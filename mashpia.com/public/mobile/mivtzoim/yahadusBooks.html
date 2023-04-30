@@ -166,9 +166,11 @@
         <div class="row">
           <h2>Checkout</h2>
           <div class="form-group" style="font-size: larger">
-            <input type="radio" name="on_file" class="on_file" value="1" /> Use my existing credit card on file<br />
+            <input type="radio" name="on_file" class="on_file" value="1" /> Use my existing credit card on file
+            <span id="cards" style="display: none;"></span><br />
             <input type="radio" name="on_file" class="on_file" value="0" /> Use a new credit card
           </div>
+
           <div id="newCard" style="display: none;">
             <div class="form-group">
               <label for="cc-name" class="control-label mb-1">Name on Card</label>
@@ -289,7 +291,7 @@
 
       let cc_type = parseInt($(".on_file:checked").val())
       let name, num, exp, zip, cvv
-      if (cc_type == 1) {
+      if (cc_type == 0) {
         // check that all fields are filled in
         name = $("#cc-name").val().trim();
         num = $("#cc-number").val().trim();
@@ -325,22 +327,24 @@
 
       if (!exceeded) {
         // disable puchase button so that they don't accidentally or purposely click it again
-        $("button#purchase").attr('disabled', true);
+        $("button#purchase").attr('disabled', true)
 
         // build data
-        let info = {};
-        info.cc = {};
-        info.cc.on_file = cc_type;
+        let info = {}
+        info.cc = {}
+        info.cc.on_file = cc_type
         if (cc_type == 0) {
-          info.cc.name = name;
-          info.cc.num = num;
-          info.cc.exp = exp;
-          info.cc.cvv = cvv;
-          info.cc.zip = zip;
+          info.cc.name = name
+          info.cc.num = num
+          info.cc.exp = exp
+          info.cc.cvv = cvv
+          info.cc.zip = zip
+        } else if (cc_type == 1) {
+          info.cc.profile_id = $("#payment-card").val()
         }
-        info.admin = admin;
-        info.total = total;
-        info.type = type;
+        info.admin = admin
+        info.total = total
+        info.type = type
         info.purchases = getListOfSeforim()
 
         $.post('ajax/purchaseSeforim.php', { info: JSON.stringify(info)}, function (info) {
@@ -409,8 +413,38 @@
 
     $(".on_file").click( function() {
       let val = parseInt($(this).val())
-      if (val == 0) $("#newCard").show()
-      else $("#newCard").hide()
+      if (val == 0) {
+        $("#newCard").show()
+        $("#cards").hide()
+      } else if (val == 1) {
+        $("#cards").show()
+        $("#newCard").hide()
+      }
+    })
+
+    $.post('/chidonOld/chidon_drive/ajax/getAdminInfo.php', { admin }, function (result) {
+      admin_info = JSON.parse(result)
+      let cards = []
+      if (admin_info['cards']) {
+        for (let i in admin_info['cards']) {
+          let cardInfo = admin_info['cards'][i]
+          let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
+          let card = {
+            profile: cardInfo.customerPaymentProfileId,
+            type: info,
+            number: cardInfo.payment.creditCard.cardNumber
+          }
+          cards.push(card)
+        }
+      }
+      // console.log(cards)
+      let html = ''
+      html += `<select name="payment-card" id="payment-card">`
+      for (let card of cards) {
+        html += `<option value=${card.profile}>${card.type}</option>`
+      }
+      html += '</select>'
+      $("#cards").html(html)
     })
   });
 </script>
