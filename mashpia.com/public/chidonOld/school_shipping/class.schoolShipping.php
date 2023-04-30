@@ -3329,12 +3329,14 @@ class SchoolShipping
             foreach ($prizes as $prize => $id) {
                 if ($school) {
                     $qty = $this->getPrizeQtys($school, $id);
-                    $info[$school][] = [
-                        'id'    => $id,
-                        'item'  => $prize,
-                        'cat'   => $type,
-                        'qty'   => $qty
-                    ];
+                    if ($qty) {
+                        $info[$school][] = [
+                            'id' => $id,
+                            'item' => $prize,
+                            'cat' => $type,
+                            'qty' => $qty
+                        ];
+                    }
                 } else {
                     foreach ($this->prize_info as $school_id => $more) {
                         if (isset($more[$id])) {
@@ -3490,6 +3492,7 @@ class SchoolShipping
     public function getPrizeQtys($school, $prize) {
         if ($school) {
             if (isset($this->prize_info[$school][$prize])) return $this->prize_info[$school][$prize];
+            else return 0;
         }
         else return $this->prize_info;
     }
