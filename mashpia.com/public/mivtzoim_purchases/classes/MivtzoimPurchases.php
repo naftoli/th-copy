@@ -325,7 +325,7 @@ class MivtzoimPurchases {
 
         $message .= "
             <br />
-            If you have any questions about your order, please contact your school’s Chidon Coordinator. 
+            If you have any questions about your order, please contact your school's Chidon Coordinator. 
             All transactions are non refundable. Hatzlocha with the learning!
             <br /><br />
             P.S. Ordering a book is <b>NOT</b> considered enrollment for next year's Chidon, enrollment will be at a later date.
