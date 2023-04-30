@@ -251,6 +251,12 @@ $school_ids = $admin_user['auths']['school'];
               <span class="link-text">Prizes Fulfillment Report</span>
             </div>
           </a>
+            <a href="/chidonOld/school_shipping/">
+                <div class="button">
+                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
+                    <span class="link-text">Prizes Shipping Reports</span>
+                </div>
+            </a>
         </div>
         <?php endforeach; ?>
 
