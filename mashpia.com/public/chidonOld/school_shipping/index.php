@@ -125,7 +125,7 @@ $items = $cs->getItems();
     $("form").submit()
   })
 
-  checkAll($("#all_items"))
-  checkAll($("#all_details"))
+  $("#all_items").click()
+  $("#all_details").click()
 </script>
 </html>
