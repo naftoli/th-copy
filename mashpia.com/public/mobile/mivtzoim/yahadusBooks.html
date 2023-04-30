@@ -171,13 +171,8 @@
           </div>
           <div id="newCard" style="display: none;">
             <div class="form-group">
-              <label for="cc-first" class="control-label mb-1">First Name on Card</label>
-              <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
-              <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-            </div>
-            <div class="form-group">
-              <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
-              <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
+              <label for="cc-name" class="control-label mb-1">Name on Card</label>
+              <input id="cc-name" name="cc-name" type="text" class="form-control cc-name identified" required placeholder="Name on Card" maxlength="18">
               <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
             </div>
             <div class="form-group">
@@ -287,22 +282,22 @@
     const total = parseInt($("#total").val())
     if ( total > 0 ) {
       // check if we are using credit card on file or new card
-      let cc_type = parseInt($(".on_file:checked").val())
-      if (!cc_type) {
+      if (! $(".on_file:checked").length) {
         alert("Please select a payment method.");
         return false;
       }
 
+      let cc_type = parseInt($(".on_file:checked").val())
+      let name, num, exp, zip, cvv
       if (cc_type == 1) {
         // check that all fields are filled in
-        const first = $("#cc-first").val().trim();
-        const last = $("#cc-last").val().trim();
-        const num = $("#cc-number").val().trim();
-        const exp = $("#cc-exp").val().trim();
-        const zip = $("#zip").val().trim();
-        const cvv = $("#x_card_code").val().trim();
+        name = $("#cc-name").val().trim();
+        num = $("#cc-number").val().trim();
+        exp = $("#cc-exp").val().trim();
+        zip = $("#zip").val().trim();
+        cvv = $("#x_card_code").val().trim();
 
-        if (!first || !last || !num || !exp || !zip || !cvv) {
+        if (!name || !num || !exp || !zip || !cvv) {
           alert("You must fill in all fields.");
           return false;
         }
@@ -337,8 +332,7 @@
         info.cc = {};
         info.cc.on_file = cc_type;
         if (cc_type == 0) {
-          info.cc.first = first;
-          info.cc.last = last;
+          info.cc.name = name;
           info.cc.num = num;
           info.cc.exp = exp;
           info.cc.cvv = cvv;

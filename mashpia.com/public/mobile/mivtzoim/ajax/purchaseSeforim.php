@@ -50,8 +50,15 @@ function purchaseItems() {
             $card_num = $cc_info->num;
             $exp_date = $cc_info->exp;
             $cvv = $cc_info->cvv;
-            $first_name = $cc_info->first;
-            $last_name = $cc_info->last;
+            $name = $cc_info->name;
+            $nameArr = explode(' ', $name);
+            $first_name = $nameArr[0];
+            if (count($nameArr) > 2) {
+                for ($i = 1; $i < count($nameArr) - 1; $i++) {
+                    $first_name .= ' ' . $nameArr[$i];
+                }
+            }
+            $last_name = $nameArr[count($nameArr) - 1];
             $zip = $cc_info->zip;
 
             chdir('../../../');
