@@ -269,12 +269,13 @@ foreach( $users as $school => $other ) {
                 <th>Medals to next Rank</th><th>Parent  1</th><th>Parent Cell 2</th></tr>";
         foreach ( $users[$school] as $grade => $more ) {
             foreach ( $more as $user_id => $row ) {
+                $rank = $row['rank_ord'];
                 $admin_info = $admins[$user_id];
                 if ($images[$school][$grade][$user_id]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$user_id]['mobile'];
                 else if ($thumbs[$school][$grade][$user_id]) $img = 'thumbs/' . $thumbs[$school][$grade][$user_id];
                 else $img = 'file_view.php?id=' . $images[$school][$grade][$user_id]['regular'];
                 echo "<tr><td>" . $admin_info['admin_id'] . "<td>" . $school . "</td><td><img class='image' src='" . $img . "' /></td><td>" .
-                    $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $rankNames[$row['rank_ord']] . "</td><td>";
+                    $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $rankNames[$rank] . "</td><td>";
                 $info = $medals[$school][$grade][$user_id];
                 for ($i = 1; $i <= $info['total']; $i++) {
                     $class = 'circle';
