@@ -67,7 +67,6 @@ function purchaseItems() {
 
             chdir('../../../');
             require_once 'authorize.php';
-            chdir('/mobile/reg/ajax/');
 
             if ($response_array[0] == 1) { // success
                 $strResponse = $response_array[3] . ':' .
