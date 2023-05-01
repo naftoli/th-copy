@@ -60,6 +60,7 @@ function createHtmlForItem($school, $row, $output = true) {
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$school])) {
             $items = $info[$cat][$school];
+//            echo "<pre>"; print_r($items); echo "</pre>"; exit;
             foreach ($items as $item) {
                 // get status and whether to show this item
                 $show_item = false;
