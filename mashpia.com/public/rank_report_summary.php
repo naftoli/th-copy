@@ -264,6 +264,7 @@ foreach( $users as $school => $info ) {
                 <th>Medals to next Rank</th><th>Parent  1</th><th>Parent Cell 2</th></tr>";
         foreach ( $info as $grade => $user ) {
             foreach ( $user as $name => $rank ) {
+                $admin_info = $admins[$userInfo[$school][$grade][$name]];
                 if ($images[$school][$grade][$name]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$name]['mobile'];
                 else if ($thumbs[$school][$grade][$name]) $img = 'thumbs/' . $thumbs[$school][$grade][$name];
                 else $img = 'file_view.php?id=' . $images[$school][$grade][$name]['regular'];
