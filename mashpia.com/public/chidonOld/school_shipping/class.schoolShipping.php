@@ -3333,7 +3333,6 @@ class SchoolShipping
                         $item = $prize;
                         if ($type != '5m raffle') {
                             $prize_info = ucwords(strtolower($this->getPrizeInfo($school, $id)));
-                            echo $prize_info . '<br>';
                             if ($prize_info) $item .= ' - ' . $prize_info;
                             echo $item . '<br>';
                         }
