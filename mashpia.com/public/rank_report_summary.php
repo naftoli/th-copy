@@ -205,7 +205,7 @@ $sql = "select a.*, aa.id from admins a
         where aa.id in (".implode(',', $userIDs).")";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    $admins[$row['id']] = $row['admin_id'];
+    $admins[$row['id']] = $row;
 }
 
 //sort by rank if needed
@@ -274,7 +274,7 @@ foreach( $users as $school => $other ) {
                 else if ($thumbs[$school][$grade][$user_id]) $img = 'thumbs/' . $thumbs[$school][$grade][$user_id];
                 else $img = 'file_view.php?id=' . $images[$school][$grade][$user_id]['regular'];
                 echo "<tr><td>" . $admin_info['admin_id'] . "<td>" . $school . "</td><td><img class='image' src='" . $img . "' /></td><td>" .
-                    $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $rankNames[$rank] . "</td><td>";
+                    $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $rankNames[$row['rank_ord']] . "</td><td>";
                 $info = $medals[$school][$grade][$user_id];
                 for ($i = 1; $i <= $info['total']; $i++) {
                     $class = 'circle';
