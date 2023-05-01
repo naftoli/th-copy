@@ -172,7 +172,7 @@ $summary_items = []; // mapping of item ID to item info
 foreach ($resultsBySchool as $school => $more) {
     if (! isset($schools[$school])) continue;
     foreach ($more as $row) {
-        if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
+//        if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
         createHtmlForItem($school, $row, false);
     }
 }
@@ -180,6 +180,8 @@ foreach ($resultsBySchool as $school => $more) {
 // sort summary
 foreach ($summary as $school => $more) ksort($summary[$school]);
 ksort($grand_summary);
+
+//echo "<pre>"; print_r($info); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -324,7 +326,7 @@ ksort($grand_summary);
         <tbody>
           <?php
           foreach ($more as $row) {
-            if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
+//            if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
             createHtmlForItem($school, $row);
           }
           ?>
@@ -336,7 +338,7 @@ ksort($grand_summary);
     </div>
   <?php endforeach; ?>
     <?php
-    if ($admin_user['auth'] == 'super' && $_POST['grand_summary'] == 1) {
+    if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['grand_summary'] == 1) {
       foreach ($grand_summary as $item => $more) {
         $grand_total = 0;
         $item_details = $summary_items[$item];

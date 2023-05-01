@@ -876,7 +876,7 @@ class ChidonShipping
     public function getCategories() {
         $categories = [
             'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes'
+            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'yahadus books'
         ];
         return $categories;
     }
@@ -902,7 +902,8 @@ class ChidonShipping
                 'iron curtain vol 2', 'escape from europe', 'the rebbe & the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
                 'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
             'ambassador prizes'     => ['ambassador prize'],
-            'raffles'   => ['5M Raffles', 'Other Raffles']
+            'raffles'   => ['5M Raffles', 'Other Raffles'],
+            'yahadus books'   => ['yahadus book purchases'],
         ];
         return $items;
     }
@@ -1125,6 +1126,13 @@ class ChidonShipping
             ],
             'ambassador prizes' => [
                 'ambassador prize' => 'CHI194'
+            ],
+            'yahadus books' => [
+                'yahadus book 1'  => 'CHI201',
+                'yahadus book 2'  => 'CHI202',
+                'yahadus book 3'  => 'CHI203',
+                'yahadus book 4'  => 'CHI204',
+                'yahadus book 5'  => 'CHI205'
             ]
         ];
 
@@ -1267,6 +1275,62 @@ class ChidonShipping
                 'cat'   => $cat
             ];
         }
+        return $info;
+    }
+
+    /**
+     * get yahadus book purchases
+     */
+    public function getYahadusBooks($gender, $school) {
+        $purchases = [];
+        $yom_tov = 'Yahadus Book Sale';
+        $sql = "
+            SELECT 
+                *
+            FROM
+                mashpia_purchases.purchases p
+                    JOIN
+                mashpia_purchases.purchase_details pd USING (purchase_id)
+                    JOIN
+                mashpia_purchases.mivtzoim_items mi ON mi.mivtzoim_item_id = pd.item_id
+                    JOIN
+                users u using (user_id)
+            WHERE
+                mi.yom_tov = :yom_tov
+        ";
+        if ($gender == 'm') {
+            $sql .= " AND u.gender = 'M'";
+        } else if ($gender == 'f') {
+            $sql .= " AND u.gender = 'F'";
+        }
+        if ($school > 0) {
+            $sql .= " AND u.school_id = " . $school;
+        }
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['yom_tov' => $yom_tov]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $purchases[$row['admin_id']][] = $row;
+        }
+
+        $info = [];
+        $cat = 'yahadus books';
+        foreach ($purchases as $rows) {
+            foreach ($rows as $row) {
+                $item = strtolower($row['item']);
+                $id = $this->getItemID($cat, $item);
+                $info[$row['user_id']][] = [
+                    'item'  => $item,
+                    'size'  => '',
+                    'color' => '',
+                    'name'  => '',
+                    'id'    => $id,
+                    'cat'   => $cat
+                ];
+            }
+        }
+
         return $info;
     }
 }

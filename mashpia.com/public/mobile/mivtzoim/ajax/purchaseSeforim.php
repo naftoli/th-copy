@@ -10,7 +10,6 @@ $year = GlobalSettings::getCurrentYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT']. '/chidonOld/chidon_drive/ajax/authorize.php';
 use classes\authorize\CustomerProfile;
 
 // **************** FUNCTIONS **************** //
@@ -21,7 +20,7 @@ function purchaseItems() {
     $address = "";
     $state = "";
 
-    $description = "Yahadus - $($amount), Admin ID: " . $admin_id;
+    $description = "Yahadus - $$amount, Admin ID: " . $admin_id;
 
     if ($total > 0) {
         // figure out if we are charging a credit card on file or a new one
@@ -34,10 +33,10 @@ function purchaseItems() {
                 ]);
                 exit;
             }
+
             // charge credit card on file
-            $profileID = $cc_info['profile_id'];
             $cp = new CustomerProfile( $customer_id );
-            $response = $cp->chargeCard( $total, $profileID, null, null, $description );
+            $response = $cp->chargeCard( $total, $cc_info->profile_id, null, null, $description );
             if (! is_array($response)) {
                 echo json_encode([
                     'success'   => false,
@@ -45,7 +44,11 @@ function purchaseItems() {
                 ]);
                 exit;
             }
-            else return parseResponse($response);
+
+            $msg = $response['transactionResponse']['messages'][0]['description'] . ':' .
+                $response['transactionResponse']['authCode'] . ':' . $response['transactionResponse']['transId'] . ':' .
+                $total;
+            return $msg;
         } else {
             // get the credit card info and charge it
             $card_num = $cc_info->num;
@@ -91,7 +94,7 @@ function getCustomerID($admin_id) {
 }
 
 function saveToDb($info) {
-    global $list, $response_array, $cc_info;
+    global $list, $cc_info;
 
     $details = [];
     foreach ($list as $item) {
@@ -105,16 +108,9 @@ function saveToDb($info) {
     if ( $m->createPurchase( $info, $details ) ) {
         // send email
         $m->sendEmail($info, $details, $cc_info);
-        echo json_encode([
-            'success'   => true
-        ]);
-    } else {
-        echo json_encode([
-            'success'   =>  false,
-            'error'     =>  'Your credit card was charged, however, there was an error saving your purchase. Please contact HQ (718-907-8884)
-                                and keep the following authorization code as proof of purchase: ' . $response_array[6]
-        ]);
+        return true;
     }
+    else return false;
 }
 // **************** END FUNCTIONS **************** //
 
@@ -126,6 +122,7 @@ $type = $info->type;
 $admin_id = encrypt_decrypt('decrypt', $info->admin);
 $response_array = [];
 
+$result = false;
 if ($res = purchaseItems()) {
     $purchaseInfo = [
         'year'      =>  $year,
@@ -133,5 +130,17 @@ if ($res = purchaseItems()) {
         'amount'    =>  $total,
         'auth'      =>  $res
     ];
-    saveToDb($purchaseInfo);
+    $result = saveToDb($purchaseInfo);
+}
+
+if ($result) {
+    echo json_encode([
+        'success'   => true
+    ]);
+} else {
+    echo json_encode([
+        'success'   =>  false,
+        'error'     =>  'Your credit card was charged, however, there was an error saving your purchase. Please contact HQ (718-907-8884)
+                                and keep the following authorization code as proof of purchase: ' . $response_array[6]
+    ]);
 }

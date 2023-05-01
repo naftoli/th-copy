@@ -1,6 +1,9 @@
 <?php
 namespace classes\authorize;
 
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 use classes\authorize;
 use \Datetime;
 
@@ -271,7 +274,7 @@ class CustomerProfile {
         $api_array = $this->auth->createApiCall(
             "createTransactionRequest", $api_array
         );
-        
+
         //set the data to the api post and execute it
         $this->api->setPostData($api_array);
         $api_data = $this->api->execute();

@@ -341,6 +341,7 @@
           info.cc.zip = zip
         } else if (cc_type == 1) {
           info.cc.profile_id = $("#payment-card").val()
+          info.cc.last_four = $("#payment-card option:selected").text().split(' ')[2]
         }
         info.admin = admin
         info.total = total
