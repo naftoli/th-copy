@@ -439,5 +439,10 @@ ksort($grand_summary);
       if (!res.success) alert(res.error)
     })
   })
+
+  <?php if (!$super) : ?>
+      $("select").attr('disabled', true)
+      $("textarea").attr('disabled', true)
+  <?php endif; ?>
 </script>
 </html>
