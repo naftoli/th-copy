@@ -236,7 +236,7 @@ foreach( $users as $school => $other ) {
         foreach ( $other as $rank => $more ) {
             foreach ( $more as $grade => $other) {
                 foreach ( $other as $user_id => $row ) {
-                    if (isset($admin[$user_id])) $admin_info = $admins[$user_id];
+                    if (isset($admins[$user_id])) $admin_info = $admins[$user_id];
                     else {
                         echo "User $user_id not found in admins table<br />";
                         continue;
@@ -273,7 +273,7 @@ foreach( $users as $school => $other ) {
                 <th>Medals to next Rank</th><th>Parent  1</th><th>Parent Cell 2</th></tr>";
         foreach ( $users[$school] as $grade => $more ) {
             foreach ( $more as $user_id => $row ) {
-                if (isset($admin[$user_id])) $admin_info = $admins[$user_id];
+                if (isset($admins[$user_id])) $admin_info = $admins[$user_id];
                 else {
                     echo "User $user_id not found in admins table<br />";
                     continue;
