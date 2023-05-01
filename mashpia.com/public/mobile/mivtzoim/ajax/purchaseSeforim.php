@@ -65,9 +65,7 @@ function purchaseItems() {
             $last_name = $nameArr[count($nameArr) - 1];
             $zip = $cc_info->zip;
 
-            chdir('../../../');
-            require_once 'authorize.php';
-            chdir('/mobile/reg/ajax/');
+            require_once '/authorize.php';
 
             if ($response_array[0] == 1) { // success
                 $strResponse = $response_array[3] . ':' .
