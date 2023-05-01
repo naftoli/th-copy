@@ -3333,11 +3333,13 @@ class SchoolShipping
                         $item = $prize;
                         if ($type != '5m raffle') {
                             $prize_info = ucwords(strtolower($this->getPrizeInfo($school, $id)));
-                            // if prize info refers to auction make sure the type is an auction
-                            // and if prize info refers to grand raffle make sure type is grand raffle
-                            if (strpos($prize_info, 'auction') !== false && $type != 'auction 5782') continue;
-                            if (strpos($prize_info, 'grand raffle') !== false && $type != '60m raffle') continue;
-                            if ($prize_info) $item .= ' - ' . $prize_info;
+                            if ($prize_info) {
+                                // if prize info refers to auction make sure the type is an auction
+                                // and if prize info refers to grand raffle make sure type is grand raffle
+                                if (strpos($prize_info, 'auction') !== false && $type != 'auction 5782') continue;
+                                if (strpos($prize_info, 'grand raffle') !== false && $type != '60m raffle') continue;
+                                $item .= ' - ' . $prize_info;
+                            }
                         }
                         $info[$school][] = [
                             'id' => $id,
@@ -3353,11 +3355,13 @@ class SchoolShipping
                             $item = $prize;
                             if ($type != '5m raffle') {
                                 $prize_info = ucwords(strtolower($this->getPrizeInfo($school_id, $id)));
-                                // if prize info refers to auction make sure the type is an auction
-                                // and if prize info refers to grand raffle make sure type is grand raffle
-                                if (strpos($prize_info, 'auction') !== false && $type != 'auction 5782') continue;
-                                if (strpos($prize_info, 'grand raffle') !== false && $type != '60m raffle') continue;
-                                if ($prize_info) $item .= ' - ' . $prize_info;
+                                if ($prize_info) {
+                                    // if prize info refers to auction make sure the type is an auction
+                                    // and if prize info refers to grand raffle make sure type is grand raffle
+                                    if (strpos($prize_info, 'auction') !== false && $type != 'auction 5782') continue;
+                                    if (strpos($prize_info, 'grand raffle') !== false && $type != '60m raffle') continue;
+                                    $item .= ' - ' . $prize_info;
+                                }
                             }
                             $info[$school_id][] = [
                                 'id' => $id,
