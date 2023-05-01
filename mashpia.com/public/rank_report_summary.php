@@ -17,17 +17,24 @@ function getMedals( $user, $rank ) {
     $numMedals = $row['total'];
 
     //find out number of medals earned above rank
-    $info = array();
-    $sql = "select rank_ord, medals_required from ranks where rank_ord in (" . $rank . ',' . ($rank+1) . ") order by rank_ord";
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $info[$row['rank_ord']] = $row['medals_required'];
-    }
+    if ($rank < 14) { // for less than five star general
+        $info = array();
+        $sql = "select rank_ord, medals_required from ranks where rank_ord in (" . $rank . ',' . ($rank + 1) . ") order by rank_ord";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $info[$row['rank_ord']] = $row['medals_required'];
+        }
 
-    return array(
-        'total'	=>	$info[$rank+1] - $info[$rank],
-        'done'	=>	$numMedals - $info[$rank]
-    );
+        return array(
+            'total' => $info[$rank + 1] - $info[$rank],
+            'done' => $numMedals - $info[$rank]
+        );
+    } else {
+        return [
+            'total' => 0,
+            'done'  => 0
+        ];
+    }
 }
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -171,13 +178,13 @@ $onlyForSchools = [269, 621, 54, 30, 7, 49, 192, 63, 105, 89, 21, 37, 86, 60, 33
 foreach ( $schools as $id => $school ) {
     if (! in_array($id, $onlyForSchools)) continue;
     $sql = "select s.school_name, u.user_id, u.last, u.first, u.user_photo_id, u.mobile_pic, c.class_grade, c.class_sub, rm.rank_ord, t.thumb  
-                    from rank_marks rm 
-                    join users u using ( user_id ) 
-                    left join thumbs t on t.file_id = u.user_photo_id 
-                    join classes c on (c.class_id = u.class_id) 
-                    join schools s on (s.school_id = u.school_id) 
-                    where u.user_registered > 0 
-                    and u.school_id = $id $orderBy";
+            from rank_marks rm 
+            join users u using ( user_id ) 
+            left join thumbs t on t.file_id = u.user_photo_id 
+            join classes c on (c.class_id = u.class_id) 
+            join schools s on (s.school_id = u.school_id) 
+            where u.user_registered > 0 
+            and u.school_id = $id $orderBy";
     //echo $sql;
 
     $result = mysql_query( $sql );
@@ -190,7 +197,7 @@ foreach ( $schools as $id => $school ) {
         $images[$row['school_name']][$grade][$userName]['mobile'] = empty($row['mobile_pic']) ? 0 : $row['mobile_pic'];
         $images[$row['school_name']][$grade][$userName]['regular'] = $row['user_photo_id'];
         $userInfo[$row['school_name']][$grade][$userName] = $row['user_id'];
-        if (! in_array($row['user_id'], $userIDs)) $userIDs[] = $row['user_id'];
+        $userIDs[] = $row['user_id'];
     }
 }
 
@@ -201,7 +208,7 @@ $sql = "select a.*, aa.id from admins a
         where aa.id in (".implode(',', $userIDs).")";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    $admins[$row['id']] = $row;
+    $admins[$row['id']] = $row['admin_id'];
 }
 
 //sort by rank if needed
