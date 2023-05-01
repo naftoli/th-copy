@@ -268,7 +268,10 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
 
   $(".shipping").change( function () {
     const action = parseInt(this.value)
-    if (!super_admin && action == 3) {
+    if (!super_admin && action == 2) {
+      alert('You must enter how many items are missing before it can be saved.')
+      return false
+    } else if (!super_admin && action == 3) {
       alert('You must explain the damage before it can be saved.')
       return false
     }
