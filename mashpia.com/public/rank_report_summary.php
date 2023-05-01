@@ -159,7 +159,6 @@ $thumbs = array();
 $images = array();
 $grandTotals = array();
 $sum = 0;
-$userInfo = [];
 $userIDs = [];
 
 //get rank names
@@ -190,13 +189,11 @@ foreach ( $schools as $id => $school ) {
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc( $result ) ) {
         $grade = $row['class_grade'] . ( empty( $row['class_sub'] ) ? '' : '-' . $row['class_sub'] );
-        $userName = $row['first'] . ' ' . $row['last'];
-        $users[$row['school_name']][$grade][$userName] = $row['rank_ord'];
-        $medals[$row['school_name']][$grade][$userName] = getMedals($row['user_id'], $row['rank_ord']);
-        $thumbs[$row['school_name']][$grade][$userName] = empty($row['thumb']) ? 0 : $row['thumb'];
-        $images[$row['school_name']][$grade][$userName]['mobile'] = empty($row['mobile_pic']) ? 0 : $row['mobile_pic'];
-        $images[$row['school_name']][$grade][$userName]['regular'] = $row['user_photo_id'];
-        $userInfo[$row['school_name']][$grade][$userName] = $row['user_id'];
+        $users[$row['school_name']][$grade][$row['user_id']] = $row;
+        $medals[$row['school_name']][$grade][$row['user_id']] = getMedals($row['user_id'], $row['rank_ord']);
+        $thumbs[$row['school_name']][$grade][$row['user_id']] = empty($row['thumb']) ? 0 : $row['thumb'];
+        $images[$row['school_name']][$grade][$row['user_id']]['mobile'] = empty($row['mobile_pic']) ? 0 : $row['mobile_pic'];
+        $images[$row['school_name']][$grade][$row['user_id']]['regular'] = $row['user_photo_id'];
         $userIDs[] = $row['user_id'];
     }
 }
@@ -217,8 +214,8 @@ if ( isset( $_GET['sort'] ) && $_GET['sort'] == 'rank' ) {
     $temp2 = array();
     foreach ( $users as $school => $info ) {
         foreach ( $info as $grade => $user ) {
-            foreach ( $user as $name => $rank ) {
-                $temp[$school][$rank][][$name] = $grade;
+            foreach ( $user as $user_id => $row ) {
+                $temp[$school][$row['rank_ord']][$grade][$user_id] = $row;
             }
         }
         ksort( $temp[$school] );
@@ -230,22 +227,23 @@ if ( isset( $_GET['sort'] ) && $_GET['sort'] == 'rank' ) {
 }
 
 //display info
-foreach( $users as $school => $info ) {
+foreach( $users as $school => $other ) {
     $totals = array();
 
     if ( isset( $_GET['sort'] ) && $_GET['sort'] == 'rank' ) {
-        echo "<table><tr><th>Parent ID</th><th>School</th><th>Grade</th><th>Student</th><th>Rank</th>
+        echo "<table><tr><th>Parent ID</th><th>School</th><th>Grade</th><th>First Name</th><th>Last Name</th><th>Rank</th>
                 <th>Medals to next Rank</th><th>Parent Cell 1</th><th>Parent Cell 2</th></tr>";
-        foreach ( $info as $rank => $user ) {
-            foreach ( $user as $names => $more ) {
-                foreach ( $more as $name => $grade ) {
-                    $admin_info = $admins[$userInfo[$school][$grade][$name]];
-                    if ($images[$school][$grade][$name]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$name]['mobile'];
-                    else if ($thumbs[$school][$grade][$name]) $img = 'thumbs/' . $thumbs[$school][$grade][$name];
-                    else $img = 'file_view.php?id=' . $images[$school][$grade][$name]['regular'];
+        foreach ( $other as $rank => $more ) {
+            foreach ( $more as $grade => $other) {
+                foreach ( $other as $user_id => $row ) {
+                    $admin_info = $admins[$user_id];
+                    if ($images[$school][$grade][$user_id]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$user_id]['mobile'];
+                    else if ($thumbs[$school][$grade][$user_id]) $img = 'thumbs/' . $thumbs[$school][$grade][$user_id];
+                    else $img = 'file_view.php?id=' . $images[$school][$grade][$user_id]['regular'];
                     echo "<tr><td>" . $admin_info['admin_id'] . "</td><td>" . $school . "</td><td><img class='image' src='" . $img . "' />
-                        </td><td>" . $grade . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td><td>";
-                    $info = $medals[$school][$grade][$name];
+                        </td><td>" . $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] .
+                        $rankNames[$rank] . "</td><td>";
+                    $info = $medals[$school][$grade][$user_id];
                     for ($i = 1; $i <= $info['total']; $i++) {
                         $class = 'circle';
                         if ($i <= $info['done']) {
@@ -253,12 +251,12 @@ foreach( $users as $school => $info ) {
                         }
                         echo "<div class='" . $class . "'></div>";
                     }
-                    echo "</td><td>" .  $admin_info['admin_phone_mobile'] . "</td><td>" . $admin_info['admin_phone_mobile2'] . "</td></tr>";
-                    if ( isset( $totals[$rank] ) )
+                    echo "</td><td>" . $admin_info['admin_phone_mobile'] . "</td><td>" . $admin_info['admin_phone_mobile2'] . "</td></tr>";
+                    if (isset($totals[$rank]))
                         $totals[$rank]++;
                     else
                         $totals[$rank] = 1;
-                    if ( isset( $grandTotals[$rank] ) )
+                    if (isset($grandTotals[$rank]))
                         $grandTotals[$rank]++;
                     else
                         $grandTotals[$rank] = 1;
@@ -267,17 +265,17 @@ foreach( $users as $school => $info ) {
             }
         }
     } else {
-        echo "<table><tr><th>Parent ID</th><th>School</th><th>Grade</th><th>Student</th><th>Rank</th>
+        echo "<table><tr><th>Parent ID</th><th>School</th><th>Grade</th><th>First Name</th><th>Last Name</th><th>Rank</th>
                 <th>Medals to next Rank</th><th>Parent  1</th><th>Parent Cell 2</th></tr>";
-        foreach ( $info as $grade => $user ) {
-            foreach ( $user as $name => $rank ) {
-                $admin_info = $admins[$userInfo[$school][$grade][$name]];
-                if ($images[$school][$grade][$name]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$name]['mobile'];
-                else if ($thumbs[$school][$grade][$name]) $img = 'thumbs/' . $thumbs[$school][$grade][$name];
-                else $img = 'file_view.php?id=' . $images[$school][$grade][$name]['regular'];
+        foreach ( $users[$school] as $grade => $more ) {
+            foreach ( $more as $user_id => $row ) {
+                $admin_info = $admins[$user_id];
+                if ($images[$school][$grade][$user_id]['mobile']) $img = '/mobile/reg/' . $images[$school][$grade][$user_id]['mobile'];
+                else if ($thumbs[$school][$grade][$user_id]) $img = 'thumbs/' . $thumbs[$school][$grade][$user_id];
+                else $img = 'file_view.php?id=' . $images[$school][$grade][$user_id]['regular'];
                 echo "<tr><td>" . $admin_info['admin_id'] . "<td>" . $school . "</td><td><img class='image' src='" . $img . "' /></td><td>" .
-                    $grade . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td><td>";
-                $info = $medals[$school][$grade][$name];
+                    $grade . "</td><td>" . $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $rankNames[$rank] . "</td><td>";
+                $info = $medals[$school][$grade][$user_id];
                 for ($i = 1; $i <= $info['total']; $i++) {
                     $class = 'circle';
                     if ($i <= $info['done']) {
