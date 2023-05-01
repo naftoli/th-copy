@@ -3336,8 +3336,8 @@ class SchoolShipping
                             if ($prize_info) {
                                 // if prize info refers to auction make sure the type is an auction
                                 // and if prize info refers to grand raffle make sure type is grand raffle
-                                if (strpos($prize_info, 'auction') !== false && $type != 'auction 5782') continue;
-                                if (strpos($prize_info, 'grand raffle') !== false && $type != '60m raffle') continue;
+                                if (strpos($prize_info, 'Auction') !== false && $type != 'auction 5782') continue;
+                                if (strpos($prize_info, 'Grand Raffle') !== false && $type != '60m raffle') continue;
                                 $item .= ' - ' . $prize_info;
                             }
                         }
@@ -3358,8 +3358,8 @@ class SchoolShipping
                                 if ($prize_info) {
                                     // if prize info refers to auction make sure the type is an auction
                                     // and if prize info refers to grand raffle make sure type is grand raffle
-                                    if (strpos($prize_info, 'auction') !== false && $type != 'auction 5782') continue;
-                                    if (strpos($prize_info, 'grand raffle') !== false && $type != '60m raffle') continue;
+                                    if (strpos($prize_info, 'Auction') !== false && $type != 'auction 5782') continue;
+                                    if (strpos($prize_info, 'Grand Raffle') !== false && $type != '60m raffle') continue;
                                     $item .= ' - ' . $prize_info;
                                 }
                             }
