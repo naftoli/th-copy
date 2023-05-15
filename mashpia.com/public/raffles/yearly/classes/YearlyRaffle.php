@@ -133,6 +133,7 @@ class YearlyRaffle {
                 AND dtm.mark_date <= " . $this->deadline ."
                 group by user_id";
 //        echo $sql; exit;
+        echo $sql . "<br />";
         $result = mysql_query($sql);
 
         $totals = [];
