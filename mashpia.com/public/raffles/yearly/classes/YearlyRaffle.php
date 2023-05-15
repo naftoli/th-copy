@@ -142,8 +142,9 @@ class YearlyRaffle {
             $totals[$user_id] = 0;
         }
 
-        if (mysql_num_rows($result) > 0) {
-            $row = mysql_fetch_array($result);
+//        if (mysql_num_rows($result) > 0) {
+//        $row = mysql_fetch_array($result);
+        while ($row = mysql_fetch_array($result)) {
             $totals[$row['user_id']] = $row['total'];
         }
 
