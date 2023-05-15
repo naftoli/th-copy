@@ -124,7 +124,7 @@ class YearlyRaffle {
             $users_filter .= " and u.school_id = " . $school_id;
         }
 
-        $sql = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
+        $sql = "SELECT user_id, IFNULL(COUNT(distinct mark_date), 0) AS total FROM date_tasks_marks dtm
                 JOIN date_tasks dt USING (date_task_id) 
                 JOIN users u using (user_id) 
                 WHERE $users_filter
