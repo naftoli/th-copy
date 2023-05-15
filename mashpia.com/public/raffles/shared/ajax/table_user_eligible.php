@@ -94,7 +94,7 @@ foreach ( $schoolsUsers as $school => $users ) {
             $yearly_raffle = new YearlyRaffle;
             $required = $yearly_raffle->required_days_of_tasks();
             $daysLeft = $yearly_raffle->getEnd() - unixtojd();
-            $totals = $yearly_raffle->getAndCacheEligibility($school);
+            $totals = $yearly_raffle->getEligibility($school);
             echo '<div align="center"><img src="../images/Mission Marathon logo.png" class="marathonLogo" /></div>';
             echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
             echo "<div id='table-marks'><table><tr><th>Grade</th><th>Student</th><th></th><th></th></tr>";
