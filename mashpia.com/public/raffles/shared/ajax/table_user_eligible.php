@@ -99,9 +99,10 @@ foreach ( $schoolsUsers as $school => $users ) {
             echo "<h2>" . $schools[$school] . " - " . $raffle->name . "</h2>";
             echo "<div id='table-marks'><table><tr><th>Grade</th><th>Student</th><th></th><th></th></tr>";
             foreach ( $users as $user ) {
-                $overriden = $raffle->get_raffle_eligable_user_ids($user['user_id']);
+//                $overriden = $raffle->get_raffle_eligable_user_ids($user['user_id']);
                 $total = $totals[$user['user_id']];
-                if ( isset($overriden[$user['user_id']]) || ($total >= $required || $daysLeft >= ( $required - $total )) ) {
+//                if ( isset($overriden[$user['user_id']]) || ($total >= $required || $daysLeft >= ( $required - $total )) ) {
+                if ( $total >= $required || $daysLeft >= ($required - $total) ) {
                     if ( $total >= $required ) $msg = "Already Eligible (finished " . $total . " days of missions)";
                     else $msg = ( $required - $total ) . " more days to go";
                     echo "<tr><td>" . $user['class_grade'] . ( empty( $user['class_sub']) ? '' : "-" . $user['class_sub'] ) . 

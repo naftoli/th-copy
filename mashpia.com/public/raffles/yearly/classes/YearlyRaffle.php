@@ -116,17 +116,17 @@ class YearlyRaffle {
      * @return array user_id => eligble_days key value pairs
      * 
      */
-    private function getEligibility( $school_id = false, $user_id = false ){
+    public function getEligibility( $school_id = false, $user_id = false ){
+        $users_filter = "u.user_registered > 0";
         if ($user_id) {
-            $users_filter = "dtm.user_id = ". $user_id;
+            $users_filter .= " and dtm.user_id = ". $user_id;
         } else if ($school_id) {
-            $users_filter = "dtm.user_id in (select user_id from users where school_id = $school_id)";
-        } else {
-            $users_filter = "true";
+            $users_filter .= " and dtm.school_id = " . $school_id;
         }
 
         $sql = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
                 JOIN date_tasks dt USING (date_task_id) 
+                JOIN users u using (user_id) 
                 WHERE $users_filter
                 AND dt.grid_id = " . $this->grid_id . " 
                 AND dtm.mark_date >= " . $this->start . " 
