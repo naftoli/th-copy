@@ -1,5 +1,4 @@
 <?php
-
 namespace raffles\yearly;
 // load the shared classes
 require_once(dirname(__FILE__)."/../../shared/classes/Constants.php");
@@ -133,7 +132,7 @@ class YearlyRaffle {
                 AND dtm.mark_date >= " . $this->start . " 
                 AND dtm.mark_date <= " . $this->deadline ."
                 group by user_id";
-//        echo $sql;
+//        echo $sql; exit;
         $result = mysql_query($sql);
 
         $totals = [];
@@ -160,7 +159,7 @@ class YearlyRaffle {
      * @return array
      * 
      */
-    private function getAndCacheEligibility($school_id = false, $user_id = false) {
+    public function getAndCacheEligibility($school_id = false, $user_id = false) {
         $totals = $this->getEligibility($school_id, $user_id);
         foreach($totals as $user_id => $total) {
             $this->cacheUser( $user_id,  $total );
