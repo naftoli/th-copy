@@ -121,7 +121,7 @@ class YearlyRaffle {
         if ($user_id) {
             $users_filter .= " and dtm.user_id = ". $user_id;
         } else if ($school_id) {
-            $users_filter .= " and dtm.school_id = " . $school_id;
+            $users_filter .= " and u.school_id = " . $school_id;
         }
 
         $sql = "SELECT user_id, COUNT(distinct mark_date) AS total FROM date_tasks_marks dtm
@@ -133,7 +133,7 @@ class YearlyRaffle {
                 AND dtm.mark_date <= " . $this->deadline ."
                 group by user_id";
 //        echo $sql; exit;
-        echo $sql . "<br />";
+//        echo $sql . "<br />";
         $result = mysql_query($sql);
 
         $totals = [];
