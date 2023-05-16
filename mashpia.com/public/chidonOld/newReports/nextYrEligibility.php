@@ -45,6 +45,7 @@ $eligible = KHK::getKHKEligibility(array_keys($children), $year, 2);
         </style>
     </head>
     <body>
+        <?php include $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php' ;?>
         <table>
             <tr>
                 <th>School</th>
