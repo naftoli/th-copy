@@ -60,8 +60,8 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                     echo "<td>" . $child['user_serial'] . "</td>";
                     echo "<td>" . $child['first'] . " " . $child['last'] . "</td>";
                     echo "</tr>";
-                    if (isset($totals[$child['school_name']][$row['gender']])) $totals[$child['school_name']][$row['gender']]++;
-                    else $totals[$child['school_name']][$row['gender']] = 1;
+                    if (isset($totals[$child['school_name']][$child['gender']])) $totals[$child['school_name']][$child['gender']]++;
+                    else $totals[$child['school_name']][$child['gender']] = 1;
                 }
             }
             ?>
