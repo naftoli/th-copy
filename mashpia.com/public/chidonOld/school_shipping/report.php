@@ -278,12 +278,14 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const action = parseInt(this.value)
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
-    if (!super_admin && action == 2 && !qty) {
-      alert('You must enter how many items are missing before it can be saved.')
-      return false
-    } else if (!super_admin && action == 3 && !(qty || desc)) {
-      alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
-      return false
+    if (!super_admin) {
+      if (action == 2 && !qty) {
+        alert('You must enter how many items are missing before it can be saved.')
+        return false
+      } else if (action == 3 && !(qty || desc)) {
+        alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
+        return false
+      }
     }
     update(this, action, qty)
     save(false)
