@@ -36,7 +36,7 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
         <link href="../../admin_styles.css" rel="stylesheet" type="text/css">
         <style>
             tr, th, td {
-                padding: 6px;
+                padding: 10px;
                 font-size: 12px;
                 border-bottom: 1px solid grey;
             }
@@ -52,6 +52,7 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                 <th>Student</th>
             </tr>
             <?php
+            $totals = [];
             foreach ($children as $user_id => $child) {
                 if (isset($eligible[$user_id]) && $eligible[$user_id] == 1) {
                     echo "<tr>";
@@ -59,11 +60,24 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                     echo "<td>" . $child['user_serial'] . "</td>";
                     echo "<td>" . $child['first'] . " " . $child['last'] . "</td>";
                     echo "</tr>";
+                    if (isset($totals[$child['school_name']])) $totals[$child['school_name']]++;
+                    else $totals[$child['school_name']] = 1;
                 }
             }
             ?>
         </table>
-    <?php
-
-    ?>
+        <br />
+        <br />
+        <table>
+            <caption>Totals</caption>
+            <tr>
+                <th>School</th>
+                <th>Total</th>
+            </tr>
+            <?php
+            foreach ($totals as $school => $total) {
+                echo "<tr><th>$school</th><th>$total</th></tr>";
+            }
+            ?>
+        </table>
     </body>
