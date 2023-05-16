@@ -12,9 +12,6 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-$year = 5784;
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-
 $children = [];
 $sql = "select user_id, user_serial, first, last, u.school_id, school_name   
         from users u 
@@ -28,7 +25,8 @@ while ($row = mysql_fetch_assoc($result)) {
     $children[$row['user_id']] = $row;
 }
 
-$eligible = KHK::getKHKEligibility(array_keys($children), $year, 2);
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+$eligible = KHK::getKHKEligibility(array_keys($children), 5783, 2);
 ?>
 <!DOCTYPE html>
 <html>
