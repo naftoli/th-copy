@@ -26,7 +26,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2);
+$eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
 ?>
 <!DOCTYPE html>
 <html>
