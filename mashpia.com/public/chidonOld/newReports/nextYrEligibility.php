@@ -84,7 +84,7 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                     else $grand_totals[$gender] = 1;
                 }
             }
-            echo "<tr><th>Grand Total</th><td>" . $grand_totals['M'] . "</td><td>" . $grand_totals['F'] . "</td></tr>";
+            echo "<tr><th>Grand Total</th><th>" . $grand_totals['M'] . "</th><th>" . $grand_totals['F'] . "</th></tr>";
             ?>
         </table>
     </body>
