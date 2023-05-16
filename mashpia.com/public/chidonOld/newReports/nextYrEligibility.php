@@ -80,9 +80,11 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
             foreach ($totals as $school => $info) {
                 echo "<tr><td>$school</td>";
                 foreach (['M', 'F'] as $gender) {
-                    echo "<td>$info[$gender]</td>";
-                    if (isset($grand_totals[$gender])) $grand_totals[$gender]++;
-                    else $grand_totals[$gender] = 1;
+                    if (isset($info[$gender])) {
+                        echo "<td>$info[$gender]</td>";
+                        if (isset($grand_totals[$gender])) $grand_totals[$gender]++;
+                        else $grand_totals[$gender] = 1;
+                    }
                 }
                 echo "</tr>";
             }
