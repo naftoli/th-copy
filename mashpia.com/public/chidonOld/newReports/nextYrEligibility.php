@@ -16,16 +16,54 @@ $year = 5784;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $children = [];
-$sql = "select user_id, user_serial, first, last, u.school_id, school_name, class_grade, class_sub  
+$sql = "select user_id, user_serial, first, last, u.school_id, school_name   
         from users u 
         join schools s using (school_id) 
         join classes c on c.class_id = u.class_id 
         where u.user_registered > 0 
-        and c.class_grade = '7'";
+        and c.class_grade = '7' 
+        order by school_name, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $children[$row['user_id']] = $row;
 }
 
 $eligible = KHK::getKHKEligibility(array_keys($children), $year, 2);
-echo "<pre>"; print_r($eligible); echo "</pre>"; exit;
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <title>Next Year Eligibility</title>
+        <link href="../../admin_styles.css" rel="stylesheet" type="text/css">
+        <style>
+            tr, th, td {
+                padding: 6px;
+                font-size: 12px;
+                border-bottom: 1px solid grey;
+            }
+        </style>
+    </head>
+    <body>
+        <table>
+            <tr>
+                <th>School</th>
+                <th>Serial Number</th>
+                <th>Student</th>
+            </tr>
+            <?php
+            foreach ($children as $user_id => $child) {
+                if (isset($eligible[$user_id]) && $eligible[$user_id] == 1) {
+                    echo "<tr>";
+                    echo "<td>" . $child['school_name'] . "</td>";
+                    echo "<td>" . $child['user_serial'] . "</td>";
+                    echo "<td>" . $child['first'] . " " . $child['last'] . "</td>";
+                    echo "</tr>";
+                }
+            }
+            ?>
+        </table>
+    <?php
+
+    ?>
+    </body>
