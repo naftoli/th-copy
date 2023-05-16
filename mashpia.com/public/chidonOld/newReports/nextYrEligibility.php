@@ -85,6 +85,7 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                         if (isset($grand_totals[$gender])) $grand_totals[$gender]++;
                         else $grand_totals[$gender] = 1;
                     }
+                    else echo "<td></td>";
                 }
                 echo "</tr>";
             }
