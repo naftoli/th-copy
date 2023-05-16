@@ -137,6 +137,8 @@ function createHtmlForItem($school, $row, $output = true) {
                             if (
                                 isset($status['shipped']) && intval($status['shipped']) == 0 && $i == $total
                                 ||
+                                isset($status['shipped']) && intval($status['shipped']) == 1 && $status['qty'] == $i
+                                ||
                                 isset($status['missing']) && intval($status['missing']) == 1 && $status['qty'] == $i
                                 ||
                                 isset($status['damaged']) && intval($status['damaged']) == 1 && $status['qty'] == $i
