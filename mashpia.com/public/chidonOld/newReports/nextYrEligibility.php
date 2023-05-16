@@ -53,6 +53,7 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
             </tr>
             <?php
             $totals = [];
+            $grand_totals = [];
             foreach ($children as $user_id => $child) {
                 if (isset($eligible[$user_id]) && $eligible[$user_id] == 1) {
                     echo "<tr>";
@@ -62,6 +63,8 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                     echo "</tr>";
                     if (isset($totals[$child['school_name']][$child['gender']])) $totals[$child['school_name']][$child['gender']]++;
                     else $totals[$child['school_name']][$child['gender']] = 1;
+                    if (isset($grand_totals[$child['gender']])) $grand_totals[$child['gender']]++;
+                    else $grand_totals[$child['gender']] = 1;
                 }
             }
             ?>
@@ -76,15 +79,10 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                 <th>Girls</th>
             </tr>
             <?php
-            $grand_totals = [];
             foreach ($totals as $school => $info) {
                 echo "<tr><td>$school</td>";
                 foreach (['M', 'F'] as $gender) {
-                    if (isset($info[$gender])) {
-                        echo "<td>$info[$gender]</td>";
-                        if (isset($grand_totals[$gender])) $grand_totals[$gender]++;
-                        else $grand_totals[$gender] = 1;
-                    }
+                    if (isset($info[$gender])) echo "<td>$info[$gender]</td>";
                     else echo "<td></td>";
                 }
                 echo "</tr>";
