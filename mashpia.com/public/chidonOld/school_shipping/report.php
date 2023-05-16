@@ -206,7 +206,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
                 }
             }
             echo "<th class='no-print'>Status</th>";
-            echo "<th class='no-print'>Number of Missing Items</th>";
+            echo "<th class='no-print'>Number of Items</th>";
             echo "<th class='no-print'>Explain the damage</th>";
             ?>
           </tr>
@@ -238,7 +238,15 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const item = ids[0]
     const school = ids[1]
     // get description
-    info.push({ action, item, school, qty, desc })
+    action = parseInt(action)
+    if (
+      action < 2
+      ||
+      action == 2 && qty
+      ||
+      action == 3 && qty && desc
+    )
+        info.push({ action, item, school, qty, desc })
   }
 
   function save(reload = true) {
@@ -268,14 +276,15 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
 
   $(".shipping").change( function () {
     const action = parseInt(this.value)
-    if (!super_admin && action == 2) {
+    const qty = parseInt($(this).parent().parent().find('.qty').val())
+    const desc = $(this).parent().parent().find('.description').val()
+    if (!super_admin && action == 2 && !qty) {
       alert('You must enter how many items are missing before it can be saved.')
       return false
-    } else if (!super_admin && action == 3) {
-      alert('You must explain the damage before it can be saved.')
+    } else if (!super_admin && action == 3 && !(qty || desc)) {
+      alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
       return false
     }
-    qty = $(this).parent().parent().find('.qty').val()
     update(this, action, qty)
     save(false)
   })
@@ -284,7 +293,12 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
-    update(elem, action, val)
+    const desc = $(this).parent().parent().find('.description').val()
+    if (!super_admin && action == 3 && !desc) {
+      alert('You must explain the damage before it can be saved.')
+      return false
+    }
+    update(elem, action, val, desc)
     save(false)
   })
 
@@ -293,6 +307,10 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
     const qty = $(this).parent().parent().find('.qty').val()
+    if (parseInt(qty) == 0) {
+      alert('You must enter a qty before it can be saved.')
+      return false
+    }
     update(elem, action, qty, val)
     save(false)
   })

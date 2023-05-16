@@ -135,14 +135,16 @@ function createHtmlForItem($school, $row, $output = true) {
                         for ($i = 0; $i <= $total; $i++) {
                             echo "<option value='$i'";
                             if (
-                                (isset($status['missing']) && intval($status['missing']) == 1 && $status['qty'] == $i)
+                                isset($status['shipped']) && intval($status['shipped']) == 0 && $i == $total
                                 ||
-                                (isset($status['shipped']) && intval($status['shipped']) == 0 && $i == $total)
+                                isset($status['missing']) && intval($status['missing']) == 1 && $status['qty'] == $i
+                                ||
+                                isset($status['damaged']) && intval($status['damaged']) == 1 && $status['qty'] == $i
                             )
                                 echo " selected ";
                             echo ">$i</option>";
                         }
-                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['description'] . "</textarea></td></tr>";
+                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['desc_of_damage'] . "</textarea></td></tr>";
                     } else {
                         // update summary
                         addToSummary($item, $school);
