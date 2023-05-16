@@ -27,5 +27,5 @@ while ($row = mysql_fetch_assoc($result)) {
     $children[$row['user_id']] = $row;
 }
 
-$eligible = ChidonTests::getKHKEligibility(array_keys($children), $year, 2);
+$eligible = KHK::getKHKEligibility(array_keys($children), $year, 2);
 echo "<pre>"; print_r($eligible); echo "</pre>"; exit;
