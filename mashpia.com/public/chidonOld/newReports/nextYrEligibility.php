@@ -13,7 +13,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $children = [];
-$sql = "select user_id, user_serial, first, last, u.school_id, school_name   
+$sql = "select gender, user_id, user_serial, first, last, u.school_id, school_name   
         from users u 
         join schools s using (school_id) 
         join classes c on c.class_id = u.class_id 
@@ -60,8 +60,8 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
                     echo "<td>" . $child['user_serial'] . "</td>";
                     echo "<td>" . $child['first'] . " " . $child['last'] . "</td>";
                     echo "</tr>";
-                    if (isset($totals[$child['school_name']])) $totals[$child['school_name']]++;
-                    else $totals[$child['school_name']] = 1;
+                    if (isset($totals[$child['school_name']][$row['gender']])) $totals[$child['school_name']][$row['gender']]++;
+                    else $totals[$child['school_name']][$row['gender']] = 1;
                 }
             }
             ?>
@@ -72,12 +72,18 @@ $eligible = KHK::getKHKEligibility(array_keys($children), 5784, 2)[0];
             <caption>Totals</caption>
             <tr>
                 <th>School</th>
-                <th>Total</th>
+                <th>Gender</th>
             </tr>
             <?php
-            foreach ($totals as $school => $total) {
-                echo "<tr><th>$school</th><th>$total</th></tr>";
+            $grand_totals = [];
+            foreach ($totals as $school => $more) {
+                foreach ($more as $gender => $total) {
+                    echo "<tr><td>$school</td><td>$gender</td><td>$total</td></tr>";
+                    if (isset($grand_totals[$gender])) $grand_totals[$gender] += $total;
+                    else $grand_totals[$gender] = $total;
+                }
             }
+            echo "<tr><th>Grand Total</th><td>" . $grand_totals['M'] . "</td><td>" . $grand_totals['F'] . "</td></tr>";
             ?>
         </table>
     </body>
