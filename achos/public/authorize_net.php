@@ -49,7 +49,7 @@
 
                 // live site:               
                 "x_login"            => "4FW7gsD8Tr",
-                "x_tran_key"         => "6f7z4c79NMLU4293",
+                "x_tran_key"         => "933Q86GEy6u8PcQP",
 
                 "x_version"             => "3.1",
                 "x_delim_data"          => "TRUE",
