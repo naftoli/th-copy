@@ -91,6 +91,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['school_country'] = $row['school_country'];
         $children[$row['user_id']]['user_serial']    = $row['user_serial'];
         $children[$row['user_id']]['hachayol']       = $row['hachayol'];
+        $children[$row['user_id']]['admin_id']       = $admin;
 
         // find out highest rank achieved
         $sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 

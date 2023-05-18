@@ -219,7 +219,7 @@
             </div>
 
             <div class="row add_child">
-                <div id="addchilddiv" class="col-xs-6 float_element">
+                <div id="addchilddiv" class="col-xs-4 float_element">
                     <a href="/mobile/registration/child.html" id="addChild">
                         <div class="float_element" style="float:left">
                             <div class="ico-wrapper">
@@ -231,7 +231,12 @@
                         </div>
                     </a>
                 </div>
-                <div class="col-xs-6" id="chidonDriveButton">
+                <div class="col-xs-4">
+                    <div style="font-size: 30px; color: #35559f; text-align: center">
+                        Family ID: <span id="family_id" style="color: green"></span>
+                    </div>
+                </div>
+                <div class="col-xs-4" id="chidonDriveButton">
                     <div class="button-spacing childrens-content" style="float:right;">
                         <button class="btn btn-primary yahadusSale">Yahadus Book Sale</button>
 <!--                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
@@ -632,6 +637,10 @@
                         $(".chilrens").append(html);
                         setSwiper();
                         $(".year").text(year);
+                        // get admin id for showing family ID
+                        let family_id = registred_children[Object.keys(registred_children)[0]].admin_id ||
+                          unregistered_children[Object.keys(unregistered_children)[0]].admin_id;
+                        $("#family_id").text(family_id)
                     }
                 }
             });
