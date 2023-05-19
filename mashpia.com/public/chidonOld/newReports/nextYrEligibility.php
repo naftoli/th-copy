@@ -17,8 +17,7 @@ $sql = "select gender, user_id, user_serial, first, last, u.school_id, school_na
         from users u 
         join schools s using (school_id) 
         join classes c on c.class_id = u.class_id 
-        where u.user_registered > 0 
-        and c.class_grade = '7' 
+        where c.class_grade = '7' 
         order by school_name, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
