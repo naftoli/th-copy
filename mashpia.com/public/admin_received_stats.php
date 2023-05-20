@@ -439,13 +439,13 @@ else
 												<?=dateToHebrew($medal['date_awarded']);?>
 											</td>
 											<td>
-												<? if (is_null($medal['date_received'])) : ?>
+												<? if (is_null($medal['date_shipped'])) : ?>
 													<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"></span>
 													<label>
 														<input type="checkbox" class="receive_medal" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>">
 													</label>
 												<? else : ?>
-													<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"><?=substr($medal['date_received'], 0, 10)?></span>
+													<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"><?=substr($medal['date_shipped'], 0, 10)?></span>
 													<label>
 														<input type="checkbox" checked="checked" class="receive_medal" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>">
 													</label>

@@ -14,7 +14,7 @@ function unreceive_medal_mark() {
 	$subject_id = $parameters[1];
 	$medal_ord = $parameters[2];
 	
-	$sql = "UPDATE medal_marks SET date_received=NULL WHERE user_id=" . $user_id . " AND subject_id=" . $subject_id . " AND medal_ord=" . $medal_ord;
+	$sql = "UPDATE medal_marks SET date_shipped=NULL WHERE user_id=" . $user_id . " AND subject_id=" . $subject_id . " AND medal_ord=" . $medal_ord;
 	$query = mysql_query($sql);
 	
 	if ($query)
@@ -31,7 +31,7 @@ function update_medal_marks() {
 	
 	$today = date('Y-m-d G:i:s');
 	
-	$sql = "UPDATE medal_marks SET date_received='" . $today . "' WHERE user_id=" . $user_id . " AND subject_id=" . $subject_id . " AND medal_ord=" . $medal_ord;
+	$sql = "UPDATE medal_marks SET date_shipped='" . $today . "' WHERE user_id=" . $user_id . " AND subject_id=" . $subject_id . " AND medal_ord=" . $medal_ord;
 	$query = mysql_query($sql);
 	
 	if ($query)
