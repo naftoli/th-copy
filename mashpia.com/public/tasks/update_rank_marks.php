@@ -1,4 +1,6 @@
 <?php
+ini_set('memory_limit', '256M');
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
