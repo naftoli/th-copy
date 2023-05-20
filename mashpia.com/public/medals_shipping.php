@@ -63,7 +63,7 @@ if (isset($_POST['submit'])) {
                      });
                 });
                 
-                $(".cshippedBtn").click( function() {
+                $(".shippedBtn").click( function() {
                     $(this).parent().parent().parent().parent().find('.shipped').each( function() {
                         $(this).attr('checked', !$(this).is(":checked")); //needed b/c trigger function will call ajax before checking the button
                         $(this).trigger('click');
@@ -71,7 +71,7 @@ if (isset($_POST['submit'])) {
                     });
                 });
                 
-                $(".creceivedBtn").click( function() {
+                $(".receivedBtn").click( function() {
                     $(this).parent().parent().parent().parent().find('.received').each( function() {
                         $(this).attr('checked', !$(this).is(":checked")); //needed b/c trigger function will call ajax before checking the button
                         $(this).trigger('click');
@@ -213,8 +213,8 @@ if (isset($_POST['submit'])) {
 	                            }
 	                        }
 	                    }
-						echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle' /></td>";
-						echo "<td><input type='button' class='receivedBtn' value='toggle' /></td></tr>";
+						echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle all' /></td>";
+						echo "<td><input type='button' class='receivedBtn' value='toggle all' /></td></tr>";
 	                    echo "</table>"; 
 	                    echo "<br /><br />"; 
 	                }
