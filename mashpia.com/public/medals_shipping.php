@@ -5,11 +5,8 @@ ini_set('memory_limit', '128M');
 $admin_auth = array('school'); 
 require('header.php');
 
-if (isset($_POST['submit'])) {
-	$previous = $_POST['previous'];
-	require_once 'class.medalReport.php';
-	$m = new MedalReport($previous);
-}
+$m = new MedalReport;
+$m->setDateToAll();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -117,206 +114,194 @@ if (isset($_POST['submit'])) {
         <? include('admin_header.php'); ?>
         <h1>Medals Shipping Report</h1>
         
-        <? 
-        if (isset($m)) {
-	        require_once 'class.adminSchools.php';      
-	        $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
-	        $schools = $as->getSchools();
-	        
-	        require_once 'class.schoolsUsers.php';         
-	        $schoolsUsers = array();
-	        $totals = array();
-	        
-	        foreach ($schools as $id => $school) {
-	            $s = new SchoolsUsers($id);
-	            $schoolsUsers[$id] = $s->getUsers();
-	        }
-	        ?>
-	        <div class='no-print'>            
-	            <div align='center'>
-	                <input type='button' name='print' value='Print' onclick="window.print()" />
-	            </div>
-	        </div>
-	        <div id='main'>          
-	            <?                     
-	            //for super setup totals arrays
-	            $grandTotal = 0;
-	            $grandTotalByMedal = array();
-	            foreach ( $schools as $school_id => $school_name ) {
-	                echo "<h2>" . $school_name . "</h2>";
-	                 
-	                //set up medals array
-	                $m->setSchoolId($school_id);
-	                $m->setMedalDetails();
-	                $details = $m->getMedalDetails();
-	                $m->setMedalSummary();
-	                $summary = $m->getMedalSummary();
-	                $totals = $m->getMedalTotals();
-	                $medalsTotal = $m->getMedalsTotal();
-	                $medalsInfo = $m->getMedalsInfo();
-	                $userInfo = $m->getUserInfo();
-	                $medalOrds = $m->getMedalOrds();
-	                $subjects = $m->getSubjects();
-	                
+        <?php
+		require_once 'class.adminSchools.php';
+		$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
+		$schools = $as->getSchools();
+
+		require_once 'class.schoolsUsers.php';
+		$schoolsUsers = array();
+		$totals = array();
+
+		foreach ($schools as $id => $school) {
+			$s = new SchoolsUsers($id);
+			$schoolsUsers[$id] = $s->getUsers();
+		}
+		?>
+		<div class='no-print'>
+			<div align='center'>
+				<input type='button' name='print' value='Print' onclick="window.print()" />
+			</div>
+		</div>
+		<div id='main'>
+			<?
+			//for super setup totals arrays
+			$grandTotal = 0;
+			$grandTotalByMedal = array();
+			foreach ( $schools as $school_id => $school_name ) {
+				echo "<h2>" . $school_name . "</h2>";
+
+				//set up medals array
+				$m->setSchoolId($school_id);
+				$m->setMedalDetails();
+				$details = $m->getMedalDetails();
+				$m->setMedalSummary();
+				$summary = $m->getMedalSummary();
+				$totals = $m->getMedalTotals();
+				$medalsTotal = $m->getMedalsTotal();
+				$medalsInfo = $m->getMedalsInfo();
+				$userInfo = $m->getUserInfo();
+				$medalOrds = $m->getMedalOrds();
+				$subjects = $m->getSubjects();
+
 //	                echo "<pre>";
-	                //print_r($details);
-	                //print_r($summary);
-	                //print_r($ranks);
+				//print_r($details);
+				//print_r($summary);
+				//print_r($ranks);
 //	                echo "</pre>";
 
-	                if (isset($details[$school_name])) {
-						?>
-						<table>
-							<tr>
-								<th>Teacher</th>
-								<th>Grade</th>
-								<th>Student</th>
-								<th>Subject</th>
-								<th>Medal</th>
-								<th>Earned</th>
-								<th>Shipped</th>
-								<th>Received</th>
-							</tr>
-						<?php
-	                    foreach ($details[$school_name] as $teacher => $class) {
-	                        foreach ($class as $grade => $info) {
-	                            foreach ($info as $user => $medals) {
-	                                foreach ($medals as $subject => $more) {
-										foreach ($more as $medal) {
-											$id = $userInfo[$user];
-											$subjectID = $subjects[$subject];
-											$ord = $medalOrds[$medal];
-											echo "<tr><td>" . $teacher . "</td><td>" . $grade . "</td><td>
-												<span class='userIDs' style='display:none'>" . 
-												$id . ":" . $subjectID . ":" . $ord . "</span>" . 
-												$user . "</td><td>" . $subject . "</td><td>" . $medal . "</td><td>" . 
-												jdtogregorian($medalsInfo[$user]['earned']) . "</td><td align='center'>";
-											
-											if (!is_null($medalsInfo[$user]['shipped'])) {
-												echo "<input type='checkbox' class='shipped' checked='checked' />";
-												echo "<span>" . $medalsInfo[$user]['shipped'] . "</span>";
-											} else {
-												echo "<input type='checkbox' class='shipped' />";
-											}
-											echo "</td><td align='center'>";
-											
-											
-											if (!is_null($medalsInfo[$user]['received'])) {
-												echo "<input type='checkbox' class='received' checked='checked' />";
-												echo "<span>" . $medalsInfo[$user]['received'] . "</span>";
-											} else {
-												echo "<input type='checkbox' class='received' />";
-											}
-											echo "</td><td align='center'>";
+				if (isset($details[$school_name])) {
+					?>
+					<table>
+						<tr>
+							<th>Teacher</th>
+							<th>Grade</th>
+							<th>Student</th>
+							<th>Subject</th>
+							<th>Medal</th>
+							<th>Earned</th>
+							<th>Shipped</th>
+							<th>Received</th>
+						</tr>
+					<?php
+					foreach ($details[$school_name] as $teacher => $class) {
+						foreach ($class as $grade => $info) {
+							foreach ($info as $user => $medals) {
+								foreach ($medals as $subject => $more) {
+									foreach ($more as $medal) {
+										$id = $userInfo[$user];
+										$subjectID = $subjects[$subject];
+										$ord = $medalOrds[$medal];
+										echo "<tr><td>" . $teacher . "</td><td>" . $grade . "</td><td>
+											<span class='userIDs' style='display:none'>" .
+											$id . ":" . $subjectID . ":" . $ord . "</span>" .
+											$user . "</td><td>" . $subject . "</td><td>" . $medal . "</td><td>" .
+											jdtogregorian($medalsInfo[$user]['earned']) . "</td><td align='center'>";
+
+										if (!is_null($medalsInfo[$user]['shipped'])) {
+											echo "<input type='checkbox' class='shipped' checked='checked' />";
+											echo "<span>" . $medalsInfo[$user]['shipped'] . "</span>";
+										} else {
+											echo "<input type='checkbox' class='shipped' />";
 										}
-	                                }
-	                            }
-	                        }
-	                    }
-						echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle all' /></td>";
-						echo "<td><input type='button' class='receivedBtn' value='toggle all' /></td></tr>";
-	                    echo "</table>"; 
-	                    echo "<br /><br />"; 
-	                }
-	                
-	                /*
-	                foreach ($details as $school => $line) {
-	                    if ($school != $school_name) continue;
-	                    ?>
-	                    <table>
-	                        <tr>
-	                            <th>Commander</th>
-	                            <th>Platoon</th>
-	                            <th>Soldier</th>
-	                            <th>Medals</th>
-	                        </tr>
-	
-	                    <? 
-	                    foreach ($line as $teacher => $class) {
-	                        foreach ($class as $grade => $info) {
-	                            foreach ($info as $user => $medals) {
-	                                echo "<tr><td>" . $teacher . "</td><td>" . $grade . "</td>";
-	                                echo "<td>" . getRank($user) . " " . $user . "</td><td>";
-	                                foreach ($medals as $subject => $medal) {
-	                                    echo $subject . "-" . $medal . "<br />";
-	                                }
-	                                echo "</td></tr>";
-	                            }
-	                        }
-	                    }
-	                    echo "</table>";
-	                    echo "<br /><br />";
-	                }
-	                echo "<br />";
-	                echo "<div class='page-break'></div>";
-	                
-	                foreach ($summary as $school => $medals) {
-	                    if ($school != $school_name) continue;   
-	                    $grandTotal += $medalsTotal[$school];  
-	                    echo "Total of " . $medalsTotal[$school] . " medals earned in " . $school . " from " . $heDates['start_he'] . " until " . $heDates['end_he'] . ". <br />";
-	                    echo "<br />";
-	                    foreach ($medals as $subject => $info) {
-	                        echo "<div class='students'>" . $subject . " - " . $totals[$school][$subject] . "</div>";
-	                        echo "<div class='medals'>";
-	                        foreach ($info as $medal => $total) {
-	                            echo $medal . "-" . $total . "<br />";
-	                            if (!isset($grandTotalByMedal[$subject][$medal])) 
-	                                $grandTotalByMedal[$subject][$medal] = $total;
-	                            else 
-	                                $grandTotalByMedal[$subject][$medal] += $total;
-	                        }
-	                        echo "</div>";
-	                    }
-	                }
-	    
-	                echo "<br /><br />";
-	                echo "<div class='page-break'></div>";
-	                foreach ($ranks as $school => $line) {
-	                    if ($school != $school_name) continue;
-	                    echo "Ranks earned in " . $school . " from " . $heDates['start_he'] . " until " . $heDates['end_he'] . ". <br />"; 
-	                    ?>
-	                    <br />
-	                    Before you give out the Rank books, please tell the chayolim we are now going to honor the children who have gone up in rank:<br />
-	                    <?
-	                    foreach ($line as $rank => $info) {
-	                        foreach ($rankNames as $rankName => $needed) {
-	                            if ($rankName == $rank) {
-	                                echo "<br />The " . $rank . "s who have earned " . $needed . " medals:<br />"; 
-	                                foreach ($info as $teacher => $class) {
-	                                    foreach ($class as $grade => $student) {
-	                                        echo "<div class='students'>" . $student . "</div>";
-	                                    }
-	                                }
-	                            }
-	                        } 
-	                    }
-	                    echo "<br />"; 
-	                }
-	                echo "<div class='page-break'></div>";
-	            }
-	            if (count($schools) > 1) {
-	                echo "<br />";
-	                echo "Total medals awarded: " . $grandTotal . "<br />";
-	                echo "<br />Total medals awarded by Medal:<br /><br />";
-	                foreach ($grandTotalByMedal as $subject => $medals) {
-	                    foreach ( $medals as $medal => $total ) { 
-	                        echo $subject . " - " . $medal . " : " . $total . "<br />";
-	                    }
-	                }
-	            } */
-	        }        
-	        ?>
-	        </div>
-	    <? 
-		} else {
-			?>
-			<form action="medals_shipping.php" method="post">
-				<input type="radio" name="previous" value="0" /> Show current report<br />
-				<input type="radio" name="previous" value="1" /> Show previous report<br />
-				<input type="submit" name="submit" value="submit" />
-			</form>
-			<?
-		} 
+										echo "</td><td align='center'>";
+
+
+										if (!is_null($medalsInfo[$user]['received'])) {
+											echo "<input type='checkbox' class='received' checked='checked' />";
+											echo "<span>" . $medalsInfo[$user]['received'] . "</span>";
+										} else {
+											echo "<input type='checkbox' class='received' />";
+										}
+										echo "</td><td align='center'>";
+									}
+								}
+							}
+						}
+					}
+					echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle all' /></td>";
+					echo "<td><input type='button' class='receivedBtn' value='toggle all' /></td></tr>";
+					echo "</table>";
+					echo "<br /><br />";
+				}
+
+				/*
+				foreach ($details as $school => $line) {
+					if ($school != $school_name) continue;
+					?>
+					<table>
+						<tr>
+							<th>Commander</th>
+							<th>Platoon</th>
+							<th>Soldier</th>
+							<th>Medals</th>
+						</tr>
+
+					<?
+					foreach ($line as $teacher => $class) {
+						foreach ($class as $grade => $info) {
+							foreach ($info as $user => $medals) {
+								echo "<tr><td>" . $teacher . "</td><td>" . $grade . "</td>";
+								echo "<td>" . getRank($user) . " " . $user . "</td><td>";
+								foreach ($medals as $subject => $medal) {
+									echo $subject . "-" . $medal . "<br />";
+								}
+								echo "</td></tr>";
+							}
+						}
+					}
+					echo "</table>";
+					echo "<br /><br />";
+				}
+				echo "<br />";
+				echo "<div class='page-break'></div>";
+
+				foreach ($summary as $school => $medals) {
+					if ($school != $school_name) continue;
+					$grandTotal += $medalsTotal[$school];
+					echo "Total of " . $medalsTotal[$school] . " medals earned in " . $school . " from " . $heDates['start_he'] . " until " . $heDates['end_he'] . ". <br />";
+					echo "<br />";
+					foreach ($medals as $subject => $info) {
+						echo "<div class='students'>" . $subject . " - " . $totals[$school][$subject] . "</div>";
+						echo "<div class='medals'>";
+						foreach ($info as $medal => $total) {
+							echo $medal . "-" . $total . "<br />";
+							if (!isset($grandTotalByMedal[$subject][$medal]))
+								$grandTotalByMedal[$subject][$medal] = $total;
+							else
+								$grandTotalByMedal[$subject][$medal] += $total;
+						}
+						echo "</div>";
+					}
+				}
+
+				echo "<br /><br />";
+				echo "<div class='page-break'></div>";
+				foreach ($ranks as $school => $line) {
+					if ($school != $school_name) continue;
+					echo "Ranks earned in " . $school . " from " . $heDates['start_he'] . " until " . $heDates['end_he'] . ". <br />";
+					?>
+					<br />
+					Before you give out the Rank books, please tell the chayolim we are now going to honor the children who have gone up in rank:<br />
+					<?
+					foreach ($line as $rank => $info) {
+						foreach ($rankNames as $rankName => $needed) {
+							if ($rankName == $rank) {
+								echo "<br />The " . $rank . "s who have earned " . $needed . " medals:<br />";
+								foreach ($info as $teacher => $class) {
+									foreach ($class as $grade => $student) {
+										echo "<div class='students'>" . $student . "</div>";
+									}
+								}
+							}
+						}
+					}
+					echo "<br />";
+				}
+				echo "<div class='page-break'></div>";
+			}
+			if (count($schools) > 1) {
+				echo "<br />";
+				echo "Total medals awarded: " . $grandTotal . "<br />";
+				echo "<br />Total medals awarded by Medal:<br /><br />";
+				foreach ($grandTotalByMedal as $subject => $medals) {
+					foreach ( $medals as $medal => $total ) {
+						echo $subject . " - " . $medal . " : " . $total . "<br />";
+					}
+				}
+			} */
+		}
 		?>
+		</div>
     </body>
 </html>

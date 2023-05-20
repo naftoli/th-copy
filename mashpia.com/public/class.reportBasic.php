@@ -62,6 +62,17 @@ class ReportBasic {
         $str2 = jdtojewish($end, true, CAL_JEWISH_ADD_GERESHAYIM);
         $this->heReportDates['end_he'] = iconv('WINDOWS-1255', 'UTF-8', $str2);
 	}
+
+    public function setDateToAll() {
+        $this->reportDates['start'] = gregoriantojd(1, 1, 2010);
+        $this->reportDates['end'] = unixtojd();
+
+        $str1 = jdtojewish($this->reportDates['start'], true, CAL_JEWISH_ADD_GERESHAYIM);
+        $this->heReportDates['start_he'] = iconv('WINDOWS-1255', 'UTF-8', $str1);
+
+        $str2 = jdtojewish($this->reportDates['end'], true, CAL_JEWISH_ADD_GERESHAYIM);
+        $this->heReportDates['end_he'] = iconv('WINDOWS-1255', 'UTF-8', $str2);
+    }
     
     public function getReportDates() {
         return $this->reportDates;
