@@ -111,8 +111,8 @@ function getRank($user) {
             </div>
 
             <div>
-                <button class='cardBtnAll'>Set All Cards as Shipped</button>
-                <button class='bookBtnAll''>Set All Books as Shipped</button>
+                <button id='cardBtnAll'>Set All Cards as Shipped</button>
+                <button id='bookBtnAll''>Set All Books as Shipped</button>
             </div>
         </div>
         <div id='main'>          
@@ -245,7 +245,7 @@ function getRank($user) {
             update(this, 'book', checked)
           })
 
-          $(".cardBtnAll").click( function() {
+          $("#cardBtnAll").click( function() {
             $.getJSON('edit_functions.php?function_name=update_ranks&parameters=' + start + '_' + end + '_card', function(success) {
               if (success = 0) {
                 alert('Error updating rank cards.')
@@ -253,7 +253,7 @@ function getRank($user) {
             })
           })
 
-          $(".bookBtnAll").click( function() {
+          $("#bookBtnAll").click( function() {
             $.getJSON('edit_functions.php?function_name=update_ranks&parameters=' + start + '_' + end + '_card', function(success) {
               if (success = 0) {
                 alert('Error updating rank books.')

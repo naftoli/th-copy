@@ -119,6 +119,23 @@ function update_ranks_all() {
         return json_encode('0');
 }
 
+function update_medals_all() {
+    $params = explode("_", $_GET['parameters']);
+    $start = $params[0];
+    $end = $params[1];
+    $today = date('Y-m-d G:i:s');
+    $sql = "UPDATE medal_marks SET date_shipped='" . $today . "' 
+            WHERE (
+                (date_awarded >= $start AND date_awarded <= $end) OR mm.date_shipped is null
+            ) AND date_shipped is null";
+    $query = mysql_query($sql);
+
+    if ($query)
+        return json_encode('1');
+    else
+        return json_encode('0');
+}
+
 function unreceive_ranks_date_book_shipped() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];

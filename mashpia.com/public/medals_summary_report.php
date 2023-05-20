@@ -23,6 +23,7 @@ if (isset($_GET['start']) && isset($_GET['end'])) {
 $heDates = $m->getHeReportDates();
 $m->setMedalSummary();
 $summary = $m->getMedalSummary();
+$dates = $m->getReportDates();
 
 $m->setMedalDetails();
 $totalSchools = $m->getTotalSchools();
@@ -96,6 +97,10 @@ $totalStudents = $m->getTotalStudents();
                 <? } ?>
             </div>
         </div>
+
+		<div class="no-print">
+			<button id="medalsBtnAll">Set All Medals as Shipped</button>
+		</div>
         
 		<div id="report_div" name="report_div">
             <h2>Totals</h2>
@@ -154,4 +159,22 @@ $totalStudents = $m->getTotalStudents();
 		</table>
 				
 	</BODY>
+	<script>
+		const start = <?= $dates['start']; ?>;
+		const end = <?= $dates['end']; ?>;
+
+		$( function () {
+			$("#medalsBtnAll").click( function () {
+				$.getJSON('edit_functions.php?function_name=update_medals_all&parameters=' + start + '_' + end, function (data) {
+					if (success == 1) {
+						alert('All medals have been set as shipped.');
+					} else {
+						alert('There was an error setting all medals as shipped.');
+					}
+				}).fail( function () {
+					alert('There was an error setting all medals as shipped.');
+				})
+			})
+		})
+	</script>
 </HTML>
