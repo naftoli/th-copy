@@ -232,11 +232,11 @@ function getRank($user) {
         $( function () {
           $(".rank_card").click( function () {
             let checked = $(this).is(":checked") ? 1 : 0;
-            update(this, 'card', checked)
+            update(this, 'card', !checked)
           })
           $(".rank_book").click( function () {
             let checked = $(this).is(":checked") ? 1 : 0;
-            update(this, 'book', checked)
+            update(this, 'book', !checked)
           })
 
           $(".cardBtnAll").click( function() {
