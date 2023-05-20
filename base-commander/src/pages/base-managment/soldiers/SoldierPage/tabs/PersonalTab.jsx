@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { LEGACY_URL } from 'components/constants';
 // components
 import { Form } from 'components/inputs';
-import { AddressRow } from 'components/rows';
+// import { AddressRow } from 'components/rows';
 import { SaveButton } from 'components/buttons';
 import { Row, Col, TabPane, Input } from 'reactstrap';
 import CropperModal from 'components/modals/CropperModal';
