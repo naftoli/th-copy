@@ -474,7 +474,7 @@ else
 												<? else : ?>
 													<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"><?=substr($medal['date_shipped'], 0, 10)?></span>
 													<label>
-														<input type="checkbox" class="receive_medal" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>">
+														<input type="checkbox" checked="checked" class="receive_medal" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>">
 													</label>
 												<? endif; ?>
 											</td>
