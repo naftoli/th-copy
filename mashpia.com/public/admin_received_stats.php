@@ -62,7 +62,8 @@ if (isset($_POST['go']) && $_POST['go'] == '1' && isset($_POST['from_awarded']))
 	$sql = "SELECT * ";
 	$sql .= "FROM users u 
 	         join classes c using (class_id) 
-	         WHERE u.user_registered > 0 ";
+	         WHERE u.user_registered > 0 
+	         AND u.medals_ranks = 1 ";
 	if ($school_id > 0)
 		$sql .= "AND u.school_id=" . $school_id . " ";
 	if ($user_id > 0)
