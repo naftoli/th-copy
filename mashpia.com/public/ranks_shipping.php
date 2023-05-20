@@ -205,22 +205,22 @@ $r = new RankReport;
                 //print_r($ranks);
                 //print_r($rankOrds);
                 echo "</pre>";
-                
-                ?>
-                <table>
-                    <tr>
-                        <th>Teacher</th>
-                        <th>Grade</th>
-                        <th>Student</th>
-                        <th>Rank</th>
-                        <th>Card Printed</th>
-                        <th>Card Shipped</th>
-                        <th>Card Received</th>
-                        <th>Book Shipped</th>
-                        <th>Book Received</th>
-                    </tr>
-                <?
+
                 if (isset($ranks[$school_name])) {
+                    ?>
+                    <table>
+                        <tr>
+                            <th>Teacher</th>
+                            <th>Grade</th>
+                            <th>Student</th>
+                            <th>Rank</th>
+                            <th>Card Printed</th>
+                            <th>Card Shipped</th>
+                            <th>Card Received</th>
+                            <th>Book Shipped</th>
+                            <th>Book Received</th>
+                        </tr>
+                    <?php
                     foreach ($ranks[$school_name] as $teacher => $class) {
                         foreach ($class as $grade => $info) {
                         	foreach ($info as $users) {
@@ -272,7 +272,7 @@ $r = new RankReport;
                     echo "<input type='button' class='bshippedBtn' value='toggle all' /></td><td>";
                     echo "<input type='button' class='breceivedBtn' value='toggle all' /></td><td>";
                     echo "</tr></table>"; 
-                    echo "<br /><br />"; 
+                    echo "<br /><br />";
                 }
             }        
             ?>

@@ -163,21 +163,21 @@ if (isset($_POST['submit'])) {
 	                //print_r($summary);
 	                //print_r($ranks);
 	                echo "</pre>";
-	                
-	                ?>
-	                <table>
-	                    <tr>
-	                        <th>Teacher</th>
-	                        <th>Grade</th>
-	                        <th>Student</th>
-	                        <th>Subject</th>
-	                        <th>Medal</th>
-	                        <th>Earned</th>
-	                        <th>Shipped</th>
-	                        <th>Received</th>
-	                    </tr>
-	                <?
+
 	                if (isset($details[$school_name])) {
+						?>
+						<table>
+							<tr>
+								<th>Teacher</th>
+								<th>Grade</th>
+								<th>Student</th>
+								<th>Subject</th>
+								<th>Medal</th>
+								<th>Earned</th>
+								<th>Shipped</th>
+								<th>Received</th>
+							</tr>
+						<?php
 	                    foreach ($details[$school_name] as $teacher => $class) {
 	                        foreach ($class as $grade => $info) {
 	                            foreach ($info as $user => $medals) {
