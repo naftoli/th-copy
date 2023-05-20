@@ -104,9 +104,14 @@ function getRank($user) {
             	<a href="isserRanks.php?prev=1">Show previous shipment</a>
             	<? endif; ?>
             </p>
-            
+
             <div align='center'>
                 <input type='button' name='print' value='Print' onclick="window.print()" />
+            </div>
+
+            <div>
+                <button id="cardBtnAll">Toggle All Cards</button>
+                <button id="bookBtnAll">Toggle All Books</button>
             </div>
         </div>
         <div id='main'>          
@@ -234,17 +239,29 @@ function getRank($user) {
             update(this, 'book')
           })
 
-          $(".cardBtn").click( function() {
+          $(".cardBtnAll").click( function() {
             $(".rank_card").each( function() {
               $(this).trigger('click')
             })
           })
 
-          $(".bookBtn").click( function() {
+          $(".bookBtnAll").click( function() {
             $(".rank_book").each( function() {
               $(this).trigger('click')
             })
           })
+
+          $(".cardBtn").click( function() {
+            $(this).closest('table').find('.rank_card').each( function() {
+              $(this).trigger('click')
+            })
+          })
+
+            $(".bookBtn").click( function() {
+                $(this).closest('table').find('.rank_book').each( function() {
+                $(this).trigger('click')
+                })
+            })
         })
     </script>
 </HTML>
