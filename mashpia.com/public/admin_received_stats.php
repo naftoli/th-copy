@@ -406,13 +406,13 @@ else
 										<th colspan="1">Subject</th>
 										<th colspan="1">Medal</th>
 										<th colspan="1">Date Earned</th>
-										<th colspan="1">Medal Sent By HQ</th>
-										<th colspan="1">Medal Recived From HQ</th>
+										<th colspan="1">Medal Sent</th>
+<!--										<th colspan="1">Medal Recived From HQ</th>-->
 										<th colspan="1">Rank</th>
 										<th colspan="1">Date Promoted</th>
-										<th colspan="1">Rank Book Received</th>
-										<th colspan="1">Rank Card Received</th>
-										<th colspan="1">Rank Card Printed</th> 	  
+<!--										<th colspan="1">Rank Book Received</th>-->
+<!--										<th colspan="1">Rank Card Received</th>-->
+										<th colspan="1">Rank Card / Book Printed & Sent</th>
 									</tr>									
 								</thead>
 								
@@ -445,9 +445,9 @@ else
 										<td></td>
 										<td></td>
 										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
+<!--										<td></td>-->
+<!--										<td></td>-->
+<!--										<td></td>-->
 									</tr>
 								
 									<!-- ********** MEDALS ********** -->
@@ -466,25 +466,35 @@ else
 												<?=dateToHebrew($medal['date_awarded']);?>
 											</td>
 											<td>
-												<?= !is_null($medal['date_shipped']) ? substr($medal['date_shipped'], 0, 10) : "Not Shipped Yet";?>
-											</td>
-											<TD style="text-align:center">											
-												<? if (!is_null($medal['date_received'])) : ?>
-												<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"><?=substr($medal['date_received'], 0, 10);?></span>
-												<LABEL>
-													<INPUT type="checkbox" checked="checked" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>" class="receive_medal">
-												</LABEL>																									
+												<? if (is_null($medal['date_shipped'])) : ?>
+													<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"></span>
+													<label>
+														<input type="checkbox" class="receive_medal" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>">
+													</label>
 												<? else : ?>
-												<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"></span>
-												<LABEL>
-													<INPUT type="checkbox" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>" class="receive_medal">
-												</LABEL>																									
-												<? endif; ?>												
-											</TD>
+													<span id="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>"><?=substr($medal['date_shipped'], 0, 10)?></span>
+													<label>
+														<input type="checkbox" class="receive_medal" data="<?=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?>">
+													</label>
+												<? endif; ?>
+											</td>
+<!--											<TD style="text-align:center">											-->
+<!--												--><?// if (!is_null($medal['date_received'])) : ?>
+<!--												<span id="--><?php //=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?><!--">--><?php //=substr($medal['date_received'], 0, 10);?><!--</span>-->
+<!--												<LABEL>-->
+<!--													<INPUT type="checkbox" checked="checked" data="--><?php //=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?><!--" class="receive_medal">-->
+<!--												</LABEL>																									-->
+<!--												--><?// else : ?>
+<!--												<span id="--><?php //=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?><!--"></span>-->
+<!--												<LABEL>-->
+<!--													<INPUT type="checkbox" data="--><?php //=$report_user->user_id . '_' . $medal['subject_id'] . '_' . $medal['medal_ord'];?><!--" class="receive_medal">-->
+<!--												</LABEL>																									-->
+<!--												--><?// endif; ?><!--												-->
+<!--											</TD>-->
 											<td></td>
 											<td></td>
-											<td></td>
-											<td></td>
+<!--											<td></td>-->
+<!--											<td></td>-->
 											<td></td>	
 										</tr>
 									
@@ -501,7 +511,7 @@ else
 											<td></td>
 											<td></td>
 											<TD></TD>
-											<td></td>
+<!--											<td></td>-->
 											
 											<td>
 												<? if ($rank['rank_color'] != '') : ?>
@@ -515,33 +525,33 @@ else
 												<?=dateToHebrew($rank['date_promoted']);?>
 											</td>
 											
-											<TD style="text-align:center">											
-												<? if ($rank['date_book_received'] == '') : ?>
-													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_0"></span>
-													<LABEL>
-														<INPUT type="checkbox" class="date_book_received_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
-													</LABEL>
-												<? else : ?>
-													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_0"><?=substr($rank['date_book_received'], 0, 10);?></span>
-													<LABEL>
-														<INPUT type="checkbox" checked="checked" class="date_book_received_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
-													</LABEL>													
-												<? endif; ?>
-											</TD>
-											
-											<TD style="text-align:center">
-												<? if ($rank['date_card_received'] == '') : ?>
-													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_1"></span>
-													<LABEL>
-														<INPUT type="checkbox" class="date_card_received_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
-													</LABEL>
-												<? else : ?>
-													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_1"><?=substr($rank['date_card_received'], 0, 10);?></span>
-													<LABEL>
-														<INPUT type="checkbox" checked="checked" class="date_card_received_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
-													</LABEL>													
-												<? endif; ?>
-											</TD>
+<!--											<TD style="text-align:center">											-->
+<!--												--><?// if ($rank['date_book_received'] == '') : ?>
+<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_0"></span>-->
+<!--													<LABEL>-->
+<!--														<INPUT type="checkbox" class="date_book_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
+<!--													</LABEL>-->
+<!--												--><?// else : ?>
+<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_0">--><?php //=substr($rank['date_book_received'], 0, 10);?><!--</span>-->
+<!--													<LABEL>-->
+<!--														<INPUT type="checkbox" checked="checked" class="date_book_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
+<!--													</LABEL>													-->
+<!--												--><?// endif; ?>
+<!--											</TD>-->
+<!--											-->
+<!--											<TD style="text-align:center">-->
+<!--												--><?// if ($rank['date_card_received'] == '') : ?>
+<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_1"></span>-->
+<!--													<LABEL>-->
+<!--														<INPUT type="checkbox" class="date_card_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
+<!--													</LABEL>-->
+<!--												--><?// else : ?>
+<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_1">--><?php //=substr($rank['date_card_received'], 0, 10);?><!--</span>-->
+<!--													<LABEL>-->
+<!--														<INPUT type="checkbox" checked="checked" class="date_card_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
+<!--													</LABEL>													-->
+<!--												--><?// endif; ?>
+<!--											</TD>-->
 											
 											<TD style="text-align:center">
 												<? if (is_null($rank['date_printed'])) : ?>
