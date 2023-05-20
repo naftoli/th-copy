@@ -91,11 +91,11 @@ class PersonalTab extends Component {
           schoolId={ soldier.school_id }
           onChange={ this.onSelectChange } />
 
-        <AddressRow
+        {/* <AddressRow
           showPhone
           prefix='user_'
           { ...soldier }
-          onChange={ this.handleChange } />
+          onChange={ this.handleChange } /> */}
 
         <SaveButton
           show={ updated }
