@@ -21,6 +21,7 @@ while ($row = mysql_fetch_assoc($result)) {
         $qrys[] = $sql;
     }
 }
+echo count($qrys) . " queries to run.<br>";
 
 $success = true;
 mysql_query('set autocommit=0');
