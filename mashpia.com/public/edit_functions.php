@@ -41,14 +41,14 @@ function update_medal_marks() {
 }
 
 
-function update_ranks_date_book_received() {
+function update_ranks_date_book_shippe() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];
 	$rank_ord = $parameters[1];
 	
 	$today = date('Y-m-d G:i:s');
 	
-	$sql = "UPDATE rank_marks SET date_book_received='" . $today . "' WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
+	$sql = "UPDATE rank_marks SET date_book_shipped='" . $today . "' WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
 	$query = mysql_query($sql);
 	
 	if ($query)
@@ -57,14 +57,14 @@ function update_ranks_date_book_received() {
 		return json_encode('0');
 }
 
-function unreceive_ranks_date_book_received() {
+function unreceive_ranks_date_book_shipped() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];
 	$rank_ord = $parameters[1];
 	
 	$today = date('Y-m-d G:i:s');
 	
-	$sql = "UPDATE rank_marks SET date_book_received=NULL WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
+	$sql = "UPDATE rank_marks SET date_book_shipped=NULL WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
 	$query = mysql_query($sql);
 	
 	if ($query)
@@ -73,14 +73,14 @@ function unreceive_ranks_date_book_received() {
 		return json_encode('0');
 }
 
-function update_ranks_date_card_received() {
+function update_ranks_date_card_shipped() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];
 	$rank_ord = $parameters[1];
 	
 	$today = date('Y-m-d G:i:s');
 	
-	$sql = "UPDATE rank_marks SET date_card_received='" . $today . "' WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
+	$sql = "UPDATE rank_marks SET date_card_shipped='" . $today . "' WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
 	$query = mysql_query($sql);
 	
 	if ($query)
@@ -89,14 +89,14 @@ function update_ranks_date_card_received() {
 		return json_encode('0');
 }
 
-function unreceive_ranks_date_card_received() {
+function unreceive_ranks_date_card_shipped() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];
 	$rank_ord = $parameters[1];
 	
 	$today = date('Y-m-d G:i:s');
 	
-	$sql = "UPDATE rank_marks SET date_card_received=NULL, date_printed=null WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
+	$sql = "UPDATE rank_marks SET date_card_shipped=NULL WHERE user_id=" . $user_id . " AND rank_ord=" . $rank_ord;
 	$query = mysql_query($sql);
 	
 	if ($query)
