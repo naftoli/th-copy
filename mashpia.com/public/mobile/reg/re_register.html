@@ -2066,7 +2066,8 @@
 				}
 			});
 
-			$("#delAcct").click( function() {
+			$("#delAcct").click( function(e) {
+				e.preventDefault()
 				if (confirm('Are you sure you want to delete this account?')) {
 					$.post('ajax/delChild.php', { parent: admin, child: id }, function( success ) {
 						if (success) {
