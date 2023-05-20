@@ -108,11 +108,6 @@ function getRank($user) {
             <div align='center'>
                 <input type='button' name='print' value='Print' onclick="window.print()" />
             </div>
-
-            <div>
-                <button id="cardBtnAll">Toggle All Cards</button>
-                <button id="bookBtnAll">Toggle All Books</button>
-            </div>
         </div>
         <div id='main'>          
             <?
@@ -129,8 +124,12 @@ function getRank($user) {
                 foreach ( $ranks as $school => $line ) {
                     if ( $school != $school_name ) continue;
 					echo "<h2>" . $school_name . "</h2>";
-                    echo "Ranks earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br /><br />";
-					$totals = array();
+                    echo "Ranks earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br />";
+                    echo "<div id='$school_id'>
+                            <button class='cardBtnAll'>Toggle All Cards</button>
+                            <button class='bookBtnAll''>Toggle All Books</button>
+                        </div>";
+					$totals = [];
 
                     foreach ( $line as $rank => $info ) {
                         foreach ( $rankNames as $rankName => $needed ) {
@@ -240,13 +239,13 @@ function getRank($user) {
           })
 
           $(".cardBtnAll").click( function() {
-            $(".rank_card").each( function() {
+            $(this).next('.table').find(".rank_card").each( function() {
               $(this).trigger('click')
             })
           })
 
           $(".bookBtnAll").click( function() {
-            $(".rank_book").each( function() {
+            $(this).next('.table').find(".rank_book").each( function() {
               $(this).trigger('click')
             })
           })
@@ -257,11 +256,11 @@ function getRank($user) {
             })
           })
 
-            $(".bookBtn").click( function() {
-                $(this).closest('table').find('.rank_book').each( function() {
-                $(this).trigger('click')
-                })
+          $(".bookBtn").click( function() {
+            $(this).closest('table').find('.rank_book').each( function() {
+              $(this).trigger('click')
             })
+          })
         })
     </script>
 </HTML>
