@@ -101,6 +101,24 @@ function update_ranks() {
         return json_encode('0');
 }
 
+function update_ranks_all() {
+    $params = explode("_", $_GET['parameters']);
+    $start = $params[0];
+    $end = $params[1];
+    $type = $params[2];
+    $today = date('Y-m-d G:i:s');
+    $sql = "UPDATE rank_marks SET date_{$type}_shipped='" . $today . "' 
+            WHERE (
+            (date_promoted >= $start AND date_promoted <= $end) OR (rm.date_book_shipped is null OR rm.date_card_shipped is null) 
+            ) AND date_{$type}_shipped is null";
+    $query = mysql_query($sql);
+
+    if ($query)
+        return json_encode('1');
+    else
+        return json_encode('0');
+}
+
 function unreceive_ranks_date_book_shipped() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];

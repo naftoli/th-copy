@@ -12,6 +12,7 @@ require_once 'class.rankReport.php';
 $rr = new RankReport($prev);
 $rr->setRankNames();
 $rankNames = $rr->getRankNames();
+$reportDates = $rr->getReportDates();
 $heDatesRanks = $rr->getHeReportDates();
 
 $rankOrds = [];
@@ -108,6 +109,11 @@ function getRank($user) {
             <div align='center'>
                 <input type='button' name='print' value='Print' onclick="window.print()" />
             </div>
+
+            <div>
+                <button class='cardBtnAll'>Set All Cards as Shipped</button>
+                <button class='bookBtnAll''>Set All Books as Shipped</button>
+            </div>
         </div>
         <div id='main'>          
             <?
@@ -119,20 +125,13 @@ function getRank($user) {
                 $ranks = $rr->getRanks();
 				$userInfo = $rr->getUserInfo();
 				$heNames = $rr->getUserHeNames();
-				//echo "<pre>"; print_r($ranks); echo "</pre>";
-    
+
                 foreach ( $ranks as $school => $line ) {
                     if ( $school != $school_name ) continue;
 					echo "<h2>" . $school_name . "</h2>";
                     echo "Ranks earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br /><br />";
-                    echo "<div>
-                            <input type='hidden' class='school_id' value='$school_id' />
-                            <button class='cardBtnAll'>Toggle All Cards</button>
-                            <button class='bookBtnAll''>Toggle All Books</button>
-                        </div>";
 					$totals = [];
 
-                    echo "<div id='$school_id'>";
                     foreach ( $line as $rank => $info ) {
                         foreach ( $rankNames as $rankName => $needed ) {
                         	//echo $rankName . "<br />";
@@ -177,7 +176,6 @@ function getRank($user) {
                             }
                         } 
                     }
-                    echo "</div>";
 					if ($super) {
 						?>
 						<h2><?=$school?> Totals</h2>
@@ -220,6 +218,9 @@ function getRank($user) {
         </div>    
     </BODY>
     <script>
+        const start = <?= $reportDates['start'] ?>;
+        const end = <?= $reportDates['end'] ?>;
+
         function update(elem, type, checked) {
           let id = $(elem).attr('id');
           let info = id.split('|');
@@ -245,18 +246,18 @@ function getRank($user) {
           })
 
           $(".cardBtnAll").click( function() {
-            let school = $(this).parent().find('.school_id').val()
-            let elem = '#' + school
-            $(elem).find(".rank_card").each( function() {
-              $(this).trigger('click')
+            $.getJSON('edit_functions.php?function_name=update_ranks&parameters=' + start + '_' + end + '_card', function(success) {
+              if (success = 0) {
+                alert('Error updating rank cards.')
+              }
             })
           })
 
           $(".bookBtnAll").click( function() {
-            let school = $(this).parent().find('.school_id').val()
-            let elem = '#' + school
-            $(elem).find(".rank_book").each( function() {
-              $(this).trigger('click')
+            $.getJSON('edit_functions.php?function_name=update_ranks&parameters=' + start + '_' + end + '_card', function(success) {
+              if (success = 0) {
+                alert('Error updating rank books.')
+              }
             })
           })
 
