@@ -217,12 +217,11 @@ function getRank($user) {
         </div>    
     </BODY>
     <script>
-        function update(elem, type) {
+        function update(elem, type, checked) {
           let id = $(elem).attr('id');
           let info = id.split('|');
           let user_id = info[0];
           let rank = info[1];
-          let checked = $(elem).is(":checked") ? 1 : 0;
           let url = 'edit_functions.php?function_name=update_ranks&parameters=' + user_id + '_' + rank + '_' + checked + '_' + type
           $.getJSON(url, function(success) {
             if (success = 0) {
@@ -232,10 +231,10 @@ function getRank($user) {
         }
         $( function () {
           $(".rank_card").click( function () {
-            update(this, 'card')
+            update(this, 'card', $(this).is(":checked") ? 1 : 0)
           })
           $(".rank_book").click( function () {
-            update(this, 'book')
+            update(this, 'book', $(this).is(":checked") ? 1 : 0)
           })
 
           $(".cardBtnAll").click( function() {
