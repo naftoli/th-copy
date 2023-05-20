@@ -231,20 +231,22 @@ function getRank($user) {
         }
         $( function () {
           $(".rank_card").click( function () {
-            update(this, 'card', $(this).is(":checked") ? 1 : 0)
+            let checked = $(this).is(":checked") ? 1 : 0;
+            update(this, 'card', checked)
           })
           $(".rank_book").click( function () {
-            update(this, 'book', $(this).is(":checked") ? 1 : 0)
+            let checked = $(this).is(":checked") ? 1 : 0;
+            update(this, 'book', checked)
           })
 
           $(".cardBtnAll").click( function() {
-            $(this).next('table').find(".rank_card").each( function() {
+            $(this).parent().next('table').find(".rank_card").each( function() {
               $(this).trigger('click')
             })
           })
 
           $(".bookBtnAll").click( function() {
-            $(this).next('table').find(".rank_book").each( function() {
+            $(this).parent().next('table').find(".rank_book").each( function() {
               $(this).trigger('click')
             })
           })
