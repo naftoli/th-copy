@@ -22,7 +22,20 @@ while ($row = mysql_fetch_assoc($result)) {
     }
 }
 
+$success = true;
+mysql_query('set autocommit=0');
+mysql_query('start transaction');
 foreach ($qrys as $qry) {
-//    mysql_query($qry);
-    echo $qry . "<br>";
+    if (!mysql_query($qry)) {
+        $success = false;
+        break;
+    }
 }
+if ($success) {
+    mysql_query('commit');
+    echo "Success";
+} else {
+    mysql_query('rollback');
+    echo "Failed";
+}
+mysql_query('set autocommit=1');
