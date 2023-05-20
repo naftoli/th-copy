@@ -231,12 +231,14 @@ function getRank($user) {
         }
         $( function () {
           $(".rank_card").click( function () {
-            let checked = $(this).is(":checked") ? 1 : 0;
-            update(this, 'card', !checked)
+            // we want to toggle the value so if it's only getting checked now, the condition will be false and vice versa
+            let checked = $(this).is(":checked") ? 0 : 1;
+            update(this, 'card', checked)
           })
           $(".rank_book").click( function () {
-            let checked = $(this).is(":checked") ? 1 : 0;
-            update(this, 'book', !checked)
+            // we want to toggle the value so if it's only getting checked now, the condition will be false and vice versa
+            let checked = $(this).is(":checked") ? 0 : 1;
+            update(this, 'book', checked)
           })
 
           $(".cardBtnAll").click( function() {
