@@ -501,6 +501,7 @@ else
 											<td></td>
 											<td></td>
 											<TD></TD>
+											<td></td>
 											
 											<td>
 												<? if ($rank['rank_color'] != '') : ?>

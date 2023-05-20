@@ -158,11 +158,11 @@ if (isset($_POST['submit'])) {
 	                $medalOrds = $m->getMedalOrds();
 	                $subjects = $m->getSubjects();
 	                
-	                echo "<pre>";
+//	                echo "<pre>";
 	                //print_r($details);
 	                //print_r($summary);
 	                //print_r($ranks);
-	                echo "</pre>";
+//	                echo "</pre>";
 
 	                if (isset($details[$school_name])) {
 						?>
@@ -210,8 +210,8 @@ if (isset($_POST['submit'])) {
 											echo "</td><td align='center'>";
 										}
 	                                }
-	                                //echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle' /></td>";
-	                                //echo "<td><input type='button' class='receivedBtn' value='toggle' /></td></tr>";
+	                                echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle' /></td>";
+	                                echo "<td><input type='button' class='receivedBtn' value='toggle' /></td></tr>";
 	                            }
 	                        }
 	                    }
