@@ -125,7 +125,8 @@ function getRank($user) {
                     if ( $school != $school_name ) continue;
 					echo "<h2>" . $school_name . "</h2>";
                     echo "Ranks earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br /><br />";
-                    echo "<div id='$school_id'>
+                    echo "<div>
+                            <input type='hidden' class='school_id' value='$school_id' />
                             <button class='cardBtnAll'>Toggle All Cards</button>
                             <button class='bookBtnAll''>Toggle All Books</button>
                         </div>";
@@ -135,7 +136,7 @@ function getRank($user) {
                         foreach ( $rankNames as $rankName => $needed ) {
                         	//echo $rankName . "<br />";
                             if ( $rankName == $rank ) {
-                            	echo "<h2>" . $rank . "</h2><table>";
+                            	echo "<h2>" . $rank . "</h2><table id='$school_id'>";
                                 echo "<tr><th>Card Sent</th><th>Book Sent</th><th>Serial #</th><th>Name</th></tr>";
                                 foreach ( $info as $teacher => $class ) {
                                     foreach ( $class as $grade => $info ) {
@@ -242,13 +243,17 @@ function getRank($user) {
           })
 
           $(".cardBtnAll").click( function() {
-            $(this).parent().next('table').find(".rank_card").each( function() {
+            let school = $(this).parent().find('.school_id').val()
+            let elem = '#' + school
+            $(elem).find(".rank_card").each( function() {
               $(this).trigger('click')
             })
           })
 
           $(".bookBtnAll").click( function() {
-            $(this).parent().next('table').find(".rank_book").each( function() {
+            let school = $(this).parent().find('.school_id').val()
+            let elem = '#' + school
+            $(elem).find(".rank_book").each( function() {
               $(this).trigger('click')
             })
           })
