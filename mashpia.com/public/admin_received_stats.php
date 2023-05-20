@@ -62,9 +62,9 @@ if (isset($_POST['go']) && $_POST['go'] == '1' && isset($_POST['from_awarded']))
 	$sql = "SELECT * ";
 	$sql .= "FROM users u 
 	         join classes c using (class_id) 
-	         WHERE ";		
+	         WHERE u.user_registered > 0 ";
 	if ($school_id > 0)
-		$sql .= "u.school_id=" . $school_id . " ";	
+		$sql .= "AND u.school_id=" . $school_id . " ";
 	if ($user_id > 0)
 		$sql .= "AND u.user_id=" . $user_id . " ";	
 	if ($class_id > 0)
@@ -173,24 +173,24 @@ else
 							});							
 						});
 
-						$('.date_book_received_checkbox').click(function() {
+						$('.date_book_shipped_checkbox').click(function() {
 							var spanId = $(this).attr('data') + "_0";
 							var span = $('#' + spanId);
 						
 							var checkbox = $(this);
 							
 							if ($(checkbox).attr('checked')) {
-								var url = "https://mashpia.com/edit_functions.php?function_name=update_ranks_date_book_received&parameters=" + $(this).attr('data');
+								var url = "https://mashpia.com/edit_functions.php?function_name=update_ranks_date_book_shipped&parameters=" + $(this).attr('data');
 								var checked = true;
 							}
 							else {
-								var url = "https://mashpia.com/edit_functions.php?function_name=unreceive_ranks_date_book_received&parameters=" + $(this).attr('data'); 
+								var url = "https://mashpia.com/edit_functions.php?function_name=unreceive_ranks_date_book_shipped&parameters=" + $(this).attr('data');
 								var checked = false;
 							}
 							
 							$.getJSON(url, function(success) {
 								if (success == 0) {
-									alert('Date book received not updated');
+									alert('Date book shipped not updated');
 								}
 								else { 
 									if (checked == true) 
@@ -201,52 +201,24 @@ else
 							});
 						});
 													
-						$('.date_card_received_checkbox').click(function() {
+						$('.date_card_shipped_checkbox').click(function() {
 							var spanId = $(this).attr('data') + "_1";
 							var span = $('#' + spanId);
 						
 							var checkbox = $(this);
 							
 							if ($(checkbox).attr('checked')) {
-								var url = "https://mashpia.com/edit_functions.php?function_name=update_ranks_date_card_received&parameters=" + $(this).attr('data');
+								var url = "https://mashpia.com/edit_functions.php?function_name=update_ranks_date_card_shipped&parameters=" + $(this).attr('data');
 								var checked = true;
 							}
 							else {
-								var url = "https://mashpia.com/edit_functions.php?function_name=unreceive_ranks_date_card_received&parameters=" + $(this).attr('data'); 
+								var url = "https://mashpia.com/edit_functions.php?function_name=unreceive_ranks_date_card_shipped&parameters=" + $(this).attr('data');
 								var checked = false;
 							}
 							
 							$.getJSON(url, function(success) {
 								if (success == 0) {
-									alert('Date card received not updated');
-								}
-								else { 
-									if (checked == true) 
-										$(span).html(success);
-									else
-										$(span).html('');
-								}
-							});							
-						});
-						
-						$('.date_card_printed_checkbox').click(function() {
-							var spanId = $(this).attr('data') + "_2";
-							var span = $('#' + spanId);
-						
-							var checkbox = $(this);
-							
-							if ($(checkbox).attr('checked')) {
-								var url = "https://mashpia.com/edit_functions.php?function_name=update_ranks_date_card_printed&parameters=" + $(this).attr('data');
-								var checked = true;
-							}
-							else {
-								var url = "https://mashpia.com/edit_functions.php?function_name=unreceive_ranks_date_card_printed&parameters=" + $(this).attr('data'); 
-								var checked = false;
-							}
-							
-							$.getJSON(url, function(success) {
-								if (success == 0) {
-									alert('Date card printed not updated');
+									alert('Date card shipped not updated');
 								}
 								else { 
 									if (checked == true) 
@@ -410,9 +382,9 @@ else
 <!--										<th colspan="1">Medal Recived From HQ</th>-->
 										<th colspan="1">Rank</th>
 										<th colspan="1">Date Promoted</th>
-<!--										<th colspan="1">Rank Book Received</th>-->
-<!--										<th colspan="1">Rank Card Received</th>-->
-										<th colspan="1">Rank Card / Book Printed & Sent</th>
+										<th colspan="1">Rank Book Shipped</th>
+										<th colspan="1">Rank Card Shipped</th>
+<!--										<th colspan="1">Rank Card / Book Printed & Sent</th>-->
 									</tr>									
 								</thead>
 								
@@ -445,7 +417,7 @@ else
 										<td></td>
 										<td></td>
 										<td></td>
-<!--										<td></td>-->
+										<td></td>
 <!--										<td></td>-->
 <!--										<td></td>-->
 									</tr>
@@ -493,9 +465,9 @@ else
 <!--											</TD>-->
 											<td></td>
 											<td></td>
-<!--											<td></td>-->
-<!--											<td></td>-->
-											<td></td>	
+											<td></td>
+											<td></td>
+<!--											<td></td>	-->
 										</tr>
 									
 									<? endforeach; ?>
@@ -525,47 +497,47 @@ else
 												<?=dateToHebrew($rank['date_promoted']);?>
 											</td>
 											
-<!--											<TD style="text-align:center">											-->
-<!--												--><?// if ($rank['date_book_received'] == '') : ?>
-<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_0"></span>-->
-<!--													<LABEL>-->
-<!--														<INPUT type="checkbox" class="date_book_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
-<!--													</LABEL>-->
-<!--												--><?// else : ?>
-<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_0">--><?php //=substr($rank['date_book_received'], 0, 10);?><!--</span>-->
-<!--													<LABEL>-->
-<!--														<INPUT type="checkbox" checked="checked" class="date_book_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
-<!--													</LABEL>													-->
-<!--												--><?// endif; ?>
-<!--											</TD>-->
-<!--											-->
-<!--											<TD style="text-align:center">-->
-<!--												--><?// if ($rank['date_card_received'] == '') : ?>
-<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_1"></span>-->
-<!--													<LABEL>-->
-<!--														<INPUT type="checkbox" class="date_card_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
-<!--													</LABEL>-->
-<!--												--><?// else : ?>
-<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_1">--><?php //=substr($rank['date_card_received'], 0, 10);?><!--</span>-->
-<!--													<LABEL>-->
-<!--														<INPUT type="checkbox" checked="checked" class="date_card_received_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
-<!--													</LABEL>													-->
-<!--												--><?// endif; ?>
-<!--											</TD>-->
-											
 											<TD style="text-align:center">
-												<? if (is_null($rank['date_printed'])) : ?>
-													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_2"></span>
+												<? if ($rank['date_book_shipped'] == '') : ?>
+													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_0"></span>
 													<LABEL>
-														<INPUT type="checkbox" class="date_card_printed_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
+														<INPUT type="checkbox" class="date_book_shipped_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
 													</LABEL>
 												<? else : ?>
-													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_2"><?=substr($rank['date_printed'], 0, 10);?></span>
+													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_0"><?=substr($rank['date_book_shipped'], 0, 10);?></span>
 													<LABEL>
-														<INPUT type="checkbox" checked="checked" class="date_card_printed_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
-													</LABEL>													
+														<INPUT type="checkbox" checked="checked" class="date_book_shipped_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
+													</LABEL>
 												<? endif; ?>
-											</TD>	
+											</TD>
+
+											<TD style="text-align:center">
+												<? if ($rank['date_card_shipped'] == '') : ?>
+													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_1"></span>
+													<LABEL>
+														<INPUT type="checkbox" class="date_card_shipped_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
+													</LABEL>
+												<? else : ?>
+													<span id="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>_1"><?=substr($rank['date_card_shipped'], 0, 10);?></span>
+													<LABEL>
+														<INPUT type="checkbox" checked="checked" class="date_card_shipped_checkbox" data="<?=$report_user->user_id . '_' . $rank['rank_ord'];?>">
+													</LABEL>
+												<? endif; ?>
+											</TD>
+											
+<!--											<TD style="text-align:center">-->
+<!--												--><?// if (is_null($rank['date_printed'])) : ?>
+<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_2"></span>-->
+<!--													<LABEL>-->
+<!--														<INPUT type="checkbox" class="date_card_printed_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
+<!--													</LABEL>-->
+<!--												--><?// else : ?>
+<!--													<span id="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--_2">--><?php //=substr($rank['date_printed'], 0, 10);?><!--</span>-->
+<!--													<LABEL>-->
+<!--														<INPUT type="checkbox" checked="checked" class="date_card_printed_checkbox" data="--><?php //=$report_user->user_id . '_' . $rank['rank_ord'];?><!--">-->
+<!--													</LABEL>													-->
+<!--												--><?// endif; ?>
+<!--											</TD>	-->
 										</tr>
 									
 									<? endforeach; ?>
