@@ -14,6 +14,13 @@ $rr->setRankNames();
 $rankNames = $rr->getRankNames();
 $heDatesRanks = $rr->getHeReportDates();
 
+$rankOrds = [];
+$sql = "select * from ranks order by rank_ord";
+$result = mysql_query( $sql ) or die( mysql_error() );
+while ( $row = mysql_fetch_assoc( $result ) ) {
+    $rankOrds[$row['rank_name']] = $row['rank_ord'];
+}
+
 function getRank($user) {
 	$name = explode(" ", $user);  
 	$sql = "select rank_name 
@@ -125,6 +132,7 @@ function getRank($user) {
                         	//echo $rankName . "<br />";
                             if ( $rankName == $rank ) {
                             	echo "<h2>" . $rank . "</h2><table>";
+                                echo "<tr><th>Card Sent</th><th>Book Sent</th><th>Serial #</th><th>Name</th></tr>";
                                 foreach ( $info as $teacher => $class ) {
                                     foreach ( $class as $grade => $info ) {
 										$add = count($info);
@@ -138,19 +146,27 @@ function getRank($user) {
 											$totals[$rank] = $add;
 											
                                     	foreach ($info as $student) {
-                                    		$sql = "select user_serial from users where user_id = " . $student;
+                                            $user_id = $student['user_id'];
+                                    		$sql = "select user_serial from users where user_id = " . $user_id;
 											$result = mysql_query($sql);
 											$row = mysql_fetch_assoc($result);
-											echo "<tr><td><input type='checkbox'></td><td>" . $row['user_serial'] . "</td><td>";
-											if (!empty($heNames[$student]))
-												echo $heNames[$student] . ' - ';
-                                            echo $userInfo[$student];
+                                            $id = $user_id . '|' . $rankOrds[$rank];
+                                            $cardChecked = $student['date_card_shipped'];
+                                            $bookChecked = $student['date_book_shipped'];
+											echo "<tr><td><input type='checkbox' class='rank_card' id='$id' ";
+                                            if ($cardChecked) echo "checked";
+                                            echo "></td><td><input type='checkbox' class='rank_book' id='$id' ";
+                                            if ($bookChecked) echo "checked";
+                                            echo "></td><td>" . $row['user_serial'] . "</td><td>";
+											if (!empty($heNames[$user_id]))
+												echo $heNames[$user_id] . ' - ';
+                                            echo $userInfo[$user_id];
                                             echo " (" . $grade . ")";
 											echo "</td></tr>";
-                                        	//echo "<div class='students'>" . $student . " " . $row['user_serial'] . " <input type='checkbox' /></div>";
 										}
                                     }	
                                 }
+                                echo "<tr><td><button class='cardBtn'>Toggle</button></td><td><button class='bookBtn'>Toggle</button></td></tr>";
 								echo "</table><br />";
                             }
                         } 
@@ -196,5 +212,40 @@ function getRank($user) {
             </table>
         </div>    
     </BODY>
+    <script>
+        function update(elem, type) {
+          let id = $(elem).attr('id');
+          let info = id.split('|');
+          let user_id = info[0];
+          let rank = info[1];
+          let checked = $(elem).is(":checked") ? 1 : 0;
+          let url = 'edit_functions.php?function_name=update_ranks&parameters=' + user_id + '_' + rank + '_' + checked + '_' + type
+          $.getJSON(url, function(success) {
+            if (success = 0) {
+              alert('Error updating rank ' + type)
+            }
+          })
+        }
+        $( function () {
+          $(".rank_card").click( function () {
+            update(this, 'card')
+          })
+          $(".rank_book").click( function () {
+            update(this, 'book')
+          })
+
+          $(".cardBtn").click( function() {
+            $(".rank_card").each( function() {
+              $(this).trigger('click')
+            })
+          })
+
+          $(".bookBtn").click( function() {
+            $(".rank_book").each( function() {
+              $(this).trigger('click')
+            })
+          })
+        })
+    </script>
 </HTML>
  

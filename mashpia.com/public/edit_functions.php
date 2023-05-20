@@ -40,7 +40,6 @@ function update_medal_marks() {
 		return json_encode('0');
 }
 
-
 function update_ranks_date_book_shipped() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];
@@ -55,6 +54,51 @@ function update_ranks_date_book_shipped() {
 		return json_encode(substr($today, 0, 10));
 	else
 		return json_encode('0');
+}
+
+function update_rank_books() {
+    $params = explode("_", $_GET['parameters']);
+    $serial = $params[0];
+    $rank_ord = $params[1];
+    $checked = $params[2];
+    $today = date('Y-m-d G:i:s');
+
+    if ($checked) {
+        $sql = "UPDATE rank_marks SET date_book_shipped='" . $today . "' WHERE user_id=(
+            SELECT user_id FROM users WHERE user_serial='" . $serial . "'
+        ) AND rank_ord=" . $rank_ord;
+    } else {
+        $sql = "UPDATE rank_marks SET date_book_shipped=NULL WHERE user_id=(
+            SELECT user_id FROM users WHERE user_serial='" . $serial . "'
+        ) AND rank_ord=" . $rank_ord;
+    }
+    $query = mysql_query($sql);
+
+    if ($query)
+        return json_encode('1');
+    else
+        return json_encode('0');
+}
+
+function update_ranks() {
+    $params = explode("_", $_GET['parameters']);
+    $user_id = $params[0];
+    $rank_ord = $params[1];
+    $checked = $params[2];
+    $type = $params[3];
+    $today = date('Y-m-d G:i:s');
+
+    if ($checked) {
+        $sql = "UPDATE rank_marks SET date_{$type}_shipped='" . $today . "' WHERE user_id=$user_id AND rank_ord=" . $rank_ord;
+    } else {
+        $sql = "UPDATE rank_marks SET date_{$type}_shipped=NULL WHERE user_id=$user_id AND rank_ord=" . $rank_ord;
+    }
+    $query = mysql_query($sql);
+
+    if ($query)
+        return json_encode('1');
+    else
+        return json_encode('0');
 }
 
 function unreceive_ranks_date_book_shipped() {
