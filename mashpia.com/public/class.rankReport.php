@@ -40,10 +40,11 @@ class RankReport extends Report {
             JOIN users u USING ( user_id )
             JOIN schools s USING ( school_id )
             JOIN classes c ON ( u.class_id = c.class_id ) 
-            WHERE date_promoted >= $start 
-            AND date_promoted <= $end 
-            AND u.user_registered > 0 
-            AND u.medals_ranks = 1  ";
+            WHERE u.user_registered > 0 
+            AND u.medals_ranks = 1  
+            AND (
+                (date_promoted >= $start AND date_promoted <= $end) OR (rm.date_book_shipped is null OR rm.date_card_shipped is null)
+            ) ";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
         }

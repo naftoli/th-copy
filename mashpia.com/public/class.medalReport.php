@@ -37,10 +37,12 @@ class MedalReport extends Report {
             JOIN users u USING ( user_id )
             JOIN subjects s USING ( subject_id )
             JOIN schools sch USING ( school_id )
-            WHERE mm.date_awarded >= $start 
-            AND mm.date_awarded <= $end
+            WHERE u.medals_ranks = 1 
+            AND u.user_registered > 0 
 			AND s.subject_id != 106 
-			AND u.medals_ranks = 1";
+			AND (
+			    (mm.date_awarded >= $start AND mm.date_awarded <= $end) OR mm.date_shipped is null
+			)";
         if ( !is_null( $this->school_id ) ) 
             $sql .= " AND sch.school_id = $this->school_id ";
         $sql .= "
