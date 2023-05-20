@@ -239,13 +239,13 @@ function getRank($user) {
           })
 
           $(".cardBtnAll").click( function() {
-            $(this).next('.table').find(".rank_card").each( function() {
+            $(this).next('table').find(".rank_card").each( function() {
               $(this).trigger('click')
             })
           })
 
           $(".bookBtnAll").click( function() {
-            $(this).next('.table').find(".rank_book").each( function() {
+            $(this).next('table').find(".rank_book").each( function() {
               $(this).trigger('click')
             })
           })
