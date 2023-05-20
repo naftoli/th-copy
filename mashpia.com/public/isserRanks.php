@@ -124,7 +124,7 @@ function getRank($user) {
                 foreach ( $ranks as $school => $line ) {
                     if ( $school != $school_name ) continue;
 					echo "<h2>" . $school_name . "</h2>";
-                    echo "Ranks earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br />";
+                    echo "Ranks earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br /><br />";
                     echo "<div id='$school_id'>
                             <button class='cardBtnAll'>Toggle All Cards</button>
                             <button class='bookBtnAll''>Toggle All Books</button>
