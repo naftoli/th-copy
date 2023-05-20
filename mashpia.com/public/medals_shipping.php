@@ -210,11 +210,11 @@ if (isset($_POST['submit'])) {
 											echo "</td><td align='center'>";
 										}
 	                                }
-	                                echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle' /></td>";
-	                                echo "<td><input type='button' class='receivedBtn' value='toggle' /></td></tr>";
 	                            }
 	                        }
 	                    }
+						echo "<tr><td colspan='6'></td><td><input type='button' class='shippedBtn' value='toggle' /></td>";
+						echo "<td><input type='button' class='receivedBtn' value='toggle' /></td></tr>";
 	                    echo "</table>"; 
 	                    echo "<br /><br />"; 
 	                }
