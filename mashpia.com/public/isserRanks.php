@@ -132,11 +132,12 @@ function getRank($user) {
                         </div>";
 					$totals = [];
 
+                    echo "<div id='$school_id'>";
                     foreach ( $line as $rank => $info ) {
                         foreach ( $rankNames as $rankName => $needed ) {
                         	//echo $rankName . "<br />";
                             if ( $rankName == $rank ) {
-                            	echo "<h2>" . $rank . "</h2><table id='$school_id'>";
+                            	echo "<h2>" . $rank . "</h2><table>";
                                 echo "<tr><th>Card Sent</th><th>Book Sent</th><th>Serial #</th><th>Name</th></tr>";
                                 foreach ( $info as $teacher => $class ) {
                                     foreach ( $class as $grade => $info ) {
@@ -176,6 +177,7 @@ function getRank($user) {
                             }
                         } 
                     }
+                    echo "</div>";
 					if ($super) {
 						?>
 						<h2><?=$school?> Totals</h2>
