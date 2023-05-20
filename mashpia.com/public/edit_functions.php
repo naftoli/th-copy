@@ -41,7 +41,7 @@ function update_medal_marks() {
 }
 
 
-function update_ranks_date_book_shippe() {
+function update_ranks_date_book_shipped() {
 	$parameters = explode("_", $_GET['parameters']);
 	$user_id = $parameters[0];
 	$rank_ord = $parameters[1];
