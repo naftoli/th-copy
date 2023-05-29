@@ -4,6 +4,11 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/DataTablesEditor/lib/" isTestSource="false" packagePrefix="DataTables\" />
       <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/mobile/reg/plugins/bootstrap-fileinput/" isTestSource="false" packagePrefix="kartik\plugins\fileinput\" />
+      <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/PHPMailer/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/api/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/blog/wp-includes/sodium_compat/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/classes/authorize/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/mashpia.com/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/authorizenet/authorizenet" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/doctrine/instantiator" />
@@ -64,6 +69,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/landrok/language-detector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/shippo/shippo-php" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
