@@ -114,7 +114,7 @@
     <div style="width: 100%; margin: auto; display: none;" id="purchases">
       <div class="row">
         <div style="font-size: larger">
-          Yasher Koach for raising $<span id="amountRaised"></span> for Tzivos Hashem!
+          Yasher Koach for raising <b>$<span id="amountRaised"></span></b> for Tzivos Hashem!
           <br /><br />
           Each $150 that you raised, earned you a pair of Tzivos Hashem Gear - The new Tzivos Hashem Sweater with a
           patch with your rank and a Tzivos Hashem cap!
@@ -222,10 +222,18 @@
         return false
       }
       else if (choice == 'address') {
-        address.push($(".address").val())
-        address.push($(".city").val())
-        address.push($(".state").val())
-        address.push($(".zip").val())
+        let address = $(".address").val()
+        let city = $(".city").val()
+        let state = $(".state").val()
+        let zip = $(".zip").val()
+        if (!address || !city || !state || !zip) {
+          alert("Please enter all address info!")
+          return false
+        }
+        address.push(address)
+        address.push(city)
+        address.push(state)
+        address.push(zip)
         if (!address.length) {
           alert("Please enter an address to send the gear to!")
           return false
@@ -347,14 +355,15 @@
                 <div>
                   <label for="choice">Please choose where you would like your gear to be sent to:</label><br />
                   <input type="radio" name="choice" class="choice" value="pickup" /> Pickup from Tzivos Hashem HQ<br />
-                  <input type="radio" name="choice" class="choice" value="address" /> A <b>US address (ONLY)</b><br />
+                  <input type="radio" name="choice" class="choice" value="address" /> A US address <b>(only)</b><br />
                 </div>
+                <br />
                 <div id="address-info" style="display: none;">
                   <label for="address">Please enter the address you would like the gear sent to:</label>
                   <input type="text" class="form-control address" placeholder="Enter Address" /><br />
                   <input type="text" class="form-control city" placeholder="Enter City" /><br />
                   <select class="state form-control">
-                    <option value="">Please Choose</option>
+                    <option value="">State</option>
                     <option value="AL">Alabama</option>
                     <option value="AK">Alaska</option>
                     <option value="AZ">Arizona</option>
