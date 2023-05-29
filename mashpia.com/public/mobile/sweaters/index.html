@@ -186,13 +186,6 @@
   }
 
   const save = () => {
-    // check if number of eligible children matches number of pairs
-    let numPairs = parseInt($("#numPairs").text())
-    let numChildren = $(".gear:checked").length
-    if (numPairs > numChildren) {
-      let conf = confirm('You still have ' + (numPairs - numChildren) + ' pair(s) of sweaters left to choose. Are you sure you want to save?')
-      if (!conf) return false
-    }
     // find all the checked children and save them to database
     let children = []
     let error = false
@@ -249,6 +242,14 @@
       } else {
         address = choice // save address as 'pickup'
       }
+    }
+
+    // check if number of eligible children matches number of pairs
+    let numPairs = parseInt($("#numPairs").text())
+    let numChildren = $(".gear:checked").length
+    if (numPairs > numChildren) {
+      let conf = confirm('You still have ' + (numPairs - numChildren) + ' pair(s) of sweaters left to choose. Are you sure you want to save?')
+      if (!conf) return false
     }
 
     $.ajax({
