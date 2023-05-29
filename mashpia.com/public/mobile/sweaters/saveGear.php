@@ -15,11 +15,15 @@ $year = GlobalSettings::getChidonYear();
 
 $qrys = [];
 foreach ($info as $child) {
-    $user_id = $child['user_id'];
-    $size = $child['size'];
-    $color = $child['color'];
-    $rank = $child['rank'];
-    $sql = "insert into family_sweaters (year, admin_id, user_id, size, color, rank) values ($year, $admin_id, $user_id, '$size', '$color', '$rank')";
+    $user_id = mysql_real_escape_string($child['user_id']);
+    $size = mysql_real_escape_string($child['size']);
+    $color = mysql_real_escape_string($child['color']);
+    $rank = mysql_real_escape_string($child['rank']);
+    $school_id = mysql_real_escape_string($_POST['school']);
+    $address = !empty($_POST['address']) && is_array($_POST['address']) ? mysql_real_escape_string(implode(' ', $_POST['address'])) :
+        mysql_real_escape_string($_POST['address']);
+    $sql = "insert into family_sweaters (year, admin_id, user_id, size, color, rank, school_id, address) 
+        values ($year, $admin_id, $user_id, '$size', '$color', '$rank', '$school_id', '$address')";
     $qrys[] = $sql;
 }
 

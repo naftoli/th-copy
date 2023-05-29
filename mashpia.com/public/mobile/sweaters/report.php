@@ -38,7 +38,7 @@ while ($row = mysql_fetch_assoc($result)) {
         <style>
             tr, th, td {
               padding: 10px;
-              font-size: 12px;
+              font-size: 14px;
               border-bottom: 1px solid grey;
             }
         </style>

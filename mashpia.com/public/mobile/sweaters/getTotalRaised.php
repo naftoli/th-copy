@@ -12,11 +12,10 @@ $year = GlobalSettings::getChidonYear();
 
 // Get the total raised for the sweater campaign
 if ($admin > 0) {
-//    $sql = "select amount from family_raised where year = $year and family_id = $admin";
-//    $result = mysql_query($sql);
-//    $row = mysql_fetch_assoc($result);
-//    $total = $row['amount'];
-    $total = 150;
+    $sql = "select amount from family_raised where year = $year and admin_id = $admin";
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    $total = $row['amount'];
     if ($total < 150) {
         echo json_encode([
             'success'   => false,
