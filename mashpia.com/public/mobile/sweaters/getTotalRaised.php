@@ -36,7 +36,7 @@ if ($admin > 0) {
     if ($num_sweaters >= $times) {
         echo json_encode([
             'success'   => false,
-            'error'     => 'You have already chosen the sweaters.'
+            'error'     => 'You have already chosen the number of sweaters that you are eligible for.'
         ]);
         exit;
     } else {
