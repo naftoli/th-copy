@@ -41,7 +41,7 @@ class MedalReport extends Report {
             AND u.user_registered > 0 
 			AND s.subject_id != 106 
 			AND (
-			    (mm.date_awarded >= $start AND mm.date_awarded <= $end) OR mm.date_shipped is null
+			    (mm.date_awarded >= $start AND mm.date_awarded <= $end and mm.date_shipped is null) OR mm.date_shipped is null
 			)";
         if ( !is_null( $this->school_id ) ) 
             $sql .= " AND sch.school_id = $this->school_id ";

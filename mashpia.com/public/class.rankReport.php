@@ -43,7 +43,7 @@ class RankReport extends Report {
             WHERE u.user_registered > 0 
             AND u.medals_ranks = 1  
             AND (
-                (date_promoted >= $start AND date_promoted <= $end) OR (rm.date_book_shipped is null OR rm.date_card_shipped is null AND rm.date_printed is not null)
+                (date_promoted >= $start AND date_promoted <= $end AND date_printed is null) OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null)
             ) ";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
