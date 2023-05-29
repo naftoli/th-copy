@@ -32,7 +32,10 @@ class IdCardsRouter {
         // add schools exceptions
         $filters[] = 'u.school_id not in (180, 585, 588, 612, 709)';
         $filters = implode( ' AND ', $filters );
-        $filters .= " OR (rm.date_book_shipped is null OR rm.date_card_shipped is null)";
+        $fix = " OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null)";
+        if ( isset($_POST['rank']) && $_POST['rank'] ) $fix .= " AND rank_ord = " . $_POST['rank'];
+        $fix .= ")";
+        $filters .= $fix;
 
         $rank_marks = "(SELECT MAX(rank_ord) max_rank, user_id FROM rank_marks GROUP BY user_id) cr USING (user_id) "
             ." JOIN rank_marks rm ON (rm.rank_ord = cr.max_rank AND rm.user_id = u.user_id) ";
