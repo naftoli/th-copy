@@ -11,6 +11,10 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+
 $school = isset($_REQUEST['school']) ? $_REQUEST['school'] : 0;
 if (!$school) exit;
 
@@ -30,7 +34,7 @@ $heMonths = array(
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
-generateFileByGrade($school);
+generateFileByGrade();
 
 function createFile($name, $info) {
     $fp = fopen($name, "w");
@@ -89,7 +93,7 @@ function generateFileByGrade() {
                 $i = 0;
                 $info = [];
                 $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
-                $info[$i++] = ['promotions_intro', 'promotions_intro', '', '', $schools[$school], $logo_url];
+                $info[$i++] = ['promotions_intro', 'promotions_intro', '', '', $schools[$school], $logo_url]; //
 
                 foreach ($other as $rank => $more) {
                     if (!isset($rankNames[$rank])) continue;
