@@ -323,6 +323,7 @@
             }
             html += '<hr />'
             // create dropdown of which school to send the stuff to
+            school.length = 0
             if (schools.length) {
               html += `
                 <div>
@@ -346,7 +347,7 @@
                 <div>
                   <label for="choice">Please choose where you would like your gear to be sent to:</label><br />
                   <input type="radio" name="choice" class="choice" value="pickup" /> Pickup from Tzivos Hashem HQ<br />
-                  <input type="radio" name="choice" class="choice" value="address" /> A US address<br />
+                  <input type="radio" name="choice" class="choice" value="address" /> A <b>US address (ONLY)</b><br />
                 </div>
                 <div id="address-info" style="display: none;">
                   <label for="address">Please enter the address you would like the gear sent to:</label>
