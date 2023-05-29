@@ -205,22 +205,16 @@
       alert("Please choose at least one child to get the gear!")
       return
     }
-    console.log(children)
+
     $.ajax({
       url: 'saveGear.php',
       type: 'post',
       dataType: 'json',
-      data: {
-        family_id: admin,
-        children: children
-      },
+      data: { admin, children },
       success: function(data) {
-        if (data.success) {
-          alert("Thank you! Your information has been saved!")
-          location.href = '/mobile'
-        } else {
-          alert(data.error)
-        }
+        alert(data.message)
+        if (data.success) location.href = '/mobile'
+        else console.log(data.error)
       }
     })
   }
@@ -252,8 +246,8 @@
                     <label for="color">Color:</label>
                     <select class="form-control color">
                       <option value="">Please Choose</option>
-                      <option value="boys">Navy / Boys</option>
-                      <option value="girls">Burgundy / Girls</option>
+                      <option value="navy">Navy / Boys</option>
+                      <option value="burgundy">Burgundy / Girls</option>
                     </select><br />
                     <label for="size">Size:</label>
                     <select class="form-control size">
@@ -279,9 +273,9 @@
               for (let r in ranks) {
                 if (r > parseInt(child.rankOrd)) break
                 let rank = ranks[r]
-                html += `
-                      <option value="${rank}">${rank}</option>
-                    `
+                html += `<option value="${rank.toLowerCase()}"`
+                if (r == parseInt(child.rankOrd)) html += ' selected'
+                html += `>${rank}</option>`
               }
               html += `
                     </select>

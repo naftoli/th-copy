@@ -7,12 +7,15 @@ require $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 $admin = mysql_real_escape_string( $_POST['family_id'] );
 $admin = encrypt_decrypt('decrypt', $admin);
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
 // Get the total raised for the sweater campaign
 if ($admin > 0) {
-//    $sql = "";
+//    $sql = "select amount from family_raised where year = $year and family_id = $admin";
 //    $result = mysql_query($sql);
 //    $row = mysql_fetch_assoc($result);
-//    $total = $row['total'];
+//    $total = $row['amount'];
     $total = 150;
     if ($total < 150) {
         echo json_encode([
