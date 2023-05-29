@@ -165,6 +165,7 @@
       },
       success: function(data) {
         if (data.success) {
+          alert(data.message)
           let amount = parseInt(data.amount)
           let times = data.times
           $("#amountRaised").text(amount)

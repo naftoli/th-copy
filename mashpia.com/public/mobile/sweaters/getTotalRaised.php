@@ -24,11 +24,30 @@ if ($admin > 0) {
         exit;
     }
 
+    // check if the admin has already chosen the sweaters
     $times = floor($total / 150);
+    $sweaters = [];
+    $sql = "select * from family_sweaters where year = $year and admin_id = $admin";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $sweaters[] = $row;
+    }
+    $num_sweaters = count($sweaters);
+    if ($num_sweaters >= $times) {
+        echo json_encode([
+            'success'   => false,
+            'error'     => 'You have already chosen the sweaters.'
+        ]);
+        exit;
+    } else {
+        $times = $times - $num_sweaters;
+    }
+
     echo json_encode([
         'success'   => true,
         'amount'    => $total,
-        'times'     => $times
+        'times'     => $times,
+        'message'   => 'You are eligible to get ' . $times . ' sweaters.'
     ]);
 } else {
     echo json_encode([
