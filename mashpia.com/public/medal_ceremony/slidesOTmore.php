@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 $prevMedals = false;
 $prevMedalsLight = false;
 
-$start = 2460028;
+$start = 2460027;
 $end = 2460089;
 
 require_once 'class.slides.php';
