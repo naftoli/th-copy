@@ -32,6 +32,7 @@ class IdCardsRouter {
         // add schools exceptions
         $filters[] = 'u.school_id not in (180, 585, 588, 612, 709)';
         $filters = implode( ' AND ', $filters );
+        $filters .= " OR (rm.date_book_shipped is null OR rm.date_card_shipped is null)";
 
         $rank_marks = "(SELECT MAX(rank_ord) max_rank, user_id FROM rank_marks GROUP BY user_id) cr USING (user_id) "
             ." JOIN rank_marks rm ON (rm.rank_ord = cr.max_rank AND rm.user_id = u.user_id) ";
@@ -74,10 +75,10 @@ class IdCardsRouter {
         global $MASHPIA_DB;
         $date = date("Y-m-d H:i:s");
         $printed_query = $MASHPIA_DB->prepare(
-            "UPDATE rank_marks SET date_printed='$date' WHERE user_id=? AND rank_ord=?"
+            "UPDATE rank_marks SET date_printed='$date', date_book_shipped = '$date', date_card_shipped = '$date' WHERE user_id=? AND rank_ord=?"
         );
         $not_printed_query = $MASHPIA_DB->prepare(
-            'UPDATE rank_marks SET date_printed=null WHERE user_id=? AND rank_ord=?'
+            'UPDATE rank_marks SET date_printed=null, date_book_shipped = null, date_card_shipped = null WHERE user_id=? AND rank_ord=?'
         );
         $status = [];
         // expects a post like so { updates: [ { user_id, rank_ord, printed }, ... ] }
