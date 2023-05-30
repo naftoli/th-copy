@@ -36,6 +36,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
 $user_ids = [];
 generateFileByGrade();
+generateRestOfChildren();
 
 function createFile($name, $info) {
     $fp = fopen($name, "w");
