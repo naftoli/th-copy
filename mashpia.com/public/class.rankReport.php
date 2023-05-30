@@ -27,7 +27,7 @@ class RankReport extends Report {
     }
 
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
-        $this->ranks = array();
+        $this->ranks = [];
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
         if ($forShipping) {
@@ -38,7 +38,7 @@ class RankReport extends Report {
         }
         else $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
         $sql = "
-            SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
+            SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.*  
             FROM rank_marks rm
             JOIN ranks r USING ( rank_ord )
             JOIN users u USING ( user_id )
@@ -138,13 +138,12 @@ class RankReport extends Report {
     }
 
     public function setOtherChildren($nameBreak, $users) {
-        $this->ranks = array();
-        $start = $this->reportDates['start'];
-        $end = $this->reportDates['end'];
+        $this->ranks = [];
+        $this->setRankNames();
+
         $sql = "
-            SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
+            SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, u.*, MAX(rm.rank_ord) as rnk 
             FROM rank_marks rm
-            JOIN ranks r USING ( rank_ord )
             JOIN users u USING ( user_id )
             JOIN schools s USING ( school_id )
             JOIN classes c ON ( u.class_id = c.class_id ) 
@@ -156,7 +155,8 @@ class RankReport extends Report {
         $sql .= "
             AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
         ";
-        $sql .= "ORDER BY s.school_name, r.rank_ord, c.class_grade, c.class_sub, u.last, u.first";
+        $sql .= "GROUP BY u.user_id ";
+        $sql .= "ORDER BY s.school_name, rnk, c.class_grade, c.class_sub, u.last, u.first";
 //        echo $sql; exit;
 //        echo "<input type='hidden' name='SQL' value='" . $sql . "' />";
         $result = mysql_query($sql);
@@ -173,7 +173,8 @@ class RankReport extends Report {
             $this->userInfo[$user_id] = $user;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
 
-            $rank = $row['rank_name'];
+            $rank_ord = $row['rnk'];
+            $rank = array_search($rank_ord, $this->rankOrds);
             $this->ranks[$school][$row['class_grade']][$rank][] = $user_id;
             $this->schoolLogos[$school] = [
                 'logo_boys'     =>  $row['logo_boys'],

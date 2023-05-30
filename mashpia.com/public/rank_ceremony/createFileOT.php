@@ -163,7 +163,6 @@ function generateRestOfChildren() {
     ];
 
     $r = new RankReport();
-    $r->overrideDates($_GET['start'], $_GET['end']);
     $r->setSchoolId($school);
     $r->setOtherChildren("<br>", $user_ids); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
