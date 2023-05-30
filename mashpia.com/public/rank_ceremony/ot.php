@@ -66,7 +66,7 @@ if (isset($_POST['submit'])) {
         let p = createFile(255)
         p.then(values => {
           console.log(values)
-          // location.href = 'createZip.php'
+          location.href = 'createZip.php'
         })
         .catch(error => {
           console.log(error)

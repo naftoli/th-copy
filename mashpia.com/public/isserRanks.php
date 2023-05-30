@@ -83,7 +83,7 @@ function getRank($user) {
     
     <BODY>
         <?php include('admin_header.php'); ?>   
-        <? 
+        <?php
         $super = false;
         $schools = array();
         //if it's a super user, loop through all schools
@@ -121,7 +121,7 @@ function getRank($user) {
             foreach ( $schools as $school_id => $school_name ) {
                 if (in_array($school_id, [180, 585, 588, 612, 709])) continue;
                 $rr->setSchoolId( $school_id );                
-                $rr->setRanks('byRank');
+                $rr->setRanks('byRank', 0, ' ', '', true);
                 $ranks = $rr->getRanks();
 				$userInfo = $rr->getUserInfo();
 				$heNames = $rr->getUserHeNames();

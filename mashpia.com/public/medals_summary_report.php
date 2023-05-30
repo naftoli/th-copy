@@ -21,7 +21,7 @@ if (isset($_GET['start']) && isset($_GET['end'])) {
 }
 
 $heDates = $m->getHeReportDates();
-$m->setMedalSummary();
+$m->setMedalSummary(true);
 $summary = $m->getMedalSummary();
 $dates = $m->getReportDates();
 

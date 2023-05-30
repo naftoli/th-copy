@@ -1,7 +1,4 @@
-<?
-//if (in_array($admin_user['auths']['school'][0], array(55,66,110,112)))
-//	require_once 'class.reportAustralia.php';
-//else 
+<?php
 require_once 'class.report.php';
 
 class MedalReport extends Report {
@@ -27,9 +24,16 @@ class MedalReport extends Report {
         $this->schoolExceptions = [180,588,612];
     }
     
-    public function setMedalSummary() {
+    public function setMedalSummary($forShipping = false) {
         $start = $this->reportDates['start'];
-        $end = $this->reportDates['end']; 
+        $end = $this->reportDates['end'];
+        if ($forShipping) {
+            $filter = "
+                AND (
+                    (mm.date_awarded >= $start AND mm.date_awarded <= $end and mm.date_shipped is null) OR mm.date_shipped is null
+                )";
+        }
+        else $filter = " AND (mm.date_awarded >= $start AND mm.date_awarded <= $end) ";
         $sql = "
             SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total 
             FROM medal_marks mm
@@ -40,9 +44,7 @@ class MedalReport extends Report {
             WHERE u.medals_ranks = 1 
             AND u.user_registered > 0 
 			AND s.subject_id != 106 
-			AND (
-			    (mm.date_awarded >= $start AND mm.date_awarded <= $end and mm.date_shipped is null) OR mm.date_shipped is null
-			)";
+            $filter ";
         if ( !is_null( $this->school_id ) ) 
             $sql .= " AND sch.school_id = $this->school_id ";
         $sql .= "

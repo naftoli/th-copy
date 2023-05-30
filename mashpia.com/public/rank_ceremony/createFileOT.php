@@ -68,13 +68,10 @@ function generateFileByGrade() {
         '5* General' => 'five_star_general'
     ];
 
-//    if (isset($_GET['prev']) && intval($_GET['prev'])) $r = new RankReport(true);
-//    else $r = new RankReport();
-//    $r->overrideDates(2459180,2459207);
     $r = new RankReport();
     $r->overrideDates($_GET['start'], $_GET['end']);
     $r->setSchoolId($school);
-    $r->setRanks('byGradeOnlyRank', 0, "<br>", '', true); // make sure to add break in name between first name and last name
+    $r->setRanks('byGradeOnlyRank', 0, "<br>", ''); // make sure to add break in name between first name and last name
     $ranks = $r->getRanks();
     $users = $r->getUserInfo();
     $pics = $r->getUserPic();

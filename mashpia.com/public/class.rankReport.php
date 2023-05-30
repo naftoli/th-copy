@@ -1,7 +1,4 @@
-<?
-//if (in_array($admin_user['auths']['school'][0], array(55,66,110,112)))
-//	require_once 'class.reportAustralia.php';
-//else 
+<?php
 require_once 'class.report.php';
 
 class RankReport extends Report {
@@ -29,10 +26,17 @@ class RankReport extends Report {
         $this->userPic = [];
     }
 
-    public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $reverseHe = false) {
+    public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
         $this->ranks = array();
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
+        if ($forShipping) {
+            $filter = "
+                AND (
+                (date_promoted >= $start AND date_promoted <= $end AND date_printed is null) OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null)
+            )";
+        }
+        else $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
         $sql = "
             SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
             FROM rank_marks rm
@@ -42,9 +46,7 @@ class RankReport extends Report {
             JOIN classes c ON ( u.class_id = c.class_id ) 
             WHERE u.user_registered > 0 
             AND u.medals_ranks = 1  
-            AND (
-                (date_promoted >= $start AND date_promoted <= $end AND date_printed is null) OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null)
-            ) ";
+            $filter ";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
         }

@@ -107,7 +107,7 @@ $schools = $as->getSchools();
     $ranktotals = array();
     foreach ( $schools as $school_id => $school_name ) {
         $rr->setSchoolId( $school_id );
-        $rr->setRanks('byRank');
+        $rr->setRanks('byRank', 0, ' ', '', true);
         $ranks = $rr->getRanks();
         $userInfo = $rr->getUserInfo();
         $heNames = $rr->getUserHeNames();
