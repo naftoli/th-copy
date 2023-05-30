@@ -26,7 +26,7 @@ class RankReport extends Report {
         $this->userPic = [];
     }
 
-    public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false, $kidsNotPromoted = false) {
+    public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
         $this->ranks = array();
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
@@ -36,10 +36,7 @@ class RankReport extends Report {
                 (date_promoted >= $start AND date_promoted <= $end AND date_printed is null) OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null)
             )";
         }
-        else {
-            if ($kidsNotPromoted) $filter = " AND date_promoted < $start";
-            else $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
-        }
+        else $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
         $sql = "
             SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
             FROM rank_marks rm
@@ -117,6 +114,67 @@ class RankReport extends Report {
             $this->rankInfo[$user_id]['book_received'] = $row['date_book_received'];
 
             $this->userSchool[$user_id] = $school;
+            $this->schoolLogos[$school] = [
+                'logo_boys'     =>  $row['logo_boys'],
+                'logo_girls'    =>  $row['logo_girls'],
+                'logo_id'       =>  $row['school_logo_id'],
+                'logo'          =>  $row['logo']
+            ];
+
+            // set user pic
+            $pic = '/mobile/reg/images/profile-photo-default.jpg';
+            if ( $row['mobile_pic'] ) {
+                $pic = '/mobile/reg/' . $row['mobile_pic'];
+            } else if ( $row['user_photo_id'] ) {
+                $pic = '/file_view.php?id=' . $row['user_photo_id'];
+            }
+            $this->userPic[$user_id] = $pic;
+            $pos = strpos($row['mobile_pic'], 'img/');
+            if ($pos !== false) {
+                $img = substr($row['mobile_pic'], $pos + 4);
+                $this->picOnly[$user_id] = $img;
+            }
+        }
+    }
+
+    public function setOtherChildren($nameBreak, $users) {
+        $this->ranks = array();
+        $start = $this->reportDates['start'];
+        $end = $this->reportDates['end'];
+        $sql = "
+            SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.* 
+            FROM rank_marks rm
+            JOIN ranks r USING ( rank_ord )
+            JOIN users u USING ( user_id )
+            JOIN schools s USING ( school_id )
+            JOIN classes c ON ( u.class_id = c.class_id ) 
+            WHERE u.user_registered > 0 
+            AND u.user_id NOT IN (" . implode(',', $users) . ") ";
+        if (!is_null($this->school_id)) {
+            $sql .= "AND s.school_id = $this->school_id ";
+        }
+        $sql .= "
+            AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+        ";
+        $sql .= "ORDER BY s.school_name, r.rank_ord, c.class_grade, c.class_sub, u.last, u.first";
+//        echo $sql; exit;
+//        echo "<input type='hidden' name='SQL' value='" . $sql . "' />";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $user_id = $row['user_id'];
+            $school = $row['school_name'];
+            $first = $row['first'];
+            $last = $row['last'];
+            if ($this->isHebrew($first) || $this->isHebrew($last)) {
+                $first = $this->reverseHebrew($first);
+                $last = $this->reverseHebrew($last);
+            }
+            $user = $first . $nameBreak . $last;
+            $this->userInfo[$user_id] = $user;
+            $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
+
+            $rank = $row['rank_name'];
+            $this->ranks[$school][$row['class_grade']][$rank][] = $user_id;
             $this->schoolLogos[$school] = [
                 'logo_boys'     =>  $row['logo_boys'],
                 'logo_girls'    =>  $row['logo_girls'],
