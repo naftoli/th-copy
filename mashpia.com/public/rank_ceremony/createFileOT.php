@@ -79,8 +79,10 @@ function generateFileByGrade() {
     $logos = $r->getSchoolLogos();
 
     if (count($ranks)) {
-        foreach ($ranks as $school_name => $more) {
-            foreach ($more as $grade => $other) {
+        foreach ($ranks as $school_name => $other) {
+            // OT wants the files to be separated into 3, one for grade 1, another for grades 2-5, and another for grades 6-7
+            $needed = [[1], [2, 3, 4, 5], [6, 7]];
+            foreach ($needed as $grades) {
                 $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
                 $logo_img = @imagecreatefromstring($logoContent);
                 $logo_url = 'images/' . $school . '.png';
@@ -90,45 +92,48 @@ function generateFileByGrade() {
                 $i = 0;
                 $info = [];
                 $info[$i++] = ['comp', 'comp_name', 'chayol_name', 'chayol_picture', 'school_name', 'school_logo'];
-                $info[$i++] = ['promotions_intro', 'promotions_intro', '', '', $schools[$school], $logo_url]; //
+                $info[$i++] = ['promotions_intro', 'promotions_intro', '', '', $schools[$school], $logo_url];
 
-                foreach ($other as $rank => $more) {
-                    if (!isset($rankNames[$rank])) continue;
-                    $j = 1;
-                    $info[$i++] = [($rankNames[$rank] . '_intro'), ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++))), '', '', $school_name, $logo_url]; // rank intro
+                foreach ($rankNames as $rank => $desc) {
+                    foreach ($grades as $grade) {
+                        if (isset($other[$grade][$rank])) {
+                            $j = 1;
+                            $info[$i++] = [($desc . '_intro'), ucwords(str_replace('_', ' ', ($desc . '_' . $j++))), '', '', $school_name, $logo_url]; // rank intro
 
-                    foreach ($more as $user_id) {
-                        // create pic of child to add to zipArchive
-                        // modify url to work with file_get_contents by enocding only the part that needs to be encoded
-                        if (isset($picOnly[$user_id])) $url = "http://mashpia.com/mobile/reg/img/" . rawurlencode($picOnly[$user_id]);
-                        else $url = "http://mashpia.com" . $pics[$user_id];
-                        $contents = file_get_contents($url);
-                        if ($contents) {
-                            $new_img = @imagecreatefromstring($contents);
-                            $img_url = 'images/' . $user_id . '.png';
-                            if ($new_img) @imagepng($new_img, $img_url);
-                            else $img_url = '';
+                            foreach ($other[$grade][$rank] as $user_id) {
+                                // create pic of child to add to zipArchive
+                                // modify url to work with file_get_contents by enocding only the part that needs to be encoded
+                                if (isset($picOnly[$user_id])) $url = "http://mashpia.com/mobile/reg/img/" . rawurlencode($picOnly[$user_id]);
+                                else $url = "http://mashpia.com" . $pics[$user_id];
+                                $contents = file_get_contents($url);
+                                if ($contents) {
+                                    $new_img = @imagecreatefromstring($contents);
+                                    $img_url = 'images/' . $user_id . '.png';
+                                    if ($new_img) @imagepng($new_img, $img_url);
+                                    else $img_url = '';
+                                }
+
+                                $info[$i++] = [
+                                    $rankNames[$rank],
+                                    ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++))),
+                                    $users[$user_id],
+                                    $img_url,
+                                    $school_name,
+                                    $logo_url
+                                ];
+                            }
                         }
-
-                        $info[$i++] = [
-                            $rankNames[$rank],
-                            ucwords(str_replace('_', ' ', ($rankNames[$rank] . '_' . $j++))),
-                            $users[$user_id],
-                            $img_url,
-                            $school_name,
-                            $logo_url
-                        ];
                     }
+                }
 
-                    $info[$i] = ['outro', 'outro', '', '', $schools[$school], $logo_url]; // outro
-                    if (count($ranks)) {
-                        $file_name = $schools[$school] . " " . $grade . ".csv";
-                        createFile($file_name, $info);
+                $info[$i] = ['outro', 'outro', '', '', $schools[$school], $logo_url]; // outro
+                if (count($ranks)) {
+                    $file_name = $schools[$school] . " " . implode('-', $grades) . ".csv";
+                    createFile($file_name, $info);
 
-                        $dates = $r->getHeReportDates();
-                        $str = "Schools By Grade:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
-                        createFile("dates2.txt", $str);
-                    }
+                    $dates = $r->getHeReportDates();
+                    $str = "Schools By Grade:\nStart Date: " . $dates['start_he'] . "\nEnd Date: " . $dates['end_he'];
+                    createFile("dates2.txt", $str);
                 }
             }
         }
