@@ -63,7 +63,6 @@ if (isset($_POST['submit'])) {
       }
 
       if (submit) {
-        let i = 1;
         let p = createFile(255)
         p.then(values => {
           console.log(values)
