@@ -876,7 +876,7 @@ class ChidonShipping
     public function getCategories() {
         $categories = [
             'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'yahadus books'
+            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes'
         ];
         return $categories;
     }
@@ -902,8 +902,7 @@ class ChidonShipping
                 'iron curtain vol 2', 'escape from europe', 'the rebbe & the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
                 'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
             'ambassador prizes'     => ['ambassador prize'],
-            'raffles'   => ['5M Raffles', 'Other Raffles'],
-            'yahadus books'   => ['yahadus book purchases'],
+            'raffles'   => ['5M Raffles', 'Other Raffles']
         ];
         return $items;
     }
