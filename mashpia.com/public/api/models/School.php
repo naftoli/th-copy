@@ -332,7 +332,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         ];
 
         $now = new DateTime();
-        if ($now > $discounts['early_bird']) $early_bird = false;
+        if ($now > $this->earlyBird()) $early_bird = false;
         else $early_bird = true;
 
         // rates for all 3 registration types, by index (minus 1)
