@@ -325,5 +325,11 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       if (!res.success) alert(res.error)
     })
   })
+
+  $(function () {
+    if (!super_admin) {
+      $("input").attr('disabled', true)
+    }
+  })
 </script>
 </html>
