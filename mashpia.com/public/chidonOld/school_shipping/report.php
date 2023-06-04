@@ -328,7 +328,9 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
 
   $(function () {
     if (!super_admin) {
-      $("input").attr('disabled', true)
+      $(".shipping").attr('disabled', true)
+      $(".qty").attr('disabled', true)
+      $(".description").attr('disabled', true)
     }
   })
 </script>
