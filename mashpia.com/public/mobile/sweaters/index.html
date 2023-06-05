@@ -194,12 +194,14 @@
       let user_id = $(this).val()
       let color = $(this).parent().find(".color").val()
       let size = $(this).parent().find(".size").val()
-      if (!color || !size) {
+      let rank = $(this).parent().find(".rank").val()
+      let cap = $(this).parent().find(".cap").val()
+      if (!color || !size || !rank || !cap) {
         alert("Please choose a color and size for each selected child!")
         error = true
         return false
       }
-      children.push({ user_id, color, size })
+      children.push({ user_id, color, size, rank, cap })
     })
     if (error) return false
     if (children.length == 0) {
@@ -332,6 +334,13 @@
                 html += `>${rank}</option>`
               }
               html += `
+                    </select>
+                    <br /><br />
+                    <label for="cap">Cap Color:</label>
+                    <select name="cap" class="form-control cap">
+                      <option value="">Please Choose</option>
+                      <option value="navy">Navy / Boys</option>
+                      <option value="burgundy">Burgundy / Girls</option>
                     </select>
                     <hr />
                   </div>

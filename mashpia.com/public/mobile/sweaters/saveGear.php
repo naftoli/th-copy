@@ -19,11 +19,12 @@ foreach ($info as $child) {
     $size = mysql_real_escape_string($child['size']);
     $color = mysql_real_escape_string($child['color']);
     $rank = mysql_real_escape_string($child['rank']);
+    $cap = mysql_real_escape_string($child['cap']);
     $school_id = mysql_real_escape_string($_POST['school']);
     $address = !empty($_POST['address']) && is_array($_POST['address']) ? mysql_real_escape_string(implode(' ', $_POST['address'])) :
         mysql_real_escape_string($_POST['address']);
-    $sql = "insert into family_sweaters (year, admin_id, user_id, size, color, rank, school_id, address) 
-        values ($year, $admin_id, $user_id, '$size', '$color', '$rank', '$school_id', '$address')";
+    $sql = "insert into family_sweaters (year, admin_id, user_id, size, color, rank, cap, school_id, address) 
+        values ($year, $admin_id, $user_id, '$size', '$color', '$rank', '$cap', '$school_id', '$address')";
     $qrys[] = $sql;
 }
 
