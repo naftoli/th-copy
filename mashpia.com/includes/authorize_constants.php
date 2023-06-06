@@ -17,7 +17,7 @@ class AuthorizeConstants
 	private static $MERCHANT_SANDBOX_TRANSACTION_KEY = "7kfzP7LuQA358N5y";
 	// merchant account credentials production (move to ENV variables for security)
 	private static $MERCHANT_LOGIN_ID = "4FW7gsD8Tr";
-	private static $MERCHANT_TRANSACTION_KEY = "6f7z4c79NMLU4293";
+	private static $MERCHANT_TRANSACTION_KEY = "933Q86GEy6u8PcQP";
 	
 	private static $SANDBOX_API_URL = "https://apitest.authorize.net/xml/v1/request.api";
 	//private static $API_URL = "https://apitest.authorize.net/xml/v1/request.api";
