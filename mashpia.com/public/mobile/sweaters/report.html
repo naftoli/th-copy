@@ -155,8 +155,18 @@
     }
 
     const generateCSV = () => {
-      const data = rows
-      const csvContent = 'data:text/csv;charset=utf-8,' + data.map(row => row.join(',')).join('\n')
+      // only show rows that have a shipping address and are not cancelled
+      let rowsToShip = rows.filter(row => row.address != '' && row.address != null && row.address != undefined && !row.cancel)
+      const columns = Object.keys(rows[0])
+      const csvContent = 'data:text/csv;charset=utf-8,' +
+        columns.join(',') + '\n' +
+        rowsToShip.map(row => columns.map(column => {
+          let value = row[column]
+          if (typeof value === 'string' && value.includes(',')) value = `"${value}"` // wrap in quotes if it contains a comma
+          if (typeof value === 'string' && value.includes('/')) value = `"${value}"` // wrap in quotes if it contains a slash
+          return value
+        }).join(',')).join('\n')
+
       // Create a link element and set its attributes
       const link = document.createElement('a');
       link.setAttribute('href', encodeURI(csvContent));
