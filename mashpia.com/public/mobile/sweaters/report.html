@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Sweaters Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous" />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    #main {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+  </style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const {useState, useEffect} = React
+  const {createRoot} = ReactDOM
+
+  const Table = () => {
+    const [rows, setRows] = useState([])
+    const [ranks, setRanks] = useState([])
+    const [schools, setSchools] = useState({})
+    const colors = ['burgundy', 'navy']
+    const sizes = ['youth xs', 'youth s', 'youth m', 'youth l', 'adult xs', 'adult s', 'adult m', 'adult l', 'adult xl', 'adult xxl', 'adult xxxl']
+    // const ranks = ["private", "sergeant", "sergeant Major", "second lieutenant", "first lieutenant", "captain", "major",
+    //   "colonel", "general", "1* general", "2* general", "3* general", "4* general", "5* general"]
+
+    useEffect(() => {
+      fetch('getReportInfo.php')
+        .then(response => response.json())
+        .then(data => {
+          if (!data.success) {
+            alert(data.message)
+            return
+          }
+          let rows = []
+          let admin_ids = data.admin_ids
+          let raised = data.raised
+          let sweaters = data.sweaters
+          for (let admin_id of admin_ids) {
+            if (!sweaters[admin_id]) {
+              continue
+            }
+            let i = 1 // keep track of which sweater we are on for each admin
+            let numSweaters = sweaters[admin_id].length
+            for (let sweater of sweaters[admin_id]) {
+              console.log(sweater)
+              let row = {
+                admin_id: admin_id,
+                serial: sweater['user_serial'],
+                raised: raised[admin_id] ? raised[admin_id] : 0,
+                color: sweater['color'],
+                size: sweater['size'],
+                rank: sweater['rank'],
+                cap: sweater['cap'],
+                sweater_id: sweater['family_sweater_id'],
+                school: parseInt(sweater['school_id']),
+                address: sweater['address'],
+                notes: sweater['notes'],
+                cancel: false,
+                gear_number: numSweaters > 1 ? (i + '/' + numSweaters) : i
+              }
+              console.log(row)
+              rows.push(row)
+              i++
+            }
+          }
+          setRows(rows)
+        })
+        .catch(error => {
+          console.log(error)
+          alert('Error: ' + error)
+        })
+    }, [ranks, schools])
+
+    useEffect(() => {
+      fetch('getRanks.php')
+        .then(response => response.json())
+        .then(data => {
+          if (!data.success) {
+            alert(data.message)
+            return
+          }
+          console.log(data.ranks)
+          setRanks(Object.values(data.ranks).map(rank => rank.toLowerCase()))
+        })
+      fetch('getSchools.php')
+        .then(response => response.json())
+        .then(data => {
+          if (!data.success) {
+            alert(data.message)
+            return
+          }
+          console.log(data.schools)
+          setSchools(data.schools)
+        })
+    }, [])
+
+    const handleInputChange = (e, index) => {
+      const {name, value} = e.target
+      const list = [...rows]
+      list[index][name] = value
+      setRows(list)
+    }
+
+    const handleCheckboxChange = (e, index) => {
+      const list = [...rows]
+      list[index].cancel = e.target.checked
+      setRows(list)
+    }
+
+    const saveInfo = () => {
+      // check if we are cancelling any orders
+      let cancel = false
+      for (let row of rows) {
+        if (row.cancel) {
+          cancel = true
+          break
+        }
+      }
+      if (cancel) {
+        if (!confirm('Are you sure you want to cancel these orders?')) {
+          return
+        }
+      }
+      // pass rows to php script to save
+      fetch('saveReportInfo.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rows)
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message)
+          if (data.error) console.log(data.error)
+          else window.location.reload()
+        })
+        .catch(error => {
+          console.log(error)
+          alert('Error: ' + error)
+        })
+    }
+
+    return (
+      <div>
+        <h1 className="mt-4">Sweaters Report</h1>
+        <p>Use this page to update the sweaters report.</p>
+        <p>For each sweater, enter the shipping method, cancel the order if necessary, and add any notes.</p>
+        <p>Click the Save button when you are done.</p>
+        <br /><br />
+        <div className="table-responsive table-striped table-bordered border-primary">
+          <table className="table">
+            <thead>
+            <tr>
+              <th>Admin ID</th>
+              <th>Serial</th>
+              <th>Amount Raised</th>
+              <th>Gear #</th>
+              <th>Sweater Color</th>
+              <th>Sweater Size</th>
+              <th>Rank patch</th>
+              <th>Cap Color</th>
+              <th>School</th>
+              <th>Shipping Address</th>
+              <th>Cancel Order</th>
+              <th>Notes</th>
+            </tr>
+            </thead>
+            <tbody className="table-group-divider">
+            {ranks && schools && rows && rows.map((row, index) => (
+              <tr key={index}>
+                <td>
+                  {row.admin_id}
+                </td>
+                <td>
+                  {row.serial}
+                </td>
+                <td>
+                  {row.raised}
+                </td>
+                <td>
+                  {row.gear_number}
+                </td>
+                <td>
+                  <select name="color" defaultValue={row.color} onChange={e => handleInputChange(e, index)}>
+                    {colors.map((color, index) => (
+                      <option key={index} value={color}>{color}</option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <select name="size" defaultValue={row.size} onChange={e => handleInputChange(e, index)}>
+                    {sizes.map((size, index) => (
+                      <option key={index} value={size}>{size}</option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <select name="rank" defaultValue={row.rank} onChange={e => handleInputChange(e, index)}>
+                    {ranks.map((rank, index) => (
+                      <option key={index} value={rank}>{rank}</option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <select name="cap" defaultValue={row.cap} onChange={e => handleInputChange(e, index)}>
+                    {colors.map((color, index) => (
+                      <option key={index} value={color}>{color}</option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <select
+                    name="school"
+                    style={{width: 200}}
+                    defaultValue={row.school}
+                    onChange={e => handleInputChange(e, index)}
+                    disabled={row.school === 0}
+                  >
+                    <option value="0">Select a school</option>
+                    {Object.keys(schools).map((key, index) => (
+                      <option key={index} value={key}>{schools[key]}</option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    name="address"
+                    defaultValue={row.address}
+                    onChange={e => handleInputChange(e, index)}
+                    disabled={row.school !== 0}
+                  />
+                </td>
+                <td>
+                  <input type="checkbox" className="form-check-input" name="cancel" checked={row.cancel ? 'checked' : ''}
+                         onChange={e => handleCheckboxChange(e, index)} />
+                </td>
+                <td>
+                  <textarea
+                    cols="20"
+                    rows="3"
+                    name="notes"
+                    defaultValue={row.notes}
+                    onChange={e => handleInputChange(e, index)}></textarea>
+                </td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+        <br />
+        <button className="btn btn-primary" onClick={saveInfo}>Save</button>
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<Table/>)
+</script>
+</html>

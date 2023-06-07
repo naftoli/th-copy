@@ -225,15 +225,15 @@
         return false
       }
       else if (choice == 'address') {
-        let address = $(".address").val()
+        let addressVal = $(".address").val()
         let city = $(".city").val()
         let state = $(".state").val()
         let zip = $(".zip").val()
-        if (!address || !city || !state || !zip) {
+        if (!addressVal || !city || !state || !zip) {
           alert("Please enter all address info!")
           return false
         }
-        address.push(address)
+        address.push(addressVal)
         address.push(city)
         address.push(state)
         address.push(zip)
@@ -253,7 +253,7 @@
       let conf = confirm('You still have ' + (numPairs - numChildren) + ' pair(s) of sweaters left to choose. Are you sure you want to save?')
       if (!conf) return false
     }
-
+    alert(address)
     $.ajax({
       url: 'saveGear.php',
       type: 'post',
@@ -327,7 +327,7 @@
                     <select class="form-control rank">
                     `
               for (let r in ranks) {
-                if (r > parseInt(child.rankOrd)) break
+                if (r > (parseInt(child.rankOrd) + 1)) break
                 let rank = ranks[r]
                 html += `<option value="${rank.toLowerCase()}"`
                 if (r == parseInt(child.rankOrd)) html += ' selected'

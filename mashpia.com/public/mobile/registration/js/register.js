@@ -1320,6 +1320,8 @@ var registrationApp = function() {
             postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
+            console.log(data)
+            return false
             if (data.success === false) {
                 alert(data.error)
             } else {
