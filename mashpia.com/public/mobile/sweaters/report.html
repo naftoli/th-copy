@@ -44,7 +44,7 @@
         .then(data => {
           if (!data.success) {
             alert(data.message)
-            return
+            location.href = '/'
           }
           let rows = []
           let admin_ids = data.admin_ids
