@@ -180,6 +180,7 @@
     return (
       <div>
         <h1 className="mt-4">Sweaters Report</h1>
+        <br />
         <div className="table-responsive table-striped table-bordered border-primary">
           <table className="table">
             <thead>
@@ -199,92 +200,133 @@
             </tr>
             </thead>
             <tbody className="table-group-divider">
-            {ranks && schools && rows && rows.map((row, index) => (
-              <tr key={index}>
-                <td>
-                  {row.admin_id}
-                </td>
-                <td>
-                  {row.serial}
-                </td>
-                <td>
-                  {row.raised}
-                </td>
-                <td>
-                  {row.gear_number}
-                </td>
-                <td>
-                  <select name="color" defaultValue={row.color} onChange={e => handleInputChange(e, index)}>
-                    {colors.map((color, index) => (
-                      <option key={index} value={color}>{color}</option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select name="size" defaultValue={row.size} onChange={e => handleInputChange(e, index)}>
-                    {sizes.map((size, index) => (
-                      <option key={index} value={size}>{size}</option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select name="rank" defaultValue={row.rank} onChange={e => handleInputChange(e, index)}>
-                    {ranks.map((rank, index) => (
-                      <option key={index} value={rank}>{rank}</option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select name="cap" defaultValue={row.cap} onChange={e => handleInputChange(e, index)}>
-                    {colors.map((color, index) => (
-                      <option key={index} value={color}>{color}</option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <select
-                    name="school"
-                    style={{width: 200}}
-                    defaultValue={row.school}
-                    onChange={e => handleInputChange(e, index)}
-                    disabled={row.school === 0}
-                  >
-                    <option value="0">Select a school</option>
-                    {Object.keys(schools).map((key, index) => (
-                      <option key={index} value={key}>{schools[key]}</option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    name="address"
-                    defaultValue={row.address}
-                    onChange={e => handleInputChange(e, index)}
-                    disabled={row.school !== 0}
-                  />
-                </td>
-                <td>
-                  <input type="checkbox" className="form-check-input" name="cancel" checked={row.cancel ? 'checked' : ''}
-                         onChange={e => handleCheckboxChange(e, index)} />
-                </td>
-                <td>
-                  <textarea
-                    cols="20"
-                    rows="3"
-                    name="notes"
-                    defaultValue={row.notes}
-                    onChange={e => handleInputChange(e, index)}></textarea>
-                </td>
-              </tr>
-            ))}
+            {ranks &&
+              schools &&
+              rows &&
+              rows.map((row, index) => (
+                <tr key={index} className={row.cancel ? 'table-danger' : ''}>
+                  <td>{row.admin_id}</td>
+                  <td>{row.serial}</td>
+                  <td>{row.raised}</td>
+                  <td>{row.gear_number}</td>
+                  <td>
+                    <select
+                      name="color"
+                      className="form-select"
+                      defaultValue={row.color}
+                      onChange={(e) => handleInputChange(e, index)}
+                    >
+                      {colors.map((color, index) => (
+                        <option key={index} value={color}>
+                          {color}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      name="size"
+                      className="form-select"
+                      defaultValue={row.size}
+                      onChange={(e) => handleInputChange(e, index)}
+                    >
+                      {sizes.map((size, index) => (
+                        <option key={index} value={size}>
+                          {size}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      name="rank"
+                      className="form-select"
+                      defaultValue={row.rank}
+                      onChange={(e) => handleInputChange(e, index)}
+                    >
+                      {ranks.map((rank, index) => (
+                        <option key={index} value={rank}>
+                          {rank}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      name="cap"
+                      className="form-select"
+                      defaultValue={row.cap}
+                      onChange={(e) => handleInputChange(e, index)}
+                    >
+                      {colors.map((color, index) => (
+                        <option key={index} value={color}>
+                          {color}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <select
+                      name="school"
+                      className="form-select"
+                      style={{ width: 200 }}
+                      defaultValue={row.school}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={row.school === 0}
+                    >
+                      <option value="0">Select a school</option>
+                      {Object.keys(schools).map((key, index) => (
+                        <option key={index} value={key}>
+                          {schools[key]}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      name="address"
+                      className="form-control"
+                      defaultValue={row.address}
+                      onChange={(e) => handleInputChange(e, index)}
+                      disabled={row.school !== 0}
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      name="cancel"
+                      checked={row.cancel}
+                      onChange={(e) => handleCheckboxChange(e, index)}
+                    />
+                  </td>
+                  <td>
+                <textarea
+                  cols="20"
+                  rows="3"
+                  name="notes"
+                  className="form-control"
+                  defaultValue={row.notes}
+                  onChange={(e) => handleInputChange(e, index)}
+                ></textarea>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
         <br />
-        <button className="btn btn-primary" onClick={saveInfo}>Save</button><br /><br />
-        <button className="btn btn-primary" onClick={generateCSV}>Generate CSV</button>
+        <button className="btn btn-primary" onClick={saveInfo}>
+          Save
+        </button>
+        <br />
+        <br />
+        <button className="btn btn-primary" onClick={generateCSV}>
+          Generate CSV
+        </button>
       </div>
+
     )
   }
 
