@@ -35,8 +35,6 @@
     const [schools, setSchools] = useState({})
     const colors = ['burgundy', 'navy']
     const sizes = ['youth xs', 'youth s', 'youth m', 'youth l', 'adult xs', 'adult s', 'adult m', 'adult l', 'adult xl', 'adult xxl', 'adult xxxl']
-    // const ranks = ["private", "sergeant", "sergeant Major", "second lieutenant", "first lieutenant", "captain", "major",
-    //   "colonel", "general", "1* general", "2* general", "3* general", "4* general", "5* general"]
 
     useEffect(() => {
       fetch('getReportInfo.php')
@@ -156,6 +154,19 @@
         })
     }
 
+    const generateCSV = () => {
+      const data = rows
+      const csvContent = 'data:text/csv;charset=utf-8,' + data.map(row => row.join(',')).join('\n')
+      // Create a link element and set its attributes
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', 'toShip.csv');
+      // Simulate a click on the link to trigger the file download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
     return (
       <div>
         <h1 className="mt-4">Sweaters Report</h1>
@@ -265,7 +276,8 @@
           </table>
         </div>
         <br />
-        <button className="btn btn-primary" onClick={saveInfo}>Save</button>
+        <button className="btn btn-primary" onClick={saveInfo}>Save</button><br /><br />
+        <button className="btn btn-primary" onClick={generateCSV}>Generate CSV</button>
       </div>
     )
   }
