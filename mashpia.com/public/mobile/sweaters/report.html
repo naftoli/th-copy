@@ -49,31 +49,47 @@
           let raised = data.raised
           let sweaters = data.sweaters
           for (let admin_id of admin_ids) {
-            if (!sweaters[admin_id]) {
-              continue
-            }
-            let i = 1 // keep track of which sweater we are on for each admin
-            let numSweaters = sweaters[admin_id].length
-            for (let sweater of sweaters[admin_id]) {
-              console.log(sweater)
+            if (sweaters[admin_id]) {
+              let i = 1 // keep track of which sweater we are on for each admin
+              let numSweaters = sweaters[admin_id].length
+              for (let sweater of sweaters[admin_id]) {
+                console.log(sweater)
+                let row = {
+                  admin_id: admin_id,
+                  serial: sweater['user_serial'],
+                  raised: raised[admin_id] ? raised[admin_id] : 0,
+                  color: sweater['color'],
+                  size: sweater['size'],
+                  rank: sweater['rank'],
+                  cap: sweater['cap'],
+                  sweater_id: sweater['family_sweater_id'],
+                  school: parseInt(sweater['school_id']),
+                  address: sweater['address'],
+                  notes: sweater['notes'],
+                  cancel: false,
+                  gear_number: numSweaters > 1 ? (i + '/' + numSweaters) : i
+                }
+                console.log(row)
+                rows.push(row)
+                i++
+              }
+            } else {
               let row = {
                 admin_id: admin_id,
-                serial: sweater['user_serial'],
+                serial: '',
                 raised: raised[admin_id] ? raised[admin_id] : 0,
-                color: sweater['color'],
-                size: sweater['size'],
-                rank: sweater['rank'],
-                cap: sweater['cap'],
-                sweater_id: sweater['family_sweater_id'],
-                school: parseInt(sweater['school_id']),
-                address: sweater['address'],
-                notes: sweater['notes'],
+                color: '',
+                size: '',
+                rank: '',
+                cap: '',
+                sweater_id: '',
+                school: '',
+                address: '',
+                notes: '',
                 cancel: false,
-                gear_number: numSweaters > 1 ? (i + '/' + numSweaters) : i
+                gear_number: ''
               }
-              console.log(row)
               rows.push(row)
-              i++
             }
           }
           setRows(rows)
@@ -210,96 +226,124 @@
                   <td>{row.raised}</td>
                   <td>{row.gear_number}</td>
                   <td>
-                    <select
-                      name="color"
-                      className="form-select"
-                      defaultValue={row.color}
-                      onChange={(e) => handleInputChange(e, index)}
-                    >
-                      {colors.map((color, index) => (
-                        <option key={index} value={color}>
-                          {color}
-                        </option>
-                      ))}
-                    </select>
+                    {row.sweater_id ? (
+                      <select
+                        name="color"
+                        className="form-select"
+                        defaultValue={row.color}
+                        onChange={(e) => handleInputChange(e, index)}
+                      >
+                        {colors.map((color, index) => (
+                          <option key={index} value={color}>
+                            {color}
+                          </option>
+                        ))}
+                      </select>
+                      ) : (
+                        'N/A'
+                      )}
                   </td>
                   <td>
-                    <select
-                      name="size"
-                      className="form-select"
-                      defaultValue={row.size}
-                      onChange={(e) => handleInputChange(e, index)}
-                    >
-                      {sizes.map((size, index) => (
-                        <option key={index} value={size}>
-                          {size}
-                        </option>
-                      ))}
-                    </select>
+                    {row.sweater_id ? (
+                      <select
+                        name="size"
+                        className="form-select"
+                        defaultValue={row.size}
+                        onChange={(e) => handleInputChange(e, index)}
+                      >
+                        {sizes.map((size, index) => (
+                          <option key={index} value={size}>
+                            {size}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      'N/A'
+                    )}
                   </td>
                   <td>
-                    <select
-                      name="rank"
-                      className="form-select"
-                      defaultValue={row.rank}
-                      onChange={(e) => handleInputChange(e, index)}
-                    >
-                      {ranks.map((rank, index) => (
-                        <option key={index} value={rank}>
-                          {rank}
-                        </option>
-                      ))}
-                    </select>
+                    {row.sweater_id ? (
+                      <select
+                        name="rank"
+                        className="form-select"
+                        defaultValue={row.rank}
+                        onChange={(e) => handleInputChange(e, index)}
+                      >
+                        {ranks.map((rank, index) => (
+                          <option key={index} value={rank}>
+                            {rank}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      'N/A'
+                    )}
                   </td>
                   <td>
-                    <select
-                      name="cap"
-                      className="form-select"
-                      defaultValue={row.cap}
-                      onChange={(e) => handleInputChange(e, index)}
-                    >
-                      {colors.map((color, index) => (
-                        <option key={index} value={color}>
-                          {color}
-                        </option>
-                      ))}
-                    </select>
+                    {row.sweater_id ? (
+                      <select
+                        name="cap"
+                        className="form-select"
+                        defaultValue={row.cap}
+                        onChange={(e) => handleInputChange(e, index)}
+                      >
+                        {colors.map((color, index) => (
+                          <option key={index} value={color}>
+                            {color}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      'N/A'
+                    )}
                   </td>
                   <td>
-                    <select
-                      name="school"
-                      className="form-select"
-                      style={{ width: 200 }}
-                      defaultValue={row.school}
-                      onChange={(e) => handleInputChange(e, index)}
-                      disabled={row.school === 0}
-                    >
-                      <option value="0">Select a school</option>
-                      {Object.keys(schools).map((key, index) => (
-                        <option key={index} value={key}>
-                          {schools[key]}
-                        </option>
-                      ))}
-                    </select>
+                    {row.sweater_id ? (
+                      <select
+                        name="school"
+                        className="form-select"
+                        style={{ width: 200 }}
+                        defaultValue={row.school}
+                        onChange={(e) => handleInputChange(e, index)}
+                        disabled={row.school === 0}
+                      >
+                        <option value="0">Select a school</option>
+                        {Object.keys(schools).map((key, index) => (
+                          <option key={index} value={key}>
+                            {schools[key]}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      'N/A'
+                    )}
                   </td>
                   <td>
-                    <input
-                      type="text"
-                      name="address"
-                      className="form-control"
-                      defaultValue={row.address}
-                      onChange={(e) => handleInputChange(e, index)}
-                      disabled={row.school !== 0}
-                    />
+                    {row.sweater_id ? (
+                      <input
+                        type="text"
+                        name="address"
+                        className="form-control"
+                        defaultValue={row.address}
+                        onChange={(e) => handleInputChange(e, index)}
+                        disabled={row.school !== 0}
+                      />
+                    ) : (
+                      'N/A'
+                    )}
                   </td>
                   <td>
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name="cancel"
-                      checked={row.cancel}
-                      onChange={(e) => handleCheckboxChange(e, index)}
-                    />
+                    {row.sweater_id ? (
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        name="cancel"
+                        checked={row.cancel}
+                        onChange={(e) => handleCheckboxChange(e, index)}
+                      />
+                    ) : (
+                      'N/A'
+                    )}
                   </td>
                   <td>
                 <textarea
