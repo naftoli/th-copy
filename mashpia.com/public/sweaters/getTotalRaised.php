@@ -2,7 +2,17 @@
 //ini_set('display_errors', 1);
 //ini_set('error_reporting', E_ALL);
 
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    echo json_encode([
+        'success' => false,
+        'message' => 'No access'
+    ]);
+    exit;
+}
+
 require $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 $admin = mysql_real_escape_string( $_POST['family_id'] );
 $admin = encrypt_decrypt('decrypt', $admin);

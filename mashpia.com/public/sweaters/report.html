@@ -192,8 +192,8 @@
             <thead>
             <tr>
               <th>Admin ID</th>
-              <th>Serial</th>
               <th>Amount Raised</th>
+              <th>Serial</th>
               <th>Gear #</th>
               <th>Sweater Color</th>
               <th>Sweater Size</th>
@@ -212,8 +212,8 @@
               rows.map((row, index) => (
                 <tr key={index} className={row.cancel ? 'table-danger' : ''}>
                   <td>{row.admin_id}</td>
-                  <td>{row.serial}</td>
                   <td>{row.raised}</td>
+                  <td>{row.serial}</td>
                   <td>{row.gear_number}</td>
                   <td>
                     {row.sweater_id ? (

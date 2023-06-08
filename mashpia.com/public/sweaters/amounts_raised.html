@@ -106,7 +106,7 @@
               {raised && raised.map((row, index) => (
                 <tr key={index}>
                   <td className="admin">{row.admin_id}</td>
-                  <td className="amount">{row.amount}</td>
+                  <td className="amount"><input type="text" defaultValue={row.amount} className="form-control" name="amount" /></td>
                 </tr>
               ))}
             </tbody>

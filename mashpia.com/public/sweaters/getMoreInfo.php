@@ -1,13 +1,15 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') {
-    echo "No access";
+    echo json_encode([
+        'success' => false,
+        'message' => 'No access'
+    ]);
     exit;
 }
 
