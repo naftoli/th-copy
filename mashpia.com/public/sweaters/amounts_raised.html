@@ -59,6 +59,7 @@
             console.log(data)
             alert(data.message)
             if (!data.success) console.log(data.error)
+            else window.location.reload()
           })
           .catch(err => console.log(err))
       }
@@ -72,22 +73,52 @@
     }
 
     const addRow = () => {
-      let html = '<tr class="newRow"><td><input type="number" name="admin_id" class="form-control" /></td>' +
+      let html = '<tr class="newRow"><td><input type="number" name="admin" class="form-control" /></td>' +
         '<td><input type="number" name="amount" class="form-control" /></td></tr>'
       document.querySelector('tbody').insertAdjacentHTML('beforeend', html)
     }
 
     const save = () => {
-      const rows = document.querySelectorAll('tbody tr.newRow')
+      const data = []
+      const rows = document.querySelectorAll('tbody tr')
       rows.forEach(row => {
-        const admin_id = row.querySelector('input[name="admin_id"]').value
+        console.log(row)
+        const admin_id = row.querySelector('input[name="admin"]') ? row.querySelector('input[name="admin"]').value : row.querySelector('.admin').textContent
         const amount = row.querySelector('input[name="amount"]').value
-        const newRow = {admin_id, amount}
-        setRaised([...raised, newRow])
-        setToSave(true)
-        // remove added rows
-        row.remove()
+        if (admin_id && amount) {
+          const info = { admin_id, amount }
+          data.push(info)
+          // remove rows that were added if any
+          if (row.classList.contains('newRow')) row.remove()
+        }
       })
+      setRaised(data)
+      setToSave(true)
+    }
+
+    const upload = () => {
+      const input = document.createElement('input')
+      input.type = 'file'
+      input.accept = '.csv'
+      input.onchange = e => {
+        const file = e.target.files[0]
+        const reader = new FileReader()
+        reader.readAsText(file)
+        reader.onload = () => {
+          const data = reader.result
+          const rows = data.split('\r\n')
+          let html = ''
+          const info = []
+          rows.forEach(row => {
+            let [admin_id, amount] = row.split(',')
+            if (admin_id && amount) info.push({ admin_id, amount })
+          })
+          setRaised([...raised, ...info])
+          setToSave(true)
+        }
+        reader.onerror = () => alert(reader.error)
+      }
+      input.click()
     }
 
     return (
@@ -119,6 +150,10 @@
         <br /><br />
         <button className="btn btn-primary" onClick={save}>
           Save
+        </button>
+        <br /><br />
+        <button className="btn btn-danger" onClick={upload}>
+          Upload Spreadsheet
         </button>
       </div>
     )
