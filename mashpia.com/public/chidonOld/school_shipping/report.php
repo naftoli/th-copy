@@ -221,6 +221,42 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     </div>
   <?php endforeach; ?>
   <?php ksort($grand_summary); ?>
+  <?php
+  if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['grand_summary'] == 1) {
+      foreach ($grand_summary as $item => $more) {
+          $grand_total = 0;
+          $item_details = $summary_items[$item];
+          $desc = "($item)";
+          foreach (['item', 'size', 'color'] as $attr) {
+              if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
+          }
+          echo "<br />";
+          echo "<h2>" . ucwords($desc) . " Totals</h2>";
+          ?>
+        <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
+          <thead>
+          <tr>
+            <th>School</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          <?php
+          foreach ($more as $school_id => $total) {
+              echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
+              $grand_total += intval($total);
+          }
+          ?>
+          </tbody>
+          <tfoot>
+          <tr><th>Grand Total:</th><th><?= $grand_total; ?></th></tr>
+          </tfoot>
+        </table>
+        <div style="page-break-after: always;"></div>
+          <?php
+      }
+  }
+  ?>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>

@@ -86,6 +86,8 @@ $items = $cs->getItems();
         <option value="summary">Summary Only</option>
         <option value="details" selected>Details Only</option>
       </select><br />
+        <?php if ($super) echo '<input type="checkbox" name="grand_summary" value="1" /> Include Grand Summary at the End of the Report'; ?>
+      <br />
       <br />
       <button id="create">Create Report</button>
     </fieldset>
