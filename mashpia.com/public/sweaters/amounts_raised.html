@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Family Raised Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous" />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    #main {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+  </style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const {useState, useEffect} = React
+  const {createRoot} = ReactDOM
+
+  const Table = () => {
+    const [raised, setRaised] = useState([])
+    const [toSave, setToSave] = useState(false)
+
+    useEffect(() => {
+      fetch('getAmountRaised.php')
+        .then(res => res.json())
+        .then(data => {
+          console.log(data)
+          const raised = Object.entries(data.raised).map(([admin_id, amount]) => ({
+            admin_id,
+            amount
+          }))
+          setRaised(raised)
+        })
+        .catch(err => console.log(err))
+    }, [])
+
+    // save to db once toSave is true
+    useEffect(() => {
+      if (toSave) {
+        fetch('saveAmountRaised.php', {
+          method: 'POST',
+          body: JSON.stringify(raised)
+        })
+          .then(res => res.json())
+          .then(data => {
+            console.log(data)
+            alert(data.message)
+            if (!data.success) console.log(data.error)
+          })
+          .catch(err => console.log(err))
+      }
+    }, [toSave])
+
+    const handleInputChange = (e, index) => {
+      const {name, value} = e.target
+      const list = [...rows]
+      list[index][name] = value
+      setRaised(list)
+    }
+
+    const addRow = () => {
+      let html = '<tr class="newRow"><td><input type="number" name="admin_id" class="form-control" /></td>' +
+        '<td><input type="number" name="amount" class="form-control" /></td></tr>'
+      document.querySelector('tbody').insertAdjacentHTML('beforeend', html)
+    }
+
+    const save = () => {
+      const rows = document.querySelectorAll('tbody tr.newRow')
+      rows.forEach(row => {
+        const admin_id = row.querySelector('input[name="admin_id"]').value
+        const amount = row.querySelector('input[name="amount"]').value
+        const newRow = {admin_id, amount}
+        setRaised([...raised, newRow])
+        setToSave(true)
+        // remove added rows
+        row.remove()
+      })
+    }
+
+    return (
+      <div>
+        <h1 className="mt-4">Family Raised Report</h1>
+        <br />
+        <div>
+          <table className="table table-striped">
+            <thead>
+            <tr>
+              <th>Admin ID</th>
+              <th>Amount</th>
+            </tr>
+            </thead>
+            <tbody className="table-group-divider">
+              {raised && raised.map((row, index) => (
+                <tr key={index}>
+                  <td className="admin">{row.admin_id}</td>
+                  <td className="amount">{row.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <br />
+        <button className="btn btn-success" onClick={addRow}>
+          Add Row
+        </button>
+        <br /><br />
+        <button className="btn btn-primary" onClick={save}>
+          Save
+        </button>
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<Table/>)
+</script>
+</html>

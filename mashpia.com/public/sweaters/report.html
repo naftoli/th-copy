@@ -101,25 +101,15 @@
     }, [ranks, schools])
 
     useEffect(() => {
-      fetch('getRanks.php')
+      fetch('getMoreInfo.php')
         .then(response => response.json())
         .then(data => {
           if (!data.success) {
             alert(data.message)
             return
           }
-          console.log(data.ranks)
-          setRanks(Object.values(data.ranks).map(rank => rank.toLowerCase()))
-        })
-      fetch('getSchools.php')
-        .then(response => response.json())
-        .then(data => {
-          if (!data.success) {
-            alert(data.message)
-            return
-          }
-          console.log(data.schools)
           setSchools(data.schools)
+          setRanks(Object.values(data.ranks).map(rank => rank.toLowerCase()))
         })
     }, [])
 
@@ -197,8 +187,8 @@
       <div>
         <h1 className="mt-4">Sweaters Report</h1>
         <br />
-        <div className="table-responsive table-striped table-bordered border-primary">
-          <table className="table">
+        <div>
+          <table className="table table-striped">
             <thead>
             <tr>
               <th>Admin ID</th>
