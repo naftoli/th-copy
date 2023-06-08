@@ -149,7 +149,7 @@
   }
 </script>
 <script>
-  let admin
+  let admin, sweaters
 
   // force https
   if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
@@ -171,9 +171,43 @@
           $("#amountRaised").text(amount)
           $("#times").text(times)
           $("#numPairs").text(times)
+          sweaters = data.sweaters
+          let school_id, address
+          // update children with sweater info wherever relevant
+          for (let i = 0; i < sweaters.length; i++) {
+            let sweater = sweaters[i]
+            let child = $("#" + sweater.user_id)
+            child.find(".color").val(sweater.color)
+            child.find(".size").val(sweater.size)
+            child.find(".rank").val(sweater.rank)
+            child.find(".cap").val(sweater.cap)
+            child.find(".qty").val(sweater.qty)
+            child.find(".gear").trigger('click')
+            if (!school_id) school_id = parseInt(sweater.school_id)
+            if (!address) address = sweater.address
+          }
+          // update school and address
+          if (school_id) $("#school").val(school_id)
+          else if (address) {
+            // find out if we are picking up from th or shipping to an address
+            if (address == 'pickup') $(".choice").eq(0).trigger('click')
+            else {
+              $(".choice").eq(1).trigger('click')
+              // parse address
+              let addressArr = address.split(', ')
+              let addr = addressArr[0]
+              let city = addressArr[1]
+              let state = addressArr[2]
+              let zip = addressArr[3]
+              $(".address").val(addr)
+              $(".city").val(city)
+              $(".state").val(state)
+              $(".zip").val(zip)
+            }
+          }
         } else {
           alert(data.error)
-          location.href = '/mobile'
+          // location.href = '/mobile'
         }
       }
     })

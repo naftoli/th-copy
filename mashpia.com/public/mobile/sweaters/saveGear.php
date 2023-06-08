@@ -14,6 +14,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $qrys = [];
+
+// first remove existing sweaters for this admin
+$sql = "delete from family_sweaters where year = $year and admin_id = $admin_id";
+$qrys[] = $sql;
+
+// now insert the new sweaters
 foreach ($info as $child) {
     $user_id = mysql_real_escape_string($child['user_id']);
     $size = mysql_real_escape_string($child['size']);

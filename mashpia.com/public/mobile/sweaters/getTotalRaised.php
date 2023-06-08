@@ -42,21 +42,12 @@ if ($admin > 0) {
     while ($row = mysql_fetch_assoc($result)) {
         $sweaters[] = $row;
     }
-    $num_sweaters = count($sweaters);
-    if ($num_sweaters >= $times) {
-        echo json_encode([
-            'success'   => false,
-            'error'     => 'You have already chosen the number of sweaters that you are eligible for.'
-        ]);
-        exit;
-    } else {
-        $times = $times - $num_sweaters;
-    }
 
     echo json_encode([
         'success'   => true,
         'amount'    => $total,
         'times'     => $times,
+        'sweaters'  => $sweaters,
         'message'   => 'You are eligible to get ' . $times . ' sweaters.'
     ]);
 } else {
