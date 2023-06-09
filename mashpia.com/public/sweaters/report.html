@@ -37,80 +37,71 @@
     const sizes = ['youth xs', 'youth s', 'youth m', 'youth l', 'adult xs', 'adult s', 'adult m', 'adult l', 'adult xl', 'adult xxl', 'adult xxxl']
 
     useEffect(() => {
-      fetch('getReportInfo.php')
-        .then(response => response.json())
-        .then(data => {
-          if (!data.success) {
-            alert(data.message)
-            location.href = '/'
-          }
-          let rows = []
-          let admin_ids = data.admin_ids
-          let raised = data.raised
-          let sweaters = data.sweaters
-          for (let admin_id of admin_ids) {
-            if (sweaters[admin_id]) {
-              let i = 1 // keep track of which sweater we are on for each admin
-              let numSweaters = sweaters[admin_id].length
-              for (let sweater of sweaters[admin_id]) {
-                console.log(sweater)
-                let row = {
-                  admin_id: admin_id,
-                  serial: sweater['user_serial'],
-                  raised: raised[admin_id] ? raised[admin_id] : 0,
-                  color: sweater['color'],
-                  size: sweater['size'],
-                  rank: sweater['rank'],
-                  cap: sweater['cap'],
-                  sweater_id: sweater['family_sweater_id'],
-                  school: parseInt(sweater['school_id']),
-                  address: sweater['address'],
-                  notes: sweater['notes'],
-                  cancel: false,
-                  gear_number: numSweaters > 1 ? (i + '/' + numSweaters) : i
-                }
-                console.log(row)
-                rows.push(row)
-                i++
-              }
-            } else {
+      (async () => {
+        const infoRes = await fetch('getReportInfo.php')
+        const moreInfoRes = await fetch('getMoreInfo.php')
+
+        const data = await infoRes.json()
+        const moreInfo = await moreInfoRes.json()
+
+        if (!data.success || !moreInfo.success) {
+          alert('Error getting info.')
+          location.href = '/'
+        }
+
+        setSchools(moreInfo.schools)
+        setRanks(Object.values(moreInfo.ranks).map(rank => rank.toLowerCase()))
+
+        let rows = []
+        let admin_ids = data.admin_ids
+        let raised = data.raised
+        let sweaters = data.sweaters
+        for (let admin_id of admin_ids) {
+          if (sweaters[admin_id]) {
+            let i = 1 // keep track of which sweater we are on for each admin
+            let numSweaters = sweaters[admin_id].length
+            for (let sweater of sweaters[admin_id]) {
+              console.log(sweater)
               let row = {
                 admin_id: admin_id,
-                serial: '',
+                serial: sweater['user_serial'],
                 raised: raised[admin_id] ? raised[admin_id] : 0,
-                color: '',
-                size: '',
-                rank: '',
-                cap: '',
-                sweater_id: '',
-                school: '',
-                address: '',
-                notes: '',
+                color: sweater['color'],
+                size: sweater['size'],
+                rank: sweater['rank'],
+                cap: sweater['cap'],
+                sweater_id: sweater['family_sweater_id'],
+                school: parseInt(sweater['school_id']),
+                address: sweater['address'],
+                notes: sweater['notes'],
                 cancel: false,
-                gear_number: ''
+                gear_number: numSweaters > 1 ? (i + '/' + numSweaters) : i
               }
+              console.log(row)
               rows.push(row)
+              i++
             }
+          } else {
+            let row = {
+              admin_id: admin_id,
+              serial: '',
+              raised: raised[admin_id] ? raised[admin_id] : 0,
+              color: '',
+              size: '',
+              rank: '',
+              cap: '',
+              sweater_id: '',
+              school: '',
+              address: '',
+              notes: '',
+              cancel: false,
+              gear_number: ''
+            }
+            rows.push(row)
           }
-          setRows(rows)
-        })
-        .catch(error => {
-          console.log(error)
-          alert('Error: ' + error)
-        })
-    }, [ranks, schools])
-
-    useEffect(() => {
-      fetch('getMoreInfo.php')
-        .then(response => response.json())
-        .then(data => {
-          if (!data.success) {
-            alert(data.message)
-            return
-          }
-          setSchools(data.schools)
-          setRanks(Object.values(data.ranks).map(rank => rank.toLowerCase()))
-        })
+        }
+        setRows(rows)
+      })()
     }, [])
 
     const handleInputChange = (e, index) => {
