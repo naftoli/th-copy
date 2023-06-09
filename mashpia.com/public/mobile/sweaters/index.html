@@ -287,7 +287,6 @@
       let conf = confirm('You still have ' + (numPairs - numChildren) + ' pair(s) of sweaters left to choose. Are you sure you want to save?')
       if (!conf) return false
     }
-    alert(address)
     $.ajax({
       url: 'saveGear.php',
       type: 'post',
@@ -295,8 +294,7 @@
       data: { admin, children, school, address },
       success: function(data) {
         alert(data.message)
-        if (data.success) location.href = '/mobile'
-        else console.log(data.error)
+        if (!data.success) console.log(data.error)
       }
     })
   }
