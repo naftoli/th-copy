@@ -149,7 +149,7 @@
   }
 </script>
 <script>
-  let admin, sweaters
+  let admin, sweaters, ranks
 
   // force https
   if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
@@ -185,6 +185,23 @@
             child.find(".gear").trigger('click')
             if (!school_id) school_id = parseInt(sweater.school_id)
             if (!address) address = sweater.address
+
+            // update rank for child and add more ranks to dropdown if needed
+            let options = child.find('select.rank option')
+            let num_options = options.length
+            let rank_ord = parseInt(Object.keys(ranks).find(key => ranks[key].toLowerCase() === sweater.rank))
+            console.log(num_options, rank_ord)
+            // only add more ranks if the child has a higher rank then what's already in the dropdown
+            if (rank_ord > num_options) {
+              let k = num_options + 1 // start adding ranks from the next rank
+              for (; k < 15; k++) { // highest rank ord is 14
+                let rank = ranks[k]
+                let rank_to_lower = rank.toLowerCase()
+                child.find('select.rank').append('<option value="' + rank_to_lower + '">' + rank + '</option>')
+                if (rank_ord == k) break
+              }
+            }
+            child.find('select.rank').val(sweater.rank)
           }
           // update school and address
           if (school_id) $("#school").val(school_id)
@@ -216,7 +233,10 @@
   const getRanks = async () => {
     const result = await fetch('getRanks.php').then(res => res.json())
     if (!result.success) alert('Error getting ranks')
-    else return result.ranks
+    else {
+      ranks = result.ranks
+      return result.ranks
+    }
   }
 
   const save = () => {
@@ -358,11 +378,12 @@
                     </p>
                     <select class="form-control rank">
                     `
+              const ord = parseInt(child.rankOrd)
               for (let r in ranks) {
-                if (r > (parseInt(child.rankOrd) + 2)) break
                 let rank = ranks[r]
+                if (r > (ord + 2)) break
                 html += `<option value="${rank.toLowerCase()}"`
-                if (r == parseInt(child.rankOrd)) html += ' selected'
+                if (r == ord) html += ' selected'
                 html += `>${rank}</option>`
               }
               html += `
