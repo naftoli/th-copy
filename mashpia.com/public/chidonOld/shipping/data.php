@@ -302,7 +302,7 @@ function createCSVforGear($users, $items) {
         'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
         'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email'];
     $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
-        'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
+        'Address Line 1', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
         'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email'];
 
     foreach ($info as $user_id => $more) {
@@ -313,18 +313,17 @@ function createCSVforGear($users, $items) {
             $user = $users[$user_id];
             $qty = $item['qty'] ?? 1;
             $itemDesc = '';
-            if ($item['name']) $itemDesc .= "Personalized ";
             $itemDesc .= $item['item'];
             if ($item['color']) $itemDesc .= ", " . $item['color'];
             if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+            if ($item['rank']) $itemDesc .= ", rank: " . $item['rank'];
+            $addressInfo = explode(', ', $item['address']);
 
             $csv[$i++] = [$admin_id, ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
-                $phone, 'ship', $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
-                $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc,
+                $phone, 'ship', $addressInfo[0], $addressInfo[1], $addressInfo[2], $addressInfo[3], 'USA', $item['id'], $itemDesc,
                 $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email']];
         }
     }
-
     return $csv;
 }
 

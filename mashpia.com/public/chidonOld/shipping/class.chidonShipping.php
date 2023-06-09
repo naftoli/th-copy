@@ -1380,7 +1380,7 @@ class ChidonShipping
             $sql .= " AND u.school_id = " . $school;
             $sql .= " AND (s.school_id = 0 OR s.school_id = " . $school . ")";
         }
-        if ($addresses) $sql .= " AND (address is not null AND address != '' AND address != 'pickup')";
+        if ($addresses) $sql .= " AND (address is not null AND address != '')";
         else $sql .= " AND (address is null OR address = '')";
 
         $stmt = $this->db->prepare($sql);
@@ -1401,7 +1401,8 @@ class ChidonShipping
                 'id'    => $id,
                 'cat'   => $cat,
                 'rank'  => $row['rank'],
-                'cap'   => $row['cap']
+                'cap'   => $row['cap'],
+                'address'   => $row['address']
             ];
         }
 

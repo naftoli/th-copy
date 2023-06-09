@@ -110,7 +110,6 @@ if ($report_type == 'file') {
     $info['gear'] = $cs->getGear($_POST['gender'],0, true);
     $users = array_keys($info['gear']);
     $csv = createCSVforGear($users, $info['gear']);
-    echo "<pre>"; print_r($csv); echo "</pre>";
     $file = 'gear.csv';
     createFile($file, $csv);
     downloadFile($file);
