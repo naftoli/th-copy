@@ -30,12 +30,13 @@ foreach ($data as $row) {
         // delete sweater
         $qry = "DELETE FROM family_sweaters WHERE family_sweater_id = " . $row['sweater_id'];
         $qrys[] = $qry;
+    } else if ($row['sweater_id'] > 0) {
+        $qry = "UPDATE family_sweaters SET color = '" . $row['color'] . "', size = '" . $row['size'] .
+            "', rank = '" . $row['rank'] . "', cap = '" . $row['cap'] . "', notes = '" . $row['notes'] . "', 
+            school_id = " . $row['school'] . ", address = '" . $row['address'] . "' 
+            WHERE family_sweater_id = " . $row['sweater_id'];
+        $qrys[] = $qry;
     }
-    $qry = "UPDATE family_sweaters SET color = '" . $row['color'] . "', size = '" . $row['size'] .
-        "', rank = '" . $row['rank'] . "', cap = '" . $row['cap'] . "', notes = '" . $row['notes'] . "', 
-        school_id = " . $row['school'] . ", address = '" . $row['address'] . "' 
-        WHERE family_sweater_id = " . $row['sweater_id'];
-    $qrys[] = $qry;
 }
 
 
