@@ -317,13 +317,15 @@ function createCSVforGear($users, $items) {
             if ($item['color']) $itemDesc .= ", " . $item['color'];
             if ($item['size']) $itemDesc .= ", size: " . $item['size'];
             if ($item['rank']) $itemDesc .= ", rank: " . $item['rank'];
-            if ($item['address'] == 'pickup') $shipping = 'pickup from JCM';
-            else {
-                $shipping = 'ship';
+            if ($item['address'] == 'pickup') {
+                $shipping = 'pickup from JCM';
                 $addressInfo[0] = '';
                 $addressInfo[1] = '';
                 $addressInfo[2] = '';
                 $addressInfo[3] = '';
+            } else {
+                $shipping = 'ship';
+                $addressInfo = explode(', ', $item['address']);
             }
 
             $csv[$i++] = [$admin_id, ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
