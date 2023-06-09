@@ -105,6 +105,16 @@ if ($report_type == 'file') {
     createZip($files, 'shipping.zip');
     downloadFile('shipping.zip');
     exit;
+} else if ($report_type == 'fileGear') {
+    $files = [];
+    $info['gear'] = $cs->getGear($_POST['gender'],0, true);
+    $users = array_keys($info['gear']);
+    $csv = createCSVforGear($users, $info['gear']);
+    echo "<pre>"; print_r($csv); echo "</pre>";
+    $file = 'gear.csv';
+    createFile($file, $csv);
+    downloadFile($file);
+    exit;
 }
 
 // get results for chosen items

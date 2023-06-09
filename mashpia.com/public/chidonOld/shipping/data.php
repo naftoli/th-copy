@@ -28,7 +28,8 @@ $item_details = [
     'size'      => 'Size',
     'color'     => 'Color/Gender',
     'name'      => 'Personalization Name',
-    'cat'       => 'Category'
+    'cat'       => 'Category',
+    'rank'      => 'Rank (for Gear Category)'
 ];
 
 function build_fields() {
@@ -257,6 +258,73 @@ function createCSV($items, $school_id) {
             }
         }
     }
+    return $csv;
+}
+
+function createCSVforGear($users, $items) {
+    global $MASHPIA_DB;
+
+    // create sql to get all needed fields
+    $sql = "SELECT 
+                a.*, u.user_id, u.first AS u_first, u.last AS u_last, u.user_serial, u.school_id 
+            FROM
+                admins a
+                    JOIN
+                admin_auths aa USING (admin_id)
+                    JOIN
+                users u ON u.user_id = aa.id
+            WHERE
+                aa.auth = 'user' AND aa.id in (" . implode(',', $users) . ")";
+    $stmt = $MASHPIA_DB->query($sql);
+    $rows = $stmt->fetchAll();
+
+    $admins = [];
+    $children = [];
+    $users = [];
+    foreach ($rows as $row) {
+        $admins[$row['admin_id']] = $row;
+        $children[$row['user_id']] = $row['admin_id'];
+        $users[$row['user_id']] = $row;
+    }
+
+    $info = [];
+    foreach ($children as $user_id => $admin_id) {
+        if (isset($items[$user_id])) {
+            $details = $items[$user_id];
+            foreach ($details as $item) {
+                $info[$user_id][] = $item;
+            }
+        }
+    }
+
+    $i = 0;
+    $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+        'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
+        'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email'];
+    $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
+        'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
+        'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email'];
+
+    foreach ($info as $user_id => $more) {
+        foreach ($more as $item) {
+            $admin = $admins[$children[$user_id]];
+            $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
+            $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
+            $user = $users[$user_id];
+            $qty = $item['qty'] ?? 1;
+            $itemDesc = '';
+            if ($item['name']) $itemDesc .= "Personalized ";
+            $itemDesc .= $item['item'];
+            if ($item['color']) $itemDesc .= ", " . $item['color'];
+            if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+
+            $csv[$i++] = [$admin_id, ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
+                $phone, 'ship', $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
+                $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc,
+                $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email']];
+        }
+    }
+
     return $csv;
 }
 

@@ -1364,14 +1364,13 @@ class ChidonShipping
         return $info;
     }
 
-    public function getGear($gender, $school) {
+    public function getGear($gender, $school, $addresses = false) {
         $cat = 'gear';
         $item = 'sweater & cap';
 
         $sql = "select * from family_sweaters s 
                 join users u using (user_id) 
-                where year = :year 
-                and (address is null or address = '')";
+                where year = :year";
         if ($gender == 'm') {
             $sql .= " AND u.gender = 'M'";
         } else if ($gender == 'f') {
@@ -1379,8 +1378,11 @@ class ChidonShipping
         }
         if ($school > 0) {
             $sql .= " AND u.school_id = " . $school;
-            $sql .= " and (s.school_id = 0 or s.school_id = " . $school . ")";
+            $sql .= " AND (s.school_id = 0 OR s.school_id = " . $school . ")";
         }
+        if ($addresses) $sql .= " AND (address is not null AND address != '' AND address != 'pickup')";
+        else $sql .= " AND (address is null OR address = '')";
+
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'year'      => $this->year
