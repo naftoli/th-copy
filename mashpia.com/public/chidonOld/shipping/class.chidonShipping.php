@@ -876,7 +876,7 @@ class ChidonShipping
     public function getCategories() {
         $categories = [
             'brochures', 'books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes'
+            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear'
         ];
         return $categories;
     }
@@ -902,7 +902,8 @@ class ChidonShipping
                 'iron curtain vol 2', 'escape from europe', 'the rebbe & the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
                 'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
             'ambassador prizes'     => ['ambassador prize'],
-            'raffles'   => ['5M Raffles', 'Other Raffles']
+            'raffles'               => ['5M Raffles', 'Other Raffles'],
+            'gear'                  => ['Sweater & Cap']
         ];
         return $items;
     }
@@ -1132,6 +1133,36 @@ class ChidonShipping
                 'yahadus book 3'  => 'CHI203',
                 'yahadus book 4'  => 'CHI204',
                 'yahadus book 5'  => 'CHI205'
+            ],
+            'gear'  => [
+                'sweater & cap'  => [
+                    'boys'  => [
+                        'youth xs'   => 'CHI300',
+                        'youth s'    => 'CHI301',
+                        'youth m'    => 'CHI302',
+                        'youth l'    => 'CHI303',
+                        'adult xs'      => 'CHI305',
+                        'adult s'       => 'CHI306',
+                        'adult m'       => 'CHI307',
+                        'adult l'       => 'CHI308',
+                        'adult xl'      => 'CHI309',
+                        'adult xxl'     => 'CHI310',
+                        'adult xxxl'    => 'CHI311'
+                    ],
+                    'girls' => [
+                        'youth xs'   => 'CHI312',
+                        'youth s'    => 'CHI313',
+                        'youth m'    => 'CHI314',
+                        'youth l'    => 'CHI315',
+                        'adult xs'      => 'CHI317',
+                        'adult s'       => 'CHI318',
+                        'adult m'       => 'CHI319',
+                        'adult l'       => 'CHI320',
+                        'adult xl'      => 'CHI321',
+                        'adult xxl'     => 'CHI322',
+                        'adult xxxl'    => 'CHI323'
+                    ]
+                ]
             ]
         ];
 
@@ -1328,6 +1359,48 @@ class ChidonShipping
                     'cat'   => $cat
                 ];
             }
+        }
+
+        return $info;
+    }
+
+    public function getGear($gender, $school) {
+        $cat = 'gear';
+        $item = 'sweater & cap';
+
+        $sql = "select * from family_sweaters s 
+                join users u using (user_id) 
+                where year = :year 
+                and (address is null or address = '')";
+        if ($gender == 'm') {
+            $sql .= " AND u.gender = 'M'";
+        } else if ($gender == 'f') {
+            $sql .= " AND u.gender = 'F'";
+        }
+        if ($school > 0) {
+            $sql .= " AND u.school_id = " . $school;
+            $sql .= " and (s.school_id = 0 or s.school_id = " . $school . ")";
+        }
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'year'      => $this->year
+        ]);
+        $rows = $stmt->fetchAll();
+//        echo "<pre>"; print_r($rows); echo "</pre>"; exit;
+        $info = [];
+        foreach ($rows as $row) {
+            $gender = $row['gender'] == 'M' ? 'boys' : $row['gender'] == 'F' ? 'girls' : '';
+            $id = $this->getItemID($cat, $item, $gender, $row['size']);
+            $info[$row['user_id']][] = [
+                'item'  => $item,
+                'size'  => $row['size'],
+                'color' => $row['color'],
+                'name'  => ' ',
+                'id'    => $id,
+                'cat'   => $cat,
+                'rank'  => $row['rank'],
+                'cap'   => $row['cap']
+            ];
         }
 
         return $info;

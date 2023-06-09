@@ -14,6 +14,7 @@ if ($admin > 0) {
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
     $total = $row['total'];
+    $times = floor($total / 150);
      if ($total < 150) {
         echo json_encode([
             'success'   => false,
@@ -23,7 +24,6 @@ if ($admin > 0) {
     }
 
     // check if the admin has already chosen the sweaters
-    $times = floor($total / 150);
     $sweaters = [];
     $sql = "select * from family_sweaters where year = $year and admin_id = $admin";
     $result = mysql_query($sql);
