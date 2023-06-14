@@ -10,10 +10,6 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
-$schools = $as->getSchools();
-
 // get all ranks
 $ranks = [];
 $sql = "SELECT * FROM ranks";
@@ -24,6 +20,5 @@ while ($row = mysql_fetch_assoc($result)) {
 
 echo json_encode([
     'success'   => true,
-    'schools'   => $schools,
     'ranks'     => $ranks
 ]);

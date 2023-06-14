@@ -32,7 +32,7 @@
   const Table = () => {
     const [rows, setRows] = useState([])
     const [ranks, setRanks] = useState([])
-    const [schools, setSchools] = useState({})
+    const [users, setUsers] = useState([])
     const colors = ['burgundy', 'navy']
     const sizes = ['youth xs', 'youth s', 'youth m', 'youth l', 'adult xs', 'adult s', 'adult m', 'adult l', 'adult xl', 'adult xxl', 'adult xxxl']
 
@@ -49,8 +49,8 @@
           location.href = '/'
         }
 
-        setSchools(moreInfo.schools)
         setRanks(Object.values(moreInfo.ranks).map(rank => rank.toLowerCase()))
+        setUsers(data.children)
 
         let rows = []
         let admin_ids = data.admin_ids
@@ -64,14 +64,13 @@
               console.log(sweater)
               let row = {
                 admin_id: admin_id,
-                serial: sweater['user_serial'],
                 raised: raised[admin_id] ? raised[admin_id] : 0,
+                user_id: sweater['user_id'],
                 color: sweater['color'],
                 size: sweater['size'],
                 rank: sweater['rank'],
                 cap: sweater['cap'],
                 sweater_id: sweater['family_sweater_id'],
-                school: parseInt(sweater['school_id']),
                 address: sweater['address'],
                 notes: sweater['notes'],
                 cancel: false,
@@ -84,14 +83,13 @@
           } else {
             let row = {
               admin_id: admin_id,
-              serial: '',
               raised: raised[admin_id] ? raised[admin_id] : 0,
+              user_id: 0,
               color: '',
               size: '',
               rank: '',
               cap: '',
               sweater_id: '',
-              school: '',
               address: '',
               notes: '',
               cancel: false,
@@ -190,7 +188,7 @@
               <th>Sweater Size</th>
               <th>Rank patch</th>
               <th>Cap Color</th>
-              <th>School</th>
+              <th>Child</th>
               <th>Shipping Address</th>
               <th>Cancel Order</th>
               <th>Notes</th>
@@ -198,13 +196,13 @@
             </thead>
             <tbody className="table-group-divider">
             {ranks &&
-              schools &&
+              users &&
               rows &&
               rows.map((row, index) => (
                 <tr key={index} className={row.cancel ? 'table-danger' : ''}>
                   <td>{row.admin_id}</td>
                   <td>{row.raised}</td>
-                  <td>{row.serial}</td>
+                  <td>{row.user_id > 0 ? users[row.admin_id][row.user_id].user_serial : ''}</td>
                   <td>{row.gear_number}</td>
                   <td>
                     {row.sweater_id ? (
@@ -281,17 +279,16 @@
                   <td>
                     {row.sweater_id ? (
                       <select
-                        name="school"
+                        name="user"
                         className="form-select"
                         style={{ width: 200 }}
-                        defaultValue={row.school}
+                        defaultValue={row.user_id}
                         onChange={(e) => handleInputChange(e, index)}
-                        disabled={row.school === 0}
+                        disabled={row.address != '' && row.address != null && row.address != undefined}
                       >
-                        <option value="0">Select a school</option>
-                        {Object.keys(schools).map((key, index) => (
-                          <option key={index} value={key}>
-                            {schools[key]}
+                        {Object.values(users[row.admin_id]).map((user, index) => (
+                          <option key={index} value={user.user_id}>
+                            {user.user_id + ' - ' + user.school_name}
                           </option>
                         ))}
                       </select>
@@ -307,7 +304,7 @@
                         className="form-control"
                         defaultValue={row.address}
                         onChange={(e) => handleInputChange(e, index)}
-                        disabled={row.school !== 0}
+                        disabled={row.address == '' || row.address == null || row.address == undefined}
                       />
                     ) : (
                       'N/A'
