@@ -346,6 +346,9 @@
             for (let c in children) {
               let child = children[c]
               if (!child.rank) continue
+              let school_id = parseInt(children[s].school_id)
+              if (exceptions.includes(school_id)) continue
+
               html += `
                 <div class="child" id="${c}">
                   <input type="checkbox" value="${c}" class="gear" />

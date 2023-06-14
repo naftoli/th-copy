@@ -102,46 +102,6 @@ class ChidonShipping
     }
 
     /**
-     * get all books purchased this yr
-     *
-     * @param $gender
-     * @param $school
-     * @param $books
-     * @return array - all book info from db with user IDs as the key
-     * TODO - DBL CHECK ABOUT BOOKS BEING BOUGHT
-     */
-    public function getBooks($gender, $school, $books = []) {
-        $info = [];
-        $sql = "SELECT * FROM yahadus_book_purchases 
-                JOIN users u USING (user_id) 
-                WHERE year = :year";
-        if ($gender == 'm') $sql .= " and u.gender = 'M'";
-        if ($gender == 'f') $sql .= " and u.gender = 'F'";
-        if ($school > 0) $sql .= " and u.school_id = " . $school;
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['year' => $this->year]);
-        $rows = $stmt->fetchAll();
-
-        $cat = 'books';
-        $item = 'yahadus book';
-        $id = $this->getItemID($cat, $item);
-
-        foreach ($rows as $row) {
-            if (in_array($row['user_id'], $this->toExclude)) continue;
-            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
-            $info[$row['user_id']][] = [
-                'item'  => $item,
-                'size'  => '',
-                'color' => '',
-                'name'  => '',
-                'id'    => $id,
-                'cat'   => $cat
-            ];
-        }
-        return $info;
-    }
-
-    /**
      * @param $gender
      * @param $school
      * @param $guides
@@ -884,7 +844,7 @@ class ChidonShipping
     public function getItems() {
         $items = [
             'brochures'             => ['brochure'],
-            'yahadus books'         => ['yahadus books'],
+            'yahadus books'         => ['during enrollment', 'end of yr sale'],
             'guides'                => ['study guides', 'khk guides'],
             'recruitment prizes'    => ['book light', 'rechargeable fan', 'watch', 'neck pillow', 'mini duffle bag'],
             'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
@@ -914,8 +874,21 @@ class ChidonShipping
             'brochures' => [
                 'brochure'  => 'CHI009'
             ],
-            'books' => [
-                'yahadus book'  => 'CHI010'
+            'yahadus books' => [
+                'during enrollment'  => [
+                    'yahadus book 1'  => 'CHI201',
+                    'yahadus book 2'  => 'CHI202',
+                    'yahadus book 3'  => 'CHI203',
+                    'yahadus book 4'  => 'CHI204',
+                    'yahadus book 5'  => 'CHI205'
+                ],
+                'end of yr sale' => [
+                    'yahadus book 1'  => 'CHI201',
+                    'yahadus book 2'  => 'CHI202',
+                    'yahadus book 3'  => 'CHI203',
+                    'yahadus book 4'  => 'CHI204',
+                    'yahadus book 5'  => 'CHI205'
+                ],
             ],
             'guides'    => [
                 'study guides'  => 'CHI011',
@@ -1127,13 +1100,6 @@ class ChidonShipping
             'ambassador prizes' => [
                 'ambassador prize' => 'CHI194'
             ],
-            'yahadus books' => [
-                'yahadus book 1'  => 'CHI201',
-                'yahadus book 2'  => 'CHI202',
-                'yahadus book 3'  => 'CHI203',
-                'yahadus book 4'  => 'CHI204',
-                'yahadus book 5'  => 'CHI205'
-            ],
             'gear'  => [
                 'th sweater'  => [
                     'boys'  => [
@@ -1331,53 +1297,85 @@ class ChidonShipping
     /**
      * get yahadus book purchases
      */
-    public function getYahadusBooks($gender, $school) {
-        $purchases = [];
-        $yom_tov = 'Yahadus Book Sale';
-        $sql = "
-            SELECT 
-                *
-            FROM
-                mashpia_purchases.purchases p
-                    JOIN
-                mashpia_purchases.purchase_details pd USING (purchase_id)
-                    JOIN
-                mashpia_purchases.mivtzoim_items mi ON mi.mivtzoim_item_id = pd.item_id
-                    JOIN
-                users u using (user_id)
-            WHERE
-                mi.yom_tov = :yom_tov
-        ";
-        if ($gender == 'm') {
-            $sql .= " AND u.gender = 'M'";
-        } else if ($gender == 'f') {
-            $sql .= " AND u.gender = 'F'";
-        }
-        if ($school > 0) {
-            $sql .= " AND u.school_id = " . $school;
-        }
-
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['yom_tov' => $yom_tov]);
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            $purchases[$row['admin_id']][] = $row;
-        }
-
+    public function getYahadusBooks($gender, $school, $items = []) {
         $info = [];
+        $purchases = [];
         $cat = 'yahadus books';
-        foreach ($purchases as $rows) {
-            foreach ($rows as $row) {
-                $item = strtolower($row['item']);
-                $id = $this->getItemID($cat, $item);
-                $info[$row['user_id']][] = [
-                    'item'  => $item,
-                    'size'  => '',
-                    'color' => '',
-                    'name'  => '',
-                    'id'    => $id,
-                    'cat'   => $cat
-                ];
+
+        foreach ($items as $item) {
+            if ($item == 'during enrollment') {
+                $info = [];
+                $sql = "SELECT * FROM yahadus_book_purchases 
+                        JOIN users u USING (user_id) 
+                        JOIN th_chidon tc using (user_id, year) 
+                        WHERE year = :year";
+                if ($gender == 'm') $sql .= " and u.gender = 'M'";
+                if ($gender == 'f') $sql .= " and u.gender = 'F'";
+                if ($school > 0) $sql .= " and u.school_id = " . $school;
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute(['year' => $this->year]);
+                $rows = $stmt->fetchAll();
+
+                foreach ($rows as $row) {
+//                    if (in_array($row['user_id'], $this->toExclude)) continue;
+//                    if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+                    $itemDesc = 'yahadus book ' . $row['book'];
+                    $id = $this->getItemID($cat, $item, $itemDesc);
+                    $info[$row['user_id']][] = [
+                        'item'  => $itemDesc,
+                        'size'  => '',
+                        'color' => '',
+                        'name'  => '',
+                        'id'    => $id,
+                        'cat'   => $cat
+                    ];
+                }
+            } else if ($item == 'end of yr sale') {
+                $yom_tov = 'Yahadus Book Sale';
+                $sql = "
+                    SELECT 
+                        *
+                    FROM
+                        mashpia_purchases.purchases p
+                            JOIN
+                        mashpia_purchases.purchase_details pd USING (purchase_id)
+                            JOIN
+                        mashpia_purchases.mivtzoim_items mi ON mi.mivtzoim_item_id = pd.item_id
+                            JOIN
+                        users u using (user_id)
+                    WHERE
+                        mi.yom_tov = :yom_tov
+                ";
+                if ($gender == 'm') {
+                    $sql .= " AND u.gender = 'M'";
+                } else if ($gender == 'f') {
+                    $sql .= " AND u.gender = 'F'";
+                }
+                if ($school > 0) {
+                    $sql .= " AND u.school_id = " . $school;
+                }
+
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute(['yom_tov' => $yom_tov]);
+                $rows = $stmt->fetchAll();
+                foreach ($rows as $row) {
+                    $purchases[$row['admin_id']][] = $row;
+                }
+
+                foreach ($purchases as $rows) {
+                    foreach ($rows as $row) {
+                        $itemDesc = strtolower($row['item']);
+                        $id = $this->getItemID($cat, $item, $itemDesc);
+                        $info[$row['user_id']][] = [
+                            'item'  => $itemDesc,
+                            'size'  => '',
+                            'color' => '',
+                            'name'  => '',
+                            'id'    => $id,
+                            'cat'   => $cat
+                        ];
+                    }
+                }
             }
         }
 
