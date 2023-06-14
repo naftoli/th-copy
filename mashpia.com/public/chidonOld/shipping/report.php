@@ -1,4 +1,7 @@
 <?php
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
@@ -107,7 +110,8 @@ if ($report_type == 'file') {
     exit;
 } else if ($report_type == 'fileGear') {
     $files = [];
-    $info['gear'] = $cs->getGear($_POST['gender'],0, true);
+    $listOfItems = array_keys($items_chosen['gear']);
+    $info['gear'] = $cs->getGear($_POST['gender'],0, $listOfItems, true);
     $users = array_keys($info['gear']);
     $csv = createCSVforGear($users, $info['gear']);
     $file = 'gear.csv';
@@ -121,7 +125,8 @@ $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
     $listOfItems = array_keys($itemsPerCat);
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-    $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
+    if ($cat == 'gear') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
+    else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
 }
 $info['status'] = $cs->getStatus();
 

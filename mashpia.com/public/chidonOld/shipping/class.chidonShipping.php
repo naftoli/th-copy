@@ -903,7 +903,7 @@ class ChidonShipping
                 'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
             'ambassador prizes'     => ['ambassador prize'],
             'raffles'               => ['5M Raffles', 'Other Raffles'],
-            'gear'                  => ['Sweater', 'Cap']
+            'gear'                  => ['TH Sweater', 'TH Cap', 'TH Rank Patch']
         ];
         return $items;
     }
@@ -1135,12 +1135,12 @@ class ChidonShipping
                 'yahadus book 5'  => 'CHI205'
             ],
             'gear'  => [
-                'sweater'  => [
+                'th sweater'  => [
                     'boys'  => [
-                        'youth xs'   => 'CHI300',
-                        'youth s'    => 'CHI301',
-                        'youth m'    => 'CHI302',
-                        'youth l'    => 'CHI303',
+                        'youth xs'      => 'CHI300',
+                        'youth s'       => 'CHI301',
+                        'youth m'       => 'CHI302',
+                        'youth l'       => 'CHI303',
                         'adult xs'      => 'CHI305',
                         'adult s'       => 'CHI306',
                         'adult m'       => 'CHI307',
@@ -1150,10 +1150,10 @@ class ChidonShipping
                         'adult xxxl'    => 'CHI311'
                     ],
                     'girls' => [
-                        'youth xs'   => 'CHI312',
-                        'youth s'    => 'CHI313',
-                        'youth m'    => 'CHI314',
-                        'youth l'    => 'CHI315',
+                        'youth xs'      => 'CHI312',
+                        'youth s'       => 'CHI313',
+                        'youth m'       => 'CHI314',
+                        'youth l'       => 'CHI315',
                         'adult xs'      => 'CHI317',
                         'adult s'       => 'CHI318',
                         'adult m'       => 'CHI319',
@@ -1163,9 +1163,25 @@ class ChidonShipping
                         'adult xxxl'    => 'CHI323'
                     ]
                 ],
-                'cap'   => [
+                'th cap'   => [
                     'boys'  => 'CHI324',
                     'girls' => 'CHI325'
+                ],
+                'th rank patch'    => [
+                    'private'           => 'CHI326',
+                    'sergeant'          => 'CHI327',
+                    'sergeant major'    => 'CHI328',
+                    'second lieutenant' => 'CHI329',
+                    'first lieutenant'  => 'CHI330',
+                    'captain'           => 'CHI331',
+                    'major'             => 'CHI332',
+                    'colonel'           => 'CHI333',
+                    'general'           => 'CHI334',
+                    '1* general'        => 'CHI335',
+                    '2* general'        => 'CHI336',
+                    '3* general'        => 'CHI337',
+                    '4* general'        => 'CHI338',
+                    '5* general'        => 'CHI339',
                 ]
             ]
         ];
@@ -1368,7 +1384,7 @@ class ChidonShipping
         return $info;
     }
 
-    public function getGear($gender, $school, $addresses = false) {
+    public function getGear($gender, $school, $items, $addresses = false) {
         $sql = "select * from family_sweaters s 
                 join users u using (user_id) 
                 where year = :year";
@@ -1383,19 +1399,21 @@ class ChidonShipping
         }
         if ($addresses) $sql .= " AND (address is not null AND address != '')";
         else $sql .= " AND (address is null OR address = '')";
+//        echo $sql . "<br />";
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'year'      => $this->year
         ]);
         $rows = $stmt->fetchAll();
-//        echo "<pre>"; print_r($rows); echo "</pre>"; exit;
+//        echo "<pre>"; print_r($rows); echo "</pre>";
+
         $info = [];
         $cat = 'gear';
         foreach ($rows as $row) {
             $gender = $row['gender'] == 'M' ? 'boys' : $row['gender'] == 'F' ? 'girls' : '';
-            foreach (['sweater', 'cap'] as $item) {
-                if ($item == 'sweater') {
+            foreach ($items as $item) {
+                if ($item == 'th sweater') {
                     $id = $this->getItemID($cat, $item, $gender, $row['size']);
                     $info[$row['user_id']][] = [
                         'item'  => $item,
@@ -1407,7 +1425,7 @@ class ChidonShipping
                         'rank'  => $row['rank'],
                         'address' => $row['address']
                     ];
-                } else if ($item == 'cap') {
+                } else if ($item == 'th cap') {
                     $id = $this->getItemID($cat, $item, $gender);
                     $info[$row['user_id']][] = [
                         'item'  => $item,
@@ -1419,10 +1437,22 @@ class ChidonShipping
                         'rank'  => $row['rank'],
                         'address' => $row['address']
                     ];
+                } else if ($item == 'th rank patch') {
+                    $id = $this->getItemID($cat, $item, $row['rank']);
+                    $info[$row['user_id']][] = [
+                        'item'  => $item,
+                        'size'  => '',
+                        'color' => '',
+                        'name'  => '',
+                        'id'    => $id,
+                        'cat'   => $cat,
+                        'rank'  => $row['rank'],
+                        'address' => $row['address']
+                    ];
                 }
             }
         }
-
+//        echo "<pre>"; print_r($info); echo "</pre>"; exit;
         return $info;
     }
 }
