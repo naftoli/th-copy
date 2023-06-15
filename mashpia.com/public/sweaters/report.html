@@ -209,7 +209,7 @@
                       <select
                         name="color"
                         className="form-select"
-                        defaultValue={row.color}
+                        value={row.color}
                         onChange={(e) => handleInputChange(e, index)}
                       >
                         {colors.map((color, index) => (
@@ -227,7 +227,7 @@
                       <select
                         name="size"
                         className="form-select"
-                        defaultValue={row.size}
+                        value={row.size}
                         onChange={(e) => handleInputChange(e, index)}
                       >
                         {sizes.map((size, index) => (
@@ -245,7 +245,7 @@
                       <select
                         name="rank"
                         className="form-select"
-                        defaultValue={row.rank}
+                        value={row.rank}
                         onChange={(e) => handleInputChange(e, index)}
                       >
                         {ranks.map((rank, index) => (
@@ -263,7 +263,7 @@
                       <select
                         name="cap"
                         className="form-select"
-                        defaultValue={row.cap}
+                        value={row.cap}
                         onChange={(e) => handleInputChange(e, index)}
                       >
                         {colors.map((color, index) => (
@@ -282,13 +282,13 @@
                         name="user"
                         className="form-select"
                         style={{ width: 200 }}
-                        defaultValue={row.user_id}
+                        value={row.user_id}
                         onChange={(e) => handleInputChange(e, index)}
                         disabled={row.address != '' && row.address != null && row.address != undefined}
                       >
                         {Object.values(users[row.admin_id]).map((user, index) => (
                           <option key={index} value={user.user_id}>
-                            {user.user_id + ' - ' + user.school_name}
+                            {user.first + ' ' + user.last + ' - ' + user.school_name}
                           </option>
                         ))}
                       </select>
@@ -302,7 +302,7 @@
                         type="text"
                         name="address"
                         className="form-control"
-                        defaultValue={row.address}
+                        value={row.address}
                         onChange={(e) => handleInputChange(e, index)}
                         disabled={row.address == '' || row.address == null || row.address == undefined}
                       />
@@ -329,7 +329,7 @@
                   rows="3"
                   name="notes"
                   className="form-control"
-                  defaultValue={row.notes}
+                  value={row.notes}
                   onChange={(e) => handleInputChange(e, index)}
                 ></textarea>
                   </td>
