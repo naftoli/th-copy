@@ -224,9 +224,14 @@
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
-            alert(data.error)
+            console.log(data.error)
+            alert('Pls try again. If this keeps on happening, please whatsapp Shimmy Weinbaum @ 917 627 7636.')
           } else {
-            alert('Sweaters saved successfully.')
+            let person = 'You'
+            if (assignedChild) person = 'Your child'
+            const message = "Your order has been saved.\n" + person + " will receive the order by the Elul Rally. Thank you.\n" +
+              "You will now be sent back to the home page.\nYou can always come back to this page and edit your order until Rosh Chodesh Elul - August 17."
+            alert(message)
             window.location.href = '/mobile'
           }
         })
@@ -282,8 +287,10 @@
                 const [address, city, state, zip] = data.sweaters[0].address.split(', ')
                 setAddress({ address, city, state, zip })
               }
+            } else {
+              console.log(data.sweaters[0].user_id)
+              setAssignedChild(data.sweaters[0].user_id)
             }
-            else setAssignedChild(data.sweaters[0].user_id)
           }
         }
       })()
@@ -461,7 +468,6 @@
   }
 
   const AssignGear = ({ children, assignedChild, setAssignedChild }) => {
-    console.log(assignedChild)
     return (
       <div>
         <p>
@@ -471,7 +477,7 @@
         <select
           name="child"
           className="form-control"
-          defaultValue={assignedChild || children[0]}
+          defaultValue={assignedChild > 0 ? assignedChild : ''}
           onChange={e => setAssignedChild(e.target.value)}
         >
           {children.map((child, i) => (
