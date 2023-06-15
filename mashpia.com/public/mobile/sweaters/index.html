@@ -481,6 +481,7 @@
           value={assignedChild || ''}
           onChange={e => setAssignedChild(e.target.value)}
         >
+          <option value="">Please Choose</option>
           {children.map((child, i) => (
             <option key={i} value={child.user_id}>{child.first + ' ' + child.last + ' - ' + child.school_name}</option>
           ))}
