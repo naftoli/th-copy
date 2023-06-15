@@ -4,11 +4,42 @@
 
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
-$info = $_POST['children'];
-$admin_id = $_POST['admin'];
+$info = file_get_contents('php://input');
+$data = json_decode($info, true);
+
+// Check if the JSON decoding was successful
+if (json_last_error() !== JSON_ERROR_NONE) {
+    // Handle JSON decoding error
+    echo json_encode([
+        'success' => false,
+        'message' => 'Error decoding JSON data'
+    ]);
+    exit;
+}
+
+$admin = $data['admin'];
+$sweaters = $data['sweaters'];
+$assignedChild = mysql_real_escape_string($data['assignedChild']);
+$choice = $data['choice'];
+if ($choice == 'address') $address = mysql_real_escape_string(implode(', ', $data['address']));
+else if ($choice == 'pickup') $address = 'pickup';
+
+if (count($sweaters) == 0) {
+    echo json_encode([
+        'success'   => false,
+        'message'   => 'You must choose at least one sweater.'
+    ]);
+    exit;
+} else if (!$choice && !$assignedChild) {
+    echo json_encode([
+        'success'   => false,
+        'error'     => 'You must choose a child to assign the sweater(s) to.'
+    ]);
+    exit;
+}
 
 require $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
-$admin_id = encrypt_decrypt('decrypt', $admin_id);
+$admin_id = encrypt_decrypt('decrypt', $admin);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
@@ -20,17 +51,13 @@ $sql = "delete from family_sweaters where year = $year and admin_id = $admin_id"
 $qrys[] = $sql;
 
 // now insert the new sweaters
-foreach ($info as $child) {
-    $user_id = mysql_real_escape_string($child['user_id']);
+foreach ($sweaters as $child) {
     $size = mysql_real_escape_string($child['size']);
     $color = mysql_real_escape_string($child['color']);
     $rank = mysql_real_escape_string($child['rank']);
     $cap = mysql_real_escape_string($child['cap']);
-    $school_id = mysql_real_escape_string($_POST['school']);
-    $address = !empty($_POST['address']) && is_array($_POST['address']) ? mysql_real_escape_string(implode(', ', $_POST['address'])) :
-        mysql_real_escape_string($_POST['address']);
-    $sql = "insert into family_sweaters (year, admin_id, user_id, size, color, rank, cap, school_id, address) 
-        values ($year, $admin_id, $user_id, '$size', '$color', '$rank', '$cap', '$school_id', '$address')";
+    $sql = "insert into family_sweaters (year, admin_id, user_id, size, color, rank, cap, address) 
+        values ($year, $admin_id, $assignedChild, '$size', '$color', '$rank', '$cap', '$address')";
     $qrys[] = $sql;
 }
 
