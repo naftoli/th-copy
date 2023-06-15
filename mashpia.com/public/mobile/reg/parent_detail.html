@@ -247,6 +247,7 @@
 <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
 <!--                        <button class="btn btn-info chidon_reg">Chidon Registration</button>-->
 <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
+                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>
                     </div>
                 </div>
             </div>
@@ -586,6 +587,8 @@
                     //	$("#auction").attr('href', '/mobile/auction/category2.html?id=' + c);
                     //	break;
                     //}
+                    if (parent.gear > 0) $(".gear").show()
+                    else $(".gear").hide()
 
                     // sepearate registered and un-registered
                     var registred_children = {};

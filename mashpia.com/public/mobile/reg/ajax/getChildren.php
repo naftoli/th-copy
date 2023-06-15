@@ -42,6 +42,15 @@ $parent['fatherPic'] = $row['father_pic'];
 $parent['motherPic'] = $row['mother_pic'];
 $parent['father'] = $row['father'];
 $parent['mother'] = $row['mother'];
+
+$parent['gear'] = 0;
+$sqlG = "select * from family_raised where admin_id = " . $admin;
+$resultG = mysql_query( $sqlG );
+if (mysql_num_rows($resultG) > 0) {
+    $rowG = mysql_fetch_assoc( $resultG );
+    $parent['gear'] = intval($rowG['amount']);
+}
+
 $info['parent'] = $parent;
 
 $users = array();
