@@ -256,6 +256,7 @@
         const data = await result.json()
         if (data.error) {
           alert(data.error)
+          window.location.href = '/mobile'
         } else {
           // make sure that admin can order at least one sweater
           if (data.times < 1) {
