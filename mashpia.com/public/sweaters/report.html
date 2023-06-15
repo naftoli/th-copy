@@ -329,7 +329,7 @@
                   rows="3"
                   name="notes"
                   className="form-control"
-                  value={row.notes}
+                  value={row.notes ? row.notes : ''}
                   onChange={(e) => handleInputChange(e, index)}
                 ></textarea>
                   </td>

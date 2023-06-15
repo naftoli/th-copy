@@ -33,7 +33,7 @@ foreach ($data as $row) {
     } else if ($row['sweater_id'] > 0) {
         $qry = "UPDATE family_sweaters SET color = '" . $row['color'] . "', size = '" . $row['size'] .
             "', rank = '" . $row['rank'] . "', cap = '" . $row['cap'] . "', notes = '" . $row['notes'] . "', 
-            address = '" . $row['address'] . "', user_id = " . $row['user'] . " WHERE family_sweater_id = " . $row['sweater_id'];
+            address = '" . $row['address'] . "', user_id = " . $row['user_id'] . " WHERE family_sweater_id = " . $row['sweater_id'];
         $qrys[] = $qry;
     }
 }
