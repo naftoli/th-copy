@@ -406,7 +406,7 @@
             <select
               name="color"
               className="form-control"
-              defaultValue={sweater.color}
+              value={sweater.color}
               onChange={(e) => handleSweaterChange(e, index)}
             >
               <option value="">Please Choose</option>
@@ -417,7 +417,7 @@
             <select
               name="size"
               className="form-control"
-              defaultValue={sweater.size}
+              value={sweater.size}
               onChange={(e) => handleSweaterChange(e, index)}
             >
               <option value="">Please Choose</option>
@@ -440,7 +440,7 @@
             <select
               name="rank"
               className="form-control"
-              defaultValue={sweater.rank}
+              value={sweater.rank}
               onChange={(e) => handleSweaterChange(e, index)}
             >
               <option value="">Please Choose</option>
@@ -453,7 +453,7 @@
             <select
               name="cap"
               className="form-control"
-              defaultValue={sweater.cap}
+              value={sweater.cap}
               onChange={(e) => handleSweaterChange(e, index)}
             >
               <option value="">Please Choose</option>
@@ -477,7 +477,7 @@
         <select
           name="child"
           className="form-control"
-          defaultValue={assignedChild > 0 ? assignedChild : ''}
+          value={assignedChild || ''}
           onChange={e => setAssignedChild(e.target.value)}
         >
           {children.map((child, i) => (
@@ -540,7 +540,7 @@
               name="address"
               className="form-control"
               placeholder="Enter Address"
-              defaultValue={address.address}
+              value={address.address}
               onChange={handleAddressChange}
             /><br />
             <input
@@ -548,13 +548,13 @@
               name="city"
               className="form-control"
               placeholder="Enter City"
-              defaultValue={address.city}
+              value={address.city}
               onChange={handleAddressChange}
             /><br />
             <select
               name="state"
               className="form-control"
-              defaultValue={address.state}
+              value={address.state}
               onChange={handleAddressChange}
             >
               <option value="">State</option>
@@ -615,7 +615,7 @@
               name="zip"
               className="form-control"
               placeholder="Enter Zip"
-              defaultValue={address.zip}
+              value={address.zip}
               onChange={handleAddressChange}
             /><br />
           </div>
