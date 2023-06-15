@@ -18,7 +18,7 @@ if (isset($_GET['school'])) {
 
 //summer 5782
 $start = 2460112; // June 16, 2023
-$end = 2460188; // August 31, 2023
+$end = 2460195; // September 7, 2023
 
 $dates = array();
 do {
