@@ -97,21 +97,21 @@ export class PlatoonsTab extends Component {
                 </Col>
 
                 <Col sm={6}>
-                  <label>Updated for 5783</label><br />
+                  <label>Updated for this yr</label><br />
                   <Radio
                     required
                     name={ platoon.class_id + '_updated' }
                     value='1'
                     className='form-check-input'
                     checked={ parseInt(platoon.updated, 10) === 1 }
-                    onChange={ e => this.setValue(platoon.class_id, e.target.name, e.target.value) }> This Teacher IS NOW BEING UPDATED for 5783 </Radio><br />
+                    onChange={ e => this.setValue(platoon.class_id, e.target.name, e.target.value) }> This Teacher IS NOW BEING UPDATED for the coming yr </Radio><br />
                   <Radio
                     required
                     name={ platoon.class_id + '_updated' }
                     value='0'
                     className='form-check-input'
                     checked={ parseInt(platoon.updated, 10) === 0 }
-                    onChange={ e => this.setValue(platoon.class_id, e.target.name, e.target.value) }> This Teacher IS NOT YET UPDATED for 5783 </Radio>
+                    onChange={ e => this.setValue(platoon.class_id, e.target.name, e.target.value) }> This Teacher IS NOT YET UPDATED for the coming yr </Radio>
                 </Col>
               </Row>
             </Fragment>
