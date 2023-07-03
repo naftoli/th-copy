@@ -88,12 +88,12 @@ if (isset($_POST['submit'])) {
             $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td class='type'>";
-            echo $child['test_type'];
+            echo $types[$child['test_type']];
             echo "</td><td>" . number_format($markInfo['avg'], 2) . "</td><td>";
             if (!empty($highestTrack)) echo $types[$highestTrack];
             echo "</td><td>" . number_format($markInfo['highest_track_avg'],2) . "</td><td>";
             if ($markInfo['reward_type'] == 'highest track passed') echo 'highest track passed';
-            else if ($child['reward_type']) echo $child['reward_type'];
+            else if ($child['reward_type']) echo $types[$child['reward_type']];
             echo "</td></tr>";
         }
         echo "</table>";
