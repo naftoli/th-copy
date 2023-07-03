@@ -75,6 +75,7 @@ if (isset($_POST['submit'])) {
 //                    break;
     }
     $message .= "<br />To see for other tests, go back to the previous screen.";
+    echo "<p>$message</p>";
     $ct = new ChidonTests();
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
