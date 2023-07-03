@@ -35,13 +35,6 @@ if (isset($_POST['submit'])) {
         $marks[$id] = $ct->getMarks();
     }
 }
-
-if (isset($_POST['save'])) {
-    $ct->setTestTypes($_POST['type']);
-    $ct->setRewardTypes($_POST['reward_type']);
-    header("Location: enterScores.php");
-    exit;
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -82,10 +75,6 @@ if (isset($_POST['submit'])) {
 //                    break;
     }
     $message .= "<br />To see for other tests, go back to the previous screen.";
-    echo "<p>$message</p>";
-    echo "<form action='' method='post'>";
-    echo "<div style='float: right'><input type='submit' name='save' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
-    echo "<div style='clear: both'></div>";
     $ct = new ChidonTests();
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
@@ -108,8 +97,6 @@ if (isset($_POST['submit'])) {
         }
         echo "</table>";
     }
-    echo "<div style='float: right'><input type='submit' name='submit' value='Save & go to Test Scoring' style='padding: 12px; font-size: large' /></div>";
-    echo "</form>";
 } else {
     echo "<form action='' method='post'>";
     echo "<p>Please select based on which tests you would like to see track averages & highest passing track</p>";
