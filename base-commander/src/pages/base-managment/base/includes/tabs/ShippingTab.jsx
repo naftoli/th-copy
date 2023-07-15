@@ -12,20 +12,9 @@ import { NavigationRow } from '../rows/registration/NavigationRow';
 
 export class ShippingTab extends Component {
 
-  state = {
-    hideShipping: false
-  }
-
-  componentDidMount() {
-    this.setState({ hideShipping: this.props.base.shipping_method === 'pickup' });
-  }
-
   onChange = e => {
     e.persist()
     onInputChange( this.props.onUpdate )( e );
-    if ( e.target.name === 'shipping_method') {
-      this.setState({ hideShipping: e.target.value === 'pickup' });
-    }
   }
 
   render(){
@@ -35,10 +24,12 @@ export class ShippingTab extends Component {
       onValidChange, back, required
     } = this.props;
     // load the base
-    const { 
-      shipping_first,   shipping_last, 
+    const {
+      shipping_first,   shipping_last,
       shipping_method,  shipping_requests,  ...base
     } = this.props.base;
+
+    const hideShipping = shipping_method === 'pickup';
     // default props
     // render the page
     return (
@@ -49,7 +40,7 @@ export class ShippingTab extends Component {
           validateAfterSubmit={ !!back }>
 
           <Callout color="warning">
-            Tzivos Hashem HQ sends out medals, rank books, magazines, and other items for your chayolim approximately once monthly. 
+            Tzivos Hashem HQ sends out medals, rank books, magazines, and other items for your chayolim approximately once monthly.
             Please indicate whether you would like yours to be shipped to your school or prepared for pickup from our Crown Heights warehouse.
           </Callout>
 
@@ -59,10 +50,10 @@ export class ShippingTab extends Component {
             shipping_last={ shipping_last }
             shipping_first={ shipping_first }
             shipping_method={ shipping_method } />
-          
+
           <AddressRow
             showPhone
-            hideShipping={ this.state.hideShipping }
+            hideShipping={ hideShipping }
             { ...base }
             title={ 'School Shipping Address' }
             prefix='shipping_'
@@ -70,19 +61,21 @@ export class ShippingTab extends Component {
             onChange={ this.onChange } />
 
           <br />
+          { !hideShipping &&
           <Callout color="warning">
             We need to have an alternate residential address for the times that we send out material that will not arrive in your school during school days.
           </Callout>
+          }
 
           <AddressRow
-              hideShipping={ this.state.hideShipping }
-              { ...base }
-              title={ 'Residential Shipping Address' }
-              prefix='res_'
-              required={ required }
-              onChange={ this.onChange } />
+            hideShipping={ hideShipping }
+            { ...base }
+            title={ 'Residential Shipping Address' }
+            prefix='res_'
+            required={ required }
+            onChange={ this.onChange } />
 
-          { !this.state.hideShipping &&
+          { !hideShipping &&
           <Fragment>
             <p className='title'>
               Special Shipping Requests

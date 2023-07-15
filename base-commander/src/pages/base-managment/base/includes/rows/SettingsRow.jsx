@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 // components
 import { Row, Col, Input } from 'reactstrap';
 import { Radio, Checkbox, Date, Label } from 'components/inputs';
+import { LEGACY_URL } from 'components/constants';
 // functions
 import julian from 'julian';
 import moment from 'moment';
@@ -11,8 +12,19 @@ import { onCheckboxChange, onInputChange, onNumberChange } from 'functions/event
 export class SettingsRow extends Component {
 
   state = {
-    disabled: false, 
+    disabled: false,
+    storeResetOptions: [],
+    checked: false, // for radio buttons under store miles settings
   };
+
+  componentDidMount() {
+    fetch( `${LEGACY_URL}/api/registration/store_resets.php` )
+      .then( res => res.json() )
+      .then( resets => {
+        console.log(resets.data)
+        this.setState({ storeResetOptions: resets.data })
+      })
+  }
 
   onChange = onInputChange( this.props.onUpdate );
   handleCheckbox = onCheckboxChange( this.props.onUpdate );
@@ -24,22 +36,35 @@ export class SettingsRow extends Component {
   disableSchoolReset = () => {
     const store_reset = this.props.base.store_reset > 0 ? 0 : toJulian( moment() );
     this.props.onUpdate({ store_reset });
-    this.setState({ disabled: true });
+    this.setState({ disabled: true, checked: true });
   }
 
   enableSchoolReset = event => {
     const store_reset = event.target.value;
     this.props.onUpdate({ store_reset });
-    this.setState({ disabled: false });
+    this.setState({ disabled: false, checked: true });
+  }
+
+  changeSchoolReset = event => {
+    const store_reset = event.target.value;
+    this.props.onUpdate({ store_reset });
+    this.setState({ disabled: true, checked: true });
+  }
+
+  enableCustom = event => {
+    const store_reset = event.target.value;
+    this.props.onUpdate({ store_reset });
+    this.setState({ disabled: false, checked: false });
   }
 
   render () {
     const { base } = this.props;
-    let { 
+    let {
       pic_mission_type,   store_reset,  school_gender,
       print_parent_tasks, allow_parent_tasks, rewards,
-      chidon_posters_boys, chidon_posters_girls
+      chidon_posters_boys, chidon_posters_girls, one_time_prize_reset
     } = base;
+    console.log("One time prize reset: " + one_time_prize_reset)
 
     const store_reset_jd = parseInt(store_reset, 10);
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
@@ -50,7 +75,8 @@ export class SettingsRow extends Component {
     const checkboxProps = { onChange: this.handleCheckbox };
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
-    const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange } 
+    const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange }
+    const oneTimeResetProps = { name: 'one_time_prize_reset', onChange: this.onChange }
 
     return (
       <Row id='SettingsRow'>
@@ -121,34 +147,49 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Allow students to spend miles earned from:</Label>
 
-          <Radio value='2459757'
-            { ...storeResetProps }
-            onChange={ this.enableSchoolReset }
-            checked={ store_reset_jd === 2459757 }>
-            The beginning of the summer (Sunday 27 Sivan / June 26)
-          </Radio>
-          <br />
+          { this.state.storeResetOptions && this.state.storeResetOptions.map(reset => (
+            <Fragment key={ reset.jd }>
+              <Radio value={ reset.jd }
+                name='store_miles_reset'
+                { ...storeResetProps }
+                onChange={ this.changeSchoolReset }
+                checked={ store_reset_jd === parseInt(reset.jd) }>
+                { reset.title } ({ reset.hDate } / { reset.date })
+              </Radio>
+              <br />
+            </Fragment>
+          ))}
 
-          <Radio value='2459822'
-            { ...storeResetProps }
-            onChange={ this.enableSchoolReset }
-            checked={ store_reset_jd === 2459822 }>
-            The beginning of the school year (Tuesday 3 Elul / August 30)
-          </Radio>
+          {/*<Radio value='2459757'*/}
+          {/*  { ...storeResetProps }*/}
+          {/*  onChange={ this.enableSchoolReset }*/}
+          {/*  checked={ store_reset_jd === 2459757 }>*/}
+          {/*  The beginning of the summer (Sunday 27 Sivan / June 26)*/}
+          {/*</Radio>*/}
+          {/*<br />*/}
 
-          <br />
-          <Radio id='store_reset' value='0'
+          {/*<Radio value='2459822'*/}
+          {/*  { ...storeResetProps }*/}
+          {/*  onChange={ this.enableSchoolReset }*/}
+          {/*  checked={ store_reset_jd === 2459822 }>*/}
+          {/*  The beginning of the school year (Tuesday 3 Elul / August 30)*/}
+          {/*</Radio>*/}
+          {/*<br />*/}
+
+          <Radio key={0} id='store_reset' value='0'
+            name='store_miles_reset'
             { ...storeResetProps }
-            onChange={ this.disableSchoolReset } 
+            onChange={ this.disableSchoolReset }
             checked={ store_reset_jd === 0 }>
-            Always (This includes all miles from previous years) 
+            Always (This includes all miles from previous years)
           </Radio>
           <br />
 
-          <Radio value={ toJulian( moment() ) }
+          <Radio key={ toJulian( moment() ) } value={ toJulian( moment() ) }
+            name='store_miles_reset'
             { ...storeResetProps }
-            checked={ store_reset_jd !== 0 && store_reset_jd !== 2459757 && store_reset_jd !== 2459822 }
-            onChange={ this.enableSchoolReset }>
+            checked={ !this.state.checked }
+            onChange={ this.enableCustom }>
             Custom Date:
           </Radio>
           <br />
@@ -173,6 +214,22 @@ export class SettingsRow extends Component {
           {/* <UncontrolledTooltip placement="top" target="store_reset" autohide={ false }>
             This includes all miles from previous years
           </UncontrolledTooltip> */}
+        </Col>
+
+        <Col sm={12} className='special-options'>
+          <p className='title'>One Time Prize Settings</p>
+          <Label>Students should not be able to purchase more than one of the "one time prize" if purchased from:</Label>
+          { this.state.storeResetOptions && this.state.storeResetOptions.map((reset, i) => (
+            <Fragment key={ reset.jd }>
+              <Radio value={ reset.jd }
+                name='one_time_prize_reset'
+                onChange={ this.onChange }
+                required>
+                { reset.title } ({ reset.hDate } / { reset.date })
+              </Radio>
+              <br />
+            </Fragment>
+          ))}
         </Col>
       </Fragment>
       }
