@@ -759,6 +759,12 @@
 		}
 
 		authenticate(user);
+		$.post('checkReg.php', { user_id: user }, function(reg) {
+			if (reg == 0) {
+				alert('This child is not yet registered for CTH, you will be redirected to the registration page.')
+				window.location.href = '/mobile/reg/parent_detail.html'
+			}
+		})
 
 		if (localStorage.getItem("login") == "user") {
 			$("#mainLink").attr('href', '/mobile/reg/medals/?id=' + user);

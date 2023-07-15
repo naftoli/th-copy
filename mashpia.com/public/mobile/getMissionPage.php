@@ -344,7 +344,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 </div>
 <?php endif; ?>
 
-<?php if ( !$user->chayolei ) { ?>
+<?php if ( !$user->user_registered ) { ?>
 <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
