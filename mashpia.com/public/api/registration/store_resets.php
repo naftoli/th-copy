@@ -9,7 +9,7 @@ $info = [
     [
         'title' => 'The beginning of the summer',
         'jd'    => $summer_start,
-        'date'  => 'Sunday July 2st, 2023',
+        'date'  => 'Sunday July 2nd, 2023',
         'hDate' => 'Yud Gimmel Tamuz, 5783'
     ],
     [
