@@ -313,7 +313,17 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             }
         }
 
+        if ($saved) $this->sendConfirmationEmail();
+
         return $saved;
+    }
+
+    private function sendConfirmationEmail() {
+        $to = $this->email;
+        $subject = "Registration Confirmation";
+        $from = 'cth@tzivoshashem.org';
+        $msg = "This is to confirm that your registration for Chayolei " . GlobalSettings::getRegistrationYear( $this->school_id ) . " has been successful.";
+        mail($to, $subject, $msg, "From: $from\r\n" . "Reply-To: $from\r\n" . "X-Mailer: PHP/" . phpversion());
     }
 
     // get the early bird, or the default

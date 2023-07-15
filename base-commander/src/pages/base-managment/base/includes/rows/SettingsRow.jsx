@@ -76,7 +76,6 @@ export class SettingsRow extends Component {
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
     const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange }
-    const oneTimeResetProps = { name: 'one_time_prize_reset', onChange: this.onChange }
 
     return (
       <Row id='SettingsRow'>
