@@ -313,7 +313,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
             }
         }
 
-        if ($saved) $this->sendConfirmationEmail();
+        if ($saved) {
+            $this->sendConfirmationEmail();
+            // update school subjects
+            $this->enrollIntoCampaigns();
+        }
 
         return $saved;
     }
@@ -543,12 +547,29 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         foreach ($rows as $row) {
             $subjects[] = $row['subject_id'];
         }
-        foreach ( $subjects as $subject ) {
-            $stmt->execute([
-                ':school'   =>  $this->school_id, 
-                ':subject'  =>  $subject
-            ]);
+
+        // first delete all subjects in the school
+        $stmtDelete = $MASHPIA_DB->prepare(" DELETE FROM school_subjects WHERE school_id = :school");
+
+        // start transaction
+        $success = true;
+        $MASHPIA_DB->beginTransaction();
+        $res = $stmtDelete->execute([':school' => $this->school_id]);
+        if (!$res) $success = false;
+        else {
+            foreach ( $subjects as $subject ) {
+                $res = $stmt->execute([
+                    ':school'   =>  $this->school_id,
+                    ':subject'  =>  $subject
+                ]);
+                if (!$res) {
+                    $success = false;
+                    break;
+                }
+            }
         }
+        if ($success) $MASHPIA_DB->commit();
+        else $MASHPIA_DB->rollBack();
     }
 
     public function addDaySchoolCampaigns() {

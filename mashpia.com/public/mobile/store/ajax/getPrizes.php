@@ -34,7 +34,16 @@ else {
         $oneTime = $row['one_per_user'];
         if ($oneTime) {
             $prizeID = $row['prize_id'];
-            $qry = "SELECT * FROM pointsDB.user_prizes WHERE prize_id = " . $prizeID . " AND user_id = " . $user . " AND is_reversed = 0";
+            // find out when to start checking for the prize
+            $qry = "select one_time_prize_reset from schools where school_id = " . $school;
+            $res = mysql_query($qry);
+            $reset = mysql_fetch_assoc($res);
+            $one_time_reset = $reset['one_time_prize_reset'];
+            // convert from jd to gregorian
+            $greg = jdtogregorian($one_time_reset);
+            $date = explode('/', $greg);
+            $date = $date[2] . '-' . $date[0] . '-' . $date[1];
+            $qry = "SELECT * FROM pointsDB.user_prizes WHERE prize_id = " . $prizeID . " AND user_id = " . $user . " AND is_reversed = 0 AND created >= '" . $date . "'";
             $res = mysql_query($qry);
             if (mysql_num_rows($res) > 0)
                 continue;
