@@ -630,7 +630,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $this->save();
             // create campaigns and birthday missions
             $this->enrollInCampaigns();
-            $this->setupBirthdayMissions();
+            $this->setupBirthdayMissions(false);
         } else {
             // make sure admin is parent
             $stmt = $MASHPIA_DB->prepare("
@@ -882,7 +882,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $c->enroll();
         } catch (EnrollmentException $e) {}
     }
-    public function setupBirthdayMissions(){
+    public function setupBirthdayMissions($past = true){
         require_once( __DIR__ . '/../../class.birthdayEn.php' );
         require_once( __DIR__ . '/../../class.birthdayYi.php' );
         require_once( __DIR__ . '/../../class.birthdayHe.php' );
@@ -891,13 +891,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // run the functions
         $b = new BirthdayEn( $this->user_id );      
-        @$b->enablePrevious();
+        if ($past) @$b->enablePrevious();
         @$b->setBirthday();
         $bi = new BirthdayYi( $this->user_id );   
-        @$bi->enablePrevious();
+        if ($past) @$bi->enablePrevious();
         @$bi->setBirthday();
         $bh = new BirthdayHe( $this->user_id );
-        @$bh->enablePrevious();
+        if ($past) @$bh->enablePrevious();
         @$bh->setBirthday();
         $hdob = new HeDob( $this->user_id );      @$hdob->setHeDob();
 //        $wpb = new WpBirthday( $this->user_id );  @$wpb->syncToWp();

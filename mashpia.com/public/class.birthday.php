@@ -100,7 +100,7 @@ abstract class Birthday {
 			$bornInLeap = false;
 		}
 
-		// check if the birhday is before the current date (so it is in the past and we need to add the birthday for next year)
+		// check if the birthday is before the current date (so it is in the past and we need to add the birthday for next year)
 		if ( !$this->enablePrev ) {
 			$jNow = jdtojewish(unixtojd()); // get the current jewish date from the unix timestamp
 			$arrJNow = explode('/', $jNow); // split the year up into an array like so [m, d, y]
@@ -108,7 +108,7 @@ abstract class Birthday {
 			if ($arrJDate[0] <= $arrJNow[0] && $arrJDate[1] <= $arrJNow[1]) $this->year++; // then jump to next year
 		}
 
-		//find out if current year is leap year
+		//find out if birthday year is leap year
 		$leap = ((7 * $this->year + 1) % 19) < 7;
 
 		//if born in regular year and current year is leap year,
