@@ -374,7 +374,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationCharge( $type, $amount, $trans_id = '', $year = false, $discount = 0 ) {
         global $MASHPIA_DB;
         // set default year.
-        $year = $year ? $year : $type == 'chidon' ? GlobalSettings::getChidonRegYear() : GlobalSettings::getRegistrationYear( $this->school_id );
+        if (!$year) $year = $type == 'chidon' ? GlobalSettings::getChidonRegYear() : GlobalSettings::getRegistrationYear( $this->school_id );
         // make sure we don't already have such a registration charge in system - avoid duplication
         $check_qry = $MASHPIA_DB->prepare("
             SELECT 
@@ -435,8 +435,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationStatus( $year = false, $chidon_year = false, $isBC = false ) {
         global $MASHPIA_DB;
 
-        $year = $year ? $year : GlobalSettings::getRegistrationYear( $this->school_id );
-        $chidon_year = $chidon_year ? $chidon_year : GlobalSettings::getChidonRegYear();
+        if (!$year) $year = GlobalSettings::getRegistrationYear( $this->school_id );
+        if (!$chidon_year) $chidon_year = GlobalSettings::getChidonRegYear();
 
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
