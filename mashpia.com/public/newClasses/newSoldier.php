@@ -1,4 +1,4 @@
-<?
+<?php
 class NewSoldier {
 	
 	private $first;
@@ -45,6 +45,7 @@ class NewSoldier {
 	public function create() {
 		//return $this->createAccount();
 		if ($this->user_id = $this->createAccount()) {
+            $this->setupTracks();
 			if ($this->assignToParent() && $this->setupStudent()) {
 				return true;
 			}
@@ -112,6 +113,14 @@ class NewSoldier {
 			return 0;
 		}
 	}
+
+    private function setupTracks() {
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/class.campaignEnrollment.php';
+        try {
+            $c = new CampaignEnrollment($this->user_id);
+            $c->enroll();
+        } catch (EnrollmentException $e) {}
+    }
 
 	private function assignToParent() {
 		$sql = "insert into admin_auths 
