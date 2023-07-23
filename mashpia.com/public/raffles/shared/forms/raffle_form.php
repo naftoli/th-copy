@@ -124,6 +124,17 @@ if ($action == "update" && !$valid){
     $raffle->run_date = $raffle_props['run_date'];
     $raffle->start_date = $raffle_props['start_date'];
     $raffle->end_date = $raffle_props['end_date'];
+
+    // check if the hq checkbox is checked
+    if (isset($_POST['hq']) && $_POST['hq'] == 1) $raffle->show_for_hq = 1;
+    else $raffle->show_for_hq = 0;
+    // check if the bc checkbox is checked
+    if (isset($_POST['bc']) && $_POST['bc'] == 1) $raffle->show_for_bc = 1;
+    else $raffle->show_for_bc = 0;
+    // check if the kids checkbox is checked
+    if (isset($_POST['kids']) && $_POST['kids'] == 1) $raffle->show_for_kids = 1;
+    else $raffle->show_for_kids = 0;
+
     //save it to the database
     if($raffle->update()){  
         $action = 'list'; // render the list page

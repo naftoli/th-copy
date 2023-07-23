@@ -55,7 +55,17 @@ $parshos = get_parshos( $raffle->year );
     Required days of tasks <input type="number" name="days_of_tasks" value="<?=$raffle->days_of_tasks ?? Constants::get_monthly_task_requirment(); ?>">
 </div>
 
+<div class="input_group input_half">
+  Date Ran: <?=$raffle->date_ran ? $raffle->date_ran->format("Y-m-d") : "Not Yet";?>
+</div>
+
+<div class="input_group input_half">
+  <input type="checkbox" name="hq" value="1" <?=$raffle->show_for_hq ? "checked" : "";?>> Show for HQ<br />
+  <input type="checkbox" name="bc" value="1" <?=$raffle->show_for_bc ? "checked" : "";?>> Show for BC<br />
+  <input type="checkbox" name="kids" value="1" <?=$raffle->show_for_kids ? "checked" : "";?>> Show on app/mobile site<br />
+</div>
+
 <div class="action-links">
-    <input type="submit" value="<?=$action == "add" ? "Create" : "Save"?>"/>
+    <input type="submit" value="<?=$action == "add" ? "Create" : "Save"?>" style="padding: 5px;"/>
     <a href="/raffles/shared/forms/raffle_form.php<?=$debug ? "?debug=true" : "";?>" class="button">Cancel</a>
 </div>

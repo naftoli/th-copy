@@ -28,6 +28,10 @@ class Raffle
     public $year; // raffle year
     public $days_of_tasks; // amount of days with completed tasks required to be in raffle
 
+    public $show_for_hq; // if it should be shown for HQ
+    public $show_for_bc; // if it should be shown for Base Commanders
+    public $show_for_kids; // if it should be shown on the app/mobile site
+
     // not in DBS
     public $prizes = []; // by default the prizes is an empty array
     public $prize_count = 0; // by default there are no prizes
@@ -181,6 +185,7 @@ class Raffle
         if ($this->date_ran instanceof DateTime) { // if there is a datetime add it to the array
             $sql .= ", date_ran='" . $this->date_ran->format("Y-m-d H:i:s") . "'";
         }
+        $sql .= ", show_for_hq = " . $this->show_for_hq . ", show_for_bc = " . $this->show_for_bc . ", show_for_kids = " . $this->show_for_kids;
         $sql .= " WHERE raffle_id=" . $this->raffle_id;
         // run the query
         $query = mysql_query($sql);

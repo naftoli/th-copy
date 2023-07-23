@@ -111,7 +111,7 @@ foreach($raffles as $raffle){
     echo "\nUpdating Raffle in Database...";
     
     $raffle->date_ran = new DateTime(); // log the time it ran into the database
-    if ($raffle->type == 'weekly') $raffle->show_on_mobile = 1 ; // show it on the mobile site
+    if ($raffle->type == 'weekly') $raffle->show_on_mobile = 0 ; // show it on the mobile site
     else $raffle->show_on_mobile = 0;
     echo $raffle->update() ? "✓" : "x";
 } // end foreach raffle loop
