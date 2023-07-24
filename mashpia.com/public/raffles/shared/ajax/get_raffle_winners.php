@@ -1,8 +1,9 @@
 <?
 //error_reporting(E_ALL);
 //ini_set("display_errors", 1);
+$admin_auth = ['school'];
 /***************** IMPORTS **********************/
-require_once( $_SERVER["DOCUMENT_ROOT"].'/db.php' ); // load the db so that the raffle can do its thing
+require_once( $_SERVER["DOCUMENT_ROOT"].'/header.php' ); // load the db so that the raffle can do its thing
 require_once( $_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php' );
 require_once( dirname(__FILE__).'/../classes/Raffle.php' );
 // namespace fixing
@@ -28,6 +29,9 @@ $school_id = isset($_POST['school_id']) ? $_POST['school_id'] : false;
 $raffle_id = isset($_POST['raffle_id']) ? $_POST['raffle_id'] : false;
 $seperate_genders = isset($_POST['single_list']) ? false : true;
 
+// find out if we are a super admin or not
+$is_super = $admin_user['auth'] == 'super';
+
 // if no single raffle was given, get all of them
 if(!$raffle_id && isset( $_GET['v'] ) && $_GET['v'] == 2){
     $raffle_query = mysql_query("SELECT r.* "
@@ -37,7 +41,6 @@ if(!$raffle_id && isset( $_GET['v'] ) && $_GET['v'] == 2){
     $raffles = [];
     while($raffle_info = mysql_fetch_assoc($raffle_query)){
         $raffle = Raffle::loadFromRow($raffle_info);
-        // $raffle->raffle_number = $raffle_info['raffle_num'];
         $raffles[] = $raffle;
     }
 } elseif(!$raffle_id) {
@@ -51,6 +54,9 @@ $return_array = [];
 $sorting = isset($_POST['sorting']) ? $_POST['sorting'] : "name";
 // for each raffle
 foreach($raffles as $raffle){
+    // only add raffles if there's permission to view them
+    if ($is_super && !$raffle->show_for_hq) continue; // if we are a super admin and the raffle is not for hq, skip it
+    else if (!$is_super && !$raffle->show_for_bc) continue;
     $winners_info = $raffle->get_winner_info($school_id, $seperate_genders, $sorting); // get the winners for the school (if given, will be false and all the schools will be returned otherwise)
     $raffle_from = explode(' ', iconv('WINDOWS-1255', 'UTF-8', jdtojewish($raffle->start_date, true, CAL_JEWISH_ADD_GERESHAYIM)));
     $raffle_from = $raffle_from[0] . ' ' . $raffle_from[1];

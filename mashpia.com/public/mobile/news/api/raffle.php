@@ -27,7 +27,7 @@ function getRaffle( $raffle_id ){
             "SELECT raffle_id AS id, name COLLATE utf8_general_ci as name, date_ran, type FROM raffles WHERE (show_on_mobile = 1 OR date_to_show < NOW()) "
             ."UNION "
             ."SELECT CONCAT('a', auction_id) AS id, auction_name COLLATE utf8_general_ci AS name, show_mobile AS date_ran, 'auction' as type "
-            ."FROM auctions WHERE show_mobile < NOW() "
+            ."FROM auctions WHERE show_mobile < NOW() OR show_for_kids = 1 "
             ."ORDER BY date_ran DESC, type ASC LIMIT 1"
         );
         $raffle_query = mysql_fetch_assoc( $raffle_query );
