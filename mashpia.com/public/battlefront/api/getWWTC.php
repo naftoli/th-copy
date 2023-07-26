@@ -42,7 +42,7 @@ $now = unixtojd();
 foreach ($sm as $date) {
     if ($date > $now) break;
 }
-$date = 2459875;
+$date = $sm[9];
 
 $sm = new ShabbosMevorchim();
 $sm->setReportDates($date);
