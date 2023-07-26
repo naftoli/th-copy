@@ -333,14 +333,15 @@
       console.log(urls)
 
       const zip = new JSZip()
-      urls.forEach(async (url, idx) => {
+      for (let idx = 0; idx < urls.length; idx++) {
+        const url = urls[idx]
         const file = await fetch('http:' + url.src)
         const blob = await file.blob()
         const name = url.name.replace(/\s/g, '_')
         const ext = url.src.split('.').pop()
         const filename = `${idx + 1}_${name}.${ext}`
         zip.file(filename, blob)
-      })
+      }
       return zip
     }
 
