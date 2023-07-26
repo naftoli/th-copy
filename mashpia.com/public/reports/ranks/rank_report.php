@@ -17,8 +17,10 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 border-bottom: 1px solid #000; font-size: 18px;
             }
             hr {display: block;}
+            .name.general { font-weight: bold; }
+            span.school.general { text-decoration: underline }
             span.rank { color: red; margin-bottom: 4px; display: inline-block;}
-            span.school {font-weight: bold; margin-bottom: 4px; display: inline-block;}
+            span.school {font-style: italic; margin-bottom: 4px; display: inline-block;}
             span.school.top { margin-top: 4px; margin-bottom: 0px;}
             a.btn.button { display: inline-block; margin-bottom: 15px; }
             img.profile { height: 35px; width: 35px; float: left; margin-right: 10px; }

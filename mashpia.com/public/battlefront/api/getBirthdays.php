@@ -9,8 +9,8 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $info = json_decode(file_get_contents('php://input'), true);
-$start_date = $info['dates']['start'];
-$end_date = $info['dates']['end'];
+$start_date = $info['start'];
+$end_date = $info['end'];
 
 $start_date_info = explode('-', $start_date);
 $end_date_info = explode('-', $end_date);

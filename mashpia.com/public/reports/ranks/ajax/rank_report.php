@@ -15,7 +15,7 @@ function dateToJd( $date ){
 $from = dateToJd( $_POST['from'] );
 $to = dateToJd( $_POST['to'] );
 
-$qry =  " SELECT s.school_name, s.hachayol_name, u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, "
+$qry =  " SELECT s.shorthand, s.hachayol_name, u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, "
     ." r.rank_name, rm.rank_ord FROM rank_marks rm "
     ." JOIN users u USING ( user_id ) "
     ." JOIN ranks r USING ( rank_ord ) "
@@ -26,17 +26,17 @@ $qry =  " SELECT s.school_name, s.hachayol_name, u.first, u.last, u.user_serial,
     ." AND s.test_school = 0 "
     ." AND s.chayolei = 1 ";
 if ($admin_user['auth'] != 'super') $qry .= " and s.school_id in (" . implode(',', array_keys($schools)) . ")";
-$qry .= " ORDER BY r.rank_ord DESC, s.school_name, u.last, u.first ";
+$qry .= " ORDER BY r.rank_ord DESC, u.gender, s.school_name, u.last, u.first ";
 $rank_promotions_query = mysql_query($qry);
 
 if ($admin_user['auth'] == 'super') {
 $totals_query = mysql_query(
-    " SELECT r.rank_name, COUNT(*) as total FROM rank_marks rm "
+    " SELECT r.rank_name, u.gender, COUNT(*) as total FROM rank_marks rm "
     ." JOIN users u USING ( user_id ) JOIN ranks r USING ( rank_ord ) "
     ." JOIN schools s USING ( school_id ) WHERE rm.date_promoted >= '$from' "
     ." AND rm.date_promoted <= '$to' AND rm.rank_ord > 1 "
     ." AND s.test_school = 0 AND s.chayolei = 1 "
-    ." GROUP BY rm.rank_ord ORDER BY r.rank_ord DESC"
+    ." GROUP BY rm.rank_ord, u.gender ORDER BY r.rank_ord DESC, u.gender"
 );
 ?>
 <h2>Totals</h2>
@@ -44,7 +44,10 @@ $totals_query = mysql_query(
 <div id="totals">
     <?php
         while( $total = mysql_fetch_assoc( $totals_query ) ){
-            echo $total['rank_name'] . " - " . $total['total'] . "<br/>";
+            $gender = '';
+            if ($total['gender'] == 'M') $gender = 'boys';
+            if ($total['gender'] == 'F') $gender = 'girls';
+            echo $total['rank_name'] . " - " . $gender . " - " . $total['total'] . "<br/>";
         }
     ?>
 </div>
@@ -62,7 +65,7 @@ $totals_query = mysql_query(
     $csv_info = [];
     while ( $promotion = mysql_fetch_assoc( $rank_promotions_query) ){
         $csv_info[$promotion['rank_name']][] = $promotion['first'] . ' ' . $promotion['last'];
-        $school_name = $promotion['hachayol_name'] ? $promotion['hachayol_name']  : $promotion['school_name'];
+        $school_name = $promotion['shorthand'];
         if ( $promotion['rank_name'] != $prev_rank )
             echo "<br/><span class='rank'>" . $promotion['rank_name'] . "</span><br />";
         
@@ -98,7 +101,8 @@ $totals_query = mysql_query(
         }
 
         if ($promotion['rank_ord'] >= $cutoff ) {
-            echo "<span class='school'>$school_name</span><div class='clearfix'></div>";
+            $add = $promotion['rank_ord'] == 9 ? 'general' : '';
+            echo "<span class='school $add'>$school_name</span><div class='clearfix'></div>";
         }
     }
     echo "<div id='data' style='display: none;'>" . json_encode($csv_info) . "</div>";

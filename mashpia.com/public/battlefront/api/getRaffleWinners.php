@@ -15,9 +15,10 @@ require_once( $_SERVER["DOCUMENT_ROOT"] . '/raffles/shared/classes/Raffle.php' )
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
-$raffle_type = $_GET['raffle_type'];
-if ($raffle_type == '60') $type = 'monthly';
-else if ($raffle_type == '5') $type = 'weekly';
+$info = json_decode(file_get_contents('php://input'), true);
+$raffle_type = $info['raffle_type'] == '5' ? 'weekly' : $info['raffle_type'] == '60' ? 'monthly' : '';
+$start_date = $info['start'];
+$end_date = $info['end'];
 
 $raffles = [];
 $sql = "SELECT 
@@ -25,9 +26,11 @@ $sql = "SELECT
         FROM
             raffles
         WHERE
-            type = '$type' AND year = '$year'
+            type = '$raffle_type' AND year = '$year'
                 AND date_ran > 0 
                 AND show_for_hq = 1 
+                AND run_date >= '$start_date' 
+                AND run_date <= '$end_date' 
         ORDER BY date_ran DESC";
 $raffle_query = mysql_query($sql);
 while($raffle_info = mysql_fetch_assoc($raffle_query)){

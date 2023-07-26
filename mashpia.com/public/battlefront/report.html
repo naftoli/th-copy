@@ -32,8 +32,16 @@
   // top level component
   const App = () => {
     const [chosen, setChosen] = useState([])
-    const [dates, setDates] = useState({ start: 0, end: 0 })
-    const [showBirthday, setShowBirthday] = useState(false)
+    const [dates, setDates] = useState({
+      start60m: 0, end60m: 0,
+      start5m: 0, end5m: 0,
+      startBirthdays: 0, endBirthdays: 0,
+      startRanks: 0, endRanks: 0
+    })
+    const [show60m, setShow60m] = useState(false)
+    const [show5m, setShow5m] = useState(false)
+    const [showBirthdays, setShowBirthdays] = useState(false)
+    const [showRanks, setShowRanks] = useState(false)
 
     const handleChange = e => {
       // add to choices if checked, remove if unchecked
@@ -50,16 +58,20 @@
     }
 
     useEffect(() => {
-      if (dates.start && dates.end) setShowBirthday(true)
+      if (dates.start60m && dates.end60m) setShow60m(true)
+      if (dates.start5m && dates.end5m) setShow5m(true)
+      if (dates.startBirthdays && dates.endBirthdays) setShowBirthdays(true)
+      if (dates.startRanks && dates.endRanks) setShowRanks(true)
     }, [dates])
 
     return (
       <div className="container-fluid mt-4 p-3">
         <Choices handleChange={handleChange} dateChange={handleDateChange} /><br />
         <div className="row">
-        {chosen.includes('60M Raffles') && <Raffles raffle_type="60" />}
-        {chosen.includes('5M Raffles') && <Raffles raffle_type="5" />}
-        {chosen.includes('Birthdays') && showBirthday && <Birthdays dates={dates} />}
+          {chosen.includes('60M Raffles') && show60m && <Raffles raffle_type="60" dates={dates} />}
+          {chosen.includes('5M Raffles') && show5m && <Raffles raffle_type="5" dates={dates} />}
+          {chosen.includes('Birthdays') && showBirthdays && <Birthdays dates={dates} />}
+          {chosen.includes('Ranks') && showRanks && <Ranks dates={dates} />}
         </div>
       </div>
     )
@@ -68,20 +80,64 @@
   const Choices = ({ handleChange, dateChange }) => {
     return (
       <div className="container-fluid border border-1 rounded p-3">
-        <h3 className="mb-2">Choose what you would like to have on your Report</h3>
-        <label><input type="checkbox" name="60M Raffles" onChange={handleChange} /> 60M Raffles</label><br />
-        <label><input type="checkbox" name="5M Raffles" onChange={handleChange} /> 5M Raffles</label><br />
-        <label><input type="checkbox" name="Birthdays" onChange={handleChange} /> Birthdays</label> -
-        from: <input type="date" name="start" onChange={dateChange} /> to: <input type="date" name="end" onChange={dateChange} />
+        <h3 className="mb-3">Choose what you would like to have on your Report</h3>
+        <table className="table">
+          <tbody>
+            <tr>
+              <td>
+                <label><input type="checkbox" name="60M Raffles" onChange={handleChange} /> 60M Raffles</label>
+              </td>
+              <td>
+                <input type="date" name="start60m" onChange={dateChange} /> <input type="date" name="end60m" onChange={dateChange} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><input type="checkbox" name="5M Raffles" onChange={handleChange} /> 5M Raffles</label>
+              </td>
+              <td>
+                <input type="date" name="start5m" onChange={dateChange} /> <input type="date" name="end5m" onChange={dateChange} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><input type="checkbox" name="Birthdays" onChange={handleChange} /> Birthdays</label>
+              </td>
+              <td>
+                <input type="date" name="startBirthdays" onChange={dateChange} /> <input type="date" name="endBirthdays" onChange={dateChange} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label><input type="checkbox" name="Ranks" onChange={handleChange} /> Ranks</label>
+              </td>
+              <td>
+                <input type="date" name="startRanks" onChange={dateChange} /> <input type="date" name="endRanks" onChange={dateChange} />
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     )
   }
 
-  const Raffles = ({ raffle_type }) => {
+  const Raffles = ({ raffle_type, dates }) => {
     const [raffles, setRaffles] = useState([])
+    let start, end
+    if (raffle_type == '60') {
+      start = dates.start60m
+      end = dates.end60m
+    } else {
+      start = dates.start5m
+      end = dates.end5m
+    }
 
     useEffect(() => {
-      fetch(`api/getRaffleWinners.php?raffle_type=${raffle_type}`)
+      fetch('api/getRaffleWinners.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ raffle_type, start, end })
+      })
         .then(res => res.json())
         .then(data => setRaffles(data))
     }, [])
@@ -122,15 +178,17 @@
     )
   }
 
-  const Birthdays = (dates) => {
+  const Birthdays = ({ dates }) => {
     const [heDates, setHeDates] = useState([])
     const [birthdays, setBirthdays] = useState([])
+    const start = dates.startBirthdays
+    const end = dates.endBirthdays
 
     useEffect(() => {
       fetch('api/getBirthdays.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(dates)
+        body: JSON.stringify({start, end})
       })
         .then(res => res.json())
         .then(data => {
@@ -145,14 +203,110 @@
         <h4>Birthdays</h4>
         {birthdays && Object.keys(birthdays).map(birthdate => (
           <div key={birthdate}>
-            <hr />
+            <hr/>
             <div style={{fontWeight: 'bold'}}>{heDates[birthdate]}</div>
             {birthdays[birthdate].map((birthday, i) => (
-            <div key={i}>
-              <div>{birthday.name}</div>
-              <div style={schoolStyle}>{birthday.school ? birthday.school : birthday.school_id}</div>
+              <div key={i}>
+                <div>{birthday.name}</div>
+                <div style={schoolStyle}>{birthday.school ? birthday.school : birthday.school_id}</div>
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const Ranks = ({ dates }) => {
+    const [ranks, setRanks] = useState([])
+    const [lowerRanks, setLowerRanks] = useState([])
+    const [starGenerals, setStarGenerals] = useState([])
+    const [generals, setGenerals] = useState([])
+    const start = dates.startRanks
+    const end = dates.endRanks
+
+    useEffect(() => {
+      fetch('api/getRanks.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ start, end })
+      })
+        .then(res => res.json())
+        .then(data => {
+          setRanks(data.ranks)
+          setLowerRanks(data.lowerRanks)
+          setStarGenerals(data.starGenerals)
+          setGenerals(data.generals)
+        })
+    }, [])
+
+    return (
+      <div className="row">
+        {starGenerals && <StarGenerals info={starGenerals} ranks={ranks} />}
+        {generals && <Generals info={generals} />}
+        {ranks && <LowerRanks info={lowerRanks} ranks={ranks} />}
+      </div>
+    )
+  }
+
+  const StarGenerals = ({ info, ranks }) => {
+    return (
+      <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
+        <h4>Star Generals</h4>
+        <hr />
+        {Object.keys(info).map(rank => (
+          <div key={rank}>
+            <div style={{fontWeight: 'bold'}}>{ranks[rank]}</div>
+            {info[rank].map(user => (
+            <div key={user.user_serial}>
+              <div>{user.first + ' ' + user.last}</div>
+              <div style={{fontStyle: 'italic'}}>{user.school}</div>
             </div>
             ))}
+            <br />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const Generals = ({ info }) => {
+    return (
+      <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
+        <h4>Generals</h4>
+        <hr />
+        {info.map(general => {
+          return (
+            <div key={general.user_serial}>
+              <div style={{fontWeight: 'bold'}}>{general.first + ' ' + general.last}</div>
+              <div style={{textDecoration: 'underline'}}>{general.school}</div>
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+
+  const LowerRanks = ({ info, ranks }) => {
+    const initials = name => {
+      const names = name.split(' ')
+      return names.map(n => n[0])
+    }
+
+    return (
+      <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
+        <h4>Lower Ranks</h4>
+        <hr />
+        {Object.keys(info).map(rank => (
+          <div key={rank}>
+            <div style={{fontStyle: 'italic'}}>{ranks[rank]}</div>
+            {info[rank].map(user => (
+              <div key={user.user_serial}>
+                <div>{initials(user.first).join('. ') + ' ' + user.last}</div>
+                <div style={{fontWeight: 'bold'}}>{user.school}</div>
+              </div>
+            ))}
+            <br />
           </div>
         ))}
       </div>
