@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER["DOCUMENT_ROOT"] . '/header.php';
@@ -18,23 +18,32 @@ function createZip($files, $filename) {
         exit("cannot open <$filename>\n");
     }
     foreach ($files as $idx => $file) {
-        $file_name = ($idx + 1) . str_replace(' ', '_', $file['name']);
-        $zip->addFromString($file_name, file_get_contents('http:' . $file['src']));
+        $url = "http:" . $file['src'];
+        $file_name = '../imgs/' . ($idx + 1) . '_' . str_replace(' ', '_', $file['name']) . ".png";
+        if ($new_img = imagecreatefromstring(file_get_contents($url))) {
+            imagepng($new_img, $file_name);
+            $zip->addFromString($file_name, file_get_contents($file_name));
+        }
     }
     $zip->close();
 }
 
 $info = json_decode(file_get_contents('php://input'), true);
-$filename = "Generals.zip";
-createZip($info, $filename);
+foreach ($info as $idx => $file) {
+    $url = "http:" . $file['src'];
+    $file_name = $_SERVER['DOCUMENT_ROOT'] . '/battlefront/imgs/' . ($idx + 1) . '_' . str_replace(' ', '_', $file['name']) . ".png";
+    if ($new_img = imagecreatefromstring(file_get_contents($url))) imagepng($new_img, $file_name);
+}
+//$filename = "Generals.zip";
+//createZip($info, $filename);
 
-header('Content-Description: File Transfer');
-header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
-header('Expires: 0');
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-header('Content-Length: ' . filesize($filename));
-flush(); // Flush system output buffer
-readfile($filename);
-unlink($filename);
+//header('Content-Description: File Transfer');
+//header('Content-Type: application/octet-stream');
+//header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+//header('Expires: 0');
+//header('Cache-Control: must-revalidate');
+//header('Pragma: public');
+//header('Content-Length: ' . filesize($filename));
+//flush(); // Flush system output buffer
+//readfile($filename);
+//unlink($filename);
