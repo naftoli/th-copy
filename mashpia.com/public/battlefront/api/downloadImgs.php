@@ -13,7 +13,6 @@ if ($admin_user['auth'] != 'super') {
 
 function createFile($name, $info) {
     $fp = fopen($name, "w");
-    fputs($fp);
     fputs($fp, $info);
     fclose($fp);
 }
