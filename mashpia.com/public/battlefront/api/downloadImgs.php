@@ -13,7 +13,7 @@ if ($admin_user['auth'] != 'super') {
 
 function createFile($name, $info) {
     $fp = fopen($name, "w");
-    fputs($fp, $bom =(chr(0xEF) . chr(0xBB) . chr(0xBF))); // utf8
+    fputs($fp);
     fputs($fp, $info);
     fclose($fp);
 }
