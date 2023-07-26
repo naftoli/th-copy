@@ -30,13 +30,14 @@ class SchoolsUsers {
     }
     
     private function setUsers($registered, $only) {
-        $sql = "select u.*, ";
+        $sql = "select u.*, s.shorthand, ";
 		if ($this->year > 0) $sql .= "ur.*, ";
 		$sql .= "c.class_grade, c.class_sub, c.class_teacher from users u 
                 join classes c using (class_id) ";
 		if ($this->year > 0) {
 			$sql .= "left join user_registration ur using (user_id) ";
 		}
+        $sql .= "join schools s on s.school_id = u.school_id ";
 		$sql .= "where u.school_id = " . $this->school;
 		if ($this->year > 0) {
 			$sql .= " and ur.year = " . $this->year;

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Battlefront Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous" />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    #main {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+  </style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const {useState, useEffect} = React
+  const {createRoot} = ReactDOM
+
+  // top level component
+  const App = () => {
+    const [chosen, setChosen] = useState([])
+
+    const handleChange = e => {
+      // add to choices if checked, remove if unchecked
+      const choice = e.target.name
+      const checked = e.target.checked
+      if (checked) setChosen([...chosen, choice])
+      else setChosen(chosen.filter(c => c !== choice))
+    }
+
+    return (
+      <div className="container-fluid mt-4 p-3">
+        <Choices handleChange={handleChange} /><br />
+        <div className="row">
+        {chosen.includes('60M Raffles') && <Raffles raffle_type="60" />}
+        {chosen.includes('5M Raffles') && <Raffles raffle_type="5" />}
+        {chosen.includes('Birthdays') && <Birthdays />}
+        </div>
+      </div>
+    )
+  }
+
+  const Choices = ({ handleChange }) => {
+    return (
+      <div className="container-fluid border border-1 rounded p-3">
+        <h3 className="mb-2">Choose what you would like to have on your Report</h3>
+        <label><input type="checkbox" name="60M Raffles" onChange={handleChange} /> 60M Raffles</label><br />
+        <label><input type="checkbox" name="5M Raffles" onChange={handleChange} /> 5M Raffles</label><br />
+        <label><input type="checkbox" name="Birthdays" onChange={handleChange} /> Birthdays</label><br />
+      </div>
+    )
+  }
+
+  const Raffles = ({ raffle_type }) => {
+    const [raffles, setRaffles] = useState([])
+
+    useEffect(() => {
+      fetch(`api/getRaffleWinners.php?raffle_type=${raffle_type}`)
+        .then(res => res.json())
+        .then(data => setRaffles(data))
+    }, [])
+
+    const infoStyle = {fontStyle: "italic"}
+    return (
+      <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
+        <h4>{raffle_type}M Raffles</h4>
+        {raffles && raffles.map(raffle => (
+          <div key={raffle.raffle_id}>
+            <hr />
+            <div style={infoStyle}>Raffle: {raffle.raffle_name}</div>
+            <div style={infoStyle}>From: {raffle.raffle_from}</div>
+            <div style={infoStyle}>To: {raffle.raffle_to}</div>
+            {raffle_type == '5' && <div style={infoStyle}>Prize: {raffle.winners[0].prize_name}</div>}
+            <br />
+            <Winners info={raffle.winners} raffle={raffle_type} />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const Winners = ({ info, raffle }) => {
+    const nameStyle = {fontWeight: 'bold'}
+    const prizeStyle = {fontStyle: 'italic'}
+    return (
+      <div>
+        {info.map(winner => (
+          <div key={winner.user_id}>
+            {raffle == '60' && <div style={prizeStyle}>Prize: {winner.prize_name}</div>}
+            <div style={nameStyle}>{winner.name}</div>
+            <div>School: {winner.shorthand ? winner.shorthand : winner.school_id}</div>
+            {raffle == '0' && <br />}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const Birthdays = () => {
+    const [heDates, setHeDates] = useState([])
+    const [birthdays, setBirthdays] = useState([])
+
+    useEffect(() => {
+      fetch('api/getBirthdays.php')
+        .then(res => res.json())
+        .then(data => {
+          setHeDates(data.heDates)
+          setBirthdays(data.birthdays)
+        })
+    }, [])
+
+    const schoolStyle = {fontStyle: 'italic'}
+    return (
+      <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
+        <h4>Birthdays</h4>
+        {birthdays && Object.keys(birthdays).map(birthdate => (
+          <div key={birthdate}>
+            <hr />
+            <div style={{fontWeight: 'bold'}}>{heDates[birthdate]}</div>
+            {birthdays[birthdate].map((birthday, i) => (
+            <div key={i}>
+              <div>{birthday.name}</div>
+              <div style={schoolStyle}>{birthday.school ? birthday.school : birthday.school_id}</div>
+            </div>
+            ))}
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<App />)
+</script>
+</body>
+</html>
