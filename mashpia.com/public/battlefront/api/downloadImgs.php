@@ -11,34 +11,22 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-function createFile($name, $info) {
-    $fp = fopen($name, "w");
-    fputs($fp, $info);
-    fclose($fp);
-}
-
 function createZip($files, $filename) {
     $zip = new ZipArchive;
     $success = $zip->open($filename, ZipArchive::CREATE);
     if ($success !== true) {
         exit("cannot open <$filename>\n");
     }
-    foreach($files as $file) {
-        $zip->addFromString($file, file_get_contents($file));
-        unlink($file);
+    foreach ($files as $idx => $file) {
+        $file_name = ($idx + 1) . str_replace(' ', '_', $file['name']);
+        $zip->addFromString($file_name, file_get_contents('http:' . $file['src']));
     }
     $zip->close();
 }
 
 $info = json_decode(file_get_contents('php://input'), true);
-foreach ($info as $idx => $details) createFile('imgs/' . ($idx + 1) . "_" . str_replace(' ', '_', $details['name']), $details['src'])                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              ;
-
-// loop through dir to get files and create zip file
-$dir = getcwd();
-$list = scandir($dir . '/imgs');
-$images = extractFiles($list);
 $filename = "Generals.zip";
-createZip($images, $filename);
+createZip($info, $filename);
 
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');
