@@ -127,7 +127,11 @@
     const [birthdays, setBirthdays] = useState([])
 
     useEffect(() => {
-      fetch('api/getBirthdays.php?start=' + dates.start + '&end=' + dates.end)
+      fetch('api/getBirthdays.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(dates)
+      })
         .then(res => res.json())
         .then(data => {
           setHeDates(data.heDates)
