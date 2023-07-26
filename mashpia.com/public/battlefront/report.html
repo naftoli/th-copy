@@ -25,6 +25,7 @@
 <body>
 <div id="main"></div>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.6.0/jszip.min.js"></script>
 <script type="text/babel">
   const {useState, useEffect} = React
   const {createRoot} = ReactDOM
@@ -266,7 +267,7 @@
     return (
       <div className="row">
         {starGenerals && <StarGenerals info={starGenerals} ranks={ranks} />}
-        {generals && <Generals info={generals} />}
+        {generals && <Generals info={generals} dates={{start, end}} />}
         {ranks && <LowerRanks info={lowerRanks} ranks={ranks} />}
       </div>
     )
@@ -293,16 +294,67 @@
     )
   }
 
-  const Generals = ({ info }) => {
+  const Generals = ({ info, dates }) => {
+    const downloadImages = (e) => {
+      e.preventDefault()
+      const zip = new JSZip()
+      // find all profile pictures on the page
+      let urls = []
+      const profiles = document.querySelectorAll(".profile")
+      profiles.forEach(profile => {
+        const img = profile.dataset.profile
+        const name = profile.dataset.name
+        urls.push({ src: img, name: name })
+      })
+      console.log(urls)
+      fetch('api/downloadImgs.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify( urls )
+      })
+
+      // let link = document.createElement('a');
+      // link.href = `data:text/csv;charset=utf-8,${encodeURI(csv)}`;
+      // console.log(link.href)
+      // link.download = `ranks.csv`;
+      // link.click();
+
+      // const createFiles = async () => {
+      //   const files = []
+      //   for (let url of urls) {
+      //     const filename = url.name + ".jpg"
+      //     const response = await fetch(url.src)
+      //     const blob = await response.blob()
+      //     files.push({ filename, blob })
+      //   }
+      //   files.forEach(file => {
+      //     zip.file(file.filename, file.blob)
+      //   })
+      //   zip.generateAsync({ type: "blob" })
+      //     .then(content => {
+      //       const from = dates.start
+      //       const to = dates.end
+      //       const filename = `images-${from}-${to}.zip`
+      //       a.download = filename
+      //       a.href = URL.createObjectURL(content)
+      //       a.click()
+      //     })
+      // }
+      // createFiles()
+    }
+
     return (
       <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
         <h4>Generals</h4>
         <hr />
+        <a href="" onClick={downloadImages} style={{textDecoration: 'none'}}>Download Images</a><br /><br />
         {info.map(general => {
+          const profile = general.mobile_pic ? `//mashpia.com/mobile/reg/${general.mobile_pic}` : general.user_photo_id ? `/file_view.php?id=${general.user_photo_id}` : ''
           return (
             <div key={general.user_serial}>
               <div style={{fontWeight: 'bold'}}>{general.first + ' ' + general.last}</div>
               <div style={{textDecoration: 'underline'}}>{general.school}</div>
+              <input type="hidden" className="profile" data-profile={profile} data-name={general.first + ' ' + general.last} />
             </div>
           )
         })}

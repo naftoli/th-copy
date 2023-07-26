@@ -39,28 +39,6 @@ $qry = " SELECT IFNULL(s.shorthand, s.school_id) as school, u.first, u.last, u.u
         ." AND s.test_school = 0 "
         ." ORDER BY gender, school, last, first";
 
-//$qry2 =  " SELECT IFNULL(s.shorthand, s.school_id) as school, u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, u.gender "
-//        ." r.rank_name, rm.rank_ord FROM rank_marks rm "
-//        ." JOIN users u USING ( user_id ) "
-//        ." JOIN ranks r USING ( rank_ord ) "
-//        ." JOIN schools s USING ( school_id ) "
-//        ." WHERE rm.date_promoted >= '$start_date' "
-//        ." AND rm.date_promoted <= '$end_date' "
-//        ." AND rm.rank_ord = 9 "
-//        ." AND s.test_school = 0 "
-//        ." ORDER BY gender, school, last, first";
-//
-//$qry3 =  " SELECT IFNULL(s.shorthand, s.school_id) as school, u.first, u.last, u.user_serial, u.mobile_pic, u.user_photo_id, u.gender "
-//        ." r.rank_name, rm.rank_ord FROM rank_marks rm "
-//        ." JOIN users u USING ( user_id ) "
-//        ." JOIN ranks r USING ( rank_ord ) "
-//        ." JOIN schools s USING ( school_id ) "
-//        ." WHERE rm.date_promoted >= '$start_date' "
-//        ." AND rm.date_promoted <= '$end_date' "
-//        ." AND rm.rank_ord < 9 "
-//        ." AND s.test_school = 0 "
-//        ." ORDER BY gender, school, last, first";
-
 $result = mysql_query($qry);
 while ($row = mysql_fetch_assoc($result)) {
     if (intval($row['rank_ord']) > 9) $starGenerals[$row['rank_ord']][] = $row;
