@@ -297,7 +297,7 @@
   const Generals = ({ info, dates }) => {
     const downloadImages = (e) => {
       e.preventDefault()
-      const zip = new JSZip()
+      // const zip = new JSZip()
       // find all profile pictures on the page
       let urls = []
       const profiles = document.querySelectorAll(".profile")
@@ -310,7 +310,7 @@
       fetch('api/downloadImgs.php', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify( urls )
+        body: JSON.stringify(urls)
       })
 
       // let link = document.createElement('a');
