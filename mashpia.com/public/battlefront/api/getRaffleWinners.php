@@ -16,7 +16,9 @@ require_once( $_SERVER["DOCUMENT_ROOT"] . '/raffles/shared/classes/Raffle.php' )
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
 $info = json_decode(file_get_contents('php://input'), true);
-$raffle_type = $info['raffle_type'] == '5' ? 'weekly' : $info['raffle_type'] == '60' ? 'monthly' : '';
+$raffle_type = '';
+if ($info['raffle_type'] == '5') $raffle_type = 'weekly';
+else if ($info['raffle_type'] == '60') $raffle_type = 'monthly';
 $start_date = $info['start'];
 $end_date = $info['end'];
 
@@ -44,7 +46,7 @@ while($raffle_info = mysql_fetch_assoc($raffle_query)){
 
     $raffles[] = [
         "raffle_id"     => $raffle->raffle_id,
-        "raffle_name"   => $raffle->name." (".$raffle->type.")",
+        "raffle_name"   => $raffle->name,
         "raffle_type"   => $raffle->type,
         "raffle_from"   => $raffle_from,
         "raffle_to"     => $raffle_to,

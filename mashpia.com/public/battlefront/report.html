@@ -149,10 +149,9 @@
         {raffles && raffles.map(raffle => (
           <div key={raffle.raffle_id}>
             <hr />
-            <div style={infoStyle}>Raffle: {raffle.raffle_name}</div>
-            <div style={infoStyle}>From: {raffle.raffle_from}</div>
-            <div style={infoStyle}>To: {raffle.raffle_to}</div>
-            {raffle_type == '5' && <div style={infoStyle}>Prize: {raffle.winners[0].prize_name}</div>}
+            <div style={infoStyle}>{raffle.raffle_name}</div>
+            {raffle_type == '60' && <div style={infoStyle}>From: {raffle.raffle_from}</div>}
+            {raffle_type == '60' && <div style={infoStyle}>To: {raffle.raffle_to}</div>}
             <br />
             <Winners info={raffle.winners} raffle={raffle_type} />
           </div>
@@ -170,7 +169,7 @@
           <div key={winner.user_id}>
             {raffle == '60' && <div style={prizeStyle}>Prize: {winner.prize_name}</div>}
             <div style={nameStyle}>{winner.name}</div>
-            <div>School: {winner.shorthand ? winner.shorthand : winner.school_id}</div>
+            <div>{winner.shorthand ? winner.shorthand : winner.school_id}</div>
             {raffle == '0' && <br />}
           </div>
         ))}
