@@ -57,7 +57,4 @@ foreach ($ids as $id => $name) {
     $sm->setSchoolResults( $id );
     $sm->setClassResults();
 }
-
-echo "<pre>";
-print_r($sm->getAccomplished());
-echo "</pre>";
+echo json_encode($sm->perfectPlatoons);

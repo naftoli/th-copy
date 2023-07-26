@@ -72,6 +72,7 @@
           {chosen.includes('5M Raffles') && show5m && <Raffles raffle_type="5" dates={dates} />}
           {chosen.includes('Birthdays') && showBirthdays && <Birthdays dates={dates} />}
           {chosen.includes('Ranks') && showRanks && <Ranks dates={dates} />}
+          {chosen.includes('WWTC') && <WWTC />}
         </div>
       </div>
     )
@@ -113,6 +114,14 @@
               </td>
               <td>
                 <input type="date" name="startRanks" onChange={dateChange} /> <input type="date" name="endRanks" onChange={dateChange} />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" name="WWTC" onChange={handleChange} /> WWTC (latest WWTC)
+              </td>
+              <td>
+                &nbsp;
               </td>
             </tr>
           </tbody>
@@ -303,6 +312,35 @@
               <div key={user.user_serial}>
                 <div>{initials(user.first).join('. ') + ' ' + user.last}</div>
                 <div style={{fontWeight: 'bold'}}>{user.school}</div>
+              </div>
+            ))}
+            <br />
+          </div>
+        ))}
+      </div>
+    )
+  }
+
+  const WWTC = () => {
+    const [info, setInfo] = useState([])
+
+    useEffect(() => {
+      fetch('api/getWWTC.php')
+        .then(res => res.json())
+        .then(data => setInfo(data))
+    }, [])
+
+    return (
+      <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
+        <h4>WWTC</h4>
+        <hr />
+        {Object.keys(info).map(grade => (
+          <div key={grade}>
+            <div style={{fontWeight: 'bold'}}>{grade}</div>
+            {info[grade].map((details, i) => (
+              <div key={i}>
+                <div>{details.teacher}</div>
+                <div style={{fontStyle: 'italic'}}>{details.school}</div>
               </div>
             ))}
             <br />

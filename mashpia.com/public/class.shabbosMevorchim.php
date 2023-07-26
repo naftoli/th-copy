@@ -55,6 +55,8 @@ class ShabbosMevorchim
     private $backup;
     private $backup_ran_by_date = [];
 
+    public $perfectPlatoons = [];
+
     public function __construct($year = 0)
     {
         if ($year == 0) {
@@ -364,9 +366,11 @@ class ShabbosMevorchim
     public function setSchool($id)
     {
         $this->school_id = $id;
-        $sql = "SELECT school_name FROM schools WHERE school_id = " . $this->school_id;
-        foreach ($this->db->query($sql) as $row)
+        $sql = "SELECT school_name, shorthand FROM schools WHERE school_id = " . $this->school_id;
+        foreach ($this->db->query($sql) as $row) {
             $this->school_name = $row['school_name'];
+            $this->school_report_name = $row['shorthand'] ?? $this->school_id;
+        }
     }
 
     public function getSchoolID()
@@ -913,6 +917,13 @@ class ShabbosMevorchim
                         //find out which classes accomplished their goals
                         if ($this->classDoneResults[$key][$date][$class] >= $this->classResults[$key][$date][$class]) {
                             $this->accomplished[$key][$date][$info['grade']] = $info['teacher'];
+                            // get grade only
+                            $gradeInfo = explode('-', $info['grade']);
+                            $gradeOnly = $gradeInfo[0];
+                            $this->perfectPlatoons[$gradeOnly][] = [
+                                'teacher' => $info['teacher'],
+                                'school'  => $this->school_report_name
+                            ];
                         }
                     }
                 }
