@@ -17,26 +17,24 @@ function createZip($files, $filename) {
     if ($success !== true) {
         exit("cannot open <$filename>\n");
     }
-    foreach ($files as $idx => $file) {
-        $url = "http:" . $file['src'];
-        $file_name = '../imgs/' . ($idx + 1) . '_' . str_replace(' ', '_', $file['name']) . ".png";
-        if ($new_img = imagecreatefromstring(file_get_contents($url))) {
-            imagepng($new_img, $file_name);
-            $zip->addFromString($file_name, file_get_contents($file_name));
-        }
+    foreach ($files as $file) {
+        $zip->addFromString($file, file_get_contents($file));
+        unset($file);
     }
     $zip->close();
 }
 
 $info = json_decode(file_get_contents('php://input'), true);
+$files = [];
 foreach ($info as $idx => $file) {
     $url = "http:" . $file['src'];
     $file_name = $_SERVER['DOCUMENT_ROOT'] . '/battlefront/imgs/' . ($idx + 1) . '_' . str_replace(' ', '_', $file['name']) . ".png";
     if ($new_img = imagecreatefromstring(file_get_contents($url))) imagepng($new_img, $file_name);
+    $files[] = $file_name;
 }
-//$filename = "Generals.zip";
-//createZip($info, $filename);
-
+//$filename = "../Generals.zip";
+//createZip($files, $filename);
+//
 //header('Content-Description: File Transfer');
 //header('Content-Type: application/octet-stream');
 //header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
