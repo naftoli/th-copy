@@ -42,6 +42,7 @@ $now = unixtojd();
 foreach ($sm as $date) {
     if ($date > $now) break;
 }
+$date = 2459875;
 
 $sm = new ShabbosMevorchim();
 $sm->setReportDates($date);
@@ -55,9 +56,8 @@ foreach ($ids as $id => $name) {
     $sm->setSchool( $id );
     $sm->setSchoolResults( $id );
     $sm->setClassResults();
-
-    // changes from shabbos_mevorchim.php
-    $sm->setStudentResults(0, $_GET['date']);
 }
 
-echo json_encode($sm->getStudentResults());
+echo "<pre>";
+print_r($sm->getAccomplished());
+echo "</pre>";
