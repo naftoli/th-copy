@@ -32,6 +32,8 @@
   // top level component
   const App = () => {
     const [chosen, setChosen] = useState([])
+    const [dates, setDates] = useState({ start: 0, end: 0 })
+    const [showBirthday, setShowBirthday] = useState(false)
 
     const handleChange = e => {
       // add to choices if checked, remove if unchecked
@@ -41,25 +43,36 @@
       else setChosen(chosen.filter(c => c !== choice))
     }
 
+    const handleDateChange = e => {
+      const name = e.target.name
+      const date = e.target.value
+      setDates({...dates, [name]: date})
+    }
+
+    useEffect(() => {
+      if (dates.start && dates.end) setShowBirthday(true)
+    }, [dates])
+
     return (
       <div className="container-fluid mt-4 p-3">
-        <Choices handleChange={handleChange} /><br />
+        <Choices handleChange={handleChange} dateChange={handleDateChange} /><br />
         <div className="row">
         {chosen.includes('60M Raffles') && <Raffles raffle_type="60" />}
         {chosen.includes('5M Raffles') && <Raffles raffle_type="5" />}
-        {chosen.includes('Birthdays') && <Birthdays />}
+        {chosen.includes('Birthdays') && showBirthday && <Birthdays dates={dates} />}
         </div>
       </div>
     )
   }
 
-  const Choices = ({ handleChange }) => {
+  const Choices = ({ handleChange, dateChange }) => {
     return (
       <div className="container-fluid border border-1 rounded p-3">
         <h3 className="mb-2">Choose what you would like to have on your Report</h3>
         <label><input type="checkbox" name="60M Raffles" onChange={handleChange} /> 60M Raffles</label><br />
         <label><input type="checkbox" name="5M Raffles" onChange={handleChange} /> 5M Raffles</label><br />
-        <label><input type="checkbox" name="Birthdays" onChange={handleChange} /> Birthdays</label><br />
+        <label><input type="checkbox" name="Birthdays" onChange={handleChange} /> Birthdays</label> -
+        from: <input type="date" name="start" onChange={dateChange} /> to: <input type="date" name="end" onChange={dateChange} />
       </div>
     )
   }
@@ -109,12 +122,12 @@
     )
   }
 
-  const Birthdays = () => {
+  const Birthdays = (dates) => {
     const [heDates, setHeDates] = useState([])
     const [birthdays, setBirthdays] = useState([])
 
     useEffect(() => {
-      fetch('api/getBirthdays.php')
+      fetch('api/getBirthdays.php?start=' + dates.start + '&end=' + dates.end)
         .then(res => res.json())
         .then(data => {
           setHeDates(data.heDates)

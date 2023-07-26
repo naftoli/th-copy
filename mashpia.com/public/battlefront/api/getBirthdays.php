@@ -8,9 +8,14 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-$_POST['dob'] = 'en';
-$_POST['start_date'] = unixtojd() - 150;
-$_POST['end_date'] = unixtojd();
+$start_date = $_GET['start'];
+$end_date = $_GET['end'];
+
+$start_date_info = explode('-', $start_date);
+$end_date_info = explode('-', $end_date);
+
+$start = gregoriantojd($start_date_info[1], $start_date_info[2], $start_date_info[0]);
+$end = gregoriantojd($end_date_info[1], $end_date_info[2], $end_date_info[0]);
 
 require_once $_SERVER["DOCUMENT_ROOT"] . '/class.adminSchools.php';
 require_once $_SERVER["DOCUMENT_ROOT"] . '/class.schoolsUsers.php';
@@ -82,7 +87,7 @@ foreach ( $schools as $id => $school ) {
         $he_birthday_str = iconv('WINDOWS-1255', 'UTF-8', $he_birthday_str);
         if (! in_array($he_birthday, array_keys($heDates))) $heDates[$he_birthday] = $he_birthday_str;
 
-        if ($he_birthday >= $_POST['start_date'] && $he_birthday <= $_POST['end_date']) {
+        if ($he_birthday >= $start && $he_birthday <= $end) {
             if (! in_array($he_birthday, $dob)) $dob[] = $he_birthday;
             $schoolsUsers[$he_birthday][] = [
                 'name' => $user['first'] . ' ' . $user['last'],
@@ -90,21 +95,7 @@ foreach ( $schools as $id => $school ) {
                 'school_id' => $id
             ];
         }
-
-//        if ( $_POST['dob'] == 'en' ) {
-//            if ( $en_birthday >= $_POST['start_date'] && $en_birthday <= $_POST['end_date'] ) {
-//                $temp[] = $user;
-//                $dob[] = $en_birthday;
-//            }
-//        } else if ( $_POST['dob'] == 'he' ) {
-//            if ( $he_birthday >= $_POST['start_date'] && $he_birthday <= $_POST['end_date'] ) {
-//                $temp[] = $user;
-//                $dob[] = $he_birthday;
-//            }
-//        }
     }
-//    array_multisort( $dob, SORT_ASC, $temp );
-//    $schoolsUsers[$id] = $temp;
 }
 array_multisort( $dob, SORT_ASC, $schoolsUsers); // sort by hebrew date
 echo json_encode([
