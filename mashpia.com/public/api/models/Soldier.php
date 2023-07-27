@@ -438,6 +438,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if (!$year) $year = GlobalSettings::getRegistrationYear( $this->school_id );
         if (!$chidon_year) $chidon_year = GlobalSettings::getChidonRegYear();
 
+        if ($this->user_id == 66871) $chidon_year = 5784;
+
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
@@ -531,6 +533,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // turn off chidon reg
         $result['chidon'] = true;
+        if ($this->user_id == 66871) $result['chidon'] = false;
         // turn off chayolei reg until site is secure
 //        $result['chayolei'] = true;
 
