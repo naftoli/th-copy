@@ -75,7 +75,6 @@ if ( !empty( $users ) ) {
     while ( $row = mysql_fetch_assoc($result) ) {
         $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
         $chidon_year                                = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
-        if ($admin == 195942) $chidon_year = 5784;
         $children[$row['user_id']]['user_id']       = $row['user_id'];
         $children[$row['user_id']]['first'] 	    = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	    = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
