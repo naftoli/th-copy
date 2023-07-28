@@ -59,7 +59,7 @@ if($action == "create" || $action == "update"){ // for both create and update, r
     $raffle_props['days_of_tasks'] = $_POST['days_of_tasks']; // set the required days of tasks
     $raffle_props['start_date'] = parseDatetoJd($_POST['start_date']); // get the start date
     $raffle_props['end_date'] = parseDatetoJd($_POST['end_date']); // get the end date
-    if (!in_array($_POST['type'], ["weekly", "monthly"])) {
+    if (!in_array($_POST['type'], ["5M", "60M"])) {
         $error .= "Type is invalid<br/>";
         $valid = false;
     }
@@ -200,8 +200,8 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 <div class="input_group input_half">
                     Type*:
                     <select id="raffle_type" class="grey" name="type">
-                        <option value="weekly">Weekly</option>
-                        <option value="monthly">Monthly</option>
+                        <option value="5M">5M</option>
+                        <option value="60M">60M</option>
                     </select>
                 </div>
                 <div id="detailed_inputs" >
@@ -251,8 +251,8 @@ if($debug) echo "</pre>"; // end debugging preformatting
                 </a>
                 <select class="grey" id="type" name="type">
                     <option value="" selected>All</option>
-                    <option value="weekly">Weekly</option>
-                    <option value="monthly">Monthly</option>
+                    <option value="5M">5M</option>
+                    <option value="60M">60M</option>
                 </select>
                 <select class="grey" id="year" name="year">
                     <?php
