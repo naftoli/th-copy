@@ -11,8 +11,9 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
-$year = GlobalSettings::getRegistrationYear();
+$cur_year = GlobalSettings::getRegistrationYear();
 if (isset($_GET['year'])) $year = $_GET['year'];
+else $year = $cur_year;
 
 require_once __DIR__ . '/../../class.adminSchools.php';
 $s = new AdminSchools($admin_user['admin_id'] ,$admin_user['auth'], true, true);
@@ -143,51 +144,76 @@ ksort($data);
             line-height: 1.4;
             margin-bottom: 20px;
         }
+        tr, td {
+          padding: 5px;
+        }
     </style>
 </head>
 <body>
 <!--    --><?php //include( __DIR__ . '/../../admin_header.php'); ?>
     <h1><?=$year?> Base Registration Status</h1>
-    <div>
-      Choose year: <select id="year">
-        <?php
-        for (; $year--; $year >= 5779) {
-            echo "<option value='$year'>$year</option>";
-        }
-        ?>
-      </select>
-    </div>
+    <table>
+      <tr>
+        <td><b>Choose year:</b></td>
+        <td>
+          <select name="year" id="year">
+              <?php
+              for ($y = $cur_year; $y >= 5777; $y--) {
+                  echo "<option value='$y'";
+                  if ($y == $year)
+                      echo " selected";
+                  echo ">$y</option>";
+              }
+              ?>
+          </select>
+      </tr>
+    </table>
+    <br />
     <form id="add_payment_form">
-        Add Payment for:
-        <select name="school_payment" id="school_payment">
-            <option value="0">Choose School</option>
-            <?php
-            foreach ($all_schools as $id => $school) {
-                echo "<option value='$id'>$school</option>";
-            }
-            ?>
-        </select>
-        <br />
-        Payment type:
-        <select name="payment" id="payment">
-            <option value="chayolei">Chayolei</option>
-            <option value="chidon">Chidon</option>
-            <option value="tanya">Tanya</option>
-            <option value="rewards">Rewards Program</option>
-            <option value="past_due">Past Dues</option>
-        </select>
-        <br />
-        Payment Method:
-        <select name="payment_method" id="payment_method">
-            <option value="cash">Cash</option>
-            <option value="check">Check</option>
-            <option value="credit_card">Credit Card</option>
-            <option value="wire">Wire Transfer</option>
-        </select>
-        <br />
-        Amount: $<input type="text" name="payment_amount" id="payment_amount" />
-        <br />
-        <button id="add_payment">Add Payment</button>
+      <table>
+        <tr>
+          <td>Add Payment for:</td>
+          <td>
+            <select name="school_payment" id="school_payment">
+              <option value="0">Choose School</option>
+              <?php
+              foreach ($all_schools as $id => $school) {
+                  echo "<option value='$id'>$school</option>";
+              }
+              ?>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Payment type:</td>
+          <td>
+            <select name="payment_type" id="payment_type">
+              <option value="0">Choose Payment Type</option>
+              <option value="chayolei">Chayolei</option>
+              <option value="chidon">Chidon</option>
+              <option value="tanya">Tanya</option>
+              <option value="rewards">Rewards Program</option>
+              <option value="past_due">Past Dues</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Payment Method:</td>
+          <td>
+            <select name="payment_method" id="payment_method">
+              <option value="cash">Cash</option>
+              <option value="check">Check</option>
+              <option value="credit_card">Credit Card</option>
+              <option value="wire">Wire Transfer</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>Amount:</td>
+          <td>$<input type="text" name="payment_amount" id="payment_amount" /></td>
+        </tr>
+      </table>
+      <button id="add_payment">Add Payment</button>
     </form>
     <br />
     <p class="note">
@@ -335,7 +361,8 @@ ksort($data);
 
     $("#year").change( function() {
       let y = $(this).val()
-      location.href = location.href + '&year=' + y
+      let url = location.href.split('?')[0]
+      location.href = url + '?year=' + y
     })
 </script>
 </html>
