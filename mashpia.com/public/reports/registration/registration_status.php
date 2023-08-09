@@ -12,6 +12,7 @@ if ($admin_user['auth'] != 'super') {
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $year = GlobalSettings::getRegistrationYear();
+if (isset($_GET['year'])) $year = $_GET['year'];
 
 require_once __DIR__ . '/../../class.adminSchools.php';
 $s = new AdminSchools($admin_user['admin_id'] ,$admin_user['auth'], true, true);
@@ -147,6 +148,15 @@ ksort($data);
 <body>
 <!--    --><?php //include( __DIR__ . '/../../admin_header.php'); ?>
     <h1><?=$year?> Base Registration Status</h1>
+    <div>
+      Choose year: <select id="year">
+        <?php
+        for (; $year--; $year >= 5779) {
+            echo "<option value='$year'>$year</option>";
+        }
+        ?>
+      </select>
+    </div>
     <form id="add_payment_form">
         Add Payment for:
         <select name="school_payment" id="school_payment">
@@ -322,5 +332,10 @@ ksort($data);
         paging : false,
         "order": [[ 2, 'asc' ]]
     });
+
+    $("#year").change( function() {
+      let y = $(this).val()
+      location.href = location.href + '&year=' + y
+    })
 </script>
 </html>
