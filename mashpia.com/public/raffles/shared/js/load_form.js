@@ -20,7 +20,7 @@ function load_form(type) {
             // add 5 days to the end date and update the run_date field
             let run_date = new Date(endDate)
             run_date.setDate(run_date.getDate() + 5)
-            $("#run_date").val() // update the run_date field
+            $("#run_date").val(run_date) // update the run_date field
         });
 
         $("#start_week").change(function () {
