@@ -19,8 +19,13 @@ function load_form(type) {
             $("#end_date").val(endDate) // update the end_date field
             // add 5 days to the end date and update the run_date field
             let run_date = new Date(endDate)
-            run_date.setDate(run_date.getDate() + 5)
-            $("#run_date").val(run_date) // update the run_date field
+            run_date.setDate(run_date.getDate() + 6)
+            let year = run_date.getFullYear()
+            let month = String(run_date.getMonth() + 1).padStart(2, '0')
+            let day = String(run_date.getDate() + 1).padStart(2, '0')
+            console.log(year, month, day)
+            let run_date_string = `${year}-${month}-${day}`
+            document.getElementById('run_date').value = run_date_string // update the run_date field
         });
 
         $("#start_week").change(function () {
