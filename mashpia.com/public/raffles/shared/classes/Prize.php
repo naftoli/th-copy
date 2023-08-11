@@ -211,8 +211,9 @@ class Prize {
      *
      * returns an array of all the prizes 
      */
-    public function get_raffles(){
-        $sql = "SELECT * FROM raffle_prizes WHERE prize_id=".$this->prize_id.";";
+    public function get_raffles($year = 0){
+        if ($year) $sql = "SELECT * FROM raffle_prizes rp JOIN raffles r USING (raffle_id) WHERE rp.prize_id=".$this->prize_id." AND r.year=".$year.";";
+        else $sql = "SELECT * FROM raffle_prizes WHERE prize_id=".$this->prize_id.";";
         $query = mysql_query($sql);
         while($row = mysql_fetch_assoc($query)){ // for each row
             $raffle = Raffle::load($row['raffle_id']); // load the prize

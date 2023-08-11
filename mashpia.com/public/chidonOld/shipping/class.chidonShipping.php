@@ -836,7 +836,7 @@ class ChidonShipping
     public function getCategories() {
         $categories = [
             'brochures', 'yahadus books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
-            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear'
+            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear', 'auction'
         ];
         return $categories;
     }
@@ -863,7 +863,8 @@ class ChidonShipping
                 'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
             'ambassador prizes'     => ['ambassador prize'],
             'raffles'               => ['5M Raffles', 'Other Raffles'],
-            'gear'                  => ['TH Sweater', 'TH Cap', 'TH Rank Patch']
+            'gear'                  => ['TH Sweater', 'TH Cap', 'TH Rank Patch'],
+            'auction'               => ['Auction 5783']
         ];
         return $items;
     }

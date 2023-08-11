@@ -207,13 +207,13 @@ $school_ids = $admin_user['auths']['school'];
                 <a href="../../weekly/forms/prize_form.php">
                     <div class="button">
                         <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
-                        <span class="link-text">Weekly Prizes</span>
+                        <span class="link-text">50M Prizes</span>
                     </div>
                 </a>
                 <a href="/admin_prize_auction.php">
                     <div class="button">
                         <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
-                        <span class="link-text">Grand Prizes</span>
+                        <span class="link-text">60M / Auction Prizes</span>
                     </div>
                 </a>
                 <br/>

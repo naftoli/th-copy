@@ -299,7 +299,7 @@ if (!empty($action)) {
 					<TD><?=es($row['prize_name'])?></TD>
 					<TD><?=!is_null($row['prize_image_id']) ? linkImgFile($row['prize_image_id'], 50) : ''?>
 					<?php
-					list($width, $height, $type, $attr) = getimagesize("http://mashpia.com/file_view.php?id=" . $row['prize_image_id']);
+					list($width, $height, $type, $attr) = @getimagesize("http://mashpia.com/file_view.php?id=" . $row['prize_image_id']);
 					echo "<td>" . $width . "</td><td>" . $height . "</td>";
 					?>
 					<!--
@@ -309,10 +309,12 @@ if (!empty($action)) {
 					<td></td>
 					<TD><?if($admin_user['auth'] == 'super' || !is_null($row['school_id'])):?><A HREF="admin_prize_auction.php?action=edit&amp;prize_id=<?=$row['prize_id']?>"><?=T_('Edit Prize')?></A><?endif;?></TD>
 					<TD><?if($admin_user['auth'] == 'super' || !is_null($row['school_id'])):?><A HREF="admin_prize_auction.php?action=delete&amp;prize_id=<?=$row['prize_id']?>" onClick="return confirm('<?=es(T_('Are you sure?'))?>')"><?=T_('Delete Prize')?></A><?endif;?></TD>
-					<td><?if($admin_user['auth'] == 'super' || !is_null($row['school_id'])):?>
-						<input type="checkbox" name="archived" id="<?=$row['prize_id']?>" class="archived" 
-							<? if ($row['archived']) echo "checked ";?>							
-						/><?endif;?>
+					<td>
+            <?if($admin_user['auth'] == 'super' || !is_null($row['school_id'])):?>
+						  <input type="checkbox" name="archived" id="<?=$row['prize_id']?>" class="archived"
+							<? if ($row['archived']) echo "checked ";?>
+              />
+            <?endif;?>
 					</td>
 				</TR>
 			<? endwhile; ?>

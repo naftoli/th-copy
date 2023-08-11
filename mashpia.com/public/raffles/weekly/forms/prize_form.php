@@ -16,6 +16,10 @@ if ($admin_user['auth'] != 'super') {
     echo "Sorry you don't have the privilege(s) necessary to view this page.";
     exit;
 }
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getCurrentYear();
+
 // import the required files
 require_once(dirname(__FILE__).'/../../shared/classes/Raffle.php');
 require_once(dirname(__FILE__).'/../../shared/classes/Prize.php');
@@ -191,7 +195,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
                     <a href="<? echo htmlspecialchars($_SERVER["PHP_SELF"]); echo $debug ? "?debug=true" : "";?>" class="button">Cancel</a>
                 </div>
             </form>
-            <? $prize->get_raffles(); // load the prizes
+            <? $prize->get_raffles($year); // load the prizes
             /*********** DEBUGGING **********************/
             //if($debug){echo "<pre>";print_r($prize->raffles);echo "</pre>";} // in debug mode show the prize objects
             /*********** GET ALL THE RAFFLES **********************/
