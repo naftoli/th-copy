@@ -50,7 +50,7 @@ use raffles\weekly\Prize as Prize;
                 <? if ($raffle->type == "weekly"){ // only show the checkbox for weekly raffles ?>
                     <td>
                         <input type="checkbox" <?=$prize->type_of_prize == "weekly" ? "" : "disabled";?>
-                            id="prize_<?=$prize->prize_id?>" <?= $raffle->prizes[$prize->prize_id] ? "checked ": ""; ?>
+                            id="prize_<?=$prize->prize_id?>" <?= isset($raffle->prizes[$prize->prize_id]) ? "checked ": ""; ?>
                         />
                     </td> 
                 <?}?>

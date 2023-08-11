@@ -195,7 +195,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
             <form method="POST" action="<? echo htmlspecialchars($_SERVER["PHP_SELF"]); echo $debug ? "?debug=true" : ""; // remove params from url and add debug to perssist debug mode?>">
                 <input name="action" value="create" type="hidden"/>
                 <div class="input_group input_half">
-                    <label>Name*: <input type="text" name="name" value="<?=$raffle->name?>" required/></label>
+                    <label>Name*: <input type="text" name="name" required/></label>
                 </div>
                 <div class="input_group input_half">
                     Type*:
