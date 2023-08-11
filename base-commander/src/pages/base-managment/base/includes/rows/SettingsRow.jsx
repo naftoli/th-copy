@@ -68,8 +68,6 @@ export class SettingsRow extends Component {
 
     const store_reset_jd = parseInt(store_reset, 10);
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
-    //console.log( store_reset );
-    //console.log( store_reset_jd );
 
     // props for all inputs
     const checkboxProps = { onChange: this.handleCheckbox };
@@ -159,22 +157,6 @@ export class SettingsRow extends Component {
             </Fragment>
           ))}
 
-          {/*<Radio value='2459757'*/}
-          {/*  { ...storeResetProps }*/}
-          {/*  onChange={ this.enableSchoolReset }*/}
-          {/*  checked={ store_reset_jd === 2459757 }>*/}
-          {/*  The beginning of the summer (Sunday 27 Sivan / June 26)*/}
-          {/*</Radio>*/}
-          {/*<br />*/}
-
-          {/*<Radio value='2459822'*/}
-          {/*  { ...storeResetProps }*/}
-          {/*  onChange={ this.enableSchoolReset }*/}
-          {/*  checked={ store_reset_jd === 2459822 }>*/}
-          {/*  The beginning of the school year (Tuesday 3 Elul / August 30)*/}
-          {/*</Radio>*/}
-          {/*<br />*/}
-
           <Radio key={0} id='store_reset' value='0'
             name='store_miles_reset'
             { ...storeResetProps }
@@ -196,23 +178,6 @@ export class SettingsRow extends Component {
           <Date value={ store_reset }
             disabled = { this.state.disabled }
             onChange={ this.onDateChage } />
-
-          {/* <Date value={ store_reset }
-            disabled = { !store_reset }
-            onChange={ this.onDateChage } /> */}
-          
-          {/* <Radio name='store_miles_reset' checked={ !store_reset } id='store_reset' onChange={ this.disableSchoolReset }>
-            Never (Points will continue accumulating from last year)
-          </Radio> */}
-            
-          {/* <Checkbox checked={ !store_reset }
-              id='store_reset' onChange={ this.disableSchoolReset }>
-            Allow soldiers to spend all their miles.
-          </Checkbox> */}
-
-          {/* <UncontrolledTooltip placement="top" target="store_reset" autohide={ false }>
-            This includes all miles from previous years
-          </UncontrolledTooltip> */}
         </Col>
 
         <Col sm={12} className='special-options'>
