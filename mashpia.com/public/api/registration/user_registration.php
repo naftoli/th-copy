@@ -87,6 +87,19 @@ class UserRegistrationRouter {
         $rate += $extra * $increaseBy;
         json_response( $rate );
     }
+
+    // check if any of the users getting registered is already registered
+    function checkRegistration($users) {
+        // check that none of the users are already registered
+        foreach ($users as $user) {
+            $status = $user->registrationStatus();
+            if ($status['chayolei']) { // child is already registered
+                $errors[] = $user->first . " " . $user->last . " is already registered for Chayolei Tzivos Hashem.";
+            }
+        }
+        if ($errors) json_error(implode("\n", $errors) . "\nPlease remove them and try again.");
+    }
+
     // charge the card and register the users
     public function registerUsers(){
         global $current_user; global $MASHPIA_DB;
@@ -115,6 +128,8 @@ class UserRegistrationRouter {
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
+
+        $this->checkRegistration($users); // find out if any users are already registered
 
         // keep user id -> serial number:school_id associations for description
         $user_serials = [];
