@@ -71,6 +71,17 @@
       }
     }
     </style>
+
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.17/web.js"></script>
+    <script>
+      const accessToken = 'pk.eyJ1IjoibmFmdG9saXIiLCJhIjoiY2xsZTR5NHFuMDBzeTNzdWxqcnd1ZGJ0ZSJ9.7M6yPlYYDHRE-QcRUp_z9A';
+      const script = document.getElementById('search-js');
+      script.onload = function() {
+        mapboxsearch.autofill({
+          accessToken
+        });
+      };
+    </script>
 </head>
   <body class="skin-blue sidebar-mini">
     <form id="editForm" method="post" action="">
@@ -178,7 +189,8 @@
                       <div class="form-group has-feedback" id="divaddress">
                           <div class="input-group">
                               <span class="input-group-addon"><img src="/mobile/img_new/House-Color-Gray-SM.png"/></span>
-                              <input id="address" name="address" type="text" class="form-control" placeholder="Home Address"  required/>
+                              <input id="address" name="address" type="text" class="form-control" placeholder="Home Address"
+                                     required autocomplete="address-line1" />
                           </div>
                       </div>
                   </div>
@@ -188,7 +200,8 @@
                       <div class="form-group has-feedback" id="divcity">
                           <div class="input-group">
                               <span class="input-group-addon"><img src="/mobile/img_new/Location-Color-Gray-SM.png"/></span>
-                              <input id="city" name="city" type="text" class="form-control" placeholder="City" required/>
+                              <input id="city" name="city" type="text" class="form-control" placeholder="City"
+                                     required autocomplete="address-level2"  />
                           </div>
                       </div>
                   </div>
@@ -198,7 +211,8 @@
                       <div class="form-group has-feedback" id="divstate">
                           <div class="input-group">
                               <span class="input-group-addon"><img src="/mobile/img_new/Arrow-Down-Color-Gray-SM.png"/></span>
-                              <input id="state" name="state" type="text" class="form-control" placeholder="State" required/>
+                              <input id="state" name="state" type="text" class="form-control" placeholder="State"
+                                     required autocomplete="address-level1" />
                           </div>
                       </div>
                   </div>
@@ -206,7 +220,8 @@
                       <div class="form-group has-feedback" id="divzip">
                           <div class="input-group">
                               <span class="input-group-addon"><img src="/mobile/img_new/Arrow-Down-3-Gray-SM.png"/></span>
-                              <input id="zip" name="zip" type="text" class="form-control" placeholder="Zip Code" required/>
+                              <input id="zip" name="zip" type="text" class="form-control" placeholder="Zip Code"
+                                     required autocomplete="postal-code" />
                           </div>
                       </div>
                   </div>
@@ -216,7 +231,8 @@
                       <div class="form-group has-feedback" id="divcountry">
                           <div class="input-group">
                               <span class="input-group-addon"><img src="/mobile/img_new/Flag-Color-Gray-SM.png"/></span>
-                              <input id="country" name="country" type="text" class="form-control" placeholder="Country" />
+                              <input id="country" name="country" type="text" class="form-control" placeholder="Country"
+                                     required autocomplete="country-name" />
                           </div>
                       </div>
                   </div>

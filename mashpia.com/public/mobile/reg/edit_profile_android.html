@@ -961,6 +961,16 @@
     <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
     <script src="../js/translation/edit-profile-android/edit_profile_android.js"></script>
 
+    <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.17/web.js"></script>
+    <script>
+        const accessToken = 'pk.eyJ1IjoibmFmdG9saXIiLCJhIjoiY2xsZTR5NHFuMDBzeTNzdWxqcnd1ZGJ0ZSJ9.7M6yPlYYDHRE-QcRUp_z9A';
+        const script = document.getElementById('search-js');
+        script.onload = function() {
+            mapboxsearch.autofill({
+                accessToken
+            });
+        };
+    </script>
 </head>
 
 <body class="skin-blue sidebar-mini">
@@ -974,44 +984,6 @@
 
             <div class="register-box">
                 <div class="register-box-body">
-                    <!--
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <div class="image-upload">
-                                <div class="img-people">
-                                    <label for="imagefather" style="display: inline;">
-                                        <div class='addPhoto'>
-                                            Add Photo
-                                        </div>
-                                        <input id="imagefather" name="images[]" type="file" class="file-loading" />
-                                    </label>
-                                </div>
-                                
-                                <label for="imagefather" style="display: inline;">
-                                    <img id="imgfather" src="images/father-2.png" class="img-people"  data-toggle="tooltip" title="Click here to load father's picture"/>
-                                </label>
-                                
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div class="image-upload">
-                                <div class="img-people">
-                                    <label for="imagemother" style="display: inline;">
-                                        <div class='addPhoto'>
-                                            Add Photo
-                                        </div>
-                                        <input id="imagemother" name="images[]" type="file" class="file-loading" />
-                                    </label
-                                </div>
-
-                                <label for="imagemother" style="display: inline;">  
-                                    <img id='imgmother' src="images/mother-2.png" class="img-people"  data-toggle="tooltip" title="Click here to load mother's picture" />
-                                </label>
-                                
-                            </div>
-                        </div>
-                    </div>
-                    -->
                     <div class="row">
                         <div class="col-xs-6">
                             <div onclick="clearFileInput()" class="image-upload" id="crop-avatar-father">
@@ -1079,7 +1051,8 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-home "></span></span>
                                     <input id="address" name="address" type="text" class="form-control"
-                                        data-key="HomeAddress" placeholder="Home Address" required />
+                                        data-key="HomeAddress" placeholder="Home Address"
+                                           required autocomplete="address-line1" />
                                 </div>
                             </div>
                         </div>
@@ -1090,7 +1063,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-map-marker "></span></span>
                                     <input id="city" name="city" type="text" class="form-control" datakey="City"
-                                        placeholder="City" required />
+                                        placeholder="City" required autocomplete="address-level2" />
                                 </div>
                             </div>
                         </div>
@@ -1101,7 +1074,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-sort-desc"></span></span>
                                     <input id="state" name="state" type="text" class="form-control" data-key="State"
-                                        placeholder="State" required />
+                                        placeholder="State" required autocomplete="address-level1" />
                                 </div>
                             </div>
                         </div>
@@ -1110,7 +1083,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-long-arrow-right"></span></span>
                                     <input id="zip" name="zip" type="text" class="form-control" data-key="ZipCode"
-                                        placeholder="Zip Code" required />
+                                        placeholder="Zip Code" required autocomplete="postal-code" />
                                 </div>
                             </div>
                         </div>
@@ -1121,7 +1094,7 @@
                                 <div class="input-group">
                                     <span class="input-group-addon"><span class="fa fa-flag "></span></span>
                                     <input id="country" name="country" type="text" class="form-control"
-                                        data-key="Country" placeholder="Country" />
+                                        data-key="Country" placeholder="Country" required autocomplete="country-name" />
                                 </div>
                             </div>
                         </div>
