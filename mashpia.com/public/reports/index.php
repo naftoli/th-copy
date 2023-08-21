@@ -137,6 +137,21 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
+        <h2>Fundraising Sweaters/Gear</h2>
+          <div id="action-links">
+            <a href="/sweaters/amounts_raised.html">
+              <div class="button">
+                <img src="/images/icon_report.png" height="32" alt="reports"/>
+                <span class="link-text">Family Raised</span>
+              </div>
+            </a>
+            <a href="/sweaters/report.html">
+              <div class="button">
+                <img src="/images/icon_report.png" height="32" alt="reports"/>
+                <span class="link-text">Sweaters Report</span>
+              </div>
+            </a>
+          </div>
         <?} // end admin only links ?>
         </div>
         
