@@ -286,7 +286,7 @@
                         onChange={(e) => handleInputChange(e, index)}
                         disabled={row.address != '' && row.address != null && row.address != undefined}
                       >
-                        {Object.values(users[row.admin_id]).map((user, index) => (
+                        {users[row.admin_id] && Object.values(users[row.admin_id]).map((user, index) => (
                           <option key={index} value={user.user_id}>
                             {user.first + ' ' + user.last + ' - ' + user.school_name}
                           </option>
