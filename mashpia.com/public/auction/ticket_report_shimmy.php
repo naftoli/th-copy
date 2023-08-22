@@ -38,12 +38,12 @@ $sql = "SELECT
         GROUP BY aup.user_id, aup.prize_id";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-  $info[$row['prize_name'] . ' - Prize ID:' . $row['prize_id']][] = $row;
+    $info[] = $row;
 }
 ?>
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <meta charset="utf8" />
     <style>
       tr, th, td {
@@ -52,23 +52,19 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         font-family: Arial;
       }
     </style>
-  </head>
-  <body>
-    <?php
-    foreach ( $info as $prize => $more ) {
-      echo "<h1>" . $prize . "</h1>";
-      ?>
-      <table>
-        <tr>
-          <th>School</th><th>Grade</th><th>Sub</th><th>First Name</th><th>Last Name</th><th># of Tickets</th><th>User ID</th>
-        </tr>
-      <?
-      foreach ( $more as $row ) {
-        echo "<tr><td>" . $row['school_name'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $row['class_sub'] . "</td><td>" . 
-          $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['quantity'] . "</td><td>" . $row['user_id'] . "</td></tr>";
-      }
-      echo "</table>";
+</head>
+<body>
+<table>
+    <tr>
+        <th>Prize ID</th><th>Prize</th><th>School</th><th>Grade</th><th>Sub</th><th>First Name</th><th>Last Name</th><th># of Tickets</th><th>User ID</th>
+    </tr>
+    <?
+    foreach ( $info as $row ) {
+        echo "<tr><td>" . $row['prize_id'] . "</td><td>" . $row['prize_name'] . "</td><td>" . $row['school_name'] . "</td><td>" .
+            $row['class_grade'] . "</td><td>" . $row['class_sub'] . "</td><td>" .
+            $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['quantity'] . "</td><td>" . $row['user_id'] . "</td></tr>";
     }
     ?>
-  </body> 
+</table>
+</body>
 </html>
