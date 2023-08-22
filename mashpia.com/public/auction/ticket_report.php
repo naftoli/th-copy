@@ -12,6 +12,7 @@ $sql = "SELECT
             aup.prize_id,
             aup.quantity,
             pa.prize_name,
+            s.school_id, 
             s.school_name,
             c.class_grade,
             c.class_sub,

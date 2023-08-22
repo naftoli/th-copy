@@ -12,7 +12,8 @@ $sql = "SELECT
             aup.prize_id,
             aup.quantity,
             pa.prize_name,
-            s.school_name,
+            s.school_id, 
+            s.school_name, 
             c.class_grade,
             c.class_sub,
             u.first,
@@ -56,12 +57,12 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
 <body>
 <table>
     <tr>
-        <th>Prize ID</th><th>Prize</th><th>School</th><th>Grade</th><th>Sub</th><th>First Name</th><th>Last Name</th><th># of Tickets</th><th>User ID</th>
+        <th>Prize ID</th><th>Prize</th><th>School ID</th><th>School</th><th>Grade</th><th>Sub</th><th>First Name</th><th>Last Name</th><th># of Tickets</th><th>User ID</th>
     </tr>
     <?
     foreach ( $info as $row ) {
-        echo "<tr><td>" . $row['prize_id'] . "</td><td>" . $row['prize_name'] . "</td><td>" . $row['school_name'] . "</td><td>" .
-            $row['class_grade'] . "</td><td>" . $row['class_sub'] . "</td><td>" .
+        echo "<tr><td>" . $row['prize_id'] . "</td><td>" . $row['prize_name'] . "</td><td>" . $row['school_id'] . "</td><td>" .
+            $row['school_name'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $row['class_sub'] . "</td><td>" .
             $row['first'] . "</td><td>" . $row['last'] . "</td><td>" . $row['quantity'] . "</td><td>" . $row['user_id'] . "</td></tr>";
     }
     ?>
