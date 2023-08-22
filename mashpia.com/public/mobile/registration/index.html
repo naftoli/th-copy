@@ -69,6 +69,56 @@
       margin-top: -10px;
     }
   </style>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font: 16px Arial;
+    }
+    .autocomplete {
+      /*the container must be positioned relative:*/
+      position: relative;
+      display: inline-block;
+    }
+    input {
+      border: 1px solid transparent;
+      background-color: #f1f1f1;
+      padding: 10px;
+      font-size: 16px;
+    }
+    input[type=text] {
+      width: 100%;
+    }
+    input[type=submit] {
+      background-color: DodgerBlue;
+      color: #fff;
+    }
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      /*position the autocomplete items to be the same width as the container:*/
+      top: 100%;
+      left: 0;
+      right: 0;
+    }
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      background-color: #fff;
+      border-bottom: 1px solid #d4d4d4;
+    }
+    .autocomplete-items div:hover {
+      /*when hovering an item:*/
+      background-color: #e9e9e9;
+    }
+    .autocomplete-active {
+      /*when navigating through the items using the arrow keys:*/
+      background-color: DodgerBlue !important;
+      color: #ffffff;
+    }
+  </style>
 </head>
 <body>
 <header>
@@ -268,27 +318,29 @@
           </div>
         </div>
         <div class="row hide" id="non_th_school_id_div">
+          <input type="hidden" name="non_th_school_id" id="non_th_school_id" value="-1" />
           <div class="col-12">
             <label for="non_th_school_id" class="i18n" data-key="NameSchoolAttending">
               Name of School Attending During Year (Actual school name, not MyShliach/Anash Kinder).
             </label>
             <div class="input-group">
-              <select class="form-control" id="non_th_school_id" name="non_th_school_id" autocomplete="on">
-              </select>
+<!--              <select class="form-control" id="non_th_school_id" name="non_th_school_id" autocomplete="on">-->
+<!--              </select>-->
+              <input type="text" class="form-control" id="non_th_school" />
             </div>
           </div>
         </div>
-        <div class="row hide" id="non_th_school_div">
-          <div class="col-12">
-            <label for="non_th_school">
-              Please type in the name of the school that you attend during the year (Actual school name, not
-              MyShliach/Anash Kinder)
-            </label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="non_th_school" name="non_th_school">
-            </div>
-          </div>
-        </div>
+<!--        <div class="row hide" id="non_th_school_div">-->
+<!--          <div class="col-12">-->
+<!--            <label for="non_th_school">-->
+<!--              Please type in the name of the school that you attend during the year (Actual school name, not-->
+<!--              MyShliach/Anash Kinder)-->
+<!--            </label>-->
+<!--            <div class="input-group">-->
+<!--              <input type="text" class="form-control" id="non_th_school" name="non_th_school">-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
         <br/>
         <label id="chayolei-registration">
           <h2 class="i18n2" data-key="ChayoleiRegistration">Chayolei Tzivos Hashem Registration <span
