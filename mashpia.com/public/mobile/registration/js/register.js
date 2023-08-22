@@ -157,16 +157,30 @@ var registrationApp = function() {
     function setupNonThSchoolList() {
         // setup non th school list
         $.post('api/getNonThSchools.php', function(result) {
-            var res = JSON.parse(result)
+            const res = JSON.parse(result)
+            const sorted = sortByVal(res)
+            console.log(sorted)
             var html = '<option value="-1" selected>Please Choose</option>'
-            for (let s in res) {
-                let key = s.substring(0, s.length - 1)
-                html += '<option value=' + key + '>' + res[s] + "</option>";
+            for (let row of sorted) {
+                let key = row[0]
+                let value = row[1]
+                html += '<option value=' + key + '>' + value + "</option>";
             }
             html += '<option value="0">My school is not listed</option>'
             $("#non_th_school_id").empty()
             $("#non_th_school_id").append(html)
         })
+    }
+
+    function sortByVal(obj) {
+        let sorted = []
+        for (let i in obj) {
+            sorted.push([i, obj[i]])
+        }
+        sorted.sort(function(a, b) {
+            return a[1].localeCompare(b[1])
+        })
+        return sorted
     }
 
     var pleaseSelectErr = "Please select at least one child";
