@@ -232,6 +232,9 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['chayoleiRegistered'] = true;
         }
 
+        // do NOT show chayolei registration
+        $children[$row['user_id']]['reg_types']['chayolei'] = false;
+
         // add remove reg button for children that are tuition school and parents registered but school didn't register
         $children[$row['user_id']]['removeRegButton'] = 0;
 //        $sqlRemove = "select * from reg_confirmations where user_id = " . $row['user_id'] . " and year = " . $reg_year;
