@@ -948,41 +948,34 @@
             <li class="i18n" data-key="ShipmentsMedals">3 shipments of medals, rank books and rank cards</li>
             <li class="i18n" data-key="RafflePrize">Raffle prize shipments (if your child wins)</li>
           </ul>
-
-          <small class="i18n" data-key="ShippingRatesVary">Shipping rates may vary by location.</small>
-          </p>
         </div>
       </div>
       <form id="shipping-form">
+        <input type="hidden" name="shipping-cost" id="shipping-cost" value="0" />
         <div class="row">
-          <div class="col-3 col-lg-2 col-xl-1">
-            <label class="radio-label" style="display: none">
-              <input type="radio" id="shipping-type" name="shipping-type" value="1" checked/>
-              <span class="radio"></span>
-            </label>
-            <span id="shipping-type-1" class="shipping_cost">$40</span>
-          </div>
-          <div class="col-9 col-lg-10 col-xl-11">
-            <p><span class="i18n" data-key="PrepaidShippingFor">Prepaid shipping fee for <span> <strong class="i18n"
-                                                                                                        data-key="PrepaidShippingFordes">Hachayol magazines, medals and rank books.</strong>
+          <div class="col-12">
+            <p>
+              <b>USA shipping:</b><br />
+              Automatic $35 Shipping Charge for Hachayol Magazines, Medals and Rank books per family.
+            </p>
+            <p>
+              <b>Canada:</b><br />
+              Automatic $40 Shipping Charge for Hachayol Magazines, Medals and Rank books per family.
+            </p>
+            <p>
+              <b>International:</b><br />
+              $45 Shipping Charge for Hachayol Magazines (Our cost is $120 a year)<br />
+              (Medals and Rankbooks will be available for pickup at the Kinus only)<br />
+            </p>
+            <p>
+              For International families ONLY, if you would like to opt out of shipping, please click below:<br />
+              <input type="radio" name="cancel-shipping" id="cancel-shipping" value="1" /> I would like to opt out of getting shipments. Please do not charge me shipping.
             </p>
           </div>
         </div>
-        <!-- <div class="row">
-            <div class="col-3 col-lg-2 col-xl-1">
-                <label class="radio-label">
-                    <input type="radio" id="shipping-type" name="shipping-type" value="2"/>
-                    <span class="radio"></span>
-                </label>
-                <span id="shipping-type-2" class="shipping_cost">$20</span>
-            </div>
-            <div class="col-9 col-lg-10 col-xl-11">
-                <p>Prepaid shipping for <strong>medals and rank books only.</strong> You are always welcome to pick up the magazines in the office.</p>
-            </div>
-        </div> -->
         <div class="row">
           <div class="col-12">
-            <input type="submit" class="btn btn-primary" value="Confirm Shipping Fee"/>
+            <input type="submit" class="btn btn-primary" value="Confirm Shipping"/>
           </div>
         </div>
       </form>

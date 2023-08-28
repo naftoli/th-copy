@@ -509,28 +509,27 @@ var registrationApp = function() {
         showSection('step-3');
         // remove any shipping items from the cart
         state.shipping_type = 1;
-        chayolei_user_ids = state.cart.map( function( item ){ 
+        chayolei_user_ids = state.cart.map( function( item ){
             // skip for any non chayolei registration or chayolei lite registration
             return item.meta.registration_type !== 'chayolei' || item.meta.lite_version != undefined || item.meta.user_id
         });
-        getShipping(
-            // limit to kids registering for Tzivos Hashem
-            state.selected_users.filter( function ( user ){
-                return user.registrationStatus.chayolei === false && chayolei_user_ids.includes( user.user_id );
+
+        let users = state.selected_users.filter( function ( user ){
+            return user.registrationStatus.chayolei === false && chayolei_user_ids.includes( user.user_id );
             // and just get their school ids
-            }).map( function( user ) { 
-                return user.school.school_id;
-            })
-        ).then( function( response ){
+        }).map( function( user ) {
+            return user.school.school_id;
+        })
+
+        getShipping( users )
+          .then( function( response ){
             if( !response ) return step4(); // skip straight to step 4
-            $("#shipping-type-1").text("$" + response);
-            // response.forEach( function( rate ) { 
-            //     $("#shipping-type-" + rate.type).text("$" + rate.rate) 
-            // });
+            // if we have a response then we need to show the shipping options
+            $("#shipping-cost").val( response )
             toggleLoading( 'step-3', false );
         });
     }
-    
+
     // cart / payment information
     function step4() {
         if( state.selected_users.length === 0 ) return step1();
@@ -538,7 +537,7 @@ var registrationApp = function() {
         showSection("step-4");
 
         console.log(state.cart)
-        
+
         var total = state.cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 )
         if ( total <= 0 ){
             return registerUsers( { payment: { total: 0 } } );
@@ -599,7 +598,7 @@ var registrationApp = function() {
         if ($("#user-img").attr('src').includes('addphoto.png')) {
             return showError(picError)
         }
-        
+
         // update the user's information
         var postData = {};  var user_changed = false;
         current_index = parseInt( $("#current_index").val() );
@@ -608,7 +607,7 @@ var registrationApp = function() {
 
         // find all changed fields
         $( event.target ).serializeArray().forEach( function( item ) {
-            if ( selected_user[ item.name ] == '' || 
+            if ( selected_user[ item.name ] == '' ||
                 ( selected_user[ item.name ] && selected_user[ item.name ] != item.value  )
             ) {
                 user_changed = true;
@@ -630,16 +629,16 @@ var registrationApp = function() {
         selected_charges = {
             chayolei: $('#chayolei-registration input')[0].checked,
             // chayolei_lite: $('#chayolei-lite-registration input')[0].checked,
-            ckids: $('#ckids-registration input')[0].checked, 
+            ckids: $('#ckids-registration input')[0].checked,
             chidon: $('#chidon-registration input')[0].checked,
             yahadus: $('#yahadus-registration input')[0].checked,
             khk: $("#khk input")[0].checked
         }
 
         if ( selected_charges.chayolei === false
-            // && selected_charges.chayolei_lite === false 
+            // && selected_charges.chayolei_lite === false
             && selected_charges.ckids === false
-            && selected_charges.chidon === false 
+            && selected_charges.chidon === false
             // && selected_charges.yahadus === false
         ){
             return showError(
@@ -854,7 +853,7 @@ var registrationApp = function() {
                     lite_version: 1
                 }
             });
-        } 
+        }
         if ( selected_charges.ckids ) {
             selected_user.registrationRates.chayolei = 0;
             state.cart.push({
@@ -868,7 +867,7 @@ var registrationApp = function() {
                     ckids: 1
                 }
             });
-        } 
+        }
         if ( selected_charges.chidon ) {
             var anash = selected_user.school.school_id === anash_kinder;
             var myshliach = selected_user.school.school_id === myshliach;
@@ -896,7 +895,7 @@ var registrationApp = function() {
                     purchased: $(".book-bought:checked").val(),
                     purchasedWhere: $(".book-purchase:checked").length ? $(".book-purchase:checked").val() : '',
                     store: {
-                        store_name: $("#store-name").val(), 
+                        store_name: $("#store-name").val(),
                         store_city: $("#store-city").val()
                     },
                     bookVersion: $("#bookVersion").val(),
@@ -1292,23 +1291,33 @@ var registrationApp = function() {
         event.preventDefault();
         // remove any old shipping items from the cart
         state.cart = state.cart.filter( function(item) { return item.meta.type != 'shipping' } );
-        
-        var selected_type = $("#shipping-type:checked").val();
-        $("#selected-shipping-type").val( selected_type );
-        state.shipping_type = selected_type;
-        
-        var shipping_charges = parseInt(
-            $("#shipping-type-"+selected_type).text().replace( /^\D+/g, '')
-        );
-        state.cart.push({
-            description: 'Prepaid Shipping',
-            price: shipping_charges,
-            meta: {
-                type: 'shipping',
-                shipping_type: selected_type,
-                shipping_charges: shipping_charges
-            }
-        });
+        // get shipping charge if exists
+        let shipping_charge, selected_type
+        shipping_charge = $("#shipping-cost").val()
+
+        switch (shipping_charge) {
+            case '35':
+                selected_type = 1
+                break
+            case '40':
+                selected_type = 2
+                break
+            case '45':
+                selected_type = 3
+                break
+        }
+
+        if (parseInt(shipping_charge) > 0 && !$("#cancel-shipping").is(":checked")) {
+            state.cart.push({
+                description: 'Prepaid Shipping',
+                price: shipping_charge,
+                meta: {
+                    type: 'shipping',
+                    shipping_type: selected_type,
+                    shipping_charges: shipping_charge
+                }
+            });
+        }
         return step4();
     }
 

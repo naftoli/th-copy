@@ -68,23 +68,37 @@ class UserRegistrationRouter {
         // base rate for zone 1 is 57 with an additional 10 for each child
         // base rate for zone 2 is 90 with an additional 15 for each child
         // base rate for zone 3 is 167 with an additional 20 for each child
-        switch ( $zone ) {
+//        switch ( $zone ) {
+//            case 1:
+//                $base = 57;
+//                $increaseBy = 10;
+//                break;
+//            case 2:
+//                $base = 90;
+//                $increaseBy = 15;
+//                break;
+//            case 3:
+//                $base = 167;
+//                $increaseBy = 20;
+//                break;
+//        }
+//        $rate = $base;
+//        $extra = $child_count - 1;
+//        $rate += $extra * $increaseBy;
+        // usa rate = 35
+        // canada rate = 40
+        // intl rate = 45
+        switch ($zone) {
             case 1:
-                $base = 57;
-                $increaseBy = 10;
+                $rate = 35;
                 break;
             case 2:
-                $base = 90;
-                $increaseBy = 15;
+                $rate = 40;
                 break;
             case 3:
-                $base = 167;
-                $increaseBy = 20;
+                $rate = 45;
                 break;
         }
-        $rate = $base;
-        $extra = $child_count - 1;
-        $rate += $extra * $increaseBy;
         json_response( $rate );
     }
 
