@@ -323,7 +323,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
     }
 
     private function sendConfirmationEmail() {
-        $to = $this->email;
+        global $current_user;
+        $to = $current_user->admin_email;
         $subject = "Registration Confirmation";
         $from = 'cth@tzivoshashem.org';
         $msg = "This is to confirm that your registration for Chayolei " . GlobalSettings::getRegistrationYear( $this->school_id ) . " has been successful.";
