@@ -1,6 +1,10 @@
-<?
-$admin_auth = array('school'); 
-require('../../header.php');
+<?php
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    die('Access denied');
+}
 
 if( isset($_GET['debug'])){
 	//error_reporting(E_ALL);
@@ -114,10 +118,10 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
         })
 
         $("#exceptions").blur( function() {
-          const exceptions = $(this).val()
-          const prize_id = $(this).closest("tr").find("td:first").text()
+          const exceptions = $(this).val().split(',')
+          const prize_id = $(this).parent().parent().attr('id')
           $.ajax({
-            url: "./updateExceptions.php",
+            url: "./updateSchoolExceptions.php",
             data: {
               prize_id,
               exceptions
@@ -128,6 +132,7 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
                 alert("Done!");
               } else {
                 alert("Error!");
+                console.log(res.error)
               }
             }
           })
