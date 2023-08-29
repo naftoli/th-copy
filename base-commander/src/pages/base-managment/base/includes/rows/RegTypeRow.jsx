@@ -42,11 +42,11 @@ export class RegTypeRow extends Component {
             Eligible Discounts:
             <ul>
               <li>$10 (Tuition School)</li>
-              <li>Regular Rate: $60</li>
             </ul>
           </div>
 
           <div className='price'>
+            Regular Rate: $60<br />
             Final Rate: <Rate rate={ prices.rates[0] } childFee={ childFee } />
             <br />Payment Due: (9/13/2022)
           </div>
@@ -71,10 +71,10 @@ export class RegTypeRow extends Component {
             <ul>
               <li>Guaranteed: $<NumberDisplay value={ prices.discounts.guaranteed } /></li>
               <li>Early Bird (<DateDisplay value={earlyBird} />): $<NumberDisplay value={ prices.discounts.early_bird } /></li>
-              <li>Regular Rate: $60</li>
             </ul>
           </div>
           <div className='price'>
+            Regular Rate: $60<br />
             Final Rate: <Rate rate={ prices.rates[1] } childFee={ childFee } />
             <br />Payment Due: (9/13/2022)
           </div>
@@ -97,10 +97,10 @@ export class RegTypeRow extends Component {
             Eligible Discounts:
             <ul>
               <li>Early Bird (<DateDisplay value={earlyBird} />): $<NumberDisplay value={ prices.discounts.early_bird } /></li>
-              <li>Regular Rate: $60</li>
             </ul>
           </div>
           <div className='price'>
+            Regular Rate: $60<br />
             Final Rate: <Rate rate={ prices.rates[2] } childFee={ childFee } />
           </div>
         </div>
