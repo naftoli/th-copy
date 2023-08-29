@@ -538,6 +538,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $result['chayolei'] = true;
 
         if ($this->user_id == 66871) $result['chidon'] = false;
+        if ($this->user_id == 62881) $result['chayolei'] = false;
 
         return $result;
     }

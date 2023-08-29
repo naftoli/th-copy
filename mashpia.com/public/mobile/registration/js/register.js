@@ -160,6 +160,26 @@ var registrationApp = function() {
             const res = JSON.parse(result)
             const sorted = sortByVal(res)
             autocomplete(document.getElementById("non_th_school"), sorted)
+            $("#non_th_school").blur( function() {
+                if ($(this).val().trim() == '') {
+                    $("#non_th_school_id").val(0)
+                } else {
+                    // find the school id from the sorted array
+                    let found = false
+                    for (let row of sorted) {
+                        let key = row[0]
+                        let value = row[1]
+                        if (value == $(this).val().trim()) {
+                            $("#non_th_school_id").val(key)
+                            found = true
+                            break
+                        }
+                    }
+                    if (!found) {
+                        $("#non_th_school_id").val(0)
+                    }
+                }
+            })
             // var html = '<option value="-1" selected>Please Choose</option>'
             // for (let row of sorted) {
             //     let key = row[0]
@@ -205,12 +225,17 @@ var registrationApp = function() {
                 let key = arr[i][0]
                 let value = arr[i][1]
                 /*check if the item starts with the same letters as the text field value:*/
-                if (value.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                // if (value.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                // check if value contains the same letters as the text field value:
+                if (value.toUpperCase().includes(val.toUpperCase())) {
                     /*create a div element for each matching element:*/
                     b = document.createElement("div");
                     /*make the matching letters bold:*/
-                    b.innerHTML = "<strong>" + value.substr(0, val.length) + "</strong>";
-                    b.innerHTML += value.substr(val.length);
+                    // find out where the match is
+                    let index = value.toUpperCase().indexOf(val.toUpperCase())
+                    b.innerHTML = value.substr(0, index);
+                    b.innerHTML += "<strong>" + value.substr(index, val.length) + "</strong>";
+                    b.innerHTML += value.substr(index + val.length);
                     /*insert an input field that will hold the current array item's value:*/
                     b.innerHTML += "<input type='hidden' value='" + value + "'>";
                     /*execute a function when someone clicks on the item value (div element):*/

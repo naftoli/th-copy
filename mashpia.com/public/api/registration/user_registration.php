@@ -105,6 +105,7 @@ class UserRegistrationRouter {
     // check if any of the users getting registered is already registered
     function checkRegistration($users) {
         // check that none of the users are already registered
+        $errors = [];
         foreach ($users as $user) {
             $status = $user->registrationStatus();
             if ($status['chayolei']) { // child is already registered
