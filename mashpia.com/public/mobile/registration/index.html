@@ -413,8 +413,8 @@
               <span class="checkbox"></span>
             </div>
             <div class="col-10 col-md-11">
-              <strong class="i18n" data-key="CKidsTzivosHashem">CKids Tzivos Hashem</strong> <span class="i18n"
-                                                                                                   data-key="CKidsTzivosHashemdes"> - FREE - (Includes Missions / Tasks / Virtual Medals and Ranks / Prizes)</span>
+              <strong class="i18n" data-key="CKidsTzivosHashem">CKids Tzivos Hashem</strong>
+              <span class="i18n" data-key="CKidsTzivosHashemdes"> - FREE - (Includes Missions / Tasks / Virtual Medals and Ranks / Prizes)</span>
             </div>
           </div>
         </label>
@@ -523,18 +523,18 @@
                 <!--                                </span>-->
                 <!--                                <br />-->
 
-                <div id="custom-name">
-                  <b>Chidon Customized Items</b>
-                  <hr/>
-                  Any child that gets a passing average on the 3 tests on any track will be eligible to get the Chidon
-                  gifts.
-                  One of the gifts will be a bottle with your name on it.<br/><br/>
-                  Please type your name in English, spelled exactly as you would like it to appear on the bottle.
-                  There is a max of 12 characters. There will be no edits once enrollment closes.<br/>
-                  <input type="text" maxlength="12" id="nameChoice" class="form-control"
-                         style="width: 175px; height: 50px !important; margin-bottom: 6px; margin-top: 6px;"/>
-                </div>
-                <br/>
+<!--                <div id="custom-name">-->
+<!--                  <b>Chidon Customized Items</b>-->
+<!--                  <hr/>-->
+<!--                  Any child that gets a passing average on the 3 tests on any track will be eligible to get the Chidon-->
+<!--                  gifts.-->
+<!--                  One of the gifts will be a bottle with your name on it.<br/><br/>-->
+<!--                  Please type your name in English, spelled exactly as you would like it to appear on the bottle.-->
+<!--                  There is a max of 12 characters. There will be no edits once enrollment closes.<br/>-->
+<!--                  <input type="text" maxlength="12" id="nameChoice" class="form-control"-->
+<!--                         style="width: 175px; height: 50px !important; margin-bottom: 6px; margin-top: 6px;"/>-->
+<!--                </div>-->
+<!--                <br/>-->
 
                 <div id="yarmulka" class="hide">
                   <b>Chidon Yarmulka</b>
@@ -552,13 +552,11 @@
                 <b>Chidon Sweater</b>
                 <hr/>
                 <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:<br/>
-                  (Please keep in mind that sweaters are distributed at the end of Chidon so your child's size might
-                  grow.
-                  Please size up if you believe your child's size may change. Unfortunately, size changes after
-                  this enrolment process will NOT be possible.)
+                  Please keep in mind that sweaters are distributed at the end of Chidon so your child's size may grow.
+                  Please size up. Unfortunately, size changes after enrolment is NOT possible.
                 </label>
                 <select class="form-control" id="chidon-sweater-size">
-                  <option value="0">Please choose</option>
+                  <option value="0">Choose Size</option>
                   <option value="children xs" class="i18n" data-key="ChildrenXS">Youth XS</option>
                   <option value="children s" class="i18n" data-key="ChildrenS">Youth S</option>
                   <option value="children m" class="i18n" data-key="ChildrenM">Youth M</option>
@@ -1001,7 +999,6 @@
               <hr>
               <form id="payment">
                 <input type="hidden" id="total" name="total"/>
-                <input type="hidden" id="selected-shipping-type" name="shipping-type"/>
                 <div class="form-group text-center">
                   <ul class="list-inline">
                     <li class="list-inline-item"><img src="img/visa.svg" id="test" height="22"/></li>
@@ -1043,11 +1040,11 @@
                           <span class="invalid-feedback order-last i18n" data-key="3DigitCode">Enter the 3-digit code on back</span>
                           <div class="input-group-append">
                             <div class="input-group-text">
-                                                            <span class="fa fa-question-circle fa-lg"
-                                                                  data-toggle="popover" data-container="body"
-                                                                  data-html="true" data-title="Security Code"
-                                                                  data-content="<div class='text-center one-card'>The 3 digit code on back of the card..<div class='visa-mc-cvc-preview'></div></div>"
-                                                                  data-trigger="hover"></span>
+                              <span class="fa fa-question-circle fa-lg"
+                                    data-toggle="popover" data-container="body"
+                                    data-html="true" data-title="Security Code"
+                                    data-content="<div class='text-center one-card'>The 3 digit code on back of the card..<div class='visa-mc-cvc-preview'></div></div>"
+                                    data-trigger="hover"></span>
                             </div>
                           </div>
                         </div>

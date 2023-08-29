@@ -534,6 +534,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // turn off chidon reg
         $result['chidon'] = true;
 
+        // turn off chayolei reg
+        $result['chayolei'] = true;
+
         if ($this->user_id == 66871) $result['chidon'] = false;
 
         return $result;

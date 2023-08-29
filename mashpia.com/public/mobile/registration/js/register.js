@@ -1543,12 +1543,12 @@ var templates = function(){
                 $("#khk-edit-info").hide()
 
                 // determine text for new enrollment
-                let text = "The Chidon Limmud (The Study Guide, 3 tests & the 3 test prizes) costs $40 per child " +
+                let text = "The Chidon Limmud (Chidon Kop Cards, the Study Guide & 3 tests) costs $40 per child " +
                   "and is subsidized by our generous donors. I would like to pay:"
-                if (user.school.school_id == 61) text = "The Chidon Limmud (The Study Guide, 3 tests, 3 test prizes & shipping) costs $50 per " +
-                  "child and is subsidized by our generous donors. I would like to pay:"
-                if (user.school.school_id == 269) text = "The Chidon Limmud (The Study Guide, 3 tests, 3 test prizes, shipping and Chidon Coordinator) " +
-                  "costs $70 per child and is subsidized by our generous donors. I would like to pay:"
+                if (user.school.school_id == 61) text = "The Chidon Limmud (Chidon Kop Cards, the Study Guide, " +
+                  "3 tests & Shipping) costs $50 per child and is subsidized by our generous donors. I would like to pay:"
+                if (user.school.school_id == 269) text = "The Chidon Limmud (Chidon Kop Cards, the Study Guide, " +
+                  "3 tests Shipping & Chidon Coordinator) costs $70 per child and is subsidized by our generous donors. I would like to pay:"
                 $("#reg_text").empty().append(text)
             } else {
                 // document.getElementById('chidon').checked = true
