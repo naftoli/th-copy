@@ -16,6 +16,16 @@ $("[data-dismiss]").click( function( event ){
     event.target.dataset.target && $(event.target.dataset.target).modal('hide')
 })
 
+function alertPersonalization(evt) {
+    if (evt.checked)
+        alert(
+          "If you would like your child to have your name on their prize, please input it below & you will need to pay the " +
+          "registration fee now instead of the end of the year. If your child doesn't pass, you will not be refunded. " +
+          "The amount paid will be deducted from the end so your amount at the end may be $0.\n\n" +
+          "If your child does not want their name on their prize, please do not fill in their name below."
+        )
+}
+
 var myshliach = 61;
 var anash_kinder = 269;
 var showClasses = 0; // global var to determine if we need to show link to myshliach online classes
@@ -1031,6 +1041,7 @@ var registrationApp = function() {
             // if (isMobile) {
             //     height = 'height: 170px;'
             // }
+
             for (let prize of res) {
                 // check if prize is not suppose to show for this school
                 if (prize.exceptions && prize.exceptions.length && checkForException(prize.exceptions)) continue
@@ -1050,9 +1061,10 @@ var registrationApp = function() {
                 let personalization = prize.personalization ? 1 : 0
                 html += `<div style="height: ${height}px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="https://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
-                        <input type="checkbox" class="prize" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" 
+                        <input type="checkbox" class="prize ${personalization ? 'personalize' : ''}" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" 
                             data-qty="${prize.quantity}" `
                 if (prize.selected) html += 'checked '
+                if (personalization) html += `onclick="alertPersonalization(this)" `
                 // if (prize.quantity <= 0) html += 'disabled '
                 html += `/>
                         ${prize.prize_name} (${prize.quantity} left in stock)<br />
@@ -1133,8 +1145,8 @@ var registrationApp = function() {
         for (var p of user_prizes[current_user]) {
             total += parseInt(p.price)
             if (parseInt(p.personalization) && (!p.he_name || p.he_name == '')) {
-                alert('You must enter a hebrew name for the prizes that need it!')
-                return false
+                let conf = confirm('You have indicated that you want a prize that needs a hebrew name, but you have not entered the name, are you sure you want to continue?')
+                if (!conf) return false
             }
         }
         if (total < 65) {
@@ -1145,9 +1157,9 @@ var registrationApp = function() {
     }
 
     function addToPrizes(prize, price, personalization) {
-        var MAX = 75
-        var total = 0
-        var found = false
+        let MAX = 75
+        let total = 0
+        let found = false
         for (var p of user_prizes[current_user]) {
             total += parseInt(p.price)
             if (p.id == prize) {
@@ -1159,7 +1171,7 @@ var registrationApp = function() {
                 alert('You cannot choose more than 75 credits worth of prizes.')
                 return false
             } else {
-                var prizeToAdd = { id: prize, price: price, personalization: personalization }
+                let prizeToAdd = { id: prize, price: price, personalization: personalization }
                 user_prizes[current_user].push(prizeToAdd)
                 return true
             }
@@ -1178,9 +1190,9 @@ var registrationApp = function() {
     }
 
     function addHeName(prize_id, he_name) {
-        for (var p in user_prizes[current_user]) {
+        for (let p in user_prizes[current_user]) {
             if (user_prizes[current_user][p].id == prize_id) {
-                var prize = user_prizes[current_user][p]
+                let prize = user_prizes[current_user][p]
                 prize.he_name = he_name
                 return true
             }
@@ -1189,7 +1201,7 @@ var registrationApp = function() {
     }
 
     function addToCart() {
-        for (var item of state.cart) {
+        for (let item of state.cart) {
             if (item.meta.registration_type == 'chidon' && item.meta.user_id == current_user) {
                 item.meta.chidon_prizes = user_prizes[current_user]
             }
@@ -1484,7 +1496,6 @@ var registrationApp = function() {
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
             console.log(data)
-            return false
             if (data.success === false) {
                 alert(data.error)
             } else {
