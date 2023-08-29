@@ -354,14 +354,19 @@ var registrationApp = function() {
                 $( '#yahadus-registration').hide();
                 // $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
                 // $( '#step-2 form #yahadus-registration-no').hide();
-                $('#book-purchase').show();
-                $(".yahadus-myshliach").hide()
-                if ([61, 269].includes(school_id)) {
-                    $(".book-purchase-item").hide()
-                    $(".book-purchase-myshliach").show()
+                if (selected_user.getChidonInfo) { // if we are editing chidon info
+                    $('#book-purchase').hide()
+                    $(".yahadus-myshliach").hide()
                 } else {
-                    $(".book-purchase-item").show()
-                    $(".book-purchase-myshliach").hide()
+                    $('#book-purchase').show();
+                    $(".yahadus-myshliach").hide()
+                    if ([61, 269].includes(school_id)) {
+                        $(".book-purchase-item").hide()
+                        $(".book-purchase-myshliach").show()
+                    } else {
+                        $(".book-purchase-item").show()
+                        $(".book-purchase-myshliach").hide()
+                    }
                 }
             }
         });
@@ -567,7 +572,7 @@ var registrationApp = function() {
         switch (field.type) {
             case 'value':
                 value = $(field.field).val()
-                // console.log(field.field + '=' + value)
+                console.log(field.field + '=' + value)
                 if (value == '' || value == 0 || value == '0' || !value.length) return field.error
                 break
             case 'amount':
@@ -679,11 +684,6 @@ var registrationApp = function() {
                     ]
                 },
                 {
-                    field: '#nameChoice',
-                    type: 'value',
-                    error: 'You must enter the name you would like to have on the your personalized bottle'
-                },
-                {
                     field: '#chidon-sweater-size',
                     type: 'value',
                     error: 'You must choose a sweater size'
@@ -697,6 +697,7 @@ var registrationApp = function() {
                     field: '.book-bought',
                     type: 'yes/no',
                     error: 'You must indicate whether you purchased a book or not',
+                    exception: selected_user.getChidonInfo, // if editing registration, don't validate
                     yesDependents: [
                         {
                             field: '.book-purchase',
@@ -707,7 +708,7 @@ var registrationApp = function() {
                             field: '#bookVersion',
                             type: 'amount',
                             error: 'You must indicate which book version you will be using'
-                        },
+                        }
                     ],
                     noDependents: [
                         {
@@ -762,9 +763,12 @@ var registrationApp = function() {
                     let value = $(elem).val()
                     if (value === '1') {
                         if (field.yesDependents) {
-                            for (dependent of field.yesDependents) {
-                                error = checkField(dependent)
-                                if (error) errors.push(error)
+                            if (field.exception !== undefined && field.exception) {} // if editing registration, don't validate}
+                            else {
+                                for (dependent of field.yesDependents) {
+                                    error = checkField(dependent)
+                                    if (error) errors.push(error)
+                                }
                             }
                         }
                     } else if (value === '0') {
@@ -902,7 +906,7 @@ var registrationApp = function() {
                     recruited: recruited,
                     recruitedBy: recruited_by,
                     poll: poll,
-                    name_pref: $("#nameChoice").val(),
+                    name_pref: '',
                     comments: $("#comments").val(),
                     chidon_prizes: user_prizes[current_user]
                 }
@@ -1746,12 +1750,6 @@ var templates = function(){
                     type: 'text',
                     cart: 'recruitedBy',
                     db: 'recruited_by'
-                },
-                {
-                    field: '#nameChoice',
-                    type: 'text',
-                    cart: 'name_pref',
-                    db: 'name_pref'
                 },
                 {
                     field: '#yarmulka-size',
