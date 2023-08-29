@@ -1359,16 +1359,20 @@ var registrationApp = function() {
                 break
         }
 
-        if (parseInt(shipping_charge) > 0 && !$("#cancel-shipping").is(":checked")) {
-            state.cart.push({
-                description: 'Prepaid Shipping',
-                price: shipping_charge,
-                meta: {
-                    type: 'shipping',
-                    shipping_type: selected_type,
-                    shipping_charges: shipping_charge
-                }
-            });
+        if (parseInt(shipping_charge) > 0) {
+            if (shipping_charge != 45 || (
+              shipping_charge == 45 && !$("#cancel-shipping").is(":checked")
+            )) {
+                state.cart.push({
+                    description: 'Prepaid Shipping',
+                    price: shipping_charge,
+                    meta: {
+                        type: 'shipping',
+                        shipping_type: selected_type,
+                        shipping_charges: shipping_charge
+                    }
+                })
+            }
         }
         return step4();
     }
