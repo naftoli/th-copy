@@ -13,6 +13,14 @@ while ($row = mysql_fetch_assoc($result)) {
     $prizes[] = $row;
 }
 
+// get school exceptions
+$exceptions = [];
+$sql = "select * from chidon_prize_school_exceptions";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $exceptions[$row['prize_id']][] = $row['school_id'];
+}
+
 $selected = [];
 $sql = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
 $result = mysql_query($sql);
@@ -24,6 +32,10 @@ foreach ($prizes as $idx => $prize) {
     if (in_array($prize['prize_id'], array_keys($selected))) {
         $prizes[$idx]['selected'] = 1;
         $prizes[$idx]['he_name'] = $selected[$prize['prize_id']]['he_name'];
+    }
+
+    if (in_array($prize['prize_id'], array_keys($exceptions))) {
+        $prizes[$idx]['exceptions'] = $exceptions[$prize['prize_id']];
     }
 
     $sql = "select count(*) as total 

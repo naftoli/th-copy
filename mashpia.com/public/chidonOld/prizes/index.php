@@ -129,9 +129,9 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
             success: function(result) {
               const res = JSON.parse(result)
               if (res.success) {
-                alert("Done!");
+                alert("Updated.");
               } else {
-                alert("Error!");
+                alert("Error updating.");
                 console.log(res.error)
               }
             }

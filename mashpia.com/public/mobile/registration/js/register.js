@@ -1002,6 +1002,14 @@ var registrationApp = function() {
         return "desktop";
     };
 
+    function checkForException(exceptions) {
+        let school_id = selected_user.school.school_id
+        for (let id of exceptions) {
+            if (parseInt(id) == school_id) return true
+        }
+        return false
+    }
+
     function setupChidonPrizes() {
         // initialize user prize cart
         user_prizes[current_user] = []
@@ -1024,8 +1032,11 @@ var registrationApp = function() {
             //     height = 'height: 170px;'
             // }
             for (let prize of res) {
-                var id = prize.prize_id
-                var height = 100
+                // check if prize is not suppose to show for this school
+                if (prize.exceptions && prize.exceptions.length && checkForException(prize.exceptions)) continue
+
+                const id = prize.prize_id
+                let height = 100
                 if (prize.personalization) height = 135
                 if (width < 500) {
                     if (width < 400) {
