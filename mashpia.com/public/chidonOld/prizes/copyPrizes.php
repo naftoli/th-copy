@@ -24,12 +24,14 @@ foreach ($prizes as $row) {
                 set year = $to, 
                 prize_picture = '" . $row['prize_picture'] . "', 
                 prize_name = '" . $row['prize_name'] . "', 
-                quantity = 100, 
+                quantity = 500, 
                 size = '" . $row['size'] . "', 
                 color = '" . $row['color'] . "', 
                 price = " . $row['price'] . ", 
                 our_price = " . $row['our_price'] . ", 
                 made_possible_by = '" . $row['made_possible_by'] . "', 
+                personalization = '" . $row['personalization'] . "', 
+                note = '" . $row['note'] . "', 
                 purchased = 0";
 }
 
