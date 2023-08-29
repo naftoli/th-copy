@@ -98,7 +98,7 @@ export class RegTypeRow extends Component {
             </ul>
           </div>
           <div className='price'>
-            Regular Rate: <Rate rate={ prices.rates[1] } childFee={ childFee } />
+            Regular Rate: <Rate rate={ prices.rates[2] } childFee={ childFee } />
           </div>
         </div>
       </Row>
