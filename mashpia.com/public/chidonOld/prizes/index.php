@@ -6,6 +6,12 @@ if( isset($_GET['debug'])){
 	//error_reporting(E_ALL);
     ini_set("display_errors", 1);
 }
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonRegYear();
+
+require_once './class.schoolExceptions.php';
+$exceptions = SchoolExceptions::getSchoolExceptions();
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
@@ -30,6 +36,11 @@ if( isset($_GET['debug'])){
     <BODY>
         <? include('../../admin_header.php'); ?>
         <h1>Chidon Prizes</h1>
+
+        <p style="float: right">
+          <button class="button" style="padding: 5px;" id="copy">Copy Prizes from <?= ($year - 1) ?> to <?= $year ?></button>
+        </p>
+
         <p style="margin: 20px 10px">
             <a href="./new.php" class="button">New Prize</a>
         </p>
@@ -46,13 +57,18 @@ if( isset($_GET['debug'])){
                 <th>Note</th>
                 <th>Price</th>
                 <th>Our Price</th>
+                <th>School Exceptions</th>
+                <th></th>
+                <th></th>
             </tr>
             
             <?
-                $sql = 'SELECT * FROM chidon_prizes WHERE year = 5783';
+                $sql = "SELECT * FROM chidon_prizes WHERE year = $year";
                 $query = mysql_query($sql);
-                while($row = mysql_fetch_assoc($query)) { ?>
-                    <tr>
+                while ($row = mysql_fetch_assoc($query)) {
+                    $school_exceptions = isset($exceptions[$row['prize_id']]) ? $exceptions[$row['prize_id']] : [];
+                    ?>
+                    <tr id="<?= $row['prize_id'] ?>">
                         <td>
                             <? if ($row['prize_picture']) { ?>
                                 <img src="<?= $row['prize_picture'] ?>" width="50" />
@@ -67,6 +83,8 @@ if( isset($_GET['debug'])){
                         <td><?= $row['note'] ?></td>
                         <td><?= $row['price'] ?></td>
                         <td><?= $row['our_price'] ?> </td>
+                        <td><input type="text" style="width: 65px;" name="exceptions" id="exceptions" value="<?= implode(',', $school_exceptions) ?>"</td>
+
                         <td> <a class="button" style="padding: 3px 7px;" href="./edit.php?id=<?=$row['prize_id']?>"> EDIT</a> </td>
                         <td> <form action="./delete.php?id=<?=$row['prize_id']?>" method="post"><input type="submit" value="DELETE"/></form> </td>
                     </tr>
@@ -74,4 +92,46 @@ if( isset($_GET['debug'])){
             ?>
         </table>
     </body>
+    <script>
+      $( function() {
+        $("#copy").click( function() {
+          $.ajax({
+            url: "./copyPrizes.php",
+            data: {
+              from: <?= ($year - 1) ?>,
+              to: <?= $year ?>
+            },
+            success: function(result) {
+              const res = JSON.parse(result)
+              if (res.success) {
+                alert("Done!");
+                location.reload();
+              } else {
+                alert("Error!");
+              }
+            }
+          })
+        })
+
+        $("#exceptions").blur( function() {
+          const exceptions = $(this).val()
+          const prize_id = $(this).closest("tr").find("td:first").text()
+          $.ajax({
+            url: "./updateExceptions.php",
+            data: {
+              prize_id,
+              exceptions
+            },
+            success: function(result) {
+              const res = JSON.parse(result)
+              if (res.success) {
+                alert("Done!");
+              } else {
+                alert("Error!");
+              }
+            }
+          })
+        })
+      })
+    </script>
 </html>

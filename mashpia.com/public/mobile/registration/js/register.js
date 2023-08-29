@@ -983,12 +983,12 @@ var registrationApp = function() {
         }
 
         // show modal for chidon prizes
-        // if (selected_charges.chidon) {
-        //     setupChidonPrizes()
-        // }
+        if (selected_charges.chidon) {
+            setupChidonPrizes()
+        }
 
-        // else nextStep()
-        nextStep()
+        else nextStep()
+        // nextStep()
     }
 
     const deviceType = () => {

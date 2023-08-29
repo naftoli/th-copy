@@ -8,8 +8,11 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+$from = $_REQUEST['from'];
+$to = $_REQUEST['to'];
+
 $prizes = [];
-$sql = "select * from chidon_prizes where year = 5781";
+$sql = "select * from chidon_prizes where year = $from";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $prizes[] = $row;
@@ -18,7 +21,7 @@ while ($row = mysql_fetch_assoc($result)) {
 $qrys = [];
 foreach ($prizes as $row) {
     $qrys[] = "insert into chidon_prizes
-                set year = 5782, 
+                set year = $to, 
                 prize_picture = '" . $row['prize_picture'] . "', 
                 prize_name = '" . $row['prize_name'] . "', 
                 quantity = 100, 
@@ -30,9 +33,23 @@ foreach ($prizes as $row) {
                 purchased = 0";
 }
 
+mysql_query('set autocommit=0');
+mysql_query('start transaction');
+
+$success = true;
 foreach ($qrys as $sql) {
-//    echo $sql . "<br />";
-    mysql_query($sql);
+    if (! mysql_query($sql)) {
+        $success = false;
+        break;
+    }
 }
 
-echo "done.";
+if ($success) {
+    mysql_query('commit');
+    mysql_query('set autocommit=1');
+    echo json_encode(['success' => true]);
+} else {
+    mysql_query('rollback');
+    mysql_query('set autocommit=1');
+    echo json_encode(['success' => false]);
+}
