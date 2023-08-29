@@ -42,8 +42,7 @@ class MedalReport extends Report {
             JOIN subjects s USING ( subject_id )
             JOIN schools sch USING ( school_id )
             WHERE u.medals_ranks = 1 
-            AND u.user_registered > 0 
-			AND s.subject_id != 106 
+            AND s.subject_id != 106 
             $filter ";
         if ( !is_null( $this->school_id ) ) 
             $sql .= " AND sch.school_id = $this->school_id ";
