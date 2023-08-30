@@ -565,7 +565,7 @@ var registrationApp = function() {
         // show shipping rates for ak or myshliach
         let school_id = selected_user.school.school_id
         if (school_id == 61) $("#myshliach-shipping").show()
-        if (school_id == 269) $("#myshliach-shipping").show()
+        if (school_id == 269) $("#anashKinder-shipping").show()
 
         // remove any shipping items from the cart
         chayolei_user_ids = state.cart.map( function( item ){
