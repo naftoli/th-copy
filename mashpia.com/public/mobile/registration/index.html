@@ -770,66 +770,67 @@
                 <div id="agreements">
                   <b>Chidon Terms</b>
                   <hr/>
-                  <label for="shabbaton">
-                    <div style="float: left; padding-right: 15px; padding-top: 5px;">
+                  <label for="shabbaton" style="display: flex">
+                    <div style="float: left; padding-right: 15px;">
                       <input type="checkbox" id="shabbaton"/>
                       <span class="checkbox"></span>
                     </div>
-                    <div>
+                    <div style="float: right" id="terms-1">
                       I am aware that if my child qualifies for the Chidon Experience by getting a passing average on
-                      the 3 tests there will be a fee of $36 - $350 depending on the track they pass
-                      <span class="myshliachTerms" style="display: none;">plus $30 shipping</span>.
+                      the 3 tests there will be a fee of $36 - $350 depending on the track they pass.
                     </div>
                   </label>
-                  <label for="heNameSpelling">
-                    <div style="float: left; padding-right: 15px; padding-top: 5px;">
+                  <label for="heNameSpelling" style="display: flex">
+                    <div style="float: left; padding-right: 15px;">
                       <input type="checkbox" id="heNameSpelling"/>
                       <span class="checkbox"></span>
                     </div>
-                    <div>
+                    <div style="float: right">
                       My Full Hebrew name is spelled as I would like it on my plaque. There will be no changes later.
                     </div>
                   </label>
-                  <label for="enNameSpelling">
-                    <div style="float: left; padding-right: 15px; padding-top: 5px;">
+                  <label for="enNameSpelling" style="display: flex">
+                    <div style="float: left; padding-right: 15px;">
                       <input type="checkbox" id="enNameSpelling"/>
                       <span class="checkbox"></span>
                     </div>
-                    <div>
+                    <div style="float: right">
                       My full English name is spelled correctly as I would want it on my ID card. There will be no changes later.
                     </div>
                   </label>
-                  <label for="edits">
-                    <div style="float: left; padding-right: 15px; padding-top: 5px;">
+                  <label for="edits" style="display: flex">
+                    <div style="float: left; padding-right: 15px;">
                       <input type="checkbox" id="edits"/>
                       <span class="checkbox"></span>
                     </div>
-                    <div>
+                    <div style="float: right">
                       Once you pay the enrolment fee on the next page, you will be able to come back until Chidon Enrolment
                       closes and make edits to your current selections, except for changing the amount being paid & canceling a Yahadus book ordered.
                     </div>
                   </label>
-                  <label for="privacy">
-                    <div style="float: left; padding-right: 15px; padding-top: 5px;">
+                  <label for="privacy" style="display: flex">
+                    <div style="float: left; padding-right: 15px;">
                       <input type="checkbox" id="privacy"/>
                       <span class="checkbox"></span>
                     </div>
-                    <div>
+                    <div style="float: right">
                       I am aware that by participating in Chidon, I consent to having my child's names and pictures used in any media produced by
                       Tzivos Hashem, for publicity purposes or otherwise.
                     </div>
                   </label>
-                  <label for="myshliach" class="myshliachTerms" style="display: none;">
-                    <div style="float: left; padding-right: 15px; padding-top: 5px;">
-                      <input type="checkbox" id="myshliach"/>
-                      <span class="checkbox"></span>
-                    </div>
-                    <div>
-                      The above enrollment charge includes $10 towards shipping of the 3 test prizes.
-                      They will be shipped to international children Adar time together with the Experience items & to children in the USA during Cheshvan.
-                      For USA children we will be adding the study guide as well. Until you get it, you can download it from online.
-                    </div>
-                  </label>
+                  <div id="myshliachTerms" style="display: none">
+                    <label for="myshliach" style="display: flex;">
+                      <div style="float: left; padding-right: 15px;">
+                        <input type="checkbox" id="myshliach"/>
+                        <span class="checkbox"></span>
+                      </div>
+                      <div style="float: right">
+                        The above enrollment charge includes $10 towards shipping of the 3 test prizes.
+                        They will be shipped to international children Adar time together with the Experience items & to children in the USA during Cheshvan.
+                        For USA children we will be adding the study guide as well. Until you get it, you can download it from online.
+                      </div>
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1260,6 +1261,23 @@
         <button type="button" class="btn btn-danger i18n" data-dismiss="modal"
                 style="background-color: #2c539e; border-color:#2c419e;" data-key="Confirm">Confirm
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="chidon-enrollment" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="i18n" data-key="Error">Chidon Enrollment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16"/>
+        </button>
+      </div>
+      <div class="modal-body" id="chidon-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="model" data-target="#chidon-enrollment">Close</button>
       </div>
     </div>
   </div>

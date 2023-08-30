@@ -360,8 +360,13 @@ var registrationApp = function() {
         if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
         else $("#anash_kinder_text").hide();
 
-        if ([61, 269].includes(school_id)) $(".myshliachTerms").show()
-        else $(".myshliachTerms").hide()
+        if ([61, 269].includes(school_id)) {
+            $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass plus $30 shipping fee.")
+            $("#myshliachTerms").show()
+        } else {
+            $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass.")
+            $("#myshliachTerms").hide()
+        }
 
         // yahadus registration
         var australian = [ 55, 66, 110, 112, 180, 256, 643, 709, 713, 690 ];
@@ -1012,9 +1017,7 @@ var registrationApp = function() {
         }
 
         // show modal for chidon prizes
-        if (selected_charges.chidon) {
-            setupChidonPrizes()
-        }
+        if (selected_charges.chidon) setupChidonPrizes()
 
         else nextStep()
         // nextStep()
@@ -1147,9 +1150,7 @@ var registrationApp = function() {
             addToCart() // add prize cart to state.cart
             nextStep()
         }
-        else {
-            $("#prizes").modal('show')
-        }
+        else $("#prizes").modal('show')
     })
 
     function validatePrizes() {
@@ -1923,8 +1924,13 @@ var templates = function(){
             if ( user.school.school_id == anash_kinder ) $("#anash_kinder_text").show();
             else $("#anash_kinder_text").hide();
 
-            if ([61, 269].includes(user.school.school_id)) $(".myshliachTerms").show()
-            else $(".myshliachTerms").hide()
+            if ([61, 269].includes(user.school.school_id)) {
+                $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass plus $30 shipping fee.")
+                $("#myshliachTerms").show()
+            } else {
+                $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass.")
+                $("#myshliachTerms").hide()
+            }
 
             // find out if the cart already has info for this child
             let info = state.cart.filter(item => item.meta.user_id == user.user_id)
