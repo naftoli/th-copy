@@ -335,7 +335,7 @@
       const zip = new JSZip()
       for (let idx = 0; idx < urls.length; idx++) {
         const url = urls[idx]
-        const file = await fetch('http:' + url.src)
+        const file = await fetch('https:' + url.src)
         const blob = await file.blob()
         const name = url.name.replace(/\s/g, '_')
         const ext = url.src.split('.').pop()
