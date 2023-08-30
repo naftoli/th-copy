@@ -239,7 +239,7 @@
                 <div class="col-xs-4" id="chidonDriveButton">
                     <div class="button-spacing childrens-content" style="float:right;">
 <!--                        <button class="btn btn-primary yahadusSale">Yahadus Book Sale</button>-->
-<!--                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
+                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>
 <!--                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>-->
 <!--                            <button class="btn btn-info gameSet">Nisseui Hanosi Cards</button>-->
 <!--                            <button class="btn btn-info chidondrive">ChidonDrive Setup</button>-->
@@ -247,7 +247,7 @@
 <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
 <!--                        <button class="btn btn-info chidon_reg">Chidon Registration</button>-->
 <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
-                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>
+<!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
                     </div>
                 </div>
             </div>
@@ -844,12 +844,12 @@
             });
 
             $(document).on('click', '.lulav', function() {
-                alert("Sorry, we are SOLD OUT!");
-                 // if (window.location.protocol == 'http:') {
-                //     window.open("https://mashpia.com/mobile/reg/lulavSet.html");
-                // } else {
-                //     window.open("/mobile/reg/lulavSet.html");
-                // }
+                // alert("Sorry, we are SOLD OUT!");
+                if (window.location.protocol == 'http:') {
+                    window.open("https://mashpia.com/mobile/reg/lulavSet.html");
+                } else {
+                    window.open("/mobile/reg/lulavSet.html");
+                }
             });
 
             $(document).on('click', '.invite_used', function () {
