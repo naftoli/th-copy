@@ -52,53 +52,68 @@ class UserRegistrationRouter {
 
         $school_ids = $_POST[ 'school_ids' ];
         $schools_with_shipping = [
-            '269', // Anash Kinder
+            '61', '269', // MyShliach, Anash Kinder
         ];
 
         $zone = $current_user->shippingZone();
         $child_count = 0;
-        foreach( $school_ids as $school_id ){
-            if ( in_array( $school_id, $schools_with_shipping ) )
+        $anashKinder = false;
+        $myshliach = false;
+        foreach ( $school_ids as $school_id ) {
+            if ( in_array( $school_id, $schools_with_shipping ) ) {
                 $child_count += 1;
+                if ( $school_id == '269' ) $anashKinder = true;
+                if ( $school_id == '61' ) $myshliach = true;
+            }
         }
         
         // added by naftoli 08/30/2018
         if ( $child_count == 0 ) json_response( false );
-        // we don't need to check the database 
-        // base rate for zone 1 is 57 with an additional 10 for each child
-        // base rate for zone 2 is 90 with an additional 15 for each child
-        // base rate for zone 3 is 167 with an additional 20 for each child
-//        switch ( $zone ) {
-//            case 1:
-//                $base = 57;
-//                $increaseBy = 10;
-//                break;
-//            case 2:
-//                $base = 90;
-//                $increaseBy = 15;
-//                break;
-//            case 3:
-//                $base = 167;
-//                $increaseBy = 20;
-//                break;
-//        }
-//        $rate = $base;
-//        $extra = $child_count - 1;
-//        $rate += $extra * $increaseBy;
-        // usa rate = 35
-        // canada rate = 40
-        // intl rate = 45
-        switch ($zone) {
-            case 1:
-                $rate = 35;
-                break;
-            case 2:
-                $rate = 40;
-                break;
-            case 3:
-                $rate = 45;
-                break;
+
+        // shipping rates
+        // Anash Kinder
+        if ($anashKinder) {
+            // base rate for zone 1 is 57 with an additional 10 for each child
+            // base rate for zone 2 is 90 with an additional 15 for each child
+            // base rate for zone 3 is 167 with an additional 20 for each child
+            switch ($zone) {
+                case 1:
+                    $base = 57;
+                    $increaseBy = 10;
+                    break;
+                case 2:
+                    $base = 90;
+                    $increaseBy = 15;
+                    break;
+                case 3:
+                    $base = 167;
+                    $increaseBy = 20;
+                    break;
+            }
+            $rate = $base;
+            $extra = $child_count - 1;
+            $rate += $extra * $increaseBy;
+        } else if ($myshliach) {
+            // MyShliach
+            // usa rate = 35
+            // canada rate = 40
+            // intl rate = 45
+            switch ($zone) {
+                case 1:
+                    $rate = 35;
+                    break;
+                case 2:
+                    $rate = 40;
+                    break;
+                case 3:
+                    $rate = 45;
+                    break;
+            }
+        } else {
+            // we should never get here
+            json_response( false );
         }
+
         json_response( $rate );
     }
 

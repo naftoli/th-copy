@@ -46,7 +46,7 @@ var state = {
     registered: [], // registered users (for choosing hachayols)
     selected_users: [], // users selected in step-1
     cart: [], // items that the user is paying for
-    shipping_type: 1 // 1 or 2
+    shipping_type: 1 // 1 or 2 or 3
 }
 
 var registrationApp = function() {
@@ -547,8 +547,27 @@ var registrationApp = function() {
         window.location.hash = 'step-3';
         toggleLoading( 'step-3', true );
         showSection('step-3');
+
+        // find out shipping type
+        switch (selected_user.parentAccount.admin_country.toUpperCase()) {
+            case 'US':
+            case 'USA':
+                state.shipping_type = 1
+                break
+            case 'CANADA':
+                state.shipping_type = 2
+                break
+            default:
+                state.shipping_type = 3
+                break
+        }
+
+        // show shipping rates for ak or myshliach
+        let school_id = selected_user.school.school_id
+        if (school_id == 61) $("#myshliach-shipping").show()
+        if (school_id == 269) $("#myshliach-shipping").show()
+
         // remove any shipping items from the cart
-        state.shipping_type = 1;
         chayolei_user_ids = state.cart.map( function( item ){
             // skip for any non chayolei registration or chayolei lite registration
             return item.meta.registration_type !== 'chayolei' || item.meta.lite_version != undefined || item.meta.user_id
@@ -1344,36 +1363,27 @@ var registrationApp = function() {
         // remove any old shipping items from the cart
         state.cart = state.cart.filter( function(item) { return item.meta.type != 'shipping' } );
         // get shipping charge if exists
-        let shipping_charge, selected_type
-        shipping_charge = $("#shipping-cost").val()
+        let shipping_charge = parseInt($("#shipping-cost").val())
+        let school_id = selected_user.school.school_id
 
-        switch (shipping_charge) {
-            case '35':
-                selected_type = 1
-                break
-            case '40':
-                selected_type = 2
-                break
-            case '45':
-                selected_type = 3
-                break
+        let addShipping = false;
+        if (shipping_charge > 0) {
+            addShipping = true
+            if (school_id == 61 && shipping_charge == 45 && $("#cancel-shipping").is(":checked")) addShipping = false
         }
 
-        if (parseInt(shipping_charge) > 0) {
-            if (shipping_charge != 45 || (
-              shipping_charge == 45 && !$("#cancel-shipping").is(":checked")
-            )) {
-                state.cart.push({
-                    description: 'Prepaid Shipping',
-                    price: shipping_charge,
-                    meta: {
-                        type: 'shipping',
-                        shipping_type: selected_type,
-                        shipping_charges: shipping_charge
-                    }
-                })
-            }
+        if (addShipping) {
+            state.cart.push({
+                description: 'Prepaid Chayolei Shipping',
+                price: shipping_charge,
+                meta: {
+                    type: 'shipping',
+                    shipping_type: state.shipping_type,
+                    shipping_charges: shipping_charge
+                }
+            })
         }
+
         return step4();
     }
 

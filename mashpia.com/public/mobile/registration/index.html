@@ -929,7 +929,9 @@
         <div class="col-12">
           <h2 class="i18n" data-key="ShippingRates">Shipping Rates</h2>
           <p>
-            <span class="i18n" data-key="ShippingFee">All children not enrolled in an active Tzivos Hashem Base will need to have their physical items (such as Hachayols, Rank Books and Medals) shipped directly.Sadly, as much as we would love to do this for free we simply cannot do so and must charge for shipping. </span>
+            <span class="i18n" data-key="ShippingFee">All children not enrolled in an active Tzivos Hashem Base will need to have their physical items
+              (such as Hachayols, Rank Books and Medals) shipped directly. Sadly, as much as we would love to do this for free,
+              we simply cannot do so and must charge for shipping. </span>
             <br/><br/>
 
             <!-- Please note that this charge is <strong>only for children who are <em>not</em> enrolled in an active Tzivos Hashem Base.</strong>
@@ -947,7 +949,7 @@
       </div>
       <form id="shipping-form">
         <input type="hidden" name="shipping-cost" id="shipping-cost" value="0" />
-        <div class="row">
+        <div class="row" id="myshliach-shipping" style="display: none;">
           <div class="col-12">
             <p>
               <b>USA shipping:</b><br />
@@ -965,6 +967,22 @@
             <p>
               For International families ONLY, if you would like to opt out of shipping, please click below:<br />
               <input type="radio" name="cancel-shipping" id="cancel-shipping" value="1" /> I would like to opt out of getting shipments. Please do not charge me shipping.
+            </p>
+          </div>
+        </div>
+        <div class="row" id="anashKinder-shipping" style="display: none;">
+          <div class="col-12">
+            <p>
+              <b>USA shipping:</b><br />
+              $57 base fee plus $10 per child.
+            </p>
+            <p>
+              <b>Canada:</b><br />
+              $90 base fee plus $15 per child.
+            </p>
+            <p>
+              <b>International:</b><br />
+              $167 base fee plus $20 per child.
             </p>
           </div>
         </div>
