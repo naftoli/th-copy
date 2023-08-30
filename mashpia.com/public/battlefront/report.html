@@ -380,17 +380,32 @@
       return names.map(n => n[0])
     }
 
+    // first split up the users by ranks then schools
+    let sorted = []
+    for (let rank in info) {
+      sorted[rank] = []
+      for (let user of info[rank]) {
+        let school = user.school
+        if (!sorted[rank][school]) sorted[rank][school] = []
+        sorted[rank][school].push(user)
+      }
+    }
+
     return (
       <div className="container-fluid border border-1 rounded p-3 mt-3 col-6">
         <h4>Lower Ranks</h4>
         <hr />
-        {Object.keys(info).map(rank => (
+        {Object.keys(sorted).map(rank => (
           <div key={rank}>
             <div style={{fontStyle: 'italic'}}>{ranks[rank]}</div>
-            {info[rank].map(user => (
-              <div key={user.user_serial}>
-                <div>{initials(user.first).join('. ') + ' ' + user.last}</div>
-                <div style={{fontWeight: 'bold'}}>{user.school}</div>
+            {Object.keys(sorted[rank]).map(school => (
+              <div key={school}>
+                <div style={{fontWeight: 'bold'}}>{school}</div>
+                {sorted[rank][school].map(user => (
+                  <div key={user.user_serial}>
+                    <div>{initials(user.first).join('. ') + ' ' + user.last}</div>
+                  </div>
+                ))}
               </div>
             ))}
             <br />
