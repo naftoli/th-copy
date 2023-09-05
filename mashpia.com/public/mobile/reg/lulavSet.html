@@ -220,12 +220,6 @@
                 }
             });
 
-            // get the current year
-            var year;
-            $.ajax({ type: "POST", url: "/mobile/chidon/ajax/getYear.php", async: false,
-                success: function( info ) { year = info; }
-            });
-
             // load children
             $.post('ajax/getChildren.php', { admin : admin }, function( success ) {
                 if ( success == -1 ) {
@@ -322,7 +316,6 @@
 
                     // build data
                     var info = {};
-                    info.year = year;
                     info.admin = admin;
                     info.amount = total;
                     info.cc = {};

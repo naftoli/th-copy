@@ -4,13 +4,14 @@
 
 require_once '../../../api/header/header.php';
 require_once '../../../api/header/db.php';
+require_once '../../../class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
 
 $info = $_POST['info'];
 
 require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 
-$year = $info['year'];
 $amount = (float)$info['amount'];
 $card_num = $info['cc']['num'];
 $exp_date = $info['cc']['exp'];
