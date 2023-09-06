@@ -354,14 +354,14 @@ if ( !empty( $users ) ) {
         // }
 
         // find out if child bought a game set
-        $children[$row['user_id']]['gameSet'] = 0;
-        $sqlGame = "select * from mashpia_purchases.purchases 
-                    join mashpia_purchases.purchase_details using (purchase_id)
-                    where item_id = 4 
-                    and year = $chidon_year 
-                    and user_id = " . $row['user_id'];
-        $resGame = mysql_query($sqlGame);
-        if (mysql_num_rows($resGame) > 0) $children[$row['user_id']]['gameSet'] = 1;
+//        $children[$row['user_id']]['gameSet'] = 0;
+//        $sqlGame = "select * from mashpia_purchases.purchases
+//                    join mashpia_purchases.purchase_details using (purchase_id)
+//                    where item_id = 4
+//                    and year = $chidon_year
+//                    and user_id = " . $row['user_id'];
+//        $resGame = mysql_query($sqlGame);
+//        if (mysql_num_rows($resGame) > 0) $children[$row['user_id']]['gameSet'] = 1;
     }
 } else {
     $children = [];
