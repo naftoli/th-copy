@@ -79,7 +79,7 @@ if (isset($_GETPOST['show']) && $_GETPOST['show'] == 'form') {
 $jdNow = unixtojd();
 $showTehillimQuota = 0;
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 $heNow = jdtojewish($jdNow);
 $heNowArr = explode("/", $heNow);
 //if ($heNowArr[0] == 13) $year++;
@@ -161,7 +161,7 @@ foreach ($sm as $val) {
 											<select name="class_id">
 												<option value="-1">&lt;<?=T_('All')?>&gt;
 												<? while($class_row = mysql_fetch_assoc($class_result)) { ?>
-													<option value="<?=$class_row['class_id']?>" <?=$class_row['class_id'] == $class_id ? 'SELECTED' : ''?>><?=es($class_row['class_grade'])?>-<?=es($class_row['class_sub'])?></optio>
+													<option value="<?=$class_row['class_id']?>" <?=$class_row['class_id'] == $class_id ? 'SELECTED' : ''?>><?=es($class_row['class_grade'])?>-<?=es($class_row['class_sub'])?></option>
 												<? } ?>
 												</select>
 										</label><BR>
