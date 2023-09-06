@@ -18,6 +18,7 @@ $exp_date = $info['cc']['exp'];
 $first_name = $info['cc']['first'];
 $last_name = $info['cc']['last'];
 $zip = $info['zip'];
+$cvv = $info['cvv'];
 $address = "";
 $state = "";
 
