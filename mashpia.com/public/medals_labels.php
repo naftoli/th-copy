@@ -5,6 +5,7 @@ require('header.php');
 require_once 'class.adminSchools.php';
 $s = new adminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = array_flip($s->getSchools());
+$schools['Unasigned Students'] = 612;
 
 require_once 'class.medalReport.php';
 $m = new MedalReport;
