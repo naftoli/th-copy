@@ -51,6 +51,7 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
 
         <table>
             <tr>
+                <th>Prize ID</th>
                 <th>picture</th>
                 <th>name</th>
                 <th>Quantity</th>
@@ -73,6 +74,7 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
                     $school_exceptions = isset($exceptions[$row['prize_id']]) ? $exceptions[$row['prize_id']] : [];
                     ?>
                     <tr id="<?= $row['prize_id'] ?>">
+                        <td><?= $row['prize_id'] ?></td>
                         <td>
                             <? if ($row['prize_picture']) { ?>
                                 <img src="<?= $row['prize_picture'] ?>" width="50" />
