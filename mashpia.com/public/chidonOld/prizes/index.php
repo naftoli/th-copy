@@ -87,7 +87,7 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
                         <td><?= $row['note'] ?></td>
                         <td><?= $row['price'] ?></td>
                         <td><?= $row['our_price'] ?> </td>
-                        <td><input type="text" style="width: 65px;" name="exceptions" id="exceptions" value="<?= implode(', ', $school_exceptions) ?>"</td>
+                        <td><input type="text" style="width: 65px;" name="exceptions" class="exceptions" value="<?= implode(', ', $school_exceptions) ?>"</td>
 
                         <td> <a class="button" style="padding: 3px 7px;" href="./edit.php?id=<?=$row['prize_id']?>"> EDIT</a> </td>
                         <td> <form action="./delete.php?id=<?=$row['prize_id']?>" method="post"><input type="submit" value="DELETE"/></form> </td>
@@ -117,7 +117,7 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
           })
         })
 
-        $("#exceptions").blur( function() {
+        $(".exceptions").blur( function() {
           const exceptions = $(this).val().split(',')
           const prize_id = $(this).parent().parent().attr('id')
           $.ajax({
