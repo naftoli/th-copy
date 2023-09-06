@@ -564,7 +564,7 @@
                 <hr/>
                 <label for="chidon-sweater-size" class="i18n" data-key="ChidonSweaterSize">Chidon Sweater Size:<br/>
                   Please keep in mind that sweaters are distributed at the end of Chidon so your child's size may grow.
-                  Please size up. Unfortunately, size changes after enrolment is NOT possible.
+                  Please size up. Unfortunately, size changes after enrollment is NOT possible.
                 </label>
                 <select class="form-control" id="chidon-sweater-size">
                   <option value="0">Choose Size</option>
@@ -583,7 +583,7 @@
                 <b>Chidon Yahadus Books</b>
                 <hr/>
                 <label for="chidon-book">Choose the Book Number your child will need to study based on the their grade
-                  in 5783:</label>
+                  in <span class="chidon_year"></span> :</label>
                 <select class="form-control" id="chidon-book">
                   <option value="0" class="i18n" data-key="ChooseBookNumber">Choose Book Number</option>
                   <option value="1" class="i18n" data-key="GradeBook1">4th Grade: Book 1</option>
@@ -615,7 +615,7 @@
                     <div class="col-12">
                       Please click <a href="https://www.thechidon.com/resources/textbooks/#order" target="_blank">here</a> to be redirected to thechidon.com to
                       buy your Yahadus book for the same limited time $40 sale price +shipping.<br/><br/>
-                      You can finish this enrolment process and go to thechidon.com afterwards to buy your
+                      You can finish this enrollment process and go to thechidon.com afterwards to buy your
                       book.
                     </div>
                   </div>
@@ -729,15 +729,6 @@
                 </div>
                 <br/>
 
-                <div id="chidon-feedback">
-                  <b>Chidon Feedback</b>
-                  <hr/>
-                  Please share your comments and feedback.<br/>
-                  <textarea rows="5" cols="50" id="comments" class="form-control"
-                            style="margin-bottom: 10px;"></textarea>
-                </div>
-                <br/>
-
                 <div id="chidonWhatsapp" style="display: none;">
                   <b>Chidon WhatsApp</b>
                   <hr/>
@@ -770,9 +761,9 @@
                     <b>KHK WhatsApp</b>
                     <hr/>
                     In addition to the regular 8th grade group:
-                    <div id="khkBoys"><a href="https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS">https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS</a>
+                    <div id="khkBoys"><a href="https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS" target="_blank">https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS</a>
                     </div>
-                    <div id="khkGirls"><a href="https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB">https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB</a>
+                    <div id="khkGirls"><a href="https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB" target="_blank">https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB</a>
                     </div>
                   </div>
                 </div>
@@ -1176,8 +1167,8 @@
                       <span class="checkbox"></span>
                     </div>
                     <div style="float: right" id="terms-1">
-                      I am aware that if my child qualifies for the Chidon Experience by getting a passing average on
-                      the 3 tests there will be a fee of $36 - $350 depending on the track they pass.
+                      I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests
+                      there will be a fee of $36 - $350 depending on the track they pass plus a shipping fee, the amount will depend on your address.
                     </div>
                   </label>
                   <label for="heNameSpelling" style="display: flex">
@@ -1204,7 +1195,7 @@
                       <span class="checkbox"></span>
                     </div>
                     <div style="float: right">
-                      Once you pay the enrolment fee on the next page, you will be able to come back until Chidon Enrolment
+                      Once you pay the enrollment fee on the next page, you will be able to come back until Chidon Enrollment
                       closes and make edits to your current selections, except for changing the amount being paid & canceling a Yahadus book ordered.
                     </div>
                   </label>
@@ -1225,12 +1216,21 @@
                         <span class="checkbox"></span>
                       </div>
                       <div style="float: right">
-                        The above enrollment charge includes $10 towards shipping of the 3 test prizes.
-                        They will be shipped to international children Adar time together with the Experience items & to children in the USA during Cheshvan.
-                        For USA children we will be adding the study guide as well. Until you get it, you can download it from online.
+                        The above enrollment charge includes $10 towards shipping of the Chidon Kop. They will be shipped to international
+                        families Adar time together with the Experience items & to families in the USA during Cheshvan. For USA children we
+                        will be adding the study guide as well. Until you get it, you can download it from thechidon.com.
                       </div>
                     </label>
                   </div>
+                </div>
+                <br />
+
+                <div id="chidon-feedback">
+                  <b>Chidon Feedback</b>
+                  <hr/>
+                  Please share your comments and feedback.<br/>
+                  <textarea rows="5" cols="50" id="comments" class="form-control"
+                            style="margin-bottom: 10px;"></textarea>
                 </div>
               </div>
             </div>
@@ -1282,9 +1282,8 @@
           <p>
             If you pass the Yediah, Havonah, or Iyun track based on your 3 tests this year,
             you will be eligible to up to 75 credits worth of prize(s). Please select which prize(s) below you would
-            like.
-            You can choose more than one as long as it stays within the 75 credits.<br/>
-            PLEASE NOTE: Those on the KHK Trip - Ultimate Chidon Experience - will not get 75 credits of prizes.
+            like. You can choose more than one as long as it stays within the 75 credits.<br/><br />
+            PLEASE NOTE: Those on the KHK Trip - Ultimate Chidon Experience - will not get 75 credits of prizes that they choose now.
           </p>
           <div id="listOfPrizes"></div>
         </div>
@@ -1477,7 +1476,7 @@
                   </div>
                   <br />
                   <div class="form-group" id="recurring" style="display: none">
-                    <label class="control-label" for="installments">Recurring Payment</label><hr />
+                    <label class="control-label" for="installments">Early Experience Payment</label><hr />
                     <p>
                       <i>
                         Since you are paying for chidon experience registration in advance, you have the option of choosing whether you would like to be

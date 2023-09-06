@@ -213,7 +213,6 @@ class UserRegistrationRouter {
             $installmentError = false;
             if ($installments) {
                 // figure out amount for installments
-                $amount = 0;
                 foreach ($registrations as $reg) {
                     if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
                         $amount += $reg['paid'];
@@ -229,13 +228,12 @@ class UserRegistrationRouter {
                     }
                 }
             }
-            if (!$installments || $installmentError) {
-                // Let the user know if the transaction fails
-                $payment_response = $customer_profile->chargeCard(
-                    $total, $payment_profile_id, null, null, $description
-                );
-                if ( !is_array( $payment_response ) ) json_error( $payment_response );
-            }
+
+            // total getting charged is dependent on the installment plan
+            $payment_response = $customer_profile->chargeCard(
+                $total, $payment_profile_id, null, null, $description
+            );
+            if ( !is_array( $payment_response ) ) json_error( $payment_response );
             $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"

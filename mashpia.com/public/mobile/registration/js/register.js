@@ -17,13 +17,14 @@ $("[data-dismiss]").click( function( event ){
 })
 
 function alertPersonalization(evt) {
-    if (evt.checked)
+    if (evt.checked) {
         alert(
-          "If you would like your child to have your name on their prize, please input it below & you will need to pay the " +
+          "If you would like your child to have their name on their prize, please input it below & you will need to pay the " +
           "registration fee now instead of the end of the year. If your child doesn't pass, you will not be refunded. " +
           "The amount paid will be deducted from the end so your amount at the end may be $0.\n\n" +
-          "If your child does not want their name on their prize, please do not fill in their name below."
+          "If your child does not want their name on their prize, please do not fill in their name below and you will not need to pay the registration fee now."
         )
+    }
 }
 
 var myshliach = 61;
@@ -42,8 +43,7 @@ var usa = [
 ]
 
 var hachayolChosen = false
-var prizesChosen = false
-var chidonPayment = false
+var chidonPayment = []
 
 var state = {
     users: [], // the users we are registering
@@ -155,6 +155,11 @@ var registrationApp = function() {
             if( users.length === 0 ) return noChildren();
 
             setupNonThSchoolList()
+
+            // initialize chidon payment for each user
+            for (let user of users) {
+                chidonPayment[user.user_id] = false
+            }
 
             if( users.length === 1 ) return step2();
 
@@ -731,7 +736,7 @@ var registrationApp = function() {
                 {
                     field: '#chidon-fee',
                     type: 'amount',
-                    error: 'You must choose how much you are paying for chidon registration'
+                    error: 'You must choose how much you are paying for chidon enrollment'
                 },
                 {
                     field: '.limmud',
@@ -1187,7 +1192,6 @@ var registrationApp = function() {
     $("#prizes").on('hidden.bs.modal', function (e) {
         if (validatePrizes()) {
             addToCart() // add prizes to cart
-            prizesChosen = true
             nextStep()
         }
         else $("#prizes").modal('show')
@@ -1220,6 +1224,7 @@ var registrationApp = function() {
         // depends on whether any prizes that have names have been selected
         // OR if the parent indicated they would like to pay advanced registration
         let show = false
+        let personalizedPrize = false
 
         let advancedPayment = parseInt($("#chidon-reg").val())
         if (advancedPayment) show = true
@@ -1227,7 +1232,8 @@ var registrationApp = function() {
         if (!show) {
             // check prizes
             for (let p of user_prizes[current_user]) {
-                if (parseInt(p.personalization)) {
+                if (parseInt(p.personalization) && p.he_name && p.he_name != '') {
+                    personalizedPrize = true
                     show = true
                     break
                 }
@@ -1235,7 +1241,7 @@ var registrationApp = function() {
         }
 
         if (!show) {
-            chidonPayment = true
+            chidonPayment[current_user] = true
             nextStep()
         } else {
             // create text for modal
@@ -1260,9 +1266,15 @@ var registrationApp = function() {
             const registering = state.cart.filter(item => item.meta.type == 'registration' && item.meta.registration_type == 'chidon')
             const shippingFee = getShippingFee(selected_user.school.school_id, selected_user.parentAccount.admin_country, registering.length)
 
+            let text = `
+                You have selected a prize with your child's name on it so you will need to prepay the registration fee now instead of at the end of Chidon.<br /><br />
+                If your child does not earn their prize, you will <b>not be refunded</b>. If you would like, you can go back and remove the 
+                name from the prize or choose a different prize so you don't need to prepay.<br /><br />`
+
             let html = `
                 <div class="col-12" style="padding: 20px 40px;">
-                    Please choose the amount that you would like to pay for the chidon experience registration.
+                    ${presonalizedPrize ? text : ''}
+                    Please choose the amount that you would like to prepay for Chidon Registration.<br />
                     <select id="chidonReg" class="form-control" style="margin-top: 10px;">
                       <option value="0">Choose Amount</option>
                       ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
@@ -1292,7 +1304,7 @@ var registrationApp = function() {
                             user_id: selected_user.user_id
                         }
                     })
-                    chidonPayment = true
+                    chidonPayment[current_user] = true
                     nextStep()
                 }
             })
@@ -1353,22 +1365,23 @@ var registrationApp = function() {
 
     function nextStep() {
         current_index += 1;
+        // first check if we need to show prizes or early chidon registration
+        if (checkForChidonReg()) {
+            if (!user_prizes[current_user] || !user_prizes[current_user].length) {
+                setupChidonPrizes()
+                return false
+            }
+            if (!chidonPayment[current_user]) {
+                checkForChidonPayment()
+                return false
+            }
+        }
         if ( state.selected_users.length <= current_index ) {
-            let next = true
             if (checkForChayoleiReg() && !hachayolChosen) {
-                next = false
                 chooseHachayols()
+                return false
             }
-            if (next && checkForChidonReg()) {
-                if (!prizesChosen) {
-                    next = false
-                    setupChidonPrizes()
-                } else if (prizesChosen && !chidonPayment) {
-                    next = false
-                    checkForChidonPayment()
-                }
-            }
-            if (next) step3()
+            else return step3()
         } else {
             selected_user = state.selected_users[ current_index ]
             current_user = selected_user.user_id // for using current_user in chidon prizes cart
