@@ -624,6 +624,11 @@ var registrationApp = function() {
                 templates.renderPaymentOptions( payment_profiles );
             }
             toggleLoading( 'payment', false );
+
+            // figure out if we need to show recurring payment option
+            let chidonReg = state.cart.filter(item => item.meta.registration_type === 'chidon' && item.meta.type === 'advance registration')
+            console.log(chidonReg)
+            if (chidonReg.length) $("#recurring").show()
         })
     }
 
@@ -1271,12 +1276,14 @@ var registrationApp = function() {
 
             $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
                 let amount = parseInt($("#chidonReg").val())
-                amount += shippingFee
-                if (!amount) $("#chidon-enrollment").modal('show')
-                else {
+                if (!amount) {
+                    alert('You must select an amount to pay for early chidon experience registration!')
+                    $("#chidon-enrollment").modal('show')
+                } else {
+                    amount += shippingFee
                     // add to cart
                     state.cart.push({
-                        description: selected_user.first + " Advanced Chidon Registration",
+                        description: selected_user.first + " Early Chidon Registration",
                         price: amount,
                         meta: {
                             type: 'advance registration',
@@ -2299,10 +2306,6 @@ var templates = function(){
             $("input#payment_profile").change( function( event ){
                 templates.toggleNewCard( !event.target.value );
             });
-
-            // figure out if we need to show recurring payment option
-            let chidonReg = state.cart.filter(item => item.meta.registration_type === 'chidon' && item.meta.type === 'advance registration')
-            if (chidonReg.length) $("#recurring").show()
         }
     }
 }();
