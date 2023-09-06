@@ -260,7 +260,6 @@
                     } else {
                         // Add the compiled html to the page
                         $(".chilrens").append( html );
-                        $(".year").text(year);
                         if ( soldOut ) $("#sold-out").show();
                         else $("#purchases").show();
                     }
@@ -340,7 +339,6 @@
                             alert( result.error );
                         }
                     });
-
                 } else {
                     alert("You have not indicated how many sets you need.");
                 }
