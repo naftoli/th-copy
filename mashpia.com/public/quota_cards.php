@@ -18,7 +18,7 @@ foreach ( $schools as $id => $school ) {
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.shabbosMevorchim.php';
 
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 $sm = new ShabbosMevorchim( $year );
 $sm->setQuotaCardDates();
 $dates = $sm->getReportDates();
