@@ -2,11 +2,6 @@
 $admin_auth = array('school');
 require('header.php');
 
-require_once 'class.adminSchools.php';
-$s = new adminSchools($admin_user['admin_id'], $admin_user['auth']);
-$schools = array_flip($s->getSchools());
-$schools['Unasigned Students'] = 612;
-
 require_once 'class.medalReport.php';
 $m = new MedalReport;
 
@@ -158,6 +153,7 @@ $userInfo = $m->getUserInfo();
             $qry = "select * from schools where school_name = '" . $school . "'";
             $res = mysql_query($qry);
             $r = mysql_fetch_assoc($res);
+            $school_id = $r['school_id'];
             $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
             $shipping = empty($r['shipping_address2']) ? '' : $r['shipping_address2'] . "<br />";
             $shippingAddress = $r['shipping_address1'] . "<br />" . $shipping . $r['shipping_city'] .
@@ -205,7 +201,7 @@ $userInfo = $m->getUserInfo();
                                     $numMedals = 1;
                                 }
                                 echo "<span class='medal'>" . $subject . "-" . $medal . "</span>";
-                                $sheet[$school][$userInfo[$user]][$grade][$subject][] = $medal;
+                                $sheet[$school_id][$user][$userInfo[$user]][$grade][$subject][] = $medal;
                                 $numMedals++;
                             }
                         }
@@ -222,7 +218,7 @@ $userInfo = $m->getUserInfo();
                                     $numMedals = 1;
                                 }
                                 echo "<span class='medal'>" . $subject . "-" . $medal . "</span>";
-                                $sheet[$school][$userInfo[$user]][$grade][$subject][] = $medal;
+                                $sheet[$school][$user][$userInfo[$user]][$grade][$subject][] = $medal;
                                 $numMedals++;
                             }
                         }
@@ -248,31 +244,36 @@ $userInfo = $m->getUserInfo();
         }
         $i++;
     }
+
     ?>
 </div>
 <div id="sheet">
-    <table>
-      <tr>
-        <th>School ID</th>
-        <th>Student</th>
-        <th>Grade</th>
-        <th>Subject</th>
-        <th>Medal</th>
-      </tr>
-        <?php
-        foreach ($sheet as $school => $more) {
-          foreach ($more as $user => $other) {
-            foreach ($other as $grade => $more) {
-              foreach ($more as $subject => $medals) {
-                foreach ($medals as $medal) {
-                  echo "<tr><td>" . $schools[$school] . "</td><td>" . $user . "</td><td>" . $grade . "</td><td>" . $subject . "</td><td>" . $medal . "</td></tr>";
-                }
+  <table>
+    <tr>
+      <th>School ID</th>
+      <th>User ID</th>
+      <th>Student</th>
+      <th>Grade</th>
+      <th>Subject</th>
+      <th>Medal</th>
+    </tr>
+      <?php
+      foreach ($sheet as $school => $more) {
+          foreach ($more as $user_id => $info) {
+              foreach ($info as $user => $other) {
+                  foreach ($other as $grade => $more) {
+                      foreach ($more as $subject => $medals) {
+                          foreach ($medals as $medal) {
+                              echo "<tr><td>" . $school . "</td><td>" . $user_id . "</td><td>" . $user . "</td><td>" .
+                                  $grade . "</td><td>" . $subject . "</td><td>" . $medal . "</td></tr>";
+                          }
+                      }
+                  }
               }
-            }
           }
-        }
-        ?>
-    </table>
+      }
+      ?>
+  </table>
 </div>
 </BODY>
 </HTML>
