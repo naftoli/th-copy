@@ -4,8 +4,9 @@ ini_set('error_reporting', E_ALL);
 
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
-include_once( __DIR__ . "/../../class.globalSettings.php" );
+include_once $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/classes/recruits.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/Installments.php'; // for subscriptions
 
 class UserRegistrationRouter {
     // parents only
@@ -144,6 +145,7 @@ class UserRegistrationRouter {
         $shipping_info = $_POST['shipping'];
         $shipping_charges = intval($shipping_info['shipping_charges']);
         $year = GlobalSettings::getRegistrationYear();
+        $installments = intval($payment_info['installments']) ?? 0;
 
         // make sure info is correct and create array of user ids
         $user_ids = [];
@@ -208,17 +210,32 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-            // Let the user know if the transaction fails
-            $payment_response = $customer_profile->chargeCard(
-                $total, $payment_profile_id, null, null, $description
-            );
-            if ( !is_array( $payment_response ) ) json_error( $payment_response );
+//            if ($installments) {
+//                // figure out amount for installments
+//                $amount = 0;
+//                foreach ($registrations as $reg) {
+//                    if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
+//                        $amount += $reg['paid'];
+//                    }
+//                }
+//                if ($amount) {
+//                    // create subscription
+//                    $subscription = new classes\authorize\Installments();
+//                    $subscription->createSubscription($amount, $installments, $customer_profile->customerProfileId, $payment_profile_id);
+//                }
+//            } else {
+                // Let the user know if the transaction fails
+                $payment_response = $customer_profile->chargeCard(
+                    $total, $payment_profile_id, null, null, $description
+                );
+                if ( !is_array( $payment_response ) ) json_error( $payment_response );
+//            }
             $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
             );
             $transaction_query->execute([
-                $admin->admin_id, $description, $payment_info['total'],
+                $admin->admin_id, $description, $total,
                 ( $total - $shipping_charges ), $shipping_charges,
                 $admin->admin_postal, implode( ', ', $user_ids ),
                 json_encode( $payment_response )

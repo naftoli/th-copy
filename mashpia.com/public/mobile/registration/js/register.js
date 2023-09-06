@@ -41,6 +41,10 @@ var usa = [
     'USA'
 ]
 
+var hachayolChosen = false
+var prizesChosen = false
+var chidonPayment = false
+
 var state = {
     users: [], // the users we are registering
     registered: [], // registered users (for choosing hachayols)
@@ -1016,11 +1020,39 @@ var registrationApp = function() {
             })
         }
 
-        // show modal for chidon prizes
-        if (selected_charges.chidon) setupChidonPrizes()
-
+        if (selected_charges.chidon) {
+            saveAddress()
+              .then(function (saved) {
+                  if (saved) nextStep()
+              })
+        }
         else nextStep()
         // nextStep()
+    }
+
+    async function saveAddress() {
+        // save address
+        let address = {
+            address1: $("#c-address").val().trim(),
+            address2: $("#c-apt").val().trim(),
+            city: $("#c-city").val().trim(),
+            state: $("#c-state").val().trim(),
+            zip: $("#c-zip").val().trim(),
+            country: $("#c-country").val().trim()
+        }
+        console.log(address)
+        // make sure there's a value for each field
+        if (! (address.address1 && address.city && address.zip && address.country)) {
+            alert("You must enter a value for your home address / city / zip / country")
+            return false
+        }
+
+        const res = await $.post('updateAddress.php', { info: address })
+        if (res.success) return true
+        else {
+            alert(res.error)
+            return false
+        }
     }
 
     const deviceType = () => {
@@ -1138,7 +1170,9 @@ var registrationApp = function() {
                     // add prize to list
                     $(this).parent().parent().find('.prize').trigger('click')
                     if (!addHeName(id, he_name)) {
-                        alert('Error adding hebrew name')
+                        setTimeout(function() {
+                            alert('Error adding hebrew name')
+                        }, 0)
                     }
                 }
             })
@@ -1147,7 +1181,8 @@ var registrationApp = function() {
 
     $("#prizes").on('hidden.bs.modal', function (e) {
         if (validatePrizes()) {
-            addToCart() // add prize cart to state.cart
+            addToCart() // add prizes to cart
+            prizesChosen = true
             nextStep()
         }
         else $("#prizes").modal('show')
@@ -1174,6 +1209,79 @@ var registrationApp = function() {
             return false
         }
         return true
+    }
+
+    function checkForChidonPayment() {
+        // depends on whether any prizes that have names have been selected
+        let show = false
+        for (let p of user_prizes[current_user]) {
+            if (parseInt(p.personalization)) {
+                show = true
+                break
+            }
+        }
+
+        if (!show) {
+            chidonPayment = true
+            nextStep()
+        } else {
+            // create text for modal
+            const track = $(".limmud:checked").val()
+            let options = []
+            switch (track) {
+                case 'maven':
+                    options = [36, 50, 75, 100, 136]
+                    break
+                case 'pro':
+                    options = [100, 120, 150, 180, 200]
+                    break
+                case 'expert':
+                    options = [200, 225, 250, 300]
+                    break
+                case 'genius':
+                    options = [200, 220, 250, 300, 350]
+                    break
+            }
+
+            // get shipping fee
+            const registering = state.cart.filter(item => item.meta.type == 'registration' && item.meta.registration_type == 'chidon')
+            const shippingFee = getShippingFee(selected_user.school.school_id, selected_user.parentAccount.admin_country, registering.length)
+
+            let html = `
+                <div class="col-12" style="padding: 20px 40px;">
+                    Please choose the amount that you would like to pay for chidon registration.
+                    <select id="chidonReg" class="form-control" style="margin-top: 10px;">
+                      <option value="0">Choose Amount</option>
+                      ${options.map(o => `<option value="${o}">${o}</option>`).join('')}
+                    </select><br />
+                    <p>
+                    You will be charged an additional $${shippingFee} for shipping.
+                </div>
+            `
+            $("#chidon-enrollment .modal-body").empty().append(html)
+            $("#chidon-enrollment").modal('show')
+
+            $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
+                let amount = parseInt($("#chidonReg").val())
+                amount += shippingFee
+                if (!amount) $("#chidon-enrollment").modal('show')
+                else {
+                    // add to cart
+                    state.cart.push({
+                        description: selected_user.first + " Advanced Chidon Registration",
+                        price: amount,
+                        meta: {
+                            type: 'advance registration',
+                            registration_type: 'chidon',
+                            paid: amount,
+                            user_id: selected_user.user_id
+                        }
+                    })
+                    chidonPayment = true
+                    nextStep()
+                }
+            })
+        }
     }
 
     function addToPrizes(prize, price, personalization) {
@@ -1230,13 +1338,22 @@ var registrationApp = function() {
 
     function nextStep() {
         current_index += 1;
-        if ( state.selected_users.length <= current_index ){
-            // find out if there's at least one chaylei registration
-            if (checkForChayoleiReg()) {
-                // choose which child(ren) should receive hachayols
+        if ( state.selected_users.length <= current_index ) {
+            let next = true
+            if (checkForChayoleiReg() && !hachayolChosen) {
+                next = false
                 chooseHachayols()
             }
-            else step3();
+            if (next && checkForChidonReg()) {
+                if (!prizesChosen) {
+                    next = false
+                    setupChidonPrizes()
+                } else if (prizesChosen && !chidonPayment) {
+                    next = false
+                    checkForChidonPayment()
+                }
+            }
+            if (next) step3()
         } else {
             selected_user = state.selected_users[ current_index ]
             current_user = selected_user.user_id // for using current_user in chidon prizes cart
@@ -1247,8 +1364,13 @@ var registrationApp = function() {
     }
 
     function checkForChayoleiReg() {
-        const reg = state.cart.filter(item => item.meta.registration_type === 'chayolei')
-        return reg.length > 0 ? true : false
+        const reg = state.cart.filter(item => item.meta.type === 'registration' && item.meta.registration_type === 'chayolei')
+        return reg.length
+    }
+
+    function checkForChidonReg() {
+        const reg = state.cart.filter(item => item.meta.type === 'registration' && item.meta.registration_type === 'chidon')
+        return reg.length
     }
 
     function chooseHachayols() {
@@ -1281,7 +1403,7 @@ var registrationApp = function() {
         $(document).on('click', '.hachayol', function(e) {
             // find out if there are any other checks
             let numChecked = $(".hachayol:checked").length
-            if (! numChecked && !$(this).is(":checked")) {
+            if (!numChecked && !$(this).is(":checked")) {
                 // if not, keep this child checked
                 alert('You must have at least one child checked.')
                 e.preventDefault()
@@ -1296,7 +1418,8 @@ var registrationApp = function() {
             $("#hachayol").modal('show')
         } else {
             await calculateHachayolCost()
-            step3()
+            hachayolChosen = true
+            nextStep()
         }
     }
 
@@ -1788,6 +1911,14 @@ var templates = function(){
             }
             $("#yahadus-poll").empty().append(html)
 
+            // update the address info
+            // if (user.parentAccount.admin_address1) $( '#c-address' ).val( user.parentAccount.admin_address1 );
+            // if (user.parentAccount.admin_address2) $( '#c-apt' ).val( user.parentAccount.admin_address2 );
+            // if (user.parentAccount.admin_city) $( '#c-city' ).val( user.parentAccount.admin_city );
+            // if (user.parentAccount.admin_state) $( '#c-state' ).val( user.parentAccount.admin_state );
+            // if (user.parentAccount.admin_postal) $( '#c-zip' ).val( user.parentAccount.admin_postal );
+            // if (user.parentAccount.admin_country) $( '#c-country' ).val( user.parentAccount.admin_country );
+
             // reset all fields
             let resets = [
                 {
@@ -2065,86 +2196,6 @@ var templates = function(){
                 }
             }
 
-
-
-            // ("#step-2 form select#yahadus-poll option").prop('selected', false);
-
-            // reset name preference
-            // $("#nameChoice").val('')
-
-            // reset chidon limmud tracks
-            // var limmud = $(".limmud")
-            // for (var l of limmud) {
-            //     l.checked = false
-            // }
-            //
-            // if (!user['registrationStatus']['chidon']) {
-            //     $("#chidonWhatsapp").show()
-            //     $("#chidonLimmud").show()
-            // } else {
-            //     $("#chidonWhatsapp").hide()
-            //     $("#chidonLimmud").hide()
-            // }
-
-            // $("#step-2 form #yarmulka-size").val(0)
-            // $("#step-2 form #chidon-sweater-size").val(0)
-            //
-            // // reset the book field
-            // $("#step-2 form #chidon-book").val(0);
-            // // reset book bought info
-            // $("#step-2 form input.book-bought").prop('checked', false);
-            // $("#step-2 form #book-purchase").hide();
-            // // yahadus
-            // $( '#step-2 form #yahadus-registration input' )[0].checked = false;
-            // // $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
-            // $( '#step-2 form #yahadus-book-number' ).text( user.class_grade - 4 );
-            // $( '#step-2 form #yahadus-registration').hide();
-            // // $( '#step-2 form #yahadus-registration-no').hide();
-            // $(".yahadus-myshliach").hide()
-            // // $(".book-purchase-myshliach").hide()
-
-            // $("#step-2 form input#shabbaton")[0].checked = false;
-            // $("#step-2 form input.recruit")[0].checked = false;
-            // $("#step-2 form input.recruit")[1].checked = false;
-            // $("#school").empty();
-            // $("#school").html("<option value='0'>Select School</option>");
-            // $("#grade").empty();
-            // $("#grade").html("<option value='0'>Select Grade</option>");
-            // $("#user").empty();
-            // $("#user").html("<option value='0'>Select Student</option>");
-            // if ( user.school.shipping_method === 'pickup' ) {
-            //     $( '#step-2 form #yahadus-cost' ).text( '$55' );
-            //     $( '#step-2 form #yahadus-real-cost' ).text( 36 )
-            //     $( '#step-2 form #yahadus-text').text( '' );
-            // } else { 
-            //     $( '#step-2 form #yahadus-cost' ).text( '$60' );
-            //     $( '#step-2 form #yahadus-real-cost' ).text( 45 )
-            //     $( '#step-2 form #yahadus-text').text( '. Price includes shipping cost.' );
-            // }
-
-            // if ( user.school.school_id == 269 ) {
-            //     $("#book_no_school").show()
-            //     $("#book_school_usa").hide()
-            //     $("#book_school_not_usa").hide()
-            // } else {
-            //     $("#book_no_school").hide()
-            //     // shipping to non USA schools is an additional $15
-            //     var usa = [
-            //         'U.S.A',
-            //         'United States',
-            //         'US',
-            //         'USA'
-            //     ]
-            //     var country = user.school.school_country
-            //     if (usa.includes(country)) {
-            //         $("#book_school_usa").show()
-            //         $("#book_school_not_usa").hide()
-            //     } else {
-            //         $("#book_school_usa").hide()
-            //         $("#book_school_not_usa").show()
-            //     }
-            // }
-
             console.log( user );
         },
         toggleRates: function( user ) {
@@ -2240,6 +2291,10 @@ var templates = function(){
             $("input#payment_profile").change( function( event ){
                 templates.toggleNewCard( !event.target.value );
             });
+
+            // figure out if we need to show recurring payment option
+            let chidonReg = state.cart.filter(item => item.meta.registration_type === 'chidon' && item.meta.type === 'advance registration')
+            if (chidonReg.length) $("#recurring").show()
         }
     }
 }();

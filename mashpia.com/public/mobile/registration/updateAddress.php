@@ -12,6 +12,10 @@ $admin_id = $current_user->admin_id;
 if ( !$admin_id ) json_error("There was an error.");
 
 $info = $_POST['info'];
+// make sure country is USA for Unites States
+if ($info['country'] == "United States") {
+    $info['country'] = "USA";
+}
 $stmt = $MASHPIA_DB->prepare("
     update admins 
     set admin_address1 = :address1, 
