@@ -2,6 +2,10 @@
 $admin_auth = array('school');
 require('header.php');
 
+require_once 'class.adminSchools.php';
+$s = new adminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = array_flip($s->getSchools());
+
 require_once 'class.medalReport.php';
 $m = new MedalReport;
 
@@ -77,6 +81,10 @@ $userInfo = $m->getUserInfo();
         display: none;
       }
 
+      #sheet {
+        display: block;
+      }
+
       .no-print {
         display: block;
       }
@@ -85,6 +93,10 @@ $userInfo = $m->getUserInfo();
     @media print {
       #report_div {
         display: block;
+      }
+
+      #sheet {
+        display: none;
       }
 
       .no-print {
@@ -237,10 +249,29 @@ $userInfo = $m->getUserInfo();
     }
     ?>
 </div>
-<div>
-    <?php
-    echo "<pre>"; print_r($sheet); echo "</pre>";
-    ?>
+<div id="sheet">
+    <table>
+      <tr>
+        <th>School ID</th>
+        <th>Student</th>
+        <th>Grade</th>
+        <th>Subject</th>
+        <th>Medal</th>
+      </tr>
+        <?php
+        foreach ($sheet as $school => $more) {
+          foreach ($more as $user => $other) {
+            foreach ($other as $grade => $more) {
+              foreach ($more as $subject => $medals) {
+                foreach ($medals as $medal) {
+                  echo "<tr><td>" . $schools[$school] . "</td><td>" . $user . "</td><td>" . $grade . "</td><td>" . $subject . "</td><td>" . $medal . "</td></tr>";
+                }
+              }
+            }
+          }
+        }
+        ?>
+    </table>
 </div>
 </BODY>
 </HTML>
