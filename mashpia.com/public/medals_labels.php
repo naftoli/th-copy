@@ -139,6 +139,7 @@ $userInfo = $m->getUserInfo();
   <div class='topSpace'></div>
     <?php
     $sheet = []; // array to hold all labels
+    $totalNumMedals = 0;
     $i = 1; //counter for columns
     $rows = 1; //counter for rows
     $tempSchool = '';
@@ -203,6 +204,7 @@ $userInfo = $m->getUserInfo();
                                 echo "<span class='medal'>" . $subject . "-" . $medal . "</span>";
                                 $sheet[$school_id][$user][$userInfo[$user]][$grade][$subject][] = $medal;
                                 $numMedals++;
+                                $totalNumMedals++;
                             }
                         }
                     } else {
@@ -218,8 +220,9 @@ $userInfo = $m->getUserInfo();
                                     $numMedals = 1;
                                 }
                                 echo "<span class='medal'>" . $subject . "-" . $medal . "</span>";
-                                $sheet[$school][$user][$userInfo[$user]][$grade][$subject][] = $medal;
+                                $sheet[$school_id][$user][$userInfo[$user]][$grade][$subject][] = $medal;
                                 $numMedals++;
+                                $totalNumMedals++;
                             }
                         }
                     }
@@ -248,6 +251,9 @@ $userInfo = $m->getUserInfo();
     ?>
 </div>
 <div id="sheet">
+  <p>
+    Total Medals: <?= $totalNumMedals; ?>
+  </p>
   <table>
     <tr>
       <th>School ID</th>
