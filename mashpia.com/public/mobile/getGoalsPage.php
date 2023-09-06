@@ -73,8 +73,6 @@ else define('HOME', '../mission_report');
 // find out if we are in the week prior to shabbos mevorchim
 $jdNow = unixtojd();
 $showTehillimQuota = 0;
-require_once '../class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
 $sm = calculateSM( $year );
 foreach ($sm as $val) {
 	if ($jdNow >= ($val - 6) && $jdNow <= $val) {
