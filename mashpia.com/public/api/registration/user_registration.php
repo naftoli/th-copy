@@ -210,26 +210,32 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-//            if ($installments) {
-//                // figure out amount for installments
-//                $amount = 0;
-//                foreach ($registrations as $reg) {
-//                    if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
-//                        $amount += $reg['paid'];
-//                    }
-//                }
-//                if ($amount) {
-//                    // create subscription
-//                    $subscription = new classes\authorize\Installments();
-//                    $subscription->createSubscription($amount, $installments, $customer_profile->customerProfileId, $payment_profile_id);
-//                }
-//            } else {
+            $installmentError = false;
+            if ($installments) {
+                // figure out amount for installments
+                $amount = 0;
+                foreach ($registrations as $reg) {
+                    if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
+                        $amount += $reg['paid'];
+                    }
+                }
+                if ($amount) {
+                    // create subscription
+                    $subscription = new classes\authorize\Installments();
+                    $installmentError = $subscription->createSubscription($amount, $installments, $customer_profile->customerProfileId);
+                    if (! $installmentError) {
+                        // remove this amount from the total to be charged today
+                        $total -= $amount;
+                    }
+                }
+            }
+            if (!$installments || $installmentError) {
                 // Let the user know if the transaction fails
                 $payment_response = $customer_profile->chargeCard(
                     $total, $payment_profile_id, null, null, $description
                 );
                 if ( !is_array( $payment_response ) ) json_error( $payment_response );
-//            }
+            }
             $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, admin_id, description, amount, reg_amount, ship_amount, zip, users_registered, response) "
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)"
@@ -353,6 +359,10 @@ class UserRegistrationRouter {
                                     Please reach out to your school's Chidon coordinator with any questions.
                                     <br /><br />
                                     Hatzlocha Rabba in your learning!";
+                        if (isset($installmentError)) {
+                            if ($installmentError) $message .= "<br /><br /><b>Unfortunately, we were unable to process your installment plan. Please contact HQ.</b>";
+                            else $message .= "<br /><br /><b>Your installment plan was successfully processed.</b>";
+                        }
 
                         $to = $admin->admin_email;
                         if ( $to ) {

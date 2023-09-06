@@ -1213,11 +1213,19 @@ var registrationApp = function() {
 
     function checkForChidonPayment() {
         // depends on whether any prizes that have names have been selected
+        // OR if the parent indicated they would like to pay advanced registration
         let show = false
-        for (let p of user_prizes[current_user]) {
-            if (parseInt(p.personalization)) {
-                show = true
-                break
+
+        let advancedPayment = parseInt($("#chidon-reg").val())
+        if (advancedPayment) show = true
+
+        if (!show) {
+            // check prizes
+            for (let p of user_prizes[current_user]) {
+                if (parseInt(p.personalization)) {
+                    show = true
+                    break
+                }
             }
         }
 
@@ -1249,10 +1257,10 @@ var registrationApp = function() {
 
             let html = `
                 <div class="col-12" style="padding: 20px 40px;">
-                    Please choose the amount that you would like to pay for chidon registration.
+                    Please choose the amount that you would like to pay for the chidon experience registration.
                     <select id="chidonReg" class="form-control" style="margin-top: 10px;">
                       <option value="0">Choose Amount</option>
-                      ${options.map(o => `<option value="${o}">${o}</option>`).join('')}
+                      ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
                     </select><br />
                     <p>
                     You will be charged an additional $${shippingFee} for shipping.
