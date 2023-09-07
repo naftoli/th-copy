@@ -1,11 +1,8 @@
 <?php
 namespace classes\authorize;
 
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
 // load the constants
-require_once( dirname(__FILE__) . "/../../../includes/authorize_constants.php" );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/authorize_constants.php';
 use includes\authorize\AuthorizeConstants as Constants;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
@@ -13,26 +10,23 @@ require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
 
-require_once 'CustomerProfile.php';
-
 class Installments
 {
     private $cp;
-    private $customerPaymentProfileId;
     private $endpoint;
+    private $payment_profile_id;
 
-    public function __construct($customerProfileId, $live = true) {
+    public function __construct($customerProfile, $payment_profile_id, $live = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         // for testing use \net\authorize\api\constants\ANetEnvironment::SANDBOX;
         if ($live) $this->endpoint = \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         else $this->endpoint = \net\authorize\api\constants\ANetEnvironment::SANDBOX;
 
-        $this->cp = new CustomerProfile($customerProfileId);
-//        echo "<pre>"; print_r($this->cp); echo "</pre>";
-        // set customer payment profile id
-        $lastIndex = count($this->cp->paymentProfiles) - 1;
-        $this->customerPaymentProfileId = $this->cp->paymentProfiles[$lastIndex]['customerPaymentProfileId'];
-        $this->updateBillingInfo();
+        $this->cp = $customerProfile;
+        $this->payment_profile_id = $payment_profile_id;
+        if (! $this->updateBillingInfo()) {
+            throw new \Exception("Error updating billing info");
+        }
     }
 
     public function setAuth() {
@@ -42,47 +36,50 @@ class Installments
         return $merchantAuthentication;
     }
 
-    public function updateBillingInfo() {
+    private function updateBillingInfo() {
         $merchantAuthentication = $this->setAuth();
+        $refId = 'ref' . time();
 
+        $name = explode(" ", $this->cp->description);
+        $last_name = array_pop($name);
+        $first_name = implode(" ", $name);
+        $billto = new AnetAPI\CustomerAddressType();
+        $billto->setFirstName($first_name);
+        $billto->setLastName($last_name);
+
+        // get payment profile
         foreach ($this->cp->paymentProfiles as $profile) {
-            $refId = 'ref' . time();
-
-            $name = explode(" ", $this->cp->description);
-            $billto = new AnetAPI\CustomerAddressType();
-            $billto->setFirstName($name[0]);
-            $billto->setLastName($name[1]);
-
-            $creditCard = new AnetAPI\CreditCardType();
-            $creditCard->setCardNumber($profile['payment']['creditCard']['cardNumber']);
-            $creditCard->setExpirationDate($profile['payment']['creditCard']['expirationDate']);
-
-            $paymentCreditCard = new AnetAPI\PaymentType();
-            $paymentCreditCard->setCreditCard($creditCard);
-
-            $paymentprofile = new AnetAPI\CustomerPaymentProfileExType();
-            $paymentprofile->setBillTo($billto);
-            $paymentprofile->setDefaultPaymentProfile(true);
-            $paymentprofile->setCustomerPaymentProfileId($this->customerPaymentProfileId);
-            $paymentprofile->setPayment($paymentCreditCard);
-
-            // Submit a UpdatePaymentProfileRequest
-            $request = new AnetAPI\UpdateCustomerPaymentProfileRequest();
-            $request->setMerchantAuthentication($merchantAuthentication);
-            $request->setCustomerProfileId($this->cp->customerProfileId);
-            $request->setPaymentProfile($paymentprofile);
-            $request->setRefId($refId);
-
-            $controller = new AnetController\UpdateCustomerPaymentProfileController($request);
-            $response = $controller->executeWithApiResponse($this->endpoint);
-
-//            return $this->parseResponse($response);
+            if ($profile['customerPaymentProfileId'] == $this->payment_profile_id) break;
         }
+
+        $creditCard = new AnetAPI\CreditCardType();
+        $creditCard->setCardNumber($profile['payment']['creditCard']['cardNumber']);
+        $creditCard->setExpirationDate($profile['payment']['creditCard']['expirationDate']);
+
+        $paymentCreditCard = new AnetAPI\PaymentType();
+        $paymentCreditCard->setCreditCard($creditCard);
+
+        $paymentprofile = new AnetAPI\CustomerPaymentProfileExType();
+        $paymentprofile->setBillTo($billto);
+        $paymentprofile->setCustomerPaymentProfileId($this->payment_profile_id);
+        $paymentprofile->setPayment($paymentCreditCard);
+
+        // Submit a UpdatePaymentProfileRequest
+        $request = new AnetAPI\UpdateCustomerPaymentProfileRequest();
+        $request->setMerchantAuthentication($merchantAuthentication);
+        $request->setCustomerProfileId($this->cp->customerProfileId);
+        $request->setPaymentProfile($paymentprofile);
+        $request->setRefId($refId);
+
+        $controller = new AnetController\UpdateCustomerPaymentProfileController($request);
+        $response = $controller->executeWithApiResponse($this->endpoint);
+
+        $res = $this->parseResponse($response);
+        if (strpos($res, "Success") !== false) return true;
+        else return false;
     }
 
-    public function createSubscription($amount, $numInstallments, $customerPaymentProfileId) {
-        if ($customerPaymentProfileId) $this->customerPaymentProfileId = $customerPaymentProfileId;
-
+    public function createSubscription($amount, $numInstallments) {
         $merchantAuthentication = $this->setAuth();
 
         // Set the transaction's refId
@@ -106,7 +103,7 @@ class Installments
 
         $profile = new AnetAPI\CustomerProfileIdType();
         $profile->setCustomerProfileId($this->cp->customerProfileId);
-        $profile->setCustomerPaymentProfileId($this->customerPaymentProfileId);
+        $profile->setCustomerPaymentProfileId($this->payment_profile_id);
         $subscription->setProfile($profile);
 
         $request = new AnetAPI\ARBCreateSubscriptionRequest();
@@ -119,16 +116,16 @@ class Installments
         return $this->parseResponse($response);
     }
 
-    public function parseResponse($response) {
-        if (($response != null) && ($response->getMessages()->getResultCode() == "Ok") ) {
-            $Message = $response->getMessages()->getMessage();
+    public function parseResponse($response)
+    {
+        if (($response != null) && ($response->getMessages()->getResultCode() == "Ok")) {
+            $message = $response->getMessages()->getMessage();
 //            echo "SUCCESS: " . $Message[0]->getCode() . "  " .$Message[0]->getText() . "<br />";
-            return true;
+            return "Success: " . $message[0]->getText() . " (" . $message[0]->getCode() . ")";
         } else if ($response != null) {
-            $errorMessages = $response->getMessages()->getMessage();
+            $message = $response->getMessages()->getMessage();
 //            echo "ERROR:  " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "<br />";
-            return false;
+            return "Error: " . $message[0]->getText() . " (" . $message[0]->getCode() . ")";
         }
-//        return $response;
     }
 }

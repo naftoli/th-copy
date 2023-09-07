@@ -3,7 +3,7 @@
  */
 // page setup
 if ( !checkDateInput() ) { $('#dob, input[type="date"]').datepicker({ format: "yyyy-mm-dd" }); }
-$("#successModal").on('hidden.bs.modal', function( event ) { window.location = "/mobile/reg/parent_detail.html" } );
+// $("#successModal").on('hidden.bs.modal', function( event ) { window.location = "/mobile/reg/parent_detail.html" } );
 $("#errorModal").on('hidden.bs.modal', function () { $("#errorBody").empty() });
 $("#error2Modal").on('hidden.bs.modal', function () { $("#error2Body").empty() })
 $('[data-toggle="popover"]').popover();
@@ -1792,7 +1792,7 @@ var registrationApp = function() {
             if (data.success === false) {
                 alert(data.error)
             } else {
-                if (showClasses) $("#successModal #success").append("<p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
+                if (showClasses) $("#successModal #success").empty().append("<p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
                 $("#successModal").modal('show');
             }
         });
