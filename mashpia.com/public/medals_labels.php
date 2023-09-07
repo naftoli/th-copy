@@ -247,7 +247,6 @@ $userInfo = $m->getUserInfo();
         }
         $i++;
     }
-
     ?>
 </div>
 <div id="sheet">
