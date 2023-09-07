@@ -55,8 +55,7 @@ function getShippingFee(schoolID, country='', numChildren=0) {
     const index = countryIndex.indexOf(country)
     // calculate fee by number of children
     let total = 0
-    let max = numChildren - 1
-    for (let i = 0; i <= max; i++) {
+    for (let i = 0; i < numChildren; i++) {
       total += feesByCountry[index][i]
     }
     return total
