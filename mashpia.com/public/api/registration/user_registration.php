@@ -181,6 +181,7 @@ class UserRegistrationRouter {
             $installmentError = false;
             if ($installments) {
                 // figure out amount for installments
+                $amount = 0;
                 foreach ($cart as $reg) {
                     if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
                         $amount += $reg['paid'];
