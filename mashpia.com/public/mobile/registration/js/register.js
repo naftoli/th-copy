@@ -1350,7 +1350,7 @@ var registrationApp = function() {
                     paid: amount,
                     user_id: selected_user.user_id,
                     code: "C" + selected_user.user_serial + ":" + trackCode + amount,
-                    codeOnly: substring(trackCode, 0, -1)
+                    codeOnly: trackCode.substring(0, trackCode.length - 1)
                 }
             })
             chidonPayment[current_user] = true
@@ -1488,7 +1488,7 @@ var registrationApp = function() {
                                 paid: shippingFee,
                                 user_id: selected_user.user_id,
                                 code: "F" + selected_user.parentAccount.admin_id + ":" + school + ":" + shipCode + shippingFee,
-                                codeOnly: substring(shipCode, 0, -1)
+                                codeOnly: shipCode.substring(0, shipCode.length - 1)
                             }
                         })
                     }
@@ -1661,7 +1661,7 @@ var registrationApp = function() {
                     shipping_type: state.shipping_type,
                     shipping_charges: shipping_charge,
                     code: "F" + selected_user.parentAccount.admin_id + ":" + shipCode + shipping_charge,
-                    codeOnly: substring(shipCode, 0, -1)
+                    codeOnly: shipCode.substring(0, shipCode.length - 1)
                 }
             })
         }
@@ -2407,11 +2407,11 @@ var templates = function(){
             // add future payment options
             if (futurePayment) {
                 $("#charges").append( '<div class="row total-row">' +
-                  '<div class="col-9 col-md-10"><strong>To be charged now</strong></div>' +
+                  '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
                   '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
                   + "</div>" );
                 $("#charges").append( '<div class="row total-row">' +
-                  '<div class="col-9 col-md-10"><strong>Eligible for installments payment</strong></div>' +
+                  '<div class="col-9 col-md-10"><strong>Eligible for installments</strong></div>' +
                   '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
                   + "</div>" );
                 // update amounts to be charged in installments

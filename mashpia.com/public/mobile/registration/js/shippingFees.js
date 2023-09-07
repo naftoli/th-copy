@@ -53,7 +53,13 @@ function getShippingFee(schoolID, country='', numChildren=0) {
     return fees[schoolID]
   } else if (byCountry.includes(schoolID) && countryIndex.includes(country)) {
     const index = countryIndex.indexOf(country)
-    return feesByCountry[index][numChildren - 1]
+    // calculate fee by number of children
+    let total = 0
+    let max = numChildren - 1
+    for (let i = 0; i <= max; i++) {
+      total += feesByCountry[index][i]
+    }
+    return total
   } else {
     return 0
   }
