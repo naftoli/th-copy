@@ -557,6 +557,8 @@
                     var children = data.children;
 
                     parent_id = parent.id;
+                    $("#family_id").text(parent_id)
+
                     var father = parent.father;
                     var mother = parent.mother;
 
@@ -640,10 +642,6 @@
                         $(".chilrens").append(html);
                         setSwiper();
                         $(".year").text(year);
-                        // get admin id for showing family ID
-                        let family_id = registred_children[Object.keys(registred_children)[0]].admin_id ||
-                          unregistered_children[Object.keys(unregistered_children)[0]].admin_id;
-                        $("#family_id").text(family_id)
                     }
                 }
             });
