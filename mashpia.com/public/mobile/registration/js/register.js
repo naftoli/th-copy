@@ -914,7 +914,10 @@ var registrationApp = function() {
                     user_id: selected_user.user_id,
                     registration_type: 'chayolei',
                     paid: selected_user.registrationRates.chayolei - discount,
-                    discount: discount
+                    discount: discount,
+                    code: "C" + selected_user.user_serial + ":" + selected_user.school.school_id + ":THE-" + (selected_user.registrationRates.chayolei - discount) +
+                      (discount ? ":V-" + discount : ""),
+                    codeOnly: 'THE'
                 }
             });
         }
@@ -957,7 +960,18 @@ var registrationApp = function() {
             $(".yahadus-poll").each( function() {
                 if ($(this).is(":checked")) poll.push(this.value)
             })
-            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) showClasses = 1;
+
+            let shipCode, shipCodeBC
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+                showClasses = 1;
+                // figure out if we are adding codes for enrollment shipping / bc fee
+                if (selected_user.school.school_id == 61) shipCode = 'MYSLDS-10'
+                else if (selected_user.school.school_id == 269) {
+                    shipCode = 'AKLDS-10'
+                    shipCodeBC = 'AKLDBC-20' // for bc fee
+                }
+            }
+
             state.cart.push({
                 description: Msg4 + selected_user.first + ' ' + (myshliach || anash ? selected_user.school.school_name : '') + ( anash ? Msg5 : ''),
                 price: fee,
@@ -982,7 +996,9 @@ var registrationApp = function() {
                     poll: poll,
                     name_pref: '',
                     comments: $("#comments").val(),
-                    chidon_prizes: user_prizes[current_user]
+                    chidon_prizes: user_prizes[current_user],
+                    code: "C" + selected_user.user_serial + ":LDE-" + fee + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : ''),
+                    codeOnly: 'LDE' + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : '')
                 }
             });
         }
@@ -1006,16 +1022,18 @@ var registrationApp = function() {
             //     ! [ 269, 61 ].includes( selected_user.school.school_id ) ||
             //     ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' )
             // ) {
-                state.cart.push({
-                    description: Msg6 + selected_user.first + ( shipping_included ? Msg7 : '' ),
-                    price: shipping_included ? (cost + shipping_charge) : cost,
-                    meta: {
-                        type: 'registration',
-                        user_id: selected_user.user_id,
-                        registration_type: 'yahadus',
-                        paid: shipping_included ? (cost + shipping_charge) : cost
-                    }
-                });
+            state.cart.push({
+                description: Msg6 + selected_user.first + ( shipping_included ? Msg7 : '' ),
+                price: shipping_included ? (cost + shipping_charge) : cost,
+                meta: {
+                    type: 'registration',
+                    user_id: selected_user.user_id,
+                    registration_type: 'yahadus',
+                    paid: shipping_included ? (cost + shipping_charge) : cost,
+                    code: "C" + selected_user.user_serial + ":YB" + $("select#chidon-book").val() + "-" + (shipping_included ? (cost + shipping_charge) : cost),
+                    codeOnly: 'YB' + $("select#chidon-book").val()
+                }
+            });
             // }
         }
         if ( selected_charges.khk && khk_fee ) {
@@ -1026,7 +1044,9 @@ var registrationApp = function() {
                     type: 'registration',
                     registration_type: 'khk',
                     paid: khk_fee,
-                    user_id: selected_user.user_id
+                    user_id: selected_user.user_id,
+                    code: "C" + selected_user.user_serial + ":KHKE-" + khk_fee,
+                    codeOnly: 'KHKE'
                 }
             })
         }
@@ -1250,8 +1270,8 @@ var registrationApp = function() {
         } else {
             checkForRegShipping = true // set flag so we know to check for shipping
             // create text for modal
-            const track = $(".limmud:checked").val()
             let options = []
+            const track = $(".limmud:checked").val()
             switch (track) {
                 case 'maven':
                     options = [36, 50, 75, 100, 136]
@@ -1260,10 +1280,8 @@ var registrationApp = function() {
                     options = [100, 120, 150, 180, 200]
                     break
                 case 'expert':
-                    options = [200, 225, 250, 300]
-                    break
                 case 'genius':
-                    options = [200, 220, 250, 300, 350]
+                    options = [200, 225, 250, 300]
                     break
             }
 
@@ -1307,6 +1325,21 @@ var registrationApp = function() {
                 $("#chidon-enrollment").modal('show')
                 return false
             }
+            // find out track for code
+            const track = $(".limmud:checked").val()
+            let trackCode = ''
+            switch (track) {
+                case 'maven':
+                    trackCode = 'RRYSD-'
+                    break
+                case 'pro':
+                    trackCode = 'RRYDA-'
+                    break
+                case 'expert':
+                case 'genius':
+                    trackCode = 'RRHVN-'
+                    break
+            }
             // add to cart
             state.cart.push({
                 description: selected_user.first + " Early Chidon Registration",
@@ -1315,7 +1348,9 @@ var registrationApp = function() {
                     type: 'advance registration',
                     registration_type: 'chidon',
                     paid: amount,
-                    user_id: selected_user.user_id
+                    user_id: selected_user.user_id,
+                    code: "C" + selected_user.user_serial + ":" + trackCode + amount,
+                    codeOnly: substring(trackCode, 0, -1)
                 }
             })
             chidonPayment[current_user] = true
@@ -1439,6 +1474,11 @@ var registrationApp = function() {
                 } else {
                     let shipping = parseInt($("#chidon-shipping-fee:checked").val())
                     if (shipping) {
+                        // figure out code to use
+                        let shipCode = ''
+                        if (country === 'USA') shipCode = 'RRSUSA-'
+                        else if (country === 'Canada') shipCode = 'RRSCAN-'
+                        else shipCode = 'RRSINT-' // international
                         state.cart.push({
                             description: "Early Chidon Registration Shipping",
                             price: shippingFee,
@@ -1446,7 +1486,9 @@ var registrationApp = function() {
                                 type: 'advance registration',
                                 registration_type: 'shipping',
                                 paid: shippingFee,
-                                user_id: selected_user.user_id
+                                user_id: selected_user.user_id,
+                                code: "F" + selected_user.parentAccount.admin_id + ":" + school + ":" + shipCode + shippingFee,
+                                codeOnly: substring(shipCode, 0, -1)
                             }
                         })
                     }
@@ -1573,7 +1615,9 @@ var registrationApp = function() {
                         meta: {
                             type: 'hachayol',
                             paid: 20,
-                            user_id: id
+                            user_id: id,
+                            code: "C" + selected_user.user_serial + ":HACH-" + 20,
+                            codeOnly: 'HACH'
                         }
                     })
                 }
@@ -1596,13 +1640,28 @@ var registrationApp = function() {
         }
 
         if (addShipping) {
+            // figure out code for shipping
+            let shipCode = ''
+            const country = selected_user.parentAccount.admin_country
+            if (school_id == 61) {
+                if (country === 'USA') shipCode = 'THAKUSA-'
+                else if (country === 'Canada') shipCode = 'THAKCAN-' // canada
+                else shipCode = 'THAKINT-' // international
+            } else if (school_id == 269) {
+                if (country === 'USA') shipCode = 'THMSUSA-'
+                else if (country === 'Canada') shipCode = 'THMSCAN-' // canada
+                else shipCode = 'THMSINT-' // international
+            }
+            // add shipping to cart
             state.cart.push({
                 description: 'Prepaid Chayolei Shipping',
                 price: shipping_charge,
                 meta: {
                     type: 'shipping',
                     shipping_type: state.shipping_type,
-                    shipping_charges: shipping_charge
+                    shipping_charges: shipping_charge,
+                    code: "F" + selected_user.parentAccount.admin_id + ":" + shipCode + shipping_charge,
+                    codeOnly: substring(shipCode, 0, -1)
                 }
             })
         }
@@ -1625,6 +1684,7 @@ var registrationApp = function() {
             event.target.checkValidity();
             $( event.target ).addClass('was-validated');
         }
+        postData.payment['installments'] = $(".installments:checked").val()
         registerUsers( postData );
     }
 
@@ -1725,11 +1785,7 @@ var registrationApp = function() {
 
     function registerUsers( postData ){
         return new Promise( function( resolve, reject ){
-            var cart_details = state.cart.map( function(item){ return item.meta } );
-            postData.registrations = cart_details.filter( function( item ) { return item.type == 'registration' } );
-            postData.hachayols = cart_details.filter(item => item.type == 'hachayol')
-            postData.shipping = cart_details.find( function( item ) { return item.type == 'shipping' } );
-            postData.shipping = postData.shipping || { shipping_charges: 0, shipping_type: 0 };
+            postData.cart = state.cart.map( function(item){ return item.meta } )
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
             console.log(data)
