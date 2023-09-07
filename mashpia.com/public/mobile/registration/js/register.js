@@ -371,7 +371,7 @@ var registrationApp = function() {
         else $("#anash_kinder_text").hide();
 
         if ([61, 269].includes(school_id)) {
-            $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass plus $30 shipping fee.")
+            $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass a shipping fee (depending on your address).")
             $("#myshliachTerms").show()
         } else {
             $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass.")
@@ -1487,7 +1487,7 @@ var registrationApp = function() {
                                 registration_type: 'shipping',
                                 paid: shippingFee,
                                 user_id: selected_user.user_id,
-                                code: "F" + selected_user.parentAccount.admin_id + ":" + school + ":" + shipCode + shippingFee,
+                                code: "F" + selected_user.parentAccount.admin_id + ":" + selected_user.school.school_id + ":" + shipCode + shippingFee,
                                 codeOnly: shipCode.substring(0, shipCode.length - 1)
                             }
                         })
