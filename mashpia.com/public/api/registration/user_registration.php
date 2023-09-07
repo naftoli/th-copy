@@ -191,7 +191,7 @@ class UserRegistrationRouter {
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id);
                         $result = $subscription->createSubscription($amount, $installments);
-                        if (strpos($result, "Success") === false) json_error($result);
+                        if (strpos($result, "Error") !== false) json_error($result);
                         else {
                             $total -= $amount; // subtract amount from total
                             $installment = true;
