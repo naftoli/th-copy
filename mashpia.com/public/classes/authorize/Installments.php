@@ -15,6 +15,11 @@ class Installments
     private $cp;
     private $endpoint;
     private $payment_profile_id;
+    private $subscription_id;
+    private $total_amount;
+    private $installment_amount;
+    private $number_of_installments;
+    private $start_date;
 
     public function __construct($customerProfile, $payment_profile_id, $live = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
@@ -80,8 +85,12 @@ class Installments
     }
 
     public function createSubscription($amount, $numInstallments) {
-        $merchantAuthentication = $this->setAuth();
+        $this->total_amount = $amount;
+        $this->number_of_installments = $numInstallments;
+        $this->installment_amount = round(floatval($amount / $numInstallments), 2);
+        $this->start_date = new \DateTime(date('Y-m-d', strtotime("+1 month")));
 
+        $merchantAuthentication = $this->setAuth();
         // Set the transaction's refId
         $refId = 'ref' . time();
 
@@ -95,11 +104,11 @@ class Installments
 
         $paymentSchedule = new AnetAPI\PaymentScheduleType();
         $paymentSchedule->setInterval($interval);
-        $paymentSchedule->setStartDate(new \DateTime(date('Y-m-d', strtotime("+1 month"))));
+        $paymentSchedule->setStartDate($this->start_date);
         $paymentSchedule->setTotalOccurrences($numInstallments);
 
         $subscription->setPaymentSchedule($paymentSchedule);
-        $subscription->setAmount(round(floatval($amount / $numInstallments), 2));
+        $subscription->setAmount($this->installment_amount);
 
         $profile = new AnetAPI\CustomerProfileIdType();
         $profile->setCustomerProfileId($this->cp->customerProfileId);
@@ -113,19 +122,28 @@ class Installments
         $controller = new AnetController\ARBCreateSubscriptionController($request);
         $response = $controller->executeWithApiResponse($this->endpoint);
 
-        return $this->parseResponse($response);
+        $res = $this->parseResponse($response);
+        if (strpos($res, "Success") !== false) $this->subscription_id = $response->getSubscriptionId();
+        return $res;
     }
 
-    public function parseResponse($response)
-    {
+    private function parseResponse($response) {
         if (($response != null) && ($response->getMessages()->getResultCode() == "Ok")) {
             $message = $response->getMessages()->getMessage();
-//            echo "SUCCESS: " . $Message[0]->getCode() . "  " .$Message[0]->getText() . "<br />";
             return "Success: " . $message[0]->getText() . " (" . $message[0]->getCode() . ")";
         } else if ($response != null) {
             $message = $response->getMessages()->getMessage();
-//            echo "ERROR:  " . $errorMessages[0]->getCode() . "  " .$errorMessages[0]->getText() . "<br />";
             return "Error: " . $message[0]->getText() . " (" . $message[0]->getCode() . ")";
         }
+    }
+
+    public function saveToDb($dbHandle, $admin_id) {
+        $stmt = $dbHandle->prepare(
+            "INSERT INTO `subscriptions` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`) 
+                VALUES (?, ?, ?, ?, ?, ?)"
+        );
+        $stmt->execute([
+            $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date
+        ]);
     }
 }

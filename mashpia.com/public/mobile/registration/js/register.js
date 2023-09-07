@@ -130,6 +130,24 @@ var registrationApp = function() {
     $(".start-step-2").click( step2 );
     $(".start-step-3").click( step3 );
 
+    $(".start-again").click(function() {
+        const conf = confirm('are you sure you want to go back?')
+        if (conf) {
+            // clear all state
+            state = {
+                registered: [], // registered users (for choosing hachayols)
+                selected_users: [], // users selected in step-1
+                cart: [], // items that the user is paying for
+                shipping_type: 1 // 1 or 2 or 3
+            }
+            hachayolChosen = false
+            chidonPayment = []
+            checkForRegShipping = false
+            user_prizes = {}
+            step1()
+        }
+    });
+
     // form handlers
     $("#step-2 form").submit( confirmUser );
     $("#step-3 form").submit( confirmShipping );
@@ -1682,7 +1700,7 @@ var registrationApp = function() {
         postData.payment["cc-number"] = postData.payment["cc-number"].replace(/ /g, '');
         postData.payment["cc-exp"] = postData.payment["cc-exp"].replace(/ /g, '');
         postData.payment["x_card_code"] = postData.payment["x_card_code"].replace(/ /g, '');
-        // validate form 
+        // validate form
         if ( postData.payment["cc-number"] ) {
             event.target.checkValidity();
             $( event.target ).addClass('was-validated');
@@ -2376,8 +2394,7 @@ var templates = function(){
                             if (n < user.registrationRates[type]) break;
                             htmlFee += "<option value=" + n + ">$" + n + "</option>";
                         }
-                        $('#chayolei-fee').empty();
-                        $('#chayolei-fee').append(htmlFee);
+                        $('#chayolei-fee').empty().append(htmlFee);
                         $('#chayolei-fee').val(user.registrationRates[type])
                     }
                 }

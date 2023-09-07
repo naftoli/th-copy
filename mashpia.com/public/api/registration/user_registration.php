@@ -164,7 +164,7 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-            $installment = false;
+            $installmentsCreated = false;
             if ($installments) {
                 // figure out amount for installments
                 $amount = 0;
@@ -179,7 +179,8 @@ class UserRegistrationRouter {
                         if (strpos($result, "Error") !== false) json_error($result);
                         else {
                             $total -= $amount; // subtract amount from total
-                            $installment = true;
+                            $installmentsCreated = true;
+                            $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
                         }
                     } catch (Exception $e) {
                         json_error($e);
@@ -236,13 +237,15 @@ class UserRegistrationRouter {
                             }
                             break;
                         case 'LDE':
+                            $early_reg = 0;
+                            if ($installmentsCreated) $early_reg = 1;
                             $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                             $recruited_by = intval( $registration['recruitedBy'] );
                             if (!
                                 $user->registerChidon(
                                     $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
                                     $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
-                                    $registration['comments'], $registration['track'] )
+                                    $registration['comments'], $registration['track'], $early_reg )
                             )
                                 $errors[$user_id][] = "Could not register ".$user->user_id." for chidon";
                             else $user->registrationCharge($code, $amount, $trans_id, $year);
