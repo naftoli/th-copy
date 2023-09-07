@@ -148,6 +148,10 @@ class UserRegistrationRouter {
         foreach ($cart as $item) {
             $desc[] = $item['code'];
         }
+
+        mysql_query("SET AUTOCOMMIT=0");
+        mysql_query("START TRANSACTION");
+        $qrySuccess = true;
         
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
@@ -232,7 +236,7 @@ class UserRegistrationRouter {
                                 //                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
                                 $year = GlobalSettings::getRegistrationYear($user->school_id);
                                 $error = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
-                                if (!empty($error)) $errors[$user_id][] = $error;
+                                if (!empty($error)) $errors[] = $error;
                                 else $this->sendEmail($user, $year);
                             }
                             break;
@@ -247,7 +251,7 @@ class UserRegistrationRouter {
                                     $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
                                     $registration['comments'], $registration['track'], $early_reg )
                             )
-                                $errors[$user_id][] = "Could not register ".$user->user_id." for chidon";
+                                $errors[] = "Could not register ".$user->user_id." for chidon";
                             else $user->registrationCharge($code, $amount, $trans_id, $year);
 
                             // add book purchased info to db
@@ -289,10 +293,13 @@ class UserRegistrationRouter {
                 }
             }
         } catch( Exception $e ) {
-            $errors[0] = $e;
+            $errors[] = $e;
         }
 
         if (count($errors)) {
+            mysql_query("ROLLBACK");
+            mysql_query("SET AUTOCOMMIT=1");
+            // mail errors to myself
             @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
             json_error( 'There were errors.', $errors );
         }

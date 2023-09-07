@@ -679,7 +679,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registerChidon(
         $year, $size, $book, $yarmulka = 5, $name_pref, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '',
         $comments = '', $track = '', $early_reg = 0
-    ){
+    ) {
         global $MASHPIA_DB;
 
         // save the charge
@@ -757,7 +757,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'parent'    => $parent_id,
             'early_reg' => $early_reg
         ]);
-//        echo $chidonQry->debugDumpParams();
+        echo $chidonQry->debugDumpParams();
         return $result;
     }
 
