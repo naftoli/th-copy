@@ -2341,7 +2341,7 @@ var templates = function(){
                   '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
                   + "</div>" );
                 $("#charges").append( '<div class="row total-row">' +
-                  '<div class="col-9 col-md-10"><strong>Eligible to be charged later</strong></div>' +
+                  '<div class="col-9 col-md-10"><strong>Eligible for installments payment</strong></div>' +
                   '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
                   + "</div>" );
                 // update amounts to be charged in installments
