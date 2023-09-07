@@ -789,7 +789,7 @@ var registrationApp = function() {
                             field: '.yahadus',
                             type: 'check',
                             error: 'You have not indicated whether you would like to purchase a book or not',
-                            schoolExceptions: [61, 269]
+                            schoolExceptions: [61, 269, 55, 66, 110, 112, 180, 256, 643, 709, 713, 690, 3, 265, 432 ] // intl schools
                         },
                     ]
                 },
