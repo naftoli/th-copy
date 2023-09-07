@@ -151,8 +151,7 @@ class UserRegistrationRouter {
 
         mysql_query("SET AUTOCOMMIT=0");
         mysql_query("START TRANSACTION");
-        $qrySuccess = true;
-        
+
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
             // if we have a payment profile provided
@@ -163,8 +162,11 @@ class UserRegistrationRouter {
             } else {
                 $payment_profile  = $admin->createPaymentProfile( $payment_info );
                 $customer_profile = $admin->customerProfile();
-                if ( !$payment_profile instanceof classes\authorize\PaymentProfile )
+                if ( !$payment_profile instanceof classes\authorize\PaymentProfile ) {
+                    mysql_query("ROLLBACK");
+                    mysql_query("SET AUTOCOMMIT=1");
                     json_error( $payment_profile );
+                }
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
@@ -180,13 +182,18 @@ class UserRegistrationRouter {
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id);
                         $result = $subscription->createSubscription($amount, $installments);
-                        if (strpos($result, "Error") !== false) json_error($result);
-                        else {
+                        if (strpos($result, "Error") !== false) {
+                            mysql_query("ROLLBACK");
+                            mysql_query("SET AUTOCOMMIT=1");
+                            json_error($result);
+                        } else {
                             $total -= $amount; // subtract amount from total
                             $installmentsCreated = true;
                             $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
                         }
                     } catch (Exception $e) {
+                        mysql_query("ROLLBACK");
+                        mysql_query("SET AUTOCOMMIT=1");
                         json_error($e);
                     }
                 }
@@ -196,7 +203,11 @@ class UserRegistrationRouter {
             $payment_response = $customer_profile->chargeCard(
                 $total, $payment_profile_id, null, null, implode(',', $desc)
             );
-            if ( !is_array( $payment_response ) ) json_error( $payment_response );
+            if ( !is_array( $payment_response ) ) {
+                mysql_query("ROLLBACK");
+                mysql_query("SET AUTOCOMMIT=1");
+                json_error( $payment_response );
+            }
             $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, admin_id, description, amount, zip, users_registered, response) "
                 ."VALUES (NOW(), ?, ?, ?, ?, ?, ?)"
@@ -211,7 +222,6 @@ class UserRegistrationRouter {
             $trans_id = 0;
         }
 
-        $errors = [];
         try {
             // process each item in the cart
             foreach ( $cart as $registration ) {
@@ -236,7 +246,11 @@ class UserRegistrationRouter {
                                 //                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
                                 $year = GlobalSettings::getRegistrationYear($user->school_id);
                                 $error = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
-                                if (!empty($error)) $errors[] = $error;
+                                if (!empty($error)) {
+                                    mysql_query("ROLLBACK");
+                                    mysql_query("SET AUTOCOMMIT=1");
+                                    json_error($error);
+                                }
                                 else $this->sendEmail($user, $year);
                             }
                             break;
@@ -250,9 +264,12 @@ class UserRegistrationRouter {
                                     $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
                                     $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
                                     $registration['comments'], $registration['track'], $early_reg )
-                            )
-                                $errors[] = "Could not register ".$user->user_id." for chidon";
-                            else $user->registrationCharge($code, $amount, $trans_id, $year);
+                            ) {
+                                mysql_query("ROLLBACK");
+                                mysql_query("SET AUTOCOMMIT=1");
+                                json_error("Could not register " . $user->user_id . " for chidon");
+                            }
+                            $user->registrationCharge($code, $amount, $trans_id, $year);
 
                             // add book purchased info to db
                             if ( intval( $registration['purchased'] ) == 1 ) {
@@ -293,20 +310,14 @@ class UserRegistrationRouter {
                 }
             }
         } catch( Exception $e ) {
-            $errors[] = $e;
-        }
-
-        if (count($errors)) {
             mysql_query("ROLLBACK");
             mysql_query("SET AUTOCOMMIT=1");
-            // mail errors to myself
-            @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
-            json_error( 'There were errors.', $errors );
-        } else {
-            mysql_query("COMMIT");
-            mysql_query("SET AUTOCOMMIT=1");
-            json_response( "Successfully Registered." );
+            json_error( $e->getMessage() );
         }
+
+        mysql_query("COMMIT");
+        mysql_query("SET AUTOCOMMIT=1");
+        json_response( "Successfully Registered." );
     }
 
     // serializer for getUsers()
