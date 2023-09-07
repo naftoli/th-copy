@@ -739,7 +739,7 @@
                     <a href="https://chat.whatsapp.com/KovwrudLUWYJDRXdZlqWmu" target="_blank">Grade 4</a><br/>
                     <a href="https://chat.whatsapp.com/CueqCOcB5Vz2eTJhfdxmbs" target="_blank">Grade 5</a><br/>
                     <a href="https://chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS" target="_blank">Grade 6</a><br/>
-                    <a href="https://chat.whatsapp.com/CFi7d10yPqV8yuIi2Osw0P" target="_blank">Grade 7</a><br/>
+                    <a href="https://chat.whatsapp.com/GfVxwUI6hgF4ATMfoOW1sX" target="_blank">Grade 7</a><br/>
                     <a href="https://chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x" target="_blank">Grade 8</a><br/>
                     <!--                                            <div id="khkWhatsappBoys" class="khkWhatsapp">-->
                     <!--                                                <a href="https://chat.whatsapp.com/I4IRgTxmVfO419sjJOz3Ii" target="_blank">Kol Hatorah Kula</a>-->
@@ -761,9 +761,11 @@
                     <b>KHK WhatsApp</b>
                     <hr/>
                     In addition to the regular 8th grade group:
-                    <div id="khkBoys"><a href="https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS" target="_blank">https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS</a>
+                    <div id="khkBoys">
+                      <a href="https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS" target="_blank">https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS</a>
                     </div>
-                    <div id="khkGirls"><a href="https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB" target="_blank">https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB</a>
+                    <div id="khkGirls">
+                      <a href="https://chat.whatsapp.com/EHhpuZtvZsh4pIZneZFCf5" target="_blank">https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB</a>
                     </div>
                   </div>
                 </div>
@@ -1327,7 +1329,7 @@
     <div class="container content">
       <div class="row">
         <div class="col-12">
-          <h2 class="i18n" data-key="ShippingRates">Shipping Rates</h2>
+          <h2 class="i18n" data-key="ShippingRates">CTH Shipping Rates</h2>
           <p>
             <span class="i18n" data-key="ShippingFee">All children not enrolled in an active Tzivos Hashem Base will need to have their physical items
               (such as Hachayols, Rank Books and Medals) shipped directly. Sadly, as much as we would love to do this for free,
@@ -1484,11 +1486,16 @@
                         the first payment will start in 1 month from today and continue every month until the full amount is paid.
                       </i>
                     </p>
-                    <input type="radio" name="installments" class="installments" value="0" checked /> I would like to pay the complete amount now.<br />
-                    <input type="radio" name="installments" class="installments" value="1" /> I would like to pay in 1 installment.<br />
-                    <input type="radio" name="installments" class="installments" value="2" /> I would like to pay in 2 installments.<br />
-                    <input type="radio" name="installments" class="installments" value="3" /> I would like to pay in 3 installments.<br />
-                    <input type="radio" name="installments" class="installments" value="4" /> I would like to pay in 4 installments.<br />
+                    <input type="radio" name="installments" class="installments" value="0" checked /> I would like to pay the complete amount now.
+                    ($<span id="earlyRegTotal"></span>)<br />
+                    <input type="radio" name="installments" class="installments" value="1" /> I would like to pay in 1 installment.
+                    ($<span id="earlyRegOne"></span>)<br />
+                    <input type="radio" name="installments" class="installments" value="2" /> I would like to pay in 2 installments.
+                    $(<span id="earlyRegTwo"></span>)<br />
+                    <input type="radio" name="installments" class="installments" value="3" /> I would like to pay in 3 installments.
+                    $(<span id="earlyRegThree"></span>)<br />
+                    <input type="radio" name="installments" class="installments" value="4" /> I would like to pay in 4 installments.
+                    $(<span id="earlyRegFour"></span>)<br />
                   </div>
                   <br />
 
@@ -1694,6 +1701,23 @@
       <div class="modal-body"></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="model" data-target="#chidon-enrollment">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="chidon-shipping" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Early Chidon Experience Shipping</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <img src="/mobile/img_new/x-color-white-svg.svg" width="16" height="16"/>
+        </button>
+      </div>
+      <div class="modal-body"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-dismiss="model" data-target="#chidon-shipping">Save</button>
       </div>
     </div>
   </div>

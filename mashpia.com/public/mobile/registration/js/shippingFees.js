@@ -6,6 +6,8 @@ function getShippingFee(schoolID, country='', numChildren=0) {
     110: 15,
   }
 
+  const byCountry = [61, 269]
+
   const countryIndex = ['USA', 'Canada', 'Brazil', 'Denmark', 'Israel', 'South Africa', 'United Kingdom',
     'Vietnam', 'Argentina', 'Australia', 'Austria', 'Azerbaijan', 'Belguim', 'Chile', 'China', 'France', 'Germany',
     'Italy', 'Korea', 'Latvia', 'Lithuania', 'Luxemberg', 'Mauritius', 'Netherlands', 'Portugal', 'S. Barthelemy',
@@ -49,10 +51,10 @@ function getShippingFee(schoolID, country='', numChildren=0) {
 
   if (notByCountry.includes(schoolID)) {
     return fees[schoolID]
-  } else if (countryIndex.includes(country)) {
+  } else if (byCountry.includes(schoolID) && countryIndex.includes(country)) {
     const index = countryIndex.indexOf(country)
     return feesByCountry[index][numChildren - 1]
   } else {
-    return feesByCountry[feesByCountry.length - 1][numChildren - 1]
+    return 0
   }
 }

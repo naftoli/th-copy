@@ -44,6 +44,7 @@ var usa = [
 
 var hachayolChosen = false
 var chidonPayment = []
+var checkForRegShipping = false
 
 var state = {
     users: [], // the users we are registering
@@ -1035,6 +1036,9 @@ var registrationApp = function() {
               .then(function (saved) {
                   if (saved) nextStep()
               })
+              .catch(function (err) {
+                  alert(err)
+              })
         }
         else nextStep()
         // nextStep()
@@ -1244,6 +1248,7 @@ var registrationApp = function() {
             chidonPayment[current_user] = true
             nextStep()
         } else {
+            checkForRegShipping = true // set flag so we know to check for shipping
             // create text for modal
             const track = $(".limmud:checked").val()
             let options = []
@@ -1262,54 +1267,47 @@ var registrationApp = function() {
                     break
             }
 
-            // get shipping fee
-            const registering = state.cart.filter(item => item.meta.type == 'registration' && item.meta.registration_type == 'chidon')
-            const shippingFee = getShippingFee(selected_user.school.school_id, selected_user.parentAccount.admin_country, registering.length)
-
             let text = `
                 You have selected a prize with your child's name on it so you will need to prepay the registration fee now instead of at the end of Chidon.<br /><br />
                 If your child does not earn their prize, you will <b>not be refunded</b>. If you would like, you can go back and remove the 
                 name from the prize or choose a different prize so you don't need to prepay.<br /><br />`
 
             let html = `
-                <div class="col-12" style="padding: 20px 40px;">
-                    ${presonalizedPrize ? text : ''}
+                <div class="col-12" style="padding: 10px 20px;">
+                    ${personalizedPrize ? text : ''}
                     Please choose the amount that you would like to prepay for Chidon Registration.<br />
                     <select id="chidonReg" class="form-control" style="margin-top: 10px;">
                       <option value="0">Choose Amount</option>
                       ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
                     </select><br />
-                    <p>
-                    You will be charged an additional $${shippingFee} for shipping.
                 </div>
             `
             $("#chidon-enrollment .modal-body").empty().append(html)
             $("#chidon-enrollment").modal('show')
-
-            $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
-                let amount = parseInt($("#chidonReg").val())
-                if (!amount) {
-                    alert('You must select an amount to pay for early chidon experience registration!')
-                    $("#chidon-enrollment").modal('show')
-                } else {
-                    amount += shippingFee
-                    // add to cart
-                    state.cart.push({
-                        description: selected_user.first + " Early Chidon Registration",
-                        price: amount,
-                        meta: {
-                            type: 'advance registration',
-                            registration_type: 'chidon',
-                            paid: amount,
-                            user_id: selected_user.user_id
-                        }
-                    })
-                    chidonPayment[current_user] = true
-                    nextStep()
-                }
-            })
         }
     }
+
+    $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
+        let amount = parseInt($("#chidonReg").val())
+        if (!amount) {
+            alert('You must select an amount to pay for early chidon experience registration!')
+            $("#chidon-enrollment").modal('show')
+        } else {
+            // add to cart
+            state.cart.push({
+                description: selected_user.first + " Early Chidon Registration",
+                price: amount,
+                meta: {
+                    type: 'advance registration',
+                    registration_type: 'chidon',
+                    paid: amount,
+                    user_id: selected_user.user_id
+                }
+            })
+            chidonPayment[current_user] = true
+            nextStep()
+        }
+    })
 
     function addToPrizes(prize, price, personalization) {
         let MAX = 75
@@ -1364,7 +1362,6 @@ var registrationApp = function() {
     }
 
     function nextStep() {
-        current_index += 1;
         // first check if we need to show prizes or early chidon registration
         if (checkForChidonReg()) {
             if (!user_prizes[current_user] || !user_prizes[current_user].length) {
@@ -1376,12 +1373,19 @@ var registrationApp = function() {
                 return false
             }
         }
+        current_index += 1;
         if ( state.selected_users.length <= current_index ) {
             if (checkForChayoleiReg() && !hachayolChosen) {
+                current_index -= 1 // reverse adding to index
                 chooseHachayols()
                 return false
             }
-            else return step3()
+            if (checkForRegShipping) { // check regardless whether this user is registering for chidon or not
+                current_index -= 1 // reverse adding to index
+                checkRegShipping()
+                return false
+            }
+            return step3()
         } else {
             selected_user = state.selected_users[ current_index ]
             current_user = selected_user.user_id // for using current_user in chidon prizes cart
@@ -1391,13 +1395,66 @@ var registrationApp = function() {
         }
     }
 
+    function checkRegShipping() {
+        const registering = state.cart.filter(item => item.meta.type === 'advance registration' && item.meta.registration_type === 'chidon')
+        // get index of user in users array
+        const index = state.users.findIndex(user => user.user_id === registering[0].meta.user_id)
+        const school_id = state.users[index].school.school_id
+        const country = state.users[index].parentAccount.admin_country
+        const shippingFee = getShippingFee(school_id, country, registering.length)
+        if (shippingFee) {
+            // show modal
+            let html = `
+                <div class="col-12" style="padding: 10px 20px;">
+                    <label for="chidon-shipping-fee">Early Registration Shipping Fee</label><br />
+                    <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="1" checked /> 
+                    I would like to have my registration items shipped to my address on file for $${shippingFee}<br />
+                    <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="0" /> 
+                    I will be picking up my registration items (Free)
+                </div>
+            `
+            $("#chidon-shipping .modal-body").empty().append(html)
+            $("#chidon-shipping").modal('show')
+
+            $("#chidon-shipping").on('hidden.bs.modal', function (e) {
+                // check if shipping option was selected
+                if (! $("#chidon-shipping-fee:checked").val()) {
+                    alert('You must select a shipping option!')
+                    $("#chidon-shipping").modal('show')
+                    return false
+                } else {
+                    let shipping = parseInt($("#chidon-shipping-fee:checked").val())
+                    if (shipping) {
+                        state.cart.push({
+                            description: "Early Chidon Registration Shipping",
+                            price: shippingFee,
+                            meta: {
+                                type: 'advance registration',
+                                registration_type: 'shipping',
+                                paid: shippingFee,
+                                user_id: selected_user.user_id
+                            }
+                        })
+                    }
+                    checkForRegShipping = false
+                    nextStep()
+                }
+            })
+        } else {
+            checkForRegShipping = false
+            nextStep()
+        }
+    }
+    
     function checkForChayoleiReg() {
-        const reg = state.cart.filter(item => item.meta.type === 'registration' && item.meta.registration_type === 'chayolei')
+        const reg = state.cart.filter(item => item.meta.user_id === selected_user.user_id && item.meta.type === 'registration'
+          && item.meta.registration_type === 'chayolei')
         return reg.length
     }
 
     function checkForChidonReg() {
-        const reg = state.cart.filter(item => item.meta.type === 'registration' && item.meta.registration_type === 'chidon')
+        const reg = state.cart.filter(item => item.meta.user_id === selected_user.user_id && item.meta.type === 'registration'
+          && item.meta.registration_type === 'chidon')
         return reg.length
     }
 
@@ -2055,6 +2112,10 @@ var templates = function(){
                 {
                     field: '#myshliach',
                     type: 'checkbox'
+                },
+                {
+                    field: '#chidon-reg',
+                    type: 'select'
                 }
             ]
 
@@ -2249,9 +2310,11 @@ var templates = function(){
         },
         renderCheckout: function( cart ){
             console.log(cart)
+            let futurePayment = 0
             let total = cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 );
             for (i = 0; i < cart.length; i++) {
                 if (cart[i].meta.discount) total -= parseInt(cart[i].meta.discount)
+                if (cart[i].meta.type === 'advance registration') futurePayment += parseInt(cart[i].price)
             }
             if (total < 0) total = 0;
             $("#charges").html('');
@@ -2271,6 +2334,26 @@ var templates = function(){
                     }
                 }
             });
+            // add future payment options
+            if (futurePayment) {
+                $("#charges").append( '<div class="row total-row">' +
+                  '<div class="col-9 col-md-10"><strong>To be charged now</strong></div>' +
+                  '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
+                  + "</div>" );
+                $("#charges").append( '<div class="row total-row">' +
+                  '<div class="col-9 col-md-10"><strong>Eligible to be charged later</strong></div>' +
+                  '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
+                  + "</div>" );
+                // update amounts to be charged in installments
+                $("#earlyRegTotal").text(futurePayment)
+                $("#earlyRegOne").text(futurePayment)
+                const two = (futurePayment / 2).toFixed(2)
+                const three = (futurePayment / 3).toFixed(2)
+                const four = (futurePayment / 4).toFixed(2)
+                $("#earlyRegTwo").text(two)
+                $("#earlyRegThree").text(three)
+                $("#earlyRegFour").text(four)
+            }
             // add the total row
             var text = "Total Balance";
             if ( Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he' ) text = "איזון כולל";
