@@ -135,13 +135,13 @@ class UserRegistrationRouter {
         /******************************** SETUP ********************************/
         // * get the post data
 
-//        $payment_info = $_POST['payment'];
-//        $cart = $_POST['cart'];
-        $info = file_get_contents("php://input");
-        $payment_info = json_decode($info, true)['payment'];
+        $payment_info = $_POST['payment'];
+        $cart = $_POST['cart'];
+//        $info = file_get_contents("php://input");
+//        $payment_info = json_decode($info, true)['payment'];
         $total = intval( $payment_info['total'] );
         $installments = intval($payment_info['installments']) ?? 0;
-        $cart = json_decode($info, true)['cart'];
+//        $cart = json_decode($info, true)['cart'];
 
         // make sure info is correct and create array of user ids
         $user_ids = [];
@@ -182,23 +182,23 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-            $installmentError = false;
-            if ($installments) {
-                // figure out amount for installments
-                $amount = 0;
-                foreach ($cart as $reg) {
-                    if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
-                        $amount += $reg['paid'];
-                    }
-                }
-                if ($amount) {
-                    // create subscription
-                    $subscription = new classes\authorize\Installments();
-                    $installmentError = $subscription->createSubscription($amount, $installments, $customer_profile->customerProfileId);
-                    if ($installmentError) json_error($installmentError);
-                    else $total -= $amount; // subtract amount from total
-                }
-            }
+//            $installmentError = false;
+//            if ($installments) {
+//                // figure out amount for installments
+//                $amount = 0;
+//                foreach ($cart as $reg) {
+//                    if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
+//                        $amount += $reg['paid'];
+//                    }
+//                }
+//                if ($amount) {
+//                    // create subscription
+//                    $subscription = new classes\authorize\Installments();
+//                    $installmentError = $subscription->createSubscription($amount, $installments, $customer_profile->customerProfileId);
+//                    if ($installmentError) json_error($installmentError);
+//                    else $total -= $amount; // subtract amount from total
+//                }
+//            }
 
             // total getting charged is dependent on the installment plan
             $payment_response = $customer_profile->chargeCard(

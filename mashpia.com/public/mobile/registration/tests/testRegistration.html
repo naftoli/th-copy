@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+</body>
+
+<script
+  src="https://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossOrigin="anonymous"></script>
+<script>
+  let info = {
+    payment: {
+      total: 318,
+      payment_profile: 639456625,
+      cc_number: '',
+      cc_exp: '',
+      x_card_code: '',
+      zip: '',
+      installments: 3
+    },
+    cart: [
+      {
+        type: 'registration',
+        user_id: 66871,
+        registration_type: 'chayolei',
+        paid: 75,
+        discount: 0,
+        code: 'C7777466:110:THE-75',
+        codeOnly: 'THE'
+      },
+      {
+        type: 'registration',
+        user_id: 66871,
+        registration_type: 'chidon',
+        paid: 30,
+        discount: 0,
+        track: 'pro',
+        size: 'children l',
+        yarmulka: 5,
+        book: 4,
+        purchased: 0,
+        purchasedWhere: '',
+        store: {
+          store_name: '',
+          store_city: ''
+        },
+        bookVersion: 0,
+        recruited: 0,
+        recruitedBy: 0,
+        poll: ['parent', 'online'],
+        name_pref: '',
+        comments: 'עיכגכעזבזבזבזסססס',
+        chidon_prizes: [
+          {
+            id: 258,
+            price: 75,
+            personalization: 0
+          }
+        ],
+        code: 'C7777466:LDE-30',
+        codeOnly: 'LDE'
+      },
+      {
+        type: 'registration',
+        user_id: 66871,
+        registration_type: 'khk',
+        paid: 18,
+        discount: 0,
+        code: 'C7777466:KHKE-18',
+        codeOnly: 'KHKE'
+      },
+      {
+        type: 'advance registration',
+        user_id: 66871,
+        registration_type: 'chidon',
+        paid: 180,
+        discount: 0,
+        code: 'C7777466:RRYDA-180',
+        codeOnly: 'RRYDA'
+      },
+      {
+        type: 'advance registration',
+        user_id: 66871,
+        registration_type: 'shipping',
+        paid: 15,
+        discount: 0,
+        code: 'F195942:110:RRSUSA-15',
+        codeOnly: 'RRSUSA'
+      }
+    ]
+  }
+  $.post('/api/registration/user_registration.php', info, function (data) {
+    console.log(data)
+  })
+</script>
+</html>
