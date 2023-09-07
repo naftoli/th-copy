@@ -30,13 +30,8 @@ class UserRegistrationRouter {
 
         $available_users = [];
         foreach( $users as $user ){
-//            echo $user->user_id . ' = ' . $user->school_id . "<br />";
             if ( !$user->school_id ) continue;
-            //$reg_info = $user->school->registration();
-            // make sure they paid for this year
-            //if ( $reg_info && $reg_info->date_paid ) {
-                $available_users[] = $user;
-            //}
+            $available_users[] = $user;
         }
 
         json_response([
@@ -146,8 +141,7 @@ class UserRegistrationRouter {
 
         // make sure info is correct and create array of user ids
         $user_ids = [];
-        foreach ($cart as $item) {
-            $reg = $item['meta'];
+        foreach ($cart as $reg) {
             if (! is_numeric($reg['paid'])) {
                 // we have an error and need to stop registration
                 json_error("There is an error in the amount being paid. please try again.");
@@ -165,7 +159,7 @@ class UserRegistrationRouter {
         // based off "code" variable in registration array
         $desc = [];
         foreach ($cart as $item) {
-            $desc[] = $item['meta']['code'];
+            $desc[] = $item['code'];
         }
         
         /******************************** PAYMENT ********************************/
@@ -187,8 +181,7 @@ class UserRegistrationRouter {
             $installmentError = false;
             if ($installments) {
                 // figure out amount for installments
-                foreach ($cart as $item) {
-                    $reg = $item['meta'];
+                foreach ($cart as $reg) {
                     if ($reg['registration_type'] == 'chidon' && $reg['type'] == 'advance registration') {
                         $amount += $reg['paid'];
                     }
@@ -226,8 +219,7 @@ class UserRegistrationRouter {
         $errors = [];
         try {
             // process each item in the cart
-            foreach ( $cart as $item ) {
-                $registration = $item['meta'];
+            foreach ( $cart as $registration ) {
                 $user_id = $registration['user_id'];
                 // get user modal;
                 foreach ($users as $user) {
