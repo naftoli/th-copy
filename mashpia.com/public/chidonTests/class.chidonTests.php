@@ -22,7 +22,7 @@ class ChidonTests
     public function __construct() {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->year = GlobalSettings::getChidonYear();
+        $this->year = GlobalSettings::getChidonRegYear();
         $this->children = [];
         $this->scores = [];
         $this->marks = [];
