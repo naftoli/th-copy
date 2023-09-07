@@ -1279,7 +1279,15 @@ var registrationApp = function() {
                     <select id="chidonReg" class="form-control" style="margin-top: 10px;">
                       <option value="0">Choose Amount</option>
                       ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
-                    </select><br />
+                    </select>
+                </div>
+                <div class="col-12" style="padding: 10px 20px;">
+                  <label for="early-reg-terms">
+                    <input type="checkbox" id="early-reg-terms" name="early-reg-terms" style="display: inline !important; width: 25px; height: 25px;" />
+                    I am aware that if my child ends up passing a lower track, 
+                    so there is a lower registration fee, I will need to opt in for a refund of the difference at registration. 
+                    If my child passes a higher track, I will need to pay the difference during registration.
+                  </label>
                 </div>
             `
             $("#chidon-enrollment .modal-body").empty().append(html)
@@ -1293,6 +1301,12 @@ var registrationApp = function() {
             alert('You must select an amount to pay for early chidon experience registration!')
             $("#chidon-enrollment").modal('show')
         } else {
+            // check that terms are accepted
+            if (! $("#early-reg-terms").is(":checked")) {
+                alert('You must accept the terms for early registration!')
+                $("#chidon-enrollment").modal('show')
+                return false
+            }
             // add to cart
             state.cart.push({
                 description: selected_user.first + " Early Chidon Registration",
