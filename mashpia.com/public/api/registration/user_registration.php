@@ -137,11 +137,8 @@ class UserRegistrationRouter {
         echo "<pre>"; print_r( $_POST ); echo "</pre>";
         $payment_info = $_POST['payment'];
         $cart = $_POST['cart'];
-//        $info = file_get_contents("php://input");
-//        $payment_info = json_decode($info, true)['payment'];
         $total = intval( $payment_info['total'] );
         $installments = intval($payment_info['installments']) ?? 0;
-//        $cart = json_decode($info, true)['cart'];
 
         // make sure info is correct and create array of user ids
         $user_ids = [];
