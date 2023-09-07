@@ -599,7 +599,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
 //            echo $reg_query->debugDumpParams();
             // save the charge
-            $type = 'chayolei';
+            $type = 'chidon';
             if ($lite) $type = 'chayolei-lite';
             if ($ckids) $type = 'ckids';
             if (!$this->registrationCharge($type, $amount, $trans_id, false, $discount)) {
