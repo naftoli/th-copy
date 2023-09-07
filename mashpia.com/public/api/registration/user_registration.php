@@ -270,7 +270,7 @@ class UserRegistrationRouter {
                             $user->addChidonPrizes($registration['chidon_prizes'], $year);
 
                             // send email to parents
-                            $this->sendEmailToParents($user, $year, $admin, $installment);
+                            $this->sendEmailToParents($user, $year, $admin, $installmentsCreated);
                             break;
                         case 'KHKE':
                             $user->addKhkReg($year, $user_id);
