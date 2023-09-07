@@ -115,19 +115,6 @@ class UserRegistrationRouter {
         json_response( $rate );
     }
 
-    // check if any of the users getting registered is already registered
-    function checkRegistration($users) {
-        // check that none of the users are already registered
-        $errors = [];
-        foreach ($users as $user) {
-            $status = $user->registrationStatus();
-            if ($status['chayolei']) { // child is already registered
-                $errors[] = $user->first . " " . $user->last . " is already registered for Chayolei Tzivos Hashem.";
-            }
-        }
-        if ($errors) json_error(implode("\n", $errors) . "\nPlease remove them and try again.");
-    }
-
     // charge the card and register the users
     public function registerUsers() {
         global $current_user; global $MASHPIA_DB;
@@ -154,8 +141,6 @@ class UserRegistrationRouter {
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
-
-        $this->checkRegistration($users); // find out if any users are already registered
 
         // description for authorize and db
         // based off "code" variable in registration array
@@ -239,12 +224,16 @@ class UserRegistrationRouter {
                     if (! in_array($code, ['LDE', 'THE'])) $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
                     switch ($code) {
                         case 'THE':
-                            $discount = $registration['discount'] ?? 0;
-//                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
-                            $year = GlobalSettings::getRegistrationYear($user->school_id);
-                            $error = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
-                            if (! empty($error)) $errors[$user_id][] = $error;
-                            else $this->sendEmail($user, $year);
+                            // check if user is already registered
+                            $status = $user->registrationStatus();
+                            if (!$status['chayolei']) { // user not yet registered, so register him/her
+                                $discount = $registration['discount'] ?? 0;
+                                //                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
+                                $year = GlobalSettings::getRegistrationYear($user->school_id);
+                                $error = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
+                                if (!empty($error)) $errors[$user_id][] = $error;
+                                else $this->sendEmail($user, $year);
+                            }
                             break;
                         case 'LDE':
                             $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
