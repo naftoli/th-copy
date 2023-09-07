@@ -305,9 +305,8 @@ class UserRegistrationRouter {
         } else {
             mysql_query("COMMIT");
             mysql_query("SET AUTOCOMMIT=1");
+            json_response( "Successfully Registered." );
         }
-
-        json_response( "Successfully Registered." );
     }
 
     // serializer for getUsers()

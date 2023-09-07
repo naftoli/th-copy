@@ -29,11 +29,7 @@
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phar-io/manifest" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phar-io/version" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/php-activerecord/php-activerecord" />
-      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpdocumentor/reflection-common" />
-      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpdocumentor/reflection-docblock" />
-      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpdocumentor/type-resolver" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpseclib/phpseclib" />
-      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpspec/prophecy" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-code-coverage" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-file-iterator" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpunit/php-text-template" />
@@ -63,7 +59,6 @@
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-mbstring" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-php72" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/theseer/tokenizer" />
-      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/paragonie/constant_time_encoding" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpmailer/phpmailer" />
@@ -71,6 +66,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/landrok/language-detector" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
+      <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/type" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

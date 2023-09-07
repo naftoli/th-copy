@@ -43,11 +43,7 @@
       <path value="$PROJECT_DIR$/mashpia.com/vendor/phar-io/manifest" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/phar-io/version" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/php-activerecord/php-activerecord" />
-      <path value="$PROJECT_DIR$/mashpia.com/vendor/phpdocumentor/reflection-common" />
-      <path value="$PROJECT_DIR$/mashpia.com/vendor/phpdocumentor/reflection-docblock" />
-      <path value="$PROJECT_DIR$/mashpia.com/vendor/phpdocumentor/type-resolver" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/phpseclib/phpseclib" />
-      <path value="$PROJECT_DIR$/mashpia.com/vendor/phpspec/prophecy" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/phpunit/php-code-coverage" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/phpunit/php-file-iterator" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/phpunit/php-text-template" />
@@ -73,7 +69,7 @@
       <path value="$PROJECT_DIR$/mashpia.com/vendor/symfony/polyfill-intl-idn" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/symfony/polyfill-php72" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/theseer/tokenizer" />
-      <path value="$PROJECT_DIR$/mashpia.com/vendor/webmozart/assert" />
+      <path value="$PROJECT_DIR$/mashpia.com/vendor/sebastian/type" />
     </include_path>
   </component>
   <component name="PhpProjectServersManager">
