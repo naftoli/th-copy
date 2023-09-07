@@ -179,7 +179,7 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-            $installmentError = false;
+            $installment = false;
             if ($installments) {
                 // figure out amount for installments
                 $amount = 0;
@@ -190,9 +190,12 @@ class UserRegistrationRouter {
                     // create subscription
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id);
-                        $installmentError = $subscription->createSubscription($amount, $installments);
-                        if ($installmentError) json_error($installmentError);
-                        else $total -= $amount; // subtract amount from total
+                        $result = $subscription->createSubscription($amount, $installments);
+                        if (strpos($result, "Success") === false) json_error($result);
+                        else {
+                            $total -= $amount; // subtract amount from total
+                            $installment = true;
+                        }
                     } catch (Exception $e) {
                         json_error($e);
                     }
@@ -272,7 +275,7 @@ class UserRegistrationRouter {
                             $user->addChidonPrizes($registration['chidon_prizes'], $year);
 
                             // send email to parents
-                            $this->sendEmailToParents($user, $year, $admin, $installmentError);
+                            $this->sendEmailToParents($user, $year, $admin, $installment);
                             break;
                         case 'KHKE':
                             $user->addKhkReg($year, $user_id);
@@ -335,7 +338,7 @@ class UserRegistrationRouter {
         @mail($to, $subject, $msg, implode("\r\n", $headers));
     }
 
-    private function sendEmailToParents($user, $year, $admin, $installmentError = false) {
+    private function sendEmailToParents($user, $year, $admin, $installment = false) {
         // send email to parents
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
@@ -352,10 +355,7 @@ class UserRegistrationRouter {
                 Please reach out to your school's Chidon coordinator with any questions.
                 <br /><br />
                 Hatzlocha Rabba in your learning!";
-        if (isset($installmentError)) {
-            if ($installmentError) $message .= "<br /><br /><b>Unfortunately, we were unable to process your installment plan. Please contact HQ.</b>";
-            else $message .= "<br /><br /><b>Your installment plan was successfully processed.</b>";
-        }
+        if ($installment) $message .= "<br /><br /><b>Your installment plan was successfully processed.</b>";
 
         $to = $admin->admin_email;
         if ( $to ) {
