@@ -234,14 +234,15 @@ class UserRegistrationRouter {
                 if ($registration['codeOnly']) {
                     $code = $registration['codeOnly'];
                     $year = GlobalSettings::getChidonRegYear();
-                    if (! in_array($code, ['LDE', 'THE'])) $errors[$user_id][] = $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
+                    if (! in_array($code, ['LDE', 'THE'])) $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
                     switch ($code) {
                         case 'THE':
                             $amount = $registration['paid'];
                             $discount = $registration['discount'] ?? 0;
                             if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
-                            $errors[$user_id][] = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
-                            if (! $errors[$user_id] || empty($errors[$user_id])) $this->sendEmail($user, $year);
+                            $res = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
+                            if ($res) $errors[$user_id][] = $res;
+                            else $this->sendEmail($user, $year);
                             break;
                         case 'LDE':
                             $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
@@ -253,7 +254,7 @@ class UserRegistrationRouter {
                                     $registration['comments'], $registration['track'] )
                             )
                                 $errors[$user_id][] = "Could not register ".$user->user_id." for chidon";
-                            else $errors[$user_id][] = $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
+                            else $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
 
                             // add book purchased info to db
                             if ( intval( $registration['purchased'] ) == 1 ) {
@@ -290,7 +291,7 @@ class UserRegistrationRouter {
                     }
                 } else {
                     // add the registration charge
-                    $errors[$user_id][] = $user->registrationCharge(
+                    $user->registrationCharge(
                         $registration['registration_type'],
                         $registration['paid'],
                         $trans_id, $year
@@ -302,7 +303,6 @@ class UserRegistrationRouter {
         }
 
         if ( count( $errors ) > 0 ) {
-//            echo "<pre>"; print_r( $errors ); echo "</pre>";
             @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
             json_error( 'There were errors.', $errors );
         }
