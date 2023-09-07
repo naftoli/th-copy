@@ -142,8 +142,9 @@ class Installments
             "INSERT INTO `subscriptions` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`) 
                 VALUES (?, ?, ?, ?, ?, ?)"
         );
-        $stmt->execute([
+        $res = $stmt->execute([
             $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date
         ]);
+        return $res;
     }
 }

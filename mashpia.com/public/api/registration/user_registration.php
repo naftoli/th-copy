@@ -189,7 +189,12 @@ class UserRegistrationRouter {
                         } else {
                             $total -= $amount; // subtract amount from total
                             $installmentsCreated = true;
-                            $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
+                            $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
+                            if (!$saved) {
+                                mysql_query("ROLLBACK");
+                                mysql_query("SET AUTOCOMMIT=1");
+                                json_error("Error saving installments to db");
+                            }
                         }
                     } catch (Exception $e) {
                         mysql_query("ROLLBACK");
