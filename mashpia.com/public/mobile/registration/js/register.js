@@ -378,6 +378,14 @@ var registrationApp = function() {
             $("#myshliachTerms").hide()
         }
 
+        // show the page
+        templates.showUser( state.selected_users[0], 0 );
+        showSection('step-2');
+
+        current_index = parseInt( $("#current_index").val() );
+        selected_user = state.selected_users[ current_index ];
+        school_id = selected_user.school.school_id;
+
         // yahadus registration
         var australian = [ 55, 66, 110, 112, 180, 256, 643, 709, 713, 690 ];
         $('.book-bought').click( function() {
@@ -426,14 +434,6 @@ var registrationApp = function() {
             if ( purchaseValue == 'store' ) $("#step-2 form #book-purchase-details").show();
             else $("#step-2 form #book-purchase-details").hide();
         });
-
-        // show the page
-        templates.showUser( state.selected_users[0], 0 );
-        showSection('step-2');
-
-        current_index = parseInt( $("#current_index").val() );
-        selected_user = state.selected_users[ current_index ];
-        school_id = selected_user.school.school_id;
 
         // show study guides info for all non Australian schools
         // if ( !australian.includes( school_id ) && school_id != anash_kinder && school_id != myshliach ) $("#study-guides").show();
