@@ -1658,6 +1658,7 @@ var registrationApp = function() {
                 price: shipping_charge,
                 meta: {
                     type: 'shipping',
+                    paid: shipping_charge,
                     shipping_type: state.shipping_type,
                     shipping_charges: shipping_charge,
                     code: "F" + selected_user.parentAccount.admin_id + ":" + shipCode + shipping_charge,

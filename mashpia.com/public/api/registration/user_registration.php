@@ -239,9 +239,9 @@ class UserRegistrationRouter {
                         case 'THE':
                             $amount = $registration['paid'];
                             $discount = $registration['discount'] ?? 0;
-                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
-                            $res = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
-                            if ($res) $errors[$user_id][] = $res;
+//                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
+                            $error = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
+                            if (! empty($error)) $errors[$user_id][] = $error;
                             else $this->sendEmail($user, $year);
                             break;
                         case 'LDE':
