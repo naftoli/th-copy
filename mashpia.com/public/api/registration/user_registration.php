@@ -302,7 +302,7 @@ class UserRegistrationRouter {
             $errors[0] = $e;
         }
 
-        if ( count( $errors ) > 0 ) {
+        if (count($errors)) {
             @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
             json_error( 'There were errors.', $errors );
         }
