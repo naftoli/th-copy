@@ -179,7 +179,7 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-//            $installmentError = false;
+            $installmentError = false;
 //            if ($installments) {
 //                // figure out amount for installments
 //                $amount = 0;
