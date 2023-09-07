@@ -2215,10 +2215,12 @@ var templates = function(){
             else $("#anash_kinder_text").hide();
 
             if ([61, 269].includes(user.school.school_id)) {
-                $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass plus $30 shipping fee.")
+                $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average " +
+                  "on the 3 tests there will be a fee of $36 - $350 depending on the track they pass plus a shipping fee (amount is dependant on your address).")
                 $("#myshliachTerms").show()
             } else {
-                $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass.")
+                $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing " +
+                  "average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass.")
                 $("#myshliachTerms").hide()
             }
 
