@@ -302,6 +302,9 @@ class UserRegistrationRouter {
             // mail errors to myself
             @mail("support@tzivoshashem.org", "Mobile Registration Error(s)", json_encode($errors));
             json_error( 'There were errors.', $errors );
+        } else {
+            mysql_query("COMMIT");
+            mysql_query("SET AUTOCOMMIT=1");
         }
 
         json_response( "Successfully Registered." );
