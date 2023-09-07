@@ -226,6 +226,8 @@ class UserRegistrationRouter {
             // process each item in the cart
             foreach ( $cart as $registration ) {
                 $user_id = $registration['user_id'];
+                $amount = $registration['paid'];
+
                 // get user modal;
                 foreach ($users as $user) {
                     if ($user->user_id == $user_id) break;
@@ -237,7 +239,6 @@ class UserRegistrationRouter {
                     if (! in_array($code, ['LDE', 'THE'])) $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
                     switch ($code) {
                         case 'THE':
-                            $amount = $registration['paid'];
                             $discount = $registration['discount'] ?? 0;
 //                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
                             $year = GlobalSettings::getRegistrationYear($user->school_id);
@@ -255,7 +256,7 @@ class UserRegistrationRouter {
                                     $registration['comments'], $registration['track'] )
                             )
                                 $errors[$user_id][] = "Could not register ".$user->user_id." for chidon";
-                            else $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
+                            else $user->registrationCharge($code, $amount, $trans_id, $year);
 
                             // add book purchased info to db
                             if ( intval( $registration['purchased'] ) == 1 ) {
@@ -292,11 +293,7 @@ class UserRegistrationRouter {
                     }
                 } else {
                     // add the registration charge
-                    $user->registrationCharge(
-                        $registration['registration_type'],
-                        $registration['paid'],
-                        $trans_id, $year
-                    );
+                    $user->registrationCharge($registration['registration_type'], $amount, $trans_id, $year);
                 }
             }
         } catch( Exception $e ) {
