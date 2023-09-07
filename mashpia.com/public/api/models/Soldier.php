@@ -678,7 +678,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
      */
     public function registerChidon(
         $year, $size, $book, $yarmulka = 5, $name_pref, $parent_id = 0, $amount = null, $trans_id = '', $recruited = false, $recruited_by = 0, $poll = '',
-        $comments = '', $track = '', $early_reg = 0
+        $comments = '', $track = ''
     ) {
         global $MASHPIA_DB;
 
@@ -738,8 +738,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 comments = :comments,
                 test_type = :test_type, 
                 recruited_by = :recruit, 
-                parent_id = :parent,
-                early_reg = :early_reg
+                parent_id = :parent
             ");
         }
         $result = $chidonQry->execute([
@@ -754,10 +753,27 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'comments'  => $comments,
             'test_type' => $track,
             'recruit'   => $recruited_by,
-            'parent'    => $parent_id,
-            'early_reg' => $early_reg
+            'parent'    => $parent_id
         ]);
-        echo $chidonQry->debugDumpParams();
+//        echo $chidonQry->debugDumpParams();
+        return $result;
+    }
+
+    public function earlyReg($admin_id, $year, $user_id, $amount) {
+        global $MASHPIA_DB;
+        $qry = $MASHPIA_DB->prepare("
+            UPDATE th_chidon SET 
+                paid = :amount,
+                date_paid = now(),
+                paid_by = :admin 
+            WHERE year = :year AND user_id = :user
+        ");
+        $result = $qry->execute([
+            'year'  => $year,
+            'user'  => $user_id,
+            'amount'    => $amount,
+            'admin'     => $admin_id
+        ]);
         return $result;
     }
 

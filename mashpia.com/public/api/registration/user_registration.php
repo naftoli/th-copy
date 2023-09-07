@@ -178,7 +178,7 @@ class UserRegistrationRouter {
                     if ($reg['type'] == 'advance registration') $amount += $reg['paid'];
                 }
                 if ($amount) {
-                    // create subscription
+                    // create installments (called subscriptions in authorize)
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id);
                         $result = $subscription->createSubscription($amount, $installments);
@@ -255,15 +255,13 @@ class UserRegistrationRouter {
                             }
                             break;
                         case 'LDE':
-                            $early_reg = 0;
-                            if ($installmentsCreated) $early_reg = 1;
                             $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
                             $recruited_by = intval( $registration['recruitedBy'] );
                             if (!
                                 $user->registerChidon(
                                     $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
                                     $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
-                                    $registration['comments'], $registration['track'], $early_reg )
+                                    $registration['comments'], $registration['track'] )
                             ) {
                                 mysql_query("ROLLBACK");
                                 mysql_query("SET AUTOCOMMIT=1");
@@ -302,6 +300,12 @@ class UserRegistrationRouter {
                         case 'YB4':
                         case 'YB5':
                             $user->addBookPurchase($year, $user_id, 'parent_account', $trans_id);
+                            break;
+                        case 'RRYSD':
+                        case 'RRYDA':
+                        case 'RRHVN':
+                            // early registration
+                            if (! $installmentsCreated) $user->earlyReg($admin->admin_id, $year, $user_id, $amount);
                             break;
                     }
                 } else {
