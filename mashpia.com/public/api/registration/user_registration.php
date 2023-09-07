@@ -134,7 +134,6 @@ class UserRegistrationRouter {
 
         /******************************** SETUP ********************************/
         // * get the post data
-
         $payment_info = $_POST['payment'];
         $cart = $_POST['cart'];
 //        $info = file_get_contents("php://input");

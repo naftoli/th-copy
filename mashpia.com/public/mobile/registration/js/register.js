@@ -1685,6 +1685,7 @@ var registrationApp = function() {
             $( event.target ).addClass('was-validated');
         }
         postData.payment['installments'] = $(".installments:checked").val()
+        postData.cart = state.cart.map( function(item){ return item.meta } )
         registerUsers( postData );
     }
 
@@ -1785,7 +1786,6 @@ var registrationApp = function() {
 
     function registerUsers( postData ){
         return new Promise( function( resolve, reject ){
-            postData.cart = state.cart.map( function(item){ return item.meta } )
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
             console.log(data)
