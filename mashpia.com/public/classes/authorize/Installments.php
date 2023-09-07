@@ -88,7 +88,7 @@ class Installments
         $this->total_amount = $amount;
         $this->number_of_installments = $numInstallments;
         $this->installment_amount = round(floatval($amount / $numInstallments), 2);
-        $this->start_date = new \DateTime(date('Y-m-d', strtotime("+1 month")));
+        $this->start_date = date('Y-m-d', strtotime("+1 month"));
 
         $merchantAuthentication = $this->setAuth();
         // Set the transaction's refId
@@ -104,7 +104,7 @@ class Installments
 
         $paymentSchedule = new AnetAPI\PaymentScheduleType();
         $paymentSchedule->setInterval($interval);
-        $paymentSchedule->setStartDate($this->start_date);
+        $paymentSchedule->setStartDate(new \DateTime(date('Y-m-d', strtotime("+1 month"))));
         $paymentSchedule->setTotalOccurrences($numInstallments);
 
         $subscription->setPaymentSchedule($paymentSchedule);
