@@ -134,10 +134,14 @@ class UserRegistrationRouter {
 
         /******************************** SETUP ********************************/
         // * get the post data
-        $payment_info = $_POST['payment'];
+
+//        $payment_info = $_POST['payment'];
+//        $cart = $_POST['cart'];
+        $info = file_get_contents("php://input");
+        $payment_info = json_decode($info, true)['payment'];
         $total = intval( $payment_info['total'] );
         $installments = intval($payment_info['installments']) ?? 0;
-        $cart = $_POST['cart'];
+        $cart = json_decode($info, true)['cart'];
 
         // make sure info is correct and create array of user ids
         $user_ids = [];
@@ -191,10 +195,8 @@ class UserRegistrationRouter {
                     // create subscription
                     $subscription = new classes\authorize\Installments();
                     $installmentError = $subscription->createSubscription($amount, $installments, $customer_profile->customerProfileId);
-                    if (! $installmentError) {
-                        // remove this amount from the total to be charged today
-                        $total -= $amount;
-                    }
+                    if ($installmentError) json_error($installmentError);
+                    else $total -= $amount; // subtract amount from total
                 }
             }
 
