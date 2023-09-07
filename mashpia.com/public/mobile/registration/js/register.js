@@ -943,6 +943,7 @@ var registrationApp = function() {
                 meta: {
                     type: 'registration',
                     user_id: selected_user.user_id,
+                    paid: selected_user.registrationRates.chayolei,
                     registration_type: 'chayolei',
                     paid: selected_user.registrationRates.chayolei,
                     ckids: 1
@@ -1659,6 +1660,7 @@ var registrationApp = function() {
                 meta: {
                     type: 'shipping',
                     paid: shipping_charge,
+                    user_id: selected_user.user_id,
                     shipping_type: state.shipping_type,
                     shipping_charges: shipping_charge,
                     code: "F" + selected_user.parentAccount.admin_id + ":" + shipCode + shipping_charge,
