@@ -1,6 +1,9 @@
 <?php
 namespace classes\authorize;
 
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 // load the constants
 require_once( dirname(__FILE__) . "/../../../includes/authorize_constants.php" );
 use includes\authorize\AuthorizeConstants as Constants;

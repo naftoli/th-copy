@@ -134,7 +134,6 @@ class UserRegistrationRouter {
 
         /******************************** SETUP ********************************/
         // * get the post data
-        echo "<pre>"; print_r( $_POST ); echo "</pre>";
         $payment_info = $_POST['payment'];
         $cart = $_POST['cart'];
         $total = intval( $payment_info['total'] );
@@ -173,7 +172,6 @@ class UserRegistrationRouter {
             } else {
                 $payment_profile  = $admin->createPaymentProfile( $payment_info );
                 $customer_profile = $admin->customerProfile();
-
                 if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
                     json_error( $payment_profile );
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
