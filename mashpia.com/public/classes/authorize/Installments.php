@@ -160,7 +160,6 @@ class Installments
         $request->setSubscriptionId($this->subscription_id);
 
         $controller = new AnetController\ARBCancelSubscriptionController($request);
-
-        $response = $controller->executeWithApiResponse($this->endpoint);
+        $controller->executeWithApiResponse($this->endpoint);
     }
 }
