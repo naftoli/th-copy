@@ -150,6 +150,17 @@ class Installments
     }
 
     public function cancelSubscription() {
+        $merchantAuthentication = $this->setAuth();
+        // Set the transaction's refId
+        $refId = 'ref' . time();
 
+        $request = new AnetAPI\ARBCancelSubscriptionRequest();
+        $request->setMerchantAuthentication($merchantAuthentication);
+        $request->setRefId($refId);
+        $request->setSubscriptionId($this->subscription_id);
+
+        $controller = new AnetController\ARBCancelSubscriptionController($request);
+
+        $response = $controller->executeWithApiResponse($this->endpoint);
     }
 }
