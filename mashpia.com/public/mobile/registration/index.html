@@ -1801,7 +1801,7 @@
 
     // make sure serial number is valid
     $("#recruited_by_user_serial").blur(function () {
-      let serial = this.value
+      let serial = $(this).val()
       if (serial.length && !isNaN(serial)) {
         checkSerial(serial)
       }
@@ -1835,7 +1835,7 @@
         }, 0)
         return false
       }
-      $.post('api/checkSerial.php', {serial}, function (result) {
+      $.post('api/checkSerial.php', { serial: number }, function (result) {
         if (!result) {
           alert('No such serial number found in our system.')
           setTimeout(function () {
