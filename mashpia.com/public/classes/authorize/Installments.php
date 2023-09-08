@@ -145,6 +145,7 @@ class Installments
         $res = $stmt->execute([
             $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date
         ]);
+        if (!$res) echo $stmt->debugDumpParams();
         return $res;
     }
 }
