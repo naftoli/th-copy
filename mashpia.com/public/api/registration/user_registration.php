@@ -242,9 +242,11 @@ class UserRegistrationRouter {
                 if ($registration['codeOnly']) {
                     $code = $registration['codeOnly'];
                     $year = GlobalSettings::getChidonRegYear();
-                    if (! in_array($code, ['LDE', 'THE'])) $user->registrationCharge($code, $amount, $trans_id, $year);
-                    switch ($code) {
-                        case 'THE':
+                    $chayoleiReg = strpos($code, 'THE') !== false;
+                    $chidonReg = strpos($code, 'LDE') !== false;
+
+                    if ($chayoleiReg || $chidonReg) {
+                        if ($chayoleiReg) {
                             // check if user is already registered
                             $status = $user->registrationStatus();
                             if (!$status['chayolei']) { // user not yet registered, so register him/her
@@ -259,15 +261,15 @@ class UserRegistrationRouter {
                                 }
                                 else $this->sendEmail($user, $year);
                             }
-                            break;
-                        case 'LDE':
-                            $recruited = intval( $registration['recruited'] ) == 1 ? true : false;
-                            $recruited_by = intval( $registration['recruitedBy'] );
+                        }
+                        if ($chidonReg) {
+                            $recruited = intval($registration['recruited']) == 1 ? true : false;
+                            $recruited_by = intval($registration['recruitedBy']);
                             if (!
-                                $user->registerChidon(
-                                    $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
-                                    $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
-                                    $registration['comments'], $registration['track'] )
+                            $user->registerChidon(
+                                $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
+                                $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
+                                $registration['comments'], $registration['track'])
                             ) {
                                 mysql_query("ROLLBACK");
                                 mysql_query("SET AUTOCOMMIT=1");
@@ -276,12 +278,12 @@ class UserRegistrationRouter {
                             $user->registrationCharge($code, $amount, $trans_id, $year);
 
                             // add book purchased info to db
-                            if ( intval( $registration['purchased'] ) == 1 ) {
+                            if (intval($registration['purchased']) == 1) {
                                 $location = $registration['purchasedWhere'];
                                 $store_name = $registration['store']['store_name'];
                                 $store_city = $registration['store']['store_city'];
                                 $version = $registration['bookVersion'];
-                                $user->addBookPurchase( $year, $user->user_id, $location, 0, $store_name, $store_city, $version );
+                                $user->addBookPurchase($year, $user->user_id, $location, 0, $store_name, $store_city, $version);
                             }
 
                             // send email to recruited by child
@@ -296,29 +298,31 @@ class UserRegistrationRouter {
 
                             // send email to parents
                             $this->sendEmailToParents($user, $year, $admin, $installmentsCreated);
-                            break;
-                        case 'KHKE':
-                            $user->addKhkReg($year, $user_id);
-                            break;
-                        case 'YB1':
-                        case 'YB2':
-                        case 'YB3':
-                        case 'YB4':
-                        case 'YB5':
-                            $user->addBookPurchase($year, $user_id, 'parent_account', $trans_id);
-                            break;
-                        case 'RRYSD':
-                        case 'RRYDA':
-                        case 'RRHVN':
-                            // early registration
-                            if (! $installmentsCreated) $user->earlyReg($admin->admin_id, $year, $user_id, $amount);
-                            break;
+                        }
+                    } else {
+                        $user->registrationCharge($code, $amount, $trans_id, $year);
+                        switch ($code) {
+                            case 'KHKE':
+                                $user->addKhkReg($year, $user_id);
+                                break;
+                            case 'YB1':
+                            case 'YB2':
+                            case 'YB3':
+                            case 'YB4':
+                            case 'YB5':
+                                $user->addBookPurchase($year, $user_id, 'parent_account', $trans_id);
+                                break;
+                            case 'RRYSD':
+                            case 'RRYDA':
+                            case 'RRHVN':
+                                // early registration
+                                if (!$installmentsCreated) $user->earlyReg($admin->admin_id, $year, $user_id, $amount);
+                                break;
+                        }
                     }
-                    echo "User ID: " . $user->user_id . "<br />";
                 } else {
                     // add the registration charge
                     $user->registrationCharge($registration['registration_type'], $amount, $trans_id, $year);
-                    echo "User ID: " . $user->user_id . "<br />";
                 }
             }
         } catch( Exception $e ) {
