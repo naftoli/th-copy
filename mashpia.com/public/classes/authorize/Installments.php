@@ -139,7 +139,7 @@ class Installments
 
     public function saveToDb($dbHandle, $admin_id) {
         $stmt = $dbHandle->prepare(
-            "INSERT INTO `th_chidon_installment` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`) 
+            "INSERT INTO `th_chidon_installments` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`) 
                 VALUES (?, ?, ?, ?, ?, ?)"
         );
         $res = $stmt->execute([
