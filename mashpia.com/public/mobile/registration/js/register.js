@@ -1770,9 +1770,9 @@ var registrationApp = function() {
                 response.users.forEach( function( user ) {
                     user.dob = user.dob ? user.dob.split(" ")[0] : user.dob;
                     if (user.user_registered > 0) state.registered.push(user)
-                    // if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false ||
-                    //         user.registrationStatus.chidonEdit === true )
-                    if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false )
+                    if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false ||
+                            user.registrationStatus.chidonEdit === true )
+                    // if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false )
                         state.users.push( user );
                 });
                 if ( state.users.length === 1 ) state.selected_users = state.users;
@@ -1931,6 +1931,7 @@ var templates = function(){
                     $("#khk-reg-info").hide()
                     $("#khk-edit-info").show()
                 }
+                $("#advanced-registration").hide()
             }
         },
         showUser: function( user, index ){
@@ -2087,13 +2088,15 @@ var templates = function(){
             }
             $("#yahadus-poll").empty().append(html)
 
-            // update the address info
-            // if (user.parentAccount.admin_address1) $( '#c-address' ).val( user.parentAccount.admin_address1 );
-            // if (user.parentAccount.admin_address2) $( '#c-apt' ).val( user.parentAccount.admin_address2 );
-            // if (user.parentAccount.admin_city) $( '#c-city' ).val( user.parentAccount.admin_city );
-            // if (user.parentAccount.admin_state) $( '#c-state' ).val( user.parentAccount.admin_state );
-            // if (user.parentAccount.admin_postal) $( '#c-zip' ).val( user.parentAccount.admin_postal );
-            // if (user.parentAccount.admin_country) $( '#c-country' ).val( user.parentAccount.admin_country );
+            // update the address info if editing
+            if (user.getChidonInfo) {
+                if (user.parentAccount.admin_address1) $('#c-address').val(user.parentAccount.admin_address1);
+                if (user.parentAccount.admin_address2) $('#c-apt').val(user.parentAccount.admin_address2);
+                if (user.parentAccount.admin_city) $('#c-city').val(user.parentAccount.admin_city);
+                if (user.parentAccount.admin_state) $('#c-state').val(user.parentAccount.admin_state);
+                if (user.parentAccount.admin_postal) $('#c-zip').val(user.parentAccount.admin_postal);
+                if (user.parentAccount.admin_country) $('#c-country').val(user.parentAccount.admin_country);
+            }
 
             // reset all fields
             let resets = [

@@ -311,8 +311,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     LEFT JOIN
                 yahadus_book_purchases ybp USING (year , user_id)
             WHERE
-                tc.year = :year AND tc.user_id = :user
-                    AND rc.type = 'chidon'
+                tc.year = :year AND tc.user_id = :user 
+                    AND rc.type like '%LDE%'
         ");
         $year = GlobalSettings::getChidonRegYear();
         $res = $query->execute([
@@ -467,10 +467,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $row['chidon'] && !in_array( $this->school_id, $exceptions )
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
-//            $result['chidonEdit'] = !!$row['th_chidon_id'];
+            $result['chidonEdit'] = !!$row['th_chidon_id'];
         } else {
             $result['chidon'] = true;
-//            $result['chidonEdit'] = false;
+            $result['chidonEdit'] = false;
         }
 
         // turn off chayolei and chidon reg if school has not registered yet
@@ -1067,9 +1067,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 'school_id', 'class_id', 'pic_mission_type'
             ],
             'methods' => [ 
-                'profilePicture', 'barcode', 'miles', 'rank',
-                'rankBoard', 'medalBoard', 
-                'parentAccount', 'registrationCharges'
+                'profilePicture', 'barcode', 'miles', 'rank', 'rankBoard', 'medalBoard',
+                'parentAccount', 'registrationCharges',
             ],
             'include' => [ 
                 'school' => [ 
