@@ -1915,6 +1915,7 @@ var templates = function(){
                 if (user.school.school_id == 269) text = "The Chidon Limmud (Chidon Kop Cards, the Study Guide, " +
                   "3 tests Shipping & Chidon Coordinator) costs $70 per child and is subsidized by our generous donors. I would like to pay:"
                 $("#reg_text").empty().append(text)
+                $("#advanced-registration").show()
             } else {
                 // document.getElementById('chidon').checked = true
                 $("#chidon").attr('disabled', true)
