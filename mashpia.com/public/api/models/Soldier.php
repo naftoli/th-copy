@@ -438,15 +438,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if (!$year) $year = GlobalSettings::getRegistrationYear( $this->school_id );
         if (!$chidon_year) $chidon_year = GlobalSettings::getChidonRegYear();
 
-        if ($this->user_id == 66871) $chidon_year = 5784;
-
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
-            ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
-            ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
-            ."JOIN schools s ON u.school_id = s.school_id "
-            ."WHERE u.user_id = :user_id;"
+                ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
+                ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
+                ."JOIN schools s ON u.school_id = s.school_id "
+                ."WHERE u.user_id = :user_id;"
         );
         $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();

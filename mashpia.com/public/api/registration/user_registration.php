@@ -241,7 +241,7 @@ class UserRegistrationRouter {
                 if ($registration['codeOnly']) {
                     $code = $registration['codeOnly'];
                     $year = GlobalSettings::getChidonRegYear();
-                    if (! in_array($code, ['LDE', 'THE'])) $user->registrationCharge($code, $registration['paid'], $trans_id, $year);
+                    if (! in_array($code, ['LDE', 'THE'])) $user->registrationCharge($code, $amount, $trans_id, $year);
                     switch ($code) {
                         case 'THE':
                             // check if user is already registered
@@ -313,9 +313,11 @@ class UserRegistrationRouter {
                             if (! $installmentsCreated) $user->earlyReg($admin->admin_id, $year, $user_id, $amount);
                             break;
                     }
+                    echo "User ID: " . $user->user_id . "<br />";
                 } else {
                     // add the registration charge
                     $user->registrationCharge($registration['registration_type'], $amount, $trans_id, $year);
+                    echo "User ID: " . $user->user_id . "<br />";
                 }
             }
         } catch( Exception $e ) {
