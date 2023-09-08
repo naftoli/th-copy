@@ -151,6 +151,7 @@ class UserRegistrationRouter {
 
         mysql_query("SET AUTOCOMMIT=0");
         mysql_query("START TRANSACTION");
+        $installmentsCreated = false;
 
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
@@ -170,7 +171,6 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-            $installmentsCreated = false;
             if ($installments) {
                 // figure out amount for installments
                 $amount = 0;
@@ -316,7 +316,7 @@ class UserRegistrationRouter {
                             case 'RRYDA':
                             case 'RRHVN':
                                 // early registration
-                                if (!$installmentsCreated) $user->earlyReg($admin->admin_id, $year, $user_id, $amount);
+                                if (! $installmentsCreated) $user->earlyReg($admin->admin_id, $year, $user_id, $amount);
                                 break;
                         }
                     }
