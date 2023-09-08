@@ -139,7 +139,7 @@ class Installments
 
     public function saveToDb($dbHandle, $admin_id) {
         $stmt = $dbHandle->prepare(
-            "INSERT INTO `subscriptions` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`) 
+            "INSERT INTO `th_chidon_installment` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`) 
                 VALUES (?, ?, ?, ?, ?, ?)"
         );
         $res = $stmt->execute([
@@ -147,5 +147,9 @@ class Installments
         ]);
         if (!$res) echo $stmt->debugDumpParams();
         return $res;
+    }
+
+    public function cancelSubscription() {
+
     }
 }

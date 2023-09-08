@@ -191,6 +191,7 @@ class UserRegistrationRouter {
                             $installmentsCreated = true;
                             $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
                             if (!$saved) {
+                                $subscription->cancelSubscription();
                                 mysql_query("ROLLBACK");
                                 mysql_query("SET AUTOCOMMIT=1");
                                 json_error("Error saving installments to db");
