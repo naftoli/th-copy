@@ -159,7 +159,7 @@ $info = array(
 );
 
 require_once '../../class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 if (isset($_POST['submit'])) {	
     $data = array();
