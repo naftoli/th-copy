@@ -21,6 +21,7 @@ $zip = $info['zip'];
 $cvv = $info['cvv'];
 $address = "";
 $state = "";
+$item_id = $info['item_id'] ?? 1;
 
 $description = "000:00 #lulav " . $amount;
 
@@ -54,7 +55,7 @@ if ( $amount > 0 ) {
             "INSERT INTO mashpia_purchases.purchase_details 
                 SET purchase_id = :id, 
                 user_id = :user, 
-                item_id = 1, 
+                item_id = :item, 
                 qty = 1"
         );
 
@@ -62,6 +63,7 @@ if ( $amount > 0 ) {
             $qry->execute([
                 ':id'       => $purchase_id,
                 ':user'     => $user_id,
+                ':item'     => $item_id
             ]);
         }
 

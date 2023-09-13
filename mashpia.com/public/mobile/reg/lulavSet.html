@@ -214,6 +214,7 @@
                 $(".sold").text( alreadySold );
                 $("#leftToSell").text( leftToSell );
                 if ( soldOut || leftToSell < 1 ) {
+                    location.href = 'lulavSet2.html'
                     soldOut = true;
                     $("#sold-out").show();
                     $("#purchases").hide();
