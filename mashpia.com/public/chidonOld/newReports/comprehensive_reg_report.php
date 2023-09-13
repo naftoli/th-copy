@@ -123,7 +123,7 @@ $trackYr = 5782;
         Choose Year:
         <select name="year" id="year">
             <?php
-            for ($y = 5782; $y <= $year; $y++) {
+            for ($y = 5782; $y <= $chidonYr; $y++) {
               echo "<option value='$y'" . ($y == $year ? ' selected' : '') . ">$y</option>";
             }
             ?>
