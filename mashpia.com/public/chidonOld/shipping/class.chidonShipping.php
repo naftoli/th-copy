@@ -21,7 +21,7 @@ class ChidonShipping
     public function __construct() {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->year = GlobalSettings::getChidonYear();
+        $this->year = GlobalSettings::getChidonRegYear();
         $this->schools = [];
         $this->grades = [];
         $this->users = [];
