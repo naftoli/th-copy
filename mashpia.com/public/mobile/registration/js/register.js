@@ -1936,6 +1936,7 @@ var templates = function(){
                 $("#advanced-registration").hide()
                 $(".limmud").attr('disabled', true)
                 $(".recruit").attr('disabled', true)
+                $("#yarmulka-size").attr('disabled', true)
                 $("#chidon-sweater-size").attr('disabled', true)
                 $(".yahadus-poll").attr('disabled', true)
                 $("#c-address").attr('disabled', true)
@@ -1944,6 +1945,7 @@ var templates = function(){
                 $("#c-state").attr('disabled', true)
                 $("#c-zip").attr('disabled', true)
                 $("#c-country").attr('disabled', true)
+                // $("#chidon").parent().empty()
             }
         },
         showUser: function( user, index ){
