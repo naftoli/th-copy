@@ -61,7 +61,7 @@ class ShabbosMevorchim
     {
         if ($year == 0) {
             require_once($_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php");
-            $year = GlobalSettings::getCurrentYear();
+            $year = GlobalSettings::getRegistrationYear();
         }
 
         require_once($_SERVER['DOCUMENT_ROOT'] . "/tehillim_backups/class.tehillimBackup.php"); // load the backups class
