@@ -792,37 +792,37 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $MASHPIA_DB;
 
         // figure out if adding or updating
-        $qry = $MASHPIA_DB->prepare("
-            SELECT count(*) as total FROM yahadus_book_purchases 
-            WHERE year = :year and user_id = :user
-        ");
-        $qry->execute([
-            'year'  => $year,
-            'user'  => $user_id
-        ]);
-        $row = $qry->fetch();
-        $total = $row['total'];
-        if ($total) {
-            // updating
-            // don't update trans_id
-            $qry = $MASHPIA_DB->prepare("
-                UPDATE yahadus_book_purchases SET 
-                    location = :location, 
-                    store_name = :store_name, 
-                    store_city = :store_city, 
-                    version = :version  
-                WHERE
-                    user_id = :user AND year = :year
-            ");
-            $qry->execute([
-                ':year' =>  $year,
-                ':user' =>  $user_id,
-                ':location' =>  $location,
-                ':store_name'   =>  $store_name,
-                ':store_city'   =>  $store_city,
-                ':version'      => intval($version)
-            ]);
-        } else {
+//        $qry = $MASHPIA_DB->prepare("
+//            SELECT count(*) as total FROM yahadus_book_purchases
+//            WHERE year = :year and user_id = :user
+//        ");
+//        $qry->execute([
+//            'year'  => $year,
+//            'user'  => $user_id
+//        ]);
+//        $row = $qry->fetch();
+//        $total = $row['total'];
+//        if ($total) {
+//            // updating
+//            // don't update trans_id
+//            $qry = $MASHPIA_DB->prepare("
+//                UPDATE yahadus_book_purchases SET
+//                    location = :location,
+//                    store_name = :store_name,
+//                    store_city = :store_city,
+//                    version = :version
+//                WHERE
+//                    user_id = :user AND year = :year
+//            ");
+//            $qry->execute([
+//                ':year' =>  $year,
+//                ':user' =>  $user_id,
+//                ':location' =>  $location,
+//                ':store_name'   =>  $store_name,
+//                ':store_city'   =>  $store_city,
+//                ':version'      => intval($version)
+//            ]);
+//        } else {
             $qry = $MASHPIA_DB->prepare(
                 "insert into yahadus_book_purchases 
                 set year = :year, 
@@ -842,7 +842,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 ':store_city'   =>  $store_city,
                 ':version'      => intval($version)
             ]);
-        }
+//        }
 //        echo $qry->debugDumpParams();
     }
 
