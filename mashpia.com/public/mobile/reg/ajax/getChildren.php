@@ -177,7 +177,7 @@ if ( !empty( $users ) ) {
          if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
          	$sqlPurchased = "select * from mashpia_purchases.purchase_details
                             join mashpia_purchases.purchases using (purchase_id)
-                            where item_id = 1 and user_id = " . $row['user_id'] . " and year = " . $reg_year;
+                            where item_id in (1, 28) and user_id = " . $row['user_id'] . " and year = " . $reg_year;
          	$resPurchased = mysql_query( $sqlPurchased );
          	if ( mysql_num_rows( $resPurchased ) ) {
          		$children[$row['user_id']]['lulavPurchased'] = 1;
@@ -287,9 +287,6 @@ if ( !empty( $users ) ) {
         if ( !$children[$row['user_id']]['schoolTypeRegistered'] ) {
             $children[ $row['user_id'] ]['reg_types'] = [];
         }
-
-        // shut down chidon reg
-        if (isset($children[ $row['user_id'] ]['reg_types']['chidon'])) $children[ $row['user_id'] ]['reg_types']['chidon'] = false;
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;
