@@ -122,8 +122,11 @@ $trackYr = 5782;
     <div>
         Choose Year:
         <select name="year" id="year">
-            <option value="5782" <?php if ($year == 5782) echo "selected" ?>>5782</option>
-            <option value="5783" <?php if ($year == 5783) echo "selected" ?>>5783</option>
+            <?php
+            for ($y = 5782; $y <= $year; $y++) {
+              echo "<option value='$y'" . ($y == $year ? ' selected' : '') . ">$y</option>";
+            }
+            ?>
         </select>
     </div>
     <?php
