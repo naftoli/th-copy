@@ -202,13 +202,13 @@
             var soldOut = false;
             var now = Math.floor( new Date().getTime() / 1000);
             console.log( now );
-            if ( now >= 1694577599 ) {
-                soldOut = true;
-            }
+            // if ( now >= 1694577599 ) {
+            //     soldOut = true;
+            // }
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2500;
-                var alreadySold = 800;
+                var alreadySold = 1120;
                 if (sold) alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
                 $(".sold").text( alreadySold );
