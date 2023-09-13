@@ -882,6 +882,8 @@ class ShabbosMevorchim
                     AND u.class_id = ?";
         $stmtBackup = $this->db->prepare($sqlBackup);
 
+        $cached = []; // add ability to cache results
+
         foreach ($this->rDates as $month => $date) {
 
             foreach ($this->tasks as $key => $task) {
@@ -895,9 +897,15 @@ class ShabbosMevorchim
                     //if ($rowQuota['total'] > 0) {
                     //	$this->classResults[$key][$date][$class] = $rowQuota['total'];
                     //} else {
-                    $stmt1->execute(array($class, $date, $date, $task));
-                    $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                    $this->classResults[$key][$date][$class] = $row1['total'];
+                    if (isset($cached[$key][$date][$class])) {
+                        $this->classResults[$key][$date][$class] = $cached[$key][$date][$class];
+                    } else {
+                        $stmt1->execute(array($class, $date, $date, $task));
+                        $stmt1->execute(array($class, $date, $date, $task));
+                        $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                        $this->classResults[$key][$date][$class] = $row1['total'];
+                        $cached[$key][$date][$class] = $row1['total'];
+                    }
                     //}
                     // if we do not want to only show what was done but also show the totals
                     if (!$this->accomplishedOnly) {
