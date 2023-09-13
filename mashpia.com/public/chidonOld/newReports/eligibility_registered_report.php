@@ -11,7 +11,7 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 // get info for report: serial number, name, school, class, avg per track, highest track passed, highest eligible reward,
 // track registered for
