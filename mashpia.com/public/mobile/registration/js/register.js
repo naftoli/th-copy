@@ -1934,6 +1934,16 @@ var templates = function(){
                     $("#khk-edit-info").show()
                 }
                 $("#advanced-registration").hide()
+                $(".limmud").attr('disabled', true)
+                $(".recruit").attr('disabled', true)
+                $("#chidon-sweater-size").attr('disabled', true)
+                $(".yahadus-poll").attr('disabled', true)
+                $("#c-address").attr('disabled', true)
+                $("#c-apt").attr('disabled', true)
+                $("#c-city").attr('disabled', true)
+                $("#c-state").attr('disabled', true)
+                $("#c-zip").attr('disabled', true)
+                $("#c-country").attr('disabled', true)
             }
         },
         showUser: function( user, index ){
