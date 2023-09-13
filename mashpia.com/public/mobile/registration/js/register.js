@@ -736,6 +736,7 @@ var registrationApp = function() {
             // && selected_charges.chayolei_lite === false
             && selected_charges.ckids === false
             && selected_charges.chidon === false
+            && !selected_user.getChidonInfo
             // && selected_charges.yahadus === false
         ){
             return showError(
