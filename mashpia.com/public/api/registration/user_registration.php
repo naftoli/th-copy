@@ -259,7 +259,9 @@ class UserRegistrationRouter {
                                     mysql_query("SET AUTOCOMMIT=1");
                                     json_error($error);
                                 }
-                                else $this->sendEmail($user, $year);
+                                else {
+                                    if ($user->school_id == 269) $this->sendEmail($user, $year);
+                                }
                             }
                         }
                         if ($chidonReg) {
