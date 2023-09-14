@@ -5,7 +5,7 @@ ini_set('error_display', E_ALL);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
