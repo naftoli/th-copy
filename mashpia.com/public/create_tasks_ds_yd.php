@@ -165,7 +165,7 @@ function getStartEnd($arr) {
 
                     foreach( $cellIterator as $cell ) {
                         $val = trim($cell->getValue());
-                        echo "Field: " . $fieldNames[$i] . " - " . $val . "<br />"; $i++; continue;
+//                        echo "Field: " . $fieldNames[$i] . " - " . $val . "<br />"; $i++; continue;
                         switch ($i) { //$i represents the column in the row
                             case 0:
                                 // set the action to add no matter what
