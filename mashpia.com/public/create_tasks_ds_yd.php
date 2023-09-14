@@ -144,7 +144,6 @@ function getStartEnd($arr) {
                     'pic_girls',
                     'lang',
                     'missionName',
-                    'missionDescription',
                     'shortName',
                     'task',
                     'cat',
@@ -231,13 +230,13 @@ function getStartEnd($arr) {
                                 }
                                 break;
                             // Add a period to the task name
-                            case 25:
+                            case 24:
                                 $task = $val;
                                 if (!strpos($task, '.'))
                                     $task .= ".";
                                 break;
                             // turn the label id into an int for the forgin key relationship
-                            case 27:
+                            case 26:
                                 $labelID = empty($val) ? 0 : intval($val);
                                 break;
                             // For rows 1, 2, 5, 6, 16, 17, 18, 19, 20, 22, 23, 24, and 26
