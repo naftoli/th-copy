@@ -310,7 +310,7 @@ function getStartEnd($arr) {
                     $missionName = "";
                 }
                 //exit;
-//                echo "<pre>"; print_r($missions['add']); echo "</pre>"; exit;
+                echo "<pre>"; print_r($missions['add']); echo "</pre>"; exit;
 
                 mysql_query("SET AUTOCOMMIT=0");
                 mysql_query("BEGIN");
