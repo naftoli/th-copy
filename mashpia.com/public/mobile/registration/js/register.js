@@ -1973,8 +1973,8 @@ var templates = function(){
 
             // hide chidon reg if not applicable
             // if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
-            if (user.registrationStatus.chidon) $("#chidon-registration").hide()
-            else $("#chidon-registration").show()
+            // if (user.registrationStatus.chidon) $("#chidon-registration").hide()
+            // else $("#chidon-registration").show()
 
             // determine if need to show non th school fields or not
             if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
@@ -2354,15 +2354,15 @@ var templates = function(){
                                             })
                                             break
                                         case '.book-bought':
-                                            $(elem.field).each( function() {
-                                                if (this.value == 1 && info.location && info.location.length) $(this).trigger('click')
-                                                else if (this.value == 0 && (!info.location || (info.location && !info.location.length))) {
-                                                    $(this).trigger('click')
-                                                    $(".yahadus").each( function() {
-                                                        if (this.value == 0) this.checked = true
-                                                    })
-                                                }
-                                            })
+                                            // $(elem.field).each( function() {
+                                            //     if (this.value == 1 && info.location && info.location.length) $(this).trigger('click')
+                                            //     else if (this.value == 0 && (!info.location || (info.location && !info.location.length))) {
+                                            //         $(this).trigger('click')
+                                            //         $(".yahadus").each( function() {
+                                            //             if (this.value == 0) this.checked = true
+                                            //         })
+                                            //     }
+                                            // })
                                             break
                                         case '#agreements input':
                                         case '#media':
