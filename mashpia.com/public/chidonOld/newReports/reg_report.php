@@ -176,9 +176,6 @@ $pollKeys = array_keys($poll);
                 <th>Parent Email</th>
                 <th>Bought Book</th>
                 <th>Book Version</th>
-                <th>Amount paid for Enrollment</th>
-                <th>Pre Reg amount</th>
-                <th>Installments</th>
             </tr>
             <?php
             foreach ($info as $row) {
