@@ -41,7 +41,7 @@ $sql = "
         poll,
         comments,
         test_type,
-        non_th_school,
+        non_th_school, 
         a.*
     FROM
         users u
@@ -73,6 +73,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $book_purchases = [];
+$book_purchased_during_reg = [];
 $sql = "select * from yahadus_book_purchases where year = " . $req_yr;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -82,6 +83,7 @@ while ($row = mysql_fetch_assoc($result)) {
     } else {
         $book_purchases[$row['user_id']] = $row;
     }
+    if ($row['location'] == 'parent account' && $row['version'] == 0) $book_purchased_during_reg[] = $row['user_id'];
 }
 
 $langs = [
@@ -155,9 +157,6 @@ $pollKeys = array_keys($poll);
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Full Hebrew Name</th>
-                <th>English Name Known by</th>
-                <th>Hebrew Name Known by</th>
-                <th>DOB</th>
                 <th>Gender</th>
                 <th>Yarmulka</th>
                 <th>Sweater Size</th>
@@ -175,15 +174,17 @@ $pollKeys = array_keys($poll);
                 <th>Non TH School</th>
                 <th>Parent Name</th>
                 <th>Parent Email</th>
+                <th>Bought Book</th>
                 <th>Book Version</th>
+                <th>Amount paid for Enrollment</th>
+                <th>Pre Reg amount</th>
+                <th>Installments</th>
             </tr>
             <?php
             foreach ($info as $row) {
                 echo "<tr><td>" . $row['reg_date'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
                     "</td><td>" . $row['school_name'] . "</td><td>" . $row['first_name'] . "</td><td>" . $row['last_name'] . "</td><td>" .
-                    $row['first_he'] . ' ' . $row['last_he'] . "</td><td>" . $row['first_known_en'] . ' ' .
-                    $row['last_known_en'] . "</td><td>" . $row['first_known_he'] . ' ' . $row['last_known_he'] . "</td><td>" .
-                    $row['dob'] . "</td><td>" . $row['gender'] . "</td><td>";
+                    $row['first_he'] . ' ' . $row['last_he'] . "</td><td>" . $row['gender'] . "</td><td>";
                 if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
                 else echo "<span>";
                 echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .
@@ -217,6 +218,9 @@ $pollKeys = array_keys($poll);
                 if (isset($row['first']) || isset($row['last'])) echo $row['first'] . " " . $row['last'];
                 echo "</td><td>";
                 if (isset($row['admin_email'])) echo $row['admin_email'];
+                echo "</td><td>";
+                if (in_array($row['user_id'], $book_purchased_during_reg)) echo "Yes";
+                else echo "No";
                 echo "</td><td>";
                 if (isset($book_purchases[$row['user_id']])) echo $book_purchases[$row['user_id']]['version'];
                 echo "</td></tr>";
