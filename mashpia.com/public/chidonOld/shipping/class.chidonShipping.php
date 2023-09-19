@@ -108,7 +108,29 @@ class ChidonShipping
      * @return void
      */
     public function getGuides($gender, $school, $guides = []) {
-
+        if (in_array('study guides', $guides)) {
+            $info = [];
+            $sql = "select * from th_chidon tc 
+                    join users u using (user_id) 
+                    where tc.year = :year";
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['year' => $this->year]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                $cat = 'guides';
+                $item = 'study guides';
+                $id = $this->getItemID($cat, $item);
+                $info[$row['user_id']][] = [
+                    'item'  => $item,
+                    'size'  => '',
+                    'color' => '',
+                    'name'  => '',
+                    'id'    => $id,
+                    'cat'   => $cat
+                ];
+            }
+            return $info;
+        }
     }
 
     /**
