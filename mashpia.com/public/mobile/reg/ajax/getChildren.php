@@ -301,6 +301,13 @@ if ( !empty( $users ) ) {
             $children[$row['user_id']]['chidon_id'] = $cRow['th_chidon_id'];
         }
 
+        // find out if child bought a chidon book this year
+        $sqlBook = "select * from yahadus_book_purchases where year = " . $chidon_year . " and user_id = " . $row['user_id'] . " and location = 'parent_account' 
+                        and version = 0";
+        $resBook = mysql_query($sqlBook);
+        if (mysql_num_rows($resBook) > 0) $children[$row['user_id']]['bookPurchased'] = 1;
+        else $children[$row['user_id']]['bookPurchased'] = 0;
+
 //        $trackSql = "select * from th_chidon where date_paid > 0 and year = " . $chidon_year . " and user_id = " . $row['user_id'];
 //        $trackRes = mysql_query($trackSql);
 //        if (mysql_num_rows($trackRes) > 0) {

@@ -405,6 +405,12 @@
                                                     </div>
                                                     {{/if}}
 
+                                                    {{#if this.bookPurchased}}
+                                                        <div class="button-spacing">
+                                                            <div class="chidonRegInfo" style="color: #FFA07A">Purchased Yahadus Book</div>
+                                                        </div>
+                                                    {{/if}}
+
 <!--                                                    {{#if this.chidon5783}}-->
                                                             <div class="button-spacing">
 <!--                                                                <button class="btn btn-danger invitation" id="{{this.user_serial}}">Share your Invitation</button>-->
@@ -416,7 +422,9 @@
 <!--                                                                {{/if}}-->
                                                                 <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{ this.next_year_chidon }}</div>
 <!--                                                                <button class="btn btn-primary re_register"><span>Edit Chidon {{ this.next_year_chidon }} Limmud Enrollment</span></button>-->
-                                                                <button class="btn btn-primary re_register"><span>Purchase Yahadus Book</span></button>
+                                                                <button class="btn btn-primary re_register"><span>Purchase
+                                                                    {{#if this.bookPurchased}}Extra{{/if}}
+                                                                    Yahadus Book</span></button>
                                                             </div>
 <!--                                                    {{/if}}-->
 
