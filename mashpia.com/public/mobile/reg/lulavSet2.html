@@ -209,7 +209,7 @@
 
     $.post('ajax/lulavPurchases.php', { item_id: 28 }, function( sold ) {
       var startWith = 500;
-      var alreadySold = 230;
+      var alreadySold = 286;
       if (sold) alreadySold += parseInt( sold );
       var leftToSell = startWith - alreadySold;
       $(".sold").text( alreadySold );
