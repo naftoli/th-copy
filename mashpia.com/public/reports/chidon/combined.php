@@ -41,7 +41,8 @@ $qry .= "ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
 while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
-    $userInfo[$row['user_id']][$row['type']] = strpos($row['type'], 'YB') !== false ? $row['book_shipped'] : $row['study_guide_shipped'];
+    if (strpos($row['type'], 'YB') !== false) $userInfo[$row['user_id']][$row['type']] = $row['book_shipped'];
+    else if (strpos($row['type'], 'LDE') !== false) $userInfo[$row['user_id']][$row['type']] = $row['study_guide_shipped'];
     $purchases[$row['school_id']][$row['user_id']][$row['type']][] = $row; // show all purchases made by child even if it's more than one
 }
 
