@@ -14,7 +14,7 @@ class Hachayol {
         $this->db = DB::getInstance();
         $this->schools = array();
         $this->schoolDetails = array();
-        $this->chidonYear = GlobalSettings::getChidonYear();
+        $this->chidonYear = GlobalSettings::getRegistrationYear();
         $this->chidonNumbers = array();
         $this->schoolExceptions = [55, 66, 110, 112, 180, 256, 584, 585, 588, 612, 432, 713, 709, 427, 434, 690, 480];
     }
@@ -28,8 +28,7 @@ class Hachayol {
                 FROM schools s
                 JOIN users u
                 USING ( school_id )
-                WHERE s.chayolei = 1 
-                AND u.user_registered > 0 
+                WHERE u.user_registered > 0 
                 AND u.hachayol = 1 
                 AND s.test_school = 0 ";
         if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
