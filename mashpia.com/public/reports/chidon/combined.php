@@ -37,7 +37,7 @@ $qry = "SELECT amount, date, s.*, logo, first, last, c.class_grade, c.class_sub,
     ."JOIN schools s ON s.school_id = u.school_id "
     ."JOIN classes c ON c.class_id = u.class_id "
     ."JOIN th_chidon tc on (tc.user_id = rc.user_id and tc.year = rc.year) "
-    ."WHERE type in ('chidon', 'yahadus') "
+    ."WHERE type like '%LDE%' or type in ('YB1', 'YB2', 'YB3', 'YB4', 'YB5') "
     ."AND rc.year = $year ";
 // limit to dates if limit exists
 if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
@@ -50,8 +50,8 @@ if ( isset( $from ) && isset( $to ) ) {
 if (isset($_POST['not_shipped'])){
     $qry .= "
       AND (
-        (type = 'chidon' and study_guide_shipped = 0) 
-        OR (type = 'yahadus' and book_shipped = 0)
+        (type like '%LDE%' and study_guide_shipped = 0) 
+        OR (type in ('YB1', 'YB2', 'YB3', 'YB4', 'YB5') and book_shipped = 0)
       )
     ";
 }
@@ -60,8 +60,8 @@ $qry .= "ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
 while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
-    if ($row['type'] == 'chidon') $userInfo[$row['user_id']]['chidon'] = $row['study_guide_shipped'];
-    if ($row['type'] == 'yahadus') $userInfo[$row['user_id']]['yahadus'] = $row['book_shipped'];
+    if (in_array($row['type'], ['YB1', 'YB2', 'YB3', 'YB4', 'YB5'])) $userInfo[$row['user_id']]['yahadus'] = $row['book_shipped'];
+    else $userInfo[$row['user_id']]['chidon'] = $row['study_guide_shipped'];
     $purchases[$row['school_id']][$row['user_id']] = $row; // only show child one time on one row
 }
 
