@@ -280,15 +280,6 @@ $totals['books'] = [
   foreach ($totals['booklets'] as $amount) echo "<th>" . $amount . "</th>";
   foreach ($totals['books'] as $amount) echo "<th>" . $amount . "</th>";
   echo "</tr>";
-//  foreach ( $totals as $school_id => $total ) {
-//      ?>
-<!--    <tr>-->
-<!--      <td>--><?//= $schools[$school_id] ?><!--</td>-->
-<!--      <td>--><?//= $total['booklets'] ?><!--</td>-->
-<!--      <td>--><?//= $total['books'] ?><!--</td>-->
-<!--    </tr>-->
-<!--      --><?php
-//  }
   ?>
   </tbody>
 </table>
