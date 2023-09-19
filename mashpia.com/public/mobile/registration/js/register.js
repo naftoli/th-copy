@@ -19,10 +19,9 @@ $("[data-dismiss]").click( function( event ){
 function alertPersonalization(evt) {
     if (evt.checked) {
         alert(
-          "If you would like your child to have their name on their prize, please input it below & you will need to pay the " +
-          "registration fee now instead of the end of the year. If your child doesn't pass, you will not be refunded. " +
-          "The amount paid will be deducted from the end so your amount at the end may be $0.\n\n" +
-          "If your child does not want their name on their prize, please do not fill in their name below and you will not need to pay the registration fee now."
+          "If you would like your child to have their name on their prize, please input it below, and you will need to pre-pay the " +
+          "registration fee now instead of at the end of the year. If your child does not pass, you will NOT be refunded the portion " +
+          "that went towards the prize. The amount paid will be deducted from the end so your amount at the end may be $0."
         )
     }
 }
