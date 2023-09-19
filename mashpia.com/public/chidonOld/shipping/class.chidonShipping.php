@@ -110,9 +110,9 @@ class ChidonShipping
     public function getGuides($gender, $school, $guides = []) {
         if (in_array('study guides', $guides)) {
             $info = [];
-            $sql = "select * from th_chidon tc 
-                    join users u using (user_id) 
-                    where tc.year = :year";
+            $sql = "select * from th_chidon 
+                    where year = :year 
+                    group by user_id";
             $stmt = $this->db->prepare($sql);
             $stmt->execute(['year' => $this->year]);
             $rows = $stmt->fetchAll();
