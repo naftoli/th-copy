@@ -62,7 +62,7 @@ $booklet_users_query = mysql_query( $qry );
 while ( $row = mysql_fetch_assoc( $booklet_users_query ) ) {
     if (strpos($row['type'], 'YB') !== false) $userInfo[$row['user_id']]['yahadus'] = $row['book_shipped'];
     else if (strpos($row['type'], 'LDE') !== false) $userInfo[$row['user_id']]['chidon'] = $row['study_guide_shipped'];
-    $purchases[$row['school_id']][$row['user_id']] = $row; // only show child one time on one row
+    $purchases[$row['school_id']][$row['user_id']][] = $row; // show all purchases made by child even if it's more than one
 }
 
 $book_grand_totals = [
@@ -153,7 +153,7 @@ foreach( $purchases as $school_id => $users ) {
         4   =>  0,
         5   =>  0
     ];
-    $base = $users[key($users)];
+    foreach ($users as $books) $base = $books[0];
     $school_address = $base['shipping_first'] . ' ' . $base['shipping_last'] . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" .
         $base['shipping_city'] . ', ' . $base['shipping_state'] . ' ' . $base['shipping_postal'] . "<br />" . $base['shipping_country'];
     ?>
@@ -177,44 +177,46 @@ foreach( $purchases as $school_id => $users ) {
     </thead>
     <tbody>
     <?php
-    foreach( $users as $user_id => $user ) {
-      $grade = $user['class_grade'];
-      ?>
-      <tr id="<?=$user_id?>">
-        <td><?= $user[ 'first' ]; ?></td>
-        <td><?= $user[ 'last' ]; ?></td>
-        <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
-        <td><?= isset($userInfo[$user_id]['chidon']) ? $user['book'] : '' ?></td>
-        <td>
-          <?php if (isset($userInfo[$user_id]['chidon'])) : ?>
-            <input type="checkbox" name="sg_shipped[]" class="sg_shipped"
-              <?php if ($userInfo[$user_id]['chidon']) echo "checked"; ?>
-            />
-          <?php endif; ?>
-        </td>
-        <td><?= isset($userInfo[$user_id]['yahadus']) ? $user['book'] : '' ?></td>
-        <td>
-          <?php if (isset($userInfo[$user_id]['yahadus'])) : ?>
-            <input type="checkbox" name="book_shipped[]" class="book_shipped"
-                <?php if ($userInfo[$user_id]['yahadus']) echo "checked"; ?>
-            />
-          <?php endif; ?>
-        </td>
-        <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
-      </tr>
-      <?php
-      if (isset($userInfo[$user_id]['chidon'])) {
-        // totals of school
-        $booklet_totals[$school_id][$user['book']]++;
-        // totals per school
-        $totals[$school_id]['booklets']++;
-        // grand totals
-        $booklet_grand_totals[$user['book']]++;
-      }
-      if (isset($userInfo[$user_id]['yahadus'])) {
-        $book_totals[$school_id][$user['book']]++;
-        $totals[$school_id]['books']++;
-        $book_grand_totals[$user['book']]++;
+    foreach( $users as $user_id => $books) {
+      foreach ($books as $user ) {
+        $grade = $user['class_grade'];
+        ?>
+        <tr id="<?=$user_id?>">
+          <td><?= $user[ 'first' ]; ?></td>
+          <td><?= $user[ 'last' ]; ?></td>
+          <td><?= $grade . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
+          <td><?= isset($userInfo[$user_id]['chidon']) ? $user['book'] : '' ?></td>
+          <td>
+            <?php if (isset($userInfo[$user_id]['chidon'])) : ?>
+              <input type="checkbox" name="sg_shipped[]" class="sg_shipped"
+                <?php if ($userInfo[$user_id]['chidon']) echo "checked"; ?>
+              />
+            <?php endif; ?>
+          </td>
+          <td><?= isset($userInfo[$user_id]['yahadus']) ? $user['book'] : '' ?></td>
+          <td>
+            <?php if (isset($userInfo[$user_id]['yahadus'])) : ?>
+              <input type="checkbox" name="book_shipped[]" class="book_shipped"
+                  <?php if ($userInfo[$user_id]['yahadus']) echo "checked"; ?>
+              />
+            <?php endif; ?>
+          </td>
+          <td><?= ( new DateTime($user[ 'date' ]) )->format( 'm/d/Y g:i:sa e' ); ?></td>
+        </tr>
+        <?php
+        if (isset($userInfo[$user_id]['chidon'])) {
+          // totals of school
+          $booklet_totals[$school_id][$user['book']]++;
+          // totals per school
+          $totals[$school_id]['booklets']++;
+          // grand totals
+          $booklet_grand_totals[$user['book']]++;
+        }
+        if (isset($userInfo[$user_id]['yahadus'])) {
+          $book_totals[$school_id][$user['book']]++;
+          $totals[$school_id]['books']++;
+          $book_grand_totals[$user['book']]++;
+        }
       }
     }
     ?>
