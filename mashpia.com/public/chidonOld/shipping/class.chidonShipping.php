@@ -1388,11 +1388,13 @@ class ChidonShipping
 
         foreach ($items as $item) {
             if ($item == 'during enrollment') {
-                $sql = "SELECT * FROM registration_charges   
+                $sql = "SELECT * FROM registration_charges rc 
+                        join users u using (user_id) 
                         WHERE type like 'YB%' AND year = :year";
                 if ($gender == 'm') $sql .= " and u.gender = 'M'";
                 if ($gender == 'f') $sql .= " and u.gender = 'F'";
                 if ($school > 0) $sql .= " and u.school_id = " . $school;
+                echo $sql; exit;
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(['year' => $this->year]);
                 $rows = $stmt->fetchAll();
