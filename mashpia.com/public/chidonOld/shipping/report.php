@@ -248,6 +248,7 @@ ksort($grand_summary);
 
       if (! isset($schools[$school])) continue;
       if (! isset($summary[$school])) continue;
+      if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
       echo "<h3>" . $schools[$school] . "</h3>";
       if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
       $address = '';
@@ -418,6 +419,13 @@ ksort($grand_summary);
       else alert(res.error)
     })
   }
+
+  $(".saveAll").click( function () {
+    $(".shipping").each( function () {
+      update(this, 1)
+    })
+    save()
+  })
 
   $(".saveSchool").click( function() {
     $(this).parent().find('.shipping').each( function () {
