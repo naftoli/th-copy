@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
 }
 
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::GetCurrentRegYear();
+$year = GlobalSettings::getRegistrationYear();
 $sm = calculateSM($year);
 $months = array(
     0 => 'Tishrei',
