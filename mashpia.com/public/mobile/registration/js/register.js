@@ -975,6 +975,7 @@ var registrationApp = function() {
             var recruited_by = $("#recruited_by_user_serial").val()
             if (!recruited || recruited === '0' || recruited_by == '') recruited_by = 0
             let fee = parseInt($("#chidon-fee").val())
+            let codeFee = fee
             let poll = []
             $(".yahadus-poll").each( function() {
                 if ($(this).is(":checked")) poll.push(this.value)
@@ -986,11 +987,10 @@ var registrationApp = function() {
                 // figure out if we are adding codes for enrollment shipping / bc fee
                 if (selected_user.school.school_id == 61) {
                     shipCode = 'MYSLDS-10'
-                    fee -= 10
+                    codeFee -= 10
                 } else if (selected_user.school.school_id == 269) {
-                    shipCode = 'AKLDS-10'
-                    shipCodeBC = 'AKLDBC-20' // for bc fee
-                    fee -= 30
+                    shipCode = 'AKLDS-10:AKLDBC-20' // for shipping and bc fee
+                    codeFee -= 30
                 }
             }
 
@@ -1019,7 +1019,7 @@ var registrationApp = function() {
                     name_pref: '',
                     comments: $("#comments").val(),
                     chidon_prizes: user_prizes[current_user],
-                    code: "C" + selected_user.user_serial + ":LDE-" + fee + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : ''),
+                    code: "C" + selected_user.user_serial + ":LDE-" + codeFee + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : ''),
                     codeOnly: 'LDE' + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : '')
                 }
             });

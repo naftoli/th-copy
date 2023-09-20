@@ -8,7 +8,7 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 function getMissionNumber() {
     global $subject_id;

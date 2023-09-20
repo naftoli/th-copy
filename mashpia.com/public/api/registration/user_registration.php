@@ -296,7 +296,24 @@ class UserRegistrationRouter {
                                 mysql_query("SET AUTOCOMMIT=1");
                                 json_error("Could not register " . $user->user_id . " for chidon");
                             }
-                            $user->registrationCharge($code, $amount, $trans_id, $year);
+
+                            // if there's ms/ak extra charges, we need to break it up and add it separately
+                            if (strpos($code, ':') !== false) {
+                                $codes = explode(':', $code);
+                                foreach ($codes as $code) {
+                                    switch ($code) {
+                                        case 'MYSLDS-10':
+                                        case 'AKLDS-10':
+                                            $amount = 10;
+                                            break;
+                                        case 'AKLDBC-20':
+                                            $amount = 20;
+                                            break;
+                                    }
+                                    $user->registrationCharge($code, $amount, $trans_id, $year);
+                                }
+                            }
+                            else $user->registrationCharge($code, $amount, $trans_id, $year);
 
                             // add book purchased info to db
                             if (intval($registration['purchased']) == 1) {
