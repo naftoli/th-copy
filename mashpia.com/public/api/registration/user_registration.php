@@ -417,38 +417,3 @@ class UserRegistrationRouter {
 }
 
 rest_router( new UserRegistrationRouter );
-
-// lookup description for registration charges table by codeOnly property
-//        $descriptions = [
-//            'THE'   =>  'CTH enrollment',
-//            'HACH'  =>  'Hachayol subscription',
-//
-//            'THAKUSA'   =>  'CTH AK shipping USA',
-//            'THAKCAN'   =>  'CTH AK shipping CAN',
-//            'THAKINT'   =>  'CTH AK shipping INT',
-//
-//            'THMSUSA'   =>  'CTH MS shipping USA',
-//            'THMSCAN'   =>  'CTH MS shipping CAN',
-//            'THMSINT'   =>  'CTH MS shipping INT',
-//
-//            'LDE'       =>  'Chidon enrollment',
-//            'KHKE'      =>  'Khk enrollment',
-//            'LDE:MYSLDS'    =>  'MyShliach chidon enrollment shipping',
-//            'LDE:AKLDS'     =>  'Anash Kinder chidon enrollment shipping',
-//            'LDE:AKLDS:AKLDBC'  =>  'Anash Kinder chidon enrollment bc fee',
-//
-//            'RRYSD'     =>  'Chidon Reg Yesod',
-//            'RRYDA'     =>  'Chidon Reg Yediah',
-//            'RRHVN'     =>  'Chidon Reg Havona / Iyun',
-//            'RRKHK'     =>  'Chidon Reg Khk',
-//
-//            'RRSUSA'    =>  'Chidon Reg shipping USA',
-//            'RRSCAN'    =>  'Chidon Reg shipping CAN',
-//            'RRSINT'    =>  'Chidon Reg shipping INT',
-//
-//            'YB1'   =>  'Yahadus Book 1',
-//            'YB2'   =>  'Yahadus Book 2',
-//            'YB3'   =>  'Yahadus Book 3',
-//            'YB4'   =>  'Yahadus Book 4',
-//            'YB5'   =>  'Yahadus Book 5',
-//        ];

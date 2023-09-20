@@ -8,13 +8,14 @@ $year = GlobalSettings::getRegistrationYear();
 // get the totals
 $totals = [];
 $total_query = mysql_query(
-    "SELECT type, SUM( amount ) AS total FROM registration_charges WHERE year = $year GROUP BY type;"
+    "SELECT type, SUM( amount ) AS total FROM registration_charges WHERE year = $year GROUP BY type ORDER BY type;"
 );
 $grand_total = 0;
 while ( $row = mysql_fetch_assoc( $total_query ) ) {
     $grand_total += intval( $row['total'] );
-    $totals[] = $row;
+    $totals[getDescription($row['type'])] = intval($row['total']);
 }
+ksort($totals);
 
 // get the details
 $details = [];
@@ -47,14 +48,14 @@ while ( $row = mysql_fetch_assoc( $detail_query ) ) $details[] = $row;
     <table>
         <thead>
             <th>Registration Type</th>
-            <th>Total Recived</th>
+            <th>Total Received</th>
         </thead>
         <tbody>
             <?php
-                foreach( $totals as $total ) { ?>
+                foreach( $totals as $type => $total ) { ?>
                 <tr>
-                    <td><?= $total['type'] ?></td>
-                    <td>$<?=number_format( intval( $total['total'] ) ) ?></td>
+                    <td><?= $type ?></td>
+                    <td>$<?=number_format( $total ) ?></td>
                 </tr>
             <?php } ?>
             <tr>
@@ -90,3 +91,44 @@ while ( $row = mysql_fetch_assoc( $detail_query ) ) $details[] = $row;
     </table>
 </body>
 </html>
+<?php
+// lookup description for registration charges table by codeOnly property
+function getDescription($code)
+{
+    $descriptions = [
+        'chayolei'  => 'CTH enrollment',
+        'shipping'  => 'Shipping Fee (before the codes)',
+
+        'THE' => 'CTH enrollment',
+        'HACH' => 'Hachayol subscription',
+
+        'THAKUSA' => 'CTH AK shipping USA',
+        'THAKCAN' => 'CTH AK shipping CAN',
+        'THAKINT' => 'CTH AK shipping INT',
+
+        'THMSUSA' => 'CTH MS shipping USA',
+        'THMSCAN' => 'CTH MS shipping CAN',
+        'THMSINT' => 'CTH MS shipping INT',
+
+        'LDE' => 'Chidon enrollment',
+        'KHKE' => 'Khk enrollment',
+        'LDE:MYSLDS-10' => 'MyShliach chidon enrollment shipping',
+        'LDE:AKLDS-10:AKLDBC-20' => 'Anash Kinder chidon enrollment shipping + bc fee',
+
+        'RRYSD' => 'Chidon Reg Yesod',
+        'RRYDA' => 'Chidon Reg Yediah',
+        'RRHVN' => 'Chidon Reg Havona / Iyun',
+        'RRKHK' => 'Chidon Reg Khk',
+
+        'RRSUSA' => 'Chidon Reg shipping USA',
+        'RRSCAN' => 'Chidon Reg shipping CAN',
+        'RRSINT' => 'Chidon Reg shipping INT',
+
+        'YB1' => 'Yahadus Book 1',
+        'YB2' => 'Yahadus Book 2',
+        'YB3' => 'Yahadus Book 3',
+        'YB4' => 'Yahadus Book 4',
+        'YB5' => 'Yahadus Book 5',
+    ];
+    return $descriptions[$code];
+}
