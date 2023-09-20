@@ -1339,7 +1339,6 @@ class ChidonShipping
             if ($item == 'during enrollment') {
                 $sql = "SELECT * FROM yahadus_book_purchases 
                         JOIN users u USING (user_id) 
-                        JOIN th_chidon tc using (user_id, year) 
                         WHERE location = 'parent_account' 
                         AND version = 0 AND year = :year";
                 if ($gender == 'm') $sql .= " and u.gender = 'M'";
