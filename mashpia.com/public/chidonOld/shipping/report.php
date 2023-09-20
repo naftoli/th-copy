@@ -25,6 +25,7 @@ $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) 
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 
 $cs = new ChidonShipping();
+$cs->setYear($year);
 
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {

@@ -6,6 +6,9 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 $super = $admin_user['auth'] == 'super';
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonRegYear();
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
@@ -65,6 +68,17 @@ $items = $cs->getItems();
 
     <fieldset>
       <legend style="margin-bottom: -5px;">Limit To</legend>
+      <h4>Year</h4>
+      <select name="year">
+        <?php
+        for ($y = 5782; $y <= $year; $y++) {
+          echo "<option value='" . $y . "'";
+          if ($y == $year) echo " selected ";
+          echo ">" . $y . "</option>";
+        }
+        ?>
+      </select>
+      <br />
       <h4>Gender</h4>
       <select name="gender">
         <option value="0">All</option>
