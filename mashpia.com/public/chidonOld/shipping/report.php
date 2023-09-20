@@ -30,6 +30,22 @@ $cs->setYear($year);
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
+    foreach ([61, 269] as $school_id) {
+        foreach ($items_chosen as $cat => $itemsPerCat) {
+          $listOfItems = array_keys($itemsPerCat);
+          $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+          $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+        }
+        $csv = createCSV($info, $school_id, true); // filter out all users that do NOT live in the usa
+        $file = $school_id . '.csv';
+        createFile($file, $csv);
+        $files[] = $file;
+    }
+    createZip($files, 'shipping.zip');
+    downloadFile('shipping.zip');
+    exit;
+}
+/*
     $ids = $cs->getChildrenToRemove();
     foreach ([61, 269] as $school_id) {
         $info = [];
@@ -61,6 +77,7 @@ if ($report_type == 'file') {
      * 2. for parents that didn't pay for shipping and include extra purchases that are to be pickud up
      * 3. (for parents that paid for shipping but have) extra purchases that go to different address
      */
+    /*
     // first
     // reset the array of kids to remove
     $cs->setToExclude([]);
@@ -109,17 +126,18 @@ if ($report_type == 'file') {
     createZip($files, 'shipping.zip');
     downloadFile('shipping.zip');
     exit;
-} else if ($report_type == 'fileGear') {
-    $files = [];
-    $listOfItems = array_keys($items_chosen['gear']);
-    $info['gear'] = $cs->getGear($_POST['gender'],0, $listOfItems, true);
-    $users = array_keys($info['gear']);
-    $csv = createCSVforGear($users, $info['gear']);
-    $file = 'gear.csv';
-    createFile($file, $csv);
-    downloadFile($file);
-    exit;
-}
+*/
+//else if ($report_type == 'fileGear') {
+//    $files = [];
+//    $listOfItems = array_keys($items_chosen['gear']);
+//    $info['gear'] = $cs->getGear($_POST['gender'],0, $listOfItems, true);
+//    $users = array_keys($info['gear']);
+//    $csv = createCSVforGear($users, $info['gear']);
+//    $file = 'gear.csv';
+//    createFile($file, $csv);
+//    downloadFile($file);
+//    exit;
+//}
 
 // get results for chosen items
 $info = [];

@@ -186,7 +186,7 @@ function checkShippingStatus($admin_id) {
     return $status;
 }
 
-function createCSV($items, $school_id) {
+function createCSV($items, $school_id, $usOnly = false) {
     global $items_chosen, $MASHPIA_DB;
 
     // create sql to get all needed fields
@@ -201,6 +201,7 @@ function createCSV($items, $school_id) {
             WHERE
                 aa.auth = 'user'
                     AND u.school_id = :id";
+    if ($usOnly) $sql .= " AND a.admin_country = 'USA'";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute(['id' => $school_id]);
     $rows = $stmt->fetchAll();

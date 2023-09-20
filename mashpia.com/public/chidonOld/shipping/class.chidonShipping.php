@@ -56,10 +56,6 @@ class ChidonShipping
     /**
      * get list of user IDs that need to have brochures sent out
      *
-     * QUALIFICATIONS:
-     * all children signed up to TH between grades 4-8
-     * (or 3-7) if doing it before end of yr
-     *
      * @param $gender
      * @param $school
      * @param $brochures
@@ -67,19 +63,16 @@ class ChidonShipping
      * @param $remove - user ids to remove
      * @return array - all user info from users db with the user id as the key
      */
-    public function getBrochures($gender, $school, $brochures = [], $early = false) {
+    public function getBrochures($gender, $school, $brochures = []) {
         $info = [];
-        $in_grades = "('4', '5', '6', '7', '8')";
-        if ($early) $in_grades = "('3', '4', '5', '6', '7')";
-        $sql = "SELECT user_id FROM users u 
-                JOIN classes c ON c.class_id = u.class_id 
-                WHERE c.class_grade in $in_grades 
-                AND u.user_registered > 0";
+        $sql = "select * from th_chidon tc 
+                join users u using (user_id) 
+                where tc.year = :year";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
-
-        $stmt = $this->db->query($sql);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
         $cat = 'brochures';
@@ -87,8 +80,6 @@ class ChidonShipping
         $id = $this->getItemID($cat, $item);
 
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $this->toExclude)) continue;
-            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
             $info[$row['user_id']][] = [
                 'item'  => $item,
                 'size'  => '',
