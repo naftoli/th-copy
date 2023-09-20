@@ -302,8 +302,8 @@ if ( !empty( $users ) ) {
         }
 
         // find out if child bought a chidon book this year
-        $sqlBook = "select * from yahadus_book_purchases where year = " . $chidon_year . " and user_id = " . $row['user_id'] . " and location = 'parent_account' 
-                        and version = 0";
+        $sqlBook = "select * from yahadus_book_purchases where year = " . $chidon_year . " and user_id = " . $row['user_id'] .
+            " and location = 'parent_account' and version = 0";
         $resBook = mysql_query($sqlBook);
         if (mysql_num_rows($resBook) > 0) $children[$row['user_id']]['bookPurchased'] = 1;
         else $children[$row['user_id']]['bookPurchased'] = 0;
