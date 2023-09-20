@@ -472,7 +472,8 @@ class user {
 
                 // for sefer hamitzvos, get chidon limmud track misssions
                 // find out level / track for chidon limmud track
-                if ($row['subject_id'] == 21) {
+                // ONLY show for mobile site
+                if ($row['subject_id'] == 21 && !$printing_mode) {
                     $sqlLimmud = "select test_type, class_grade from th_chidon tc join users u using (user_id) join classes c using (class_id) where user_id = " . $this->user_id . " and year = " . GlobalSettings::getChidonYear();
                     $resultLimmud = mysql_query($sqlLimmud);
                     if (mysql_num_rows($resultLimmud) > 0) {
