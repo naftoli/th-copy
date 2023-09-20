@@ -1337,10 +1337,9 @@ class ChidonShipping
 
         foreach ($items as $item) {
             if ($item == 'during enrollment') {
-                $sql = "SELECT * FROM yahadus_book_purchases 
+                $sql = "SELECT * FROM registration_charges rc  
                         JOIN users u USING (user_id) 
-                        WHERE location = 'parent_account' 
-                        AND version = 0 AND year = :year";
+                        WHERE type like 'YB%' AND year = :year";
                 if ($gender == 'm') $sql .= " and u.gender = 'M'";
                 if ($gender == 'f') $sql .= " and u.gender = 'F'";
                 if ($school > 0) $sql .= " and u.school_id = " . $school;
@@ -1349,11 +1348,13 @@ class ChidonShipping
                 $rows = $stmt->fetchAll();
 
                 foreach ($rows as $row) {
-                    $itemDesc = 'yahadus book ' . $row['book'];
+                    // get last letter of type
+                    $book = substr($row['type'], -1);
+                    $itemDesc = 'yahadus book ' . $book;
                     $id = $this->getItemID($cat, $item, $itemDesc);
                     $info[$row['user_id']][] = [
                         'item'  => $itemDesc,
-                        'size'  => $row['book'],
+                        'size'  => $book,
                         'color' => '',
                         'name'  => '',
                         'id'    => $id,
