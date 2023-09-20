@@ -166,7 +166,6 @@ class UserRegistrationRouter {
                     mysql_query("ROLLBACK");
                     mysql_query("SET AUTOCOMMIT=1");
                     json_error( $payment_profile );
-                    json_error( $payment_profile );
                 }
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
