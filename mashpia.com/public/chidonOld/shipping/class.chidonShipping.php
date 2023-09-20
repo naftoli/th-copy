@@ -917,7 +917,7 @@ class ChidonShipping
 
     public function getCategories() {
         $categories = [
-            'brochures', 'yahadus books', 'guides', 'recruitment prizes', 'test prizes', 'children sweaters', 'extra purchases',
+            'brochures', 'guides', 'yahadus books', 'enrollment prize', 'recruitment prizes', 'children sweaters', 'extra purchases',
             'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear', 'auction'
         ];
         return $categories;
