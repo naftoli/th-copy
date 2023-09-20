@@ -1,5 +1,4 @@
 <?php
-
 namespace classes\authorize;
 
 // load the custom authorization tools for the Authorize.net API
@@ -61,16 +60,17 @@ class PaymentProfile {
      */
     public static function create($cardNumber, $exparation, $code, $customerProfileId, $billToArray = null, $default=false, $live = false, $api = null) {
         $auth = new Auth(); // create a new auth for the staic context
-        if (!$api){$api = new AuthorizeAPIRequest();} // create a new $api object if not passed in
+        if (!$api) {
+            $api = new AuthorizeAPIRequest(); // create a new $api object if not passed in
+        }
         // create the basic array
         $api_array = [
             "customerProfileId" => $customerProfileId,
             "paymentProfile" => []
         ];
-        // if we get billing information add it to the request
-        if ($billToArray) {
-            $api_array['paymentProfile']['billto'] = $billToArray;
-        }
+        // if we get billing information add it to the request, otherwise create billing info from admin info
+        if ($billToArray) $api_array['paymentProfile']['billTo'] = $billToArray;
+
         // The payment must be after the bill to in the JSON request or it will fail
         $api_array['paymentProfile']["payment"] = [
             "creditCard" => [
@@ -93,7 +93,7 @@ class PaymentProfile {
         $api_data = $api->execute();
         
         // if it returns data that can be used to make an object. create an object and return it.
-        if(array_key_exists("customerProfileId", $api_data) && array_key_exists("customerPaymentProfileId", $api_data)) {
+        if (array_key_exists("customerProfileId", $api_data) && array_key_exists("customerPaymentProfileId", $api_data)) {
             return new self($api_data["customerPaymentProfileId"], $api_data["customerProfileId"], true, $api); // pass the api in for performance
         } else { //otherwise return the json for now.
             return $api_data;

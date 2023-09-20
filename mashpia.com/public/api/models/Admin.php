@@ -254,7 +254,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      *      success: classes\authorize\PaymentProfile
      *      error: string
      */
-    public function createPaymentProfile( $payment_info ) {
+    public function createPaymentProfile( $payment_info, $setAsDefault = true ) {
         // if we do not have a customer profile
         if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
             // create the account
@@ -272,9 +272,13 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
             $this->save();
         }
+        $billTo = [
+            'firstName' => $this->first,
+            'lastName' => $this->last
+        ];
         $payment_profile = classes\authorize\PaymentProfile::create(
             $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'],
-            $this->authorize_customer_profile_id
+            $this->authorize_customer_profile_id, $billTo, true
         );
         if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
             return $payment_profile['messages']['message'][0]['text'];
