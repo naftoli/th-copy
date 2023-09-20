@@ -108,8 +108,8 @@ class ChidonShipping
      * @return void
      */
     public function getGuides($gender, $school, $guides = []) {
+        $info = [];
         if (in_array('study guides', $guides)) {
-            $info = [];
             $sql = "select * from th_chidon tc 
                     join users u using (user_id) 
                     where tc.year = :year";
@@ -133,8 +133,33 @@ class ChidonShipping
                     'cat'   => $cat
                 ];
             }
-            return $info;
+        } else if (in_array('khk guides', $guides)) {
+            $sql = "select * from th_chidon tc 
+                    join users u using (user_id) 
+                    where khk_reg = 1 and year = :year";
+            if ($gender == 'm') $sql .= " and u.gender = 'M'";
+            if ($gender == 'f') $sql .= " and u.gender = 'F'";
+            if ($school > 0) $sql .= " and u.school_id = " . $school;
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute(['year' => $this->year]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                $cat = 'guides';
+                $item = 'khk guides';
+                $id = $this->getItemID($cat, $item);
+                $he_name = $row['first_he'] . ' ' . $row['last_he'];
+                $info[$row['user_id']][] = [
+                    'item'  => $item,
+                    'size'  => '',
+                    'color' => '',
+                    'name'  => $he_name,
+                    'id'    => $id,
+                    'cat'   => $cat
+                ];
+            }
         }
+
+        return $info;
     }
 
     /**
