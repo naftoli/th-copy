@@ -1394,7 +1394,6 @@ class ChidonShipping
                 if ($gender == 'm') $sql .= " and u.gender = 'M'";
                 if ($gender == 'f') $sql .= " and u.gender = 'F'";
                 if ($school > 0) $sql .= " and u.school_id = " . $school;
-                echo $sql; exit;
                 $stmt = $this->db->prepare($sql);
                 $stmt->execute(['year' => $this->year]);
                 $rows = $stmt->fetchAll();
