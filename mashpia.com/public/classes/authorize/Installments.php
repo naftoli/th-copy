@@ -45,9 +45,11 @@ class Installments
         $merchantAuthentication = $this->setAuth();
         $refId = 'ref' . time();
 
-        $name = explode(" ", $this->cp->description);
+        if (! empty($this->cp->description)) $name = explode(" ", $this->cp->description);
+        else $name = $this->getName();
         $last_name = array_pop($name);
         $first_name = implode(" ", $name);
+
         $billto = new AnetAPI\CustomerAddressType();
         $billto->setFirstName($first_name);
         $billto->setLastName($last_name);
@@ -172,5 +174,13 @@ class Installments
 
         $controller = new AnetController\ARBCancelSubscriptionController($request);
         $controller->executeWithApiResponse($this->endpoint);
+    }
+
+    public function getName() {
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+        $sql = "select first, last from users where authorize_customer_profile_id = " . $this->cp->customerProfileId;
+        $result = mysql_query($sql);
+        $row = mysql_fetch_assoc($result);
+        return [$row['first'], $row['last']];
     }
 }
