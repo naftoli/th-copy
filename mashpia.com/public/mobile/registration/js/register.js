@@ -984,10 +984,13 @@ var registrationApp = function() {
             if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
                 showClasses = 1;
                 // figure out if we are adding codes for enrollment shipping / bc fee
-                if (selected_user.school.school_id == 61) shipCode = 'MYSLDS-10'
-                else if (selected_user.school.school_id == 269) {
+                if (selected_user.school.school_id == 61) {
+                    shipCode = 'MYSLDS-10'
+                    fee -= 10
+                } else if (selected_user.school.school_id == 269) {
                     shipCode = 'AKLDS-10'
                     shipCodeBC = 'AKLDBC-20' // for bc fee
+                    fee -= 30
                 }
             }
 
