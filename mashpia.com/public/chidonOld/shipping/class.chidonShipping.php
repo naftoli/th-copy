@@ -161,7 +161,12 @@ class ChidonShipping
      */
     public function getEnrollmentPrize($gender, $school, $limitTo = []) {
         $info = [];
-        $sql = "select user_id, book from th_chidon where year = :year";
+        $sql = "select user_id, book from th_chidon 
+                 join users u using (user_id) 
+                 where year = :year";
+        if ($gender == 'm') $sql .= " and u.gender = 'M'";
+        if ($gender == 'f') $sql .= " and u.gender = 'F'";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
