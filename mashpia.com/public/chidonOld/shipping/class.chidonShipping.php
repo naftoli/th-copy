@@ -113,6 +113,9 @@ class ChidonShipping
             $sql = "select * from th_chidon tc 
                     join users u using (user_id) 
                     where tc.year = :year";
+            if ($gender == 'm') $sql .= " and u.gender = 'M'";
+            if ($gender == 'f') $sql .= " and u.gender = 'F'";
+            if ($school > 0) $sql .= " and u.school_id = " . $school;
             $stmt = $this->db->prepare($sql);
             $stmt->execute(['year' => $this->year]);
             $rows = $stmt->fetchAll();
@@ -1334,11 +1337,11 @@ class ChidonShipping
 
         foreach ($items as $item) {
             if ($item == 'during enrollment') {
-                $info = [];
                 $sql = "SELECT * FROM yahadus_book_purchases 
                         JOIN users u USING (user_id) 
                         JOIN th_chidon tc using (user_id, year) 
-                        WHERE year = :year";
+                        WHERE location = 'parent_account' 
+                        AND version = 0 AND year = :year";
                 if ($gender == 'm') $sql .= " and u.gender = 'M'";
                 if ($gender == 'f') $sql .= " and u.gender = 'F'";
                 if ($school > 0) $sql .= " and u.school_id = " . $school;
@@ -1347,13 +1350,11 @@ class ChidonShipping
                 $rows = $stmt->fetchAll();
 
                 foreach ($rows as $row) {
-//                    if (in_array($row['user_id'], $this->toExclude)) continue;
-//                    if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
                     $itemDesc = 'yahadus book ' . $row['book'];
                     $id = $this->getItemID($cat, $item, $itemDesc);
                     $info[$row['user_id']][] = [
                         'item'  => $itemDesc,
-                        'size'  => '',
+                        'size'  => $row['book'],
                         'color' => '',
                         'name'  => '',
                         'id'    => $id,
