@@ -36,10 +36,14 @@ if ($report_type == 'file') {
           $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
           $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
         }
-        $csv = createCSV($info, $school_id, true); // filter out all users that do NOT live in the usa
-        $file = $school_id . '.csv';
+        $csv = createCSV($info, $school_id, true); // filter out all users that ONLY live in the usa
+        $file = $school_id . '-usa.csv';
         createFile($file, $csv);
         $files[] = $file;
+        $csv2 = createCSV($info, $school_id, false, true); // filter out all users that do NOT live in the usa
+        $file2 = $school_id . '-intl.csv';
+        createFile($file2, $csv2);
+        $files[] = $file2;
     }
     createZip($files, 'shipping.zip');
     downloadFile('shipping.zip');
