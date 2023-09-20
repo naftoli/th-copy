@@ -142,13 +142,6 @@ class UserRegistrationRouter {
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
 
-        // description for authorize and db
-        // based off "code" variable in registration array
-        $desc = [];
-        foreach ($cart as $item) {
-            $desc[] = $item['code'];
-        }
-
         mysql_query("SET AUTOCOMMIT=0");
         mysql_query("START TRANSACTION");
         $installmentsCreated = false;
@@ -202,6 +195,24 @@ class UserRegistrationRouter {
                         json_error($e);
                     }
                 }
+            }
+
+            // description for authorize and db
+            // based off "code" variable in registration array
+            $desc = [];
+            foreach ($cart as $item) {
+                // find out if we need to change the amount in the code
+                // change amount to 0 for the advance registration if there's installments
+                if ($installmentsCreated && strpos('RR', $item['code']) !== false) {
+                    if (strpos($item['code'], 'RRYSD') !== false) $item['code'] = 'RRYSD-0';
+                    else if (strpos($item['code'], 'RRYDA') !== false) $item['code'] = 'RRYDA-0';
+                    else if (strpos($item['code'], 'RRHVN') !== false) $item['code'] = 'RRHVN-0';
+                    else if (strpos($item['code'], 'RRKHK') !== false) $item['code'] = 'RRKHK-0';
+                    else if (strpos($item['code'], 'RRSUSA') !== false) $item['code'] = 'RRSUSA-0';
+                    else if (strpos($item['code'], 'RRSCAN') !== false) $item['code'] = 'RRSCAN-0';
+                    else if (strpos($item['code'], 'RRSINT') !== false) $item['code'] = 'RRSINT-0';
+                }
+                $desc[] = $item['code'];
             }
 
             // total getting charged is dependent on the installment plan
