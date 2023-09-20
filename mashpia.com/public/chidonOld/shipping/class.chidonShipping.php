@@ -1431,7 +1431,7 @@ class ChidonShipping
                             JOIN
                         users u using (user_id)
                     WHERE
-                        mi.yom_tov = :yom_tov
+                        mi.yom_tov = :yom_tov AND p.year = :year
                 ";
                 if ($gender == 'm') {
                     $sql .= " AND u.gender = 'M'";
@@ -1443,7 +1443,10 @@ class ChidonShipping
                 }
 
                 $stmt = $this->db->prepare($sql);
-                $stmt->execute(['yom_tov' => $yom_tov]);
+                $stmt->execute([
+                    'yom_tov' => $yom_tov,
+                    'year'    => $this->year
+                ]);
                 $rows = $stmt->fetchAll();
                 foreach ($rows as $row) {
                     $purchases[$row['admin_id']][] = $row;
