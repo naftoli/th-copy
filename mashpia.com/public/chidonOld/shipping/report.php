@@ -17,7 +17,7 @@ $schools = $as->getSchools();
 require 'class.chidonShipping.php';
 require 'data.php';
 
-$updated = getUpdatedSchools($schools);
+//$updated = getUpdatedSchools($schools);
 
 $items_chosen = isset($_POST['items']) ? $_POST['items'] : [];
 $fields_chosen = array_keys($_POST['fields']);
@@ -245,6 +245,7 @@ ksort($grand_summary);
   <?php foreach ($resultsBySchool as $school => $more) : ?>
     <div class="header" id="<?=$school?>">
       <?php
+
       if (! isset($schools[$school])) continue;
       if (! isset($summary[$school])) continue;
       echo "<h3>" . $schools[$school] . "</h3>";
@@ -446,14 +447,14 @@ ksort($grand_summary);
     save(false)
   })
 
-  $(".updated").click( function() {
-    const school_id = $(this).parent().parent().attr('id')
-    const checked = $(this).is(":checked") ? 1 : 0
-    $.post('ajax/updateSchool.php', { school_id, checked }, function (result) {
-      const res = JSON.parse(result)
-      if (!res.success) alert(res.error)
-    })
-  })
+  // $(".updated").click( function() {
+  //   const school_id = $(this).parent().parent().attr('id')
+  //   const checked = $(this).is(":checked") ? 1 : 0
+  //   $.post('ajax/updateSchool.php', { school_id, checked }, function (result) {
+  //     const res = JSON.parse(result)
+  //     if (!res.success) alert(res.error)
+  //   })
+  // })
 
   <?php if (!$super) : ?>
   $("select").attr('disabled', true)
