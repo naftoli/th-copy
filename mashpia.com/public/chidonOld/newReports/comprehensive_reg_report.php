@@ -34,7 +34,7 @@ $grades = [];
 for ($i = $startGrade; $i <= $endGrade; $i++) $grades[] = "$i";
 
 $chidonYr = GlobalSettings::getChidonRegYear();
-$year = $_REQUEST['year'] ?? GlobalSettings::getChidonRegYear();
+$year = $_REQUEST['year'] ?? $chidonYr;
 if ($chidonYr > $year) {
     $startGrade--;
     $endGrade--;
