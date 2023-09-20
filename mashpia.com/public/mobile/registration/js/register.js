@@ -1665,11 +1665,11 @@ var registrationApp = function() {
             // figure out code for shipping
             let shipCode = ''
             const country = selected_user.parentAccount.admin_country
-            if (school_id == 61) {
+            if (school_id == 269) {
                 if (country === 'USA') shipCode = 'THAKUSA-'
                 else if (country === 'Canada') shipCode = 'THAKCAN-' // canada
                 else shipCode = 'THAKINT-' // international
-            } else if (school_id == 269) {
+            } else if (school_id == 61) {
                 if (country === 'USA') shipCode = 'THMSUSA-'
                 else if (country === 'Canada') shipCode = 'THMSCAN-' // canada
                 else shipCode = 'THMSINT-' // international
