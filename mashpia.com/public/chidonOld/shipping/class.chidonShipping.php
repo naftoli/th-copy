@@ -978,7 +978,7 @@ class ChidonShipping
                     'study guide 4' => 'CHI01D',
                     'study guide 5' => 'CHI01E'
                 ],
-                'khk guide'     => 'CHI012'
+                'khk guides'     => 'CHI012'
             ],
             'recruitment prizes'    => [
                 'book light'    => 'CHI013',
