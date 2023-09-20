@@ -1,11 +1,11 @@
 <?php
 $admin_auth = array('school');
-require_once ( __DIR__ . '/../../header.php' );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-require_once ( __DIR__ . '/../../class.globalSettings.php' );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
-require_once ( __DIR__ . '/../../class.adminSchools.php' );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // needed for including chidon only schools
 $schools = $as->getSchools();
 
@@ -18,7 +18,7 @@ $qry = "SELECT amount, date, s.*, logo, first, last, c.class_grade, c.class_sub,
     ."JOIN schools s ON s.school_id = u.school_id "
     ."JOIN classes c ON c.class_id = u.class_id "
     ."JOIN th_chidon tc on (tc.user_id = rc.user_id and tc.year = rc.year) "
-    ."WHERE type like '%LDE%' or type like '%YB%' "
+    ."WHERE (type like '%LDE%' or type like '%YB%') "
     ."AND rc.year = $year ";
 // limit to dates if limit exists
 if (isset($_POST['fromDate']) && $_POST['fromDate'] && isset($_POST['toDate']) && $_POST['toDate']) {
@@ -36,7 +36,7 @@ if (isset($_POST['not_shipped'])){
       )
     ";
 }
-$qry .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ") ";
+$qry .= " AND rc.school_id in (" . implode(',', array_keys($schools)) . ") ";
 $qry .= "ORDER BY school_name, c.class_grade, c.class_sub, last, first";
 //echo $qry; exit;
 $booklet_users_query = mysql_query( $qry );
