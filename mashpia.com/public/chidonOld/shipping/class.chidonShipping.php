@@ -168,6 +168,37 @@ class ChidonShipping
      * @param $prizes
      * @return array - list prizes to give per user ID
      */
+    public function getEnrollmentPrize($gender, $school, $limitTo = []) {
+        $info = [];
+        $sql = "select user_id, book from th_chidon where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $book = $row['book'];
+            $cat = 'enrollment prize';
+            $item = 'kop cards';
+            if (in_array(strtolower($item), $limitTo)) {
+                $id = $this->getItemID($cat, $item);
+                $info[$row['user_id']][] = [
+                    'item'  => $item,
+                    'size'  => $book,
+                    'color' => '',
+                    'name'  => '',
+                    'id'    => $id,
+                    'cat'   => $cat
+                ];
+            }
+        }
+        return $info;
+    }
+
+    /**
+     * @param $gender
+     * @param $school
+     * @param $prizes
+     * @return array - list prizes to give per user ID
+     */
     public function getRecruitmentPrizes($gender, $school, $limitTo = []) {
         $info = [];
         // get list of prizes
@@ -895,10 +926,11 @@ class ChidonShipping
     public function getItems() {
         $items = [
             'brochures'             => ['brochure'],
-            'yahadus books'         => ['during enrollment', 'end of yr sale'],
             'guides'                => ['study guides', 'khk guides'],
+            'yahadus books'         => ['during enrollment', 'end of yr sale'],
+            'enrollment prize'      => ['kop cards'],
             'recruitment prizes'    => ['book light', 'rechargeable fan', 'watch', 'neck pillow', 'mini duffle bag'],
-            'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
+//            'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
             'children sweaters'     => ['children sweaters'],
             'extra purchases'       => ['celebration boxes', 'sweaters'],
             'gifts'                 => ['yarmulka', 'personalized bottle', 'jewelry'],
@@ -1157,6 +1189,9 @@ class ChidonShipping
             ],
             'ambassador prizes' => [
                 'ambassador prize' => 'CHI194'
+            ],
+            'enrollment prize'  => [
+                'kop cards' => 'CHI196'
             ],
             'gear'  => [
                 'th sweater'  => [
