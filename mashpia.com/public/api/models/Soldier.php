@@ -504,8 +504,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // if tuition school, turn off chayolei
         if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
-        if ($this->school_id == 54) $result['chidon'] = true; // disable chidon for beis rivkah
-
         return $result;
     }
 
