@@ -374,49 +374,24 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationCharge( $type, $amount, $trans_id = '', $year = false, $discount = 0 ) {
         global $MASHPIA_DB;
         // set default year.
-        if (!$year) $year = $type == 'chidon' ? GlobalSettings::getChidonRegYear() : GlobalSettings::getRegistrationYear( $this->school_id );
-        // make sure we don't already have such a registration charge in system - avoid duplication
-        $check_qry = $MASHPIA_DB->prepare("
-            SELECT 
-                count(*) as total
-            FROM
-                registration_charges
-            WHERE
-                user_id = :id AND year = :year
-                    AND type = :type
-        ");
-        $check_qry->execute([
-            ':id'   =>  $this->user_id, 
-            ':year' =>  $year, 
-            ':type' =>  $type
-        ]);
-        $row = $check_qry->fetch();
-        $total = $row['total'];
-        if (!$total) {
-//        if ($row['total']) {
-//            $registration_info_query = $MASHPIA_DB->prepare("
-//                UPDATE registration_charges SET trans_id = :trans, amount = :amount
-//                WHERE user_id = :user AND year = :year AND type = :type
-//            ");
-//            return $registration_info_query->execute([
-//                'type' => $type,        'trans' => $trans_id,
-//                'year' => $year,        'user'  => $this->user_id,
-//                'amount' => $amount
-//            ]);
-//        }
-            // * prepare the query
-            $registration_info_query = $MASHPIA_DB->prepare(
-                "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
-                . "VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
-            );
-            // * execte the query
-            return $registration_info_query->execute([
-                'type' => $type, 'trans_id' => $trans_id,
-                'year' => $year, 'user_id' => $this->user_id,
-                'amount' => $amount, 'school_id' => $this->school_id,
-                'discount' => $discount
-            ]);
+        if (!$year) {
+            if (strpos($type, 'THE') !== false) GlobalSettings::getRegistrationYear( $this->school_id );
+            else $year = GlobalSettings::getChidonRegYear();
         }
+
+        // * prepare the query
+        $registration_info_query = $MASHPIA_DB->prepare(
+            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
+            . "VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
+        );
+        // * execte the query
+        return $registration_info_query->execute([
+            'type' => $type, 'trans_id' => $trans_id,
+            'year' => $year, 'user_id' => $this->user_id,
+            'amount' => $amount, 'school_id' => $this->school_id,
+            'discount' => $discount
+        ]);
+
         return true;
     }
     //get all of the soldiers registration charges
