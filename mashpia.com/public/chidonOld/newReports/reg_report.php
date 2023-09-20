@@ -80,10 +80,9 @@ while ($row = mysql_fetch_assoc($result)) {
     // only overwrite if newer row has the version info
     if (in_array($row['user_id'], $book_purchases)) {
         if (intval($row['version']) > intval($book_purchases[$row['user_id']]['version'])) $book_purchases[$row['user_id']] = $row;
-    } else {
-        $book_purchases[$row['user_id']] = $row;
     }
-    if ($row['location'] == 'parent account' && $row['version'] == 0) $book_purchased_during_reg[] = $row['user_id'];
+    else $book_purchases[$row['user_id']] = $row;
+    if ($row['location'] == 'parent_account' && intval($row['version']) == 0) $book_purchased_during_reg[] = $row['user_id'];
 }
 
 $langs = [
