@@ -1337,8 +1337,7 @@ class ChidonShipping
 
         foreach ($items as $item) {
             if ($item == 'during enrollment') {
-                $sql = "SELECT * FROM registration_charges rc  
-                        JOIN users u USING (user_id) 
+                $sql = "SELECT * FROM registration_charges   
                         WHERE type like 'YB%' AND year = :year";
                 if ($gender == 'm') $sql .= " and u.gender = 'M'";
                 if ($gender == 'f') $sql .= " and u.gender = 'F'";
