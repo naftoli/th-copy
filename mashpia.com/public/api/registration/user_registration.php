@@ -155,17 +155,17 @@ class UserRegistrationRouter {
 
         /******************************** PAYMENT ********************************/
         if ( $total != 0 ) {
+            $customer_profile = $admin->customerProfile();
             // if we have a payment profile provided
-            if ( isset($payment_info['payment_profile']) && $payment_info['payment_profile'] ) {
-                $customer_profile = $admin->customerProfile();
+            if ( isset($payment_info['payment_profile']) && $payment_info['payment_profile'] )
                 $payment_profile_id = $payment_info['payment_profile'];
             // we need to create the payment profile
-            } else {
+            else {
                 $payment_profile  = $admin->createPaymentProfile( $payment_info );
-                $customer_profile = $admin->customerProfile();
                 if ( !$payment_profile instanceof classes\authorize\PaymentProfile ) {
                     mysql_query("ROLLBACK");
                     mysql_query("SET AUTOCOMMIT=1");
+                    json_error( $payment_profile );
                     json_error( $payment_profile );
                 }
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
@@ -175,12 +175,12 @@ class UserRegistrationRouter {
                 // figure out amount for installments
                 $amount = 0;
                 foreach ($cart as $reg) {
-                    if ($reg['type'] == 'advance registration') $amount += $reg['paid'];
+                    if ($reg['type'] == 'advance registration') $amount += intval($reg['paid']);
                 }
                 if ($amount) {
                     // create installments (called subscriptions in authorize)
                     try {
-                        $subscription = new Installments($customer_profile, $payment_profile_id);
+                        $subscription = new Installments($customer_profile, $payment_profile_id, true, isset($payment_info['payment_profile']));
                         $result = $subscription->createSubscription($amount, $installments);
                         if (strpos($result, "Error") !== false) {
                             mysql_query("ROLLBACK");
@@ -210,9 +210,18 @@ class UserRegistrationRouter {
                 $total, $payment_profile_id, null, null, implode(',', $desc)
             );
             if ( !is_array( $payment_response ) ) {
+                // undo the subscription
+                if ($installmentsCreated) {
+                    $subscription->cancelSubscription();
+                    $subscription->removeFromDb($MASHPIA_DB);
+                }
+                $errorInfo = [
+                    'error' => $payment_response,
+                    'payment_profile_id' => $payment_profile_id
+                ];
                 mysql_query("ROLLBACK");
                 mysql_query("SET AUTOCOMMIT=1");
-                json_error( $payment_response );
+                json_error( $errorInfo );
             }
             $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, admin_id, description, amount, zip, users_registered, response) "

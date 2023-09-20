@@ -21,7 +21,7 @@ class Installments
     private $number_of_installments;
     private $start_date;
 
-    public function __construct($customerProfile, $payment_profile_id, $live = true) {
+    public function __construct($customerProfile, $payment_profile_id, $live = true, $updateBilling = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         // for testing use \net\authorize\api\constants\ANetEnvironment::SANDBOX;
         if ($live) $this->endpoint = \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
@@ -29,7 +29,7 @@ class Installments
 
         $this->cp = $customerProfile;
         $this->payment_profile_id = $payment_profile_id;
-        if (! $this->updateBillingInfo()) {
+        if ($updateBilling && !$this->updateBillingInfo()) {
             throw new \Exception("Error updating billing info");
         }
     }
@@ -53,8 +53,12 @@ class Installments
         $billto->setLastName($last_name);
 
         // get payment profile
-        foreach ($this->cp->paymentProfiles as $profile) {
-            if ($profile['customerPaymentProfileId'] == $this->payment_profile_id) break;
+        if (! count($this->cp->paymentProfiles)) {
+            throw new \Exception("No payment profiles found");
+        } else {
+            foreach ($this->cp->paymentProfiles as $profile) {
+                if ($profile['customerPaymentProfileId'] == $this->payment_profile_id) break;
+            }
         }
 
         $creditCard = new AnetAPI\CreditCardType();
@@ -145,6 +149,13 @@ class Installments
         $res = $stmt->execute([
             $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date
         ]);
+        if (!$res) echo $stmt->debugDumpParams();
+        return $res;
+    }
+
+    public function removeFromDb($dbHandle) {
+        $stmt = $dbHandle->prepare("DELETE FROM `th_chidon_installments` WHERE `subscription_id` = ?");
+        $res = $stmt->execute([$this->subscription_id]);
         if (!$res) echo $stmt->debugDumpParams();
         return $res;
     }
