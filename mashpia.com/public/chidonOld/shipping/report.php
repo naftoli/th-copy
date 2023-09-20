@@ -246,7 +246,7 @@ ksort($grand_summary);
       <?php
       if (! isset($schools[$school])) continue;
       if (! isset($summary[$school])) continue;
-      echo "<h3>" . $schools[$school] . ' - ' . $year . "</h3>";
+      echo "<h3>" . $schools[$school] . "</h3>";
       if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
       $address = '';
       foreach ($fields_chosen as $field) {
@@ -275,11 +275,11 @@ ksort($grand_summary);
       }
       if (! empty($address)) echo "<br />" . $address . "<br />";
       ?>
-      <p>
-        <input type='checkbox' class='updated' value='<?= $updated[$school] ?>'
-        <?php if (intval($updated[$school]) == 1) echo "checked"; ?>
-        /> I have reviewed and updated the shipping status for the entire school.
-      </p>
+<!--      <p>-->
+<!--        <input type='checkbox' class='updated' value='--><?php //= $updated[$school] ?><!--'-->
+<!--        --><?php //if (intval($updated[$school]) == 1) echo "checked"; ?>
+<!--        /> I have reviewed and updated the shipping status for the entire school.-->
+<!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
         <table class="table table-striped table-condensed cell-border hover row-order order-column">
