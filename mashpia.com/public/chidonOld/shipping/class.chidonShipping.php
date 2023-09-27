@@ -124,7 +124,8 @@ class ChidonShipping
                     'cat'   => $cat
                 ];
             }
-        } else if (in_array('khk guides', $guides)) {
+        }
+        if (in_array('khk guides', $guides)) {
             $sql = "select * from th_chidon tc 
                     join users u using (user_id) 
                     where khk_reg = 1 and year = :year";
