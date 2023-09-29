@@ -12,6 +12,7 @@ if ($admin_user['auth'] != 'super') {
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+$year--;
 
 $raised = [];
 $sql = "select * from family_raised where year = $year order by admin_id";

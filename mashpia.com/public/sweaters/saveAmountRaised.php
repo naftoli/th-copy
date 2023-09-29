@@ -12,6 +12,7 @@ if ($admin_user['auth'] != 'super') {
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+$year--;
 
 $info = file_get_contents('php://input');
 $data = json_decode($info, true);
