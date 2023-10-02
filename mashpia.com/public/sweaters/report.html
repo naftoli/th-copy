@@ -61,7 +61,6 @@
             let i = 1 // keep track of which sweater we are on for each admin
             let numSweaters = sweaters[admin_id].length
             for (let sweater of sweaters[admin_id]) {
-              console.log(sweater)
               let row = {
                 admin_id: admin_id,
                 raised: raised[admin_id] ? raised[admin_id] : 0,
@@ -202,7 +201,7 @@
                 <tr key={index} className={row.cancel ? 'table-danger' : ''}>
                   <td>{row.admin_id}</td>
                   <td>{row.raised}</td>
-                  <td>{row.user_id > 0 ? users[row.admin_id][row.user_id].user_serial : ''}</td>
+                  <td>{parseInt(row.user_id) > 0 ? users[row.admin_id][row.user_id].user_serial : ''}</td>
                   <td>{row.gear_number}</td>
                   <td>
                     {row.sweater_id ? (
