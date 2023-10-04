@@ -150,6 +150,12 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['ultimate_trip'] = intval($row['ultimate_trip']);
         $children[$row['user_id']]['rep'] = intval($row['school_rep']) ? 1 : intval($row['regional_rep']) ? 1 : intval($row['intl_rep']) ? 1 : 0;
 
+        // turn on chidon registration for children from monsey schools
+        if (in_array($row['school_id'], [49, 192])) {
+            $children[$row['user_id']]['schoolRegistered'] = 1;
+            $children[$row['user_id']]['schoolTypeRegistered'] = 1;
+        }
+
         //mivtza lulav
         $lulavSchools = [];
         $sqlLulav = "select ls.*
