@@ -176,7 +176,7 @@ class ChidonShipping
             $cat = 'enrollment prize';
             $item = 'kop cards';
             if (in_array(strtolower($item), $limitTo)) {
-                $id = $this->getItemID($cat, $item);
+                $id = $this->getItemID($cat, $item, ($item . ' #' . $book));
                 $info[$row['user_id']][] = [
                     'item'  => $item,
                     'size'  => $book,
@@ -1188,7 +1188,13 @@ class ChidonShipping
                 'ambassador prize' => 'CHI194'
             ],
             'enrollment prize'  => [
-                'kop cards' => 'CHI196'
+                'kop cards' => [
+                    'kop cards #1' => 'CHI195',
+                    'kop cards #2' => 'CHI196',
+                    'kop cards #3' => 'CHI197',
+                    'kop cards #4' => 'CHI198',
+                    'kop cards #5' => 'CHI199'
+                ]
             ],
             'gear'  => [
                 'th sweater'  => [
