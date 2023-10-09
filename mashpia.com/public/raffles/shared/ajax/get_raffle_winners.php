@@ -16,14 +16,15 @@ if ( isset( $_COOKIE['admin_id'] ) ){
     );
     if ( mysql_num_rows( $is_parent_query ) === 0 ){
         http_response_code( 401 );
-        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] ); 
+        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
         die();
     };
-} else {
-    http_response_code( 401 );
-    echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] ); 
-    die();
 }
+//else {
+//    http_response_code( 401 );
+//    echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
+//    die();
+//}
 
 $school_id = isset($_POST['school_id']) ? $_POST['school_id'] : false;
 $raffle_id = isset($_POST['raffle_id']) ? $_POST['raffle_id'] : false;
