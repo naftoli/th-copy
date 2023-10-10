@@ -71,12 +71,25 @@ $minutes = [
 //}
 
 $i = 0;
-$fakeTasks = [26.1, 1, 46, 100, 157-158, 209];
-$date = explode('.', $fakeTasks[$i++]);
-$heDate = $date[0] . ',' . $date[1];
-$details['start'] = getJulianDate($heDate);
-foreach ($levels as $level) {
-    $details['level_' . $level] = $fakeTasks[$i++];
+$fakeTasks = [
+    [22.1, '1', '46', '100', '157-158', '209'],
+    [23.1, '2', '46', '101-102', '159-160', '209-210'],
+    [24.1, '3', '47', '102-103', '160', '211-212'],
+    [25.1, '4', '48', '103', '161-162', '212-213'],
+    [26.1, '5', '49', '103-104', '163', '214-215'],
+    [27.1, '6', '50', '105', '163-164', '216'],
+    [28.1, '7', '51', '106', '165', '216']
+];
+
+$info = [];
+foreach ($fakeTasks as $task) {
+    $date = explode('.', $task[0]);
+    $heDate = $date[0] . ',' . $date[1];
+    $details['start'] = getJulianDate($heDate);
+    foreach ($levels as $idx => $level) {
+        $details['level_' . $level] = $task[$idx + 1];
+    }
+    $info[] = $details;
 }
 
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
@@ -87,7 +100,7 @@ mysql_query('set autocommit=0');
 mysql_query('begin');
 
 $success = true;
-//foreach ($info as $details) {
+foreach ($info as $details) {
     $start = $details['start'];
     $end = $start;
     foreach ($types as $type) {
@@ -121,7 +134,7 @@ $success = true;
                         mission_description = '', 
                         start_date = $start, 
                         end_date = $end, 
-                        default_on = 0, 
+                        default_on = 1, 
                         lang_id = " . $lang;
                     echo $sql . "<br />";
                     if (! mysql_query($sql)) {
@@ -163,7 +176,7 @@ $success = true;
             }
         }
     }
-//}
+}
 
 if ($success) {
     echo "done.";
