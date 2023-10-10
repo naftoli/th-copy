@@ -122,7 +122,7 @@ foreach ($info as $details) {
                 $heDateArr = explode(' ', iconv ('WINDOWS-1255', 'UTF-8', $heDate));
                 $heDateInsertable = $heDateArr[0] . ' ' . $heDateArr[1] . ' - Chidon Limmud';
                 $mission_name = addslashes($heDateInsertable);
-                foreach ([1, 2] as $lang) {
+                foreach ([1] as $lang) {
                     $sql = "insert into date_tasks_missions 
                         set school_type_id = $type, 
                         subject_id = $subject_id, 
