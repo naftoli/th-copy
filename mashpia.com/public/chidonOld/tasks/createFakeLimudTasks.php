@@ -50,7 +50,7 @@ $minutes = [
     4 => 45
 ];
 
-$info = [];
+//$info = [];
 //if (($handle = fopen('LimmudTasks5784.csv', "r")) !== false) {
 //    $j = 0; // counter for rows
 //    while (($data = fgetcsv($handle, 1000, ",")) !== false) {
@@ -74,9 +74,9 @@ $i = 0;
 $fakeTasks = [26.1, 1, 46, 100, 157-158, 209];
 $date = explode('.', $fakeTasks[$i++]);
 $heDate = $date[0] . ',' . $date[1];
-$info['start'] = getJulianDate($heDate);
+$details['start'] = getJulianDate($heDate);
 foreach ($levels as $level) {
-    $info['level_' . $level] = $fakeTasks[$i++];
+    $details['level_' . $level] = $fakeTasks[$i++];
 }
 
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
@@ -87,8 +87,8 @@ mysql_query('set autocommit=0');
 mysql_query('begin');
 
 $success = true;
-foreach ($info as $details) {
-    $start = getJulianDate($details['start']);
+//foreach ($info as $details) {
+    $start = $details['start'];
     $end = $start;
     foreach ($types as $type) {
         foreach ($levels as $level) {
@@ -123,6 +123,7 @@ foreach ($info as $details) {
                         end_date = $end, 
                         default_on = 0, 
                         lang_id = " . $lang;
+                    echo $sql . "<br />";
                     if (! mysql_query($sql)) {
                         $success = false;
                         break 4;
@@ -151,6 +152,7 @@ foreach ($info as $details) {
                                 mission_marking = 1, 
                                 grid_marking = 0, 
                                 quantity = " . $task['qty'];
+                            echo $sql . "<br />";
                             if (!mysql_query($sql)) {
                                 $success = false;
                                 break 5;
@@ -161,7 +163,7 @@ foreach ($info as $details) {
             }
         }
     }
-}
+//}
 
 if ($success) {
     echo "done.";
