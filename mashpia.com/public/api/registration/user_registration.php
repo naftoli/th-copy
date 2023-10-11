@@ -192,7 +192,7 @@ class UserRegistrationRouter {
                     } catch (Exception $e) {
                         mysql_query("ROLLBACK");
                         mysql_query("SET AUTOCOMMIT=1");
-                        json_error($e);
+                        json_error($e->getMessage());
                     }
                 }
             }
@@ -225,13 +225,9 @@ class UserRegistrationRouter {
                     $subscription->cancelSubscription();
                     $subscription->removeFromDb($MASHPIA_DB);
                 }
-                $errorInfo = [
-                    'error' => $payment_response,
-                    'payment_profile_id' => $payment_profile_id
-                ];
                 mysql_query("ROLLBACK");
                 mysql_query("SET AUTOCOMMIT=1");
-                json_error( $errorInfo );
+                json_error( $payment_response );
             }
             $transaction_query = $MASHPIA_DB->prepare(
                 "INSERT INTO transactions (trans_date, admin_id, description, amount, zip, users_registered, response) "

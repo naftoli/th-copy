@@ -3,8 +3,8 @@
  */
 // page setup
 if ( !checkDateInput() ) { $('#dob, input[type="date"]').datepicker({ format: "yyyy-mm-dd" }); }
-$("#successModal").on('hidden.bs.modal', function( event ) { window.location = "/mobile/reg/parent_detail.html" } );
-$("#errorModal").on('hidden.bs.modal', function () { $("#errorBody").empty() });
+$("#successModal").on('hidden.bs.modal', function( event ) { location.href = "/mobile/reg/parent_detail.html" } );
+// $("#errorModal").on('hidden.bs.modal', function () { $("#errorBody").empty() });
 $("#error2Modal").on('hidden.bs.modal', function () { $("#error2Body").empty() })
 $('[data-toggle="popover"]').popover();
 hebrew_keyboard.attach( "#first_he, #last_he" ); // use hebrew in the right places
@@ -1812,9 +1812,7 @@ var registrationApp = function() {
         return new Promise( function( resolve, reject ){
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
-            console.log(data)
-            if (data.error) showError(data.error)
-            else {
+            if (data) {
                 if (showClasses) $("#successModal #success").empty().append("<p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
                 $("#successModal").modal('show');
             }

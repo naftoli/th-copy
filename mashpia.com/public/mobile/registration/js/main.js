@@ -15,7 +15,7 @@ $.ajaxSetup({
  * @param {string} message 
  */
 function showError( message ){
-    $("#errorBody").html( message );
+    $("#errorBody").empty().html( message );
     $("#errorModal").modal('show');
     $("#payment-button").html('Pay And Register');
     return false;
@@ -28,13 +28,9 @@ function handleAPIResponse( callback ){
         if ( typeof response === 'string' )
             //return showError( 'Unknown Server Error. Please contact bugs@tzivoshashem.org.' );
             return callback( false ); // previous line causing bugs
-        if ( response === undefined ) 
-            return callback( false ); // IE bug
-        if ( !response.success ){
-            return showError( response.message );
-        } else {
-            return callback( response.data );
-        }
+        else if ( response === undefined ) return callback( false ); // IE bug
+        else if ( !response.success ) return showError( response.message || response.error );
+        else return callback( response.data );
     }
 }
 
