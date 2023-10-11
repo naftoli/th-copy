@@ -8,7 +8,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $qrys = [];
-$sql = "select * from mashpia_backup.rank_marks where rank_ord = 1 and date_printed is null";
+$sql = "select * from mashpia_backup.rank_marks where date_printed > '2023-10-07'";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     if ($row['user_id']) {
