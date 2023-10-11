@@ -79,7 +79,8 @@ function createHtmlForItem($school, $row, $output = true) {
                 $statusDesc = [
                     1   => 'shipped',
                     2   => 'missing',
-                    3   => 'damaged'
+                    3   => 'damaged',
+                    4   => 'received'
                 ];
                 if (empty($limit_to_status)) $show_item = true;
                 else {
@@ -124,6 +125,7 @@ function createHtmlForItem($school, $row, $output = true) {
                              * 1 = shipped
                              * 2 = missing
                              * 3 = damaged
+                             * 4 = received
                              */
                             switch ($i) {
                                 case 0:
@@ -138,6 +140,10 @@ function createHtmlForItem($school, $row, $output = true) {
                                     break;
                                 case 3:
                                     if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
+                                    break;
+                                case 4:
+                                    if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
+                                        && intval($status['damaged']) == 0) echo " selected ";
                                     break;
                             }
                             echo ">" . $val . "</option>";
