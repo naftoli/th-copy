@@ -67,7 +67,7 @@ function build_items() {
 }
 
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $super, $limit_to_status;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
@@ -114,7 +114,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "<td class='no-print'>";
                         echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'";
                         // figure out if it should be disabled or not
-                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
+//                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
                         echo ">";
                         $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
                         foreach ($options as $i => $val) {
