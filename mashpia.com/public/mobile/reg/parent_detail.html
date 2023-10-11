@@ -383,6 +383,9 @@
                                                                     </button>
                                                                 {{/if}}
                                                                 {{#if this.reg_types.chidon}}
+                                                                    {{#if this.reg_types.chayolei}}
+                                                                        <div class="button-spacing"></div> <!-- spacer if showing both chayolei and chidon buttons -->
+                                                                    {{/if}}
                                                                     <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n2">Chidon Limmud Enrollment</span>
                                                                         {{ this.next_year_chidon }}</button>
                                                                 {{/if}}
