@@ -107,10 +107,13 @@ function update_ranks_all() {
     $end = $params[1];
     $type = $params[2];
     $today = date('Y-m-d G:i:s');
+//    $sql = "UPDATE rank_marks SET date_{$type}_shipped='" . $today . "'
+//            WHERE (
+//                (date_promoted >= $start AND date_promoted <= $end) OR (rm.date_book_shipped is null OR rm.date_card_shipped is null)
+//            ) AND date_{$type}_shipped is null";
     $sql = "UPDATE rank_marks SET date_{$type}_shipped='" . $today . "' 
-            WHERE (
-            (date_promoted >= $start AND date_promoted <= $end) OR (rm.date_book_shipped is null OR rm.date_card_shipped is null) 
-            ) AND date_{$type}_shipped is null";
+            WHERE (date_promoted >= $start AND date_promoted <= $end) 
+            AND date_{$type}_shipped is null";
     $query = mysql_query($sql);
 
     if ($query)
