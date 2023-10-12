@@ -309,7 +309,7 @@ class UserRegistrationRouter {
                                     $user->registrationCharge($code, $amount, $trans_id, $year);
                                 }
                             }
-                            else $user->registrationCharge($code, $amount, $trans_id, $year);
+//                            else $user->registrationCharge($code, $amount, $trans_id, $year);
 
                             // add book purchased info to db
                             if (intval($registration['purchased']) == 1) {
