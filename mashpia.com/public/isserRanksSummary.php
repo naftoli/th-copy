@@ -136,18 +136,18 @@ $schools = $as->getSchools();
                                 else
                                     $totals[$rank] = $add;
 
-                                foreach ($info as $student) {
-                                    $sql = "select user_serial from users where user_id = " . $student;
-                                    $result = mysql_query($sql);
-                                    $row = mysql_fetch_assoc($result);
+//                                foreach ($info as $student) {
+//                                    $sql = "select user_serial from users where user_id = " . $student;
+//                                    $result = mysql_query($sql);
+//                                    $row = mysql_fetch_assoc($result);
 //                                    echo "<tr><td><input type='checkbox'></td><td>" . $row['user_serial'] . "</td><td>";
 //                                    if (!empty($heNames[$student]))
 //                                        echo $heNames[$student] . ' - ';
 //                                    echo $userInfo[$student];
 //                                    echo " (" . $grade . ")";
 //                                    echo "</td></tr>";
-                                    //echo "<div class='students'>" . $student . " " . $row['user_serial'] . " <input type='checkbox' /></div>";
-                                }
+//                                    echo "<div class='students'>" . $student . " " . $row['user_serial'] . " <input type='checkbox' /></div>";
+//                                }
                             }
                         }
 //                        echo "</table><br />";
