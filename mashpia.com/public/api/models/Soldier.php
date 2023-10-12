@@ -857,7 +857,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 year = :year, 
                 he_name = :he_name");
         foreach ($prizes as $prize) {
-            $he = $prize['personalization'] ? $prize['he_name'] : '';
+            $he = '';
+            if ($prize['personalization'] && isset($prize['he_name']) && $prize['he_name']) $he = $prize['he_name'];
             $stmt->execute([
                 ':user'     => $this->user_id,
                 ':prize'    => $prize['id'],
