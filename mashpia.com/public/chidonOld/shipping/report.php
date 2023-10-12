@@ -144,26 +144,26 @@ if ($report_type == 'file') {
 //}
 
 // figure out which schools to include
-$school = $_POST['school'];
-if ($school == 0) $schools = array_keys($schools);
-else if ($school == -2) $schools = [61, 269];
-else if ($school == -1) {
-  $schools = array_keys($schools);
-  $key = array_search(61, $schools);
-  unset($schools[$key]);
-  $key = array_search(269, $schools);
-  unset($schools[$key]);
+$schoolID = $_POST['school'];
+if ($schoolID == 0) $schoolIDs = array_keys($schools);
+else if ($schoolID == -2) $schoolIDs = [61, 269];
+else if ($schoolID == -1) {
+    $schoolIDs = array_keys($schools);
+    $key = array_search(61, $schoolIDs);
+    unset($schoolIDs[$key]);
+    $key = array_search(269, $schoolIDs);
+    unset($schoolIDs[$key]);
 }
-else if ($school > 0) $schools = [$school];
+else if ($schoolID > 0) $schoolIDs = [$schoolID];
 
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
-    foreach ($schools as $school) {
+    foreach ($schoolIDs as $schoolID) {
         $listOfItems = array_keys($itemsPerCat);
         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        if ($cat == 'gear') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school, $listOfItems);
-        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school, $listOfItems);
+        if ($cat == 'gear') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
+        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
     }
 }
 $info['status'] = $cs->getStatus();
@@ -197,9 +197,9 @@ foreach ($tables as $table) {
 //********* WHERE *********//
 $sql .= " WHERE 1";
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
-if ($school > 0) $sql .= " AND u.school_id = " . $school;
-else if ($school == -1) $sql .= " AND u.school_id not in (61, 269)";
-else if ($school == -2) $sql .= " AND u.school_id in (61, 269)";
+if ($schoolID > 0) $sql .= " AND u.school_id = " . $schoolID;
+else if ($schoolID == -1) $sql .= " AND u.school_id not in (61, 269)";
+else if ($schoolID == -2) $sql .= " AND u.school_id in (61, 269)";
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
 
