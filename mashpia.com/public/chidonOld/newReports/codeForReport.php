@@ -185,10 +185,9 @@ function daysPassed() {
         $dateArr = explode('/', $date);
         $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
         if ($day == 0) $first = $jd;
-        if ($jd == $today) return ($day + 1);
+        // if first date hasn't passed yet
+        if ($first > $today) return 0;
+        else if ($jd == $today) return ($day + 1);
         else if ($jd > $today) return $day;
     }
-    // if first date hasn't passed yet
-    if ($first > $today) return 0;
-    else return $day;
 }
