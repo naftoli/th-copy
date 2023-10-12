@@ -1813,7 +1813,7 @@ var registrationApp = function() {
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
             if (data) {
-                if (showClasses) $("#successModal #success").empty().append("<p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
+                if (showClasses) $("#successModal #success").append("<p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
                 $("#successModal").modal('show');
             }
         });
