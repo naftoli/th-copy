@@ -301,12 +301,12 @@ class ChidonTests
     }
 
     public function getLearned( $dates, $untilToday = false ) {
-        $dateArr = explode('/', $dates[1]);
-        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[0]);
+        $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
         if ($untilToday) $end = unixtojd();
         else {
-            $dateArr = explode('/', $dates[count($dates)]);
-            $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+            $dateArr = explode('/', $dates[count($dates)-1]);
+            $end = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
         }
         $stmt = $this->db->prepare("
             SELECT 
@@ -328,12 +328,12 @@ class ChidonTests
     }
 
     public function getTotalMinutesLearned( $user_id, $dates, $untilToday = false ) {
-        $dateArr = explode('/', $dates[1]);
-        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[0]);
+        $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
         if ($untilToday) $end = unixtojd();
         else {
-            $dateArr = explode('/', $dates[count($dates)]);
-            $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+            $dateArr = explode('/', $dates[count($dates)-1]);
+            $end = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
         }
         $stmt = $this->db->prepare("
             SELECT 
@@ -352,16 +352,17 @@ class ChidonTests
             ':end'      => $end,
             ':user'     => $user_id
         ]);
+//        $stmt->debugDumpParams();
         return $stmt->fetch()['total'];
     }
 
     public function getTotalDaysLearned( $user_id, $dates, $untilToday = false ) {
-        $dateArr = explode('/', $dates[1]);
-        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[0]);
+        $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
         if ($untilToday) $end = unixtojd();
         else {
-            $dateArr = explode('/', $dates[count($dates)]);
-            $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+            $dateArr = explode('/', $dates[count($dates)-1]);
+            $end = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
         }
         $stmt = $this->db->prepare("
             SELECT 
@@ -416,10 +417,10 @@ class ChidonTests
     }
 
     public function getLimmudDetails($user_id, $dates) {
-        $dateArr = explode('/', $dates[1]);
-        $start = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-        $dateArr = explode('/', $dates[count($dates)]);
-        $end = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        $dateArr = explode('/', $dates[0]);
+        $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+        $dateArr = explode('/', $dates[count($dates)-1]);
+        $end = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
 
         $info = [];
         $stmt = $this->db->prepare("
@@ -450,7 +451,7 @@ class ChidonTests
             $details[$day]['upToDate'] = false;
 
             $dateArr = explode('/', $date);
-            $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+            $jd = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
             if (isset($info[$jd][20010])) {
                 // could have multiple entries
                 foreach ($info[$jd][20010] as $amount) $details[$day]['minutes'][] = $amount;
