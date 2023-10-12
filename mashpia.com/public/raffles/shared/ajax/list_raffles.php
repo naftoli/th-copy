@@ -26,8 +26,8 @@ if ( $type !== "" )
 if ( $ran_only )
     $filter[] = "date_ran IS NOT NULL";
 
-// for BC only show winners for raffles marked as show_on_mobile
-if ( $admin_user['auth'] !== 'super' && $ran_only ) $filter[] = "show_on_mobile = 1";
+// for BC only show winners for raffles marked as show_for_bc
+if ( $admin_user['auth'] !== 'super' && $ran_only ) $filter[] = "show_for_bc = 1";
 
 //if ( $admin_user['auth'] !== 'super' )
     //$filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
