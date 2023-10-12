@@ -12,6 +12,8 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 $year = GlobalSettings::getChidonYear();
 
+$schools = [49 => 'Cheder Chabad Monsey'];
+
 require_once 'codeForReport.php';
 
 $test_num = isset($_GET['num']) ? $_GET['num'] : 1;
