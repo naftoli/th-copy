@@ -295,7 +295,7 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chidon
-        $children[$row['user_id']]['reg_types']['chidon'] = false;
+        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
 
         // chidon experience registration
         $children[$row['user_id']]['shabbatonPaid'] = 0;
