@@ -237,9 +237,8 @@ class ChidonShipping
      */
     private function getListofRecruitmentPrizes() {
         $prizes = [];
-        $sql = "select * from chidon_credit_prizes where year = :year";
-        $stmt = $this->db->prepare($sql);
-        $stmt->execute(['year' => $this->year]);
+        $sql = "select * from chidon_credit_prizes where year = 5783";
+        $stmt = $this->db->query($sql);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $prizes[$row['credits']] = strtolower($row['prize']);
