@@ -289,11 +289,12 @@ class ChidonTests
             foreach ($avgs as $type => $avg) {
                 $avgs[$type] /= $num;
                 $avg = $avgs[$type];
-                if ($type != 'genius') {
-                    if ($avg >= 70) $highest = $type;
-                } else {
-                    if ($avg >= 90) $highest = $type;
-                }
+                if ($avg >= 80) $highest = $type;
+//                if ($type != 'genius') {
+//                    if ($avg >= 70) $highest = $type;
+//                } else {
+//                    if ($avg >= 90) $highest = $type;
+//                }
             }
             return $highest;
         }
@@ -495,10 +496,10 @@ class ChidonTests
         }
 
         // needed avgs
-        $neededAvgs['maven']    = 70;
-        $neededAvgs['pro']      = 70;
-        $neededAvgs['expert']   = 70;
-        $neededAvgs['genius']   = 90;
+        $neededAvgs['maven']    = 80;
+        $neededAvgs['pro']      = 80;
+        $neededAvgs['expert']   = 80;
+        $neededAvgs['genius']   = 80;
 
         // change for some schools
         $school_id = $child['school_id'];

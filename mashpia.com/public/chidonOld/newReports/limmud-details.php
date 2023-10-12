@@ -78,9 +78,9 @@ $info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test
             Class: <?= $info['grade'] ?><br />
             Track Chosen: <?= $types[$info['test_type']] ?><br />
             Track Passed: <?= $info['track_passed'] ?><br />
-            Daily Minutes Required: <?= $minutes[$info['test_type']] ?><br />
-            Total Minutes Required: <?= $info['required'] ?><br />
-            Total Minutes Learned: <?= $info['learned'] ?><br />
+            Daily Minutes Required: <?= $minutes[$info['test_type']] ?><br /><br/>
+            Total Minutes Required (as of today): <?= $info['required'] ?><br />
+            Total Minutes Learned (as of today): <?= $info['learned'] ?><br />
         </p>
         <table>
             <tr>
