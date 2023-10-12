@@ -197,9 +197,9 @@ foreach ($tables as $table) {
 //********* WHERE *********//
 $sql .= " WHERE 1";
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
-if ($schoolID > 0) $sql .= " AND u.school_id = " . $schoolID;
-else if ($schoolID == -1) $sql .= " AND u.school_id not in (61, 269)";
-else if ($schoolID == -2) $sql .= " AND u.school_id in (61, 269)";
+if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
+else if ($_POST['school'] == -1) $sql .= " AND u.school_id not in (61, 269)";
+else if ($_POST['school'] == -2) $sql .= " AND u.school_id in (61, 269)";
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
 
