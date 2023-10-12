@@ -142,8 +142,7 @@ function createHtmlForItem($school, $row, $output = true) {
                                     if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
                                     break;
                                 case 4:
-                                    if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
-                                        && intval($status['damaged']) == 0) echo " selected ";
+                                    if (!empty($status) && intval($status['received']) == 1) echo " selected ";
                                     break;
                             }
                             echo ">" . $val . "</option>";
