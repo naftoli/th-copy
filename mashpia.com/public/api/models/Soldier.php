@@ -505,7 +505,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
         // turn off chidon
-        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
+//        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
 
         return $result;
     }
