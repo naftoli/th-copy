@@ -486,9 +486,9 @@ ksort($grand_summary);
   //   })
   // })
 
-  <?php if (!$super) : ?>
+<!--  --><?php //if (!$super) : ?>
   // $("select").attr('disabled', true)
   // $("textarea").attr('disabled', true)
-  <?php endif; ?>
+<!--  --><?php //endif; ?>
 </script>
 </html>
