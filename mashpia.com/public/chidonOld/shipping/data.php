@@ -148,7 +148,7 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                             echo ">" . $val . "</option>";
                         }
-                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['description'] . "</textarea></td></tr>";
+                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . ($status['description'] ?? '') . "</textarea></td></tr>";
                     } else {
                         // update summary
                         addToSummary($item, $school);
