@@ -183,6 +183,7 @@ function daysPassed() {
     foreach ($learningDays[$test_num] as $day => $date) {
         $dateArr = explode('/', $date);
         $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
+        echo "Today: " . $today . ", JD: " . $jd . "<br />";
         if ($day == 0 && $today < $jd) return 0; // if first date hasn't passed yet
         else if ($today < $jd) return $day;
         else if ($today == $jd) return $day + 1;
