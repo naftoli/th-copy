@@ -180,14 +180,10 @@ function daysPassed() {
     global $learningDays, $test_num;
     $today = unixtojd();
     // find today in array
-    $first = 0;
     foreach ($learningDays[$test_num] as $day => $date) {
         $dateArr = explode('/', $date);
         $jd = gregoriantojd(intval($dateArr[0]), intval($dateArr[1]), intval($dateArr[2]));
-        if ($day == 0) $first = $jd;
-        // if first date hasn't passed yet
-        if ($first > $today) return 0;
-        else if ($jd == $today) return ($day + 1);
-        else if ($jd > $today) return $day;
+        if ($day == 0 && $today < $jd) return 0; // if first date hasn't passed yet
+        else if ($today < $jd) return $day - 1;
     }
 }
