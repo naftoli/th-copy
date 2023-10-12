@@ -8,9 +8,6 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-require_once( $_SERVER["DOCUMENT_ROOT"] . '/class.globalSettings.php' );
-$year = GlobalSettings::getCurrentYear();
-
 require_once( $_SERVER["DOCUMENT_ROOT"] . '/raffles/shared/classes/Raffle.php' );
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
@@ -28,7 +25,7 @@ $sql = "SELECT
         FROM
             raffles
         WHERE
-            type = '$raffle_type' AND year = '$year'
+            type = '$raffle_type' 
                 AND date_ran > 0 
                 AND show_for_hq = 1 
                 AND run_date >= '$start_date' 
