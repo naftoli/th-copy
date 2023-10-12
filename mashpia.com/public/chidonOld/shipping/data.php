@@ -117,7 +117,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         // figure out if it should be disabled or not
 //                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
                         echo ">";
-                        $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
+                        $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged', 'Received'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
                             /*
