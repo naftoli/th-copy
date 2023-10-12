@@ -30,7 +30,7 @@ function handleAPIResponse( callback ){
             return callback( false ); // previous line causing bugs
         if ( response === undefined ) return callback( response ); // IE bug
         else if ( !response.success ) return showError( response.message || response.error );
-        else return callback( response.data ? response.data : response );
+        else return callback( response.data );
     }
 }
 
