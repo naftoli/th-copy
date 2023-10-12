@@ -87,8 +87,14 @@ $items = $cs->getItems();
       </select><br />
       <h4>School</h4>
       <select name="school">
-          <?php if ($super) echo '<option value="0">All Schools</option>'; ?>
-          <?php foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>"; ?>
+          <?php
+          if ($super) {
+            echo '<option value="0">All Schools</option>';
+            echo '<option value="-1">All Schools Except MS/AK</option>';
+            echo '<option value="-2">Only MS/AK</option>';
+          }
+          foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>";
+          ?>
       </select><br />
       <h4>Status</h4>
       <p>
