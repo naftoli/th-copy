@@ -143,28 +143,13 @@ if ($report_type == 'file') {
 //    exit;
 //}
 
-// figure out which schools to include
-$schoolID = $_POST['school'];
-if ($schoolID == 0) $schoolIDs = array_keys($schools);
-else if ($schoolID == -2) $schoolIDs = [61, 269];
-else if ($schoolID == -1) {
-    $schoolIDs = array_keys($schools);
-    $key = array_search(61, $schoolIDs);
-    unset($schoolIDs[$key]);
-    $key = array_search(269, $schoolIDs);
-    unset($schoolIDs[$key]);
-}
-else if ($schoolID > 0) $schoolIDs = [$schoolID];
-
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
-    foreach ($schoolIDs as $schoolID) {
-        $listOfItems = array_keys($itemsPerCat);
-        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        if ($cat == 'gear') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
-        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
-    }
+    $listOfItems = array_keys($itemsPerCat);
+    $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+    if ($cat == 'gear') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
+    else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
 }
 $info['status'] = $cs->getStatus();
 
@@ -198,8 +183,6 @@ foreach ($tables as $table) {
 $sql .= " WHERE 1";
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
-else if ($_POST['school'] == -1) $sql .= " AND u.school_id not in (61, 269)";
-else if ($_POST['school'] == -2) $sql .= " AND u.school_id in (61, 269)";
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
 
