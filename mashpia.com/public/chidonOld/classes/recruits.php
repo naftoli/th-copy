@@ -45,7 +45,7 @@ class Recruits {
             $stmt = $MASHPIA_DB->prepare("
                 SELECT user_id, count(recruited_by) AS total 
                 FROM th_chidon 
-                WHERE recruited_by = :user 
+                WHERE recruited_by = :user  
                 AND year >= 5782
             ");
             $stmt->execute(['user' => $this->user->user_serial]);
