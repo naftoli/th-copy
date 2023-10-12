@@ -71,6 +71,7 @@ foreach ($info as $row) {
         'shipped'   => $shipped,
         'missing'   => $missing,
         'damaged'   => $damaged,
+        'received'  => $received,
         'desc'      => $row['desc']
     ]);
     if (! $res) {
