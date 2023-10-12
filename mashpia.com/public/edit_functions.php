@@ -112,7 +112,7 @@ function update_ranks_all() {
 //                (date_promoted >= $start AND date_promoted <= $end) OR (rm.date_book_shipped is null OR rm.date_card_shipped is null)
 //            ) AND date_{$type}_shipped is null";
     $sql = "UPDATE rank_marks SET date_{$type}_shipped='" . $today . "' 
-            WHERE (date_promoted >= $start AND date_promoted <= $end) 
+            WHERE date_promoted >= $start AND date_promoted <= $end 
             AND date_{$type}_shipped is null";
     $query = mysql_query($sql);
 
@@ -127,10 +127,13 @@ function update_medals_all() {
     $start = $params[0];
     $end = $params[1];
     $today = date('Y-m-d G:i:s');
+//    $sql = "UPDATE medal_marks SET date_shipped='" . $today . "'
+//            WHERE (
+//                (date_awarded >= $start AND date_awarded <= $end) OR mm.date_shipped is null
+//            ) AND date_shipped is null";
     $sql = "UPDATE medal_marks SET date_shipped='" . $today . "' 
-            WHERE (
-                (date_awarded >= $start AND date_awarded <= $end) OR mm.date_shipped is null
-            ) AND date_shipped is null";
+            WHERE date_awarded >= $start AND date_awarded <= $end 
+            AND date_shipped is null";
     $query = mysql_query($sql);
 
     if ($query)

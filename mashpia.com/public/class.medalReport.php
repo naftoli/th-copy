@@ -27,13 +27,14 @@ class MedalReport extends Report {
     public function setMedalSummary($forShipping = false) {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
-        if ($forShipping) {
-            $filter = "
-                AND (
-                    (mm.date_awarded >= $start AND mm.date_awarded <= $end and mm.date_shipped is null) OR mm.date_shipped is null
-                )";
-        }
-        else $filter = " AND (mm.date_awarded >= $start AND mm.date_awarded <= $end) ";
+//        if ($forShipping) {
+//            $filter = "
+//                AND (
+//                    (mm.date_awarded >= $start AND mm.date_awarded <= $end and mm.date_shipped is null) OR mm.date_shipped is null
+//                )";
+//        }
+//        else $filter = " AND (mm.date_awarded >= $start AND mm.date_awarded <= $end) ";
+        $filter = " AND (mm.date_awarded >= $start AND mm.date_awarded <= $end) ";
         $sql = "
             SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total 
             FROM medal_marks mm
