@@ -30,13 +30,14 @@ class RankReport extends Report {
         $this->ranks = [];
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
-        if ($forShipping) {
-            $filter = "
-                AND (
-                (date_promoted >= $start AND date_promoted <= $end AND date_printed is null) OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null)
-            )";
-        }
-        else $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
+//        if ($forShipping) {
+//            $filter = "
+//                AND (
+//                (date_promoted >= $start AND date_promoted <= $end AND date_printed is null) OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null)
+//            )";
+//        }
+//        else $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
+        $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
         $sql = "
             SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, r.rank_name, u.*, rm.*  
             FROM rank_marks rm
