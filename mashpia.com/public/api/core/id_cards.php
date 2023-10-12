@@ -32,10 +32,10 @@ class IdCardsRouter {
         // add schools exceptions
         $filters[] = 'u.school_id not in (180, 585, 588, 612, 709)';
         $filters = implode( ' AND ', $filters );
-        $fix = " OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null";
-        if ( isset($_POST['rank']) && $_POST['rank'] ) $fix .= " AND rank_ord = " . $_POST['rank'];
-        $fix .= ")";
-        $filters .= $fix;
+//        $fix = " OR ((rm.date_book_shipped is null OR rm.date_card_shipped is null) AND rm.date_printed is not null";
+//        if ( isset($_POST['rank']) && $_POST['rank'] ) $fix .= " AND rank_ord = " . $_POST['rank'];
+//        $fix .= ")";
+//        $filters .= $fix;
 //        echo $filters; exit;
 
         $rank_marks = "(SELECT MAX(rank_ord) max_rank, user_id FROM rank_marks GROUP BY user_id) cr USING (user_id) "
@@ -53,6 +53,7 @@ class IdCardsRouter {
             ." ORDER BY s.school_name, c.class_grade, c.class_sub, u.first, u.last, rm.rank_ord;";
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
+        $query->debugDumpParams(); exit;
         
         $response = [];
         while( $row = $query->fetch() ){
