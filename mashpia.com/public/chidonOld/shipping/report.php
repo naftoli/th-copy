@@ -487,8 +487,8 @@ ksort($grand_summary);
   // })
 
   <?php if (!$super) : ?>
-  $("select").attr('disabled', true)
-  $("textarea").attr('disabled', true)
+  // $("select").attr('disabled', true)
+  // $("textarea").attr('disabled', true)
   <?php endif; ?>
 </script>
 </html>
