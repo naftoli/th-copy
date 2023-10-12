@@ -53,8 +53,7 @@ class IdCardsRouter {
             ." ORDER BY s.school_name, c.class_grade, c.class_sub, u.first, u.last, rm.rank_ord;";
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
-        $query->debugDumpParams(); exit;
-        
+
         $response = [];
         while( $row = $query->fetch() ){
             // set the picture, and profile name using the models
