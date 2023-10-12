@@ -14,7 +14,7 @@ if (!isset($_GET['id']) || !isset($_GET['test'])) {
 
 function getHeDay($day) {
     $dateArr = explode('/', $day);
-    $str = jdtojewish(gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]), true, CAL_JEWISH_ADD_GERESHAYIM); // for today
+    $str = jdtojewish(gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]), true, CAL_JEWISH_ADD_GERESHAYIM); // for today
     $str1 = iconv ('WINDOWS-1255', 'UTF-8', $str); // convert to utf-8
     return $str1;
 }
