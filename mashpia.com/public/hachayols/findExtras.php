@@ -29,33 +29,35 @@ foreach ($info as $row) {
     $admins[$row['admin_id']][] = $row;
 }
 
-// find all family accounts with no hachayol set
-$missing = [];
+// get all children that paid for extra hachayols
+$sql = "select user_id from registration_charges where type like '%HACH%'";
+$result = $mysqli->query($sql);
+$paid = $result->fetch_all(MYSQLI_ASSOC);
+
+// find all extras that didn't pay
+$extras = [];
 foreach ($admins as $admin_id => $children) {
-    $found = false;
-    foreach ($children as $user) {
-        if ($user['hachayol'] == 1) {
-            $found = true;
-            break;
+    $num = count($children);
+    if ($num > 1) {
+        for ($i = 1; $i < $num; $i++) {
+            $child = $children[$i];
+            if ($child['hachayol'] == 1 && !in_array($children[$i]['user_id'], $paid)) {
+                $extras[] = $children[$i]['user_id'];
+            }
         }
-    }
-    if (!$found) {
-        $missing[] = $admin_id;
     }
 }
 
-// find first child per admin
-foreach ($missing as $admin_id) {
-    $children = $admins[$admin_id];
-    $first = $children[0];
-    $user_id = $first['user_id'];
+// update extras to have their hachayol flag set to 0
+foreach ($extras as $user_id) {
     $sql = "UPDATE users 
             SET 
-                hachayol = 1
+                hachayol = 0
             WHERE
                 user_id = ?";
     $result = $mysqli->prepare($sql);
     $result->bind_param("i", $user_id);
     $result->execute();
 }
+
 echo "done";
