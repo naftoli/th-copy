@@ -86,15 +86,11 @@ $items = $cs->getItems();
         <option value="f">Girls</option>
       </select><br />
       <h4>School(s)</h4>
-      <select name="school[]" multiple style="height: 300px;">
-          <?php
-          if ($super) {
-//            echo '<option value="0">All Schools</option>';
-//            echo '<option value="-1">All Schools Except MS/AK</option>';
-//            echo '<option value="-2">Only MS/AK</option>';
-          }
-          foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>";
-          ?>
+      <?php
+        if ($super) echo '<select name="school[]" multiple style="height: 300px;">';
+        else echo '<select name="school[]">';
+        foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>";
+      ?>
       </select><br />
       <h4>Status</h4>
       <p>
