@@ -32,9 +32,20 @@ if ($report_type == 'file') {
     $files = [];
     foreach ([61, 269] as $school_id) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
-          $listOfItems = array_keys($itemsPerCat);
-          $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-          $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+            $listOfItems = array_keys($itemsPerCat);
+            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+            $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+        }
+        // remove shipped items if needed
+        if (in_array(0, $limit_to_status)) {
+            $status = $cs->getStatus();
+            foreach ($info as $cat => $details) {
+                foreach ($details as $user => $items) {
+                    foreach ($items as $item => $more) {
+                        if (isset($status[$user][$item['id']]) && $status[$user][$item['id']]['shipped'] == 1) unset($info[$cat][$user][$item]);
+                    }
+                }
+            }
         }
         $csv = createCSV($info, $school_id, true); // filter out all users that ONLY live in the usa
         $file = $school_id . '-usa.csv';
