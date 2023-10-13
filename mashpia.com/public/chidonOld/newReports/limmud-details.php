@@ -84,7 +84,7 @@ $info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test
         </p>
         <table>
             <tr>
-                <th>Learning Days Passed</th>
+                <th>Learning Day #</th>
                 <th>Date</th>
                 <th>Minutes Logged</th>
                 <th>Balance</th>
