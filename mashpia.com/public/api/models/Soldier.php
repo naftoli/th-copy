@@ -595,7 +595,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 ]);
             }
             // update fields to mark registered
-            if ($this->user_registered) $this->user_registered = new \Datetime();
+            $this->user_registered = new \Datetime();
             if (!$this->user_start_date) $this->user_start_date = unixtojd();
             // update field for chayolei lite registration
             if ($lite) $this->lite_edition = 1;
