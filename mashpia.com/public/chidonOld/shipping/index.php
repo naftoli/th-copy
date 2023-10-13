@@ -86,7 +86,7 @@ $items = $cs->getItems();
         <option value="f">Girls</option>
       </select><br />
       <h4>School(s)</h4>
-      <select name="school[]" multiple>
+      <select name="school[]" multiple style="height: 300px;">
           <?php
           if ($super) {
 //            echo '<option value="0">All Schools</option>';
