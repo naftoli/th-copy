@@ -29,19 +29,33 @@ foreach ($info as $row) {
     $admins[$row['admin_id']][] = $row;
 }
 
-// find first child per admin
-foreach ($admins as $children) {
-    $first = $children[0];
-    if ($first['hachayol'] == 0) { // if child does not have hachayol set, update child
-        $user_id = $first['user_id'];
-        $sql = "UPDATE users 
-                SET 
-                    hachayol = 1
-                WHERE
-                    user_id = ?";
-        $result = $mysqli->prepare($sql);
-        $result->bind_param("i", $user_id);
-        $result->execute();
+// find all family accounts with no hachayol set
+$missing = [];
+foreach ($admins as $admin_id => $users) {
+    $found = false;
+    foreach ($users as $user) {
+        if ($user['hachayol'] == 1) {
+            $found = true;
+            break;
+        }
     }
+    if (!$found) {
+        $missing[] = $admin_id;
+    }
+}
+
+// find first child per admin
+foreach ($missing as $admin_id) {
+    $children = $admins[$admin_id];
+    $first = $children[0];
+    $user_id = $first['user_id'];
+    $sql = "UPDATE users 
+            SET 
+                hachayol = 1
+            WHERE
+                user_id = ?";
+    $result = $mysqli->prepare($sql);
+    $result->bind_param("i", $user_id);
+    $result->execute();
 }
 echo "done";
