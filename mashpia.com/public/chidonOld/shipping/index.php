@@ -85,11 +85,11 @@ $items = $cs->getItems();
         <option value="m">Boys</option>
         <option value="f">Girls</option>
       </select><br />
-      <h4>School</h4>
-      <select name="school">
+      <h4>School(s)</h4>
+      <select name="school[]" multiple>
           <?php
           if ($super) {
-            echo '<option value="0">All Schools</option>';
+//            echo '<option value="0">All Schools</option>';
 //            echo '<option value="-1">All Schools Except MS/AK</option>';
 //            echo '<option value="-2">Only MS/AK</option>';
           }

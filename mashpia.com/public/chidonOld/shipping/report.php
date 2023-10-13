@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -154,13 +154,19 @@ if ($report_type == 'file') {
 //    exit;
 //}
 
+// get list of schools to iterate over
+$list_of_schools = $_POST['school'];
+
 // get results for chosen items
 $info = [];
-foreach ($items_chosen as $cat => $itemsPerCat) {
-    $listOfItems = array_keys($itemsPerCat);
-    $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-    if ($cat == 'gear') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
-    else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $_POST['school'], $listOfItems);
+foreach ($list_of_schools as $schoolID) {
+    foreach ($items_chosen as $cat => $itemsPerCat) {
+        if (! isset($info[$cat])) $info[$cat] = [];
+        $listOfItems = array_keys($itemsPerCat);
+        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+        if ($cat == 'gear') $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
+        else $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
+    }
 }
 $info['status'] = $cs->getStatus();
 
@@ -192,8 +198,9 @@ foreach ($tables as $table) {
 
 //********* WHERE *********//
 $sql .= " WHERE 1";
+$sql .= " AND u.school_id in (" . implode(",", $list_of_schools) . ")";
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
-if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
+//if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
 
