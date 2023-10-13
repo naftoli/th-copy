@@ -30,6 +30,7 @@ $cs->setYear($year);
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
+    $status = $cs->getStatus();
     foreach ([61, 269] as $school_id) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
@@ -38,11 +39,10 @@ if ($report_type == 'file') {
         }
         // remove shipped items if needed
         if (in_array(0, $limit_to_status)) {
-            $status = $cs->getStatus();
             foreach ($info as $cat => $details) {
                 foreach ($details as $user => $items) {
-                    foreach ($items as $item => $more) {
-                        if (isset($status[$user][$item['id']]) && $status[$user][$item['id']]['shipped'] == 1) unset($info[$cat][$user][$item]);
+                    foreach ($items as $idx => $item) {
+                        if (isset($status[$user][$item['id']]) && $status[$user][$item['id']]['shipped'] == 1) unset($info[$cat][$user][$idx]);
                     }
                 }
             }
