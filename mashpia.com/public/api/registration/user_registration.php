@@ -267,8 +267,8 @@ class UserRegistrationRouter {
                             if (!$status['chayolei']) { // user not yet registered, so register him/her
                                 $discount = $registration['discount'] ?? 0;
                                 //                            if ( $user->school->reg_type == 1 ) $amount = $amount > 0 ? $amount : null;
-                                $year = GlobalSettings::getRegistrationYear($user->school_id);
-                                $error = $user->registerChayolei($admin->admin_id, $year, $amount, $trans_id, 0, 0, $discount);
+                                $yearTmp = GlobalSettings::getRegistrationYear($user->school_id);
+                                $error = $user->registerChayolei($admin->admin_id, $yearTmp, $amount, $trans_id, 0, 0, $discount);
                                 if (!empty($error)) {
                                     mysql_query("ROLLBACK");
                                     mysql_query("SET AUTOCOMMIT=1");
