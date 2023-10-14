@@ -14,7 +14,7 @@ $schools = $as->getSchools();
 require 'class.schoolShipping.php';
 require 'data.php';
 
-$updated = getUpdatedSchools($schools);
+//$updated = getUpdatedSchools($schools);
 
 $items_chosen = isset($_POST['items']) ? $_POST['items'] : [];
 $fields_chosen = array_keys($_POST['fields']);
@@ -22,13 +22,15 @@ $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) 
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 $report_type = $_POST['report_type'];
 
+$school_list = $_POST['school'] == 0 ? array_keys($schools) : [$_POST['school']];
+
 $cs = new SchoolShipping();
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
     $listOfItems = array_keys($itemsPerCat);
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-    $info[$cat] = $cs->$nameOfFunc($_POST['school'], $listOfItems);
+    $info[$cat] = $cs->$nameOfFunc($school_list, $listOfItems);
 }
 $info['status'] = $cs->getStatus();
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
@@ -147,11 +149,11 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       }
       if (! empty($address)) echo "<br />" . $address . "<br />";
       ?>
-      <p>
-        <input type='checkbox' class='updated' value='<?= $updated[$school] ?>'
-        <?php if (intval($updated[$school]) == 1) echo "checked"; ?>
-        /> I have reviewed and updated the shipping status for the entire school.
-      </p>
+<!--      <p>-->
+<!--        <input type='checkbox' class='updated' value='--><?php //= $updated[$school] ?><!--'-->
+<!--        --><?php //if (intval($updated[$school]) == 1) echo "checked"; ?>
+<!--        /> I have reviewed and updated the shipping status for the entire school.-->
+<!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
         <table class="table table-striped table-condensed cell-border hover row-order order-column">
