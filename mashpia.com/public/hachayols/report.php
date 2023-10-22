@@ -99,9 +99,9 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                         $school = $all_schools[$child['school_id']];
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
 
-                        echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
-                        if ($child['hachayol'] == 1) echo " checked='checked'";
-                        if ($disable || (!$super && $child['school_id'] != $school_id)) echo " disabled";
+                        $toCheck = $child['hachayol'] == 1 ? ' toCheck' : '';
+                        echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
+                        if ($disable) echo " disabled";
                         echo " />";
                         echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
                     }
@@ -115,8 +115,8 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
 
                     echo "<tr><td colspan='2'>No Parent Account</td><td>";
-                    echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
-                    if ($child['hachayol'] == 1) echo " checked='checked'";
+                    $toCheck = $child['hachayol'] == 1 ? ' toCheck' : '';
+                    echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
                     echo " />";
                     echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
                 }
@@ -125,6 +125,9 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
         <?php endforeach; ?>
     </body>
     <script>
+      $( function() {
+        $(".toCheck").prop('checked', true)
+      })
       $(".hachayol").click( function () {
         let list = []
         let elem = $(this).parent()
