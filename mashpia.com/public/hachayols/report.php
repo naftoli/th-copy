@@ -8,6 +8,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
 
+$super = $admin_user['auth'] == 'super';
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
@@ -85,7 +87,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                     // find out if hachayol child is in this school or not
                     $disable = false;
                     foreach ($children as $child) {
-                        if ($child['hachayol'] && $child['school_id'] != $school_id) {
+                        if (!$super && $child['hachayol'] == 1 && $child['school_id'] != $school_id) {
                             $disable = true;
                             break;
                         }
@@ -98,7 +100,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
                         $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
 
                         echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
-                        if ($child['hachayol']) echo " checked";
+                        if ($child['hachayol'] == 1) echo " checked='checked'";
                         if ($disable || $child['school_id'] != $school_id) echo " disabled";
                         echo " />";
                         echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
@@ -114,7 +116,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 
                     echo "<tr><td colspan='2'>No Parent Account</td><td>";
                     echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol' id='" . $child['user_id'] . "'";
-                    if ($child['hachayol']) echo " checked";
+                    if ($child['hachayol'] == 1) echo " checked='checked'";
                     echo " />";
                     echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
                 }
