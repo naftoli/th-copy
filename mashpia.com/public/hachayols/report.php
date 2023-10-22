@@ -101,7 +101,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 
                         echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
                         if ($child['hachayol'] == 1) echo " checked='checked'";
-                        if ($disable || $child['school_id'] != $school_id) echo " disabled";
+                        if ($disable || (!$super && $child['school_id'] != $school_id)) echo " disabled";
                         echo " />";
                         echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
                     }
