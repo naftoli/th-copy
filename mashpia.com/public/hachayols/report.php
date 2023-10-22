@@ -130,11 +130,6 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           let id = $(this).attr('id')
           document.getElementById(id).checked = true
         })
-        // do it twice to make sure they are all checked
-        $(".toCheck").each( function() {
-          let id = $(this).attr('id')
-          if (! document.getElementById(id).checked) document.getElementById(id).checked = true
-        })
       })
       $(".hachayol").click( function () {
         let list = []
