@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
 require_once $_SERVER["DOCUMENT_ROOT"] . '/header.php';
 
@@ -31,6 +34,7 @@ $months = array(
     11 => 'Av',
     12 => 'Elul'
 );
+
 // if plain yr change adar 1 to adar and remove adar 2
 if ($sm[6] == $sm[7]) {
     unset($sm[6]);
@@ -39,9 +43,10 @@ if ($sm[6] == $sm[7]) {
 
 // get most recent shabbos mevorchim
 $now = unixtojd();
-foreach ($sm as $date) {
+foreach ($sm as $idx => $date) {
     if ($date > $now) break;
 }
+if ($idx != 0) $date = $sm[--$idx];
 
 $sm = new ShabbosMevorchim();
 $sm->setReportDates($date);
