@@ -19,9 +19,10 @@ $("[data-dismiss]").click( function( event ){
 function alertPersonalization(evt) {
     if (evt.checked) {
         alert(
-          "If you would like your child to have their name on their prize, please input it below, and you will need to pre-pay the " +
-          "registration fee now instead of at the end of the year. If your child does not pass, you will NOT be refunded the portion " +
-          "that went towards the prize. The amount paid will be deducted from the end so your amount at the end may be $0."
+          "If you would like your child to have their name on their prize, please input it below, and you will need to " +
+          "pre-pay the registration fee now instead of at the end of the year (On the following page you will see the option " +
+          "to pay this in up to 4 installments).\n\nIf your child does not pass, you will NOT be refunded the portion that " +
+          "went towards the prize. The amount paid will be deducted from the end so your amount at the end may be $0."
         )
     }
 }
