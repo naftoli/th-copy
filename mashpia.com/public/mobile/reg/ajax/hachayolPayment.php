@@ -44,6 +44,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $info = $_POST['info'];
+$user_ids = $_POST['list'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 $year = GlobalSettings::getCurrentYear();
 
@@ -57,7 +58,15 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
-$description = "Hachayol Payment - Admin ID: " . $admin_id;
+$users = [];
+$description = "";
+// get serial numbers for description
+$stmt = $MASHPIA_DB->query("select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")");
+$rows = $stmt->fetchAll();
+foreach ($rows as $row) {
+    $users[$row['user_id']] = $row['school_id'];
+    $description .= "C" . $row['user_serial'] . ":HACH-20,";
+}
 
 if ( $amount > 0 ) {
     chdir('../../../');
@@ -66,9 +75,9 @@ if ( $amount > 0 ) {
 
     if ($response_array[0] == 1) { // success
         $strResponse =  $response_array[3] . ':' .
-            $response_array[4] . ':' .
-            $response_array[6] . ':' .
-            $response_array[9];
+        $response_array[4] . ':' .
+        $response_array[6] . ':' .
+        $response_array[9];
 
         // save to transactions table
         $stmt = $MASHPIA_DB->prepare("
@@ -89,6 +98,28 @@ if ( $amount > 0 ) {
             'first'         => $first_name,
             'last'          => $last_name
         ]);
+
+        $trans_id = $MASHPIA_DB->lastInsertId() ?? 0;
+
+        // save to registration charges table
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO registration_charges 
+            SET trans_id = :trans_id, 
+            user_id = :user, 
+            school_id = :school, 
+            type = :type, 
+            amount = 20, 
+            year = :year
+        ");
+        foreach ($users as $user_id => $school_id) {
+            $stmt->execute([
+                'trans_id'  => $trans_id,
+                'user'      => $user_id,
+                'school'    => $school_id,
+                'type'      => 'HACH',
+                'year'      => $year
+            ]);
+        }
 
         // send email confirmation
         sendEmailConf($response_array[6]);
