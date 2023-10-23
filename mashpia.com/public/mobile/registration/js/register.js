@@ -630,8 +630,13 @@ var registrationApp = function() {
         console.log(state.cart)
 
         var total = state.cart.reduce( function( total, item ) { return parseInt(total) + parseInt(item.price) }, 0 )
-        if ( total <= 0 ){
-            return registerUsers( { payment: { total: 0 } } );
+        if ( total <= 0 ) {
+            var postData = {};
+            postData.payment = {}
+            postData.payment['total'] = 0
+            postData.payment['installments'] = 0
+            postData.cart = state.cart.map( function(item){ return item.meta } )
+            return registerUsers( postData );
         }
 
         templates.renderCheckout( state.cart );
@@ -1916,8 +1921,9 @@ var templates = function(){
                   "3 tests Shipping & Chidon Coordinator) costs $70 per child and is subsidized by our generous donors. I would like to pay:"
                 $("#reg_text").empty().append(text)
                 $("#advanced-registration").show()
+                $("#chidon-learning").show()
             } else {
-                // document.getElementById('chidon').checked = true
+                document.getElementById('chidon').checked = true
                 $("#chidon").attr('disabled', true)
                 $("#chidon-fee").html("<option value='0'>$0</option>")
                 $("#chidon-fee").attr('disabled', true)
@@ -1933,10 +1939,11 @@ var templates = function(){
                     $("#khk-edit-info").show()
                 }
                 $("#advanced-registration").hide()
-                $(".limmud").attr('disabled', true)
-                $(".recruit").attr('disabled', true)
-                $("#yarmulka-size").attr('disabled', true)
-                $("#chidon-sweater-size").attr('disabled', true)
+                // $(".limmud").attr('disabled', true)
+                // $(".recruit").attr('disabled', true)
+                // $("#yarmulka-size").attr('disabled', true)
+                // $("#chidon-sweater-size").attr('disabled', true)
+                $("#chidon-learning").hide()
                 $(".yahadus-poll").attr('disabled', true)
                 $("#c-address").attr('disabled', true)
                 $("#c-apt").attr('disabled', true)

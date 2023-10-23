@@ -283,10 +283,10 @@ class UserRegistrationRouter {
                             $recruited = intval($registration['recruited']) == 1 ? true : false;
                             $recruited_by = intval($registration['recruitedBy']);
                             if (!
-                            $user->registerChidon(
-                                $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
-                                $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
-                                $registration['comments'], $registration['track'])
+                                $user->registerChidon(
+                                    $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
+                                    $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
+                                    $registration['comments'], $registration['track'])
                             ) {
                                 mysql_query("ROLLBACK");
                                 mysql_query("SET AUTOCOMMIT=1");

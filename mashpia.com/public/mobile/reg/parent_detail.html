@@ -422,7 +422,10 @@
 <!--                                                                    <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon Rewards {{ this.next_year_chidon }}</div>-->
 <!--                                                                {{/if}}-->
                                                                 <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{ this.next_year_chidon }}</div>
-<!--                                                                <button class="btn btn-primary re_register"><span>Edit Chidon {{ this.next_year_chidon }} Limmud Enrollment</span></button>-->
+                                                                {{#if this.editChidon}}
+                                                                    <button class="btn btn-primary re_register" style="margin-bottom: 8px"><span>Edit Chidon {{ this.next_year_chidon }}
+                                                                        Limmud Enrollment</span></button><br />
+                                                                {{/if}}
                                                                 <button class="btn btn-primary re_register"><span>Purchase
                                                                     {{#if this.bookPurchased}}Extra{{/if}}
                                                                     Yahadus Book</span></button>
