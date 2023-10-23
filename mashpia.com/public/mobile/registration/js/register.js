@@ -1314,9 +1314,10 @@ var registrationApp = function() {
             }
 
             let text = `
-                You have selected a prize with your child's name on it so you will need to prepay the registration fee now instead of at the end of Chidon.<br /><br />
-                If your child does not earn their prize, you will <b>not be refunded</b>. If you would like, you can go back and remove the 
-                name from the prize or choose a different prize so you don't need to prepay.<br /><br />`
+                You have selected a prize with your child's name on it so you will need to prepay the registration fee now 
+                instead of at the end of Chidon. (On the following page, you will see the option to pay this in up to 4 installments.)<br /><br />
+                If your child does not earn their prize, you will not be refunded the portion that went towards the prize. 
+                If you would like, you can go back and remove the name from the prize or choose a different prize so you don't need to prepay.<br /><br />`
 
             let html = `
                 <div class="col-12" style="padding: 10px 20px;">
