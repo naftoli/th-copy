@@ -1473,13 +1473,28 @@ var registrationApp = function() {
         }
     }
 
-    function checkRegShipping() {
+    async function checkRegShipping() {
         const registering = state.cart.filter(item => item.meta.type === 'advance registration' && item.meta.registration_type === 'chidon')
         // get index of user in users array
         const index = state.users.findIndex(user => user.user_id === registering[0].meta.user_id)
+
+        // make sure that if editing chidon info, we check if parent already paid for shipping
+        const paid = await fetch('api/checkShippingFee.php', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ admin: state.users[index].parentAccount.admin_id }),
+        })
+        if (parseInt(paid)) {
+            checkForRegShipping = false
+            nextStep()
+        }
+
         const school_id = state.users[index].school.school_id
         const country = state.users[index].parentAccount.admin_country
         const shippingFee = getShippingFee(school_id, country, registering.length)
+
         if (shippingFee) {
             // show modal
             let html = `
@@ -1515,8 +1530,8 @@ var registrationApp = function() {
                                 type: 'advance registration',
                                 registration_type: 'shipping',
                                 paid: shippingFee,
-                                user_id: selected_user.user_id,
-                                code: "F" + selected_user.parentAccount.admin_id + ":" + selected_user.school.school_id + ":" + shipCode + shippingFee,
+                                user_id: state.users[index].user_id,
+                                code: "F" + state.users[index].parentAccount.admin_id + ":" + state.users[index].school.school_id + ":" + shipCode + shippingFee,
                                 codeOnly: shipCode.substring(0, shipCode.length - 1)
                             }
                         })
@@ -2470,8 +2485,8 @@ var templates = function(){
                   '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
                   + "</div>" );
                 // update amounts to be charged in installments
-                $("#earlyRegTotal").text(futurePayment)
-                $("#earlyRegOne").text(futurePayment)
+                $("#earlyRegTotal").text(futurePayment.toFixed(2))
+                $("#earlyRegOne").text(futurePayment.toFixed(2))
                 const two = (futurePayment / 2).toFixed(2)
                 const three = (futurePayment / 3).toFixed(2)
                 const four = (futurePayment / 4).toFixed(2)
