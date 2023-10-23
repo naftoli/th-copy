@@ -282,56 +282,76 @@ class UserRegistrationRouter {
                         if ($chidonReg) {
                             $recruited = intval($registration['recruited']) == 1 ? true : false;
                             $recruited_by = intval($registration['recruitedBy']);
-                            if (!
-                                $user->registerChidon(
-                                    $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
-                                    $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
-                                    $registration['comments'], $registration['track'])
-                            ) {
-                                mysql_query("ROLLBACK");
-                                mysql_query("SET AUTOCOMMIT=1");
-                                json_error("Could not register " . $user->user_id . " for chidon");
-                            }
 
-                            // if there's ms/ak extra charges, we need to break it up and add it separately
-                            if (strpos($code, ':') !== false) {
-                                $codes = explode(':', $code);
-                                foreach ($codes as $code) {
-                                    switch ($code) {
-                                        case 'MYSLDS-10':
-                                        case 'AKLDS-10':
-                                            $amount = 10;
-                                            break;
-                                        case 'AKLDBC-20':
-                                            $amount = 20;
-                                            break;
-                                    }
-                                    $user->registrationCharge($code, $amount, $trans_id, $year);
+                            if (isset($registration['editingOnly']) && $registration['editingOnly']) {
+                                if (!
+                                    $user->registerChidon(
+                                        $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
+                                        $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
+                                        $registration['comments'], $registration['track'])
+                                ) {
+                                    mysql_query("ROLLBACK");
+                                    mysql_query("SET AUTOCOMMIT=1");
+                                    json_error("Could not update " . $user->user_id . " for chidon");
                                 }
-                            }
-//                            else $user->registrationCharge($code, $amount, $trans_id, $year);
 
-                            // add book purchased info to db
-                            if (intval($registration['purchased']) == 1) {
-                                $location = $registration['purchasedWhere'];
-                                $store_name = $registration['store']['store_name'];
-                                $store_city = $registration['store']['store_city'];
-                                $version = $registration['bookVersion'];
-                                $user->addBookPurchase($year, $user->user_id, $location, 0, $store_name, $store_city, $version);
-                            }
+                                // if recruited by changed, send new email
+                                if (isset($user->newRecruit) && $user->newRecruit) {
+                                    $recruitedChild = $user->first . ' ' . $user->last;
+                                    $r = new Recruits($recruited_by);
+                                    $r->sendEmail($recruitedChild);
+                                }
+                            } else {
+                                if (!
+                                    $user->registerChidon(
+                                        $year, $registration['size'], $registration['book'], intval($registration['yarmulka']), ucwords($registration['name_pref']),
+                                        $admin->admin_id, $amount, $trans_id, $recruited, $recruited_by, implode(',', $registration['poll']),
+                                        $registration['comments'], $registration['track'])
+                                ) {
+                                    mysql_query("ROLLBACK");
+                                    mysql_query("SET AUTOCOMMIT=1");
+                                    json_error("Could not register " . $user->user_id . " for chidon");
+                                }
 
-                            // send email to recruited by child
-                            if ($recruited_by) {
-                                $recruitedChild = $user->first . ' ' . $user->last;
-                                $r = new Recruits($recruited_by);
-                                $r->sendEmail($recruitedChild);
+                                // if there's ms/ak extra charges, we need to break it up and add it separately
+                                if (strpos($code, ':') !== false) {
+                                    $codes = explode(':', $code);
+                                    foreach ($codes as $code) {
+                                        switch ($code) {
+                                            case 'MYSLDS-10':
+                                            case 'AKLDS-10':
+                                                $amount = 10;
+                                                break;
+                                            case 'AKLDBC-20':
+                                                $amount = 20;
+                                                break;
+                                        }
+                                        $user->registrationCharge($code, $amount, $trans_id, $year);
+                                    }
+                                }
+
+                                // add book purchased info to db
+                                if (intval($registration['purchased']) == 1) {
+                                    $location = $registration['purchasedWhere'];
+                                    $store_name = $registration['store']['store_name'];
+                                    $store_city = $registration['store']['store_city'];
+                                    $version = $registration['bookVersion'];
+                                    $user->addBookPurchase($year, $user->user_id, $location, 0, $store_name, $store_city, $version);
+                                }
+
+                                // send email to recruited by child
+                                if ($recruited_by) {
+                                    $recruitedChild = $user->first . ' ' . $user->last;
+                                    $r = new Recruits($recruited_by);
+                                    $r->sendEmail($recruitedChild);
+                                }
+
+                                // send email to parents
+                                $this->sendEmailToParents($user, $year, $admin, $installmentsCreated);
                             }
 
                             // add chidon prizes
                             $user->addChidonPrizes($registration['chidon_prizes'], $year);
-
-                            // send email to parents
-                            $this->sendEmailToParents($user, $year, $admin, $installmentsCreated);
                         }
                     } else {
                         $user->registrationCharge($code, $amount, $trans_id, $year);

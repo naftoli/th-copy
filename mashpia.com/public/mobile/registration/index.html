@@ -594,12 +594,12 @@
                 </select>
                 <br/>
 
-                <div>
+                <div id="chidon-books">
                   <span class="i18n" data-key="AlreadyBoughtBooks">Have you already bought your Yahadus book for this year's chidon? </span><br/>
                   <input type="radio" name="book-bought" class="book-bought i18n" data-key="Yes" value="1"/> Yes<br/>
-                  <input type="radio" name="book-bought" class="book-bought i18n" data-key="No" value="0"/> No<br/>
+                  <input type="radio" name="book-bought" class="book-bought i18n" data-key="No" value="0" /> No<br/>
+                  <br/>
                 </div>
-                <br/>
 
                 <!--                                    <div class="yahadus-late" style="display: none;">-->
                 <!--                                        <div class="row">-->
@@ -668,8 +668,8 @@
                     your book).<br/>
                     <select class="form-control" name="bookVersion" id="bookVersion"></select>
                   </div>
+                  <br/>
                 </div>
-                <br/>
 
                 <div id="yahadus-registration" class="hide" style="margin-top: -30px;">
                   <div>Would You like to purchase a Yahadus Book?</div>
@@ -704,8 +704,8 @@
                   <div>
                     <span class="i18n" data-key="AlreadyHaveBook"> No thanks, I already have a book to use.</span>
                   </div>
+                  <br/>
                 </div>
-                <br/>
 
                 <!--                                    <div id="yahadus-registration-no" style="display: none;">-->
                 <!--                                        <label for="no_yahadus">-->
@@ -726,8 +726,8 @@
                   <span class="i18n" data-key="LearningChidon">I will be Learning for Chidon:</span>
                   <br/><br/>
                   <div id="yahadus-poll"></div>
+                  <br/>
                 </div>
-                <br/>
 
                 <div id="chidonWhatsapp" style="display: none;">
                   <b>Chidon WhatsApp</b>
@@ -768,8 +768,8 @@
                       <a href="https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB" target="_blank">KHK Girls</a>
                     </div>
                   </div>
+                  <br/>
                 </div>
-                <br/>
 
                 <div id="chidon-address">
                   <b>Home Address</b>
@@ -1137,9 +1137,9 @@
 <!--                    <option value="Zambia">Zambia</option>-->
 <!--                    <option value="Zimbabwe">Zimbabwe</option>-->
 <!--                  </select>-->
+                  <br />
+                  <br />
                 </div>
-                <br />
-                <br />
 
                 <div id="advanced-registration">
                   <b>Early Chidon Experience Registration</b>
@@ -1157,8 +1157,8 @@
                       </select><br />
                     </div>
                   </div>
+                  <br />
                 </div>
-                <br />
 
                 <div id="agreements">
                   <b>Chidon Terms</b>
@@ -1224,8 +1224,8 @@
                       </div>
                     </label>
                   </div>
+                  <br />
                 </div>
-                <br />
 
                 <div id="chidon-feedback">
                   <b>Chidon Feedback</b>
@@ -1635,9 +1635,9 @@
           </svg>
         </div>
         <p id="success" class="primary i18n2" data-key="YourchildRegistered">
-          Your child(ren) has(have) been enrolled!<br/>
-          If you were updating an existing enrolment, your information has been updated and you will not be charged
-          again!<br/>
+          Your child(ren) has(have) been enrolled / updated!<br/>
+          If you are enrolling children, you should be receiving a confirmation email shortly.<br/><br />
+          If you were updating an existing enrollment, you will not be charged again.<br/>
         </p>
         <div class="alert alert-danger" id="error-message"></div>
       </div>
@@ -1799,7 +1799,7 @@
       }
     })
 
-    // make sure serial number is valid
+    // make sure serial number is validrecruited_by_user_serial
     $("#recruited_by_user_serial").blur(function () {
       let serial = $(this).val()
       if (serial.length && !isNaN(serial)) {

@@ -663,7 +663,7 @@ var registrationApp = function() {
     /*********************** FORM HANDLERS ***********************/
     function checkField( field ) {
         // skip if we are editing registration
-        if (field.field === '#chidon-fee' && selected_user.getChidonInfo) return false
+        if (['#chidon-fee', '.book-bought'].includes(field.field) && selected_user.getChidonInfo) return false
         let value, checked
         switch (field.type) {
             case 'value':
@@ -760,7 +760,8 @@ var registrationApp = function() {
                 {
                     field: '#chidon-fee',
                     type: 'amount',
-                    error: 'You must choose how much you are paying for chidon enrollment'
+                    error: 'You must choose how much you are paying for chidon enrollment',
+                    exception: selected_user.getChidonInfo == undefined, // if editing registration, don't validate
                 },
                 {
                     field: '.limmud',
@@ -794,7 +795,7 @@ var registrationApp = function() {
                     field: '.book-bought',
                     type: 'yes/no',
                     error: 'You must indicate whether you purchased a book or not',
-                    exception: selected_user.getChidonInfo, // if editing registration, don't validate
+                    exception: selected_user.getChidonInfo == undefined, // if editing registration, don't validate
                     yesDependents: [
                         {
                             field: '.book-purchase',
@@ -855,17 +856,15 @@ var registrationApp = function() {
                 error = checkField(field)
                 if (error) errors.push(error)
                 else if (field.type == 'yes/no') {
+                    if (field.exception !== undefined && field.exception) continue // skip if exception
                     // check dependants if relevant
                     let elem = field.field + ':checked'
                     let value = $(elem).val()
                     if (value === '1') {
                         if (field.yesDependents) {
-                            if (field.exception !== undefined && field.exception) {} // if editing registration, don't validate}
-                            else {
-                                for (dependent of field.yesDependents) {
-                                    error = checkField(dependent)
-                                    if (error) errors.push(error)
-                                }
+                            for (dependent of field.yesDependents) {
+                                error = checkField(dependent)
+                                if (error) errors.push(error)
                             }
                         }
                     } else if (value === '0') {
@@ -1025,7 +1024,8 @@ var registrationApp = function() {
                     comments: $("#comments").val(),
                     chidon_prizes: user_prizes[current_user],
                     code: "C" + selected_user.user_serial + ":LDE-" + codeFee + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : ''),
-                    codeOnly: 'LDE' + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : '')
+                    codeOnly: 'LDE' + (shipCode ? ":" + shipCode : '') + (shipCodeBC ? ":" + shipCodeBC : ''),
+                    editingOnly: selected_user.getChidonInfo ? true : false
                 }
             });
         }
@@ -1921,7 +1921,10 @@ var templates = function(){
                   "3 tests Shipping & Chidon Coordinator) costs $70 per child and is subsidized by our generous donors. I would like to pay:"
                 $("#reg_text").empty().append(text)
                 $("#advanced-registration").show()
+                $("#chidon-address").show()
                 $("#chidon-learning").show()
+                $("#chidon-books").show()
+                $("#agreements").show()
             } else {
                 document.getElementById('chidon').checked = true
                 $("#chidon").attr('disabled', true)
@@ -1943,7 +1946,10 @@ var templates = function(){
                 // $(".recruit").attr('disabled', true)
                 // $("#yarmulka-size").attr('disabled', true)
                 // $("#chidon-sweater-size").attr('disabled', true)
+                $("#chidon-address").hide()
                 $("#chidon-learning").hide()
+                $("#chidon-books").hide()
+                $("#agreements").hide()
                 $(".yahadus-poll").attr('disabled', true)
                 $("#c-address").attr('disabled', true)
                 $("#c-apt").attr('disabled', true)
@@ -2072,6 +2078,7 @@ var templates = function(){
 
             if (user.registrationStatus.new_to_chidon == 1) {
                 $("#chidonRecruitment").show()
+                $("#recruited_by_user_serial").val(user.recruited_by > 0 ? user.recruited_by : '')
             } else {
                 $("#chidonRecruitment").hide()
                 $("#recruited_by_user_serial").val('')

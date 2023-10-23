@@ -671,14 +671,14 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // check if we are inserting or updating
-        $qry = $MASHPIA_DB->prepare("SELECT count(*) as total FROM th_chidon WHERE year = :year AND user_id = :user");
+        $qry = $MASHPIA_DB->prepare("SELECT user_id, recruited_by FROM th_chidon WHERE year = :year AND user_id = :user");
         $qry->execute([
             'year'  => $year,
             'user'  => $this->user_id
         ]);
         $row = $qry->fetch();
-        $total = $row['total'];
-        if ($total) {
+        if ($row) {
+            if ($row['recruited_by'] != $recruited_by) $this->newRecruit = true;
             // we are updating
             $chidonQry = $MASHPIA_DB->prepare("
                 UPDATE th_chidon SET 
