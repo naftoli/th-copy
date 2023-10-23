@@ -463,7 +463,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     break;
                 }
             }
-            if (!$school_registered && !GlobalSettings::isAustralian($this->school_id)) {
+            $exceptions = [49, 192]; // allow Monsey schools to register for chidon even if school not registered
+            if (!$school_registered && !GlobalSettings::isAustralian($this->school_id) && !in_array($this->school_id, $exceptions)) {
                 $result['chayolei'] = true; // disable chayolei reg if school is not registered
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
