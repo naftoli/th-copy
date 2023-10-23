@@ -443,6 +443,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
+            if (! isset($_COOKIE['naftoli']) && $row['th_chidon_id']) {
+                $result['chidon'] = true;
+                $result['chidonEdit'] = false;
+            }
         } else {
             $result['chidon'] = true;
             $result['chidonEdit'] = false;
