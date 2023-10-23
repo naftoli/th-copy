@@ -455,9 +455,14 @@ class ChidonTests
             $jd = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
             if (isset($info[$jd][20010])) {
                 // could have multiple entries
-                foreach ($info[$jd][20010] as $amount) $details[$day]['minutes'][] = $amount;
+                // find largest amount
+                $largest = 0;
+                foreach ($info[$jd][20010] as $amount) {
+                    if ($amount > $largest) $largest = $amount;
+                }
+                $details[$day]['minutes'] = $largest;
             }
-            else $details[$day]['minutes'][] = 0; 
+            else $details[$day]['minutes'] = 0;
             if (isset($info[$jd][20011])) $details[$day]['upToDate'] = true;
         }
 
