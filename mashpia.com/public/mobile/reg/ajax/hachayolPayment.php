@@ -114,6 +114,7 @@ if ( $amount > 0 ) {
             year = :year, 
             discount = 0
         ");
+        $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
         foreach ($users as $user_id => $school_id) {
             $stmt->execute([
                 'trans_id'  => $trans_id,
@@ -122,6 +123,7 @@ if ( $amount > 0 ) {
                 'type'      => 'HACH',
                 'year'      => $year
             ]);
+            $stmt2->execute([ 'user' => $user_id ]);
         }
 
         // send email confirmation
