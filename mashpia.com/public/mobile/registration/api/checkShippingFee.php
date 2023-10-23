@@ -18,7 +18,7 @@ foreach ($rows as $row) {
 }
 
 // check if there's any shipping fee already charged for any children of this admin
-$stmt = $MASHPIA_DB->prepare("select * from registration_charges where type like '%RR%' and year = :year 
+$stmt = $MASHPIA_DB->prepare("select * from registration_charges where type in ('RRSUSA', 'RRSCAN', 'RRSINT') year = :year 
                                      and user_id in (" . implode(',', $children) . ")");
 $stmt->execute([':year' => $year]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
