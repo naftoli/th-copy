@@ -2362,7 +2362,8 @@ var templates = function(){
                                             }
                                             break
                                         case '.recruit':
-                                            if (user.registrationStatus.khk === false) $("#chidonRecruitment").show()
+                                            if (user.registrationStatus.khk === false && user.registrationStatus.new_to_chidon == 1)
+                                                $("#chidonRecruitment").show()
                                             $(elem.field).each( function() {
                                                 if (parseInt(info.recruited_by) && this.value == 1) $(this).trigger('click')
                                                 else if (!parseInt(info.recruited_by) && this.value == 0) this.checked = true
