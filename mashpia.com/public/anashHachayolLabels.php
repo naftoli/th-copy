@@ -188,13 +188,21 @@ $children = $m->getChildren();
   const info = <?= json_encode($parents) ?>;
   const children = <?= json_encode($children) ?>;
   let rows = []
-  let i = 0
+  let i = 1 // order number
   for (let p in info) {
     for (let id in info[p]) {
       const parent = info[p][id]
       const name = parent['first'] + ' ' + parent['last']
-      const address = parent['admin_address1']
-      const address2 = parent['admin_address2']
+      let address = parent['admin_address1']
+      let address2 = parent['admin_address2']
+      // check if address contains comma and then separate into address and address2 if address2 is empty
+      if (address.includes(',')) {
+        const addressArr = address.split(',')
+        if (address2.length === 0) {
+          address = addressArr[0]
+          address2 = addressArr[1]
+        }
+      }
       const city = parent['admin_city']
       const state = parent['admin_state']
       const zip = parent['admin_postal']
