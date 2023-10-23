@@ -325,7 +325,7 @@
         if (child_num > numHachayols) {
           const user_id = $(this).attr('id')
           const checked = $(this).is(":checked") ? 1 : 0
-          if (checked) list.push({ user_id })
+          if (checked) list.push( user_id )
         }
       })
       console.log(list)

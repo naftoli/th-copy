@@ -61,17 +61,19 @@ $state = "";
 $users = [];
 $description = "";
 // get serial numbers for description
-$stmt = $MASHPIA_DB->query("select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")");
+$qry = "select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")";
+$stmt = $MASHPIA_DB->query($qry);
 $rows = $stmt->fetchAll();
 foreach ($rows as $row) {
     $users[$row['user_id']] = $row['school_id'];
     $description .= "C" . $row['user_serial'] . ":HACH-20,";
 }
+// remove trailing comma
+$description = substr($description, 0, strlen($description) - 1);
 
 if ( $amount > 0 ) {
-    chdir('../../../');
-    require_once 'authorize.php';
-    chdir('/mobile/reg/ajax/');
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/authorize.php';
+    $trans_id = 0;
 
     if ($response_array[0] == 1) { // success
         $strResponse =  $response_array[3] . ':' .
@@ -85,21 +87,21 @@ if ( $amount > 0 ) {
                 SET trans_date = now(), 
                 description = :description, 
                 amount = :amount, 
-                reponse = :response, 
+                response = :response, 
                 zip = :zip, 
-                first = :first, 
-                last = :last");
+                admin_id = :admin
+        ");
 
-        $stmt->execute([
+        $res = $stmt->execute([
             'description'   => $description,
             'amount'        => $amount,
             'response'      => $strResponse,
             'zip'           => $zip,
-            'first'         => $first_name,
-            'last'          => $last_name
+            'admin'         => $admin_id
         ]);
 
-        $trans_id = $MASHPIA_DB->lastInsertId() ?? 0;
+        if ($res) $trans_id = $MASHPIA_DB->lastInsertId();
+//        else $stmt->debugDumpParams();
 
         // save to registration charges table
         $stmt = $MASHPIA_DB->prepare("
@@ -109,7 +111,8 @@ if ( $amount > 0 ) {
             school_id = :school, 
             type = :type, 
             amount = 20, 
-            year = :year
+            year = :year, 
+            discount = 0
         ");
         foreach ($users as $user_id => $school_id) {
             $stmt->execute([
