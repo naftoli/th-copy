@@ -655,10 +655,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     ) {
         global $MASHPIA_DB;
 
-        // save the charge
-        if ( !is_null( $amount ) ) {
-            $this->registrationCharge( 'LDE', $amount, $trans_id, $year );
-        }
+        if (is_null( $amount )) return false;
+
         // make sure we have parent id
         if ( !$parent_id ) {
             $stmt = $MASHPIA_DB->prepare("
@@ -698,6 +696,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                         AND user_id = :user
             ");
         } else {
+            // save the charge
+            $this->registrationCharge( 'LDE', $amount, $trans_id, $year );
+            // we are inserting
             $chidonQry = $MASHPIA_DB->prepare("
                 INSERT INTO th_chidon SET 
                 year = :year,

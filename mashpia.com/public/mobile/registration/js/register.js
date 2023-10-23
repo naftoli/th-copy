@@ -987,7 +987,7 @@ var registrationApp = function() {
             })
 
             let shipCode, shipCodeBC
-            if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+            if ( [ 269, 61 ].includes( selected_user.school.school_id ) && !selected_user.getChidonInfo ) { // make sure not editing enrollment
                 showClasses = 1;
                 // figure out if we are adding codes for enrollment shipping / bc fee
                 if (selected_user.school.school_id == 61) {
