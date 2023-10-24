@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>Sweaters Report</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+        crossorigin="anonymous" />
+    <script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+    <style>
+      #main {
+        margin-left: 2%;
+        margin-right: 2%;
+      }
+    </style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const {useState, useEffect} = React
+  const {createRoot} = ReactDOM
+
+  const Table = () => {
+    const [rows, setRows] = useState([])
+    const [ranks, setRanks] = useState([])
+    const [users, setUsers] = useState([])
+    const colors = ['burgundy', 'navy']
+    const sizes = ['youth xs', 'youth s', 'youth m', 'youth l', 'adult xs', 'adult s', 'adult m', 'adult l', 'adult xl', 'adult xxl', 'adult xxxl']
+
+    useEffect(() => {
+      (async () => {
+        const infoRes = await fetch('getReportInfo.php')
+        const moreInfoRes = await fetch('getMoreInfo.php')
+
+        const data = await infoRes.json()
+        const moreInfo = await moreInfoRes.json()
+
+        if (!data.success || !moreInfo.success) {
+          alert('Error getting info.')
+          location.href = '/'
+        }
+
+        setRanks(Object.values(moreInfo.ranks).map(rank => rank.toLowerCase()))
+        setUsers(data.children)
+
+        let rows = []
+        let admin_ids = data.admin_ids
+        let raised = data.raised
+        let sweaters = data.sweaters
+        for (let admin_id of admin_ids) {
+          if (sweaters[admin_id]) {
+            let i = 1 // keep track of which sweater we are on for each admin
+            let numSweaters = sweaters[admin_id].length
+            for (let sweater of sweaters[admin_id]) {
+              let row = {
+                admin_id: admin_id,
+                raised: raised[admin_id] ? raised[admin_id] : 0,
+                user_id: sweater['user_id'],
+                color: sweater['color'],
+                size: sweater['size'],
+                rank: sweater['rank'],
+                cap: sweater['cap'],
+                sweater_id: sweater['family_sweater_id'],
+                address: sweater['address'],
+                notes: sweater['notes'],
+                cancel: false,
+                gear_number: numSweaters > 1 ? (i + '/' + numSweaters) : i
+              }
+              console.log(row)
+              rows.push(row)
+              i++
+            }
+          } else {
+            let row = {
+              admin_id: admin_id,
+              raised: raised[admin_id] ? raised[admin_id] : 0,
+              user_id: 0,
+              color: '',
+              size: '',
+              rank: '',
+              cap: '',
+              sweater_id: '',
+              address: '',
+              notes: '',
+              cancel: false,
+              gear_number: ''
+            }
+            rows.push(row)
+          }
+        }
+        setRows(rows)
+      })()
+    }, [])
+
+    const handleInputChange = (e, index) => {
+      const {name, value} = e.target
+      const list = [...rows]
+      list[index][name] = value
+      setRows(list)
+    }
+
+    const handleCheckboxChange = (e, index) => {
+      const list = [...rows]
+      list[index].cancel = e.target.checked
+      setRows(list)
+    }
+
+    const saveInfo = () => {
+      // check if we are cancelling any orders
+      let cancel = false
+      for (let row of rows) {
+        if (row.cancel) {
+          cancel = true
+          break
+        }
+      }
+      if (cancel) {
+        if (!confirm('Are you sure you want to cancel these orders?')) {
+          return
+        }
+      }
+      // pass rows to php script to save
+      fetch('saveReportInfo.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(rows)
+      })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message)
+          if (data.error) console.log(data.error)
+          else window.location.reload()
+        })
+        .catch(error => {
+          console.log(error)
+          alert('Error: ' + error)
+        })
+    }
+
+    const generateCSV = () => {
+      // only show rows that have a shipping address and are not cancelled
+      let rowsToShip = rows
+      const columns = Object.keys(rows[0])
+      const csvContent = 'data:text/csv;charset=utf-8,' +
+        columns.join(',') + '\n' +
+        rowsToShip.map(row => columns.map(column => {
+          let value = row[column]
+          if (typeof value === 'string' && value.includes(',')) value = `"${value}"` // wrap in quotes if it contains a comma
+          if (typeof value === 'string' && value.includes('/')) value = `"${value}"` // wrap in quotes if it contains a slash
+          return value
+        }).join(',')).join('\n')
+
+      // Create a link element and set its attributes
+      const link = document.createElement('a');
+      link.setAttribute('href', encodeURI(csvContent));
+      link.setAttribute('download', 'toShip.csv');
+      // Simulate a click on the link to trigger the file download
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    return (
+      <div>
+        <h1 className="mt-4">Sweaters Report</h1>
+        <br />
+        <div>
+          <table className="table table-striped">
+            <thead>
+            <tr>
+              <th>Admin ID</th>
+              <th>Amount Raised</th>
+              <th>Serial</th>
+              <th>Gear #</th>
+              <th>Sweater Color</th>
+              <th>Sweater Size</th>
+              <th>Rank patch</th>
+              <th>Cap Color</th>
+              <th>Child</th>
+              <th>Shipping Address</th>
+              <th>Cancel Order</th>
+              <th>Notes</th>
+            </tr>
+            </thead>
+            <tbody className="table-group-divider">
+            {ranks &&
+              users &&
+              rows &&
+              rows.map((row, index) => (
+                <tr key={index} className={row.cancel ? 'table-danger' : ''}>
+                  <td>{row.admin_id}</td>
+                  <td>{row.raised}</td>
+                  <td>{parseInt(row.user_id) > 0 ? users[row.admin_id][row.user_id].user_serial : ''}</td>
+                  <td>{row.gear_number}</td>
+                  <td>
+                    {row.sweater_id ? (
+                        row.color
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td>
+                    {row.sweater_id ? (
+                      row.size
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td>
+                    {row.sweater_id ? (
+                      row.rank
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td>
+                    {row.sweater_id ? (
+                      row.cap
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td>
+                    {row.sweater_id && users[row.admin_id][row.user_id] ? (
+                      users[row.admin_id][row.user_id].first + ' ' + users[row.admin_id][row.user_id].last + ' - ' + users[row.admin_id][row.user_id].school_name
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                  <td>
+                    {row.sweater_id ? (
+                      row.address
+                    ) : (
+                      'N/A'
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <br />
+        <button className="btn btn-primary" onClick={saveInfo}>
+          Save
+        </button>
+        <br />
+        <br />
+        <button className="btn btn-primary" onClick={generateCSV}>
+          Generate CSV
+        </button>
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<Table/>)
+</script>
+</html>
