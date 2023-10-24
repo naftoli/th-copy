@@ -13,7 +13,7 @@ function reloadRaffleWinners() {
     $('div#winner_list_container').html("<div class='loader'></div><p id='loader-status'>Getting winners....</p>"); // show the loader
     
     var school_id = $("select#school_id").val();
-    var auction_id = 82 //$("select#auction_id").val();
+    var auction_id = 84 //$("select#auction_id").val();
     var sorting = $("select#sorting").val();
     var single_school = $("select#school_id")[0].disabled;
     
