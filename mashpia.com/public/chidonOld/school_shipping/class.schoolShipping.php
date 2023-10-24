@@ -27,7 +27,7 @@ class SchoolShipping
 
     public function getItems() {
         $items = [
-            'Raffles'   => ['5M Raffle', '60M Raffle', 'Auction 5783']
+            'Raffles'   => ['5M Raffle', '60M Raffle']
         ];
         return $items;
     }
