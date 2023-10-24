@@ -150,11 +150,11 @@
 
     const generateCSV = () => {
       // only show rows that have a shipping address and are not cancelled
-      let rowsToShip = rows
-      const columns = Object.keys(rows[0])
+      const columns = ['admin_id', 'raised', 'user_id', 'gear_number', 'color', 'size', 'rank', 'cap', 'child', 'address']
       const csvContent = 'data:text/csv;charset=utf-8,' +
         columns.join(',') + '\n' +
-        rowsToShip.map(row => columns.map(column => {
+        rows.map(row => columns.map(column => {
+          if (column == 'child') return row.user_id > 0 ? users[row.admin_id][row.user_id].first + ' ' + users[row.admin_id][row.user_id].last + ' - ' + users[row.admin_id][row.user_id].school_name : ''
           let value = row[column]
           if (typeof value === 'string' && value.includes(',')) value = `"${value}"` // wrap in quotes if it contains a comma
           if (typeof value === 'string' && value.includes('/')) value = `"${value}"` // wrap in quotes if it contains a slash
@@ -252,6 +252,7 @@
         <button className="btn btn-primary" onClick={generateCSV}>
           Generate CSV
         </button>
+        <br />
       </div>
     )
   }
