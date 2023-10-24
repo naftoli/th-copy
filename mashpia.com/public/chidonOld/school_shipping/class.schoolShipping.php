@@ -91,7 +91,7 @@ class SchoolShipping
         $prizes = [];
         switch ($type) {
             case '5m raffle':
-                $qry = "select prize_id, name, shipping_code from prizes";
+                $qry = "select prize_id, name as prize_name, shipping_code from prizes";
                 break;
             case '60m raffle':
             case 'auction 5783':
@@ -102,7 +102,7 @@ class SchoolShipping
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $prizes[$row['prize_id']] = [
-                'name'  =>  $row['name'],
+                'name'  =>  $row['prize_name'],
                 'code'  =>  $row['shipping_code']
             ];
         }
