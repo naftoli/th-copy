@@ -27,7 +27,7 @@ class SchoolShipping
 
     public function getItems() {
         $items = [
-            'Raffles'   => ['5M Raffle', '60M Raffle']
+            'Raffles'   => ['5M Raffle', '60M Raffle', 'Auction 5783']
         ];
         return $items;
     }
@@ -219,8 +219,13 @@ class SchoolShipping
     private function getSchoolAuctionPrizes() {
         $info = [];
         $auction_id = key($this->raffles);
-        $sql = "select * from school_auction_prizes where auction_id = :auction and school_id in (" .
-            implode(',', $this->schools) . ")";
+//        $sql = "select * from school_auction_prizes where auction_id = :auction and school_id in (" .
+//            implode(',', $this->schools) . ")";
+        // use existing winners to determine how many prizes each school gets
+        $sql = "select u.school_id, aw.user_id 
+                from auction_winners aw 
+                join users u using (user_id) 
+                where auction_id = :auction";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['auction' => $auction_id]);
         $rows = $stmt->fetchAll();
