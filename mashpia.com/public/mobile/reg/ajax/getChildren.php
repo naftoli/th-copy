@@ -64,7 +64,7 @@ if ( !empty( $users ) ) {
     $children = [];
     $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, s.school_country, c.class_grade, "
         ." u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, u.hachayol, "
-        ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, s.school_id, c.class_id "
+        ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, u.gender, s.school_id, c.class_id "
         ." FROM users u "
         ." JOIN schools s USING (school_id) "
         ." LEFT JOIN classes c ON c.class_id = u.class_id "
@@ -78,6 +78,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['user_id']       = $row['user_id'];
         $children[$row['user_id']]['first'] 	    = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	    = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
+        $children[$row['user_id']]['gender']        = $row['gender'];
         $children[$row['user_id']]['school'] 	    = (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $row['school_name_he'] : $row['school_name']);
         $children[$row['user_id']]['city'] 		    = $row['school_city'];
         $children[$row['user_id']]['photo'] 	    = empty( $row['user_photo_id'] ) ? null : $row['user_photo_id'];
@@ -266,14 +267,22 @@ if ( !empty( $users ) ) {
         // if tuition school, turn off registration
         if (intval($row['reg_type']) == 1 && !$row['reg_chayolei'] && $row['chayolei']) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
-        // chidon registration
+        // chidon enrollment
          $exceptions = [482,544,583];
+         $children[$row['user_id']]['next_year_chidon'] = $chidon_year;
          $sqlNextChidon = "select * from th_chidon where user_id = " . $row['user_id'] . " and year = " . $chidon_year;
          $resNextChidon = mysql_query($sqlNextChidon);
-         $children[$row['user_id']]['next_year_chidon'] = $chidon_year;
          if (mysql_num_rows($resNextChidon)) {
+             $rowChidon = mysql_fetch_assoc($resNextChidon);
              $row['reg_chidon'] = true;
              $children[$row['user_id']]['chidon5783'] = true;
+             $children[$row['user_id']]['chidon_info'] = $rowChidon;
+             // chidon experience registration
+             if ($rowChidon['date_paid'] > 0) {
+                 $children[$row['user_id']]['chidonRegistered'] = 1;
+                 $children[$row['user_id']]['shabbatonPaid'] = 1;
+                 $children[$row['user_id']]['chidon_id'] = $rowChidon['th_chidon_id'];
+             }
          } else {
              $row['reg_chidon'] = false;
              $children[$row['user_id']]['chidon5783'] = false;
@@ -283,7 +292,7 @@ if ( !empty( $users ) ) {
          	&& intval( $row['class_grade'] ) <= 8 // not in grade 8
          	&& $row['chidon'] // make sure the kid is in chidon
          	&& !in_array( intval( $children[$row['user_id']]['school_id'] ), $exceptions ) // make sure not one of these schools
-         	//&& in_array( $row['school_id'], $australia ) // and not in australia..
+         	//&& in_array( $row['school_id'], $australia ) // and not in australia...
          ) {
          	$children[ $row['user_id'] ]['needsReg'] = 1;
          	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
@@ -299,15 +308,17 @@ if ( !empty( $users ) ) {
         // turn off chidon
 //        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
 
-        // chidon experience registration
-        $children[$row['user_id']]['shabbatonPaid'] = 0;
-        $cSql = "SELECT * FROM th_chidon WHERE date_paid > 0 and year = " . $chidon_year . " AND user_id = " . $row['user_id'];
-        $cRes = mysql_query($cSql);
-        if (mysql_num_rows($cRes) > 0) {
-            $cRow = mysql_fetch_assoc($cRes);
-            $children[$row['user_id']]['chidonRegistered'] = 1;
-            $children[$row['user_id']]['shabbatonPaid'] = 1;
-            $children[$row['user_id']]['chidon_id'] = $cRow['th_chidon_id'];
+        // find chosen prizes for those enrolled into chidon
+        if ($children[$row['user_id']]['chidon5783']) {
+            $sqlPrizes = "select * from chidon_user_prizes cup 
+                          join chidon_prizes cp using (prize_id) 
+                          where cup.year = " . $chidon_year . " 
+                          and user_id = " . $row['user_id'];
+            $resPrizes = mysql_query($sqlPrizes);
+            $children[$row['user_id']]['chidon_prizes'] = [];
+            while ($rowPrizes = mysql_fetch_assoc($resPrizes)) {
+                $children[$row['user_id']]['chidon_prizes'][] = $rowPrizes;
+            }
         }
 
         // find out if child bought a chidon book this year

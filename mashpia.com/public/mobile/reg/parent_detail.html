@@ -423,8 +423,7 @@
 <!--                                                                {{/if}}-->
                                                                 <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{ this.next_year_chidon }}</div>
                                                                 {{#if this.editChidon}}
-                                                                    <button class="btn btn-primary re_register" style="margin-bottom: 8px"><span>Edit Chidon {{ this.next_year_chidon }}
-                                                                        Limmud Enrollment</span></button><br />
+                                                                    <button class="btn btn-primary chidon_info" style="margin-bottom: 8px"><span>View / Edit Chidon Enrollment Options</span></button><br />
                                                                 {{/if}}
 <!--                                                                <button class="btn btn-primary re_register"><span>Purchase-->
 <!--                                                                    {{#if this.bookPurchased}}Extra{{/if}}-->
@@ -507,6 +506,30 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLongTitle"></h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
     <script src="../js/translation/parent-detail/parent_detail.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -558,6 +581,7 @@
 
             // load children
             var parent_id;
+            var allChildren = []
             var childrenToRegister = [];
             $.post('ajax/getChildren.php', {
                 admin: admin
@@ -568,6 +592,7 @@
                     var data = $.parseJSON(success);
                     var parent = data.parent;
                     var children = data.children;
+                    allChildren = children
 
                     parent_id = parent.id;
                     $("#family_id").text(parent_id)
@@ -675,6 +700,34 @@
                 if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
                 else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
             });
+
+            const testTypes = {
+                maven: 'Yesod',
+                pro: 'Yediah',
+                expert: 'Havonah',
+                genius: 'Iyun'
+            }
+
+            $(document).on('click', '.chidon_info', function () {
+                let id = $(this).parent().parent().parent().attr('id')
+                let child = allChildren[id]
+                let title = "Chidon Enrollment Information for " + child.first + " " + child.last
+                $("#exampleModalLongTitle").text(title)
+                let html = `
+                    <h5>Chosen Track: ${testTypes[child.chidon_info.test_type]}</h5>
+                    <h5>Sweater Size: ${child.chidon_info.size}</h5>
+                    <h5>Book Number: ${child.chidon_info.book}</h5>
+                `
+                if (child.gender == 'M') html += `<h5>Yarmulka Size: ${child.chidon_info.yarmulka}</h5>`
+                html += `<h5>Chidon Prizes:</h5><ul>`
+                for (let i = 0; i < child.chidon_prizes.length; i++) {
+                    let prize = child.chidon_prizes[i]
+                    html += `<li><h5>${prize.prize_name + (prize.he_name ? '-' + prize.he_name : '')}</h5></li>`
+                }
+                html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
+                $("#exampleModalCenter .modal-body").html(html)
+                $("#exampleModalCenter").modal('show')
+            })
 
             $(document).on('click', '.notify', function () {
                 // send to form
