@@ -149,7 +149,9 @@ class SchoolShipping
     private function setMonthlyRaffles() {
         $raffles = [];
         // get last year's 4th 60m and the first three of this year's 60m
-        $sql = "select * from raffles where type = 'monthly' and year in (" . $this-year . ", " . ($this->year - 1) . ")";
+        $lastYr = $this->year - 1;
+        $curYr = $this->year;
+        $sql = "select * from raffles where type = 'monthly' and year in ($lastYr, $curYr) order by raffle_id";
         $stmt = $this->db->query($sql);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
