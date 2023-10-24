@@ -1272,8 +1272,8 @@ var registrationApp = function() {
         return true
     }
 
-    function checkForChidonPayment() {
-        // depends on whether any prizes that have names have been selected
+    async function checkForChidonPayment() {
+        // depends on whether any prizes that have names have been selected AND the parent has not yet paid for chidon registration
         // OR if the parent indicated they would like to pay advanced registration
         let show = false
         let personalizedPrize = false
@@ -1282,12 +1282,22 @@ var registrationApp = function() {
         if (advancedPayment) show = true
 
         if (!show) {
-            // check prizes
-            for (let p of user_prizes[current_user]) {
-                if (parseInt(p.personalization) && p.he_name && p.he_name != '') {
-                    personalizedPrize = true
-                    show = true
-                    break
+            // check if parent already paid for chidon registration
+            const paid = await fetch('api/checkRegistrationPayment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ user: current_user })
+            })
+            if (! parseInt(paid)) {
+                // check prizes
+                for (let p of user_prizes[current_user]) {
+                    if (parseInt(p.personalization) && p.he_name && p.he_name != '') {
+                        personalizedPrize = true
+                        show = true
+                        break
+                    }
                 }
             }
         }
