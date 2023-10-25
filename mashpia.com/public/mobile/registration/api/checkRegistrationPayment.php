@@ -17,5 +17,5 @@ $stmt->execute([
     ':user' => $info['user']
 ]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-if ($row && !empty($row)) echo 1;
+if (is_array($row)) echo 1;
 else echo 0;

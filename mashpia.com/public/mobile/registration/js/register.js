@@ -725,7 +725,8 @@ var registrationApp = function() {
         }
 
         // make sure not to recharge khk if editing info (for cart info)
-        if (selected_user.getChidonInfo && selected_user.getChidonInfo.khk_reg === '1') khk_fee = 0
+        if (selected_user.getChidonInfo && parseInt(selected_user.getChidonInfo.khk_reg) == 1) khk_fee = 0
+        else khk_fee = 18
 
         // Detect and validate the charges accepted.
         selected_charges = {
@@ -1079,7 +1080,7 @@ var registrationApp = function() {
             })
         }
 
-        if (selected_charges.chidon) {
+        if (selected_charges.chidon && !selected_user.getChidonInfo) {
             saveAddress()
               .then(function (saved) {
                   if (saved) nextStep()
@@ -1283,13 +1284,14 @@ var registrationApp = function() {
 
         if (!show) {
             // check if parent already paid for chidon registration
-            const paid = await fetch('api/checkRegistrationPayment.php', {
+            const res = await fetch('api/checkRegistrationPayment.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ user: current_user })
             })
+            const paid = await res.json()
             if (! parseInt(paid)) {
                 // check prizes
                 for (let p of user_prizes[current_user]) {
@@ -1533,18 +1535,23 @@ var registrationApp = function() {
                         if (country === 'USA') shipCode = 'RRSUSA-'
                         else if (country === 'Canada') shipCode = 'RRSCAN-'
                         else shipCode = 'RRSINT-' // international
-                        state.cart.push({
-                            description: "Early Chidon Registration Shipping",
-                            price: shippingFee,
-                            meta: {
-                                type: 'advance registration',
-                                registration_type: 'shipping',
-                                paid: shippingFee,
-                                user_id: state.users[index].user_id,
-                                code: "F" + state.users[index].parentAccount.admin_id + ":" + state.users[index].school.school_id + ":" + shipCode + shippingFee,
-                                codeOnly: shipCode.substring(0, shipCode.length - 1)
-                            }
-                        })
+                        // for some reason this is showing more than once under certain circumstances
+                        // check if it doesn't already exist
+                        const exists = state.cart.filter(item => item.meta.codeOnly === shipCode.substring(0, shipCode.length - 1))
+                        if (!exists.length) {
+                            state.cart.push({
+                                description: "Early Chidon Registration Shipping",
+                                price: shippingFee,
+                                meta: {
+                                    type: 'advance registration',
+                                    registration_type: 'shipping',
+                                    paid: shippingFee,
+                                    user_id: state.users[index].user_id,
+                                    code: "F" + state.users[index].parentAccount.admin_id + ":" + state.users[index].school.school_id + ":" + shipCode + shippingFee,
+                                    codeOnly: shipCode.substring(0, shipCode.length - 1)
+                                }
+                            })
+                        }
                     }
                     checkForRegShipping = false
                     nextStep()
@@ -1919,23 +1926,15 @@ var templates = function(){
             if (! user.getChidonInfo) {
                 // non registered child
                 // check if coming after a prev registered child
-                if ($("#chidon").prop('disabled')) {
-                    $("#chidon").attr('disabled', false)
-                    $("#chidon-fee").attr('disabled', false)
-                    // if ($("#chidon").is(":checked")) {
-                        // reset chidon fee
-                        $("#chidon-fee").html(html)
-                        $("#chidon-fee").show()
-                        $("#reg_text").show()
-                        $("#chidon-registration").find('#chidon-reg-text').html('<strong>I would like to enroll for Chidon</strong>')
-                    // }
-                    if ($("#chidon").is(":checked")) $("#chidon").trigger('click')
+                if ($("#chidon-reg-text").html().includes('You have already enrolled for')) {
+                    $("#chidon-reg-text").html('<strong>I would like to enroll for the Chidon Limmud Program</strong>')
+                    document.getElementById('chidon').checked = false
+                    // reset chidon fee
+                    $("#chidon-fee").html(html)
+                    $("#chidon-fee").show()
+                    $("#reg_text").show()
                 }
-                // same idea for khk
-                if ($("khk_enrollment").prop('disabled')) {
-                    $("#khk_enrollment").attr('disabled', false)
-                    if ($("#khk_enrollment").is(":checked")) $("#khk-reg-text").html('Registration Fee: An additional $' + khk_fee)
-                }
+
                 $("#khk-reg-info").show()
                 $("#khk-edit-info").hide()
 
@@ -1967,6 +1966,9 @@ var templates = function(){
                 if (user.getChidonInfo.khk_reg === '1') {
                     $("#khk-reg-info").hide()
                     $("#khk-edit-info").show()
+                } else {
+                    $("#khk-reg-info").show()
+                    $("#khk-edit-info").hide()
                 }
                 $("#advanced-registration").hide()
                 // $(".limmud").attr('disabled', true)
@@ -2350,11 +2352,7 @@ var templates = function(){
                             if (this.value === '1') this.checked = true
                         })
                     }
-                    if (item.meta.registration_type === 'khk') {
-                        $("#khk_enrollment").each( function() {
-                            this.checked = true
-                        })
-                    }
+                    if (item.meta.registration_type === 'khk') document.getElementById('khk_enrollment').checked = true
                 }
                 // check off no for yahadus book if yes is not selected
                 if (! yahadus) {
@@ -2380,10 +2378,11 @@ var templates = function(){
                                         // some fields have exceptions
                                         case '#khk_enrollment':
                                             if (parseInt(info.khk_reg)) {
-                                                $(elem.field).each( function() {
-                                                    this.checked = true
-                                                })
-                                                $(elem.field).attr('disabled', true)
+                                                document.getElementById('khk_enrollment').checked = true
+                                                $("#khk_enrollment").attr('disabled', true)
+                                            } else {
+                                                document.getElementById('khk_enrollment').checked = false
+                                                $("#khk_enrollment").attr('disabled', false)
                                             }
                                             break
                                         case '.recruit':

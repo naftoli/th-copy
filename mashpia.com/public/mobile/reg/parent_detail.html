@@ -722,7 +722,8 @@
                 html += `<h5>Chidon Prizes:</h5><ul>`
                 for (let i = 0; i < child.chidon_prizes.length; i++) {
                     let prize = child.chidon_prizes[i]
-                    html += `<li><h5>${prize.prize_name + (prize.he_name ? '-' + prize.he_name : '')}</h5></li>`
+                    let desc = prize.prize_name + (prize.he_name ? '-' + prize.he_name : '') + (prize.color ? ' (' + prize.color + ')' : '') + (prize.size ? ' (' + prize.size + ')' : '')
+                    html += `<li><h5>${desc}</h5></li>`
                 }
                 html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
                 $("#exampleModalCenter .modal-body").html(html)
