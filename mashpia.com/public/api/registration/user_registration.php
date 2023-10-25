@@ -203,15 +203,16 @@ class UserRegistrationRouter {
             foreach ($cart as $item) {
                 // find out if we need to change the amount in the code
                 // change amount to 0 for the advance registration if there's installments
-                if ($installmentsCreated && strpos('RR', $item['code']) !== false) {
-                    if (strpos($item['code'], 'RRYSD') !== false) $item['code'] = 'RRYSD-0';
-                    else if (strpos($item['code'], 'RRYDA') !== false) $item['code'] = 'RRYDA-0';
-                    else if (strpos($item['code'], 'RRHVN') !== false) $item['code'] = 'RRHVN-0';
-                    else if (strpos($item['code'], 'RRKHK') !== false) $item['code'] = 'RRKHK-0';
-                    else if (strpos($item['code'], 'RRSUSA') !== false) $item['code'] = 'RRSUSA-0';
-                    else if (strpos($item['code'], 'RRSCAN') !== false) $item['code'] = 'RRSCAN-0';
-                    else if (strpos($item['code'], 'RRSINT') !== false) $item['code'] = 'RRSINT-0';
+                if ($installmentsCreated) {
+                    $codeOnly = $item['codeOnly'];
+                    if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
+                        $item['code'] = $codeOnly . '-0';
+                    } else if (strpos(['RRSUSA', 'RRSCAN', 'RRSINT'], $codeOnly) !== false) {
+                        $item['code'] = $codeOnly . '-0';
+                    }
                 }
+                // don't add LDE to desc if editing only
+                if ($codeOnly == 'LDE' && intval($item['editingOnly']) == 1) continue;
                 $desc[] = $item['code'];
             }
 
