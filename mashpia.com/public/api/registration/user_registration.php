@@ -216,29 +216,34 @@ class UserRegistrationRouter {
             }
 
             // total getting charged is dependent on the installment plan
-            $payment_response = $customer_profile->chargeCard(
-                $total, $payment_profile_id, null, null, implode(',', $desc)
-            );
-            if ( !is_array( $payment_response ) ) {
-                // undo the subscription
-                if ($installmentsCreated) {
-                    $subscription->cancelSubscription();
-                    $subscription->removeFromDb($MASHPIA_DB);
+            // if there's only installments and nothing to charge, then don't charge anything
+            if ($total) {
+                $payment_response = $customer_profile->chargeCard(
+                    $total, $payment_profile_id, null, null, implode(',', $desc)
+                );
+                if (!is_array($payment_response)) {
+                    // undo the subscription
+                    if ($installmentsCreated) {
+                        $subscription->cancelSubscription();
+                        $subscription->removeFromDb($MASHPIA_DB);
+                    }
+                    mysql_query("ROLLBACK");
+                    mysql_query("SET AUTOCOMMIT=1");
+                    json_error($payment_response);
                 }
-                mysql_query("ROLLBACK");
-                mysql_query("SET AUTOCOMMIT=1");
-                json_error( $payment_response );
+                $transaction_query = $MASHPIA_DB->prepare(
+                    "INSERT INTO transactions (trans_date, admin_id, description, amount, zip, users_registered, response) "
+                    . "VALUES (NOW(), ?, ?, ?, ?, ?, ?)"
+                );
+                $transaction_query->execute([
+                    $admin->admin_id, implode(',', $desc), $total,
+                    $admin->admin_postal, implode(', ', $user_ids),
+                    json_encode($payment_response)
+                ]);
+                $trans_id = $MASHPIA_DB->lastInsertId() ?? 0;
+            } else {
+                $trans_id = 0;
             }
-            $transaction_query = $MASHPIA_DB->prepare(
-                "INSERT INTO transactions (trans_date, admin_id, description, amount, zip, users_registered, response) "
-                ."VALUES (NOW(), ?, ?, ?, ?, ?, ?)"
-            );
-            $transaction_query->execute([
-                $admin->admin_id, implode(',', $desc), $total,
-                $admin->admin_postal, implode( ', ', $user_ids ),
-                json_encode( $payment_response )
-            ]);
-            $trans_id = $MASHPIA_DB->lastInsertId() ?? 0;
         } else {
             $trans_id = 0;
         }
