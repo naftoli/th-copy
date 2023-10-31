@@ -207,12 +207,12 @@ class UserRegistrationRouter {
                 if ($installmentsCreated) {
                     if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
                         $item['code'] = $codeOnly . '-0';
-                    } else if (strpos(['RRSUSA', 'RRSCAN', 'RRSINT'], $codeOnly) !== false) {
+                    } else if (in_array($codeOnly, ['RRSUSA', 'RRSCAN', 'RRSINT']) !== false) {
                         $item['code'] = $codeOnly . '-0';
                     }
                 }
                 // don't add LDE to desc if editing only
-                if ($codeOnly == 'LDE' && intval($item['editingOnly']) == 1) continue;
+                if ($codeOnly == 'LDE' && intval($item['editingOnly']) == 1 && parseInt($item['paid']) == 0) continue;
                 $desc[] = $item['code'];
             }
 

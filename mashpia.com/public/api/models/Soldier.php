@@ -385,7 +385,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
             . "VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
         );
-        // * execte the query
+        // * execute the query
         return $registration_info_query->execute([
             'type' => $type, 'trans_id' => $trans_id,
             'year' => $year, 'user_id' => $this->user_id,
