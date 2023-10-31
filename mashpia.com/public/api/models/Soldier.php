@@ -38,6 +38,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     private $missions = [];
     public $parent; // needed for chidon registration
     public $needs_new_pic = 1; // needs new Picture entered from mobile site
+    public $newRecruit = false;
 
     // Access validation - takes a login and returns true or false if it can access the user
     public function validateAccess( $login ){
