@@ -711,9 +711,11 @@
             $(document).on('click', '.chidon_info', function () {
                 let id = $(this).parent().parent().parent().attr('id')
                 let child = allChildren[id]
-                let title = "Chidon Enrollment Information for " + child.first + " " + child.last
-                $("#exampleModalLongTitle").text(title)
-                let html = `
+                let title = "Chidon Enrollment Information for <b>" + child.first + " " + child.last + "</b>"
+                $("#exampleModalLongTitle").html(title)
+                let html = ''
+                if (parseInt(child.chidon_info.khk_reg)) html += "<h5>Enrolled for Kol Hatorah Kulah</h5>"
+                html += `
                     <h5>Chosen Track: ${testTypes[child.chidon_info.test_type]}</h5>
                     <h5>Sweater Size: ${child.chidon_info.size}</h5>
                     <h5>Book Number: ${child.chidon_info.book}</h5>
@@ -722,8 +724,9 @@
                 html += `<h5>Chidon Prizes:</h5><ul>`
                 for (let i = 0; i < child.chidon_prizes.length; i++) {
                     let prize = child.chidon_prizes[i]
-                    let desc = prize.prize_name + (prize.he_name ? '-' + prize.he_name : '') + (prize.color ? ' (' + prize.color + ')' : '') + (prize.size ? ' (' + prize.size + ')' : '')
+                    let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ' - ' : '') + (prize.size ? prize.size + ') ' : '')
                     html += `<li><h5>${desc}</h5></li>`
+                    if (prize.he_name) html += `<li><h5>Personalized name on prize: ${prize.he_name}</h5></li>`
                 }
                 html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
                 $("#exampleModalCenter .modal-body").html(html)
