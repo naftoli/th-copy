@@ -1801,14 +1801,6 @@
       }
     })
 
-    // make sure serial number is validrecruited_by_user_serial
-    $("#recruited_by_user_serial").blur(function () {
-      let serial = $(this).val()
-      if (serial.length && !isNaN(serial)) {
-        checkSerial(serial)
-      }
-    })
-
     // show recruited by if recruit is checked off
     $(".recruit").click(function () {
       $(this).val() == '1' ? $("#recruited_by").show() : $("#recruited_by").hide()
@@ -1821,32 +1813,6 @@
     $("#nameChoice").blur(isEnglish)
 
     $(document).on('blur', ".he_name", isHebrew)
-
-    function checkSerial(number) {
-      let good = true
-      if (number.length != 7) {
-        good = false
-        alert('Invalid serial number.')
-      } else if (selected_user.user_serial == number) {
-        good = false
-        alert('You cannot enter your own serial number.')
-      }
-      if (!good) {
-        setTimeout(function () {
-          $("#recruited_by_user_serial").focus()
-        }, 0)
-        return false
-      }
-      $.post('api/checkSerial.php', { serial: number }, function (result) {
-        if (!result) {
-          alert('No such serial number found in our system.')
-          setTimeout(function () {
-            $("#recruited_by_user_serial").focus()
-          }, 0)
-          return false
-        }
-      })
-    }
 
     function isEnglish(event) {
         let max = 60

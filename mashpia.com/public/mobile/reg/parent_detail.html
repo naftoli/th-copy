@@ -721,12 +721,14 @@
                     <h5>Book Number: ${child.chidon_info.book}</h5>
                 `
                 if (child.gender == 'M') html += `<h5>Yarmulka Size: ${child.chidon_info.yarmulka}</h5>`
+                if (parseInt(child.chidon_info.recruited_by) > 0) html += `<h5>Recruited by: ${child.chidon_info.recruited_by}</h5>`
                 html += `<h5>Chidon Prizes:</h5><ul>`
                 for (let i = 0; i < child.chidon_prizes.length; i++) {
                     let prize = child.chidon_prizes[i]
                     let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
-                    html += `<li><h5>${desc}</h5></li>`
-                    if (prize.he_name) html += `<li><h5>Personalized name on prize: ${prize.he_name}</h5></li>`
+                    html += `<li><h5>${desc}`
+                    if (prize.he_name) html += `<br />Personalized name on prize: ${prize.he_name}`
+                    html += `</h5></li>`
                 }
                 html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
                 $("#exampleModalCenter .modal-body").html(html)

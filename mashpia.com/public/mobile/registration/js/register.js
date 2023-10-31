@@ -693,7 +693,7 @@ var registrationApp = function() {
         return false
     }
 
-    function confirmUser(event) {
+    async function confirmUser(event) {
         event.preventDefault();
 
         // make sure picture is uploaded
@@ -886,6 +886,20 @@ var registrationApp = function() {
                     errors.push("You must indicate your acceptance of all Terms (6th term not checked)")
                 }
             }
+
+            // check recruited_by_user serial
+            if ($(".recruit:checked").val() == '1') {
+                let number = $("#recruited_by_user_serial").val().trim()
+                if (number.length != 7) errors.push('Invalid serial number')
+                else if (selected_user.user_serial == number) errors.push('You cannot enter your own serial number')
+                else {
+                    const result = await $.post('api/checkSerial.php', { serial: number })
+                    if (!result) {
+                        errors.push('No such serial number found in our system')
+                    }
+                }
+            }
+
             // console.log(errors)
             if (errors.length) {
                 let html = ''
