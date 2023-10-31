@@ -724,7 +724,7 @@
                 html += `<h5>Chidon Prizes:</h5><ul>`
                 for (let i = 0; i < child.chidon_prizes.length; i++) {
                     let prize = child.chidon_prizes[i]
-                    let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ' - ' : '') + (prize.size ? prize.size + ') ' : '')
+                    let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
                     html += `<li><h5>${desc}</h5></li>`
                     if (prize.he_name) html += `<li><h5>Personalized name on prize: ${prize.he_name}</h5></li>`
                 }
