@@ -1703,14 +1703,14 @@ class UsersController extends Zend_Controller_Action
 							'state' => $arrPost['creditcard_state'],
 							'zip' => $arrPost['creditcard_zip']
 						));
-//						if ($arrResponse["Response Code"] != '1')
-//						{
-//							print json_encode(array(
-//								'error' => $arrResponse['Response Reason Text'],
-//								"success" => "false"
-//							));
-//							exit;
-//						}
+						if ($arrResponse["Response Code"] != '1')
+						{
+							print json_encode(array(
+								'error' => $arrResponse['Response Reason Text'],
+								"success" => "false"
+							));
+							exit;
+						}
 						$intPayment = $query->payment_processes__insert(array(
 							'user_id' => $this->_user_session_data->user_id,
 							'institution_id' => $this->_user_session_data->institution_id,
