@@ -201,10 +201,10 @@ class UserRegistrationRouter {
             // based off "code" variable in registration array
             $desc = [];
             foreach ($cart as $item) {
+                $codeOnly = $item['codeOnly'];
                 // find out if we need to change the amount in the code
                 // change amount to 0 for the advance registration if there's installments
                 if ($installmentsCreated) {
-                    $codeOnly = $item['codeOnly'];
                     if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
                         $item['code'] = $codeOnly . '-0';
                     } else if (strpos(['RRSUSA', 'RRSCAN', 'RRSINT'], $codeOnly) !== false) {
