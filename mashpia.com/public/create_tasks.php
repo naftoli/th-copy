@@ -58,7 +58,6 @@ function createStartArray($val, $subject_id)
         //$year = $missionYear;
         // for some reason this function is returning a jd date that is 1 day greater then the actual date
         $jd = (jewishtojd($arrTemp[0], $arrTemp[1], $year) - 1);
-        echo $jd; exit;
         $arrStart[] = $jd;
         if (in_array($subject_id, [12, 27, 41])) { // end date is 6 days later (Mivtzoim / Tanya / Avos Ubanim)
             $arrEnd[] = $jd + 6;
@@ -282,8 +281,7 @@ if (isset($_POST['submit'])) {
                                         $arrEnd[] = $temp;
                                         $arrStart[] = ++$temp;
                                     } else {
-                                        while (jddayofweek(++$temp) != 4) {
-                                        }
+                                        while (jddayofweek(++$temp) != 4) {}
                                     }
                                     while ($temp < $endDate) {
                                         // create new mission
@@ -508,10 +506,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
             //exit;
-            echo "<pre>";
-            print_r($missions);
-            echo "</pre>";
-            exit;
+//            echo "<pre>";
+//            print_r($missions);
+//            echo "</pre>";
+//            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN");
