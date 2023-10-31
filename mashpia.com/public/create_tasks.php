@@ -57,6 +57,7 @@ function createStartArray($val, $subject_id)
         $year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear;
         //$year = $missionYear;
         $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year);
+        echo $jd; exit;
         $arrStart[] = $jd;
         if (in_array($subject_id, [12, 27, 41])) { // end date is 6 days later (Mivtzoim / Tanya / Avos Ubanim)
             $arrEnd[] = $jd + 6;
@@ -506,10 +507,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
             //exit;
-//            echo "<pre>";
-//			print_r($missions);
-//			echo "</pre>";
-//			exit;
+            echo "<pre>";
+            print_r($missions);
+            echo "</pre>";
+            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN");
