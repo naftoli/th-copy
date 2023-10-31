@@ -1573,53 +1573,53 @@ class UsersController extends Zend_Controller_Action
 					}
 				}
 
-//				if ($intSum > 0)
-//				{
-//					if ($arrPost["creditcard_number"] != $strCreditCardBypass)
-//					{
-//						if (!isset($arrPost["confirm_order"]) || $arrPost["confirm_order"] != "1")
-//						{
-//							$arrResult["error"]["confirm_order"] = "You must confirm that you authorize the registration / add-on fees.";
-//						}
-//						if (!isset($arrPost["creditcard_first_name"]) || !strlen($arrPost["creditcard_first_name"]))
-//						{
-//							$arrResult["error"]["creditcard_first_name"] = "Credit card holders's first name is required.";
-//						}
-//						if (!isset($arrPost["creditcard_last_name"]) || !strlen($arrPost["creditcard_last_name"]))
-//						{
-//							$arrResult["error"]["creditcard_last_name"] = "Credit card holders's last name is required.";
-//						}
-//						if (!isset($arrPost["creditcard_address"]) || !strlen($arrPost["creditcard_address"]))
-//						{
-//							$arrResult["error"]["creditcard_address"] = "Address is required.";
-//						}
-//						if (!isset($arrPost["creditcard_state"]) || !strlen($arrPost["creditcard_state"]))
-//						{
-//							$arrResult["error"]["creditcard_state"] = "State is required.";
-//						}
-//						if (!isset($arrPost["creditcard_zip"]) || !strlen($arrPost["creditcard_zip"]))
-//						{
-//							$arrResult["error"]["creditcard_zip"] = "Zip/Postal is required.";
-//						}
-//						if (!isset($arrPost["creditcard_number"]) || !strlen($arrPost["creditcard_number"]))
-//						{
-//							$arrResult["error"]["creditcard_number"] = "Credit card number is required.";
-//						}
-//						if (!isset($arrPost["creditcard_ccv"]) || !strlen($arrPost["creditcard_ccv"]))
-//						{
-//							$arrResult["error"]["creditcard_ccv"] = "CCV is required.";
-//						}
-//						if (
-//							!isset($arrPost["creditcard_expiration_month"])
-//							|| $arrPost["creditcard_expiration_month"] < 1
-//							|| $arrPost["creditcard_expiration_month"] > 12
-//							|| !isset($arrPost["creditcard_expiration_year"])
-//							|| $arrPost["creditcard_expiration_year"] < date("Y")
-//						) {
-//							$arrResult["error"]["creditcard_expiration_month"] = "Credit card expiration must be valid.";
-//						}
-//					}
-//				}
+				if ($intSum > 0)
+				{
+					if ($arrPost["creditcard_number"] != $strCreditCardBypass)
+					{
+						if (!isset($arrPost["confirm_order"]) || $arrPost["confirm_order"] != "1")
+						{
+							$arrResult["error"]["confirm_order"] = "You must confirm that you authorize the registration / add-on fees.";
+						}
+						if (!isset($arrPost["creditcard_first_name"]) || !strlen($arrPost["creditcard_first_name"]))
+						{
+							$arrResult["error"]["creditcard_first_name"] = "Credit card holders's first name is required.";
+						}
+						if (!isset($arrPost["creditcard_last_name"]) || !strlen($arrPost["creditcard_last_name"]))
+						{
+							$arrResult["error"]["creditcard_last_name"] = "Credit card holders's last name is required.";
+						}
+						if (!isset($arrPost["creditcard_address"]) || !strlen($arrPost["creditcard_address"]))
+						{
+							$arrResult["error"]["creditcard_address"] = "Address is required.";
+						}
+						if (!isset($arrPost["creditcard_state"]) || !strlen($arrPost["creditcard_state"]))
+						{
+							$arrResult["error"]["creditcard_state"] = "State is required.";
+						}
+						if (!isset($arrPost["creditcard_zip"]) || !strlen($arrPost["creditcard_zip"]))
+						{
+							$arrResult["error"]["creditcard_zip"] = "Zip/Postal is required.";
+						}
+						if (!isset($arrPost["creditcard_number"]) || !strlen($arrPost["creditcard_number"]))
+						{
+							$arrResult["error"]["creditcard_number"] = "Credit card number is required.";
+						}
+						if (!isset($arrPost["creditcard_ccv"]) || !strlen($arrPost["creditcard_ccv"]))
+						{
+							$arrResult["error"]["creditcard_ccv"] = "CCV is required.";
+						}
+						if (
+							!isset($arrPost["creditcard_expiration_month"])
+							|| $arrPost["creditcard_expiration_month"] < 1
+							|| $arrPost["creditcard_expiration_month"] > 12
+							|| !isset($arrPost["creditcard_expiration_year"])
+							|| $arrPost["creditcard_expiration_year"] < date("Y")
+						) {
+							$arrResult["error"]["creditcard_expiration_month"] = "Credit card expiration must be valid.";
+						}
+					}
+				}
 
 				if (
 					$intSum < 0.01
@@ -1687,22 +1687,22 @@ class UsersController extends Zend_Controller_Action
 				}
 
 				$intAutherizeNetResult = 0;
-//				if ($intSum > 0)
-//				{
-//					if ($arrPost["creditcard_number"] != $strCreditCardBypass)
-//					{
-//						$objAuthorizeNet = new AuthorizeNet();
-//						$arrResponse = $objAuthorizeNet->process_transaction(array(
-//							'card_num' => $arrPost['creditcard_number'],
-//							'exp_date' => $arrPost['creditcard_expiration_month'] . '/' . $arrPost['creditcard_expiration_year'],
-//							'amount' => $intSum,
-//							'description' => '',
-//							'first_name' => $arrPost["creditcard_first_name"],
-//							'last_name' => $arrPost["creditcard_last_name"],
-//							'address' => $arrPost['creditcard_address'],
-//							'state' => $arrPost['creditcard_state'],
-//							'zip' => $arrPost['creditcard_zip']
-//						));
+				if ($intSum > 0)
+				{
+					if ($arrPost["creditcard_number"] != $strCreditCardBypass)
+					{
+						$objAuthorizeNet = new AuthorizeNet();
+						$arrResponse = $objAuthorizeNet->process_transaction(array(
+							'card_num' => $arrPost['creditcard_number'],
+							'exp_date' => $arrPost['creditcard_expiration_month'] . '/' . $arrPost['creditcard_expiration_year'],
+							'amount' => $intSum,
+							'description' => '',
+							'first_name' => $arrPost["creditcard_first_name"],
+							'last_name' => $arrPost["creditcard_last_name"],
+							'address' => $arrPost['creditcard_address'],
+							'state' => $arrPost['creditcard_state'],
+							'zip' => $arrPost['creditcard_zip']
+						));
 //						if ($arrResponse["Response Code"] != '1')
 //						{
 //							print json_encode(array(
@@ -1711,40 +1711,40 @@ class UsersController extends Zend_Controller_Action
 //							));
 //							exit;
 //						}
-//						$intPayment = $query->payment_processes__insert(array(
-//							'user_id' => $this->_user_session_data->user_id,
-//							'institution_id' => $this->_user_session_data->institution_id,
-//							'amount' => $intSum,
-//							'response' => serialize($arrResponse)
-//						));
-//					}
+						$intPayment = $query->payment_processes__insert(array(
+							'user_id' => $this->_user_session_data->user_id,
+							'institution_id' => $this->_user_session_data->institution_id,
+							'amount' => $intSum,
+							'response' => serialize($arrResponse)
+						));
+					}
 
-//					$strSubject = "Mashpia Student Registration" . " #" . strtoupper($strOrderCode);
-//					$strHeaders =	'From' . ': orders@mashpia.com' . "\r\n";
-//					$objUser = first($query->users__select(array(
-//						"user_id" => $this->_user_session_data->user_id
-//					)));
-//					$objInstitution = first($query->institutions__select(array(
-//						"institution_id" => $this->_user_session_data->institution_id
-//					)));
-//					$strMessage = "
-//- " . "Student Registration:" . " -
-//" . "User Email" . ": " . $objUser->email . "
-//" . "User Institution: " . $objInstitution->name . "
-//" . "User ID" . ": " . $this->_user_session_data->user_id . "
-//" . "Institution ID" . ": " . $this->_user_session_data->institution_id . "
-//" . "Order Code" . ": " . strtoupper($strOrderCode) . "
-//" . "Cost" . ": " . $intSum . "
-//" . "CreditCard Number Ends with" . ": " . substr($arrPost["creditcard_number"],0,-8) . "
-//" . "CreditCard Expiration Month" . ": " . $arrPost["creditcard_expiration_month"] . "
-//" . "CreditCard Expiration Year" . ": " . $arrPost["creditcard_expiration_year"] . "
-//" . "CreditCard CCV" . ": " . $arrPost["creditcard_ccv"];
-//					$strTo = join(', ', $arrDetails['admin_emails']);
-//					$strHeaders .= 'Bcc: andyware@gmail.com' . "\r\n";
-//					if ($boolSendMail)
-//						mail($strTo, $strSubject, $strMessage, $strHeaders);
-//
-//				}
+					$strSubject = "Mashpia Student Registration" . " #" . strtoupper($strOrderCode);
+					$strHeaders =	'From' . ': orders@mashpia.com' . "\r\n";
+					$objUser = first($query->users__select(array(
+						"user_id" => $this->_user_session_data->user_id
+					)));
+					$objInstitution = first($query->institutions__select(array(
+						"institution_id" => $this->_user_session_data->institution_id
+					)));
+					$strMessage = "
+- " . "Student Registration:" . " -
+" . "User Email" . ": " . $objUser->email . "
+" . "User Institution: " . $objInstitution->name . "
+" . "User ID" . ": " . $this->_user_session_data->user_id . "
+" . "Institution ID" . ": " . $this->_user_session_data->institution_id . "
+" . "Order Code" . ": " . strtoupper($strOrderCode) . "
+" . "Cost" . ": " . $intSum . "
+" . "CreditCard Number Ends with" . ": " . substr($arrPost["creditcard_number"],0,-8) . "
+" . "CreditCard Expiration Month" . ": " . $arrPost["creditcard_expiration_month"] . "
+" . "CreditCard Expiration Year" . ": " . $arrPost["creditcard_expiration_year"] . "
+" . "CreditCard CCV" . ": " . $arrPost["creditcard_ccv"];
+					$strTo = join(', ', $arrDetails['admin_emails']);
+					$strHeaders .= 'Bcc: andyware@gmail.com' . "\r\n";
+					if ($boolSendMail)
+						mail($strTo, $strSubject, $strMessage, $strHeaders);
+
+				}
 
 
 				$arrPermissions = array_hash("user_id", $query->permissions__select(array(
