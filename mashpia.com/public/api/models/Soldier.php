@@ -444,7 +444,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
-            if ($result['chidon'] && !isset($_COOKIE['naftoli']) && !in_array($this->school_id, [54, 33, 542, 21, 434])) $result['chidonEdit'] = false;
+            if ($result['chidon'] && !isset($_COOKIE['naftoli']) && !in_array($this->school_id, [54, 33, 542, 21, 434, 105])) $result['chidonEdit'] = false;
         } else {
             $result['chidon'] = true;
             $result['chidonEdit'] = false;
