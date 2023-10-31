@@ -57,7 +57,8 @@ function createStartArray($val, $subject_id)
         $year = $arrTemp[0] == 13 ? ($missionYear - 1) : $missionYear;
         //$year = $missionYear;
         // for some reason this function is returning a jd date that is 1 day greater then the actual date
-        $jd = jewishtojd($arrTemp[0], $arrTemp[1], $year) - 1;
+        $jd = (jewishtojd($arrTemp[0], $arrTemp[1], $year) - 1);
+        echo $jd; exit;
         $arrStart[] = $jd;
         if (in_array($subject_id, [12, 27, 41])) { // end date is 6 days later (Mivtzoim / Tanya / Avos Ubanim)
             $arrEnd[] = $jd + 6;
