@@ -297,7 +297,9 @@ if ( !empty( $users ) ) {
          	$children[ $row['user_id'] ]['needsReg'] = 1;
          	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
          } else if ( $row['reg_chidon'] ) {
-         	if (isset($_COOKIE['naftoli'])) $children[ $row['user_id'] ]['editChidon'] = true;
+         	if (isset($_COOKIE['naftoli']) || in_array($children[$row['user_id']]['school_id'], [54, 33, 542, 21, 434])) {
+                $children[$row['user_id']]['editChidon'] = true;
+            }
          }
 
         // if school hasn't registered, turn off chayolei, chidon registration
