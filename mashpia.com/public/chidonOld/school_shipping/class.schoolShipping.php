@@ -222,7 +222,7 @@ class SchoolShipping
 //        $sql = "select * from school_auction_prizes where auction_id = :auction and school_id in (" .
 //            implode(',', $this->schools) . ")";
         // use existing winners to determine how many prizes each school gets
-        $sql = "select u.school_id, aw.user_id 
+        $sql = "select u.school_id, aw.user_id, aw.prize_id  
                 from auction_winners aw 
                 join users u using (user_id) 
                 where auction_id = :auction";
