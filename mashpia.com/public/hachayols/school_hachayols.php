@@ -59,7 +59,7 @@ $stmt = $MASHPIA_DB->prepare("
                 echo "<h3>" . $schools[$school_id] . "</h3><hr />";
                 ?>
                 <table>
-                    <tr style="border-bottom: 1px solid grey;">
+                    <tr style="border-bottom: 1px solid grey !important;">
                         <th>Grade</th>
                         <th>Hebrew Name</th>
                         <th>Student</th>
@@ -85,7 +85,7 @@ $stmt = $MASHPIA_DB->prepare("
                         $user['first'] . ' ' . $user['last'] . "</td><td>" . $user['admin_id'] . "</td><td>" .
                         $receives_hachayol . "</td><td>" . implode("<br />", $children) . "</td></tr>";
                 }
-                echo "<tr style='border-top: 1px solid grey;'><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
+                echo "<tr style='border-top: 1px solid grey !important;'><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
             }
             echo "<div style='page-break-after:always;'></div>";
         }
