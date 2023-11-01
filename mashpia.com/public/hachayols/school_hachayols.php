@@ -29,8 +29,13 @@ foreach ($schools as $id => $name) {
     }
 }
 
-// find out which children get hachayol from each family
-
+$stmt = $MASHPIA_DB->prepare("
+    select u.* from users u 
+    join admin_auths aa on aa.id = u.user_id 
+    where u.hachayol = 1 
+    and u.user_registered > 0 
+    and aa.admin_id = :admin_id
+");
 ?>
 <!DOCTYPE html>
 <html>
@@ -62,10 +67,20 @@ foreach ($schools as $id => $name) {
         foreach ($more as $class_grade => $other) {
             foreach ($other as $class_sub => $more) {
                 foreach ($more as $user) {
+                    $children = [];
+                    $receives_hachayol = intval($user['hachayol']) ? 'yes' : 'no';
+                    if ($receives_hachayol == 'no') {
+                      // find out which child(ren) do get it
+                      $stmt->execute(['admin_id' => $user['admin_id']]);
+                      $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                      foreach ($rows as $row) {
+                        $children[] = $row['first'] . ' ' . $row['last'];
+                      }
+                    }
                     echo "<tr><td>" . $class_grade . "-" . $class_sub . "</td><td>" .
                         $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" . $user['first'] . ' ' . $user['last'] .
-                        "</td><td>" . $user['admin_id'] . "</td><td>" . (intval($user['hachayol']) ? 'yes' : 'no') .
-                        "</td><td>" . "</td></tr>";
+                        "</td><td>" . $user['admin_id'] . "</td><td>" . $receives_hachayol . "</td><td>" .
+                        implode(',', $children) . "</td></tr>";
                 }
             }
         }
