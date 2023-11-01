@@ -56,10 +56,10 @@ $stmt = $MASHPIA_DB->prepare("
         foreach ($more as $class_grade => $other) {
             foreach ($other as $class_sub => $more) {
                 $grade = $class_grade . ($class_sub ? '-' . $class_sub : '');
-                echo "<h3>" . $schools[$school_id] . " (" . $grade . ")</h3><hr />";
+                echo "<h3>" . $schools[$school_id] . "</h3><hr />";
                 ?>
                 <table>
-                    <tr>
+                    <tr style="border-bottom: 1px solid grey;">
                         <th>Grade</th>
                         <th>Hebrew Name</th>
                         <th>Student</th>
@@ -67,7 +67,6 @@ $stmt = $MASHPIA_DB->prepare("
                         <th>Receives Hachayol</th>
                         <th>Who gets Hachayol in Family</th>
                     </tr>
-                    <hr />
                 <?php
                 $total = 0;
                 foreach ($more as $user) {
@@ -86,7 +85,7 @@ $stmt = $MASHPIA_DB->prepare("
                         $user['first'] . ' ' . $user['last'] . "</td><td>" . $user['admin_id'] . "</td><td>" .
                         $receives_hachayol . "</td><td>" . implode("<br />", $children) . "</td></tr>";
                 }
-                echo "<hr /><tr><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
+                echo "<tr style='border-top: 1px solid grey;'><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
             }
             echo "<div style='page-break-after:always;'></div>";
         }
