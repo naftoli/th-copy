@@ -52,20 +52,20 @@ $stmt = $MASHPIA_DB->prepare("
     <body>
     <?php
     foreach ($users as $school_id => $more) {
-        echo "<h2>" . $schools[$school_id] . "</h2><hr />";
-        ?>
-        <table>
-            <tr>
-                <th>Grade</th>
-                <th>Hebrew Name</th>
-                <th>Student</th>
-                <th>Family ID</th>
-                <th>Receives Hachayol</th>
-                <th>Who gets Hachayol in Family</th>
-            </tr>
-        <?php
         foreach ($more as $class_grade => $other) {
             foreach ($other as $class_sub => $more) {
+                echo "<h2>" . $schools[$school_id] . "</h2><hr />";
+                ?>
+                <table>
+                    <tr>
+                        <th>Grade</th>
+                        <th>Hebrew Name</th>
+                        <th>Student</th>
+                        <th>Family ID</th>
+                        <th>Receives Hachayol</th>
+                        <th>Who gets Hachayol in Family</th>
+                    </tr>
+                <?php
                 foreach ($more as $user) {
                     $children = [];
                     $receives_hachayol = intval($user['hachayol']) ? 'yes' : 'no';
@@ -83,6 +83,7 @@ $stmt = $MASHPIA_DB->prepare("
                         implode("<br />", $children) . "</td></tr>";
                 }
             }
+            echo "<div style='page-break-after:always;'></div>";
         }
         echo "</table>";
     }
