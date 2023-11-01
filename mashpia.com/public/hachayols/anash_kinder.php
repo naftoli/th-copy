@@ -64,8 +64,9 @@ foreach ($admins as $admin) {
     foreach ($admins as $admin_id => $admin) {
       $name = $admin['first'] . ' ' . $admin['last'];
       $address = $admin['admin_address1'] . " " . $admin['admin_address2'] . "<br />" . $admin['admin_city'] .
-          ", " . $admin['admin_state'] . "<br />" . $admin['admin_postal'] . "<br />" . $admin['admin_county'];
-      echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>" . $paid[$admin_id] . "</td></tr>";
+          ", " . $admin['admin_state'] . "<br />" . $admin['admin_postal'] . "<br />" . $admin['admin_country'];
+      echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>" .
+          ($paid[$admin_id] ? 'yes' : 'no') . "</td></tr>";
     }
     ?>
 </table>
