@@ -85,15 +85,18 @@ foreach ($admins as $children) {
         }
       }
       echo "</td><td>";
+      $paid = false;
       foreach ($children as $child) {
         foreach ($charges[$child['user_id']] as $charge) {
           if (strpos($charge['type'], 'THE') === false) {
+            $paid = true;
             echo $charge['amount'];
             echo "<br />";
             break;
           }
         }
       }
+      if (!$paid) echo "NOT PAID";
       echo "</td></tr>";
     }
     ?>
