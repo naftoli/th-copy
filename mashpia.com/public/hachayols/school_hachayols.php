@@ -17,7 +17,7 @@ $stmt = $MASHPIA_DB->prepare("
     join admin_auths aa on aa.id = u.user_id 
     join classes c using (class_id) 
     where u.school_id = :id
-    order by class_grade, class_sub, last, first
+    order by class_grade, class_sub, hachayol desc, last, first
 ");
 
 $users = [];
@@ -47,12 +47,7 @@ $stmt = $MASHPIA_DB->prepare("
               font-size: 14px;
               padding: 5px;
               font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-            }
-            tr:first-child > th {
-              border-bottom: 1px solid grey !important;
-            }
-            tr:last-child > th {
-              border-top: 1px solid grey !important;
+              border-bottom: 1px solid grey;
             }
         </style>
     </head>
