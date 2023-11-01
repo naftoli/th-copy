@@ -444,9 +444,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
-            if ($result['chidon'] && !isset($_COOKIE['naftoli']) && !in_array($this->school_id, [54, 33, 542, 21, 434, 105, 61])) {
-                $result['chidonEdit'] = false;
-            }
+//            if ($result['chidon'] && !isset($_COOKIE['naftoli']) && !in_array($this->school_id, [54, 33, 542, 21, 434, 105, 61])) {
+//                $result['chidonEdit'] = false;
+//            }
         } else {
             $result['chidon'] = true;
             $result['chidonEdit'] = false;
@@ -510,7 +510,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
         // turn off chidon
-//        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
+        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
 
         return $result;
     }

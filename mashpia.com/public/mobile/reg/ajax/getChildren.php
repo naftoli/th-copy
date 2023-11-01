@@ -297,9 +297,9 @@ if ( !empty( $users ) ) {
          	$children[ $row['user_id'] ]['needsReg'] = 1;
          	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
          } else if ( $row['reg_chidon'] ) {
-         	if (isset($_COOKIE['naftoli']) || in_array($children[$row['user_id']]['school_id'], [54, 33, 542, 21, 434, 105, 61])) {
+//         	if (isset($_COOKIE['naftoli']) || in_array($children[$row['user_id']]['school_id'], [54, 33, 542, 21, 434, 105, 61])) {
                 $children[$row['user_id']]['editChidon'] = true;
-            }
+//            }
          }
 
         // if school hasn't registered, turn off chayolei, chidon registration
@@ -308,7 +308,7 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chidon
-//        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
+        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
 
         // find chosen prizes for those enrolled into chidon
         if ($children[$row['user_id']]['chidon5783']) {
