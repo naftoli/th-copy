@@ -88,7 +88,7 @@ foreach ($admins as $children) {
       foreach ($children as $child) {
         foreach ($charges[$child['user_id']] as $charge) {
           if (strpos($charge['type'], 'THE') === false) {
-            echo $charge['paid'];
+            echo $charge['amount'];
             echo "<br />";
             break;
           }
