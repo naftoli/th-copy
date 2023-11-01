@@ -25,7 +25,7 @@ $paid = [];
 $stmt = $MASHPIA_DB->prepare("
     select * from registration_charges 
     where year = :year 
-    and type in ('THMSUSA', 'THMSCAN', 'THMSINT') 
+    and type in ('THMSUSA', 'THMSCAN', 'THMSINT', 'THAKUSA', 'THAKCAN', 'THAKINT') 
     and user_id in (
         select id from admin_auths where admin_id = :admin_id
     ) 
