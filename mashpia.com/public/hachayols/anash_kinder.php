@@ -70,11 +70,6 @@ foreach ($admins as $children) {
       $address = $admin['admin_address1'] . " " . $admin['admin_address2'] . "<br />" . $admin['admin_city'] .
           ", " . $admin['admin_state'] . "<br />" . $admin['admin_postal'] . "<br />" . $admin['admin_country'];
       echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>";
-      foreach ($children as $child) {
-        $stmt->execute(['user' => $child['user_id']]);
-        $charges = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-      }
       echo "</td><td>" . count($children) . "</td><td>$";
       foreach ($children as $child) {
         foreach ($charges[$child['user_id']] as $charge) {
