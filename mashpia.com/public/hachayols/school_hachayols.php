@@ -48,6 +48,12 @@ $stmt = $MASHPIA_DB->prepare("
                 padding: 5px;
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             }
+            tr:first-child > th {
+              border-bottom: 1px solid grey !important;
+            }
+            tr:last-child > th {
+              border-top: 1px solid grey !important;
+            }
         </style>
     </head>
     <body>
@@ -59,7 +65,7 @@ $stmt = $MASHPIA_DB->prepare("
                 echo "<h3>" . $schools[$school_id] . "</h3><hr />";
                 ?>
                 <table>
-                    <tr style="border-bottom: 1px solid grey !important;">
+                    <tr>
                         <th>Grade</th>
                         <th>Hebrew Name</th>
                         <th>Student</th>
