@@ -6,7 +6,7 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
-// get all admins that have children in MyShliach
+// get all admins that have children in myshliach
 $admins = [];
 $stmt = $MASHPIA_DB->query("
     select a.* from admins a 
@@ -25,7 +25,7 @@ $paid = [];
 $stmt = $MASHPIA_DB->prepare("
     select * from registration_charges 
     where year = :year 
-    and type in ('THAKUSA', 'THAKCAN', 'THAKINT') 
+    and type in ('THMSUSA', 'THMSCAN', 'THMSINT') 
     and user_id in (
         select id from admin_auths where admin_id = :admin_id
     ) 
