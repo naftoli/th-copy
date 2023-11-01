@@ -30,13 +30,13 @@ $stmt = $MASHPIA_DB->prepare("
         select id from admin_auths where admin_id = :admin_id
     ) 
 ");
-foreach ($admins as $admin) {
+foreach ($admins as $admin_id => $admin) {
     $stmt->execute([
         'year'      => 5784,
-        'admin_id'  => $admin['admin_id']
+        'admin_id'  => $admin_id
     ]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $paid[$admin['admin_id']] = count($rows) > 0 ? 1 : 0;
+    $paid[$admin_id] = count($rows) > 0 ? 1 : 0;
 }
 ?>
 <!DOCTYPE html>
