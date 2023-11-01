@@ -54,12 +54,11 @@ $stmt = $MASHPIA_DB->prepare("
     foreach ($users as $school_id => $more) {
         foreach ($more as $class_grade => $other) {
             foreach ($other as $class_sub => $more) {
-                if (count($more) < 1) continue;
-                $grade = $class_grade . ($class_sub ? '-' . $class_sub : '');
-                echo "<h3>" . $schools[$school_id] . " - " . $grade . "</h3><hr />";
+                echo "<h3>" . $schools[$school_id] . "</h3><hr />";
                 ?>
                 <table>
                     <tr>
+                        <th>Grade</th>
                         <th>Hebrew Name</th>
                         <th>Student</th>
                         <th>Family ID</th>
@@ -78,7 +77,8 @@ $stmt = $MASHPIA_DB->prepare("
                         $children[] = $row['first'] . ' ' . $row['last'] . ' (' . $schools[$row['school_id']] . ')';
                       }
                     }
-                    echo "<tr><td>" . $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" . $user['first'] . ' ' . $user['last'] .
+                    echo "<tr><td>" . $class_grade . "-" . $class_sub . "</td><td>" .
+                        $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" . $user['first'] . ' ' . $user['last'] .
                         "</td><td>" . $user['admin_id'] . "</td><td>" . $receives_hachayol . "</td><td>" .
                         implode("<br />", $children) . "</td></tr>";
                 }
