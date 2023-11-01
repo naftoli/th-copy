@@ -13,7 +13,8 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $stmt = $MASHPIA_DB->prepare("
-    select * from users u 
+    select u.*, c.*, aa.admin_id from users u 
+    join admin_auths aa on aa.id = u.user_id 
     join classes c using (class_id) 
     where u.school_id = :id
     order by class_grade, class_sub, last, first
@@ -27,6 +28,9 @@ foreach ($schools as $id => $name) {
         $users[$id][$row['class_grade']][$row['class_sub']][] = $row;
     }
 }
+
+// find out which children get hachayol from each family
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -59,9 +63,9 @@ foreach ($schools as $id => $name) {
             foreach ($other as $class_sub => $more) {
                 foreach ($more as $user) {
                     echo "<tr><td>" . $class_grade . "-" . $class_sub . "</td><td>" .
-                        $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" .
-                        $user['first'] . ' ' . $user['last'] . "</td><td>" .
-                        "</td><td>" . "</td><td>" . "</td></tr>";
+                        $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" . $user['first'] . ' ' . $user['last'] .
+                        "</td><td>" . $user['admin_id'] . "</td><td>" . (intval($user['hachayol']) ? 'yes' : 'no') .
+                        "</td><td>" . "</td></tr>";
                 }
             }
         }
