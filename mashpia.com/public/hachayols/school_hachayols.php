@@ -47,7 +47,12 @@ $stmt = $MASHPIA_DB->prepare("
                 font-size: 14px;
                 padding: 5px;
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            }
+            tr:first-child {
                 border-bottom: 1px solid grey;
+            }
+            tr:last-child {
+                border-top: 1px solid grey;
             }
         </style>
     </head>
