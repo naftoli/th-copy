@@ -44,9 +44,9 @@ $stmt = $MASHPIA_DB->prepare("
         <title>Hachayol Report</title>
         <style>
             tr, th, td {
-                font-size: 14px;
-                padding: 5px;
-                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+              font-size: 14px;
+              padding: 5px;
+              font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             }
             tr:first-child > th {
               border-bottom: 1px solid grey !important;
