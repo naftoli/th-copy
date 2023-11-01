@@ -24,9 +24,9 @@ foreach ($rows as $row) {
 $children = [];
 $stmt = $MASHPIA_DB->prepare("
     select rc.*, u.first, u.last
-    from registration_charges rc using (user_id, year) 
+    from registration_charges rc 
     join users u using (user_id)
-    where tc.year = 5784 
+    where rc.year = 5784 
     and (
         type in ('THE', 'THMSUSA', 'THMSCAN', 'THMSINT', 'THAKUSA', 'THAKCAN', 'THAKINT', 'shipping') 
         or type like 'THE%'
@@ -35,7 +35,7 @@ $stmt = $MASHPIA_DB->prepare("
         select id from admin_auths where admin_id = :admin_id
     )
 ");
-foreach (array_keys($admins) as $admin_id) {
+foreach ($admins as $admin_id => $admin) {
     $stmt->execute([
         'admin_id'  => $admin_id
     ]);
