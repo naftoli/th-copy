@@ -48,12 +48,6 @@ $stmt = $MASHPIA_DB->prepare("
                 padding: 5px;
                 font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             }
-            tr:first-child {
-                border-bottom: 1px solid grey;
-            }
-            tr:last-child {
-                border-top: 1px solid grey;
-            }
         </style>
     </head>
     <body>
@@ -73,6 +67,7 @@ $stmt = $MASHPIA_DB->prepare("
                         <th>Receives Hachayol</th>
                         <th>Who gets Hachayol in Family</th>
                     </tr>
+                    <hr />
                 <?php
                 $total = 0;
                 foreach ($more as $user) {
@@ -91,7 +86,7 @@ $stmt = $MASHPIA_DB->prepare("
                         $user['first'] . ' ' . $user['last'] . "</td><td>" . $user['admin_id'] . "</td><td>" .
                         $receives_hachayol . "</td><td>" . implode("<br />", $children) . "</td></tr>";
                 }
-                echo "<tr><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
+                echo "<hr /><tr><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
             }
             echo "<div style='page-break-after:always;'></div>";
         }
