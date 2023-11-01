@@ -248,21 +248,7 @@ class ChidonTests
         foreach ($this->scores as $id => $more) {
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
-                    switch ($type) {
-                        case 'maven':
-                            $mark = floatval($details[$type] / $questions);
-                            break;
-                        case 'pro':
-                            $mark = floatval(($details['maven'] + $details[$type]) / ($this->testQuestions['maven'] + $questions));
-                            break;
-                        case 'expert':
-                            $mark = floatval(($details['maven'] + $details['pro'] + $details[$type]) / ($this->testQuestions['maven'] + $this->testQuestions['pro'] + $questions));
-                            break;
-                        case 'genius':
-                            $mark = floatval(($details['maven'] + $details['pro'] + $details['expert'] + $details[$type]) /
-                                ($this->testQuestions['maven'] + $this->testQuestions['pro'] + $this->testQuestions['expert'] + $questions));
-                            break;
-                    }
+                    $mark = floatval($details[$type] / $questions);
                     $this->marks[$id][$testNum][$type] = $mark * 100;
                 }
             }
@@ -273,7 +259,7 @@ class ChidonTests
         return $this->marks;
     }
 
-    public function getHighestTrackEligible( $marks ) {
+    public function getHighestTrackEligible( $marks, $user_id ) {
         foreach ($this->types as $type => $value) {
             $avgs[$type] = 0;
         }
@@ -286,15 +272,11 @@ class ChidonTests
             }
 
             $highest = 'maven';
+            $passingAvgs = $this->getPassingAvgs($user_id);
             foreach ($avgs as $type => $avg) {
                 $avgs[$type] /= $num;
                 $avg = $avgs[$type];
-                if ($avg >= 80) $highest = $type;
-//                if ($type != 'genius') {
-//                    if ($avg >= 70) $highest = $type;
-//                } else {
-//                    if ($avg >= 90) $highest = $type;
-//                }
+                if ($avg >= $passingAvgs[$type]) $highest = $type;
             }
             return $highest;
         }
@@ -501,20 +483,11 @@ class ChidonTests
         }
 
         // needed avgs
-        $neededAvgs['maven']    = 80;
-        $neededAvgs['pro']      = 80;
-        $neededAvgs['expert']   = 80;
-        $neededAvgs['genius']   = 80;
-
-        // change for some schools
-        $school_id = $child['school_id'];
-        switch ($school_id) {
-            case '5':
-            case '50':
-            case '255':
-                $neededAvgs['expert'] = 80;
-                break;
-        }
+//        $neededAvgs['maven']    = 80;
+//        $neededAvgs['pro']      = 80;
+//        $neededAvgs['expert']   = 80;
+//        $neededAvgs['genius']   = 80;
+        $passingAvgs = $this->getPassingAvgs($child['user_id']);
 
         // calculate avgs and highest type currently eligible for
         $highest_type = '';
@@ -523,7 +496,7 @@ class ChidonTests
             if ($numTests && ($marksPerType[$type])) {
                 $avg = $marksPerType[$type] / $numTests;
                 $avgs[$type] = $avg;
-                if ($avg >= $neededAvgs[$type]) {
+                if ($avg >= $passingAvgs[$type]) {
                     $highest_type = $type;
                     $highest_mark = $avg;
                 }
@@ -562,6 +535,53 @@ class ChidonTests
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
         return $row['highest_track'];
+    }
+
+    private function getPassingAvgs($user_id) {
+        $stmt = $this->db->prepare("
+            select * from chidon_passing_avgs 
+            where year = :year 
+            and user_id = :user
+        ");
+        $stmt->execute([
+            ':year' => $this->year,
+            ':user' => $user_id
+        ]);
+        $rows = $stmt->fetchAll();
+        $passingAvgs = [];
+        foreach ($rows as $row) {
+            $passingAvgs[$row['test_type']] = $row['avg'];
+        }
+        // make sure we have info for all test types
+        $schoolAvgs = $this->getSchoolDefaults($user_id);
+        foreach ($this->types as $type => $val) {
+            if (! isset($passingAvgs[$type])) $passingAvgs[$type] = $schoolAvgs[$type];
+        }
+        return $passingAvgs;
+    }
+
+    private function getSchoolDefaults($user) {
+        $stmt = $this->db->prepare("
+            select * from chidon_passing_avgs 
+            where year = :year 
+            and school_id = (
+                select school_id from users where user_id = :user
+            )
+        ");
+        $stmt->execute([
+            ':year' => $this->year,
+            ':user' => $user
+        ]);
+        $rows = $stmt->fetchAll();
+        $avgs = [];
+        foreach ($rows as $row) {
+            $avgs[$row['test_type']] = $row['avg'];
+        }
+        // make sure we have avg for each test type
+        foreach ($this->types as $type => $val) {
+            if (! isset($avgs[$type])) $avgs[$type] = 70; // global default is 70
+        }
+        return $avgs;
     }
 }
 
