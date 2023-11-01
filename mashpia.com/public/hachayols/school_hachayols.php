@@ -91,7 +91,7 @@ $stmt = $MASHPIA_DB->prepare("
                         $user['first'] . ' ' . $user['last'] . "</td><td>" . $user['admin_id'] . "</td><td>" .
                         $receives_hachayol . "</td><td>" . implode("<br />", $children) . "</td></tr>";
                 }
-                echo "<tr><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
+                echo "<tr><th>Total:</th><th>$total</th><th colspan='4'></th></tr></table>";
                 echo "<div style='page-break-after: always;'></div>";
             }
         }
