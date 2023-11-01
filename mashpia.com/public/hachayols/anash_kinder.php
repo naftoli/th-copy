@@ -69,13 +69,16 @@ foreach ($admins as $children) {
       $name = $admin['first'] . ' ' . $admin['last'];
       $address = $admin['admin_address1'] . " " . $admin['admin_address2'] . "<br />" . $admin['admin_city'] .
           ", " . $admin['admin_state'] . "<br />" . $admin['admin_postal'] . "<br />" . $admin['admin_country'];
-      echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>";
-      echo "</td><td>" . count($children) . "</td><td>$";
+      echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>" . count($children) . "</td><td>";
+      foreach ($children as $child) {
+        echo $child['first'] . ' ' . $child['last'] . "<br />";
+      }
+      echo "</td><td>";
       foreach ($children as $child) {
         foreach ($charges[$child['user_id']] as $charge) {
           if (strpos($charge['type'], 'THE') !== false) {
             echo $charge['amount'];
-            if (intval($charge['discount']) > 0) echo ' (discount: $' . $charge['discount'] . ')';
+            if (intval($charge['discount']) > 0) echo ' (discount: ' . $charge['discount'] . ')';
             echo "<br />";
             break;
           }
