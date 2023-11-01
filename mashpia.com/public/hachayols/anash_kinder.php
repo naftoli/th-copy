@@ -22,9 +22,9 @@ foreach ($rows as $row) {
 
 // get all children registered into chidon and the charges they paid
 $children = [];
-$stmt = $MASHPIA_DB->query("
-    select rc.*, u.first, u.last, tc.parent_id from th_chidon tc 
-    join registration_charges rc using (user_id, year) 
+$stmt = $MASHPIA_DB->prepare("
+    select rc.*, u.first, u.last
+    from registration_charges rc using (user_id, year) 
     join users u using (user_id)
     where tc.year = 5784 
     and (
@@ -32,18 +32,23 @@ $stmt = $MASHPIA_DB->query("
         or type like 'THE%'
     )
     and user_id in (
-        select id from admin_auths where admin_id in (" . implode(',', array_keys($admins)) . ")
+        select id from admin_auths where admin_id = :admin_id
     )
 ");
-$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-foreach ($rows as $row) {
-    $children[$row['parent_id']][$row['user_id']][] = [
-        'type'  => $row['type'],
-        'paid'  => $row['amount'],
-        'discount'  => $row['discount'],
-        'date'  => $row['date'],
-        'name'  => $row['first'] . ' ' . $row['last']
-    ];
+foreach (array_keys($admins) as $admin_id) {
+    $stmt->execute([
+        'admin_id'  => $admin_id
+    ]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $children[$admin_id][$row['user_id']][] = [
+            'type'  => $row['type'],
+            'paid'  => $row['amount'],
+            'discount'  => $row['discount'],
+            'date'  => $row['date'],
+            'name'  => $row['first'] . ' ' . $row['last']
+        ];
+    }
 }
 
 // find out if any admin did NOT pay the shipping fee (if intl)
