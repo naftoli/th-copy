@@ -20,6 +20,32 @@ foreach ($rows as $row) {
     $admins[$row['admin_id']] = $row;
 }
 
+// get all children registered into chidon and the charges they paid
+$children = [];
+$stmt = $MASHPIA_DB->query("
+    select rc.*, u.first, u.last from th_chidon tc 
+    join registration_charges rc using (user_id, year) 
+    join users u using (user_id)
+    where tc.year = 5784 
+    and (
+        type in ('THE', 'THMSUSA', 'THMSCAN', 'THMSINT', 'THAKUSA', 'THAKCAN', 'THAKINT', 'shipping') 
+        or type like 'THE%'
+    )
+    and user_id in (
+        select id from admin_auths where admin_id in (" . implode(',', array_keys($admins)) . ")
+    )
+");
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($rows as $row) {
+    $children[$row['parent_id']][$row['user_id']][] = [
+        'type'  => $row['type'],
+        'paid'  => $row['amount'],
+        'discount'  => $row['discount'],
+        'date'  => $row['date'],
+        'name'  => $row['first'] . ' ' . $row['last']
+    ];
+}
+
 // find out if any admin did NOT pay the shipping fee (if intl)
 $paid = [];
 $stmt = $MASHPIA_DB->prepare("
@@ -59,6 +85,12 @@ foreach ($admins as $admin_id => $admin) {
     <th>Family Name</th>
     <th>Address</th>
     <th>Paid</th>
+    <th>Children Registered</th>
+    <th>Number of Registered Children</th>
+    <th>Registation amount paid</th>
+    <th>Date Paid</th>
+    <th>Shipping Fee Paid</th>
+    <th>Date Paid</th>
   </tr>
     <?php
     foreach ($admins as $admin_id => $admin) {
@@ -66,7 +98,28 @@ foreach ($admins as $admin_id => $admin) {
       $address = $admin['admin_address1'] . " " . $admin['admin_address2'] . "<br />" . $admin['admin_city'] .
           ", " . $admin['admin_state'] . "<br />" . $admin['admin_postal'] . "<br />" . $admin['admin_country'];
       echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>" .
-          ($paid[$admin_id] ? 'yes' : 'no') . "</td></tr>";
+          ($paid[$admin_id] ? 'yes' : 'no') . "</td></td>";
+      foreach ($children[$admin_id] as $kids) {
+        echo $kids[0]['name'] . "<br />";
+      }
+      echo "</td><td>" . count($children[$admin_id]) . "</td><td>";
+      foreach ($children[$admin_id] as $kids) {
+        foreach ($kids as $child) {
+          if (strpos($child['type'], 'THE') !== false) {
+            echo $child['paid'];
+            if (intval($child['discount']) > 0) echo ' (discount: ' . $child['discount'] . ')';
+            echo "</td><td>" . $child['date'] . "</td><td>";
+            break;
+          }
+        }
+      }
+      foreach ($children[$admin_id] as $kids) {
+        foreach ($kids as $child) {
+          if (strpos($child['type'], 'THE') !== false) continue;
+          echo $child['paid'] . "</td><td>" . $child['date'] . "</td></tr>";
+          break;
+        }
+      }
     }
     ?>
 </table>
