@@ -83,10 +83,10 @@ $stmt = $MASHPIA_DB->prepare("
                         $user['first'] . ' ' . $user['last'] . "</td><td>" . $user['admin_id'] . "</td><td>" .
                         $receives_hachayol . "</td><td>" . implode("<br />", $children) . "</td></tr>";
                 }
+                echo "</table>";
             }
             echo "<div style='page-break-after:always;'></div>";
         }
-        echo "</table>";
     }
     ?>
     </body>
