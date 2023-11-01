@@ -30,7 +30,8 @@ foreach ($schools as $id => $name) {
 }
 
 $stmt = $MASHPIA_DB->prepare("
-    select u.* from users u 
+    select u.*, s.school_name from users u 
+    join schools s using (school_id) 
     join admin_auths aa on aa.id = u.user_id 
     where u.hachayol = 1 
     and u.user_registered > 0 
@@ -54,6 +55,7 @@ $stmt = $MASHPIA_DB->prepare("
     foreach ($users as $school_id => $more) {
         foreach ($more as $class_grade => $other) {
             foreach ($other as $class_sub => $more) {
+                $grade = $class_grade . ($class_sub ? '-' . $class_sub : '');
                 echo "<h3>" . $schools[$school_id] . "</h3><hr />";
                 ?>
                 <table>
@@ -74,13 +76,12 @@ $stmt = $MASHPIA_DB->prepare("
                       $stmt->execute(['admin_id' => $user['admin_id']]);
                       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                       foreach ($rows as $row) {
-                        $children[] = $row['first'] . ' ' . $row['last'] . ' (' . $schools[$row['school_id']] . ')';
+                        $children[] = $row['first'] . ' ' . $row['last'] . ' (' . $row['school_name'] . ')';
                       }
                     }
-                    echo "<tr><td>" . $class_grade . "-" . $class_sub . "</td><td>" .
-                        $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" . $user['first'] . ' ' . $user['last'] .
-                        "</td><td>" . $user['admin_id'] . "</td><td>" . $receives_hachayol . "</td><td>" .
-                        implode("<br />", $children) . "</td></tr>";
+                    echo "<tr><td>" . $grade . "</td><td>" . $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" .
+                        $user['first'] . ' ' . $user['last'] . "</td><td>" . $user['admin_id'] . "</td><td>" .
+                        $receives_hachayol . "</td><td>" . implode("<br />", $children) . "</td></tr>";
                 }
             }
             echo "<div style='page-break-after:always;'></div>";
