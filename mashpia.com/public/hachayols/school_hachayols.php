@@ -68,6 +68,7 @@ $stmt = $MASHPIA_DB->prepare("
                         <th>Who gets Hachayol in Family</th>
                     </tr>
                 <?php
+                $total = 0;
                 foreach ($more as $user) {
                     $children = [];
                     $receives_hachayol = intval($user['hachayol']) ? 'yes' : 'no';
@@ -79,11 +80,12 @@ $stmt = $MASHPIA_DB->prepare("
                         $children[] = $row['first'] . ' ' . $row['last'] . ' (' . $row['school_name'] . ')';
                       }
                     }
+                    else $total++;
                     echo "<tr><td>" . $grade . "</td><td>" . $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" .
                         $user['first'] . ' ' . $user['last'] . "</td><td>" . $user['admin_id'] . "</td><td>" .
                         $receives_hachayol . "</td><td>" . implode("<br />", $children) . "</td></tr>";
                 }
-                echo "</table>";
+                echo "<tr><th>Total:</th><th colspan='3'></th><th>$total</th><th></th></tr></table>";
             }
             echo "<div style='page-break-after:always;'></div>";
         }
