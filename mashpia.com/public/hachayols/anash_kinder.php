@@ -23,7 +23,7 @@ foreach ($rows as $row) {
 // get all children registered into chidon and the charges they paid
 $children = [];
 $stmt = $MASHPIA_DB->query("
-    select rc.*, u.first, u.last from th_chidon tc 
+    select rc.*, u.first, u.last, tc.parent_id from th_chidon tc 
     join registration_charges rc using (user_id, year) 
     join users u using (user_id)
     where tc.year = 5784 
