@@ -74,13 +74,13 @@ $stmt = $MASHPIA_DB->prepare("
                       $stmt->execute(['admin_id' => $user['admin_id']]);
                       $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                       foreach ($rows as $row) {
-                        $children[] = $row['first'] . ' ' . $row['last'];
+                        $children[] = $row['first'] . ' ' . $row['last'] . ' (' . $schools[$row['school_id']] . ')';
                       }
                     }
                     echo "<tr><td>" . $class_grade . "-" . $class_sub . "</td><td>" .
                         $user['first_he'] . ' ' . $user['last_he'] . "</td><td>" . $user['first'] . ' ' . $user['last'] .
                         "</td><td>" . $user['admin_id'] . "</td><td>" . $receives_hachayol . "</td><td>" .
-                        implode(',', $children) . "</td></tr>";
+                        implode("<br />", $children) . "</td></tr>";
                 }
             }
         }
