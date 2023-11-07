@@ -119,7 +119,7 @@ if (isset($_POST['save'])) {
                         echo ">" . $value . "</option>";
                     }
                     echo "<option value='highest track passed'";
-                    if ($markInfo['reward_type'] == 'highest track passed') echo " selected ";
+                    if (!isset($markInfo['reward_type']) || $markInfo['reward_type'] == 'highest track passed') echo " selected ";
                     echo ">Highest Track Passed</option>";
                     echo "</select></td></tr>";
                 }
