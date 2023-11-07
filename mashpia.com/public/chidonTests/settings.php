@@ -149,8 +149,9 @@ if (count($schools) == 1) {
 <script type="text/javascript">
   async function setPlatoons() {
     let html = ''
-    let info = getInfo('baseSelect', 'classes')
-    if (info.length) {
+    let info = await getInfo('baseSelect', 'classes')
+    if (! info.length) document.getElementById('userSelection').innerHTML = html
+    else {
       html += '<select name="platoonSelect" id="platoonSelect" onchange="setUsers()">'
       html += '<option value="0">All Platoons</option>'
       info.map(platoon => {
@@ -158,16 +159,15 @@ if (count($schools) == 1) {
         html += `<option value="${platoon.class_id}">${grade}</option>`
       })
     }
-    else document.getElementById('userSelection').innerHTML = html
     document.getElementById('platoonSelection').innerHTML = html;
   }
 
-  function setUsers() {
+  async function setUsers() {
     // show settings
     document.getElementById('settings').style.display = 'block'
 
     let html = '';
-    let info = getInfo('platoonSelect', 'users')
+    let info = await getInfo('platoonSelect', 'users')
     if (info.length) {
       html += '<select name="userSelect" id="userSelect">'
       html += '<option value="0">All Users</option>'
