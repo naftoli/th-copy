@@ -7,12 +7,16 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.chidonTests.php';
+
+$super = $admin_user['auth'] == 'super';
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 $year = GlobalSettings::getChidonYear();
 
-$super = $admin_user['auth'] == 'super';
+$ct = new ChidonTests();
+$tracks = $ct->getTypes();
 
 if (count($schools) == 1) {
     $editOnly = true;
@@ -72,8 +76,6 @@ if (count($schools) == 1) {
       <legend>Avg Score</legend>
       <p>
           <?php
-          $ct = new ChidonTests();
-          $tracks = $ct->getTypes();
           foreach ($tracks as $type => $desc) {
             echo "<input type='checkbox' class='track' name='track' value='$type' /> $desc<br />";
           }
