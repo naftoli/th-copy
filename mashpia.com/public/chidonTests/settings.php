@@ -13,6 +13,16 @@ $schools = $as->getSchools();
 $year = GlobalSettings::getChidonYear();
 
 $super = $admin_user['auth'] == 'super';
+
+if (count($schools) == 1) {
+    $editOnly = true;
+    $disabled = ' disabled';
+    $selected = ' selected';
+} else {
+    $editOnly = false;
+    $disabled = '';
+    $selected = '';
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -40,7 +50,19 @@ $super = $admin_user['auth'] == 'super';
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Chidon Test Settings</h1>
-<div id="baseSelection"></div>
+<div id="baseSelection">
+  <select name="baseSelect" id="baseSelect" onchange="setPlatoons()" <?= $selected . $disabled ?>>
+      <?php if (! $editOnly) { ?>
+        <option value="0">Select Base</option>
+        <option value="-1">All</option>
+      <?php
+      }
+      foreach ($schools as $id => $name) {
+          echo "<option value='$id'>$name</option>";
+      }
+      ?>
+  </select>
+</div>
 <div id="platoonSelection"></div>
 <div id="userSelection"></div>
 <h2></h2>
@@ -134,23 +156,6 @@ $super = $admin_user['auth'] == 'super';
 </div>
 </body>
 <script type="text/javascript">
-  let bases = <?= json_encode($schools) ?>;
-  let year = <?= $year ?>;
-
-  function setBases() {
-    let html = ''
-    let baseIDs = Object.keys(bases)
-    let editOnly = baseIDs.length == 1
-    html += `<select id="baseSelect" onchange="setPlatoons()" ${editOnly ? 'disabled' : ''}>`
-    if (!editOnly) html += '<option value="">Select Base</option>';
-    for (let id of baseIDs) {
-      html += '<option value="' + id + '">' + bases[id] + '</option>';
-    }
-    html += '</select>';
-    document.getElementById('baseSelection').innerHTML = html;
-    if (editOnly) setPlatoons();
-  }
-
   async function setPlatoons() {
     // get platoons based on this base
     const res = await fetch('api/getPlatoons.php', {
@@ -193,6 +198,8 @@ $super = $admin_user['auth'] == 'super';
     document.getElementById('userSelection').innerHTML = html;
   }
 
-  document.onload = setBases();
+  $( function() {
+    if (document.getElementById('baseSelect').value != 0) setPlatoons()
+  })
 </script>
 </html>
