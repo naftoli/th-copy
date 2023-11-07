@@ -538,50 +538,57 @@ class ChidonTests
     }
 
     private function getPassingAvgs($user_id) {
+        // if there's no setting, default to 80
         $stmt = $this->db->prepare("
             select * from chidon_passing_avgs 
             where year = :year 
-            and user_id = :user
+            and (
+                user_id = :user or school_id = (
+                    select school_id from users where user_id = :user
+                )
         ");
         $stmt->execute([
             ':year' => $this->year,
             ':user' => $user_id
         ]);
+
+        $avgs = [];
         $rows = $stmt->fetchAll();
-        $passingAvgs = [];
         foreach ($rows as $row) {
-            $passingAvgs[$row['test_type']] = $row['avg'];
+            if ($row['user_id'] > 0) $avgs['user'][$row['test_type']] = $row['avg'];
+            else if ($row['school_id'] > 0) $avgs['school'][$row['test_type']] = $row['avg'];
         }
-        // make sure we have info for all test types
-        $schoolAvgs = $this->getSchoolDefaults($user_id);
-        foreach ($this->types as $type => $val) {
-            if (! isset($passingAvgs[$type])) $passingAvgs[$type] = $schoolAvgs[$type];
+
+        $passingAvgs = [];
+        foreach ($this->types as $type => $desc) {
+            $passingAvgs[$type] = $avgs['user'][$type] ?? $avgs['school'][$type] ?? 80;
         }
         return $passingAvgs;
     }
 
-    private function getSchoolDefaults($user) {
+    private function getDefaultLevel($user_id) {
+        // if there's no setting, default to 2
         $stmt = $this->db->prepare("
-            select * from chidon_passing_avgs 
+            select * from chidon_test_levels 
             where year = :year 
-            and school_id = (
+            and (school_id = (
                 select school_id from users where user_id = :user
-            )
+            ) or user_id = :user) 
         ");
         $stmt->execute([
             ':year' => $this->year,
-            ':user' => $user
+            ':user' => $user_id
         ]);
+
+        $levels = [];
         $rows = $stmt->fetchAll();
-        $avgs = [];
         foreach ($rows as $row) {
-            $avgs[$row['test_type']] = $row['avg'];
+            if ($row['user_id'] > 0) $levels['user'] = $row['test_level'];
+            else if ($row['school_id'] > 0) $levels['school'] = $row['test_level'];
         }
-        // make sure we have avg for each test type
-        foreach ($this->types as $type => $val) {
-            if (! isset($avgs[$type])) $avgs[$type] = 70; // global default is 70
-        }
-        return $avgs;
+
+        $level = $levels['user'] ?? $levels['school'] ?? 2;
+        return $level;
     }
 }
 
