@@ -7,7 +7,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.chidonTests.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $super = $admin_user['auth'] == 'super';
 
