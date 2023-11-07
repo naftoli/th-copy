@@ -22,18 +22,17 @@ switch ($table) {
             and class_grade >= '4' 
             and class_grade <= '8' 
             order by class_grade, class_sub");
-        $stmt->execute(['school_id' => $id]);
         break;
     case 'users':
         // get all platoons for this school
         $stmt = $MASHPIA_DB->prepare("
             select * 
             from users 
-            where class_id = :class_id 
+            where class_id = :id 
             and user_registered > 0 
             order by last, first");
-        $stmt->execute(['class_id' => $id]);
         break;
 }
+$stmt->execute(['id' => $id]);
 $info = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($info);
