@@ -149,19 +149,11 @@ if (count($schools) == 1) {
 <script type="text/javascript">
   async function setPlatoons() {
     let html = ''
-    // get platoons based on base value
-    let school_id = document.getElementById('baseSelect').value
-    if (school_id > 0) {
-      const res = await fetch('api/getPlatoons.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ school_id })
-      })
-      let platoons = await res.json()
-
+    let info = getInfo('baseSelect', 'classes')
+    if (info.length) {
       html += '<select name="platoonSelect" id="platoonSelect" onchange="setUsers()">'
       html += '<option value="0">All Platoons</option>'
-      platoons.map(platoon => {
+      info.map(platoon => {
         let grade = platoon.class_grade + (platoon.class_sub ? '-' + platoon.class_sub : '')
         html += `<option value="${platoon.class_id}">${grade}</option>`
       })
@@ -170,25 +162,16 @@ if (count($schools) == 1) {
     document.getElementById('platoonSelection').innerHTML = html;
   }
 
-  async function setUsers() {
+  function setUsers() {
     // show settings
     document.getElementById('settings').style.display = 'block'
 
     let html = '';
-    // check if any platoon was selected
-    let class_id = document.getElementById('platoonSelect').value
-    if (class_id > 0) {
-      // get users for specific platoon
-      const res = await fetch('api/getUsers.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ class_id })
-      })
-      let users = await res.json()
-
+    let info = getInfo('platoonSelect', 'users')
+    if (info.length) {
       html += '<select name="userSelect" id="userSelect">'
       html += '<option value="0">All Users</option>'
-      users.map(user => {
+      info.map(user => {
         html += `<option value="${user.user_id}">${user.first} ${user.last}</option>`
       })
     }
@@ -198,5 +181,19 @@ if (count($schools) == 1) {
   $( function() {
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
+
+  async function getInfo(elem, table) {
+    let info = []
+    let id = document.getElementById(elem).value
+    if (id > 0) {
+      const res = await fetch('api/getInfo.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id, table })
+      })
+      info = await res.json()
+    }
+    return info
+  }
 </script>
 </html>
