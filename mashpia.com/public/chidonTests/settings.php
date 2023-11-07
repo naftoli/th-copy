@@ -159,7 +159,13 @@ if (count($schools) == 1) {
 </body>
 <script type="text/javascript">
   async function setPlatoons() {
-    // get platoons based on this base
+    // get platoons based on base value
+    let class_id = document.getElementById('baseSelect').value
+    if (class_id <= 0) {
+        document.getElementById('platoonSelection').innerHTML = ''
+        document.getElementById('userSelection').innerHTML = ''
+        return false
+    }
     const res = await fetch('api/getPlatoons.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -180,8 +186,7 @@ if (count($schools) == 1) {
   async function setUsers() {
     // check if all platoons are selected
     let platoonSelect = document.getElementById('platoonSelect')
-    let allPlatoons = platoonSelect.value == '-1'
-    if (allPlatoons) {
+    if (platoonSelect <= 0) {
       document.getElementById('userSelection').innerHTML = ''
       return false
     }
