@@ -43,6 +43,7 @@ if (count($schools) == 1) {
         border-radius: 10px;
         border: 1px solid grey;
         padding: 10px;
+        width: 45%;
       }
       legend {
         font-size: 16px;
@@ -69,10 +70,10 @@ if (count($schools) == 1) {
 </div>
 <div id="platoonSelection"></div>
 <div id="userSelection"></div>
-<h2></h2>
-<div id="settings">
+<div id="settings" style="display: none;">
+  <h2></h2>
   <div id="settingsTable">
-    <fieldset>
+    <fieldset style="float: left;">
       <legend>Avg Score</legend>
       <p>
           <?php
@@ -91,10 +92,11 @@ if (count($schools) == 1) {
         }
         ?>
       </select>
+      <br />
+      <button class="save">Save</button>
     </fieldset>
-    <br />
 
-    <fieldset>
+    <fieldset style="float: right;">
       <legend>Avg for Final</legend>
       <p>
           <?php
@@ -115,50 +117,34 @@ if (count($schools) == 1) {
           }
           ?>
       </select>
+      <br />
+      <button class="save">Save</button>
     </fieldset>
-    <br />
 
+    <div style="clear: both;"></div>
+    <br />
     <fieldset>
       <legend>Test Level</legend>
       <p>
-          <?php
-          $ct = new ChidonTests();
-          $tracks = $ct->getTypes();
-          foreach ($tracks as $type => $desc) {
-              echo "<input type='checkbox' class='trackLevel' name='trackLevel' value='$type' /> $desc<br />";
-          }
-          ?>
+        <input type="checkbox" name="tests" id="tests" value="1" /> Tests<br />
+        <input type="checkbox" name="finals" id="finals" value="1" /> Finals<br />
       </p>
       <select name="level" class="level">
         <option value="0">Select Level</option>
         <option value="1">Level 1</option>
         <option value="2">Level 2</option>
       </select>
+      <br />
+      <button class="save">Save</button>
     </fieldset>
     <br />
-
-<!--    <fieldset>-->
-<!--      <legend>Reward Type</legend>-->
-<!--      <select name="rewardType" id="rewardType">-->
-<!--        <option value="0">Select Reward Type</option>-->
-<!--        --><?php
-//          $ct = new ChidonTests();
-//          $types = $ct->getRewardTypes();
-//          foreach ($types as $type => $desc) {
-//            echo "<option value='$type'>$desc</option>";
-//          }
-//        ?>
-<!--      </select>-->
-<!--    </fieldset>-->
-<!--    <br />-->
-
-    <br />
-    <button id="save">Save</button>
   </div>
 </div>
 </body>
 <script type="text/javascript">
   async function setPlatoons() {
+    // show settings
+    document.getElementById('settings').style.display = 'block'
     // get platoons based on base value
     let class_id = document.getElementById('baseSelect').value
     if (class_id <= 0) {
