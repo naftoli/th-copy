@@ -181,7 +181,10 @@ if (count($schools) == 1) {
     // check if all platoons are selected
     let platoonSelect = document.getElementById('platoonSelect')
     let allPlatoons = platoonSelect.value == '-1'
-    if (allPlatoons) return
+    if (allPlatoons) {
+      document.getElementById('userSelection').innerHTML = ''
+      return
+    }
 
     // get users for specific platoon
     const res = await fetch('api/getUsers.php', {
