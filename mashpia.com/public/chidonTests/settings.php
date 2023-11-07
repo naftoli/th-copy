@@ -50,6 +50,11 @@ if (count($schools) == 1) {
         font-weight: bold;
         padding: 5px;
       }
+      <?php if (!$super) : ?>
+        #settings {
+          display: none;
+        }
+      <?php endif; ?>
     </style>
 </head>
 <body>
@@ -70,7 +75,7 @@ if (count($schools) == 1) {
 </div>
 <div id="platoonSelection"></div>
 <div id="userSelection"></div>
-<div id="settings" style="display: none;">
+<div id="settings">
   <h2></h2>
   <div id="settingsTable">
     <fieldset style="float: left;">
@@ -143,54 +148,50 @@ if (count($schools) == 1) {
 </body>
 <script type="text/javascript">
   async function setPlatoons() {
-    // show settings
-    document.getElementById('settings').style.display = 'block'
+    let html = ''
     // get platoons based on base value
-    let class_id = document.getElementById('baseSelect').value
-    if (class_id <= 0) {
-        document.getElementById('platoonSelection').innerHTML = ''
-        document.getElementById('userSelection').innerHTML = ''
-        return false
-    }
-    const res = await fetch('api/getPlatoons.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ school_id: document.getElementById('baseSelect').value })
-    })
-    let platoons = await res.json()
+    let school_id = document.getElementById('baseSelect').value
+    if (school_id > 0) {
+      const res = await fetch('api/getPlatoons.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ school_id })
+      })
+      let platoons = await res.json()
 
-    let html = '<select name="platoonSelect" id="platoonSelect" onchange="setUsers()">'
-    html += '<option value="0">Select Platoon</option>'
-    html += '<option value="-1">All</option>'
-    platoons.map(platoon => {
-      let grade = platoon.class_grade + (platoon.class_sub ? '-' + platoon.class_sub : '')
-      html += `<option value="${platoon.class_id}">${grade}</option>`
-    })
+      html += '<select name="platoonSelect" id="platoonSelect" onchange="setUsers()">'
+      html += '<option value="0">All Platoons</option>'
+      platoons.map(platoon => {
+        let grade = platoon.class_grade + (platoon.class_sub ? '-' + platoon.class_sub : '')
+        html += `<option value="${platoon.class_id}">${grade}</option>`
+      })
+    }
+    else document.getElementById('userSelection').innerHTML = html
     document.getElementById('platoonSelection').innerHTML = html;
   }
 
   async function setUsers() {
-    // check if all platoons are selected
-    let platoonSelect = document.getElementById('platoonSelect')
-    if (platoonSelect <= 0) {
-      document.getElementById('userSelection').innerHTML = ''
-      return false
+    // show settings
+    document.getElementById('settings').style.display = 'block'
+
+    let html = '';
+    // check if any platoon was selected
+    let class_id = document.getElementById('platoonSelect').value
+    if (class_id > 0) {
+      // get users for specific platoon
+      const res = await fetch('api/getUsers.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ class_id })
+      })
+      let users = await res.json()
+
+      html += '<select name="userSelect" id="userSelect">'
+      html += '<option value="0">All Users</option>'
+      users.map(user => {
+        html += `<option value="${user.user_id}">${user.first} ${user.last}</option>`
+      })
     }
-
-    // get users for specific platoon
-    const res = await fetch('api/getUsers.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ class_id: platoonSelect.value })
-    })
-    let users = await res.json()
-
-    let html = '<select name="userSelect" id="userSelect">'
-    html += '<option value="0">Select User</option>'
-    html += '<option value="-1">All</option>'
-    users.map(user => {
-      html += `<option value="${user.user_id}">${user.first} ${user.last}</option>`
-    })
     document.getElementById('userSelection').innerHTML = html;
   }
 
