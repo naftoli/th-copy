@@ -183,7 +183,7 @@ if (count($schools) == 1) {
     let allPlatoons = platoonSelect.value == '-1'
     if (allPlatoons) {
       document.getElementById('userSelection').innerHTML = ''
-      return
+      return false
     }
 
     // get users for specific platoon
