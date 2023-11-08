@@ -80,74 +80,85 @@ if (count($schools) == 1) {
   <div id="settingsTable">
     <fieldset style="float: left;">
       <legend>Avg Score</legend>
-      <p>
+      <form id="avgScore">
+        <p>
           <?php
           foreach ($tracks as $type => $desc) {
-            echo "<input type='checkbox' class='track' name='track' value='$type' /> $desc<br />";
+            echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc<br />";
           }
           ?>
-      </p>
-      <select name="avg" id="avg">
-        <option value="0">Select Avg</option>
-        <?php
-        $i = 70;
-        if ($super) $i = 50;
-        for (; $i <= 100; $i += 5) {
-          echo "<option value='$i'>$i</option>";
-        }
-        ?>
-      </select>
-      <br />
-      <button class="save">Save</button>
-    </fieldset>
-
-    <fieldset style="float: right;">
-      <legend>Avg for Final</legend>
-      <p>
-          <?php
-          $ct = new ChidonTests();
-          $tracks = $ct->getTypes();
-          foreach ($tracks as $type => $desc) {
-              echo "<input type='checkbox' class='trackFinal' name='trackFinal' value='$type' /> $desc<br />";
-          }
-          ?>
-      </p>
-      <select name="avgFinal" id="avgFinal">
-        <option value="0">Select Avg</option>
+        </p>
+        <select name="avg" id="avg">
+          <option value="0">Select Avg</option>
           <?php
           $i = 70;
           if ($super) $i = 50;
           for (; $i <= 100; $i += 5) {
-              echo "<option value='$i'>$i</option>";
+            echo "<option value='$i'>$i</option>";
           }
           ?>
-      </select>
-      <br />
-      <button class="save">Save</button>
+        </select>
+        <br />
+        <button class="save" onclick="save('avgScore'); return false;">Save</button>
+      </form>
+    </fieldset>
+
+    <fieldset style="float: right;">
+      <legend>Avg for Final</legend>
+      <form id="avgScoreFinal">
+        <p>
+            <?php
+            foreach ($tracks as $type => $desc) {
+                echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc<br />";
+            }
+            ?>
+        </p>
+        <select name="avgFinal" id="avg_final">
+          <option value="0">Select Avg</option>
+            <?php
+            $i = 70;
+            if ($super) $i = 50;
+            for (; $i <= 100; $i += 5) {
+                echo "<option value='$i'>$i</option>";
+            }
+            ?>
+        </select>
+        <br />
+        <button class="save" onclick="save('avgScoreFinal'); return false;">Save</button>
+      </form>
     </fieldset>
 
     <div style="clear: both;"></div>
     <br />
     <fieldset>
       <legend>Test Level</legend>
-      <p>
-        <input type="checkbox" name="tests" id="tests" value="1" /> Tests<br />
-        <input type="checkbox" name="finals" id="finals" value="1" /> Finals<br />
-      </p>
-      <select name="level" class="level">
-        <option value="0">Select Level</option>
-        <option value="1">Level 1</option>
-        <option value="2">Level 2</option>
-      </select>
-      <br />
-      <button class="save">Save</button>
+      <form id="levels">
+        <p>
+          <input type="checkbox" name="tests" id="tests" value="1" /> Tests<br />
+          <input type="checkbox" name="finals" id="finals" value="1" /> Finals<br />
+        </p>
+        <select name="level" class="level">
+          <option value="0">Select Level</option>
+          <option value="1">Level 1</option>
+          <option value="2">Level 2</option>
+        </select>
+        <br />
+        <button class="save" onclick="save('levels'); return false;">Save</button>
+      </form>
     </fieldset>
     <br />
   </div>
 </div>
 </body>
 <script type="text/javascript">
+  $( function() {
+    if (document.getElementById('baseSelect').value != 0) setPlatoons()
+  })
+
   async function setPlatoons() {
+    // show settings
+    document.getElementById('settings').style.display = 'block'
+    // create platoon selection
     let html = ''
     let info = await getInfo('baseSelect', 'classes')
     if (! info.length) document.getElementById('userSelection').innerHTML = html
@@ -163,9 +174,7 @@ if (count($schools) == 1) {
   }
 
   async function setUsers() {
-    // show settings
-    document.getElementById('settings').style.display = 'block'
-
+    // create user selection
     let html = '';
     let info = await getInfo('platoonSelect', 'users')
     if (info.length) {
@@ -177,10 +186,6 @@ if (count($schools) == 1) {
     }
     document.getElementById('userSelection').innerHTML = html;
   }
-
-  $( function() {
-    if (document.getElementById('baseSelect').value != 0) setPlatoons()
-  })
 
   async function getInfo(elem, table) {
     let info = []
@@ -194,6 +199,63 @@ if (count($schools) == 1) {
       info = await res.json()
     }
     return info
+  }
+
+  async function save(id) {
+    let info = new FormData(document.forms[id])
+    info.set('elem', id)
+    let school_id = document.getElementById('baseSelect') ? document.getElementById('baseSelect').value : 0
+    let class_id = document.getElementById('platoonSelect') ? document.getElementById('platoonSelect').value : 0
+    let user_id = document.getElementById('userSelect') ? document.getElementById('userSelect').value : 0
+    info.set('school_id', school_id)
+    info.set('class_id', class_id)
+    info.set('user_id', user_id)
+
+    if (validateForm(id, info)) {
+      const res = await fetch('api/saveSettings.php', {
+        method: 'POST',
+        body: info
+      })
+      const data = await res.json()
+      if (data.error) alert(data.error)
+      else alert('Saved!')
+    }
+  }
+
+  function validateForm(id, info) {
+    switch (id) {
+      case 'avgScore':
+        if (!info.get('avg') || info.get('avg') == 0) {
+          alert('Please select an average score')
+          return false
+        }
+        if (!info.get('tracks[]')) {
+          alert('Please select at least one track')
+          return false
+        }
+        break
+      case 'avgScoreFinal':
+        if (!info.get('avgFinal') || info.get('avgFinal') == 0) {
+          alert('Please select an average score')
+          return false
+        }
+        if (!info.get('tracks[]')) {
+          alert('Please select at least one track')
+          return false
+        }
+        break
+      case 'levels':
+        if (!info.get('level') || info.get('level') == 0) {
+          alert('Please select a level')
+          return false
+        }
+        if (!info.get('tests') && !info.get('finals')) {
+          alert('Please select what you are applying the level to')
+          return false
+        }
+        break
+    }
+    return true
   }
 </script>
 </html>

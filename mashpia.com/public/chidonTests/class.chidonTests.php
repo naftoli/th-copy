@@ -555,8 +555,8 @@ class ChidonTests
         $avgs = [];
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            if ($row['user_id'] > 0) $avgs['user'][$row['test_type']] = $row['avg'];
-            else if ($row['school_id'] > 0) $avgs['school'][$row['test_type']] = $row['avg'];
+            if ($row['user_id'] > 0) $avgs['user'][$row['track']] = $row['avg'];
+            else if ($row['school_id'] > 0) $avgs['school'][$row['track']] = $row['avg'];
         }
 
         $passingAvgs = [];
@@ -566,17 +566,48 @@ class ChidonTests
         return $passingAvgs;
     }
 
-    private function getDefaultLevel($user_id) {
+    private function getFinalPassingAvgs($user_id) {
+        // if there's no setting, default to 80
+        $stmt = $this->db->prepare("
+            select * from chidon_final_passing_avgs 
+            where year = :year 
+            and (
+                user_id = :user or school_id = (
+                    select school_id from users where user_id = :user
+                )
+        ");
+        $stmt->execute([
+            ':year' => $this->year,
+            ':user' => $user_id
+        ]);
+
+        $avgs = [];
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            if ($row['user_id'] > 0) $avgs['user'][$row['track']] = $row['avg'];
+            else if ($row['school_id'] > 0) $avgs['school'][$row['track']] = $row['avg'];
+        }
+
+        $passingAvgs = [];
+        foreach ($this->types as $type => $desc) {
+            $passingAvgs[$type] = $avgs['user'][$type] ?? $avgs['school'][$type] ?? 80;
+        }
+        return $passingAvgs;
+    }
+
+    private function getDefaultLevel($type, $user_id) {
         // if there's no setting, default to 2
         $stmt = $this->db->prepare("
             select * from chidon_test_levels 
             where year = :year 
+            and test_type = :type 
             and (school_id = (
                 select school_id from users where user_id = :user
             ) or user_id = :user) 
         ");
         $stmt->execute([
             ':year' => $this->year,
+            ':type' => $type,
             ':user' => $user_id
         ]);
 
