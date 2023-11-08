@@ -24,7 +24,7 @@ else if ($class_id > 0) {
     $stmt = $MASHPIA_DB->prepare("
         select user_id 
         from users 
-        where class_id = :class
+        where class_id = :class 
         and user_registered > 0 
     ");
     $stmt->execute(['class' => $class_id]);
@@ -37,8 +37,6 @@ if (empty($users)) $users[] = 0;
 else $school_id = 0; // only include school id if no users are being set
 
 $success = true;
-$MASHPIA_DB->startTransaction();
-
 $elem = $_POST['elem'];
 switch ($elem) {
     case 'avgScore':
@@ -48,13 +46,14 @@ switch ($elem) {
             INSERT IGNORE INTO chidon_passing_avgs 
             SET 
                 school_id = :school, 
-                user_id = :user,
-                track = :track,
-                avg = :avg,
-                year = :year
+                user_id = :user, 
+                track = :track, 
+                avg = :avg, 
+                year = :year 
             ON DUPLICATE KEY UPDATE 
-                avg = :avg
+                avg = :avg 
         ");
+        $MASHPIA_DB->beginTransaction();
         foreach ($users as $user_id) {
             foreach ($tracks as $track) {
                 $res = $stmt->execute([
@@ -78,13 +77,14 @@ switch ($elem) {
             INSERT IGNORE INTO chidon_final_passing_avgs 
             SET 
                 school_id = :school, 
-                user_id = :user,
-                track = :track,
-                avg = :avg,
-                year = :year
+                user_id = :user, 
+                track = :track, 
+                avg = :avg, 
+                year = :year 
             ON DUPLICATE KEY UPDATE 
-                avg = :avg
+                avg = :avg 
         ");
+        $MASHPIA_DB->beginTransaction();
         foreach ($users as $user_id) {
             foreach ($tracks as $track) {
                 $res = $stmt->execute([
@@ -103,40 +103,36 @@ switch ($elem) {
         break;
     case 'levels':
         $level = $_POST['level'];
-        $tests = isset($_POST['tests']);
-        $finals = isset($_POST['finals']);
+        $types = [];
+        if (isset($_POST['tests'])) $types[] = 'tests';
+        if (isset($_POST['finals'])) $types[] = 'finals';
         $stmt = $MASHPIA_DB->prepare("
             INSERT IGNORE INTO chidon_test_levels 
             SET 
                 school_id = :school, 
-                user_id = :user,
+                user_id = :user, 
                 test_type = :type, 
                 test_level = :level, 
-                year = :year
+                year = :year 
             ON DUPLICATE KEY UPDATE 
-                test_level = :level
+                test_level = :level 
         ");
-        if ($tests) {
-            $res = $stmt->execute([
-                'school' => $school_id,
-                'user' => $user_id,
-                'type' => 'tests',
-                'level' => $level,
-                'year' => $year
-            ]);
-            if (!$res) $success = false;
+        $MASHPIA_DB->beginTransaction();
+        foreach ($users as $user_id) {
+            foreach ($types as $type) {
+                $res = $stmt->execute([
+                    'school' => $school_id,
+                    'user' => $user_id,
+                    'type' => $type,
+                    'level' => $level,
+                    'year' => $year
+                ]);
+                if (!$res) {
+                    $success = false;
+                    break 2;
+                }
+            }
         }
-        if ($success && $finals) {
-            $res = $stmt->execute([
-                'school' => $school_id,
-                'user' => $user_id,
-                'type' => 'finals',
-                'level' => $level,
-                'year' => $year
-            ]);
-            if (!$res) $success = false;
-        }
-        break;
 }
 
 if ($success) {
