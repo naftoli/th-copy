@@ -210,6 +210,11 @@ if (count($schools) == 1) {
     info.set('school_id', school_id)
     info.set('class_id', class_id)
     info.set('user_id', user_id)
+    // if (school_id > 0 && class_id == 0 && user_id == 0) {
+    //   let conf = confirm('Are you sure you want to set this for the entire school?\n' +
+    //     'It will overwrite any existing settings for any child in this school.')
+    //   if (!conf) return false
+    // }
 
     if (validateForm(id, info)) {
       const res = await fetch('api/saveSettings.php', {
