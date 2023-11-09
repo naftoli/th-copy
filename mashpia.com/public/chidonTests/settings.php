@@ -60,6 +60,10 @@ if (count($schools) == 1) {
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Chidon Test Settings</h1>
+<div class="infobox">
+  PLEASE NOTE: The settings for School/Grade/Child are all different, so changing one will NOT CHANGE the others.
+</div>
+<br />
 <div id="baseSelection">
   <select name="baseSelect" id="baseSelect" onchange="setPlatoons()" <?= $selected . $disabled ?>>
       <?php if (! $editOnly) { ?>
@@ -156,6 +160,8 @@ if (count($schools) == 1) {
   })
 
   async function setPlatoons() {
+    // get settings already saved
+
     // show settings
     document.getElementById('settings').style.display = 'block'
     // create platoon selection
@@ -210,11 +216,6 @@ if (count($schools) == 1) {
     info.set('school_id', school_id)
     info.set('class_id', class_id)
     info.set('user_id', user_id)
-    // if (school_id > 0 && class_id == 0 && user_id == 0) {
-    //   let conf = confirm('Are you sure you want to set this for the entire school?\n' +
-    //     'It will overwrite any existing settings for any child in this school.')
-    //   if (!conf) return false
-    // }
 
     if (validateForm(id, info)) {
       const res = await fetch('api/saveSettings.php', {

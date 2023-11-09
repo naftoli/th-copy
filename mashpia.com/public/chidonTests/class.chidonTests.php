@@ -537,17 +537,24 @@ class ChidonTests
         return $row['highest_track'];
     }
 
-    private function getPassingAvgs($user_id) {
-        // if there's no setting, default to 80
+    private function getPassingAvgs($user_id, $type = '') {
+        $table = 'chidon_passing_avgs';
+        if ($type == 'finals') $table = 'chidon_final_passing_avgs';
+
         $stmt = $this->db->prepare("
-            select * from chidon_passing_avgs 
+            select * from :table 
             where year = :year 
             and (
-                user_id = :user or school_id = (
+                user_id = :user 
+                or school_id = (
                     select school_id from users where user_id = :user
+                )
+                or class_id = (
+                    select class_id from users where user_id = :user
                 )
         ");
         $stmt->execute([
+            ':table' => $table,
             ':year' => $this->year,
             ':user' => $user_id
         ]);
@@ -556,70 +563,96 @@ class ChidonTests
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             if ($row['user_id'] > 0) $avgs['user'][$row['track']] = $row['avg'];
+            else if ($row['class)id'] > 0) $avgs['class'][$row['track']] = $row['avg'];
             else if ($row['school_id'] > 0) $avgs['school'][$row['track']] = $row['avg'];
         }
-
-        $passingAvgs = [];
-        foreach ($this->types as $type => $desc) {
-            $passingAvgs[$type] = $avgs['user'][$type] ?? $avgs['school'][$type] ?? 80;
-        }
-        return $passingAvgs;
-    }
-
-    private function getFinalPassingAvgs($user_id) {
         // if there's no setting, default to 80
-        $stmt = $this->db->prepare("
-            select * from chidon_final_passing_avgs 
-            where year = :year 
-            and (
-                user_id = :user or school_id = (
-                    select school_id from users where user_id = :user
-                )
-        ");
-        $stmt->execute([
-            ':year' => $this->year,
-            ':user' => $user_id
-        ]);
-
-        $avgs = [];
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            if ($row['user_id'] > 0) $avgs['user'][$row['track']] = $row['avg'];
-            else if ($row['school_id'] > 0) $avgs['school'][$row['track']] = $row['avg'];
-        }
-
         $passingAvgs = [];
         foreach ($this->types as $type => $desc) {
-            $passingAvgs[$type] = $avgs['user'][$type] ?? $avgs['school'][$type] ?? 80;
+            $passingAvgs[$type] = $avgs['user'][$type] ?? $avgs['class'][$type] ?? $avgs['school'][$type] ?? 80;
         }
         return $passingAvgs;
     }
 
-    private function getDefaultLevel($type, $user_id) {
-        // if there's no setting, default to 2
-        $stmt = $this->db->prepare("
-            select * from chidon_test_levels 
-            where year = :year 
-            and test_type = :type 
-            and (school_id = (
-                select school_id from users where user_id = :user
-            ) or user_id = :user) 
-        ");
-        $stmt->execute([
-            ':year' => $this->year,
-            ':type' => $type,
-            ':user' => $user_id
-        ]);
-
+    private function getLevel($user_id, $type = '')
+    {
         $levels = [];
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            if ($row['user_id'] > 0) $levels['user'] = $row['test_level'];
-            else if ($row['school_id'] > 0) $levels['school'] = $row['test_level'];
+        foreach (['tests', 'finals'] as $test_type) {
+            if ($type && $type != $test_type) continue;
+            $stmt = $this->db->prepare("
+                select * from chidon_test_levels 
+                where year = :year 
+                and test_type = :type 
+                and (
+                    user_id = :user 
+                    or school_id = (
+                        select school_id from users where user_id = :user
+                    )
+                    or class_id = (
+                        select class_id from users where user_id = :user
+                    )
+                )
+            ");
+            $stmt->execute([
+                ':year' => $this->year,
+                ':type' => $type,
+                ':user' => $user_id
+            ]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                if ($row['user_id'] > 0) $levels['user'][$row['test_type']] = $row['test_level'];
+                else if ($row['class_id'] > 0) $levels['class'][$row['test_type']] = $row['test_level'];
+                else if ($row['school_id'] > 0) $levels['school'][$row['test_type']] = $row['test_level'];
+            }
         }
 
-        $level = $levels['user'] ?? $levels['school'] ?? 2;
-        return $level;
+        // if there's no setting, default to 2
+        $test_level = $levels['user']['tests'] ?? $levels['class']['tests'] ?? $levels['school']['tests'] ?? 2;
+        $final_level = $levels['user']['finals'] ?? $levels['class']['finals'] ?? $levels['school']['finals'] ?? 2;
+
+        if ($type == 'tests') return $test_level;
+        else if ($type == 'finals') return $final_level;
+        else {
+            return [
+                'test_level' => $test_level,
+                'final_level' => $final_level
+            ];
+        }
+    }
+
+    private function getAllSettings($school_id, $class_id, $user_id) {
+        $info = [];
+        foreach(['passing_avgs', 'final_passing_avgs', 'test_levels'] as $table) {
+            $stmt = $this->db->prepare("
+                SELECT * FROM :table WHERE year = :year 
+                AND (
+                    school_id = :school 
+                    OR class_id = :class 
+                    OR user_id = :user
+                )
+            ");
+            $stmt->execute([
+                ':table' => 'chidon_' . $table,
+                ':year' => $this->year,
+                ':school' => $school_id,
+                ':class' => $class_id,
+                ':user' => $user_id
+            ]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                if ($table == 'test_levels') {
+                    if ($row['user_id'] > 0) $info[$row['user_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    else if ($row['class_id'] > 0) $info[$row['class_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    else if ($row['school_id'] > 0) $info[$row['school_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                } else {
+                    if ($row['user_id'] > 0) $info[$row['user_id']][$table][$row['track']] = $row['avg'];
+                    else if ($row['class_id'] > 0) $info[$row['class_id']][$table][$row['track']] = $row['avg'];
+                    else if ($row['school_id'] > 0) $info[$row['school_id']][$table][$row['track']] = $row['avg'];
+                }
+            }
+        }
+
+        return $info;
     }
 }
 

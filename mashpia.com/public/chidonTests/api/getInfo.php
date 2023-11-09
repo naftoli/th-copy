@@ -24,7 +24,7 @@ switch ($table) {
             order by class_grade, class_sub");
         break;
     case 'users':
-        // get all platoons for this school
+        // get all users for this platoon
         $stmt = $MASHPIA_DB->prepare("
             select * 
             from users 

@@ -17,24 +17,12 @@ if (!$school_id) {
     exit;
 }
 
-$users = [];
-if ($user_id > 0) $users[] = $user_id;
-else if ($class_id > 0) {
-    // find all users in this class
-    $stmt = $MASHPIA_DB->prepare("
-        select user_id 
-        from users 
-        where class_id = :class 
-        and user_registered > 0 
-    ");
-    $stmt->execute(['class' => $class_id]);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($rows as $row) {
-        $users[] = $row['user_id'];
-    }
+if ($user_id > 0) {
+    $school_id = 0;
+    $class_id = 0;
+} else if ($class_id > 0) {
+    $school_id = 0;
 }
-if (empty($users)) $users[] = 0;
-else $school_id = 0; // only include school id if no users are being set
 
 $success = true;
 $elem = $_POST['elem'];
@@ -46,6 +34,7 @@ switch ($elem) {
             INSERT IGNORE INTO chidon_passing_avgs 
             SET 
                 school_id = :school, 
+                class_id = :class, 
                 user_id = :user, 
                 track = :track, 
                 avg = :avg, 
@@ -54,19 +43,18 @@ switch ($elem) {
                 avg = :avg 
         ");
         $MASHPIA_DB->beginTransaction();
-        foreach ($users as $user_id) {
-            foreach ($tracks as $track) {
-                $res = $stmt->execute([
-                    'school' => $school_id,
-                    'user' => $user_id,
-                    'track' => $track,
-                    'avg' => $avg,
-                    'year' => $year
-                ]);
-                if (!$res) {
-                    $success = false;
-                    break 2;
-                }
+        foreach ($tracks as $track) {
+            $res = $stmt->execute([
+                'school' => $school_id,
+                'class' => $class_id,
+                'user' => $user_id,
+                'track' => $track,
+                'avg' => $avg,
+                'year' => $year
+            ]);
+            if (!$res) {
+                $success = false;
+                break;
             }
         }
         break;
@@ -77,6 +65,7 @@ switch ($elem) {
             INSERT IGNORE INTO chidon_final_passing_avgs 
             SET 
                 school_id = :school, 
+                class_id = :class,
                 user_id = :user, 
                 track = :track, 
                 avg = :avg, 
@@ -85,19 +74,18 @@ switch ($elem) {
                 avg = :avg 
         ");
         $MASHPIA_DB->beginTransaction();
-        foreach ($users as $user_id) {
-            foreach ($tracks as $track) {
-                $res = $stmt->execute([
-                    'school' => $school_id,
-                    'user' => $user_id,
-                    'track' => $track,
-                    'avg' => $avg,
-                    'year' => $year
-                ]);
-                if (!$res) {
-                    $success = false;
-                    break 2;
-                }
+        foreach ($tracks as $track) {
+            $res = $stmt->execute([
+                'school' => $school_id,
+                'class' => $class_id,
+                'user' => $user_id,
+                'track' => $track,
+                'avg' => $avg,
+                'year' => $year
+            ]);
+            if (!$res) {
+                $success = false;
+                break;
             }
         }
         break;
@@ -110,6 +98,7 @@ switch ($elem) {
             INSERT IGNORE INTO chidon_test_levels 
             SET 
                 school_id = :school, 
+                class_id = :class,
                 user_id = :user, 
                 test_type = :type, 
                 test_level = :level, 
@@ -118,19 +107,18 @@ switch ($elem) {
                 test_level = :level 
         ");
         $MASHPIA_DB->beginTransaction();
-        foreach ($users as $user_id) {
-            foreach ($types as $type) {
-                $res = $stmt->execute([
-                    'school' => $school_id,
-                    'user' => $user_id,
-                    'type' => $type,
-                    'level' => $level,
-                    'year' => $year
-                ]);
-                if (!$res) {
-                    $success = false;
-                    break 2;
-                }
+        foreach ($types as $type) {
+            $res = $stmt->execute([
+                'school' => $school_id,
+                'class' => $class_id,
+                'user' => $user_id,
+                'type' => $type,
+                'level' => $level,
+                'year' => $year
+            ]);
+            if (!$res) {
+                $success = false;
+                break;
             }
         }
 }
