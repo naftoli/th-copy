@@ -620,24 +620,38 @@ class ChidonTests
         }
     }
 
-    private function getAllSettings($school_id, $class_id, $user_id) {
+    public function getSettings($school_id, $class_id, $user_id) {
         $info = [];
         foreach(['passing_avgs', 'final_passing_avgs', 'test_levels'] as $table) {
-            $stmt = $this->db->prepare("
-                SELECT * FROM :table WHERE year = :year 
-                AND (
-                    school_id = :school 
-                    OR class_id = :class 
-                    OR user_id = :user
-                )
-            ");
-            $stmt->execute([
-                ':table' => 'chidon_' . $table,
-                ':year' => $this->year,
-                ':school' => $school_id,
-                ':class' => $class_id,
-                ':user' => $user_id
-            ]);
+            $table = 'chidon_' . $table;
+            if ($user_id > 0) {
+                $stmt = $this->db->prepare("
+                    SELECT * FROM `$table` WHERE year = :year 
+                    AND user_id = :id
+                ");
+                $stmt->execute([
+                    ':year' => $this->year,
+                    ':id'   => $user_id
+                ]);
+            } else if ($class_id > 0) {
+                $stmt = $this->db->prepare("
+                    SELECT * FROM `$table` WHERE year = :year 
+                    AND class_id = :id
+                ");
+                $stmt->execute([
+                    ':year' => $this->year,
+                    ':id'   => $class_id
+                ]);
+            } else if ($school_id > 0) {
+                $stmt = $this->db->prepare("
+                    SELECT * FROM `$table` WHERE year = :year 
+                    AND school_id = :id
+                ");
+                $stmt->execute([
+                    ':year' => $this->year,
+                    ':id'   => $school_id
+                ]);
+            }
             $rows = $stmt->fetchAll();
             foreach ($rows as $row) {
                 if ($table == 'test_levels') {

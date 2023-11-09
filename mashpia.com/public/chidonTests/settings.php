@@ -65,10 +65,10 @@ if (count($schools) == 1) {
 </div>
 <br />
 <div id="baseSelection">
+  Choose Base:
   <select name="baseSelect" id="baseSelect" onchange="setPlatoons()" <?= $selected . $disabled ?>>
       <?php if (! $editOnly) { ?>
         <option value="0">Select Base</option>
-        <option value="-1">All</option>
       <?php
       }
       foreach ($schools as $id => $name) {
@@ -79,6 +79,8 @@ if (count($schools) == 1) {
 </div>
 <div id="platoonSelection"></div>
 <div id="userSelection"></div>
+<br />
+<button id="showSettings" onclick="getSettings(); return false;">Show / Refresh Settings</button>
 <div id="settings">
   <h2></h2>
   <div id="settingsTable">
@@ -88,7 +90,9 @@ if (count($schools) == 1) {
         <p>
           <?php
           foreach ($tracks as $type => $desc) {
-            echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc<br />";
+            echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc ";
+            echo "<span id='chidon_passing_avgs_$type'></span>";
+            echo "<br />";
           }
           ?>
         </p>
@@ -113,7 +117,9 @@ if (count($schools) == 1) {
         <p>
             <?php
             foreach ($tracks as $type => $desc) {
-                echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc<br />";
+                echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc ";
+                echo "<span id='chidon_final_passing_avgs_$type'></span>";
+                echo "<br />";
             }
             ?>
         </p>
@@ -138,8 +144,10 @@ if (count($schools) == 1) {
       <legend>Test Level</legend>
       <form id="levels">
         <p>
-          <input type="checkbox" name="tests" id="tests" value="1" /> Tests<br />
-          <input type="checkbox" name="finals" id="finals" value="1" /> Finals<br />
+          <input type="checkbox" name="tests" id="tests" value="1" /> Tests
+          <span id='chidon_test_levels_tests'></span><br />
+          <input type="checkbox" name="finals" id="finals" value="1" /> Finals
+          <span id='chidon_test_levels_finals'></span><br />
         </p>
         <select name="level" class="level">
           <option value="0">Select Level</option>
@@ -159,16 +167,46 @@ if (count($schools) == 1) {
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
 
-  async function setPlatoons() {
-    // get settings already saved
+  async function getSettings() {
+    let school_id = document.getElementById('baseSelect').value
+    let class_id = document.getElementById('platoonSelect') ? document.getElementById('platoonSelect').value : 0
+    let user_id = document.getElementById('userSelect') ? document.getElementById('userSelect').value : 0
+    const res = await fetch('api/getSettings.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ school_id, class_id, user_id })
+    })
+    const settings = await res.json()
+    console.log(settings)
+
+    // set avgs
+    let id = user_id > 0 ? user_id : class_id > 0 ? class_id : user_id > 0 ? user_id : 0
+    for (let table of ['chidon_passing_avgs', 'chidon_final_passing_avgs']) {
+      for (let track of ['maven', 'pro', 'expert', 'genius']) {
+        let elem = '#' + table + '_' + track
+        let avg = settings[id] && settings[id][table] && settings[id][table][track] ? settings[id][table][track] : 80 // always default to 80
+        $(elem).text('(' + avg + ')')
+      }
+    }
+    // set levels
+    let testLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['tests'] ?
+      settings[id]['chidon_test_levels']['tests'] : 2
+    let finalLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['finals'] ?
+      settings[id]['chidon_test_levels']['finals'] : 2
+    $('#chidon_test_levels_tests').text('(' + testLevel + ')')
+    $('#chidon_test_levels_finals').text('(' + finalLevel + ')')
 
     // show settings
     document.getElementById('settings').style.display = 'block'
+  }
+
+  async function setPlatoons() {
     // create platoon selection
     let html = ''
     let info = await getInfo('baseSelect', 'classes')
     if (! info.length) document.getElementById('userSelection').innerHTML = html
     else {
+      html += 'Choose Platoon: '
       html += '<select name="platoonSelect" id="platoonSelect" onchange="setUsers()">'
       html += '<option value="0">All Platoons</option>'
       info.map(platoon => {
@@ -184,8 +222,9 @@ if (count($schools) == 1) {
     let html = '';
     let info = await getInfo('platoonSelect', 'users')
     if (info.length) {
+      html += 'Choose Chayol: '
       html += '<select name="userSelect" id="userSelect">'
-      html += '<option value="0">All Users</option>'
+      html += '<option value="0">All Chayolim</option>'
       info.map(user => {
         html += `<option value="${user.user_id}">${user.first} ${user.last}</option>`
       })
@@ -208,6 +247,7 @@ if (count($schools) == 1) {
   }
 
   async function save(id) {
+    alert(id)
     let info = new FormData(document.forms[id])
     info.set('elem', id)
     let school_id = document.getElementById('baseSelect') ? document.getElementById('baseSelect').value : 0
