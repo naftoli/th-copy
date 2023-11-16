@@ -22,6 +22,7 @@ foreach ($schools as $school_id => $school) {
     foreach ($types as $type) {
         if (isset($settings[$type])) {
             foreach ($settings[$type] as $id => $more) {
+                echo $school . '<br />';
                 $test_level = '';
                 $final_level = '';
 
