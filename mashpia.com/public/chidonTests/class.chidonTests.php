@@ -702,6 +702,7 @@ class ChidonTests
                 }
             }
         }
+        echo "<pre>"; print_r($info); echo "</pre>";
 
         $details = [];
         if (isset($info['user'])) {
