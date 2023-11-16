@@ -15,7 +15,6 @@ $schools = $as->getSchools();
 $data = [];
 foreach ($schools as $school_id => $school) {
     $info = $ct->getSettingsForReport($school_id);
-    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     $settings = $info['settings'];
     $details = $info['details'];
 
@@ -26,8 +25,8 @@ foreach ($schools as $school_id => $school) {
                 $test_level = '';
                 $final_level = '';
 
-                if (isset($settings[$type][$id]['test_levels'])) {
-                    foreach ($settings['school'][$id]['test_levels'] as $type => $level) {
+                if (isset($more['test_levels'])) {
+                    foreach ($more['test_levels'] as $type => $level) {
                         if ($type == 'tests') $test_level = $level;
                         else if ($type == 'finals') $final_level = $level;
                     }
@@ -58,5 +57,10 @@ foreach ($schools as $school_id => $school) {
         }
     }
 }
+echo "<pre>";
+print_r($info);
+print_r($date);
+echo "</pre>";
+exit;
 
 echo json_encode($data);
