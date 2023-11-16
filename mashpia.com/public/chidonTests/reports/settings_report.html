@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8"/>
+  <title>Battlefront Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous"/>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    #main {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+    tr, th, td {
+      font-size: 12px;
+      padding: 5px;
+    }
+  </style>
+</head>
+<body>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const { useState, useEffect } = React
+  const { createRoot } = ReactDOM
+
+  const App = () => {
+    const [data, setData] = useState([])
+
+    useEffect(() => {
+      fetch('../api/getReportInfo.php', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => res.json())
+        .then(data => setData(data))
+    }, [])
+
+    return (
+      <table className="table table-bordered table-responsive table-striped">
+        {!data.length && <tr><td>Loading...</td></tr>}
+        {data.length &&
+          <thead>
+            <tr>
+              <th colSpan="5"></th>
+              <th>Level</th>
+              <th colSpan="4">Test Avg</th>
+              <th>Level</th>
+              <th colSpan="4">Final Avg</th>
+            </tr>
+            <tr>
+              <th>School</th>
+              <th>Grade</th>
+              <th>Serial</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Test</th>
+              <th>Yesoid</th>
+              <th>Yediah</th>
+              <th>Havona</th>
+              <th>Iyun</th>
+              <th>Final</th>
+              <th>Yesoid</th>
+              <th>Yediah</th>
+              <th>Havana</th>
+              <th>Iyun</th>
+            </tr>
+          </thead>
+        }
+        {data.length &&
+          <tbody>
+          {data.map(row => {
+            <tr key={row.serial}>
+              <td>{row.school}</td>
+              <td>{row.grade}</td>
+              <td>{row.serial}</td>
+              <td>{row.first_name}</td>
+              <td>{row.last_name}</td>
+              <td>{row.level}</td>
+              <td>{row.yesod}</td>
+              <td>{row.yediah}</td>
+              <td>{row.havonah}</td>
+              <td>{row.iyun}</td>
+              <td>{row.final_level}</td>
+              <td>{row.final_yesod}</td>
+              <td>{row.final_yediah}</td>
+              <td>{row.final_havonah}</td>
+              <td>{row.final_iyun}</td>
+            </tr>
+          })}
+          </tbody>
+        }
+      </table>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<App/>)
+</script>
+</html>

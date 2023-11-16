@@ -668,6 +668,67 @@ class ChidonTests
 
         return $info;
     }
+
+    public function getSettingsForReport($school) {
+        $info = [];
+        foreach(['passing_avgs', 'final_passing_avgs', 'test_levels'] as $table) {
+            $table = 'chidon_' . $table;
+            $stmt = $this->db->prepare("
+                SELECT * FROM `$table` WHERE year = :year 
+                AND (
+                    school_id = :school 
+                    OR class_id = (
+                        SELECT class_id FROM classes WHERE school_id = :school AND class_era = 0
+                    )
+                    OR user_id = (
+                        SELECT user_id FROM users WHERE school_id = :school
+                    )
+                )
+            ");
+            $stmt->execute([
+                ':year'     => $this->year,
+                ':school'   => $school
+            ]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                if ($table == 'test_levels') {
+                    if ($row['user_id'] > 0) $info['user'][$row['user_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    else if ($row['class_id'] > 0) $info['class'][$row['class_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    else if ($row['school_id'] > 0) $info['school'][$row['school_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                } else {
+                    if ($row['user_id'] > 0) $info['user'][$row['user_id']][$table][$row['track']] = $row['avg'];
+                    else if ($row['class_id'] > 0) $info['class'][$row['class_id']][$table][$row['track']] = $row['avg'];
+                    else if ($row['school_id'] > 0) $info['school'][$row['school_id']][$table][$row['track']] = $row['avg'];
+                }
+            }
+        }
+
+        $details = [];
+        $user_ids = array_keys($info['user']);
+        $this->db->query("
+            SELECT * FROM users u 
+            JOIN classes c on c.class_id = u.class_id 
+            WHERE user_id IN (" . implode(',', $user_ids) . ") 
+        ");
+        $rows = $this->db->fetchAll();
+        foreach ($rows as $row) {
+            $details['user'][$row['user_id']] = $row;
+        }
+
+        $class_ids = array_keys($info['class']);
+        $this->db->query("
+            SELECT * FROM classes WHERE class_id IN (" . implode(',', $class_ids) . ")
+        ");
+        $rows = $this->db->fetchAll();
+        foreach ($rows as $row) {
+            $details['class'][$row['class_id']] = $row;
+        }
+
+        return [
+            'settings'  => $info,
+            'details'   => $details
+        ];
+    }
 }
 
 class KHK {
