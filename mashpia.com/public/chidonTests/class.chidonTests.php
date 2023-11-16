@@ -704,24 +704,28 @@ class ChidonTests
         }
 
         $details = [];
-        $user_ids = array_keys($info['user']);
-        $this->db->query("
-            SELECT * FROM users u 
-            JOIN classes c on c.class_id = u.class_id 
-            WHERE user_id IN (" . implode(',', $user_ids) . ") 
-        ");
-        $rows = $this->db->fetchAll();
-        foreach ($rows as $row) {
-            $details['user'][$row['user_id']] = $row;
+        if (isset($info['user'])) {
+            $user_ids = array_keys($info['user']);
+            $this->db->query("
+                SELECT * FROM users u 
+                JOIN classes c on c.class_id = u.class_id 
+                WHERE user_id IN (" . implode(',', $user_ids) . ") 
+            ");
+            $rows = $this->db->fetchAll();
+            foreach ($rows as $row) {
+                $details['user'][$row['user_id']] = $row;
+            }
         }
 
-        $class_ids = array_keys($info['class']);
-        $this->db->query("
-            SELECT * FROM classes WHERE class_id IN (" . implode(',', $class_ids) . ")
-        ");
-        $rows = $this->db->fetchAll();
-        foreach ($rows as $row) {
-            $details['class'][$row['class_id']] = $row;
+        if (isset($info['class'])) {
+            $class_ids = array_keys($info['class']);
+            $this->db->query("
+                SELECT * FROM classes WHERE class_id IN (" . implode(',', $class_ids) . ")
+            ");
+            $rows = $this->db->fetchAll();
+            foreach ($rows as $row) {
+                $details['class'][$row['class_id']] = $row;
+            }
         }
 
         return [
