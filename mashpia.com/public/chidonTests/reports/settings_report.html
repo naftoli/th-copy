@@ -40,14 +40,18 @@
   const App = () => {
     const [data, setData] = useState([])
 
-    useEffect(async () => {
-      const res = await fetch('../api/getReportInfo.php', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      const json = await res.json()
+    useEffect(() => {
+      async function fetchData() {
+        const res = await fetch('../api/getReportInfo.php', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const data = await res.json()
+        setData(data)
+      }
+      fetchData()
     }, [])
 
     return (
