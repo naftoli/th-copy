@@ -54,6 +54,7 @@
       fetchData()
     }, [])
 
+    let i = 1 // for the key of the row if needed
     return (
       <>
       {data.length && (
@@ -85,7 +86,7 @@
           </thead>
           <tbody>
           {data.map(row => (
-            <tr key={row.serial}>
+            <tr key={i++}>
               <td>{row.school}</td>
               <td>{row.grade}</td>
               <td>{row.serial}</td>
