@@ -671,6 +671,9 @@ class ChidonTests
 
     public function getSettingsForReport($school) {
         $info = [];
+        $class_ids = [];
+        $user_ids = [];
+
         foreach(['passing_avgs', 'final_passing_avgs', 'test_levels'] as $table) {
             $table_name = 'chidon_' . $table;
             $stmt = $this->db->prepare("
@@ -692,20 +695,31 @@ class ChidonTests
             $rows = $stmt->fetchAll();
             foreach ($rows as $row) {
                 if ($table == 'test_levels') {
-                    if ($row['user_id'] > 0) $info['user'][$row['user_id']]['test_levels'][$row['test_type']] = $row['test_level'];
-                    else if ($row['class_id'] > 0) $info['class'][$row['class_id']]['test_levels'][$row['test_type']] = $row['test_level'];
-                    else if ($row['school_id'] > 0) $info['school'][$row['school_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    if ($row['user_id'] > 0) {
+                        if (! in_array($row['user_id'], $user_ids)) $user_ids[] = $row['user_id'];
+                        $info['user'][$row['user_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    } else if ($row['class_id'] > 0) {
+                        if (! in_array($row['class_id'], $class_ids)) $class_ids[] = $row['class_id'];
+                        $info['class'][$row['class_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    } else if ($row['school_id'] > 0) {
+                        $info['school'][$row['school_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    }
                 } else {
-                    if ($row['user_id'] > 0) $info['user'][$row['user_id']][$table][$row['track']] = $row['avg'];
-                    else if ($row['class_id'] > 0) $info['class'][$row['class_id']][$table][$row['track']] = $row['avg'];
-                    else if ($row['school_id'] > 0) $info['school'][$row['school_id']][$table][$row['track']] = $row['avg'];
+                    if ($row['user_id'] > 0) {
+                        if (! in_array($row['user_id'], $user_ids)) $user_ids[] = $row['user_id'];
+                        $info['user'][$row['user_id']][$table][$row['track']] = $row['avg'];
+                    } else if ($row['class_id'] > 0) {
+                        if (! in_array($row['class_id'], $class_ids)) $class_ids[] = $row['class_id'];
+                        $info['class'][$row['class_id']][$table][$row['track']] = $row['avg'];
+                    } else if ($row['school_id'] > 0) {
+                        $info['school'][$row['school_id']][$table][$row['track']] = $row['avg'];
+                    }
                 }
             }
         }
 
         $details = [];
-        if (isset($info['user'])) {
-            $user_ids = array_keys($info['user']);
+        if (count($user_ids)) {
             $this->db->query("
                 SELECT * FROM users u 
                 JOIN classes c on c.class_id = u.class_id 
@@ -717,8 +731,7 @@ class ChidonTests
             }
         }
 
-        if (isset($info['class'])) {
-            $class_ids = array_keys($info['class']);
+        if (count($class_ids)) {
             $this->db->query("
                 SELECT * FROM classes WHERE class_id IN (" . implode(',', $class_ids) . ")
             ");
