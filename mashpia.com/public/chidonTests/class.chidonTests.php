@@ -677,10 +677,10 @@ class ChidonTests
                 SELECT * FROM `$table_name` WHERE year = :year 
                 AND (
                     school_id = :school 
-                    OR class_id = (
+                    OR class_id IN (
                         SELECT class_id FROM classes WHERE school_id = :school AND class_era = 0
                     )
-                    OR user_id = (
+                    OR user_id IN (
                         SELECT user_id FROM users WHERE school_id = :school
                     )
                 )
