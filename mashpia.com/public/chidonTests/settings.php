@@ -247,7 +247,6 @@ if (count($schools) == 1) {
   }
 
   async function save(id) {
-    alert(id)
     let info = new FormData(document.forms[id])
     info.set('elem', id)
     let school_id = document.getElementById('baseSelect') ? document.getElementById('baseSelect').value : 0
