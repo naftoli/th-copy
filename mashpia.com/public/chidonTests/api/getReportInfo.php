@@ -58,8 +58,7 @@ foreach ($schools as $school_id => $school) {
     }
 }
 echo "<pre>";
-print_r($info);
-print_r($date);
+print_r($data);
 echo "</pre>";
 exit;
 
