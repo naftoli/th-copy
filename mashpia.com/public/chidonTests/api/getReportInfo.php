@@ -33,13 +33,8 @@ foreach ($schools as $school_id => $school) {
                     }
                 }
 
-                $grade = '';
-                if ($type == 'class') {
-                    $grade = $details['class'][$id]['class_grade'] . ($details['class'][$id]['class_sub'] ?
-                            '-' . $details['class'][$id]['class_sub'] : '');
-                }
-
-                if ($type != 'school') $school = '';
+                $grade = $details['class'][$id]['class_grade'] . ($details['class'][$id]['class_sub'] ?
+                        '-' . $details['class'][$id]['class_sub'] : '');
 
                 $data[] = [
                     'school'    => $school,
