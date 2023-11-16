@@ -39,8 +39,10 @@ foreach ($schools as $school_id => $school) {
                             '-' . $details['class'][$id]['class_sub'] : '');
                 }
 
+                if ($type != 'school') $school = '';
+
                 $data[] = [
-                    'school'    => $type == 'school' ? $school : '',
+                    'school'    => $school,
                     'grade'     => $grade,
                     'serial'    => $type == 'user' ? $details['user'][$id]['user_serial'] : '',
                     'first_name' => $type == 'user' ? $details['user'][$id]['first'] : '',
