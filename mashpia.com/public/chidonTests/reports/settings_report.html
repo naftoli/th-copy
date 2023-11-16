@@ -40,16 +40,15 @@
   const App = () => {
     const [data, setData] = useState([])
 
-    useEffect(() => {
-      fetch('../api/getReportInfo.php', {
+    useEffect(async () => {
+      const res = await fetch('../api/getReportInfo.php', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         }
       })
-        .then(res => res.json())
-        .then(data => setData(data))
-    }, [data])
+      const json = await res.json()
+    }, [])
 
     return (
       <table className="table table-bordered table-responsive table-striped">
