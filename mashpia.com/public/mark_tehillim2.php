@@ -212,7 +212,7 @@ if (isset($_POST['submit'])) {
                                     $qrys[] = $sql;
                                 } else if (intval($val) < $quota && mysql_num_rows( $result ) == 1) {
                                     $sql = "DELETE FROM date_tasks_mission_marks
-                                            WHERE user_id = " . $user . ",
+                                            WHERE user_id = " . $user . " 
                                             AND date_tasks_mission_id = " . $missionID;
                                     $qrys[] = $sql;    
                                 }
@@ -224,25 +224,14 @@ if (isset($_POST['submit'])) {
             }
         }
         //echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
-        $updated = true;
-        mysql_query('set autocommit=0');
-        mysql_query('start transaction');
         foreach ($qrys as $qry) {
             // echo $qry . "<br />";
             if (! mysql_query($qry)) {
-//              echo $qry . "<br />" . mysql_error();
-              $updated = false;
+              echo $qry . "<br />" . mysql_error();
+              $msg = "Error Saving.";
               break;
             }
         }
-        if ($updated) {
-            mysql_query('commit');
-            $msg = 'Saved.';
-        } else {
-            mysql_query('rollback');
-            $msg = 'Error Saving.';
-        }
-        mysql_query('set autocommit=1');
     }
     
     //get marked info
