@@ -58,7 +58,4 @@ foreach ($schools as $school_id => $school) {
     }
 }
 
-echo json_encode([
-    'success'   => true,
-    'info'      => $info,
-]);
+echo json_encode($data);
