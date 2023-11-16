@@ -38,13 +38,12 @@ foreach ($schools as $school_id => $school) {
                             '-' . $details['class'][$id]['class_sub'] : '');
                 }
 
-                echo $school . "<br />";
                 $data[] = [
-                    'school'    => $type == 'school' ? $school : '',
+                    'school'    => ($type == 'school' ? $school : ''),
                     'grade'     => $grade,
-                    'serial'    => $type == 'user' ? $details['user'][$id]['user_serial'] : '',
-                    'first_name' => $type == 'user' ? $details['user'][$id]['first'] : '',
-                    'last_name' => $type == 'user' ? $details['user'][$id]['last'] : '',
+                    'serial'    => ($type == 'user' ? $details['user'][$id]['user_serial'] : ''),
+                    'first_name' => ($type == 'user' ? $details['user'][$id]['first'] : ''),
+                    'last_name' => ($type == 'user' ? $details['user'][$id]['last'] : ''),
                     'level'     => $test_level,
                     'yesod'     => isset($more['passing_avgs']['maven']) ? $more['passing_avgs']['maven'] : '',
                     'yediah'    => isset($more['passing_avgs']['pro']) ? $more['passing_avgs']['pro'] : '',
