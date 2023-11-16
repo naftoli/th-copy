@@ -15,6 +15,7 @@ $schools = $as->getSchools();
 $data = [];
 foreach ($schools as $school_id => $school) {
     $info = $ct->getSettingsForReport($school_id);
+    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     $settings = $info['settings'];
     $details = $info['details'];
 
