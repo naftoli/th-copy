@@ -14,7 +14,6 @@ $schools = $as->getSchools();
 
 $data = [];
 foreach ($schools as $school_id => $school) {
-    echo $school . "<br />";
     $info = $ct->getSettingsForReport($school_id);
     $settings = $info['settings'];
     $details = $info['details'];
@@ -33,9 +32,6 @@ foreach ($schools as $school_id => $school) {
                     }
                 }
 
-                $school_name = '';
-                if ($type == 'school') $school_name = $schools[$id];
-
                 $grade = '';
                 if ($type == 'class') {
                     $grade = $details['class'][$id]['class_grade'] . ($details['class'][$id]['class_sub'] ?
@@ -43,21 +39,21 @@ foreach ($schools as $school_id => $school) {
                 }
 
                 $data[] = [
-                    'school' => $school_name,
-                    'grade' => $grade,
-                    'serial' => $type == 'user' ? $details['user'][$id]['user_serial'] : '',
+                    'school'    => $type == 'school' ? $school : '',
+                    'grade'     => $grade,
+                    'serial'    => $type == 'user' ? $details['user'][$id]['user_serial'] : '',
                     'first_name' => $type == 'user' ? $details['user'][$id]['first'] : '',
                     'last_name' => $type == 'user' ? $details['user'][$id]['last'] : '',
-                    'level' => $test_level,
-                    'yesod' => isset($more['passing_avgs']['maven']) ? $more['passing_avgs']['maven'] : '',
-                    'yediah' => isset($more['passing_avgs']['pro']) ? $more['passing_avgs']['pro'] : '',
-                    'havanah' => isset($more['passing_avgs']['expert']) ? $more['passing_avgs']['expert'] : '',
-                    'iyun' => isset($more['passing_avgs']['genius']) ? $more['passing_avgs']['genius'] : '',
-                    'final_level' => $final_level,
-                    'final_yesod' => isset($more['final_passing_avgs']['maven']) ? $more['final_passing_avgs']['maven'] : '',
-                    'final_yediah' => isset($more['final_passing_avgs']['pro']) ? $more['final_passing_avgs']['pro'] : '',
+                    'level'     => $test_level,
+                    'yesod'     => isset($more['passing_avgs']['maven']) ? $more['passing_avgs']['maven'] : '',
+                    'yediah'    => isset($more['passing_avgs']['pro']) ? $more['passing_avgs']['pro'] : '',
+                    'havanah'   => isset($more['passing_avgs']['expert']) ? $more['passing_avgs']['expert'] : '',
+                    'iyun'      => isset($more['passing_avgs']['genius']) ? $more['passing_avgs']['genius'] : '',
+                    'final_level'   => $final_level,
+                    'final_yesod'   => isset($more['final_passing_avgs']['maven']) ? $more['final_passing_avgs']['maven'] : '',
+                    'final_yediah'  => isset($more['final_passing_avgs']['pro']) ? $more['final_passing_avgs']['pro'] : '',
                     'final_havanah' => isset($more['final_passing_avgs']['expert']) ? $more['final_passing_avgs']['expert'] : '',
-                    'final_iyun' => isset($more['final_passing_avgs']['genius']) ? $more['final_passing_avgs']['genius'] : '',
+                    'final_iyun'    => isset($more['final_passing_avgs']['genius']) ? $more['final_passing_avgs']['genius'] : '',
                 ];
             }
         }
