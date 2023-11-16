@@ -702,7 +702,6 @@ class ChidonTests
                 }
             }
         }
-        echo "<pre>"; print_r($info);
 
         $details = [];
         if (isset($info['user'])) {
@@ -728,7 +727,7 @@ class ChidonTests
                 $details['class'][$row['class_id']] = $row;
             }
         }
-        print_r($details); echo "</pre>"; exit;
+        echo "<pre>"; print_r($info); print_r($details); echo "</pre>"; exit;
 
         return [
             'settings'  => $info,
