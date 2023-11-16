@@ -672,9 +672,9 @@ class ChidonTests
     public function getSettingsForReport($school) {
         $info = [];
         foreach(['passing_avgs', 'final_passing_avgs', 'test_levels'] as $table) {
-            $table = 'chidon_' . $table;
+            $table_name = 'chidon_' . $table;
             $stmt = $this->db->prepare("
-                SELECT * FROM `$table` WHERE year = :year 
+                SELECT * FROM `$table_name` WHERE year = :year 
                 AND (
                     school_id = :school 
                     OR class_id = (
