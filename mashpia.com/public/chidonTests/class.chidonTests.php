@@ -740,7 +740,6 @@ class ChidonTests
                 $details['class'][$row['class_id']] = $row;
             }
         }
-        echo "<pre>"; print_r($info); print_r($details); echo "</pre>"; exit;
 
         return [
             'settings'  => $info,
