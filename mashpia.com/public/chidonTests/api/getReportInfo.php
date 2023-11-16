@@ -31,10 +31,11 @@ foreach ($schools as $school_id => $school) {
                         else if ($type == 'finals') $final_level = $level;
                     }
                 }
-                $grade = $type == 'class' ? (
-                $details['class'][$id]['class_grade'] . $details['class'][$id]['class_sub'] ?
-                    '-' . $details['class'][$id]['class_sub'] : '')
-                    : '';
+                $grade = '';
+                if ($type == 'class') {
+                    $grade = $details['class'][$id]['class_grade'] . ($details['class'][$id]['class_sub'] ?
+                            '-' . $details['class'][$id]['class_sub'] : '');
+                }
 
                 $data[] = [
                     'school' => $type == 'school' ? $school : '',
