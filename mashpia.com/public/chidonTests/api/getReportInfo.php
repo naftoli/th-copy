@@ -27,9 +27,9 @@ foreach ($schools as $school_id => $school) {
                 $final_level = '';
 
                 if (isset($more['test_levels'])) {
-                    foreach ($more['test_levels'] as $type => $level) {
-                        if ($type == 'tests') $test_level = $level;
-                        else if ($type == 'finals') $final_level = $level;
+                    foreach ($more['test_levels'] as $test_type => $level) {
+                        if ($test_type == 'tests') $test_level = $level;
+                        else if ($test_type == 'finals') $final_level = $level;
                     }
                 }
 
