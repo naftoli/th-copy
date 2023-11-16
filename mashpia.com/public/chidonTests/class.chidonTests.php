@@ -724,7 +724,7 @@ class ChidonTests
                 SELECT * FROM users u 
                 JOIN classes c on c.class_id = u.class_id 
                 WHERE user_id IN (" . implode(',', $user_ids) . ") 
-            ");
+            ", PDO::FETCH_ASSOC);
             $rows = $this->db->fetchAll();
             foreach ($rows as $row) {
                 $details['user'][$row['user_id']] = $row;
@@ -734,7 +734,7 @@ class ChidonTests
         if (count($class_ids)) {
             $this->db->query("
                 SELECT * FROM classes WHERE class_id IN (" . implode(',', $class_ids) . ")
-            ");
+            ", PDO::FETCH_ASSOC);
             $rows = $this->db->fetchAll();
             foreach ($rows as $row) {
                 $details['class'][$row['class_id']] = $row;
