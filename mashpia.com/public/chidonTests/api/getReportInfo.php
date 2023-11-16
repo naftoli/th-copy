@@ -13,12 +13,13 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $data = [];
+$types = ['school', 'class', 'user'];
+
 foreach ($schools as $school_id => $school) {
     $info = $ct->getSettingsForReport($school_id);
     $settings = $info['settings'];
     $details = $info['details'];
 
-    $types = ['school', 'class', 'user'];
     foreach ($types as $type) {
         if (isset($settings[$type])) {
             foreach ($settings[$type] as $id => $more) {
@@ -39,11 +40,11 @@ foreach ($schools as $school_id => $school) {
                 }
 
                 $data[] = [
-                    'school'    => ($type == 'school' ? $school : ''),
+                    'school'    => $type == 'school' ? $school : '',
                     'grade'     => $grade,
-                    'serial'    => ($type == 'user' ? $details['user'][$id]['user_serial'] : ''),
-                    'first_name' => ($type == 'user' ? $details['user'][$id]['first'] : ''),
-                    'last_name' => ($type == 'user' ? $details['user'][$id]['last'] : ''),
+                    'serial'    => $type == 'user' ? $details['user'][$id]['user_serial'] : '',
+                    'first_name' => $type == 'user' ? $details['user'][$id]['first'] : '',
+                    'last_name' => $type == 'user' ? $details['user'][$id]['last'] : '',
                     'level'     => $test_level,
                     'yesod'     => isset($more['passing_avgs']['maven']) ? $more['passing_avgs']['maven'] : '',
                     'yediah'    => isset($more['passing_avgs']['pro']) ? $more['passing_avgs']['pro'] : '',
