@@ -33,7 +33,7 @@ foreach ($schools as $school_id => $school) {
                 }
 
                 $school_name = '';
-                if ($type == 'school') $school_name = $school;
+                if ($type == 'school') $school_name = $schools[$id];
 
                 $grade = '';
                 if ($type == 'class') {
