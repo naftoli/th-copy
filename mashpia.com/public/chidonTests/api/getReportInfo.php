@@ -57,9 +57,5 @@ foreach ($schools as $school_id => $school) {
         }
     }
 }
-echo "<pre>";
-print_r($data);
-echo "</pre>";
-exit;
 
 echo json_encode($data);
