@@ -58,54 +58,54 @@
       <table className="table table-bordered table-responsive table-striped">
         {!data.length && <tr><td>Loading...</td></tr>}
         {data.length &&
-          <thead>
-            <tr>
-              <th colSpan="5"></th>
-              <th colSpan="2">Level</th>
-              <th colSpan="4">Test Avg</th>
-              <th colSpan="4">Final Avg</th>
-            </tr>
-            <tr>
-              <th>School</th>
-              <th>Grade</th>
-              <th>Serial</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Tests</th>
-              <th>Final</th>
-              <th>Yesoid</th>
-              <th>Yediah</th>
-              <th>Havona</th>
-              <th>Iyun</th>
-              <th>Yesoid</th>
-              <th>Yediah</th>
-              <th>Havana</th>
-              <th>Iyun</th>
-            </tr>
-          </thead>
-        }
-        {data.length &&
-          <tbody>
-          {data.map(row => {
-            <tr key={row.serial}>
-              <td>{row.school}</td>
-              <td>{row.grade}</td>
-              <td>{row.serial}</td>
-              <td>{row.first_name}</td>
-              <td>{row.last_name}</td>
-              <td>{row.level}</td>
-              <td>{row.final_level}</td>
-              <td>{row.yesod}</td>
-              <td>{row.yediah}</td>
-              <td>{row.havonah}</td>
-              <td>{row.iyun}</td>
-              <td>{row.final_yesod}</td>
-              <td>{row.final_yediah}</td>
-              <td>{row.final_havonah}</td>
-              <td>{row.final_iyun}</td>
-            </tr>
-          })}
-          </tbody>
+          <>
+            <thead>
+              <tr>
+                <th colSpan="5"></th>
+                <th colSpan="2">Level</th>
+                <th colSpan="4">Test Avg</th>
+                <th colSpan="4">Final Avg</th>
+              </tr>
+              <tr>
+                <th>School</th>
+                <th>Grade</th>
+                <th>Serial</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Tests</th>
+                <th>Final</th>
+                <th>Yesoid</th>
+                <th>Yediah</th>
+                <th>Havona</th>
+                <th>Iyun</th>
+                <th>Yesoid</th>
+                <th>Yediah</th>
+                <th>Havana</th>
+                <th>Iyun</th>
+              </tr>
+            </thead>
+            <tbody>
+            {data.map(row => {
+              <tr key={row.serial}>
+                <td>{row.school}</td>
+                <td>{row.grade}</td>
+                <td>{row.serial}</td>
+                <td>{row.first_name}</td>
+                <td>{row.last_name}</td>
+                <td>{row.level}</td>
+                <td>{row.final_level}</td>
+                <td>{row.yesod}</td>
+                <td>{row.yediah}</td>
+                <td>{row.havonah}</td>
+                <td>{row.iyun}</td>
+                <td>{row.final_yesod}</td>
+                <td>{row.final_yediah}</td>
+                <td>{row.final_havonah}</td>
+                <td>{row.final_iyun}</td>
+              </tr>
+            })}
+            </tbody>
+          </>
         }
       </table>
     )
