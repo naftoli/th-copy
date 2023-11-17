@@ -90,7 +90,7 @@ if (count($schools) == 1) {
         <p>
           <?php
           foreach ($tracks as $type => $desc) {
-            echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc ";
+            echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' checked /> $desc ";
             echo "<span id='chidon_passing_avgs_$type'></span>";
             echo "<br />";
           }
@@ -117,7 +117,7 @@ if (count($schools) == 1) {
         <p>
             <?php
             foreach ($tracks as $type => $desc) {
-                echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' /> $desc ";
+                echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' checked /> $desc ";
                 echo "<span id='chidon_final_passing_avgs_$type'></span>";
                 echo "<br />";
             }
@@ -144,9 +144,9 @@ if (count($schools) == 1) {
       <legend>Test Level</legend>
       <form id="levels">
         <p>
-          <input type="checkbox" name="tests" id="tests" value="1" /> Tests
+          <input type="checkbox" name="tests" id="tests" value="1" checked /> Tests
           <span id='chidon_test_levels_tests'></span><br />
-          <input type="checkbox" name="finals" id="finals" value="1" /> Finals
+          <input type="checkbox" name="finals" id="finals" value="1" checked /> Finals
           <span id='chidon_test_levels_finals'></span><br />
         </p>
         <select name="level" class="level">
