@@ -45,12 +45,12 @@ foreach ($schools as $school_id => $school) {
                     'level'     => $test_level,
                     'yesod'     => isset($more['passing_avgs']['maven']) ? $more['passing_avgs']['maven'] : '',
                     'yediah'    => isset($more['passing_avgs']['pro']) ? $more['passing_avgs']['pro'] : '',
-                    'havanah'   => isset($more['passing_avgs']['expert']) ? $more['passing_avgs']['expert'] : '',
+                    'havonah'   => isset($more['passing_avgs']['expert']) ? $more['passing_avgs']['expert'] : '',
                     'iyun'      => isset($more['passing_avgs']['genius']) ? $more['passing_avgs']['genius'] : '',
                     'final_level'   => $final_level,
                     'final_yesod'   => isset($more['final_passing_avgs']['maven']) ? $more['final_passing_avgs']['maven'] : '',
                     'final_yediah'  => isset($more['final_passing_avgs']['pro']) ? $more['final_passing_avgs']['pro'] : '',
-                    'final_havanah' => isset($more['final_passing_avgs']['expert']) ? $more['final_passing_avgs']['expert'] : '',
+                    'final_havonah' => isset($more['final_passing_avgs']['expert']) ? $more['final_passing_avgs']['expert'] : '',
                     'final_iyun'    => isset($more['final_passing_avgs']['genius']) ? $more['final_passing_avgs']['genius'] : '',
                 ];
             }
