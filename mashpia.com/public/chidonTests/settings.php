@@ -180,7 +180,7 @@ if (count($schools) == 1) {
     console.log(settings)
 
     // set avgs
-    let id = user_id > 0 ? user_id : class_id > 0 ? class_id : user_id > 0 ? user_id : 0
+    let id = user_id > 0 ? user_id : class_id > 0 ? class_id : school_id > 0 ? school_id : 0
     for (let table of ['chidon_passing_avgs', 'chidon_final_passing_avgs']) {
       for (let track of ['maven', 'pro', 'expert', 'genius']) {
         let elem = '#' + table + '_' + track
@@ -263,7 +263,10 @@ if (count($schools) == 1) {
       })
       const data = await res.json()
       if (data.error) alert(data.error)
-      else alert('Saved!')
+      else {
+        alert('Saved!')
+        getSettings()
+      }
     }
   }
 

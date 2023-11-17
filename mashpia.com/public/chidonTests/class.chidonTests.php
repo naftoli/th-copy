@@ -655,9 +655,9 @@ class ChidonTests
             $rows = $stmt->fetchAll();
             foreach ($rows as $row) {
                 if ($table == 'chidon_test_levels') {
-                    if ($row['user_id'] > 0) $info[$row['user_id']]['test_levels'][$row['test_type']] = $row['test_level'];
-                    else if ($row['class_id'] > 0) $info[$row['class_id']]['test_levels'][$row['test_type']] = $row['test_level'];
-                    else if ($row['school_id'] > 0) $info[$row['school_id']]['test_levels'][$row['test_type']] = $row['test_level'];
+                    if ($row['user_id'] > 0) $info[$row['user_id']]['chidon_test_levels'][$row['test_type']] = $row['test_level'];
+                    else if ($row['class_id'] > 0) $info[$row['class_id']]['chidon_test_levels'][$row['test_type']] = $row['test_level'];
+                    else if ($row['school_id'] > 0) $info[$row['school_id']]['chidon_test_levels'][$row['test_type']] = $row['test_level'];
                 } else {
                     if ($row['user_id'] > 0) $info[$row['user_id']][$table][$row['track']] = $row['avg'];
                     else if ($row['class_id'] > 0) $info[$row['class_id']][$table][$row['track']] = $row['avg'];
