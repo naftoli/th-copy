@@ -189,10 +189,10 @@ if (count($schools) == 1) {
       }
     }
     // set levels
-    let testLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['tests'] ?
-      settings[id]['chidon_test_levels']['tests'] : 2
-    let finalLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['finals'] ?
-      settings[id]['chidon_test_levels']['finals'] : 2
+    let testLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['tests']
+      && settings[id]['chidon_test_levels']['tests'] == 1 ? 1 : 2
+    let finalLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['finals']
+      && settings[id]['chidon_test_levels']['finals'] == 1 ? 1 : 2
     $('#chidon_test_levels_tests').text('(' + testLevel + ')')
     $('#chidon_test_levels_finals').text('(' + finalLevel + ')')
 
