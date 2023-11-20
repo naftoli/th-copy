@@ -21,7 +21,6 @@ foreach ($info as $school => $children) {
         }
     }
 }
-echo "<pre>"; print_r($adminsSorted); echo "</pre>";
 
 // order by award
 //$data = [];
