@@ -561,6 +561,7 @@ class ChidonTests
             ':year' => $this->year,
             ':user' => $user_id
         ]);
+        $stmt->debugDumpParams();
 
         $avgs = [];
         $rows = $stmt->fetchAll();
