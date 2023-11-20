@@ -533,6 +533,18 @@ class ChidonTests
         return $markInfo;
     }
 
+    public function getHighestTrackUsingMarks($marks, $user_id) {
+        $highest = '';
+        $avgs = $this->getPassingAvgs($user_id);
+        foreach ($marks as $num => $more) {
+            foreach ($more as $type => $mark) {
+                if ($mark >= $avgs[$type]) $highest = $type;
+                else break; // can't go higher if lower one was not passed
+            }
+        }
+        return $highest;
+    }
+
     public function getPrevHighestTrack($year, $user_id) {
         $sql = "select * from th_chidon_info where year = " . $year . " and user_id = " . $user_id;
         $result = mysql_query($sql);
