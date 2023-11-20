@@ -125,8 +125,8 @@ foreach ($info as $school => $children) {
                     if (in_array($row['school_id'], [61, 269])) {
                         $code = $row['parent_id'] . '-';
                         // find number of child in admins array
-                        if (isset($adminsSorted[$row['parent_id']][$award])) {
-                            $key = array_search($row['user_id'], $adminsSorted[$row['parent_id']][$award]);
+                        if (isset($adminsSorted[$row['parent_id']][$row['award']])) {
+                            $key = array_search($row['user_id'], $adminsSorted[$row['parent_id']][$row['award']]);
                             if ($key !== false) $code .= $key + 1;
                         }
                     } else {
