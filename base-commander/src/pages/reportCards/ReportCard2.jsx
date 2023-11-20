@@ -311,7 +311,7 @@ function ReportCard(info) {
                                     {tracks.map((track, i) => (
                                       <React.Fragment key={track + '_' + i}>
                                       {(track !== 'genius' || (track === 'genius' && showIyun)) && (
-                                          <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                          <td className={report.highestTrack === track ? 'bold' : ''}>
                                             {report.scores[index] ? report.scores[index][track] : 0} / {report.questions[track]}
                                           </td>
                                       )}
@@ -323,7 +323,7 @@ function ReportCard(info) {
                                     {tracks.map((track, i) => (
                                       <React.Fragment key={track + '_mark_' + i}>
                                           {(track !== 'genius' || (track === 'genius' && showIyun)) && (
-                                            <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                            <td className={report.highestTrack === track ? 'bold' : ''}>
                                               {report.scores[index] ? (
                                                 report.tests[index][track] % 1 ? report.tests[index][track].toFixed(2) :
                                                   report.tests[index][track]) : 0}%
@@ -343,7 +343,7 @@ function ReportCard(info) {
                                   {tracks.map((track, i) => (
                                     <React.Fragment key={track + '_total_' + i}>
                                         {(track !== 'genius' || (track === 'genius' && showIyun)) && (
-                                          <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                          <td className={report.highestTrack === track ? 'bold' : ''}>
                                             {totals[track]} / {report.questions[track] * numTests}
                                           </td>
                                         )}
@@ -356,7 +356,7 @@ function ReportCard(info) {
                                   {tracks.map((track, i) => (
                                     <React.Fragment key={track + '_total_mark_' + i}>
                                         {(track !== 'genius' || (track === 'genius' && showIyun)) && (
-                                          <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                          <td className={report.highestTrack === track ? 'bold' : ''}>
                                               {totalMarks[track]}%
                                           </td>
                                         )}
