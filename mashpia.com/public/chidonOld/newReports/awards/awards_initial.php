@@ -13,13 +13,10 @@ require 'afterTest1.php';
 
 $adminsSorted = [];
 foreach ($info as $school => $children) {
-    foreach ($children as $child) {
-        $myShliach = false;
-        if (in_array($school, [61, 269])) {
-            foreach ($admins as $admin_id => $more) {
-                foreach ($more as $user_id) {
-                    if ($user_id == $child['user_id']) $adminsSorted[$admin_id][] = $user_id;
-                }
+    if (in_array($school, [61, 269])) {
+        foreach ($admins as $admin_id => $more) {
+            foreach ($more as $user_id) {
+                $adminsSorted[$admin_id][] = $user_id;
             }
         }
     }
