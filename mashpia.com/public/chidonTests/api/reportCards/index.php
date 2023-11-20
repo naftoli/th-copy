@@ -49,7 +49,6 @@ foreach ($info as $school => $users) {
 
         $tests = [];
         $totalMarks = 0;
-        $avgRequired = 0;
         $test_type = $user['test_type'];
         for ($i = 1; $i <= $test_num; $i++) {
             $totalMarks += floatval($marks[$school][$id][$i][$test_type]);
@@ -63,26 +62,16 @@ foreach ($info as $school => $users) {
         $testsLeft = $totalTests - $test_num;
         $avgs = $ct->getPassingAvgs($user['user_id']);
         // what avg is needed to pass the track that the user is on
+//        $avgRequired = 0;
 //        $avgRequired = $test_num < $totalTests ? round((($avgs[$test_type] * $totalTests) - $totalMarks) / $testsLeft) : 0;
 
-        $highestTrack = '';
-        $trackMarks = [];
-        foreach ($types as $type => $value) {
-            $trackMarks[$type] = 0;
-            for ($i = 1; $i <= $test_num; $i++) {
-                $trackMarks[$type] += $marks[$school][$id][$i][$type];
-            }
-            $trackMarks[$type] /= $test_num;
-            if ($trackMarks[$type] >= $avgs[$type]) $highestTrack = $value;
-            else break; // if one track is not passed, no need to check the rest
-        }
+        $highestTrack = $ct->getHighestTrackEligible($marks[$school][$id], $user['user_id']);
 
         $result[] = [
             'id'                    => $id,
             'name'                  => $name,
             'grade'                 => $grade,
             'avgs'                  => $avgs,
-            'avgRequired'           => $avgRequired,
             'highestTrackPassed'    => $highestTrack,
             'tests'                 => $tests,
             'scores'                => $scores[$school][$id],
