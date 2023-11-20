@@ -50,7 +50,7 @@ ksort($data);
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Awards Report</title>
+    <title>Certificate Report</title>
     <link href="../../../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
       fieldset {

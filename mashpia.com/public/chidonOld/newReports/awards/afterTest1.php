@@ -33,34 +33,35 @@ $stmt = $MASHPIA_DB->query($sql);
 $rows = $stmt->fetchAll();
 $info = [];
 foreach ($rows as $row) {
+    $row['award'] = 'cert'; // default to 'cert'
     $info[$row['school_id']][] = $row;
 }
-
-foreach ($info as $school => &$rows) {
-    foreach ($rows as &$row) {
-        $id = $row['th_chidon_id'];
-        $marks = $all_marks[$id][1];
-        $award = 'certificate';
-        $noMarks = true;
-        foreach (['genius', 'expert', 'pro', 'maven'] as $type) {
-            // check if child got ANY mark on ANY test
-            if ($marks[$type] > 0) $noMarks = false;
-            if ($type == 'genius' && $marks[$type] >= 84) {
-                $award = ['plaque', 'trophy'];
-                $noMarks = false;
-                break;
-            }
-            else if ($type != 'maven' && $marks[$type] >= 70) {
-                $award = 'plaque';
-                $noMarks = false;
-                break;
-            }
-            else if ($marks[$type] > 0) $noMarks = false;
-        }
-        if ($noMarks) $award = 'cert';
-        $row['award'] = $award;
-    }
-}
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
+//foreach ($info as $school => &$rows) {
+//    foreach ($rows as &$row) {
+//        $id = $row['th_chidon_id'];
+//        $marks = $all_marks[$id][1];
+//        $award = 'certificate';
+//        $noMarks = true;
+//        foreach (['genius', 'expert', 'pro', 'maven'] as $type) {
+//            // check if child got ANY mark on ANY test
+//            if ($marks[$type] > 0) $noMarks = false;
+//            if ($type == 'genius' && $marks[$type] >= 84) {
+//                $award = ['plaque', 'trophy'];
+//                $noMarks = false;
+//                break;
+//            }
+//            else if ($type != 'maven' && $marks[$type] >= 70) {
+//                $award = 'plaque';
+//                $noMarks = false;
+//                break;
+//            }
+//            else if ($marks[$type] > 0) $noMarks = false;
+//        }
+//        if ($noMarks) $award = 'cert';
+//        $row['award'] = $award;
+//    }
+//}
 
 // find out order of kids for admins
 $admins = [];
