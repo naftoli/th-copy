@@ -24,6 +24,7 @@ foreach ($info as $school => $children) {
         }
     }
 }
+echo "<pre>"; print_r($adminsSorted); echo "</pre>";
 
 // order by award
 //$data = [];
@@ -110,7 +111,7 @@ foreach ($info as $school => $children) {
                 $total = count($users);
                 $colspan = 4;
                 echo "<tr><td>" . $schools[$school_id] . " (" . $total . ")</td><td colspan='$colspan'></td></tr>";
-                foreach ($users as $idx => $row) {
+                foreach ($users as $row) {
                     $school = $row['school_name'];
                     $serial = $row['user_serial'];
                     $he_name = $row['first_he'] . ' ' . $row['last_he'];
