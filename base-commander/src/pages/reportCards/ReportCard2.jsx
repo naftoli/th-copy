@@ -169,6 +169,8 @@ function ReportCard(info) {
     const elem = report.user_id + '_rows'
     const numTests = info.testNum
     const currentOnly = info.current
+    const avgs = info.avgs
+
     let mainStyle, header
     switch (numTests) {
         case 1:
@@ -269,13 +271,11 @@ function ReportCard(info) {
                     <img src={header} alt="Header" className={classes.header} />
                     <br /><br />
                     <p><b>Name:</b> {report.name}</p>
-                    <p><b>School:</b> {report.school}  <b>Class:</b> {report.grade}</p>
-                    <br />
+                    <p><b>School:</b> {report.school}<br />  <b>Class:</b> {report.grade}</p>
                     <p><b>Track you are on:</b> {report.currentTrack}</p>
                     <p><b>Highest track you passed:</b> {report.highestTrackPassed}</p>
-                    <br />
                     <p><b>Learning commitment per day:</b> {learningTime[report.track]} minutes</p>
-                    <br /><br />
+                    <br />
                     <table className={classes.table}>
                         <thead>
                             <tr>
@@ -368,25 +368,25 @@ function ReportCard(info) {
                         }
                         <tr className={classes.lastRow}>
                             <td colSpan={2}>Passing Mark for Reward</td>
-                            <td>%<br />Sweater & gift</td>
-                            <td>%<br />Sweater, Gift & Prizes</td>
-                            <td>%<br />Sweater, Gift, Prizes & Regional Trip</td>
+                            <td>{avgs.maven}%<br />Sweater & gift</td>
+                            <td>{avgs.pro}%<br />Sweater, Gift & Prizes</td>
+                            <td>{avgs.expert}%<br />Sweater, Gift, Prizes & Regional Trip</td>
                             {showIyun &&
-                                <td>%<br/>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</td>
+                                <td>{avgs.genius}%<br/>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</td>
                             }
                         </tr>
-                        <tr className={classes.finalRow}>
-                            <td colSpan={6} style={{padding: '10px'}}>
-                                Please Note: The track that you are on is just to give you an idea of:<br />
-                                <ul>
-                                    <li>How much time you have committed to learn.</li>
-                                    <li>How well you are going to know the information.</li>
-                                    <li>What prizes you are going for.</li>
-                                </ul>
-                                But it does not impact the prize you will earn. No matter the track you chose,
-                                you will receive the rewards for the levels you pass.
-                            </td>
-                        </tr>
+                        {/*<tr className={classes.finalRow}>*/}
+                        {/*    <td colSpan={6} style={{padding: '10px'}}>*/}
+                        {/*        Please Note: The track that you are on is just to give you an idea of:<br />*/}
+                        {/*        <ul>*/}
+                        {/*            <li>How much time you have committed to learn.</li>*/}
+                        {/*            <li>How well you are going to know the information.</li>*/}
+                        {/*            <li>What prizes you are going for.</li>*/}
+                        {/*        </ul>*/}
+                        {/*        But it does not impact the prize you will earn. No matter the track you chose,*/}
+                        {/*        you will receive the rewards for the levels you pass.*/}
+                        {/*    </td>*/}
+                        {/*</tr>*/}
                     </tbody>
                 </table>
             </div>

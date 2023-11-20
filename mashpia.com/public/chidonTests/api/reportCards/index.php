@@ -80,6 +80,7 @@ foreach ($info as $school => $users) {
             'id'                    => $id,
             'name'                  => $name,
             'grade'                 => $grade,
+            'avgs'                  => $avgs,
             'avgRequired'           => $avgRequired,
             'highestTrackPassed'    => $highestTrack,
             'tests'                 => $tests,
