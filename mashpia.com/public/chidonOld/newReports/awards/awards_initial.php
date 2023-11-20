@@ -11,7 +11,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 require 'afterTest1.php';
 
-$data = $info;
 $adminsSorted = [];
 foreach ($info as $school => $children) {
     foreach ($children as $child) {
@@ -19,7 +18,7 @@ foreach ($info as $school => $children) {
         if (in_array($school, [61, 269])) {
             foreach ($admins as $admin_id => $more) {
                 foreach ($more as $user_id) {
-                    if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$child['award']][] = $user_id;
+                    if ($user_id == $child['user_id']) $adminsSorted[$admin_id][] = $user_id;
                 }
             }
         }
@@ -91,7 +90,7 @@ foreach ($info as $school => $children) {
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
-<h1>Awards Report</h1>
+<h1>Certificate Report</h1>
     <div>
         <table>
             <tr>
@@ -125,8 +124,8 @@ foreach ($info as $school => $children) {
                     if (in_array($row['school_id'], [61, 269])) {
                         $code = $row['parent_id'] . '-';
                         // find number of child in admins array
-                        if (isset($adminsSorted[$row['parent_id']][$row['award']])) {
-                            $key = array_search($row['user_id'], $adminsSorted[$row['parent_id']][$row['award']]);
+                        if (isset($adminsSorted[$row['parent_id']])) {
+                            $key = array_search($row['user_id'], $adminsSorted[$row['parent_id']]);
                             if ($key !== false) $code .= $key + 1;
                         }
                     } else {
