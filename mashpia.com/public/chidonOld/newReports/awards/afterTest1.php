@@ -37,7 +37,7 @@ foreach ($rows as $row) {
     $row['award'] = 'cert'; // default to 'cert'
     $info[$row['school_id']][] = $row;
 }
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
+
 //foreach ($info as $school => &$rows) {
 //    foreach ($rows as &$row) {
 //        $id = $row['th_chidon_id'];
