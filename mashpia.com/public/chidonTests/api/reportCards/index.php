@@ -62,8 +62,8 @@ foreach ($info as $school => $users) {
         }
         $testsLeft = $totalTests - $test_num;
         $avgs = $ct->getPassingAvgs($user['user_id']);
-        // need an {avg} for all tests to maintain the average
-        $avgRequired = $test_num < $totalTests ? round((($avgs[$test_type] * $totalTests) - $totalMarks) / $testsLeft) : 0;
+        // what avg is needed to pass the track that the user is on
+//        $avgRequired = $test_num < $totalTests ? round((($avgs[$test_type] * $totalTests) - $totalMarks) / $testsLeft) : 0;
 
         $highestTrack = '';
         $trackMarks = [];
