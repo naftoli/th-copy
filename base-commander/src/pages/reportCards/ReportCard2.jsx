@@ -169,7 +169,6 @@ function ReportCard(info) {
     const elem = report.user_id + '_rows'
     const numTests = info.testNum
     const currentOnly = info.current
-    const avgs = info.avgs
 
     let mainStyle, header
     switch (numTests) {
@@ -368,11 +367,11 @@ function ReportCard(info) {
                         }
                         <tr className={classes.lastRow}>
                             <td colSpan={2}>Passing Mark for Reward</td>
-                            <td>{avgs['maven']}%<br />Sweater & gift</td>
-                            <td>{avgs['pro']}%<br />Sweater, Gift & Prizes</td>
-                            <td>{avgs['expert']}%<br />Sweater, Gift, Prizes & Regional Trip</td>
+                            <td>{report.avgs.maven}%<br />Sweater & gift</td>
+                            <td>{report.avgs.pro}%<br />Sweater, Gift & Prizes</td>
+                            <td>{report.avgs.expert}%<br />Sweater, Gift, Prizes & Regional Trip</td>
                             {showIyun &&
-                                <td>{avgs['genius']}%<br/>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</td>
+                                <td>{report.avgs.genius}%<br/>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</td>
                             }
                         </tr>
                         {/*<tr className={classes.finalRow}>*/}
