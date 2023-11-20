@@ -277,6 +277,7 @@ class ChidonTests
                 $avgs[$type] /= $num;
                 $avg = $avgs[$type];
                 if ($avg >= $passingAvgs[$type]) $highest = $type;
+                else break; // can't go higher if lower one was not passed
             }
             return $highest;
         }
@@ -499,6 +500,8 @@ class ChidonTests
                 if ($avg >= $passingAvgs[$type]) {
                     $highest_type = $type;
                     $highest_mark = $avg;
+                } else {
+                    break; // can't get higher if lower one was not passed
                 }
             }
         }

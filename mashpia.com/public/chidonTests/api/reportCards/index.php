@@ -74,6 +74,7 @@ foreach ($info as $school => $users) {
             }
             $trackMarks[$type] /= $test_num;
             if ($trackMarks[$type] >= $avgs[$type]) $highestTrack = $value;
+            else break; // if one track is not passed, no need to check the rest
         }
 
         $result[] = [
