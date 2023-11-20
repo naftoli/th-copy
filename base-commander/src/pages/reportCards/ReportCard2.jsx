@@ -368,11 +368,11 @@ function ReportCard(info) {
                         }
                         <tr className={classes.lastRow}>
                             <td colSpan={2}>Passing Mark for Reward</td>
-                            <td>70%<br />Sweater & gift</td>
-                            <td>70%<br />Sweater, Gift & Prizes</td>
-                            <td>70%<br />Sweater, Gift, Prizes & Regional Trip</td>
+                            <td>%<br />Sweater & gift</td>
+                            <td>%<br />Sweater, Gift & Prizes</td>
+                            <td>%<br />Sweater, Gift, Prizes & Regional Trip</td>
                             {showIyun &&
-                                <td>90%<br/>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</td>
+                                <td>%<br/>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</td>
                             }
                         </tr>
                         <tr className={classes.finalRow}>

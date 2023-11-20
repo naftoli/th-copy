@@ -52,7 +52,7 @@ foreach ($info as $school => $users) {
         $avgRequired = 0;
         $test_type = $user['test_type'];
         for ($i = 1; $i <= $test_num; $i++) {
-            $totalMarks += intval($marks[$school][$id][$i][$test_type]);
+            $totalMarks += floatval($marks[$school][$id][$i][$test_type]);
             $tests[$i] = [
                 'maven'     => $marks[$school][$id][$i]['maven'],
                 'pro'       => $marks[$school][$id][$i]['pro'],
@@ -61,8 +61,9 @@ foreach ($info as $school => $users) {
             ];
         }
         $testsLeft = $totalTests - $test_num;
-        if ($test_type != 'genius') $avgRequired = $test_num < $totalTests ? ceil((280 - $totalMarks) / $testsLeft) : 0; // need a 70 avg for all tests
-        else $avgRequired = $test_num < $totalTests ? ceil((360 - $totalMarks) / $testsLeft) : 0; // need a 90 avg for all tests
+        $avgs = $ct->getPassingAvgs($user['user_id']);
+        // need an {avg} for all tests to maintain the average
+        $avgRequired = $test_num < $totalTests ? round((($avgs[$test_type] * $totalTests) - $totalMarks) / $testsLeft) : 0;
 
         $highestTrack = '';
         $trackMarks = [];
@@ -72,11 +73,7 @@ foreach ($info as $school => $users) {
                 $trackMarks[$type] += $marks[$school][$id][$i][$type];
             }
             $trackMarks[$type] /= $test_num;
-            if ($type != 'genius') {
-                if ($trackMarks[$type] >= 70) $highestTrack = $value;
-            } else {
-                if ($trackMarks[$type] >= 90) $highestTrack = $value;
-            }
+            if ($trackMarks[$type] >= $avgs[$type]) $highestTrack = $value;
         }
 
         $result[] = [

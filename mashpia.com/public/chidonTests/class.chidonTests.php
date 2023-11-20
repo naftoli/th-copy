@@ -537,7 +537,7 @@ class ChidonTests
         return $row['highest_track'];
     }
 
-    private function getPassingAvgs($user_id, $type = '') {
+    public function getPassingAvgs($user_id, $type = '') {
         $table = 'chidon_passing_avgs';
         if ($type == 'finals') $table = 'chidon_final_passing_avgs';
 
