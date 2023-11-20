@@ -40,31 +40,31 @@ foreach ($rows as $row) {
     $info[$row['school_id']][] = $row;
 }
 
-//foreach ($info as $school => &$rows) {
-//    foreach ($rows as &$row) {
-//        $id = $row['th_chidon_id'];
-//        $marks = $all_marks[$id][1];
-//        $award = 'certificate';
-//        $noMarks = true;
-//        foreach (['genius', 'expert', 'pro', 'maven'] as $type) {
-//            // check if child got ANY mark on ANY test
-//            if ($marks[$type] > 0) $noMarks = false;
-//            if ($type == 'genius' && $marks[$type] >= 84) {
-//                $award = ['plaque', 'trophy'];
-//                $noMarks = false;
-//                break;
-//            }
-//            else if ($type != 'maven' && $marks[$type] >= 70) {
-//                $award = 'plaque';
-//                $noMarks = false;
-//                break;
-//            }
-//            else if ($marks[$type] > 0) $noMarks = false;
-//        }
-//        if ($noMarks) $award = 'cert';
-//        $row['award'] = $award;
-//    }
-//}
+foreach ($info as $school => &$rows) {
+    foreach ($rows as &$row) {
+        $id = $row['th_chidon_id'];
+        $marks = $all_marks[$id][1];
+        $award = 'certificate';
+        $noMarks = true;
+        foreach (['genius', 'expert', 'pro', 'maven'] as $type) {
+            // check if child got ANY mark on ANY test
+            if ($marks[$type] > 0) $noMarks = false;
+            if ($type == 'genius' && $marks[$type] >= 84) {
+                $award = ['plaque', 'trophy'];
+                $noMarks = false;
+                break;
+            }
+            else if ($type != 'maven' && $marks[$type] >= 70) {
+                $award = 'plaque';
+                $noMarks = false;
+                break;
+            }
+            else if ($marks[$type] > 0) $noMarks = false;
+        }
+        if ($noMarks) $award = 'cert';
+        $row['award'] = $award;
+    }
+}
 
 // find out order of kids for admins
 $admins = [];
@@ -78,3 +78,39 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $admins[$row['admin_id']][] = $row['id'];
 }
+
+
+// order by award
+//$data = [];
+//$adminsSorted = [];
+//foreach ($info as $school => $children) {
+//  $myShliach = false;
+//  if (in_array($school, [61, 269])) $myShliach = true;
+//  foreach ($children as $child) {
+//    if (is_array($child['award'])) {
+//      foreach ($child['award'] as $award) {
+//        $data[$award][$school][] = $child;
+//        if ($myShliach) {
+//          // find admin id
+//          foreach ($admins as $admin_id => $more) {
+//            foreach ($more as $user_id) {
+//              if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$award][] = $user_id;
+//            }
+//          }
+//        }
+//      }
+//    } else {
+//      $data[$child['award']][$school][] = $child;
+//      if ($myShliach) {
+//        // find admin id
+//        foreach ($admins as $admin_id => $more) {
+//          foreach ($more as $user_id) {
+//            if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$child['award']][] = $user_id;
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
+//// sort by award
+//ksort($data);
