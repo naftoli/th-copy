@@ -26,7 +26,9 @@ $sql = "
         join th_chidon tc using (user_id) 
         join th_chidon_marks tcm using (th_chidon_id) 
     WHERE
-        tc.year = $year
+        tc.year = $year 
+    GROUP BY 
+        u.user_id 
     ORDER BY
         s.school_id, c.class_grade, c.class_sub, u.last, u.first";
 //echo $sql . "<br />"; exit;
