@@ -7,6 +7,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
+$totalTests = 3;
 $test_num = intval($_GET['test']);
 $school_id = intval($_GET['school_id']);
 $class_id = intval($_GET['class_id']);
@@ -59,9 +60,9 @@ foreach ($info as $school => $users) {
                 'genius'    => $marks[$school][$id][$i]['genius']
             ];
         }
-        $testsLeft = 4 - $test_num;
-        if ($test_type != 'genius') $avgRequired = $test_num < 4 ? ceil((280 - $totalMarks) / $testsLeft) : 0; // need a 70 avg for all tests
-        else $avgRequired = $test_num < 4 ? ceil((360 - $totalMarks) / $testsLeft) : 0; // need a 90 avg for all tests
+        $testsLeft = $totalTests - $test_num;
+        if ($test_type != 'genius') $avgRequired = $test_num < $totalTests ? ceil((280 - $totalMarks) / $testsLeft) : 0; // need a 70 avg for all tests
+        else $avgRequired = $test_num < $totalTests ? ceil((360 - $totalMarks) / $testsLeft) : 0; // need a 90 avg for all tests
 
         $highestTrack = '';
         $trackMarks = [];
