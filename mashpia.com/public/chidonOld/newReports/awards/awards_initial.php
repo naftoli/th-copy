@@ -11,40 +11,55 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 require 'afterTest1.php';
 
-// order by award
-$data = [];
+$data = $info;
 $adminsSorted = [];
 foreach ($info as $school => $children) {
-  $myShliach = false;
-  if (in_array($school, [61, 269])) $myShliach = true;
-  foreach ($children as $child) {
-    if (is_array($child['award'])) {
-      foreach ($child['award'] as $award) {
-        $data[$award][$school][] = $child;
-        if ($myShliach) {
-          // find admin id
-          foreach ($admins as $admin_id => $more) {
-            foreach ($more as $user_id) {
-              if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$award][] = $user_id;
+    foreach ($children as $child) {
+        $myShliach = false;
+        if (in_array($school, [61, 269])) {
+            foreach ($admins as $admin_id => $more) {
+                foreach ($more as $user_id) {
+                    if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$child['award']][] = $user_id;
+                }
             }
-          }
         }
-      }
-    } else {
-      $data[$child['award']][$school][] = $child;
-      if ($myShliach) {
-        // find admin id
-        foreach ($admins as $admin_id => $more) {
-          foreach ($more as $user_id) {
-            if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$child['award']][] = $user_id;
-          }
-        }
-      }
     }
-  }
 }
-// sort by award
-ksort($data);
+
+// order by award
+//$data = [];
+//$adminsSorted = [];
+//foreach ($info as $school => $children) {
+//  $myShliach = false;
+//  if (in_array($school, [61, 269])) $myShliach = true;
+//  foreach ($children as $child) {
+//    if (is_array($child['award'])) {
+//      foreach ($child['award'] as $award) {
+//        $data[$award][$school][] = $child;
+//        if ($myShliach) {
+//          // find admin id
+//          foreach ($admins as $admin_id => $more) {
+//            foreach ($more as $user_id) {
+//              if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$award][] = $user_id;
+//            }
+//          }
+//        }
+//      }
+//    } else {
+//      $data[$child['award']][$school][] = $child;
+//      if ($myShliach) {
+//        // find admin id
+//        foreach ($admins as $admin_id => $more) {
+//          foreach ($more as $user_id) {
+//            if ($user_id == $child['user_id']) $adminsSorted[$admin_id][$child['award']][] = $user_id;
+//          }
+//        }
+//      }
+//    }
+//  }
+//}
+//// sort by award
+//ksort($data);
 ?>
 <!DOCTYPE html>
 <html>

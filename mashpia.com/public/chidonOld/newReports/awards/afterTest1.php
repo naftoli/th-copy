@@ -24,6 +24,7 @@ $sql = "
         join schools s using (school_id) 
         join classes c on c.class_id = u.class_id 
         join th_chidon tc using (user_id) 
+        join th_chidon_marks tcm using (th_chidon_id) 
     WHERE
         tc.year = $year
     ORDER BY
