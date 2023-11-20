@@ -545,7 +545,7 @@ class ChidonTests
         if ($type == 'finals') $table = 'chidon_final_passing_avgs';
 
         $stmt = $this->db->prepare("
-            select * from :table 
+            select * from $table  
             where year = :year 
             and (
                 user_id = :user 
@@ -555,13 +555,12 @@ class ChidonTests
                 or class_id = (
                     select class_id from users where user_id = :user
                 )
+            )
         ");
         $stmt->execute([
-            ':table' => $table,
             ':year' => $this->year,
             ':user' => $user_id
         ]);
-        $stmt->debugDumpParams();
 
         $avgs = [];
         $rows = $stmt->fetchAll();
