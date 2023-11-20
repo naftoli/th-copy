@@ -60,6 +60,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
             echo "<th>Avg To Date</th>";
             echo "</tr>";
             foreach ($children as $child) {
+                $avgs = $ct->getPassingAvgs($child['user_id']);
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
@@ -72,8 +73,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                     $color = 'grey';
                     if ($child['test_type'] == $type) {
                         $color = 'black';
-                        if ($type != 'genius' && $mark < 70) $color = 'red';
-                        else if ($type == 'genius' && $mark < 90) $color = 'red';
+                        if ($mark < $avgs[$type]) $color = 'red';
                     }
                     echo "<td style='color: $color;'>" . $mark . "%</td>";
                 }
