@@ -197,10 +197,10 @@ function ReportCard(info) {
     const showIyun = !info.showIyun || (info.showIyun && report.highestTrackPassed === 'Iyun')
 
     const learningTime = {
-        'maven': 15,
-        'pro': 30,
-        'expert': 45,
-        'genius': 60
+        'maven': 10,
+        'pro': 20,
+        'expert': 30,
+        'genius': 45
     }
 
     const totals = {}
@@ -213,7 +213,7 @@ function ReportCard(info) {
     }
     // console.log(totals)
 
-    const totalDays = [32, 27, 31]
+    const totalDays = [32, 37, 37]
 
     const state = {
         totals: []
@@ -251,14 +251,12 @@ function ReportCard(info) {
         rows.push(i)
     }
 
+    const tracks = ['maven', 'pro', 'expert', 'genius']
+
     let totalMarks = {}
-    totalMarks['maven'] = totals['maven'] ? (totals['maven'] / (report.questions['maven'] * numTests) * 100) : 0
-    totalMarks['pro'] = totals['pro'] ? ((totals['maven'] + totals['pro']) /
-        ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests) * 100) : 0
-    totalMarks['expert'] = totals['expert'] ? ((totals['maven'] + totals['pro'] + totals['expert']) /
-        ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10)) * numTests) * 100) : 0
-    totalMarks['genius'] = totals['genius'] ? ((totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']) /
-        ((parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests) * 100) : 0
+    for (let track of tracks) {
+        totalMarks[track] = totals[track] ? (totals[track] / (report.questions[track] *  numTests) * 100) : 0
+    }
     for (let k of Object.keys(learningTime)) {
         if (totalMarks[k] % 1) totalMarks[k] = totalMarks[k].toFixed(2)
     }
@@ -296,11 +294,11 @@ function ReportCard(info) {
                         <tr>
                             <th>Test #</th>
                             <th>Questions / Mark</th>
-                            <th>Yesod<br /><span className={classes.unbold}>Part 1</span></th>
-                            <th>Yediah<br /><span className={classes.unbold}>Parts 1 and 2</span></th>
-                            <th>Havonah<br /><span className={classes.unbold}>Parts 1, 2 and 3</span></th>
+                            <th>Yesod</th>
+                            <th>Yediah</th>
+                            <th>Havonah</th>
                             {showIyun &&
-                                <th>Iyun<br/><span className={classes.unbold}>Parts 1 - 4</span></th>
+                                <th>Iyun</th>
                             }
                         </tr>
                     </thead>
@@ -311,149 +309,61 @@ function ReportCard(info) {
                                     <td rowSpan={2}>{index}</td>
                                     <td>Correct Questions</td>
 
-                                    {report.highestTrackPassed === 'Yesod' &&
-                                    <td className="bold">{report.scores[index] ? report.scores[index]['maven'] : 0} / {report.questions['maven']}</td>
-                                    }
-                                    {report.highestTrackPassed !== 'Yesod' &&
-                                    <td>{report.scores[index] ? report.scores[index]['maven'] : 0} / {report.questions['maven']}</td>
-                                    }
-
-                                    {report.highestTrackPassed === 'Yediah' &&
-                                    <td className="bold">{report.scores[index] ? (parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
-                                        {report.questions['pro'] + report.questions['maven']}</td>
-                                    }
-                                    {report.highestTrackPassed !== 'Yediah' &&
-                                    <td>{report.scores[index] ? (parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
-                                        {report.questions['pro'] + report.questions['maven']}</td>
-                                    }
-
-                                    {report.highestTrackPassed === 'Havonah' &&
-                                    <td className="bold">{report.scores[index] ? (parseInt(report.scores[index]['expert'], 10) + parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
-                                        {report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
-                                    }
-                                    {report.highestTrackPassed !== 'Havonah' &&
-                                    <td>{report.scores[index] ? (parseInt(report.scores[index]['expert'], 10) + parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
-                                        {report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
-                                    }
-
-                                    {showIyun && report.highestTrackPassed === 'Iyun' &&
-                                    <td className="bold">{report.scores[index] ? (parseInt(report.scores[index]['genius'], 10) + parseInt(report.scores[index]['expert'], 10) +
-                                    parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
-                                        {report.questions['genius'] + report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
-                                    }
-                                    {showIyun && report.highestTrackPassed !== 'Iyun' &&
-                                    <td>{report.scores[index] ? (parseInt(report.scores[index]['genius'], 10) + parseInt(report.scores[index]['expert'], 10) +
-                                        parseInt(report.scores[index]['pro'], 10) + parseInt(report.scores[index]['maven'], 10)) : 0} /
-                                        {report.questions['genius'] + report.questions['expert'] + report.questions['pro'] + report.questions['maven']}</td>
-                                    }
+                                    {tracks.map((track, i) => (
+                                      <React.Fragment key={track + '_' + i}>
+                                      {track !== 'genius' || (track === 'genius' && showIyun) && (
+                                          <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                            {report.scores[index] ? report.scores[index][track] : 0} / {report.questions[track]}
+                                          </td>
+                                      )}
+                                      </React.Fragment>
+                                    ))}
                                 </tr>
                                 <tr>
                                     <td>Mark</td>
-
-                                    {report.highestTrackPassed === 'Yesod' &&
-                                    <td className="bold">{report.scores[index] ? (report.tests[index]['maven'] % 1 ? report.tests[index]['maven'].toFixed(2) : report.tests[index]['maven']) : 0}%</td>
-                                    }
-                                    {report.highestTrackPassed !== 'Yesod' &&
-                                    <td>{report.scores[index] ? (report.tests[index]['maven'] % 1 ? report.tests[index]['maven'].toFixed(2) : report.tests[index]['maven']) : 0}%</td>
-                                    }
-
-                                    {report.highestTrackPassed === 'Yediah' &&
-                                    <td className="bold">{report.scores[index] ? (report.tests[index]['pro'] % 1 ? report.tests[index]['pro'].toFixed(2) : report.tests[index]['pro']) : 0}%</td>
-                                    }
-                                    {report.highestTrackPassed !== 'Yediah' &&
-                                    <td>{report.scores[index] ? (report.tests[index]['pro'] % 1 ? report.tests[index]['pro'].toFixed(2) : report.tests[index]['pro']) : 0}%</td>
-                                    }
-
-                                    {report.highestTrackPassed === 'Havonah' &&
-                                    <td className="bold">{report.scores[index] ? (report.tests[index]['expert'] % 1 ? report.tests[index]['expert'].toFixed(2) : report.tests[index]['expert']) : 0}%</td>
-                                    }
-                                    {report.highestTrackPassed !== 'Havonah' &&
-                                    <td>{report.scores[index] ? (report.tests[index]['expert'] % 1 ? report.tests[index]['expert'].toFixed(2) : report.tests[index]['expert']) : 0}%</td>
-                                    }
-
-                                    {showIyun && report.highestTrackPassed === 'Iyun' &&
-                                    <td className="bold">{report.scores[index] ? (report.tests[index]['genius'] % 1 ? report.tests[index]['genius'].toFixed(2) : report.tests[index]['genius']) : 0}%</td>
-                                    }
-                                    {showIyun && report.highestTrackPassed !== 'Iyun' &&
-                                    <td>{report.scores[index] ? (report.tests[index]['genius'] % 1 ? report.tests[index]['genius'].toFixed(2) : report.tests[index]['genius']) : 0}%</td>
-                                    }
+                                    {tracks.map((track, i) => (
+                                      <React.Fragment key={track + '_mark_' + i}>
+                                          {track !== 'genius' || (track === 'genius' && showIyun) && (
+                                            <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                              {report.scores[index] ? (
+                                                report.tests[index][track] % 1 ? report.tests[index][track].toFixed(2) :
+                                                  report.tests[index][track]) : 0}%
+                                              </td>
+                                          )}
+                                      </React.Fragment>
+                                    ))}
                                 </tr>
                             </React.Fragment>
                         ))}
-                        {numTests !== 1 &&
+                        {numTests > 1 &&
                           <React.Fragment>
                               <tr>
                                   <td rowSpan={2}>Total</td>
                                   <td>Correct Questions</td>
 
-                                  {report.highestTrackPassed === 'Yesod' &&
-                                    <td className="bold">{totals['maven']} / {report.questions['maven'] * numTests}</td>
-                                  }
-                                  {report.highestTrackPassed !== 'Yesod' &&
-                                    <td>{totals['maven']} / {report.questions['maven'] * numTests}</td>
-                                  }
-
-                                  {report.highestTrackPassed === 'Yediah' &&
-                                    <td className="bold">{totals['maven'] + totals['pro']} / {
-                                      (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests}
-                                    </td>
-                                  }
-                                  {report.highestTrackPassed !== 'Yediah' &&
-                                    <td>{totals['maven'] + totals['pro']} / {
-                                      (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10)) * numTests}
-                                    </td>
-                                  }
-
-                                  {report.highestTrackPassed === 'Havonah' &&
-                                    <td className="bold">{totals['maven'] + totals['pro'] + totals['expert']} / {
-                                      (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10)) * numTests}</td>
-                                  }
-                                  {report.highestTrackPassed !== 'Havonah' &&
-                                    <td>{totals['maven'] + totals['pro'] + totals['expert']} / {
-                                      (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10)) * numTests}</td>
-                                  }
-
-                                  {showIyun && report.highestTrackPassed === 'Iyun' &&
-                                    <td
-                                      className="bold">{totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']} / {
-                                      (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests}</td>
-                                  }
-                                  {showIyun && report.highestTrackPassed !== 'Iyun' &&
-                                    <td>{totals['maven'] + totals['pro'] + totals['expert'] + totals['genius']} / {
-                                      (parseInt(report.questions['maven'], 10) + parseInt(report.questions['pro'], 10) + parseInt(report.questions['expert'], 10) + parseInt(report.questions['genius'], 10)) * numTests}</td>
-                                  }
+                                  {tracks.map((track, i) => (
+                                    <React.Fragment key={track + '_total_' + i}>
+                                        {track !== 'genius' || (track === 'genius' && showIyun) && (
+                                          <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                            {totals[track]} / {report.questions[track] * numTests}
+                                          </td>
+                                        )}
+                                    </React.Fragment>
+                                  ))}
                               </tr>
-                            <tr>
+                              <tr>
                                 <td>Mark</td>
 
-                                {report.highestTrackPassed === 'Yesod' &&
-                                <td className="bold">{totalMarks['maven']}%</td>
-                                }
-                                {report.highestTrackPassed !== 'Yesod' &&
-                                <td>{totalMarks['maven']}%</td>
-                                }
-
-                                {report.highestTrackPassed === 'Yediah' &&
-                                <td className="bold">{totalMarks['pro']}%</td>
-                                }
-                                {report.highestTrackPassed !== 'Yediah' &&
-                                <td>{totalMarks['pro']}%</td>
-                                }
-
-                                {report.highestTrackPassed === 'Havonah' &&
-                                <td className="bold">{totalMarks['expert']}%</td>
-                                }
-                                {report.highestTrackPassed !== 'Havonah' &&
-                                <td>{totalMarks['expert']}%</td>
-                                }
-
-                                {showIyun && report.highestTrackPassed === 'Iyun' &&
-                                <td className="bold">{totalMarks['genius']}%</td>
-                                }
-                                {showIyun && report.highestTrackPassed !== 'Iyun' &&
-                                <td>{totalMarks['genius']}%</td>
-                                }
-                            </tr>
+                                  {tracks.map((track, i) => (
+                                    <React.Fragment key={track + '_total_mark_' + i}>
+                                        {track !== 'genius' || (track === 'genius' && showIyun) && (
+                                          <td className={report.highestTrackPassed === track ? 'bold' : ''}>
+                                              {totalMarks[track]}%
+                                          </td>
+                                        )}
+                                    </React.Fragment>
+                                  ))}
+                              </tr>
                           </React.Fragment>
                         }
                         <tr className={classes.lastRow}>
