@@ -523,7 +523,7 @@ class ChidonTests
         $markInfo = [];
         $markInfo['avg'] = $avgs[$child['test_type']] ?? 0;
         $markInfo['highest_track'] = $highest_type;
-        $markInfo['highest_track_avg'] = round($highest_mark, 2);
+        $markInfo['highest_track_avg'] = round($highest_mark);
         $markInfo['test_type'] = $testType;
         $markInfo['reward_type'] = $rewardType;
 
