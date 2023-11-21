@@ -93,6 +93,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         }
         ?>
     </body>
+    <?php if ($admin_user['auth'] != 'super') : ?>
     <script>
         // BCM IA wants to have the page only show when entering a password. not secure but makes her beleive it's secure.
         const school_id = <?=$admin_user['auths']['school'][0]?>;
@@ -106,4 +107,5 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         }
         $('body').show();
     </script>
+    <?php endif; ?>
 </html>
