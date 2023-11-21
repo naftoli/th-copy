@@ -845,12 +845,12 @@ class ChidonShipping
                     classes c ON u.class_id = c.class_id 
                 WHERE
                     cup.year = :year AND tc.date_paid > 0 
-                        AND tc.ultimate_trip = 0 AND tci.highest_track != 'yesod'";
+                        AND tc.ultimate_trip = 0 AND (tci.highest_track is null OR tci.highest_track != 'yesod')";
 //        if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
-        if ($gender == 'm') $sql .= " and u.gender = 'M'";
-        if ($gender == 'f') $sql .= " and u.gender = 'F'";
-        if ($school > 0) $sql .= " and u.school_id = " . $school;
-//        echo $sql;
+        if ($gender == 'm') $sql .= " AND u.gender = 'M'";
+        if ($gender == 'f') $sql .= " AND u.gender = 'F'";
+        if ($school > 0) $sql .= " AND u.school_id = " . $school;
+//        echo $sql; exit;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
