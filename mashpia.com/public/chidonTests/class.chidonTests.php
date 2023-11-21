@@ -270,30 +270,6 @@ class ChidonTests
         return $this->marks;
     }
 
-    public function getHighestTrackEligible( $marks, $user_id ) {
-        foreach ($this->types as $type => $value) {
-            $avgs[$type] = 0;
-        }
-
-        if (count($marks) > 0) {
-            foreach ($marks as $num => $more) {
-                foreach ($more as $type => $mark) {
-                    $avgs[$type] += $mark;
-                }
-            }
-
-            $highest = 'maven';
-            $passingAvgs = $this->getPassingAvgs($user_id);
-            foreach ($avgs as $type => $avg) {
-                $avg = round($avgs[$type] / $num);
-                if ($avg >= $passingAvgs[$type]) $highest = $type;
-                else break; // can't go higher if lower one was not passed
-            }
-            return $highest;
-        }
-        return '';
-    }
-
     public function getLearned( $dates, $untilToday = false ) {
         $dateArr = explode('/', $dates[0]);
         $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
@@ -541,7 +517,7 @@ class ChidonTests
         return $markInfo;
     }
 
-    public function getHighestTrackUsingMarks($marks, $user_id) {
+    private function getHighestTrack($marks, $user_id) {
         $highest = '';
         $avgs = $this->getPassingAvgs($user_id);
 
@@ -551,20 +527,32 @@ class ChidonTests
         }
 
         // make sure we pass each track on each test
-        foreach ($marks as $test_num => $more) {
-            foreach ($more as $track => $mark) {
-                $marksByTrack[$track] += $mark;
+        foreach ($marks as $more) {
+            $num_tests = count($more);
+            foreach ($more as $tests => $details) {
+                foreach ($details as $track => $mark) {
+                    $marksByTrack[$track] += $mark;
+                }
             }
         }
 
         // calculate avgs and highest type currently eligible for
         foreach ($marksByTrack as $track => $total) {
-            $avg = round($marksByTrack[$track] / $test_num);
-            if ($avg >= $avgs[$type]) $highest = $type;
+            $avg = round($total / $num_tests);
+            if ($avg >= $avgs[$track]) $highest = $track;
             else break; // can't go higher if lower one was not passed
         }
 
         return $highest;
+    }
+
+    public function getHighestTrackEligible( $marks, $user_id ) {
+        if (empty($marks)) return 'maven';
+        else return $this->getHighestTrack($marks, $user_id);
+    }
+
+    public function getHighestTrackUsingMarks($marks, $user_id) {
+        return $this->getHighestTrack($marks, $user_id);
     }
 
     public function getPrevHighestTrack($year, $user_id) {
