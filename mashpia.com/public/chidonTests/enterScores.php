@@ -118,7 +118,7 @@ if ($admin_user['auth'] != 'super') {
             $types = $ct->getTypes();
             echo "<form action='' method='post'>";
             echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
-            echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
+            echo "<a href='settings.php'><input type='button' value='Marks/Levels Settings' style='padding: 12px; font-size: large' /></a>";
             foreach ($info as $school => $children) {
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
