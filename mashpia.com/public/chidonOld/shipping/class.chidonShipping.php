@@ -893,7 +893,7 @@ class ChidonShipping
 
     private function getChidonPrizes() {
         /**
-         * gets list of child prizes with name and ID
+         * gets list of chidon prizes with name and ID
          */
 
         $info = [];
