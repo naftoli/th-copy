@@ -109,7 +109,7 @@ if ($admin_user['auth'] != 'super') {
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
                         if ($disabled) echo "readonly ";
                         echo "/>";
-                        echo "<select name='types[$id][$testNumber][$type]'>";
+                        echo "<select name='levels[$id][$testNumber][$type]'>";
                         echo "<option value='1'";
                         if ($levelValue == 1) echo " selected";
                         echo ">1</option>";
