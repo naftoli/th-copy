@@ -13,13 +13,18 @@ if ($admin_user['auth'] != 'super') {
 //        $disabled = true;
 //    }
 }
+$superAdmin = $admin_user['auth'] == 'super';
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
 $schools = $as->getSchools();
 
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$ct = new ChidonTests();
+if (isset($_POST['yr'])) $ct = new ChidonTests($_POST['yr']);
+else $ct = new ChidonTests();
 $types = $ct->getTypes();
 
 $info = [];
@@ -129,6 +134,15 @@ if (isset($_POST['save'])) {
             echo "</form>";
         } else {
             echo "<form action='' method='post'>";
+            if ($superAdmin) {
+                echo "<p>Select School: <select name='school'>";
+                foreach ($schools as $id => $school) {
+                    echo "<option value='$id'";
+                    if ($id == $year) echo " selected ";
+                    echo ">$school</option>";
+                }
+                echo "</select></p>";
+            }
             echo "<p>Please select based on which tests you would like to see track averages & highest passing track</p>";
             echo "Choose Test: <select name='test'>";
             echo "<option value='1'>Test 1</option>";

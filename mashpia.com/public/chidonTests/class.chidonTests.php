@@ -20,10 +20,10 @@ class ChidonTests
     private $end;
     private $levels;
 
-    public function __construct() {
+    public function __construct($yr = 0) {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->year = GlobalSettings::getChidonRegYear();
+        $this->year = $yr > 0 ? $yr : GlobalSettings::getChidonRegYear();
         $this->children = [];
         $this->scores = [];
         $this->marks = [];
