@@ -18,12 +18,14 @@ else $ct = new ChidonTests();
 
 $info = [];
 $marks = [];
+$levels = [];
 foreach ($schools as $id => $school) {
     $ct->setStudents($id);
     $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
     $marks += $ct->getMarks();
+    $levels += $ct->getLevels();
 }
 //echo "<pre>"; print_r($info); echo "</pre>";
 $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
@@ -68,14 +70,14 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         <div class="infobox">The mark has been calculated by the system based on the number of questions answered correctly.</div>
         <?php
         $types = $ct->getTypes();
-        echo "<a href='setTypes.php'><input type='button' value='Edit Test Type' style='padding: 12px; font-size: large' /></a>";
+        echo "<a href='settings.php'><input type='button' value='Marks/Level Settings' style='padding: 12px; font-size: large' /></a>";
         echo "<div style='float: right'><a href='enterScores.php?test_num=" . $testNumber . "'><input type='button' value='Edit Test " . $testNumber . " Scores' style='padding: 12px; font-size: large' /></a></div>";
         foreach ($info as $school => $children) {
             if (empty($children)) continue;
             echo "<h2>" . $schools[$school] . "</h2>";
             echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th>";
             foreach ($types as $type => $value) {
-                echo "<th>" . ucwords($value) . " Correct</th>";
+                echo "<th>" . ucwords($value) . " / Level</th>";
             }
             echo "<th>Avg To Date</th>";
             echo "</tr>";
@@ -95,7 +97,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                         $color = 'black';
                         if ($mark < $avgs[$type]) $color = 'red';
                     }
-                    echo "<td style='color: $color;'>" . $mark . "%</td>";
+                    echo "<td style='color: $color;'>" . $mark . "% / " . $levels[$id][$testNumber][$type] . "</td>";
                 }
                 // figure out avg
                 $avg = 0;
