@@ -135,10 +135,11 @@ if (isset($_POST['save'])) {
         } else {
             echo "<form action='' method='post'>";
             if ($superAdmin) {
+                $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $year;
                 echo "<p>Select School: <select name='school'>";
                 foreach ($schools as $id => $school) {
                     echo "<option value='$id'";
-                    if ($id == $year) echo " selected ";
+                    if ($id == $selectedYr) echo " selected ";
                     echo ">$school</option>";
                 }
                 echo "</select></p>";

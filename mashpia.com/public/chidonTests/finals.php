@@ -8,10 +8,11 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$currentYear = GlobalSettings::getChidonYear();
+$year = isset($_POST['yr']) ? $_POST['yr'] : $currentYear;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$ct = new ChidonTests();
+$ct = new ChidonTests($year);
 
 // save marks
 if (isset($_POST['submit'])) {
@@ -200,6 +201,18 @@ if ($admin_user['auth'] != 'super') {
   the correct mark.
 </div>
 <?php
+if ($admin_user['auth'] == 'super') {
+    $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $currentYear;
+    echo '<form action="finals.php" method="post">';
+    echo "Change Year: <select name='yr'>";
+    for ($i = 5782; $i <= $currentYear; $i++) {
+        echo "<option value='$i'";
+        if ($i == $selectedYr) echo " selected";
+        echo ">$i</option>";
+    }
+    echo "</form><br /><br />";
+}
+
 $exceptions = [192, 63, 13, 42, 726];
 $types = $ct->getTypes();
 $tracks = array_values($types);

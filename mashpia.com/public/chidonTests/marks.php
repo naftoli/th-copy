@@ -7,8 +7,12 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
 $schools = $as->getSchools();
 
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$ct = new ChidonTests();
+if (isset($_POST['yr'])) $ct = new ChidonTests($_POST['yr']);
+else $ct = new ChidonTests();
 
 $info = [];
 $marks = [];
@@ -44,6 +48,20 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
     <body>
         <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
         <h1>Review Marks</h1>
+        <?php
+        if ($admin_user['auth'] == 'super') {
+            $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $year;
+            echo '<form action="marks.php" method="post">';
+            echo "Change Year: <select name='yr'>";
+            for ($i = 5782; $i <= $year; $i++) {
+                echo "<option value='$i'";
+                if ($i == $selectedYr) echo " selected";
+                echo ">$i</option>";
+            }
+            echo "<input type='hidden' name='test_num' value=" . $testNumber . ">";
+            echo "</form><br /><br />";
+        }
+        ?>
         <h2>Test #<?= $testNumber ?></h2>
         <div class="infobox">The mark has been calculated by the system based on the number of questions answered correctly.</div>
         <?php
@@ -93,7 +111,6 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         }
         ?>
     </body>
-    <?php if ($admin_user['auth'] != 'super') : ?>
     <script>
         // BCM IA wants to have the page only show when entering a password. not secure but makes her beleive it's secure.
         const school_id = <?=$admin_user['auths']['school'][0]?>;
@@ -107,5 +124,4 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         }
         $('body').show();
     </script>
-    <?php endif; ?>
 </html>
