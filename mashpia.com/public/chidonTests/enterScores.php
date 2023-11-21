@@ -41,14 +41,13 @@ $exceptions = [];
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = [];
-//    $shutdown[1] = new DateTime('2022-11-25 05:00:00');
-//    $shutdown[2] = new DateTime('2022-12-28 05:00:00');
-//    $shutdown[3] = new DateTime('2023-02-03 05:00:00');
-//    $shutdown[3] = new DateTime('2022-01-21 05:00:00');
-//    $shutdown[4] = new DateTime('2022-02-16 14:00:00');
-//    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions)) {
-//        $disabled = true;
-//    }
+    $shutdown[1] = new DateTime('2023-12-06 04:59:00');
+    $shutdown[2] = new DateTime('2024-01-12 04:59:00');
+    $shutdown[3] = new DateTime('2024-02-17 04:59:00');
+    $shutdown[3] = new DateTime('2024-03-19 04:59:00');
+    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions)) {
+        $disabled = true;
+    }
 }
 ?>
 <!DOCTYPE html>
