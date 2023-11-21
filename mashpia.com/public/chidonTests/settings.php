@@ -269,7 +269,7 @@ if (count($schools) == 1) {
       if (user_id == 0) {
         conf = confirm('Please note, if you have already changed settings in the past, those children will stay ' +
           'with the same settings and will not be updated with what you are doing now, you will need to update those children manually.' +
-          '\n\nAre you sure you want to continue?')
+          '\n\nAre you sure you want to save?')
       }
       if (conf == false) return false
       const res = await fetch('api/saveSettings.php', {
