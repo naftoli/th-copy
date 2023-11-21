@@ -13,7 +13,7 @@ $ct = new ChidonTests();
 $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 
 if (isset($_POST['scores'])) {
-    $ct->insertScores($_POST['scores'], $_POST['types']);
+    $ct->insertScores($_POST['scores'], $_POST['levels']);
     header("Location: marks.php?test_num=" . $testNumber);
     exit;
 }
@@ -115,8 +115,7 @@ if ($admin_user['auth'] != 'super') {
                         echo "<option value='2'";
                         if ($levelValue == 2) echo " selected";
                         echo ">2</option>";
-                        echo "</select>";
-                        echo "</td>";
+                        echo "</select></td>";
                     }
                     echo "</tr>";
                 }

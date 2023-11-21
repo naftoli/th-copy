@@ -221,6 +221,7 @@ foreach ($info as $school => $children) {
             $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['user_id'];
+            $level = $ct->getLevel($id, 'finals');
             echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
                 $child['highest_track'] . "</td>";
             for ($i = 1; $i <= 4; $i++) {
@@ -233,7 +234,15 @@ foreach ($info as $school => $children) {
                 if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                 else echo "value='0'";
                 if ($i > $key || $tooLate) echo " disabled";
-                echo " /></td>";
+                echo " />";
+                echo "<select name='level_{$i}[$id]'>";
+                echo "<option value='1'";
+                if ($level == 1) echo " selected";
+                echo ">1</option>";
+                echo "<option value='2'";
+                if ($level == 2) echo " selected";
+                echo ">2</option>";
+                echo "</select></td>";
             }
             // add khk_final
             // check if child should be able to take the khk final
@@ -242,8 +251,15 @@ foreach ($info as $school => $children) {
             echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
             if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
             else echo "value='0'";
-            echo " /></td>";
-            echo "<td>" . getAward($child) . "</td></tr>";
+            echo " />";
+            echo "<select name='khk_level[$id]'>";
+            echo "<option value='1'";
+            if ($level == 1) echo " selected";
+            echo ">1</option>";
+            echo "<option value='2'";
+            if ($level == 2) echo " selected";
+            echo ">2</option>";
+            echo "</select></td><td>" . getAward($child) . "</td></tr>";
         }
     }
     echo "</table>";
