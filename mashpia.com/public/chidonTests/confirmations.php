@@ -23,8 +23,10 @@ foreach ($schools as $school_id => $name) {
 
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
-    SELECT tc.*, u.* FROM th_chidon tc 
+    SELECT tc.*, u.*, c.* 
+    FROM th_chidon tc 
     JOIN users u ON tc.user_id = u.user_id 
+    JOIN classes c ON u.class_id = c.class_id 
     WHERE tc.year = :year AND u.school_id = :school
 ");
 foreach ($schools as $school_id => $name) {
