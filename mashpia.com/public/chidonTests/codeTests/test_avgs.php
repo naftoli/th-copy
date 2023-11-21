@@ -19,5 +19,5 @@ $ct->calculateMarks();
 $marks = $ct->getMarks();
 
 // get highest passing avg
-$highest = $ct->getHighestTrackUsingMarks($marks, 60704);
+$highest = $ct->getHighestTrack($marks, 60704);
 echo $highest;
