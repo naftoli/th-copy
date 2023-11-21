@@ -54,14 +54,14 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         if ($admin_user['auth'] == 'super') {
             $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $year;
             echo '<form action="marks.php" method="post">';
-            echo "Change Year: <select name='yr'>";
+            echo "Change Year: <select name='yr' onchange='this.forms[0].submit()'>";
             for ($i = 5782; $i <= $year; $i++) {
                 echo "<option value='$i'";
                 if ($i == $selectedYr) echo " selected";
                 echo ">$i</option>";
             }
             echo "<input type='hidden' name='test_num' value=" . $testNumber . ">";
-            echo "</form><br />";
+            echo "</form>";
         }
         ?>
         <h2>Test #<?= $testNumber ?></h2>
