@@ -65,7 +65,7 @@ foreach ($info as $school => $users) {
 //        $avgRequired = $test_num < $totalTests ? round((($avgs[$test_type] * $totalTests) - $totalMarks) / $testsLeft) : 0;
 
         $avgs = $ct->getPassingAvgs($user['user_id']);
-        $highestTrack = $ct->getHighestTrackUsingMarks($marks[$school][$id], $user['user_id']);
+        $highestTrack = $ct->getHighestTrackUsingMarks($marks[$school], $user['user_id']);
         $highestTrackPassed = $types[ $highestTrack ];
 
         $result[] = [
