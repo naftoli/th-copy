@@ -511,9 +511,8 @@ class ChidonTests
                 if ($avg >= $passingAvgs[$type]) {
                     $highest_type = $type;
                     $highest_mark = $avg;
-                } else {
-                    break; // can't get higher if lower one was not passed
                 }
+                else break; // can't get higher if lower one was not passed
             }
         }
 
@@ -547,7 +546,7 @@ class ChidonTests
     public function getHighestTrackUsingMarks($marks, $user_id) {
         $highest = '';
         $avgs = $this->getPassingAvgs($user_id);
-        foreach ($marks as $num => $more) {
+        foreach ($marks as $more) {
             foreach ($more as $type => $mark) {
                 if ($mark >= $avgs[$type]) $highest = $type;
                 else break; // can't go higher if lower one was not passed
