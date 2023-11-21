@@ -112,7 +112,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   </style>
 </head>
 <body>
-  <?php if ($super) : ?>
+  <?php if ($superAdmin) : ?>
     <button id="saveAll" class="no-print">Save All Schools as Shipped</button>
   <?php endif; ?>
   <?php foreach ($resultsBySchool as $school => $row) : ?>
@@ -121,7 +121,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       if (! isset($schools[$school])) continue;
       if (! isset($summary[$school])) continue;
       echo "<h3>" . $schools[$school] . ' - ' . $year . "</h3>";
-      if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
+      if ($superAdmin) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
       $address = '';
       foreach ($fields_chosen as $field) {
         $pos = strpos($field, '.');
