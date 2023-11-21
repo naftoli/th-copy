@@ -65,7 +65,7 @@ foreach ($info as $row) {
         'desc'      => $row['desc']
     ]);
     if (! $res) {
-//        $stmt->debugDumpParams();
+        $stmt->debugDumpParams();
         $success = false;
         break;
     }

@@ -54,16 +54,15 @@ class SchoolShipping
             foreach ($school_prizes as $school_id => $raffles) {
                 foreach ($raffles as $raffle_id => $prizes) {
                     $raffle_name = $this->raffles[$raffle_id];
-                    foreach ($prizes as $prize_id) {
-                        $prize_info = $this->prizes[$prize_id];
-                        $prize_name = $prize_info['name'];
-                        $info[$school_id][] = [
-                            'id'    => $prize_info['code'],
-                            'item'  => $prize_name,
-                            'cat'   => $raffle_name,
-                            'qty'   => 1
-                        ];
-                    }
+                    $prize_id = $prizes[0];
+                    $prize_info = $this->prizes[$prize_id];
+                    $prize_name = $prize_info['name'];
+                    $info[$school_id][] = [
+                        'id'    => $prize_info['code'],
+                        'item'  => $prize_name,
+                        'cat'   => $raffle_name,
+                        'qty'   => count($prizes)
+                    ];
                 }
             }
         }

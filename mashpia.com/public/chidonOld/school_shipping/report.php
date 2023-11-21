@@ -2,7 +2,7 @@
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-$super = $admin_user['auth'] == 'super';
+$superAdmin = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
@@ -268,7 +268,6 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   });
 
   let info = []
-  const super_admin = <?= $super ? 1 : 0; ?>;
 
   function update(elem, action, qty = 1, desc = '') {
     const id = $(elem).attr('id')
@@ -283,8 +282,20 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       action == 2 && qty
       ||
       action == 3 && qty && desc
-    )
-        info.push({ action, item, school, qty, desc })
+    ) {
+      // check if item already exists in array
+      let found = false
+      for (let i = 0; i < info.length; i++) {
+        if (info[i].item == item && info[i].school == school) {
+          found = true
+          info[i].action = action
+          info[i].qty = qty
+          info[i].desc = desc
+          break
+        }
+      }
+      if (!found) info.push({ action, item, school, qty, desc })
+    }
   }
 
   function save(reload = true) {
@@ -316,14 +327,13 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const action = parseInt(this.value)
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
-    if (!super_admin) {
-      if (action == 2 && !qty) {
-        alert('You must enter how many items are missing before it can be saved.')
-        return false
-      } else if (action == 3 && !(qty || desc)) {
-        alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
-        return false
-      }
+    // if (action == 2 && !qty) {
+    //   alert('You must enter how many items are missing before it can be saved.')
+    //   return false
+    // } else
+    if (action == 3 && !(qty && desc)) {
+      alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
+      return false
     }
     update(this, action, qty)
     save(false)
@@ -334,7 +344,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
     const desc = $(this).parent().parent().find('.description').val()
-    if (!super_admin && action == 3 && !desc) {
+    if (action == 3 && !desc) {
       alert('You must explain the damage before it can be saved.')
       return false
     }
@@ -365,7 +375,8 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   })
 
   $(function () {
-    if (!super_admin) {
+    const superAdmin = <?= $superAdmin ? true : false ?>;
+    if (!superAdmin) {
       $(".shipping").attr('disabled', true)
       $(".qty").attr('disabled', true)
       $(".description").attr('disabled', true)
