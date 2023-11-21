@@ -61,7 +61,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                 echo ">$i</option>";
             }
             echo "<input type='hidden' name='test_num' value=" . $testNumber . ">";
-            echo "</form><br /><br />";
+            echo "</form><br />";
         }
         ?>
         <h2>Test #<?= $testNumber ?></h2>
@@ -115,6 +115,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
     </body>
     <script>
         // BCM IA wants to have the page only show when entering a password. not secure but makes her beleive it's secure.
+        <?php if ($admin_user['auth'] == 'super') : ?>
         const school_id = <?=$admin_user['auths']['school'][0]?>;
         if (school_id == 176) {
             // password protect
@@ -124,6 +125,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
                 pass = prompt('Please enter password.');
             }
         }
+        <?php endif; ?>
         $('body').show();
     </script>
 </html>

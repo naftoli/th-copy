@@ -108,7 +108,7 @@ if ($admin_user['auth'] != 'super') {
                 echo ">$i</option>";
             }
             echo "<input type='hidden' name='test_num' value=" . $testNumber . ">";
-            echo "</form><br /><br />";
+            echo "</form><br />";
         }
         ?>
         <?php if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) { ?>

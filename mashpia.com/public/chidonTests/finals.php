@@ -212,7 +212,7 @@ if ($admin_user['auth'] == 'super') {
         if ($i == $selectedYr) echo " selected";
         echo ">$i</option>";
     }
-    echo "</form><br /><br />";
+    echo "</form><br />";
 }
 
 $exceptions = [192, 63, 13, 42, 726];
