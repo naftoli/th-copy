@@ -18,6 +18,7 @@ class ChidonTests
     private $genderOnly;
     private $start;
     private $end;
+    private $levels;
 
     public function __construct() {
         global $MASHPIA_DB;
@@ -26,6 +27,7 @@ class ChidonTests
         $this->children = [];
         $this->scores = [];
         $this->marks = [];
+        $this->levels = [];
         $this->types = [
             'maven' => 'Yesod',
             'pro'   => 'Yediah',
@@ -167,8 +169,10 @@ class ChidonTests
                 ]);
                 if ($res) {
                     $rows = $stmt->fetchAll();
-                    foreach ($rows as $row)
+                    foreach ($rows as $row) {
                         $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
+                        $this->levels[$id][$row['test_number']][$type] = $row['level'];
+                    }
                 }
             }
         }
@@ -179,7 +183,11 @@ class ChidonTests
         return $this->scores;
     }
 
-    public function insertScores($info) {
+    public function getLevels() {
+        return $this->levels;
+    }
+
+    public function insertScores($info, $levels) {
         $success = true;
         $stmt = $this->db->prepare("
             INSERT IGNORE INTO th_chidon_marks 
@@ -188,9 +196,11 @@ class ChidonTests
                 test_type = :type, 
                 test_number = :number, 
                 total_questions = :questions, 
-                answered_correctly = :answered
+                answered_correctly = :answered, 
+                level = :level
             ON DUPLICATE KEY UPDATE 
-                answered_correctly = :answered
+                answered_correctly = :answered, 
+                level = :level
         ");
         foreach ($info as $id => $more) {
             foreach ($more as $testNum => $details) {
@@ -201,7 +211,8 @@ class ChidonTests
                                 ':type' => $type,
                                 ':number' => $testNum,
                                 ':questions' => $questions,
-                                ':answered' => $details[$type]
+                                ':answered' => $details[$type],
+                                ':level'    => $levels[$id][$testNum][$type]
                             ])) {
                             $success = false;
                         }
@@ -578,7 +589,7 @@ class ChidonTests
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             if ($row['user_id'] > 0) $avgs['user'][$row['track']] = $row['avg'];
-            else if ($row['class)id'] > 0) $avgs['class'][$row['track']] = $row['avg'];
+            else if ($row['class_id'] > 0) $avgs['class'][$row['track']] = $row['avg'];
             else if ($row['school_id'] > 0) $avgs['school'][$row['track']] = $row['avg'];
         }
         // if there's no setting, default to 80

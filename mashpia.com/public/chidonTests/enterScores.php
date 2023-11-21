@@ -13,7 +13,7 @@ $ct = new ChidonTests();
 $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 
 if (isset($_POST['scores'])) {
-    $ct->insertScores($_POST['scores']);
+    $ct->insertScores($_POST['scores'], $_POST['types']);
     header("Location: marks.php?test_num=" . $testNumber);
     exit;
 }
@@ -27,6 +27,7 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
         $info[$id] = $ct->getStudents();
         $ct->setScores();
         $scores[$id] = $ct->getScores();
+        $levels[$id] = $ct->getLevels();
     }
 }
 
@@ -101,10 +102,20 @@ if ($admin_user['auth'] != 'super') {
                     foreach ($types as $type => $value) {
                         $class = 'score';
                         if ($type == 'expert') $class = 'expert';
+                        $levelValue = isset($levels[$school][$id][$testNumber][$type]) ? $levels[$school][$id][$testNumber][$type] : 2;
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
                         if ($disabled) echo "readonly ";
-                        echo "/></td>";
+                        echo "/>";
+                        echo "<select name='types[$id][$testNumber][$type]'>";
+                        echo "<option value='1'";
+                        if ($levelValue == 1) echo " selected";
+                        echo ">1</option>";
+                        echo "<option value='2'";
+                        if ($levelValue == 2) echo " selected";
+                        echo ">2</option>";
+                        echo "</select>";
+                        echo "</td>";
                     }
                     echo "</tr>";
                 }
