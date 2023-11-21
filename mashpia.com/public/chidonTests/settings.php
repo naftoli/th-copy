@@ -168,7 +168,7 @@ if (count($schools) == 1) {
     </fieldset>
     <br />
     <div style="clear:both;">
-      <button onclick="location.href='enterScores.php'; return false;">Enter Marks</button>
+      <button onclick="location.href='enterScores.php'; return false;">Go to Enter Marks Page</button>
     </div>
   </div>
 </div>
