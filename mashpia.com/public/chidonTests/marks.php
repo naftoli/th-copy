@@ -54,7 +54,7 @@ $testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
         if ($admin_user['auth'] == 'super') {
             $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $year;
             echo '<form action="marks.php" method="post">';
-            echo "Change Year: <select name='yr' onchange='this.submit()'>";
+            echo "Change Year: <select name='yr' onchange='this.form.submit()'>";
             for ($i = 5782; $i <= $year; $i++) {
                 echo "<option value='$i'";
                 if ($i == $selectedYr) echo " selected";
