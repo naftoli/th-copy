@@ -101,14 +101,14 @@ if ($admin_user['auth'] != 'super') {
         if ($admin_user['auth'] == 'super') {
             $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $year;
             echo '<form action="enterScores.php" method="post">';
-            echo "Change Year: <select name='yr'>";
+            echo "Change Year: <select name='yr' onchange='this.form.submit()'>";
             for ($i = 5782; $i <= $year; $i++) {
                 echo "<option value='$i'";
                 if ($i == $selectedYr) echo " selected";
                 echo ">$i</option>";
             }
             echo "<input type='hidden' name='test_num' value=" . $testNumber . ">";
-            echo "</form><br />";
+            echo "</form>";
         }
         ?>
         <?php if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) { ?>

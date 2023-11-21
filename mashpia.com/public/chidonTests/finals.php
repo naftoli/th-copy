@@ -206,13 +206,13 @@ if ($admin_user['auth'] != 'super') {
 if ($admin_user['auth'] == 'super') {
     $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $currentYear;
     echo '<form action="finals.php" method="post">';
-    echo "Change Year: <select name='yr'>";
+    echo "Change Year: <select name='yr' onchange='this.form.submit()'>";
     for ($i = 5782; $i <= $currentYear; $i++) {
         echo "<option value='$i'";
         if ($i == $selectedYr) echo " selected";
         echo ">$i</option>";
     }
-    echo "</form><br />";
+    echo "</form><br /><br />";
 }
 
 $exceptions = [192, 63, 13, 42, 726];
