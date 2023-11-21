@@ -61,6 +61,14 @@ if (count($schools) == 1) {
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Chidon Test Settings</h1>
 <div class="infobox">
+  Chidon HQ has set the standard that an 80% is needed to pass each track and that all are taking the test on level 2 (Harder test).
+  <br /><br />
+  You have the option to change the passing mark up/down as well as change the test to level 1 (Easier test).
+  You can either do this for your full school, individual platoon (class) or per child. Remember to press save!
+  <br /><br />
+  Please note that the lowest you can choose is 70%. If there is a particular child who needs a lower average.
+  Please contact HQ and they will adjust it for you.
+  <br /><br />
   PLEASE NOTE: The settings for School/Grade/Child are all different, so changing one will NOT CHANGE the others.
 </div>
 <br />
@@ -257,6 +265,13 @@ if (count($schools) == 1) {
     info.set('user_id', user_id)
 
     if (validateForm(id, info)) {
+      let conf = true
+      if (user_id == 0) {
+        conf = confirm('Please note, if you have already changed settings in the past, those children will stay ' +
+          'with the same settings and will not be updated with what you are doing now, you will need to update those children manually.' +
+          '\n\nAre you sure you want to continue?')
+      }
+      if (conf == false) return false
       const res = await fetch('api/saveSettings.php', {
         method: 'POST',
         body: info
