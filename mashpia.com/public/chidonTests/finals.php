@@ -4,7 +4,7 @@ $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true); // add chidon schools
 $schools = $as->getSchools();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
@@ -17,15 +17,17 @@ $ct = new ChidonTests();
 if (isset($_POST['submit'])) {
     $qrys = [];
     for ($i = 1; $i <= 4; $i++) {
+        $track = 'track_' . $i;
         $level = 'level_' . $i;
-        foreach ($_POST[$level] as $id => $mark) {
+        foreach ($_POST[$track] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
-                            $level = $mark
-                            on duplicate key update $level = $mark";
+                            $track = $mark, 
+                            $level = $_POST[$level][$id], 
+                            on duplicate key update $track = $mark, $level = $_POST[$level][$id]";
             }
         }
     }
@@ -33,11 +35,13 @@ if (isset($_POST['submit'])) {
         foreach ($_POST['khk'] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
+                $level = $_POST['khk_level'][$id];
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
-                            khk = $mark
-                            on duplicate key update khk = $mark";
+                            khk = $mark, 
+                            khk_level = $level,
+                            on duplicate key update khk = $mark, khk_level = $level";
             }
         }
     }
@@ -46,7 +50,7 @@ if (isset($_POST['submit'])) {
     mysql_query('begin');
     $success = true;
     foreach ($qrys as $qry) {
-        if (! mysql_query($qry)) {
+        if (!mysql_query($qry)) {
             $success = false;
             break;
         }
@@ -73,7 +77,8 @@ while ($row = mysql_fetch_assoc($result)) {
     $final_marks[$row['user_id']] = $row;
 }
 
-function passedKhk($id) {
+function passedKhk($id)
+{
     global $marks;
 
     if (isset($marks[$id])) {
@@ -86,32 +91,33 @@ function passedKhk($id) {
     return false;
 }
 
-function getAward($child) {
+function getAward($child)
+{
     global $final_marks;
 
     $tracks = [
-        1   => 'yesod',
-        2   => 'yediah',
-        3   => 'havonah',
-        4   => 'iyun'
+        1 => 'yesod',
+        2 => 'yediah',
+        3 => 'havonah',
+        4 => 'iyun'
     ];
     $finals = [
-        'yesod'     => 20,
-        'yediah'    => 40,
-        'havonah'   => 60,
-        'iyun'      => 80
+        'yesod' => 20,
+        'yediah' => 40,
+        'havonah' => 60,
+        'iyun' => 80
     ];
     $needed = [
-        'yesod'     => 60,
-        'yediah'    => 70,
-        'havonah'   => 80,
-        'iyun'      => 90
+        'yesod' => 60,
+        'yediah' => 70,
+        'havonah' => 80,
+        'iyun' => 90
     ];
     $awards = [
-        'yesod'     => 'certificate',
-        'yediah'    => 'plaque',
-        'havonah'   => 'medal / plaque',
-        'iyun'      => 'trophy / medal / plaque'
+        'yesod' => 'certificate',
+        'yediah' => 'plaque',
+        'havonah' => 'medal / plaque',
+        'iyun' => 'trophy / medal / plaque'
     ];
 
     $highest_track = $child['highest_track'];
@@ -152,45 +158,51 @@ $tooLate = false;
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown = new DateTime('2023-03-06 19:20:00');
-    if ($today >= $shutdown) {
-        $tooLate = true;
-    }
+//    $shutdown = new DateTime('2023-03-06 19:20:00');
+//    if ($today >= $shutdown) {
+//        $tooLate = true;
+//    }
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Enter Test Score</title>
-    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
-    <style>
-        tr, th, td {
-            font-size: 14px;
-            padding: 5px;
-        }
-        td:not(.type) {
-            vertical-align: top;
-        }
-        body {
-            display: none;
-        }
-        .mark, .khk {
-            width: 50px;
-        }
-        input:disabled {
-            background: #ccc;
-        }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Enter Test Score</title>
+  <link href="../admin_styles.css" rel="stylesheet" type="text/css">
+  <style>
+    tr, th, td {
+      font-size: 14px;
+      padding: 5px;
+    }
+
+    td:not(.type) {
+      vertical-align: top;
+    }
+
+    body {
+      display: none;
+    }
+
+    .mark, .khk {
+      width: 50px;
+    }
+
+    input:disabled {
+      background: #ccc;
+    }
+  </style>
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Enter Test Score</h1>
-<div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate the correct mark.</div>
+<div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate
+  the correct mark.
+</div>
 <?php
 $exceptions = [192, 63, 13, 42, 726];
 $types = $ct->getTypes();
-$levels = array_values($types);
+$tracks = array_values($types);
 echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
 echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
 foreach ($info as $school => $children) {
@@ -198,8 +210,8 @@ foreach ($info as $school => $children) {
 //    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
     echo "<h2>" . $schools[$school] . "</h2>";
     echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
-    foreach ($types as $old => $new) {
-        echo "<th>$new</th>";
+    foreach ($tracks as $track) {
+        echo "<th>$track</th>";
     }
     echo "<th>KHK Final</th>";
     echo "<th>Award</th>";
@@ -212,13 +224,13 @@ foreach ($info as $school => $children) {
             echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
                 $child['highest_track'] . "</td>";
             for ($i = 1; $i <= 4; $i++) {
-                // find out which level the child can go up to
-                $key = array_search(ucwords($child['highest_track']), $levels);
+                // find out which track the child can go up to
+                $key = array_search(ucwords($child['highest_track']), $tracks);
                 $key++;
                 // create the proper input box
-                $level = 'level_' . $i;
-                echo "<td><input type='text' name='{$level}[$id]' class='$level mark'";
-                if (isset($final_marks[$id][$level])) echo " value='" . $final_marks[$id][$level] . "'";
+                $track = 'track_' . $i;
+                echo "<td><input type='text' name='{$track}[$id]' class='$track mark'";
+                if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                 else echo "value='0'";
                 if ($i > $key || $tooLate) echo " disabled";
                 echo " /></td>";
@@ -241,51 +253,48 @@ echo "</form>";
 ?>
 </body>
 <script>
-    $(function() {
-        // BCM IA wants to have the page only show when entering a password. not secure but makes her believe it's secure.
-        const school_id = <?=$admin_user['auths']['school'][0]?>;
-        if (school_id == 176) {
-            // password protect
-            const password = 'laky';
-            let pass = '';
-            while (pass != password) {
-                pass = prompt('Please enter password.');
-            }
-        }
-        $('body').show();
-        <?php if (! isset($_POST['submit'])) : ?>
-        alert('Please make sure to SAVE after entering scores.');
-        <?php endif; ?>
-    })
+  $(function () {
+    // BCM IA wants to have the page only show when entering a password. not secure but makes her believe it's secure.
+    const school_id = <?=$admin_user['auths']['school'][0]?>;
+    if (school_id == 176) {
+      // password protect
+      const password = 'laky';
+      let pass = '';
+      while (pass != password) {
+        pass = prompt('Please enter password.');
+      }
+    }
+    $('body').show();
+    <?php if (!isset($_POST['submit'])) : ?>
+      alert('Please make sure to SAVE after entering scores.');
+    <?php endif; ?>
+  })
 
-    $(".mark").focus( function() {
-        let val = $(this).val()
-        if (parseInt(val) == 0) {
-            $(this).val('')
-        }
-    })
+  $(".mark").focus(function () {
+    let val = $(this).val()
+    if (parseInt(val) == 0) {
+      $(this).val('')
+    }
+  })
 
-    $(".mark").blur(function () {
-        const amount = $(this).val()
-        if (amount) {
-            const max = 20
-            if (amount > max) {
-                alert('You cannot enter a number greater than ' + max)
-                $(this).val('')
-                $(this).focus()
-            }
-        } else {
-            if (amount == '') $(this).val(0)
-        }
-    })
-    $(".khk").blur(function () {
-        const amount = $(this).val()
-        const max = 200
-        if (amount > max) {
-            alert('You cannot enter a number greater than ' + max)
-            $(this).val('')
-            $(this).focus()
-        }
-    })
+  $(".mark").blur(function () {
+    const max = 20
+    checkAmount(this, max)
+  })
+
+  $(".khk").blur(function () {
+    const max = 200
+    checkAmount(this, max)
+  })
+
+  function checkAmount(elem, max) {
+    const amount = $(elem).val()
+    if (amount == '') $(elem).val(0)
+    else if (amount > max) {
+      alert('You cannot enter a number greater than ' + max)
+      $(elem).val('')
+      $(elem).focus()
+    }
+  }
 </script>
 </html>

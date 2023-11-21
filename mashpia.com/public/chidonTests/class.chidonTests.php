@@ -600,7 +600,7 @@ class ChidonTests
         return $passingAvgs;
     }
 
-    private function getLevel($user_id, $type = '')
+    public function getLevel($user_id, $type = '')
     {
         $levels = [];
         foreach (['tests', 'finals'] as $test_type) {
@@ -640,8 +640,8 @@ class ChidonTests
         else if ($type == 'finals') return $final_level;
         else {
             return [
-                'test_level' => $test_level,
-                'final_level' => $final_level
+                'tests' => $test_level,
+                'finals' => $final_level
             ];
         }
     }

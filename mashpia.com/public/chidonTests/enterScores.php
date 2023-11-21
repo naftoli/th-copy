@@ -102,7 +102,9 @@ if ($admin_user['auth'] != 'super') {
                     foreach ($types as $type => $value) {
                         $class = 'score';
                         if ($type == 'expert') $class = 'expert';
-                        $levelValue = isset($levels[$school][$id][$testNumber][$type]) ? $levels[$school][$id][$testNumber][$type] : 2;
+                        $levelValue = $ct->getLevel($child['user_id'])['tests'];
+                        if (isset($levels[$school][$id][$testNumber][$type]))
+                            $levelValue = $levels[$school][$id][$testNumber][$type];
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
                         if ($disabled) echo "readonly ";
