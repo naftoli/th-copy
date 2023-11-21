@@ -199,17 +199,17 @@ if (count($schools) == 1) {
     for (let table of ['chidon_passing_avgs', 'chidon_final_passing_avgs']) {
       for (let track of ['maven', 'pro', 'expert', 'genius']) {
         let elem = '#' + table + '_' + track
-        let avg = settings[id] && settings[id][table] && settings[id][table][track] ? settings[id][table][track] : 80 // always default to 80
-        $(elem).text('(' + avg + ')')
+        let avg = settings[id] && settings[id][table] && settings[id][table][track] ? settings[id][table][track] : ''
+        if (avg) $(elem).text('(' + avg + ')')
       }
     }
     // set levels
-    let testLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['tests']
-      && settings[id]['chidon_test_levels']['tests'] == 1 ? 1 : 2
-    let finalLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['finals']
-      && settings[id]['chidon_test_levels']['finals'] == 1 ? 1 : 2
-    $('#chidon_test_levels_tests').text('(' + testLevel + ')')
-    $('#chidon_test_levels_finals').text('(' + finalLevel + ')')
+    let testLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['tests'] ?
+      settings[id]['chidon_test_levels']['tests'] : ''
+    let finalLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['finals'] ?
+      settings[id]['chidon_test_levels']['finals'] : ''
+    if (testLevel) $('#chidon_test_levels_tests').text('(' + testLevel + ')')
+    if (finalLevel) $('#chidon_test_levels_finals').text('(' + finalLevel + ')')
 
     // show settings
     document.getElementById('settings').style.display = 'block'
