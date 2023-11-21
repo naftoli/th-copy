@@ -105,7 +105,7 @@ foreach ($info as $school => $students) {
             if ($prize['he_name']) echo "<div class='indent'>Engraved: " . $prize['he_name'] . "</div>";
         }
         echo "</div><br />";
-        echo "<img src='/chidonOld/certs/Jpegs/$serial.jpg' style='max-height: 700px' /><br /><br />";
+        echo "<img src='/chidonOld/certs/Jpegs/$serial.jpg' style='max-height: 600px' /><br /><br />";
         echo "<div style='page-break-after: always;'></div></div>";
     }
 }
