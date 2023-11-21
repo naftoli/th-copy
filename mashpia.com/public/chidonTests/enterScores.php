@@ -12,6 +12,28 @@ $ct = new ChidonTests();
 
 $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 
+// check if there's avgs that were set for the school
+// if not, route them to settings page
+if ($admin_user['auth'] != 'super') {
+    $settingsSet = true;
+    $school_id = $admin_user['auths']['school'][0];
+    $settings = $ct->getSettings($school_id, 0, 0);
+    foreach(['chidon_passing_avgs', 'chidon_final_passing_avgs', 'chidon_test_levels'] as $table) {
+        if ($table == 'chidon_test_levels') $details = ['tests', 'finals'];
+        else $details = ['maven', 'pro', 'expert', 'genius'];
+        foreach ($details as $type) {
+            if (empty($settings[$school_id][$table][$type])) {
+                $settingsSet = false;
+                break;
+            }
+        }
+    }
+    if (!$settingsSet) {
+        header("Location: settings.php?fromMarks=1");
+        exit;
+    }
+}
+
 if (isset($_POST['scores'])) {
     $ct->insertScores($_POST['scores'], $_POST['levels']);
     header("Location: marks.php?test_num=" . $testNumber);

@@ -172,6 +172,10 @@ if (count($schools) == 1) {
 </body>
 <script type="text/javascript">
   $( function() {
+    // find out if coming from entering marks page
+    let url = new URL(window.location.href)
+    let fromMarks = url.searchParams.get('fromMarks')
+    if (fromMarks) alert('You can only enter the marks once you have set the avgs per track and level for your school.')
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
 
