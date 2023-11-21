@@ -44,6 +44,7 @@ foreach ($schools as $school_id => $name) {
 <h1>Confirmations</h1>
 <?php
 foreach ($info as $school => $students) {
+    echo "<h2>" . $schools[$school] . "</h2>";
     foreach ($students as $student) {
         $name = $student['first'] . ' ' . $student['last'];
         $grade = $student['class_grade'] . (empty($student['class_sub']) ? '' : '-' . $student['class_sub']);
@@ -57,8 +58,8 @@ foreach ($info as $school => $students) {
         $prizes_chosen = $prizes[$school][$user_id];
         ?>
 
-        <h2><?= $name ?></h2>
-        <h3><?= $grade ?></h3>
+        <h3><?= $name ?></h3>
+        <h4><?= $grade ?></h4>
         <br />
         Hebrew Name spelling for awards: <?= $he_name ?><br />
         <br />
