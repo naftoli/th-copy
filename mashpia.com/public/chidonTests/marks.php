@@ -98,7 +98,8 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                         $color = 'black';
                         if ($mark < $avgs[$type]) $color = 'red';
                     }
-                    echo "<td style='color: $color;'>" . $mark . "% / " . $levels[$id][$testNumber][$type] . "</td>";
+                    echo "<td style='color: $color;'>" . $mark . "% / " . (
+                      $levels[$id][$testNumber][$type] ?? 2) . "</td>";
                 }
                 // figure out avg
                 $avg = 0;
