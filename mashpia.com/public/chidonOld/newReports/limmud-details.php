@@ -28,7 +28,7 @@ $year = GlobalSettings::getChidonYear();
 $chidon = new ChidonTests();
 $types = $chidon->getTypes();
 $info = $chidon->getLimmudInfo($user_id, true);
-$details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num], true);
+$details = $chidon->getLimmudDetails($user_id, $learningDays[$test_num], false, true);
 
 $types = $chidon->getTypes();
 
