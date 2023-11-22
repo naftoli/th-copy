@@ -8,6 +8,7 @@ $schools = $as->getSchools();
 
 require_once 'class.globalSettings.php';
 $startEnd = GlobalSettings::getCurYearDates();
+$startEnd['start'] = 2460280;
 
 //get dates
 $dates = [];
@@ -136,9 +137,7 @@ $today = unixtojd();
                 <?
                 foreach ($dates as $date) {
                     echo "<input type='checkbox' name='parshas[]' value='" .
-                        $date['end'] . "' class='parsha'";
-                    if ($date['start'] == 2460280) echo " checked";
-                    echo ">" . $date['name'] . "<br />";
+                        $date['end'] . "' class='parsha'>" . $date['name'] . "<br />";
                 }
                 ?>
             </div>
