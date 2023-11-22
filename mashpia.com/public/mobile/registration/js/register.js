@@ -18,11 +18,13 @@ $("[data-dismiss]").click( function( event ){
 
 function alertPersonalization(evt) {
     if (evt.checked) {
+        // (On the following page you will see the option " +
+        // "to pay this in up to 4 installments)
         alert(
           "If you would like your child to have their name on their prize, please input it below, and you will need to " +
-          "pre-pay the registration fee now instead of at the end of the year (On the following page you will see the option " +
-          "to pay this in up to 4 installments).\n\nIf your child does not pass, you will NOT be refunded the portion that " +
-          "went towards the prize. The amount paid will be deducted from the end so your amount at the end may be $0."
+          "pre-pay the registration fee now instead of at the end of the year.\n\nIf your child does not pass, " +
+          "you will NOT be refunded the portion that went towards the prize. The amount paid will be deducted from the " +
+          "end so your amount at the end may be $0."
         )
     }
 }
@@ -655,9 +657,9 @@ var registrationApp = function() {
             toggleLoading( 'payment', false );
 
             // figure out if we need to show recurring payment option
-            let chidonReg = state.cart.filter(item => item.meta.registration_type === 'chidon' && item.meta.type === 'advance registration')
-            console.log(chidonReg)
-            if (chidonReg.length) $("#recurring").show()
+            // let chidonReg = state.cart.filter(item => item.meta.registration_type === 'chidon' && item.meta.type === 'advance registration')
+            // console.log(chidonReg)
+            // if (chidonReg.length) $("#recurring").show()
         })
     }
 
@@ -1341,9 +1343,10 @@ var registrationApp = function() {
 
             let text = `
                 You have selected a prize with your child's name on it so you will need to prepay the registration fee now 
-                instead of at the end of Chidon. (On the following page, you will see the option to pay this in up to 4 installments.)<br /><br />
+                instead of at the end of Chidon. <br /><br />
                 If your child does not earn their prize, you will not be refunded the portion that went towards the prize. 
                 If you would like, you can go back and remove the name from the prize or choose a different prize so you don't need to prepay.<br /><br />`
+            // (On the following page, you will see the option to pay this in up to 4 installments.)
 
             let html = `
                 <div class="col-12" style="padding: 10px 20px;">
@@ -1761,7 +1764,8 @@ var registrationApp = function() {
             event.target.checkValidity();
             $( event.target ).addClass('was-validated');
         }
-        postData.payment['installments'] = $(".installments:checked").val()
+        // postData.payment['installments'] = $(".installments:checked").val()
+        postData.payment['installments'] = 0
         postData.cart = state.cart.map( function(item){ return item.meta } )
         registerUsers( postData );
     }
@@ -1984,7 +1988,7 @@ var templates = function(){
                     $("#khk-reg-info").show()
                     $("#khk-edit-info").hide()
                 }
-                $("#advanced-registration").hide()
+                // $("#advanced-registration").hide()
                 // $(".limmud").attr('disabled', true)
                 // $(".recruit").attr('disabled', true)
                 // $("#yarmulka-size").attr('disabled', true)
@@ -2498,25 +2502,25 @@ var templates = function(){
                 }
             });
             // add future payment options
-            if (futurePayment) {
-                $("#charges").append( '<div class="row total-row">' +
-                  '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
-                  '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
-                  + "</div>" );
-                $("#charges").append( '<div class="row total-row">' +
-                  '<div class="col-9 col-md-10"><strong>Eligible for installments</strong></div>' +
-                  '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
-                  + "</div>" );
-                // update amounts to be charged in installments
-                $("#earlyRegTotal").text(futurePayment.toFixed(2))
-                $("#earlyRegOne").text(futurePayment.toFixed(2))
-                const two = (futurePayment / 2).toFixed(2)
-                const three = (futurePayment / 3).toFixed(2)
-                const four = (futurePayment / 4).toFixed(2)
-                $("#earlyRegTwo").text(two)
-                $("#earlyRegThree").text(three)
-                $("#earlyRegFour").text(four)
-            }
+            // if (futurePayment) {
+            //     $("#charges").append( '<div class="row total-row">' +
+            //       '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
+            //       '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
+            //       + "</div>" );
+            //     $("#charges").append( '<div class="row total-row">' +
+            //       '<div class="col-9 col-md-10"><strong>Eligible for installments</strong></div>' +
+            //       '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
+            //       + "</div>" );
+            //     // update amounts to be charged in installments
+            //     $("#earlyRegTotal").text(futurePayment.toFixed(2))
+            //     $("#earlyRegOne").text(futurePayment.toFixed(2))
+            //     const two = (futurePayment / 2).toFixed(2)
+            //     const three = (futurePayment / 3).toFixed(2)
+            //     const four = (futurePayment / 4).toFixed(2)
+            //     $("#earlyRegTwo").text(two)
+            //     $("#earlyRegThree").text(three)
+            //     $("#earlyRegFour").text(four)
+            // }
             // add the total row
             var text = "Total Balance";
             if ( Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he' ) text = "איזון כולל";
