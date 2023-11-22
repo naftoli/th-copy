@@ -12,7 +12,7 @@ if ($admin_user['auth'] != 'super') {
 
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $stmt = $MASHPIA_DB->prepare("
-    INSERT INTO mivtzoim_items
+    INSERT INTO mashpia_purchases.mivtzoim_items 
     SET
         item = :item,
         yom_tov = 'Hei Teves',
