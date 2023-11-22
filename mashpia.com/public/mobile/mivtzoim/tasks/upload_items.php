@@ -15,7 +15,7 @@ $stmt = $MASHPIA_DB->prepare("
     INSERT INTO mivtzoim_items
     SET
         item = :item,
-        yom_tov = :type,
+        yom_tov = 'Hei Teves',
         msrp = :msrp,
         sale = :sale,
         stock = :stock,
@@ -29,11 +29,10 @@ if (isset($_FILES['items'])) {
     $file = fopen($_FILES['items']['tmp_name'], 'r');
     while (($line = fgetcsv($file)) !== FALSE) {
         $item = $line[0];
-        $type = $line[1];
-        $msrp = $line[2];
-        $sale = $line[3];
-        $stock = $line[4];
-        $image = $line[5];
+        $msrp = $line[1];
+        $sale = $line[2];
+        $stock = $line[3];
+        $image = $line[4];
         if (! $stmt->execute([
             ':item' => $item,
             ':type' => 'Hei Teves',
