@@ -23,7 +23,7 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 
 if (isset($_FILES['items'])) {
-    $MASHPIA_DB->startTransaction();
+    $MASHPIA_DB->beginTransaction();
     echo "starting...";
     $file = fopen($_FILES['items']['tmp_name'], 'r');
     while (($line = fgetcsv($file)) !== FALSE) {
