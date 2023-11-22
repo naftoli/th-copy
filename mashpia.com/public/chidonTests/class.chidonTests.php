@@ -216,7 +216,7 @@ class ChidonTests
 
     public function insertScores($info, $levels) {
         $success = true;
-        $stmt = $this->db->prepare("
+        $stmtInsert = $this->db->prepare("
             INSERT IGNORE INTO th_chidon_marks 
             SET 
                 th_chidon_id = :id, 
@@ -232,8 +232,8 @@ class ChidonTests
         foreach ($info as $id => $more) {
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
-                    if ($details[$type] > 0) {
-                        if (! $stmt->execute([
+                    if (intval($details[$type]) > 0) {
+                        if (! $stmtInsert->execute([
                                 ':id' => $id,
                                 ':type' => $type,
                                 ':number' => $testNum,
@@ -245,7 +245,7 @@ class ChidonTests
                         }
                     } else {
                         // check if we need to set mark to 0
-                        $stmt = $this->db->prepare("
+                        $stmtCheck = $this->db->prepare("
                             SELECT 
                                 * 
                             FROM
@@ -255,14 +255,14 @@ class ChidonTests
                                 AND test_type = :type 
                                 AND test_number = :number
                         ");
-                        $stmt->execute([
+                        $stmtCheck->execute([
                             ':id' => $id,
                             ':type' => $type,
                             ':number' => $testNum
                         ]);
-                        $row = $stmt->fetch();
+                        $row = $stmtCheck->fetch();
                         if ($row['answered_correctly'] > 0) {
-                            $stmt = $this->db->prepare("
+                            $stmtUpdate = $this->db->prepare("
                                 UPDATE th_chidon_marks 
                                 SET 
                                     answered_correctly = 0, 
@@ -272,7 +272,7 @@ class ChidonTests
                                     AND test_type = :type 
                                     AND test_number = :number
                             ");
-                            if (! $stmt->execute([
+                            if (! $stmtUpdate->execute([
                                     ':id' => $id,
                                     ':type' => $type,
                                     ':number' => $testNum,
