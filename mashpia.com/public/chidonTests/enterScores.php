@@ -144,7 +144,7 @@ if ($admin_user['auth'] != 'super') {
                         $class = 'score';
                         if ($type == 'expert') $class = 'expert';
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
-                        $levelValue = $ct->getLevel($child['user_id'])['tests'];
+                        $levelValue = $ct->getLevel($child['user_id'], 'tests');
                         if ($score > 0 && isset($levels[$school][$id][$testNumber][$type]))
                             $levelValue = $levels[$school][$id][$testNumber][$type];
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
