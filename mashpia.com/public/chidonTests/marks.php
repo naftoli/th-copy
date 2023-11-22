@@ -63,7 +63,7 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 if ($i == $selectedYr) echo " selected";
                 echo ">$i</option>";
             }
-            echo "</form>";
+            echo "</form><br /><br />";
         }
         ?>
         <h2>Test #<?= $testNumber ?></h2>
