@@ -20,9 +20,9 @@ $info = [];
 $marks = [];
 $levels = [];
 foreach ($schools as $id => $school) {
-    $ct->setStudents($id);
-    if (isset($_POST['yr'])) $info[$id] = $ct->setPrevYrStudents($yr);
-    else $info[$id] = $ct->getStudents();
+    if (isset($_POST['yr'])) $ct->setPrevYrStudents($yr);
+    else $ct->setStudents($id);
+    $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
     $marks += $ct->getMarks();
