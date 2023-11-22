@@ -191,9 +191,11 @@ class ChidonTests
                 ]);
                 if ($res) {
                     $rows = $stmt->fetchAll();
-                    foreach ($rows as $row) {
-                        $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
-                        $this->levels[$id][$row['test_number']][$type] = $row['level'];
+                    if (! empty($rows)) {
+                        foreach ($rows as $row) {
+                            $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
+                            $this->levels[$id][$row['test_number']][$type] = $row['level'];
+                        }
                     }
                 }
             }
