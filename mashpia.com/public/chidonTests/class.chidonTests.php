@@ -171,7 +171,7 @@ class ChidonTests
         ");
         $stmt->execute([':year' => $yr]);
         $this->children = $stmt->fetchAll();
-        echo "<pre>"; print_r($this->children); echo "</pre>"; exit;
+//        echo "<pre>"; print_r($this->children); echo "</pre>"; exit;
     }
 
     public function setScores() {
