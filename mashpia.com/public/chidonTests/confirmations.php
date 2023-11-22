@@ -15,25 +15,35 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $stmtPrizes = $MASHPIA_DB->prepare("
-    SELECT * 
-    FROM chidon_user_prizes cup 
-    JOIN chidon_prizes ON cup.prize_id = chidon_prizes.prize_id 
-    WHERE cup.year = :year 
-    AND user_id in (
-        SELECT user_id 
-        FROM users 
-        WHERE school_id = :school
-    ) 
+    SELECT 
+        *
+    FROM
+        chidon_user_prizes cup
+            JOIN
+        chidon_prizes ON cup.prize_id = chidon_prizes.prize_id
+    WHERE
+        cup.year = :year
+            AND user_id IN (SELECT 
+                user_id
+            FROM
+                users
+            WHERE
+                school_id = :school)
 ");
 
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
-    SELECT tc.*, u.*, c.* 
-    FROM th_chidon tc 
-    JOIN users u ON tc.user_id = u.user_id 
-    JOIN classes c ON u.class_id = c.class_id 
-    WHERE tc.year = :year AND u.school_id = :school 
-    ORDER BY u.class_grade, u.class_sub, u.last, u.first 
+    SELECT 
+        tc.*, u.*, c.*
+    FROM
+        th_chidon tc
+            JOIN
+        users u ON tc.user_id = u.user_id
+            JOIN
+        classes c ON u.class_id = c.class_id
+    WHERE
+        tc.year = :year AND u.school_id = :school
+    ORDER BY c.class_grade , c.class_sub , u.last , u.first
 ");
 foreach ($schools as $school_id => $name) {
     $stmt->execute([':year' => $year, ':school' => $school_id]);
