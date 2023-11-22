@@ -208,7 +208,7 @@ function ReportCard(info) {
     for (let k of Object.keys(learningTime)) {
         totals[k] = 0
         for (let i = 1; i <= numTests; i++) {
-            if (report.scores[i])
+            if (report && report.scores && report.scores[i])
                 totals[k] += parseInt(report.scores[i][k], 10)
         }
     }
