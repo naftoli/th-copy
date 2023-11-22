@@ -13,15 +13,15 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-if (isset($_POST['yr'])) $ct = new ChidonTests($_POST['yr']);
-else $ct = new ChidonTests();
+$yr = isset($_POST['yr']) ? $_POST['yr'] : $year;
+$ct = new ChidonTests($yr);
 
 $info = [];
 $marks = [];
 $levels = [];
 foreach ($schools as $id => $school) {
-    $ct->setStudents($id);
-    $info[$id] = $ct->getStudents();
+    if (isset($_POST['yr'])) $info[$id] = $ct->setPrevYrStudents($yr);
+    else $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
     $marks += $ct->getMarks();

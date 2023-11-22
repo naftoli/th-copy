@@ -151,6 +151,30 @@ class ChidonTests
         return $this->children;
     }
 
+    public function setPrevYrStudents($yr) {
+        $stmt = $this->db->prepare("
+            SELECT 
+                *
+            FROM
+                th_chidon_marks tcm
+                    JOIN
+                th_chidon tc USING (th_chidon_id)
+                    JOIN
+                users u ON u.user_id = tc.user_id
+                    JOIN
+                classes c ON c.class_id = u.class_id
+                    JOIN
+                schools s ON s.school_id = u.school_id
+                    JOIN
+                th_chidon_info tci ON tc.year = tci.year
+                    AND tc.user_id = tci.user_id
+            WHERE
+                tc.year = :year
+        ");
+        $stmt->execute([':year' => $yr]);
+        $this->children = $stmt->fetchAll();
+    }
+
     public function setScores() {
         $stmt = $this->db->prepare("
             SELECT 
