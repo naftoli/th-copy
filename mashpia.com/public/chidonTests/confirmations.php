@@ -45,6 +45,12 @@ foreach ($schools as $school_id => $name) {
     }
 }
 //echo "<pre>"; print_r($prizes); echo "</pre>"; exit;
+$tracks = [
+    'maven' => 'Yesod',
+    'pro'   => 'Yediah',
+    'expert'  => 'Havanah',
+    'genius' => 'Iyun'
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -73,7 +79,7 @@ foreach ($info as $school => $students) {
         $name = $student['first'] . ' ' . $student['last'];
         $grade = $student['class_grade'] . (empty($student['class_sub']) ? '' : '-' . $student['class_sub']);
         $he_name = $student['first_he'] . ' ' . $student['last_he'];
-        $track = $student['test_type'];
+        $track = $tracks[$student['test_type']];
         $sweater = $student['size'];
         $book = $student['book'];
         $yarmulka = $student['yarmulka'];
@@ -94,7 +100,7 @@ foreach ($info as $school => $students) {
         <?php if ($gender == 'M') : ?>
             Yarmulka Size: <?= $yarmulka ?><br />
         <?php endif; ?>
-        Chidon Prizes:<br />
+        Prizes:<br />
         <div class="indent">
         <?php
         foreach ($prizes_chosen as $prize) {
