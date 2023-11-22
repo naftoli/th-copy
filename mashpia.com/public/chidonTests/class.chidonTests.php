@@ -205,7 +205,7 @@ class ChidonTests
         foreach ($info as $id => $more) {
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
-//                    if ($details[$type] > 0) {
+                    if ($details[$type] > 0) {
                         if (! $stmt->execute([
                                 ':id' => $id,
                                 ':type' => $type,
@@ -216,7 +216,45 @@ class ChidonTests
                             ])) {
                             $success = false;
                         }
-//                    }
+                    } else {
+                        // check if we need to set mark to 0
+                        $stmt = $this->db->prepare("
+                            SELECT 
+                                * 
+                            FROM
+                                th_chidon_marks 
+                            WHERE 
+                                th_chidon_id = :id 
+                                AND test_type = :type 
+                                AND test_number = :number
+                        ");
+                        $stmt->execute([
+                            ':id' => $id,
+                            ':type' => $type,
+                            ':number' => $testNum
+                        ]);
+                        $row = $stmt->fetch();
+                        if ($row['answered_correctly'] > 0) {
+                            $stmt = $this->db->prepare("
+                                UPDATE th_chidon_marks 
+                                SET 
+                                    answered_correctly = 0, 
+                                    level = :level  
+                                WHERE 
+                                    th_chidon_id = :id 
+                                    AND test_type = :type 
+                                    AND test_number = :number
+                            ");
+                            if (! $stmt->execute([
+                                    ':id' => $id,
+                                    ':type' => $type,
+                                    ':number' => $testNum,
+                                    ':level' => $levels[$id][$testNum][$type]
+                                ])) {
+                                $success = false;
+                            }
+                        }
+                    }
                 }
             }
         }
