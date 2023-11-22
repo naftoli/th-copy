@@ -34,7 +34,6 @@ if (isset($_FILES['items'])) {
         $image = $line[4];
         if (! $stmt->execute([
             ':item' => $item,
-            ':type' => 'Hei Teves',
             ':msrp' => $msrp,
             ':sale' => $sale,
             ':stock' => $stock,
