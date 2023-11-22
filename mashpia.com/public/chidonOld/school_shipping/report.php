@@ -11,8 +11,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-$superAdmin = $admin_user['auth'] == 'super';
-
 require 'class.schoolShipping.php';
 require 'data.php';
 
@@ -377,12 +375,11 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   })
 
   $(function () {
-    const superAdmin = <?= $superAdmin ? true : false ?>;
-    if (!superAdmin) {
+    <?php if ($superAdmin) : ?>
       $(".shipping").attr('disabled', true)
       $(".qty").attr('disabled', true)
       $(".description").attr('disabled', true)
-    }
+    <?php endif; ?>
   })
 </script>
 </html>
