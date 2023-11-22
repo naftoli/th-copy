@@ -45,18 +45,22 @@ if ($test_num == 4) {
     foreach ($info as $id => $more) {
         $user_id = getUserID($id);
         foreach ($more as $test_num => $scores) {
-            foreach ($scores as $type => $mark) {
-                $mark = intval($mark);
-                $level = 'level_' . $levels[$type];
-                // make sure child is allowed to enter mark for this level
-                $allowed = checkTrack($user_id, $levels[$type]);
-                if ($allowed) {
-                    $sql = "insert into th_chidon_finals 
-                            set year = $year, 
-                            user_id = $user_id, 
-                            $level = $mark
-                            on duplicate key update $level = $mark";
-                    $qrys[] = $sql;
+            foreach ($scores as $type => $other) {
+                foreach ($other as $testLevel => $marks) {
+                    $mark = intval($mark);
+                    $track = 'track_' . $levels[$type];
+                    $level = 'level_' . $levels[$type];
+                    // make sure child is allowed to enter mark for this level
+                    $allowed = checkTrack($user_id, $levels[$type]);
+                    if ($allowed) {
+                        $sql = "insert into th_chidon_finals 
+                                set year = $year, 
+                                user_id = $user_id, 
+                                $track = $mark, 
+                                $level = $testLevel   
+                                on duplicate key update $track = $mark, $level = $testLevel";
+                        $qrys[] = $sql;
+                    }
                 }
             }
         }
@@ -76,15 +80,19 @@ if ($test_num == 4) {
     mysql_query('set autocommit=1');
 } else {
     $marks = [];
+    $levels = [];
     $info = $_POST['scores'];
     foreach ($info as $id => $more) {
-        foreach ($more as $test_num => $scores) {
-            foreach ($scores as $type => $mark) {
-                $marks[$id][$test_num]["$type"] = $mark;
+        foreach ($more as $test_num => $other) {
+            foreach ($other as $type => $scores) {
+                foreach ($scores as $level => $mark) {
+                    $marks[$id][$test_num]["$type"] = $mark;
+                    $levels[$id][$test_num]["$type"] = $level;
+                }
             }
         }
     }
-    $success = $ct->insertScores($marks);
+    $success = $ct->insertScores($marks, $levels);
 }
 ?>
 <!DOCTYPE html>
