@@ -156,9 +156,7 @@ class ChidonTests
             SELECT 
                 *
             FROM
-                th_chidon_marks tcm
-                    JOIN
-                th_chidon tc USING (th_chidon_id)
+                th_chidon tc 
                     JOIN
                 users u ON u.user_id = tc.user_id
                     JOIN
