@@ -79,7 +79,7 @@ if ($admin_user['auth'] != 'super') {
     }
 }
 
-if ($_POST['yr'] != $year) $disabled = true;
+if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
 ?>
 <!DOCTYPE html>
 <html>
