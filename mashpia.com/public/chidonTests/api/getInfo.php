@@ -35,7 +35,6 @@ switch ($table) {
             from users u 
             join th_chidon tc using (user_id) 
             where class_id = :id 
-            and user_registered > 0 
             and tc.year = :year 
             order by last, first");
         $stmt->execute([
