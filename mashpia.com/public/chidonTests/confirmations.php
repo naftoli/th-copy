@@ -23,7 +23,7 @@ $stmtPrizes = $MASHPIA_DB->prepare("
         SELECT user_id 
         FROM users 
         WHERE school_id = :school
-    )
+    ) 
 ");
 
 $info = [];
@@ -32,7 +32,8 @@ $stmt = $MASHPIA_DB->prepare("
     FROM th_chidon tc 
     JOIN users u ON tc.user_id = u.user_id 
     JOIN classes c ON u.class_id = c.class_id 
-    WHERE tc.year = :year AND u.school_id = :school
+    WHERE tc.year = :year AND u.school_id = :school 
+    ORDER BY u.class_grade, u.class_sub, u.last, u.first 
 ");
 foreach ($schools as $school_id => $name) {
     $stmt->execute([':year' => $year, ':school' => $school_id]);
