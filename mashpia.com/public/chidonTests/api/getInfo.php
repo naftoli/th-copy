@@ -17,13 +17,21 @@ switch ($table) {
     case 'classes':
         // get all platoons for this school
         $stmt = $MASHPIA_DB->prepare("
-            select * 
-            from classes 
-            where school_id = :id
-            and class_era = 0 
-            and class_grade >= '4' 
-            and class_grade <= '8' 
-            order by class_grade, class_sub");
+            SELECT 
+                *
+            FROM
+                classes
+            WHERE
+                school_id = :id 
+                    AND class_id IN (SELECT 
+                        class_id
+                    FROM
+                        users u
+                            JOIN
+                        th_chidon tc USING (user_id)
+                    WHERE
+                        tc.year = 5784)
+            ORDER BY class_grade, class_sub");
         $stmt->execute([
             'id'    => $id
         ]);
