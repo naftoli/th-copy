@@ -24,6 +24,9 @@ switch ($table) {
             and class_grade >= '4' 
             and class_grade <= '8' 
             order by class_grade, class_sub");
+        $stmt->execute([
+            'id'    => $id
+        ]);
         break;
     case 'users':
         // get all users for this platoon
@@ -35,11 +38,11 @@ switch ($table) {
             and user_registered > 0 
             and tc.year = :year 
             order by last, first");
+        $stmt->execute([
+            'id'    => $id,
+            'year'  => $year
+        ]);
         break;
 }
-$stmt->execute([
-    'id'    => $id,
-    'year'  => $year
-]);
 $info = $stmt->fetchAll(PDO::FETCH_ASSOC);
 echo json_encode($info);
