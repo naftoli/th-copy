@@ -28,7 +28,7 @@ foreach ($schools as $id => $school) {
     $levels += $ct->getLevels();
 }
 //echo "<pre>"; print_r($info); echo "</pre>";
-$testNumber = isset($_GET['test_num']) ? $_GET['test_num'] : 1;
+$testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 ?>
 <!DOCTYPE html>
 <html>
