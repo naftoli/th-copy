@@ -11,18 +11,19 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+$stmt = $MASHPIA_DB->prepare("
+    INSERT INTO mivtzoim_items
+    SET
+        item = :item,
+        yom_tov = :type,
+        msrp = :msrp,
+        sale = :sale,
+        stock = :stock,
+        thumb = :thumb
+");
 
 if (isset($_FILES['items'])) {
-    $stmt = $MASHPIA_DB->prepare("
-        INSERT INTO mivtzoim_items
-        SET
-            item = :item,
-            type = :type,
-            msrp = :msrp,
-            sale = :sale,
-            stock = :stock,
-            thumb = :thumb
-    ");
+
     $MASHPIA_DB->startTransaction();
 
     $file = fopen($_FILES['items']['tmp_name'], 'r');
