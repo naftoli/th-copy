@@ -151,7 +151,7 @@ class ChidonTests
         return $this->children;
     }
 
-    public function setPrevYrStudents($yr) {
+    public function setPrevYrStudents($yr, $school_id) {
         $stmt = $this->db->prepare("
             SELECT 
                 *
@@ -167,11 +167,13 @@ class ChidonTests
                 th_chidon_info tci ON tc.year = tci.year
                     AND tc.user_id = tci.user_id
             WHERE
-                tc.year = :year
+                tc.year = :year AND u.school_id = :id
         ");
-        $stmt->execute([':year' => $yr]);
+        $stmt->execute([
+            ':year' => $yr,
+            ':id'   => $school_id
+        ]);
         $this->children = $stmt->fetchAll();
-//        echo "<pre>"; print_r($this->children); echo "</pre>"; exit;
     }
 
     public function setScores() {
