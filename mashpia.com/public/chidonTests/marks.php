@@ -106,7 +106,8 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 $total = 0;
                 if (isset($marks[$id])) {
                     for ($i = 1; $i <= $testNumber; $i++) {
-                        $total += $marks[$id][$i][$child['test_type']];
+                        if (isset($marks[$id][$i][$child['test_type']]))
+                          $total += $marks[$id][$i][$child['test_type']];
                     }
                     if ($total > 0) $avg = number_format($total / $testNumber, 2);
                 }
