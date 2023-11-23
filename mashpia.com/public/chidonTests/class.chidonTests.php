@@ -324,8 +324,10 @@ class ChidonTests
         foreach ($this->scores as $id => $more) {
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
-                    $mark = floatval($details[$type] / $questions);
-                    $this->marks[$id][$testNum][$type] = round($mark * 100);
+                    if (isset($details[$type])) {
+                        $mark = floatval($details[$type] / $questions);
+                        $this->marks[$id][$testNum][$type] = round($mark * 100);
+                    }
                 }
             }
         }
