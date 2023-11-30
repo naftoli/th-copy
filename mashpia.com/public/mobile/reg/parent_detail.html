@@ -1001,9 +1001,9 @@
       $("#child-name").text(child.first + ' ' + child.last)
       $("#child-school").text(child.school)
       $("#child-grade").text(child.grade)
-      $("#child-track").text(child.track)
-      $("#child-highest-track").text()
-      $("#child-learning-commitment").text()
+      $("#child-track").text(child.currentTrack)
+      $("#child-highest-track").text(child.highestTrack)
+      $("#child-learning-commitment").text(learningTime[child.currentTrack])
       $("#reportCard").modal('show')
     })
   });
