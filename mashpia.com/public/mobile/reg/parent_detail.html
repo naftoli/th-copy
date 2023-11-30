@@ -995,17 +995,7 @@
 
       const id = $(this).parent().parent().parent().attr('id')
       const child = allChildren[id]
-      const res = await fetch('/chidonTests/api/reportCards/', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          school_id: child.school_id,
-          class_id: child.class_id,
-          user_id: id
-        })
-      })
+      const res = await fetch('/chidonTests/api/reportCards/?user_id=' + id + '&class_id=' + child.class_id + '&school_id=' + child.school_id)
       const data = await res.json()
       console.log(data)
       $("#child-name").text(child.first + ' ' + child.last)
