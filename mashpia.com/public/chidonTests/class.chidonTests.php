@@ -122,7 +122,6 @@ class ChidonTests
         if ($this->genderOnly) $qry .= " AND u.gender = :gender";
         // order by
         $qry .= " ORDER BY school_name, class_grade, class_sub, last, first";
-//        echo $qry . "<br />";
         $stmt = $this->db->prepare($qry);
         if ($this->genderOnly) {
             if ($school_id > 0 && $class_id > 0 && $user_id > 0) {
@@ -196,11 +195,12 @@ class ChidonTests
                 classes c ON c.class_id = u.class_id
                     JOIN
                 schools s ON s.school_id = u.school_id
-                    JOIN
+                    LEFT JOIN
                 th_chidon_info tci ON tc.year = tci.year
                     AND tc.user_id = tci.user_id
             WHERE
-                tc.year = :year AND u.school_id = :id
+                tc.year = :year AND u.school_id = :id 
+            ORDER BY school_name, class_grade, class_sub, last, first
         ");
         $stmt->execute([
             ':year' => $yr,
