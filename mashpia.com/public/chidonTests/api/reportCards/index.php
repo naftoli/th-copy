@@ -6,36 +6,10 @@ header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_S
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-
-$dates = [
-    [
-        1 => '10/17/2023',
-        2 => '11/28/2023'
-    ],
-    [
-        1 => '11/29/2023',
-        2 => '1/7/2024'
-    ],
-    [
-        1 => '1/8/2024',
-        2 => '2/14/2024'
-    ]
-];
-
-function figureOutTestNum() {
-    global $dates;
-    $today = date('m/d/Y');
-    $testNum = 0;
-    foreach ($dates as $test => $date) {
-        if ($today >= $date[1] && $today <= $date[2]) {
-            $testNum = $test + 1;
-        }
-    }
-    return $testNum;
-}
+$ct = new ChidonTests();
 
 $totalTests = 3;
-$test_num = intval($_GET['test']) ?? figureOutTestNum();
+$test_num = isset($_GET['test']) ? intval($_GET['test']) : $ct->figureOutTestNum();
 $school_id = intval($_GET['school_id']);
 $class_id = intval($_GET['class_id']);
 $user_id = intval($_GET['user_id']);
@@ -75,18 +49,16 @@ foreach ($info as $school => $users) {
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
 
         $tests = [];
-//        $totalMarks = 0;
-//        $test_type = $user['test_type'];
         for ($i = 1; $i <= $test_num; $i++) {
-//            $totalMarks += floatval($marks[$school][$id][$i][$test_type]);
-            $tests[$i] = [
-                'maven'     => $marks[$school][$id][$i]['maven'],
-                'pro'       => $marks[$school][$id][$i]['pro'],
-                'expert'    => $marks[$school][$id][$i]['expert'],
-                'genius'    => $marks[$school][$id][$i]['genius']
-            ];
+            if (isset($marks[$school][$id][$i])) {
+                $tests[$i] = [
+                    'maven' => $marks[$school][$id][$i]['maven'],
+                    'pro' => $marks[$school][$id][$i]['pro'],
+                    'expert' => $marks[$school][$id][$i]['expert'],
+                    'genius' => $marks[$school][$id][$i]['genius']
+                ];
+            }
         }
-//        $testsLeft = $totalTests - $test_num;
         // what avg is needed to pass the track that the user is on
 //        $avgRequired = 0;
 //        $avgRequired = $test_num < $totalTests ? round((($avgs[$test_type] * $totalTests) - $totalMarks) / $testsLeft) : 0;
