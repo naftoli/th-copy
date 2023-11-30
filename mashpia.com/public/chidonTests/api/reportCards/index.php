@@ -7,8 +7,35 @@ require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
+$dates = [
+    [
+        1 => '10/17/2023',
+        2 => '11/28/2023'
+    ],
+    [
+        1 => '11/29/2023',
+        2 => '1/7/2024'
+    ],
+    [
+        1 => '1/8/2024',
+        2 => '2/14/2024'
+    ]
+];
+
+function figureOutTestNum() {
+    global $dates;
+    $today = date('m/d/Y');
+    $testNum = 0;
+    foreach ($dates as $test => $date) {
+        if ($today >= $date[1] && $today <= $date[2]) {
+            $testNum = $test + 1;
+        }
+    }
+    return $testNum;
+}
+
 $totalTests = 3;
-$test_num = intval($_GET['test']);
+$test_num = intval($_GET['test']) ?? figureOutTestNum();
 $school_id = intval($_GET['school_id']);
 $class_id = intval($_GET['class_id']);
 $user_id = intval($_GET['user_id']);

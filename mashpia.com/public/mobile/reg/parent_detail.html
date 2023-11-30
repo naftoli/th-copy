@@ -2,960 +2,1039 @@
 <html lang="en" dir="ltr">
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-key="title" class="i18n">Tzivos Hashem Homepage</title>
-    <link href="/mobile/reg/css/all.css?v=1.4" rel="stylesheet" />
-    <noscript>
-        <link rel="stylesheet" href="css/all.css?v=1.1" as="style" onload="this.rel='stylesheet'"></noscript>
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload"
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-key="title" class="i18n">Tzivos Hashem Homepage</title>
+  <link href="/mobile/reg/css/all.css?v=1.4" rel="stylesheet"/>
+  <noscript>
+    <link rel="stylesheet" href="css/all.css?v=1.1" as="style" onload="this.rel='stylesheet'">
+  </noscript>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload"
         as="style" onload="this.rel='stylesheet'">
-    <noscript>
-        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
-            rel="stylesheet"></noscript>
+  <noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
+          rel="stylesheet">
+  </noscript>
 
-    <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+  <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
 
-    <script src="js/all.js" defer></script>
+  <script src="js/all.js" defer></script>
 
-    <style>
-        html,
-        body,
-        span,
-        p,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        div,
-        button,
-        i,
-        input {
-            color: #1b2b51;
-        }
+  <style>
+    html,
+    body,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    div,
+    button,
+    i,
+    input {
+      color: #1b2b51;
+    }
 
-        span.red {
-            color: red;
-        }
+    span.red {
+      color: red;
+    }
 
-        #logOff img,
-        #settings img,
-        #addChild img {
-            height: 30px;
-            width: 30px;
-        }
+    #logOff img,
+    #settings img,
+    #addChild img {
+      height: 30px;
+      width: 30px;
+    }
 
-        #logOff div {
-            float: left;
-        }
+    #logOff div {
+      float: left;
+    }
 
-        #settings div {
-            float: right;
-        }
+    #settings div {
+      float: right;
+    }
 
-        .row.parent_names {
-            margin: 5px 0px;
-        }
+    .row.parent_names {
+      margin: 5px 0px;
+    }
 
-        .row.add_child {
-            margin: 10px;
-        }
+    .row.add_child {
+      margin: 10px;
+    }
 
-        .button-spacing {
-            margin-top: 8px;
-        }
+    .button-spacing {
+      margin-top: 8px;
+    }
 
-        .btn-info {
-            background-color: #5bc0de !important;
-            border-color: #46b8da !important;
-        }
+    .btn-info {
+      background-color: #5bc0de !important;
+      border-color: #46b8da !important;
+    }
 
-        .chidonRegInfo {
-            font-size: 18px;
-            color: red;
-            font-style: italic
-        }
+    .chidonRegInfo {
+      font-size: 18px;
+      color: red;
+      font-style: italic
+    }
 
-        #bh {
-            text-align: center;
-            font-size: 1.5em;
-            position: absolute;
-            top: 5px;
-            width: 100%;
-            color: #fff;
-            font-family: font1;
-            display: inline-block;
-            text-align: center;
-        }
+    #bh {
+      text-align: center;
+      font-size: 1.5em;
+      position: absolute;
+      top: 5px;
+      width: 100%;
+      color: #fff;
+      font-family: font1;
+      display: inline-block;
+      text-align: center;
+    }
 
-        .page5 .chilrens {
-            margin-bottom: 10px;
-        }
+    .page5 .chilrens {
+      margin-bottom: 10px;
+    }
 
-        .page5 .chilrens .row {
-            margin-bottom: 10px;
-        }
+    .page5 .chilrens .row {
+      margin-bottom: 10px;
+    }
 
-        .img-img,
-        .img-people {
-            border-color: #fff;
-        }
+    .img-img,
+    .img-people {
+      border-color: #fff;
+    }
 
-        /*		Remove this to make it take up the whole page*/
-        .page5>.span12.body {
-            width: 100%;
-            margin: 0 auto;
-            float: none;
-            margin-bottom: 0px
-        }
+    /*		Remove this to make it take up the whole page*/
+    .page5 > .span12.body {
+      width: 100%;
+      margin: 0 auto;
+      float: none;
+      margin-bottom: 0px
+    }
 
-        .page5 .header>*,
-        .row.add_child,
-        .childrens {
-            max-width: 1024px;
-            margin: auto;
-        }
+    .page5 .header > *,
+    .row.add_child,
+    .childrens {
+      max-width: 1024px;
+      margin: auto;
+    }
 
-        /* New shamai changes, 4/8/2018 */
-        .page5 .header {
-            background-image: url("/mobile/img_new/Navy_Monoline_Background.png");
-            background-size: cover;
-            background-color: #1b2b51;
-        }
+    /* New shamai changes, 4/8/2018 */
+    .page5 .header {
+      background-image: url("/mobile/img_new/Navy_Monoline_Background.png");
+      background-size: cover;
+      background-color: #1b2b51;
+    }
 
-        .page5 .lb-ico {
-            color: #fff
-        }
+    .page5 .lb-ico {
+      color: #fff
+    }
 
-        @media screen and (min-width: 600px) {
-            .bottomSpace {
-                height: 125px;
-            }
-        }
+    @media screen and (min-width: 600px) {
+      .bottomSpace {
+        height: 125px;
+      }
+    }
 
-        @media screen and (max-width: 639px) {
-            .chidonRegInfo {
-                font-size: 15px;
-            }
-        }
+    @media screen and (max-width: 639px) {
+      .chidonRegInfo {
+        font-size: 15px;
+      }
+    }
 
-        @media screen and (max-width: 600px) {
+    @media screen and (max-width: 600px) {
 
-            #logOff img,
-            #settings img,
-            #addChild img {
-                height: 20px;
-                width: 20px;
-            }
+      #logOff img,
+      #settings img,
+      #addChild img {
+        height: 20px;
+        width: 20px;
+      }
 
-            .bottomSpace {
-                height: 75px;
-            }
-        }
+      .bottomSpace {
+        height: 75px;
+      }
+    }
 
-        @media screen and (max-width: 479px) {
-            .chidonRegInfo {
-                font-size: 12px;
-            }
-        }
+    @media screen and (max-width: 479px) {
+      .chidonRegInfo {
+        font-size: 12px;
+      }
+    }
 
-        #no-children {
-            display: none;
-            text-align: center;
-        }
+    #no-children {
+      display: none;
+      text-align: center;
+    }
 
-        button>span {
-            color: #fff;
-        }
-    </style>
+    button > span {
+      color: #fff;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="container page5">
-        <div id="bh">ב"ה</div>
-        <div class="span12 body">
-            <div class="header">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <a href="#" id="logOff">
-                            <div><img src="/mobile/img_new/lock-color-white-svg.svg" /></div>
-                            <div style="margin-left:10px">
-                                <span data-key="LogOut" class="lb-ico i18n">logout</span>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-xs-6" align="right" id="settings">
-                        <a href="edit_profile.html">
-                            <div><img src="/mobile/img_new/settings-color-white-svg.svg" /></div>
-                            <div style="margin-right:10px;">
-                                <span data-key="edit" class="lb-ico i18n">edit</span>
-                            </div>
-                        </a>
-                    </div>
-
-                </div>
-                <div class="row">
-                    <div class="col-xs-1"></div>
-                    <div class="col-xs-4" align="center">
-                        <img src="img/father-2.png" alt="" class="avatar img-people" id="father">
-                    </div>
-                    <div class="col-xs-2"></div>
-                    <div class="col-xs-4" align="center">
-                        <img src="img/mother-2.png" alt="" class="avatar img-people" id="mother">
-                    </div>
-                </div>
-                <div class="row parent_names">
-                    <div class="col-xs-6" align="center">
-                        <div class="profile-name father"></div>
-                    </div>
-                    <div class="col-xs-6" align="center">
-                        <div class="profile-name mother"></div>
-                    </div>
-                </div>
+<div class="container page5">
+  <div id="bh">ב"ה</div>
+  <div class="span12 body">
+    <div class="header">
+      <div class="row">
+        <div class="col-xs-6">
+          <a href="#" id="logOff">
+            <div><img src="/mobile/img_new/lock-color-white-svg.svg"/></div>
+            <div style="margin-left:10px">
+              <span data-key="LogOut" class="lb-ico i18n">logout</span>
             </div>
-
-            <div class="row add_child">
-                <div id="addchilddiv" class="col-xs-4 float_element">
-                    <a href="/mobile/registration/child.html" id="addChild">
-                        <div class="float_element" style="float:left">
-                            <div class="ico-wrapper">
-                                <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
-                            </div>
-                        </div>
-                        <div class="float_element" style="float:left">
-                            <span class="lb-add-child i18n" data-key="addChild">add child</span>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-xs-4">
-                    <div style="font-size: 30px; color: #35559f; text-align: center">
-                        Family ID: <span id="family_id" style="color: green"></span>
-                    </div>
-                </div>
-                <div class="col-xs-4" id="chidonDriveButton">
-                    <div class="button-spacing childrens-content" style="float:right;">
-<!--                        <button class="btn btn-primary yahadusSale">Yahadus Book Sale</button>-->
-<!--                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
-                            <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>
-<!--                            <button class="btn btn-info gameSet">Nisseui Hanosi Cards</button>-->
-<!--                            <button class="btn btn-info chidondrive">ChidonDrive Setup</button>-->
-<!--                        <button class="btn btn-info story">Submit your Rebbe Story</button>-->
-<!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
-<!--                        <button class="btn btn-info chidon_reg">Chidon Registration</button>-->
-<!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
-<!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
-                    </div>
-                </div>
+          </a>
+        </div>
+        <div class="col-xs-6" align="right" id="settings">
+          <a href="edit_profile.html">
+            <div><img src="/mobile/img_new/settings-color-white-svg.svg"/></div>
+            <div style="margin-right:10px;">
+              <span data-key="edit" class="lb-ico i18n">edit</span>
             </div>
+          </a>
+        </div>
 
-            <!-- temp
-                        <div id="addchilddiv2" >
-                            <div class="col-xs-6" style="float:right;">
-                                <a href="/mobile/registration/child.html" id="addChild">
-                                    <div style="float:right">
-                                        <div class="ico-wrapper">
-                                            <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
-                                        </div>
-                                    </div>
-                                    <div style="float:right">
-                                        <span class="lb-add-child i18n" data-key="addChild">הספפ </span>
-                                    </div>
-                                </a>
-                            </div>
-                            <div class="col-xs-6" id="chidonDriveButton">
-                                <div class="button-spacing childrens-content" style="float:right;">
+      </div>
+      <div class="row">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-4" align="center">
+          <img src="img/father-2.png" alt="" class="avatar img-people" id="father">
+        </div>
+        <div class="col-xs-2"></div>
+        <div class="col-xs-4" align="center">
+          <img src="img/mother-2.png" alt="" class="avatar img-people" id="mother">
+        </div>
+      </div>
+      <div class="row parent_names">
+        <div class="col-xs-6" align="center">
+          <div class="profile-name father"></div>
+        </div>
+        <div class="col-xs-6" align="center">
+          <div class="profile-name mother"></div>
+        </div>
+      </div>
+    </div>
 
+    <div class="row add_child">
+      <div id="addchilddiv" class="col-xs-4 float_element">
+        <a href="/mobile/registration/child.html" id="addChild">
+          <div class="float_element" style="float:left">
+            <div class="ico-wrapper">
+              <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
+            </div>
+          </div>
+          <div class="float_element" style="float:left">
+            <span class="lb-add-child i18n" data-key="addChild">add child</span>
+          </div>
+        </a>
+      </div>
+      <div class="col-xs-4">
+        <div style="font-size: 30px; color: #35559f; text-align: center">
+          Family ID: <span id="family_id" style="color: green"></span>
+        </div>
+      </div>
+      <div class="col-xs-4" id="chidonDriveButton">
+        <div class="button-spacing childrens-content" style="float:right;">
+          <!--                        <button class="btn btn-primary yahadusSale">Yahadus Book Sale</button>-->
+          <!--                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
+          <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>
+          <!--                            <button class="btn btn-info gameSet">Nisseui Hanosi Cards</button>-->
+          <!--                            <button class="btn btn-info chidondrive">ChidonDrive Setup</button>-->
+          <!--                        <button class="btn btn-info story">Submit your Rebbe Story</button>-->
+          <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
+          <!--                        <button class="btn btn-info chidon_reg">Chidon Registration</button>-->
+          <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
+          <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
+        </div>
+      </div>
+    </div>
+
+    <!-- temp
+                <div id="addchilddiv2" >
+                    <div class="col-xs-6" style="float:right;">
+                        <a href="/mobile/registration/child.html" id="addChild">
+                            <div style="float:right">
+                                <div class="ico-wrapper">
+                                    <img src="/mobile/img_new/circle-+-color-blue-svg.svg" alt="" class="ico-add-child">
                                 </div>
                             </div>
+                            <div style="float:right">
+                                <span class="lb-add-child i18n" data-key="addChild">הספפ </span>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-xs-6" id="chidonDriveButton">
+                        <div class="button-spacing childrens-content" style="float:right;">
+
                         </div>
+                    </div>
+                </div>
 
-            -->
+    -->
 
 
-
-
-
-            <div class="row">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="chilrens" id="children">
+          <script id="childrenTpl" type="text/x-handlebars-template">
+            {{#each children}}
+              {{log this}}
+              <div class="row" id="r{{@key}}">
                 <div class="col-xs-12">
-                    <div class="chilrens" id="children">
-                        <script id="childrenTpl" type="text/x-handlebars-template">
-                            {{#each children}}
-                            {{log this}}
-                            <div class="row" id="r{{@key}}">
-                                <div class="col-xs-12">
-                                    <table width="100%" style="margin-left:-10px">
-                                        <tr>
-                                            <td width="33.3%" valign="top">
-                                                <div class="avatar-container img-people" align="center" style="position:relative">
-                                                    <!--<a href="medals/index.html?id={{@key}}">-->
-                                                    {{#if this.needsReg}}
-                                                        {{#if this.allowRemove}}
-                                                        {{else}}
-                                                            {{#if this.new_day_school}}
-                                                                <a href="ds_intro.html">
-                                                            {{else}}
-                                                                <a href="medals/?id={{@key}}">
-                                                            {{/if}}
-                                                        {{/if}}
-                                                    {{else}}
-                                                        {{#if this.chayolei}}
-                                                            {{#if this.new_day_school}}
-                                                                <a href="ds_intro.html">
-                                                            {{else}}
-                                                                <a href="medals/?id={{@key}}">
-                                                            {{/if}}
-                                                        {{/if}}
-                                                    {{/if}}
-                                                    {{#if this.mobile_pic}}
-                                                        <img src="{{mobile_pic}}" class="children-avatar">
-                                                    {{else}}
-                                                        {{#if this.photo}}
-                                                            {{#if this.thumb}}
-                                                                <img src="/thumbs/{{thumb}}" class="children-avatar">
-                                                            {{else}}
-                                                                <img src="../../git cdh{{photo}}" class="children-avatar">
-                                                            {{/if}}
-                                                        {{else}}
-                                                            <img src="images/profile-photo-default.jpg" class="children-avatar">
-                                                        {{/if}}
-                                                    {{/if}}
-                                                    <img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
-                                                            <!--</a>-->
-                                                    {{#if this.needsReg}}
-                                                        {{#if this.allowRemove}}
-                                                        {{else}}
-                                                            </a>
-                                                        {{/if}}
-                                                    {{else}}
-                                                        {{#if this.chayolei}}
-                                                            </a>
-                                                        {{/if}}
-                                                    {{/if}}
-                                                </div>
-                                            </td>
-                                            <td style="padding-left:10px" id="{{@key}}">
-                                                <div class="childrens-content">
-                                                    {{#if this.needsReg}}
-                                                        {{#if this.allowRemove}}
-                                                        {{else}}
-                                                            {{#if this.new_day_school}}
-                                                                <a href="ds_intro.html?id={{@key}}">
-                                                            {{else}}
-                                                                <a href="medals/?id={{@key}}">
-                                                            {{/if}}
-                                                        {{/if}}
-                                                    {{else}}
-                                                        {{#if this.chayolei}}
-                                                            {{#if this.new_day_school}}
-                                                                <a href="ds_intro.html">
-                                                            {{else}}
-                                                                <a href="medals/?id={{@key}}">
-                                                            {{/if}}
-                                                        {{/if}}
-                                                    {{/if}}
-                                                    <div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
-                                                    <div class="childrens-content-h2">{{school}} - {{city}}</div>
-                                                    {{#if this.needsReg}}
-                                                        {{#if this.allowRemove}}
-                                                        {{else}}
-                                                            </a>
-                                                        {{/if}}
-                                                    {{else}}
-                                                        {{#if this.chayolei}}
-                                                            </a>
-                                                        {{/if}}
-                                                    {{/if}}
-                                                    {{#if this.needsReg}}
-                                                    <div class="button-spacing">
-                                                        {{#if this.schoolRegistered}}
-                                                            {{#if this.schoolTypeRegistered}}
-                                                                {{#if this.reg_types.chayolei}}
-                                                                    <button class="btn btn-primary re_register">
-                                                                    {{#if this.confirmationOnly}}
-<!--                                                                        <span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>-->
-                                                                    {{else}}
-                                                                        <span data-key="RegisterChayolei" class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}
-                                                                    {{/if}}
-                                                                    </button>
-                                                                {{/if}}
-                                                                {{#if this.reg_types.chidon}}
-                                                                    {{#if this.reg_types.chayolei}}
-                                                                        <div class="button-spacing"></div> <!-- spacer if showing both chayolei and chidon buttons -->
-                                                                    {{/if}}
-                                                                    <button class="btn btn-primary re_register"><span data-key="RegisterChidon" class="i18n2">Chidon Limmud Enrollment</span>
-                                                                        {{ this.next_year_chidon }}</button>
-                                                                {{/if}}
-                                                            {{/if}}
-                                                        {{/if}}
-                                                    </div>
-                                                    {{/if}}
-
-<!--                                                    {{#if this.ultimate_trip}}-->
-<!--                                                    <div class="button-spacing">-->
-<!--                                                        <button class="btn btn-primary ultimate_trip">Edit Ultimate Trip Info</button>-->
-<!--                                                    </div>-->
-<!--                                                    {{/if}}-->
-
-                                                    {{#if this.chayoleiRegistered}}
-                                                    <div class="button-spacing">
-                                                        <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredCH" class="i18n2"> Enrolled for Chayolei TH </span> {{ this.reg_year }}</div>
-                                                    </div>
-                                                    {{/if}}
-
-                                                    {{#if this.bookPurchased}}
-                                                        <div class="button-spacing">
-                                                            <div class="chidonRegInfo" style="color: #FFA07A">Purchased Yahadus Book</div>
-                                                        </div>
-                                                    {{/if}}
-
-<!--                                                    {{#if this.chidon5783}}-->
-                                                            <div class="button-spacing">
-<!--                                                                <button class="btn btn-danger invitation" id="{{this.user_serial}}">Share your Invitation</button>-->
-<!--                                                                <button class="btn btn-danger reviewCert" id="{{this.user_serial}}:{{this.user_id}}">Review your Certificate</button>-->
-<!--                                                                {{#if this.rep}}-->
-<!--                                                                    <button class="btn btn-primary chidonPhoto">Update your Chidon Photo</button>-->
-<!--                                                                {{/if}}-->
-<!--                                                                {{#if this.shabbatonPaid}}-->
-<!--                                                                    <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon Rewards {{ this.next_year_chidon }}</div>-->
-<!--                                                                {{/if}}-->
-                                                                <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{ this.next_year_chidon }}</div>
-                                                                {{#if this.editChidon}}
-                                                                    <button class="btn btn-primary chidon_info" style="margin-bottom: 8px"><span>View / Edit Chidon Enrollment Options</span></button><br />
-                                                                {{/if}}
-<!--                                                                <button class="btn btn-primary re_register"><span>Purchase-->
-<!--                                                                    {{#if this.bookPurchased}}Extra{{/if}}-->
-<!--                                                                    Yahadus Book</span></button>-->
-                                                            </div>
-<!--                                                    {{/if}}-->
-
-<!--                                                    {{#if this.gameSet}}-->
-<!--                                                        <div class="button-spacing">-->
-<!--                                                            <div class="chidonRegInfo" style="color: #FFA07A">Purchased Game Set</div>-->
-<!--                                                        </div>-->
-<!--                                                    {{/if}}-->
-
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                  <table width="100%" style="margin-left:-10px">
+                    <tr>
+                      <td width="33.3%" valign="top">
+                        <div class="avatar-container img-people" align="center" style="position:relative">
+                          <!--<a href="medals/index.html?id={{@key}}">-->
+                          {{#if this.needsReg}}
+                            {{#if this.allowRemove}}
+                            {{else}}
+                              {{#if this.new_day_school}}
+                              <a href="ds_intro.html">
+                              {{else}}
+                                <a href="medals/?id={{@key}}">
+                              {{/if}}
+                            {{/if}}
+                          {{else}}
+                            {{#if this.chayolei}}
+                              {{#if this.new_day_school}}
+                              <a href="ds_intro.html">
+                              {{else}}
+                                <a href="medals/?id={{@key}}">
+                              {{/if}}
+                            {{/if}}
+                          {{/if}}
+                          {{#if this.mobile_pic}}
+                            <img src="{{mobile_pic}}" class="children-avatar">
+                          {{else}}
+                            {{#if this.photo}}
+                              {{#if this.thumb}}
+                                <img src="/thumbs/{{thumb}}" class="children-avatar">
+                              {{else}}
+                                <img src="../../git cdh{{photo}}" class="children-avatar">
+                              {{/if}}
+                            {{else}}
+                              <img src="images/profile-photo-default.jpg" class="children-avatar">
+                            {{/if}}
+                          {{/if}}
+                          <img src="/mobile/img_new/ranks/{{rankOrd}}.svg" class="children-mark">
+                          <!--</a>-->
+                          {{#if this.needsReg}}
+                            {{#if this.allowRemove}}
+                            {{else}}
+                            </a>
+                            {{/if}}
+                          {{else}}
+                            {{#if this.chayolei}}
+                            </a>
+                            {{/if}}
+                          {{/if}}
+                        </div>
+                      </td>
+                      <td style="padding-left:10px" id="{{@key}}">
+                        <div class="childrens-content">
+                          {{#if this.needsReg}}
+                            {{#if this.allowRemove}}
+                            {{else}}
+                              {{#if this.new_day_school}}
+                                <a href="ds_intro.html?id={{@key}}">
+                              {{else}}
+                                <a href="medals/?id={{@key}}">
+                              {{/if}}
+                            {{/if}}
+                          {{else}}
+                            {{#if this.chayolei}}
+                              {{#if this.new_day_school}}
+                              <a href="ds_intro.html">
+                              {{else}}
+                                <a href="medals/?id={{@key}}">
+                              {{/if}}
+                            {{/if}}
+                          {{/if}}
+                          <div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
+                          <div class="childrens-content-h2">{{school}} - {{city}}</div>
+                          {{#if this.needsReg}}
+                            {{#if this.allowRemove}}
+                            {{else}}
+                            </a>
+                            {{/if}}
+                          {{else}}
+                            {{#if this.chayolei}}
+                              </a>
+                            {{/if}}
+                          {{/if}}
+                          {{#if this.needsReg}}
+                            <div class="button-spacing">
+                              {{#if this.schoolRegistered}}
+                                {{#if this.schoolTypeRegistered}}
+                                  {{#if this.reg_types.chayolei}}
+                                    <button class="btn btn-primary re_register">
+                                      {{#if this.confirmationOnly}}
+                                        <!--                                                                        <span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>-->
+                                      {{else}}
+                                        <span data-key="RegisterChayolei"
+                                              class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}
+                                      {{/if}}
+                                    </button>
+                                  {{/if}}
+                                  {{#if this.reg_types.chidon}}
+                                    {{#if this.reg_types.chayolei}}
+                                      <div class="button-spacing"></div>
+                                      <!-- spacer if showing both chayolei and chidon buttons -->
+                                    {{/if}}
+                                    <button class="btn btn-primary re_register"><span data-key="RegisterChidon"
+                                                                                      class="i18n2">Chidon Limmud Enrollment</span>
+                                      {{ this.next_year_chidon }}</button>
+                                  {{/if}}
+                                {{/if}}
+                              {{/if}}
                             </div>
-                            {{/each}}
-                        </script>
-                    </div>
-                    <div id='no-children'>
-                        <h3>
+                          {{/if}}
+
+                          <!--                                                    {{#if this.ultimate_trip}}-->
+                          <!--                                                    <div class="button-spacing">-->
+                          <!--                                                        <button class="btn btn-primary ultimate_trip">Edit Ultimate Trip Info</button>-->
+                          <!--                                                    </div>-->
+                          <!--                                                    {{/if}}-->
+
+                          {{#if this.chayoleiRegistered}}
+                            <div class="button-spacing">
+                              <div class="chidonRegInfo" style="color: #17771c"><span data-key="RegisteredCH"
+                                                                                      class="i18n2"> Enrolled for Chayolei TH </span> {{ this.reg_year }}
+                              </div>
+                            </div>
+                          {{/if}}
+
+                          {{#if this.bookPurchased}}
+                            <div class="button-spacing">
+                              <div class="chidonRegInfo" style="color: #FFA07A">Purchased Yahadus Book</div>
+                            </div>
+                          {{/if}}
+
+                          <!--                                                    {{#if this.chidon5783}}-->
+                          <div class="button-spacing">
+                            <!--                                                                <button class="btn btn-danger invitation" id="{{this.user_serial}}">Share your Invitation</button>-->
+                            <!--                                                                <button class="btn btn-danger reviewCert" id="{{this.user_serial}}:{{this.user_id}}">Review your Certificate</button>-->
+                            <!--                                                                {{#if this.rep}}-->
+                            <!--                                                                    <button class="btn btn-primary chidonPhoto">Update your Chidon Photo</button>-->
+                            <!--                                                                {{/if}}-->
+                            <!--                                                                {{#if
+                            this.shabbatonPaid}}-->
+                            <!--                                                                    <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon Rewards {{ this.next_year_chidon }}</div>-->
+                            <!--                                                                {{/if}}-->
+                            <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon
+                              Limmud {{ this.next_year_chidon }}</div>
+                            {{#if this.editChidon}}
+                              <button class="btn btn-primary chidon_info" style="margin-bottom: 8px"><span>View / Edit Chidon Enrollment Options</span></button>
+                              <br/>
+                              <button class="btn btn-primary report-card" style="display: none;"><span>View Report Card</span></button><br />
+                            {{/if}}
+                            <!--                                                                <button class="btn btn-primary re_register"><span>Purchase-->
+                            <!--                                                                    {{#if
+                              this.bookPurchased}}Extra{{/if}}-->
+                            <!--                                                                    Yahadus Book</span></button>-->
+                          </div>
+                          <!--                                                    {{/if}}-->
+
+                          <!--                                                    {{#if this.gameSet}}-->
+                          <!--                                                        <div class="button-spacing">-->
+                          <!--                                                            <div class="chidonRegInfo" style="color: #FFA07A">Purchased Game Set</div>-->
+                          <!--                                                        </div>-->
+                          <!--                                                    {{/if}}-->
+
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            {{/each}}
+          </script>
+        </div>
+        <div id='no-children'>
+          <h3>
                             <span data-key="WelcomeMsg1" class="i18n">
                                 Welcome to your Tzivos Hashem Family Account. Get
                                 started by
                             </span>
-                            <a href="/mobile/registration/child.html" data-key="WelcomeMsg2Add" class="i18n">
-                                adding a
-                                child
-                            </a>.
-                        </h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bottomSpace"></div>
-            <!--
-            <div id="popModal" class="modal fade" role="dialog">
-              <div class="modal-dialog modal-sm">
-
-                <div class="modal-content">
-                    <form action="addchild.php" method="post" id="popup">
-                        <div class="modal-body">
-                            Has the child that you are adding ever been in Tzivos Hashem?<br />
-                            <input type="radio" class="thAdded" name="childAdded" value="1" /> Yes<br />
-                            <input type="radio" class="thAdded" name="childAdded" value="0" /> No
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-default" name="submit">Continue</button>
-                        </div>
-                    </form>
-                </div>
-
-              </div>
-            </div>
-            -->
-            <div class="span12"
-                style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background: #4258a2;display:flex;"
-                id="news-link">
-                <div class="span12 footer">
-                    <div class="span3" style="width: 100%">
-                        <a href="/mobile/news?v=3">
-                            <div class="menu-item">
-                                <div class="span12">
-                                    <picture>
-                                        <img src="/mobile/img_new/news-color-white.svg" alt="news" />
-                                    </picture>
-                                </div>
-                                <div class="span12">
-                                    <span data-key="News" class="i18n">News</span>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+            <a href="/mobile/registration/child.html" data-key="WelcomeMsg2Add" class="i18n">
+              adding a
+              child
+            </a>.
+          </h3>
         </div>
+      </div>
     </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="exampleModalLongTitle"></h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+    <div class="bottomSpace"></div>
+    <!--
+    <div id="popModal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-sm">
 
+        <div class="modal-content">
+            <form action="addchild.php" method="post" id="popup">
+                <div class="modal-body">
+                    Has the child that you are adding ever been in Tzivos Hashem?<br />
+                    <input type="radio" class="thAdded" name="childAdded" value="1" /> Yes<br />
+                    <input type="radio" class="thAdded" name="childAdded" value="0" /> No
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-default" name="submit">Continue</button>
                 </div>
-            </div>
+            </form>
         </div>
+
+      </div>
+    </div>
+    -->
+    <div class="span12"
+         style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background: #4258a2;display:flex;"
+         id="news-link">
+      <div class="span12 footer">
+        <div class="span3" style="width: 100%">
+          <a href="/mobile/news?v=3">
+            <div class="menu-item">
+              <div class="span12">
+                <picture>
+                  <img src="/mobile/img_new/news-color-white.svg" alt="news"/>
+                </picture>
+              </div>
+              <div class="span12">
+                <span data-key="News" class="i18n">News</span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </div>
+</div>
 
-    <script src="../js/translation/parent-detail/parent_detail.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
+<!-- Modal -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLongTitle"></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
 
-            if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-            // allow parents to swipe to open a child's account.
-            function setSwiper() {
-                $("#children .row").each(function () {
-                    var h = new Hammer(this);
-                    var id = $(this).find("table td:last-child").attr('id');
-                    h.on("swipe", function () {
-                        location.href = "medals/?id=" + id;
-                    });
-                });
+<!-- Report Card Modal -->
+<div class="modal fade" id="reportCard" tabindex="-1" role="dialog" aria-labelledby="reportCardTitle"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="reportCardTitle">Report Card</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <b>Name:</b> <span id="child-name"></span><br/>
+        <b>School:</b> <span id="child-school"></span><br/>
+        <b>Grade:</b> <span id="child-grade"></span><br/>
+        <b>Track you are on:</b> <span id="child-track"></span><br/>
+        <b>Highest track passed:</b> <span id="child-highest-track"></span><br/>
+        <b>Learning commitment per day:</b> <span id="child-learning-commitment"></span><br/>
+        <table>
+          <tr>
+            <th>Test</th>
+            <th>Total commited Learning Time</th>
+            <th>Total actual Learning Time</th>
+          </tr>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-                translate(); // on mobile\js\translation\parent-detail\parent_detail.js
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 
+<script src="../js/translation/parent-detail/parent_detail.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
 
-            }
+    if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
-            // make sure we have a cookie
-            var admin = Cookies.get('admin');
-            if (!admin) {
-                window.location = "index.html";
-            }
+    // allow parents to swipe to open a child's account.
+    function setSwiper() {
+      $("#children .row").each(function () {
+        var h = new Hammer(this);
+        var id = $(this).find("table td:last-child").attr('id');
+        h.on("swipe", function () {
+          location.href = "medals/?id=" + id;
+        });
+      });
+      translate(); // on mobile\js\translation\parent-detail\parent_detail.js
+    }
 
-            // remove any shipping cookies
-            Cookies.remove('shipping');
-            Cookies.remove('shipOpt');
-            Cookies.remove('destination');
+    // make sure we have a cookie
+    var admin = Cookies.get('admin');
+    if (!admin) {
+      window.location = "index.html";
+    }
 
-            // find out if we should show link for chidon registration
-            $(".chidon_reg").click( function () {
-                Cookies.set('chidon_admin', admin)
-                location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
-            })
+    if (Cookies.get('naftoli')) $(".report-card").show()
 
-            // get the current year
-            var year;
-            $.ajax({
-                type: "POST",
-                url: "/mobile/chidon/ajax/getYear.php",
-                async: false,
-                success: function (info) {
-                    year = info;
-                }
+    // remove any shipping cookies
+    Cookies.remove('shipping');
+    Cookies.remove('shipOpt');
+    Cookies.remove('destination');
+
+    // find out if we should show link for chidon registration
+    $(".chidon_reg").click(function () {
+      Cookies.set('chidon_admin', admin)
+      location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
+    })
+
+    // get the current year
+    var year;
+    $.ajax({
+      type: "POST",
+      url: "/mobile/chidon/ajax/getYear.php",
+      async: false,
+      success: function (info) {
+        year = info;
+      }
+    });
+
+    // load children
+    var parent_id;
+    var allChildren = []
+    var childrenToRegister = [];
+    $.post('ajax/getChildren.php', {
+      admin: admin
+    }, function (success) {
+      if (success == -1) {
+        window.location = "index.html";
+      } else {
+        var data = $.parseJSON(success);
+        var parent = data.parent;
+        var children = data.children;
+        allChildren = children
+
+        parent_id = parent.id;
+        $("#family_id").text(parent_id)
+
+        var father = parent.father;
+        var mother = parent.mother;
+
+        if (father)
+          $(".father").text(father.toUpperCase());
+        if (mother)
+          $(".mother").text(mother.toUpperCase());
+
+        var fatherPic = parent.fatherPic;
+        var motherPic = parent.motherPic;
+
+        if (fatherPic != '' && fatherPic != null) {
+          $("#father").attr('src', fatherPic);
+        }
+        var w = $("#father").width();
+        //var newW = w * 1.1;
+        //$("#father").width( newW );
+        //$("#father").height( newW );
+
+        if (motherPic != '' && motherPic != null) {
+          $("#mother").attr('src', motherPic);
+        }
+        //$("#mother").width( newW );
+        //$("#mother").height( newW );
+
+        //set auction button link
+        //for (var c in children) {
+        //	$("#auction").attr('href', '/mobile/auction/category2.html?id=' + c);
+        //	break;
+        //}
+        if (parent.gear > 0) $(".gear").show()
+        else $(".gear").hide()
+
+        // sepearate registered and un-registered
+        var registred_children = {};
+        var unregistered_children = {};
+
+        for (var c in children) {
+          var child = children[c]
+
+          if (child.chidonRegistered && parseInt(child.chidonSchoolConfirmed)) {
+            $(".subsidy").show()
+          }
+
+          if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
+            unregistered_children[c] = child;
+            childrenToRegister.push({
+              id: c,
+              reg: 0,
+              reviewed: 0,
+              anash: child.anashkinder,
+              shliach: child.myshliach
             });
+          } else {
+            registred_children[c] = child;
+          }
+        }
 
-            // load children
-            var parent_id;
-            var allChildren = []
-            var childrenToRegister = [];
-            $.post('ajax/getChildren.php', {
-                admin: admin
-            }, function (success) {
-                if (success == -1) {
-                    window.location = "index.html";
-                } else {
-                    var data = $.parseJSON(success);
-                    var parent = data.parent;
-                    var children = data.children;
-                    allChildren = children
+        Cookies.set('toRegister', childrenToRegister);
 
-                    parent_id = parent.id;
-                    $("#family_id").text(parent_id)
+        // Grab the template script
+        console.log(parent)
+        var tplScript = $("#childrenTpl").html();
 
-                    var father = parent.father;
-                    var mother = parent.mother;
+        // Compile the template
+        var tpl = Handlebars.compile(tplScript);
 
-                    if (father)
-                        $(".father").text(father.toUpperCase());
-                    if (mother)
-                        $(".mother").text(mother.toUpperCase());
+        // Pass our data to the template
+        var registered_html = tpl({
+          children: registred_children
+        });
+        var unregistered_html = tpl({
+          children: unregistered_children
+        });
+        // put the registered kids first
+        var html = registered_html + unregistered_html;
+        if ($.trim(html) === '') {
+          $("#no-children").show();
+        } else {
+          // Add the compiled html to the page
+          $(".chilrens").append(html);
+          setSwiper();
+          $(".year").text(year);
+        }
+      }
+    });
 
-                    var fatherPic = parent.fatherPic;
-                    var motherPic = parent.motherPic;
+    $.post('ajax/checkAdminInfo.php', {
+      admin: admin,
+      onlyEmail: true
+    }, function (result) {
+      result = JSON.parse(result);
+      if (!result.success && !localStorage.getItem('email_notified')) {
+        localStorage.setItem('email_notified', true);
+        location.href = "edit_profile.html";
+      }
+    });
 
-                    if (fatherPic != '' && fatherPic != null) {
-                        $("#father").attr('src', fatherPic);
-                    }
-                    var w = $("#father").width();
-                    //var newW = w * 1.1;
-                    //$("#father").width( newW );
-                    //$("#father").height( newW );
+    $(document).on('click', ".re_register", function () {
+      var id = $(this).parent().parent().parent().attr('id');
+      if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
+      else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
+    });
 
-                    if (motherPic != '' && motherPic != null) {
-                        $("#mother").attr('src', motherPic);
-                    }
-                    //$("#mother").width( newW );
-                    //$("#mother").height( newW );
+    const testTypes = {
+      maven: 'Yesod',
+      pro: 'Yediah',
+      expert: 'Havonah',
+      genius: 'Iyun'
+    }
 
-                    //set auction button link
-                    //for (var c in children) {
-                    //	$("#auction").attr('href', '/mobile/auction/category2.html?id=' + c);
-                    //	break;
-                    //}
-                    if (parent.gear > 0) $(".gear").show()
-                    else $(".gear").hide()
-
-                    // sepearate registered and un-registered
-                    var registred_children = {};
-                    var unregistered_children = {};
-
-                    for (var c in children) {
-                        var child = children[c]
-
-                        if (child.chidonRegistered && parseInt(child.chidonSchoolConfirmed)) {
-                            $(".subsidy").show()
-                        }
-
-                        if (child.schoolRegistered && child.schoolTypeRegistered && !child.user_registered) {
-                            unregistered_children[c] = child;
-                            childrenToRegister.push({
-                                id: c,
-                                reg: 0,
-                                reviewed: 0,
-                                anash: child.anashkinder,
-                                shliach: child.myshliach
-                            });
-                        } else {
-                            registred_children[c] = child;
-                        }
-                    }
-
-                    Cookies.set('toRegister', childrenToRegister);
-
-                    // Grab the template script
-                    console.log(parent)
-                    var tplScript = $("#childrenTpl").html();
-
-                    // Compile the template
-                    var tpl = Handlebars.compile(tplScript);
-
-                    // Pass our data to the template
-                    var registered_html = tpl({
-                        children: registred_children
-                    });
-                    var unregistered_html = tpl({
-                        children: unregistered_children
-                    });
-                    // put the registered kids first
-                    var html = registered_html + unregistered_html;
-                    if ($.trim(html) === '') {
-                        $("#no-children").show();
-                    } else {
-                        // Add the compiled html to the page
-                        $(".chilrens").append(html);
-                        setSwiper();
-                        $(".year").text(year);
-                    }
-                }
-            });
-
-            $.post('ajax/checkAdminInfo.php', {
-                admin: admin,
-                onlyEmail: true
-            }, function (result) {
-                result = JSON.parse(result);
-                if (!result.success && !localStorage.getItem('email_notified')) {
-                    localStorage.setItem('email_notified', true);
-                    location.href = "edit_profile.html";
-                }
-            });
-
-            $(document).on('click', ".re_register", function () {
-                var id = $(this).parent().parent().parent().attr('id');
-                if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
-                else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
-            });
-
-            const testTypes = {
-                maven: 'Yesod',
-                pro: 'Yediah',
-                expert: 'Havonah',
-                genius: 'Iyun'
-            }
-
-            $(document).on('click', '.chidon_info', function () {
-                let id = $(this).parent().parent().parent().attr('id')
-                let child = allChildren[id]
-                let title = "Chidon Enrollment Information for <b>" + child.first + " " + child.last + "</b>"
-                $("#exampleModalLongTitle").html(title)
-                let html = ''
-                if (parseInt(child.chidon_info.khk_reg)) html += "<h5>Enrolled for Kol Hatorah Kulah</h5>"
-                html += `
+    $(document).on('click', '.chidon_info', function () {
+      let id = $(this).parent().parent().parent().attr('id')
+      let child = allChildren[id]
+      let title = "Chidon Enrollment Information for <b>" + child.first + " " + child.last + "</b>"
+      $("#exampleModalLongTitle").html(title)
+      let html = ''
+      if (parseInt(child.chidon_info.khk_reg)) html += "<h5>Enrolled for Kol Hatorah Kulah</h5>"
+      html += `
                     <h5>Chosen Track: ${testTypes[child.chidon_info.test_type]}</h5>
                     <h5>Sweater Size: ${child.chidon_info.size}</h5>
                     <h5>Book Number: ${child.chidon_info.book}</h5>
                 `
-                if (child.gender == 'M') html += `<h5>Yarmulka Size: ${child.chidon_info.yarmulka}</h5>`
-                if (parseInt(child.chidon_info.recruited_by) > 0) html += `<h5>Recruited by: ${child.chidon_info.recruited_by}</h5>`
-                html += `<h5>Chidon Prizes:</h5><ul>`
-                for (let i = 0; i < child.chidon_prizes.length; i++) {
-                    let prize = child.chidon_prizes[i]
-                    let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
-                    html += `<li><h5>${desc}`
-                    if (prize.he_name) html += `<br />Personalized name on prize: ${prize.he_name}`
-                    html += `</h5></li>`
-                }
-                html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
-                $("#exampleModalCenter .modal-body").html(html)
-                $("#exampleModalCenter").modal('show')
-            })
+      if (child.gender == 'M') html += `<h5>Yarmulka Size: ${child.chidon_info.yarmulka}</h5>`
+      if (parseInt(child.chidon_info.recruited_by) > 0) html += `<h5>Recruited by: ${child.chidon_info.recruited_by}</h5>`
+      html += `<h5>Chidon Prizes:</h5><ul>`
+      for (let i = 0; i < child.chidon_prizes.length; i++) {
+        let prize = child.chidon_prizes[i]
+        let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
+        html += `<li><h5>${desc}`
+        if (prize.he_name) html += `<br />Personalized name on prize: ${prize.he_name}`
+        html += `</h5></li>`
+      }
+      html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
+      $("#exampleModalCenter .modal-body").html(html)
+      $("#exampleModalCenter").modal('show')
+    })
 
-            $(document).on('click', '.notify', function () {
-                // send to form
-                window.open('https://www.thechidon.com/registration-notification/', '_blank')
-            })
+    $(document).on('click', '.notify', function () {
+      // send to form
+      window.open('https://www.thechidon.com/registration-notification/', '_blank')
+    })
 
-            $(document).on('click', '.del', function () {
-                var del = confirm('Are you sure you want to delete this child from your profile?');
-                //alert( del );
-                if (del) {
-                    var id = $(this).parent().parent().attr('id');
-                    $.post('ajax/delChild.php', {
-                        child: id,
-                        parent: admin
-                    }, function (success) {
-                        if (success) {
-                            alert(i18next.t('AlertReCPr'));
-                            location.href = "parent_detail.html";
-                        } else {
-                            alert(i18next.t('AlertDEChp'));
-                        }
-                    });
-                }
-            });
-
-            $(document).on('click', '.ultimate_trip', function () {
-                Cookies.set('chidon_admin', admin)
-                location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
-            })
-
-            $(document).on('click', '.reviewCert', function () {
-                var id = $(this).attr('id')
-                window.open('certs.html?ids=' + id, '_blank')
-            })
-
-            $(document).on('click', '.chidonPhoto', function () {
-                var id = $(this).parent().parent().parent().attr('id');
-                location.href = "upload_photo.html?id=" + id;
-            });
-
-            $(document).on('click', '.invitation', function () {
-                let id = $(this).attr('id')
-                window.open('/chidonOld/invitations/index.html?id=' + id, '_blank')
-            })
-
-            $(document).on('click', '.shabbaton', function() {
-                Cookies.set('chidon_admin', admin)
-                location.href = 'https://chidondrive.com/site/enrollNew.html';
-            });
-
-            $(document).on('click', '.shabbatonConfirm', function() {
-                let url = "/mobile/chidon/chidon_purchases.html";
-                location.href = url;
-            });
-
-            $(document).on('click', '.confirm_chidon', function () {
-                location.href = '/mobile/chidon/confirmation_intro.html'
-            })
-
-            $(document).on('click', '.chidondrive', function () {
-                Cookies.set('chidon_admin', admin)
-                if (location.href.includes('mashpia.com')) location.href = "https://chidondrive.com/setup/?a=" + encodeURI(admin);
-                else location.href = "/chidonOld/chidon_drive/setup/";
-            });
-
-            $(document).on('click', '.noSchoolShabbaton', function () {
-                alert(i18next.t('AlertOpRe'));
-            });
-
-            $(document).on('click', '.story', function () {
-                location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
-            });
-
-            $(document).on('click', '.contest', function () {
-                location.href = "https://forms.gle/k44DGdcQcXGurqiWA"
-            })
-
-            $(document).on('click', '.yahadusSale', function () {
-                location.href = '/mobile/mivtzoim/yahadusBooks.html'
-            })
-
-            // $(document).on('click', '.editChidon', function() {
-            //     var id = $(this).parent().parent().parent().parent().attr('id');
-            //     location.href = "/mobile/chidon/edit.html?id=" + id;
-            // });
-
-            $(document).on('click', '.chanuka', function () {
-                location.href = "/mobile/mivtzoim/chanuka.html";
-            });
-
-            // $(document).on('click', '.enroll', function() {
-            //     //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
-            //     // var id = $(this).parent().parent().parent().parent().attr('id');
-            //     // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
-            //     // set chidon_admin cookie
-            //     let url = "https://chidondrive.com/site/enroll.html?a=" + Cookies.get('admin');
-            //     location.href = url;
-            // });
-
-            $(document).on('click', '.heyTeves', function() {
-                // location.href = "/mobile/mivtzoim/heyTeves.html";
-            })
-
-            $(document).on('click', '.editEnrollment', function () {
-                let url = "https://chidondrive.com/site/edit.html?a=" + Cookies.get('admin');
-                location.href = url;
-            });
-
-            $(document).on('click', '.chidon', function () {
-                var id = $(this).parent().parent().parent().attr('id');
-                var shliach = false;
-                // if it's a myshliach child then we need to send them elsewhere
-                var list = Cookies.getJSON('toRegister');
-                for (var l in list) {
-                    if (l.id == id) {
-                        if (l.shliach == 1) {
-                            shliach = true;
-                            alert(i18next.t('AlertTCHPV'));
-                            break;
-                        }
-                    }
-                }
-                if (!shliach) location.href = "/mobile/chidon/?id=" + id;
-            });
-
-
-            $(document).on('click', '.gameSet', function () {
-                location.href = '/mobile/reg/gameSale.html'
-            })
-
-            $(document).on('click', '.story', function () {
-                location.href = 'http://www.tzivoshashem.com/rebbestories'
-            })
-
-            $(document).on('click', '.subsidy', function () {
-                Cookies.set('chidon_admin', admin)
-                location.href = 'subsidy.html'
-            })
-
-            $("#logOff").click(function () {
-                Cookies.remove('admin', {
-                    path: '/'
-                });
-                Cookies.remove('admin_id', {
-                    path: '/'
-                });
-                var allCookies = Cookies.getJSON();
-                for (var c in allCookies) {
-                    Cookies.remove(c, {
-                        path: '/'
-                    });
-                }
-                window.location = "/mobile/reg/";
-            });
-
-            $("#popup").submit(function () {
-                var answer = $(".thAdded");
-                var submit = false;
-                $(answer).each(function () {
-                    if ($(this).is(":checked")) {
-                        submit = true;
-                        return;
-                    }
-                });
-                if (submit) {
-                    return true;
-                } else {
-                    alert(i18next.t('AlertTchild'));
-                    return false;
-                }
-            });
-
-            $(document).on('click', '.feedback', function () {
-                window.open("https://form.jotform.com/Chidon/chidon-feedback-form", "_blank");
-            });
-            $(document).on('click', ".no-register", function () {
-                alert(i18next.t('AlertTAdRE'));
-            });
-
-            $(document).on('click', '.lulav', function() {
-                // alert("Sorry, we are SOLD OUT!");
-                if (window.location.protocol == 'http:') {
-                    window.open("https://mashpia.com/mobile/reg/lulavSet.html");
-                } else {
-                    window.open("/mobile/reg/lulavSet.html");
-                }
-            });
-
-            $(document).on('click', '.invite_used', function () {
-                let id = $(this).attr('id')
-                $.post('ajax/updateInvite.php', { id }, function( success ) {
-                    if (success) {
-                        alert('Saved.')
-                        location.reload()
-                    }
-                    else alert('Error saving.')
-                })
-            })
-
-            $(document).on('click', '.gear', function() {
-                location.href = '/mobile/sweaters'
-            })
+    $(document).on('click', '.del', function () {
+      var del = confirm('Are you sure you want to delete this child from your profile?');
+      //alert( del );
+      if (del) {
+        var id = $(this).parent().parent().attr('id');
+        $.post('ajax/delChild.php', {
+          child: id,
+          parent: admin
+        }, function (success) {
+          if (success) {
+            alert(i18next.t('AlertReCPr'));
+            location.href = "parent_detail.html";
+          } else {
+            alert(i18next.t('AlertDEChp'));
+          }
         });
-    </script>
+      }
+    });
+
+    $(document).on('click', '.ultimate_trip', function () {
+      Cookies.set('chidon_admin', admin)
+      location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
+    })
+
+    $(document).on('click', '.reviewCert', function () {
+      var id = $(this).attr('id')
+      window.open('certs.html?ids=' + id, '_blank')
+    })
+
+    $(document).on('click', '.chidonPhoto', function () {
+      var id = $(this).parent().parent().parent().attr('id');
+      location.href = "upload_photo.html?id=" + id;
+    });
+
+    $(document).on('click', '.invitation', function () {
+      let id = $(this).attr('id')
+      window.open('/chidonOld/invitations/index.html?id=' + id, '_blank')
+    })
+
+    $(document).on('click', '.shabbaton', function () {
+      Cookies.set('chidon_admin', admin)
+      location.href = 'https://chidondrive.com/site/enrollNew.html';
+    });
+
+    $(document).on('click', '.shabbatonConfirm', function () {
+      let url = "/mobile/chidon/chidon_purchases.html";
+      location.href = url;
+    });
+
+    $(document).on('click', '.confirm_chidon', function () {
+      location.href = '/mobile/chidon/confirmation_intro.html'
+    })
+
+    $(document).on('click', '.chidondrive', function () {
+      Cookies.set('chidon_admin', admin)
+      if (location.href.includes('mashpia.com')) location.href = "https://chidondrive.com/setup/?a=" + encodeURI(admin);
+      else location.href = "/chidonOld/chidon_drive/setup/";
+    });
+
+    $(document).on('click', '.noSchoolShabbaton', function () {
+      alert(i18next.t('AlertOpRe'));
+    });
+
+    $(document).on('click', '.story', function () {
+      location.href = "https://docs.google.com/a/tzivoshashem.org/forms/d/1fhls5odH69pWlzpp3RGtSfVCg_G9heh0VjOqHl44Mug/edit";
+    });
+
+    $(document).on('click', '.contest', function () {
+      location.href = "https://forms.gle/k44DGdcQcXGurqiWA"
+    })
+
+    $(document).on('click', '.yahadusSale', function () {
+      location.href = '/mobile/mivtzoim/yahadusBooks.html'
+    })
+
+    // $(document).on('click', '.editChidon', function() {
+    //     var id = $(this).parent().parent().parent().parent().attr('id');
+    //     location.href = "/mobile/chidon/edit.html?id=" + id;
+    // });
+
+    $(document).on('click', '.chanuka', function () {
+      location.href = "/mobile/mivtzoim/chanuka.html";
+    });
+
+    // $(document).on('click', '.enroll', function() {
+    //     //alert("Shabbaton enrollment will IYH open up on Monday February 18, 2019");
+    //     // var id = $(this).parent().parent().parent().parent().attr('id');
+    //     // location.href = "/mobile/chidon/shabbaton.html?id=" + id;
+    //     // set chidon_admin cookie
+    //     let url = "https://chidondrive.com/site/enroll.html?a=" + Cookies.get('admin');
+    //     location.href = url;
+    // });
+
+    $(document).on('click', '.heyTeves', function () {
+      // location.href = "/mobile/mivtzoim/heyTeves.html";
+    })
+
+    $(document).on('click', '.editEnrollment', function () {
+      let url = "https://chidondrive.com/site/edit.html?a=" + Cookies.get('admin');
+      location.href = url;
+    });
+
+    $(document).on('click', '.chidon', function () {
+      var id = $(this).parent().parent().parent().attr('id');
+      var shliach = false;
+      // if it's a myshliach child then we need to send them elsewhere
+      var list = Cookies.getJSON('toRegister');
+      for (var l in list) {
+        if (l.id == id) {
+          if (l.shliach == 1) {
+            shliach = true;
+            alert(i18next.t('AlertTCHPV'));
+            break;
+          }
+        }
+      }
+      if (!shliach) location.href = "/mobile/chidon/?id=" + id;
+    });
 
 
-    <script>
-        (function (i, s, o, g, r, a, m) {
-            i['GoogleAnalyticsObject'] = r;
-            i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-            a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-            a.async = 1;
-            a.src = g;
-            m.parentNode.insertBefore(a, m)
-        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-        ga('create', 'UA-71974937-1', 'auto');
-        ga('send', 'pageview');
-    </script>
+    $(document).on('click', '.gameSet', function () {
+      location.href = '/mobile/reg/gameSale.html'
+    })
+
+    $(document).on('click', '.story', function () {
+      location.href = 'http://www.tzivoshashem.com/rebbestories'
+    })
+
+    $(document).on('click', '.subsidy', function () {
+      Cookies.set('chidon_admin', admin)
+      location.href = 'subsidy.html'
+    })
+
+    $("#logOff").click(function () {
+      Cookies.remove('admin', {
+        path: '/'
+      });
+      Cookies.remove('admin_id', {
+        path: '/'
+      });
+      var allCookies = Cookies.getJSON();
+      for (var c in allCookies) {
+        Cookies.remove(c, {
+          path: '/'
+        });
+      }
+      window.location = "/mobile/reg/";
+    });
+
+    $("#popup").submit(function () {
+      var answer = $(".thAdded");
+      var submit = false;
+      $(answer).each(function () {
+        if ($(this).is(":checked")) {
+          submit = true;
+          return;
+        }
+      });
+      if (submit) {
+        return true;
+      } else {
+        alert(i18next.t('AlertTchild'));
+        return false;
+      }
+    });
+
+    $(document).on('click', '.feedback', function () {
+      window.open("https://form.jotform.com/Chidon/chidon-feedback-form", "_blank");
+    });
+    $(document).on('click', ".no-register", function () {
+      alert(i18next.t('AlertTAdRE'));
+    });
+
+    $(document).on('click', '.lulav', function () {
+      // alert("Sorry, we are SOLD OUT!");
+      if (window.location.protocol == 'http:') {
+        window.open("https://mashpia.com/mobile/reg/lulavSet.html");
+      } else {
+        window.open("/mobile/reg/lulavSet.html");
+      }
+    });
+
+    $(document).on('click', '.invite_used', function () {
+      let id = $(this).attr('id')
+      $.post('ajax/updateInvite.php', {id}, function (success) {
+        if (success) {
+          alert('Saved.')
+          location.reload()
+        } else alert('Error saving.')
+      })
+    })
+
+    $(document).on('click', '.gear', function () {
+      location.href = '/mobile/sweaters'
+    })
+
+    $(document).on('click', '.report-card', async function () {
+      const learningTime = {
+          'maven': 10,
+          'pro': 20,
+          'expert': 30,
+          'genius': 45
+      }
+
+      const id = $(this).parent().parent().parent().attr('id')
+      const child = allChildren[id]
+      const res = await fetch('/chidonTests/api/reportCards/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          school_id: child.school_id,
+          class_id: child.class_id,
+          user_id: id
+        })
+      })
+      const data = await res.json()
+      console.log(data)
+      $("#child-name").text(child.first + ' ' + child.last)
+      $("#child-school").text(child.school)
+      $("#child-grade").text(child.grade)
+      $("#child-track").text(child.track)
+      $("#child-highest-track").text()
+      $("#child-learning-commitment").text()
+      $("#reportCard").modal('show')
+    })
+  });
+</script>
+
+
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-71974937-1', 'auto');
+  ga('send', 'pageview');
+</script>
 </body>
 
 </html>

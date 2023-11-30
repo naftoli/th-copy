@@ -95,6 +95,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['reg_year']      = $reg_year;
         $children[$row['user_id']]['chidon_year']   = $chidon_year;
         $children[$row['user_id']]['school_id']     = $row['school_id'];
+        $children[$row['user_id']]['class_id']      = $row['class_id'];
         $children[$row['user_id']]['shipping']      = $row['shipping_method'];
         $children[$row['user_id']]['chayoleiRegistered'] = false;
         $children[$row['user_id']]['new_day_school'] = intval($row['school_type_id']) == 50 ? true : false;
@@ -158,38 +159,38 @@ if ( !empty( $users ) ) {
         }
 
         //mivtza lulav
-        $lulavSchools = [];
-        $sqlLulav = "select ls.*
-                     from lulav_settings ls
-                     join schools s using (school_id)
-                     where school_country in ('United States','US','USA','U.S.A.','Canada','canada')
-                     and year = " . $reg_year;
-        $resLulav = mysql_query( $sqlLulav );
-        while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
-           if ( intval( $rowLulav['allow_lulav'] ) ) $lulavSchools[$rowLulav['school_id']] = $rowLulav['lulav_shipping'];
-        }
-
-         $children[$row['user_id']]['mivtzaLulav'] = 0;
-         if ( $children[$row['user_id']]['schoolRegistered']
-         	&& $children[$row['user_id']]['schoolTypeRegistered']
-         	&& $children[$row['user_id']]['user_registered']
-         	&& in_array( $row['school_id'], array_keys( $lulavSchools ) )
-         	) {
-         	$children[$row['user_id']]['lulavPurchased'] = 0;
-         	$children[$row['user_id']]['mivtzaLulav'] = 1;
-         	$children[$row['user_id']]['lulav_shipping'] = intval( $lulavSchools[$row['school_id']] );
-         }
-
-         // find out if user already purchases a set
-         if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
-         	$sqlPurchased = "select * from mashpia_purchases.purchase_details
-                            join mashpia_purchases.purchases using (purchase_id)
-                            where item_id in (1, 28) and user_id = " . $row['user_id'] . " and year = " . $reg_year;
-         	$resPurchased = mysql_query( $sqlPurchased );
-         	if ( mysql_num_rows( $resPurchased ) ) {
-         		$children[$row['user_id']]['lulavPurchased'] = 1;
-         	}
-         }
+//        $lulavSchools = [];
+//        $sqlLulav = "select ls.*
+//                     from lulav_settings ls
+//                     join schools s using (school_id)
+//                     where school_country in ('United States','US','USA','U.S.A.','Canada','canada')
+//                     and year = " . $reg_year;
+//        $resLulav = mysql_query( $sqlLulav );
+//        while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
+//           if ( intval( $rowLulav['allow_lulav'] ) ) $lulavSchools[$rowLulav['school_id']] = $rowLulav['lulav_shipping'];
+//        }
+//
+//         $children[$row['user_id']]['mivtzaLulav'] = 0;
+//         if ( $children[$row['user_id']]['schoolRegistered']
+//         	&& $children[$row['user_id']]['schoolTypeRegistered']
+//         	&& $children[$row['user_id']]['user_registered']
+//         	&& in_array( $row['school_id'], array_keys( $lulavSchools ) )
+//         	) {
+//         	$children[$row['user_id']]['lulavPurchased'] = 0;
+//         	$children[$row['user_id']]['mivtzaLulav'] = 1;
+//         	$children[$row['user_id']]['lulav_shipping'] = intval( $lulavSchools[$row['school_id']] );
+//         }
+//
+//         // find out if user already purchases a set
+//         if ( intval( $children[$row['user_id']]['mivtzaLulav'] ) ) {
+//         	$sqlPurchased = "select * from mashpia_purchases.purchase_details
+//                            join mashpia_purchases.purchases using (purchase_id)
+//                            where item_id in (1, 28) and user_id = " . $row['user_id'] . " and year = " . $reg_year;
+//         	$resPurchased = mysql_query( $sqlPurchased );
+//         	if ( mysql_num_rows( $resPurchased ) ) {
+//         		$children[$row['user_id']]['lulavPurchased'] = 1;
+//         	}
+//         }
 
          // mivtza chanuka
          $children[$row['user_id']]['menorah'] = 0;
@@ -393,6 +394,7 @@ if ( !empty( $users ) ) {
 //                    and user_id = " . $row['user_id'];
 //        $resGame = mysql_query($sqlGame);
 //        if (mysql_num_rows($resGame) > 0) $children[$row['user_id']]['gameSet'] = 1;
+
     }
 } else {
     $children = [];
