@@ -200,7 +200,7 @@ class ChidonTests
                     AND tc.user_id = tci.user_id
             WHERE
                 tc.year = :year AND u.school_id = :id 
-            ORDER BY school_name, class_grade, class_sub, last, first
+            ORDER BY s.school_name, class_grade, class_sub, last, first
         ");
         $stmt->execute([
             ':year' => $yr,
