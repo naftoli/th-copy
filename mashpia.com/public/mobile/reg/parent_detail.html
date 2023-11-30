@@ -996,7 +996,7 @@
       const id = $(this).parent().parent().parent().attr('id')
       const child = allChildren[id]
       const res = await fetch('/chidonTests/api/reportCards/', {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json'
         },
