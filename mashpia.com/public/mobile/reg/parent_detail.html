@@ -996,13 +996,13 @@
       const id = $(this).parent().parent().parent().attr('id')
       const child = allChildren[id]
       const res = await fetch('/chidonTests/api/reportCards/?user_id=' + id + '&class_id=' + child.class_id + '&school_id=' + child.school_id)
-      const data = await res.json()
+      const data = await res.json()[0]
       $("#child-name").text(child.first + ' ' + child.last)
       $("#child-school").text(child.school)
       $("#child-grade").text(child.grade)
-      $("#child-track").text(data[0].currentTrack)
-      $("#child-highest-track").text(data[0].highestTrack)
-      $("#child-learning-commitment").text(learningTime[data[0].currentTrack])
+      $("#child-track").text(data.currentTrack)
+      $("#child-highest-track").text(data.highestTrack)
+      $("#child-learning-commitment").text(learningTime[data.currentTrack])
       $("#reportCard").modal('show')
     })
   });
