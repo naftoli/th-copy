@@ -6,8 +6,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $user_id = mysql_real_escape_string($_GET['id']);
-$testNum = $_GET['test'];
 $ct = new ChidonTests();
+$testNum = isset($_GET['test']) ? $_GET['test'] : $ct->figureOutTestNum();
 $dates = $ct->getDates();
 
 $totals = [];
