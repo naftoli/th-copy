@@ -604,7 +604,7 @@
       window.location = "index.html";
     }
 
-    if (Cookies.get('naftoli')) $(".report-card").show()
+    if (Cookies.get('naftoli')) $(".report-card").attr('display', 'block')
 
     // remove any shipping cookies
     Cookies.remove('shipping');
