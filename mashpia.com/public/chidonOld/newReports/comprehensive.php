@@ -168,7 +168,7 @@ $types = $t->getTypes();
                     else echo $types[$user['test_type']];
                     echo "</td><td>";
 
-                    echo $t->getHighestTrack($user['marks'], $user['user_id'], true) . "</td><td>";
+                    echo $t->getHighestTrack($user['marks'][$user['th_chidon_id']], $user['user_id'], true) . "</td><td>";
 
                     $t->setLimmudDates(2459469, 2459514);
                     $timeLearned = $t->getTotalMinutesLearned($user['user_id']);

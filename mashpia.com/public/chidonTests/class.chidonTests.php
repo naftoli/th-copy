@@ -596,12 +596,10 @@ class ChidonTests
         }
 
         // make sure we pass each track on each test
-        foreach ($marks as $more) {
-            $num_tests = count($more);
-            foreach ($more as $details) {
-                foreach ($details as $track => $mark) {
-                    $marksByTrack[$track] += $mark;
-                }
+        $num_tests = count($marks);
+        foreach ($marks as $details) {
+            foreach ($details as $track => $mark) {
+                $marksByTrack[$track] += $mark;
             }
         }
 
