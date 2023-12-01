@@ -1009,17 +1009,18 @@
             $("#child-school").text(child.school)
             $("#child-grade").text(child.grade)
             $("#child-track").text(report_card.currentTrack)
-            $("#child-highest-track").text(report_card.highestTrackPassed)
+            $("#child-highest-track").text(report_card.highestTrackPassed == null ? '' : report_card.highestTrackPassed)
             $("#child-learning-commitment").text(learningTime[report_card.currentTrack])
             $("#child-actual-learning").text(time_learned)
 
             let html = ''
-            if (report_card.tests) {
+            if (report_card.tests && report_card.tests[1]) {
                 html += `
             <table class="table table-striped">
                 <thead>
                     <tr>
                         <th>Test #</th>
+                        <th></th>
                         <th>Yesod</th>
                         <th>Yediah</th>
                         <th>Havonah</th>
@@ -1039,7 +1040,11 @@
                     if (report_card.tests[i]) {
                         actualTests++
                         let test = report_card.tests[i]
-                        html += '<tr><td>' + i + '</td>'
+                        html += '<tr><td rowspan="2">' + i + '</td><td>Answered Correctly</td>'
+                        for (let track of tracks) {
+                            html += '<td>' + report_card.scores[i][track] + ' / ' + report_card.questions[track] + '</td>'
+                        }
+                        html += '</tr><tr><td>Mark</td>'
                         for (let track of tracks) {
                             html += '<td>' + (test[track] ? test[track] : '') + '%</td>'
                             totals[track] += test[track] ? test[track] : 0
@@ -1048,15 +1053,19 @@
                     }
                 }
                 if (actualTests > 1) {
-                    html += '<tr><th>Total Avg</th>'
+                    html += '<tr><th>Total Avg</th><th></th>'
                     for (let track of tracks) {
                         html += '<td>' + Math.round(totals[track] / actualTests) + '%</td>'
                     }
                     html += '</tr>'
                 }
-                html += '</tbody></table>'
+                html += '<tr><th>Needed Avg</th><th></th>'
+                for (let track of tracks) {
+                    html += '<th>' + report_card.avgs[track] + '%</th>'
+                }
+                html += '</tr></tbody></table>'
             } else {
-                html += '<h5>No tests taken yet.</h5>'
+                html += '<h5>No test marks are available yet.</h5>'
             }
             $("#report-card-table").html(html)
 
