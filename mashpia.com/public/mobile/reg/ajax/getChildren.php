@@ -312,7 +312,7 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chidon
-        $children[$row['user_id']]['reg_types']['chidon'] = false;
+        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
 
         // find chosen prizes for those enrolled into chidon
         if ($children[$row['user_id']]['chidon5783']) {
