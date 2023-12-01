@@ -453,7 +453,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // turn off chidon edit if no cookie
-//        if (! isset($_COOKIE['naftoli'])) $result['chidonEdit'] = false;
+        $result['chidonEdit'] = false;
 
         // turn off chayolei and chidon reg if school has not registered yet
         if (

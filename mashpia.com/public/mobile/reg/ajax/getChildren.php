@@ -303,8 +303,8 @@ if ( !empty( $users ) ) {
 //            }
          }
 
-         // turn off chidon edit if no cookie
-//        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['editChidon'] = false;
+         // turn off chidon editing for australian schools
+        $children[$row['user_id']]['editChidon'] = false;
 
         // if school hasn't registered, turn off chayolei, chidon registration
         if ( !$children[$row['user_id']]['schoolTypeRegistered'] ) {
