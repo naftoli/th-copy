@@ -312,7 +312,7 @@ function ReportCard(info) {
                                       <React.Fragment key={track + '_' + i}>
                                       {(track !== 'genius' || (track === 'genius' && showIyun)) && (
                                           <td className={report.highestTrack === track ? 'bold' : ''}>
-                                            {report.scores[index] ? report.scores[index][track] : 0} / {report.questions[track]}
+                                            {report.scores && report.scores[index] ? report.scores[index][track] : 0} / {report.questions[track]}
                                           </td>
                                       )}
                                       </React.Fragment>
@@ -324,7 +324,7 @@ function ReportCard(info) {
                                       <React.Fragment key={track + '_mark_' + i}>
                                           {(track !== 'genius' || (track === 'genius' && showIyun)) && (
                                             <td className={report.highestTrack === track ? 'bold' : ''}>
-                                              {report.scores[index] ? (
+                                              {report.scores && report.scores[index] ? (
                                                 report.tests[index][track] % 1 ? report.tests[index][track].toFixed(2) :
                                                   report.tests[index][track]) : 0}%
                                               </td>
