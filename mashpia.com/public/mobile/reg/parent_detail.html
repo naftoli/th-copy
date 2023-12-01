@@ -1063,7 +1063,10 @@
                 for (let track of tracks) {
                     html += '<th>' + report_card.avgs[track] + '%</th>'
                 }
-                html += '</tr></tbody></table>'
+                html += '</tr>';
+                html += '<tr><th colspan="2">Passing Mark for Reward</th><th>80% Sweater & Gift</th><th>Sweater, Gift & Prizes</th>' +
+                  '<th>80% Sweater, Gift, Prizes & Regional Trip</th><th>80% Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</th></tr>'
+                html += '</tbody></table>'
             } else {
                 html += '<h5>No test marks are available yet.</h5>'
             }
