@@ -20,7 +20,7 @@ function purchaseItems() {
     $address = "";
     $state = "";
 
-    $description = "Yahadus - $$amount, Admin ID: " . $admin_id;
+    $description = "Hey Teves Sale - $$amount, Admin ID: " . $admin_id;
 
     if ($total > 0) {
         // figure out if we are charging a credit card on file or a new one
