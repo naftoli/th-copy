@@ -1478,6 +1478,35 @@ class ChidonShipping
         return $info;
     }
 
+    public function getHeiTeves($gender, $school, $items) {
+        $purchases = [];
+        $sql = "
+            SELECT 
+                *
+            FROM
+                mashpia_purchases.purchases p
+                    JOIN
+                mashpia_purchases.purchase_details pd USING (purchase_id)
+                    JOIN
+                mashpia_purchases.mivtzoim_items mi ON mi.mivtzoim_item_id = pd.item_id
+                    JOIN
+                users u USING (user_id)
+            WHERE
+                mi.yom_tov = 'Hei Teves'
+                    AND p.year = :year";
+        if ($gender == 'M') $sql .= " AND u.gender = 'M'";
+        else if ($gender == 'F') $sql .= " AND u.gender = 'F'";
+        if ($school > 0) $sql .= " AND u.school_id = " . $school;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            if (count($items) && !in_array($row['item'], $items)) continue;
+            $purchases[$row['user_id']][] = $row;
+        }
+        return $purchases;
+    }
+
     public function getGear($gender, $school, $items, $addresses = false) {
         $sql = "select * from family_sweaters s 
                 join users u using (user_id) 
