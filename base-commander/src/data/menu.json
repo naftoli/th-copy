@@ -61,6 +61,7 @@
         "items": [
           { "label": "Marks/Levels Settings", "legacy": true, "path": "/chidonTests/settings.php" },
           { "label": "Marks/Levels Settings Report", "legacy": true, "path": "/chidonTests/reports/settings_report.html" },
+          { "label":  "Track/Reward", "legacy": true, "path": "/chidonTests/setTypes.php" },
           { "label": "Enter Chidon Test Scores",
             "items": [
               { "label": "Test #1", "legacy": true, "path": "/chidonTests/enterScores.php?test_num=1" },
