@@ -1020,7 +1020,7 @@
                 <thead>
                     <tr>
                         <th>Test #</th>
-                        <th></th>
+                        <th>Questions/Mark</th>
                         <th>Yesod</th>
                         <th>Yediah</th>
                         <th>Havonah</th>
@@ -1040,30 +1040,36 @@
                     if (report_card.tests[i]) {
                         actualTests++
                         let test = report_card.tests[i]
-                        html += '<tr><td rowspan="2">' + i + '</td><td>Answered Correctly</td>'
+                        html += '<tr><td rowspan="2" style="text-align: center; vertical-align: middle">' + i + '</td><td>Answered Correctly</td>'
                         for (let track of tracks) {
-                            html += '<td>' + report_card.scores[i][track] + ' / ' + report_card.questions[track] + '</td>'
+                            if (report_card.highestTrack == track) html += '<td style="font-weight: bold">'
+                            else html += '<td>'
+                            html += report_card.scores[i][track] + ' / ' + report_card.questions[track] + '</td>'
                         }
                         html += '</tr><tr><td>Mark</td>'
                         for (let track of tracks) {
-                            html += '<td>' + (test[track] ? test[track] : '') + '%</td>'
+                            if (report_card.highestTrack == track) html += '<td style="font-weight: bold">'
+                            else html += '<td>'
+                            html += (test[track] ? test[track] : '') + '%</td>'
                             totals[track] += test[track] ? test[track] : 0
                         }
                         html += '</tr>'
                     }
                 }
-                if (actualTests > 1) {
-                    html += '<tr><th>Total Avg</th><th></th>'
-                    for (let track of tracks) {
-                        html += '<td>' + Math.round(totals[track] / actualTests) + '%</td>'
-                    }
-                    html += '</tr>'
-                }
-                html += '<tr><th>Needed Avg</th><th></th>'
+                html += '<tr><td>Needed Avg</td><td></td>'
                 for (let track of tracks) {
-                    html += '<th>' + report_card.avgs[track] + '%</th>'
+                    if (report_card.highestTrack == track) html += '<td style="font-weight: bold">'
+                    else html += '<td>'
+                    html += report_card.avgs[track] + '%</td>'
                 }
                 html += '</tr>';
+                // if (actualTests > 1) {
+                    html += '<tr><th>Total Avg</th><th></th>'
+                    for (let track of tracks) {
+                        html += '<th>' + Math.round(totals[track] / actualTests) + '%</th>'
+                    }
+                    html += '</tr>'
+                // }
                 html += '<tr><th colspan="2">Reward</th><th>Sweater & Gift</th><th>Sweater, Gift & Prizes</th>' +
                   '<th>Sweater, Gift, Prizes & Regional Trip</th><th>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</th></tr>'
                 html += '</tbody></table>'
