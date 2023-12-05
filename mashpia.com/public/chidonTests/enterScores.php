@@ -234,14 +234,14 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
           const info = await res.json()
           if (info.success) {
             const data = info.info
-            for (let id of data) {
-              let elem = '#' + id
-              document.getElementById(elem).checked = parseInt(data[id]) ? true : false
+            const ids = Object.keys(data)
+            for (let id of ids) {
+              if (data[id] && document.getElementById(id)) document.getElementById(id).checked = parseInt(data[id]) ? true : false
             }
           }
         }
 
-        $(".report_cards").click( async function() {
+        async function updateReportCards() {
           let id = $(this).attr('id')
           let isChecked = $(this).is(":checked")
           const res = await fetch('api/setReportCardsInfo.php', {
@@ -254,6 +254,8 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
           const result = await res.json()
           if (result.success) alert('Saved.')
           else alert('Error saving.')
-        })
+        }
+
+        $(".report_cards").click(updateReportCards)
     </script>
 </html>
