@@ -23,7 +23,8 @@ $sql = "SELECT th_chidon_id, prize, school_name, last, first, he_name, confirmed
         join admin_auths aa ON (u.user_id = aa.id AND aa.auth = 'user')
         join admins a using (admin_id)
         where s.school_id in (" . implode(',', array_keys($schools)) . ") 
-        and prize_id in (44, 45, 48, 50, 53, 54, 59, 60)
+        and prize_id in (
+            select prize_id from chidon_prizes where year = $year and personalization != '')
         and tc.year = $year
     UNION
         SELECT th_chidon_id, CONCAT('Yarmulka - ', yarmulka), s.school_name, u.last, u.first, null as he_name, confirmed_chidon_5781, class_grade, class_sub
@@ -41,7 +42,7 @@ $sql = "SELECT th_chidon_id, prize, school_name, last, first, he_name, confirmed
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_name']][] = $row;
-    $logger->debug("{$row['th_chidon_id']}, {$row['prize']}");
+//    $logger->debug("{$row['th_chidon_id']}, {$row['prize']}");
 }
 //echo "<pre>"; print_r($info); echo "</pre>";
 ?>
