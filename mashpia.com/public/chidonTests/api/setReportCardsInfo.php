@@ -13,6 +13,7 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 
 $input = json_decode(file_get_contents("php://input"));
+echo "<pre>"; print_r($input); echo "</pre>";
 $school_id = $input['school_id'];
 $value = $input['value'];
 $res = $stmt->execute([
