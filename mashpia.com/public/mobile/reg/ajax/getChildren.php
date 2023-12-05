@@ -103,7 +103,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['user_serial']    = $row['user_serial'];
         $children[$row['user_id']]['hachayol']       = $row['hachayol'];
         $children[$row['user_id']]['admin_id']       = $admin;
-        $children[$row['user_id']]['show_report_cards'] = $row['show_report_cards'];
+        $children[$row['user_id']]['show_report_cards'] = intval($row['show_report_cards']);
 
         // find out highest rank achieved
         $sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 
