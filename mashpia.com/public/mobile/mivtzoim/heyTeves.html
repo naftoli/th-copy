@@ -212,7 +212,7 @@
               html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="65px" /></td>
                   <td style="padding: 2px;">${item.item}</td><td><strike>${item.msrp}</strike><br />
                   <span style="color: red;">${item.sale}</span></td>
-                  <td>${item.stock > 0 ? item.stock : 'SOLD OUT'}</td></tr>`
+                  <td>${item.stock > 0 ? 'IN STOCK' : 'SOLD OUT'}</td></tr>`
           }
           html += "</table><hr />"
           $(".listOfItems").each( function() {

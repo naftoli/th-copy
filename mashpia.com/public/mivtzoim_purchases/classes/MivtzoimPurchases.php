@@ -244,7 +244,7 @@ class MivtzoimPurchases {
      */
     public function getItemsByType($type) {
         $stmt = $this->pdo->prepare("
-            SELECT * FROM mashpia_purchases.mivtzoim_items WHERE yom_tov = :type
+            SELECT * FROM mashpia_purchases.mivtzoim_items WHERE yom_tov = :type ORDER BY ord
         ");
         $stmt->execute(['type' => $type]);
         $rows = $stmt->fetchAll();
