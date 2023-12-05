@@ -233,9 +233,10 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
           const res = await fetch('api/getReportCardsInfo.php')
           const info = await res.json()
           if (info.success) {
-            for (let id of info) {
+            const data = info.info
+            for (let id of data) {
               let elem = '#' + id
-              document.getElementById(elem).checked = parseInt(info[id]) ? true : false
+              document.getElementById(elem).checked = parseInt(data[id]) ? true : false
             }
           }
         }
