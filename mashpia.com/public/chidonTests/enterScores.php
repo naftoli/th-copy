@@ -64,7 +64,6 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
 
 // initialize all tests to not be disabled
 $disabled = false;
-$school_id = implode('', array_keys($schools));
 $exceptions = [];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
@@ -125,6 +124,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
             foreach ($info as $school => $children) {
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
+                echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Cards on Parent Accounts</p>";
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th>";
                 foreach ($types as $type => $value) {
                     echo "<th>" . ucwords($value) . " Score</th>";
@@ -196,6 +196,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
         $(function() {
             const showAlert = <?= isset($_POST['submit']) ? 1 : 0?>;
             if (showAlert) alert('Please make sure to SAVE after entering scores.');
+            checkShowReportCards()
         })
         $(".score").focus( function() {
             let val = $(this).val()
@@ -227,5 +228,31 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
                 $(this).focus();
             }
         });
+
+        async function checkShowReportCards() {
+          const res = await fetch('api/getReportCardsInfo.php')
+          const info = await res.json()
+          if (info.success) {
+            for (let id of info) {
+              let elem = '#' + id
+              document.getElementById(elem).checked = parseInt(info[id]) ? true : false
+            }
+          }
+        }
+
+        $(".report_cards").click( async function() {
+          let id = $(this).attr('id')
+          let isChecked = $(this).is(":checked")
+          const res = await fetch('api/setReportCardsInfo.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ school_id: id, value: isChecked })
+          })
+          const result = await res.json()
+          if (result.success) alert('Saved.')
+          else alert('Error saving.')
+        })
     </script>
 </html>

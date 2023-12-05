@@ -433,13 +433,14 @@
                                                             <button class="btn btn-primary chidon_info" style="margin-bottom: 8px"><span>View / Edit Chidon Enrollment Options</span>
                                                             </button>
                                                             <br/>
-                                                            <button class="btn btn-primary report-card" style="display: none;">
-                                                                <span>View Report Card</span></button>
-                                                            <br/>
+                                                            {{#if this.show_report_cards}}
+                                                                <button class="btn btn-primary report-card"><span>View Report Card</span></button>
+                                                                <br/>
+                                                            {{/if}}
                                                         {{/if}}
                                                         <!--                                                                <button class="btn btn-primary re_register"><span>Purchase-->
-                                                        <!--                                                                    {{#if
-                                                          this.bookPurchased}}Extra{{/if}}-->
+                                                        <!--
+                                                        {{#if this.bookPurchased}}Extra{{/if}}-->
                                                         <!--                                                                    Yahadus Book</span></button>-->
                                                     </div>
                                                   <!--                                                    {{/if}}-->
