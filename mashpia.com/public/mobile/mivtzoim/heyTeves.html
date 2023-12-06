@@ -197,7 +197,7 @@
   }
 </script>
 <script>
-  let admin
+  let admin, sweaters_stock = {}
 
   // force https
   if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
@@ -205,8 +205,44 @@
   const setupItems = () => {
       $.post('ajax/getItems.php', { type: 'Hei Teves' }, function(result) {
           items = JSON.parse(result)
+          items.map(item => {
+              if (item.item.includes('Sweater')) sweaters_stock[item.mivtzoim_item_id] = item.stock
+          })
+
+          const sweaters = {
+              Boys: {
+                  'XX-Small Youth': items.filter(item => item.mivtzoim_item_id == 57)[0].mivtzoim_item_id,
+                  'X-Small Youth': items.filter(item => item.mivtzoim_item_id == 58)[0].mivtzoim_item_id,
+                  'Small Youth': items.filter(item => item.mivtzoim_item_id == 59)[0].mivtzoim_item_id,
+                  'Medium Youth': items.filter(item => item.mivtzoim_item_id == 60)[0].mivtzoim_item_id,
+                  'Large Youth': items.filter(item => item.mivtzoim_item_id == 61)[0].mivtzoim_item_id,
+                  'X-Small Adult': items.filter(item => item.mivtzoim_item_id == 62)[0].mivtzoim_item_id,
+                  'Small Adult': items.filter(item => item.mivtzoim_item_id == 63)[0].mivtzoim_item_id,
+                  'Medium Adult': items.filter(item => item.mivtzoim_item_id == 64)[0].mivtzoim_item_id,
+                  'Large Adult': items.filter(item => item.mivtzoim_item_id == 65)[0].mivtzoim_item_id,
+                  'X-Large Adult': items.filter(item => item.mivtzoim_item_id == 66)[0].mivtzoim_item_id,
+                  'XX-Large Adult': items.filter(item => item.mivtzoim_item_id == 67)[0].mivtzoim_item_id,
+                  'XXX-Large Adult': items.filter(item => item.mivtzoim_item_id == 68)[0].mivtzoim_item_id
+              },
+              Girls: {
+                  'XX-Small Youth': items.filter(item => item.mivtzoim_item_id == 69)[0].mivtzoim_item_id,
+                  'X-Small Youth': items.filter(item => item.mivtzoim_item_id == 70)[0].mivtzoim_item_id,
+                  'Small Youth': items.filter(item => item.mivtzoim_item_id == 71)[0].mivtzoim_item_id,
+                  'Medium Youth': items.filter(item => item.mivtzoim_item_id == 72)[0].mivtzoim_item_id,
+                  'Large Youth': items.filter(item => item.mivtzoim_item_id == 73)[0].mivtzoim_item_id,
+                  'X-Small Adult': items.filter(item => item.mivtzoim_item_id == 74)[0].mivtzoim_item_id,
+                  'Small Adult': items.filter(item => item.mivtzoim_item_id == 75)[0].mivtzoim_item_id,
+                  'Medium Adult': items.filter(item => item.mivtzoim_item_id == 76)[0].mivtzoim_item_id,
+                  'Large Adult': items.filter(item => item.mivtzoim_item_id == 77)[0].mivtzoim_item_id,
+                  'X-Large Adult': items.filter(item => item.mivtzoim_item_id == 78)[0].mivtzoim_item_id,
+                  'XX-Large Adult': items.filter(item => item.mivtzoim_item_id == 79)[0].mivtzoim_item_id,
+                  'XXX-Large Adult': items.filter(item => item.mivtzoim_item_id == 80)[0].mivtzoim_item_id
+              }
+          }
+
           let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>Price</th><th>In Stock</th></tr>"
           for (let item of items) {
+              if (item.item.includes('Sweater')) continue // skip sweaters
               html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock}"`
               if (parseInt(item.stock) === 0) html += ' disabled';
               html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="65px" /></td>
@@ -214,10 +250,27 @@
                   <span style="color: red;">${item.sale}</span></td>
                   <td>${item.stock > 0 ? 'IN STOCK' : 'SOLD OUT'}</td></tr>`
           }
-          html += "</table><hr />"
-          $(".listOfItems").each( function() {
-              let id = $(this).parent().parent().attr('id')
 
+          // sweaters
+          const genders = Object.keys(sweaters)
+          for (let g of genders) {
+              const sizes = Object.keys(sweaters[g])
+              html += `<tr id='0:20.00'><td><input type="number" class="qty" size="4" max="${sweaters_stock[sweaters[g][size]]}" /></td>
+                <td style="padding: 0;"><image src="images/Sweater Boys Mock Up 5783.png" width="65px" /></td>
+                <td style="padding: 2px;">
+                  Tzivos Hashem Sweater ${g}
+                  <select name="sweater_size" id="sweater_size">
+                    <option value="">Select Size</option>
+                    ${sizes.map(size => `<option value="${sweaters[g][size]}">${size} -
+                        ${sweaters_stock[sweaters[g][size]] > 0 ? 'IN STOCK' : 'SOLD OUT'}</option>`)}
+                  </select>
+                </td>
+                <td><strike>25.00</strike><br />
+                <span style="color: red;">20.00</span></td><td></tr>`
+          }
+          html += "</table><hr />"
+
+          $(".listOfItems").each( function() {
               $(this).empty().append(html)
           })
       })
@@ -226,13 +279,26 @@
   const calcTotal = () => {
       let total = 0
       $(".qty").each( function() {
-          const qty = parseInt($(this).val())
+          let qty = parseInt($(this).val())
           if (qty > 0) {
               const id = $(this).parent().parent().attr('id')
               const info = id.split(':')
-              const item_id = info[0]
-              const price = info[1]
-              total += parseInt(price) * qty
+              const item_id = parseInt(info[0])
+              const price = parseInt(info[1])
+
+              // check if it's a sweater and it's out of stock
+              if (item_id == 0) {
+                  const sweater_id = parseInt($(this).parent().parent().find("#sweater_size").val())
+                if (sweaters_stock[sweater_id] == 0) {
+                  setTimeout(() => {
+                    alert("Sorry, this sweater is out of stock.")
+                      $(this).val(0)
+                      calcTotal()
+                  }, 100)
+                }
+              }
+
+              total += price * qty
           }
       })
       $("#amount").text( total );
@@ -247,9 +313,9 @@
               const user_id = $(this).parent().parent().parent().parent().parent().parent().parent().attr('id')
               const id = $(this).parent().parent().attr('id')
               const info = id.split(':')
-              const item_id = info[0]
+              const item_id = info[0] > 0 ? info[0] : parseInt($(this).parent().parent().find("#sweater_size").val())
               const price = info[1]
-              list.push({ user_id, item_id, price, qty })
+              if (item_id && price) list.push({ user_id, item_id, price, qty })
           }
       })
       return list
@@ -376,6 +442,7 @@
     $(document).on('change', '.qty', calcTotal)
     $(document).on('blur', '.qty', calcTotal)
     $(document).on('click', '#purchase', purchaseSets);
+    $(document).on('change', '#sweater_size', calcTotal)
   });
 </script>
 </html>
