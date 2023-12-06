@@ -1,34 +1,18 @@
 <?php
+ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
 //$type = $_POST['type'];
 //ini_set('display_errors',1);
 if (isset($_POST['type'])) {
+    require_once '../api/header/db.php';
+    require_once '../api/models/School.php';
     $id = $_POST['id'];
-    require_once '../db.php';
-    
-    $campaigns = array();
-    $sql = "select subject_id, subject_name from subjects s 
-            join school_type_subjects sts using (subject_id) 
-            where s.subject_type in ('', 'WWTC', 'Tanya', 'Hakhel') 
-            and sts.school_type_id in (2,3,4,5,12,13) 
-            group by s.subject_id 
-            order by s.subject_name";
-    $result = mysql_query($sql) or die(mysql_error());
-    while ($row = mysql_fetch_assoc($result)) {
-        $campaigns[] = $row['subject_id'];
-    }
-    //print_r($campaigns);
-    // delete old subjects from school to make sure it's new and fresh
-    $sql = "delete from school_subjects where school_id = " . $id;
-    if (mysql_query($sql)) {
-        foreach ($campaigns as $campaign) {
-            $sql = "insert into school_subjects values( $id, $campaign )";
-            mysql_query( $sql ) or die(mysql_error());
-        }
+    $school = School::find_by_pk($id);
+    $res = $school->enrollIntoCampaigns();
+    if (!$res) {
+        echo "Error updating campaigns for school $id";
     } else {
-        foreach ($campaigns as $campaign) {
-            $sql = "insert ignore into school_subjects values( $id, $campaign )";
-            mysql_query( $sql ) or die(mysql_error());
-        }
+        echo "Successfully updated campaigns for school $id";
     }
 } else {
     $users = $_POST['id'];
