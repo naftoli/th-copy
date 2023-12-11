@@ -13,7 +13,7 @@ $colors: (
   // permenent cards are different
   @media print {
     border: 1px dashed; padding: 8px;
-    &.permanent{
+    &.permanent:not(:last-child){
       page-break-after: always; display: block;
        //.rank-card .top { opacity: 0; }
       border: none; padding: 0px;
