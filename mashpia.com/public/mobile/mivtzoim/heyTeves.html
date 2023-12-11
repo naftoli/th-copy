@@ -243,7 +243,7 @@
           let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>Price</th><th>In Stock</th></tr>"
           for (let item of items) {
               if (item.item.includes('Sweater')) continue // skip sweaters
-              html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock}"`
+              html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock > 20 ? 20 : item.stock}"`
               if (parseInt(item.stock) === 0) html += ' disabled';
               html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="65px" /></td>
                   <td style="padding: 2px;">${item.item}</td><td><strike>${item.msrp}</strike><br />
@@ -255,7 +255,7 @@
           const genders = Object.keys(sweaters)
           for (let g of genders) {
               const sizes = Object.keys(sweaters[g])
-              html += `<tr id='0:20.00'><td><input type="number" class="qty" size="4" max="10" /></td>
+              html += `<tr id='0:20.00'><td><input type="number" class="qty" size="4" max="20" /></td>
                 <td style="padding: 0;"><image src="images/Sweater Boys Mock Up 5783.png" width="65px" /></td>
                 <td style="padding: 2px;">
                   Tzivos Hashem Sweater ${g}
