@@ -89,7 +89,7 @@
               max-width: 65px;
           }
       }
-      image {
+      img {
           padding: 5px;
       }
     </style>
@@ -248,7 +248,7 @@
               if (item.item.includes('Sweater')) continue // skip sweaters
               html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock > 20 ? 20 : item.stock}"`
               if (parseInt(item.stock) === 0) html += ' disabled';
-              html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="65px" /></td>
+              html += ` /></td><td style="padding: 0;"><img src="images/${item.thumb}" width="65px" /></td>
                   <td style="padding: 2px;">${item.item}</td><td><strike>${item.msrp}</strike><br />
                   <span style="color: red;">${item.sale}</span></td>
                   <td>${item.stock > 0 ? 'IN STOCK' : 'SOLD OUT'}</td></tr>`
@@ -259,7 +259,7 @@
           for (let g of genders) {
               const sizes = Object.keys(sweaters[g])
               html += `<tr id='0:20.00'><td><input type="number" class="qty" size="4" max="20" /></td>
-                <td style="padding: 0;"><image src="images/Sweater Boys Mock Up 5783.png" width="65px" /></td>
+                <td style="padding: 0;"><img src="images/Sweater Boys Mock Up 5783.png" width="65px" /></td>
                 <td style="padding: 2px;">
                   Tzivos Hashem Sweater ${g}
                   <select name="sweater_size" id="sweater_size">
