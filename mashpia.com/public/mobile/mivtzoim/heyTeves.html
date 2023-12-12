@@ -200,7 +200,7 @@
   }
 </script>
 <script>
-  let admin, sweaters_stock = {}
+  let admin, sweaters_stock = {}, children = {}
 
   // force https
   if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
@@ -273,8 +273,11 @@
           }
           html += "</table><hr />"
 
+          const exceptions = [61, 55, 66, 110, 112, 180, 256, 643, 709, 713, 690]
           $(".listOfItems").each( function() {
-              $(this).empty().append(html)
+              let user_id = $(this).parent().parent().attr('id')
+              if (! exceptions.includes(children[user_id].school_id))
+                  $(this).empty().append(html)
           })
       })
   }
@@ -405,15 +408,15 @@
             if ( success == -1 ) {
                 window.location = "index.html";
             } else {
-                var data = $.parseJSON( success );
-                var children = data.children;
+                const data = $.parseJSON( success );
+                children = data.children;
 
                 // sepearate registered and un-registered
-                var registred_children = {};
-                var unregistered_children = {};
+                let registred_children = {};
+                let unregistered_children = {};
 
-                for (var c in children) {
-                    var child = children[c];
+                for (let c in children) {
+                    let child = children[c];
                     if ((child.user_registered || child.chidon5783) && ![58, 61].includes(child.school_id)) {
                         registred_children[c] = child;
                     } else {
