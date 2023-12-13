@@ -15,16 +15,27 @@ class IdCardsRouter {
         // add filters from post request
         if ( isset($_POST['school_id']) && $_POST['school_id'] ) {
             $filters[] = 'u.school_id = ?'; $params[] = $_POST['school_id'];
-        } if ( isset($_POST['class_id']) && $_POST['class_id'] ) {
+        }
+        if ( isset($_POST['class_id']) && $_POST['class_id'] ) {
             $filters[] = 'u.class_id = ?'; $params[] = $_POST['class_id'];
-        } if ( isset($_POST['rank']) && $_POST['rank'] ) {
+        }
+        if ( isset($_POST['rank']) && $_POST['rank'] ) {
             $filters[] = 'rm.rank_ord = ?'; $params[] = $_POST['rank'];
-        } if ( isset($_POST['user_serial']) && $_POST['user_serial'] ) {
+        }
+        if ( isset($_POST['user_serial']) && $_POST['user_serial'] ) {
             $filters[] = 'u.user_serial = ?'; $params[] = $_POST['user_serial'];
-        } if ( isset($_POST['hide_printed']) && $_POST['hide_printed'] ) {
+        }
+        if ( isset($_POST['hide_printed']) && $_POST['hide_printed'] ) {
             $filters[] = 'rm.date_printed IS NULL';
-        } if ( isset($_POST['earned_before']) ) { // expect julian date from client
-            $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_before'];
+        }
+//        if ( isset($_POST['earned_before']) ) { // expect julian date from client
+//            $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_before'];
+//        }
+        if ( isset($_POST['earned_start']) ) {
+            $filters[] = 'rm.date_promoted >= ?'; $params[] = $_POST['earned_start'];
+        }
+        if ( isset($_POST['earned_end']) ) {
+            $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_end'];
         }
         // combine the filters
         $filters[] = 'u.user_registered > 0';

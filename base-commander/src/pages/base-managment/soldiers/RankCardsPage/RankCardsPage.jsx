@@ -6,7 +6,7 @@ import { ButtonBar, Callout, Spinner, FontAwesome } from 'components/ui';
 import { Row, Col, Button, Alert, Input } from 'reactstrap';
 import { 
   PlatoonSelect, BaseSelect, Select, 
-  Checkbox, Radio, Date 
+  Checkbox, Radio, HeDate
 } from 'components/inputs'
 // functions
 import is from 'is_js';
@@ -31,7 +31,9 @@ export class RegistrationPage extends Component {
       school_id: false, class_id: false,
       rank: 1, user_serial: '', permanent: true,
       hide_printed: true, current: false,
-      earned_before: toJulian( moment() )
+      earned_before: toJulian( moment() ),
+      earned_start: 0,
+      earned_end: 0
     },
     cards: [],
     updates: []
@@ -111,6 +113,26 @@ export class RegistrationPage extends Component {
     });
   }
   print = () => { window.print(); }
+
+  JStoJulian = ( dateStr ) => {
+    const date = new Date( dateStr );
+    console.log(date)
+    return Math.floor((date / 86400000) - (date.getTimezoneOffset()/1440) + 2440587.5);
+  }
+
+  handleHeDateChange = ( start, end ) => {
+    console.log( start, end )
+    this.setState(prev => ({
+      ...prev,
+      options: {
+        ...prev.options,
+        earned_start: this.JStoJulian( start.date ),
+        earned_end: this.JStoJulian( end.date )
+      }
+    }), () => {
+      console.log( this.state.options )
+    })
+  }
   
   render() {
     const { login } = this.props;
@@ -189,10 +211,13 @@ export class RegistrationPage extends Component {
           </Col>
           <Col xs='12' sm='6'>
             <label>Ranks earned on or before:</label><br/>
-            <Date 
-              maxDate={ moment() }
-              value={ moment( julian.toDate( earned_before ) ) }
-              onChange={ this.handleDateChange('earned_before') } />
+            {/*<Date */}
+            {/*  maxDate={ moment() }*/}
+            {/*  value={ moment( julian.toDate( earned_before ) ) }*/}
+            {/*  onChange={ this.handleDateChange('earned_before') } />*/}
+            <HeDate
+              onChange={ this.handleHeDateChange }
+              />
           </Col>
           <Col xs='12' sm='6'>
             <label>Other Options:</label><br/>
