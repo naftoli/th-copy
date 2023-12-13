@@ -10,7 +10,7 @@ import {
 } from 'components/inputs'
 // functions
 import is from 'is_js';
-import julian from 'julian';
+// import julian from 'julian';
 import moment from 'moment';
 import { toast } from 'react-toastify';
 import { isAdmin } from 'functions/login';
@@ -137,7 +137,7 @@ export class RegistrationPage extends Component {
   render() {
     const { login } = this.props;
     const { cards, loading, loaded, options, updates } = this.state;
-    const { school_id, class_id, rank, user_serial, current, hide_printed, earned_before, permanent } = options;
+    const { school_id, class_id, rank, user_serial, current, hide_printed, permanent } = options;
     // generate dropdowns
     // const soldierOptions = this.getSoldierOptions();
     const rankOptions = this.getRankOptions();
