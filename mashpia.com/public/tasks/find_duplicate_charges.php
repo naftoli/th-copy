@@ -31,3 +31,5 @@ foreach ($extras as $row) {
     $stmt->execute(['id' => $row['registration_charge_id']]);
 }
 echo "done";
+
+echo "<pre>"; print_r($others); echo "</pre>";
