@@ -13,13 +13,15 @@ include('classes/school_class.php');
 
 require_once 'class.report.php';
 $r = new Report();
-$reportDates = $r->getReportDates();
+
 
 if (isset($_POST['date_selection'])) {
     $dates = explode(':', $_POST['date_selection']);
     $start = $dates[0];
     $end = $dates[1];
+    $r->overrideDates($start, $end);
 } else {
+    $reportDates = $r->getReportDates();
     $start = $reportDates['start'];
     $end = $reportDates['end'];
 }
