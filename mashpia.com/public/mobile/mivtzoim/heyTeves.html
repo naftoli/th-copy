@@ -270,11 +270,9 @@
           }
           html += "</table><hr />"
 
-          const exceptions = [61, 55, 66, 110, 112, 180, 256, 427, 643, 709, 713, 690]
+
           $(".listOfItems").each( function() {
-              let user_id = $(this).parent().parent().attr('id')
-              if (! exceptions.includes(parseInt(children[user_id].school_id)))
-                  $(this).empty().append(html)
+              $(this).empty().append(html)
           })
       })
   }
@@ -412,9 +410,10 @@
                 let registred_children = {};
                 let unregistered_children = {};
 
+                const exceptions = [61, 55, 66, 110, 112, 180, 256, 427, 643, 709, 713, 690]
                 for (let c in children) {
                     let child = children[c];
-                    if ((child.user_registered || child.chidon5783) && ![58, 61].includes(child.school_id)) {
+                    if ((child.user_registered || child.chidon5783) && !exceptions.includes(parseInt(child.school_id))) {
                         registred_children[c] = child;
                     } else {
                         unregistered_children[c] = child;
