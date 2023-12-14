@@ -1,23 +1,20 @@
 <?php
-$admin_auth = array('school'); 
-require('header.php'); 
+$admin_auth = array('school');
+require('header.php');
 require_once('calendar.php');
 
 require_once 'class.medalReport.php';
 $m = new MedalReport;
 
-$previous = false;
-$next = false;
-if ( isset($_GET['go']) && $_GET['go'] == 'back' ) {
-    $previous = true; 
-    $m->setPreviousDates();
-} else if ( isset($_GET['go']) && $_GET['go'] == 'next' ) {
-    $next = true;
-    $m->setNextDates();
-}
-
 if (isset($_GET['start']) && isset($_GET['end'])) {
     $m->overrideDates($_GET['start'], $_GET['end']);
+}
+
+if (isset($_POST['date_selection'])) {
+    $dates = explode(':', $_POST['date_selection']);
+    $start = $dates[0];
+    $end = $dates[1];
+    $m->overrideDates($start, $end);
 }
 
 $heDates = $m->getHeReportDates();
@@ -33,148 +30,159 @@ $totalStudents = $m->getTotalStudents();
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 
-<HTML DIR="<?=$dir?>">
+<HTML DIR="<?= $dir ?>">
 
-	<HEAD>
-		<TITLE>Medals Summary Report</TITLE>
-		<LINK href="admin_styles.css" rel="stylesheet" type="text/css">
-		<SCRIPT type="text/javascript" src="icalendar.js"></SCRIPT>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-		<style type="text/css">
-			th, td {
-				padding: 5px;
-				font-size: 12px;
-			}
-		    .column {
-		        width: 3.5in;
-		        height: 10.5in;
-		        padding: .3in;
-		    }
-		    .label {
-		        width: 2in;
-		        font-size: 14px;
-		    }
-		    .medals {
-		        width: 1.5in;
-		        margin-left: .3in;
-                font-size: 14px;
-		    }
-		    .break {
-		        clear: both;
-		    }
-		    .page-break {
-		        page-break-after: always;
-		    }
-		    @media screen {
-		        .no-print {
-		            display: block;
-		        }
-		    }
-		    @media print {
-		        .no-print {
-		            display: none;
-		        }
-		        .page {
-			        width: 8in;
-			        height: 10.5in;
-			    }
-		    }
-		</style>
-	</HEAD>
-	
-	
-	<BODY>
-		<?php include('admin_header.php'); ?>
-		
-		<div class="no-print">
-        <h1>Medals Report Summary</h1>        
-            <div>
-                Current Report is calculated from <?=$heDates['start_he']?> up to <?=$heDates['end_he']?>.<br />
-                <? if ( $previous ) { ?> 
-                Click <a href='medals_summary_report.php'>here</a> to show next report dates.<br /><br />
-                <? } else { ?> 
-                Click <a href='medals_summary_report.php?go=back'>here</a> to show previous report dates.<br /><br />
-                <? } ?>
-            </div>
-        </div>
+<HEAD>
+  <TITLE>Medals Summary Report</TITLE>
+  <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
+  <SCRIPT type="text/javascript" src="icalendar.js"></SCRIPT>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <style type="text/css">
+    th, td {
+      padding: 5px;
+      font-size: 12px;
+    }
 
-		<div class="no-print">
-			<button id="medalsBtnAll">Set All Medals as Shipped</button>
-		</div>
-        
-		<div id="report_div" name="report_div">
-            <h2>Totals</h2>
-            <p>
-                Total Schools: <?=$totalSchools;?><br />
-                Total Classes: <?=$totalGrades;?><br />
-                Total Students: <?=$totalStudents?><br />
-            </p>
+    .column {
+      width: 3.5in;
+      height: 10.5in;
+      padding: .3in;
+    }
 
-            <h2>Medals Summary</h2>
-			<div class='page'>
-			<? 
-			$grandtotals = array();
-			foreach ($summary as $school => $line) {
-			    $totalSchools++;
-			    echo "Medals Summary for " . $school . "<br /><br />"; 
-				foreach ($line as $subject => $medals) {
-				    echo "<div class='label'>" . $subject . "<br />";
-				    echo "<div class='medals'>"; 
-				    foreach ($medals as $medal => $total) {
-				        echo $medal . " - " . $total . "<br />";
-				        if (isset($grandtotals[$subject][$medal])) {
-				        	$grandtotals[$subject][$medal] += $total;
-				        } else {
-				        	$grandtotals[$subject][$medal] = $total;
-				        }
-				    }
-                    echo "</div></div>";
-                    echo "<div class='break'></div>";
-				} 
-                echo "<br />";
-                echo "<div class='page-break'></div>";
-                echo "<br />";   
-			}
-			?>
-			</div>
-		</div>
-		
-		<h2>Grand Totals</h2>
-		<table>
-			<tr>
-				<th>Subject</th>
-				<th>Medal</th>
-				<th>Total</th>
-			</tr>
-			<?
-			$gtotal = 0;
-			foreach ($grandtotals as $subject => $info) {
-				foreach ($info as $medal => $total) {
-					$gtotal += $total;
-					echo "<tr><td>" . $subject . "</td><td>" . $medal . "</td><td>" . $total . "</td></tr>";
-				}
-			}
-			echo "<tr><th></th><th></th><th>" . number_format($gtotal) . "</th></tr>";
-			?>
-		</table>
-				
-	</BODY>
-	<script>
-		const start = <?= $dates['start']; ?>;
-		const end = <?= $dates['end']; ?>;
+    .label {
+      width: 2in;
+      font-size: 14px;
+    }
 
-		$( function () {
-			$("#medalsBtnAll").click( function () {
-				$.getJSON('edit_functions.php?function_name=update_medals_all&parameters=' + start + '_' + end, function (data) {
-					if (success == 1) {
-						alert('All medals have been set as shipped.');
-					} else {
-						alert('There was an error setting all medals as shipped.');
-					}
-				}).fail( function () {
-					alert('There was an error setting all medals as shipped.');
-				})
-			})
-		})
-	</script>
+    .medals {
+      width: 1.5in;
+      margin-left: .3in;
+      font-size: 14px;
+    }
+
+    .break {
+      clear: both;
+    }
+
+    .page-break {
+      page-break-after: always;
+    }
+
+    @media screen {
+      .no-print {
+        display: block;
+      }
+    }
+
+    @media print {
+      .no-print {
+        display: none;
+      }
+
+      .page {
+        width: 8in;
+        height: 10.5in;
+      }
+    }
+  </style>
+</HEAD>
+
+
+<BODY>
+<?php include('admin_header.php'); ?>
+
+<div class="no-print">
+  <h1>Medals Report Summary</h1>
+  <div>
+    Current Report is calculated from <?= $heDates['start_he'] ?> up to <?= $heDates['end_he'] ?>.<br/>
+    <form action="" method="post">
+      <p>
+          <?php
+          echo $m->getHtmlSelect();
+          ?>
+        <input type="submit" name="submit" value="Modify Report"/>
+      </p>
+    </form>
+  </div>
+</div>
+
+<div class="no-print">
+  <button id="medalsBtnAll">Set All Medals as Shipped</button>
+</div>
+
+<div id="report_div" name="report_div">
+  <h2>Totals</h2>
+  <p>
+    Total Schools: <?= $totalSchools; ?><br/>
+    Total Classes: <?= $totalGrades; ?><br/>
+    Total Students: <?= $totalStudents ?><br/>
+  </p>
+
+  <h2>Medals Summary</h2>
+  <div class='page'>
+      <?
+      $grandtotals = array();
+      foreach ($summary as $school => $line) {
+          $totalSchools++;
+          echo "Medals Summary for " . $school . "<br /><br />";
+          foreach ($line as $subject => $medals) {
+              echo "<div class='label'>" . $subject . "<br />";
+              echo "<div class='medals'>";
+              foreach ($medals as $medal => $total) {
+                  echo $medal . " - " . $total . "<br />";
+                  if (isset($grandtotals[$subject][$medal])) {
+                      $grandtotals[$subject][$medal] += $total;
+                  } else {
+                      $grandtotals[$subject][$medal] = $total;
+                  }
+              }
+              echo "</div></div>";
+              echo "<div class='break'></div>";
+          }
+          echo "<br />";
+          echo "<div class='page-break'></div>";
+          echo "<br />";
+      }
+      ?>
+  </div>
+</div>
+
+<h2>Grand Totals</h2>
+<table>
+  <tr>
+    <th>Subject</th>
+    <th>Medal</th>
+    <th>Total</th>
+  </tr>
+    <?
+    $gtotal = 0;
+    foreach ($grandtotals as $subject => $info) {
+        foreach ($info as $medal => $total) {
+            $gtotal += $total;
+            echo "<tr><td>" . $subject . "</td><td>" . $medal . "</td><td>" . $total . "</td></tr>";
+        }
+    }
+    echo "<tr><th></th><th></th><th>" . number_format($gtotal) . "</th></tr>";
+    ?>
+</table>
+
+</BODY>
+<script>
+  const start = <?= $dates['start']; ?>;
+  const end = <?= $dates['end']; ?>;
+
+  $(function () {
+    $("#medalsBtnAll").click(function () {
+      $.getJSON('edit_functions.php?function_name=update_medals_all&parameters=' + start + '_' + end, function (data) {
+        if (success == 1) {
+          alert('All medals have been set as shipped.');
+        } else {
+          alert('There was an error setting all medals as shipped.');
+        }
+      }).fail(function () {
+        alert('There was an error setting all medals as shipped.');
+      })
+    })
+  })
+</script>
 </HTML>
