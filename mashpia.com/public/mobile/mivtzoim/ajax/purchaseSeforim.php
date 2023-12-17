@@ -106,7 +106,7 @@ function saveToDb($info) {
     $m = new MivtzoimPurchases();
     if ( $m->createPurchase( $info, $details ) ) {
         // send email
-        $m->sendEmail($info, $details, $cc_info);
+        $m->sendEmail($info, $list, $cc_info, 'Hei Teves');
         return true;
     }
     else return false;

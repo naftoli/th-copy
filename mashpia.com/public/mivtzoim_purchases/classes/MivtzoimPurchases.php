@@ -254,18 +254,18 @@ class MivtzoimPurchases {
     /**
      * send email to admin with list of purchases done for specific year / item
      */
-    public function sendEmail($info, $details, $cc) {
+    public function sendEmail($info, $details, $cc_info, $yom_tov = 'Yahadus Book Sale') {
         $to = $this->getEmail($info['admin']);
-        $subject = "Yahadus Book Order Confirmation";
-        $message = $this->getMessage($info['amount'], $details, $cc);
+        $subject = $yom_tov . ' Order';
+        $message = $this->getMessage($info['amount'], $details, $cc_info, $yom_tov);
         // To send HTML mail, the Content-type header must be set
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         // Additional headers
         $headers[] = 'From: chidon@tzivoshashem.org';
         // Mail it
-//        $success = mail($to, $subject, $message, implode("\r\n", $headers));
-//        return $success;
+        $success = mail($to, $subject, $message, implode("\r\n", $headers));
+        return $success;
     }
 
     private function getEmail($admin_id) {
@@ -277,60 +277,95 @@ class MivtzoimPurchases {
         return $row['admin_email'];
     }
 
-    private function getMessage($amount, $details, $ccInfo) {
+    private function getMessage($amount, $details, $ccInfo, $yom_tov) {
         // get items info
         $itemsInfo = [];
-        $items_all = $this->getItemsByType('Yahadus Book Sale');
+        $items_all = $this->getItemsByType($yom_tov);
         foreach ($items_all as $item) {
             $itemsInfo[$item['mivtzoim_item_id']] = $item;
         }
 
-        $message = '
-            <b>Thank you for your order!</b>
-            <br /><br />
-            We will start shipping all books to your school <b>after</b> the sale is over, 
-            with the goal for them to arrive before the end of the school year so you can start learning over the summer! 
-            Please be patient.
-            <br /><br />
-            <b>Items</b><br />
-        ';
-
-        foreach ($details as $items) {
-            foreach ($items as $item => $qty) {
-                $message .= $itemsInfo[$item]['item'] . " - $" . ($qty * 40) . "<br />";
+        if ($yom_tov == 'Yahadus Book Sale') {
+            $message = '
+                <b>Thank you for your order!</b>
+                <br /><br />
+                We will start shipping all books to your school <b>after</b> the sale is over, 
+                with the goal for them to arrive before the end of the school year so you can start learning over the summer! 
+                Please be patient.
+                <br /><br />
+                <b>Items</b><br />
+            ';
+            foreach ($details as $items) {
+                foreach ($items as $item => $qty) {
+                    $message .= $itemsInfo[$item]['item'] . " - $" . ($qty * 40) . "<br />";
+                }
             }
-        }
-        $message .= "<br /><b>Total: $" . $amount . "</b><br /><br />";
+            $message .= "<br /><b>Total: $" . $amount . "</b><br /><br />";
 
-        if ($ccInfo->on_file == 1) {
-            $name = '';
-            $digits = $ccInfo->last_four;
-        } else if ($ccInfo->on_file == 0) {
-            $name = $ccInfo->name;
-            $number = $ccInfo->num;
-            $digits = substr($number, -4);
-        }
+            if ($ccInfo->on_file == 1) {
+                $name = '';
+                $digits = $ccInfo->last_four;
+            } else if ($ccInfo->on_file == 0) {
+                $name = $ccInfo->name;
+                $number = $ccInfo->num;
+                $digits = substr($number, -4);
+            }
 
-        $message .= "
+            $message .= "
             <b>Billing Information</b>
             <br />";
 
-        if ($name) $message .= "Name on Card: $name<br />";
-        else $message .= "Used Credit Card on File<br />";
-        $message .= "Last 4 digits: $digits<br />";
+            if ($name) $message .= "Name on Card: $name<br />";
+            else $message .= "Used Credit Card on File<br />";
+            $message .= "Last 4 digits: $digits<br />";
 
-        $message .= "
-            <br />
-            If you have any questions about your order, please contact your school's Chidon Coordinator. 
-            All transactions are non refundable. Hatzlocha with the learning!
-            <br /><br />
-            P.S. Ordering a book is <b>NOT</b> considered enrollment for next year's Chidon, enrollment will be at a later date.
-            <br />
-            <br />
-            <span style='font-size: small'>
-              To unsbuscribe from this mailing list, please click <a href='http://www.mashpia.com/unsubscribe.php'>here</a>
-          </span>
-        ";
+            $message .= "
+                <br />
+                If you have any questions about your order, please contact your school's Chidon Coordinator. 
+                All transactions are non refundable. Hatzlocha with the learning!
+                <br /><br />
+                P.S. Ordering a book is <b>NOT</b> considered enrollment for next year's Chidon, enrollment will be at a later date.
+                <br />
+                <br />
+                <span style='font-size: small'>
+                  To unsbuscribe from this mailing list, please click <a href='http://www.mashpia.com/unsubscribe.php'>here</a>
+              </span>
+            ";
+        } else if ($yom_tov == 'Hei Teves') {
+            $message = '
+                <b>Thank you for your order!</b>
+                <br /><br />
+                We will start shipping all books to your school <b>after</b> the sale is over, please be patient.
+                <br /><br />
+                <b>Items</b><br />
+                <ul>
+            ';
+            foreach ($details as $item) {
+                $message .= "<li>" . $item->qty . ' ' . $itemsInfo[$item->item_id]['item'] . " - $" . ($item->qty * $item->price) . "</li>";
+            }
+            $message .= "</ul><br /><b>Total: $" . $amount . "</b><br /><br />";
+
+            $name = $ccInfo->first . ' ' . $ccInfo->last;
+            $number = $ccInfo->num;
+            $digits = substr($number, -4);
+
+            $message .= "
+            <b>Billing Information</b>
+            <br />";
+
+            $message .= "Name on Card: $name<br />";
+            $message .= "Last 4 digits: $digits<br />";
+
+            $message .= "
+                <br />
+                If you have any questions about your order, please contact your school's Chidon Coordinator. 
+                All transactions are non refundable!
+                <br /><br />
+                <span style='font-size: small'>
+                  To unsbuscribe from this mailing list, please click <a href='http://www.mashpia.com/unsubscribe.php'>here</a>
+              </span>
+            ";
+        }
 
         return $message;
     }
