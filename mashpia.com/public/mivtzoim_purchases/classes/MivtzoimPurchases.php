@@ -264,8 +264,8 @@ class MivtzoimPurchases {
         // Additional headers
         $headers[] = 'From: chidon@tzivoshashem.org';
         // Mail it
-        $success = mail($to, $subject, $message, implode("\r\n", $headers));
-        return $success;
+//        $success = mail($to, $subject, $message, implode("\r\n", $headers));
+//        return $success;
     }
 
     private function getEmail($admin_id) {
