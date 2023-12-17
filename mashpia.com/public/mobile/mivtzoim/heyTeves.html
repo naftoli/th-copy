@@ -410,7 +410,7 @@
                 let registred_children = {};
                 let unregistered_children = {};
 
-                const exceptions = [61, 55, 66, 110, 112, 180, 256, 427, 643, 709, 713, 690]
+                const exceptions = [61, 55, 58, 66, 110, 112, 180, 256, 643, 709, 713, 690]
                 for (let c in children) {
                     let child = children[c];
                     if ((child.user_registered || child.chidon5783) && !exceptions.includes(parseInt(child.school_id))) {
