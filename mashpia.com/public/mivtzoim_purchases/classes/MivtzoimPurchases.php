@@ -341,7 +341,7 @@ class MivtzoimPurchases {
                 <ul>
             ';
             foreach ($details as $item) {
-                $message .= "<li>" . $item->qty . ' ' . $itemsInfo[$item->item_id]['item'] . " - $" . ($item->qty * $item->price) . "</li>";
+                $message .= "<li>" . $item->qty . ' of ' . $itemsInfo[$item->item_id]['item'] . " - $" . ($item->qty * $item->price) . "</li>";
             }
             $message .= "</ul><br /><b>Total: $" . $amount . "</b><br /><br />";
 
