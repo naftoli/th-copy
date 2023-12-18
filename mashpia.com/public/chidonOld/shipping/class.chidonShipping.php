@@ -914,8 +914,9 @@ class ChidonShipping
     public function getCategories() {
         $categories = [
             'brochures', 'guides', 'yahadus books', 'enrollment prize', 'recruitment prizes', 'children sweaters', 'extra purchases',
-            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear', 'auction', 'hei teves'
+            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear', 'auction'
         ];
+        if (isset($_COOKIE['naftoli'])) $categories[] = 'hei teves';
         return $categories;
     }
 
