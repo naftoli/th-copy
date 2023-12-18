@@ -914,7 +914,7 @@ class ChidonShipping
     public function getCategories() {
         $categories = [
             'brochures', 'guides', 'yahadus books', 'enrollment prize', 'recruitment prizes', 'children sweaters', 'extra purchases',
-            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear', 'auction'
+            'gifts', 'ID cards', 'awards', 'prizes', 'ambassador prizes', 'gear', 'auction', 'hei teves'
         ];
         return $categories;
     }
@@ -945,6 +945,8 @@ class ChidonShipping
             'gear'                  => ['TH Sweater', 'TH Cap', 'TH Rank Patch'],
             'auction'               => ['Auction 5783']
         ];
+        if (isset($_COOKIE['naftoli'])) $items['hei teves'] = $this->getHeiTevesItems();
+
         return $items;
     }
 
@@ -1478,6 +1480,24 @@ class ChidonShipping
         return $info;
     }
 
+    public function getHeiTevesItems() {
+        $items = [];
+        $sql = "
+            SELECT 
+                *
+            FROM    
+                mashpia_purchases.mivtzoim_items 
+            WHERE
+                yom_tov = 'Hei Teves' 
+            ORDER BY ord";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $items[] = $row['item'];
+        }
+        return $items;
+    }
+
     public function getHeiTeves($gender, $school, $items) {
         $purchases = [];
         $sql = "
@@ -1501,9 +1521,17 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            if (count($items) && !in_array($row['item'], $items)) continue;
-            $purchases[$row['user_id']][] = $row;
+            if (count($items) && !in_array(strtolower($row['item']), $items)) continue;
+            $purchases[$row['user_id']][] = [
+                'item'  => $row['item'],
+                'size'  => '',
+                'name'  => '',
+                'id'    => $row['shipping_code'],
+                'cat'   => 'hei teves',
+                'size'  => $row['size'],
+            ];
         }
+
         return $purchases;
     }
 
