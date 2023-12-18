@@ -11,7 +11,7 @@ class TehillimBackup {
         require_once(dirname(__FILE__).'/../class.globalSettings.php');
         $this->year = GlobalSettings::getRegistrationYear();
         $this->dates = [
-            2460201, 2460241, 2460266
+            2460201, 2460241, 2460266, 2460297, 2460322, 2460350, 2460385, 2460413, 2460441
         ];
         $this->errors = array();
     }
