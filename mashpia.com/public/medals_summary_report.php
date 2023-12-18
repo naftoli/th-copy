@@ -3,6 +3,25 @@ $admin_auth = array('school');
 require('header.php');
 require_once('calendar.php');
 
+function getInfo()
+{
+    $sql = "SELECT 
+            s.subject_name, m.medal_name, ms.subject_id, ms.medal_ord 
+        FROM
+            medals_subjects ms
+                JOIN
+            medals m USING (medal_ord)
+                JOIN
+            subjects s USING (subject_id)
+        ORDER BY subject_id , medal_ord";
+    $result = mysql_query($sql);
+    $info = [];
+    while ($row = mysql_fetch_assoc($result)) {
+        $info[$row['subject_name']][$row['medal_name']] = $row;
+    }
+    return $info;
+}
+
 require_once 'class.medalReport.php';
 $m = new MedalReport;
 
@@ -26,6 +45,8 @@ $m->setMedalDetails();
 $totalSchools = $m->getTotalSchools();
 $totalGrades = $m->getTotalGrades();
 $totalStudents = $m->getTotalStudents();
+
+$subject_medals = getInfo();
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -125,10 +146,26 @@ $totalStudents = $m->getTotalStudents();
       foreach ($summary as $school => $line) {
           $totalSchools++;
           echo "Medals Summary for " . $school . "<br /><br />";
-          foreach ($line as $subject => $medals) {
+//          foreach ($line as $subject => $medals) {
+//              echo "<div class='label'>" . $subject . "<br />";
+//              echo "<div class='medals'>";
+//              foreach ($medals as $medal => $total) {
+//                  echo $medal . " - " . $total . "<br />";
+//                  if (isset($grandtotals[$subject][$medal])) {
+//                      $grandtotals[$subject][$medal] += $total;
+//                  } else {
+//                      $grandtotals[$subject][$medal] = $total;
+//                  }
+//              }
+//              echo "</div></div>";
+//              echo "<div class='break'></div>";
+//          }
+          foreach ($subject_medals as $subject => $medals) {
               echo "<div class='label'>" . $subject . "<br />";
               echo "<div class='medals'>";
-              foreach ($medals as $medal => $total) {
+              foreach ($medals as $medal => $row) {
+                  if (isset($line[$subject][$medal])) $total = $line[$subject][$medal];
+                  else $total = 0;
                   echo $medal . " - " . $total . "<br />";
                   if (isset($grandtotals[$subject][$medal])) {
                       $grandtotals[$subject][$medal] += $total;
@@ -136,8 +173,6 @@ $totalStudents = $m->getTotalStudents();
                       $grandtotals[$subject][$medal] = $total;
                   }
               }
-              echo "</div></div>";
-              echo "<div class='break'></div>";
           }
           echo "<br />";
           echo "<div class='page-break'></div>";
