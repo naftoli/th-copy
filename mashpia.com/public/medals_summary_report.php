@@ -173,6 +173,8 @@ $subject_medals = getInfo();
                       $grandtotals[$subject][$medal] = $total;
                   }
               }
+              echo "</div></div>";
+              echo "<div class='break'></div>";
           }
           echo "<br />";
           echo "<div class='page-break'></div>";
