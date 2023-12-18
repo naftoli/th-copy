@@ -3,7 +3,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-$sql = "select * from registration_charges where year = :year";
+$sql = "select rc.*, u.first, u.last 
+        from registration_charges rc 
+        join users u using (user_id) 
+        where year = :year";
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute(['year' => $year]);
 
@@ -24,12 +27,41 @@ foreach ($charges as $user_id => $details) {
         }
     }
 }
-echo count($extras) . "<br />" . count($others) . "<br />";
+//echo count($extras) . "<br />" . count($others) . "<br />";
+//echo "<pre>"; print_r($others); echo "</pre>";
 
 $stmt = $MASHPIA_DB->prepare("delete from registration_charges where registration_charge_id = :id");
 foreach ($extras as $row) {
     $stmt->execute(['id' => $row['registration_charge_id']]);
 }
-echo "done";
-
-echo "<pre>"; print_r($others); echo "</pre>";
+//echo "done";
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Duplicate Charges</title>
+    <style>
+        tr, th, td {
+          font-family: "Arial", sans-serif;
+          padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Find Duplicate Charges</h1>
+    <table>
+        <tr>
+            <th>Student Name</th>
+            <th>Charge Type</th>
+            <th>Amount</th>
+            <th>Charge Date</th>
+        </tr>
+        <?php foreach ($others as $row) { ?>
+        <tr>
+            <td><?php echo $row['first'] . ' ' . $row['last']; ?></td>
+            <td><?php echo $row['type']; ?></td>
+            <td><?php echo $row['amount']; ?></td>
+            <td><?php echo $row['date']; ?></td>
+        </tr>
+        <?php } ?>
+</html>
