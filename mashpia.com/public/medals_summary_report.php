@@ -17,6 +17,7 @@ function getInfo()
     $result = mysql_query($sql);
     $info = [];
     while ($row = mysql_fetch_assoc($result)) {
+        if ($row['subject_name'] == 'Old Sefer Hamitzvos') continue;
         $info[$row['subject_name']][$row['medal_name']] = $row;
     }
     return $info;
