@@ -12,7 +12,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 
 $chidon_prizes = [];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/shipping/class.chidonShipping.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/chidon_shipping/class.chidonShipping.php';
 $cs = new ChidonShipping();
 foreach ($schools as $id => $name) {
     $chidon_prizes[$id] = $cs->getPrizes('M', $id);
