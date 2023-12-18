@@ -3,7 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-$sql = "select rc.*, u.first, u.last 
+$sql = "select rc.*, u.user_id, u.first, u.last, u.user_serial  
         from registration_charges rc 
         join users u using (user_id) 
         where year = :year";
@@ -51,6 +51,8 @@ foreach ($extras as $row) {
     <h1>Find Duplicate Charges</h1>
     <table>
         <tr>
+            <th>Student ID</th>
+            <th>Serial Number</th>
             <th>Student Name</th>
             <th>Charge Type</th>
             <th>Amount</th>
@@ -58,6 +60,8 @@ foreach ($extras as $row) {
         </tr>
         <?php foreach ($others as $row) { ?>
         <tr>
+            <td><?php echo $row['user_id']; ?></td>
+            <td><?php echo $row['user_serial']; ?></td>
             <td><?php echo $row['first'] . ' ' . $row['last']; ?></td>
             <td><?php echo $row['type']; ?></td>
             <td><?php echo $row['amount']; ?></td>
