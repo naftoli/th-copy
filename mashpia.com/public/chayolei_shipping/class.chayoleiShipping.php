@@ -4,17 +4,16 @@ ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 /**
- * Class ChidonShipping
+ * Class ChayoleiShipping
  *
  * list of functions needed for figuring out what to ship
  * all functions need to return an array or items
  * each item needs to have item/qty/size/color/name keys
  */
 
-class Shipping
+class ChayoleiShipping
 {
     private $db, $year, $schools, $grades, $users;
 
