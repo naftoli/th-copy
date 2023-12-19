@@ -46,7 +46,8 @@ foreach ($schools as $school_id => $school) {
             join th_chidon tc using (user_id) 
             where tc.khk_reg = 1 
             and u.school_id = " . $school_id . "            
-            and tc.year = " . $year;
+            and tc.year = " . $year . " 
+            order by c.class_grade, c.class_sub, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $info[$school_id][] = $row;
