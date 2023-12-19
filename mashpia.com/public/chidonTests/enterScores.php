@@ -237,7 +237,8 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
             const data = info.info
             const ids = Object.keys(data)
             for (let id of ids) {
-              if (data[id][test_number] && document.getElementById(id)) document.getElementById(id).checked = parseInt(data[id]) ? true : false
+              if (data[id][test_number] && document.getElementById(id))
+                document.getElementById(id).checked = parseInt(data[id][test_number]) ? true : false
             }
           }
         }
