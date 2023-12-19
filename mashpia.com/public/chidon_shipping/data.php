@@ -96,7 +96,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         // create new row
                         echo "<tr>";
                         foreach ($fields_chosen as $field) {
-                            if (strpos($field, 'shipping') === false) {
+                            if (strpos($field, 'shipping_old') === false) {
                                 $desc = substr($field, strpos($field, '.') + 1);
                                 echo "<td>" . $row[$desc] . "</td>";
                             }
@@ -111,9 +111,9 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                         }
                         echo "</td>";
-                        // add column for shipping info
+                        // add column for shipping_old info
                         echo "<td class='no-print'>";
-                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping'";
+                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping_old'";
                         // figure out if it should be disabled or not
 //                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
                         echo ">";
@@ -187,7 +187,7 @@ function checkShippingStatus($admin_id) {
         'id'    => $admin_id
     ]);
     $row = $stmt->fetch();
-    if ($row && $row['amount_paid'] > 0) $status = 'shipping';
+    if ($row && $row['amount_paid'] > 0) $status = 'shipping_old';
     return $status;
 }
 

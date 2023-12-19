@@ -196,7 +196,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
           <tr>
             <?php
             foreach ($fields_chosen as $field) {
-              if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
+              if (strpos($field, 'shipping_old') === false) echo "<th>" . $fields[$field] . "</th>";
             }
             echo "<th>Item</th>";
             if ($item_details_chosen && count($item_details_chosen)) {
@@ -309,7 +309,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   }
 
   $("#saveAll").click( function () {
-    $(".shipping").each( function () {
+    $(".shipping_old").each( function () {
       let qty = $(this).parent().parent().find('td:eq(3)').text()
       update(this, 1, qty)
     })
@@ -317,13 +317,13 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
   })
 
   $(".saveSchool").click( function() {
-    $(this).parent().find('.shipping').each( function () {
+    $(this).parent().find('.shipping_old').each( function () {
       update(this, 1)
     })
     save()
   })
 
-  $(".shipping").change( function () {
+  $(".shipping_old").change( function () {
     const action = parseInt(this.value)
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
@@ -341,7 +341,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
 
   $(".qty").blur( function() {
     const val = $(this).val()
-    const elem = $(this).parent().parent().find('.shipping')
+    const elem = $(this).parent().parent().find('.shipping_old')
     const action = parseInt($(elem).val())
     const desc = $(this).parent().parent().find('.description').val()
     if (action == 3 && !desc) {
@@ -354,7 +354,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
 
   $(".description").blur( function() {
     const val = $(this).val()
-    const elem = $(this).parent().parent().find('.shipping')
+    const elem = $(this).parent().parent().find('.shipping_old')
     const action = parseInt($(elem).val())
     const qty = $(this).parent().parent().find('.qty').val()
     if (parseInt(qty) == 0) {
@@ -376,7 +376,7 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
 
   $(function () {
     <?php if ($superAdmin) : ?>
-      $(".shipping").attr('disabled', true)
+      $(".shipping_old").attr('disabled', true)
       $(".qty").attr('disabled', true)
       $(".description").attr('disabled', true)
     <?php endif; ?>

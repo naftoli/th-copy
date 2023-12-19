@@ -115,7 +115,7 @@
     "icon": "/images/icon_report.png",
     "items": [
       { "label": "Office Reports", "legacy": true, "path": "/reports/", "user_types": [ "HQ" ] },
-      { "label": "Chayolei Shipping", "legacy": true, "path": "/chidonOld/shipping/" },
+      { "label": "Chayolei Shipping", "legacy": true, "path": "/chidonOld/chayolei_shipping/" },
       { "label":  "Hachayol Report", "legacy":  true, "path": "/hachayol_report_details.php" },
       { "label": "Registered Report", "legacy": true, "path": "/registered_report.php" },
       { "label": "Parents Report", "legacy": true, "path": "/parent_report.php" },

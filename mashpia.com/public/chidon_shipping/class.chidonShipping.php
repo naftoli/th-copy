@@ -1336,7 +1336,7 @@ class ChidonShipping
             'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email'];
         foreach ($info as $row) {
             $phone = $row['admin_phone_mobile'] ?? $row['admin_phone_work'] ?? $row['admin_phone_home'] ?? '';
-            $shipping = 'shipping';
+            $shipping = 'shipping_old';
             $qty = $row['amount'];
             if ($row['item'] == 'celeb_box') {
                 $itemDesc = 'celebration box(es)';
