@@ -9,50 +9,51 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 $start_dates_to_hachayol_issues = [
-    2459825 => 1,
-    2459832 => 2,
-    2459839 => 3,
-    2459846 => 4,
-    2459853 => 5,
-    2459860 => 6,
-    2459867 => 7,
-    2459874 => 8,
-    2459881 => 9,
-    2459888 => 10,
-    2459895 => 11,
-    2459902 => 12,
-    2459909 => 13,
-    2459916 => 14,
-    2459923 => 15,
-    2459930 => 16,
-    2459937 => 17,
-    2459944 => 18,
-    2459951 => 19,
-    2459958 => 20,
-    2459965 => 21,
-    2459972 => 22,
-    2459979 => 23,
-    2459986 => 24,
-    2459993 => 25,
-    2460000 => 26,
-    2460007 => 27,
-    2460014 => 28,
-    2460021 => 29,
-    2460028 => 30,
-    2460035 => 31,
-    2460042 => 32,
-    2460049 => 33,
-    2460056 => 34,
-    2460063 => 35,
-    2460070 => 36,
-    2460077 => 37,
-    2460084 => 38,
-    2460091 => 39,
-    2460098 => 40,
-    2460105 => 41
+    2460196 => 1,
+    2460203 => 2,
+    2460210 => 3,
+    2460217 => 4,
+    2460224 => 5,
+    2460231 => 6,
+    2460238 => 7,
+    2460245 => 8,
+    2460252 => 9,
+    2460259 => 10,
+    2460266 => 11,
+    2460273 => 12,
+    2460280 => 13,
+    2460287 => 14,
+    2460294 => 15,
+    2460301 => 16,
+    2460308 => 17,
+    2460315 => 18,
+    2460322 => 19,
+    2460329 => 20,
+    2460336 => 21,
+    2460343 => 22,
+    2460350 => 23,
+    2460357 => 24,
+    2460364 => 25,
+    2460371 => 26,
+    2460378 => 27,
+    2460385 => 28,
+    2460392 => 29,
+    2460399 => 30,
+    2460406 => 31,
+    2460413 => 32,
+    2460420 => 33,
+    2460427 => 34,
+    2460434 => 35,
+    2460441 => 36,
+    2460448 => 37,
+    2460455 => 38,
+    2460462 => 39,
+    2460469 => 40,
+    2460476 => 41,
+    2460483 => 42
 ];
 
 // get logos for schools
@@ -142,8 +143,9 @@ foreach ($schools as $school_id => $school) {
         <button style="padding: 10px 20px; font-size: large;" onclick="window.print()">Print</button>
         <?php
         function renderPoster($week, $issue_number, $winners) {
+            global $year;
             ?>
-                <div class='poster' style='background-image: url( "./templates/<?= $issue_number ?> 5M 5783.jpg" ); '>
+                <div class='poster' style='background-image: url( "./templates/<?= $year ?>/<?= $issue_number ?> 5M <?= $year ?> 7.5x10.jpg" ); '>
                     <div class='names'>
                         <!-- <div class='name'> <?=$week['name']?> - <?=$week['start_date']?> - <?=$issue_number?> </div> -->
                         <? foreach ($winners as $winner) { ?>
