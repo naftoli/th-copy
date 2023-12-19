@@ -53,7 +53,7 @@ if (isset($_POST['go']) && $_POST['go'] == '1' && isset($_POST['from_awarded']))
 		
 	$ranks_card_filter = $_POST['ranks_card_filter'];
 	$ranks_book_filter = $_POST['ranks_book_filter'];
-		
+
 	$from_awarded = $_POST['from_awarded'];
 	$to_awarded = $_POST['to_awarded'];
 	$from_promoted = $_POST['from_promoted'];
@@ -324,9 +324,8 @@ else
 						<br>
 						<br>
 						
-						<INPUT type="hidden" name="from_awarded" value="<?=$from_awarded?>"> &nbsp;
-						<LABEL>
-							Medals Awarded Between
+						<INPUT type="hidden" name="from_awarded" value="<?=$from_awarded?>">
+						<LABEL>Medals Awarded Between:
 							<INPUT type="text" name="from_awarded_disp" READONLY value="<?=es(dateToHebrew($from_awarded))?>" onClick="getDate(this.form, 'from_awarded', true);"/>
 						</LABEL>
 						
@@ -338,9 +337,8 @@ else
 						
 						<br>
 						
-						<INPUT type="hidden" name="from_promoted" value="<?=$from_promoted?>">&nbsp;
-						<LABEL>
-							Rank Promoted Between: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<INPUT type="hidden" name="from_promoted" value="<?=$from_promoted?>">
+						<LABEL>Rank Promoted Between:&nbsp;&nbsp;
 							<INPUT type="text" name="from_promoted_disp" READONLY value="<?=es(dateToHebrew($from_promoted))?>" onClick="getDate(this.form, 'from_promoted', true);"/>
 						</LABEL>
 
