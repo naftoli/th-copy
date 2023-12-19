@@ -16,7 +16,7 @@ $schools = $as->getSchools();
 require 'class.chayoleiShipping.php';
 require 'data.php';
 
-$cs = new Shipping();
+$cs = new ChayoleiShipping();
 $categories = $cs->getCategories();
 $items = $cs->getItems();
 ?>
