@@ -16,7 +16,7 @@ $r = new Report();
 $reportDates = $r->getReportDates();
 
 if (isset($_POST['date_selection'])) {
-    $dates = explode(':', $_POST['date_selection']);
+    $dates = explode(':', $_POST['medal_dates']);
     $start = $dates[0];
     $end = $dates[1];
 } else {
