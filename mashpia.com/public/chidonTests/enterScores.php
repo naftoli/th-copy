@@ -193,6 +193,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
         ?>
     </body>
     <script>
+        const test_number = <?= $testNumber ?>;
         $(function() {
             const showAlert = <?= isset($_POST['submit']) ? 1 : 0?>;
             if (showAlert) alert('Please make sure to SAVE after entering scores.');
@@ -230,14 +231,13 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
         });
 
         async function checkShowReportCards() {
-          const test_num = <?= $testNumber ?>;
           const res = await fetch('api/getReportCardsInfo.php')
           const info = await res.json()
           if (info.success) {
             const data = info.info
             const ids = Object.keys(data)
             for (let id of ids) {
-              if (data[id][test_num] && document.getElementById(id)) document.getElementById(id).checked = parseInt(data[id]) ? true : false
+              if (data[id][test_number] && document.getElementById(id)) document.getElementById(id).checked = parseInt(data[id]) ? true : false
             }
           }
         }
@@ -253,7 +253,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
             body: JSON.stringify({
               school_id: id,
               value: isChecked,
-              test_num: <?= $testNumber ?>
+              test_num: test_number
             })
           })
             .then(res => res.json())
