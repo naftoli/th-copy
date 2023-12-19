@@ -50,9 +50,10 @@ foreach ($schools as $school_id => $school) {
             order by c.class_grade, c.class_sub, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $info[$school_id][] = $row;
+        $info[$school][] = $row;
     }
 }
+ksort($info);
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
 // initialize all tests to not be disabled
@@ -111,9 +112,9 @@ if ($admin_user['auth'] != 'super') {
     }
     echo "<form action='' method='post'>";
     echo "<div style='float: right'><input type='submit' name='submit' value='Save Marks' style='padding: 12px; font-size: large' /></div><div style='clear: both;'></div>";
-    foreach ($info as $school => $children) {
+    foreach ($info as $school_name => $children) {
         if (empty($children)) continue;
-        echo "<h2>" . $schools[$school] . "</h2>";
+        echo "<h2>" . $school_name . "</h2>";
         echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Test 1</th><th>Test 2</th><th>Test 3</th><th>Test 4</th><th>Avg Mark</th></tr>";
         foreach ($children as $child) {
             $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
