@@ -152,5 +152,9 @@ $items = $cs->getItems();
     }
     $("form").submit()
   })
+
+  $(function() {
+    $("#all_details").click()
+  })
 </script>
 </html>

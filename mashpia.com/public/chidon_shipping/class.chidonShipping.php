@@ -944,7 +944,6 @@ class ChidonShipping
             'raffles'               => ['5M Raffles', 'Other Raffles'],
             'gear'                  => ['TH Sweater', 'TH Cap', 'TH Rank Patch']
         ];
-        if (isset($_COOKIE['naftoli'])) $items['hei teves'] = $this->getHeiTevesItems();
 
         return $items;
     }
