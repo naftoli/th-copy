@@ -124,7 +124,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
             foreach ($info as $school => $children) {
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
-                echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Card #" . $testNumber . " on Parent Accounts</p>";
+                echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Card for Test #" . $testNumber . " on Parent Accounts</p>";
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th>";
                 foreach ($types as $type => $value) {
                     echo "<th>" . ucwords($value) . " Score</th>";
