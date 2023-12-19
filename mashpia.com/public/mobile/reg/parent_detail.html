@@ -995,6 +995,7 @@
 
             const id = $(this).parent().parent().parent().attr('id')
             const child = allChildren[id]
+            console.log(child)
             const res = await fetch('/chidonTests/api/reportCards/?user_id=' + id + '&class_id=' + child.class_id + '&school_id=' + child.school_id)
             const report_card_info = await res.json()
             const report_card = report_card_info[0]
@@ -1038,6 +1039,7 @@
                 let actualTests = 0
                 for (let i = 1; i <= 3; i++) {
                     if (report_card.tests[i]) {
+                        if (i > 1  && child['show_report_card_'+i] == 0) continue
                         actualTests++
                         let test = report_card.tests[i]
                         html += '<tr><td rowspan="2" style="text-align: center; vertical-align: middle">' + i + '</td><td>Answered Correctly</td>'

@@ -8,7 +8,7 @@ $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true
 $schools = $as->getSchools();
 
 $stmt = $MASHPIA_DB->prepare("
-    SELECT school_id, show_report_cards 
+    SELECT school_id, show_report_cards, show_report_card_2, show_report_card_3  
     FROM schools 
     WHERE school_id = :id
 ");
@@ -17,7 +17,11 @@ $info = [];
 foreach ($schools as $school_id => $school) {
     $stmt->execute(['id' => $school_id]);
     $row = $stmt->fetch();
-    $info[$school_id] = $row['show_report_cards'];
+    $info[$school_id] = [
+        1 => $row['show_report_cards'],
+        2 => $row['show_report_card_2'],
+        3 => $row['show_report_card_3']
+    ];
 }
 echo json_encode([
     'success'   => true,

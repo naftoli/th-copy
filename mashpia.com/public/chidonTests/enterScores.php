@@ -124,7 +124,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
             foreach ($info as $school => $children) {
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
-                echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Cards on Parent Accounts</p>";
+                echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Card #" . $testNumber . " on Parent Accounts</p>";
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th>";
                 foreach ($types as $type => $value) {
                     echo "<th>" . ucwords($value) . " Score</th>";
@@ -230,13 +230,14 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
         });
 
         async function checkShowReportCards() {
+          const test_num = <?= $testNumber ?>
           const res = await fetch('api/getReportCardsInfo.php')
           const info = await res.json()
           if (info.success) {
             const data = info.info
             const ids = Object.keys(data)
             for (let id of ids) {
-              if (data[id] && document.getElementById(id)) document.getElementById(id).checked = parseInt(data[id]) ? true : false
+              if (data[id][test_num] && document.getElementById(id)) document.getElementById(id).checked = parseInt(data[id]) ? true : false
             }
           }
         }
@@ -249,7 +250,11 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
             headers: {
               'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ school_id: id, value: isChecked })
+            body: JSON.stringify({
+              school_id: id,
+              value: isChecked,
+              test_num: <?= $testNumber ?>
+            })
           })
             .then(res => res.json())
             .then(res => {
