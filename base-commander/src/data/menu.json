@@ -99,7 +99,7 @@
 
       { "label":  "Enrollment / Award Confirmation", "legacy": true, "path": "/chidonTests/confirmations.php" },
 
-      { "label": "Chidon Shipping", "legacy": true, "path": "/chidonOld/chidon_shipping/" },
+      { "label": "Chidon Shipping", "legacy": true, "path": "/chidon_shipping/" },
 
       { "label": "Eligibility & Registered Report", "legacy": true, "path": "/chidonOld/newReports/eligibility_registered_report.php" },
 
@@ -115,7 +115,7 @@
     "icon": "/images/icon_report.png",
     "items": [
       { "label": "Office Reports", "legacy": true, "path": "/reports/", "user_types": [ "HQ" ] },
-      { "label": "Chayolei Shipping", "legacy": true, "path": "/chidonOld/chayolei_shipping/" },
+      { "label": "Chayolei Shipping", "legacy": true, "path": "/chayolei_shipping/" },
       { "label":  "Hachayol Report", "legacy":  true, "path": "/hachayol_report_details.php" },
       { "label": "Registered Report", "legacy": true, "path": "/registered_report.php" },
       { "label": "Parents Report", "legacy": true, "path": "/parent_report.php" },
