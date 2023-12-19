@@ -7,13 +7,24 @@ class UsersRouter {
     public function index() {
         global $current_user; global $MASHPIA_DB;
 
+        $ranks = [];
+        $sql = "SELECT * FROM ranks";
+        $stmt = $MASHPIA_DB->query( $sql );
+        while( $row = $stmt->fetch() ) {
+            $ranks[$row['rank_ord']] = $row['rank_name'];
+        }
+
         $filters = $current_user->login->getFilter( 's.', 'u.' );
         // generate the SQL
-        $sql = "SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub FROM users u "
-            ."JOIN schools s USING ( school_id ) "
-            ."LEFT JOIN classes c USING ( class_id ) WHERE $filters "
-            ."ORDER BY school_name, class_grade, class_sub, last, first";
-
+        $sql = "
+            SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, MAX(rank_ord) as `rank` 
+            FROM users u 
+            JOIN schools s USING ( school_id ) 
+            JOIN rank_marks using ( user_id ) 
+            LEFT JOIN classes c USING ( class_id ) WHERE $filters 
+            GROUP BY user_id 
+            ORDER BY school_name, class_grade, class_sub, last, first
+        ";
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute();
         if ($query->errorCode() !== "00000") {
@@ -40,7 +51,8 @@ class UsersRouter {
                 'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
                 'barcode' => '3'.$row['user_code'],
-                'platoon' => ( $platoon ? [ 'name' => $platoon ] : null )
+                'platoon' => ( $platoon ? [ 'name' => $platoon ] : null ),
+                'rank'  => $ranks[$row['rank']],
             ];
         }
         json_response( $users );

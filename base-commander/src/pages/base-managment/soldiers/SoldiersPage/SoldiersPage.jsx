@@ -117,7 +117,7 @@ export class SoldiersPage extends Component {
     const rows = this.props.soldiers.map( soldier => [
       soldier.user_serial, soldier.first, soldier.last, soldier.first_he, soldier.last_he, soldier.dob, soldier.gender, 
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
-      soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name
+      soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name, soldier.rank
     ]);
     return dataToCSV( headers, rows );
   }
