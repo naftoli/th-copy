@@ -2,16 +2,14 @@
 $admin_auth = array('school');
 require('header.php');
 
-require_once 'class.rankReport.php';
-$rr = new RankReport();
-
-if (isset($_POST['date_selection'])) {
-    $dates = explode(':', $_POST['date_selection']);
-    $start = $dates[0];
-    $end = $dates[1];
-    $rr->overrideDates($start, $end);
+if (isset($_GET['prev']) && $_GET['prev'] == 1) {
+    $prev = true;
+} else {
+    $prev = false;
 }
 
+require_once 'class.rankReport.php';
+$rr = new RankReport($prev);
 $rr->setRankNames();
 $rankNames = $rr->getRankNames();
 $reportDates = $rr->getReportDates();
@@ -109,17 +107,13 @@ $schools = $as->getSchools();
 <div class='no-print'>
   <h1>Isser's Ranks Summary Sheet</h1>
 
-  <div>
-    Current Report is calculated from <?= $heDatesRanks['start_he'] ?> up to <?= $heDatesRanks['end_he'] ?>.<br/>
-    <form action="" method="post">
-      <p>
-          <?php
-          echo $rr->getHtmlSelect();
-          ?>
-        <input type="submit" name="submit" value="Modify Report"/>
-      </p>
-    </form>
-  </div>
+  <p>
+      <? if ($prev) : ?>
+        <a href="isserRanks.php">Show next shipment</a>
+      <? else : ?>
+        <a href="isserRanks.php?prev=1">Show previous shipment</a>
+      <? endif; ?>
+  </p>
 
   <div align='center'>
     <input type='button' name='print' value='Print' onclick="window.print()"/>
