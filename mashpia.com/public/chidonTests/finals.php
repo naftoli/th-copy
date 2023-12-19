@@ -88,7 +88,7 @@ function passedKhk($id)
         $user_marks = $marks[$id];
         $total = 0;
         foreach ($user_marks as $mark) $total += intval($mark);
-        $total /= 4;
+        $total /= 3;
         if ($total >= 70) return true;
     }
     return false;
@@ -212,81 +212,104 @@ if ($admin_user['auth'] == 'super') {
         if ($i == $selectedYr) echo " selected";
         echo ">$i</option>";
     }
-    echo "</form><br /><br />";
+    echo "</select></form>";
 }
 
-$exceptions = [192, 63, 13, 42, 726];
-$types = $ct->getTypes();
-$tracks = array_values($types);
-echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
-echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
-foreach ($info as $school => $children) {
-    if (empty($children)) continue;
-//    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
-    echo "<h2>" . $schools[$school] . "</h2>";
-    echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
-    foreach ($tracks as $track) {
-        echo "<th>$track</th>";
-    }
-    echo "<th>KHK Final</th>";
-    echo "<th>Award</th>";
-    echo "</tr>";
-    foreach ($children as $child) {
-        if ($child['date_paid'] > 0) {
-            $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-            $name = $child['first'] . ' ' . $child['last'];
-            $id = $child['user_id'];
-            $level = $ct->getLevel($id, 'finals');
-            echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
-                $child['highest_track'] . "</td>";
-            for ($i = 1; $i <= 4; $i++) {
-                // find out which track the child can go up to
-                $key = array_search(ucwords($child['highest_track']), $tracks);
-                $key++;
-                // create the proper input box
-                $track = 'track_' . $i;
-                echo "<td><input type='text' name='{$track}[$id]' class='$track mark'";
-                if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
+if (isset($_POST['grade'])) {
+    $gradeChosen = $_POST['grade'];
+    $exceptions = [192, 63, 13, 42, 726];
+    $types = $ct->getTypes();
+    $tracks = array_values($types);
+    echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
+    echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
+    foreach ($info as $school => $children) {
+        if (empty($children)) continue;
+        //    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
+        echo "<h2>" . $schools[$school] . "</h2>";
+        echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
+        foreach ($tracks as $track) {
+            echo "<th>$track</th>";
+        }
+        echo "<th>KHK Final</th>";
+        echo "<th>Award</th>";
+        echo "</tr>";
+        foreach ($children as $child) {
+            if ($child['date_paid'] > 0) {
+                if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
+                $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+                $name = $child['first'] . ' ' . $child['last'];
+                $id = $child['user_id'];
+                $level = $ct->getLevel($id, 'finals');
+                echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
+                    $child['highest_track'] . "</td>";
+                for ($i = 1; $i <= 4; $i++) {
+                    // find out which track the child can go up to
+                    $key = array_search(ucwords($child['highest_track']), $tracks);
+                    $key++;
+                    // create the proper input box
+                    $track = 'track_' . $i;
+                    echo "<td><input type='text' name='{$track}[$id]' class='$track mark'";
+                    if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
+                    else echo "value='0'";
+                    if ($i > $key || $tooLate) echo " disabled";
+                    echo " />";
+                    echo "<select name='level_{$i}[$id]'>";
+                    echo "<option value='1'";
+                    if ($level == 1) echo " selected";
+                    echo ">1</option>";
+                    echo "<option value='2'";
+                    if ($level == 2) echo " selected";
+                    echo ">2</option>";
+                    echo "</select></td>";
+                }
+                // add khk_final
+                // check if child should be able to take the khk final
+                $disabled = 'disabled';
+                if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
+                echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
+                if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
                 else echo "value='0'";
-                if ($i > $key || $tooLate) echo " disabled";
                 echo " />";
-                echo "<select name='level_{$i}[$id]'>";
+                echo "<select name='khk_level[$id]'>";
                 echo "<option value='1'";
                 if ($level == 1) echo " selected";
                 echo ">1</option>";
                 echo "<option value='2'";
                 if ($level == 2) echo " selected";
                 echo ">2</option>";
-                echo "</select></td>";
+                echo "</select></td><td>" . getAward($child) . "</td></tr>";
             }
-            // add khk_final
-            // check if child should be able to take the khk final
-            $disabled = 'disabled';
-            if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
-            echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
-            if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
-            else echo "value='0'";
-            echo " />";
-            echo "<select name='khk_level[$id]'>";
-            echo "<option value='1'";
-            if ($level == 1) echo " selected";
-            echo ">1</option>";
-            echo "<option value='2'";
-            if ($level == 2) echo " selected";
-            echo ">2</option>";
-            echo "</select></td><td>" . getAward($child) . "</td></tr>";
         }
+        echo "</table>";
     }
-    echo "</table>";
-}
-echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div>";
-echo "</form>";
-?>
+    echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div>";
+    echo "</form>";
+} else {
+    ?>
+  <form action="finals.php" method="post">
+    Choose Class: <select name="grade">
+      <option value="0">All Classes</option>
+          <?php
+          if (isset($admin_user['auths']['school'][0])) {
+              $sql = "select class_id, class_grade, class_sub from classes where school_id = " . $admin_user['auths']['school'][0];
+              $result = mysql_query($sql);
+              while ($row = mysql_fetch_assoc($result)) {
+                  if (intval($row['class_grade']) >= 4) {
+                      $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                      echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
+                  }
+              }
+          }
+          ?>
+    </select><br/><br/>
+    <input type="submit" name="submit" value="Submit"/>
+  </form>
+<?php } ?>
 </body>
 <script>
   $(function () {
     // BCM IA wants to have the page only show when entering a password. not secure but makes her believe it's secure.
-    const school_id = <?=$admin_user['auths']['school'][0]?>;
+    const school_id = <?= $admin_user['auths']['school'][0] ?? 0 ?>;
     if (school_id == 176) {
       // password protect
       const password = 'laky';
@@ -296,9 +319,9 @@ echo "</form>";
       }
     }
     $('body').show();
-    <?php if (!isset($_POST['submit'])) : ?>
-      alert('Please make sure to SAVE after entering scores.');
-    <?php endif; ?>
+      <?php if (!isset($_POST['submit'])) : ?>
+    alert('Please make sure to SAVE after entering scores.');
+      <?php endif; ?>
   })
 
   $(".mark").focus(function () {
