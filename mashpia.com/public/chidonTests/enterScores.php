@@ -230,7 +230,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
         });
 
         async function checkShowReportCards() {
-          const test_num = <?= $testNumber ?>
+          const test_num = <?= $testNumber ?>;
           const res = await fetch('api/getReportCardsInfo.php')
           const info = await res.json()
           if (info.success) {
