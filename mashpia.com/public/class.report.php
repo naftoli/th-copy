@@ -34,5 +34,28 @@ class Report extends ReportBasic {
     public function getDates() {
         return $this->dates;
     }
+
+    public function getHtmlSelect() {
+        $reportDates = $this->getReportDates();
+
+        $str = "<select name='date_selection' id='date_selection'>";
+        $num = count($this->dates)-1;
+        for ( $i = 1; $i < $num; $i++ ) {
+            $start = $this->dates[$i]+1;
+            $end = $this->dates[$i+1];
+
+            $str1 = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
+            $start_he = iconv('WINDOWS-1255', 'UTF-8', $str1);
+            $str2 = jdtojewish($end, true, CAL_JEWISH_ADD_GERESHAYIM);
+            $end_he = iconv('WINDOWS-1255', 'UTF-8', $str2);
+
+            $str .= "<option value='" . ($start . ':' . $end) . "'";
+            if ( $start == $reportDates['start'] )
+                $str .= " selected='selected'";
+            $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
+        }
+        $str .= "</select>";
+        return $str;
+    }
 }
 ?>
