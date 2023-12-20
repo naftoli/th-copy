@@ -154,7 +154,7 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
                     $levelValue = $ct->getLevel($child['user_id'], 'tests');
                     if (isset($levels[$school][$id][$testNumber]))
                         $levelValue = $levels[$school][$id][$testNumber];
-                    echo "</tr><tr><td><select name='levels[$id][$testNumber]'>";
+                    echo "<td><select name='levels[$id][$testNumber]'>";
                     echo "<option value='1'";
                     if ($levelValue == 1) echo " selected";
                     echo ">1</option>";
