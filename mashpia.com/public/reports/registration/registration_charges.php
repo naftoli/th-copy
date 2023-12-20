@@ -23,7 +23,8 @@ ksort($totals);
 // get the details
 $details = [];
 $detail_query = mysql_query(
-    "SELECT s.school_name, s.school_number, u.user_serial, u.first, u.last, rc.type, rc.date, rc.year, rc.amount, rc.refunded "
+    "SELECT s.school_name, s.school_number, u.user_serial, u.first, u.last, rc.registration_charge_id, rc.type, rc.date, 
+      rc.year, rc.amount, rc.refunded "
     . "FROM registration_charges rc LEFT JOIN schools s USING ( school_id ) "
     . "LEFT JOIN users u USING ( user_id ) LEFT JOIN transactions t USING ( trans_id ) "
     . "WHERE year = $year ORDER BY rc.date DESC, school_name, u.first, u.last, rc.amount;"
@@ -92,7 +93,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     <tbody>
     <?php
     foreach ($details as $user) { ?>
-      <tr>
+      <tr id="<?= $user['registration_charge_id'] ?>">
         <td><?= $user['school_number'] ?></td>
         <td><?= $user['school_name'] ?></td>
         <td><?= $user['user_serial'] ?></td>
@@ -116,33 +117,34 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
   <script>
     $(document).ready(function () {
       $('.refund').click(function () {
-        var row = $(this).closest('tr');
-        var serial = row.find('td:nth-child(3)').text();
-        var name = row.find('td:nth-child(4)').text();
-        var type = row.find('td:nth-child(5)').text();
-        var amount = row.find('td:nth-child(7)').text();
-        var confirmed = confirm('Are you sure you want to refund $' + amount + ' for ' + name + ' (' + serial + ') for ' + type + '?');
-        if (confirmed) {
+        const row = $(this).closest('tr')
+        const id = row.attr('id')
+        const name = row.find('td:nth-child(4)').text()
+        const amount = row.find('td:nth-child(7)').text()
+        const reason = prompt('What is the reason for the refund?')
+        if (reason) {
           $.ajax({
             url: 'refund.php',
             type: 'POST',
             data: {
-              serial: serial,
-              type: type,
+              id: id,
               amount: amount
             },
             success: function (data) {
-              if (data == 'success') {
+              if (data.success) {
+                alert('Refund successful.\nYou need to refresh the page to see the updated totals.')
                 row.find('td:nth-child(8)').text('Yes');
-                row.find('td:nth-child(9) button').attr('disabled', true')
+                row.find('td:nth-child(9) button').attr('disabled', true)
               } else {
-                alert('Error: ' + data);
+                alert('Error: ' + (data.error || data));
               }
             }
-          });
+          })
+        } else {
+          alert('You must enter a reason for the refund.')
         }
-      });
-    });
+      })
+    })
   </script>
   </html>
 <?php
@@ -150,33 +152,33 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
 function getDescription($code)
 {
     $descriptions = [
-        'chayolei' => 'CTH enrollment',
+        'chayolei' => 'CTH Enrollment',
         'shipping' => 'Shipping Fee (before the codes)',
 
-        'THE' => 'CTH enrollment',
-        'HACH' => 'Hachayol subscription',
+        'THE' => 'CTH Enrollment',
+        'HACH' => 'Hachayol Subscription',
 
-        'THAKUSA' => 'CTH AK shipping USA',
-        'THAKCAN' => 'CTH AK shipping CAN',
-        'THAKINT' => 'CTH AK shipping INT',
+        'THAKUSA' => 'CTH AK Shipping USA',
+        'THAKCAN' => 'CTH AK Shipping CAN',
+        'THAKINT' => 'CTH AK Shipping INT',
 
         'THMSUSA' => 'CTH MS shipping USA',
         'THMSCAN' => 'CTH MS shipping CAN',
         'THMSINT' => 'CTH MS shipping INT',
 
-        'LDE' => 'Chidon enrollment',
-        'KHKE' => 'Khk enrollment',
+        'LDE' => 'Chidon Enrollment',
+        'KHKE' => 'KHK Enrollment',
         'LDE:MYSLDS-10' => 'MyShliach chidon enrollment shipping',
         'LDE:AKLDS-10:AKLDBC-20' => 'Anash Kinder chidon enrollment shipping + bc fee',
 
         'RRYSD' => 'Chidon Reg Yesod',
         'RRYDA' => 'Chidon Reg Yediah',
         'RRHVN' => 'Chidon Reg Havona / Iyun',
-        'RRKHK' => 'Chidon Reg Khk',
+        'RRKHK' => 'Chidon Reg KHK',
 
-        'RRSUSA' => 'Chidon Reg shipping USA',
-        'RRSCAN' => 'Chidon Reg shipping CAN',
-        'RRSINT' => 'Chidon Reg shipping INT',
+        'RRSUSA' => 'Chidon Reg Shipping USA',
+        'RRSCAN' => 'Chidon Reg Shipping CAN',
+        'RRSINT' => 'Chidon Reg Shipping INT',
 
         'YB1' => 'Yahadus Book 1',
         'YB2' => 'Yahadus Book 2',
