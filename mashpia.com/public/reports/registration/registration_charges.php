@@ -120,15 +120,19 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
         const row = $(this).closest('tr')
         const id = row.attr('id')
         const name = row.find('td:nth-child(4)').text()
-        const amount = row.find('td:nth-child(7)').text()
+        const type = row.find('td:nth-child(6)').text()
+        const amount = row.find('td:nth-child(8)').text()
         const reason = prompt('What is the reason for the refund?')
-        if (reason) {
+        if (! reason) alert('You must enter a reason for the refund.')
+        else {
           $.ajax({
             url: 'refund.php',
             type: 'POST',
             data: {
               id: id,
-              amount: amount
+              amount: amount,
+              reason: reason,
+              type: type,
             },
             success: function (data) {
               if (data.success) {
@@ -140,8 +144,6 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
               }
             }
           })
-        } else {
-          alert('You must enter a reason for the refund.')
         }
       })
     })
