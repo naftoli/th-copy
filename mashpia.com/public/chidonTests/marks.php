@@ -78,9 +78,9 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
             echo "<h2>" . $schools[$school] . "</h2>";
             echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th>";
             foreach ($types as $type => $value) {
-                echo "<th>" . ucwords($value) . " / Level</th>";
+                echo "<th>" . ucwords($value) . "</th>";
             }
-            echo "<th>Avg To Date</th>";
+            echo "<th>Test Level</th><th>Avg To Date</th>";
             echo "</tr>";
             foreach ($children as $child) {
                 $avgs = $ct->getPassingAvgs($child['user_id']);
@@ -98,9 +98,12 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                         $color = 'black';
                         if ($mark < $avgs[$type]) $color = 'red';
                     }
-                    echo "<td style='color: $color;'>" . $mark . "% / " . (
-                      $levels[$id][$testNumber][$type] ?? 2) . "</td>";
+                    echo "<td style='color: $color;'>" . $mark . "%</td>";
                 }
+                $levelValue = $ct->getLevel($child['user_id'], 'tests');
+                if (isset($levels[$school][$id][$testNumber]))
+                    $levelValue = $levels[$school][$id][$testNumber];
+                echo "<td>" . $levelValue . "</td>";
                 // figure out avg
                 $avg = 0;
                 $total = 0;

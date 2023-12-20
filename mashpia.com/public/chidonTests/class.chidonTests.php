@@ -230,7 +230,8 @@ class ChidonTests
                     if (! empty($rows)) {
                         foreach ($rows as $row) {
                             $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
-                            $this->levels[$id][$row['test_number']][$type] = $row['level'];
+                            if (! isset($this->levels[$id][$row['test_number']]))
+                                $this->levels[$id][$row['test_number']] = $row['level'];
                         }
                     }
                 }
@@ -272,7 +273,7 @@ class ChidonTests
                                 ':number' => $testNum,
                                 ':questions' => $questions,
                                 ':answered' => $details[$type],
-                                ':level'    => $levels[$id][$testNum][$type]
+                                ':level'    => $levels[$id][$testNum]
                             ])) {
                             $success = false;
                         }

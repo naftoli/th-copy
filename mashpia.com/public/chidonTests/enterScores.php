@@ -147,22 +147,21 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
                         $class = 'score';
                         if ($type == 'expert') $class = 'expert';
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
-                        $levelValue = $ct->getLevel($child['user_id'], 'tests');
-                        if ($score > 0 && isset($levels[$school][$id][$testNumber][$type]))
-                            $levelValue = $levels[$school][$id][$testNumber][$type];
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
                         if ($disabled) echo "readonly ";
-                        echo "/>";
-                        echo "<select name='levels[$id][$testNumber][$type]'>";
-                        echo "<option value='1'";
-                        if ($levelValue == 1) echo " selected";
-                        echo ">1</option>";
-                        echo "<option value='2'";
-                        if ($levelValue == 2) echo " selected";
-                        echo ">2</option>";
-                        echo "</select></td>";
+                        echo "/></td>";
                     }
-                    echo "</tr>";
+                    $levelValue = $ct->getLevel($child['user_id'], 'tests');
+                    if (isset($levels[$school][$id][$testNumber]))
+                        $levelValue = $levels[$school][$id][$testNumber];
+                    echo "</tr><tr><td><select name='levels[$id][$testNumber]'>";
+                    echo "<option value='1'";
+                    if ($levelValue == 1) echo " selected";
+                    echo ">1</option>";
+                    echo "<option value='2'";
+                    if ($levelValue == 2) echo " selected";
+                    echo ">2</option>";
+                    echo "</select></td></tr>";
                 }
                 echo "</table>";
             }
