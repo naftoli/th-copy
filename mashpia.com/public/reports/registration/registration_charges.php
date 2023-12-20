@@ -162,9 +162,9 @@ function getDescription($code)
         'THAKCAN' => 'CTH AK Shipping CAN',
         'THAKINT' => 'CTH AK Shipping INT',
 
-        'THMSUSA' => 'CTH MS shipping USA',
-        'THMSCAN' => 'CTH MS shipping CAN',
-        'THMSINT' => 'CTH MS shipping INT',
+        'THMSUSA' => 'CTH MS Shipping USA',
+        'THMSCAN' => 'CTH MS Shipping CAN',
+        'THMSINT' => 'CTH MS Shipping INT',
 
         'LDE' => 'Chidon Enrollment',
         'KHKE' => 'KHK Enrollment',
