@@ -53,14 +53,12 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = [];
-        if (isset($_COOKIE['naftoli'])) $categories[] = 'hei teves';
+        $categories = ['hei teves'];
         return $categories;
     }
 
     public function getItems() {
-        $items = [];
-        if (isset($_COOKIE['naftoli'])) $items['hei teves'] = $this->getHeiTevesItems();
+        $items['hei teves'] = $this->getHeiTevesItems();
         return $items;
     }
 
