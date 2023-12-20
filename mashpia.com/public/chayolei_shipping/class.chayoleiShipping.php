@@ -59,11 +59,8 @@ class ChayoleiShipping
     }
 
     public function getItems() {
-        $items = [
-            'auction'               => ['Auction 5783']
-        ];
+        $items = [];
         if (isset($_COOKIE['naftoli'])) $items['hei teves'] = $this->getHeiTevesItems();
-
         return $items;
     }
 
