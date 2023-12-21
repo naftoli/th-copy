@@ -142,7 +142,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
         document.getElementById('reason').value = '' // reset
         document.getElementById('duplicate').checked = false // reset
         document.getElementById('refund_id').value = row.attr('id')
-        document.getElementById('amount').value = row.find('td:nth-child(4)').text()
+        document.getElementById('amount').value = row.find('td:nth-child(4)').text().replace(/$/, '') // remove first $
         document.getElementById('serial').value = row.find('td:nth-child(3)').text()
         document.getElementById('type').value = row.find('td:nth-child(6)').text()
         document.getElementById('amount').value = row.find('td:nth-child(8)').text()
