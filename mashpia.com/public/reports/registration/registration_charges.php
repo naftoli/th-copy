@@ -113,38 +113,57 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     <?php } ?>
     </tbody>
   </table>
+  <dialog>
+    <form method="dialog">
+      <label>Reason for Refund</label>
+      <input type="text" name="reason" id="reason" required />
+      <br />
+      <input type="checkbox" name="duplicate" id="duplicate" value="1" /> Duplicate Charge
+      <br />
+      <input type="hidden" name="refund_id" id="refund_id" value="" />
+      <input type="hidden" name="amount" id="amount" value="" />
+      <input type="hidden" name="type" id="type" value="" />
+      <input type="hidden" name="serial" id="serial" value="" />
+      <button id="refund" type="submit">Refund</button>
+    </form>
+  </dialog>
   </body>
   <script>
     $(document).ready(function () {
       $('.refund').click(function () {
         const row = $(this).closest('tr')
-        const id = row.attr('id')
-        const name = row.find('td:nth-child(4)').text()
-        const type = row.find('td:nth-child(6)').text()
-        const amount = row.find('td:nth-child(8)').text()
-        const reason = prompt('What is the reason for the refund?')
-        if (! reason) alert('You must enter a reason for the refund.')
-        else {
-          $.ajax({
-            url: 'refund.php',
-            type: 'POST',
-            data: {
-              id: id,
-              amount: amount,
-              reason: reason,
-              type: type,
-            },
-            success: function (data) {
-              if (data.success) {
-                alert('Refund successful.\nYou need to refresh the page to see the updated totals.')
-                row.find('td:nth-child(8)').text('Yes');
-                row.find('td:nth-child(9) button').attr('disabled', true)
-              } else {
-                alert('Error: ' + (data.error || data));
-              }
+        document.getElementById('reason').value = '' // reset
+        document.getElementById('duplicate').checked = false // reset
+        document.getElementById('refund_id').value = row.attr('id')
+        document.getElementById('amount').value = row.find('td:nth-child(4)').text()
+        document.getElementById('serial').value = row.find('td:nth-child(3)').text()
+        document.getElementById('type').value = row.find('td:nth-child(6)').text()
+        document.getElementById('amount').value = row.find('td:nth-child(8)').text()
+        dialog.showModal()
+      })
+      $("#refund").click( function() {
+        $.ajax({
+          url: 'refund.php',
+          type: 'POST',
+          data: {
+            id: document.getElementById('refund_id').value,
+            amount: document.getElementById('amount').value,
+            reason: document.getElementById('reason').value,
+            type: document.getElementById('type').value,
+            serial: document.getElementById('serial').value,
+            duplicate: document.getElementById('duplicate').checked ? 1 : 0
+          },
+          success: function (data) {
+            if (data.success) {
+              alert('Refund successful.\nYou need to refresh the page to see the updated totals.')
+              row.find('td:nth-child(8)').text('Yes');
+              row.find('td:nth-child(9) button').attr('disabled', true)
+            } else {
+              alert('Error: ' + (data.error || data));
+              console.log(data.error_msg)
             }
-          })
-        }
+          }
+        })
       })
     })
   </script>
