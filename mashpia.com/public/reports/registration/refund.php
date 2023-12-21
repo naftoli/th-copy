@@ -12,6 +12,7 @@ $amount = $_POST['amount'];
 $reason = $_POST['reason'];
 $type = $_POST['type'];
 $serial = $_POST['serial'];
+$duplicate = $_POST['duplicate'];
 
 $stmt = $MASHPIA_DB->prepare("
     update registration_charges 
@@ -28,8 +29,8 @@ $res = $stmt->execute([
     ':reason' => $reason
 ]);
 
-$updated = false;
-if ($res) {
+$updated = $duplicate; // if not duplicate, then we need to update the other db
+if ($res && !$duplicate) {
     // check type
     switch ($type) {
         case 'chayolei':
@@ -76,7 +77,7 @@ if ($res) {
     }
 }
 
-if ($updated) $MASHPIA_DB->commit();
+if ($res && $updated) $MASHPIA_DB->commit();
 else $MASHPIA_DB->rollBack();
 
 echo json_encode([
