@@ -250,7 +250,7 @@
                     <!--                        <button class="btn btn-info chidon_reg">Chidon Registration</button>-->
                     <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
                     <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
-                    <button class="btn btn-info heyTeves" style="display: none;">Hey Teves Sale</button>
+<!--                    <button class="btn btn-info heyTeves" style="display: none;">Hey Teves Sale</button>-->
                 </div>
             </div>
         </div>
@@ -584,9 +584,6 @@
 <script src="../js/translation/parent-detail/parent_detail.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const now = new Date()
-        const midnight = new Date('2023-12-21T00:00:00')
-        if (now.getTime() < midnight.getTime()) $(".heyTeves").show()
 
         if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
