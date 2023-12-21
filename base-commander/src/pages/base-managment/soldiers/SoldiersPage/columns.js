@@ -44,7 +44,9 @@ export default ( login, editPicture, updateToggle ) => {
       Header: 'Date Of Birth', accessor: 'dob',
       Cell: props => <DateDisplay value={ props.value } format = 'l'/>,
       filterMethod: dateFilter,
-    },
+    }, {
+      Header: 'Family ID', accessor: 'admin_id',
+    }
   ];
 
   // * Chayolei columns
