@@ -9,7 +9,7 @@ require_once 'class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
 $id = $_POST['id'];
-$amount = $_POST['amount'];
+$amount = floatval(str_replace('$', '', $_POST['amount']));
 $reason = $_POST['reason'];
 $type = $_POST['type'];
 $serial = $_POST['serial'];
