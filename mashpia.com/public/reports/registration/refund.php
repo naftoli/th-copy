@@ -1,7 +1,6 @@
 <?php
 $admin_auth = ['school'];
 require 'header.php';
-exit;
 
 if ($admin_user['auth'] != 'super') exit;
 
