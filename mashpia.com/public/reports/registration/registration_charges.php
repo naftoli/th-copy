@@ -52,6 +52,13 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
       #details {
         font-size: 14px;
       }
+
+      dialog {
+        line-height: 2;
+      }
+      button#refund {
+        padding: 5px;
+      }
     </style>
   </head>
   <body>
