@@ -116,7 +116,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
   <dialog>
     <form method="dialog">
       <label>Reason for Refund</label>
-      <input type="text" name="reason" id="reason" required />
+      <input type="text" name="reason" id="reason" autofocus required />
       <br />
       <input type="checkbox" name="duplicate" id="duplicate" value="1" /> Duplicate Charge
       <br />
@@ -143,16 +143,30 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
         dialog.showModal()
       })
       $("#refund").click( function() {
+        const id = document.getElementById('refund_id').value
+        const amount = document.getElementById('amount').value
+        const reason = document.getElementById('reason').value
+        const type = document.getElementById('type').value
+        const serial = document.getElementById('serial').value
+        const duplicate = document.getElementById('duplicate').checked ? 1 : 0
+        if (! reason) {
+          alert('Please enter a reason for the refund!')
+          return false
+        }
+        if (! (id && amount && type && serial)) {
+          alert('Cannot submit refund, missing data!')
+          return false
+        }
         $.ajax({
           url: 'refund.php',
           type: 'POST',
           data: {
-            id: document.getElementById('refund_id').value,
-            amount: document.getElementById('amount').value,
-            reason: document.getElementById('reason').value,
-            type: document.getElementById('type').value,
-            serial: document.getElementById('serial').value,
-            duplicate: document.getElementById('duplicate').checked ? 1 : 0
+            id,
+            amount,
+            reason,
+            type,
+            serial,
+            duplicate
           },
           success: function (data) {
             if (data.success) {
