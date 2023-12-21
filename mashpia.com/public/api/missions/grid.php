@@ -134,7 +134,8 @@ class GridRouter {
         // Query used to fetch tasks for grid.
         $missions_sql = 'SELECT dt.short_name as cat, dt.points AS points, dt.grid_id, dt.quantity, '
             .$mark_date.' AS mark_date, dtm.subject_id, dtm.start_date, dtm.end_date, '
-            .' s.subject_id, s.subject_name, dt.mandatory_qty, IFNULL( disabled, 0 ) as disabled '
+            .' s.subject_id, s.subject_name, dt.mandatory_qty, IFNULL( disabled, 0 ) as disabled, '
+            .' s.subject_id, s.subject_name, dt.mandatory_qty '
             .' FROM mashpiadb.date_tasks dt '
             .' JOIN mashpiadb.date_tasks_missions dtm USING (date_tasks_mission_id) '
             .' JOIN mashpiadb.subjects s USING (subject_id) '
@@ -144,14 +145,14 @@ class GridRouter {
             // * Misc limits used for keeping the data clean
             .' WHERE dtm.personal = 0 '
             .' AND dt.cat != \'\' AND dt.short_name != \'\' '
-            .' AND dt.grid_id IS NOT NULL AND dt.grid_marking = 1 '
+//            .' AND dt.grid_id IS NOT NULL AND dt.grid_marking = 1 '
             // * Limits based on :start_date, :end_date and :daily_task
             .' AND dt.daily_task = :daily_task '
             .' AND ' . $dates_filter // add date filter if we are limiting by dates
             .' AND dtm.subject_id IN (' . $campaigns_filter .') '
             // * Limits based on :school_id
             .' AND ( dtm.created_by_school IS NULL OR dtm.created_by_school = :school_id )'
-            .' AND dtm.lang_id = ( SELECT lang_id FROM schools WHERE school_id = :school_id ) '
+//            .' AND dtm.lang_id = ( SELECT lang_id FROM schools WHERE school_id = :school_id ) '
             // * Limit the level, subjects and school_type_id based on the :class_id
             .' AND dtm.school_type_id IN ('
                 .' SELECT DISTINCT school_type_id FROM users '
@@ -172,6 +173,7 @@ class GridRouter {
 
         $missions_query = $MASHPIA_DB->prepare( $missions_sql );
         $missions_query->execute( $params );
+//        $missions_query->debugDumpParams();
         $missions = $missions_query->fetchAll();
 
         $missions = $this->sortMissions( $missions, $current_user->login->class_id, $type );
