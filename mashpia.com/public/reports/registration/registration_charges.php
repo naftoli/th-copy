@@ -139,6 +139,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
         document.getElementById('serial').value = row.find('td:nth-child(3)').text()
         document.getElementById('type').value = row.find('td:nth-child(6)').text()
         document.getElementById('amount').value = row.find('td:nth-child(8)').text()
+        const dialog = document.querySelector('dialog')
         dialog.showModal()
       })
       $("#refund").click( function() {
