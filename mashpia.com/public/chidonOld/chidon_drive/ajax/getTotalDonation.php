@@ -29,11 +29,29 @@ if ( $res ) {
   ");
   $stmt->execute([':year' => $year]);
   $row = $stmt->fetch();
-  $totalReg = $row['registration'];
+  $totalReg = floatval($row['registration']);
+
+  $stmt = $MASHPIA_DB->prepare("
+    SELECT 
+        SUM(total_amount) AS paid
+    FROM
+        mashpiadb.th_chidon_installments
+    WHERE
+        year = :year
+            AND admin_id NOT IN (SELECT 
+                parent_id
+            FROM
+                th_chidon
+            WHERE
+                year = :year AND paid > 0) 
+    ");
+    $stmt->execute([':year' => $year]);
+    $row = $stmt->fetch();
+    $totalReg += floatval($row['paid']);
 
   echo json_encode([
     'success' =>  true, 
-    'total'   =>  intval( $totalDonation ) + intval( $totalReg )
+    'total'   =>  floatval( $totalDonation ) + floatval( $totalReg )
   ]);
 } else {
   echo json_encode([
