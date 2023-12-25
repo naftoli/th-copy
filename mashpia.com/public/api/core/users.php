@@ -22,7 +22,7 @@ class UsersRouter {
             FROM users u 
             JOIN schools s USING ( school_id ) 
             JOIN rank_marks using ( user_id ) 
-            JOIN admin_auths aa on aa.id = u.user_id and aa.auth = 'user' 
+            LEFT JOIN admin_auths aa ON ( aa.id = u.user_id AND aa.auth = 'user' )
             LEFT JOIN classes c USING ( class_id ) WHERE $filters 
             GROUP BY user_id 
             ORDER BY school_name, class_grade, class_sub, last, first
