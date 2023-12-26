@@ -25,12 +25,13 @@ if (isset($_POST['submit'])) {
         foreach ($_POST[$track] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
+                $levelChosen = $_POST[$level][$id];
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
                             $track = $mark, 
-                            $level = $_POST[$level][$id], 
-                            on duplicate key update $track = $mark, $level = $_POST[$level][$id]";
+                            $level = $levelChosen 
+                            on duplicate key update $track = $mark, $level = $levelChosen";
             }
         }
     }
@@ -239,7 +240,6 @@ if (isset($_POST['grade'])) {
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['user_id'];
-                $level = $ct->getLevel($id, 'finals');
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
                     $child['highest_track'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
@@ -252,16 +252,17 @@ if (isset($_POST['grade'])) {
                     if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                     else echo "value='0'";
                     if ($i > $key || $tooLate) echo " disabled";
-                    echo " />";
-                    echo "<select name='level_{$i}[$id]'>";
-                    echo "<option value='1'";
-                    if ($level == 1) echo " selected";
-                    echo ">1</option>";
-                    echo "<option value='2'";
-                    if ($level == 2) echo " selected";
-                    echo ">2</option>";
-                    echo "</select></td>";
+                    echo " /></td>";
                 }
+                $level = $ct->getLevel($id, 'finals');
+                echo "<td><select name='level[$id]'>";
+                echo "<option value='1'";
+                if ($level == 1) echo " selected";
+                echo ">1</option>";
+                echo "<option value='2'";
+                if ($level == 2) echo " selected";
+                echo ">2</option>";
+                echo "</select></td>";
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
