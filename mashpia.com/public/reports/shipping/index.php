@@ -34,13 +34,13 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/school_shipping">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
-                    <span class="link-text">Chayolei Kids Shipping</span>
+                    <span class="link-text">Chayolei School Shipping</span>
                 </div>
             </a>
             <a href="/chayolei_shipping">
                 <div class="button">
                   <img src="/images/icon_report.png" height="32" alt="report"/>
-                  <span class="link-text">Chayolei School Shipping</span>
+                  <span class="link-text">Chayolei Kids Shipping</span>
                 </div>
             </a>
             <a href="/chidon_shipping">
