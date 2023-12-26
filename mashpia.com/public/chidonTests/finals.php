@@ -231,7 +231,9 @@ if (isset($_POST['grade'])) {
         foreach ($tracks as $track) {
             echo "<th>$track</th>";
         }
+        echo "<th>Level</th>";
         echo "<th>KHK Final</th>";
+        echo "<th>KHK Final Level</th>";
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
