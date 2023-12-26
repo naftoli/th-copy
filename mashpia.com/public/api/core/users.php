@@ -16,21 +16,35 @@ class UsersRouter {
 
         $filters = $current_user->login->getFilter( 's.', 'u.' );
         // generate the SQL
-        $sql = "
-            SELECT u.*, aa.admin_id, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
-                   MAX(rank_ord) as `rank` 
-            FROM users u 
-            JOIN schools s USING ( school_id ) 
-            JOIN rank_marks using ( user_id ) 
-            LEFT JOIN admin_auths aa ON ( aa.id = u.user_id AND aa.auth = 'user' )
-            LEFT JOIN classes c USING ( class_id ) WHERE $filters 
-            GROUP BY user_id 
-            ORDER BY school_name, class_grade, class_sub, last, first
-        ";
-        if (isset($_COOKIE['naftoli'])) {
-            echo $sql;
-            exit;
+        // if we are a parent
+        if ( $current_user->login->code === 'PARENT' ) {
+            $sql = "
+                SELECT u.*, aa.admin_id, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
+                       MAX(rank_ord) as `rank` 
+                FROM users u 
+                JOIN schools s USING ( school_id ) 
+                JOIN rank_marks using ( user_id ) 
+                LEFT JOIN admin_auths aa ON ( aa.id = u.user_id AND aa.auth = 'user' )
+                LEFT JOIN classes c USING ( class_id ) WHERE $filters 
+                GROUP BY user_id 
+                ORDER BY school_name, class_grade, class_sub, last, first
+            ";
+        } else {
+            $sql = "
+                SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
+                       MAX(rank_ord) as `rank` 
+                FROM users u 
+                JOIN schools s USING ( school_id ) 
+                JOIN rank_marks using ( user_id ) 
+                LEFT JOIN classes c USING ( class_id ) WHERE $filters 
+                GROUP BY user_id 
+                ORDER BY school_name, class_grade, class_sub, last, first
+            ";
         }
+//        if (isset($_COOKIE['naftoli'])) {
+//            echo $sql;
+//            exit;
+//        }
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute();
         if ($query->errorCode() !== "00000") {
