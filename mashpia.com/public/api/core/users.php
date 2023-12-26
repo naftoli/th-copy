@@ -27,7 +27,10 @@ class UsersRouter {
             GROUP BY user_id 
             ORDER BY school_name, class_grade, class_sub, last, first
         ";
-        if (isset($_COOKIE['naftoli'])) echo $sql;
+        if (isset($_COOKIE['naftoli'])) {
+            echo $sql;
+            exit;
+        }
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute();
         if ($query->errorCode() !== "00000") {
