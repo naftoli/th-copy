@@ -28,9 +28,24 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <p style="text-align: center">
             Please click <a href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">here</a> for the Rewards Manual
         </p>-->
-        
-        <h2>5778 Shipping System</h2>
-        <? include(dirname(__FILE__)."/parts/action_links.php");?>
+
+        <h2>Current Shipping System</h2>
+        <div id="action-links">
+            <a href="/chayolei_shipping">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Chayolei Shipping</span>
+                </div>
+            </a>
+            <a href="/chidon_shipping">
+                <div class="button">
+                  <img src="/images/icon_report.png" height="32" alt="report"/>
+                  <span class="link-text">Chidon Shipping</span>
+                </div>
+            </a>
+        </div>
+<!--        <h2>5778 Shipping System</h2>-->
+        <?// include(dirname(__FILE__)."/parts/action_links.php");?>
         
         <? if ($admin_user['auth'] == 'super') { ?>
         <h2>Inventory</h2>
