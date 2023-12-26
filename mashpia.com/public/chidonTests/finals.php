@@ -272,7 +272,7 @@ if (isset($_POST['grade'])) {
                 echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
                 if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
                 else echo "value='0'";
-                echo " />";
+                echo " /></td><td>";
                 echo "<select name='khk_level[$id]'>";
                 echo "<option value='1'";
                 if ($level == 1) echo " selected";
