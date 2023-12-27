@@ -80,7 +80,7 @@ function createHtmlForItem($school, $row, $output = true) {
                 else $item_num = 0;
                 // get status and whether to show this item
                 $show_item = false;
-                $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item['num']] : [];
+                $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item_num] : [];
                 $statusDesc = [
                     1   => 'shipped',
                     2   => 'missing',
