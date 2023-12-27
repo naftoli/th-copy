@@ -70,6 +70,7 @@
             handleSchoolChange={handleSchoolChange}
             handleYearChange={handleYearChange}
             handleGradeChange={handleGradeChange}
+            getInfo={getInfo}
           />
         </div>
         <div>
@@ -81,7 +82,7 @@
     )
   }
 
-  const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange}) => {
+  const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange, getInfo}) => {
     const [schools, setSchools] = useState([])
     const [years, setYears] = useState([])
     const [grades, setGrades] = useState([])
