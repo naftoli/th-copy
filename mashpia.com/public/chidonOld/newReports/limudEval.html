@@ -73,7 +73,7 @@
             handleSchoolChange={handleSchoolChange}
             handleYearChange={handleYearChange}
             handleGradeChange={handleGradeChange}
-            getInfo={getInfo}
+            handleClick={getInfo}
           />
         </div>
         <div>
@@ -85,7 +85,7 @@
     )
   }
 
-  const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange, getInfo}) => {
+  const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange, handleClick}) => {
     const [schools, setSchools] = useState([])
     const [years, setYears] = useState([])
     const [grades, setGrades] = useState([])
@@ -131,7 +131,7 @@
         <br />
         <div className="row">
           <div className="col">
-            <button className="btn btn-primary" onClick={getInfo}>Get Info</button>
+            <button className="btn btn-primary" onClick={handleClick}>Get Info</button>
           </div>
         </div>
       </div>
