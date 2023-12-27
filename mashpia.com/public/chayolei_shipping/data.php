@@ -58,11 +58,12 @@ function build_items() {
     $html = "<input type='checkbox' name='all_items' id='all_items' /> ALL ITEMS<br />";
     foreach ($categories as $cat) {
         $html .= "<h4>" . ucwords($cat) . "</h4>";
-        $html .= "<input type='checkbox' name='items[" . $cat . "]' class='check_items' /> All " . ucwords($cat) . "<br />";
+        $html .= "<div><input type='checkbox' name='items[" . $cat . "]' class='check_items' /> All " . ucwords($cat) . "<br />";
         foreach ($items[$cat] as $item) {
             $name = strtolower($item);
             $html .= "<input type='checkbox' name='items[" . $cat . "][" . $name . "]' class='item' /> " . ucwords($item) . "<br />";
         }
+        $html .= "</div>";
     }
     return $html;
 }
