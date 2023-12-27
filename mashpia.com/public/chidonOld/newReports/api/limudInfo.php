@@ -4,7 +4,6 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $year = $input['year'];
