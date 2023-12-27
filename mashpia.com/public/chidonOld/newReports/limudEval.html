@@ -106,24 +106,24 @@
           <div className="col">
             <label htmlFor="school">School</label>
             <select className="form-select" id="school" onChange={handleSchoolChange}>
-              {Object.entries(schools).map((school) => {
-                return <option value={school[0]}>{school[1]}</option>
+              {Object.entries(schools).map((school, i) => {
+                return <option key={i} value={school[0]}>{school[1]}</option>
               })}
             </select>
           </div>
           <div className="col">
             <label htmlFor="year">Year</label>
             <select className="form-select" id="year" onChange={handleYearChange}>
-              {years.map((year) => {
-                return <option value={year}>{year}</option>
+              {years.map((year, i) => {
+                return <option key={i} value={year}>{year}</option>
               })}
             </select>
           </div>
           <div className="col">
             <label htmlFor="grade">Class</label>
             <select className="form-select" id="grade" onChange={handleGradeChange}>
-              {grades.map((grade) => {
-                return <option value={grade}>{grade}</option>
+              {grades.map((grade, i) => {
+                return <option key={i} value={grade}>{grade}</option>
               })}
             </select>
           </div>
@@ -155,7 +155,7 @@
           <tbody>
           {info && info.map((row) => {
             return (
-              <tr>
+              <tr key={row.serial}>
                 <td>{row.serial}</td>
                 <td>{row.name}</td>
                 <td>{row.class}</td>
