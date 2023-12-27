@@ -107,6 +107,15 @@ $items = $cs->getItems();
     })
   }
 
+  function checkAllItems() {
+    let checked = $(this).is(":checked")
+    let elem = $(this).parent().find('.item')
+    $(elem).each( function () {
+      this.checked = checked
+    })
+  }
+
+  $(".check_items").click(checkAllItems)
   $("#all_items").click(checkAll)
   $("#all_details").click(checkAll)
   $("#all_fields").click(checkAll)
@@ -124,7 +133,6 @@ $items = $cs->getItems();
     $("form").submit()
   })
 
-  $("#all_items").click()
   $("#all_details").click()
 </script>
 </html>
