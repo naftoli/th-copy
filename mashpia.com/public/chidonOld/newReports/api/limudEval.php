@@ -11,10 +11,6 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true)
 $schools = $as->getSchools();
 $year = intval(GlobalSettings::getChidonYear());
 
-$grades = [
-    0 => 'All Classes',
-];
-
 if (count($schools) == 1) {
     $school_id = key($schools);
     $sql = "select * from classes where class_era = 0 and class_grade in ('4', '5', '6', '7', '8') and school_id = " . $school_id;
@@ -28,5 +24,4 @@ echo json_encode([
     'success'   => true,
     'schools'   => $schools,
     'years'     => [$year, $year - 1],
-    'grades'    => $grades,
 ]);

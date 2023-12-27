@@ -96,16 +96,33 @@
         .then((data) => {
           setSchools(data.schools)
           setYears(data.years)
-          setGrades(data.grades)
         })
     }, [])
+
+    const getClasses = (e) => {
+      handleSchoolChange(e)
+      const school_id = parseInt(e.target.value)
+      if (school_id > 0) {
+        fetch('api/getClasses.php', {
+          method: 'POST',
+          body: JSON.stringify({
+            school: e.target.value,
+          })
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setGrades(data.grades)
+          })
+      }
+    }
 
     return (
       <div>
         <div className="row">
           <div className="col">
             <label htmlFor="school">School</label>
-            <select className="form-select" id="school" onChange={handleSchoolChange}>
+            <select className="form-select" id="school" onChange={getClasses}>
+              <option value="0">All</option>
               {Object.entries(schools).map((school, i) => {
                 return <option key={i} value={school[0]}>{school[1]}</option>
               })}
@@ -122,7 +139,8 @@
           <div className="col">
             <label htmlFor="grade">Class</label>
             <select className="form-select" id="grade" onChange={handleGradeChange}>
-              {grades.map((grade, i) => {
+              <option value="0">All</option>
+              {grades.length && grades.map((grade, i) => {
                 return <option key={i} value={grade}>{grade}</option>
               })}
             </select>
