@@ -65,18 +65,20 @@
 
     return (
       <div>
-        <Choices
-          handleSchoolChange={handleSchoolChange}
-          handleYearChange={handleYearChange}
-          handleGradeChange={handleGradeChange}
-        />
+        <div>
+          <Choices
+            handleSchoolChange={handleSchoolChange}
+            handleYearChange={handleYearChange}
+            handleGradeChange={handleGradeChange}
+          />
+        </div>
+        <div>
+          <Table
+            info={info}
+          />
+        </div>
       </div>
-    <div>
-      <Table
-        info={info}
-      />
-    </div>
-  )
+    )
   }
 
   const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange}) => {
