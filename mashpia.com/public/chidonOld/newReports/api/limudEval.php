@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
-$year = GlobalSettings::getChidonYear();
+$year = intval(GlobalSettings::getChidonYear());
 
 $grades = [
     0 => 'All Classes',
