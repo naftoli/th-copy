@@ -27,6 +27,6 @@ if (count($schools) == 1) {
 echo json_encode([
     'success'   => true,
     'schools'   => $schools,
-    'years'     => [$year - 1, $year],
+    'years'     => [$year, $year - 1],
     'grades'    => $grades,
 ]);
