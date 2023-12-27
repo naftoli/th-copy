@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8"/>
+  <title>Limud Evaluation Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous"/>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    #main {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+  </style>
+</head>
+<body>
+<h1>Limud Evaluation Report</h1>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const {useState, useEffect} = React
+  const {createRoot} = ReactDOM
+
+  const Report = () => {
+    const [school, setSchool] = useState(0)
+    const [year, setYear] = useState(0)
+    const [grade, setGrade] = useState(0)
+    const [info, setInfo] = useState([])
+
+    const handleSchoolChange = (e) => {
+      setSchool(e.target.value)
+    }
+
+    const handleYearChange = (e) => {
+      setYear(e.target.value)
+    }
+
+    const handleGradeChange = (e) => {
+      setGrade(e.target.value)
+    }
+
+    const getInfo = () => {
+      fetch('/api/limudInfo.php', {
+        method: 'POST',
+        body: JSON.stringify({
+          school: school,
+          year: year,
+          grade: grade,
+        })
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setInfo(data.info)
+        })
+    }
+
+    return (
+      <div>
+        <Choices
+          handleSchoolChange={handleSchoolChange}
+          handleYearChange={handleYearChange}
+          handleGradeChange={handleGradeChange}
+        />
+      </div>
+    <div>
+      <Table
+        info={info}
+      />
+    </div>
+  )
+  }
+
+  const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange}) => {
+    const [schools, setSchools] = useState([])
+    const [years, setYears] = useState([])
+    const [grades, setGrades] = useState([])
+
+    useEffect(() => {
+      fetch('/api/limudEval.php')
+        .then((response) => response.json())
+        .then((data) => {
+          setSchools(data.schools)
+          setYears(data.years)
+          setGrades(data.grades)
+        })
+    }, [])
+
+    return (
+      <div>
+        <div className="row">
+          <div className="col">
+            <label htmlFor="school">School</label>
+            <select className="form-select" id="school" onChange={handleSchoolChange}>
+              {schools.map((school) => {
+                return <option value={school.id}>{school.school_name}</option>
+              })}
+            </select>
+          </div>
+          <div className="col">
+            <label htmlFor="year">Year</label>
+            <select className="form-select" id="year" onChange={handleYearChange}>
+              {years.map((year) => {
+                return <option value={year}>{year}</option>
+              })}
+            </select>
+          </div>
+          <div className="col">
+            <label htmlFor="grade">Grade</label>
+            <select className="form-select" id="grade" onChange={handleGradeChange}>
+              {grades.map((grade) => {
+                return <option value={grade}>{grade}</option>
+              })}
+            </select>
+          </div>
+          <div className="col">
+            <button className="btn btn-primary" onClick={getInfo}>Get Info</button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const Table = ({info}) => {
+    const headers = ['Serial', 'Name', 'Class', 'Track', 'Reward', 'Award', 'Passing Avg', 'Yesod', 'Yediah', 'Havonah', 'Iyun',
+      'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Why']
+
+    return (
+      <div>
+        <table className="table table-striped">
+          <thead>
+          <tr>
+            {headers.map((header) => {
+              return <th scope="col">{header}</th>
+            })}
+          </tr>
+          </thead>
+          <tbody>
+          {info && info.map((row) => {
+            return (
+              <tr>
+                <td>{row.serial}</td>
+                <td>{row.name}</td>
+                <td>{row.class}</td>
+                <td>{row.track}</td>
+                <td>{row.reward}</td>
+                <td>{row.award}</td>
+                <td>{row.passing_avg}</td>
+                <td>{row.yesod}</td>
+                <td>{row.yediah}</td>
+                <td>{row.havonah}</td>
+                <td>{row.iyun}</td>
+                <td>{row.non_cumulative_track_passed}</td>
+                <td>{row.cumulative_track_passed}</td>
+                <td>{row.time_committed}</td>
+                <td>{row.time_learned}</td>
+                <td>{row.dropped_out}</td>
+                <td>{row.why}</td>
+              </tr>
+            )
+          })}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<Choices/>)
+</script>
+</html>
+
