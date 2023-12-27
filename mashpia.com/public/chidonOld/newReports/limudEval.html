@@ -123,7 +123,7 @@
             <label htmlFor="school">School</label>
             <select className="form-select" id="school" onChange={getClasses}>
               <option value="0">All</option>
-              {Object.entries(schools).map((school, i) => {
+              {schools.length && Object.entries(schools).map((school, i) => {
                 return <option key={i} value={school[0]}>{school[1]}</option>
               })}
             </select>
