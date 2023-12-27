@@ -140,8 +140,8 @@
             <label htmlFor="grade">Class</label>
             <select className="form-select" id="grade" onChange={handleGradeChange}>
               <option value="0">All</option>
-              {grades.length && grades.map((grade, i) => {
-                return <option key={i} value={grade}>{grade}</option>
+              {grades.length && Object.entries(grades).map((grade, i) => {
+                return <option key={i} value={grade[0]}>{grade[1]}</option>
               })}
             </select>
           </div>
