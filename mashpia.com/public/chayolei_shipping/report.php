@@ -56,8 +56,8 @@ if ($report_type == 'file') {
         createFile($file2, $csv2);
         $files[] = $file2;
     }
-    createZip($files, 'shipping_old.zip');
-    downloadFile('shipping_old.zip');
+    createZip($files, 'shipping.zip');
+    downloadFile('shipping.zip');
     exit;
 }
 /*
@@ -88,9 +88,9 @@ if ($report_type == 'file') {
     /*
      * create myshliach / anash kinder with extra purchases files
      * there's 3 files needed
-     * 1. for parents that paid for shipping_old and include extra purchases that are to be shipped to home address
-     * 2. for parents that didn't pay for shipping_old and include extra purchases that are to be pickud up
-     * 3. (for parents that paid for shipping_old but have) extra purchases that go to different address
+     * 1. for parents that paid for shipping and include extra purchases that are to be shipped to home address
+     * 2. for parents that didn't pay for shipping and include extra purchases that are to be pickud up
+     * 3. (for parents that paid for shipping but have) extra purchases that go to different address
      */
     /*
     // first
@@ -138,8 +138,8 @@ if ($report_type == 'file') {
     createFile($file, $csv);
     $files[] = $file;
 
-    createZip($files, 'shipping_old.zip');
-    downloadFile('shipping_old.zip');
+    createZip($files, 'shipping.zip');
+    downloadFile('shipping.zip');
     exit;
 */
 //else if ($report_type == 'fileGear') {
@@ -321,7 +321,7 @@ ksort($grand_summary);
 <!--      <p>-->
 <!--        <input type='checkbox' class='updated' value='--><?php //= $updated[$school] ?><!--'-->
 <!--        --><?php //if (intval($updated[$school]) == 1) echo "checked"; ?>
-<!--        /> I have reviewed and updated the shipping_old status for the entire school.-->
+<!--        /> I have reviewed and updated the shipping status for the entire school.-->
 <!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
@@ -364,7 +364,7 @@ ksort($grand_summary);
           <tr>
             <?php
             foreach ($fields_chosen as $field) {
-              if (strpos($field, 'shipping_old') === false) echo "<th>" . $fields[$field] . "</th>";
+              if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
             }
             echo "<th>Item</th>";
             if ($item_details_chosen && count($item_details_chosen)) {
@@ -446,8 +446,9 @@ ksort($grand_summary);
     const ids = id.split(':')
     const item = ids[0]
     const user = ids[1]
+    const num = ids[2]
     // get description
-    info.push({ action, item, user, desc })
+    info.push({ action, item, user, desc, num })
   }
 
   function save(reload = true) {
@@ -461,20 +462,20 @@ ksort($grand_summary);
   }
 
   $(".saveAll").click( function () {
-    $(".shipping_old").each( function () {
+    $(".shipping").each( function () {
       update(this, 1)
     })
     save()
   })
 
   $(".saveSchool").click( function() {
-    $(this).parent().find('.shipping_old').each( function () {
+    $(this).parent().find('.shipping').each( function () {
       update(this, 1)
     })
     save()
   })
 
-  $(".shipping_old").change( function () {
+  $(".shipping").change( function () {
     const action = parseInt(this.value)
     if (!super_admin && action == 0) {
       alert('You cannot change this to not yet shipped, it will not be saved.')
@@ -489,7 +490,7 @@ ksort($grand_summary);
 
   $(".description").blur( function() {
     const val = $(this).val()
-    const elem = $(this).parent().parent().find('.shipping_old')
+    const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
     update(elem, action, val)
     save(false)

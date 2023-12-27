@@ -86,7 +86,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         // create new row
                         echo "<tr>";
                         foreach ($fields_chosen as $field) {
-                            if (strpos($field, 'shipping_old') === false) {
+                            if (strpos($field, 'shipping') === false) {
                                 $desc = substr($field, strpos($field, '.') + 1);
                                 echo "<td>" . $row[$desc] . "</td>";
                             }
@@ -101,9 +101,9 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                         }
                         echo "</td>";
-                        // add column for shipping_old info
+                        // add column for shipping info
                         echo "<td class='no-print'>";
-                        echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping_old'>";
+                        echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping'>";
                         $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";

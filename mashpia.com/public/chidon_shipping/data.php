@@ -74,10 +74,13 @@ function createHtmlForItem($school, $row, $output = true) {
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
             $items = $info[$cat][$row['user_id']];
-            foreach ($items as $item) {
+            foreach ($items as $idx => $item) {
+                // find out how many of the same item we have
+                if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
+                else $item_num = 0;
                 // get status and whether to show this item
                 $show_item = false;
-                $status = isset($info['status'][$row['user_id']][$item['id']]) ? $info['status'][$row['user_id']][$item['id']] : [];
+                $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item_num] : [];
                 $statusDesc = [
                     1   => 'shipped',
                     2   => 'missing',
@@ -98,7 +101,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         // create new row
                         echo "<tr>";
                         foreach ($fields_chosen as $field) {
-                            if (strpos($field, 'shipping_old') === false) {
+                            if (strpos($field, 'shipping') === false) {
                                 $desc = substr($field, strpos($field, '.') + 1);
                                 echo "<td>" . $row[$desc] . "</td>";
                             }
@@ -113,9 +116,9 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                         }
                         echo "</td>";
-                        // add column for shipping_old info
+                        // add column for shipping info
                         echo "<td class='no-print'>";
-                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . "' class='shipping_old'";
+                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . ':' . $item_num . "' class='shipping'";
                         // figure out if it should be disabled or not
 //                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
                         echo ">";
@@ -189,7 +192,7 @@ function checkShippingStatus($admin_id) {
         'id'    => $admin_id
     ]);
     $row = $stmt->fetch();
-    if ($row && $row['amount_paid'] > 0) $status = 'shipping_old';
+    if ($row && $row['amount_paid'] > 0) $status = 'shipping';
     return $status;
 }
 

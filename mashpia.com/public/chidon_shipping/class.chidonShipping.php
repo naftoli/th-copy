@@ -1259,7 +1259,7 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $info[$row['user_id']][$row['item_id']] = $row;
+            $info[$row['user_id']][$row['item_id']][$row['item_num']] = $row;
         }
         return $info;
     }
@@ -1335,7 +1335,7 @@ class ChidonShipping
             'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email'];
         foreach ($info as $row) {
             $phone = $row['admin_phone_mobile'] ?? $row['admin_phone_work'] ?? $row['admin_phone_home'] ?? '';
-            $shipping = 'shipping_old';
+            $shipping = 'shipping';
             $qty = $row['amount'];
             if ($row['item'] == 'celeb_box') {
                 $itemDesc = 'celebration box(es)';

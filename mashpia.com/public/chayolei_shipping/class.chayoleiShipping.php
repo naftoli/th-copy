@@ -69,7 +69,7 @@ class ChayoleiShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $info[$row['user_id']][$row['item_id']] = $row;
+            $info[$row['user_id']][$row['item_id']][$row['item_num']] = $row;
         }
         return $info;
     }
