@@ -107,7 +107,7 @@
             <label htmlFor="school">School</label>
             <select className="form-select" id="school" onChange={handleSchoolChange}>
               {Object.entries(schools).map((school) => {
-                return <option value={school.key}>{school.value}</option>
+                return <option value={school[0]}>{school[1]}</option>
               })}
             </select>
           </div>
