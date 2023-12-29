@@ -156,8 +156,8 @@
             <label htmlFor="grade">Test</label>
             <select className="form-select" id="grade" onChange={handleTestNumChange}>
               <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
+              <option value="2">1 & 2</option>
+              <option value="3">1, 2 & 3</option>
             </select>
           </div>
         </div>
@@ -175,7 +175,12 @@
     const headers = ['Serial', 'Name', 'Class', 'Track', 'Reward', 'Award', 'Passing Avg', 'Yesod', 'Yediah', 'Havonah', 'Iyun',
       'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Why']
 
-    console.log(info)
+    const types = {
+      'maven': 'yesod',
+      'pro': 'yediah',
+      'expert': 'havonah',
+      'genius': 'iyun'
+    }
 
     return (
       <div>
