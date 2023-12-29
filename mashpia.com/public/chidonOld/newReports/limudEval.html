@@ -102,6 +102,7 @@
         .then((data) => {
           setSchools(data.schools)
           setYears(data.years)
+          handleYearChange({target: {value: data.years[0]}}) // set year to first year
         })
     }, [])
 
