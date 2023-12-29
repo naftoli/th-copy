@@ -21,6 +21,7 @@ $students = $ct->getStudents();
 $marks = $ct->getMarks();
 $num_questions = $ct->getTestQuestions();
 $dates = $ct->getDates();
+$types = $ct->getTypes();
 
 $learning_time = [
     'maven'     => 10,
@@ -32,8 +33,16 @@ $total_days = [32, 37, 37];
 
 $info = [];
 foreach ($students as $student) {
-    $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[$test_num], true);
-    $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']) : '';
+//    $totals = [];
+//    $days = 0;
+//    for ($i = 0; $i < $test_num; $i++) {
+//        $days += $total_days[$i];
+//        $totals[$i] = $ct->getTotalMinutesLearned($student['user_id'], $dates[$i]);
+//    }
+//    $learned = array_sum($totals);
+    $days = $total_days[$test_num - 1];
+    $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[$test_num - 1]);
+    $track_passed = isset($marks[$student['th_chidon_id']]) ? $types[ $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']) ] : '';
     $info[] = [
         'user_id'   => $student['user_id'],
         'school_id' => $student['school_id'],
@@ -41,8 +50,8 @@ foreach ($students as $student) {
         'serial'    => $student['user_serial'],
         'name'      => $student['first'] . ' ' . $student['last'],
         'grade'     => $student['class_grade'] . ($student['class_sub'] ? '-' . $student['class_sub'] : ''),
-        'track'     => $student['test_type'],
-        'reward'    => $student['reward_type'] === 'highest track passed' ? $track_passed : $student['reward_type'],
+        'track'     => $types[ $student['test_type'] ],
+        'reward'    => $student['reward_type'] === 'highest track passed' ? $track_passed : $types[ $student['reward_type'] ],
         'passing_avg'   => $ct->getPassingAvgs($student['user_id'])[$student['test_type']],
         'yesod'     => ($marks[$student['th_chidon_id']][$test_num]['maven'] ?? 0 . '/' . $num_questions['maven']),
         'yediah'    => ($marks[$student['th_chidon_id']][$test_num]['pro'] ?? 0 . '/' . $num_questions['pro']),
@@ -50,7 +59,7 @@ foreach ($students as $student) {
         'iyun'      => ($marks[$student['th_chidon_id']][$test_num]['genius'] ?? 0 . '/' . $num_questions['genius']),
         'non_cumulative_track_passed'   => $track_passed,
         'cumulative_track_passed'   => '',
-        'time_committed'    => $learning_time[$student['test_type']] * $total_days[$test_num],
+        'time_committed'    => $learning_time[$student['test_type']] * $days,
         'time_learned'  => $learned,
         'dropped_out'   => 0,
         'reason'        => '',

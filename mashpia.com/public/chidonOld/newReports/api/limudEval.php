@@ -13,7 +13,8 @@ $year = intval(GlobalSettings::getChidonYear());
 
 if (count($schools) == 1) {
     $school_id = key($schools);
-    $sql = "select * from classes where class_era = 0 and class_grade in ('4', '5', '6', '7', '8') and school_id = " . $school_id;
+    $sql = "select * from classes where class_era = 0 and class_grade in ('4', '5', '6', '7', '8') and school_id = " .
+        $school_id . " order by class_grade, class_sub";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $grades[$row['class_id']] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
