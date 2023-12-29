@@ -61,7 +61,7 @@ foreach ($students as $student) {
         'havonah'   => ($marks[$student['th_chidon_id']][$test_num]['expert'] ?? 0 . '/' . $num_questions['expert']),
         'iyun'      => ($marks[$student['th_chidon_id']][$test_num]['genius'] ?? 0 . '/' . $num_questions['genius']),
         'non_cumulative_track_passed'   => $track_passed,
-        'cumulative_track_passed'   => '',
+        'cumulative_track_passed'   => calculateCumulative($student['th_chidon_id']),
         'time_committed'    => $learning_time[$student['test_type']] * $days,
         'time_learned'  => $learned,
         'dropped_out'   => 0,
@@ -76,16 +76,33 @@ echo json_encode([
 ]);
 
 function calculateCumulative($id) {
-    global $scores, $test_num, $num_questions;
+    global $scores, $test_num, $num_questions, $types;
 
-    $cumulative = [];
+    $cumulative_score = [];
+    $cumulative_questions = [];
     foreach ($scores[$id] as $testNum => $details) {
         if ($testNum > $test_num) break;
-        foreach ($num_questions as $type => $questions) {
-            if (isset($details[$type])) {
-                $mark = floatval($details[$type] / $questions);
-                $cumulative[$id][$testNum][$type] += $mark;
-            }
-        }
+        $cumulative_score['maven'] += $details['maven'];
+        $cumulative_score['pro'] += $details['pro'];
+        $cumulative_score['expert'] += $details['expert'];
+        $cumulative_score['genius'] += $details['genius'];
+        $cumulative_questions['maven'] += $num_questions['maven'];
+        $cumulative_questions['pro'] += $num_questions['pro'];
+        $cumulative_questions['expert'] += $num_questions['expert'];
+        $cumulative_questions['genius'] += $num_questions['genius'];
     }
+
+    $reg_avg = 70;
+    $iyun_avg = 90;
+    $cumulative = [];
+    $cumulative['maven'] = round(($cumulative_score['maven'] / $cumulative_questions['maven']) * 100);
+    $cumulative['pro'] = round(($cumulative_score['pro'] / $cumulative_questions['pro']) * 100);
+    $cumulative['expert'] = round(($cumulative_score['expert'] / $cumulative_questions['expert']) * 100);
+    $cumulative['genius'] = round(($cumulative_score['genius'] / $cumulative_questions['genius']) * 100);
+
+    if ($cumulative['genius'] >= $iyun_avg) return $types['genius'];
+    else if ($cumulative['expert'] >= $reg_avg) return $types['expert'];
+    else if ($cumulative['pro'] >= $reg_avg) return $types['pro'];
+    else if ($cumulative['maven'] >= $reg_avg) return $types['maven'];
+    else return '';
 }
