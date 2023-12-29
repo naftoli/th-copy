@@ -97,6 +97,7 @@
         .then((response) => response.json())
         .then((data) => {
           setSchools(data.schools)
+            .then(console.log(schools))
           setYears(data.years)
         })
     }, [])
