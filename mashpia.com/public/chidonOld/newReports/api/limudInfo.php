@@ -91,9 +91,9 @@ function calculateCumulative($id) {
             $testNum--;
             break;
         }
-        foreach ($details as $type => $score) {
-            if (isset($cumulative_scores[$type])) $cumulative_scores[$type] += $score;
-            else $cumulative_scores[$type] = $score;
+        foreach ($types as $type => $desc) {
+            if (isset($cumulative_scores[$type])) $cumulative_scores[$type] += $details[$type];
+            else $cumulative_scores[$type] = $details[$type];
         }
     }
 
