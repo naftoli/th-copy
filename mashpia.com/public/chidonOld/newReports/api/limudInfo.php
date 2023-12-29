@@ -82,10 +82,10 @@ function calculateCumulative($id) {
     $cumulative_questions = [];
     foreach ($scores[$id] as $testNum => $details) {
         if ($testNum > $test_num) break;
-        $cumulative_score['maven'] += $details['maven'];
-        $cumulative_score['pro'] += $details['pro'];
-        $cumulative_score['expert'] += $details['expert'];
-        $cumulative_score['genius'] += $details['genius'];
+        $cumulative_score['maven'] += $details[$testNum]['maven'];
+        $cumulative_score['pro'] += $details[$testNum]['pro'];
+        $cumulative_score['expert'] += $details[$testNum]['expert'];
+        $cumulative_score['genius'] += $details[$testNum]['genius'];
         $cumulative_questions['maven'] += $num_questions['maven'];
         $cumulative_questions['pro'] += $num_questions['pro'];
         $cumulative_questions['expert'] += $num_questions['expert'];
