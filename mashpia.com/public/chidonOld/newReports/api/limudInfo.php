@@ -53,7 +53,7 @@ foreach ($students as $student) {
         'name'      => $student['first'] . ' ' . $student['last'],
         'grade'     => $student['class_grade'] . ($student['class_sub'] ? '-' . $student['class_sub'] : ''),
         'track'     => $types[ $student['test_type'] ],
-        'reward'    => $student['reward_type'] === 'highest track passed' ? $track_passed : $types[ $student['reward_type'] ],
+        'reward'    => $student['reward_type'] === 'highest track passed' || $student['reward_type'] === '' ? $track_passed : $types[ $student['reward_type'] ],
         'award'     => $track_passed,
         'passing_avg'   => $ct->getPassingAvgs($student['user_id'])[$student['test_type']],
         'yesod'     => ($marks[$student['th_chidon_id']][$test_num]['maven'] ?? 0 . '/' . $num_questions['maven']),
