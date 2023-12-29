@@ -38,6 +38,7 @@
     const [year, setYear] = useState(0)
     const [grade, setGrade] = useState(0)
     const [info, setInfo] = useState([])
+    const [test_num, setTestNum] = useState(1)
 
     const handleSchoolChange = (e) => {
       setSchool(e.target.value)
@@ -51,13 +52,15 @@
       setGrade(e.target.value)
     }
 
+    const handleTestNumChange = (e) => {
+      setTestNum(e.target.value)
+    }
+
     const getInfo = () => {
       fetch('api/limudInfo.php', {
         method: 'POST',
         body: JSON.stringify({
-          school: school,
-          year: year,
-          grade: grade,
+          school, year, grade, test_num
         })
       })
         .then((response) => response.json())
@@ -73,6 +76,7 @@
             handleSchoolChange={handleSchoolChange}
             handleYearChange={handleYearChange}
             handleGradeChange={handleGradeChange}
+            handleTestNumChange={handleTestNumChange}
             handleClick={getInfo}
           />
         </div>
@@ -87,7 +91,7 @@
     )
   }
 
-  const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange, handleClick}) => {
+  const Choices = ({handleSchoolChange, handleYearChange, handleGradeChange, handleClick, handleTestNumChange}) => {
     const [schools, setSchools] = useState([])
     const [years, setYears] = useState([])
     const [grades, setGrades] = useState([])
@@ -147,8 +151,16 @@
               })}
             </select>
           </div>
+          <div className="col">
+            <label htmlFor="grade">Test</label>
+            <select className="form-select" id="grade" onChange={handleTestNumChange}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
         </div>
-        <br />
+        <br/>
         <div className="row">
           <div className="col">
             <button className="btn btn-primary" onClick={handleClick}>Get / Update Info</button>
@@ -180,7 +192,7 @@
               <tr key={row.serial}>
                 <td>{row.serial}</td>
                 <td>{row.name}</td>
-                <td>{row.class}</td>
+                <td>{row.grade}</td>
                 <td>{row.track}</td>
                 <td>{row.reward}</td>
                 <td>{row.award}</td>
@@ -193,8 +205,8 @@
                 <td>{row.cumulative_track_passed}</td>
                 <td>{row.time_committed}</td>
                 <td>{row.time_learned}</td>
-                <td>{row.dropped_out}</td>
-                <td>{row.why}</td>
+                <td><input type="checkbox" name="dropped_out" class="dropped_out" checked={parseInt(row.dropped_out) === 1} /></td>
+                <td><textarea>{row.reason}</textarea></td>
               </tr>
             )
           })}
