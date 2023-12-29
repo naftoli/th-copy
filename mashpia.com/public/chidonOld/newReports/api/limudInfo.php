@@ -43,7 +43,9 @@ foreach ($students as $student) {
 //    $learned = array_sum($totals);
     $days = $total_days[$test_num - 1];
     $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[$test_num - 1]);
-    $track_passed = isset($marks[$student['th_chidon_id']]) ? $types[ $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']) ] : '';
+    $highestTrack = $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']);
+    if ($highestTrack) $highestTrack = $types[$highestTrack];
+    $track_passed = isset($marks[$student['th_chidon_id']]) ? $highestTrack : '';
     $info[] = [
         'user_id'   => $student['user_id'],
         'school_id' => $student['school_id'],
