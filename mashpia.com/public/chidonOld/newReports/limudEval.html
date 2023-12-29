@@ -77,9 +77,11 @@
           />
         </div>
         <div>
-          <Table
-            info={info}
-          />
+          {info.length > 0 &&
+            <Table
+              info={info}
+            />
+          }
         </div>
       </div>
     )
@@ -171,7 +173,7 @@
           </tr>
           </thead>
           <tbody>
-          {info && info.map((row) => {
+          {info.map((row) => {
             return (
               <tr key={row.serial}>
                 <td>{row.serial}</td>
