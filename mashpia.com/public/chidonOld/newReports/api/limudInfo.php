@@ -78,29 +78,36 @@ echo json_encode([
 function calculateCumulative($id) {
     global $scores, $test_num, $num_questions, $types;
 
-    $cumulative_score = [];
-    $cumulative_questions = [];
+    $questions = [];
+    $cumulative_scores = [];
 
-    foreach ($types as $type => $desc) {
-        $cumulative_score[$type] = 0;
-        $cumulative_questions[$type] = 0;
+    $questions['maven'] = $num_questions['maven'];
+    $questions['pro'] = $num_questions['maven'] + $num_questions['pro'];
+    $questions['expert'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'];
+    $questions['genius'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'] + $num_questions['genius'];
+
+    foreach ($scores[$id] as $testNum => $details) {
+        if ($testNum > $test_num) {
+            $testNum--;
+            break;
+        }
+        foreach ($details as $type => $score) {
+            if (isset($cumulative_scores[$type])) $cumulative_scores[$type] += $score;
+            else $cumulative_scores[$type] = $score;
+        }
     }
 
+    $cumulative_scores['genius'] += $cumulative_scores['expert'] + $cumulative_scores['pro'] + $cumulative_scores['maven'];
+    $cumulative_scores['expert'] += $cumulative_scores['pro'] + $cumulative_scores['maven'];
+    $cumulative_scores['pro'] += $cumulative_scores['maven'];
+
+    $cumulative = [];
     foreach ($types as $type => $desc) {
-        $cumulative_questions[$type] += $num_questions[$type];
-        foreach ($scores[$id] as $testNum => $details) {
-            if ($testNum > $test_num) break;
-            $cumulative_score[$type] += $details[$testNum][$type] ?? 0;
-        }
+        $cumulative[$type] = round(($cumulative_scores[$type] / ($questions[$type] * $testNum)) * 100);
     }
 
     $reg_avg = 70;
     $iyun_avg = 90;
-    $cumulative = [];
-    foreach ($types as $type => $desc) {
-        $cumulative[$type] = round(($cumulative_score[$type] / $cumulative_questions[$type]) * 100);
-    }
-
     if ($cumulative['genius'] >= $iyun_avg) return $types['genius'];
     else if ($cumulative['expert'] >= $reg_avg) return $types['expert'];
     else if ($cumulative['pro'] >= $reg_avg) return $types['pro'];
