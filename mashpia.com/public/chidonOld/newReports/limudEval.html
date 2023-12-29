@@ -97,7 +97,6 @@
         .then((response) => response.json())
         .then((data) => {
           setSchools(data.schools)
-            .then(console.log(schools))
           setYears(data.years)
         })
     }, [])
@@ -109,7 +108,7 @@
         fetch('api/getClasses.php', {
           method: 'POST',
           body: JSON.stringify({
-            school: e.target.value,
+            school: school_id
           })
         })
           .then((response) => response.json())
@@ -126,7 +125,7 @@
             <label htmlFor="school">School</label>
             <select className="form-select" id="school" onChange={getClasses}>
               <option value="0">All</option>
-              {schools.length && Object.entries(schools).map((school, i) => {
+              {Object.entries(schools).map((school, i) => {
                 return <option key={i} value={school[0]}>{school[1]}</option>
               })}
             </select>
@@ -143,7 +142,7 @@
             <label htmlFor="grade">Class</label>
             <select className="form-select" id="grade" onChange={handleGradeChange}>
               <option value="0">All</option>
-              {grades.length && Object.entries(grades).map((grade, i) => {
+              {Object.entries(grades).map((grade, i) => {
                 return <option key={i} value={grade[0]}>{grade[1]}</option>
               })}
             </select>
@@ -162,6 +161,8 @@
   const Table = ({info}) => {
     const headers = ['Serial', 'Name', 'Class', 'Track', 'Reward', 'Award', 'Passing Avg', 'Yesod', 'Yediah', 'Havonah', 'Iyun',
       'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Why']
+
+    console.log(info)
 
     return (
       <div>
