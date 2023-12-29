@@ -18,6 +18,7 @@ $ct->setScores();
 $ct->calculateMarks();
 
 $students = $ct->getStudents();
+$scores = $ct->getScores();
 $marks = $ct->getMarks();
 $num_questions = $ct->getTestQuestions();
 $dates = $ct->getDates();
@@ -52,6 +53,7 @@ foreach ($students as $student) {
         'grade'     => $student['class_grade'] . ($student['class_sub'] ? '-' . $student['class_sub'] : ''),
         'track'     => $types[ $student['test_type'] ],
         'reward'    => $student['reward_type'] === 'highest track passed' ? $track_passed : $types[ $student['reward_type'] ],
+        'award'     => $track_passed,
         'passing_avg'   => $ct->getPassingAvgs($student['user_id'])[$student['test_type']],
         'yesod'     => ($marks[$student['th_chidon_id']][$test_num]['maven'] ?? 0 . '/' . $num_questions['maven']),
         'yediah'    => ($marks[$student['th_chidon_id']][$test_num]['pro'] ?? 0 . '/' . $num_questions['pro']),
@@ -71,3 +73,18 @@ echo json_encode([
     'info'      => $info,
     'marks'     => $marks,
 ]);
+
+function calculateCumulative($id) {
+    global $scores, $test_num, $num_questions;
+
+    $cumulative = [];
+    foreach ($scores[$id] as $testNum => $details) {
+        if ($testNum > $test_num) break;
+        foreach ($num_questions as $type => $questions) {
+            if (isset($details[$type])) {
+                $mark = floatval($details[$type] / $questions);
+                $cumulative[$id][$testNum][$type] += $mark;
+            }
+        }
+    }
+}
