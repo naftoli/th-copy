@@ -81,6 +81,11 @@ function calculateCumulative($id) {
     $questions = [];
     $cumulative_scores = [];
 
+    // initialize cumulative scores
+    foreach ($types as $type => $desc) {
+        $cumulative_scores[$type] = 0;
+    }
+
     $questions['maven'] = $num_questions['maven'];
     $questions['pro'] = $num_questions['maven'] + $num_questions['pro'];
     $questions['expert'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'];
@@ -92,8 +97,7 @@ function calculateCumulative($id) {
             break;
         }
         foreach ($types as $type => $desc) {
-            if (isset($cumulative_scores[$type])) $cumulative_scores[$type] += $details[$type];
-            else $cumulative_scores[$type] = $details[$type];
+            $cumulative_scores[$type] += isset($details[$type]) ? $details[$type] : 0;
         }
     }
 
