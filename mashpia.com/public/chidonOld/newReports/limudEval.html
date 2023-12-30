@@ -195,21 +195,21 @@
                 <td>{row.name}</td>
                 <td>{row.grade}</td>
                 <td>
-                  <select name="track" className="select track">
+                  <select name="track" className="form-select track">
                     {types.map((type) => {
                       return <option value={type} selected={row.track === type}>{type}</option>
                     })}
                   </select>
                 </td>
                 <td>
-                  <select name="reward" className="select reward">
+                  <select name="reward" className="form-select reward">
                     {types.map((type) => {
                       return <option value={type} selected={row.reward === type}>{type}</option>
                     })}
                   </select>
                 </td>
                 <td>
-                  <select name="award" className="select award">
+                  <select name="award" className="form-select award">
                     {types.map((type) => {
                       return <option value={type} selected={row.track === type}>{type}</option>
                     })}
