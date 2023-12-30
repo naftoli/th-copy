@@ -175,6 +175,7 @@
       'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Why']
 
     const types = ['Yesod', 'Yediah', 'Havonah', 'Iyun']
+    const reasons = ['Not Interested', 'Not Challenging', 'Too Challenging', 'Not Enough Time', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test']
 
     return (
       <div>
@@ -224,7 +225,13 @@
                 <td>{row.time_committed}</td>
                 <td>{row.time_learned}</td>
                 <td><input type="checkbox" name="dropped_out" class="dropped_out" checked={parseInt(row.dropped_out) === 1} /></td>
-                <td><textarea>{row.reason}</textarea></td>
+                <td>
+                  <select name="reason" className="form-select reason">
+                    {reasons.map((reason) => {
+                      return <option value={reason} selected={row.reason === reason}>{reason}</option>
+                    })}
+                  </select>
+                </td>
               </tr>
             )
           })}
