@@ -168,11 +168,81 @@
   }
 
   const Table = ({info}) => {
+    // variables
+    const tracks = {
+      'Yesod': 'maven',
+      'Yediah': 'pro',
+      'Havonah': 'expert',
+      'Iyun': 'genius'
+    }
+
+    const rewards = Object.assign({}, tracks, {
+      'KHK Trip': 'khk trip',
+      'No Reward': 'no reward',
+      'Highest track passed': 'highest track passed'
+    })
+
+    const awards = Object.assign({}, tracks, {
+      'No Award': 'no award'
+    })
+
+    // functions
+    const updateTrack = (e, serial) => {
+      update(e, 'track', serial)
+    }
+
+    const updateReward = (e, serial) => {
+      update(e, 'reward', serial)
+    }
+
+    const updateAward = (e, serial) => {
+      update(e, 'award', serial)
+    }
+
+    const updateAvg = (e, serial) => {
+      update(e, 'passing_avg', serial)
+    }
+
+    const updateDroppedOut = (e, serial) => {
+      update(e, 'dropped_out', serial)
+    }
+
+    const updateReason = (e, serial) => {
+      update(e, 'reason', serial)
+    }
+
+    const update = (e, field, serial) => {
+      let value
+      if (field == 'dropped_out') value = e.target.checked ? 1 : 0
+      else value = e.target.value.toLowerCase()
+      fetch('api/update.php', {
+        method: 'POST',
+        body: JSON.stringify({
+           field, serial, value
+        })
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (! data.success) {
+            alert(data.error)
+            console.log(data.sql)
+          } else {
+            if (field == 'dropped_out' && value === 1) {
+              const elem = document.getElementById(serial).querySelector('.reason')
+              elem.addEventListener('change', (e) => {
+                update(e, 'reason', serial)
+              })
+              elem.dispatchEvent(new Event('change'))
+            }
+          }
+        })
+    }
+
+    // constants for table
     const headers = ['Serial', 'Name', 'Class', 'Track', 'Reward', 'Award', 'Passing Avg', 'Yesod', 'Yediah', 'Havonah', 'Iyun',
       'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Why']
-
-    const types = ['Yesod', 'Yediah', 'Havonah', 'Iyun']
-    const reasons = ['Not Interested', 'Not Challenging', 'Too Challenging', 'Not Enough Time', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test']
+    const reasons = ['Not Interested', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test', 'Other']
+    const avgs = [70, 75, 80, 85, 90]
 
     return (
       <div>
@@ -187,32 +257,42 @@
           <tbody>
           {info.map((row) => {
             return (
-              <tr key={row.serial}>
+              <tr key={row.serial} id={row.serial}>
                 <td>{row.serial}</td>
                 <td>{row.name}</td>
                 <td>{row.grade}</td>
                 <td>
-                  <select name="track" className="form-select track" style={{width: '100px'}}>
-                    {types.map((type) => {
-                      return <option value={type} selected={row.track === type}>{type}</option>
+                  <select name="track" className="form-select track" style={{width: '100px'}} defaultValue={row.track}
+                          onChange={(e) => updateTrack(e, row.serial)}>
+                    {Object.entries(tracks).map((track, i) => {
+                      return <option key={i} value={track[1]}>{track[0]}</option>
                     })}
                   </select>
                 </td>
                 <td>
-                  <select name="reward" className="form-select reward" style={{width: '100px'}}>
-                    {types.map((type) => {
-                      return <option value={type} selected={row.reward === type}>{type}</option>
+                  <select name="reward" className="form-select reward" style={{width: '100px'}} defaultValue={row.reward}
+                          onChange={(e) => updateReward(e, row.serial)}>
+                    {Object.entries(rewards).map((reward, i) => {
+                      return <option key={i} value={reward[1]}>{reward[0]}</option>
                     })}
                   </select>
                 </td>
                 <td>
-                  <select name="award" className="form-select award" style={{width: '100px'}}>
-                    {types.map((type) => {
-                      return <option value={type} selected={row.track === type}>{type}</option>
+                  <select name="award" className="form-select award" style={{width: '100px'}} defaultValue={row.award}
+                          onChange={(e) => updateAward(e, row.serial)}>
+                    {Object.entries(awards).map((award, i) => {
+                      return <option key={i} value={award[1]}>{award[0]}</option>
                     })}
                   </select>
                 </td>
-                <td>{row.passing_avg}</td>
+                <td>
+                  <select name="passing_avg" className="form-select passing_avg" defaultValue={row.passing_avg}
+                          onChange={(e) => updateAvg(e, row.serial)}>
+                    {avgs.map((avg, i) => {
+                      return <option key={i} value={avg}>{avg}</option>
+                    })}
+                  </select>
+                </td>
                 <td>{row.yesod}</td>
                 <td>{row.yediah}</td>
                 <td>{row.havonah}</td>
@@ -221,11 +301,15 @@
                 <td>{row.cumulative_track_passed}</td>
                 <td>{row.time_committed}</td>
                 <td>{row.time_learned}</td>
-                <td><input type="checkbox" name="dropped_out" class="dropped_out" checked={parseInt(row.dropped_out) === 1} /></td>
                 <td>
-                  <select name="reason" className="form-select reason">
-                    {reasons.map((reason) => {
-                      return <option value={reason} selected={row.reason === reason}>{reason}</option>
+                  <input type="checkbox" name="dropped_out" className="dropped_out" defaultChecked={row.dropped_out ? true : false}
+                         onClick={(e) => updateDroppedOut(e, row.serial)} />
+                </td>
+                <td>
+                  <select name="reason" className="form-select reason" defaultValue={row.reason}
+                          onChange={(e) => updateReason(e, row.serial)}>
+                    {reasons.map((reason, i) => {
+                      return <option key={i} value={reason}>{reason}</option>
                     })}
                   </select>
                 </td>

@@ -97,8 +97,7 @@ class ChidonTests
     public function setStudents($school_id = 0, $class_id = 0, $user_id = 0) {
         $qry = "
             SELECT 
-                tc.th_chidon_id, tc.user_id, tc.test_type, tc.parent_id, tc.khk_reg, tc.school_rep, tc.regional_rep, 
-                tc.intl_rep, tc.school_team, tc.regional_team, tc.intl_team, tc.reward_type, tc.date_paid, 
+                tc.*,
                 tci.highest_track, 
                 u.first, u.last, u.gender, u.user_serial, 
                 c.class_id, c.class_grade, c.class_sub, 
@@ -121,7 +120,7 @@ class ChidonTests
         if ($user_id > 0) $qry .= " AND u.user_id = :user";
         if ($this->genderOnly) $qry .= " AND u.gender = :gender";
         // order by
-        $qry .= " ORDER BY school_name, class_grade, class_sub, last, first";
+        $qry .= " ORDER BY s.school_name, class_grade, class_sub, last, first";
         $stmt = $this->db->prepare($qry);
         if ($this->genderOnly) {
             if ($school_id > 0 && $class_id > 0 && $user_id > 0) {
