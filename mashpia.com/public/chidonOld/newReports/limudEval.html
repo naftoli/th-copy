@@ -175,12 +175,7 @@
     const headers = ['Serial', 'Name', 'Class', 'Track', 'Reward', 'Award', 'Passing Avg', 'Yesod', 'Yediah', 'Havonah', 'Iyun',
       'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Why']
 
-    const types = {
-      'maven': 'yesod',
-      'pro': 'yediah',
-      'expert': 'havonah',
-      'genius': 'iyun'
-    }
+    const types = ['Yesod', 'Yediah', 'Havonah', 'Iyun']
 
     return (
       <div>
@@ -199,9 +194,27 @@
                 <td>{row.serial}</td>
                 <td>{row.name}</td>
                 <td>{row.grade}</td>
-                <td>{row.track}</td>
-                <td>{row.reward}</td>
-                <td>{row.award}</td>
+                <td>
+                  <select name="track" class="track">
+                    {types.map((type) => {
+                      return <option value={type} selected={row.track === type}>{type}</option>
+                    })}
+                  </select>
+                </td>
+                <td>
+                  <select name="track" className="track">
+                    {types.map((type) => {
+                      return <option value={type} selected={row.reward === type}>{type}</option>
+                    })}
+                  </select>
+                </td>
+                <td>
+                  <select name="track" className="track">
+                    {types.map((type) => {
+                      return <option value={type} selected={row.track === type}>{type}</option>
+                    })}
+                  </select>
+                </td>
                 <td>{row.passing_avg}</td>
                 <td>{row.yesod}</td>
                 <td>{row.yediah}</td>
