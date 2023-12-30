@@ -61,7 +61,7 @@ foreach ($students as $student) {
         'yediah'    => $avgs['pro'],
         'havonah'   => $avgs['expert'],
         'iyun'      => $avgs['genius'],
-        'non_cumulative_track_passed'   => $types[$track_passed],
+        'non_cumulative_track_passed'   => $track_passed ? $types[$track_passed] : '',
         'cumulative_track_passed'   => calculateCumulative($student['th_chidon_id']),
         'time_committed'    => $learning_time[$student['test_type']] * $days,
         'time_learned'  => $learned,

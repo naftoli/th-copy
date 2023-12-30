@@ -121,6 +121,7 @@ class ChidonTests
         if ($this->genderOnly) $qry .= " AND u.gender = :gender";
         // order by
         $qry .= " ORDER BY s.school_name, class_grade, class_sub, last, first";
+//        echo $qry; exit;
         $stmt = $this->db->prepare($qry);
         if ($this->genderOnly) {
             if ($school_id > 0 && $class_id > 0 && $user_id > 0) {
