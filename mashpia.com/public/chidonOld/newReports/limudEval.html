@@ -19,9 +19,6 @@
     body {
       margin: 20px;
     }
-    select.table:not(.reason) {
-      width: 100px;
-    }
   </style>
 </head>
 <body>
@@ -195,21 +192,21 @@
                 <td>{row.name}</td>
                 <td>{row.grade}</td>
                 <td>
-                  <select name="track" className="form-select track">
+                  <select name="track" className="form-select track" style={{width: '100px'}}>
                     {types.map((type) => {
                       return <option value={type} selected={row.track === type}>{type}</option>
                     })}
                   </select>
                 </td>
                 <td>
-                  <select name="reward" className="form-select reward">
+                  <select name="reward" className="form-select reward" style={{width: '100px'}}>
                     {types.map((type) => {
                       return <option value={type} selected={row.reward === type}>{type}</option>
                     })}
                   </select>
                 </td>
                 <td>
-                  <select name="award" className="form-select award">
+                  <select name="award" className="form-select award" style={{width: '100px'}}>
                     {types.map((type) => {
                       return <option value={type} selected={row.track === type}>{type}</option>
                     })}
