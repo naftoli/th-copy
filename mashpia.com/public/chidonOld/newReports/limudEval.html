@@ -126,8 +126,8 @@
             <label htmlFor="school">School</label>
             <select className="form-select" id="school" onChange={getClasses}>
               <option value="0">All</option>
-              {Object.entries(schools).map((school, i) => {
-                return <option key={i} value={school[0]}>{school[1]}</option>
+              {schools.map((school, i) => {
+                return <option key={i} value={school.id}>{school.name}</option>
               })}
             </select>
           </div>
@@ -143,8 +143,8 @@
             <label htmlFor="grade">Class</label>
             <select className="form-select" id="grade" onChange={handleGradeChange}>
               <option value="0">All</option>
-              {Object.entries(grades).map((grade, i) => {
-                return <option key={i} value={grade[0]}>{grade[1]}</option>
+              {grades.map((grade, i) => {
+                return <option key={i} value={grade.id}>{grade.name}</option>
               })}
             </select>
           </div>
@@ -177,14 +177,23 @@
     }
 
     const rewards = Object.assign({}, tracks, {
-      'KHK Trip': 'khk trip',
+      'Highest track passed': 'highest track passed',
       'No Reward': 'no reward',
-      'Highest track passed': 'highest track passed'
+      'KHK Trip': 'khk trip',
     })
 
     const awards = Object.assign({}, tracks, {
+      'Highest final passed': 'highest final passed',
       'No Award': 'no award'
     })
+
+    const createChangeEvent = (serial, field) => {
+      const elem = document.getElementById(serial).querySelector(`.${field}`)
+      elem.addEventListener('change', (e) => {
+        update(e, field, serial)
+      })
+      elem.dispatchEvent(new Event('change'))
+    }
 
     // functions
     const updateTrack = (e, serial) => {
@@ -197,10 +206,6 @@
 
     const updateAward = (e, serial) => {
       update(e, 'award', serial)
-    }
-
-    const updateAvg = (e, serial) => {
-      update(e, 'passing_avg', serial)
     }
 
     const updateDroppedOut = (e, serial) => {
@@ -228,11 +233,7 @@
             console.log(data.sql)
           } else {
             if (field == 'dropped_out' && value === 1) {
-              const elem = document.getElementById(serial).querySelector('.reason')
-              elem.addEventListener('change', (e) => {
-                update(e, 'reason', serial)
-              })
-              elem.dispatchEvent(new Event('change'))
+              createChangeEvent(serial, 'reason')
             }
           }
         })
@@ -240,9 +241,12 @@
 
     // constants for table
     const headers = ['Serial', 'Name', 'Class', 'Track', 'Reward', 'Award', 'Passing Avg', 'Yesod', 'Yediah', 'Havonah', 'Iyun',
-      'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Why']
-    const reasons = ['Not Interested', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test', 'Other']
-    const avgs = [70, 75, 80, 85, 90]
+      'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Reason']
+    const reasons = ['', 'Not Interested', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test', 'Other']
+    const style = {
+      0: 'black',
+      1: 'red'
+    }
 
     return (
       <div>
@@ -285,18 +289,11 @@
                     })}
                   </select>
                 </td>
-                <td>
-                  <select name="passing_avg" className="form-select passing_avg" defaultValue={row.passing_avg}
-                          onChange={(e) => updateAvg(e, row.serial)}>
-                    {avgs.map((avg, i) => {
-                      return <option key={i} value={avg}>{avg}</option>
-                    })}
-                  </select>
-                </td>
-                <td>{row.yesod}</td>
-                <td>{row.yediah}</td>
-                <td>{row.havonah}</td>
-                <td>{row.iyun}</td>
+                <td>{row.passing_avg}</td>
+                <td style={{ color: style[row.yesod < row.passing_avg ? 1 : 0] }}>{row.yesod}</td>
+                <td style={{ color: style[row.yediah < row.passing_avg ? 1 : 0] }}>{row.yediah}</td>
+                <td style={{ color: style[row.havonah < row.passing_avg ? 1 : 0] }}>{row.havonah}</td>
+                <td style={{ color: style[row.iyun < row.passing_avg ? 1 : 0] }}>{row.iyun}</td>
                 <td>{row.non_cumulative_track_passed}</td>
                 <td>{row.cumulative_track_passed}</td>
                 <td>{row.time_committed}</td>

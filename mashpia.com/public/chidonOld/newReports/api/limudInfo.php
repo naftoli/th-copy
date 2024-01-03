@@ -44,7 +44,7 @@ foreach ($students as $student) {
     $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[0], true, $untilToday);
     $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']) : '';
     $avgs = calculateAvgs($student['th_chidon_id']);
-    $passing_avg = $ct->getPassingAvgs($student['user_id'])[$student['test_type']];
+    $passing_avg = getPassingAvg($student['user_id']);
 
     $info[] = [
         'user_id'   => $student['user_id'],
@@ -54,8 +54,8 @@ foreach ($students as $student) {
         'name'      => $student['first'] . ' ' . $student['last'],
         'grade'     => $student['class_grade'] . ($student['class_sub'] ? '-' . $student['class_sub'] : ''),
         'track'     => $student['test_type'],
-        'reward'    => $student['reward_type'] === 'highest track passed' || empty($student['reward_type']) ? $track_passed : $student['reward_type'],
-        'award'     => empty($student['award_type']) ? $track_passed : $student['award_type'],
+        'reward'    => $student['reward_type'] === 'highest track passed' || empty($student['reward_type']) ? 'highest track passed' : $student['reward_type'],
+        'award'     => empty($student['award_type']) ? 'highest final passed' : $student['award_type'],
         'passing_avg'   => $passing_avg,
         'yesod'     => $avgs['maven'],
         'yediah'    => $avgs['pro'],
@@ -66,13 +66,27 @@ foreach ($students as $student) {
         'time_committed'    => $learning_time[$student['test_type']] * $days,
         'time_learned'  => $learned,
         'dropped_out'   => intval($student['dropped_out']),
-        'reason'        => $student['reason']
+        'reason'        => $student['reason'] ?? ''
     ];
 }
 
 echo json_encode([
     'info'      => $info,
 ]);
+
+function getPassingAvg($id) {
+    global $ct;
+
+    $avgs = $ct->getPassingAvgs($id);
+    $passing_avg = $avgs['maven'];
+    foreach ($avgs as $avg) {
+        if (intval($avg) != intval($passing_avg)) {
+            $passing_avg = 'different per track';
+            break;
+        }
+    }
+    return $passing_avg;
+}
 
 function calculateAvgs($id) {
     global $scores, $test_num, $num_questions, $types;

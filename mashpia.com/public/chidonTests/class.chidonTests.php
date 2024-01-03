@@ -633,7 +633,7 @@ class ChidonTests
         $num_tests = count($marks);
         foreach ($marks as $details) {
             foreach ($details as $track => $mark) {
-                $marksByTrack[$track] += $mark;
+                $marksByTrack[$track] += intval($mark);
             }
         }
 
