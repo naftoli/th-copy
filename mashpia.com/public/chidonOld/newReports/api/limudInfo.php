@@ -50,6 +50,7 @@ foreach ($types as $type => $desc) {
 // calculate total days
 if ($need_avg) {
     $idx = 0; // flag for calculating total minutes learned
+    $days = 0;
     for ($i = 0; $i < $test_num; $i++) {
         $days += $total_days[$i];
     }
