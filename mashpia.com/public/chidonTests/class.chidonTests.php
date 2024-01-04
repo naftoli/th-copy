@@ -632,7 +632,7 @@ class ChidonTests
         // make sure we pass each track on each test
         $num_tests = $numTests;
         foreach ($marks as $details) {
-            if ($numTests == 0 && $details['maven'] > 0) $num_tests++;
+            if ($numTests == 0 && isset($details['maven']) && $details['maven'] > 0) $num_tests++;
             foreach ($details as $track => $mark) {
                 $marksByTrack[$track] += intval($mark);
             }
