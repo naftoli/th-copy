@@ -639,6 +639,7 @@ class ChidonTests
         }
 
         // calculate avgs and highest type currently eligible for
+        if ($num_tests == 0) return $highest;
         foreach ($marksByTrack as $track => $total) {
             $avg = round($total / $num_tests);
             if ($avg >= $avgs[$track]) $highest = $track;
