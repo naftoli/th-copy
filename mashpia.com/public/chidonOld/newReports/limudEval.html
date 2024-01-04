@@ -189,6 +189,19 @@
       totals[outcome] = 0
     }
 
+    let track_totals = {}
+    Object.keys(track_options).forEach((track) => {
+      headers.forEach((outcome) => {
+        if (! track_totals[track]) track_totals[track] = info[track][outcome]
+        else track_totals[track] += info[track][outcome]
+      })
+    })
+
+    let grandTotal = 0
+    Object.entries(track_totals).map((track) => {
+      grandTotal += track[1]
+    })
+
     return (
       <div>
         <br />
@@ -196,15 +209,17 @@
         <table className="table table-striped">
           <thead>
           <tr>
-            <th colSpan={headers.length + 1}></th>
+            <th colSpan={headers.length + 2}></th>
           </tr>
           <tr>
             <th style={{ borderRight: '1px solid grey' }}>Track Currently On</th>
+            <th style={{ borderRight: '1px solid grey' }}></th>
             <th colSpan={4} style={{ textAlign: 'center', borderRight: '1px solid grey' }}>Track Passed</th>
             <th colSpan={3}></th>
           </tr>
           <tr>
             <th style={{ borderRight: '1px solid grey' }}></th>
+            <th style={{ borderRight: '1px solid grey' }}>Totals</th>
             {headers.map((header, i) => {
               let style = {}
               if (i == 3) style = { borderRight: '1px solid grey' }
@@ -217,7 +232,8 @@
           <tbody>
             {Object.entries(track_options).map((track, i) => (
               <tr key={i}>
-                <th style={{borderRight: '1px solid grey'}}>{track[1]}</th>
+                <th style={{ borderRight: '1px solid grey' }}>{track[1]}</th>
+                <th style={{borderRight: '1px solid grey'}}>{track_totals[track[0]]}</th>
                 {headers.map((outcome, i) => {
                   totals[outcome] += info[track[0]][outcome]
                   let style = {}
@@ -229,7 +245,8 @@
               </tr>
             ))}
             <tr>
-              <th style={{borderRight: '1px solid grey'}}>Totals</th>
+              <th style={{ borderRight: '1px solid grey' }}>Totals</th>
+              <th style={{borderRight: '1px solid grey'}}>{grandTotal}</th>
               {Object.entries(totals).map((total, i) => {
                 let style = {}
                 if (i == 3) style = { borderRight: '1px solid grey' }
@@ -287,6 +304,10 @@
 
     const updateAvg = (e, serial) => {
       update(e, 'passing_avg', serial)
+    }
+
+    const updateKhk = (e, serial) => {
+      update(e, 'khk_experience', serial)
     }
 
     const updateDroppedOut = (e, serial) => {
@@ -415,7 +436,7 @@
                 {!row.khk_eligible && <span style={{color: 'red'}}>Not Eligible</span>}
                 {row.khk_eligible &&
                   <select name="khk_experience" className="form-select khk_experience" defaultValue={row.khk_experience}
-                          onChange={(e) => update(e, 'khk_experience', row.serial)}>
+                          onChange={(e) => updateKhk(e, row.serial)}>
                     {khk_options.map((option, i) => {
                       return <option key={i} value={option.toLowerCase()}>{option}</option>
                     })}
