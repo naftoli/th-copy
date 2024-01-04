@@ -64,20 +64,20 @@ if ($need_avg) {
 $info = [];
 foreach ($students as $student) {
     $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[$idx], true, $untilToday);
-    $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']) : '';
     $avgs = calculateAvgs($student['th_chidon_id']);
     $passing_avg = getPassingAvg($student['user_id']);
+    if ($need_avg) $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id'], false, $test_num) : '';
+    else $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']) : '';
 
     // summary
-    foreach ($types as $type => $desc) {
-        if ($student['dropped_out']) $track = 'dropped out';
-        else if ($track_passed == '') {
-            if (isset($scores[$student['th_chidon_id']][$test_num][$type]) && $scores[$student['th_chidon_id']][$test_num][$type] > 0) $track = 'did not pass';
-            else $track = 'did not take test';
-        }
-        else $track = $track_passed;
-        $summary[$student['test_type']][$track]++;
+    if ($student['dropped_out']) $track = 'dropped out';
+    else if ($track_passed == '') {
+        if (isset($scores[$student['th_chidon_id']][$test_num][$type]) && $scores[$student['th_chidon_id']][$test_num][$type] > 0) $track = 'did not pass';
+        else $track = 'did not take test';
     }
+    else $track = $track_passed;
+    $summary[$student['test_type']][$track]++;
+
 
     $info[] = [
         'user_id'   => $student['user_id'],
@@ -99,7 +99,9 @@ foreach ($students as $student) {
         'time_committed'    => $learning_time[$student['test_type']] * $days,
         'time_learned'  => $learned,
         'dropped_out'   => intval($student['dropped_out']),
-        'reason'        => $student['reason'] ?? ''
+        'reason'        => $student['reason'] ?? '',
+        'khk_eligible'  => false,
+        'khk_experience'    => false,
     ];
 }
 

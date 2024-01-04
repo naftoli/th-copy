@@ -15,15 +15,33 @@ else updateField($serial, $field, $value);
 function updateAvg($serial, $value) {
     global $year;
 
+    mysql_query('SET AUTOCOMMIT=0');
+    mysql_query('START TRANSACTION');
+
     $tracks = ['maven', 'pro', 'expert', 'genius'];
-    $sql = "UPDATE chidon_passing_avgs 
+    foreach ($tracks as $track) {
+        $sql = "INSERT IGNORE INTO chidon_passing_avgs 
             SET  
-                avg = '$value' 
-            WHERE 
-                user_id = (SELECT user_id FROM users WHERE user_serial = '$serial') AND 
-                track IN ('" . implode("','", $tracks) . "') AND 
-                year = $year";
-    $result = mysql_query($sql);
+                user_id = (SELECT user_id FROM users WHERE user_serial = '$serial'), 
+                track = '$track',
+                avg = '$value', 
+                year = $year 
+            ON DUPLICATE KEY UPDATE avg = '$value'";
+        $result = mysql_query($sql);
+        if (!$result) {
+            echo json_encode([
+                'success'   => false,
+                'sql'       => $sql,
+                'error'     => 'Could not update avg for ' . $serial . ' to ' . $value . '.'
+            ]);
+            mysql_query('ROLLBACK');
+            mysql_query('SET AUTOCOMMIT=1');
+            exit;
+        }
+    }
+
+    mysql_query('COMMIT');
+    mysql_query('SET AUTOCOMMIT=1');
 
     echo json_encode([
         'success'   => $result,

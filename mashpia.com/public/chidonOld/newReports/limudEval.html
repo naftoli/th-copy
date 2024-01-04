@@ -184,6 +184,13 @@
       genius: 'Iyun'
     }
 
+    const headers = Object.keys(info['maven'])
+
+    let totals = {}
+    for (let outcome of headers) {
+      totals[outcome] = 0
+    }
+
     return (
       <div>
         <br />
@@ -191,24 +198,35 @@
         <table className="table table-striped">
           <thead>
           <tr>
-            <th>Track Selected</th>
-            <th>Track Passed</th>
-            <th>Number of Children</th>
+            <th></th>
+            <th colSpan={headers.length} style={{ textAlign: 'center' }}>Outcomes</th>
+          </tr>
+          <tr>
+            <th style={{ borderRight: '1px solid grey' }}></th>
+            {headers.map((header) => (
+              <th scope="col">{Object.keys(track_options).includes(header) ? track_options[header] : header}</th>
+            ))}
           </tr>
           </thead>
           <tbody>
-            {Object.keys(info).map((track, i) => (
-              Object.entries(info[track]).map((row, j) => (
-                <tr key={(i*10)+j}>
-                  <td>{track_options[track] ? track_options[track] : track}</td>
-                  <td>{track_options[row[0]] ? track_options[row[0]] : row[0]}</td>
-                  <td>{row[1]}</td>
-                </tr>
-              ))
+            {Object.entries(track_options).map((track, i) => (
+              <tr key={i}>
+                <th style={{borderRight: '1px solid grey'}}>{track[1]}</th>
+                {headers.map((outcome) => {
+                  totals[outcome] += info[track[0]][outcome]
+                  return <td>{info[track[0]][outcome]}</td>
+                })}
+              </tr>
             ))}
+            <tr>
+              <th style={{borderRight: '1px solid grey'}}>Totals</th>
+              {Object.entries(totals).map((total, i) => (
+                <th key={i}>{total[1]}</th>
+              ))}
+            </tr>
           </tbody>
         </table>
-        <br />
+        <br/>
       </div>
     )
   }
@@ -225,7 +243,6 @@
     const rewards = Object.assign({}, tracks, {
       'Highest track passed': 'highest track passed',
       'No Reward': 'no reward',
-      'KHK Trip': 'khk trip',
     })
 
     const awards = Object.assign({}, tracks, {
@@ -252,6 +269,10 @@
 
     const updateAward = (e, serial) => {
       update(e, 'award', serial)
+    }
+
+    const updateAvg = (e, serial) => {
+      update(e, 'passing_avg', serial)
     }
 
     const updateDroppedOut = (e, serial) => {
@@ -306,9 +327,11 @@
     }
 
     // constants for table
-    const headers = ['Serial', 'Name', 'Class', 'Track', 'Reward', 'Award', 'Passing Avg', 'Yesod', 'Yediah', 'Havonah', 'Iyun',
-      'Non Cumulative Track Passed', 'Cumulative Track Passed', 'Time Committed', 'Time Learned', 'Dropped Out', 'Reason']
+    const headers = ['Serial', 'Name', 'Class', 'Track', 'Non Cumulative Track Passed', 'Cumulative Track Passed',
+      'Passing Avg', 'Yesod Mark/Avg', 'Yediah Mark/Avg', 'Havonah Mark/Avg', 'Iyun Mark/Avg', 'Reward', 'Award', 'KHK Experience', 'Time Committed', 'Time Learned', 'Dropped Out', 'Reason']
     const reasons = ['', 'Not Interested', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test', 'Other']
+    const khk_options = ['Eligible', 'KHK Experience', 'Regional Trip']
+    const avgs = [70, 75, 80, 85, 90]
     const style = {
       0: 'black',
       1: 'red'
@@ -320,66 +343,87 @@
         <table className="table table-striped">
           <thead>
           <tr>
-            {headers.map((header) => {
-              return <th scope="col">{header}</th>
-            })}
+            {headers.map((header) => (
+              <th scope="col">{header}</th>
+            ))}
           </tr>
           </thead>
           <tbody>
-          {info.map((row) => {
-            return (
-              <tr key={row.serial} id={row.serial}>
-                <td>{row.serial}</td>
-                <td>{row.name}</td>
-                <td>{row.grade}</td>
-                <td>
-                  <select name="track" className="form-select track" style={{width: '100px'}} defaultValue={row.track}
-                          onChange={(e) => updateTrack(e, row.serial)}>
-                    {Object.entries(tracks).map((track, i) => {
-                      return <option key={i} value={track[1]}>{track[0]}</option>
+          {info.map((row) => (
+            <tr key={row.serial} id={row.serial}>
+              <td>{row.serial}</td>
+              <td>{row.name}</td>
+              <td>{row.grade}</td>
+              <td>
+                <select name="track" className="form-select track" style={{width: '100px'}} defaultValue={row.track}
+                        onChange={(e) => updateTrack(e, row.serial)}>
+                  {Object.entries(tracks).map((track, i) => {
+                    return <option key={i} value={track[1]}>{track[0]}</option>
+                  })}
+                </select>
+              </td>
+              <td>{row.non_cumulative_track_passed}</td>
+              <td>{row.cumulative_track_passed}</td>
+              <td>
+                {isNaN(row.passing_avg) && row.passing_avg}
+                {!isNaN(row.passing_avg) &&
+                  <select name="avg" className="form-select avg" style={{width: '100px'}} defaultValue={row.passing_avg}
+                          onChange={(e) => updateAvg(e, row.serial)}>
+                    {avgs.map((avg, i) => {
+                      return <option key={i} value={avg}>{avg}</option>
                     })}
                   </select>
-                </td>
-                <td>
-                  <select name="reward" className="form-select reward" style={{width: '100px'}} defaultValue={row.reward}
-                          onChange={(e) => updateReward(e, row.serial)}>
-                    {Object.entries(rewards).map((reward, i) => {
-                      return <option key={i} value={reward[1]}>{reward[0]}</option>
+                }
+              </td>
+              <td style={{color: style[row.yesod < row.passing_avg ? 1 : 0]}}>{row.yesod}</td>
+              <td style={{color: style[row.yediah < row.passing_avg ? 1 : 0]}}>{row.yediah}</td>
+              <td style={{color: style[row.havonah < row.passing_avg ? 1 : 0]}}>{row.havonah}</td>
+              <td style={{color: style[row.iyun < row.passing_avg ? 1 : 0]}}>{row.iyun}</td>
+              <td>
+                <select name="reward" className="form-select reward" style={{width: '100px'}}
+                        defaultValue={row.reward}
+                        onChange={(e) => updateReward(e, row.serial)}>
+                  {Object.entries(rewards).map((reward, i) => {
+                    return <option key={i} value={reward[1]}>{reward[0]}</option>
+                  })}
+                </select>
+              </td>
+              <td>
+                <select name="award" className="form-select award" style={{width: '100px'}} defaultValue={row.award}
+                        onChange={(e) => updateAward(e, row.serial)}>
+                  {Object.entries(awards).map((award, i) => {
+                    return <option key={i} value={award[1]}>{award[0]}</option>
+                  })}
+                </select>
+              </td>
+              <td>
+                {!row.khk_eligible && <span style={{color: 'red'}}>Not Eligible</span>}
+                {row.khk_eligible &&
+                  <select name="khk_experience" className="form-select khk_experience" defaultValue={row.khk_experience}
+                          onChange={(e) => update(e, 'khk_experience', row.serial)}>
+                    {khk_options.map((option, i) => {
+                      return <option key={i} value={option.toLowerCase()}>{option}</option>
                     })}
                   </select>
-                </td>
-                <td>
-                  <select name="award" className="form-select award" style={{width: '100px'}} defaultValue={row.award}
-                          onChange={(e) => updateAward(e, row.serial)}>
-                    {Object.entries(awards).map((award, i) => {
-                      return <option key={i} value={award[1]}>{award[0]}</option>
-                    })}
-                  </select>
-                </td>
-                <td>{row.passing_avg}</td>
-                <td style={{ color: style[row.yesod < row.passing_avg ? 1 : 0] }}>{row.yesod}</td>
-                <td style={{ color: style[row.yediah < row.passing_avg ? 1 : 0] }}>{row.yediah}</td>
-                <td style={{ color: style[row.havonah < row.passing_avg ? 1 : 0] }}>{row.havonah}</td>
-                <td style={{ color: style[row.iyun < row.passing_avg ? 1 : 0] }}>{row.iyun}</td>
-                <td>{row.non_cumulative_track_passed}</td>
-                <td>{row.cumulative_track_passed}</td>
-                <td>{row.time_committed}</td>
-                <td>{row.time_learned}</td>
-                <td>
-                  <input type="checkbox" name="dropped_out" className="form-check-label dropped_out" defaultChecked={row.dropped_out ? true : false}
-                         onClick={(e) => updateDroppedOut(e, row.serial)} />
-                </td>
-                <td>
-                  <select name="reason" className="form-select reason" defaultValue={row.reason}
-                          onChange={(e) => updateReason(e, row.serial)}>
-                    {reasons.map((reason, i) => {
-                      return <option key={i} value={reason.toLowerCase()}>{reason}</option>
-                    })}
-                  </select>
-                </td>
-              </tr>
-            )
-          })}
+                }
+              </td>
+              <td>{row.time_committed}</td>
+              <td>{row.time_learned}</td>
+              <td>
+                <input type="checkbox" name="dropped_out" className="form-check-label dropped_out"
+                       defaultChecked={row.dropped_out ? true : false}
+                       onClick={(e) => updateDroppedOut(e, row.serial)}/>
+              </td>
+              <td>
+                <select name="reason" className="form-select reason" defaultValue={row.reason}
+                        onChange={(e) => updateReason(e, row.serial)}>
+                  {reasons.map((reason, i) => {
+                    return <option key={i} value={reason.toLowerCase()}>{reason}</option>
+                  })}
+                </select>
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>
