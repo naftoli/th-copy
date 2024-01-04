@@ -34,6 +34,7 @@
     const [year, setYear] = useState(0)
     const [grade, setGrade] = useState(0)
     const [info, setInfo] = useState([])
+    const [summary, setSummary] = useState([])
     const [test_num, setTestNum] = useState(1)
 
     const handleSchoolChange = (e) => {
@@ -62,6 +63,7 @@
         .then((response) => response.json())
         .then((data) => {
           setInfo(data.info)
+          setSummary(data.summary)
         })
     }
 
@@ -78,9 +80,14 @@
         </div>
         <div>
           {info.length > 0 &&
-            <Table
-              info={info}
-            />
+            <>
+              <SummaryTable
+                info={summary}
+              />
+              <Table
+                info={info}
+              />
+            </>
           }
         </div>
       </div>
@@ -152,8 +159,10 @@
             <label htmlFor="grade">Test</label>
             <select className="form-select" id="grade" onChange={handleTestNumChange}>
               <option value="1">1</option>
-              <option value="2">1 & 2</option>
-              <option value="3">1, 2 & 3</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="two">1 & 2</option>
+              <option value="three">1, 2 & 3</option>
             </select>
           </div>
         </div>
@@ -163,6 +172,43 @@
             <button className="btn btn-primary" onClick={handleClick}>Get / Update Info</button>
           </div>
         </div>
+      </div>
+    )
+  }
+
+  const SummaryTable = ({info}) => {
+    const track_options = {
+      maven: 'Yesod',
+      pro: 'Yediah',
+      expert: 'Havonah',
+      genius: 'Iyun'
+    }
+
+    return (
+      <div>
+        <br />
+        <h2>Summary</h2>
+        <table className="table table-striped">
+          <thead>
+          <tr>
+            <th>Track Selected</th>
+            <th>Track Passed</th>
+            <th>Number of Children</th>
+          </tr>
+          </thead>
+          <tbody>
+            {Object.keys(info).map((track, i) => (
+              Object.entries(info[track]).map((row, j) => (
+                <tr key={(i*10)+j}>
+                  <td>{track_options[track] ? track_options[track] : track}</td>
+                  <td>{track_options[row[0]] ? track_options[row[0]] : row[0]}</td>
+                  <td>{row[1]}</td>
+                </tr>
+              ))
+            ))}
+          </tbody>
+        </table>
+        <br />
       </div>
     )
   }
@@ -209,11 +255,35 @@
     }
 
     const updateDroppedOut = (e, serial) => {
-      update(e, 'dropped_out', serial)
+      const reason = document.getElementById(serial).querySelector('.reason')
+      if (e.target.checked) {
+        // check reason
+        if (reason.value == '') {
+          alert('Please select a reason')
+          return false
+        } else {
+          update(e, 'dropped_out', serial)
+          update(reason, 'reason', serial)
+        }
+      } else {
+        update(e, 'dropped_out', serial)
+        // reset reason
+        reason.value = ''
+        createChangeEvent(serial, 'reason')
+      }
     }
 
     const updateReason = (e, serial) => {
-      update(e, 'reason', serial)
+      if (e.target.value !== '') {
+        const dropped_out = document.getElementById(serial).querySelector('.dropped_out')
+        if (dropped_out.checked) {
+          update(dropped_out, 'dropped_out', serial)
+          update(e, 'reason', serial)
+        } else {
+          dropped_out.checked = true
+          createChangeEvent(serial, 'dropped_out')
+        }
+      }
     }
 
     const update = (e, field, serial) => {
@@ -231,10 +301,6 @@
           if (! data.success) {
             alert(data.error)
             console.log(data.sql)
-          } else {
-            if (field == 'dropped_out' && value === 1) {
-              createChangeEvent(serial, 'reason')
-            }
           }
         })
     }
@@ -250,6 +316,7 @@
 
     return (
       <div>
+        <h2>Details</h2>
         <table className="table table-striped">
           <thead>
           <tr>
