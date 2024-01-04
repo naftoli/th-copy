@@ -259,11 +259,11 @@
       if (e.target.checked) {
         // check reason
         if (reason.value == '') {
-          alert('Please select a reason')
+          alert('You must first select a reason!')
+          e.target.checked = false
           return false
         } else {
           update(e, 'dropped_out', serial)
-          update(reason, 'reason', serial)
         }
       } else {
         update(e, 'dropped_out', serial)
@@ -275,20 +275,20 @@
 
     const updateReason = (e, serial) => {
       if (e.target.value !== '') {
+        update(e, 'reason', serial)
         const dropped_out = document.getElementById(serial).querySelector('.dropped_out')
-        if (dropped_out.checked) {
-          update(dropped_out, 'dropped_out', serial)
-          update(e, 'reason', serial)
-        } else {
-          dropped_out.checked = true
-          createChangeEvent(serial, 'dropped_out')
-        }
+        if (! dropped_out.checked) dropped_out.checked = true
+        createChangeEvent(serial, 'dropped_out')
+      } else {
+        alert('If you want to remove the reason, uncheck the dropped out checkbox')
+        e.target.value = 'Not Interested'
+        return false
       }
     }
 
     const update = (e, field, serial) => {
       let value
-      if (field == 'dropped_out') value = e.target.checked ? 1 : 0
+      if (field == 'dropped_out') value = e.target.checked || e.checked ? 1 : 0
       else value = e.target.value.toLowerCase()
       fetch('api/update.php', {
         method: 'POST',
@@ -366,14 +366,14 @@
                 <td>{row.time_committed}</td>
                 <td>{row.time_learned}</td>
                 <td>
-                  <input type="checkbox" name="dropped_out" className="dropped_out" defaultChecked={row.dropped_out ? true : false}
+                  <input type="checkbox" name="dropped_out" className="form-check-label dropped_out" defaultChecked={row.dropped_out ? true : false}
                          onClick={(e) => updateDroppedOut(e, row.serial)} />
                 </td>
                 <td>
                   <select name="reason" className="form-select reason" defaultValue={row.reason}
                           onChange={(e) => updateReason(e, row.serial)}>
                     {reasons.map((reason, i) => {
-                      return <option key={i} value={reason}>{reason}</option>
+                      return <option key={i} value={reason.toLowerCase()}>{reason}</option>
                     })}
                   </select>
                 </td>
