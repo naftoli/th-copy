@@ -11,13 +11,6 @@ $school_id = intval($input['school']);
 $class_id = intval($input['grade']);
 $test_num = intval($input['test_num']);
 
-$need_avg = false;
-if (in_array($test_num, ["two", "three"])) {
-    $need_avg = true;
-    if ($test_num == "two") $test_num = 2;
-    else if ($test_num == "three") $test_num = 3;
-}
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests($year);
 $ct->setStudents($school_id, $class_id);
@@ -48,33 +41,34 @@ foreach ($types as $type => $desc) {
 }
 
 // calculate total days
-if ($need_avg) {
-    $idx = 0; // flag for calculating total minutes learned
-    $days = 0;
-    for ($i = 0; $i < $test_num; $i++) {
-        $days += $total_days[$i];
-    }
-    $untilToday = new DateTime() <= new DateTime($dates[$test_num - 1][2]); // for getting total minutes learned
-} else {
-    $idx = $test_num - 1;
-    $days = $total_days[$test_num - 1];
-    $untilToday = false;
+$days = 0;
+for ($i = 0; $i < $test_num; $i++) {
+    $days += $total_days[$i];
 }
+$untilToday = new DateTime() <= new DateTime($dates[$test_num - 1][2]); // for getting total minutes learned
 
 // calculate khk eligibility
 $ids = [];
+$khk = [];
 foreach ($students as $student) {
-    $ids[] = $student['user_id'];
+    // only 8th graders are eligible for KHK
+    if (intval($student['class_grade']) == 8) $ids[] = $student['user_id'];
 }
-$khk = KHK::getKHKEligibility($ids, ($year - 1))[0];
+if ($ids) $khk = KHK::getKHKEligibility($ids, ($year - 1))[0];
 
 $info = [];
 foreach ($students as $student) {
-    $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[$idx], true, $untilToday);
-    $avgs = calculateAvgs($student['th_chidon_id']);
-    $passing_avg = getPassingAvg($student['user_id']);
-    if ($need_avg) $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id'], false, $test_num) : '';
-    else $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id']) : '';
+    if (! isset($marks[$student['th_chidon_id']])) {
+        $learned = 0;
+        $avgs = ['maven' => 0, 'pro' => 0, 'expert' => 0, 'genius' => 0];
+        $passing_avg = 0;
+        $track_passed = '';
+    } else {
+        $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[0], true, $untilToday);
+        $avgs = calculateAvgs($student['th_chidon_id']);
+        $passing_avg = getPassingAvg($student['user_id']);
+        $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id'], false, $test_num) : '';
+    }
 
     // summary
     if ($student['dropped_out']) $track = 'dropped out';
@@ -84,7 +78,6 @@ foreach ($students as $student) {
     }
     else $track = $track_passed;
     $summary[$student['test_type']][$track]++;
-
 
     $info[] = [
         'user_id'   => $student['user_id'],
@@ -97,10 +90,10 @@ foreach ($students as $student) {
         'reward'    => $student['reward_type'] === 'highest track passed' || empty($student['reward_type']) ? 'highest track passed' : $student['reward_type'],
         'award'     => empty($student['award_type']) ? 'highest final passed' : $student['award_type'],
         'passing_avg'   => $passing_avg,
-        'yesod'     => $need_avg ? $avgs['maven'] : isset($marks[$student['th_chidon_id']][$test_num]['maven']) ? $marks[$student['th_chidon_id']][$test_num]['maven'] : '',
-        'yediah'    => $need_avg ? $avgs['pro'] : isset($marks[$student['th_chidon_id']][$test_num]['pro']) ? $marks[$student['th_chidon_id']][$test_num]['pro'] : '',
-        'havonah'   => $need_avg ? $avgs['expert'] : isset($marks[$student['th_chidon_id']][$test_num]['expert']) ? $marks[$student['th_chidon_id']][$test_num]['expert'] : '',
-        'iyun'      => $need_avg ? $avgs['genius'] : isset($marks[$student['th_chidon_id']][$test_num]['genius']) ? $marks[$student['th_chidon_id']][$test_num]['genius'] : '',
+        'yesod'     => $avgs['maven'],
+        'yediah'    => $avgs['pro'],
+        'havonah'   => $avgs['expert'],
+        'iyun'      => $avgs['genius'],
         'non_cumulative_track_passed'   => $track_passed ? $types[$track_passed] : '',
         'cumulative_track_passed'   => calculateCumulative($student['th_chidon_id']),
         'time_committed'    => $learning_time[$student['test_type']] * $days,
@@ -174,13 +167,10 @@ function calculateCumulative($id) {
 
     if (! isset($scores[$id])) return '';
 
-    foreach ($scores[$id] as $testNum => $details) {
-        if ($testNum > $test_num) {
-            $testNum--;
-            break;
-        }
+    $marks = $scores[$id];
+    for ($i = 1; $i <= $test_num; $i++) {
         foreach ($types as $type => $desc) {
-            $cumulative_scores[$type] += isset($details[$type]) ? $details[$type] : 0;
+            if (isset($marks[$i][$type]) && $marks[$i][$type] > 0) $cumulative_scores[$type] += intval($marks[$i][$type]);
         }
     }
 
@@ -190,7 +180,7 @@ function calculateCumulative($id) {
 
     $cumulative = [];
     foreach ($types as $type => $desc) {
-        $cumulative[$type] = round(($cumulative_scores[$type] / ($questions[$type] * $testNum)) * 100);
+        $cumulative[$type] = round(($cumulative_scores[$type] / ($questions[$type] * $test_num)) * 100);
     }
 
     $reg_avg = 70;

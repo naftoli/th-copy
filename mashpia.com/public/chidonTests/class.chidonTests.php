@@ -361,6 +361,8 @@ class ChidonTests
                     if (isset($details[$type])) {
                         $mark = floatval($details[$type] / $questions);
                         $this->marks[$id][$testNum][$type] = round($mark * 100);
+                    } else {
+                        $this->marks[$id][$testNum][$type] = 0;
                     }
                 }
             }

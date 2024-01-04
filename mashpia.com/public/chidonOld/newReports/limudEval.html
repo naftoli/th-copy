@@ -159,10 +159,8 @@
             <label htmlFor="grade">Test</label>
             <select className="form-select" id="grade" onChange={handleTestNumChange}>
               <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="two">1 & 2</option>
-              <option value="three">1, 2 & 3</option>
+              <option value="2">1 & 2</option>
+              <option value="3">1, 2 & 3</option>
             </select>
           </div>
         </div>
@@ -202,30 +200,43 @@
           </tr>
           <tr>
             <th style={{ borderRight: '1px solid grey' }}>Track Currently On</th>
-            <th colSpan={headers.length} style={{ textAlign: 'center' }}>Track Passed</th>
+            <th colSpan={4} style={{ textAlign: 'center', borderRight: '1px solid grey' }}>Track Passed</th>
+            <th colSpan={3}></th>
           </tr>
           <tr>
             <th style={{ borderRight: '1px solid grey' }}></th>
-            {headers.map((header) => (
-              <th scope="col">{Object.keys(track_options).includes(header) ? track_options[header] : header}</th>
-            ))}
+            {headers.map((header, i) => {
+              let style = {}
+              if (i == 3) style = { borderRight: '1px solid grey' }
+              return (
+                <th key={i} style={style}>{Object.keys(track_options).includes(header) ? track_options[header] : header}</th>
+              )
+            })}
           </tr>
           </thead>
           <tbody>
             {Object.entries(track_options).map((track, i) => (
               <tr key={i}>
                 <th style={{borderRight: '1px solid grey'}}>{track[1]}</th>
-                {headers.map((outcome) => {
+                {headers.map((outcome, i) => {
                   totals[outcome] += info[track[0]][outcome]
-                  return <td>{info[track[0]][outcome]}</td>
+                  let style = {}
+                  if (i == 3) style = { borderRight: '1px solid grey' }
+                  return (
+                    <td key={i} style={style}>{info[track[0]][outcome]}</td>
+                  )
                 })}
               </tr>
             ))}
             <tr>
               <th style={{borderRight: '1px solid grey'}}>Totals</th>
-              {Object.entries(totals).map((total, i) => (
-                <th key={i}>{total[1]}</th>
-              ))}
+              {Object.entries(totals).map((total, i) => {
+                let style = {}
+                if (i == 3) style = { borderRight: '1px solid grey' }
+                return (
+                  <th key={i} style={style}>{total[1]}</th>
+                )
+              })}
             </tr>
           </tbody>
         </table>
