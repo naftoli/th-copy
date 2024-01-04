@@ -198,8 +198,11 @@
         <table className="table table-striped">
           <thead>
           <tr>
-            <th></th>
-            <th colSpan={headers.length} style={{ textAlign: 'center' }}>Outcomes</th>
+            <th colSpan={headers.length + 1}></th>
+          </tr>
+          <tr>
+            <th style={{ borderRight: '1px solid grey' }}>Track Currently On</th>
+            <th colSpan={headers.length} style={{ textAlign: 'center' }}>Track Passed</th>
           </tr>
           <tr>
             <th style={{ borderRight: '1px solid grey' }}></th>
@@ -301,9 +304,10 @@
         if (! dropped_out.checked) dropped_out.checked = true
         createChangeEvent(serial, 'dropped_out')
       } else {
-        alert('If you want to remove the reason, uncheck the dropped out checkbox')
-        e.target.value = 'Not Interested'
-        return false
+        update(e, 'reason', serial)
+        const dropped_out = document.getElementById(serial).querySelector('.dropped_out')
+        if (dropped_out.checked) dropped_out.checked = false
+        createChangeEvent(serial, 'dropped_out')
       }
     }
 

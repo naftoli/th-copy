@@ -61,6 +61,13 @@ if ($need_avg) {
     $untilToday = false;
 }
 
+// calculate khk eligibility
+$ids = [];
+foreach ($students as $student) {
+    $ids[] = $student['user_id'];
+}
+$khk = KHK::getKHKEligibility($ids, ($year - 1))[0];
+
 $info = [];
 foreach ($students as $student) {
     $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[$idx], true, $untilToday);
@@ -100,8 +107,8 @@ foreach ($students as $student) {
         'time_learned'  => $learned,
         'dropped_out'   => intval($student['dropped_out']),
         'reason'        => $student['reason'] ?? '',
-        'khk_eligible'  => false,
-        'khk_experience'    => false,
+        'khk_eligible'  => $khk[$student['user_id']] ?? false,
+        'khk_experience'    => $student['khk_experience'] ?? '',
     ];
 }
 
