@@ -54,11 +54,12 @@ function updateField($serial, $field, $value) {
     global $year;
 
     $table_fields = [
-        'track' => 'test_type',
-        'reward' => 'reward_type',
-        'award' => 'award_type',
-        'dropped_out' => 'dropped_out',
-        'reason'    => 'reason',
+        'track'         => 'test_type',
+        'reward'        => 'reward_type',
+        'award'         => 'award_type',
+        'dropped_out'   => 'dropped_out',
+        'reason'        => 'reason',
+        'khk_experience' => 'khk_experience',
     ];
     $field = $table_fields[$field];
 

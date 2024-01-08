@@ -307,6 +307,10 @@
     }
 
     const updateKhk = (e, serial) => {
+      if (e.target.value == 'eligible') {
+        alert('You must first select a trip type!')
+        return false
+      }
       update(e, 'khk_experience', serial)
     }
 
