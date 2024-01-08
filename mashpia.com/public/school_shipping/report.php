@@ -373,13 +373,14 @@ foreach ($summary as $school => $more) ksort($summary[$school]);
       if (!res.success) alert(res.error)
     })
   })
-
+/*
   $(function () {
-    <?php if ($superAdmin) : ?>
+//    <?php //if (!$superAdmin) : ?>
       $(".shipping").attr('disabled', true)
       $(".qty").attr('disabled', true)
       $(".description").attr('disabled', true)
-    <?php endif; ?>
+//    <?php //endif; ?>
   })
+*/
 </script>
 </html>

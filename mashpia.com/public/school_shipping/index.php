@@ -115,7 +115,7 @@ $items = $cs->getItems();
     })
   }
 
-  $(".item").click(checkAllItems)
+  $(".check_items").click(checkAllItems)
   $("#all_items").click(checkAll)
   $("#all_details").click(checkAll)
   $("#all_fields").click(checkAll)
