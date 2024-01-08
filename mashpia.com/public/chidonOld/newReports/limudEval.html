@@ -308,7 +308,10 @@
 
     const updateKhk = (e, serial) => {
       if (e.target.value == 'eligible') {
-        alert('You must first select a trip type!')
+        alert('You must select a trip!')
+        // find original value
+        const user = info.filter((row) => row.serial == serial)[0]
+        e.target.value = user.khk_experience
         return false
       }
       update(e, 'khk_experience', serial)
