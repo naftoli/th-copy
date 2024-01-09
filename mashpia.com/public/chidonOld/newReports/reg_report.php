@@ -55,7 +55,9 @@ $sql = "
         admins a USING (admin_id)
     WHERE
         tc.year = $req_yr AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
+    GROUP BY u.user_id
     ORDER BY reg_date DESC";
+
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
@@ -80,30 +82,29 @@ while ($row = mysql_fetch_assoc($result)) {
     // only overwrite if newer row has the version info
     if (in_array($row['user_id'], $book_purchases)) {
         if (intval($row['version']) > intval($book_purchases[$row['user_id']]['version'])) $book_purchases[$row['user_id']] = $row;
-    }
-    else $book_purchases[$row['user_id']] = $row;
+    } else $book_purchases[$row['user_id']] = $row;
     if ($row['location'] == 'parent_account' && intval($row['version']) == 0) $book_purchased_during_reg[] = $row['user_id'];
 }
 
 $langs = [
-    1   =>  'English',
-    2   =>  'Yiddish',
-    3   =>  'French',
-    4   =>  'Hebrew'
+    1 => 'English',
+    2 => 'Yiddish',
+    3 => 'French',
+    4 => 'Hebrew'
 ];
 
 $customNames = [
-    'en'    =>  'Full English Name',
-    'he'    =>  'Full Hebrew Name',
-    'nick_en'   =>  'English Name Known by',
-    'nick_he'   =>  'Hebrew Name Known by'
+    'en' => 'Full English Name',
+    'he' => 'Full Hebrew Name',
+    'nick_en' => 'English Name Known by',
+    'nick_he' => 'Hebrew Name Known by'
 ];
 
 $types = [
     'maven' => 'Yesod',
-    'pro'   => 'Yediah',
-    'expert'=> 'Havonah',
-    'genius'=> 'Iyun'
+    'pro' => 'Yediah',
+    'expert' => 'Havonah',
+    'genius' => 'Iyun'
 ];
 
 $poll = [
@@ -118,117 +119,118 @@ $pollKeys = array_keys($poll);
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf8" />
-        <title>Chidon Registration Report</title>
-        <style>
-            tr, th, td {
-                font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-                font-size: 12px;
-                padding: 5px;
-                border-bottom: 1px solid grey;
+<head>
+  <meta charset="utf8"/>
+  <title>Chidon Registration Report</title>
+  <style>
+    tr, th, td {
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+      font-size: 12px;
+      padding: 5px;
+      border-bottom: 1px solid grey;
+    }
+  </style>
+</head>
+<body>
+<h1>Chidon Registration Report <?= $req_yr ?></h1>
+<div>
+  Choose Year:
+  <select name="year" id="year">
+      <?php
+      $cur_yr = $year;
+      for ($i = 0; $i < 5; $i++) {
+          echo "<option value='" . $cur_yr . "'";
+          if ($req_yr && $req_yr == $cur_yr) echo " selected ";
+          echo ">" . $cur_yr . "</option>";
+          $cur_yr--;
+      }
+      ?>
+  </select>
+</div>
+<br/>
+<table>
+  <tr>
+    <th>Registration Date</th>
+    <th>User ID</th>
+    <th>Serial Number</th>
+    <th>School</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Full Hebrew Name</th>
+    <th>Gender</th>
+    <th>Yarmulka</th>
+    <th>Sweater Size</th>
+    <th>Language</th>
+    <th>Track</th>
+    <th>Custom Item Name</th>
+    <th>Book Number</th>
+    <th>Registered for KHK</th>
+    <th>Chidon Learning Method</th>
+    <th>Invited by (Serial Number)</th>
+    <th>Comments</th>
+    <th>Prizes</th>
+    <th>Personalized Prize Name</th>
+    <th>Total Credits Used</th>
+    <th>Non TH School</th>
+    <th>Parent Name</th>
+    <th>Parent Email</th>
+    <th>Bought Book</th>
+    <th>Book Version</th>
+  </tr>
+    <?php
+    foreach ($info as $row) {
+        echo "<tr><td>" . $row['reg_date'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
+            "</td><td>" . $row['school_name'] . "</td><td>" . $row['first_name'] . "</td><td>" . $row['last_name'] . "</td><td>" .
+            $row['first_he'] . ' ' . $row['last_he'] . "</td><td>" . $row['gender'] . "</td><td>";
+        if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
+        else echo "<span>";
+        echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .
+            $langs[$row['lang_id']] . "</td><td>" . $types[strtolower($row['test_type'])] . "</td><td>";
+        echo in_array($row['name_pref'], array_keys($customNames)) ? $customNames[$row['name_pref']] : $row['name_pref'];
+        echo "</td><td>" . $row['book'] . "</td><td>" .
+            ($row['khk_reg'] ? 'yes' : 'no') .
+            "</td><td>";
+        if (in_array($row['poll'], $pollKeys)) echo $poll[$row['poll']];
+        else echo $row['poll'];
+        echo "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td><td class='prize'>";
+        if (isset($prizes[$row['user_id']])) {
+            foreach ($prizes[$row['user_id']] as $i => $prize) {
+                echo $prize['prize_name'];
+                if ($prize['size']) echo " Size: " . $prize['size'];
+                if ($prize['color']) echo " Color: " . $prize['color'];
+                if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
             }
-        </style>
-    </head>
-    <body>
-        <h1>Chidon Registration Report <?= $req_yr ?></h1>
-        <div>
-            Choose Year:
-            <select name="year" id="year">
-                <?php
-                $cur_yr = $year;
-                for ($i = 0; $i < 5; $i++) {
-                    echo "<option value='" . $cur_yr . "'";
-                    if ($req_yr && $req_yr == $cur_yr) echo " selected ";
-                    echo ">" . $cur_yr . "</option>";
-                    $cur_yr--;
-                }
-                ?>
-            </select>
-        </div>
-        <br />
-        <table>
-            <tr>
-                <th>Registration Date</th>
-                <th>User ID</th>
-                <th>Serial Number</th>
-                <th>School</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Full Hebrew Name</th>
-                <th>Gender</th>
-                <th>Yarmulka</th>
-                <th>Sweater Size</th>
-                <th>Language</th>
-                <th>Track</th>
-                <th>Custom Item Name</th>
-                <th>Book Number</th>
-                <th>Registered for KHK</th>
-                <th>Chidon Learning Method</th>
-                <th>Invited by (Serial Number)</th>
-                <th>Comments</th>
-                <th>Prizes</th>
-                <th>Personalized Prize Name</th>
-                <th>Total Credits Used</th>
-                <th>Non TH School</th>
-                <th>Parent Name</th>
-                <th>Parent Email</th>
-                <th>Bought Book</th>
-                <th>Book Version</th>
-            </tr>
-            <?php
-            foreach ($info as $row) {
-                echo "<tr><td>" . $row['reg_date'] . "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .
-                    "</td><td>" . $row['school_name'] . "</td><td>" . $row['first_name'] . "</td><td>" . $row['last_name'] . "</td><td>" .
-                    $row['first_he'] . ' ' . $row['last_he'] . "</td><td>" . $row['gender'] . "</td><td>";
-                if ($row['gender'] == 'M' && $row['yarmulka'] == '0') echo "<span style='color: red; font-width: bold;'>";
-                else echo "<span>";
-                echo $row['yarmulka'] . "</span></td><td>" . $row['size'] . "</td><td>" .
-                    $langs[$row['lang_id']] . "</td><td>" . $types[strtolower($row['test_type'])] . "</td><td>";
-                echo in_array($row['name_pref'], array_keys($customNames)) ? $customNames[$row['name_pref']] : $row['name_pref'];
-                echo "</td><td>" . $row['book'] . "</td><td>" .
-                    ($row['khk_reg'] ? 'yes' : 'no') .
-                    "</td><td>";
-                if (in_array($row['poll'], $pollKeys)) echo $poll[$row['poll']];
-                else echo $row['poll'];
-                echo "</td><td>" . $row['recruited_by'] . "</td><td>" . $row['comments'] . "</td><td class='prize'>";
-                if (isset($prizes[$row['user_id']])) {
-                    foreach ($prizes[$row['user_id']] as $i => $prize) {
-                        echo $prize['prize_name'];
-                        if ($prize['size']) echo " Size: " . $prize['size'];
-                        if ($prize['color']) echo " Color: " . $prize['color'];
-                        if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
-                    }
-                }
-                echo "</td><td>";
-                $totalCredits = 0;
-                if (isset($prizes[$row['user_id']])) {
-                    foreach ($prizes[$row['user_id']] as $i => $prize) {
-                        $totalCredits += floatval($prize['price']);
-                        echo $prize['he_name'];
-                        if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
-                    }
-                }
-                echo "</td><td>" . $totalCredits;
-                echo "</td><td>" . $row['non_th_school'] . "</td><td>";
-                if (isset($row['first']) || isset($row['last'])) echo $row['first'] . " " . $row['last'];
-                echo "</td><td>";
-                if (isset($row['admin_email'])) echo $row['admin_email'];
-                echo "</td><td>";
-                if (in_array($row['user_id'], $book_purchased_during_reg)) echo "Yes";
-                else echo "No";
-                echo "</td><td>";
-                if (isset($book_purchases[$row['user_id']])) echo $book_purchases[$row['user_id']]['version'];
-                echo "</td></tr>";
+        }
+        echo "</td><td>";
+        $totalCredits = 0;
+        if (isset($prizes[$row['user_id']])) {
+            foreach ($prizes[$row['user_id']] as $i => $prize) {
+                $totalCredits += floatval($prize['price']);
+                echo $prize['he_name'];
+                if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
             }
-            ?>
-        </table>
-    </body>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
-    <script>
-        $("#year").change( function () {
-            let yr = $(this).val()
-            location.href = "reg_report.php?year=" + yr
-        })
-    </script>
+        }
+        echo "</td><td>" . $totalCredits;
+        echo "</td><td>" . $row['non_th_school'] . "</td><td>";
+        if (isset($row['first']) || isset($row['last'])) echo $row['first'] . " " . $row['last'];
+        echo "</td><td>";
+        if (isset($row['admin_email'])) echo $row['admin_email'];
+        echo "</td><td>";
+        if (in_array($row['user_id'], $book_purchased_during_reg)) echo "Yes";
+        else echo "No";
+        echo "</td><td>";
+        if (isset($book_purchases[$row['user_id']])) echo $book_purchases[$row['user_id']]['version'];
+        echo "</td></tr>";
+    }
+    ?>
+</table>
+</body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script>
+  $("#year").change(function () {
+    let yr = $(this).val()
+    location.href = "reg_report.php?year=" + yr
+  })
+</script>
 </html>
