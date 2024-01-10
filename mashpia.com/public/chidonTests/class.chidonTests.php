@@ -920,13 +920,13 @@ class KHK {
             $khk[$id] = true;
 
             // check if bc indicated that child is eligible
-            $sql = "select khk_eligible from users where user_id = " . $id;
-            $result = mysql_query($sql);
-            $row = mysql_fetch_assoc($result);
-            if ($row['khk_eligible'] == 1) {
-                // no need to check all years
-                continue;
-            }
+//            $sql = "select khk_eligible from users where user_id = " . $id;
+//            $result = mysql_query($sql);
+//            $row = mysql_fetch_assoc($result);
+//            if ($row['khk_eligible'] == 1) {
+//                // no need to check all years
+//                continue;
+//            }
 
             foreach ($yrs as $eligible) {
                 if (! $eligible) {
