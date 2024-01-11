@@ -26,6 +26,7 @@ $MASHPIA_DB->beginTransaction();
 
 $final = 2460574;
 $info = getInfo();
+echo "<pre>";
 foreach ($info as $subject => $more) {
     foreach ($more as $grid_id) {
         $start = 2460293;
@@ -49,6 +50,7 @@ foreach ($info as $subject => $more) {
     }
     break;
 }
+echo "</pre>";
 
 $MASHPIA_DB->rollBack();
 
