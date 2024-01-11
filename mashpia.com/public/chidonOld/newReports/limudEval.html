@@ -267,9 +267,12 @@
     const tracks = {
       'Yesod': 'maven',
       'Yediah': 'pro',
-      'Havonah': 'expert',
-      'Iyun': 'genius'
+      'Havonah': 'expert'
     }
+
+    const user_tracks = Object.assign({}, tracks, {
+      'Iyun': 'genius'
+    })
 
     const rewards = Object.assign({}, tracks, {
       'Highest track passed': 'highest track passed',
@@ -400,7 +403,7 @@
               <td>
                 <select name="track" className="form-select track" style={{width: '100px'}} defaultValue={row.track}
                         onChange={(e) => updateTrack(e, row.serial)}>
-                  {Object.entries(tracks).map((track, i) => {
+                  {Object.entries(user_tracks).map((track, i) => {
                     return <option key={i} value={track[1]}>{track[0]}</option>
                   })}
                 </select>
