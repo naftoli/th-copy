@@ -10,10 +10,6 @@ if ($admin_user['auth'] != 'super') {
     die('Access denied');
 }
 
-$start = 2460293;
-$end = 2460299;
-$final = 2460574;
-
 $update = $MASHPIA_DB->prepare("
     UPDATE date_tasks_missions dtm 
     JOIN date_tasks dt USING (date_tasks_mission_id) 
@@ -28,9 +24,12 @@ $update = $MASHPIA_DB->prepare("
 
 $MASHPIA_DB->beginTransaction();
 
+$final = 2460574;
 $info = getInfo();
 foreach ($info as $subject => $more) {
     foreach ($more as $grid_id) {
+        $start = 2460293;
+        $end = 2460299;
         while ($start < $final) {
             $new_start = $start + 1;
             $new_end = $new_start + 6;
