@@ -43,10 +43,12 @@ foreach ($info as $subject => $more) {
                 'end' => $end,
             ]);
             $update->debugDumpParams();
+            echo "<br><br />";
             $start += 7;
             $end += 7;
         }
     }
+    break;
 }
 
 $MASHPIA_DB->rollBack();
