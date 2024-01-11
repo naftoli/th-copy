@@ -3,6 +3,10 @@ $admin_auth = array('school');
 require_once '../header.php';
 require_once '../class.shabbosMevorchim.php';
 
+if ($admin_user['auth'] != 'super') {
+    die('Access denied');
+}
+
 $sm = new ShabbosMevorchim();
 $sm->setReportDates();
 $dates = $sm->getReportDates();

@@ -2,6 +2,10 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT']."/blog/wp-load.php";
 
+if ($admin_user['auth'] != 'super') {
+    die('Access denied');
+}
+
 function updateWP( $rank, $user ) {
     $info = getInfo( $rank, $user );
     return import_promotion($info);

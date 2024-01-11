@@ -1,6 +1,11 @@
 <?php
 //error_reporting(E_ALL);
 ini_set("display_errors", 1);
+
+if ($admin_user['auth'] != 'super') {
+    die('Access denied');
+}
+
 //
 function disable_ob() {
     // Turn off output buffering

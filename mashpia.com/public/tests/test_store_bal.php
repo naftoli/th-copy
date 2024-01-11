@@ -2,6 +2,10 @@
 require '../db.php';
 require '../class.points.php';
 
+if ($admin_user['auth'] != 'super') {
+    die('Access denied');
+}
+
 if (isset($_GET['id'])) $user_id = $_GET['id'];
 else $user_id = 8273;
 $p = new Points( $user_id );
