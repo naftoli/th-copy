@@ -22,11 +22,11 @@ $update = $MASHPIA_DB->prepare("
         AND dtm.end_date = :end
 ");
 
+$success = true;
 $MASHPIA_DB->beginTransaction();
 
 $final = 2460574;
 $info = getInfo();
-echo "<pre>";
 foreach ($info as $subject => $more) {
     foreach ($more as $grid_id) {
         $start = 2460293;
@@ -34,7 +34,7 @@ foreach ($info as $subject => $more) {
         while ($start < $final) {
             $new_start = $start + 1;
             $new_end = $new_start + 6;
-            $update->execute([
+            $res = $update->execute([
                 'new_start' => $new_start,
                 'new_end' => $new_end,
                 'subject' => $subject,
@@ -42,17 +42,19 @@ foreach ($info as $subject => $more) {
                 'start' => $start,
                 'end' => $end,
             ]);
-            $update->debugDumpParams();
-            echo "<br><br />";
+            if (!$res) {
+                $success = false;
+                break 2;
+            }
             $start += 7;
             $end += 7;
         }
     }
-    break;
 }
-echo "</pre>";
 
-$MASHPIA_DB->rollBack();
+if ($success) $MASHPIA_DB->commit();
+else $MASHPIA_DB->rollBack();
+echo "done.";
 
 function getInfo() {
     global $MASHPIA_DB;
@@ -80,5 +82,3 @@ function getInfo() {
 
     return $info;
 }
-
-
