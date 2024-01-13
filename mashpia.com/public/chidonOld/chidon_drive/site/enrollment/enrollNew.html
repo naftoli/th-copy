@@ -762,7 +762,7 @@
 		if (Cookies.get('chidon_admin')) {
 			processChildren(Cookies.get('chidon_admin'));
 		} else {
-			$(".login").show();
+			$(".login").show()
 		}
 
 		$("#loginForm").submit(function (evt) {
@@ -874,6 +874,7 @@
 				return false
 			}
 			children = result.children
+
 			for (let child of children) {
 				users[child.user_id] = child.first + ' ' + child.last
 			}
@@ -902,6 +903,8 @@
 				} else {
 					location.href = '/mobile'
 				}
+			} else {
+				processPage()
 			}
 		}
 
@@ -947,7 +950,7 @@
 			$("#ch_info").modal('show')
 		}
 
-			/*
+		async function processPage() {
 			let registered = children.filter(child => child.date_paid)
 			// let haveTrack = children.filter(child => child.track)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
@@ -977,14 +980,14 @@
 
 				const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
 				html += `
-                    <div class="kid flex-kids" id="${child.user_id}">
-                        <div>
-                            <img class="childImg" src="//mashpia.com/${childPic}" />
-                        </div>
-                         <div style="margin-left: 20px;">
-                            <h5 class="formDetails">Dear ${child.first},<br /><br />
-                            Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
-                            Track. You are eligible for ${trackText}.<h5>`
+										<div class="kid flex-kids" id="${child.user_id}">
+												<div>
+														<img class="childImg" src="//mashpia.com/${childPic}" />
+												</div>
+												 <div style="margin-left: 20px;">
+														<h5 class="formDetails">Dear ${child.first},<br /><br />
+														Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
+														Track. You are eligible for ${trackText}.<h5>`
 
 				const tripDates = {
 					M: '27 - 29 Adar, March 20 - 22',
@@ -1074,21 +1077,21 @@
 				// coupons
 				if (child.coupon > 0 && parseInt(child.coupon_used) === 0) {
 					html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
-                        You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
+												You have a $${child.coupon} coupon which will be applied to your registration cost.</h5>`
 				}
 
 				// chidon drive
 				if (parseFloat(child.raised) > 0) {
 					html += `<h5 class="formDetails"><span class="title">Chidon Drive</span><br />
-                        You raised $${child.raised} which will be taken off your registration cost.</h5>`
+												You raised $${child.raised} which will be taken off your registration cost.</h5>`
 				}
 
 				html += `<div class='reg-details'></div>
 									</div>
-                </div>
-            </div>
-            <div style="clear: both"></div>
-            <br />`
+								</div>
+						</div>
+						<div style="clear: both"></div>
+						<br />`
 			}
 
 			// set myshliach cookie; needed for processing registration page
@@ -1493,7 +1496,6 @@
 				errors = [] // reset errors
 			}
 		})
-			 */
 	</script>
 
 	<script>
