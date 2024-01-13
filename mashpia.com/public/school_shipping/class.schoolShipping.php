@@ -57,12 +57,25 @@ class SchoolShipping
                         $prize_info = $this->prizes[$prize];
                         $prize_name = $prize_info['name'];
                         $raffle_name = $this->raffles[$raffle_id];
-                        $info[$school_id][] = [
-                            'id'    => $prize_info['code'],
-                            'item'  => $prize_name,
-                            'cat'   => $raffle_name,
-                            'qty'   => 1
-                        ];
+                        // check if this prize is already in the list
+                        $found = false;
+                        if (isset($info[$school_id])) {
+                            foreach ($info[$school_id] as $item) {
+                                if ($item['id'] == $prize_info['code'] && $item['cat'] == $raffle_name) {
+                                    $found = true;
+                                    $item['qty']++;
+                                    break;
+                                }
+                            }
+                        }
+                        if (!$found) {
+                            $info[$school_id][] = [
+                                'id'    => $prize_info['code'],
+                                'item'  => $prize_name,
+                                'cat'   => $raffle_name,
+                                'qty'   => 1
+                            ];
+                        }
                     }
                 }
             }
@@ -140,7 +153,7 @@ class SchoolShipping
         ]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $raffles[$row['raffle_id']] = $row['name'];
+            $raffles[$row['raffle_id']] = $row['name'] . ' (' . $row['year'] . ')';
         }
         $this->raffles = $raffles;
     }
@@ -157,7 +170,7 @@ class SchoolShipping
             // filter out last year's 4th 60m and this year's first three 60m for monthly raffles
             if ($row['year'] == ($this->year - 1) && strpos($row['name'], '4') === false) continue;
             else if ($row['year'] == $this->year && strpos($row['name'], '4') !== false) continue;
-            $raffles[$row['raffle_id']] = $row['name'];
+            $raffles[$row['raffle_id']] = $row['name'] . ' (' . $row['year'] . ')';
         }
         $this->raffles = $raffles;
     }

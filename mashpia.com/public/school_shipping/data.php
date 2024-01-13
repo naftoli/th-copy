@@ -158,12 +158,13 @@ function createHtmlForItem($school, $row, $output = true) {
 function addToSummary($item, $school) {
     global $summary, $summary_items;
 
-    $key = $item['id'];
+    $key1 = $item['id'];
+    $key2 = $item['cat'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
+    if (!in_array($key1, array_keys($summary_items)) || !in_array($key2, array_keys($summary_items[$key1]))) $summary_items[$key1][$key2] = $item;
 
-    if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
-    else $summary[$school][$key] = $qty;
+    if (isset($summary[$school][$key1][$key2])) $summary[$school][$key1][$key2] += $qty;
+    else $summary[$school][$key1][$key2] = $qty;
 }
 
 function getUpdatedSchools($schools) {
