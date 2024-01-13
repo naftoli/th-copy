@@ -889,6 +889,12 @@
 			// update children with track info
 			for (let child of children) {
 				child.track = tracks[child.user_id]
+				if (Cookies.get('naftoli')) {
+					// get track from GET param
+					const queryString = window.location.search
+					child.track = new URLSearchParams(queryString).get('track')
+					child.schoolConfirmed = 1
+				}
 			}
 
 			// only let ultimate trip kids to update their trip info
@@ -904,7 +910,7 @@
 					location.href = '/mobile'
 				}
 			} else {
-				processPage()
+				processPage(admin)
 			}
 		}
 
@@ -950,7 +956,7 @@
 			$("#ch_info").modal('show')
 		}
 
-		async function processPage() {
+		async function processPage(admin) {
 			let registered = children.filter(child => child.date_paid)
 			// let haveTrack = children.filter(child => child.track)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)

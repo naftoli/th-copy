@@ -11,7 +11,11 @@ $types = $ct->getTypes();
 $children = $_POST['children'];
 $tracks = [];
 foreach ($children as $child) {
-    $track = $ct->getHighestTrackPassed($child)['highest_track'];
+    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+    $ct->setScores();
+    $ct->calculateMarks();
+    $marks = $ct->getMarks();
+    $track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
     $tracks[$child['user_id']] = $track ? $types[$track] : '';
 }
 

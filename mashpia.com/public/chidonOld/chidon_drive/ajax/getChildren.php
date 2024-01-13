@@ -15,7 +15,8 @@ function getChildren() {
 
     $children = [];
     // track, raised, grade, trip location
-    $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, u.user_serial, UPPER(u.gender) as gender,
+    $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, u.user_serial, 
+                UPPER(u.gender) as gender, 
                 c.class_grade as grade, 
                 tc.*, 
                 IFNULL(cc.value, 0) as coupon, cc.used as coupon_used, cc.reason as coupon_reason,  
