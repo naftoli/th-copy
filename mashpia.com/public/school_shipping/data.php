@@ -161,8 +161,11 @@ function addToSummary($item, $school) {
     $key1 = $item['id'];
     $key2 = $item['cat'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    if (!in_array($key1, array_keys($summary_items)) || !in_array($key2, array_keys($summary_items[$key1]))) $summary_items[$key1][$key2] = $item;
-
+    // if item doesn't exist in summary_items, add it
+    if (isset($summary_items[$key1][$key2])) $summary_items[$key1][$key2]['qty'] += $qty;
+    // else update qty
+    else $summary_items[$key1][$key2] = $item;
+    // update summary
     if (isset($summary[$school][$key1][$key2])) $summary[$school][$key1][$key2] += $qty;
     else $summary[$school][$key1][$key2] = $qty;
 }

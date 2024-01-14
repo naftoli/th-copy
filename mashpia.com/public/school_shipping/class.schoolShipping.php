@@ -60,7 +60,7 @@ class SchoolShipping
                         // check if this prize is already in the list
                         $found = false;
                         if (isset($info[$school_id])) {
-                            foreach ($info[$school_id] as $item) {
+                            foreach ($info[$school_id] as &$item) {
                                 if ($item['id'] == $prize_info['code'] && $item['cat'] == $raffle_name) {
                                     $found = true;
                                     $item['qty']++;
