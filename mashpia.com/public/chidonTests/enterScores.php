@@ -64,7 +64,7 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
 
 // initialize all tests to not be disabled
 $disabled = false;
-$exceptions = [];
+$exceptions = [66, 112, 180];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
