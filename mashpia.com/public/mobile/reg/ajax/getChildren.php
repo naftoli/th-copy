@@ -104,7 +104,8 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['user_serial']    = $row['user_serial'];
         $children[$row['user_id']]['hachayol']       = $row['hachayol'];
         $children[$row['user_id']]['admin_id']       = $admin;
-        $children[$row['user_id']]['show_report_cards'] = intval($row['show_report_cards']);
+        $children[$row['user_id']]['show_report_cards'] = intval($row['show_report_cards']) || intval($row['show_report_card_2']) || intval($row['show_report_card_3']) ? 1 : 0;
+        $children[$row['user_id']]['show_report_card_1'] = intval($row['show_report_cards']);
         $children[$row['user_id']]['show_report_card_2'] = intval($row['show_report_card_2']);
         $children[$row['user_id']]['show_report_card_3'] = intval($row['show_report_card_3']);
 
