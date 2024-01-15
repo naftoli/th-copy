@@ -15,5 +15,5 @@ if (isset($_GET['serial'])) {
     $user_id = $row['user_id'];
 }
 
-$eligibility = KHK::getKHKEligibility([ $user_id ], 5783);
+$eligibility = KHK::getKHKEligibility([ $user_id ], 5783, 2);
 echo "<pre>"; print_r($eligibility); echo "</pre>";

@@ -887,11 +887,11 @@ class KHK {
         // figure out which years we need to check
         $years = [];
         $curYr = $year > 0 ? $year : GlobalSettings::getChidonRegYear();
-        $i = $numYrs;
-        $yr = $curYr - $i;
-        for (; $i > 0; $i--) {
+        $yr = $curYr - $numYrs;
+        for (; $numYrs >= 0; $numYrs--) { // includes the year that is passed in or current yr
             $years[] = $yr++;
         }
+        print_r($years);
 
         foreach ($ids as $id) {
             $details[$id] = [];
