@@ -5,7 +5,7 @@ ini_set('error_reporting', E_ALL);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
-$user_id = 22886;
+$user_id = 0;
 
 if (isset($_GET['serial'])) {
     $serial = $_GET['serial'];
