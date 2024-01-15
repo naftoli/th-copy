@@ -908,10 +908,11 @@ class KHK {
                     }
                     else $details[$id][$yr] = false;
                 } else {
-                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
-                    $result = mysql_query($sql);
-                    if (mysql_num_rows($result) == 0) $details[$id][$yr] = false;
-                    else $details[$id][$yr] = true;
+//                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
+//                    $result = mysql_query($sql);
+//                    if (mysql_num_rows($result) == 0) $details[$id][$yr] = false;
+//                    else $details[$id][$yr] = true;
+                    $details[$id][$yr] = true;
                 }
             }
         }
