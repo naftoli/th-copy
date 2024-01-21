@@ -890,9 +890,9 @@
 			for (let child of children) {
 				child.track = tracks[child.user_id]
 				if (Cookies.get('naftoli')) {
-					// get track from GET param
+					// get track from GET param if exists
 					const queryString = window.location.search
-					child.track = new URLSearchParams(queryString).get('track')
+					if (!child.track) child.track = new URLSearchParams(queryString).get('track')
 					child.schoolConfirmed = 1
 				}
 			}
