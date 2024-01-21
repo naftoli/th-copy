@@ -891,7 +891,6 @@ class KHK {
         for (; $numYrs >= 0; $numYrs--) { // includes the year that is passed in or current yr
             $years[] = $yr++;
         }
-        print_r($years);
 
         foreach ($ids as $id) {
             $details[$id] = [];
