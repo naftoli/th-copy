@@ -1,10 +1,13 @@
 <?php
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
+
 $admin_auth = ['school'];
-require 'header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') exit;
 
-require_once 'class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
 $id = $_POST['id'];
@@ -97,6 +100,7 @@ function updateChayolei() {
     $res1 = $stmt->execute([
         ':serial' => $serial
     ]);
+
     $stmt = $MASHPIA_DB->prepare("
         DELETE FROM user_registration 
         WHERE year = :year 
