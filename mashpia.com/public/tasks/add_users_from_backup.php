@@ -15,7 +15,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $updated = 0;
-$serials = [7779179, 7756156];
+$serials = [7779401];
 $sql = "select * from mashpia_backup2.users where user_serial in (" . implode(',', $serials) . ")";
 //$sql = "SELECT * FROM mashpia_backup2.users where user_id not in (select user_id from users)";
 $result = mysql_query($sql);
