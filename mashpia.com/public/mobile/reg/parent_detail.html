@@ -1015,7 +1015,7 @@
             $("#child-actual-learning").text(time_learned)
 
             let html = ''
-            if (report_card.tests.length) {
+            if (Object.keys(report_card.tests).length > 0) {
                 html += `
             <table class="table">
                 <thead>
@@ -1038,7 +1038,7 @@
                 }
                 let actualTests = 0
                 for (let i = 1; i <= 3; i++) {
-                    if (report_card.tests[i] && intval(child['show_report_card_'+i])) {
+                    if (report_card.tests[i] && parseInt(child['show_report_card_'+i])) {
                         actualTests++
                         let test = report_card.tests[i]
                         html += '<tr><td rowspan="2" style="text-align: center; vertical-align: middle">' + i + '</td><td>Answered Correctly</td>'
