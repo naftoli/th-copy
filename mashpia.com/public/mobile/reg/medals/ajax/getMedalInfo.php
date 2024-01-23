@@ -1,6 +1,7 @@
-<?
-// load up the database
-require_once( dirname(__FILE__) . '/../../../../db.php' );
+<?php
+$admin_auth = ['school', 'user'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $user = mysql_real_escape_string( $_POST['user_id'] );
 
 $monthly_subjects = [1, 12, 15, 93, 106];
@@ -8,9 +9,14 @@ $monthly_subjects = [1, 12, 15, 93, 106];
 $ds_daily = [121, 122, 124, 125, 129, 130, 131, 132, 133, 134, 135];
 
 function calculateNextDate($subject, $needed) {
+    global $user, $monthly_subjects, $MASHPIA_DB;
     // find date of task for this subject in $needed times
-    global $user;
     $jd = unixtojd();
+    $limit_by = $needed;
+    if (! in_array($subject, $monthly_subjects)) {
+        $jd = $jd + ($needed * 7);
+        $limit_by = 1;
+    }
     $sql = "
         SELECT 
             end_date
@@ -22,28 +28,22 @@ function calculateNextDate($subject, $needed) {
             users u USING (user_id)
         WHERE
             dtm.subject_id = $subject
-                AND dtm.end_date > $jd
+                AND dtm.end_date >= $jd
                 AND u.school_type_id = dtm.school_type_id
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
                 AND u.user_id = $user
         GROUP BY dtm.end_date 
-        LIMIT $needed";
-//    if ($subject == 1) echo $sql;
-    $result = mysql_query($sql);
-    if (mysql_num_rows($result) == $needed) {
-        // we have the correct result
-        $res = [];
-        while ($row = mysql_fetch_assoc($result)) {
-            $res[] = $row;
-        }
-        $date = $res[$needed - 1]['end_date'];
-        $jewish = jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM);
-        $str = iconv ('WINDOWS-1255', 'UTF-8', $jewish);
-        return $str;
-    } else {
-        return '';
-    }
+        LIMIT $limit_by";
+//    echo $sql . "<br />";
+    $stmt = $MASHPIA_DB->query($sql);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    if (count($rows) < $limit_by) return '';
+    // get last row
+    $date = $rows[$limit_by - 1]['end_date'];
+    $jewish = jdtojewish($date, true, CAL_JEWISH_ADD_GERESHAYIM);
+    $str = iconv('WINDOWS-1255', 'UTF-8', $jewish);
+    return $str;
 }
 
 function getImgBack($subject_id, $medal) {
@@ -76,7 +76,7 @@ function getImgBack($subject_id, $medal) {
 }
 
 // figure out which subjects we are showing
-require '../../../../class.campaignEnrollment.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.campaignEnrollment.php';
 $c = new CampaignEnrollment($user);
 $c->setType();
 $subjects = $c->getCampaigns();
@@ -106,22 +106,6 @@ $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $subject = $row['subject_id'];
     $total = $row['total'];
-	//echo "Subject: " . $subject . ", Total: " . $total . "<br />";
-	/*
-	if ($subject == 27) {
-		//if we are in tanya, get total from new system and add to old system
-		//get tanya missions done
-		//first get user barcode
-		$sqlT = "select user_code from users where user_id = " . $user;
-		$resT = mysql_query( $sqlT );
-		$rowT = mysql_fetch_assoc( $resT );
-		$barcode = '3' . $rowT['user_code'];
-		
-		$newTotal = header_v2_missions( array( 'arrUserCodes' => array( $barcode ) ) );
-		if (isset($newTotal[$barcode]) && !empty($newTotal[$barcode])) 
-		    $total += $newTotal[$barcode];		
-	}
-	*/
     $sql2 = "SELECT medal_ord, medal_name, medal_name_he, missions_required, profile_photo_id FROM medals_subjects 
              JOIN medals USING (medal_ord)    
              WHERE subject_id = " . $subject . " 
@@ -170,28 +154,13 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         $missions[$subject] = array(
             'medal'	=>	$tempMedals[$ctr-1], 
             'photo'	=>	end($tempMedalPics), 
-            'left'	=>	$needed - $total,
+            'left'	=>	0,
             'total' =>  $total,
             'needed' => $needed,
             'base_amount' => $base_amount
         );
     }
 }
-//echo "<pre>"; print_r( $missions ); echo "</pre>";
-
-//array to hold required missions to reach first medal for each subject if no missions where done
-//$medal_subjects = array();
-//$sql = "SELECT subject_id, missions_required, profile_photo_id
-//        FROM medals_subjects
-//        WHERE medal_ord = 1
-//        ORDER BY subject_id";
-//$result = mysql_query($sql);
-//while ($row = mysql_fetch_assoc($result)) {
-//    $medal_subjects[$row['subject_id']] = array(
-//    	'photo'	=>	$row['profile_photo_id'],
-//		'left'	=>	$row['missions_required']
-//	);
-//}
 
 $medals = array();
 $sql = "select medal_ord, medal_name, medal_name_he from medals";
@@ -205,7 +174,7 @@ $subject_medals = [];
 foreach ($subjects as $subject) {
     $sql = "SELECT medal_ord, missions_required, profile_photo_id FROM medals_subjects 
              WHERE subject_id = " . $subject . " 
-             AND medal_ord <= 10 
+             
              ORDER BY medal_ord";
     $result = mysql_query($sql);
     $needed = 0;
@@ -286,7 +255,7 @@ foreach ( $subjects as $subject ) {
             'total'	=>	0, 
             'needed'=>	(int)$subject_medals[$subject][1]['missions_needed'],
 			'next'	=>	1,
-            'nextMedalDate' => calculateNextDate($subject, $subject_medals[$subject][1]['missions_needed']),
+            'nextMedalDate' => $left ? calculateNextDate($subject, $left) : '',
             'nextMedalImg'  => $subject_medals[$subject][1]['img'],
             'nextMedalColor'    => $imgColors[1],
             'monthly'   => $monthly,

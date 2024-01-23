@@ -1,5 +1,6 @@
-<?
-require_once( dirname(__FILE__) . '/../../../db.php' );
+<?php
+$admin_auth = ['school', 'user'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
 function getSubjectName( $subject_id, $default ) {
     if ( $subject_id == 1 ) 

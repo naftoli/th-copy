@@ -32,7 +32,7 @@ function medal_board(target, user_id, url) {
                     subject: medal.name, url: url ? (url + "?id=" + user_id + '&subject=' + medal.id) : "#",
                     picture: medal.icon ? ("/file_view.php?id=" + medal.icon) : "/mobile/reg/medals/images/Empty-Medal-Holder.png",
                     animate: medal.icon ? true : false, base_amount: medal.base_amount,
-                    needed: medal.needed, total: medal.total, next: medal.next,
+                    needed: medal.needed, total: medal.total, next: medal.next, left: medal.left,
                     nextMedalDate: medal.nextMedalDate, nextMedalImg: medal.nextMedalImg, nextMedalColor: medal.nextMedalColor, medals: medal.medals,
                     weekly: medal.weekly, daily: medal.daily
                 }).render();
@@ -88,6 +88,7 @@ function Medal(config) {
     this.medals = config.medals;
     this.weekly = config.weekly;
     this.daily = config.daily;
+    this.left = config.left;
 }
 
 Medal.prototype.getColor = function (current) {
@@ -161,6 +162,9 @@ Medal.prototype.render = function () {
     else
         status_width = 0;
 
+    if (this.left == 0) var style = "style='display:none;'";
+    else var style = "";
+
     var html = "<div class='medal'>";
     html += '<div class="medal-header">';
     html += '<a href="' + this.url + '" class="onlyComputer">';
@@ -177,7 +181,7 @@ Medal.prototype.render = function () {
     html += '<p><span class="' + this.getColor(true).toLowerCase() + '">' + this.total + '</span> ' +
         (this.daily ? "daily" : this.weekly ? "weekly" : "monthly") + ' missions earned</p>';
     html += '</div>';
-    html += "<p class='cornerLabel'>Don't miss a " + (this.daily ? "day" : this.weekly ? "week" : "month") + "<br/> to earn your "
+    html += "<p class='cornerLabel' " + style + "> Don't miss a " + (this.daily ? "day" : this.weekly ? "week" : "month") + "<br/> to earn your "
     html += '<span><img class="medal-img" src="http://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
     html += " medal by " + this.nextMedalDate + "</p>";
     html += '</div>';

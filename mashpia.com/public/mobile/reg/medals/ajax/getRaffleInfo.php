@@ -7,6 +7,30 @@ require_once( dirname(__FILE__) . '/../../../../raffles/shared/classes/Constants
 use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
 use raffles\shared\Constants as Constants;
 
+// check raffle eligibilities
+$yearly = checkYearly( $user );
+$monthly = checkMonthly( $user );
+$weekly = checkWeekly( $user );
+
+if ( $weekly ) { ?>
+  <div class="progress <?= $weekly['percent_done'] == 100 ? "compleate" : ""?>">
+    <div class="progress-bar" role="progressbar" style="width: <?= $weekly['percent_done']?>%;"></div>
+    <span ><?= $weekly['msg'] ?></span>
+  </div>
+<? }
+if ( $monthly ) { ?>
+  <div class="progress <?= $monthly['percent_done'] == 100 ? "compleate" : ""?>">
+    <div class="progress-bar" role="progressbar" style="width: <?= $monthly['percent_done']?>%;"></div>
+    <span ><?= $monthly['msg'] ?></span>
+  </div>
+<? }
+if ( $yearly ) { ?>
+  <div class="progress <?= $yearly['percent_done'] == 100 ? "compleate" : ""?> <?= $yearly['missed-deadline'] ? "missed-deadline" : ""?>">
+    <div class="progress-bar" role="progressbar" style="width: <?= $yearly['percent_done']?>%;"></div>
+    <span ><?= $yearly['msg'] ?></span>
+  </div>
+<? }
+
 /**
  * checkYearly
  * 
@@ -213,27 +237,3 @@ function getRaffle( $type ) {
     if ( mysql_num_rows( $result ) == 0 ) return false;
 	return mysql_fetch_assoc($result);
 }
-
-// check raffle eligibilities
-$yearly = checkYearly( $user );
-$monthly = checkMonthly( $user );
-$weekly = checkWeekly( $user );
-
-if ( $weekly ) { ?>
-<div class="progress <?= $weekly['percent_done'] == 100 ? "compleate" : ""?>">
-    <div class="progress-bar" role="progressbar" style="width: <?= $weekly['percent_done']?>%;"></div>
-    <span ><?= $weekly['msg'] ?></span>
-</div>
-<? }
-if ( $monthly ) { ?>
-<div class="progress <?= $monthly['percent_done'] == 100 ? "compleate" : ""?>">
-    <div class="progress-bar" role="progressbar" style="width: <?= $monthly['percent_done']?>%;"></div>
-    <span ><?= $monthly['msg'] ?></span>
-</div>
-<? } 
-if ( $yearly ) { ?>
-<div class="progress <?= $yearly['percent_done'] == 100 ? "compleate" : ""?> <?= $yearly['missed-deadline'] ? "missed-deadline" : ""?>">
-    <div class="progress-bar" role="progressbar" style="width: <?= $yearly['percent_done']?>%;"></div>
-    <span ><?= $yearly['msg'] ?></span>
-</div>
-<? } ?>
