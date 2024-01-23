@@ -281,7 +281,6 @@
 
     const awards = Object.assign({}, tracks, {
       'Highest final passed': 'highest final passed',
-      'No Award': 'no award'
     })
 
     const createChangeEvent = (serial, field) => {
@@ -435,8 +434,7 @@
                 </select>
               </td>
               <td>
-                <select name="award" className="form-select award" style={{width: '100px'}} defaultValue={row.award}
-                        onChange={(e) => updateAward(e, row.serial)}>
+                <select name="award" className="form-select award" style={{width: '100px'}} defaultValue={row.award} disabled>
                   {Object.entries(awards).map((award, i) => {
                     return <option key={i} value={award[1]}>{award[0]}</option>
                   })}
