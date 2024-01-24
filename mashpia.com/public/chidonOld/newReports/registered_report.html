@@ -121,15 +121,15 @@
                 <td>{row.first + ' ' + row.last}</td>
                 <td><b>{types[row.highest_track]}</b><br/><span className="smaller">{rewardDescs[types[row.highest_track]]}</span></td>
                 <td>
-                  <b>{types[row.reward]}</b><br/><span className="smaller">{row.khk ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
+                  <b>{types[row.reward]}</b><br/><span className="smaller">{row.khk_tests ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
                 </td>
-                <td>{row.khk ? 'Yes' : 'No'}</td>
+                <td>{row.khk_eligibile ? 'Yes' : 'No'}</td>
                 <td>
                   <b>{row.award ? types[row.award] : ''}</b><br/>
-                  <span className="smaller">{row.award ? awardDescs[types[row.award]] + (row.khk ? ' & KHK Plaque' : '') : ''}</span>
+                  <span className="smaller">{row.award ? awardDescs[types[row.award]] + (row.khk_tests ? ' & KHK Plaque' : '') : ''}</span>
                 </td>
                 <td>{row.raised}</td>
-                <td>${row.khk ? khkFee : row.fee}</td>
+                <td>${row.khk_eligible ? khkFee : row.fee}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>
                 <td>{row.extra_purchases}</td>
