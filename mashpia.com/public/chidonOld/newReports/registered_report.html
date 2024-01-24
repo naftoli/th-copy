@@ -98,7 +98,7 @@
       'Iyun': 'Plaque, Medal & Mini Trophy',
     }
 
-    const khkFee = '200 Regional Trip $350 KHK Trip'
+    const khkFee = '$200 Regional Trip $350 KHK Trip'
 
     return (
       <div>
@@ -129,11 +129,11 @@
                   <span className="smaller">{row.award ? awardDescs[types[row.award]] + (parseInt(row.khk_reg) ? ' & KHK Plaque' : '') : ''}</span>
                 </td>
                 <td>{row.raised}</td>
-                <td>${row.fee}</td>
+                <td>{row.khk_eligible ? khkFee : ('$' + row.fee)}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>
                 <td>{row.extra_purchases}</td>
-                {superAdmin && <td>${row.paid}</td>}
+                {superAdmin && <td>{'$' + row.paid}</td>}
               </tr>
             ))}
             </tbody>
