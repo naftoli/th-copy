@@ -731,24 +731,36 @@
 			$(".bug-report img").data("user_id", user);
 		});
 
-		$("#scan").submit(function (e) {
+		$("#scan").submit(async function (e) {
 			e.preventDefault();
-			var card = $("#scanner").val();
+			$("#submit").attr('disabled', true);
+			const res = await processCard()
+			$("#submit").attr('disabled', false);
+		});
+
+		async function processCard() {
+			const card = $("#scanner").val();
 			if (card.length == 20) {
-				$("#submit").attr('disabled', true);
-				$.post('ajax/checkCard.php', {
-					admin: Cookies.get("admin"),
-					user: user,
-					card: card
-				}, function (success) {
-					alert(success);
-					$("#scanner").val('');
-					$("#submit").attr('disabled', false);
-				});
+				const res = await fetch('ajax/checkCard.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						admin: Cookies.get("admin"),
+						user: user,
+						card: card
+					})
+				})
+				const data = await res.json()
+				alert(data)
+				$("#scanner").val('')
+				return true
 			} else {
 				alert(i18next.t('digitstw'));
+				return false
 			}
-		});
+		}
 	});
 </script>
 
