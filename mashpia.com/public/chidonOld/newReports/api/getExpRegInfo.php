@@ -41,7 +41,7 @@ $sql = "
 ";
 $stmt = $db->prepare($sql);
 $res = $stmt->execute([
-    'year' => $year,
+    'year' => $year
 ]);
 //$stmt->debugDumpParams();
 $info = [];
