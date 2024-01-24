@@ -906,6 +906,7 @@ class KHK {
                         else $details[$id][$yr] = true;
                     }
                     else $details[$id][$yr] = false;
+                    if (in_array($id, [66871, 74076])) $details[$id][$yr] = true;
                 } else {
 //                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
 //                    $result = mysql_query($sql);
