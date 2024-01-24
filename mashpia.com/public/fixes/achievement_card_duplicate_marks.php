@@ -110,8 +110,8 @@ if (isset($_POST['delete']) && $_POST['delete'] == 1) {
             </tr>
             <?php foreach ($more as $row) { ?>
                 <tr>
-                    <td><?php echo $row['first'] . ' ' . $row['last'] ?></td>
                     <td><?php echo $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '') ?></td>
+                    <td><?php echo $row['first'] . ' ' . $row['last'] ?></td>
                     <td><?php echo $row['achievement_card_id'] ?></td>
                     <td><?php echo $row['user_id'] ?></td>
                     <td><?php echo $row['card_points'] ?></td>
