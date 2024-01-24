@@ -1,5 +1,7 @@
 <?php
-require '../db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/utils/utils.php';
+checkAuth();
+$schools = getSchools();
 
 $rows = [];
 $sql = "SELECT 
@@ -23,7 +25,7 @@ $sql = "SELECT
         WHERE
             up.created > '2023-06-01'
                 AND achievement_card_id > 0
-                AND up.institution_id = 255
+                AND up.institution_id in (" . implode(',', array_keys($schools)) . ")
         GROUP BY achievement_card_id
         HAVING total > 1 
         ORDER BY class_grade, class_sub, last, first";
@@ -83,7 +85,6 @@ while ($row = mysql_fetch_assoc($result)) {
             <tr>
                 <th>Grade</th>
                 <th>Name</th>
-                <th>Points</th>
                 <th>Card ID</th>
                 <th>User ID</th>
                 <th>Card Count</th>
@@ -93,11 +94,10 @@ while ($row = mysql_fetch_assoc($result)) {
                 <tr>
                     <td><?php echo $row['first'] . ' ' . $row['last'] ?></td>
                     <td><?php echo $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '') ?></td>
-                    <td><?php echo $row['user_point_id'] ?></td>
                     <td><?php echo $row['achievement_card_id'] ?></td>
                     <td><?php echo $row['user_id'] ?></td>
                     <td><?php echo $row['total'] ?></td>
-                    <td><?php echo (intval($row['card_points']) * intval($row['total'])) ?></td>
+                    <td><?php echo (intval($row['card_points']) * intval($row['total']) - 1) ?></td>
                 </tr>
             <?php } ?>
         </table>
