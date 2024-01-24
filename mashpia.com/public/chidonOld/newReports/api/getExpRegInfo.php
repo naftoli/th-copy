@@ -20,7 +20,6 @@ $sql = "
         tc.reward_type,
         tc.award_type,
         tc.trip, 
-        tc.khk_experience,
         u.user_id,
         u.user_serial,
         u.first,
@@ -118,7 +117,7 @@ function getRaised($row) {
 }
 
 function getTrip($row) {
-    if ($row['khk_experience']) return 'KHK Trip';
+    if ($row['khk']) return 'KHK Trip';
     else return ($row['trip'] ? $row['trip'] . ' Trip' : '');
 }
 
