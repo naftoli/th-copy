@@ -117,8 +117,7 @@ function getRaised($row) {
 }
 
 function getTrip($row) {
-    if ($row['khk']) return 'KHK Trip';
-    else return ($row['trip'] ? $row['trip'] . ' Trip' : '');
+    return $row['trip'] ? ($row['trip'] . ' Trip') : '';
 }
 
 function getExtraPurchases($row) {
