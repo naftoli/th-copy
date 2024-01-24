@@ -44,7 +44,7 @@ $stmt = $db->prepare($sql);
 $res = $stmt->execute([
     'year' => $year,
 ]);
-//$stmt->debugDumpParams();
+$stmt->debugDumpParams();
 $info = [];
 if ($res) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
