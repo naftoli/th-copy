@@ -19,6 +19,10 @@
     body {
       margin: 20px;
     }
+    td {
+      vertical-align: middle !important;
+      horiz-align: center !important;
+    }
   </style>
 </head>
 <body>
@@ -109,7 +113,7 @@
                 <td><b>{types[ row.highest_track ]}</b><br />{rewardDescs[types[ row.highest_track ]]}</td>
                 <td><b>{types[ row.reward ]}</b><br />{row.khk ? khkDescs[types[ row.reward ]] : rewardDescs[types[ row.reward ]]}</td>
                 <td>{row.khk ? 'Yes' : 'No'}</td>
-                <td>{row.fee >= 200 ? (row.khk ? '$200 Regional Trip $350 KHK Trip' : '$' + row.fee + ' Regional Trip') : row.fee}</td>
+                <td>{row.fee >= 200 ? (row.khk ? '$200 Regional Trip $350 KHK Trip' : '$' + row.fee + ' Regional Trip') : '$' + row.fee}</td>
                 <td><b>{types[ row.award ]}</b><br />{awardDescs[types[ row.award ]]} {row.khk ? '& KHK Plaque' : ''}</td>
                 <td>{row.raised}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
