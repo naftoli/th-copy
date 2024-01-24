@@ -73,7 +73,7 @@ echo json_encode([
     'success'   => $res,
     'info'      => $info,
     'error'     => $db->errorInfo()[2] ?? '',
-    'super'     => $admin_user['auth'] == 'super' ? 1 : 0,
+    'super'     => getAuth() == 'super' ? 1 : 0,
     'types'     => $types
 ]);
 
