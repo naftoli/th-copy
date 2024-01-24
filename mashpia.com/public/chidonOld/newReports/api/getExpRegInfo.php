@@ -67,6 +67,7 @@ if ($res) {
         $info[$row['school_id']][] = $row;
     }
 }
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
 echo json_encode([
     'success'   => $res,
