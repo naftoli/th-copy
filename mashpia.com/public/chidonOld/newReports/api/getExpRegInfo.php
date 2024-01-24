@@ -8,7 +8,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 checkAuth();
 $db = getDbHandle();
 $schools = getSchools();
-$schools = [2 => 'Lubavitcher Yeshiva'];
 $year = getChidonYear();
 $ct = new ChidonTests($year);
 $types = $ct->getTypes();
