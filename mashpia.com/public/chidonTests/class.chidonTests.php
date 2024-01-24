@@ -905,7 +905,7 @@ class KHK {
                         // make sure child is at least on the yediah track (not on 'yesod')
                         if ($highest_track != 'yesod') $details[$id][$yr] = true;
                     }
-                    if (in_array($id, [66871, 74076])) $details[$id][$yr] = true;
+                    if (in_array($id, [66871])) $details[$id][$yr] = true;
                 } else {
 //                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
 //                    $result = mysql_query($sql);
