@@ -88,7 +88,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 <th>Card ID</th>
                 <th>User ID</th>
                 <th>Card Count</th>
-                <th>Points</th>
+                <th>Extra Points</th>
             </tr>
             <?php foreach ($rows as $row) { ?>
                 <tr>
