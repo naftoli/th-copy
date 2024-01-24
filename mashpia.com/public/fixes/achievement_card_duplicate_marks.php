@@ -28,43 +28,47 @@ $sql = "SELECT
                 AND up.institution_id in (" . implode(',', array_keys($schools)) . ")
         GROUP BY achievement_card_id
         HAVING total > 1 
-        ORDER BY class_grade, class_sub, last, first";
+        ORDER BY u.school_id, class_grade, class_sub, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $rows[$row['school_id']][] = $row;
 }
 
-//$toDelete = [];
-//foreach ($rows as $row) {
-//    $sql = "SELECT
-//                user_point_id
-//            FROM
-//                pointsDB.user_points
-//            WHERE
-//                achievement_card_id = " . $row['achievement_card_id'] . "
-//                    AND user_id = " . $row['user_id'];
-//    $result = mysql_query($sql);
-//    $i = 0;
-//    while ($r = mysql_fetch_assoc($result)) {
-//        if (++$i > 1) {
-//            $toDelete[] = $r['user_point_id'];
-//        }
-//    }
-//}
-//
-//$qrys = [];
-//foreach ($toDelete as $user_point_id) {
-//    $qry = "delete from pointsDB.user_points where user_point_id = " . $user_point_id;
-//    $qrys[] = $qry;
-//}
-//
-//$deleted = 0;
-//foreach ($qrys as $qry) {
-//    echo $qry . "<br />";
-////    if (mysql_query($qry)) $deleted++;
-//}
-//
-//echo "Deleted: " . $deleted;
+if (isset($_POST['delete']) && $_POST['delete'] == 1) {
+    $toDelete = [];
+    foreach ($rows as $school_id => $more) {
+        foreach ($more as $row) {
+            $sql = "SELECT
+                        user_point_id
+                    FROM
+                        pointsDB.user_points
+                    WHERE
+                        achievement_card_id = " . $row['achievement_card_id'] . "
+                            AND user_id = " . $row['user_id'];
+            $result = mysql_query($sql);
+            $i = 0;
+            while ($r = mysql_fetch_assoc($result)) {
+                if (++$i > 1) {
+                    $toDelete[] = $r['user_point_id'];
+                }
+            }
+        }
+    }
+
+    $qrys = [];
+    foreach ($toDelete as $user_point_id) {
+        $qry = "delete from pointsDB.user_points where user_point_id = " . $user_point_id;
+        $qrys[] = $qry;
+    }
+
+    $deleted = 0;
+    foreach ($qrys as $qry) {
+        echo $qry . "<br>";
+        if (mysql_query($qry)) $deleted++;
+    }
+
+    echo "Deleted: " . $deleted;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -76,11 +80,22 @@ while ($row = mysql_fetch_assoc($result)) {
             }
             td, th {
                 border: 1px solid black;
-                padding: 5px;
+                padding: 10px;
+                font-family: "Arial", sans-serif;
+                font-size: 12px;
+            }
+            button {
+                padding: 10px;
             }
         </style>
     </head>
     <body>
+    <?php if (getAuth() != 'super') : ?>
+    <form method="post" action="" id="deleteForm">
+        <button id="delete">Delete All Extra Cards Scanned</button>
+        <input type="hidden" name="delete" value="1" />
+    </form>
+    <?php endif; ?>
     <?php foreach ($rows as $school_id => $more) { ?>
         <h2><?= $schools[$school_id] ?></h2>
         <table>
@@ -107,4 +122,16 @@ while ($row = mysql_fetch_assoc($result)) {
         </table>
     <?php } ?>
     </body>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+    <script>
+        $(function() {
+          $("#delete").on('click', function(e) {
+            e.preventDefault()
+            const conf = confirm('Are you sure you want to delete all extra cards scanned?\nThis action cannot be undone.')
+            if (conf) {
+              $("#deleteForm").submit()
+            }
+          })
+        })
+    </script>
 </html>

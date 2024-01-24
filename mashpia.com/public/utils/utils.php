@@ -10,6 +10,11 @@ function checkAuth() {
     }
 }
 
+function getAuth() {
+    global $admin_user;
+    return $admin_user['auth'];
+}
+
 function getDbHandle() {
     global $MASHPIA_DB;
     return $MASHPIA_DB;
