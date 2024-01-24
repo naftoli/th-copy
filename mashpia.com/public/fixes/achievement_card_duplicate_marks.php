@@ -102,7 +102,7 @@ while ($row = mysql_fetch_assoc($result)) {
                     <td><?php echo $row['user_id'] ?></td>
                     <td><?php echo $row['card_points'] ?></td>
                     <td><?php echo $row['total'] ?></td>
-                    <td><?php echo (intval($row['card_points']) * intval($row['total']) - 1) ?></td>
+                    <td><?php echo (intval($row['card_points']) * intval($row['total'] - 1)) ?></td>
                 </tr>
             <?php } ?>
         </table>
