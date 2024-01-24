@@ -54,7 +54,6 @@ if ($res) {
         $marks = $ct->getMarks();
         $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
         // setup row with needed info
-//        $row['marks'] = $marks;
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
         $row['reward'] = $row['reward_type'] == 'highest track passed' || empty($row['reward_type']) ? $highest_track : $row['reward_type'];
@@ -65,10 +64,8 @@ if ($res) {
         $row['trip'] = getTrip($row);
         $row['extra_purchases'] = getExtraPurchases($row);
         $info[$row['school_id']][] = $row;
-//        echo "<pre>"; print_r($row); echo "</pre>";
     }
 }
-//echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
 echo json_encode([
     'success'   => $res,
