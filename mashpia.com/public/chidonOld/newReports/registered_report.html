@@ -23,6 +23,9 @@
       vertical-align: middle !important;
       horiz-align: center !important;
     }
+    .smaller {
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
@@ -110,12 +113,12 @@
                 <td>{row.grade}</td>
                 <td>{row.user_serial}</td>
                 <td>{row.first + ' ' + row.last}</td>
-                <td><b>{types[row.highest_track]}</b><br/>{rewardDescs[types[row.highest_track]]}</td>
+                <td><b>{types[row.highest_track]}</b><br/><span className="smaller">{rewardDescs[types[row.highest_track]]}</span></td>
                 <td>
-                  <b>{types[row.reward]}</b><br/>{row.khk ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}
+                  <b>{types[row.reward]}</b><br/><span className="smaller">{row.khk ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
                 </td>
                 <td>{row.khk ? 'Yes' : 'No'}</td>
-                <td><b>{types[row.award]}</b><br/>{awardDescs[types[row.award]]} {row.khk ? '& KHK Plaque' : ''}</td>
+                <td><b>{types[row.award]}</b><br/><span className="smaller">{awardDescs[types[row.award]]} {row.khk ? '& KHK Plaque' : ''}</span></td>
                 <td>{row.raised}</td>
                 <td>{row.khk ? '$200 Regional Trip $350 KHK Trip' : ('$' + row.fee)}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
