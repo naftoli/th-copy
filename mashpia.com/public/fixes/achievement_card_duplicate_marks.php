@@ -7,6 +7,7 @@ $rows = [];
 $sql = "SELECT 
             first,
             last,
+            u.school_id,
             class_grade,
             class_sub,
             user_point_id,
@@ -31,7 +32,7 @@ $sql = "SELECT
         ORDER BY class_grade, class_sub, last, first";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $rows[] = $row;
+    $rows[$row['school_id']][] = $row;
 }
 
 //$toDelete = [];
@@ -81,6 +82,8 @@ while ($row = mysql_fetch_assoc($result)) {
         </style>
     </head>
     <body>
+    <?php foreach ($rows as $school_id => $more) { ?>
+        <h2><?= $schools[$school_id] ?></h2>
         <table>
             <tr>
                 <th>Grade</th>
@@ -90,7 +93,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 <th>Times Scanned</th>
                 <th>Extra Points</th>
             </tr>
-            <?php foreach ($rows as $row) { ?>
+            <?php foreach ($more as $row) { ?>
                 <tr>
                     <td><?php echo $row['first'] . ' ' . $row['last'] ?></td>
                     <td><?php echo $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '') ?></td>
@@ -101,5 +104,6 @@ while ($row = mysql_fetch_assoc($result)) {
                 </tr>
             <?php } ?>
         </table>
+    <?php } ?>
     </body>
 </html>
