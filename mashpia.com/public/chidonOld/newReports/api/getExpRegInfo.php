@@ -5,7 +5,6 @@ ini_set('error_reporting', E_ALL);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/utils/utils.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
-checkAuth();
 $db = getDbHandle();
 $schools = getSchools();
 $year = getChidonYear();
