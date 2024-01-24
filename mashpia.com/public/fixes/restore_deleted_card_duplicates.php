@@ -11,7 +11,7 @@ $columns = array_column($columns, 'Field');
 
 $sql = "
     SELECT 
-        *
+        up1.*
     FROM
         mashpia_backup2.user_points up1
             LEFT JOIN
