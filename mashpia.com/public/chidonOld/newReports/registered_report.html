@@ -52,7 +52,7 @@
           (result) => {
             if (result.super) setSuperAdmin(true)
             if (result.types) {
-              result.types[''] = 'None'
+              result.types[''] = ''
               setTypes(result.types)
             }
             if (result.schools) setSchools(result.schools)
@@ -124,7 +124,10 @@
                   <b>{types[row.reward]}</b><br/><span className="smaller">{row.khk ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
                 </td>
                 <td>{row.khk ? 'Yes' : 'No'}</td>
-                <td><b>{types[row.award]}</b><br/><span className="smaller">{awardDescs[types[row.award]] + (row.khk ? ' & KHK Plaque' : '')}</span></td>
+                <td>
+                  <b>{row.award ? types[row.award] : ''}</b><br/>
+                  <span className="smaller">{row.award ? awardDescs[types[row.award]] + (row.khk ? ' & KHK Plaque' : '') : ''}</span>
+                </td>
                 <td>{row.raised}</td>
                 <td>${row.khk ? khkFee : row.fee}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
