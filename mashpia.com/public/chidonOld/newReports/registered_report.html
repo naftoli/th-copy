@@ -35,6 +35,7 @@
     const [error, setError] = useState(null)
     const [superAdmin, setSuperAdmin] = useState(false)
     const [types, setTypes] = useState([])
+    const [schools, setSchools] = useState([])
 
     useEffect(() => {
       fetch('api/getExpRegInfo.php')
@@ -43,6 +44,7 @@
           (result) => {
             if (result.super) setSuperAdmin(true)
             if (result.types) setTypes(result.types)
+            if (result.schools) setSchools(result.schools)
             if (result.info) setData(result.info)
             else if (result.error) setError(result.error)
             setLoading(false)
@@ -84,7 +86,7 @@
       <div>
         {data && Object.keys(data).map((school, j) => (
         <div key={j}>
-          <h2>{school}</h2>
+          <h2>{schools[school]}</h2>
           <table className="table table-striped">
             <thead>
             <tr>
@@ -99,11 +101,11 @@
                 <td>{row.grade}</td>
                 <td>{row.user_serial}</td>
                 <td>{row.first + ' ' + row.last}</td>
-                <td><i>{types[ row.highest_track ]}</i> {rewardDescs[types[ row.highest_track ]]}</td>
-                <td><i>{types[ row.reward ]}</i> {rewardDescs[types[ row.reward ]]}</td>
+                <td><b>{types[ row.highest_track ]}</b> {rewardDescs[types[ row.highest_track ]]}</td>
+                <td><b>{types[ row.reward ]}</b> {rewardDescs[types[ row.reward ]]}</td>
                 <td>{row.khk ? 'Yes' : 'No'}</td>
-                <td>{row.fee}</td>
-                <td><i>{types[ row.award ]}</i> {awardDescs[types[ row.award ]]}</td>
+                <td>{row.fee} {row.fee >= 200 ? 'Regional Trip' : ''}</td>
+                <td><b>{types[ row.award ]}</b> {awardDescs[types[ row.award ]]}</td>
                 <td>{row.raised}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>

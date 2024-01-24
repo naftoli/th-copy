@@ -75,7 +75,8 @@ echo json_encode([
     'info'      => $info,
     'error'     => $db->errorInfo()[2] ?? '',
     'super'     => getAuth() == 'super' ? 1 : 0,
-    'types'     => $types
+    'types'     => $types,
+    'schools'   => $schools
 ]);
 
 function getKHK($row) {
