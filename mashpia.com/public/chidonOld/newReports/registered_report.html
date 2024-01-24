@@ -51,7 +51,10 @@
         .then(
           (result) => {
             if (result.super) setSuperAdmin(true)
-            if (result.types) setTypes(result.types)
+            if (result.types) {
+              result.types[''] = 'None'
+              setTypes(result.types)
+            }
             if (result.schools) setSchools(result.schools)
             if (result.info) setData(result.info)
             else if (result.error) setError(result.error)

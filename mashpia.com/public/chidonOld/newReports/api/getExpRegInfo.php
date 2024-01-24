@@ -56,7 +56,7 @@ if ($res) {
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
         $row['reward'] = $row['reward_type'] == 'highest track passed' || empty($row['reward_type']) ? $highest_track : $row['reward_type'];
-        $row['award'] = $row['award_type'] == 'highest track passed' || empty($row['award_type']) ? $highest_track : $row['award_type'];
+        $row['award'] = $row['award_type'] == 'highest track passed' || empty($row['award_type']) ? $row['reward'] : $row['award_type'];
         $row['khk'] = getKHK($row);
         $row['fee'] = getFee($row);
         $row['raised'] = getRaised($row);
