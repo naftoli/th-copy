@@ -68,8 +68,8 @@
       return <div>Error: {error.message}</div>
     }
 
-    const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'KHK Trip Eligible', 'Minimum Fee',
-      'Award', 'Raised on Drive', 'Registered', 'Trip Registered', 'Extra Purchases']
+    const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'KHK Trip Eligible', 'Award',
+      'Raised on Drive', 'Minimum Fee', 'Registered', 'Trip Registered', 'Extra Purchases']
     if (superAdmin) headers.push('Registration Paid')
 
     const rewardDescs = {
@@ -110,12 +110,14 @@
                 <td>{row.grade}</td>
                 <td>{row.user_serial}</td>
                 <td>{row.first + ' ' + row.last}</td>
-                <td><b>{types[ row.highest_track ]}</b><br />{rewardDescs[types[ row.highest_track ]]}</td>
-                <td><b>{types[ row.reward ]}</b><br />{row.khk ? khkDescs[types[ row.reward ]] : rewardDescs[types[ row.reward ]]}</td>
+                <td><b>{types[row.highest_track]}</b><br/>{rewardDescs[types[row.highest_track]]}</td>
+                <td>
+                  <b>{types[row.reward]}</b><br/>{row.khk ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}
+                </td>
                 <td>{row.khk ? 'Yes' : 'No'}</td>
-                <td>{row.khk ? '$200 Regional Trip $350 KHK Trip' : ('$' + row.fee)}</td>
-                <td><b>{types[ row.award ]}</b><br />{awardDescs[types[ row.award ]]} {row.khk ? '& KHK Plaque' : ''}</td>
+                <td><b>{types[row.award]}</b><br/>{awardDescs[types[row.award]]} {row.khk ? '& KHK Plaque' : ''}</td>
                 <td>{row.raised}</td>
+                <td>{row.khk ? '$200 Regional Trip $350 KHK Trip' : ('$' + row.fee)}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>
                 <td>{row.extra_purchases}</td>
@@ -125,7 +127,7 @@
             </tbody>
           </table>
         </div>
-      ))}
+        ))}
       </div>
     )
   }
