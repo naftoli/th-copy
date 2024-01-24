@@ -84,19 +84,18 @@ function getKHK($row) {
 
 function getFee($row) {
     $fees = [
-        'maven' => 36,
-        'pro'   => 100,
-        'expert' => 200,
-        'genius' => 200,
-        'khk'    => 350
+        'maven'     => 36,
+        'pro'       => 100,
+        'expert'    => 200,
+        'genius'    => 200,
+        'khk'       => 350
     ];
     if ($row['khk']) return $fees['khk'];
     else return $fees[$row['reward']];
 }
 
 function getRaised($row) {
-    global $year;
-    $db = getDbHandle();
+    global $db, $year;
     $sql = "
         SELECT 
             IFNULL( SUM(subsidy_amount), 0 ) AS total 
@@ -121,7 +120,7 @@ function getRaised($row) {
 
 function getTrip($row) {
     if ($row['khk_experience']) return 'KHK Trip';
-    else return $row['trip'] ? $row['trip'] . ' Trip' : '';
+    else return ($row['trip'] ? $row['trip'] . ' Trip' : '');
 }
 
 function getExtraPurchases($row) {
