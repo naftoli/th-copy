@@ -90,6 +90,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 <th>Name</th>
                 <th>Card ID</th>
                 <th>User ID</th>
+                <th>Card Points</th>
                 <th>Times Scanned</th>
                 <th>Extra Points</th>
             </tr>
@@ -99,6 +100,7 @@ while ($row = mysql_fetch_assoc($result)) {
                     <td><?php echo $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '') ?></td>
                     <td><?php echo $row['achievement_card_id'] ?></td>
                     <td><?php echo $row['user_id'] ?></td>
+                    <td><?php echo $row['card_points'] ?></td>
                     <td><?php echo $row['total'] ?></td>
                     <td><?php echo (intval($row['card_points']) * intval($row['total']) - 1) ?></td>
                 </tr>
