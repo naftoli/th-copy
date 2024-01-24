@@ -58,7 +58,6 @@ if ($res) {
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
         $row['reward'] = $row['reward_type'] == 'highest track passed' || empty($row['reward_type']) ? $highest_track : $row['reward_type'];
         $row['award'] = $row['award_type'] == 'highest track passed' || empty($row['award_type']) ? $row['reward'] : $row['award_type'];
-        $row['khk_tests'] = $row['khk_reg'] ? 1 : 0;
         $row['khk_eligible'] = getKhkEligibility($row);
         $row['fee'] = getFee($row);
         $row['raised'] = getRaised($row);
