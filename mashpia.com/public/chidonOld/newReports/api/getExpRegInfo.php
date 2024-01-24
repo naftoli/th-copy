@@ -78,7 +78,7 @@ echo json_encode([
 
 function getKhkEligibility($row) {
     global $year;
-    return KHK::getKHKEligibility([$row['user_id']], ($year - 1))[0][$row['user_id']];
+    return KHK::getKHKEligibility([$row['user_id']], ($year - 1))[0][$row['user_id']] ? 1 : 0;
 }
 
 function getFee($row) {
