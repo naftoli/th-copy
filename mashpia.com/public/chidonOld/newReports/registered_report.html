@@ -120,7 +120,7 @@
                 <td>{row.khk ? 'Yes' : 'No'}</td>
                 <td><b>{types[row.award]}</b><br/><span className="smaller">{awardDescs[types[row.award]]} {row.khk ? '& KHK Plaque' : ''}</span></td>
                 <td>{row.raised}</td>
-                <td>{row.khk ? '$200 Regional Trip $350 KHK Trip' : ('$' + row.fee)}</td>
+                <td>{row.khk ? '$200 Regional Trip<br />$350 KHK Trip' : ('$' + row.fee)}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>
                 <td>{row.extra_purchases}</td>
