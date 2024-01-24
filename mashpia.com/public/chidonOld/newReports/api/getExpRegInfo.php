@@ -54,20 +54,21 @@ if ($res) {
         $marks = $ct->getMarks();
         $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
         // setup row with needed info
-        $row['marks'] = $marks;
+//        $row['marks'] = $marks;
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-        $row['reward'] = in_array($row['reward_type'], ['highest track passed', '']) ? $highest_track : $row['reward_type'];
-        $row['award'] = in_array($row['award_type'], ['highest track passed', '']) ? $highest_track : $row['award_type'];
+        $row['reward'] = $row['reward_type'] == 'highest track passed' || empty($row['reward_type']) ? $highest_track : $row['reward_type'];
+        $row['award'] = $row['award_type'] == 'highest track passed' || empty($row['award_type']) ? $highest_track : $row['award_type'];
         $row['khk'] = getKHK($row);
         $row['fee'] = getFee($row);
         $row['raised'] = getRaised($row);
         $row['trip'] = getTrip($row);
         $row['extra_purchases'] = getExtraPurchases($row);
         $info[$row['school_id']][] = $row;
+//        echo "<pre>"; print_r($row); echo "</pre>";
     }
 }
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
+//echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
 echo json_encode([
     'success'   => $res,

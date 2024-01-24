@@ -66,6 +66,20 @@
       'Award', 'Raised on Drive', 'Registered', 'Trip Registered', 'Extra Purchases']
     if (superAdmin) headers.push('Registration Paid')
 
+    const rewardDescs = {
+      'Yesod': 'Sweater, Gift & Yesod Final',
+      'Yediah': 'Sweater, Gift, & Yediah Final',
+      'Havonah': 'Sweater, Gift, Prizes, Trip & Havonah Final',
+      'Iyun': 'Sweater, Gift, Prizes, Trip & Iyun Final',
+    }
+
+    const awardDescs = {
+      'Yesod': 'Certificate',
+      'Yediah': 'Plaque',
+      'Havonah': 'Plaque & Medal',
+      'Iyun': 'Plaque, Medal & Mini Trophy',
+    }
+
     return (
       <div>
         {data && Object.keys(data).map((school, j) => (
@@ -85,11 +99,11 @@
                 <td>{row.grade}</td>
                 <td>{row.user_serial}</td>
                 <td>{row.first + ' ' + row.last}</td>
-                <td>{types[ row.highest_track ]}</td>
-                <td>{types[ row.reward ]}</td>
+                <td><i>{types[ row.highest_track ]}</i> {rewardDescs[types[ row.highest_track ]]}</td>
+                <td><i>{types[ row.reward ]}</i> {rewardDescs[types[ row.reward ]]}</td>
                 <td>{row.khk ? 'Yes' : 'No'}</td>
                 <td>{row.fee}</td>
-                <td>{types[ row.award ]}</td>
+                <td><i>{types[ row.award ]}</i> {awardDescs[types[ row.award ]]}</td>
                 <td>{row.raised}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>
