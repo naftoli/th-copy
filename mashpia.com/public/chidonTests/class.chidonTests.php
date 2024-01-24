@@ -895,6 +895,7 @@ class KHK {
         foreach ($ids as $id) {
             $details[$id] = [];
             foreach ($years as $yr) {
+                $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
                     // check highest track passed
                     $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
@@ -902,10 +903,8 @@ class KHK {
                     if (mysql_num_rows($result) > 0) {
                         $highest_track = mysql_fetch_assoc($result)['highest_track'];
                         // make sure child is at least on the yediah track (not on 'yesod')
-                        if ($highest_track == 'yesod') $details[$id][$yr] = false;
-                        else $details[$id][$yr] = true;
+                        if ($highest_track != 'yesod') $details[$id][$yr] = true;
                     }
-                    else $details[$id][$yr] = false;
                     if (in_array($id, [66871, 74076])) $details[$id][$yr] = true;
                 } else {
 //                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
