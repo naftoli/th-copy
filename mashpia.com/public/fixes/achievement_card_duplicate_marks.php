@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/utils/utils.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/utils/header.php';
 $schools = getSchools();
 
 $rows = [];
