@@ -129,7 +129,7 @@
                   <span className="smaller">{row.award ? awardDescs[types[row.award]] + (parseInt(row.khk_reg) ? ' & KHK Plaque' : '') : ''}</span>
                 </td>
                 <td>{row.raised}</td>
-                <td>${row.fee == 350 ? khkFee : row.fee}</td>
+                <td>${row.khk_eligible ? khkFee : row.fee}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>
                 <td>{row.extra_purchases}</td>

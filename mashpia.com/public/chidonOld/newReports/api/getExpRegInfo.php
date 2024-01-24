@@ -86,11 +86,9 @@ function getFee($row) {
         'maven'     => 36,
         'pro'       => 100,
         'expert'    => 200,
-        'genius'    => 200,
-        'khk'       => 350
+        'genius'    => 200
     ];
-    if ($row['khk_eligible']) return $fees['khk'];
-    else return $fees[$row['reward']];
+    return $fees[$row['reward']];
 }
 
 function getRaised($row) {
