@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8"/>
+  <title>Chidon Experience Registration Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous"/>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+<h1>Chidon Experience Registration Report</h1>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const { useState, useEffect } = React
+  const { createRoot } = ReactDOM
+
+  const Report = () => {
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const [superAdmin, setSuperAdmin] = useState(false)
+    const [types, setTypes] = useState([])
+
+    useEffect(() => {
+      fetch('api/getExpRegInfo.php')
+        .then(res => res.json())
+        .then(
+          (result) => {
+            if (result.super) setSuperAdmin(true)
+            if (result.types) setTypes(result.types)
+            if (result.info) setData(result.info)
+            else if (result.error) setError(result.error)
+            setLoading(false)
+          },
+          (error) => {
+            setError(error)
+            setLoading(false)
+          }
+        )
+    }, [])
+
+    if (loading) {
+      return <div>Loading...</div>
+    }
+
+    if (error) {
+      return <div>Error: {error.message}</div>
+    }
+
+    const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'KHK Trip Eligible', 'Minimum Fee',
+      'Award', 'Raised on Drive', 'Registered', 'Trip Registered', 'Extra Purchases']
+    if (superAdmin) headers.push('Registration Paid')
+
+    return (
+      <div>
+        {data && Object.keys(data).map((school, j) => (
+        <div key={j}>
+          <h2>{school}</h2>
+          <table className="table table-striped">
+            <thead>
+            <tr>
+              {headers.map((header, i) => (
+                <th key={i}>{header}</th>
+              ))}
+            </tr>
+            </thead>
+            <tbody>
+            {data[school].map((row, i) => (
+              <tr key={i}>
+                <td>{row.grade}</td>
+                <td>{row.user_serial}</td>
+                <td>{row.first + ' ' + row.last}</td>
+                <td>{types[ row.highest_track ]}</td>
+                <td>{types[ row.reward ]}</td>
+                <td>{row.khk ? 'Yes' : 'No'}</td>
+                <td>{row.fee}</td>
+                <td>{types[ row.award ]}</td>
+                <td>{row.raised}</td>
+                <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
+                <td>{row.trip}</td>
+                <td>{row.extra_purchases}</td>
+                {superAdmin && <td>{row.paid}</td>}
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<Report/>)
+</script>
+</html>
