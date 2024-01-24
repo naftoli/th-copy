@@ -10,7 +10,7 @@ $sql = "SELECT
         FROM
             pointsDB.user_points
         WHERE
-            created > '2021-06-01'
+            created > '2023-06-01'
                 AND achievement_card_id > 0
         GROUP BY achievement_card_id
         HAVING total > 1";
@@ -45,7 +45,8 @@ foreach ($toDelete as $user_point_id) {
 
 $deleted = 0;
 foreach ($qrys as $qry) {
-    if (mysql_query($qry)) $deleted++;
+    echo $qry . "<br />";
+//    if (mysql_query($qry)) $deleted++;
 }
 
 echo "Deleted: " . $deleted;
