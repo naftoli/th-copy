@@ -50,6 +50,7 @@
         .then(res => res.json())
         .then(
           (result) => {
+            console.log(result.info)
             if (result.super) setSuperAdmin(true)
             if (result.types) {
               result.types[''] = ''
@@ -123,13 +124,13 @@
                 <td>
                   <b>{types[row.reward]}</b><br/><span className="smaller">{parseInt(row.khk_reg) ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
                 </td>
-                <td>{row.khk_eligibile ? 'Yes' : 'No'}</td>
+                <td>{parseInt(row.khk_eligible) ? 'Yes' : 'No'}</td>
                 <td>
                   <b>{row.award ? types[row.award] : ''}</b><br/>
                   <span className="smaller">{row.award ? awardDescs[types[row.award]] + (parseInt(row.khk_reg) ? ' & KHK Plaque' : '') : ''}</span>
                 </td>
                 <td>{row.raised}</td>
-                <td>{row.khk_eligible ? khkFee : ('$' + row.fee)}</td>
+                <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
                 <td>{row.date_paid > 0 ? row.date_paid : ''}</td>
                 <td>{row.trip}</td>
                 <td>{row.extra_purchases}</td>
