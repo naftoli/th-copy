@@ -58,9 +58,9 @@ if ($res) {
         // setup row with needed info
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-        $row['reward'] = $row['reward_type'] == 'highest track passed' || empty($row['reward_type']) ? $highest_track : $row['reward_type'];
-        $row['award'] = getAward($row);
         $row['khk_eligible'] = $khk_eligibility[$row['user_id']] ? 1 : 0;
+        $row['reward'] = getReward($row);
+        $row['award'] = getAward($row);
         $row['fee'] = getFee($row);
         $row['raised'] = getRaised($row);
         $row['trip'] = getTrip($row);
@@ -77,6 +77,13 @@ echo json_encode([
     'types'     => $types,
     'schools'   => $schools
 ]);
+
+function getReward($row) {
+    $reward = trim($row['reward_type']);
+    if (empty($reward) || $reward == 'highest track passed') return $row['highest_track'];
+    else if ($reward == 'no reward') return '';
+    else return $reward;
+}
 
 function getAward($row) {
     $award = trim($row['award_type']);
