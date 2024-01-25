@@ -122,12 +122,12 @@
                 <td>{row.first + ' ' + row.last}</td>
                 <td><b>{types[row.highest_track]}</b><br/><span className="smaller">{rewardDescs[types[row.highest_track]]}</span></td>
                 <td>
-                  <b>{types[row.reward]}</b><br/><span className="smaller">{parseInt(row.khk_reg) ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
+                  <b>{types[row.reward]}</b><br/><span className="smaller">{parseInt(row.khk_passed_tests) ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
                 </td>
                 <td>{parseInt(row.khk_eligible) ? 'Yes' : 'No'}</td>
                 <td>
                   <b>{types[row.award]}</b><br/>
-                  <span className="smaller">{row.award ? awardDescs[types[row.award]] + (parseInt(row.khk_reg) ? ' & KHK Plaque' : '') : ''}</span>
+                  <span className="smaller">{row.award ? awardDescs[types[row.award]] + (parseInt(row.khk_passed_tests) ? ' & KHK Plaque' : '') : ''}</span>
                 </td>
                 <td>{row.raised}</td>
                 <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
