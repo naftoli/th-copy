@@ -97,7 +97,8 @@ function getFee($row) {
         'maven'     => 36,
         'pro'       => 100,
         'expert'    => 200,
-        'genius'    => 200
+        'genius'    => 200,
+        ''          => 0
     ];
     return $fees[$row['reward']];
 }
