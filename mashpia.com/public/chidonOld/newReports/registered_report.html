@@ -50,7 +50,7 @@
         .then(res => res.json())
         .then(
           (result) => {
-            console.log(result.info)
+            // console.log(result.info)
             if (result.super) setSuperAdmin(true)
             if (result.types) {
               result.types[''] = 'None'
