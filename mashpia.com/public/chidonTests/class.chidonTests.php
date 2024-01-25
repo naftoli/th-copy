@@ -959,6 +959,7 @@ class KHK {
         }
 
         $passed = [];
+        $ct = new ChidonTests($year);
         foreach ($ids as $id) {
             $highest_track = $ct->getHighestTrack($marks[$info[$id]['th_chidon_id']], $id);
             // if highest track is expert or genius, child is eligible
