@@ -59,7 +59,7 @@ if ($res) {
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
         $row['khk_eligible'] = $khk_eligibility[$row['user_id']] ? 1 : 0;
-        $row['khk_passed_tests'] = getKhkTests($row);
+        $row['khk_passed_tests'] = getKhkPassed($row);
         $row['reward'] = getReward($row);
         $row['award'] = getAward($row);
         $row['fee'] = getFee($row);
@@ -79,7 +79,7 @@ echo json_encode([
     'schools'   => $schools
 ]);
 
-function getKhkTestsPassed($row) {
+function getKhkPassed($row) {
     if (! $row['khk_reg']) return false;
     else {
         global $db;
