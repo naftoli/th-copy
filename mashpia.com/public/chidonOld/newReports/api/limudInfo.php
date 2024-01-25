@@ -54,7 +54,7 @@ foreach ($students as $student) {
     // only 8th graders are eligible for KHK
     if (intval($student['class_grade']) == 8) $ids[] = $student['user_id'];
 }
-if ($ids) $khk = KHK::getKHKEligibility($ids)[0];
+if ($ids) $khk = KHK::getKHKEligibility($ids, 0, 4, $marks)[0];
 
 $info = [];
 foreach ($students as $student) {
@@ -100,7 +100,7 @@ foreach ($students as $student) {
         'time_learned'  => $learned,
         'dropped_out'   => intval($student['dropped_out']),
         'reason'        => $student['reason'] ?? '',
-        'khk_eligible'  => $khk[$student['user_id']] ?? false,
+        'khk_eligible'  => isset($khk[$student['user_id']]) && $khk[$student['user_id']] ? true : false,
         'khk_experience'    => $student['khk_experience'] ?? '',
     ];
 }

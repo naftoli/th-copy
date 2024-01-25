@@ -62,8 +62,8 @@ if ($res) {
         $row['khk_passed_tests'] = getKhkPassed($row);
         $row['reward'] = getReward($row);
         $row['award'] = getAward($row);
-        $row['fee'] = getFee($row);
         $row['raised'] = getRaised($row);
+        $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
         $row['extra_purchases'] = getExtraPurchases($row);
         $info[$row['school_id']][] = $row;
@@ -117,17 +117,6 @@ function getAward($row) {
     else return $award;
 }
 
-function getFee($row) {
-    $fees = [
-        'maven'     => 36,
-        'pro'       => 100,
-        'expert'    => 200,
-        'genius'    => 200,
-        ''          => 0
-    ];
-    return $fees[$row['reward']];
-}
-
 function getRaised($row) {
     global $db, $year;
     $sql = "
@@ -150,6 +139,20 @@ function getRaised($row) {
     } else {
         return 0;
     }
+}
+
+function getFee($row) {
+    $fees = [
+        'maven'     => 36,
+        'pro'       => 100,
+        'expert'    => 200,
+        'genius'    => 200,
+        ''          => 0
+    ];
+    if ($row['raised'] > 0) $fee = $fees[$row['reward']] - $row['raised'];
+    else $fee = $fees[$row['reward']];
+    if ($fee < 0) $fee = 0;
+    return $fee;
 }
 
 function getTrip($row) {
