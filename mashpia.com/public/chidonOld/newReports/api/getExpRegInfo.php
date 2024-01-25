@@ -90,7 +90,7 @@ function getKhkPassed($row) {
         foreach ($rows as $row) {
             $marks[$row['test_number']] = $row['mark'];
         }
-        $avg = 0;
+
         $total = 0;
         $num_tests = 0;
         $passing_mark = 70;
