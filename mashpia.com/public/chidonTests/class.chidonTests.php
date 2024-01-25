@@ -938,7 +938,7 @@ class KHK {
     private static function getCurrentYrPassing(string $year, array $ids, array $marks) {
         $info = [];
         // get the school_id, class_id and th_chidon_id for all children
-        $sql = "select u.school_id, class_id, th_chidon_id 
+        $sql = "select u.user_id, u.school_id, class_id, th_chidon_id 
                 from users u 
                 join th_chidon tc using (user_id) 
                 where u.user_id IN (" . implode(',', $ids) . ") and tc.year = " . $year;
