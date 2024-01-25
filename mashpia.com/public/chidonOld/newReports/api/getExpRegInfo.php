@@ -98,7 +98,7 @@ function getKhkPassed($row) {
             $total += $mark;
             $num_tests++;
         }
-        $avg = $total / $num_tests;
+        $avg = intval($total / $num_tests);
         return $avg >= $passing_mark;
     }
 }

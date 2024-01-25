@@ -881,9 +881,6 @@ class KHK {
      * the other is the details of which yr the child was or wasn't eligible
      */
     public static function getKHKEligibility( array $ids, $year = 0, $numYrs = 4 ) {
-        // for current yr, check if passed
-        $passed = KHK::getCurrentYrPassing($year, $ids);
-
         // yr that we don't check registration but rather check highest track passed
         $rollover = 5782;
 
@@ -894,6 +891,9 @@ class KHK {
         for (; $numYrs >= 0; $numYrs--) { // includes the year that is passed in or current yr
             $years[] = $yr++;
         }
+
+        // for current yr, check if passed
+        $passed = KHK::getCurrentYrPassing($curYr, $ids);
 
         foreach ($ids as $id) {
             $details[$id] = [];
@@ -920,6 +920,7 @@ class KHK {
                 else $details[$id][$yr] = true;
             }
         }
+        echo "<pre>"; print_r($details); echo "</pre>";
 
         // for each child find out if final result is eligible or not
         foreach ($details as $id => $yrs) {
@@ -955,6 +956,7 @@ class KHK {
             $ct->calculateMarks();
             $marks = $ct->getMarks();
             $highest_track = $ct->getHighestTrack($marks[$th_chidon_id], $id);
+            echo "User ID: " . $id . " Highest Track: " . $highest_track . "<br>";
             // if highest track is expert or genius, child is eligible
             switch ($highest_track) {
                 case 'expert':
