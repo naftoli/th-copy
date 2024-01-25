@@ -920,7 +920,6 @@ class KHK {
                 else $details[$id][$yr] = true;
             }
         }
-        echo "<pre>"; print_r($details); echo "</pre>";
 
         // for each child find out if final result is eligible or not
         foreach ($details as $id => $yrs) {
@@ -956,7 +955,6 @@ class KHK {
             $ct->calculateMarks();
             $marks = $ct->getMarks();
             $highest_track = $ct->getHighestTrack($marks[$th_chidon_id], $id);
-            echo "User ID: " . $id . " Highest Track: " . $highest_track . "<br>";
             // if highest track is expert or genius, child is eligible
             switch ($highest_track) {
                 case 'expert':
