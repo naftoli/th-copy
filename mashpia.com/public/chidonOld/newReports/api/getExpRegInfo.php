@@ -57,7 +57,7 @@ if ($res) {
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
         $row['reward'] = $row['reward_type'] == 'highest track passed' || empty($row['reward_type']) ? $highest_track : $row['reward_type'];
-        $row['award'] = $row['award_type'] == 'highest track passed' || empty($row['award_type']) ? $row['reward'] : $row['award_type'];
+        $row['award'] = $row['award_type'] == 'highest final passed' || empty($row['award_type']) ? $row['reward'] : $row['award_type'] == 'no award' ? '' : $row['award_type'];
         $row['khk_eligible'] = getKhkEligibility($row);
         $row['fee'] = getFee($row);
         $row['raised'] = getRaised($row);
@@ -78,7 +78,7 @@ echo json_encode([
 
 function getKhkEligibility($row) {
     global $year;
-    return KHK::getKHKEligibility([$row['user_id']], ($year - 1))[0][$row['user_id']] ? 1 : 0;
+    return KHK::getKHKEligibility([$row['user_id']])[0][$row['user_id']] ? 1 : 0;
 }
 
 function getFee($row) {

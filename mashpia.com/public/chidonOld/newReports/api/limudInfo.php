@@ -54,7 +54,7 @@ foreach ($students as $student) {
     // only 8th graders are eligible for KHK
     if (intval($student['class_grade']) == 8) $ids[] = $student['user_id'];
 }
-if ($ids) $khk = KHK::getKHKEligibility($ids, ($year - 1), 3)[0];
+if ($ids) $khk = KHK::getKHKEligibility($ids)[0];
 
 $info = [];
 foreach ($students as $student) {

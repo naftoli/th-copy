@@ -897,15 +897,19 @@ class KHK {
             foreach ($years as $yr) {
                 $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
-                    // check highest track passed
-                    $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
-                    $result = mysql_query($sql);
-                    if (mysql_num_rows($result) > 0) {
-                        $highest_track = mysql_fetch_assoc($result)['highest_track'];
-                        // make sure child is at least on the yediah track (not on 'yesod')
-                        if ($highest_track != 'yesod') $details[$id][$yr] = true;
+                    // for current yr, check highest track passed
+                    if ($yr == $curYr) $details[$id][$yr] = KHK::getHighestTrackPassed($yr, $id);
+                    else {
+                        // check highest track passed
+                        $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
+                        $result = mysql_query($sql);
+                        if (mysql_num_rows($result) > 0) {
+                            $highest_track = mysql_fetch_assoc($result)['highest_track'];
+                            // make sure child is at least on the yediah track (not on 'yesod')
+                            if ($highest_track != 'yesod') $details[$id][$yr] = true;
+                        }
+                        if (in_array($id, [66871])) $details[$id][$yr] = true;
                     }
-                    if (in_array($id, [66871])) $details[$id][$yr] = true;
                 } else {
 //                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
 //                    $result = mysql_query($sql);
@@ -938,5 +942,19 @@ class KHK {
         }
 
         return [$khk, $details];
+    }
+
+    private static function getHighestTrackPassed($year, $user_id) {
+        $ct = new ChidonTests($year);
+        $ct->setScores();
+        $ct->calculateMarks();
+        $marks = $ct->getMarks();
+        // get th_chidon_id for child
+        $sql = "select th_chidon_id from th_chidon where user_id = " . $user_id . " and year = " . $year;
+        $result = mysql_query($sql);
+        $th_chidon_id = mysql_fetch_assoc($result)['th_chidon_id'];
+        $highest_track = $ct->getHighestTrack($marks[$th_chidon_id], $user_id);
+        if ($highest_track == 'expert' || $highest_track == 'genius') return true;
+        else return false;
     }
 }
