@@ -881,6 +881,9 @@ class KHK {
      * the other is the details of which yr the child was or wasn't eligible
      */
     public static function getKHKEligibility( array $ids, $year = 0, $numYrs = 4 ) {
+        // for current yr, check if passed
+        $passed = KHK::getCurrentYrPassing($year, $ids);
+
         // yr that we don't check registration but rather check highest track passed
         $rollover = 5782;
 
@@ -897,8 +900,12 @@ class KHK {
             foreach ($years as $yr) {
                 $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
-                    // for current yr, check highest track passed
-                    if ($yr == $curYr) $details[$id][$yr] = KHK::getHighestTrackPassed($yr, $id);
+                    if (in_array($id, [66871])) { // exceptions
+                        $details[$id][$yr] = true;
+                        continue;
+                    }
+                    // for current yr, check if passed
+                    if ($yr == $curYr) $details[$id][$yr] = $passed[$id];
                     else {
                         // check highest track passed
                         $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
@@ -908,31 +915,15 @@ class KHK {
                             // make sure child is at least on the yediah track (not on 'yesod')
                             if ($highest_track != 'yesod') $details[$id][$yr] = true;
                         }
-                        if (in_array($id, [66871])) $details[$id][$yr] = true;
                     }
-                } else {
-//                    $sql = "select * from th_chidon where date_paid > 0 and user_id = " . $id . " and year = " . $yr;
-//                    $result = mysql_query($sql);
-//                    if (mysql_num_rows($result) == 0) $details[$id][$yr] = false;
-//                    else $details[$id][$yr] = true;
-                    $details[$id][$yr] = true;
                 }
+                else $details[$id][$yr] = true;
             }
         }
 
         // for each child find out if final result is eligible or not
         foreach ($details as $id => $yrs) {
             $khk[$id] = true;
-
-            // check if bc indicated that child is eligible
-//            $sql = "select khk_eligible from users where user_id = " . $id;
-//            $result = mysql_query($sql);
-//            $row = mysql_fetch_assoc($result);
-//            if ($row['khk_eligible'] == 1) {
-//                // no need to check all years
-//                continue;
-//            }
-
             foreach ($yrs as $eligible) {
                 if (! $eligible) {
                     $khk[$id] = false;
@@ -944,17 +935,37 @@ class KHK {
         return [$khk, $details];
     }
 
-    private static function getHighestTrackPassed($year, $user_id) {
-        $ct = new ChidonTests($year);
-        $ct->setScores();
-        $ct->calculateMarks();
-        $marks = $ct->getMarks();
-        // get th_chidon_id for child
-        $sql = "select th_chidon_id from th_chidon where user_id = " . $user_id . " and year = " . $year;
-        $result = mysql_query($sql);
-        $th_chidon_id = mysql_fetch_assoc($result)['th_chidon_id'];
-        $highest_track = $ct->getHighestTrack($marks[$th_chidon_id], $user_id);
-        if ($highest_track == 'expert' || $highest_track == 'genius') return true;
-        else return false;
+    private static function getCurrentYrPassing(string $year, array $ids) {
+        $highest_tracks = [];
+        foreach ($ids as $id) {
+            // get the school_id, class_id and th_chidon_id for child
+            $sql = "select u.school_id, class_id, th_chidon_id 
+                    from users u 
+                    join th_chidon tc using (user_id) 
+                    where u.user_id = " . $id . " and tc.year = " . $year;
+            $result = mysql_query($sql);
+            $row = mysql_fetch_assoc($result);
+            $school_id = $row['school_id'];
+            $class_id = $row['class_id'];
+            $th_chidon_id = $row['th_chidon_id'];
+            // get marks
+            $ct = new ChidonTests($year);
+            $ct->setStudents($school_id, $class_id, $id);
+            $ct->setScores();
+            $ct->calculateMarks();
+            $marks = $ct->getMarks();
+            $highest_track = $ct->getHighestTrack($marks[$th_chidon_id], $id);
+            // if highest track is expert or genius, child is eligible
+            switch ($highest_track) {
+                case 'expert':
+                case 'genius':
+                    $highest_tracks[$id] = true;
+                    break;
+                default:
+                    $highest_tracks[$id] = false;
+                    break;
+            }
+        }
+        return $highest_tracks;
     }
 }

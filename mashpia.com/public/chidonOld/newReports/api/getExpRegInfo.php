@@ -47,6 +47,8 @@ $res = $stmt->execute([
 $info = [];
 if ($res) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $ids = array_map(function($row) { return $row['user_id']; }, $rows);
+    $khk_eligibility = KHK::getKHKEligibility($ids)[0];
     foreach ($rows as $row) {
         $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
         $ct->setScores();
@@ -57,8 +59,8 @@ if ($res) {
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
         $row['reward'] = $row['reward_type'] == 'highest track passed' || empty($row['reward_type']) ? $highest_track : $row['reward_type'];
-        $row['award'] = $row['award_type'] == 'highest final passed' || empty($row['award_type']) ? $row['reward'] : $row['award_type'] == 'no award' ? '' : $row['award_type'];
-        $row['khk_eligible'] = getKhkEligibility($row);
+        $row['award'] = getAward($row);
+        $row['khk_eligible'] = $khk_eligibility[$row['user_id']] ? 1 : 0;
         $row['fee'] = getFee($row);
         $row['raised'] = getRaised($row);
         $row['trip'] = getTrip($row);
@@ -76,9 +78,11 @@ echo json_encode([
     'schools'   => $schools
 ]);
 
-function getKhkEligibility($row) {
-    global $year;
-    return KHK::getKHKEligibility([$row['user_id']])[0][$row['user_id']] ? 1 : 0;
+function getAward($row) {
+    $award = trim($row['award_type']);
+    if (empty($award) || $award == 'highest final passed') return $row['reward'];
+    else if ($award == 'no award') return '';
+    else return $award;
 }
 
 function getFee($row) {
