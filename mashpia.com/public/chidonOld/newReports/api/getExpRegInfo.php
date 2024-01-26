@@ -149,8 +149,12 @@ function getFee($row) {
         'genius'    => 200,
         ''          => 0
     ];
-    if ($row['raised'] > 0) $fee = $fees[$row['reward']] - $row['raised'];
-    else $fee = $fees[$row['reward']];
+    $fee = $fees[$row['reward']];
+    // check if already paid for registration
+    if (intval($row['paid']) > 0) $fee -= intval($row['paid']);
+    // check how much was raised
+    if ($row['raised'] > 0) $fee -= intval($row['raised']);
+    // zero out negative fees
     if ($fee < 0) $fee = 0;
     return $fee;
 }
@@ -161,4 +165,8 @@ function getTrip($row) {
 
 function getExtraPurchases($row) {
     return '';
+}
+
+function getPreRegAmount($user_id) {
+
 }
