@@ -304,6 +304,7 @@ class Points
     public function scanMiles($card) {
         $msg = '';
         $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . mysql_real_escape_string($card);
+//        echo $sql;
         $result = mysql_query($sql);
         if (mysql_num_rows($result) > 0) {
             $row = mysql_fetch_assoc($result);
