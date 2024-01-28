@@ -45,77 +45,6 @@ $user_id = $user['user_id'];
 $school_id = $user['school_id'];
 
 $camp_season = 0;
-//$camp_id = $user_row['camp_id'];
-//$camp_registered = $user_row['camp_registered'];
-
-//$australian = array(55,66,112,180);
-
-/*
-if ($camp_id > 0 && $camp_registered > 0) {
-	$todays_date = get_todays_julian_date();
-	$row = mysql_fetch_assoc(mysql_query("SELECT start_date, end_date FROM camps WHERE camp_id=" . $camp_id));
-	$camp_start_date = $row['start_date'];
-	$camp_end_date = $row['end_date'];
-	if ($todays_date >= $camp_start_date && $todays_date <= $camp_end_date)
-		$camp_season = 1;
-	setcookie("camper_id", $user['user_id'], time()+3600);
-}
-
-$qryTimes[$qryCounter]['start'] = time();
-if (is_null($user_row['class_id'])) {
-	$user_row['class_average'] = T_('N/A');
-} else {
-	$classUsers = array();
-	$classSql = "select user_id from users where class_id = " . $user_row['class_id'] . " 
-				and user_registered > 0";
-	$classRes = mysql_query($classSql);
-	while ($classRow = mysql_fetch_assoc($classRes)) {
-		$classUsers[] = $classRow['user_id'];
-	}
-	$avgSql = "select sum(mark_points) as total from date_tasks_marks where user_id in (" . 
-		implode(',', $classUsers) . ")";
-	$avgRes = mysql_query($avgSql);
-	$avgRow = mysql_fetch_assoc($avgRes);
-	$classAvg = $avgRow['total'];
-	$user_row['class_average'] = round($classAvg / count($classUsers), 0);
-}
-if (is_null($user_row['school_id'])) {
-	$user_row['school_average'] = T_('N/A');
-} else {
-	$numSql = "select count(*) as num from users where school_id = " . $user_row['school_id'] . " 
-				and user_registered > 0";
-	$numRes = mysql_query($numSql);
-	$numRow = mysql_fetch_assoc($numRes);
-	$schoolNum = $numRow['num'];
-	$avgSql = "select sum(mark_points) as total from date_tasks_marks 
-				join users u using (user_id) 
-				where u.school_id = " . $user_row['school_id'] . " 
-				and u.user_registered > 0";
-	$avgRes = mysql_query($avgSql);
-	$avgRow = mysql_fetch_assoc($avgRes);
-	$user_row['school_average'] = round($avgRow['total'] / $schoolNum, 0);			
-}
-/*
-$user_row['class_average'] = (is_null($user_row['class_id'])) ? T_('N/A') : 
-	@number_format(mysql_result(mq(
-		totalMarks("JOIN users USING (user_id) 
-			WHERE school_id = {$user['school_id']} 
-			AND class_id = {$user_row['class_id']} 
-			AND user_start_date IS NOT NULL")), 0) / mysql_result(mq("
-			SELECT COUNT(*) FROM users 
-			WHERE school_id = {$user['school_id']} 
-			AND class_id = {$user_row['class_id']} 
-			AND user_start_date IS NOT NULL"), 0), 2);
-$user_row['school_average'] = (is_null($user_row['class_id'])) ? T_('N/A') : 
-	@number_format(mysql_result(mq(
-		totalMarks("JOIN users USING (user_id) 
-			WHERE school_id = {$user['school_id']} 
-			AND user_start_date IS NOT NULL")), 0) / mysql_result(mq("
-			SELECT COUNT(*) FROM users 
-			WHERE school_id = {$user['school_id']} 
-			AND user_start_date IS NOT NULL"), 0), 2);
-$qryTimes[$qryCounter++]['end']  = time();
-*/
 
 // ***** TOTAL MILES ***** //
 //$sql = totalMarks("WHERE user_id = {$user['user_id']}");
@@ -146,31 +75,8 @@ $qryTimes[$qryCounter]['start'] = time();
 $cur_points = $p->getTotalThisYear();
 //$mashpiaPoints = floor(mysql_result(mq(totalMarks("WHERE user_id = {$user['user_id']} and mark_date >= 2457629")), 0));
 $qryTimes[$qryCounter++]['end'] = time();
-//dumper(jdtounix(dateThisYear(13, 18)),1,1);
-//$cur_points = $user_miles;
 
-//echo totalMarks("WHERE user_id = {$user['user_id']} AND mark_date >= " . dateThisYear(13, 18));
-
-//if ($camp_season)
-//	include('camp_code_processor.php');
-//else
-	include('code_processor.php');
-
-// ********** USER MILES ********** //
-/*
-$sql = "SELECT SUM(points) AS user_miles FROM member_tasks JOIN camp_tasks USING (camp_task_id) WHERE user_id=" . $user_id . " AND completed=1";
-$qryTimes[$qryCounter]['start'] = time();
-$query = mysql_query($sql);
-$qryTimes[$qryCounter++]['end'] = time();
-$row = mysql_fetch_assoc($query);
-$user_miles = floatval($row['user_miles']);
-$sql = "SELECT SUM(points) AS user_miles FROM member_points WHERE user_id=" . $user_id;
-$qryTimes[$qryCounter]['start'] = time();
-$row = mysql_fetch_assoc(mysql_query($sql));
-$qryTimes[$qryCounter++]['end'] = time();
-$user_miles = $user_miles + floatval($row['user_miles']);
-*/
-// ********** USER MILES ********** //
+include('code_processor.php');
 
 $qryTimes[$qryCounter]['start'] = time();
 //$camp_points = mysql_fetch_assoc(mq("SELECT SUM(points) c_points FROM camp_tasks JOIN member_tasks AS mt USING(camp_task_id) WHERE mt.user_id = {$user['user_id']} AND mt.completed = 1"));
@@ -191,45 +97,6 @@ while ($row = mysql_fetch_assoc($subjects_result))
 	}
 }
 $qryTimes[$qryCounter++]['end'] = time();
-/*
-if ($camp_season) {
-	$camp_logo_id = 0;
-	$row = mysql_fetch_assoc(mysql_query("SELECT camp_logo_id FROM camps WHERE camp_id=" . $camp_id));
-	$camp_logo_id = $row['camp_logo_id'];
-
-	$groups = array();
-	$sql = "SELECT * FROM member_groups JOIN groups USING (group_id) WHERE user_id=" . $user_id . " AND end_date=0";
-	$query = mysql_query($sql);
-	while ($row = mysql_fetch_assoc($query)) {
-		$group_id = $row['group_id'];
-		$group_name = $row['group_name'];
-
-		$sql2 = "SELECT COUNT(*) AS no_of_members FROM member_groups WHERE group_id=" . $group_id . " AND end_date=0";
-		$query2 = mysql_query($sql2);
-		$row2 = mysql_fetch_assoc($query2);
-		$no_of_members = $row2['no_of_members'];
-
-		$sql3 = "SELECT SUM(points) AS total_points FROM member_tasks JOIN camp_tasks USING (camp_task_id) WHERE group_id=" . $group_id . " AND completed=1";
-		$query3 = mysql_query($sql3);
-		$row3 = mysql_fetch_assoc($query3);
-		$total_points = $row3['total_points'];
-
-		$sql4 = "SELECT SUM(points) AS total_points FROM group_task_dates JOIN camp_tasks USING (camp_task_id) WHERE group_id=" . $group_id . " AND completed=1";;
-		$query4 = mysql_query($sql4);
-		$row4 = mysql_fetch_assoc($query4);
-		$total_group_points = $row4['total_points'];
-
-		if ($total_points > 0)
-			$average_points = $no_of_members / $total_points;
-		else
-			$average_points = 0;
-
-		$total_group_points = $total_group_points + $average_points;
-		$element = compact('group_id', 'group_name', 'total_group_points');
-		array_push($groups, $element);
-	}
-}
-*/
 
 //$left_points = $user_row['total_miles'] - $withdraw_used_points['points_total'];
 
@@ -331,20 +198,6 @@ require 'mobile/reg/ajax/encrypt.php';
 				document.getElementById("total_miles").innerHTML = document.getElementById("total_miles").innerHTML * 1 + intCardPoints;
 				document.getElementById("year_miles").innerHTML = document.getElementById("year_miles").innerHTML * 1 + intCardPoints;
 				confirm_points(intCardPoints);
-			}
-			
-			function control(intControl, intSerial)
-			{
-				$.ajax({
-					type : "POST",
-					cache : false,
-					url : '/cardpop.php?card_id=' + intSerial,
-					dataType : "text",
-					data: {'control' : intControl},
-					success : function(strResponse) {
-						eval(strResponse);
-					}
-				});
 			}
 			
 			window.onload = scanFocus;
@@ -501,25 +354,12 @@ require 'mobile/reg/ajax/encrypt.php';
                 	<div class="scan_card">
                     	<div class="scan_card_inside">
 							<script>
-	function loadShadow(cardnum) {
-		if (cardnum.value.match(/^ *$/))
-			return;
-		
-		// if (cardnum.value.length == 6) {
-		// 	var user = <?=$user_id?>;
-		// 	$.post('ajax/setMaosChitimPledge.php', {user_id : user, number : cardnum.value}, function(data) {
-		// 		 alert(data);
-		// 		 return false;
-		// 	});
-		// } else {
-			// open a welcome message as soon as the window loads
-			Shadowbox.open({
-				content:    '/cardpop.php?card_id=' + cardnum.value,
-				player:     "iframe",
-				width:      770,
-				height:     600// 430
-			});
-		//}
+	async function loadShadow(cardnum) {
+		if (cardnum.value.match(/^ *$/)) return;
+    // open a welcome message as soon as the window loads
+    const res = await fetch('/cardpop.php?card=' + cardnum.value + '&amp;user_id=' + <?=$user_id?>)
+    const result = await res.json()
+    alert(result)
 		cardnum.value='';
 		return false;
 	}

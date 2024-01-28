@@ -9,5 +9,5 @@ $card = $input['card'];
 
 $p = new Points($user);
 $msg = $p->scanMiles($card);
-echo json_encode(['msg' => $msg]);
+echo json_encode($msg);
 ?>
