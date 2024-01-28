@@ -268,22 +268,6 @@ class Points
     private function getNonMarksStorePoints($start_date = false)
     {
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
-        // get sum of points and then delete reversed points
-//        if (unixtojd() < 2459761 || ($this->australian && unixtojd() < 2459945)) {
-//            if ($this->useBetaPoints()) {
-//                // ignore transaction_manager_store reversals where the original purchase is before the start date
-//                $sql = "SELECT SUM( if(rup.points is not null AND rup.created < '$formatted_date', 0, up.points) ) AS total
-//                    FROM pointsDB.user_points up
-//                    LEFT JOIN pointsDB.user_points rup ON (up.reversed_user_point_id = rup.user_point_id)
-//                    WHERE up.user_id = '{$this->user_id}'
-//                    AND up.created >= '$formatted_date'";
-//            } else {
-//                $sql = "SELECT SUM(points) AS total
-//                    FROM pointsDB.user_points up
-//                    WHERE up.user_id = '{$this->user_id}'
-//                    AND up.created >= '$formatted_date'";
-//            }
-//        } else {
         // ignore transaction_manager_store reversals where the original purchase is before the start date
         $sql = "SELECT IFNULL(SUM(points), 0) AS total
                 FROM pointsDB.user_points up
