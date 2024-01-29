@@ -57,30 +57,32 @@ function school_lines( $campaigns, $grade ) {
     $regInfo = get_reg_info( $ids, !!$grade );
     $lineInfo = [];
 
-    foreach ($campaigns as $campaign_id => $campaign) {
-        // create the BpSummary that we need.
-        $bps = new BpSummary( $campaign_id, $grade ? 'class' : 'school' );
+    if (count($campaigns) > 0) {
+        foreach ($campaigns as $campaign_id => $campaign) {
+            // create the BpSummary that we need.
+            $bps = new BpSummary($campaign_id, $grade ? 'class' : 'school');
 
-        foreach ( $info as $index => $row ) {
-            if ( !isset( $row['id'] ) ) continue;
+            foreach ($info as $index => $row) {
+                if (!isset($row['id'])) continue;
 
-            $id = $row['id'];
-            $learned = intval( $bps->getSummary( $id ) );
+                $id = $row['id'];
+                $learned = intval($bps->getSummary($id));
 
-            if ( !$grade && !$row['chayolei'] ) {
-                $child_count = $bps->getChildCount( $id );
-            } else {
-                $child_count = isset($regInfo[$id]) ? $regInfo[$id] : 0;
+                if (!$grade && !$row['chayolei']) {
+                    $child_count = $bps->getChildCount($id);
+                } else {
+                    $child_count = isset($regInfo[$id]) ? $regInfo[$id] : 0;
+                }
+                // convert to number
+                $child_count = intval($child_count);
+
+                // make sure we have kids in the class/school
+                if ($child_count == 0) continue;
+                else $info[$index]['child_count'] = $child_count;
+
+                $lineInfo[$id][$campaign]['learned'] = $learned;
+                $lineInfo[$id][$campaign]['avg'] = $learned > 0 ? floor($learned / $child_count) : 0;
             }
-            // convert to number
-            $child_count = intval( $child_count );
-
-            // make sure we have kids in the class/school
-            if ( $child_count == 0 ) continue;
-            else $info[$index]['child_count'] = $child_count;
-            
-            $lineInfo[$id][$campaign]['learned'] = $learned;
-            $lineInfo[$id][$campaign]['avg'] = $learned > 0 ? floor( $learned / $child_count ) : 0;
         }
     }
 
