@@ -398,7 +398,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						
 						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?= $desktop ? "display: none" : ""?>" />
                        
-						<?php if ( !isset($_COOKIE['lang']) || $_COOKIE['lang'] != 'he' ) { ?>
+						<?php if ( (!isset($_COOKIE['lang']) || $_COOKIE['lang'] != 'he') && isset($_COOKIE['admin']) ) { ?>
 						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
                             <!--<input type="button" class="btn btn-danger btn-sm i18n"  data-key="PrintMissions" value="Print Missions" />-->
                        
