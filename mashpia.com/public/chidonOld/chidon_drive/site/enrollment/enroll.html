@@ -5,7 +5,7 @@
 	<meta name="viewport" content="width=device-width">
 	<meta charset="UTF-8">
 	<meta name="google" content="notranslate">
-	<title>Shabbaton Enrollment | Chidon Drive</title>
+	<title>Chidon Experience Enrollment | Chidon Drive</title>
 	<meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
 	<link rel="icon" type="image/png" href="../img/favicon.png" />
 	<link rel="stylesheet" href="../css/font.css" type="text/css" />
@@ -38,10 +38,10 @@
 	</header>
 	<div class="main">
 		<div class="wrapper">
-			<h2 class="title">Shabbaton Enrollment</h2>
+			<h2 class="title">Chidon Experience Enrollment</h2>
 			<div class="form login" style="display: none;">
 				<form id="loginForm">
-					<p>Please log in to your Mashpia.com account to proceed with Shabbaton enrollment</p>
+					<p>Please log in to your Mashpia.com account to proceed with Chidon Experience Enrollment</p>
 					<div class="field">
 						<label>Username: <input type="text" id="username" name="username" required /></label>
 					</div>
@@ -693,7 +693,7 @@
 					for (c in info.children) {
 						let child = info.children[c];
 						if (parseInt(child.date_paid) > 0) continue;
-						child.history = ['5779', '5780', '5781', '5782']
+						child.history = ['5780', '5781', '5782', '5783']
 						children[child.user_id] = child;
 						children_ids.push(child.user_id);
 						let childPic = child.mobile_pic ? "mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
