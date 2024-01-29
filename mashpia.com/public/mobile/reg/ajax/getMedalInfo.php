@@ -126,7 +126,10 @@ if ( isset( $_GET['v'] ) && $_GET['v'] == 2) {
         }
         $row['running_total'] = $running_total;
         // convert julian date to hebrew utf8
-        $row['date_awarded'] = iconv('WINDOWS-1255', 'UTF-8', jdtojewish( $row['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM ) );;
+        if ($row['date_awarded'] && ($row['date_awarded'] >= 347998 || $row['date_awarded'] <= 4000075))
+            $row['date_awarded'] = iconv('WINDOWS-1255', 'UTF-8', jdtojewish( $row['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM ) );
+        else
+            $row['date_awarded'] = '';
         
         // calcuate images for the sticker items
         $medal_name = strtolower( $row['medal_name'] );
