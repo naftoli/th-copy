@@ -799,25 +799,25 @@
 
 		async function getChildren(admin) {
 			let result = await $.post('../../ajax/getChildren.php', { admin })
-			let info = await result.json()
+			let info = JSON.parse(result)
 			return info
 		}
 
 		async function getTracks(children) {
 			let result = await $.post('../../ajax/getTracks.php', { children })
-			let tracks = await result.json()
+			let tracks = JSON.parse(result)
 			return tracks
 		}
 
 		async function getShippingAmount(admin) {
 			let result = await $.post('../../ajax/getShippingAmount.php', { admin })
-			let amount = await result.json()
+			let amount = JSON.parse(result)
 			return amount
 		}
 
 		async function getKHK(children) {
 			let result = await $.post('../../ajax/getKHK.php', { children })
-			let khk = await result.json()
+			let khk = JSON.parse(result)
 			return khk
 		}
 
@@ -834,10 +834,10 @@
 		}
 
 		const trackInfo = {
-			'Yesod': [150, 100, 70, 50],
-			'Yediah': [200, 180, 150, 120, 100],
-			'Havonah': [300, 250, 225, 200],
-			'Iyun': [350, 300, 250, 220, 200],
+			'Yesod': [36, 50, 75, 100, 136].reverse(),
+			'Yediah': [100, 120, 150, 180, 200].reverse(),
+			'Havonah': [200, 225, 250, 300].reverse(),
+			'Iyun': [200, 225, 250, 300].reverse(),
 			'Ultimate': [500, 400, 300, 275, 250]
 		} // need it for a few functions so it needs to be global
 
@@ -1020,14 +1020,14 @@
 					html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
 					html += `<div class="flex">
 											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip_${child.user_id}" value='0:${child.user_id}' />
-											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($250)<br />
+											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($250 minimum)<br />
 													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Mon - Wed, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
 													Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
 											</h5>
 									</div>
 									<div class="flex">
 											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip_${child.user_id}" value='1:${child.user_id}' />
-											<h5 class="formDetails"><b>Regional Trip</b> ($200) <br />
+											<h5 class="formDetails"><b>Regional Trip</b> ($200 minimum) <br />
 												${text}
 											</h5>
 									</div>
@@ -1184,8 +1184,9 @@
 			// find out if we need to add a smaller amount to the amounts array
 			const raised = parseInt(child.raised)
 			const coupon = parseInt(child.coupon_used) === 0 ? parseInt(child.coupon) : 0
+			const alreadyPaid = parseInt(child.paid) > 0 ? parseInt(child.paid) : 0
 			let lowest = amounts[amounts.length - 1]
-			lowest -= raised + coupon
+			lowest -= raised + coupon + alreadyPaid
 
 			// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce by another $100
 			if (idx && [61, 269].includes(parseInt(child.school_id))) {

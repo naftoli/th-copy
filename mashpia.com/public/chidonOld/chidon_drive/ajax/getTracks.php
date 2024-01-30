@@ -15,7 +15,8 @@ foreach ($children as $child) {
     $ct->setScores();
     $ct->calculateMarks();
     $marks = $ct->getMarks();
-    $track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
+    $track = $child['reward_type'] === 'highest track passed' || empty($child['reward_type']) ?
+        $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']) : $child['reward_type'];
     $tracks[$child['user_id']] = $track ? $types[$track] : '';
 }
 

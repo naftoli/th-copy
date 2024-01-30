@@ -744,7 +744,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $qry = $MASHPIA_DB->prepare("
             UPDATE th_chidon SET 
                 paid = :amount,
-                date_paid = now(),
                 paid_by = :admin, 
                 early_registration = 1 
             WHERE year = :year AND user_id = :user
