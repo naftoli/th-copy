@@ -1183,10 +1183,12 @@
 
 			// find out if we need to add a smaller amount to the amounts array
 			const raised = parseInt(child.raised)
-			const coupon = parseInt(child.coupon_used) === 0 ? parseInt(child.coupon) : 0
 			const alreadyPaid = parseInt(child.paid) > 0 ? parseInt(child.paid) : 0
 			let lowest = amounts[amounts.length - 1]
-			lowest -= raised + coupon + alreadyPaid
+			lowest -= raised + alreadyPaid
+
+			// check coupon codes
+			lowest -= couponCodesAmount(child)
 
 			// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce by another $100
 			if (idx && [61, 269].includes(parseInt(child.school_id))) {
@@ -1202,6 +1204,16 @@
 			})
 
 			createRegDropdown(child, amounts, idx)
+		}
+
+		function couponCodesAmount(child) {
+			let total = 0
+			for (let i in child.coupon) {
+				let coupon = child.coupon[i]
+				if (parseInt(coupon.used)) continue
+				if (parseInt(coupon.amount) > 0) total += parseInt(coupon.amount)
+			}
+			return total
 		}
 
 		function createRegDropdown(child, amounts, selection) {

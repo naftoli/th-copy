@@ -20,13 +20,11 @@ function getChildren() {
                 UPPER(u.gender) as gender, 
                 c.class_grade as grade, 
                 tc.*, 
-                IFNULL(cc.value, 0) as coupon, cc.used as coupon_used, cc.reason as coupon_reason,  
                 conf.chidon_confirmation_id as schoolConfirmed 
             from users u 
             join schools s using (school_id)
             join th_chidon tc using (user_id)  
             join classes c on c.class_id = u.class_id 
-            left join coupon_codes cc on (u.user_serial = cc.serial_num and cc.year = :year) 
             left join chidon_confirmations conf on (u.school_id = conf.school_id and conf.year = :year) 
             where tc.year = :year 
             and tc.parent_id = :admin";
@@ -46,6 +44,13 @@ function getChildren() {
         ");
         // check track history
 //        $stmt2 = $MASHPIA_DB->prepare("SELECT * FROM th_chidon_info where user_id = :user");
+        // check coupon codes for children
+        $stmtCoupon = $MASHPIA_DB->prepare("
+            SELECT IFNULL(value, 0) as coupon, used as coupon_used, reason as coupon_reason, 
+            FROM chidon_coupons 
+            WHERE user_serial = :serial 
+            AND year = :year
+        ");
 
         for ($i = 0; $i < count($children); $i++) {
             $child = $children[$i];
@@ -55,6 +60,16 @@ function getChildren() {
             ]);
             $result = $stmt->fetch();
             if ($result['raised']) $children[$i]['raised'] = $result['raised'];
+            $stmtCoupon->execute([
+                ':serial'   => $child['user_serial'],
+                ':year'     => $year
+            ]);
+            $resCoupon = $stmtCoupon->fetch();
+            if ($resCoupon['coupon']) {
+                $children[$i]['coupon'][] = $resCoupon['coupon'];
+                $children[$i]['coupon_used'][] = $resCoupon['coupon_used'];
+                $children[$i]['coupon_reason'][] = $resCoupon['coupon_reason'];
+            }
 //            $children[$i]['raised'] = 200;
 //            $children[$i]['schoolConfirmed'] = 1;
 
