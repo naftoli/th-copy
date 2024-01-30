@@ -52,7 +52,7 @@ define('CELEB_BOX_COST', 20);
 define('SWEATER_COST', 25);
 
 //******************* SQL QUERIES ***********************/
-$sql = "update th_chidon set paid += :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
+$sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
 $sqlReg = $MASHPIA_DB->prepare($sql);
 
 $sql = "update th_chidon set trip = :trip where user_id = :user";

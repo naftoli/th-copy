@@ -739,20 +739,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $result;
     }
 
-    public function earlyReg($admin_id, $year, $user_id, $amount) {
+    public function earlyReg($year, $user_id, $amount) {
         global $MASHPIA_DB;
         $qry = $MASHPIA_DB->prepare("
             UPDATE th_chidon SET 
-                paid = :amount,
-                paid_by = :admin, 
+                prepaid = :amount,
                 early_registration = 1 
             WHERE year = :year AND user_id = :user
         ");
         $result = $qry->execute([
             'year'  => $year,
             'user'  => $user_id,
-            'amount'    => $amount,
-            'admin'     => $admin_id
+            'amount'    => $amount
         ]);
         return $result;
     }

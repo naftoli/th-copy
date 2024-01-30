@@ -376,7 +376,7 @@ class UserRegistrationRouter {
                             case 'RRYDA':
                             case 'RRHVN':
                                 // early registration
-                                if (! $installmentsCreated) $user->earlyReg($admin->admin_id, $year, $user_id, $amount);
+                                if (! $installmentsCreated) $user->earlyReg($year, $user_id, $amount);
                                 break;
                         }
                     }

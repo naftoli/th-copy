@@ -823,14 +823,19 @@
 
 		function getTrackText(track, ultimate) {
 			let trackText = {
-				'Yesod': "the Chidon Sweater, Gifts & to take the Yesod Final",
-				'Yediah': "the Chidon Sweater, Gifts, $75 Prize credits, and to take the Yediah Final",
-				'Havonah': "the Chidon Sweater, Gifts, $75 Prize credits, Regional Trip, and to take the Havonah Final",
-				'Iyun': "the Chidon Sweater, Gifts, $75 Prize credits, Regional Trip, and to take the Iyun Final",
-				'Ultimate': "the <b>Ultimate Chidon Experience</b> which includes the Chidon Sweater, Gifts, Ultimate Chidon Experience Trip, and to take the " + track + " Final"
+				'Yesod': "Sweater, Gift & Yesod Final",
+				'Yediah': "Sweater, Gift, & Yediah Final",
+				'Havonah': "Sweater, Gift, Prizes, Trip & Havonah Final",
+				'Iyun': "Sweater, Gift, Prizes, Trip & Iyun Final",
 			}
-			if (ultimate) track = 'Ultimate'
-			return trackText[track]
+			let ultimateText = {
+				'Yesod': "Sweater, Gift, Yesod & KHK Final",
+				'Yediah': "Sweater, Gift, Yediah & KHK Final",
+				'Havonah': "Sweater, Gift, Prizes, Trip, Havonah & KHK Final",
+				'Iyun': "Sweater, Gift, Prizes, Trip, Iyun & KHK Final",
+			}
+
+			return ultimate ? ultimateText[track] : trackText[track]
 		}
 
 		const trackInfo = {
@@ -838,7 +843,7 @@
 			'Yediah': [100, 120, 150, 180, 200].reverse(),
 			'Havonah': [200, 225, 250, 300].reverse(),
 			'Iyun': [200, 225, 250, 300].reverse(),
-			'Ultimate': [500, 400, 300, 275, 250]
+			'Ultimate': [500, 450, 400, 350]
 		} // need it for a few functions so it needs to be global
 
 		// list of children serial numbers that should have the option of choosing europe as their trip
@@ -1020,7 +1025,7 @@
 					html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
 					html += `<div class="flex">
 											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip_${child.user_id}" value='0:${child.user_id}' />
-											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($250 minimum)<br />
+											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($350 minimum)<br />
 													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Mon - Wed, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
 													Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
 											</h5>
@@ -1049,8 +1054,7 @@
 											<option value="seattle">Seattle</option>`
 						}
 						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
-						text += `<option value="no_trip">No Trip</option>
-						</select>`
+						text += `<option value="no_trip">No Trip</option></select>`
 					}
 					let style = ''
 					if (ultimate) style = 'display: none'
@@ -1075,13 +1079,6 @@
 				html += `<div class='registration' style="${style}">`
 				html += `<h5 class="formDetails"><span class="title">Registration Fee</span><br />`
 				html += `Full cost: $<span class="full_cost">${amounts[0]}</span></h5>`
-
-				// check if any payment was already made
-				let paid = parseInt(child.paid)
-				if (paid) {
-					html += `<h5 class="formDetails"><span class="title">Payment</span><br />
-												You have already paid $${paid} towards your registration cost.</h5>`
-				}
 
 				// coupons
 				const coupon = couponCodesAmount(child)
@@ -1191,9 +1188,8 @@
 
 			// find out if we need to add a smaller amount to the amounts array
 			const raised = parseInt(child.raised)
-			const alreadyPaid = parseInt(child.paid) > 0 ? parseInt(child.paid) : 0
 			let lowest = amounts[amounts.length - 1]
-			lowest -= raised + alreadyPaid
+			lowest -= raised
 
 			// check coupon codes
 			lowest -= couponCodesAmount(child)
