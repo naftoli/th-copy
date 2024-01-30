@@ -799,38 +799,26 @@
 
 		async function getChildren(admin) {
 			let result = await $.post('../../ajax/getChildren.php', { admin })
-			let info = JSON.parse(result);
+			let info = await result.json()
 			return info
 		}
 
 		async function getTracks(children) {
 			let result = await $.post('../../ajax/getTracks.php', { children })
-			let tracks = JSON.parse(result)
+			let tracks = await result.json()
 			return tracks
 		}
 
 		async function getShippingAmount(admin) {
 			let result = await $.post('../../ajax/getShippingAmount.php', { admin })
-			let amount = JSON.parse(result)
+			let amount = await result.json()
 			return amount
 		}
 
-		function checkForUltimate(child) {
-			const base = 5782
-			const year = parseInt(child.year)
-			let pastYrs = true
-			const checkYrs = base - year
-			// check history
-			if (checkYrs >= 1) {
-				for (let i = 1; i <= checkYrs; i++) {
-					if (!child.history || !child.history[year-i] || child.history[year-i] === 'Yesod') {
-						pastYrs = false
-						break
-					}
-				}
-			}
-			if ([7748670, 7755774, 7751863, 7751890, 7782690, 7782464, 7782464].includes(parseInt(child.user_serial))) return true
-			return parseInt(child.grade) === 8 && ['Havonah', 'Iyun'].includes(child.track) && child.history && pastYrs
+		async function getKHK(children) {
+			let result = await $.post('../../ajax/getKHK.php', { children })
+			let khk = await result.json()
+			return khk
 		}
 
 		function getTrackText(track, ultimate) {
@@ -886,9 +874,17 @@
 			}
 			let tracks = result.tracks
 
+			result = await getKHK(children)
+			if (!result.success) {
+				alert(result.error)
+				return false
+			}
+			let khk = result.khk
+
 			// update children with track info
 			for (let child of children) {
 				child.track = tracks[child.user_id]
+				child.khk_eligible = khk[child.user_id]
 				if (Cookies.get('naftoli')) {
 					// get track from GET param if exists
 					const queryString = window.location.search
@@ -981,7 +977,7 @@
 				}
 				// figure out if child is eligible for ultimate experience
 				console.log(child)
-				let ultimate = checkForUltimate(child)
+				let ultimate = parseInt(child.khk_eligible) > 0 ? true : false
 				let trackText = getTrackText(child.track, ultimate)
 
 				const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;

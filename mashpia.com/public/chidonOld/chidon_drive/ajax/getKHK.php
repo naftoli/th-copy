@@ -1,7 +1,4 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', 1);
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
@@ -9,17 +6,17 @@ $ct = new ChidonTests();
 $types = $ct->getTypes();
 $children = $_POST['children'];
 
-$tracks = [];
+$khk = [];
 foreach ($children as $child) {
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
     $ct->calculateMarks();
     $marks = $ct->getMarks();
-    $track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
-    $tracks[$child['user_id']] = $track ? $types[$track] : '';
+    $khk = KHK::getKHKEligibility([$child['user_id']], 0, 4, $marks)[0];
+    $khk[$child['user_id']] = isset($khk[$child['user_id']]) && $khk[$child['user_id']] ? 1 : 0;
 }
 
 echo json_encode([
     'success'   => true,
-    'tracks'    => $tracks
+    'khk'       => $khk
 ]);

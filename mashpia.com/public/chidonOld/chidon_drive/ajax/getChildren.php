@@ -2,8 +2,9 @@
 //ini_set('display_errors', 1);
 //ini_set('error_reporting', E_ALL);
 
-require_once __DIR__ . '/../../../api/header/db.php';
-require_once __DIR__ . '/../../../class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 require __DIR__ . '/../encrypt.php';
 
 $year = GlobalSettings::getChidonYear();
@@ -44,7 +45,7 @@ function getChildren() {
             WHERE chidon_year = :year AND user_id = :user
         ");
         // check track history
-        $stmt2 = $MASHPIA_DB->prepare("SELECT * FROM th_chidon_info where user_id = :user");
+//        $stmt2 = $MASHPIA_DB->prepare("SELECT * FROM th_chidon_info where user_id = :user");
 
         for ($i = 0; $i < count($children); $i++) {
             $child = $children[$i];
@@ -57,11 +58,11 @@ function getChildren() {
 //            $children[$i]['raised'] = 200;
 //            $children[$i]['schoolConfirmed'] = 1;
 
-            $stmt2->execute([':user' => $child['user_id']]);
-            $rows = $stmt2->fetchAll();
-            foreach ($rows as $row) {
-                $children[$i]['history'][$row['year']] = ucwords($row['highest_track']);
-            }
+//            $stmt2->execute([':user' => $child['user_id']]);
+//            $rows = $stmt2->fetchAll();
+//            foreach ($rows as $row) {
+//                $children[$i]['history'][$row['year']] = ucwords($row['highest_track']);
+//            }
         }
     }
     return $children;
