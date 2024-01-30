@@ -1487,7 +1487,7 @@
 			if (!errors.length && checkExtraInfo() && checkRegAddUserInfo()) {
 				json_cart = JSON.stringify(cart)
 				// add coupons and chidon drive raised
-				json_coupons = JSON.stringify(children.filter(child => child.coupon && count(child.coupon) > 0 && parseInt(child.coupon_used) === 0))
+				json_coupons = JSON.stringify(children.filter(child => child.coupon && count(child.coupon) > 0))
 				json_raised = JSON.stringify(children.filter(child => parseFloat(child.raised) > 0))
 				// add track info
 				json_tracks = JSON.stringify(children.filter(child => child.track != ''))

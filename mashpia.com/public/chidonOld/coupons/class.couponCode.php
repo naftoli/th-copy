@@ -169,6 +169,7 @@ class CouponCode
     }
 
     public function checkForUserCode($user_serial) {
+        $amount = 0;
         $stmt = $this->db->prepare("
             SELECT * FROM coupon_codes 
             WHERE 
@@ -179,11 +180,12 @@ class CouponCode
             ':year' => $this->year,
             ':user' => $user_serial
         ]);
-        $row = $stmt->fetch();
-        if ($row['value']) {
-            return $row['value'];
-        }
-        return false;
+        $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
+        $amount += array_reduce($rows, function($carry, $item) {
+            return $carry + intval($item['value']);
+        }, 0);
+
+        return $amount;
     }
 
     public function checkForUsedUserCode($user_serial) {

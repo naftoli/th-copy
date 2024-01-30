@@ -52,7 +52,7 @@ define('CELEB_BOX_COST', 20);
 define('SWEATER_COST', 25);
 
 //******************* SQL QUERIES ***********************/
-$sql = "update th_chidon set paid = :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
+$sql = "update th_chidon set paid += :paid, date_paid = now(), paid_by = :admin where year = :year and user_id = :user";
 $sqlReg = $MASHPIA_DB->prepare($sql);
 
 $sql = "update th_chidon set trip = :trip where user_id = :user";
@@ -466,8 +466,12 @@ function getEmailMsg($trans_id) {
             $msg .= "Track: " . $tracks[$user_id] . "<br />";
             if (isset($coupons[$user_id]) || isset($raised[$user_id])) {
                 $msg .= "Discounts applied:<br /><ul>";
-                if (isset($coupons[$user_id])) $msg .= "<li>A $" . $coupons[$user_id]['coupon'] . " coupon has been applied 
-                    (" . $coupons[$user_id]['coupon_reason'] . ").</li>";
+                if (isset($coupons[$user_id])) {
+                    foreach ($coupons[$user_id]['coupon'] as $idx => $coupon) {
+                        $msg .= "<li>A $" . $coupon . " coupon has been applied 
+                        (" . $coupons[$user_id]['coupon_reason'][$idx] . ").</li>";
+                    }
+                }
                 if (isset($raised[$user_id])) $msg .= "<li>A $" . $raised[$user_id] . " deduction was applied from what was raised on 
                     the Chidon Drive.</li>";
                 $msg .= "</ul>";
