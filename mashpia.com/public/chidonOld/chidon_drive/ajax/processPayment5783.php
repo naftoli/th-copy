@@ -249,8 +249,8 @@ function updateShipping() {
     global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
 
     $sqlInsert = "UPDATE chidon_parent_shipping 
-                    SET amount_paid = :amount, date_paid = now()
-                    WHERE parent_id = :admin AND year = :year";
+                  SET amount_paid = :amount, date_paid = now()
+                  WHERE parent_id = :admin AND year = :year";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
     $updated = true;

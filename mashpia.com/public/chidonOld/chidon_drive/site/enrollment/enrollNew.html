@@ -977,7 +977,7 @@
 				}
 				// figure out if child is eligible for ultimate experience
 				console.log(child)
-				let ultimate = parseInt(child.khk_eligible) > 0 ? true : false
+				let ultimate = child.khk_eligible
 				let trackText = getTrackText(child.track, ultimate)
 
 				const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
