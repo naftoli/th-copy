@@ -360,7 +360,10 @@ require 'mobile/reg/ajax/encrypt.php';
     // open a welcome message as soon as the window loads
     const res = await fetch('/cardpop.php?card=' + cardnum.value + '&user_id=' + <?=$user_id?> + '&school_id=' + <?=$school_id?> + '&class_id=' + <?=$class_id?>)
     const result = await res.json()
-    alert(result)
+    alert(result.msg)
+    if (result.success) {
+      fetch('/cardpop2.php?card=' + cardnum.value) // update db in separate request
+    }
 		cardnum.value='';
 		return false;
 	}

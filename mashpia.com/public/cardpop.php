@@ -8,5 +8,5 @@ $user = mysql_real_escape_string($_REQUEST['user_id']);
 $card = mysql_real_escape_string($_REQUEST['card']);
 
 $msg = Points::scanMiles($school, $class, $user, $card);
-echo json_encode($msg);
+echo $msg;
 ?> 

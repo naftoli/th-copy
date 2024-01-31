@@ -287,7 +287,8 @@ class Points
     // originally in mashpia.com/public/v2/application/controllers/KioskMainController.php
     public static function scanMiles($school_id, $class_id, $user_id, $card) {
         $msg = '';
-        $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . mysql_real_escape_string($card);
+        $success = false;
+        $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . $card;
 //        echo $sql;
         $result = mysql_query($sql);
         if (mysql_num_rows($result) > 0) {
@@ -300,36 +301,33 @@ class Points
                 } else if ($row['class_id'] > 0 && $row['class_id'] != $class_id) {
                     $msg = "You are not in the correct platoon to scan this card.";
                 }
-                if (empty($msg)) {
-                    // insert into user_points
-                    $sql4 = "INSERT into pointsDB.user_points SET 
-                             achievement_card_id = " . $row['achievement_card_id'] . ",
-                             user_id = " . $user_id . ", 
-                             campaign_id = " . $row['campaign_id'] . ", 
-                             mission_id = " . $row['mission_id'] . ", 
-                             task_id = " . $row['task_id'] . ", 
-                             institution_id = " . $school_id . ", 
-                             class_id = " . $row['class_id'] . ", 
-                             points = " . $row['card_points'] . ", 
-                             resource_name = 'specific achievement card'";
-                    // update achievement cards
-                    $sql3 = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . mysql_real_escape_string($card);
-                    // make sure both qrys work or don't work
-                    mysql_query('set autocommit=0');
-                    mysql_query('begin');
-                    if (mysql_query($sql4) && mysql_query($sql3)) {
-                        $msg = "Congratulations! You have just been awarded " . $row['card_points'] . " points!";
-                        mysql_query('commit');
-                    } else {
-                        $msg = "Error awarding points.";
-                        mysql_query('rollback');
-                    }
-                    mysql_query('set autocommit=1');
+                if ($msg) return json_encode([
+                    'success'   => false,
+                    'msg'       => $msg
+                ]);
+
+                // insert into user_points
+                $sql4 = "INSERT into pointsDB.user_points SET 
+                         achievement_card_id = " . $row['achievement_card_id'] . ",
+                         user_id = " . $user_id . ", 
+                         campaign_id = " . $row['campaign_id'] . ", 
+                         mission_id = " . $row['mission_id'] . ", 
+                         task_id = " . $row['task_id'] . ", 
+                         institution_id = " . $school_id . ", 
+                         class_id = " . $row['class_id'] . ", 
+                         points = " . $row['card_points'] . ", 
+                         resource_name = 'specific achievement card'";
+
+                if (mysql_query($sql4)) {
+                    $success = true;
+                    $msg = "Congratulations! You have just been awarded " . $row['card_points'] . " points!";
+                } else {
+                    $msg = "Error awarding points.";
                 }
             }
         } else {
             // check if it's scanned
-            $sql = "SELECT * FROM pointsDB.achievement_cards_scanned where card_serial = " . mysql_real_escape_string($card);
+            $sql = "SELECT * FROM pointsDB.achievement_cards_scanned where card_serial = " . $card;
             $result = mysql_query($sql);
             if (mysql_num_rows($result) > 0) {
                 $msg = "This card has already been scanned.";
@@ -338,7 +336,46 @@ class Points
                 else $msg = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
             }
         }
-        return $msg;
+        echo json_encode([
+            'success'   => $success,
+            'msg'       => $msg
+        ]);
+    }
+
+    public static function updateScanned($card) {
+        $qrys = [];
+        $sqlCopy = "INSERT INTO pointsDB.achievement_cards_scanned SELECT * FROM pointsDB.achievement_cards WHERE card_serial = " . $card;
+        $qrys[] = $sqlCopy;
+        $sqlUpdate = "UPDATE pointsDB.achievement_cards_scanned SET status = 'scanned' WHERE card_serial = " . $card;
+        $qrys[] = $sqlUpdate;
+        $sqlDelete = "DELETE FROM pointsDB.achievement_cards WHERE card_serial = " . $card;
+        $qrys[] = $sqlDelete;
+
+        mysql_query('set autocommit=0');
+        mysql_query('start transaction');
+        if (mysql_query($sqlCopy) && mysql_query($sqlUpdate) && mysql_query($sqlDelete)) {
+            mysql_query('commit');
+            mysql_query('set autocommit=1');
+            return [
+                'success'   => true
+            ];
+        } else {
+            mysql_query('rollback');
+            mysql_query('set autocommit=1');
+            $sqlUpdate2 = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . $card;
+            $qrys[] = $sqlUpdate2;
+            if (! mysql_query($sqlUpdate2)) {
+                return [
+                    'success'   => false,
+                    'data'      => $qrys
+                ];
+            } else {
+                return [
+                    'success'   => true,
+                    'data'      => $qrys
+                ];
+            }
+        }
     }
 
     public function getPointsHistory($start, $end = 0) {
