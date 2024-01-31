@@ -5,7 +5,13 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 $types = $ct->getTypes();
 $children = $_POST['children'];
-$ids = array_map(function($child) { return $child['user_id']; }, $children);
+// get ids from children if they are in 8th grade
+$ids = [];
+foreach ($children as $child) {
+    if ($child['class_grade'] == '8') {
+        $ids[] = $child['id'];
+    }
+}
 $khk = KHK::getKHKEligibility($ids)[0];
 
 echo json_encode([

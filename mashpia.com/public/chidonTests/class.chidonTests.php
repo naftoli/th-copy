@@ -902,10 +902,6 @@ class KHK {
             foreach ($years as $yr) {
                 $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
-                    if ($id == 25540) {
-                        $details[$id][$yr] = false;
-                        continue;
-                    }
                     if (in_array($id, [66871])) { // exceptions
                         $details[$id][$yr] = true;
                         continue;
