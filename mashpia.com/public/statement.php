@@ -43,6 +43,7 @@ if (!isset($_COOKIE["user"])) {
 
 $user_id = $user['user_id'];
 $school_id = $user['school_id'];
+$class_id = $user['class_id'];
 
 $camp_season = 0;
 
@@ -357,7 +358,7 @@ require 'mobile/reg/ajax/encrypt.php';
 	async function loadShadow(cardnum) {
 		if (cardnum.value.match(/^ *$/)) return;
     // open a welcome message as soon as the window loads
-    const res = await fetch('/cardpop.php?card=' + cardnum.value + '&user_id=' + <?=$user_id?> + '&school_id=' + <?=$school_id?>)
+    const res = await fetch('/cardpop.php?card=' + cardnum.value + '&user_id=' + <?=$user_id?> + '&school_id=' + <?=$school_id?> + '&class_id=' + <?=$class_id?>)
     const result = await res.json()
     alert(result)
 		cardnum.value='';

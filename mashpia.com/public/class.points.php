@@ -285,7 +285,7 @@ class Points
     }
 
     // originally in mashpia.com/public/v2/application/controllers/KioskMainController.php
-    public static function scanMiles($school_id, $user_id, $card) {
+    public static function scanMiles($school_id, $class_id, $user_id, $card) {
         $msg = '';
         $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . mysql_real_escape_string($card);
 //        echo $sql;
@@ -297,15 +297,8 @@ class Points
             } else {
                 if ($row['institution_id'] > 0 && $row['institution_id'] != $school_id) {
                     $msg = "You are not in the correct base to scan this card.";
-                } else if ($row['class_id'] > 0) {
-                    // get user class id
-                    $sql2 = "SELECT class_id FROM users WHERE user_id = " . $user_id;
-                    $result2 = mysql_query($sql2);
-                    $row2 = mysql_fetch_assoc($result2);
-                    $class_id = $row2['class_id'];
-                    if ($row['class_id'] != $class_id) {
-                        $msg = "You are not in the correct platoon to scan this card.";
-                    }
+                } else if ($row['class_id'] > 0 && $row['class_id'] != $class_id) {
+                    $msg = "You are not in the correct platoon to scan this card.";
                 }
                 if (empty($msg)) {
                     // insert into user_points
