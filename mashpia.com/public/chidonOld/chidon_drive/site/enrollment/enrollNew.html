@@ -736,6 +736,7 @@
 	<script src="../js/jquery.nice-select.min.js"></script>
 	<script src='../js/circles.min.js'></script>
 	<script src="../js/js.cookie.js"></script>
+	<script src="../../../../mobile/registration/js/shippingFees.js"></script>
 	<script type="text/javascript">
 		// let closed = "Due to technical difficulties with our payment processor, registration is temporarily suspended.  As soon as it is resolved, registration will re-open.  Thanks for your patience."
 		// alert(closed)
@@ -807,12 +808,6 @@
 			let result = await $.post('../../ajax/getTracks.php', { children })
 			let tracks = JSON.parse(result)
 			return tracks
-		}
-
-		async function getShippingAmount(admin) {
-			let result = await $.post('../../ajax/getShippingAmount.php', { admin })
-			let amount = JSON.parse(result)
-			return amount
 		}
 
 		async function getKHK(children) {
@@ -976,12 +971,9 @@
 			let html = ''
 			for (let child of eligible) {
 				let myshliach = false // flag for determining if need to show shipping section
-				if ([61, 269].includes(parseInt(child.school_id))) {
-					myshliach = true
-					needsShipping = true
-				}
+				if ([61, 269].includes(parseInt(child.school_id))) myshliach = true
 				// figure out if child is eligible for ultimate experience
-				console.log(child)
+				// console.log(child)
 				let ultimate = child.khk_eligible
 				let trackText = getTrackText(child.track, ultimate)
 
@@ -1101,31 +1093,39 @@
 						<br />`
 			}
 
-			// set myshliach cookie; needed for processing registration page
-			Cookies.set('myshliach', needsShipping ? 1 : 0)
-
 			// find out if we need to charge for shipping
-			let res = await getShippingAmount(admin)
-			if (res.amount && !res.paid) {
-				shipping = res.amount
-				if (needsShipping) {
-					html += `<div id="shipping_charges" style="display: none;">
-									<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-									<div class="flex">
-										<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
-										<label>
-											(FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
-											Sunday 19 Adar: 4-6PM; Monday 20 Adar: 6-9PM; Thursday 23 Adar: 9-11AM.
-										</label>
-									</div>
-									<div class="flex">
-										<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping}" />
-										<label>
-											($${shipping}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
-											check to confirm that it has the correct address saved.
-										</label>
-									</div></div>`
-				}
+			let shipping = getShippingFee(parseInt(eligible[0]['school_id']), eligible[0]['admin_country'].trim(), eligible.length)
+			if (shipping > 0) {
+				const res = await fetch('../../../../mobile/registration/api/checkShippingFee.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ admin: children[0]['admin_id'] })
+				})
+				const paid = await res.json()
+				if (shipping > 0 && paid == 0) needsShipping = true
+			}
+			// set cookie; needed for processing registration page
+			Cookies.set('needsShipping', needsShipping ? 1 : 0)
+
+			if (needsShipping) {
+				html += `<div id="shipping_charges">
+								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+								<div class="flex">
+									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+									<label>
+										(FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+										Sunday 19 Adar: 4-6PM; Monday 20 Adar: 6-9PM; Thursday 23 Adar: 9-11AM.
+									</label>
+								</div>
+								<div class="flex">
+									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping}" />
+									<label>
+										($${shipping}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
+										check to confirm that it has the correct address saved.
+									</label>
+								</div></div>`
 			}
 
 			$(".login").hide();
