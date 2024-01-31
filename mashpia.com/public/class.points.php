@@ -285,7 +285,7 @@ class Points
     }
 
     // originally in mashpia.com/public/v2/application/controllers/KioskMainController.php
-    public function scanMiles($card) {
+    public static function scanMiles($school_id, $user_id, $card) {
         $msg = '';
         $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . mysql_real_escape_string($card);
 //        echo $sql;
@@ -295,11 +295,11 @@ class Points
             if ($row['status'] == 'scanned') {
                 $msg = "This card has already been scanned.";
             } else {
-                if ($row['institution_id'] > 0 && $row['institution_id'] != $this->school_id) {
+                if ($row['institution_id'] > 0 && $row['institution_id'] != $school_id) {
                     $msg = "You are not in the correct base to scan this card.";
                 } else if ($row['class_id'] > 0) {
                     // get user class id
-                    $sql2 = "SELECT class_id FROM users WHERE user_id = " . $this->user_id;
+                    $sql2 = "SELECT class_id FROM users WHERE user_id = " . $user_id;
                     $result2 = mysql_query($sql2);
                     $row2 = mysql_fetch_assoc($result2);
                     $class_id = $row2['class_id'];
@@ -311,11 +311,11 @@ class Points
                     // insert into user_points
                     $sql4 = "INSERT into pointsDB.user_points SET 
                              achievement_card_id = " . $row['achievement_card_id'] . ",
-                             user_id = " . $this->user_id . ", 
+                             user_id = " . $user_id . ", 
                              campaign_id = " . $row['campaign_id'] . ", 
                              mission_id = " . $row['mission_id'] . ", 
                              task_id = " . $row['task_id'] . ", 
-                             institution_id = " . $this->school_id . ", 
+                             institution_id = " . $school_id . ", 
                              class_id = " . $row['class_id'] . ", 
                              points = " . $row['card_points'] . ", 
                              resource_name = 'specific achievement card'";
