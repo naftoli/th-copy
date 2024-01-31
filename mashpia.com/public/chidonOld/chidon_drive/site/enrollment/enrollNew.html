@@ -884,7 +884,7 @@
 			// update children with track info
 			for (let child of children) {
 				child.track = tracks[child.user_id]
-				child.khk_eligible = khk[child.user_id]
+				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
 				if (Cookies.get('naftoli')) {
 					// get track from GET param if exists
 					const queryString = window.location.search
@@ -966,6 +966,11 @@
 				location.href = 'enroll_extra.html'
 			} else if (schoolNotConfirmed.length) {
 				alert('Only children that have had their school confirm their eligibility will show up for registration.')
+			}
+
+			// check if there's any family balance that can be applied to registration
+			if (eligible[0].balance > 0) {
+				alert('You have a balance of $' + eligible[0].balance + ' that can be applied to your registration.')
 			}
 
 			let html = ''
@@ -1417,7 +1422,7 @@
 
 		function checkShipping() {
 			// only check shipping if at least one child from myshliach or anash kinder is being registered
-			if (needsShipping && $(".ultimate_trip:checked").length) {
+			if (needsShipping && cart.length) {
 				if (!$(".shipping:checked").length) {
 					errors.push("You must indicate how you would like to have your chidon stuff shipped!")
 					$(".shipping").eq(0).focus()
@@ -1506,7 +1511,7 @@
 					Cookies.set('ultimate_trip', JSON.stringify(ultimate_trip))
 					Cookies.set('ultimate_info', JSON.stringify(ultimate_info))
 				}
-				// go to checkout page
+				// go to extra purchases page
 				location.href = 'enroll_extra.html'
 			} else if (errors.length) {
 				alert(errors.join('\n'))
