@@ -335,8 +335,15 @@ class Points
                 }
             }
         } else {
-            if ( isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ) $msg = "הקוד הסרוק לא נמצא במערכת שלנו. אולי הבר קוד לא נסרק כראוי";
-            else $msg = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
+            // check if it's scanned
+            $sql = "SELECT * FROM pointsDB.achievement_cards_scanned where card_serial = " . mysql_real_escape_string($card);
+            $result = mysql_query($sql);
+            if (mysql_num_rows($result) > 0) {
+                $msg = "This card has already been scanned.";
+            } else {
+                if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') $msg = "הקוד הסרוק לא נמצא במערכת שלנו. אולי הבר קוד לא נסרק כראוי";
+                else $msg = "The scan code was not found in our system. Maybe the bar code wasn't scanned properly.";
+            }
         }
         return $msg;
     }
