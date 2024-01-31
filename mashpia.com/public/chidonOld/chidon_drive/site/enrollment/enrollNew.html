@@ -1106,8 +1106,6 @@
 				const paid = await res.json()
 				if (shipping > 0 && paid == 0) needsShipping = true
 			}
-			// set cookie; needed for processing registration page
-			Cookies.set('needsShipping', needsShipping ? 1 : 0)
 
 			if (needsShipping) {
 				html += `<div id="shipping_charges">
