@@ -5,6 +5,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/chidon_drive/site/enrollment/class.tripRegistration.php';
 require __DIR__ . '/../encrypt.php';
 
 $year = GlobalSettings::getChidonYear();
@@ -75,7 +76,7 @@ function getChildren() {
             }
 
             // get family balance
-//            $children[$i]['balance'] = TripRegistration::getFamilyBalance($child['admin_id'], $year);
+            $children[$i]['balance'] = TripRegistration::getFamilyBalance($child['admin_id'], $year);
 //            $children[$i]['raised'] = 200;
 //            $children[$i]['schoolConfirmed'] = 1;
 
