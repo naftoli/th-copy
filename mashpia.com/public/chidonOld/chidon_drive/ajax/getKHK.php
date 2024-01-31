@@ -9,7 +9,7 @@ $children = $_POST['children'];
 $ids = [];
 foreach ($children as $child) {
     if ($child['class_grade'] == '8') {
-        $ids[] = $child['id'];
+        $ids[] = $child['user_id'];
     }
 }
 $khk = KHK::getKHKEligibility($ids)[0];
