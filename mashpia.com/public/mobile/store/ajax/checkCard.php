@@ -13,5 +13,7 @@ $row = mysql_fetch_assoc($res);
 $school = $row['school_id'];
 
 $msg = Points::scanMiles($school, $user, $card);
-echo json_encode($msg);
+echo $msg;
+$scanned = json_decode($msg, true);
+if ($scanned['success']) Points::updateScanned($card);
 ?>
