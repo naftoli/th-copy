@@ -970,7 +970,11 @@
 
 			// check if there's any family balance that can be applied to registration
 			if (eligible[0].balance > 0) {
-				alert('You have a balance of $' + eligible[0].balance + ' that can be applied to your registration.')
+				const bal = eligible[0].balance
+				if (window.localStorage) localStorage.setItem('credit', bal)
+				else Cookies.set('credit', bal)
+				const text = `You have $${bal} credit from pre registration and will be reflected on the payment page. If you would like to get a refund without registering, please continue to the payment page.`
+				alert(text)
 			}
 
 			let html = ''
@@ -1109,7 +1113,12 @@
 					body: JSON.stringify({ admin: children[0]['admin_id'] })
 				})
 				const paid = await res.json()
-				if (shipping > 0 && paid == 0) needsShipping = true
+				if (shipping > 0 && paid == 0) {
+					needsShipping = true
+					// save country to for checkout
+					if (window.localStorage) localStorage.setItem('country', eligible[0]['admin_country'])
+					else Cookies.set('country', eligible[0]['admin_country'])
+				}
 			}
 
 			if (needsShipping) {

@@ -24,14 +24,14 @@ $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
 $payment_id = intval($_POST['card_id']);
 $shipping_charge = isset($_POST['shipping']) ? intval($_POST['shipping']) : 0;
-$to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge) : 0;
+$credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
+$to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge - $credit) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
 $cart = $_POST['cart'];
 $sweaters = isset($_POST['sweaters']) ? $_POST['sweaters'] : [];
 $addresses = isset($_POST['addresses']) ? $_POST['addresses'] : [];
 $users = [];
 $user_info = [];
-$reg_cost = 0;
 //$iyun = false;
 $celebBoxes = 0;
 $celebBoxShipping = 0;
@@ -47,6 +47,9 @@ $tracks = arrayByField($tracksArr, 'user_id', 'track');
 $trips = json_decode($_POST['trips']);
 $ultimate_trip = json_decode($_POST['ultimate_trip']);
 $ultimate_info = json_decode($_POST['ultimate_info']);
+$country = $_POST['country'];
+$creditVal = $_POST['creditVal'];
+$paypal_email = $_POST['paypal_email'];
 
 define('CELEB_BOX_COST', 20);
 define('SWEATER_COST', 25);
@@ -98,7 +101,7 @@ function arrayByField($array, $key, $value) {
 }
 
 function processCart() {
-    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info, $reg_cost;
+    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info;
 
     $sweater_types = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater'];
 
@@ -108,7 +111,6 @@ function processCart() {
                 $regInfo = explode('_', $item['desc']);
                 $user_id = $regInfo[1];
                 $users[$user_id] = floatval($item['value']);
-                $reg_cost .= $users[$user_id];
             } else if ($item['desc'] == 'num_celeb_boxes') {
                 $celebBoxes = intval($item['value']);
             } else if ($item['desc'] == 'celeb_box_ship') {
@@ -166,7 +168,7 @@ function processFee() {
     global $admin_id, $to_charge, $payment_id;
 
     // create description for authorize
-    $desc = getDescForAuthorize();
+    $desc = getAuthDesc();
 
     if ($payment_id) {
         $admin = \Admin::find('first', ['admin_id' => $admin_id]);
@@ -189,38 +191,243 @@ function processFee() {
     }
 }
 
-function getDescForAuthorize() {
-    global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $to_charge, $shipping_charge;
+function getAuthDesc() {
+    // code format (either for child or family):
+    // C<user_serial>:<code>-<amount>,
+    // F<admin_id>:<code>-<amount>,
+    $desc = [];
+    $descriptions = getDescriptions();
+    foreach ($descriptions as $item) {
+        $desc[] = $item['prefix'] . $item['id'] . ':' . $item['code'] . '-' . $item['amount'];
+    }
 
-    $desc = $admin_id . ": $" . $to_charge . " = ";
+    return implode(',', $desc);
+}
+
+function insertIntoRegCharges($trans_id = 0) {
+    global $MASHPIA_DB, $users, $year, $credit;
+
+    $user_ids = array_keys($users);
+    $stmtSchoolIDs = $MASHPIA_DB->query("
+        SELECT user_id, school_id 
+        FROM users 
+        WHERE user_id in (" . implode(',', $user_ids) . ")
+    ");
+    $rows = $stmtSchoolIDs->fetchAll();
+    foreach ($rows as $row) {
+        $school_ids[$row['user_id']] = $row['school_id'];
+    }
+
+    $stmt = $MASHPIA_DB->prepare("
+        INSERT INTO registration_charges 
+        SET 
+            trans_id = :trans_id,
+            user_id = :user, 
+            school_id = :school, 
+            admin_id = :admin,
+            type = :type, 
+            amount = :amount, 
+            year = :year,
+    ");
+
+    $success = true;
+    $MASHPIA_DB->beginTransaction();
+    $descriptions = getDescriptions();
+    foreach ($descriptions as $item) {
+        if ($item['prefix'] == 'C') {
+            if (! $stmt->execute([
+                'trans_id' => $trans_id,
+                'user' => $item['id'],
+                'school' => $school_ids[$item['id']],
+                'admin' => 0,
+                'type' => $item['code'],
+                'amount' => $item['amount'],
+                'year' => $year
+            ])) {
+                $success = false;
+                break;
+            }
+        } else if ($item['prefix'] == 'F') {
+            if (! $stmt->execute([
+                'trans_id' => $trans_id,
+                'user' => 0,
+                'school' => 0,
+                'admin' => $item['id'],
+                'type' => $item['code'],
+                'amount' => $item['amount'],
+                'year' => $year
+            ])) {
+                $success = false;
+                break;
+            }
+        }
+    }
+
+    if ($success) {
+        $MASHPIA_DB->commit();
+        updateFamilyBalance($credit);
+        return true;
+    } else {
+        $MASHPIA_DB->rollBack();
+        return false;
+    }
+}
+
+function getDescriptions() {
+    global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip, $shipping_charge, $country, $credit;
+
+    $desc = [];
+    $serials = getSerials();
+
+    // if there's credit first zero out the amounts in the registration_charges table
+    if ($credit > 0) {
+        $existing_codes = getExistingCodes();
+        foreach ($existing_codes as $code) {
+            $desc[] = [
+                'prefix'    => 'C',
+                'id'        => $serials[$code['user_id']],
+                'code'      => $code['type'] . '-',
+                'amount'    => $code['amount']
+            ];
+        }
+    }
+
+    if ($users) {
+        foreach ($users as $user_id => $amount) {
+            $user_track = $tracks[$user_id];
+            switch ($user_track) {
+                case 'Yesod':
+                    $code = 'RRYSD';
+                    break;
+                case 'Yediah':
+                    $code = 'RRYDA';
+                    break;
+                case 'Havonah':
+                case 'Iyun':
+                    if (isset($ultimate_trip[$user_id])) $code = 'RRKHK';
+                    else $code = 'RRHVN';
+                    break;
+                default:
+                    continue;
+            }
+            $desc[] = [
+                'prefix'    => 'C',
+                'id'        => $serials[$user_id],
+                'code'      => $code,
+                'amount'    => $amount
+            ];
+        }
+    }
 
     if ($shipping_charge) {
-        $desc .= "Shipping charge: $" . $shipping_charge . "; ";
+        // figure out code for shipping charge
+        // check country of family
+        switch ($country) {
+            case 'USA':
+                $code = 'RRSUSA';
+                break;
+            case 'Canada':
+                $code = 'RRSCAN';
+                break;
+            default:
+                $code = 'RRSINT';
+                break;
+        }
+        $desc[] = [
+            'prefix'    => 'F',
+            'id'        => $admin_id,
+            'code'      => $code,
+            'amount'    => $shipping_charge
+        ];
     }
 
     if ($celebBoxes) {
-        $desc .=  $celebBoxes . " celebration boxes-$" . ($celebBoxes * CELEB_BOX_COST) . ", shipping-$" . $celebBoxShipping . "; ";
+        $desc[] = [
+            'prefix'    => 'F',
+            'id'        => $admin_id,
+            'code'      => 'RRCB',
+            'amount'    => $celebBoxes * CELEB_BOX_COST
+        ];
+        if ($celebBoxShipping) {
+            $desc[] = [
+                'prefix'    => 'F',
+                'id'        => $admin_id,
+                'code'      => 'RRCBS',
+                'amount'    => $celebBoxShipping
+            ];
+        }
     }
 
     if ($sweaters) {
-        $shipping = 0;
+        $shipping_cost = 0;
         $num_sweaters = 0;
         foreach ($sweater_info as $other)  {
             foreach ($other as $sweater) {
                 $num_sweaters++;
-                $shipping += intval($sweater['ship']);
+                $shipping_cost += intval($sweater['ship']);
             }
         }
-        $desc .= "sweaters-$" . ($num_sweaters * SWEATER_COST) . ", shipping-$" . $shipping . "; ";
-    }
-
-    if ($users) {
-        $serials = getSerials();
-        foreach ($users as $user_id => $amount) {
-            $desc .= $serials[$user_id] . ": $" . $amount . " - " . $tracks[$user_id] . "; ";
+        if ($num_sweaters) {
+            $desc[] = [
+                'prefix'    => 'F',
+                'id'        => $admin_id,
+                'code'      => 'RRSW',
+                'amount'    => $num_sweaters * SWEATER_COST
+            ];
+            if ($shipping_cost) {
+                $desc[] = [
+                    'prefix'    => 'F',
+                    'id'        => $admin_id,
+                    'code'      => 'RRSWS',
+                    'amount'    => $shipping_cost
+                ];
+            }
         }
     }
+
     return $desc;
+}
+
+function getExistingCodes() {
+    global $admin_id, $year, $MASHPIA_DB;
+
+    // get children for admin
+    $stmt = $MASHPIA_DB->prepare("
+        SELECT id 
+        FROM admin_auths 
+        WHERE admin_id = :admin
+    ");
+    $stmt->execute([':admin' => $admin_id]);
+    $children = $stmt->fetchAll();
+    $user_ids = array_map(function($child) {
+        return $child['id'];
+    }, $children);
+
+    // get codes
+    $stmt2 = $MASHPIA_DB->prepare("
+        SELECT user_id, type, amount
+        FROM registration_charges
+        WHERE user_id in (" . implode(',', $user_ids) . ") AND year = :year
+    ");
+    $stmt2->execute([':year' => $year]);
+    $codes = $stmt->fetchAll();
+
+    return $codes;
+}
+
+function updateFamilyBalance($amount) {
+    global $MASHPIA_DB, $admin_id, $year;
+
+    $stmt = $MASHPIA_DB->prepare("
+        UPDATE family_prepaid_balances 
+        SET used = used + :amount 
+        WHERE admin_id = :admin AND year = :year
+    ");
+    return $stmt->execute([
+        ':amount'   => $amount,
+        ':admin'    => $admin_id,
+        ':year'     => $year
+    ]);
 }
 
 function processReg() {
@@ -548,7 +755,7 @@ $ultimate = saveUltimateTripInfo();
 $info = [];
 $trans_id = 0;
 if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
-    if ($to_charge) {
+    if ($to_charge > 0) {
         $payment = processFee();
         if (! $payment) {
             $MASHPIA_DB->rollBack();
@@ -563,6 +770,8 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
             $MASHPIA_DB->commit();
             // redeem coupons
             redeemCoupons();
+            // update registration_charges table
+            insertIntoRegCharges($trans_id);
             $info['success'] = true;
             $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                 'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
@@ -576,6 +785,7 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
         }
     } else {
         $MASHPIA_DB->commit();
+        insertIntoRegCharges();
         $info['success'] = true;
         $info['msg'] = 'Congratulation! You have successfully registered your child(ren).';
     }
@@ -583,12 +793,6 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     $MASHPIA_DB->rollBack();
     $info['success'] = false;
     $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
-//    echo "Registered: " . $registered . "<br />";
-//    echo "Shipping Updated: " . $shippingUpdated . "<br />";
-//    echo "Celebration Boxes Processed: " . $celebBoxesProcessed . "<br />";
-//    echo "Sweaters Processed: " . $sweatersProcessed . "<br />";
-//    echo "Trips Saved: " . $tripsSaved . "<br />";
-//    echo "Ultimate Trip Info Saved: " . $ultimate;
 }
 // send email confirmation
 if ($info['success']) {

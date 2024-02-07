@@ -343,7 +343,7 @@
             location.href = newUrl;
         }
 
-        if (!Cookies.get('chidon_admin')) {
+        if (! Cookies.get('chidon_admin')) {
             location.href = 'enrollNew.html'
         }
 
@@ -363,6 +363,8 @@
         var cc = {}
         var card_id = 0
         var shipping = 0
+        var credit = 0
+        var grand_total = 0
 
         $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function (result) {
             admin = JSON.parse(result)
@@ -400,6 +402,7 @@
             trips = window.localStorage.getItem('trips')
             ultimate_trip = window.localStorage.getItem('ultimate_trip')
             ultimate_info = window.localStorage.getItem('ultimate_info')
+            credit = window.localStorage.getItem('credit') ? parseInt(window.localStorage.getItem('credit')) : 0
         } else {
             cart = JSON.parse(Cookies.get('cart'))
             addresses = JSON.parse(Cookies.get('addresses'))
@@ -409,8 +412,8 @@
             trips = Cookies.get('trips')
             ultimate_trip = Cookies.get('ultimate_trip')
             ultimate_info = Cookies.get('ultimate_info')
+            credit = Cookies.get('credit') ? parseInt(Cookies.get('credit')) : 0
         }
-        if (!cart.length) location.href = 'enrollNew.html'
 
         let names = cart.filter(item => item.desc === 'names')
         if (names.length) children = names[0].value
@@ -514,8 +517,53 @@
             html += `<h5 class="formDetails">Total Sweater Cost: $${sweater_cost}</h5>`
             cart_total += sweater_cost
         }
+
+        // find out how much to deduct using previous balance if any exists
+        if (credit) {
+            html += `<h5 class="formDetails"><span class="title">Available Credit</span></h5>`
+            html += `<h5 class="formDetails">Available Credit: $${credit}</h5>`
+        }
+
+        grand_total = parseFloat(cart_total) + parseFloat(shipping) - parseFloat(credit)
+        if (grand_total <= 0 && !credit) location.href = 'enrollNew.html'
+
         html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
-        html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${cart_total + shipping}</span></h5>`
+        if (grand_total < 0) {
+            html += `<h5 class="formDetails">Your have a credit of: <span>$${Math.abs(grand_total)}</span></h5>`
+            html += `<h5 class="formDetails">What would you like to do with this credit?</h5>`
+            html += `
+            <div class="flex">
+                <input type="radio" name="credit" class="inputCheckbox credit" value="1" />
+                <label for="credit" style="display: inline">I would like to donate my credit to the Chidon scholarship fund.</label>
+            </div>
+            <div class="flex">
+                <input type="radio" name="credit" class="inputCheckbox credit" value="2" />
+                <label for="credit" style="display: inline">Please refund me to my original payment, (Refunds will take 3-5 business days)</label>
+            </div>
+            <div class="flex">
+                <input type="radio" name="credit" class="inputCheckbox credit" value="3" />
+                <label for="credit" style="display: inline">Please refund me by PayPal. (Refunds will take 3-5 business days)</label>
+            </div>
+            <div class="flex">
+              <input type="text" id="paypal_email" placeholder="PayPal Email" style="max-width: 300px; display: none" />
+            </div>`
+            $("#terms2").attr('checked', true)
+            $("#terms2").parent().hide()
+        } else if (grand_total > 0) {
+            html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${grand_total}</span></h5>`
+        } else {
+            html += `<h5 class="formDetails">Your available credit has been applied to your total charge. There is no charge today.</h5>`
+            $("#terms2").attr('checked', true)
+            $("#terms2").parent().hide()
+        }
+
+        $(document).on('click', '.credit', function() {
+            if (parseInt($(this).val()) === 3) {
+                $("#paypal_email").show()
+            } else {
+                $("#paypal_email").hide()
+            }
+        })
 
         // payment
         html += `
@@ -533,13 +581,19 @@
 
         $(".personalInfo").append(html)
 
-        if (reg.length && cart_total === 0 && shipping === 0) {
-            $("#paymentDetails").hide()
-            $(".processPayment").val('Register')
+        if (grand_total > 0) $("#paymentDetails").show()
+        else $("#paymentDetails").hide()
+
+        let buttonVal
+        if (reg.length) {
+            if (grand_total > 0) buttonVal = 'Pay & Register Child(ren)'
+            else buttonVal = 'Register Child(ren)'
+        } else {
+            if (grand_total > 0) buttonVal = 'Pay for Extra Purchases'
+            else if (cart_total || shipping) buttonVal = 'Get Extra Purchases'
+            else buttonVal = 'Refund Credit'
         }
-        else if (reg.length) $(".processPayment").val('Pay & Register')
-        else if (cart_total > 0 || shipping > 0) $(".processPayment").val('Pay')
-        else if (cart_total == 0 && !reg.length) location.href = 'enrollNew.html'
+        $(".processPayment").val(buttonVal)
 
         $(".payment").click(function () {
             if (parseInt($(this).val())) {
@@ -553,13 +607,15 @@
             evt.preventDefault()
             $(".processPayment").attr('disabled', true)
 
-            if ((cart_total || shipping) && !$(".payment:checked").length) {
+            if ((grand_total > 0) && !$(".payment:checked").length) {
                 alert('You must indicate how your are going to pay!')
                 $(".processPayment").attr('disabled', false)
                 return false
             }
 
-            if (cart_total || shipping) {
+            let creditVal = 0
+            let paypal_email = ''
+            if (grand_total > 0) {
                 if (parseInt($(".payment:checked").val()) === 0) {
                     card_id = parseInt($(".payment-card").val())
                     // check if cvc is correct
@@ -575,6 +631,22 @@
                         return false
                     }
                 }
+            } else if (grand_total < 0) {
+                // check credit and paypal_email
+                creditVal = parseInt($(".credit:checked").val())
+                if (!creditVal) {
+                    alert('You must indicate what you would like to do with your credit.')
+                    $(".processPayment").attr('disabled', false)
+                    return false
+                }
+                if (creditVal === 3) {
+                    paypal_email = $("#paypal_email").val()
+                    if (!paypal_email) {
+                        alert('You must enter a PayPal email to receive your refund.')
+                        $(".processPayment").attr('disabled', false)
+                        return false
+                    }
+                }
             }
 
             // check terms
@@ -585,6 +657,8 @@
             }
 
             const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks')
+            const country = shipping ? window.localStorage ? window.localStorage.getItem('country') : Cookies.get('country') : ''
+
             $.post('../../ajax/processPayment5783.php', {
                 admin_id: admin.admin_id,
                 admin_email,
@@ -600,12 +674,16 @@
                 tracks,
                 trips,
                 ultimate_trip,
-                ultimate_info
+                ultimate_info,
+                credit,
+                country,
+                creditVal,
+                paypal_email
             }, function (result) {
                 const res = JSON.parse(result)
                 if (res.success) {
                     alert(res.msg)
-                    let items = ['cart', 'addresses', 'coupons', 'raised', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks']
+                    let items = ['cart', 'addresses', 'coupons', 'raised', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks', 'needs_shipping', 'credit']
                     for (let item of items) {
                         if (window.localStorage) window.localStorage.removeItem(item)
                         else Cookies.remove(item)

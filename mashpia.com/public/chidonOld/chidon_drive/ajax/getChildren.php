@@ -76,7 +76,8 @@ function getChildren() {
             }
 
             // get family balance
-            $children[$i]['balance'] = TripRegistration::getFamilyBalance($child['admin_id'], $year);
+            $r = new TripRegistration($child['admin_id'], $year);
+            $children[$i]['balance'] = $r->getFamilyBalance();
 //            $children[$i]['raised'] = 200;
 //            $children[$i]['schoolConfirmed'] = 1;
 
