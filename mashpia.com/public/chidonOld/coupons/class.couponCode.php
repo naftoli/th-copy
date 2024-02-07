@@ -153,12 +153,15 @@ class CouponCode
         $stmt = $this->db->prepare("
             SELECT * FROM coupon_codes 
             WHERE 
-                year = :year AND admin_id = :admin 
-                    AND used = 0
+                year = :year 
+                AND admin_id = :admin 
+                AND type = :type
+                AND used = 0
         ");
         $stmt->execute([
             ':year' => $this->year,
-            ':admin'=> $admin_id
+            ':admin'=> $admin_id,
+            ':type' => $this->type
         ]);
         $row = $stmt->fetch();
         if ($row['value']) {
@@ -173,12 +176,15 @@ class CouponCode
         $stmt = $this->db->prepare("
             SELECT * FROM coupon_codes 
             WHERE 
-                year = :year AND serial_num = :user 
-                    AND used = 0
+                year = :year 
+                AND serial_num = :user 
+                AND type = :type
+                AND used = 0
         ");
         $stmt->execute([
             ':year' => $this->year,
-            ':user' => $user_serial
+            ':user' => $user_serial,
+            ':type' => $this->type
         ]);
         $rows = $stmt->fetchAll( PDO::FETCH_ASSOC );
         $amount += array_reduce($rows, function($carry, $item) {
@@ -192,12 +198,15 @@ class CouponCode
         $stmt = $this->db->prepare("
             SELECT * FROM coupon_codes 
             WHERE 
-                year = :year AND serial_num = :user 
-                    AND used = 1
+                year = :year 
+                AND serial_num = :user 
+                AND type = :type 
+                AND used = 1
         ");
         $stmt->execute([
             ':year' => $this->year,
-            ':user' => $user_serial
+            ':user' => $user_serial,
+            ':type' => $this->type
         ]);
         $row = $stmt->fetch();
         if ($row['value']) {
@@ -208,15 +217,16 @@ class CouponCode
 
     public function useUserCode($user_serial) {
         $stmt = $this->db->prepare("
-            update coupon_codes 
-            set used = 1, 
-            date_redeemed = now() 
-            where year = :year 
-            and serial_num = :serial
+            UPDATE coupon_codes 
+            SET used = 1, date_redeemed = now() 
+            WHERE year = :year 
+            AND serial_num = :serial
+            AND type = :type
         ");
         $stmt->execute([
             ':year'     => $this->year,
-            ':serial'   => $user_serial
+            ':serial'   => $user_serial,
+            ':type'     => $this->type
         ]);
 
         if ($stmt->errorCode() > 0) return false;

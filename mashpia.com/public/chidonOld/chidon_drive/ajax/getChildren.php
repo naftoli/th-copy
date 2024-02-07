@@ -5,6 +5,7 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/chidon_drive/site/enrollment/class.tripRegistration.php';
 require __DIR__ . '/../encrypt.php';
 
@@ -51,14 +52,7 @@ function getChildren() {
             WHERE chidon_year = :year AND user_id = :user
         ");
 
-        // get coupon amounts
-        $stmtCoupon = $MASHPIA_DB->prepare("
-            SELECT IFNULL(SUM(value), 0) as coupon,  
-            FROM coupon_codes 
-            WHERE admin_id = :admin 
-            AND year = :year
-            AND serial_num = :serial
-        ");
+        $c = new CouponCode($MASHPIA_DB, $year);
 
         for ($i = 0; $i < count($children); $i++) {
             $children[$i]['familyBalance'] = $familyBalance;
@@ -71,13 +65,7 @@ function getChildren() {
             $result = $stmt->fetch();
             if ($result['raised']) $children[$i]['raised'] = $result['raised'];
 
-            $stmtCoupon->execute([
-                ':admin'    => $admin_id,
-                ':year'     => $year,
-                ':serial'   => $child['user_serial']
-            ]);
-            $coupon = $stmtCoupon->fetch();
-            $children[$i]['coupon'] = $coupon['coupon'];
+            $children[$i]['coupon'] = $c->checkForUserCode($child['user_serial']);
         }
     }
     return $children;
