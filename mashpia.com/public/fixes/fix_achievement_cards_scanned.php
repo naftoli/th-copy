@@ -14,7 +14,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 foreach ($ids as $id) {
-    $sql = "delete from achievement_cards_scanned where achievement_card_id = $id";
+    $sql = "delete from pointsDB.achievement_cards_scanned where achievement_card_id = $id";
     mysql_query($sql) or die(mysql_error());
 }
 echo "done";
