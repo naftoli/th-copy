@@ -343,39 +343,57 @@ class Points
     }
 
     public static function updateScanned($card) {
-        $qrys = [];
-        $sqlCopy = "INSERT INTO pointsDB.achievement_cards_scanned SELECT * FROM pointsDB.achievement_cards WHERE card_serial = " . $card;
-        $qrys[] = $sqlCopy;
-        $sqlUpdate = "UPDATE pointsDB.achievement_cards_scanned SET status = 'scanned' WHERE card_serial = " . $card;
-        $qrys[] = $sqlUpdate;
-        $sqlDelete = "DELETE FROM pointsDB.achievement_cards WHERE card_serial = " . $card;
-        $qrys[] = $sqlDelete;
-
-        mysql_query('set autocommit=0');
-        mysql_query('start transaction');
-        if (mysql_query($sqlCopy) && mysql_query($sqlUpdate) && mysql_query($sqlDelete)) {
-            mysql_query('commit');
-            mysql_query('set autocommit=1');
+        if (! $card) {
             return [
-                'success'   => true
+                'success'   => false,
+                'msg'       => 'No card number provided.'
+            ];
+        }
+        $sql = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . $card;
+        if (! mysql_query($sql)) {
+            return [
+                'success'   => false,
+                'msg'       => $sql
             ];
         } else {
-            mysql_query('rollback');
-            mysql_query('set autocommit=1');
-            $sqlUpdate2 = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . $card;
-            $qrys[] = $sqlUpdate2;
-            if (! mysql_query($sqlUpdate2)) {
-                return [
-                    'success'   => false,
-                    'data'      => $qrys
-                ];
-            } else {
-                return [
-                    'success'   => true,
-                    'data'      => $qrys
-                ];
-            }
+            return [
+                'success'   => true,
+                'msg'       => $sql
+            ];
         }
+//        $qrys = [];
+//        $sqlCopy = "INSERT INTO pointsDB.achievement_cards_scanned SELECT * FROM pointsDB.achievement_cards WHERE card_serial = " . $card;
+//        $qrys[] = $sqlCopy;
+//        $sqlUpdate = "UPDATE pointsDB.achievement_cards_scanned SET status = 'scanned' WHERE card_serial = " . $card;
+//        $qrys[] = $sqlUpdate;
+//        $sqlDelete = "DELETE FROM pointsDB.achievement_cards WHERE card_serial = " . $card;
+//        $qrys[] = $sqlDelete;
+//
+//        mysql_query('set autocommit=0');
+//        mysql_query('start transaction');
+//        if (mysql_query($sqlCopy) && mysql_query($sqlUpdate) && mysql_query($sqlDelete)) {
+//            mysql_query('commit');
+//            mysql_query('set autocommit=1');
+//            return [
+//                'success'   => true
+//            ];
+//        } else {
+//            mysql_query('rollback');
+//            mysql_query('set autocommit=1');
+//            $sqlUpdate2 = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . $card;
+//            $qrys[] = $sqlUpdate2;
+//            if (! mysql_query($sqlUpdate2)) {
+//                return [
+//                    'success'   => false,
+//                    'data'      => $qrys
+//                ];
+//            } else {
+//                return [
+//                    'success'   => true,
+//                    'data'      => $qrys
+//                ];
+//            }
+//        }
     }
 
     public function getPointsHistory($start, $end = 0) {

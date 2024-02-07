@@ -358,11 +358,12 @@ require 'mobile/reg/ajax/encrypt.php';
 	async function loadShadow(cardnum) {
 		if (cardnum.value.match(/^ *$/)) return;
     // open a welcome message as soon as the window loads
-    const res = await fetch('/cardpop.php?card=' + cardnum.value + '&user_id=' + <?=$user_id?> + '&school_id=' + <?=$school_id?> + '&class_id=' + <?=$class_id?>)
+    const card = cardnum.value
+    const res = await fetch('/cardpop.php?card=' + card + '&user_id=' + <?=$user_id?> + '&school_id=' + <?=$school_id?> + '&class_id=' + <?=$class_id?>)
     const result = await res.json()
     alert(result.msg)
     if (result.success) {
-      fetch('/cardpop2.php?card=' + cardnum.value) // update db in separate request
+      fetch('/cardpop2.php?card=' + card) // update db in separate request
     }
 		cardnum.value='';
 		return false;
