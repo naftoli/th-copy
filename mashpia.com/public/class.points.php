@@ -357,8 +357,7 @@ class Points
             ];
         } else {
             return [
-                'success'   => true,
-                'msg'       => $sql
+                'success'   => true
             ];
         }
 //        $qrys = [];

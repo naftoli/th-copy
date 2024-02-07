@@ -362,9 +362,6 @@ require 'mobile/reg/ajax/encrypt.php';
     const res = await fetch('/cardpop.php?card=' + card + '&user_id=' + <?=$user_id?> + '&school_id=' + <?=$school_id?> + '&class_id=' + <?=$class_id?>)
     const result = await res.json()
     alert(result.msg)
-    if (result.success) {
-      fetch('/cardpop2.php?card=' + card) // update db in separate request
-    }
 		cardnum.value='';
 		return false;
 	}
