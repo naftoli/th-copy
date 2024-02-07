@@ -4,7 +4,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.points.php';
 
 $card = mysql_real_escape_string($_REQUEST['card']);
 $result = Points::updateScanned($card);
-if (isset($result['data'])) {
+if (!$result['success'] && isset($result['data'])) {
 	// mail issue to myself
 	$to = 'naftoli@tzivoshashem.org';
     $from = 'debug@tzivoshashem.org';
