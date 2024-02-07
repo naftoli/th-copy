@@ -529,7 +529,7 @@
 
         html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
         if (grand_total < 0) {
-            html += `<h5 class="formDetails">Your have a credit of: <span>$${Math.abs(grand_total)}</span></h5>`
+            html += `<h5 class="formDetails">You have a credit of: <span>$${Math.abs(grand_total)}</span></h5>`
             html += `<h5 class="formDetails">What would you like to do with this credit?</h5>`
             html += `
             <div class="flex">
@@ -640,7 +640,7 @@
                     return false
                 }
                 if (creditVal === 3) {
-                    paypal_email = $("#paypal_email").val()
+                    paypal_email = $("#paypal_email").val().trim()
                     if (!paypal_email) {
                         alert('You must enter a PayPal email to receive your refund.')
                         $(".processPayment").attr('disabled', false)

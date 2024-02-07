@@ -26,6 +26,7 @@ $payment_id = intval($_POST['card_id']);
 $shipping_charge = isset($_POST['shipping']) ? intval($_POST['shipping']) : 0;
 $credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
 $to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge - $credit) : 0;
+$total_without_credit = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
 $cart = $_POST['cart'];
 $sweaters = isset($_POST['sweaters']) ? $_POST['sweaters'] : [];
@@ -205,7 +206,7 @@ function getAuthDesc() {
 }
 
 function insertIntoRegCharges($trans_id = 0) {
-    global $MASHPIA_DB, $users, $year, $credit;
+    global $MASHPIA_DB, $users, $year;
 
     $user_ids = array_keys($users);
     $stmtSchoolIDs = $MASHPIA_DB->query("
@@ -265,7 +266,7 @@ function insertIntoRegCharges($trans_id = 0) {
 
     if ($success) {
         $MASHPIA_DB->commit();
-        updateFamilyBalance($credit);
+        updateFamilyBalance($descriptions);
         return true;
     } else {
         $MASHPIA_DB->rollBack();
@@ -415,19 +416,54 @@ function getExistingCodes() {
     return $codes;
 }
 
-function updateFamilyBalance($amount) {
-    global $MASHPIA_DB, $admin_id, $year;
+function updateFamilyBalance(array $desc = []) {
+    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit;
 
-    $stmt = $MASHPIA_DB->prepare("
-        UPDATE family_prepaid_balances 
-        SET used = used + :amount 
-        WHERE admin_id = :admin AND year = :year
-    ");
-    return $stmt->execute([
-        ':amount'   => $amount,
-        ':admin'    => $admin_id,
-        ':year'     => $year
-    ]);
+    if (empty($desc)) $desc = getDescriptions();
+
+    if ($to_charge > 0) {
+        $stmt = $MASHPIA_DB->prepare("
+            UPDATE family_prepaid_balances 
+            SET used = used + :amount, 
+            accounting_code = :code 
+            WHERE admin_id = :admin AND year = :year
+        ");
+        return $stmt->execute([
+            ':amount'   => $credit,
+            ':admin'    => $admin_id,
+            ':year'     => $year,
+            ':code'     => implode(',', $desc)
+        ]);
+    } else {
+        $stmt = $MASHPIA_DB->prepare("
+            UPDATE family_prepaid_balances 
+            SET used = used + :amount, 
+            refund_type = :type, 
+            paypal = :paypal, 
+            accounting_code = :code 
+            WHERE admin_id = :admin AND year = :year
+        ");
+
+        switch (intval($creditVal)) {
+            case 1:
+                $type = 'donation';
+                break;
+            case 2:
+                $type = 'refund';
+                break;
+            case 3:
+                $type = 'paypal';
+                break;
+        }
+        return $stmt->execute([
+            ':amount'   => $total_without_credit,
+            ':type'     => $type,
+            ':paypal'   => $paypal_email,
+            ':admin'    => $admin_id,
+            ':year'     => $year,
+            ':code'     => implode(',', $desc)
+        ]);
+    }
 }
 
 function processReg() {
@@ -785,9 +821,11 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
         }
     } else {
         $MASHPIA_DB->commit();
-        insertIntoRegCharges();
         $info['success'] = true;
         $info['msg'] = 'Congratulation! You have successfully registered your child(ren).';
+        // redeem coupons and update family balance
+        redeemCoupons();
+        updateFamilyBalance();
     }
 } else {
     $MASHPIA_DB->rollBack();
