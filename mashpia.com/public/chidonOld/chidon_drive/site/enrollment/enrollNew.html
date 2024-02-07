@@ -385,37 +385,14 @@
 						<div class="modal-section">
 							<h5>Accommodation Information</h5>
 							<p>
-								Chidon staff will supervise a safe drop-off FROM all Chidon programs on Monday, Tuesday
-								& wednesday night if they are within our walking group zones. See
-								<a href="https://www.dropbox.com/s/3ha3ls3a89b1odm/Walking%20Zone%20Map.png?dl=0"
-									target="_blank">here</a>
-								for a map. It will be your responsibility to get your child TO the Chidon programs each
-								morning.
-							</p>
-							<h5>Where will your child be staying?</h5>
-							<p>
-								Please note: If you live in Crown Heights, please provide your home address. <br />
-								We will need an address on record even if it is outside of the walking zones.<br />
+								It will be the parents responsibility to get the child to the Chidon programs each morning as well as
+								picking them up at the end of each day. Click <a href="" id="whatsapp_link">here</a> to join the
+								Whatsapp group with parents looking to coordinate walking together.<br />
+								Chidon staff will be at drop off each morning to greet them when they arrive, and will stay with them until it's time to leave at the end of each day.
 							</p>
 
-							<div class="modal-radio-group">
-								<label><input type="radio" name="in_zone" class="in_zone" value="1" /></label>
-								My child will be staying WITHIN the Crown Heights walking zone.
-							</div>
-							<div class="modal-radio-group">
-								<label><input type="radio" name="in_zone" class="in_zone" value="0" /></label>
-								<span>
-									My child will be staying OUTSIDE of the walking zone. I understand I will need to
-									make arrangements to get them home after Chidon programs. Click <a
-										href="https://chat.whatsapp.com/FFKRUKX1Blp7D7hcrYyGZs" target="_blank">here</a>
-									to join a whatsapp group with other parents from outside the walking zone to
-									coordinate transportation arrangements.
-								</span>
-							</div>
-							<br />
-
-							<div id="zoneAddress" style="display: none;">
-								<h5>Crown Heights Address</h5>
+							<div id="zoneAddress">
+								<h5>Crown Heights address that you will be sleeping at</h5>
 
 								<div class="flex">
 									<label>Crown Heights Family Name:</label>
@@ -446,8 +423,9 @@
 									</div>
 								</div>
 							</div>
+							<input type="hidden" name="in_zone" class="in_zone" value="1" />
 
-							<div id="insideZone" style="display: none;">
+							<div id="insideZone">
 								<div class="flex">
 									<label>Street Name (Name Only):</label>
 									<select id="acc_street" name="acc_street"></select>
@@ -459,8 +437,7 @@
 									<input type="text" id="acc_cross2" name="acc_cross2" disabled />
 								</div>
 								<p>
-									<i>Address not showing up? Please email chidon@tzivoshashem.org
-										with the exact address and cross streets to have it updated.</i>
+									<i>Address not showing up? Please click <a href="" id="toggleZone">here</a> to add your address.</i>
 								</p>
 							</div>
 
@@ -480,12 +457,16 @@
 							</div>
 							<br />
 							<div class="flex checkbox-container">
-								<label><input type="checkbox" name="walking" id="walking" /></label>
-								I allow my child to walk home alone at any time of the day and night, from ALL
-								chidon programs. <br /><br />
-								Please Note: Even if your child has permission to walk home alone at the time of
-								dismissal they will need to get into a walking group and only after their walking
-								group has left the building will they be able to walk home alone.
+								<label>
+									<input type="checkbox" name="walking" class="walking" value="1" />
+								</label>
+								My child will be walking alone to and from the program each day
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="checkbox" name="walking" class="walking" value="0" />
+								</label>
+								My child will be dropped off and picked up from the program each day
 							</div>
 						</div>
 						<div class="modal-section">
@@ -504,14 +485,13 @@
 							</div>
 							<div class="flex checkbox-container">
 								<label><input type="checkbox" id="terms2" class="terms" /></label>
-								Please read with your child and initial: I will abide by all rules established by
-								Chidon headquarters. Any behavior deemed inappropriate by staff or a departure from
-								an
-								activity without the sconsent of your counselor and safety officer is terms for
-								dismissal from the
-								Program.
-								The Program fee will NOT be refunded.
+								Please read with your child and initial: I have signed the contract that I will follow all the rules,
+								Chas Veshalom, if I don't, I will be dismissed from the program with no refund.
 								<input type="text" id="initials" style="width: 40px;" />
+							</div>
+							<div class="flex checkbox-container">
+								<label><input type="checkbox" id="terms3" class="terms" /></label>
+								I am aware the Chidon HQ will <b>NOT</b> be providing transportation to pick up and drop off the children each day.
 							</div>
 						</div>
 					</form>
@@ -534,20 +514,15 @@
 		// for modal
 		var ultimate_info = {}
 
-		$(".in_zone").click(function () {
-			$("#zoneAddress").show()
-			let val = $(this).val()
-			if (parseInt(val)) {
-				$("#outsideZone").hide()
-				$("#insideZone").show()
-			} else {
-				$("#insideZone").hide()
-				$("#outsideZone").show()
-			}
+		$("#toggleZone").click(function (e) {
+			e.preventDefault()
+			$("#insideZone").hide()
+			$("#outsideZone").show()
+			$(".in_zone").val(0)
 		})
 
 		function getCrossStreets(number, street) {
-			if (street && street != 'Choose One' && parseInt($(".in_zone:checked").val()) == 1) {
+			if (street && street != 'Choose One' && parseInt($(".in_zone").val()) == 1) {
 				if (!number) {
 					alert('You must enter a Street Number.');
 					return false;
@@ -625,7 +600,7 @@
 				{ elem: '#acc_family', type: 'val', error: 'You must enter the accomodation family name.' },
 				{ elem: '#acc_street_num', type: 'val', error: 'You must enter the accomodation street number.' },
 				{
-					elem: '.in_zone', type: 'radio', error: 'You must indicate whether the accomodation family is within the walking zone or not.',
+					elem: '.in_zone', type: 'hidden', error: '',
 					yes: [
 						{ elem: '#acc_street', type: 'val', error: 'You must enter the accomodation street.' },
 						{ elem: '#acc_cross1', type: 'val', error: 'You must enter a correct address OR choose that your are staying OUTSIDE of the walking zone.' },
@@ -637,8 +612,10 @@
 					]
 				},
 				{ elem: '#acc_phone', type: 'val', error: 'You must enter a phone number where you can be reached.' },
+				{ elem: '.walking', type: 'checkbox', error: 'You must indicate whether your child will be walking alone or not.' },
 				{ elem: '#terms1', type: 'checkbox', error: 'You must check off all Terms.' },
 				{ elem: '#terms2', type: 'checkbox', error: 'You must check off all Terms.' },
+				{ elem: '#terms3', type: 'checkbox', error: 'You must check off all Terms.' },
 				{ elem: '#initials', type: 'val', error: 'You must enter your initials in the last Term.' }
 			]
 			for (let obj of needed) {
@@ -671,6 +648,21 @@
 							}
 						}
 						break
+					case 'hidden':
+						if (parseInt($(obj.elem).val()) === 1) {
+							if (obj.yes) {
+								for (let id of obj.yes) {
+									if (!$(id.elem).val().trim().length) errors.push(id.error)
+								}
+							}
+						} else if (parseInt($(obj.elem).val()) === 0) {
+							if (obj.no) {
+								for (let id of obj.no) {
+									if (!$(id.elem).val().trim().length) errors.push(id.error)
+								}
+							}
+						}
+						break
 				}
 			}
 
@@ -682,7 +674,7 @@
 				const allergy = $(".allegy:checked").val() === '1'
 				const allergies = $("#allergies").val()
 				const in_zone = $(".in_zone:checked").val() === '1'
-				const walk_alone = $("#walking").is(":checked")
+				const walk_alone = parseInt($(".walking:checked").val())
 				const chidon_answer = $("#chidonAnswer").val()
 				let acc = {}
 				acc.family = $("#acc_family").val()
@@ -956,6 +948,9 @@
 
 			if (parseInt(user.walking)) $("#ch_info #walking").attr('checked', true)
 			$("#ch_info #chidonAnswer").val(user.poll)
+
+			if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
+			else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
 
 			$("#ch_info select").niceSelect('update')
 			$("#ch_info").modal('show')
@@ -1355,6 +1350,11 @@
 					if ($(elem).find('.ultimate_trip').eq(0).is(":checked")) {
 						$("#ch_info #user_id").val(user_id)
 						$("#ch_info input[type='radio']").checked = false
+
+						const user = children.filter(child => child.user_id == user_id)[0]
+						if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
+						else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
+
 						$("#ch_info").modal('show')
 					}
 				}
