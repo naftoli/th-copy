@@ -697,7 +697,7 @@ function extractAddress($info) {
 }
 
 function getEmailMsg($trans_id) {
-    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised, $tracks;
+    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised, $tracks, $credit;
 
     $msg = "Mazal Tov for registering for the Chidon Experience<br /><br />";
     $msg .= "Below is a summary of your registration and purchase(s) where applicable.<br /><br />";
@@ -747,7 +747,10 @@ function getEmailMsg($trans_id) {
         $msg .= "</blockquote><br />";
     }
 
-    if ($to_charge) $msg .= "You were charged a total of: $" . $to_charge . " today. Your transaction ID is: " . $trans_id . ".<br /><br />";
+    if ($credit) $msg .= "You have a credit of $" . $credit . " which has been applied to your total.<br /><br />";
+
+    if ($to_charge > 0) $msg .= "You were charged a total of: $" . $to_charge . " today. Your transaction ID is: " . $trans_id . ".<br /><br />";
+    else $msg .= "You have not been charged anything as your total was covered by your credit.<br /><br />";
 
     $msg .= "All purchases are non-refundable.<br /><br />Please continue to review for the Chidon Final.<br /><br />";
     $msg .= "If you have any questions, please email <a href='mailto:chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a><br /><br />";
