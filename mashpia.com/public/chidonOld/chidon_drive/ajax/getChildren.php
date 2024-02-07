@@ -19,7 +19,7 @@ function getChildren() {
     // track, raised, grade, trip location
     $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, u.user_serial, 
                 UPPER(u.gender) as gender, 
-                c.class_grade as grade, 
+                c.class_grade, 
                 tc.*, 
                 conf.chidon_confirmation_id as schoolConfirmed, 
                 a.admin_id, a.admin_country 
@@ -40,23 +40,29 @@ function getChildren() {
     ])) {
         $children = $stmt->fetchAll();
 
+        // get family balance
+        $r = new TripRegistration($admin_id, $year);
+        $familyBalance = $r->getFamilyBalance();
+
         // find sum of chidon drive raised for child
         $stmt = $MASHPIA_DB->prepare("
             SELECT IFNULL(SUM(subsidy_amount), 0) as raised 
             FROM chidon_user_subsidies 
             WHERE chidon_year = :year AND user_id = :user
         ");
-        // check track history
-//        $stmt2 = $MASHPIA_DB->prepare("SELECT * FROM th_chidon_info where user_id = :user");
-        // check coupon codes for children
+
+        // get coupon amounts
         $stmtCoupon = $MASHPIA_DB->prepare("
-            SELECT IFNULL(value, 0) as coupon, used as coupon_used, reason as coupon_reason, 
-            FROM chidon_coupons 
-            WHERE user_serial = :serial 
+            SELECT IFNULL(SUM(value), 0) as coupon,  
+            FROM coupon_codes 
+            WHERE admin_id = :admin 
             AND year = :year
+            AND serial_num = :serial
         ");
 
         for ($i = 0; $i < count($children); $i++) {
+            $children[$i]['familyBalance'] = $familyBalance;
+
             $child = $children[$i];
             $stmt->execute([
                 ':year'     => $year,
@@ -64,28 +70,14 @@ function getChildren() {
             ]);
             $result = $stmt->fetch();
             if ($result['raised']) $children[$i]['raised'] = $result['raised'];
+
             $stmtCoupon->execute([
-                ':serial'   => $child['user_serial'],
-                ':year'     => $year
+                ':admin'    => $admin_id,
+                ':year'     => $year,
+                ':serial'   => $child['user_serial']
             ]);
-            $resCoupon = $stmtCoupon->fetch();
-            if ($resCoupon['coupon']) {
-                $children[$i]['coupon'][] = $resCoupon['coupon'];
-                $children[$i]['coupon_used'][] = $resCoupon['coupon_used'];
-                $children[$i]['coupon_reason'][] = $resCoupon['coupon_reason'];
-            }
-
-            // get family balance
-            $r = new TripRegistration($child['admin_id'], $year);
-            $children[$i]['balance'] = $r->getFamilyBalance();
-//            $children[$i]['raised'] = 200;
-//            $children[$i]['schoolConfirmed'] = 1;
-
-//            $stmt2->execute([':user' => $child['user_id']]);
-//            $rows = $stmt2->fetchAll();
-//            foreach ($rows as $row) {
-//                $children[$i]['history'][$row['year']] = ucwords($row['highest_track']);
-//            }
+            $coupon = $stmtCoupon->fetch();
+            $children[$i]['coupon'] = $coupon['coupon'];
         }
     }
     return $children;

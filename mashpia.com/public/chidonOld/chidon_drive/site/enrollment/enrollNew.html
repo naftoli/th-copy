@@ -601,6 +601,15 @@
 			getCrossStreets(number, street);
 		});
 
+		$("#allergies").on('input', function () {
+			if ($(this).val().length) {
+				if ($(".allergy").eq(0).is(':checked'))
+					$(".allergy").eq(0).attr('checked', false);
+				if (! $(".allergy").eq(1).is(':checked'))
+					$(".allergy").eq(1).attr('checked', true);
+			}
+		})
+
 		$(".save").click(function (e) {
 			e.preventDefault()
 			let errors = []
@@ -727,9 +736,9 @@
 				else $("#ch_info").modal('hide')
 			}
 		})
-		$(".close").click( function () {
-			location.href = '/mobile'
-		})
+		// $(".close").click( function () {
+		// 	location.href = '/mobile'
+		// })
 	</script>
 
 	<script src="../js/circletype.min.js"></script>
@@ -1082,7 +1091,7 @@
 				html += `Full cost: $<span class="full_cost">${amounts[0]}</span></h5>`
 
 				// coupons
-				const coupon = couponCodesAmount(child)
+				const coupon = child.coupon
 				if (coupon) {
 					html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
 												You have $${coupon} in coupon code(s) which will be applied to your registration cost.</h5>`
@@ -1204,7 +1213,7 @@
 			lowest -= raised
 
 			// check coupon codes
-			lowest -= couponCodesAmount(child)
+			lowest -= child.coupon
 
 			// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce by another $100
 			if (idx && [61, 269].includes(parseInt(child.school_id))) {
@@ -1220,16 +1229,6 @@
 			})
 
 			createRegDropdown(child, amounts, idx)
-		}
-
-		function couponCodesAmount(child) {
-			let total = 0
-			for (let i in child.coupon) {
-				let coupon = child.coupon[i]
-				if (parseInt(coupon.used)) continue
-				if (parseInt(coupon.amount) > 0) total += parseInt(coupon.amount)
-			}
-			return total
 		}
 
 		function createRegDropdown(child, amounts, selection) {
@@ -1346,7 +1345,7 @@
 				id = class_names[1] // get celeb_box_ship for celebration boxes shipping
 			}
 			const value = $(this).val()
-			if (value !== '') {
+			if (parseInt(value) > 0) {
 				addToCart(id, value)
 				// find this child's user id
 				let user_id = $(this).attr('id').split('_')[1]
@@ -1495,7 +1494,7 @@
 			if (!errors.length && checkExtraInfo() && checkRegAddUserInfo()) {
 				json_cart = JSON.stringify(cart)
 				// add coupons and chidon drive raised
-				json_coupons = JSON.stringify(children.filter(child => child.coupon && count(child.coupon) > 0))
+				json_coupons = JSON.stringify(children.filter(child => child.coupon > 0))
 				json_raised = JSON.stringify(children.filter(child => parseFloat(child.raised) > 0))
 				// add track info
 				json_tracks = JSON.stringify(children.filter(child => child.track != ''))

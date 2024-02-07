@@ -6,6 +6,7 @@ $khk = [];
 $ct = new ChidonTests();
 $types = $ct->getTypes();
 $children = $_POST['children'];
+//echo "<pre>"; print_r($children); echo "</pre>";
 // get ids from children if they are in 8th grade
 $ids = [];
 foreach ($children as $child) {
@@ -13,7 +14,8 @@ foreach ($children as $child) {
         $ids[] = $child['user_id'];
     }
 }
-$khk = KHK::getKHKEligibility($ids)[0];
+//echo "<pre>"; print_r($ids); echo "</pre>";
+if (count($ids)) $khk = KHK::getKHKEligibility($ids)[0];
 
 echo json_encode([
     'success'   => true,
