@@ -117,7 +117,7 @@ export class RegistrationPage extends Component {
   JStoJulian = ( dateStr ) => {
     const date = new Date( dateStr );
     console.log(date)
-    return Math.floor((date / 86400000) - (date.getTimezoneOffset()/1440) + 2440588);
+    return Math.floor((date / 86400000) - (date.getTimezoneOffset()/1440) + 2440588.5);
   }
 
   handleHeDateChange = ( start, end ) => {
