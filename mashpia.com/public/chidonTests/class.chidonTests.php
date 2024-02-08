@@ -944,9 +944,19 @@ class KHK {
                 from users u 
                 join th_chidon tc using (user_id) 
                 where u.user_id IN (" . implode(',', $ids) . ") and tc.year = " . $year;
+//        echo $sql;
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $info[$row['user_id']] = $row;
+        }
+
+        if (! count($info)) {
+            // return false for all ids
+            $passed = [];
+            foreach ($ids as $id) {
+                $passed[$id] = false;
+            }
+            return $passed;
         }
 
         if (empty($marks)) {
