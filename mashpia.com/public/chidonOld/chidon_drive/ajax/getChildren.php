@@ -23,7 +23,7 @@ function getChildren() {
                 c.class_grade, 
                 tc.*, 
                 conf.chidon_confirmation_id as schoolConfirmed, 
-                a.admin_id, a.admin_country 
+                a.admin_id, a.admin_country, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_zip, a.admin_country  
             from users u 
             join schools s using (school_id)
             join th_chidon tc using (user_id)  

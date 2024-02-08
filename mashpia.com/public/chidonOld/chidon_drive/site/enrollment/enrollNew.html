@@ -1125,6 +1125,7 @@
 				}
 			}
 
+			const parentAddress = eligible[0]['admin_address1'] + ' ' + eligible[0]['admin_address2'] + ', ' + eligible[0]['admin_city'] + ', ' + eligible[0]['admin_state'] + ' ' + eligible[0]['admin_zip']
 			if (needsShipping) {
 				html += `<div id="shipping_charges">
 								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
@@ -1138,7 +1139,7 @@
 								<div class="flex">
 									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping}" />
 									<label>
-										($${shipping}) I would like to have my items shipped to the address on my mashpia.com parent account. I will
+										($${shipping}) I would like to have my items shipped to ${parentAddress}. I will
 										check to confirm that it has the correct address saved.
 									</label>
 								</div></div>`
