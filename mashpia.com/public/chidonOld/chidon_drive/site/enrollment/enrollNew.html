@@ -458,13 +458,13 @@
 							<br />
 							<div class="flex checkbox-container">
 								<label>
-									<input type="checkbox" name="walking" class="walking" value="1" />
+									<input type="radio" name="walking" class="walking" value="1" />
 								</label>
 								My child will be walking alone to and from the program each day
 							</div>
 							<div class="flex checkbox-container">
 								<label>
-									<input type="checkbox" name="walking" class="walking" value="0" />
+									<input type="radio" name="walking" class="walking" value="0" />
 								</label>
 								My child will be dropped off and picked up from the program each day
 							</div>
@@ -612,7 +612,7 @@
 					]
 				},
 				{ elem: '#acc_phone', type: 'val', error: 'You must enter a phone number where you can be reached.' },
-				{ elem: '.walking', type: 'checkbox', error: 'You must indicate whether your child will be walking alone or not.' },
+				{ elem: '.walking', type: 'radio', error: 'You must indicate whether your child will be walking alone or not.' },
 				{ elem: '#terms1', type: 'checkbox', error: 'You must check off all Terms.' },
 				{ elem: '#terms2', type: 'checkbox', error: 'You must check off all Terms.' },
 				{ elem: '#terms3', type: 'checkbox', error: 'You must check off all Terms.' },
@@ -1002,8 +1002,8 @@
 														Track. You are eligible for ${trackText}.<h5>`
 
 				const tripDates = {
-					M: '27 - 29 Adar, March 20 - 22',
-					F: '20 - 22 Adar, March 13 - 15'
+					M: '18 - 20 Adar 2, March 28 - 30',
+					F: '25 - 27 Adar 2, April 4 - 6'
 				}
 
 				// registration heading
@@ -1031,7 +1031,7 @@
 					html += `<div class="flex">
 											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip_${child.user_id}" value='0:${child.user_id}' />
 											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($350 minimum)<br />
-													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Mon - Wed, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
+													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Thursday - Motzai Shabbos, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
 													Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
 											</h5>
 									</div>
