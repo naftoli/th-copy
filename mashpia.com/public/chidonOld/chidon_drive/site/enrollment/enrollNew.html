@@ -973,8 +973,8 @@
 			}
 
 			// check if there's any family balance that can be applied to registration
-			if (eligible[0].balance > 0) {
-				const bal = eligible[0].balance
+			if (eligible[0].familyBalance > 0) {
+				const bal = eligible[0].familyBalance
 				if (window.localStorage) localStorage.setItem('credit', bal)
 				else Cookies.set('credit', bal)
 				const text = `You have $${bal} credit from pre registration and will be reflected on the payment page. If you would like to get a refund without registering, please continue to the payment page.`
