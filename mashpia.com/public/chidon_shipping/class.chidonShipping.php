@@ -207,6 +207,8 @@ class ChidonShipping
         foreach ($children as $user_id => $details) {
             if (in_array($user_id, $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
+            // skip if child did not recruit this yr
+            if (intval($details['year']) != $this->year) continue;
 
             if ($details['credits'] > 5) $details['credits'] = 5;
             $prize = $prizes[$details['credits']];
@@ -256,7 +258,8 @@ class ChidonShipping
     private function getChildrenRecruitments($gender, $school) {
         $children = [];
         $start = 5782;
-        $sql = "select u.user_id, u.gender, count(*) as credits from users u 
+        $sql = "select u.user_id, u.gender, count(*) as credits, MAX(year) as year 
+                from users u 
                 join th_chidon tc on u.user_serial = tc.recruited_by 
                 where year >= :start";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
@@ -270,7 +273,8 @@ class ChidonShipping
         foreach ($rows as $row) {
             $children[$row['user_id']] = [
                 'gender'    => $row['gender'],
-                'credits'   => $row['credits']
+                'credits'   => $row['credits'],
+                'year'      => $row['year']
             ];
         }
         return $children;
