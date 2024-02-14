@@ -417,52 +417,53 @@ function getExistingCodes() {
 }
 
 function updateFamilyBalance(array $desc = []) {
-    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit;
+    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email;
 
-    if (empty($desc)) $desc = getDescriptions();
+    if ($credit) {
+        if (empty($desc)) $desc = getDescriptions();
 
-    if ($to_charge > 0) {
-        $stmt = $MASHPIA_DB->prepare("
-            UPDATE family_prepaid_balances 
-            SET used = used + :amount, 
-            accounting_code = :code 
-            WHERE admin_id = :admin AND year = :year
-        ");
-        return $stmt->execute([
-            ':amount'   => $credit,
-            ':admin'    => $admin_id,
-            ':year'     => $year,
-            ':code'     => implode(',', $desc)
-        ]);
-    } else {
-        $stmt = $MASHPIA_DB->prepare("
-            UPDATE family_prepaid_balances 
-            SET used = used + :amount, 
-            refund_type = :type, 
-            paypal = :paypal, 
-            accounting_code = :code 
-            WHERE admin_id = :admin AND year = :year
-        ");
+        if ($to_charge > 0) {
+            $stmt = $MASHPIA_DB->prepare("
+                UPDATE family_prepaid_balances 
+                SET used = used + :amount, 
+                accounting_code = :code 
+                WHERE admin_id = :admin AND year = :year
+            ");
+            return $stmt->execute([
+                ':amount' => $credit,
+                ':admin' => $admin_id,
+                ':year' => $year,
+                ':code' => implode(',', $desc)
+            ]);
+        } else {
+            $stmt = $MASHPIA_DB->prepare("
+                UPDATE family_prepaid_balances 
+                SET used = prepaid, 
+                refund_type = :type, 
+                paypal = :paypal, 
+                accounting_code = :code 
+                WHERE admin_id = :admin AND year = :year
+            ");
 
-        switch (intval($creditVal)) {
-            case 1:
-                $type = 'donation';
-                break;
-            case 2:
-                $type = 'refund';
-                break;
-            case 3:
-                $type = 'paypal';
-                break;
+            switch (intval($creditVal)) {
+                case 1:
+                    $type = 'donation';
+                    break;
+                case 2:
+                    $type = 'refund';
+                    break;
+                case 3:
+                    $type = 'paypal';
+                    break;
+            }
+            return $stmt->execute([
+                ':type' => $type,
+                ':paypal' => $paypal_email,
+                ':admin' => $admin_id,
+                ':year' => $year,
+                ':code' => implode(',', $desc)
+            ]);
         }
-        return $stmt->execute([
-            ':amount'   => $total_without_credit,
-            ':type'     => $type,
-            ':paypal'   => $paypal_email,
-            ':admin'    => $admin_id,
-            ':year'     => $year,
-            ':code'     => implode(',', $desc)
-        ]);
     }
 }
 
