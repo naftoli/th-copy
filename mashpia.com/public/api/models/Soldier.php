@@ -301,6 +301,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // get chidon info for child
     public function getChidonInfo() {
         global $MASHPIA_DB;
+
         $info = [];
         $query = $MASHPIA_DB->prepare("
             SELECT 
@@ -323,6 +324,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 //        echo $query->debugDumpParams();
 
         if ($res) $info = $query->fetch();
+
+        // turn off any getting chidon info
+        $info = false;
 
         return $info;
     }
