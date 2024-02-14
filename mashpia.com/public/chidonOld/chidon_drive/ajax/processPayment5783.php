@@ -422,6 +422,13 @@ function updateFamilyBalance(array $desc = []) {
     if ($credit) {
         if (empty($desc)) $desc = getDescriptions();
 
+        // create string for accounting_code
+        // format is <prefix><id>:<code>-<amount>,<prefix><id>:<code>-<amount>,...
+        $code = '';
+        foreach ($desc as $item) {
+            $code .= $item['prefix'] . $item['id'] . ':' . $item['code'] . '-' . $item['amount'] . ',';
+        }
+
         if ($to_charge > 0) {
             $stmt = $MASHPIA_DB->prepare("
                 UPDATE family_prepaid_balances 
@@ -461,7 +468,7 @@ function updateFamilyBalance(array $desc = []) {
                 ':paypal' => $paypal_email,
                 ':admin' => $admin_id,
                 ':year' => $year,
-                ':code' => implode(',', $desc)
+                ':code' => $code
             ]);
         }
     }
