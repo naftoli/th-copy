@@ -40,7 +40,7 @@ $sweater_info = [];
 $sweater_shipping = 0;
 $emailMsg = '';
 $couponsArr = json_decode($_POST['coupons']);
-$coupons = arrayByField($couponsArr, 'user_id', '');
+$coupons = arrayByField($couponsArr, 'user_id', 'coupon');
 $raisedArr = json_decode($_POST['raised']);
 $raised = arrayByField($raisedArr, 'user_id', 'raised');
 $tracksArr = json_decode($_POST['tracks']);
@@ -705,8 +705,7 @@ function extractAddress($info) {
 function getEmailMsg($trans_id) {
     global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised, $tracks, $credit;
 
-    $msg = "Mazal Tov for registering for the Chidon Experience<br /><br />";
-    $msg .= "Below is a summary of your registration and purchase(s) where applicable.<br /><br />";
+    $msg = "Below is a summary of your Chidon registration and extra purchase(s) where applicable.<br /><br />";
 
     if ($users) {
         $msg .= "REGISTRATION<br /><br /><blockquote>";
@@ -715,14 +714,8 @@ function getEmailMsg($trans_id) {
             $msg .= "Track: " . $tracks[$user_id] . "<br />";
             if (isset($coupons[$user_id]) || isset($raised[$user_id])) {
                 $msg .= "Discounts applied:<br /><ul>";
-                if (isset($coupons[$user_id])) {
-                    foreach ($coupons[$user_id]['coupon'] as $idx => $coupon) {
-                        $msg .= "<li>A $" . $coupon . " coupon has been applied 
-                        (" . $coupons[$user_id]['coupon_reason'][$idx] . ").</li>";
-                    }
-                }
-                if (isset($raised[$user_id])) $msg .= "<li>A $" . $raised[$user_id] . " deduction was applied from what was raised on 
-                    the Chidon Drive.</li>";
+                if (isset($coupons[$user_id])) $msg .= "<li>Voucher: $" . $coupons[$user_id] . "</li>";
+                if (isset($raised[$user_id])) $msg .= "<li>Chidon Drive: " . $raised[$user_id] . "</li>";
                 $msg .= "</ul>";
             }
         }
