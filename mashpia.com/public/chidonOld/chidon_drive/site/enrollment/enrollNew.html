@@ -1016,15 +1016,10 @@
 						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />
 						<select name="regional_trip" id="regional_trip">
 							<option value="0">Please select which trip you will be joining</option>
-							<option value="ny">New York</option>
+							<option value="east">East Coast</option>
 							<option value="west">West Coast</option>`
 						// add few options for anash kinder only
-						if (parseInt(child.school_id) === 269) {
-							text += `<option value="atlanta">Atlanta</option>
-											<option value="houston">Houston</option>
-											<option value="seattle">Seattle</option>`
-						}
-						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
+						if (parseInt(child.school_id) === 269) text += `<option value="europe">Europe</option>`
 						text += `<option value="no_trip">No Trip</option></select>`
 					}
 					html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
@@ -1050,15 +1045,10 @@
 						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />
 						<select name="regional_trip" id="regional_trip">
 							<option value="0">Please select which trip you will be joining</option>
-							<option value="ny">New York</option>
+							<option value="east">East Coast</option>
 							<option value="west">West Coast</option>`
 						// add few options for anash kinder only
-						if (parseInt(child.school_id) === 269) {
-							text += `<option value="atlanta">Atlanta</option>
-											<option value="houston">Houston</option>
-											<option value="seattle">Seattle</option>`
-						}
-						if (europe.includes(parseInt(child.user_serial))) text += `<option value="europe">Europe</option>`
+						if (parseInt(child.school_id) === 269) text += `<option value="europe">Europe</option>`
 						text += `<option value="no_trip">No Trip</option></select>`
 					}
 					let style = ''
@@ -1066,11 +1056,11 @@
 					html += `<div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />${text}</h5>`
 					if (!myshliach) {
 						html += `<div class="flex">
-													<input class="inputCheckbox trip_terms" type="checkbox" name="trip" id="trip_terms_${child.user_id}" />
-															<label for="trip_terms_${child.user_id}" style="display: inline; text-transform: none;">
-															I understand that if I can't make it to my regional trip and need to be switched to a different regional trip,
-															I will email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE registration closes.
-															</label>
+												<input class="inputCheckbox trip_terms" type="checkbox" name="trip" id="trip_terms_${child.user_id}" />
+												<label for="trip_terms_${child.user_id}" style="display: inline; text-transform: none;">
+												I understand that if I can't make it to my regional trip and need to be switched to a different regional trip,
+												I will email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE registration closes.
+												</label>
 											</div>`
 					}
 					html += '</div>'
