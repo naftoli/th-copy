@@ -518,19 +518,18 @@
             cart_total += sweater_cost
         }
 
-        // find out how much to deduct using previous balance if any exists
-        if (credit) {
-            html += `<h5 class="formDetails"><span class="title">Available Credit</span></h5>`
-            html += `<h5 class="formDetails">Available Credit: $${credit}</h5>`
+        grand_total = parseFloat(cart_total) + parseFloat(shipping)
+        if (grand_total == 0) {
+            alert('You have no items in your cart to pay for.')
+            location.href = 'enrollNew.html'
         }
 
-        grand_total = parseFloat(cart_total) + parseFloat(shipping) - parseFloat(credit)
-        if (grand_total <= 0 && !credit) location.href = 'enrollNew.html'
-
-        html += `<h5 class="formDetails"><span class="title">Grand Total</span></h5>`
-        if (grand_total < 0) {
-            html += `<h5 class="formDetails">You have a credit of: <span>$${Math.abs(grand_total)}</span></h5>`
-            html += `<h5 class="formDetails">What would you like to do with this credit?</h5>`
+        html += `<h5 class="formDetails"><span class="title">Grand Total</span> - $${grand_total}</h5>`
+        const totalAfterCredit = grand_total - parseInt(credit)
+        if (totalAfterCredit < 0) {
+            html += `<h5 class="formDetails"><span class="title">Pre-Registration Credit</span></h5>`
+            html += `<h5 class="formDetails">You have pre-paid $${credit} towards your registration.
+                  What would you like to do with the remaining $${Math.abs(totalAfterCredit)}?</h5>`
             html += `
             <div class="flex">
                 <input type="radio" name="credit" class="inputCheckbox credit" value="1" />
@@ -549,10 +548,12 @@
             </div>`
             $("#terms2").attr('checked', true)
             $("#terms2").parent().hide()
-        } else if (grand_total > 0) {
-            html += `<h5 class="formDetails">Total Charge Today: $<span id="total">${grand_total}</span></h5>`
+        } else if (totalAfterCredit > 0) {
+            html += `<h5 class="formDetails"><span class="title">Pre-Registration Credit</span></h5>`
+            html += `<h5 class="formDetails">You have pre-paid $${credit} towards your registration.</h5>`
+            html += `<h5 class="formDetails">Due Today: $<span id="total">${totalAfterCredit}</span></h5>`
         } else {
-            html += `<h5 class="formDetails">Your available credit has been applied to your total charge. There is no charge today.</h5>`
+            html += `<h5 class="formDetails">Your pre-paid $${credit} has been applied to your total charge. There is no charge today.</h5>`
             $("#terms2").attr('checked', true)
             $("#terms2").parent().hide()
         }
@@ -567,7 +568,7 @@
 
         // payment
         html += `
-            <div id="paymentDetails"><h5 class="formDetails"><span class="title">Payment</span></h5>
+            <div id="paymentDetails" style="margin-top: 20px;"><h5 class="formDetails"><span class="title">Payment</span></h5>
                 <div class="flex">
                     <input type="radio" name="payment" class="inputCheckbox payment" value="0" />
                     <label for="payment" style="display: inline">Please use my credit card on file ending in</label>
@@ -581,15 +582,15 @@
 
         $(".personalInfo").append(html)
 
-        if (grand_total > 0) $("#paymentDetails").show()
+        if (totalAfterCredit > 0) $("#paymentDetails").show()
         else $("#paymentDetails").hide()
 
         let buttonVal
         if (reg.length) {
-            if (grand_total > 0) buttonVal = 'Pay & Register Child(ren)'
+            if (totalAfterCredit > 0) buttonVal = 'Pay & Register Child(ren)'
             else buttonVal = 'Register Child(ren)'
         } else {
-            if (grand_total > 0) buttonVal = 'Pay for Extra Purchases'
+            if (totalAfterCredit > 0) buttonVal = 'Pay for Extra Purchases'
             else if (cart_total || shipping) buttonVal = 'Get Extra Purchases'
             else buttonVal = 'Refund Credit'
         }
