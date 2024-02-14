@@ -417,7 +417,7 @@ function getExistingCodes() {
 }
 
 function updateFamilyBalance(array $desc = []) {
-    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email;
+    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit;
 
     if ($credit) {
         if (empty($desc)) $desc = getDescriptions();
@@ -429,29 +429,24 @@ function updateFamilyBalance(array $desc = []) {
             $code .= $item['prefix'] . $item['id'] . ':' . $item['code'] . '-' . $item['amount'] . ',';
         }
 
-        if ($to_charge > 0) {
-            $stmt = $MASHPIA_DB->prepare("
+        $stmt = $MASHPIA_DB->prepare("
                 UPDATE family_prepaid_balances 
-                SET used = used + :amount, 
-                accounting_code = :code 
+                SET used = :amount, 
+                    refund_amount = :refund,
+                    refund_type = :type, 
+                    paypal = :paypal, 
+                    accounting_code = :code 
                 WHERE admin_id = :admin AND year = :year
-            ");
-            return $stmt->execute([
-                ':amount' => $credit,
-                ':admin' => $admin_id,
-                ':year' => $year,
-                ':code' => implode(',', $desc)
-            ]);
-        } else {
-            $stmt = $MASHPIA_DB->prepare("
-                UPDATE family_prepaid_balances 
-                SET used = prepaid, 
-                refund_type = :type, 
-                paypal = :paypal, 
-                accounting_code = :code 
-                WHERE admin_id = :admin AND year = :year
-            ");
+        ");
 
+        // find out if we are using up all prepaid amount or not
+        if ($to_charge > 0) {
+            $amount = $credit;
+            $refund = 0;
+            $type = '';
+        } else {
+            $amount = $total_without_credit;
+            $refund = $credit - $total_without_credit;
             switch (intval($creditVal)) {
                 case 1:
                     $type = 'donation';
@@ -463,14 +458,17 @@ function updateFamilyBalance(array $desc = []) {
                     $type = 'paypal';
                     break;
             }
-            return $stmt->execute([
-                ':type' => $type,
-                ':paypal' => $paypal_email,
-                ':admin' => $admin_id,
-                ':year' => $year,
-                ':code' => $code
-            ]);
         }
+
+        return $stmt->execute([
+            ':amount'   => $amount,
+            ':refund'   => $refund,
+            ':type' => $type,
+            ':paypal' => $paypal_email,
+            ':admin' => $admin_id,
+            ':year' => $year,
+            ':code' => $code
+        ]);
     }
 }
 

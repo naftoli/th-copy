@@ -24,7 +24,7 @@ class TripRegistration
         $bal = 0;
         $stmt = $this->db->prepare("
             SELECT 
-                prepaid, used 
+                prepaid, used, refund_amount  
             FROM
                 family_prepaid_balances
             WHERE
@@ -38,7 +38,8 @@ class TripRegistration
         if ($result) {
             $paid = floatval($result['prepaid']);
             $used = floatval($result['used']);
-            $bal = $paid - $used;
+            $refund = floatval($result['refund_amount']);
+            $bal = $paid - $used - $refund;
         }
         return $bal;
     }
