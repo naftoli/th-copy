@@ -724,36 +724,42 @@ function getEmailMsg($trans_id) {
 
     if ($celebBoxes || $sweaters) {
         $msg .= "EXTRA PURCHASES<br /><br /><blockquote>";
-        if ($celebBoxes) $msg .= "You purchased " . $celebBoxes . " Celebration Boxes for: $" . ($celebBoxes * CELEB_BOX_COST) . ". ";
-        if ($celebBoxShipping) $msg .= "It will be shipped to: " . extractAddress($addresses['celeb_box']) . "<br />";
-        else $msg .= "It will be sent to your child's school.<br />";
+        $msg .= "You purchased:<br /><ol>";
+        if ($celebBoxes) {
+            $msg .= "<li>" . $celebBoxes . " Celebration boxe(s) for: $" . ($celebBoxes * CELEB_BOX_COST) . ". ";
+            if ($celebBoxShipping) $msg .= "It will be shipped to: " . extractAddress($addresses['celeb_box']);
+            else $msg .= "It will be sent to your child's school";
+            $msg .= "</li>";
+        }
         if ($sweaters) {
-            $msg .= "<br />(s) Purchased:<br /><blockquote>";
             foreach ($sweater_info as $type => $other)  {
                 foreach ($other as $num => $sweater) {
                     $size = $sweater['size'];
                     $shipping = intval($sweater['ship']);
                     $typeStr = str_replace('_', ' ', $type);
-                    $msg .= '1 ' . ucwords($size) . " " . ucwords($typeStr) . " purchased. ";
+                    $msg .= "<li>" . $num . " " . ucwords($size) . " " . ucwords($typeStr) . " Sweater for: $" . ($num * SWEATER_COST) . ". ";
                     if ($shipping) {
                         $key = $type . "_" . $num;
-                        $msg .= "It will be shipped to: " . extractAddress($addresses[$key]) . "<br />";
+                        $msg .= "It will be shipped to: " . extractAddress($addresses[$key]);
                     }
-                    else $msg .= "It will be sent to you child's school.<br />";
+                    else $msg .= "It will be sent to you child's school.";
+                    $msg .= "</li>";
                 }
             }
         }
-        $msg .= "</blockquote><br />";
+        $msg .= "</ol></blockquote><br /><br />";
     }
 
-    if ($credit) $msg .= "You have a credit of $" . $credit . " which has been applied to your total.<br /><br />";
-
-    if ($to_charge > 0) $msg .= "You were charged a total of: $" . $to_charge . " today. Your transaction ID is: " . $trans_id . ".<br /><br />";
-    else $msg .= "You have not been charged anything as your total was covered by your credit.<br /><br />";
-
-    $msg .= "All purchases are non-refundable.<br /><br />Please continue to review for the Chidon Final.<br /><br />";
-    $msg .= "If you have any questions, please email <a href='mailto:chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a><br /><br />";
-    $msg .= "Wishing you much continued Nachas,<br /<br />Chidon HQ";
+    $msg . "SUMMARY<br /><br /><blockquote>";
+    if ($credit) $msg .= "Amount Credited From Your Pre Registration: $" . $credit . ".<br />";
+    if ($to_charge) {
+        $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
+        $msg .= "Transaction ID: " . $trans_id . ".<br />";
+    }
+    $msg .= "<br />All purchases are non-refundable.<br /><br />";
+    $msg .= "Please continue to review for the Chidon Final.<br /><br />";
+    $msg .= "If you have any questions, please be in touch with your school's Chodon coordinator.<br /><br />";
+    $msg .= "Wishing you much continued Nachas,<br />Chidon HQ</blockquote>";
 
     $msg .= "<br /><br /><footer style='font-size: 9px; color: grey;'>Our Address: <address>792 Eastern Parkway Brooklyn, NY 11213</address><br /><br />
             To Unsubscribe please click <a href='http://mashpia.com/unsubscribe.php'>here</a></footer>";
