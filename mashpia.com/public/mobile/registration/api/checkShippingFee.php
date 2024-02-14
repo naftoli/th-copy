@@ -22,7 +22,7 @@ foreach ($rows as $row) {
 $stmt = $MASHPIA_DB->prepare("
     select * from registration_charges where type in ('RRSUSA', 'RRSCAN', 'RRSINT') and year = :year 
     and user_id in (" . implode(',', $children) . ")
-    ");
+");
 $stmt->execute([':year' => $year]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($row && !empty($row)) echo 1;
