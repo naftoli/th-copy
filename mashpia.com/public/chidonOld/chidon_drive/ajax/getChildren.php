@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
@@ -13,6 +13,14 @@ $year = GlobalSettings::getChidonYear();
 $admin = mysql_real_escape_string( $_POST['admin'] );
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
+if (! $admin_id) {
+    echo json_encode([
+        'success'   => false,
+        'error'     => 'Missing Admin ID.'
+    ]);
+    exit;
+}
+
 function getChildren() {
     global $MASHPIA_DB, $admin_id, $year;
 
@@ -23,7 +31,7 @@ function getChildren() {
                 c.class_grade, 
                 tc.*, 
                 conf.chidon_confirmation_id as schoolConfirmed, 
-                a.admin_id, a.admin_country, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_zip, a.admin_country  
+                a.admin_id, a.admin_country, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_postal, a.admin_country  
             from users u 
             join schools s using (school_id)
             join th_chidon tc using (user_id)  
@@ -68,25 +76,20 @@ function getChildren() {
             $children[$i]['coupon'] = $c->checkForUserCode($child['user_serial']);
         }
     }
+    else $stmt->debugDumpParams();
+
     return $children;
 }
 
-if (! $admin_id) {
+$children = getChildren();
+if (! $children) {
     echo json_encode([
         'success'   => false,
-        'error'     => 'Missing Admin ID.'
+        'error'     => 'You do not have any children that are eligible for the Chidon.'
     ]);
 } else {
-    $children = getChildren();
-    if (! $children) {
-        echo json_encode([
-            'success'   => false,
-            'error'     => 'You do not have any children that are eligible for the Chidon.'
-        ]);
-    } else {
-        echo json_encode([
-            'success'   => true,
-            'children'  => $children
-        ]);
-    }
+    echo json_encode([
+        'success'   => true,
+        'children'  => $children
+    ]);
 }
