@@ -632,7 +632,6 @@ class ChidonTests
         }
 
         // make sure we pass each track on each test
-        $num_tests = $numTests;
         if (count($marks) > 0) {
             foreach ($marks as $details) {
                 foreach ($details as $track => $mark) {
@@ -642,9 +641,8 @@ class ChidonTests
         }
 
         // calculate avgs and highest type currently eligible for
-        if ($num_tests == 0) return $highest;
         foreach ($marksByTrack as $track => $total) {
-            $avg = round($total / $num_tests);
+            $avg = round($total / $numTests);
             if ($avg >= $avgs[$track]) $highest = $track;
             else break; // can't go higher if lower one was not passed
         }
@@ -900,10 +898,6 @@ class KHK {
             foreach ($years as $yr) {
                 $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
-                    if (in_array($id, [66871])) { // exceptions
-                        $details[$id][$yr] = true;
-                        continue;
-                    }
                     // for current yr, check if passed
                     if ($yr == $curYr) $details[$id][$yr] = $passed[$id];
                     else {
@@ -938,7 +932,7 @@ class KHK {
     private static function getCurrentYrPassing(string $year, array $ids, array $marks) {
         $info = [];
         // get the school_id, class_id and th_chidon_id for all children
-        $sql = "select u.user_id, u.school_id, class_id, th_chidon_id 
+        $sql = "select u.user_id, u.school_id, class_id, th_chidon_id, reward_type  
                 from users u 
                 join th_chidon tc using (user_id) 
                 where u.user_id IN (" . implode(',', $ids) . ") and tc.year = " . $year;
@@ -976,6 +970,8 @@ class KHK {
                 continue;
             }
             $highest_track = $ct->getHighestTrack($marks[$info[$id]['th_chidon_id']], $id);
+            if ($info[$id]['reward_type'] != 'highest track passed' || $info[$id]['reward_type'] != '')
+                $highest_track = $info[$id]['reward_type'];
             // if highest track is expert or genius, child is eligible
             switch ($highest_track) {
                 case 'expert':
