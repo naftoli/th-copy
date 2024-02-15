@@ -897,6 +897,8 @@
 			// only let ultimate trip kids to update their trip info
 			let registered = children.filter(child => child.date_paid)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			console.log(eligible)
+			debugger;
 			if (registered.length && !eligible.length) {
 				editing_mode = true
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
@@ -904,6 +906,7 @@
 					for (let c of to_edit) ultimate_trip.push(c.user_id)
 					updateModal(to_edit[0])
 				} else {
+					alert('No children are eligible for registration or for editing their ultimate trip info.')
 					location.href = '/mobile'
 				}
 			} else {

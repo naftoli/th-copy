@@ -608,7 +608,7 @@
             evt.preventDefault()
             $(".processPayment").attr('disabled', true)
 
-            if ((grand_total > 0) && !$(".payment:checked").length) {
+            if ((totalAfterCredit > 0) && !$(".payment:checked").length) {
                 alert('You must indicate how your are going to pay!')
                 $(".processPayment").attr('disabled', false)
                 return false
@@ -616,7 +616,7 @@
 
             let creditVal = 0
             let paypal_email = ''
-            if (grand_total > 0) {
+            if (totalAfterCredit > 0) {
                 if (parseInt($(".payment:checked").val()) === 0) {
                     card_id = parseInt($(".payment-card").val())
                     // check if cvc is correct
@@ -632,7 +632,7 @@
                         return false
                     }
                 }
-            } else if (grand_total < 0) {
+            } else if (totalAfterCredit < 0) {
                 // check credit and paypal_email
                 creditVal = parseInt($(".credit:checked").val())
                 if (!creditVal) {

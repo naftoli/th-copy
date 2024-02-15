@@ -232,8 +232,9 @@ function insertIntoRegCharges($trans_id = 0) {
     ");
 
     $success = true;
-    $MASHPIA_DB->beginTransaction();
     $descriptions = getDescriptions();
+
+    $MASHPIA_DB->beginTransaction();
     foreach ($descriptions as $item) {
         if ($item['prefix'] == 'C') {
             if (! $stmt->execute([
@@ -266,9 +267,9 @@ function insertIntoRegCharges($trans_id = 0) {
 
     if ($success) {
         $MASHPIA_DB->commit();
-        updateFamilyBalance($descriptions);
         return true;
     } else {
+        $stmt->debugDumpParams();
         $MASHPIA_DB->rollBack();
         return false;
     }
@@ -277,23 +278,29 @@ function insertIntoRegCharges($trans_id = 0) {
 function getDescriptions() {
     global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip, $shipping_charge, $country, $credit;
 
-    $desc = [];
-    $serials = getSerials();
+    $existing_codes = getExistingCodes();
+    if (count($existing_codes)) {
+        // we need the serials for the users in the existing codes
+        $ids = array_map(function ($code) {
+            return $code['user_id'];
+        }, $existing_codes);
+        $serials = getSerials($ids);
 
-    // if there's credit first zero out the amounts in the registration_charges table
-    if ($credit > 0) {
-        $existing_codes = getExistingCodes();
-        foreach ($existing_codes as $code) {
-            $desc[] = [
-                'prefix'    => 'C',
-                'id'        => $serials[$code['user_id']],
-                'code'      => $code['type'] . '-',
-                'amount'    => $code['amount']
-            ];
+        // if there's credit first zero out the amounts in the registration_charges table
+        $desc = [];
+        if ($credit > 0) {
+            foreach ($existing_codes as $code) {
+                $desc[] = [
+                    'prefix' => 'C',
+                    'id' => $serials[$code['user_id']],
+                    'code' => $code['type'] . '-',
+                    'amount' => $code['amount']
+                ];
+            }
         }
     }
 
-    if ($users) {
+    if (count($users)) {
         foreach ($users as $user_id => $amount) {
             $user_track = $tracks[$user_id];
             switch ($user_track) {
@@ -396,7 +403,7 @@ function getExistingCodes() {
     $stmt = $MASHPIA_DB->prepare("
         SELECT id 
         FROM admin_auths 
-        WHERE admin_id = :admin
+        WHERE admin_id = :admin AND auth = 'user'
     ");
     $stmt->execute([':admin' => $admin_id]);
     $children = $stmt->fetchAll();
@@ -416,11 +423,11 @@ function getExistingCodes() {
     return $codes;
 }
 
-function updateFamilyBalance(array $desc = []) {
+function updateFamilyBalance() {
     global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit;
 
     if ($credit) {
-        if (empty($desc)) $desc = getDescriptions();
+        $desc = getDescriptions();
 
         // create string for accounting_code
         // format is <prefix><id>:<code>-<amount>,<prefix><id>:<code>-<amount>,...
@@ -460,7 +467,7 @@ function updateFamilyBalance(array $desc = []) {
             }
         }
 
-        return $stmt->execute([
+        if (! $stmt->execute([
             ':amount'   => $amount,
             ':refund'   => $refund,
             ':type' => $type,
@@ -468,7 +475,12 @@ function updateFamilyBalance(array $desc = []) {
             ':admin' => $admin_id,
             ':year' => $year,
             ':code' => $code
-        ]);
+        ])) {
+            $stmt->debugDumpParams();
+            return false;
+        }
+
+        return true;
     }
 }
 
@@ -590,16 +602,17 @@ function processSweaters() {
     return $success;
 }
 
-function getSerials() {
-    global $users;
-    // get serial numbers
+function getSerials(array $ids) {
+    global $MASHPIA_DB;
+
     $serials = [];
-    $user_ids = array_keys($users);
-    $sql = "select user_id, user_serial from users where user_id in (" . implode(',', $user_ids) . ")";
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
+    $sql = "select user_id, user_serial from users where user_id in (" . implode(',', $ids) . ")";
+    $stmt = $MASHPIA_DB->query($sql);
+    $rows = $stmt->fetchAll();
+    foreach ($rows as $row) {
         $serials[$row['user_id']] = $row['user_serial'];
     }
+
     return $serials;
 }
 
@@ -607,7 +620,7 @@ function redeemCoupons() {
     global $coupon, $users;
 
     if ($users && count($users)) {
-        $serials = getSerials();
+        $serials = getSerials(array_keys($users));
         // redeem coupons
         if ($serials && count($serials)) {
             foreach ($serials as $user_serial) {
@@ -812,12 +825,13 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
             $trans_id = $payment['transactionResponse']['transId'];
             // payment went through so commit to db
             $MASHPIA_DB->commit();
-            // redeem coupons
-            redeemCoupons();
             // update registration_charges table
             insertIntoRegCharges($trans_id);
+            // redeem coupons and update family balance
+            redeemCoupons();
+            updateFamilyBalance();
             $info['success'] = true;
-            $msg = 'Congratulation! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
+            $msg = 'Congratulations! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                 'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
                 'You should receive an email confirmation shortly with all the details.' . "\r\n" .
                 'If you do not receive an email, please check your SPAM folder'. "\r\n" . 'Thank You!';
@@ -829,11 +843,13 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
         }
     } else {
         $MASHPIA_DB->commit();
-        $info['success'] = true;
-        $info['msg'] = 'Congratulation! You have successfully registered your child(ren).';
-        // redeem coupons and update family balance
-        redeemCoupons();
+        // update family balance
         updateFamilyBalance();
+        $info['success'] = true;
+        $msg = 'Congratulations! ';
+        if (count($users)) $msg .= 'You have successfully registered your child(ren) for the Chidon. ';
+        if ($celebBoxes || $sweaters) $msg .= 'You have successfully ordered your additional purchase(s). ';
+        $info['msg'] = $msg;
     }
 } else {
     $MASHPIA_DB->rollBack();
