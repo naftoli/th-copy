@@ -526,36 +526,38 @@
 
         html += `<h5 class="formDetails"><span class="title">Grand Total</span> - $${grand_total}</h5>`
         const totalAfterCredit = grand_total - parseInt(credit)
-        if (totalAfterCredit < 0) {
-            html += `<h5 class="formDetails"><span class="title">Pre-Registration Credit</span></h5>`
-            html += `<h5 class="formDetails">You have pre-paid $${credit} towards your registration.
-                  What would you like to do with the remaining $${Math.abs(totalAfterCredit)}?</h5>`
-            html += `
-            <div class="flex">
-                <input type="radio" name="credit" class="inputCheckbox credit" value="1" />
-                <label for="credit" style="display: inline">I would like to donate my credit to the Chidon scholarship fund.</label>
-            </div>
-            <div class="flex">
-                <input type="radio" name="credit" class="inputCheckbox credit" value="2" />
-                <label for="credit" style="display: inline">Please refund me to my original payment, (Refunds will take 3-5 business days)</label>
-            </div>
-            <div class="flex">
-                <input type="radio" name="credit" class="inputCheckbox credit" value="3" />
-                <label for="credit" style="display: inline">Please refund me by PayPal. (Refunds will take 3-5 business days)</label>
-            </div>
-            <div class="flex">
-              <input type="text" id="paypal_email" placeholder="PayPal Email" style="max-width: 300px; display: none" />
-            </div>`
-            $("#terms2").attr('checked', true)
-            $("#terms2").parent().hide()
-        } else if (totalAfterCredit > 0) {
-            html += `<h5 class="formDetails"><span class="title">Pre-Registration Credit</span></h5>`
-            html += `<h5 class="formDetails">You have pre-paid $${credit} towards your registration.</h5>`
-            html += `<h5 class="formDetails">Due Today: $<span id="total">${totalAfterCredit}</span></h5>`
-        } else {
-            html += `<h5 class="formDetails">Your pre-paid $${credit} has been applied to your total charge. There is no charge today.</h5>`
-            $("#terms2").attr('checked', true)
-            $("#terms2").parent().hide()
+        if (credit > 0) {
+            if (totalAfterCredit < 0) {
+                html += `<h5 class="formDetails"><span class="title">Pre-Registration Credit</span></h5>`
+                html += `<h5 class="formDetails">You have pre-paid $${credit} towards your registration.
+                      What would you like to do with the remaining $${Math.abs(totalAfterCredit)}?</h5>`
+                html += `
+                <div class="flex">
+                    <input type="radio" name="credit" class="inputCheckbox credit" value="1" />
+                    <label for="credit" style="display: inline">I would like to donate my credit to the Chidon scholarship fund.</label>
+                </div>
+                <div class="flex">
+                    <input type="radio" name="credit" class="inputCheckbox credit" value="2" />
+                    <label for="credit" style="display: inline">Please refund me to my original payment, (Refunds will take 3-5 business days)</label>
+                </div>
+                <div class="flex">
+                    <input type="radio" name="credit" class="inputCheckbox credit" value="3" />
+                    <label for="credit" style="display: inline">Please refund me by PayPal. (Refunds will take 3-5 business days)</label>
+                </div>
+                <div class="flex">
+                  <input type="text" id="paypal_email" placeholder="PayPal Email" style="max-width: 300px; display: none" />
+                </div>`
+                $("#terms2").attr('checked', true)
+                $("#terms2").parent().hide()
+            } else if (totalAfterCredit > 0) {
+                html += `<h5 class="formDetails"><span class="title">Pre-Registration Credit</span></h5>`
+                html += `<h5 class="formDetails">You have pre-paid $${credit} towards your registration.</h5>`
+                html += `<h5 class="formDetails">Due Today: $<span id="total">${totalAfterCredit}</span></h5>`
+            } else {
+                html += `<h5 class="formDetails">Your pre-paid $${credit} has been applied to your total charge. There is no charge today.</h5>`
+                $("#terms2").attr('checked', true)
+                $("#terms2").parent().hide()
+            }
         }
 
         $(document).on('click', '.credit', function() {
