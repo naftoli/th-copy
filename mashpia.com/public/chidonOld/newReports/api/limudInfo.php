@@ -11,6 +11,12 @@ $school_id = intval($input['school']);
 $class_id = intval($input['grade']);
 $test_num = intval($input['test_num']);
 
+// find out if school info was confirmed and should be locked
+$locked = 0;
+$sql = "select * from chidon_confirmations where school_id = :school and year = :year";
+$result = mysql_query($sql);
+if (mysql_num_rows($result) > 0) $locked = 1;
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests($year);
 $ct->setStudents($school_id, $class_id);
@@ -108,6 +114,7 @@ foreach ($students as $student) {
 echo json_encode([
     'info'      => $info,
     'summary'   => $summary,
+    'school_confirmed' => $locked,
 ]);
 
 function getPassingAvg($id) {

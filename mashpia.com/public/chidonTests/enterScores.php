@@ -79,6 +79,14 @@ if ($admin_user['auth'] != 'super') {
 }
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
+
+// find out which schools to disable
+$locked = [];
+$sql = "SELECT * FROM chidon_confirmations where year = " . $year;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $locked[] = $row['school_id'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -122,6 +130,8 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
             echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
             echo "<a href='settings.php'><input type='button' value='Marks/Levels Settings' style='padding: 12px; font-size: large' /></a>";
             foreach ($info as $school => $children) {
+                // check locked
+                if (in_array($school, $locked)) $disabled = true;
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
                 echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Card for Test #" . $testNumber . " on Parent Accounts</p>";
@@ -148,13 +158,15 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
                         if ($type == 'expert') $class = 'expert';
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
-                        if ($disabled) echo "readonly ";
+                        if ($disabled) echo "disabled ";
                         echo "/></td>";
                     }
                     $levelValue = $ct->getLevel($child['user_id'], 'tests');
                     if (isset($levels[$school][$id][$testNumber]))
                         $levelValue = $levels[$school][$id][$testNumber];
-                    echo "<td><select name='levels[$id][$testNumber]'>";
+                    echo "<td><select name='levels[$id][$testNumber]'";
+                    if ($disabled) echo " disabled";
+                    echo ">";
                     echo "<option value='1'";
                     if ($levelValue == 1) echo " selected";
                     echo ">1</option>";

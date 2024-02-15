@@ -34,5 +34,23 @@ function getSchools() {
     global $admin_user;
     require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
     $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
-    return $as->getSchools();
+    $schools = $as->getSchools();
+
+    // find out which schools should be locked
+    $locked = [];
+    $year = getChidonYear();
+    $sql = "SELECT * FROM mashpiadb.chidon_confirmations where year = " . $year;
+    $stmt = getDbHandle()->query($sql);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $locked[] = $row['school_id'];
+    }
+    $tmp = [];
+    foreach ($schools as $id => $name) {
+        $tmp[$id] = [
+            'name'  => $name,
+            'locked'    => in_array($id, $locked) ? 1 : 0
+        ];
+    }
+    return $tmp;
 }

@@ -76,6 +76,27 @@
       return <div>Error: {error.message}</div>
     }
 
+    const confEligibility = async (e) => {
+      const id = e.target.id.split('_')[1]
+      const conf = confirm('Once eligibility is confirmed, there will be NO CHANGES. Are you sure you want to confirm eligibility for ' + schools[id]['name'] + '?')
+      if (conf) {
+        const res = await fetch('api/confirmEligibility.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({school: id})
+        })
+        const data = await res.json()
+        if (data.success) {
+          alert('Eligibility confirmed for ' + schools[id]['name'])
+        } else {
+          alert(data.error)
+          console.log(data.error_msg)
+        }
+      }
+    }
+
     const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'KHK Trip Eligible', 'Award',
       'Raised on Drive', 'Minimum Fee', 'Registered', 'Trip Registered', 'Extra Purchases']
     if (superAdmin) headers.push('Registration Paid')
@@ -112,7 +133,10 @@
       <div>
         {data && Object.keys(data).map((school, j) => (
         <div key={j}>
-          <h2>{schools[school]}</h2>
+          <h2>{schools[school]['name']}</h2>
+          <button className="btn btn-primary" id={'school_' + school} onClick={confEligibility} disabled={parseInt(schools[school]['locked']) == 1}>
+            {parseInt(schools[school]['locked']) ? 'Eligibility Confirmed' : 'Confirm Eligibility'}
+          </button>
           <table className="table table-striped">
             <thead>
             <tr>
