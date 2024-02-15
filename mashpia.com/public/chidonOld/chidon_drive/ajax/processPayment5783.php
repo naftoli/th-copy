@@ -301,6 +301,7 @@ function getDescriptions() {
     }
 
     if (count($users)) {
+        $serials = getSerials(array_keys($users));
         foreach ($users as $user_id => $amount) {
             $user_track = $tracks[$user_id];
             switch ($user_track) {
