@@ -15,7 +15,9 @@ class TripRegistration
      */
     public function getFamilyBalance() {
         $balance = $this->getBalance();
+        echo "balance: $balance\n";
         $prizes_subtract = $this->subtractForPrizes();
+        echo "prizes_subtract: $prizes_subtract\n";
         $balance -= $prizes_subtract;
         return $balance;
     }
@@ -74,8 +76,11 @@ class TripRegistration
             $prizes = $stmt->fetchAll();
             foreach ($prizes as $prize) {
                 if (! empty($prize['he_name'])) {
-                    $amount = array_search($prize['prize_id'], $subtract);
-                    if ($amount) $toSubtract += $amount;
+                    foreach ($subtract as $amount => $prize_ids) {
+                        if (in_array($prize['prize_id'], $prize_ids)) {
+                            $toSubtract += $amount;
+                        }
+                    }
                 }
             }
         }
