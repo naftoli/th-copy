@@ -387,7 +387,7 @@
     return (
       <div>
         <h2>Details</h2>
-        <table className="table table-striped" disabled={locked}>
+        <table className="table table-striped">
           <thead>
           <tr>
             {headers.map((header) => (
@@ -402,7 +402,7 @@
               <td>{row.name}</td>
               <td>{row.grade}</td>
               <td>
-                <select name="track" className="form-select track" style={{width: '100px'}} defaultValue={row.track}
+                <select name="track" className="form-select track" style={{width: '100px'}} defaultValue={row.track} disabled={locked}
                         onChange={(e) => updateTrack(e, row.serial)}>
                   {Object.entries(user_tracks).map((track, i) => {
                     return <option key={i} value={track[1]}>{track[0]}</option>
@@ -414,7 +414,7 @@
               <td>
                 {isNaN(row.passing_avg) && row.passing_avg}
                 {!isNaN(row.passing_avg) &&
-                  <select name="avg" className="form-select avg" style={{width: '100px'}} defaultValue={row.passing_avg}
+                  <select name="avg" className="form-select avg" style={{width: '100px'}} defaultValue={row.passing_avg} disabled={locked}
                           onChange={(e) => updateAvg(e, row.serial)}>
                     {avgs.map((avg, i) => {
                       return <option key={i} value={avg}>{avg}</option>
@@ -427,7 +427,7 @@
               <td style={{color: style[row.havonah < row.passing_avg ? 1 : 0]}}>{row.havonah}</td>
               <td style={{color: style[row.iyun < row.passing_avg ? 1 : 0]}}>{row.iyun}</td>
               <td>
-                <select name="reward" className="form-select reward" style={{width: '100px'}}
+                <select name="reward" className="form-select reward" style={{width: '100px'}} disabled={locked}
                         defaultValue={row.reward}
                         onChange={(e) => updateReward(e, row.serial)}>
                   {Object.entries(rewards).map((reward, i) => {
@@ -445,7 +445,7 @@
               <td>
                 {!row.khk_eligible && <span style={{color: 'red'}}>Not Eligible</span>}
                 {row.khk_eligible &&
-                  <select name="khk_experience" className="form-select khk_experience" defaultValue={row.khk_experience}
+                  <select name="khk_experience" className="form-select khk_experience" defaultValue={row.khk_experience} disabled={locked}
                           onChange={(e) => updateKhk(e, row.serial)}>
                     {khk_options.map((option, i) => {
                       return <option key={i} value={option.toLowerCase()}>{option}</option>
@@ -456,12 +456,12 @@
               <td>{row.time_committed}</td>
               <td>{row.time_learned}</td>
               <td>
-                <input type="checkbox" name="dropped_out" className="form-check-label dropped_out"
+                <input type="checkbox" name="dropped_out" className="form-check-label dropped_out" disabled={locked}
                        defaultChecked={row.dropped_out ? true : false}
                        onClick={(e) => updateDroppedOut(e, row.serial)}/>
               </td>
               <td>
-                <select name="reason" className="form-select reason" defaultValue={row.reason}
+                <select name="reason" className="form-select reason" defaultValue={row.reason} disabled={locked}
                         onChange={(e) => updateReason(e, row.serial)}>
                   {reasons.map((reason, i) => {
                     return <option key={i} value={reason.toLowerCase()}>{reason}</option>
