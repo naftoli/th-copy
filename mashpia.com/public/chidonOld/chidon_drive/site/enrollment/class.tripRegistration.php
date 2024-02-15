@@ -15,9 +15,7 @@ class TripRegistration
      */
     public function getFamilyBalance() {
         $balance = $this->getBalance();
-        echo "balance: $balance\n";
         $prizes_subtract = $this->subtractForPrizes();
-        echo "prizes_subtract: $prizes_subtract\n";
         $balance -= $prizes_subtract;
         return $balance;
     }
