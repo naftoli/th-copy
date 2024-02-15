@@ -90,6 +90,9 @@
         const data = await res.json()
         if (data.success) {
           alert('Eligibility confirmed for ' + schools[id]['name'])
+          e.target.disabled = true
+          // change button text
+          e.target.innerHTML = 'Eligibility Confirmed'
         } else {
           alert(data.error)
           console.log(data.error_msg)
