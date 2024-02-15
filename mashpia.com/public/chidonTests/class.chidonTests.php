@@ -622,7 +622,7 @@ class ChidonTests
         return $markInfo;
     }
 
-    public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 0) {
+    public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3) {
         $highest = $forEligibility ? 'maven' : '';
         $avgs = $this->getPassingAvgs($user_id);
 
@@ -635,8 +635,6 @@ class ChidonTests
         $num_tests = $numTests;
         if (count($marks) > 0) {
             foreach ($marks as $details) {
-                // if we have not passed in a test number, calculate how many tests were taken
-                if ($numTests == 0 && isset($details['maven']) && $details['maven'] > 0) $num_tests++;
                 foreach ($details as $track => $mark) {
                     $marksByTrack[$track] += intval($mark);
                 }
