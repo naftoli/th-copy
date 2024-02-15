@@ -3,7 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-// get uploaded csv file, parse file with following columns: id, amount, used
+// get uploaded csv file, parse file with following columns: id, type, amount
 if (isset($_FILES['file'])) {
     // parse cvs
     $file = $_FILES['file']['tmp_name'];
@@ -12,17 +12,21 @@ if (isset($_FILES['file'])) {
     $updated = 0;
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
         $id = $data[0];
-        $amount = $data[1];
+        $type = $data[1];
+        $amount = $data[2];
         // update family balance
         $stmt = $MASHPIA_DB->prepare("
-            UPDATE family_prepaid_balances 
-            SET prepaid = :amount, 
-                used = 0 
-            WHERE admin_id = :id
+            UPDATE registration_charges  
+            SET amount = :amount 
+            WHERE user_id = :id 
+            AND type = :type 
+            AND year = :year
         ");
         if ($stmt->execute([
+            ':type'     => $type,
             ':amount'   => $amount,
-            ':id'       => $id
+            ':id'       => $id,
+            ':year'     => $year
         ])) {
             $updated++;
         } else {
@@ -31,7 +35,7 @@ if (isset($_FILES['file'])) {
             break;
         }
     }
-    echo "Updated $updated family balances.";
+    echo "Updated $updated registration charges.";
 }
 ?>
 <!DOCTYPE html>
@@ -42,8 +46,8 @@ if (isset($_FILES['file'])) {
 </head>
 <!-- add ability to upload file -->
 <body>
-    <form action="fix_family_balances.php" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" id="file">
-        <input type="submit" value="Upload">
-    </form>
+<form action="fix_family_balances.php" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" id="file">
+    <input type="submit" value="Upload">
+</form>
 </body>
