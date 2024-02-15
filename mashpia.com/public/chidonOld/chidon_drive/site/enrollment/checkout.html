@@ -519,7 +519,7 @@
         }
 
         grand_total = parseFloat(cart_total) + parseFloat(shipping)
-        if (grand_total == 0) {
+        if (grand_total == 0 && !credit) {
             alert('You have no items in your cart to pay for.')
             location.href = 'enrollNew.html'
         }
