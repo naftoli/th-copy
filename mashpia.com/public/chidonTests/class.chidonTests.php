@@ -970,7 +970,7 @@ class KHK {
                 continue;
             }
             $highest_track = $ct->getHighestTrack($marks[$info[$id]['th_chidon_id']], $id);
-            if ($info[$id]['reward_type'] != 'highest track passed' || $info[$id]['reward_type'] != '')
+            if ($info[$id]['reward_type'] != 'highest track passed' && $info[$id]['reward_type'] != '')
                 $highest_track = $info[$id]['reward_type'];
             // if highest track is expert or genius, child is eligible
             switch ($highest_track) {
