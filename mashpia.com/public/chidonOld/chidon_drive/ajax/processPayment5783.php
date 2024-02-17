@@ -717,7 +717,8 @@ function extractAddress($info) {
 }
 
 function getEmailMsg($trans_id) {
-    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons, $raised, $tracks, $credit;
+    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons,
+           $raised, $tracks, $credit, $creditVal, $paypal_email;
 
     $msg = "Below is a summary of your Chidon registration and extra purchase(s) where applicable.<br /><br />";
 
@@ -765,10 +766,23 @@ function getEmailMsg($trans_id) {
     }
 
     $msg . "SUMMARY<br /><br /><blockquote>";
-    if ($credit) $msg .= "Amount Credited From Your Pre Registration: $" . $credit . ".<br />";
-    if ($to_charge) {
+    if ($credit > 0) $msg .= "Amount Credited From Your Pre Registration: $" . $credit . ".<br />";
+    if ($to_charge > 0) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
         $msg .= "Transaction ID: " . $trans_id . ".<br />";
+    } else if ($to_charge < 0) {
+        $refund = Math.abs($to_charge);
+        switch (parseInt($creditVal)) {
+            case 1:
+                $msg .= "Thank you for choosing to donate the remaining $" . $refund . " from your pre registration to our scholarship fund!<br />";
+                break;
+            case 2:
+                $msg .= "You have chosen to have the remaining $" . $refund . " from your pre registration credited to your original payment method.<br />";
+                break;
+            case 3:
+                $msg .= "You have chosen to have the remaining $" . $refund . " from your pre registration credited to your PayPal address " . $paypal_email . ".<br />";
+                break;
+        }
     }
     $msg .= "<br />All purchases are non-refundable.<br /><br />";
     $msg .= "Please continue to review for the Chidon Final.<br /><br />";
