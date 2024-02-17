@@ -898,6 +898,8 @@
 			let registered = children.filter(child => child.date_paid)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
 			console.log(eligible)
+			if (window.localStorage) window.localStorage.setItem('eligible', JSON.stringify(eligible))
+			else Cookies.set('eligible', JSON.stringify(eligible))
 			if (registered.length && !eligible.length) {
 				editing_mode = true
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
@@ -1512,7 +1514,6 @@
 					window.localStorage.setItem('trips', JSON.stringify(trips))
 					window.localStorage.setItem('ultimate_trip', JSON.stringify(ultimate_trip))
 					window.localStorage.setItem('ultimate_info', JSON.stringify(ultimate_info))
-					window.localStorage.setItem('eligible', JSON.stringify(eligible))
 				} else {
 					// put in cookie
 					Cookies.set('cart', json_cart)
@@ -1523,7 +1524,6 @@
 					Cookies.set('trips', JSON.stringify(trips))
 					Cookies.set('ultimate_trip', JSON.stringify(ultimate_trip))
 					Cookies.set('ultimate_info', JSON.stringify(ultimate_info))
-					Cookies.set('eligible', JSON.stringify(eligible))
 				}
 				// go to extra purchases page
 				location.href = 'enroll_extra.html'
