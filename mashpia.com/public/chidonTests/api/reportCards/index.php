@@ -9,7 +9,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
 $totalTests = 3;
-$test_num = isset($_GET['test']) ? intval($_GET['test']) : $ct->figureOutTestNum();
+$test_num = 3;
 $school_id = intval($_GET['school_id']);
 $class_id = intval($_GET['class_id']);
 $user_id = intval($_GET['user_id']);
@@ -59,6 +59,7 @@ foreach ($info as $school => $users) {
                 ];
             }
         }
+
         // what avg is needed to pass the track that the user is on
 //        $avgRequired = 0;
 //        $avgRequired = $test_num < $totalTests ? round((($avgs[$test_type] * $totalTests) - $totalMarks) / $testsLeft) : 0;
