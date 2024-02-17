@@ -985,6 +985,7 @@
 
 			let html = ''
 			for (let child of eligible) {
+				console.log(child)
 				let myshliach = false // flag for determining if need to show shipping section
 				if ([61, 269].includes(parseInt(child.school_id))) myshliach = true
 				// figure out if child is eligible for ultimate experience
@@ -1511,6 +1512,7 @@
 					window.localStorage.setItem('trips', JSON.stringify(trips))
 					window.localStorage.setItem('ultimate_trip', JSON.stringify(ultimate_trip))
 					window.localStorage.setItem('ultimate_info', JSON.stringify(ultimate_info))
+					window.localStorage.setItem('eligible', JSON.stringify(eligible))
 				} else {
 					// put in cookie
 					Cookies.set('cart', json_cart)
@@ -1521,6 +1523,7 @@
 					Cookies.set('trips', JSON.stringify(trips))
 					Cookies.set('ultimate_trip', JSON.stringify(ultimate_trip))
 					Cookies.set('ultimate_info', JSON.stringify(ultimate_info))
+					Cookies.set('eligible', JSON.stringify(eligible))
 				}
 				// go to extra purchases page
 				location.href = 'enroll_extra.html'
