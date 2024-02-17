@@ -898,8 +898,6 @@
 			let registered = children.filter(child => child.date_paid)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
 			console.log(eligible)
-			if (window.localStorage) window.localStorage.setItem('eligible', JSON.stringify(eligible))
-			else Cookies.set('eligible', JSON.stringify(eligible))
 			if (registered.length && !eligible.length) {
 				editing_mode = true
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
@@ -911,6 +909,11 @@
 					location.href = '/mobile'
 				}
 			} else {
+				if (eligible.length) {
+					// save eligible children to local storage
+					if (window.localStorage) window.localStorage.setItem('eligible', JSON.stringify(eligible))
+					else Cookies.set('eligible', JSON.stringify(eligible))
+				}
 				processPage(admin)
 			}
 		}

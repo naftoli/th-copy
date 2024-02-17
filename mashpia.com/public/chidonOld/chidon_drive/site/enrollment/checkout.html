@@ -404,7 +404,7 @@
             ultimate_trip = window.localStorage.getItem('ultimate_trip')
             ultimate_info = window.localStorage.getItem('ultimate_info')
             credit = window.localStorage.getItem('credit') ? parseInt(window.localStorage.getItem('credit')) : 0
-            eligible = window.localStorage.getItem('eligible')
+            eligible = JSON.parse(window.localStorage.getItem('eligible'))
         } else {
             cart = JSON.parse(Cookies.get('cart'))
             addresses = JSON.parse(Cookies.get('addresses'))
@@ -415,7 +415,7 @@
             ultimate_trip = Cookies.get('ultimate_trip')
             ultimate_info = Cookies.get('ultimate_info')
             credit = Cookies.get('credit') ? parseInt(Cookies.get('credit')) : 0
-            eligible = Cookies.get('eligible')
+            eligible = JSON.parse(Cookies.get('eligible'))
         }
 
         let names = cart.filter(item => item.desc === 'names')
@@ -531,10 +531,11 @@
         if (reg.length) {
             for (let info of reg) {
                 // find child info from eligible array
-                let childInfo = eligible.find(child => child.user_id === info.id)
+                let childInfo = eligible.filter(child => child.user_id == info.id)[0]
+                console.log(childInfo)
                 // get track
                 let track = childInfo.track
-                if (childInfo.prepaid_credit > 0 && track != 'Yesod' && track != '') {
+                if (parseInt(childInfo.prepaid_credit) > 0 && track != 'Yesod' && track != '') {
                     credit += parseInt(childInfo.prepaid_credit)
                 }
             }
