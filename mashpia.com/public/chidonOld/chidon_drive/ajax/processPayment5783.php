@@ -37,7 +37,6 @@ $user_info = [];
 $celebBoxes = 0;
 $celebBoxShipping = 0;
 $sweater_info = [];
-$sweater_shipping = 0;
 $emailMsg = '';
 $couponsArr = json_decode($_POST['coupons']);
 $coupons = arrayByField($couponsArr, 'user_id', 'coupon');
@@ -102,7 +101,7 @@ function arrayByField($array, $key, $value) {
 }
 
 function processCart() {
-    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info;
+    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info, $sweaters;
 
     $sweater_types = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater'];
 
@@ -126,7 +125,7 @@ function processCart() {
 }
 
 function setSweaterInfo() {
-    global $cart, $sweaters, $sweater_info, $sweater_shipping;
+    global $cart, $sweaters, $sweater_info;
 
     // find out size and shipping info for sweaters purchased
     if ($sweaters && count($sweaters)) {
@@ -141,7 +140,6 @@ function setSweaterInfo() {
                         $sweater_info[$type][$i]['size'] = $item['value'];
                     } else if ($item['desc'] == $ship) {
                         $sweater_info[$type][$i]['ship'] = $item['value'];
-                        $sweater_shipping += intval($item['value']);
                     }
                 }
             }
