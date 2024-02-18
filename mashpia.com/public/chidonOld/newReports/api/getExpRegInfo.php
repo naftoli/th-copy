@@ -80,26 +80,7 @@ echo json_encode([
 ]);
 
 function getKhkPassed($row) {
-    if ($row['class_grade'] != '8') return false;
-
-    global $db;
-    $marks = [];
-    $sql = "select * from th_khk_marks where th_chidon_id = " . $row['th_chidon_id'];
-    $stmt = $db->query($sql);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($rows as $row) {
-        $marks[$row['test_number']] = $row['mark'];
-    }
-
-    $total = 0;
-    $num_tests = 0;
-    $passing_mark = 70;
-    foreach ($marks as $mark) {
-        $total += $mark;
-        $num_tests++;
-    }
-    $avg = intval($total / $num_tests);
-    return $avg >= $passing_mark;
+    return KHK::getKHKEligibility([$row['user_id']])[0][$row['user_id']];
 }
 
 function getReward($row) {
