@@ -418,7 +418,8 @@ function getExistingCodes() {
         SELECT user_id, type, amount
         FROM registration_charges
         WHERE user_id in (" . implode(',', $user_ids) . ") AND year = :year 
-        AND type in ('RRYSD', 'RRYDA', 'RRHVN', 'RRSUSA', 'RRSCAN', 'RRSINT')
+        AND type in ('RRYSD', 'RRYDA', 'RRHVN', 'RRSUSA', 'RRSCAN', 'RRSINT') 
+        AND amount > 0 
     ");
     $stmt2->execute([':year' => $year]);
     $codes = $stmt2->fetchAll();
