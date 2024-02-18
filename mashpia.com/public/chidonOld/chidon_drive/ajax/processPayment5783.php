@@ -739,7 +739,7 @@ function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
 
-function getEmailMsg($trans_id) {
+function getEmailMsg($trans_id, $last_four) {
     global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons,
            $raised, $tracks, $credit, $creditVal, $paypal_email;
 
@@ -793,6 +793,7 @@ function getEmailMsg($trans_id) {
     if ($to_charge > 0) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
         $msg .= "Transaction ID: " . $trans_id . ".<br />";
+        $msg .= "Last 4 digits of card: <" . $last_four . ">.<br />";
     } else if ($to_charge < 0) {
         $refund = abs($to_charge);
         switch (parseInt($creditVal)) {
@@ -867,6 +868,7 @@ $ultimate = saveUltimateTripInfo();
 
 $info = [];
 $trans_id = 0;
+$last_four = 0;
 if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
     if ($to_charge > 0) {
         $payment = processFee();
@@ -879,6 +881,7 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
         }
         if (is_array($payment)) {
             $trans_id = $payment['transactionResponse']['transId'];
+            $last_four = $payment['transactionResponse']['accountNumber'];
             // payment went through so commit to db
             $MASHPIA_DB->commit();
             // update registration_charges table
@@ -936,8 +939,9 @@ echo json_encode($info);
 
 // send email confirmation
 if (! isset($trans_id)) $trans_id = 0;
+if (! isset($last_four)) $last_four = 0;
 if ($info['success']) {
-    $msg = getEmailMsg($trans_id);
+    $msg = getEmailMsg($trans_id, $last_four);
     if (!sendEmail($msg)) {
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
