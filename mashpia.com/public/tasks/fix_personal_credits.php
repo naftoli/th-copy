@@ -15,7 +15,7 @@ if (isset($_FILES['file'])) {
         $amount = $data[2];
         // update family balance
         $stmt = $MASHPIA_DB->prepare("
-            UPDATE th_chidon   
+            UPDATE th_chidon 
             SET prepaid_credit = :amount 
             WHERE user_id = :id 
             AND year = :year
@@ -26,6 +26,7 @@ if (isset($_FILES['file'])) {
             ':year'     => $year
         ])) {
             $updated++;
+            if ($id == 51859) $stmt->debugDumpParams();
         } else {
             $stmt->errorInfo();
             $stmt->debugDumpParams();
