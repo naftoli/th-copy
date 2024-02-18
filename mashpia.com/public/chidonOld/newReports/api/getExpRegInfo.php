@@ -65,7 +65,6 @@ if ($res) {
         $row['raised'] = getRaised($row);
         $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
-        $row['extra_purchases'] = getExtraPurchases($row);
         $info[$row['school_id']][] = $row;
     }
 }
@@ -160,7 +159,18 @@ function getFee($row) {
 }
 
 function getTrip($row) {
-    return $row['trip'] ? ($row['trip'] . ' Trip') : '';
+    switch ($row['trip']) {
+        case 'east':
+            return 'East Coast';
+            break;
+        case 'west':
+            return 'West Coast';
+            break;
+        case 'europe':
+            return 'Europe';
+            break;
+    }
+    return '';
 }
 
 function getExtraPurchases($row) {
