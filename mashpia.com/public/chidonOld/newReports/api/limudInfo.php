@@ -13,9 +13,11 @@ $test_num = intval($input['test_num']);
 
 // find out if school info was confirmed and should be locked
 $locked = 0;
-$sql = "select * from chidon_confirmations where school_id = $school_id and year = $year";
-$result = mysql_query($sql);
-if (mysql_num_rows($result) > 0) $locked = 1;
+if ($admin_user['auth'] != 'super') {
+    $sql = "select * from chidon_confirmations where school_id = $school_id and year = $year";
+    $result = mysql_query($sql);
+    if (mysql_num_rows($result) > 0) $locked = 1;
+}
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests($year);
