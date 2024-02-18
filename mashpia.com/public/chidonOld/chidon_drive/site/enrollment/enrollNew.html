@@ -886,12 +886,7 @@
 			for (let child of children) {
 				child.track = tracks[child.user_id]
 				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
-				if (Cookies.get('naftoli')) {
-					// get track from GET param if exists
-					const queryString = window.location.search
-					if (!child.track) child.track = new URLSearchParams(queryString).get('track')
-					child.schoolConfirmed = 1
-				}
+				if (Cookies.get('naftoli')) child.schoolConfirmed = 1
 			}
 
 			// only let ultimate trip kids to update their trip info
