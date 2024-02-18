@@ -528,6 +528,7 @@
         }
 
         // figure out if there's more credit from personal credit (for seforim that was paid in advance)
+        let already_used_credit = credit == 0;
         if (reg.length) {
             for (let info of reg) {
                 // find child info from eligible array
@@ -705,7 +706,8 @@
                 credit,
                 country,
                 creditVal,
-                paypal_email
+                paypal_email,
+                already_used_credit
             }, function (result) {
                 const res = JSON.parse(result)
                 if (res.success) {

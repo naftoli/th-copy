@@ -25,6 +25,7 @@ $admin_email = $_POST['admin_email'];
 $payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
 $shipping_charge = isset($_POST['shipping']) ? intval($_POST['shipping']) : 0;
 $credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
+$already_used_credit = isset($_POST['already_used_credit']) ? intval($_POST['already_used_credit']) : 0;
 $to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) - $credit) : 0;
 $total_without_credit = isset($_POST['cart_total']) ? intval($_POST['cart_total']) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
@@ -282,23 +283,26 @@ function insertIntoRegCharges($trans_id = 0) {
 }
 
 function getDescriptions() {
-    global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip, $shipping_charge, $country, $credit;
+    global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip,
+           $shipping_charge, $country, $credit, $already_used_credit;
 
     $desc = [];
 
-    $existing_codes = getExistingCodes();
-    if (count($existing_codes)) {
-        // if there's credit first zero out the amounts in the registration_charges table
-        $desc = [];
-        if ($credit > 0) {
-            foreach ($existing_codes as $code) {
-                $desc[] = [
-                    'prefix' => 'C',
-                    'id' => $code['user_id'],
-                    'code' => $code['type'],
-                    'amount' => '-' . $code['amount'],
-                    'school_id' => $code['school_id']
-                ];
+    if (! $already_used_credit) {
+        $existing_codes = getExistingCodes();
+        if (count($existing_codes)) {
+            // if there's credit first zero out the amounts in the registration_charges table
+            $desc = [];
+            if ($credit > 0) {
+                foreach ($existing_codes as $code) {
+                    $desc[] = [
+                        'prefix' => 'C',
+                        'id' => $code['user_id'],
+                        'code' => $code['type'],
+                        'amount' => '-' . $code['amount'],
+                        'school_id' => $code['school_id']
+                    ];
+                }
             }
         }
     }
@@ -429,7 +433,7 @@ function getExistingCodes() {
 }
 
 function updateFamilyBalance() {
-    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit;
+    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit, $already_used_credit;
 
     if ($credit) {
         $desc = getDescriptions();
@@ -452,6 +456,18 @@ function updateFamilyBalance() {
                     accounting_code = :code 
                 WHERE admin_id = :admin AND year = :year
         ");
+
+        if ($already_used_credit) {
+            $stmt = $MASHPIA_DB->prepare("
+                UPDATE family_prepaid_balances 
+                SET used = SUM(used + :amount), 
+                    refund_amount = :refund,
+                    refund_type = :type, 
+                    paypal = :paypal, 
+                    accounting_code = :code 
+                WHERE admin_id = :admin AND year = :year
+            ");
+        }
 
         // find out if we are using up all prepaid amount or not
         if ($to_charge > 0) {
