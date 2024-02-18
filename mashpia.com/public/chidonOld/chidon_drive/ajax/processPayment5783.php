@@ -57,7 +57,7 @@ if (isset($_POST['tracks'])) {
 }
 else $tracks = [];
 
-$trips = isset($_POST['trip']) ? json_decode($_POST['trips']) : [];
+$trips = isset($_POST['trips']) ? json_decode($_POST['trips']) : [];
 $ultimate_trip = isset($_POST['ultimate_trip']) ? json_decode($_POST['ultimate_trip']) : [];
 $ultimate_info = isset($_POST['ultimate_info']) ? json_decode($_POST['ultimate_info']) : [];
 $country = isset($_POST['country']) ? $_POST['country'] : '';
