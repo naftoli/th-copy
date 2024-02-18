@@ -275,7 +275,7 @@ function insertIntoRegCharges($trans_id = 0) {
         $MASHPIA_DB->commit();
         return true;
     } else {
-        $stmt->debugDumpParams();
+//        $stmt->debugDumpParams();
         $MASHPIA_DB->rollBack();
         return false;
     }
@@ -484,7 +484,7 @@ function updateFamilyBalance() {
             ':year' => $year,
             ':code' => $code
         ])) {
-            $stmt->debugDumpParams();
+//            $stmt->debugDumpParams();
             return false;
         }
 
@@ -709,7 +709,7 @@ function saveUltimateTripInfo() {
                     'year' => $year
                 ]);
                 if (!$res) {
-                    $stmt->debugDumpParams();
+//                    $stmt->debugDumpParams();
                     $success = false;
                     break;
                 }
@@ -817,6 +817,14 @@ function sendEmail($msg) {
     return false;
 }
 
+function sendMyselfEmail($error, $desc) {
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+    $headers[] = 'From: chidon@tzivoshashem.org';
+    if (is_array($desc)) $desc = implode('<br />', $desc);
+    @mail('naftoli@tzivoshashem.org', 'Error with Chidon Registration', ($error . "<br /><br />" . $desc), implode("\r\n", $headers));
+}
+
 //******************* PROGRAM STARTS HERE ***********************/
 processCart();
 setSweaterInfo();
@@ -858,10 +866,25 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
             // payment went through so commit to db
             $MASHPIA_DB->commit();
             // update registration_charges table
-            insertIntoRegCharges($trans_id);
+            $inserted = insertIntoRegCharges($trans_id);
+            $updated = updateFamilyBalance();
+            if (!$inserted || !$updated) {
+                // send email to myself
+                if (!$inserted && !$updated) {
+                    $error = 'There was an error inserting into the registration_charges table and updating the family balance. Please check the database.';
+                    $desc = getDescriptions();
+                    $desc[] = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
+                } else if (!$inserted) {
+                    $error = 'There was an error inserting into the registration_charges table. Please check the database.';
+                    $desc = getDescriptions();
+                } else if (!$updated) {
+                    $error = 'There was an error updating the family balance. Please check the database.';
+                    $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
+                }
+                sendMyselfEmail($error, $desc);
+            }
             // redeem coupons and update family balance
             redeemCoupons();
-            updateFamilyBalance();
             $info['success'] = true;
             $msg = 'Congratulations! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                 'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
@@ -876,7 +899,11 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     } else {
         $MASHPIA_DB->commit();
         // update family balance
-        updateFamilyBalance();
+        if (!updateFamilyBalance()) {
+            $error = 'There was an error updating the family balance. Please check the database.';
+            $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
+            sendMyselfEmail($error, $desc);
+        }
         $info['success'] = true;
         $msg = 'Congratulations! ';
         if (count($users)) $msg .= 'You have successfully registered your child(ren) for the Chidon. ';
