@@ -1118,22 +1118,6 @@
 					if (window.localStorage) localStorage.setItem('country', eligible[0]['admin_country'])
 					else Cookies.set('country', eligible[0]['admin_country'])
 				}
-				// if (shipping > 0) {
-				// 	const res = await fetch('../../../../mobile/registration/api/checkShippingFee.php', {
-				// 		method: 'POST',
-				// 		headers: {
-				// 			'Content-Type': 'application/json'
-				// 		},
-				// 		body: JSON.stringify({admin: children[0]['admin_id']})
-				// 	})
-				// 	const paid = await res.json()
-				// 	if (shipping > 0 && paid == 0) {
-				// 		needsShipping = true
-				// 		// save country to for checkout
-				// 		if (window.localStorage) localStorage.setItem('country', eligible[0]['admin_country'])
-				// 		else Cookies.set('country', eligible[0]['admin_country'])
-				// 	}
-				// }
 			}
 
 			const parentAddress = eligible[0]['admin_address1'] + ' ' + eligible[0]['admin_address2'] + ', ' + eligible[0]['admin_city'] + ', ' + eligible[0]['admin_state'] + ' ' + eligible[0]['admin_postal']
