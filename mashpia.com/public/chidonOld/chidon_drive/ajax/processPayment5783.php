@@ -739,7 +739,7 @@ function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
 
-function getEmailMsg($trans_id) {
+function getEmailMsg($trans_id = 0) {
     global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons,
            $raised, $tracks, $credit, $creditVal, $paypal_email;
 
