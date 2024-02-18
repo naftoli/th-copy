@@ -938,8 +938,6 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
 echo json_encode($info);
 
 // send email confirmation
-if (! isset($trans_id)) $trans_id = 0;
-if (! isset($last_four)) $last_four = 0;
 if ($info['success']) {
     $msg = getEmailMsg($trans_id, $last_four);
     if (! sendEmail($msg)) {
