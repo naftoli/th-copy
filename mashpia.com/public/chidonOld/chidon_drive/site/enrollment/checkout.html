@@ -417,8 +417,6 @@
             credit = Cookies.get('credit') ? parseInt(Cookies.get('credit')) : 0
             eligible = JSON.parse(Cookies.get('eligible'))
         }
-        console.log(cart)
-        alert()
 
         let names = cart.filter(item => item.desc === 'names')
         if (names.length) children = names[0].value
@@ -428,6 +426,7 @@
         let celeb_boxes = 0
         let celeb_box_shipping = 0
         let sweaters = []
+        let num_sweaters = 0
         let sweater_shipping = 0
 
         const celeb_box_price = 20
@@ -457,6 +456,7 @@
                                 amount: parseInt(item.value)
                             }
                             sweaters.push(sweater)
+                            num_sweaters++;
                         }
                     }
                 }
@@ -523,7 +523,8 @@
             cart_total += sweater_cost
         }
 
-        grand_total = parseFloat(cart_total) + parseFloat(shipping)
+        grand_total = parseFloat(cart_total) + parseFloat(shipping) + parseFloat(celeb_boxes * celeb_box_price) +
+            parseFloat(celeb_box_shipping) + parseFloat(num_sweaters * sweater_price) + parseFloat(sweater_shipping)
         if (grand_total == 0 && !credit) {
             alert('You have no items in your cart to pay for.')
             location.href = 'enrollNew.html'
