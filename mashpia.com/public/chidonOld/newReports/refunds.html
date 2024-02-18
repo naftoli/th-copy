@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Refunds Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous"/>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 20px;
+    }
+    th, td {
+      vertical-align: middle !important;
+      text-align: center !important;
+    }
+    .smaller {
+      font-size: 14px;
+      font-style: italic;
+    }
+  </style>
+</head>
+<h1>Refunds Report</h1>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const { useState, useEffect } = React
+  const { createRoot } = ReactDOM
+
+  const Report = () => {
+    const [data, setData] = useState([])
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+      fetch('api/refunds.php')
+        .then(res => res.json())
+        .then(
+          (result) => {
+            if (result) {
+              setLoading(false)
+              setData(result)
+            }
+          },
+          (error) => {
+            setLoading(false)
+            setError(error)
+            console.log(error)
+          }
+        )
+    }, [])
+
+    if (loading) {
+      return <div>Loading...</div>
+    }
+
+    if (error) {
+      return <div>Error: {error.message}</div>
+    }
+
+    const headers = ['Admin ID', 'Prepaid', 'Used', 'Refund Amount', 'Refund Type', 'Paypal Email', 'Codes']
+
+    return (
+      <div>
+        <table className="table table-striped table-bordered">
+          <thead>
+            <tr>
+              {headers.map((header, index) => (
+                <th key={index}>{header}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((row, index) => (
+              <tr key={index}>
+                <td>{row.admin_id}</td>
+                <td>{row.prepaid}</td>
+                <td>{row.used}</td>
+                <td>{row.refund_amount}</td>
+                <td>{row.refund_type}</td>
+                <td>{row.paypal}</td>
+                <td>{row.accounting_code}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<Report/>)
+</script>
+</html>
