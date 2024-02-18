@@ -245,9 +245,9 @@
 <!--                    <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>-->
                     <!--                            <button class="btn btn-info gameSet">Nisseui Hanosi Cards</button>-->
                     <!--                            <button class="btn btn-info chidondrive">ChidonDrive Setup</button>-->
-                                            <button class="btn btn-info story">Submit your Rebbe Story</button>
+<!--                                            <button class="btn btn-info story">Submit your Rebbe Story</button>-->
                     <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
-                    <!--                        <button class="btn btn-info chidon_reg">Chidon Registration</button>-->
+                                            <button class="btn btn-info chidon_reg" style="display: none;">Chidon Registration</button>
                     <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
                     <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
 <!--                    <button class="btn btn-info heyTeves" style="display: none;">Hey Teves Sale</button>-->
@@ -430,11 +430,11 @@
                                                       <!--                                                                {{/if}}-->
                                                         <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon
                                                             Limmud {{ this.next_year_chidon }}</div>
-                                                        {{#if this.editChidon}}
-                                                            <button class="btn btn-primary chidon_info" style="margin-bottom: 8px"><span>View / Edit Chidon Enrollment Options</span>
-                                                            </button>
-                                                            <br/>
-                                                        {{/if}}
+<!--                                                        {{#if this.editChidon}}-->
+<!--                                                            <button class="btn btn-primary chidon_info" style="margin-bottom: 8px">-->
+<!--                                                                <span>View / Edit Chidon Enrollment Options</span>-->
+<!--                                                            </button><br/>-->
+<!--                                                        {{/if}}-->
                                                         {{#if this.show_report_cards}}
                                                             <button class="btn btn-primary report-card"><span>View Report Card</span></button>
                                                             <br/>
@@ -631,6 +631,7 @@
         var parent_id;
         var allChildren = []
         var childrenToRegister = [];
+        var show_reg = false;
         $.post('ajax/getChildren.php', {
             admin: admin
         }, function (success) {
@@ -684,6 +685,9 @@
 
                 for (var c in children) {
                     var child = children[c]
+                    if ([693, 11, 41].includes(parseInt(child.school_id))) {
+                        show_reg = true
+                    }
 
                     if (child.chidonRegistered && parseInt(child.chidonSchoolConfirmed)) {
                         $(".subsidy").show()
@@ -728,6 +732,10 @@
                     $(".chilrens").append(html);
                     setSwiper();
                     $(".year").text(year);
+                }
+
+                if (show_reg) {
+                    $(".chidon_reg").show()
                 }
             }
         });
