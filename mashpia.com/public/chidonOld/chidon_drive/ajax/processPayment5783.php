@@ -288,7 +288,7 @@ function getDescriptions() {
 
     $desc = [];
 
-    if (! $already_used_credit) {
+    if ($already_used_credit == 0) {
         $existing_codes = getExistingCodes();
         if (count($existing_codes)) {
             // if there's credit first zero out the amounts in the registration_charges table
@@ -460,7 +460,7 @@ function updateFamilyBalance() {
         if ($already_used_credit) {
             $stmt = $MASHPIA_DB->prepare("
                 UPDATE family_prepaid_balances 
-                SET used = SUM(used + :amount), 
+                SET used = (used + :amount), 
                     refund_amount = :refund,
                     refund_type = :type, 
                     paypal = :paypal, 
