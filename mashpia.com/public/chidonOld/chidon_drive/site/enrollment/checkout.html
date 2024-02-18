@@ -220,13 +220,11 @@
                                 <div class="field">
                                     <label>Exp. Year:</label>
                                     <select id="exp_yy">
-                                        <option>2022</option>
-                                        <option>2023</option>
-                                        <option>2024</option>
-                                        <option>2025</option>
-                                        <option>2026</option>
-                                        <option>2027</option>
-                                        <option>2028</option>
+                                        <script>
+                                            for (let year = new Date().getFullYear(); year < new Date().getFullYear() + 12; year++) {
+                                                document.write('<option>' + year + '</option>')
+                                            }
+                                        </script>
                                     </select>
                                 </div>
                                 <div class="field">
