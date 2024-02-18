@@ -2,8 +2,8 @@
 //ini_set('display_errors', 1);
 //ini_set('error_reporting', 1);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+require_once '../../../api/header/db.php';
+require_once '../../../chidonTests/class.chidonTests.php';
 
 $ct = new ChidonTests();
 $types = $ct->getTypes();

@@ -1,5 +1,5 @@
 <?php
-require $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/chidon_drive/classes/WalkingZones.php';
+require '../classes/WalkingZones.php';
 $w = new WalkingZones;
 $num = $_POST['num'];
 $street = $_POST['street'];

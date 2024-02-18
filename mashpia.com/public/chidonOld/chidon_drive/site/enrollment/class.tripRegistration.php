@@ -1,5 +1,5 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once '../../../../api/header/db.php';
 class TripRegistration
 {
     public function __construct($admin_id, $year)

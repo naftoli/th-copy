@@ -2,12 +2,12 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/chidon_drive/site/enrollment/class.tripRegistration.php';
-require __DIR__ . '/../encrypt.php';
+require_once '../../../api/header/db.php';
+require_once '../../../class.globalSettings.php';
+require_once '../../../chidonTests/class.chidonTests.php';
+require_once '../coupons/class.couponCode.php';
+require_once '../site/enrollment/class.tripRegistration.php';
+require_once '../encrypt.php';
 
 $year = GlobalSettings::getChidonYear();
 $admin = mysql_real_escape_string( $_POST['admin'] );

@@ -4,8 +4,8 @@ if (! isset($_COOKIE['chidon_admin'])) {
     echo "no permission.";
     exit;
 }
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once '../../../../api/header/db.php';
+require_once '../../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $ultimate_trip = json_decode($_POST['ultimate_trip']);
