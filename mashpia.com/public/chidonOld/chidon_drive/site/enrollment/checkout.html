@@ -417,6 +417,7 @@
             credit = Cookies.get('credit') ? parseInt(Cookies.get('credit')) : 0
             eligible = JSON.parse(Cookies.get('eligible'))
         }
+        if (credit < 0) credit = 0 // if credit is negative, set to 0
 
         let names = cart.filter(item => item.desc === 'names')
         if (names.length) children = names[0].value
