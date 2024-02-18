@@ -488,11 +488,10 @@
         }
         if (shipping) {
             html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
-            cart_total += intval(shipping)
         }
         if (reg.length) {
             html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + shipping}</h5>`
-            cart_total += intval(reg_fee)
+            cart_total += intval(reg_fee + shipping)
         }
         if (celeb_boxes) {
             html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
@@ -500,7 +499,7 @@
             html += `<h5 class="formDetails">Cost per Celebration Box: $${celeb_box_price}</h5>`
             html += `<h5 class="formDetails">Additional Shipping Fee: $${celeb_box_shipping}</h5>`
             html += `<h5 class="formDetails">Total Cost: $${celeb_boxes * celeb_box_price + celeb_box_shipping}`
-            cart_total += intval((celeb_boxes * celeb_box_price) + intval(celeb_box_shipping))
+            cart_total += intval(celeb_boxes * celeb_box_price + celeb_box_shipping)
         }
         if (sweaters.length) {
             let sweater_cost = 0
