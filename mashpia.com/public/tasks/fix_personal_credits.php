@@ -26,7 +26,6 @@ if (isset($_FILES['file'])) {
             ':year'     => $year
         ])) {
             $updated++;
-            if ($id == 51859) $stmt->debugDumpParams();
         } else {
             $stmt->errorInfo();
             $stmt->debugDumpParams();
