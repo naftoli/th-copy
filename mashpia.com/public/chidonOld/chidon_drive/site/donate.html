@@ -397,8 +397,8 @@
 
 			// fill in exp dropdown
 			let html = "";
-			for (let yy = 2022; yy <= 2030; yy++) {
-				html += "<option>" + yy + "</option>";
+			for (let year = new Date().getFullYear(); year < new Date().getFullYear() + 12; year++) {
+				html += "<option>" + year + "</option>";
 			}
 			$("#exp_yy").html(html);
 
