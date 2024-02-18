@@ -896,6 +896,10 @@ class KHK {
         foreach ($ids as $id) {
             $details[$id] = [];
             foreach ($years as $yr) {
+                if ($id == 66871) {
+                    $details[$id][$yr] = true;
+                    continue;
+                }
                 $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
                     // for current yr, check if passed
@@ -965,10 +969,6 @@ class KHK {
         $passed = [];
         $ct = new ChidonTests($year);
         foreach ($ids as $id) {
-            if ($id == 66871) {
-                $passed[$id] = true;
-                continue;
-            }
             if (! isset($marks[$info[$id]['th_chidon_id']])) {
                 $passed[$id] = false;
                 continue;
