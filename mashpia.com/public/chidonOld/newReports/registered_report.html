@@ -167,7 +167,7 @@
                 <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
                 <td>{row.date_paid}</td>
                 <td>{row.trip}</td>
-                <td>{row.ultimate_trip ? 'Yes' : 'No'}</td>
+                <td>{parseInt(row.ultimate_trip) == 1 ? 'Yes' : 'No'}</td>
                 {superAdmin && <td>{row.paid ? ('$' + row.paid) : ''}</td>}
               </tr>
             ))}
