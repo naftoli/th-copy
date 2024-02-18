@@ -12,7 +12,7 @@ if (isset($_FILES['file'])) {
     $updated = 0;
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
         $id = $data[0];
-        $amount = $data[2];
+        $amount = $data[1];
         // update family balance
         $stmt = $MASHPIA_DB->prepare("
             UPDATE th_chidon 
