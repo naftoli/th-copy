@@ -520,7 +520,7 @@
         }
 
         grand_total = cart_total
-        if (grand_total == 0 && !credit) {
+        if (!reg.length && grand_total == 0 && !credit) { // it's possible to register someone for free
             alert('You have no items in your cart to pay for.')
             location.href = 'enrollNew.html'
         }
