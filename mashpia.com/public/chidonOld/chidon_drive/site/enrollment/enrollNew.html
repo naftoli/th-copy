@@ -1121,14 +1121,18 @@
 			}
 
 			const parentAddress = eligible[0]['admin_address1'] + ' ' + eligible[0]['admin_address2'] + ', ' + eligible[0]['admin_city'] + ', ' + eligible[0]['admin_state'] + ' ' + eligible[0]['admin_postal']
+			const pickupText = {
+				61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+						Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
+				269: `I would like to pick up my items in Crown Heights during the NY trip.`
+			}
 			if (needsShipping) {
 				html += `<div id="shipping_charges">
 								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
 								<div class="flex">
 									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
 									<label>
-										(FREE) I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
-										Tuesday, 16 Adar 2 - 5-9PM OR Tuesday, 23 Adar 2 - 5-9PM.
+										(FREE) ${pickupText[eligible[0]['school_id']]}
 									</label>
 								</div>
 								<div class="flex">
