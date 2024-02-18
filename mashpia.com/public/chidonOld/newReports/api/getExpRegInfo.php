@@ -58,7 +58,7 @@ if ($res) {
         // setup row with needed info
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-        $row['khk_eligible'] = $khk_eligibility[$row['user_id']] ? 1 : 0;
+        $row['khk_eligible'] = $row['class_grade'] == '8' ? $khk_eligibility[$row['user_id']] ? 1 : 0 : 0;
         $row['khk_passed_tests'] = getKhkPassed($row);
         $row['reward'] = getReward($row);
         $row['award'] = getAward($row);
@@ -80,7 +80,27 @@ echo json_encode([
 ]);
 
 function getKhkPassed($row) {
-    return KHK::getKHKEligibility([$row['user_id']])[0][$row['user_id']];
+    if (! $row['khk_reg']) return false;
+    else {
+        global $db;
+        $marks = [];
+        $sql = "select * from th_khk_marks where th_chidon_id = " . $row['th_chidon_id'];
+        $stmt = $db->query($sql);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $marks[$row['test_number']] = $row['mark'];
+        }
+
+        $total = 0;
+        $num_tests = 0;
+        $passing_mark = 70;
+        foreach ($marks as $mark) {
+            $total += $mark;
+            $num_tests++;
+        }
+        $avg = intval($total / $num_tests);
+        return $avg >= $passing_mark;
+    }
 }
 
 function getReward($row) {
