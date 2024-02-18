@@ -1,5 +1,6 @@
 <?php
-require_once '../../../../api/header/db.php';
+require_once '../../../api/header/db.php';
+
 class TripRegistration
 {
     public function __construct($admin_id, $year)
