@@ -46,7 +46,7 @@ if (isset($_FILES['file'])) {
 </head>
 <!-- add ability to upload file -->
 <body>
-<form action="fix_family_balances.php" method="post" enctype="multipart/form-data">
+<form action="add_reg_charges.php" method="post" enctype="multipart/form-data">
     <input type="file" name="file" id="file">
     <input type="submit" value="Upload">
 </form>
