@@ -101,9 +101,7 @@ function arrayByField($array, $key, $value) {
 }
 
 function processCart() {
-    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info, $sweaters;
-
-    $sweater_types = ['mother_sweater', 'father_sweater', 'bubby_sweater', 'zaidy_sweater'];
+    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info;
 
     if ($cart && count($cart)) {
         foreach ($cart as $item) {
@@ -115,8 +113,6 @@ function processCart() {
                 $celebBoxes = intval($item['value']);
             } else if ($item['desc'] == 'celeb_box_ship') {
                 $celebBoxShipping = intval($item['value']);
-            } else if (in_array($item['desc'], $sweater_types)) {
-                $sweaters[$item['desc']] = intval($item['value']);
             } else if ($item['desc'] == 'names' && $item['value']) {
                 $user_info = $item['value'];
             }
@@ -226,7 +222,7 @@ function insertIntoRegCharges($trans_id = 0) {
             admin_id = :admin,
             type = :type, 
             amount = :amount, 
-            year = :year,
+            year = :year
     ");
 
     $success = true;
@@ -276,30 +272,25 @@ function insertIntoRegCharges($trans_id = 0) {
 function getDescriptions() {
     global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip, $shipping_charge, $country, $credit;
 
+    $desc = [];
+
     $existing_codes = getExistingCodes();
     if (count($existing_codes)) {
-        // we need the serials for the users in the existing codes
-        $ids = array_map(function ($code) {
-            return $code['user_id'];
-        }, $existing_codes);
-        $serials = getSerials($ids);
-
         // if there's credit first zero out the amounts in the registration_charges table
         $desc = [];
         if ($credit > 0) {
             foreach ($existing_codes as $code) {
                 $desc[] = [
                     'prefix' => 'C',
-                    'id' => $serials[$code['user_id']],
-                    'code' => $code['type'] . '-',
-                    'amount' => $code['amount']
+                    'id' => $code['user_id'],
+                    'code' => $code['type'],
+                    'amount' => '-' . $code['amount']
                 ];
             }
         }
     }
 
     if (count($users)) {
-        $serials = getSerials(array_keys($users));
         foreach ($users as $user_id => $amount) {
             $user_track = $tracks[$user_id];
             switch ($user_track) {
@@ -319,7 +310,7 @@ function getDescriptions() {
             }
             $desc[] = [
                 'prefix'    => 'C',
-                'id'        => $serials[$user_id],
+                'id'        => $user_id,
                 'code'      => $code,
                 'amount'    => $amount
             ];
@@ -414,10 +405,11 @@ function getExistingCodes() {
     $stmt2 = $MASHPIA_DB->prepare("
         SELECT user_id, type, amount
         FROM registration_charges
-        WHERE user_id in (" . implode(',', $user_ids) . ") AND year = :year
+        WHERE user_id in (" . implode(',', $user_ids) . ") AND year = :year 
+        AND type in ('RRYSD', 'RRYDA', 'RRHVN', 'RRSUSA', 'RRSCAN', 'RRSINT')
     ");
     $stmt2->execute([':year' => $year]);
-    $codes = $stmt->fetchAll();
+    $codes = $stmt2->fetchAll();
 
     return $codes;
 }
@@ -450,6 +442,7 @@ function updateFamilyBalance() {
             $amount = $credit;
             $refund = 0;
             $type = '';
+            $code = '';
         } else {
             $amount = $total_without_credit;
             $refund = $credit - $total_without_credit;
@@ -769,7 +762,7 @@ function getEmailMsg($trans_id) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
         $msg .= "Transaction ID: " . $trans_id . ".<br />";
     } else if ($to_charge < 0) {
-        $refund = Math.abs($to_charge);
+        $refund = abs($to_charge);
         switch (parseInt($creditVal)) {
             case 1:
                 $msg .= "Thank you for choosing to donate the remaining $" . $refund . " from your pre registration to our scholarship fund!<br />";
