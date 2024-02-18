@@ -1005,8 +1005,8 @@
 														Track. You are eligible for ${trackText}.<h5>`
 
 				const tripDates = {
-					M: '18 - 20 Adar 2, March 28 - 30',
-					F: '25 - 27 Adar 2, April 4 - 6'
+					M: 'Wednesday, 24 Adar 2/April 3 6:30pm - Sunday, 28 Adar 2/April 7 1:00pm',
+					F: 'Wednesday, 17 Adar 2/March 27 6:30pm - Sunday, 21 Adar 2/March 31 1:00pm'
 				}
 
 				// registration heading
@@ -1033,7 +1033,7 @@
 					html += `<div class="flex">
 											<input class="inputCheckbox ultimate_trip" type="radio" name="ultimate_trip_${child.user_id}" value='0:${child.user_id}' />
 											<h5 class="formDetails"><b>Ultimate Chidon Experience</b> ($350 minimum)<br />
-													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Thursday - Motzai Shabbos, ${tripDates[child.gender ? child.gender : 'M']}<br /><br />
+													I will be joining the 3 day Ultimate Chidon Experience in Crown Heights: Thursday - Motzai Shabbos, ${tripDates[child.gender ? child.gender.toUpperCase() : 'M']}<br /><br />
 													Please Note: Those participating in the Ultimate Chidon Experience will NOT receive the 75 credits worth of prizes that they choose.
 											</h5>
 									</div>
