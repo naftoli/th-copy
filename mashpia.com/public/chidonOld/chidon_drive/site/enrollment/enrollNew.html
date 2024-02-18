@@ -1018,12 +1018,16 @@
 						$100 will be deducted from your registration fee.<br /><br />
 						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />
 						<select name="regional_trip" id="regional_trip">
-							<option value="0">Please select which trip you will be joining</option>
-							<option value="east">East Coast</option>
-							<option value="west">West Coast</option>`
-						// add few options for anash kinder only
-						if (parseInt(child.school_id) === 61) text += `<option value="europe">Europe</option>`
-						text += `<option value="no_trip">No Trip</option></select>`
+							<option value="0">Please select which trip you will be joining</option>`
+						// add option for anash kinder only
+						if (parseInt(child.school_id) === 269) text += `<option value="east">East Coast</option>`
+						// add few options for myshliach only
+						else if (parseInt(child.school_id) === 61) {
+							text += `<option value="east">MyShliach NY Retreat</option>
+											<option value="europe">MyShliach EU Retreat</option>`
+						}
+						text += `<option value="west">West Coast</option>
+											<option value="no_trip">No Trip</option></select>`
 					}
 					html += `<h5 class="formDetails"><span class="title">Trip Choice</span></h5>`
 					html += `<div class="flex">
@@ -1047,12 +1051,16 @@
 						$100 will be deducted from your registration fee.<br /><br />
 						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />
 						<select name="regional_trip" id="regional_trip">
-							<option value="0">Please select which trip you will be joining</option>
-							<option value="east">East Coast</option>
-							<option value="west">West Coast</option>`
-						// add few options for anash kinder only
-						if (parseInt(child.school_id) === 269) text += `<option value="europe">Europe</option>`
-						text += `<option value="no_trip">No Trip</option></select>`
+							<option value="0">Please select which trip you will be joining</option>`
+						// add option for anash kinder only
+						if (parseInt(child.school_id) === 269) text += `<option value="east">East Coast</option>`
+						// add few options for myshliach only
+						else if (parseInt(child.school_id) === 61) {
+							text += `<option value="east">MyShliach NY Retreat</option>
+											<option value="europe">MyShliach EU Retreat</option>`
+						}
+						text += `<option value="west">West Coast</option>
+											<option value="no_trip">No Trip</option></select>`
 					}
 					let style = ''
 					if (ultimate) style = 'display: none'
