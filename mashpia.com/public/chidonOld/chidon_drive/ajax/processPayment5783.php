@@ -438,6 +438,8 @@ function updateFamilyBalance() {
         foreach ($desc as $item) {
             $code .= $item['prefix'] . $item['id'] . ':' . $item['code'] . '-' . $item['amount'] . ',';
         }
+        // remove trailing comma
+        $code = rtrim($code, ',');
 
         $stmt = $MASHPIA_DB->prepare("
                 UPDATE family_prepaid_balances 
