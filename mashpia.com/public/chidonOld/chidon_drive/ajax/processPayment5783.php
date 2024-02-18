@@ -810,7 +810,7 @@ function getEmailMsg($trans_id, $last_four) {
     }
     $msg .= "<br />All purchases are non-refundable.<br /><br />";
     $msg .= "Please continue to review for the Chidon Final.<br /><br />";
-    $msg .= "If you have any questions, please be in touch with your school's Chodon coordinator.<br /><br />";
+    $msg .= "If you have any questions, please be in touch with your school's Chidon co-ordinator.<br /><br />";
     $msg .= "Wishing you much continued Nachas,<br />Chidon HQ</blockquote>";
 
     $msg .= "<br /><br /><footer style='font-size: 9px; color: grey;'>Our Address: <address>792 Eastern Parkway Brooklyn, NY 11213</address><br /><br />
