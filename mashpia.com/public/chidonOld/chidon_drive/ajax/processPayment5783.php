@@ -942,10 +942,7 @@ if (! isset($trans_id)) $trans_id = 0;
 if (! isset($last_four)) $last_four = 0;
 if ($info['success']) {
     $msg = getEmailMsg($trans_id, $last_four);
-    if (!sendEmail($msg)) {
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-        $headers[] = 'From: chidon@tzivoshashem.org';
-        @mail('naftoli@tzivoshashem.org', 'Error Emailing Chidon Confirmation', $msg, implode("\r\n", $headers));
+    if (! sendEmail($msg)) {
+        sendMyselfEmail('There was an error sending the confirmation email.', $msg);
     }
 }
