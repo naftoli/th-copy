@@ -21,6 +21,7 @@ $sql = "
         tc.reward_type,
         tc.award_type,
         tc.trip, 
+        tc.ultimate_trip, 
         u.user_id,
         u.user_serial,
         u.first,
