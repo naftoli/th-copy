@@ -131,7 +131,7 @@ while ($row = mysql_fetch_assoc($result)) {
             echo "<a href='settings.php'><input type='button' value='Marks/Levels Settings' style='padding: 12px; font-size: large' /></a>";
             foreach ($info as $school => $children) {
                 // check locked
-                if (in_array($school, $locked)) $disabled = true;
+                if (in_array($school, $locked) && $admin_auth != 'super') $disabled = true;
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
                 echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Card for Test #" . $testNumber . " on Parent Accounts</p>";
