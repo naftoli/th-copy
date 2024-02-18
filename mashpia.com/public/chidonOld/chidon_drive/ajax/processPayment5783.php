@@ -423,7 +423,7 @@ function getExistingCodes() {
         SELECT user_id, type, amount, school_id 
         FROM registration_charges
         WHERE user_id in (" . implode(',', $user_ids) . ") AND year = :year 
-        AND type in ('RRYSD', 'RRYDA', 'RRHVN', 'RRSUSA', 'RRSCAN', 'RRSINT') 
+        AND type in ('RRYSD', 'RRYDA', 'RRHVN', 'RRSUSA', 'RRSCAN', 'RRSINT', 'PRRSUSA', 'PRRSCAN', 'PRRSINT') 
         AND amount > 0 
     ");
     $stmt2->execute([':year' => $year]);
