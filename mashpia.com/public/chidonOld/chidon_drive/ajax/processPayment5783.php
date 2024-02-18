@@ -915,7 +915,7 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     } else {
         $MASHPIA_DB->commit();
         // update family balance
-        if (!updateFamilyBalance()) {
+        if (! updateFamilyBalance()) {
             $error = 'There was an error updating the family balance. Please check the database.';
             $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
             sendMyselfEmail($error, $desc);
@@ -931,6 +931,9 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     $info['success'] = false;
     $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
 }
+
+echo json_encode($info);
+
 // send email confirmation
 if ($info['success']) {
     $msg = getEmailMsg($trans_id);
@@ -941,5 +944,3 @@ if ($info['success']) {
         @mail('naftoli@tzivoshashem.org', 'Error Emailing Chidon Confirmation', $msg, implode("\r\n", $headers));
     }
 }
-
-echo json_encode($info);
