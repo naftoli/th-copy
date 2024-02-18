@@ -22,13 +22,13 @@ $coupon = new CouponCode($MASHPIA_DB, $year);
 //******************* GLOBAL VARIABLES ***********************/
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
-$payment_id = intval($_POST['card_id']);
+$payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
 $shipping_charge = isset($_POST['shipping']) ? intval($_POST['shipping']) : 0;
 $credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
 $to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge - $credit) : 0;
 $total_without_credit = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) + $shipping_charge) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
-$cart = $_POST['cart'];
+$cart = isset($_POST['cart']) ? $_POST['cart'] : [];
 $sweaters = isset($_POST['sweaters']) ? $_POST['sweaters'] : [];
 $addresses = isset($_POST['addresses']) ? $_POST['addresses'] : [];
 $users = [];
@@ -38,18 +38,30 @@ $celebBoxes = 0;
 $celebBoxShipping = 0;
 $sweater_info = [];
 $emailMsg = '';
-$couponsArr = json_decode($_POST['coupons']);
-$coupons = arrayByField($couponsArr, 'user_id', 'coupon');
-$raisedArr = json_decode($_POST['raised']);
-$raised = arrayByField($raisedArr, 'user_id', 'raised');
-$tracksArr = json_decode($_POST['tracks']);
-$tracks = arrayByField($tracksArr, 'user_id', 'track');
-$trips = json_decode($_POST['trips']);
-$ultimate_trip = json_decode($_POST['ultimate_trip']);
-$ultimate_info = json_decode($_POST['ultimate_info']);
-$country = $_POST['country'];
-$creditVal = $_POST['creditVal'];
-$paypal_email = $_POST['paypal_email'];
+if (isset($_POST['coupons'])) {
+    $couponsArr = json_decode($_POST['coupons']);
+    $coupons = arrayByField($couponsArr, 'user_id', 'coupon');
+}
+else $coupons = [];
+
+if (isset($_POST['raised'])) {
+    $raisedArr = json_decode($_POST['raised']);
+    $raised = arrayByField($raisedArr, 'user_id', 'raised');
+}
+else $raised = [];
+
+if (isset($_POST['tracks'])) {
+    $tracksArr = json_decode($_POST['tracks']);
+    $tracks = arrayByField($tracksArr, 'user_id', 'track');
+}
+else $tracks = [];
+
+$trips = isset($_POST['trip']) ? json_decode($_POST['trips']) : [];
+$ultimate_trip = isset($_POST['ultimate_trip']) ? json_decode($_POST['ultimate_trip']) : [];
+$ultimate_info = isset($_POST['ultimate_info']) ? json_decode($_POST['ultimate_info']) : [];
+$country = isset($_POST['country']) ? $_POST['country'] : '';
+$creditVal = isset($_POST['creditVal']) ? $_POST['creditVal'] : 0;
+$paypal_email = isset($_POST['paypal_email']) ? $_POST['paypal_email'] : '';
 
 define('CELEB_BOX_COST', 20);
 define('SWEATER_COST', 25);
@@ -804,6 +816,16 @@ function sendEmail($msg) {
 //******************* PROGRAM STARTS HERE ***********************/
 processCart();
 setSweaterInfo();
+
+// if we are only refunding credit, then we don't need to do anything else
+if ($credit && $_POST['cart_total'] == 0) {
+    $success = updateFamilyBalance();
+    $info['success'] = $success;
+    $info['msg'] = 'Your credit has been refunded. Thank you!';
+    $info['error'] = 'There was a problem refunding your credit.';
+    echo json_encode($info);
+    exit;
+}
 
 // process everything
 $MASHPIA_DB->beginTransaction();

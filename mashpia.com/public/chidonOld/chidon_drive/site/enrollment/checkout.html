@@ -541,7 +541,7 @@
             }
         }
 
-        html += `<h5 class="formDetails"><span class="title">Grand Total</span> - $${grand_total}</h5>`
+        if (grand_total) html += `<h5 class="formDetails"><span class="title">Grand Total</span> - $${grand_total}</h5>`
         const totalAfterCredit = grand_total - parseInt(credit)
         if (credit > 0) {
             if (totalAfterCredit < 0) {
@@ -611,7 +611,14 @@
         } else {
             if (totalAfterCredit > 0) buttonVal = 'Pay for Extra Purchases'
             else if (cart_total || shipping) buttonVal = 'Get Extra Purchases'
-            else buttonVal = 'Refund Credit'
+            else {
+                buttonVal = 'Refund Credit'
+                $("#terms1").attr('checked', true)
+                $("#terms1").parent().hide()
+                $("#terms1").parent().prev().hide()
+                $("#terms2").attr('checked', true)
+                $("#terms2").parent().hide()
+            }
         }
         $(".processPayment").val(buttonVal)
 
