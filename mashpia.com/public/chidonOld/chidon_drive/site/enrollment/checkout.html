@@ -463,7 +463,6 @@
         }
 
         // check shipping for this sweater
-        console.log(sweaters)
         for (let sweater of sweaters) {
             let num = sweater.amount
             let desc = sweater.type
@@ -489,11 +488,11 @@
         }
         if (shipping) {
             html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
-            cart_total += shipping
+            cart_total += intval(shipping)
         }
         if (reg.length) {
             html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + shipping}</h5>`
-            cart_total += reg_fee
+            cart_total += intval(reg_fee)
         }
         if (celeb_boxes) {
             html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
@@ -501,7 +500,7 @@
             html += `<h5 class="formDetails">Cost per Celebration Box: $${celeb_box_price}</h5>`
             html += `<h5 class="formDetails">Additional Shipping Fee: $${celeb_box_shipping}</h5>`
             html += `<h5 class="formDetails">Total Cost: $${celeb_boxes * celeb_box_price + celeb_box_shipping}`
-            cart_total += (celeb_boxes * celeb_box_price) + celeb_box_shipping
+            cart_total += intval((celeb_boxes * celeb_box_price) + intval(celeb_box_shipping))
         }
         if (sweaters.length) {
             let sweater_cost = 0
@@ -515,12 +514,12 @@
                 }
                 let typeName = typeInfo.join(' ')
                 html += `<h5 class="formDetails">Number of ${typeName}s: ${sweater.amount}</h5>`
-                sweater_cost += sweater.amount * sweater_price
+                sweater_cost += intval(sweater.amount * sweater_price)
             }
             html += `<h5 class="formDetails">Additional Sweater Shipping: $${sweater_shipping}</h5>`
-            sweater_cost += sweater_shipping
+            sweater_cost += intval(sweater_shipping)
             html += `<h5 class="formDetails">Total Sweater Cost: $${sweater_cost}</h5>`
-            cart_total += sweater_cost
+            cart_total += intval(sweater_cost)
         }
 
         grand_total = cart_total
