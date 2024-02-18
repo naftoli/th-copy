@@ -965,6 +965,10 @@ class KHK {
         $passed = [];
         $ct = new ChidonTests($year);
         foreach ($ids as $id) {
+            if (in_array($id, [66871])) {
+                $passed[$id] = true;
+                continue;
+            }
             if (! isset($marks[$info[$id]['th_chidon_id']])) {
                 $passed[$id] = false;
                 continue;
