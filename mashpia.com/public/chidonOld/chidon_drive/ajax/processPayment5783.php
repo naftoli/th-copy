@@ -739,7 +739,7 @@ function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
 
-function getEmailMsg($trans_id = 0) {
+function getEmailMsg($trans_id) {
     global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons,
            $raised, $tracks, $credit, $creditVal, $paypal_email;
 
@@ -935,6 +935,7 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
 echo json_encode($info);
 
 // send email confirmation
+if (! isset($trans_id)) $trans_id = 0;
 if ($info['success']) {
     $msg = getEmailMsg($trans_id);
     if (!sendEmail($msg)) {
