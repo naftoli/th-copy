@@ -101,7 +101,7 @@
 
       { "label": "Chidon Shipping", "legacy": true, "path": "/chidon_shipping/" },
 
-      { "label": "Eligibility & Registered Report", "legacy": true, "path": "/chidonOld/newReports/registered_report.php" },
+      { "label": "Eligibility & Registered Report", "legacy": true, "path": "/chidonOld/newReports/registered_report.html" },
 
       { "label": "Choosing Reps", "legacy": true, "path": "/chidonTests/setReps.php" },
       
