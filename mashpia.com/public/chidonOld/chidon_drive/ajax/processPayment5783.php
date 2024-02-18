@@ -435,7 +435,7 @@ function getExistingCodes() {
 function updateFamilyBalance() {
     global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit, $already_used_credit;
 
-    if ($credit) {
+    if ($credit > 0) {
         $desc = getDescriptions();
 
         // create string for accounting_code
@@ -494,18 +494,18 @@ function updateFamilyBalance() {
         if (! $stmt->execute([
             ':amount'   => $amount,
             ':refund'   => $refund,
-            ':type' => $type,
-            ':paypal' => $paypal_email,
-            ':admin' => $admin_id,
-            ':year' => $year,
-            ':code' => $code
+            ':type'     => $type,
+            ':paypal'   => $paypal_email,
+            ':admin'    => $admin_id,
+            ':year'     => $year,
+            ':code'     => $code
         ])) {
 //            $stmt->debugDumpParams();
             return false;
         }
-
         return true;
     }
+    return true;
 }
 
 function processReg() {
