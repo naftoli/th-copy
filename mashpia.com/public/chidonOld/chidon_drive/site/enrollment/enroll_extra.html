@@ -519,9 +519,9 @@
 
     $(".sweater").change(function () {
       let typeOfSweater = $(this).attr('id')
-      // removeRelatedItems(typeOfSweater) // first remove from cart existing info
+      removeRelatedItems(typeOfSweater) // first remove from cart existing info
       let num = parseInt($(this).val())
-      // addToCart(typeOfSweater, num)
+      addToCart(typeOfSweater, num)
 
       let type = typeOfSweater.split('_')[0]
       let typeUpper = type[0].toUpperCase() + type.substring(1)
