@@ -896,6 +896,7 @@ class KHK {
         foreach ($ids as $id) {
             $details[$id] = [];
             foreach ($years as $yr) {
+                // exceptions
                 if (in_array($id, [20838, 66871])) {
                     $details[$id][$yr] = true;
                     continue;
