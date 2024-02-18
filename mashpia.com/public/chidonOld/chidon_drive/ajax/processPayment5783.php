@@ -792,8 +792,8 @@ function getEmailMsg($trans_id, $last_four) {
     if ($credit > 0) $msg .= "Amount Credited From Your Pre Registration: $" . $credit . ".<br />";
     if ($to_charge > 0) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
-        $msg .= "Transaction ID: " . $trans_id . ".<br />";
-        $msg .= "Last 4 digits of card: <" . $last_four . ">.<br />";
+        if ($trans_id) $msg .= "Transaction ID: " . $trans_id . ".<br />";
+        if ($last_four) $msg .= "Last 4 digits of card: <" . $last_four . ">.<br />";
     } else if ($to_charge < 0) {
         $refund = abs($to_charge);
         switch (parseInt($creditVal)) {
