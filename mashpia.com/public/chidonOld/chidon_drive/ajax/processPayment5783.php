@@ -246,7 +246,7 @@ function insertIntoRegCharges($trans_id = 0) {
             if (! $stmt->execute([
                 'trans_id' => $trans_id,
                 'user' => $item['id'],
-                'school' => $school_ids[$item['id']],
+                'school' => isset($item['school_id']) ? $item['school_id'] : $school_ids[$item['id']],
                 'admin' => 0,
                 'type' => $item['code'],
                 'amount' => $item['amount'],
@@ -296,7 +296,8 @@ function getDescriptions() {
                     'prefix' => 'C',
                     'id' => $code['user_id'],
                     'code' => $code['type'],
-                    'amount' => '-' . $code['amount']
+                    'amount' => '-' . $code['amount'],
+                    'school_id' => $code['school_id']
                 ];
             }
         }
@@ -415,7 +416,7 @@ function getExistingCodes() {
 
     // get codes
     $stmt2 = $MASHPIA_DB->prepare("
-        SELECT user_id, type, amount
+        SELECT user_id, type, amount, school_id 
         FROM registration_charges
         WHERE user_id in (" . implode(',', $user_ids) . ") AND year = :year 
         AND type in ('RRYSD', 'RRYDA', 'RRHVN', 'RRSUSA', 'RRSCAN', 'RRSINT') 
