@@ -5,7 +5,7 @@ ini_set('error_reporting', E_ALL);
 require_once '../../../api/header/db.php';
 require_once '../../../class.globalSettings.php';
 require_once '../../../chidonTests/class.chidonTests.php';
-require_once '../coupons/class.couponCode.php';
+require_once '../../coupons/class.couponCode.php';
 require_once '../site/enrollment/class.tripRegistration.php';
 require_once '../encrypt.php';
 
