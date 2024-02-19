@@ -29,7 +29,7 @@ $MASHPIA_DB->beginTransaction();
 $a = resetReg($admin_id);
 $b = resetCharges($admin_id);
 $c = resetFamilyBalances($admin_id);
-$d = resetExtraCharges($admin_id);
+$d = resetExtraPurchases($admin_id);
 $e = resetShipping($admin_id);
 $f = resetCoupons($admin_id);
 if ($a && $b && $c && $d && $e && $f) {
@@ -136,46 +136,27 @@ function resetFamilyBalances($admin_id) {
     return true;
 }
 
-function resetExtraCharges($admin_id) {
+function resetExtraPurchases($admin_id) {
     global $MASHPIA_DB, $year;
 
-    $sql = "select * from extra_charges where year = :year and admin_id = :admin";
+    $sql = "delete from extra_purchases where year = :year and admin_id = :admin";
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([
+    $res = $stmt->execute([
         ':year' => $year,
         ':admin' => $admin_id
     ]);
-    $charges = $stmt->fetchAll();
-    if (count($charges) == 0) {
-        return true;
-    }
-
-    // delete extra charges
-    $ids = array_map(function($c) { return $c['purchase_id']; }, $charges);
-    $res = $MASHPIA_DB->query("
-        delete from extra_charges 
-        where purchase_id in (" . implode(',', $ids) . ")");
     return $res;
 }
 
 function resetShipping($admin_id) {
     global $MASHPIA_DB, $year;
 
-    $sql = "select * from chidon_parent_shipping where year = :year and parent_id = :admin";
+    $sql = "delete from chidon_parent_shipping where year = :year and parent_id = :admin";
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([
+    $res = $stmt->execute([
         ':year' => $year,
         ':admin' => $admin_id
     ]);
-    $shipping = $stmt->fetch();
-    if (! $shipping) {
-        return true;
-    }
-
-    // delete shipping
-    $res = $MASHPIA_DB->query("
-        delete from chidon_parent_shipping  
-        where chidon_parent_shipping_id = " . $shipping['chidon_parent_shipping_id']);
     return $res;
 }
 
