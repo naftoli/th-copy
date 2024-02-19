@@ -3,6 +3,8 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
+
 $year = GlobalSettings::getChidonYear();
 $date = '2024-02-17';
 
@@ -29,7 +31,8 @@ $b = resetCharges($admin_id);
 $c = resetFamilyBalances($admin_id);
 $d = resetExtraCharges($admin_id);
 $e = resetShipping($admin_id);
-if ($a && $b && $c && $d && $e) {
+$f = resetCoupons($admin_id);
+if ($a && $b && $c && $d && $e && $f) {
     $MASHPIA_DB->commit();
     echo "Reset successful.";
 } else {
@@ -174,4 +177,23 @@ function resetShipping($admin_id) {
         delete from chidon_parent_shipping  
         where chidon_parent_shipping_id = " . $shipping['chidon_parent_shipping_id']);
     return $res;
+}
+
+function resetCoupons($admin_id) {
+    global $MASHPIA_DB, $year;
+
+    $coupon = new CouponCode($MASHPIA_DB, $year);
+    // get all serials based of admin_id
+    $sql = "select user_serial from users where id in (
+            select id from admin_auths where admin_id = :admin and auth = 'user')";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([
+        ':admin' => $admin_id
+    ]);
+    $rows = $stmt->fetchAll();
+    $serials = array_map(function($r) { return $r['user_serial']; }, $rows);
+    foreach ($serials as $user_serial) {
+        if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
+    }
+    return true;
 }
