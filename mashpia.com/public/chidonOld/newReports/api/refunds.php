@@ -38,8 +38,8 @@ foreach ($info as $row) {
     $total2 = 0;
     $tmp = $stmt->fetchAll();
     foreach ($tmp as $t) {
-        $total1 += floatval($t['prepaid_credit']);
-        $total2 += floatval($t['prepaid_credit_old']);
+        $total1 += floatval($t['prepaid_credit_old']);
+        $total2 += floatval($t['prepaid_credit']);
     }
     $prepaid[$row['admin_id']] = [
         'total1' => $total1,
