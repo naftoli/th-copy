@@ -38,7 +38,7 @@ if ($a && $b && $c && $d && $e) {
 }
 
 function getAdminID($serial) {
-    global ;
+    global $MASHPIA_DB;
 
     $sql = "select * from admins where admin_id in (
             select admin_id from admin_auths where id = (
