@@ -293,7 +293,6 @@ function getDescriptions() {
         $existing_codes = getExistingCodes();
         if (count($existing_codes)) {
             // if there's credit first zero out the amounts in the registration_charges table
-            $desc = [];
             if ($credit > 0) {
                 foreach ($existing_codes as $code) {
                     $desc[] = [
@@ -843,7 +842,13 @@ function sendMyselfEmail($error, $desc) {
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
     $headers[] = 'From: chidon@tzivoshashem.org';
-    if (is_array($desc)) $description = implode('<br />', $desc);
+    $description = '';
+    if (is_array($desc)) {
+        foreach ($desc as $item) {
+            $description .= implode('<br />', $item);
+        }
+        $description .= '<br />';
+    }
     @mail('naftoli@tzivoshashem.org', 'Error with Chidon Registration', ($error . "<br /><br />" . $description), implode("\r\n", $headers));
 }
 
