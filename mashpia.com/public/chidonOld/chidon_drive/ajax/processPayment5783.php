@@ -460,7 +460,7 @@ function updateFamilyBalance() {
         if ($already_used_credit) {
             $stmt = $MASHPIA_DB->prepare("
                 UPDATE family_prepaid_balances 
-                SET used = (used + :amount), 
+                SET used_2 = :amount, 
                     refund_amount = :refund,
                     refund_type = :type, 
                     paypal = :paypal, 
