@@ -840,8 +840,8 @@ function sendMyselfEmail($error, $desc) {
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
     $headers[] = 'From: chidon@tzivoshashem.org';
-    if (is_array($desc)) $desc = implode('<br />', $desc);
-    @mail('naftoli@tzivoshashem.org', 'Error with Chidon Registration', ($error . "<br /><br />" . $desc), implode("\r\n", $headers));
+    if (is_array($desc)) $description = implode('<br />', $desc);
+    @mail('naftoli@tzivoshashem.org', 'Error with Chidon Registration', ($error . "<br /><br />" . $description), implode("\r\n", $headers));
 }
 
 //******************* PROGRAM STARTS HERE ***********************/
