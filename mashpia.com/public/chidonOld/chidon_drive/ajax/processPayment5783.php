@@ -319,7 +319,7 @@ function getDescriptions() {
                     break;
                 case 'Havonah':
                 case 'Iyun':
-                    if (isset($ultimate_trip[$user_id])) $code = 'RRKHK';
+                    if (in_array($user_id, $ultimate_trip)) $code = 'RRKHK';
                     else $code = 'RRHVN';
                     break;
                 default:
@@ -847,15 +847,15 @@ processCart();
 setSweaterInfo();
 
 // if we are only refunding credit, then we don't need to do anything else
-if ($credit && $_POST['cart_total'] == 0) {
-    $registered = processReg(); // there could be registration even with no charge
-    $success = updateFamilyBalance();
-    $info['success'] = $success;
-    $info['msg'] = 'Your credit has been refunded. Thank you!';
-    $info['error'] = 'There was a problem refunding your credit.';
-    echo json_encode($info);
-    exit;
-}
+//if ($credit && $_POST['cart_total'] == 0) {
+//    $registered = processReg(); // there could be registration even with no charge
+//    $success = updateFamilyBalance();
+//    $info['success'] = $success;
+//    $info['msg'] = 'Your credit has been refunded. Thank you!';
+//    $info['error'] = 'There was a problem refunding your credit.';
+//    echo json_encode($info);
+//    exit;
+//}
 
 // process everything
 $MASHPIA_DB->beginTransaction();
