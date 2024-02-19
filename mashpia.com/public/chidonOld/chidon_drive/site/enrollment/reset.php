@@ -19,13 +19,14 @@ if (!$serial) {
     exit;
 }
 
-$admin_id = getAdminID($serial);
+$admin = getAdmin($serial);
+$admin_id = $admin['admin_id'];
+$authorize_id = $admin['authorize_customer_profile_id'];
 if (!$admin_id) {
     echo "Admin not found.";
     exit;
 }
 
-$authorize_id = 0;
 $MASHPIA_DB->beginTransaction();
 $a = resetReg($admin_id);
 $b = resetCharges($admin_id);
@@ -41,8 +42,8 @@ if ($a && $b && $c && $d && $e && $f) {
     echo "Reset failed.";
 }
 
-function getAdminID($serial) {
-    global $MASHPIA_DB, $authorize_id;
+function getAdmin($serial) {
+    global $MASHPIA_DB;
 
     $sql = "select * from admins where admin_id in (
             select admin_id from admin_auths where id = (
@@ -52,9 +53,7 @@ function getAdminID($serial) {
         ':serial' => $serial
     ]);
     $admin = $stmt->fetch();
-    $authorize_id = $admin['authorize_customer_profile_id'];
-
-    return $admin['admin_id'];
+    return $admin;
 }
 
 function resetReg($admin_id) {
