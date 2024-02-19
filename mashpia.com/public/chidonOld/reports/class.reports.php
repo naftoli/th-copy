@@ -35,6 +35,10 @@ class Reports
                 'table'     =>  'th_chidon',
                 'column'    =>  'th_chidon_id as chidon_id'
             ),
+            'user_id'       =>  array(
+                'table'     =>  'users',
+                'column'    =>  'user_id'
+            ),
             'user_serial'   =>  array(
                 'table'     =>  'users',
                 'column'    =>  'user_serial'
