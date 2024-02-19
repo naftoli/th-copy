@@ -67,7 +67,7 @@
       return <div>Error: {error.message}</div>
     }
 
-    const headers = ['Admin ID', 'Prepaid', 'Used', 'Refund Amount', 'Refund Type', 'Paypal Email', 'Codes']
+    const headers = ['Admin ID', 'Prepaid', 'Used 1', 'Used 2', 'Refund Amount', 'Refund Type', 'Paypal Email', 'Codes']
 
     return (
       <div>
@@ -85,6 +85,7 @@
                 <td>{row.admin_id}</td>
                 <td>{row.prepaid}</td>
                 <td>{row.used}</td>
+                <td>{row.used_2}</td>
                 <td>{row.refund_amount}</td>
                 <td>{row.refund_type}</td>
                 <td>{row.paypal}</td>
