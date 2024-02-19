@@ -70,7 +70,7 @@ function resetReg($admin_id) {
 
     $stmt = $MASHPIA_DB->prepare("
          update th_chidon 
-         set paid = null, date_paid = null, paid_by = null 
+         set paid = null, date_paid = null, paid_by = null, trip = null, ultimate_trip = 0  
          where year = :year and user_id = :user");
     foreach ($users as $user) {
         $res = $stmt->execute([
