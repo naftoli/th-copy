@@ -6,7 +6,7 @@ function subtractForPrizes()
     global $MASHPIA_DB;
 
     $cheshbon = [];
-    $subtract = [
+    $individual_amounts = [
         75 => [284, 285, 286, 287, 288, 289, 290, 291, 295, 302, 303],
         35 => [395],
         30 => [380, 381]
@@ -26,14 +26,14 @@ function subtractForPrizes()
     if ($res) {
         $prizes = $stmt->fetchAll();
         foreach ($prizes as $prize) {
-            $toSubtract = 0;
+            $total = 0;
             if (!empty($prize['he_name'])) {
-                foreach ($subtract as $amount => $prize_ids) {
+                foreach ($individual_amounts as $amount => $prize_ids) {
                     if (in_array($prize['prize_id'], $prize_ids)) {
-                        $toSubtract += $amount;
+                        $total += $amount;
                     }
                 }
-                $cheshbon[$prize['user_id']][] = $toSubtract;
+                $cheshbon[$prize['user_id']][] = $total;
             }
         }
     }
@@ -54,6 +54,8 @@ foreach ($data as $user_id => $amounts) {
 }
 
 foreach ($totals as $user_id => $amount) {
+//    echo "Updating user $user_id with $amount<br />";
+//    continue;
     if (! $stmt->execute([
         ':amount' => $amount,
         ':year' => 5784,
