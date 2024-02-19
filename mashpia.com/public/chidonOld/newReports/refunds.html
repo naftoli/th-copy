@@ -39,6 +39,7 @@
   const Report = () => {
     const [data, setData] = useState([])
     const [prepaid, setPrepaid] = useState([])
+    const [emails, setEmails] = useState([])
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
 
@@ -51,6 +52,7 @@
               setLoading(false)
               setData(result.info)
               setPrepaid(result.prepaid)
+              setEmails(result.emails)
             }
           },
           (error) => {
@@ -69,7 +71,7 @@
       return <div>Error: {error.message}</div>
     }
 
-    const headers = ['Admin ID', 'Prepaid', 'Used 1', 'Used 2', 'Personal Credit 1', 'Personal Credit 2', 'Refund Amount', 'Refund Type', 'Paypal Email', 'Codes']
+    const headers = ['Email', 'Admin ID', 'Prepaid', 'Used 1', 'Used 2', 'Personal Credit 1', 'Personal Credit 2', 'Refund Amount', 'Refund Type', 'Paypal Email', 'Codes']
 
     return (
       <div>
@@ -84,6 +86,7 @@
           <tbody>
             {data.map((row, index) => (
               <tr key={index}>
+                <td>{emails[row.admin_id]}</td>
                 <td>{row.admin_id}</td>
                 <td>{row.prepaid}</td>
                 <td>{row.used}</td>

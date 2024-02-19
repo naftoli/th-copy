@@ -28,8 +28,10 @@ $sql = "select user_id, prepaid_credit, prepaid_credit_old
             select id from admin_auths where admin_id = :admin and auth = 'user')";
 $stmt = $MASHPIA_DB->prepare($sql);
 
+$admins = [];
 $prepaid = [];
 foreach ($info as $row) {
+    $admins[] = $row['admin_id'];
     $stmt->execute([
         ':year' => $year,
         ':admin' => $row['admin_id']
@@ -47,7 +49,20 @@ foreach ($info as $row) {
     ];
 }
 
+// get admin emails
+$emails = [];
+$sql = "select admin_email from admins where admin_id = :admin";
+$stmt = $MASHPIA_DB->prepare($sql);
+foreach ($admins as $admin_id) {
+    $stmt->execute([
+        ':admin' => $admin_id
+    ]);
+    $tmp = $stmt->fetch();
+    $emails[$admin_id] = $tmp['admin_email'];
+}
+
 $data['info'] = $info;
 $data['prepaid'] = $prepaid;
+$data['emails'] = $emails;
 
 echo json_encode($data);
