@@ -964,6 +964,18 @@
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
 			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
 
+			// check if there's any family balance that can be applied to registration
+			const bal = children[0].familyBalance || 0
+			if (bal > 0) {
+				if (window.localStorage) localStorage.setItem('credit', bal)
+				else Cookies.set('credit', bal)
+				const text = `You have $${bal} credit from pre registration which will be reflected on the payment page. If for any reason you are not planning on registering, please continue to the payment page to see your options.`
+				alert(text)
+				if (!eligible.length && !registered.length) {
+					location.href = 'enroll_extra.html'
+				}
+			}
+
 			if (!eligible.length && registered.length) {
 				alert('All of your eligible children have already registered.')
 				location.href = 'enroll_extra.html'
@@ -972,15 +984,6 @@
 				location.href = 'enroll_extra.html'
 			} else if (schoolNotConfirmed.length) {
 				alert('Only children that have had their school confirm their eligibility will show up for registration.')
-			}
-
-			// check if there's any family balance that can be applied to registration
-			if (eligible[0].familyBalance > 0) {
-				const bal = eligible[0].familyBalance
-				if (window.localStorage) localStorage.setItem('credit', bal)
-				else Cookies.set('credit', bal)
-				const text = `You have $${bal} credit from pre registration which will be reflected on the payment page. If for any reason you are not planning on registering, please continue to the payment page to see your options.`
-				alert(text)
 			}
 
 			let html = ''
