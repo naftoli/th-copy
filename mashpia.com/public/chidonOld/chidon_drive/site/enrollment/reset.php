@@ -25,6 +25,7 @@ if (!$admin_id) {
     exit;
 }
 
+$authorize_id = 0;
 $MASHPIA_DB->beginTransaction();
 $a = resetReg($admin_id);
 $b = resetCharges($admin_id);
@@ -34,14 +35,14 @@ $e = resetShipping($admin_id);
 $f = resetCoupons($admin_id);
 if ($a && $b && $c && $d && $e && $f) {
     $MASHPIA_DB->commit();
-    echo "Reset successful.";
+    echo "Reset successful.<br />Authorize Profile ID: $authorize_id<br />";
 } else {
     $MASHPIA_DB->rollBack();
     echo "Reset failed.";
 }
 
 function getAdminID($serial) {
-    global $MASHPIA_DB;
+    global $MASHPIA_DB, $authorize_id;
 
     $sql = "select * from admins where admin_id in (
             select admin_id from admin_auths where id = (
@@ -51,6 +52,8 @@ function getAdminID($serial) {
         ':serial' => $serial
     ]);
     $admin = $stmt->fetch();
+    $authorize_id = $admin['authorize_customer_profile_id'];
+
     return $admin['admin_id'];
 }
 
