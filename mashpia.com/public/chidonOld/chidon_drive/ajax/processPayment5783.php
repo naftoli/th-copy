@@ -469,7 +469,7 @@ function updateFamilyBalance() {
             ");
         }
 
-        // find out if we are using up all prepaid amount or not
+        // find out if we are using up all prepaid amount
         if ($to_charge > 0) {
             $amount = $credit;
             $refund = 0;
@@ -848,6 +848,7 @@ setSweaterInfo();
 
 // if we are only refunding credit, then we don't need to do anything else
 if ($credit && $_POST['cart_total'] == 0) {
+    $registered = processReg(); // there could be registration even with no charge
     $success = updateFamilyBalance();
     $info['success'] = $success;
     $info['msg'] = 'Your credit has been refunded. Thank you!';
