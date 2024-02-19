@@ -19,4 +19,35 @@ $res = $stmt->execute([
 if ($res) {
     $info = $stmt->fetchAll();
 }
-echo json_encode($info);
+
+// get personal balance from th_chidon database
+$sql = "select user_id, prepaid_credit, prepaid_credit_old 
+        from th_chidon 
+        where year = :year 
+        and user_id in (
+            select id from admin_auths where admin_id = :admin and auth = 'user')";
+$stmt = $MASHPIA_DB->prepare($sql);
+
+$prepaid = [];
+foreach ($info as $row) {
+    $stmt->execute([
+        ':year' => $year,
+        ':admin' => $row['admin_id']
+    ]);
+    $total1 = 0;
+    $total2 = 0;
+    $tmp = $stmt->fetchAll();
+    foreach ($tmp as $t) {
+        $total1 += floatval($t['prepaid_credit']);
+        $total2 += floatval($t['prepaid_credit_old']);
+    }
+    $prepaid[$row['admin_id']] = [
+        'total1' => $total1,
+        'total2' => $total2
+    ];
+}
+
+$data['info'] = $info;
+$data['prepaid'] = $prepaid;
+
+echo json_encode($data);
