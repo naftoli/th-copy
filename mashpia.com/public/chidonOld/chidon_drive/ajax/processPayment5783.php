@@ -535,8 +535,11 @@ function updateShipping() {
     global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
 
     $sqlInsert = "INSERT IGNORE INTO chidon_parent_shipping 
-                  SET amount_paid = :amount, date_paid = now()
-                  WHERE parent_id = :admin AND year = :year
+                  SET 
+                        parent_id = :admin,
+                        year = :year, 
+                        amount_paid = :amount, 
+                        date_paid = now()
                   ON DUPLICATE KEY UPDATE amount_paid = :amount, date_paid = now()";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
