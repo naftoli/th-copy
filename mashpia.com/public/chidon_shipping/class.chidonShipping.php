@@ -755,7 +755,7 @@ class ChidonShipping
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
             // check if award was overriden by bc/hq
-            if ($row['award_type'] != '' && $row['award_type'] != 'highest award passed') $award = $row['award_type'];
+            if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') $award = $row['award_type'];
 
             if ($award) {
                 // check for khk plaque
