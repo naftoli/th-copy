@@ -29,7 +29,7 @@ $MASHPIA_DB->startTransaction();
 $success = true;
 
 $updated = 0;
-$stmt = $MASHPIA_DB->prepar("
+$stmt = $MASHPIA_DB->prepare("
     UPDATE family_prepaid_balances 
     SET real_prepaid = :amount
     WHERE admin_id = :id
