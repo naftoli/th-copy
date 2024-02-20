@@ -333,7 +333,7 @@ class ChidonShipping
                     $info += $this->getChildrenSweaters($gender, $school);
                     break;
                 case 'staff sweaters':
-                    $info += $this->getStaffSweaters($gender, $school);
+//                    $info += $this->getStaffSweaters($gender, $school);
                     break;
                 case 'parent/grandparent sweaters':
                     $info += $this->getExtraPurchases($gender, $school, ['sweaters']);
@@ -443,13 +443,13 @@ class ChidonShipping
         foreach ($rows as $row) {
             if ($row['item'] == 'celeb_box') {
                 $size = '';
-                $cat = 'extra purchases';
+                $cat = 'celebration items';
                 $item = 'celebration boxes';
                 $id = $this->getItemID($cat, $item);
             } else {
                 $cat = 'sweaters';
                 $size = $row['size'];
-                $item = 'children sweaters';
+                $item = 'parent/grandparent sweaters';
                 $id = $this->getItemID($cat, $item, ($row['type_of_sweater'] . ' sweater'), $size);
             }
             $purchases[$row['admin_id']][] = [
@@ -1566,7 +1566,7 @@ class ChidonShipping
                 ]
             ]
         ];
-
+//        echo "Cat: $cat, Item: $item, Deep: $deep, Deeper: $deeper<br />";
         if (! empty($deeper)) return $item_ids[$cat][$item][$deep][$deeper];
         else if (! empty($deep)) return $item_ids[$cat][$item][$deep];
         else return $item_ids[$cat][$item];
