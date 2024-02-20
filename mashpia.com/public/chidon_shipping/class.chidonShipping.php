@@ -466,7 +466,12 @@ class ChidonShipping
         $admin_info = $this->getOldestChild(array_keys($purchases));
         foreach ($purchases as $admin_id => $more) {
             foreach ($more as $purchase) {
-                if (isset($admin_info[$admin_id])) $info[$admin_info[$admin_id]][] = $purchase;
+                if (isset($admin_info[$admin_id])) {
+                    $user_id = $admin_info[$admin_id]['user_id'];
+                    $school_id = $admin_info[$admin_id]['school_id'];
+                    if ($school > 0 && $school != $school_id) continue;
+                    $info[$user_id][] = $purchase;
+                }
             }
         }
         return $info;
@@ -478,7 +483,7 @@ class ChidonShipping
      */
     private function getOldestChild(array $admin_ids) {
         // find oldest child in chidon
-        $sql = "select user_id, dob from users u 
+        $sql = "select user_id, dob, school_id from users u 
                 join admin_auths aa on aa.id = u.user_id 
                 join th_chidon tc using (user_id)
                 where admin_id = :id and auth = 'user' 
@@ -490,7 +495,7 @@ class ChidonShipping
         $stmt = $this->db->prepare($sql);
 
         // find oldest child registered in chayolei
-        $sql2 = "select user_id, dob from users u 
+        $sql2 = "select user_id, dob, school_id from users u 
                  join admin_auths aa on aa.id = u.user_id 
                  where admin_id = :id and auth = 'user' 
                  and u.user_registered > 0 
@@ -530,7 +535,7 @@ class ChidonShipping
                 if ($d2 < $d1) $child = $row;
             }
         }
-        return $child['user_id'];
+        return $child;
     }
 
     public function getExtraPurchasesAK($toShip = true) {
