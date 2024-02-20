@@ -742,9 +742,7 @@ class ChidonShipping
             'yesod'     => 'certificate',
             'yediah'    => 'plaque',
             'havonah'   => 'medal / plaque',
-            'iyun'      => 'medal / plaque / glass trophy',
-            'khk'       => 'medal / plaque / khk trophy',
-            'khk/iyun'  => 'medal / plaque / glass trophy / khk trophy'
+            'iyun'      => 'medal / plaque / blue trophy',
         ];
 
         $cat = 'awards';
@@ -752,11 +750,14 @@ class ChidonShipping
             if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
-            if (in_array($school, [61, 269])) $awardTrack = isset($row['highest_track']) ? $row['highest_track'] : '';
-            else $awardTrack = $this->getAwardTrack($row);
+//            if (in_array($school, [61, 269])) $awardTrack = isset($row['highest_track']) ? $row['highest_track'] : '';
+//            else $awardTrack = $this->getAwardTrack($row);
+            $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
 
             if ($award) {
+                // check for khk plaque
+                if (addKHK($row)) $award .= ' / khk plaque';
                 $award_info = explode(' / ', $award);
                 foreach ($award_info as $item) {
                     if (!empty($limitTo) && !in_array($item, $limitTo)) continue;
@@ -792,15 +793,13 @@ class ChidonShipping
             'yesod'     => 20,
             'yediah'    => 40,
             'havonah'   => 60,
-            'iyun'      => 80,
-            'khk'       => 200
+            'iyun'      => 80
         ];
         $needed = [
             'yesod'     => 60,
             'yediah'    => 70,
             'havonah'   => 80,
-            'iyun'      => 90,
-            'khk'       => 140 // not a mark but rather number of correct answers (out of 200)
+            'iyun'      => 90
         ];
 
         $ct = new ChidonTests();
@@ -827,18 +826,19 @@ class ChidonShipping
                         $award = $tracks[$i];
                     }
                 }
-                // check for khk trophy
-                if (intval($child['khk_reg']) && intval($child['khk_final']) >= $needed['khk']) {
-                    // only show khk trophy if NOT going on ultimate trip
-                    if (intval($child['ultimate_trip']) == 0) {
-                        if ($highest_track == 'genius') $award = 'khk/iyun';
-                        else $award = 'khk';
-                    }
-                    else if (intval($child['ultimate_trip']) == 1) $award = strtolower($types[$highest_track]);
-                }
             }
         }
         return $award;
+    }
+
+    function addKHK($child) {
+        $needed = 140;
+        // check for khk trophy
+        // only show khk plaque if NOT going on ultimate trip
+        if (intval($child['khk_reg']) && intval($child['khk_final']) >= $needed && intval($child['khk']) == 0)
+            return true;
+        else
+            return false;
     }
 
     /**
