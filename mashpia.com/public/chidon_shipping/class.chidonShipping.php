@@ -712,15 +712,15 @@ class ChidonShipping
      */
     public function getAwards($gender, $school, $limitTo = []) {
         $info = [];
-        if (in_array($school, [61, 269])) {
-            $sql = "select * from th_chidon_info tci 
-                    join users u using (user_id) 
-                    join th_chidon tc using (user_id) 
-                    where tc.year = :year 
-                    and tci.year = :year 
-                    and tc.date_paid > 0 
-                    and u.school_id = $school";
-        } else {
+//        if (in_array($school, [61, 269])) {
+//            $sql = "select * from th_chidon_info tci
+//                    join users u using (user_id)
+//                    join th_chidon tc using (user_id)
+//                    where tc.year = :year
+//                    and tci.year = :year
+//                    and tc.date_paid > 0
+//                    and u.school_id = $school";
+//        } else {
             $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
                     join th_chidon tc using (user_id, year) 
                     join users u using (user_id) 
@@ -733,7 +733,7 @@ class ChidonShipping
             if ($gender == 'f') $sql .= " and u.gender = 'F";
             if ($school > 0) $sql .= " and u.school_id = " . $school;
             $sql .= " GROUP BY user_id";
-        }
+//        }
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -754,6 +754,8 @@ class ChidonShipping
 //            else $awardTrack = $this->getAwardTrack($row);
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
+            // check if award was overriden by bc/hq
+            if ($row['award_type'] != '' && $row['award_type'] != 'highest award passed') $award = $row['award_type'];
 
             if ($award) {
                 // check for khk plaque
