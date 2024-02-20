@@ -1,4 +1,11 @@
 <?php
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if (!$admin_user['admin_id']) {
+    die('You are not authorized to view this page.');
+}
+
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
