@@ -18,6 +18,7 @@ $ct = new ChidonTests($year);
 
 // save marks
 if (isset($_POST['submit'])) {
+    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
     $qrys = [];
     for ($i = 1; $i <= 4; $i++) {
         $track = 'track_' . $i;
@@ -25,13 +26,11 @@ if (isset($_POST['submit'])) {
         foreach ($_POST[$track] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
-                $levelChosen = $_POST[$level][$id];
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
                             $track = $mark, 
-                            $level = $levelChosen 
-                            on duplicate key update $track = $mark, $level = $levelChosen";
+                            on duplicate key update $track = $mark";
             }
         }
     }
@@ -39,13 +38,12 @@ if (isset($_POST['submit'])) {
         foreach ($_POST['khk'] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
-                $level = $_POST['khk_level'][$id];
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
                             khk = $mark, 
                             khk_level = $level,
-                            on duplicate key update khk = $mark, khk_level = $level";
+                            on duplicate key update khk = $mark";
             }
         }
     }
@@ -255,17 +253,14 @@ if (isset($_POST['grade'])) {
                     echo " /></td>";
                 }
                 $level = $ct->getLevel($id, 'finals');
-                echo "<td><input type='hidden' name='level[$id]' value='$level' />";
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
                 if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
-                echo "<input type='text' name='khk[$id]' class='khk' $disabled ";
+                echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
                 if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
                 else echo "value='0'";
-                echo " />";
-                echo "<input type='hidden' name='khk_level[$id]' value='$level' />";
-                echo "</td><td>" . getAward($child) . "</td></tr>";
+                echo " /></td><td>" . getAward($child) . "</td></tr>";
             }
         }
         echo "</table>";
