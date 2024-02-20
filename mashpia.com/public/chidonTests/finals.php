@@ -29,7 +29,7 @@ if (isset($_POST['submit'])) {
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
-                            $track = $mark, 
+                            $track = $mark 
                             on duplicate key update $track = $mark";
             }
         }
@@ -41,8 +41,7 @@ if (isset($_POST['submit'])) {
                 $qrys[] = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
-                            khk = $mark, 
-                            khk_level = $level,
+                            khk = $mark 
                             on duplicate key update khk = $mark";
             }
         }
