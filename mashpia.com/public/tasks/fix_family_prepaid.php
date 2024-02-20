@@ -25,7 +25,7 @@ foreach ($res as $row) {
     $info[$row['admin_id']] = $row['total'];
 }
 
-$MASHPIA_DB->startTransaction();
+$MASHPIA_DB->beginTransaction();
 $success = true;
 
 $updated = 0;
