@@ -2,7 +2,7 @@
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-if (!$admin_user['admin_id']) {
+if ($admin_user['auth'] !== 'super') {
     die('You are not authorized to view this page.');
 }
 
