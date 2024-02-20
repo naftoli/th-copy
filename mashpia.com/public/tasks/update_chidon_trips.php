@@ -3,8 +3,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-// get uploaded csv file, parse file with following columns: id, type, amount
 if (isset($_FILES['file'])) {
+    $stmt = $MASHPIA_DB->prepare("
+        UPDATE th_chidon  
+        SET trip = :trip 
+        WHERE year = :year 
+        AND user_id = (
+            SELECT user_id 
+            FROM users 
+            WHERE user_serial = :id 
+        )
+    ");
+
     // parse cvs
     $file = $_FILES['file']['tmp_name'];
     $handle = fopen($file, "r");
@@ -13,24 +23,14 @@ if (isset($_FILES['file'])) {
     while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
         $id = $data[0];
         $trip = $data[1];
-        // update family balance
-        $stmt = $MASHPIA_DB->prepare("
-            UPDATE th_chidon   
-            SET trip = :trip 
-            WHERE year = :year 
-            AND user_id = (
-                SELECT user_id 
-                FROM users 
-                WHERE user_serial = :id
-            )
-        ");
+        // update chidon trip
         if ($stmt->execute([
             ':id'       => $id,
-            ':year'     => $year
+            ':year'     => $year,
+            ':trip'     => $trip
         ])) {
             $updated++;
         } else {
-            $stmt->errorInfo();
             $stmt->debugDumpParams();
             break;
         }
