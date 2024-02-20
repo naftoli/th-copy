@@ -231,9 +231,7 @@ if (isset($_POST['grade'])) {
         foreach ($tracks as $track) {
             echo "<th>$track</th>";
         }
-        echo "<th>Level</th>";
         echo "<th>KHK Final</th>";
-        echo "<th>KHK Final Level</th>";
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
@@ -257,14 +255,7 @@ if (isset($_POST['grade'])) {
                     echo " /></td>";
                 }
                 $level = $ct->getLevel($id, 'finals');
-                echo "<td><select name='level[$id]'>";
-                echo "<option value='1'";
-                if ($level == 1) echo " selected";
-                echo ">1</option>";
-                echo "<option value='2'";
-                if ($level == 2) echo " selected";
-                echo ">2</option>";
-                echo "</select></td>";
+                echo "<td><input type='hidden' name='level[$id]' value='$level' /></td>";
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
@@ -273,14 +264,8 @@ if (isset($_POST['grade'])) {
                 if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
                 else echo "value='0'";
                 echo " /></td><td>";
-                echo "<select name='khk_level[$id]'>";
-                echo "<option value='1'";
-                if ($level == 1) echo " selected";
-                echo ">1</option>";
-                echo "<option value='2'";
-                if ($level == 2) echo " selected";
-                echo ">2</option>";
-                echo "</select></td><td>" . getAward($child) . "</td></tr>";
+                echo "<input type='hidden' name='khk_level[$id]' value='$level' />";
+                echo "</td><td>" . getAward($child) . "</td></tr>";
             }
         }
         echo "</table>";
