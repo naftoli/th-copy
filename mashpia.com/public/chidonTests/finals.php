@@ -18,7 +18,7 @@ $ct = new ChidonTests($year);
 
 // save marks
 if (isset($_POST['submit'])) {
-    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+//    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
     $qrys = [];
     for ($i = 1; $i <= 4; $i++) {
         $track = 'track_' . $i;
