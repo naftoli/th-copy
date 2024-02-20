@@ -255,15 +255,15 @@ if (isset($_POST['grade'])) {
                     echo " /></td>";
                 }
                 $level = $ct->getLevel($id, 'finals');
-                echo "<td><input type='hidden' name='level[$id]' value='$level' /></td>";
+                echo "<td><input type='hidden' name='level[$id]' value='$level' />";
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
                 if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
-                echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
+                echo "<input type='text' name='khk[$id]' class='khk' $disabled ";
                 if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
                 else echo "value='0'";
-                echo " /></td><td>";
+                echo " />";
                 echo "<input type='hidden' name='khk_level[$id]' value='$level' />";
                 echo "</td><td>" . getAward($child) . "</td></tr>";
             }
