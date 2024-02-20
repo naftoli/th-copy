@@ -16,13 +16,16 @@ $year = isset($_POST['yr']) ? $_POST['yr'] : $currentYear;
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests($year);
 
+require $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.php';
+$cs = new ChidonShipping($year);
+
 // save marks
-if (isset($_POST['submit'])) {
+$msg = '';
+if (isset($_POST['submit']) && isset($_POST['track_1'])) {
 //    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
     $qrys = [];
     for ($i = 1; $i <= 4; $i++) {
         $track = 'track_' . $i;
-        $level = 'level_' . $i;
         foreach ($_POST[$track] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
@@ -56,10 +59,13 @@ if (isset($_POST['submit'])) {
             break;
         }
     }
-    if ($success) mysql_query('commit');
+    if ($success) {
+      mysql_query('commit');
+      $msg = "Saved";
+    }
     else {
         mysql_query('rollback');
-        echo "Not Saved. Error in qry: " . $qry . "<br />";
+        $msg = "Not Saved. Error in qry: " . $qry . "<br />";
     }
     mysql_query('set autocommit=1');
 }
@@ -94,59 +100,85 @@ function passedKhk($id)
 
 function getAward($child)
 {
-    global $final_marks;
+    global $cs;
 
-    $tracks = [
-        1 => 'yesod',
-        2 => 'yediah',
-        3 => 'havonah',
-        4 => 'iyun'
+    $types = [
+        'maven'   => 'yesod',
+        'pro'     => 'yediah',
+        'expert'  => 'havonah',
+        'genius'  => 'iyun'
     ];
-    $finals = [
-        'yesod' => 20,
-        'yediah' => 40,
-        'havonah' => 60,
-        'iyun' => 80
-    ];
-    $needed = [
-        'yesod' => 60,
-        'yediah' => 70,
-        'havonah' => 80,
-        'iyun' => 90
-    ];
+
     $awards = [
-        'yesod' => 'certificate',
-        'yediah' => 'plaque',
-        'havonah' => 'medal / plaque',
-        'iyun' => 'trophy / medal / plaque'
+        'yesod'     => 'certificate',
+        'yediah'    => 'plaque',
+        'havonah'   => 'medal / plaque',
+        'iyun'      => 'medal / plaque / blue trophy',
     ];
 
-    $highest_track = $child['highest_track'];
-    // find out if award is same as before final or not
-    $award = false;
-    $key = array_search($highest_track, $tracks);
-    if ($key !== false) {
-        // go down from key to find where the child is holding
-        if (isset($final_marks[$child['user_id']])) {
-            $row = $final_marks[$child['user_id']];
-            $score = 0;
-            for ($i = 1; $i <= $key; $i++) {
-                $level = 'level_' . $i;
-                if ($row[$level]) {
-                    $score += $row[$level];
-                }
-            }
-            for ($i = 1; $i <= $key; $i++) {
-                $divide_by = $finals[$tracks[$i]];
-                $final_score = number_format(($score / $divide_by) * 100, 2);
-                if ($final_score >= $needed[$tracks[$i]]) {
-                    $award = $tracks[$i];
-                }
-            }
-        }
+    // check if award was overriden by bc/hq
+    if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
+        $awardTrack = $types[$row['award_type']];
+    } else {
+        $awardTrack = $cs->getAwardTrack($child);
     }
-    if ($award) return $awards[$award];
-    else return 'no award yet';
+    $award = $awardTrack ? $awards[$awardTrack] : 'no award yet';
+
+    return $award;
+
+//    global $final_marks;
+//
+//    $tracks = [
+//        1 => 'yesod',
+//        2 => 'yediah',
+//        3 => 'havonah',
+//        4 => 'iyun'
+//    ];
+//    $finals = [
+//        'yesod' => 20,
+//        'yediah' => 40,
+//        'havonah' => 60,
+//        'iyun' => 80
+//    ];
+//    $needed = [
+//        'yesod' => 60,
+//        'yediah' => 70,
+//        'havonah' => 80,
+//        'iyun' => 90
+//    ];
+//    $awards = [
+//        'yesod'     => 'certificate',
+//        'yediah'    => 'plaque',
+//        'havonah'   => 'medal / plaque',
+//        'iyun'      => 'medal / plaque / blue trophy',
+//    ];
+//
+//    $highest_track = $child['highest_track'];
+//    // find out if award is same as before final or not
+//    $award = false;
+//    $key = array_search($highest_track, $tracks);
+//    if ($key !== false) {
+//        // go down from key to find where the child is holding
+//        if (isset($final_marks[$child['user_id']])) {
+//            $row = $final_marks[$child['user_id']];
+//            $score = 0;
+//            for ($i = 1; $i <= $key; $i++) {
+//                $level = 'level_' . $i;
+//                if ($row[$level]) {
+//                    $score += $row[$level];
+//                }
+//            }
+//            for ($i = 1; $i <= $key; $i++) {
+//                $divide_by = $finals[$tracks[$i]];
+//                $final_score = number_format(($score / $divide_by) * 100, 2);
+//                if ($final_score >= $needed[$tracks[$i]]) {
+//                    $award = $tracks[$i];
+//                }
+//            }
+//        }
+//    }
+//    if ($award) return $awards[$award];
+//    else return 'no award yet';
 }
 
 $info = [];
@@ -197,6 +229,7 @@ if ($admin_user['auth'] != 'super') {
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Enter Test Score</h1>
+<?php if ($msg) echo "<div style='color: red'>$msg</div><br />"; ?>
 <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate
   the correct mark.
 </div>

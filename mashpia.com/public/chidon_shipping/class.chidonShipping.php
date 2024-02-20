@@ -712,28 +712,18 @@ class ChidonShipping
      */
     public function getAwards($gender, $school, $limitTo = []) {
         $info = [];
-//        if (in_array($school, [61, 269])) {
-//            $sql = "select * from th_chidon_info tci
-//                    join users u using (user_id)
-//                    join th_chidon tc using (user_id)
-//                    where tc.year = :year
-//                    and tci.year = :year
-//                    and tc.date_paid > 0
-//                    and u.school_id = $school";
-//        } else {
-            $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
-                    join th_chidon tc using (user_id, year) 
-                    join users u using (user_id) 
-                    where tcf.year = :year 
-                        AND (level_1 > 0 OR level_2 > 0
-                        OR level_3 > 0
-                        OR level_4 > 0
-                        OR tcf.khk > 0)";
-            if ($gender == 'm') $sql .= " and u.gender = 'M'";
-            if ($gender == 'f') $sql .= " and u.gender = 'F";
-            if ($school > 0) $sql .= " and u.school_id = " . $school;
-            $sql .= " GROUP BY user_id";
-//        }
+        $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
+                join th_chidon tc using (user_id, year) 
+                join users u using (user_id) 
+                where tcf.year = :year 
+                    AND (level_1 > 0 OR level_2 > 0
+                    OR level_3 > 0
+                    OR level_4 > 0
+                    OR tcf.khk > 0)";
+        if ($gender == 'm') $sql .= " and u.gender = 'M'";
+        if ($gender == 'f') $sql .= " and u.gender = 'F";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
+        $sql .= " GROUP BY user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -750,16 +740,12 @@ class ChidonShipping
             if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
-//            if (in_array($school, [61, 269])) $awardTrack = isset($row['highest_track']) ? $row['highest_track'] : '';
-//            else $awardTrack = $this->getAwardTrack($row);
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
-            // check if award was overriden by bc/hq
-            if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') $award = $row['award_type'];
 
             if ($award) {
                 // check for khk plaque
-                if (addKHK($row)) $award .= ' / khk plaque';
+                if ($this->addKHK($row)) $award .= ' / khk plaque';
                 $award_info = explode(' / ', $award);
                 foreach ($award_info as $item) {
                     if (!empty($limitTo) && !in_array($item, $limitTo)) continue;
@@ -784,19 +770,32 @@ class ChidonShipping
      * @param $child
      * @return string
      */
-    private function getAwardTrack($child) {
+    public function getAwardTrack($child) {
+        $types = [
+            'maven'   => 'yesod',
+            'pro'     => 'yediah',
+            'expert'  => 'havonah',
+            'genius'  => 'iyun'
+        ];
+
+        if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
+            return $types[$row['award_type']];
+        }
+
         $tracks = [
             1   => 'yesod',
             2   => 'yediah',
             3   => 'havonah',
             4   => 'iyun'
         ];
+
         $finals = [
             'yesod'     => 20,
             'yediah'    => 40,
             'havonah'   => 60,
             'iyun'      => 80
         ];
+
         $needed = [
             'yesod'     => 60,
             'yediah'    => 70,
