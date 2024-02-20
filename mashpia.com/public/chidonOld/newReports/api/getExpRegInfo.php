@@ -170,8 +170,13 @@ function getTrip($row) {
         case 'europe':
             return 'Europe';
             break;
+        case 'no_trip':
+            return 'No Trip';
+            break;
+        default:
+            return '';
+            break;
     }
-    return '';
 }
 
 function getExtraPurchases($row) {
