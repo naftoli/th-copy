@@ -66,6 +66,7 @@ if ($res) {
         $row['raised'] = getRaised($row);
         $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
+        $row['shipping'] = getShippingInfo($row);
         $info[$row['school_id']][] = $row;
     }
 }
@@ -181,4 +182,22 @@ function getTrip($row) {
 
 function getExtraPurchases($row) {
     return '';
+}
+
+function getShippingInfo($row) {
+    // check if there's a shipping code in the db for any children in this admin
+    global $db, $year;
+
+    $stmt = $db->prepare("
+        SELECT * FROM registration_charges where year = :year and admin_id = (
+            SELECT admin_id FROM admin_auths WHERE id = :id
+        ) AND type like 'RRS%' 
+    ");
+   $stmt->execute([
+        ':year' => $year,
+        ':id'   => $row['user_id']
+    ]);
+    // find out if there's any rows
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    return count($rows) > 0 ? 'shipping' : 'pickup';
 }

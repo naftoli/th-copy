@@ -101,7 +101,7 @@
     }
 
     const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'KHK Trip Eligible', 'Award',
-      'Raised on Drive', 'Minimum Fee', 'Registered', 'Trip Registered']
+      'Raised on Drive', 'Minimum Fee', 'Registered', 'Trip Registered', 'Shipping']
     if (superAdmin) headers.push('Registration Paid')
 
     const rewardDescs = {
@@ -167,6 +167,7 @@
                 <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
                 <td>{row.date_paid}</td>
                 <td>{row.trip ? row.trip : parseInt(row.ultimate_trip) == 1 ? 'Ultimate Trip' : ''}</td>
+                {[61, 269].includes(row.school_id) || superAdmin ? <td>{row.shipping}</td> : ''}
                 {superAdmin && <td>{row.paid ? ('$' + row.paid) : ''}</td>}
               </tr>
             ))}
