@@ -71,7 +71,7 @@
       return <div>Error: {error.message}</div>
     }
 
-    const headers = ['Email', 'Admin ID', 'Prepaid', 'Used 1', 'Used 2', 'Personal Credit 1', 'Personal Credit 2', 'Refund Amount', 'Refund Type', 'Paypal Email', 'Codes']
+    const headers = ['Email', 'Admin ID', 'Prepaid', 'Used 1', 'Used 2', 'Personal Credit Old', 'Personal Credit Current', 'Refund Amount', 'Refund Type', 'Paypal Email', 'Codes', 'Real Prepaid', 'Real Refund']
 
     return (
       <div>
@@ -97,6 +97,8 @@
                 <td>{row.refund_type}</td>
                 <td>{row.paypal}</td>
                 <td>{row.accounting_code}</td>
+                <td>{row.real_prepaid}</td>
+                <td>{row.real_prepaid - row.used - (row.used_2 ? row.used_2 : 0)}</td>
               </tr>
             ))}
           </tbody>
