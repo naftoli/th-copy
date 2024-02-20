@@ -11,7 +11,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $info = [];
-$sql = "select * from family_prepaid_balances where year = :year and used > 0";
+$sql = "select * from family_prepaid_balances where year = :year";
 $stmt = $MASHPIA_DB->prepare($sql);
 $res = $stmt->execute([
     ':year' => $year
