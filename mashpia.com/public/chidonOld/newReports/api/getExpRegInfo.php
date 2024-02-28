@@ -66,7 +66,7 @@ if ($res) {
         $row['raised'] = getRaised($row);
         $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
-        $row['shipping'] = getShippingInfo($row);
+        $row['shipping'] = in_array($row['user_id'], [61, 269]) ? getShippingInfo($row) : '';
         $info[$row['school_id']][] = $row;
     }
 }
