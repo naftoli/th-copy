@@ -854,7 +854,6 @@ class ChidonShipping
     public function getPrizes($gender, $school, $limitTo = []) {
         // get list of prizes in system with prize ids
         $prizes = $this->getChidonPrizes();
-        print_r($prizes);
 
         $info = [];
         $sql = "SELECT 
