@@ -167,7 +167,7 @@
                 <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
                 <td>{row.date_paid}</td>
                 <td>{row.trip ? row.trip : parseInt(row.ultimate_trip) == 1 ? 'Ultimate Trip' : ''}</td>
-                {[61, 269].includes(parseInt(row.school_id)) || superAdmin ? <td>{row.shipping}</td> : ''}
+                <td>{[61, 269].includes(parseInt(row.school_id)) || superAdmin ? row.shipping : ''}</td>
                 {superAdmin && <td>{row.paid ? ('$' + row.paid) : ''}</td>}
               </tr>
             ))}
