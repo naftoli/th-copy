@@ -854,6 +854,7 @@ class ChidonShipping
     public function getPrizes($gender, $school, $limitTo = []) {
         // get list of prizes in system with prize ids
         $prizes = $this->getChidonPrizes();
+        print_r($prizes);
 
         $info = [];
         $sql = "SELECT 
@@ -927,6 +928,7 @@ class ChidonShipping
         $info = [];
         $sql = "select prize_id, prize_name from chidon_prizes where year = :year";
         $stmt = $this->db->prepare($sql);
+        if ($this->year == '0') $this->year = GlobalSettings::getChidonYear();
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
@@ -1246,6 +1248,10 @@ class ChidonShipping
     }
 
     public function getItems() {
+        $p = $this->getChidonPrizes();
+        $prizes = [];
+        foreach ($p as $prize) $prizes[] = $prize;
+
         $items = [
             'brochures'             => ['brochure'],
             'guides'                => ['study guides', 'khk guides'],
@@ -1257,14 +1263,7 @@ class ChidonShipping
             'celebration items'     => ['celebration boxes'],
             'gifts'                 => ['yarmulka', 'jewelry'],
             'ID cards'              => ['ID card'],
-            'prizes'                => ['remote control helicopter', 'video drone', 'bracelet', 'necklace', 'earrings',
-                'chidon T-shirt', 'chidon art set', 'chidon juggling set', 'chidon soccer ball', 'chidon basket ball',
-                'chidon football', 'framed rebbe picture', 'chidon cap', 'der rebbe ret tzu kinder',
-                'chidon leather sefer hamitzvos', 'chidon leather chitas', 'chidon leather siddur', 'chidon leather tehillim',
-                'chidon leather machzor', 'chidon base ball', 'chidon carry-on', 'chidon towel', 'personalized name bracelet',
-                'chidon pogo ball', 'the jewish underground volume 1', 'the jewish underground volume 2', 'iron curtain vol 1',
-                'iron curtain vol 2', 'escape from europe', 'the rebbe & the mazkir', 'chidon towel', 'chocolate mold', 'backpack', 'waffle maker',
-                'chidon cookie cutters', 'reb binyomin kletzker', 'reb shmuel munkis', 'the slavita brothers', 'reb hillel paritcher'],
+            'prizes'                => $prizes,
             'awards'                => ['certificate', 'plaque', 'medal', 'blue trophy', 'khk plaque'],
             'ambassador prizes'     => ['ambassador prize'],
             'raffles'               => ['5M Raffles', 'Other Raffles'],
