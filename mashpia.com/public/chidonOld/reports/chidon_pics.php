@@ -87,7 +87,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
 <BODY>
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Pictures</h1>
-<!--        <a href="chidon_pics_download.php" target="__blank"><button id="downloadPics">Download Pictures</button></a>-->
+<a href="chidon_pics_download.php" target="__blank"><button id="downloadPics">Download Pictures</button></a>
 <a href="chidon_pics_iyun.php" target="__blank">
   <button id="downloadPicsIyun">Download Iyun Only Pictures</button>
 </a>
