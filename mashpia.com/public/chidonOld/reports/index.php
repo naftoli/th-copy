@@ -24,6 +24,12 @@ $info = array(
 		'grade'			=>	'Grade',
 		'school_id'     =>  'School ID',
 		'school'		=>	'School',
+    'school_address'  => 'School Address',
+    'school_city'   =>  'School City',
+    'school_state'  =>  'School State',
+    'school_postal' =>  'School Zip',
+    'school_country'  =>  'School Country',
+    'school_phone'  =>  'School Phone',
 		'host_name'		=>	'Host Name',
 		'host_number'	=>	'Host Number',
 		'host_address_num'	=>	'Accomodation Address Number',
@@ -246,11 +252,10 @@ if (isset($_POST['submit'])) {
 		'parent_name'	=>	array('first', 'last'),
 		'parent_number'	=>	array('admin_phone_mobile', 'admin_phone_mobile2'),
 		'parent_login'	=>	array('username', 'password'),
-        'parent_address'=>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country'),
-        'grade'         =>  array('class_grade', 'class_sub'),
-        'eligibility'   =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert', 'shabbaton_trophy')
-//		'avg1'			=>	array('test1a', 'test2a', 'test3a'),
-//		'avg2'			=>	array('test1b', 'test2b', 'test3b')
+    'parent_address'=>  array('admin_address1', 'admin_city', 'admin_state', 'admin_postal', 'admin_country'),
+    'grade'         =>  array('class_grade', 'class_sub'),
+    'eligibility'   =>  array('shabbaton_maven', 'shabbaton_pro', 'shabbaton_expert', 'shabbaton_trophy'),
+    'school_address' =>  array('school_address1', 'school_address2'),
 	);
 }
 ?>
@@ -290,12 +295,12 @@ if (isset($_POST['submit'])) {
 							foreach ($info as $legend => $other) {
 								if (array_key_exists($column, $info[$legend])) {
 									echo "<th>" . $info[$legend][$column] . "</th>";
-                                    if ($column == 'raised') {
-                                        // check if we need to add any chidon drive stuff
-                                        if ($rohr) echo "<th>Rohr</th>";
-                                        if ($cd_total) echo "<th>Total Chidon Drive</th>";
-                                        if ($cd_balance) echo "<th>Registration Balance</th>";
-                                    }
+                  if ($column == 'raised') {
+                      // check if we need to add any chidon drive stuff
+                      if ($rohr) echo "<th>Rohr</th>";
+                      if ($cd_total) echo "<th>Total Chidon Drive</th>";
+                      if ($cd_balance) echo "<th>Registration Balance</th>";
+                  }
 								}
 							}
 						}
@@ -337,46 +342,46 @@ if (isset($_POST['submit'])) {
 											echo "<td>Private Ride</td>";
 											break;
 									}
-                                } else if ($column == 'trip_option') {
-                                    switch ( intval($row[$column]) ) {
-                                        case 1:
-                                            echo "<td>New York Trip</td>";
-                                            break;
-                                        case 2:
-                                            echo "<td>California Trip</td>";
-                                            break;
-                                        case 3:
-                                            echo "<td>Family Trip</td>";
-                                            break;
-                                        default:
-                                            echo "<td></td>";
-                                            break;
-                                    }
-                                } else if (in_array($column, ['shabbaton_trophy', 'khk_rep', 'school_rep'])) {
-                                    if ( intval( $row[$column] == 1 ) ) echo "<td>Yes</td>";
-                                    else echo "<td>No</td>";
-                                } else if ($column == 'chidon_final_mark') {
-								    echo "<td>" . intval($row[$column]) * 2 . "%</td>";
-                                } else {
-									echo "<td>" . $row[$column] . "</td>";
-                                    if ($column == 'raised') {
-                                        // check if we need to add any chidon drive stuff
-                                        if ($rohr) {
-                                            if (intval($row[$column]) >= 270) echo "<td>100</td>";
-                                            else echo "<td>0</td>";
-                                        }
-                                        if ($cd_total) {
-                                            $total = intval($row[$column]);
-                                            if ($total >= 270) $total += 100;
-                                            echo "<td>" . $total . "</td>";
-                                        }
-                                        if ($cd_balance) {
-                                            $half = intval($row[$column]) / 2;
-                                            $balance = 185 - $half;
-                                            if ($balance < 0) $balance = 0;
-                                            echo "<td>" . $balance . "</td>";
-                                        }
-                                    }
+              } else if ($column == 'trip_option') {
+                  switch ( intval($row[$column]) ) {
+                      case 1:
+                          echo "<td>New York Trip</td>";
+                          break;
+                      case 2:
+                          echo "<td>California Trip</td>";
+                          break;
+                      case 3:
+                          echo "<td>Family Trip</td>";
+                          break;
+                      default:
+                          echo "<td></td>";
+                          break;
+                  }
+              } else if (in_array($column, ['shabbaton_trophy', 'khk_rep', 'school_rep'])) {
+                  if ( intval( $row[$column] == 1 ) ) echo "<td>Yes</td>";
+                  else echo "<td>No</td>";
+              } else if ($column == 'chidon_final_mark') {
+                  echo "<td>" . intval($row[$column]) * 2 . "%</td>";
+              } else {
+                  echo "<td>" . $row[$column] . "</td>";
+                  if ($column == 'raised') {
+                      // check if we need to add any chidon drive stuff
+                      if ($rohr) {
+                          if (intval($row[$column]) >= 270) echo "<td>100</td>";
+                          else echo "<td>0</td>";
+                      }
+                      if ($cd_total) {
+                          $total = intval($row[$column]);
+                          if ($total >= 270) $total += 100;
+                          echo "<td>" . $total . "</td>";
+                      }
+                      if ($cd_balance) {
+                          $half = intval($row[$column]) / 2;
+                          $balance = 185 - $half;
+                          if ($balance < 0) $balance = 0;
+                          echo "<td>" . $balance . "</td>";
+                      }
+                  }
 								}
 							} else {
 								// build html output

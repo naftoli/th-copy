@@ -59,6 +59,30 @@ class Reports
                 'table'     =>  'schools',
                 'column'    =>  'school_name as school',
             ),
+            'school_address'   =>  array(
+                'table'     =>  'schools',
+                'column'    =>  ['school_address1', 'school_address2'],
+            ),
+            'school_city'   =>  array(
+                'table'     =>  'schools',
+                'column'    =>  'school_city',
+            ),
+            'school_state'  =>  array(
+                'table'     =>  'schools',
+                'column'    =>  'school_state',
+            ),
+            'school_postal'    =>  array(
+                'table'     =>  'schools',
+                'column'    =>  'school_postal',
+            ),
+            'school_country'   =>  array(
+                'table'     =>  'schools',
+                'column'    =>  'school_country',
+            ),
+            'school_phone'  =>  array(
+                'table'     =>  'schools',
+                'column'    =>  'school_phone',
+            ),
             'grade'     =>  array(
                 'table'     =>  'classes',
                 'column'    =>  ['class_grade', 'class_sub']
