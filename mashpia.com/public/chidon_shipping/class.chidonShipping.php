@@ -1249,7 +1249,9 @@ class ChidonShipping
     public function getItems() {
         $p = $this->getChidonPrizes();
         $prizes = [];
-        foreach ($p as $prize) $prizes[] = $prize;
+        foreach ($p as $prize) {
+            if (! in_array($prize, $prizes)) $prizes[] = $prize;
+        }
 
         $items = [
             'brochures'             => ['brochure'],
