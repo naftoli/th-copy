@@ -711,6 +711,28 @@ class ChidonShipping
      * @return array
      */
     public function getAwards($gender, $school, $limitTo = []) {
+        $award_types = ['certificate', 'plaque', 'medal', 'blue trophy'];
+        if (empty($limitTo)) $limitTo = $award_types;
+
+        $info = [];
+        foreach ($limitTo as $award) {
+            switch ($award) {
+                case 'plaque':
+                case 'medal':
+                    $info += $this->getAwardsByTests($gender, $school, $award);
+                    break;
+                case 'certificate':
+                case 'blue trophy':
+                case 'khk plaque':
+                    $info += $this->getAwardsByFinals($gender, $school, $award);
+                    break;
+            }
+        }
+
+        return $info;
+    }
+
+    private function getAwardsByFinals($gender, $school, $toAward) {
         $info = [];
         $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
                 join th_chidon tc using (user_id, year) 
@@ -729,10 +751,10 @@ class ChidonShipping
         $rows = $stmt->fetchAll();
 
         $awards = [
-            'yesod'     => 'certificate',
-            'yediah'    => 'plaque',
-            'havonah'   => 'medal / plaque',
-            'iyun'      => 'medal / plaque / blue trophy',
+            'yesod' => 'certificate',
+            'yediah' => 'plaque',
+            'havonah' => 'medal / plaque',
+            'iyun' => 'medal / plaque / blue trophy',
         ];
 
         $cat = 'awards';
@@ -742,27 +764,81 @@ class ChidonShipping
 
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
+            if (!empty($toAward) && strpos($award, $toAward) === false) continue;
 
             if ($award) {
                 // check for khk plaque
                 if ($this->addKHK($row)) $award .= ' / khk plaque';
                 $award_info = explode(' / ', $award);
                 foreach ($award_info as $item) {
-                    if (!empty($limitTo) && !in_array($item, $limitTo)) continue;
                     $id = $this->getItemID($cat, $item);
                     $info[$row['user_id']][] = [
-                        'item'  => $item,
-                        'size'  => '',
+                        'item' => $item,
+                        'size' => '',
                         'color' => '',
-                        'name'  => '',
-                        'id'    => $id,
-                        'cat'   => $cat,
-                        'name'  => $item == 'medal' ? '' : ($row['first_he'] . ' ' . $row['last_he'])
+                        'name' => '',
+                        'id' => $id,
+                        'cat' => $cat,
+                        'name' => $item == 'medal' ? '' : ($row['first_he'] . ' ' . $row['last_he'])
                     ];
                 }
             }
         }
-//        echo "<pre>"; print_r($info); echo "</pre>";
+    //        echo "<pre>"; print_r($info); echo "</pre>";
+        return $info;
+    }
+
+    private function getAwardsByTests($gender, $school, $toAward) {
+        $info = [];
+        $sql = "
+            SELECT 
+                *
+            FROM
+                th_chidon tc
+                    JOIN
+                users u USING (user_id)
+            WHERE
+                tc.year = :year AND tc.reg_date > 0
+        ";
+        if ($gender == 'm') $sql .= " and u.gender = 'M'";
+        if ($gender == 'f') $sql .= " and u.gender = 'F";
+        if ($school > 0) $sql .= " and u.school_id = " . $school;
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+
+        $awards = [
+            'yesod' => 'certificate',
+            'yediah' => 'plaque',
+            'havonah' => 'medal / plaque',
+            'iyun' => 'medal / plaque / blue trophy',
+        ];
+
+        $ct = new ChidonTests();
+        $types = $ct->getTypes();
+        foreach ($rows as $row) {
+            if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
+                $highest_track = $types[ $row['award_type'] ];
+            } else {
+                $highest_track = $ct->getHighestTrackPassed($row)['highest_track'];
+            }
+            $award = $highest_track ? $awards[$highest_track] : '';
+            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
+
+            $award_info = explode(' / ', $award);
+            foreach ($award_info as $item) {
+                $id = $this->getItemID('awards', $award);
+                $info[$row['user_id']][] = [
+                    'item' => $award,
+                    'size' => '',
+                    'color' => '',
+                    'name' => '',
+                    'id' => $id,
+                    'cat' => 'awards'
+                ];
+            }
+        }
+
         return $info;
     }
 
@@ -832,7 +908,7 @@ class ChidonShipping
         return $award;
     }
 
-    function addKHK($child) {
+    public function addKHK($child) {
         $needed = 140;
         // check for khk trophy
         // only show khk plaque if NOT going on ultimate trip
