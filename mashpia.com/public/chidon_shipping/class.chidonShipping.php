@@ -759,8 +759,8 @@ class ChidonShipping
 
         $cat = 'awards';
         foreach ($rows as $row) {
-            if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
-            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+//            if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
+//            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
