@@ -74,10 +74,10 @@ function createHtmlForItem($school, $row, $output = true) {
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
             $items = $info[$cat][$row['user_id']];
+            $item_num = 0; // start at 0 for each new item
             foreach ($items as $idx => $item) {
                 // find out how many of the same item we have
                 if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
-                else $item_num = 0;
                 // get status and whether to show this item
                 $show_item = false;
                 $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item_num] : [];

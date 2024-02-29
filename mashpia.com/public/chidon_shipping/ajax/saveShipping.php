@@ -30,6 +30,20 @@ $sql = "INSERT IGNORE INTO th_chidon_shipping
             item_num = :num";
 $stmt = $MASHPIA_DB->prepare($sql);
 
+// for setting as shipped, we only need to change the shipping status
+// so as not to overwrite the other statuses
+$sqlShipped = "INSERT IGNORE INTO th_chidon_shipping
+        SET 
+            year = :year, 
+            user_id = :user, 
+            item_id = :item, 
+            shipped = :shipped,  
+            item_num = :num
+        ON DUPLICATE KEY UPDATE 
+            shipped = :shipped, 
+            item_num = :num";
+$stmtShipped = $MASHPIA_DB->prepare($sqlShipped);
+
 $MASHPIA_DB->beginTransaction();
 $success = true;
 foreach ($info as $row) {
@@ -43,9 +57,7 @@ foreach ($info as $row) {
             break;
         case 1:
             $shipped = 1;
-            $missing = 0;
-            $damaged = 0;
-            $received = 0;
+            // the rest will either default to 0 or stay at whatever it has been set to
             break;
         case 2:
             $shipped = 1;
@@ -66,17 +78,27 @@ foreach ($info as $row) {
             $received = 1;
             break;
     }
-    $res = $stmt->execute([
-        'year'      => $year,
-        'user'      => $row['user'],
-        'item'      => $row['item'],
-        'shipped'   => $shipped,
-        'missing'   => $missing,
-        'damaged'   => $damaged,
-        'received'  => $received,
-        'desc'      => $row['desc'],
-        'num'       => $row['num']
-    ]);
+    if (intval($row['action']) == 1) {
+        $res = $stmtShipped->execute([
+            'year'      => $year,
+            'user'      => $row['user'],
+            'item'      => $row['item'],
+            'shipped'   => $shipped,
+            'num'       => $row['num']
+        ]);
+    } else {
+        $res = $stmt->execute([
+            'year'      => $year,
+            'user'      => $row['user'],
+            'item'      => $row['item'],
+            'shipped'   => $shipped,
+            'missing'   => $missing,
+            'damaged'   => $damaged,
+            'received'  => $received,
+            'desc'      => $row['desc'],
+            'num'       => $row['num']
+        ]);
+    }
     if (! $res) {
 //        $stmt->debugDumpParams();
         $success = false;
