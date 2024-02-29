@@ -131,7 +131,7 @@ foreach ($info as $cat => $more) {
     if (in_array($_POST['report_type'], ['all', 'details'])) {
         foreach ($more as $admin_id => $items) {
             $row = $parents[$admin_id];
-            $address = $row['admin_address1'] . ' ' . $row['admin_address2'] . '<br />' . $row['admin_city'] . ', ' . $row['admin_state'] . ' ' . $row['admin_postal'] . '<br />' . $row['admin_country'];
+            $address = $row['address'] . '<br />' . $row['city'] . ', ' . $row['state'] . ' ' . $row['zip'] . '<br />' . $row['country'];
             echo "<div class='header' id='" . $admin_id . "'>";
             echo "<h2>Deliver to:</h2>";
             echo "<p>" . $row['first'] . ' ' . $row['last'] . "<br />" . $address . "</p>";
