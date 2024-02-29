@@ -110,6 +110,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
       foreach ($children as $child) {
           $grade = $child['class_grade'] . ($child['class_sub'] ? '-' . $child['class_sub'] : '');
           $img_fallbacks = [
+              ['val' => $child['khk_photo'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['khk_photo'])],
               ['val' => $child['chidon_photo'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
               ['val' => $child['mobile_pic'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
               ['val' => $child['thumb'], 'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
