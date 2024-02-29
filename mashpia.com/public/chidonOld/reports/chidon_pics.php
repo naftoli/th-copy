@@ -95,7 +95,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
 </a>
 <a href="chidon_pics_khk.php" target="__blank">
   <button id="downloadPicsIyun">Download KHK Only Pictures</button>
-</a
+</a>
 <?php foreach ($info as $id => $children) : ?>
   <h2><?= $schools[$id] ?></h2>
   <table class="pics">
