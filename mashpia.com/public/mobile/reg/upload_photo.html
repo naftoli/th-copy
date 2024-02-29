@@ -1078,7 +1078,7 @@
     <h4 class="alert-heading">For the Award Ceremony we are relying on great photos to put it together!</h4>
     <div class="alert-body" style="font-size: 16px">
       <blockquote>
-        When taking photos, please pay close attention to the following guidelines. 
+        When taking photos, please pay close attention to the following guidelines.
         <br/>
         <input type="checkbox"/> Horizontal picture (when using a phone, make sure the phone is on the side, not
         upright)
@@ -1320,7 +1320,7 @@
             window.location = "parent_detail.html";
           } else {
             var info = $.parseJSON(success);
-            if (info.chidon_pic_5782 != null) $("#imgchild").attr('src', info.chidon_pic_5782);
+            if (info.chidon_photo != null) $("#imgchild").attr('src', info.chidon_photo);
           }
         });
       }
@@ -1342,6 +1342,7 @@
         $.post('ajax/updateChidonPhoto.php', {
           user_id: id,
           chidonPhoto: photo,
+          photo_type: 'chidon'
         }, function (success) {
           if (!success) {
             alert("There was an error updating the chidon photo.");

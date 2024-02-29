@@ -10,6 +10,8 @@ $schools = $as->getSchools();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+
 function createZip($files, $filename) {
     $image_extensions = explode(',', "jpg,jpeg,jpe,jif,jfif,jfi,png,gif,webp,tiff,tif,raw,arw,cr2,nrw,k25,bmp,dib,heif,heic,jp2,j2k,jpf,jpx,jpm,mj2,svg,svgz");
     $zip = new ZipArchive;
@@ -53,18 +55,20 @@ function custom_urlencode($url) {
 $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
+        join classes c on c.class_id = u.class_id 
         left join thumbs t on u.user_photo_id = t.file_id 
-        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
+        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") 
+        and c.class_grade = '8'";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    $info[$row['school_id']][] = $row;
+    if (KHK::getKHKEligibility([$row['user_id']])) $info[$row['school_id']][] = $row;
 }
 
 $imgs = []; // array for keeping track of all pictures that are showing up
 foreach ( $info as $id => $children ) {
     foreach ($children as $child) {
         $img_fallbacks = [
-            ['from_db' => false, 'val' => $child['chidon_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
+            ['from_db' => false, 'val' => $child['khk_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['khk_photo'])],
             ['from_db' => false, 'val' => $child['mobile_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
             ['from_db' => false, 'val' => $child['thumb'],         'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
             ['from_db' => true,  'val' => $child['user_photo_id']]
@@ -78,7 +82,7 @@ foreach ( $info as $id => $children ) {
     }
 }
 
-$filename = 'chidonPics.zip';
+$filename = 'chidonPicsKHK.zip';
 createZip($imgs, $filename);
 header('Content-Description: File Transfer');
 header('Content-Type: application/octet-stream');

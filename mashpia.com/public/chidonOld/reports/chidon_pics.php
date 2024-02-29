@@ -87,7 +87,9 @@ $imgs = []; // array for keeping track of all pictures that are showing up
 <BODY>
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Pictures</h1>
-<a href="chidon_pics_download.php" target="__blank"><button id="downloadPics">Download Pictures</button></a>
+<a href="chidon_pics_download.php" target="__blank">
+  <button id="downloadPics">Download Pictures</button>
+</a>
 <a href="chidon_pics_iyun.php" target="__blank">
   <button id="downloadPicsIyun">Download Iyun Only Pictures</button>
 </a>
@@ -105,6 +107,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
       foreach ($children as $child) {
           $grade = $child['class_grade'] . ($child['class_sub'] ? '-' . $child['class_sub'] : '');
           $img_fallbacks = [
+              ['val' => $child['chidon_photo'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
               ['val' => $child['mobile_pic'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
               ['val' => $child['thumb'], 'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
               ['val' => $child['user_photo_id'], 'url' => 'https://mashpia.com/file_view.php?id=' . $child['user_photo_id']],
