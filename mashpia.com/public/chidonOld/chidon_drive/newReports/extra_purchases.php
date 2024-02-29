@@ -11,21 +11,10 @@ $year = GlobalSettings::getChidonYear();
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
-function getParents() {
-    global $parents, $year, $schools;
-
-    $sql = "select parent_id from th_chidon where date_paid > 0 and school_id in (" . implode(',', array_keys($schools)) . ") 
-            and year = " . $year;
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $parents[] = $row['parent_id'];
-    }
-}
-
 function getExtraPurchases() {
     global $extra_purchases, $year;
 
-    $sqlExtra = "select p.*, a.admin_id, a.first, a.last 
+    $sqlExtra = "select p.*, a.* 
             from extra_purchases p 
             join admins a using (admin_id) 
             where year = " . $year;
@@ -45,11 +34,9 @@ function getAddresses() {
     }
 }
 
-$parents = [];
 $extra_purchases = [];
 $addresses = [];
 
-getParents();
 getExtraPurchases();
 getAddresses();
 ?>
@@ -83,7 +70,6 @@ getAddresses();
     </tr>
     <?php
     foreach ($extra_purchases as $purchase) {
-        if (! in_array($purchase['admin_id'], $parents)) continue;
         echo "<tr><td>" . $purchase['admin_id'] . "</td><td>" . $purchase['first'] . "</td><td>" . $purchase['last'] .
             "</td><td>" . $purchase['item'] . "</td><td>" . $purchase['amount'] . "</td><td>" . $purchase['type_of_sweater'] .
             "</td><td>" . $purchase['size'] . "</td>";
