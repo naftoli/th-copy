@@ -18,6 +18,7 @@ $items_chosen = isset($_POST['items']) ? $_POST['items'] : [];
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 $report_type = $_POST['report_type'];
+$ship_to = isset($_POST['ship_to']) ? $_POST['ship_to'] : 'all';
 
 $cs = new ParentShipping();
 // get results for chosen items

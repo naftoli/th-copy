@@ -52,11 +52,18 @@ class ParentShipping
     }
 
     private function getExtraPurchases() {
+        global $ship_to;
+
         $ep = [];
         $sql = "select * from extra_purchases ep 
                 join purchase_addresses pa using (purchase_id) 
                 join admins a using (admin_id) 
                 where ep.year = :year";
+        if ($ship_to == 'domestic') {
+            $sql .= " and pa.country = 'USA'";
+        } else if ($ship_to == 'intl') {
+            $sql .= " and pa.country != 'USA'";
+        }
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
