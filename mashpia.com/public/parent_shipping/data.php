@@ -57,7 +57,7 @@ function build_items() {
     return $html;
 }
 
-function createHtmlForItem($school, $output = true) {
+function createHtmlForItem($school, $output = true) { // copied from class.chidon_shipping.php so we are using the school as variable instead of admin
     global $info, $item_details_chosen, $items_chosen, $limit_to_status;
 
     foreach ($items_chosen as $cat => $more) {

@@ -96,6 +96,7 @@ foreach ($info as $cat => $more) {
 <?php endif; ?>
 <?php
 foreach ($info as $cat => $more) {
+    if ($cat == 'status') break;
     if (in_array($_POST['report_type'], ['all', 'summary'])) {
       ?>
       <h3>Summary</h3>
