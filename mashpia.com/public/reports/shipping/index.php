@@ -54,6 +54,15 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         <?// include(dirname(__FILE__)."/parts/action_links.php");?>
         
         <? if ($admin_user['auth'] == 'super') { ?>
+        <h2>Chidon Shipping</h2>
+          <div id="action_links">
+            <a href="/parent_shipping">
+              <div class="button">
+                <img src="/images/icon_report.png" height="32" alt="report"/>
+                <span class="link-text">Chidon Parents Shipping</span>
+              </div>
+            </a>
+          </div>
         <h2>Inventory</h2>
         <div id="action-links">
             <a href="medals_inventory/<?=$debug ? "?debug=true": "";?>">
