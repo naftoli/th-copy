@@ -15,6 +15,8 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
+        join schools s on u.school_id = s.school_id 
+        join classes c on c.class_id = u.class_id 
         left join thumbs t on u.user_photo_id = t.file_id 
         where year = " . $year . " 
         and date_paid > 0 
@@ -82,7 +84,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
     <BODY>
         <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
         <h1>Chidon Pictures</h1>
-        <a href="chidon_pics_download.php" target="__blank"><button id="downloadPics">Download Pictures</button></a>
+<!--        <a href="chidon_pics_download.php" target="__blank"><button id="downloadPics">Download Pictures</button></a>-->
         <a href="chidon_pics_iyun.php" target="__blank"><button id="downloadPicsIyun">Download Iyun Only Pictures</button></a>
         <?php foreach ( $info as $id => $children ) : ?>
             <h2><?= $schools[$id] ?></h2>
@@ -90,10 +92,13 @@ $imgs = []; // array for keeping track of all pictures that are showing up
                 <tr>
                     <th>Serial Number</th>
                     <th>Name</th>
+                    <th>School</th>
+                    <th>Grade</th>
                     <th>Chidon Picture</th>
                 </tr>
                 <?php
                 foreach ( $children as $child ) {
+                    $grade = $child['class_grade'] . ($child['class_sub'] ? '-' . $child['class_sub'] : '');
                     $img_fallbacks = [
                         ['val' => $child['mobile_pic'],     'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
                         ['val' => $child['thumb'],          'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
@@ -109,6 +114,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
                         }
                     }
                     echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
+                    echo $child['school_name'] . "</td><td>" . $grade . "</td><td>";
                     echo "<img src='" . $img . "' /></td></tr>";
                     if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
                         $imgs[] = $img;
