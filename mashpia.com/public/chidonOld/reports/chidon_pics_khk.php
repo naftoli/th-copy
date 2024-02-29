@@ -61,7 +61,7 @@ $sql = "select * from th_chidon tc
         and c.class_grade = '8'";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    if (KHK::getKHKEligibility([$row['user_id']])) $info[$row['school_id']][] = $row;
+    if (KHK::getKHKEligibility([$row['user_id']])[0][$row['user_id']]) $info[$row['school_id']][] = $row;
 }
 
 $imgs = []; // array for keeping track of all pictures that are showing up
