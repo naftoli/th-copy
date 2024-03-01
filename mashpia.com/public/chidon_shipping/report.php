@@ -23,6 +23,8 @@ $items_chosen = isset($_POST['items']) ? $_POST['items'] : [];
 $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
+$ship_to = isset($_POST['ship_to']) ? $_POST['ship_to'] : 'all';
+$list_of_schools = $_POST['school'];
 
 $cs = new ChidonShipping();
 $cs->setYear($year);
@@ -31,128 +33,52 @@ $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
     $status = $cs->getStatus();
-    foreach ([61, 269] as $school_id) {
+    foreach ($list_of_schools as $school_id) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
             $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
         }
         // remove shipped items if needed
-        if (in_array(0, $limit_to_status)) {
+        foreach ($limit_to_status as $limit_num) {
             foreach ($info as $cat => $details) {
                 foreach ($details as $user => $items) {
                     foreach ($items as $idx => $item) {
-                        if (isset($status[$user][$item['id']]) && $status[$user][$item['id']]['shipped'] == 1) unset($info[$cat][$user][$idx]);
+                        switch ($limit_num) {
+                            case 0:
+                                if (isset($status[$user][$item['id']]) && $status[$user][$item['id']]['shipped'] == 1) unset($info[$cat][$user][$idx]);
+                                break;
+                            case 1:
+                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']]['shipped'] == 0) unset($info[$cat][$user][$idx]);
+                                break;
+                            case 2:
+                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']]['missing'] == 0) unset($info[$cat][$user][$idx]);
+                                break;
+                            case 3:
+                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']]['received'] == 0) unset($info[$cat][$user][$idx]);
+                                break;
+                        }
                     }
                 }
             }
         }
-        $csv = createCSV($info, $school_id, true); // filter out all users that ONLY live in the usa
-        $file = $school_id . '-usa.csv';
+        if ($ship_to == 'domestic') {
+            $csv = createCSV($info, $school_id, true); // filter out all users that ONLY live in the usa
+            $file = $school_id . '-usa.csv';
+        } else if ($ship_to == 'intl') {
+            $csv = createCSV($info, $school_id, false, true); // filter out all users that do NOT live in the usa
+            $file = $school_id . '-intl.csv';
+        } else {
+            $csv = createCSV($info, $school_id);
+            $file = $school_id . '.csv';
+        }
         createFile($file, $csv);
         $files[] = $file;
-        $csv2 = createCSV($info, $school_id, false, true); // filter out all users that do NOT live in the usa
-        $file2 = $school_id . '-intl.csv';
-        createFile($file2, $csv2);
-        $files[] = $file2;
     }
     createZip($files, 'shipping.zip');
     downloadFile('shipping.zip');
     exit;
 }
-/*
-    $ids = $cs->getChildrenToRemove();
-    foreach ([61, 269] as $school_id) {
-        $info = [];
-        $cs->setToExclude($ids);
-        foreach ($items_chosen as $cat => $itemsPerCat) {
-            $listOfItems = array_keys($itemsPerCat);
-            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-//            if ($cat == 'extra purchases') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, 'byFamily', $remove);
-            if ($cat == 'extra purchases') continue;
-            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-        }
-//        echo "<pre>"; print_r($info); echo "</pre>";
-        $csv = createCSV($info, $school_id);
-        $file = $school_id . '.csv';
-        createFile($file, $csv);
-        $files[] = $file;
-    }
-    // add extra purchases not ak/myshliach to ship
-    $extra = $cs->getExtraPurchasesToShip();
-    $csv = $cs->createCSVFromExtraPurchases($extra);
-    $file = 'extra_purchases.csv';
-    createFile($file, $csv);
-    $files[] = $file;
-
-    /*
-     * create myshliach / anash kinder with extra purchases files
-     * there's 3 files needed
-     * 1. for parents that paid for shipping and include extra purchases that are to be shipped to home address
-     * 2. for parents that didn't pay for shipping and include extra purchases that are to be pickud up
-     * 3. (for parents that paid for shipping but have) extra purchases that go to different address
-     */
-/*
-// first
-// reset the array of kids to remove
-$cs->setToExclude([]);
-foreach ([61, 269] as $school_id) {
-    $info = [];
-    $ids = $cs->getChildrenToRemove(true);
-    $cs->setOnly($ids);
-
-    foreach ($items_chosen as $cat => $itemsPerCat) {
-        $listOfItems = array_keys($itemsPerCat);
-        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK();
-        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-    }
-    $csv = createCSV($info, $school_id);
-    $file = $school_id . 'withEPtoShip.csv';
-    createFile($file, $csv);
-    $files[] = $file;
-}
-
-//second
-foreach ([61, 269] as $school_id) {
-    $info = [];
-    $ids = $cs->getChildrenToRemove(false, true);
-    $cs->setOnly($ids);
-
-    foreach ($items_chosen as $cat => $itemsPerCat) {
-        $listOfItems = array_keys($itemsPerCat);
-        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK(false);
-        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-    }
-    $csv = createCSV($info, $school_id);
-    $file = $school_id . 'withEPtoPickup.csv';
-    createFile($file, $csv);
-    $files[] = $file;
-}
-
-//third
-$extra = $cs->getExtraPurchasesToShip(true);
-$csv = $cs->createCSVFromExtraPurchases($extra);
-$file = 'extra_purchases_myshliach_ak.csv';
-createFile($file, $csv);
-$files[] = $file;
-
-createZip($files, 'shipping.zip');
-downloadFile('shipping.zip');
-exit;
-*/
-//else if ($report_type == 'fileGear') {
-//    $files = [];
-//    $listOfItems = array_keys($items_chosen['gear']);
-//    $info['gear'] = $cs->getGear($_POST['gender'],0, $listOfItems, true);
-//    $users = array_keys($info['gear']);
-//    $csv = createCSVforGear($users, $info['gear']);
-//    $file = 'gear.csv';
-//    createFile($file, $csv);
-//    downloadFile($file);
-//    exit;
-//}
 
 // get list of schools to iterate over
 $list_of_schools = $_POST['school'];
@@ -166,22 +92,6 @@ foreach ($list_of_schools as $schoolID) {
         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
         if ($cat == 'gear') $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
         else $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
-        // remove duplicate items and change qty of first item
-//        foreach ($info[$cat] as $user => $rows) {
-//            foreach ($rows as $idx => $row) {
-//                if (isset($rows[$idx + 1])) { // if there's a next row
-//                    if ($row['id'] == $rows[$idx + 1]['id']) {
-//                        if (isset($info[$cat][$user][$idx]['qty']) && isset($info[$cat][$user][$idx + 1]['qty'])) {
-//                            $info[$cat][$user][$idx]['qty'] += $info[$cat][$user][$idx + 1]['qty'];
-//                            unset($info[$cat][$user][$idx + 1]);
-//                        } else {
-//                            $info[$cat][$user][$idx + 1]['qty'] = 2;
-//                            unset($info[$cat][$user][$idx]);
-//                        }
-//                    }
-//                }
-//            }
-//        }
     }
 }
 $info['status'] = $cs->getStatus();

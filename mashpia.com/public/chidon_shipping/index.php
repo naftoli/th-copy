@@ -102,8 +102,13 @@ $items = $cs->getItems();
       </p>
     </fieldset>
 
-    <fieldset>
-      <legend>Group By</legend>
+    <fieldset id="shipping" style="display: none">
+      <legend>Shipping to:</legend>
+      <select name="ship_to">
+        <option value="all" selected>All</option>
+        <option value="domestic">Domestic</option>
+        <option value="intl">International</option>
+      </select>
     </fieldset>
 
     <fieldset>
@@ -144,6 +149,13 @@ $items = $cs->getItems();
     })
   }
 
+  function showDropdown() {
+    const superAdmin = <?= $super ? 1 : 0 ?>;
+    const school_id = parseInt($("#school").val())
+    if (superAdmin || [61, 269].includes(school_id)) $("#shipping").show()
+    else $("#shipping").hide()
+  }
+
   $(".check_items").click(checkAllItems)
   $("#all_items").click(checkAll)
   $("#all_details").click(checkAll)
@@ -162,8 +174,13 @@ $items = $cs->getItems();
     $("form").submit()
   })
 
+  $("#school").change( function() {
+    showDropdown()
+  })
+
   $(function() {
     $("#all_details").click()
+    showDropdown()
   })
 </script>
 </html>
