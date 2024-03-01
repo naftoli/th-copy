@@ -830,7 +830,7 @@ class ChidonShipping
             foreach ($award_info as $item) {
                 $id = $this->getItemID('awards', $item);
                 $info[$row['user_id']][] = [
-                    'item' => $award,
+                    'item' => $item,
                     'size' => '',
                     'color' => '',
                     'name' => '',
