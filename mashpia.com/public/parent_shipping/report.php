@@ -37,6 +37,7 @@ $summary_items = []; // mapping of item ID to item info
 
 // go through it once so that we can have totals
 foreach ($info as $cat => $more) {
+    if ($cat == 'status') break;
     foreach ($more as $admin_id => $other) {
         createHtmlForItem($admin_id, false);
     }

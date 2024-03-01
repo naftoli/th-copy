@@ -57,9 +57,10 @@ function build_items() {
     return $html;
 }
 
-function createHtmlForItem($school, $output = true) { // copied from class.chidon_shipping.php so we are using the school as variable instead of admin
+function createHtmlForItem($admin_id, $output = true) {
     global $info, $item_details_chosen, $items_chosen, $limit_to_status;
 
+    $school = $admin_id; // school is the admin_id in this case bc we are using the code from class.chidon_shipping.php
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$school])) {
             $items = $info[$cat][$school];
@@ -154,10 +155,12 @@ function addToSummary($item) {
     global $summary, $summary_items;
 
     $id = $item['id'];
-    $qty = $item['qty'];
+    $qty = $item['qty'] ?? 1;
+
     // update summary
     if (isset($summary[$id])) $summary[$id] += $qty;
     else $summary[$id] = $qty;
+
     // if item doesn't exist in summary_items, add it
     if (! isset($summary_items[$id])) $summary_items[$id] = $item;
 }
