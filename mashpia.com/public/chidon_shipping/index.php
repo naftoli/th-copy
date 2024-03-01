@@ -87,8 +87,8 @@ $items = $cs->getItems();
       </select><br />
       <h4>School(s)</h4>
       <?php
-        if ($super) echo '<select name="school[]" multiple style="height: 300px;">';
-        else echo '<select name="school[]">';
+        if ($super) echo '<select name="school[]" id="school" multiple style="height: 300px;">';
+        else echo '<select name="school[]" id="school">';
         foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>";
       ?>
       </select><br />
@@ -169,6 +169,11 @@ $items = $cs->getItems();
     }
     if (! $(".field:checked").length) {
       alert('You must choose at least one field!')
+      return false
+    }
+    // check school for at least one school selected
+    if ($("#school").val() === null) {
+      alert('You must choose at least one school!')
       return false
     }
     $("form").submit()
