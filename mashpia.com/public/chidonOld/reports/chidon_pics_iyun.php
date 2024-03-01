@@ -79,12 +79,6 @@ function getAward($child) {
         'havonah'   => 80,
         'iyun'      => 90
     ];
-    $awards = [
-        'yesod'     => 'certificate',
-        'yediah'    => 'plaque',
-        'havonah'   => 'medal / plaque',
-        'iyun'      => 'trophy / medal / plaque'
-    ];
 
     $highest_track = $child['highest_track'];
     // find out if award is same as before final or not
@@ -96,8 +90,8 @@ function getAward($child) {
             $row = $final_marks[$child['user_id']];
             $score = 0;
             for ($i = 1; $i <= $key; $i++) {
-                $level = 'level_' . $i;
-                if ($row[$level]) {
+                $level = 'track_' . $i;
+                if (isset($row[$level]) && $row[$level] > 0) {
                     $score += $row[$level];
                 }
             }
