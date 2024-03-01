@@ -818,16 +818,17 @@ class ChidonShipping
         $types = $ct->getTypes();
         foreach ($rows as $row) {
             if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
-                $highest_track = $types[ $row['award_type'] ];
+                $highest_track = strtolower($types[ $row['award_type'] ]);
             } else {
-                $highest_track = $ct->getHighestTrackPassed($row)['highest_track'];
+                $tmp = $ct->getHighestTrackPassed($row)['highest_track'];
+                $highest_track = empty($tmp) ? '' : strtolower($types[$tmp]);
             }
             $award = $highest_track ? $awards[$highest_track] : '';
             if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
 
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
-                $id = $this->getItemID('awards', $award);
+                $id = $this->getItemID('awards', $item);
                 $info[$row['user_id']][] = [
                     'item' => $award,
                     'size' => '',
@@ -847,12 +848,8 @@ class ChidonShipping
      * @return string
      */
     public function getAwardTrack($child) {
-        $types = [
-            'maven'   => 'yesod',
-            'pro'     => 'yediah',
-            'expert'  => 'havonah',
-            'genius'  => 'iyun'
-        ];
+        $ct = new ChidonTests();
+        $types = $ct->getTypes();
 
         if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
             return $types[$row['award_type']];
@@ -879,8 +876,7 @@ class ChidonShipping
             'iyun'      => 90
         ];
 
-        $ct = new ChidonTests();
-        $types = $ct->getTypes();
+        // highest track passed
         $highest_track = $ct->getHighestTrackPassed($child)['highest_track'];
 
         // find out if award is same as before final or not

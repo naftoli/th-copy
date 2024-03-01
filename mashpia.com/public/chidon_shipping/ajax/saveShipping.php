@@ -57,6 +57,7 @@ foreach ($info as $row) {
             break;
         case 1:
             $shipped = 1;
+            $received = 1;
             // the rest will either default to 0 or stay at whatever it has been set to
             break;
         case 2:
