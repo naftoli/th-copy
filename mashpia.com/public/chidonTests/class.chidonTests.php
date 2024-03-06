@@ -588,10 +588,12 @@ class ChidonTests
         return $details;
     }
 
-    public function getHighestTrackPassed( $child, $numTests = 3 ) {
-        $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
-        $this->setScores();
-        $this->calculateMarks();
+    public function getHighestTrackPassed( $child, $numTests = 3, $overwrite = true ) {
+        if ($overwrite) {
+            $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+            $this->setScores();
+            $this->calculateMarks();
+        }
 
         // get child mark info
         if (! isset($this->marks[$child['th_chidon_id']])) {

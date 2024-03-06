@@ -1,6 +1,7 @@
 <?php
 //ini_set('display_errors', 1);
 //ini_set('error_reporting', E_ALL);
+set_time_limit(300);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -99,8 +100,9 @@ function passedKhk($id)
 }
 
 function getTrack($child) {
-    global $cs;
-    return $cs->getTrackByTests($child);
+    global $cs, $ct;
+    $track = $cs->getTrackByTests($child, $ct);
+    return $track;
 }
 
 function getAward($child)
@@ -112,7 +114,7 @@ function getAward($child)
       'iyun' => 'medal / plaque / blue trophy',
     ];
 
-    $track = getTrack($child);
+    $track = $child['highest_track'];
     return $track ? $awards[$track] : 'no award yet';
 }
 
@@ -206,7 +208,7 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            $child['highest_track'] = getTrack($child); // update track based off tests
+            $child['highest_track'] = $child['highest_track'] ?? getTrack($child); // update track based off tests
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);

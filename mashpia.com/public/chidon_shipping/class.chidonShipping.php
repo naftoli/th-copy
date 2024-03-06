@@ -836,16 +836,16 @@ class ChidonShipping
         return $info;
     }
 
-    public function getTrackByTests($row) {
-        $ct = new ChidonTests();
-        $types = $ct->getTypes();
+    public function getTrackByTests($row, $ct = null) {
+        if (!$ct) $ct = new ChidonTests();
         $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
         $ct->setScores();
         $ct->calculateMarks();
         $marks = $ct->getMarks();
-
         $ht = $ct->getHighestTrack($marks, $row['user_id']);
-        $highest_track = empty($tmp) ? '' : strtolower($types[$ht]);
+
+        $types = $ct->getTypes();
+        $highest_track = empty($ht) ? '' : strtolower($types[$ht]);
         $highest_track2 = $row['reward_type'] ? strtolower($types[$row['reward_type']]) : '';
         $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest award passed' ? strtolower($types[$row['award_type']]) : false;
 
