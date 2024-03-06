@@ -369,7 +369,7 @@ class ChidonTests
         }
     }
 
-    public function calculateCumulative($id, $scores, $test_num = 0) {
+    public function calculateCumulative($child, $scores, $test_num = 0) {
         $test_num = $test_num ?? $this->figureOutTestNum();
         $num_questions = $this->getTestQuestions();
         $types = $this->getTypes();
@@ -387,6 +387,7 @@ class ChidonTests
         $questions['expert'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'];
         $questions['genius'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'] + $num_questions['genius'];
 
+        $id = $child['th_chidon_id'];
         if (! isset($scores[$id])) return '';
 
         $marks = $scores[$id];
@@ -405,12 +406,12 @@ class ChidonTests
             $cumulative[$type] = round(($cumulative_scores[$type] / ($questions[$type] * $test_num)) * 100);
         }
 
-        $reg_avg = 70;
         $iyun_avg = 90;
+        $avgs = $this->getPassingAvgs($child['user_id']);
         if ($cumulative['genius'] >= $iyun_avg) return $types['genius'];
-        else if ($cumulative['expert'] >= $reg_avg) return $types['expert'];
-        else if ($cumulative['pro'] >= $reg_avg) return $types['pro'];
-        else if ($cumulative['maven'] >= $reg_avg) return $types['maven'];
+        else if ($cumulative['expert'] >= $avgs['expert']) return $types['expert'];
+        else if ($cumulative['pro'] >= $avgs['pro']) return $types['pro'];
+        else if ($cumulative['maven'] >= $avgs['maven']) return $types['maven'];
         else return '';
     }
 

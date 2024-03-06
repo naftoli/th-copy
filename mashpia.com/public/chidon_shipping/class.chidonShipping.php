@@ -836,17 +836,17 @@ class ChidonShipping
         return $info;
     }
 
-    public function getTrackByTests($row, $ct = null) {
-        if (!$ct) $ct = new ChidonTests();
+    public function getTrackByTests($row) {
+        $ct = new ChidonTests();
         $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
         $ct->setScores();
         $ct->calculateMarks();
         $marks = $ct->getMarks();
-        $ht = $ct->getHighestTrack($marks, $row['user_id']);
+        $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
 
         $types = $ct->getTypes();
-        $highest_track = empty($ht) ? '' : strtolower($types[$ht]);
-        $highest_track2 = $row['reward_type'] ? strtolower($types[$row['reward_type']]) : '';
+        $highest_track = empty($ht) ? false : strtolower($types[$ht]);
+        $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? strtolower($types[$row['reward_type']]) : false;
         $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest award passed' ? strtolower($types[$row['award_type']]) : false;
 
         // find a way of comparing them
@@ -864,7 +864,7 @@ class ChidonShipping
             $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
         }
 
-        return $highest_track;
+        return $highest_track ?? '';
     }
 
     /**

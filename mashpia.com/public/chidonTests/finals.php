@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 set_time_limit(300);
 
 $admin_auth = ['school'];
@@ -100,8 +100,8 @@ function passedKhk($id)
 }
 
 function getTrack($child) {
-    global $cs, $ct;
-    $track = $cs->getTrackByTests($child, $ct);
+    global $cs;
+    $track = $cs->getTrackByTests($child);
     return $track;
 }
 
@@ -118,10 +118,13 @@ function getAward($child)
     return $track ? $awards[$track] : 'no award yet';
 }
 
-function showIyun($child, $track) {
+function showIyun($child) {
     global $ct;
-    $cumulative_track = $ct->calculateCumulative($child['th_chidon_id']);
-    return $track == 'iyun' || $cumulative_track == 'iyun';
+    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+    $ct->setScores();
+    $scores = $ct->getScores();
+    $cumulative_track = $ct->calculateCumulative($child, $scores);
+    return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun';
 }
 
 $info = [];
@@ -208,7 +211,7 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            $child['highest_track'] = $child['highest_track'] ?? getTrack($child); // update track based off tests
+            $child['highest_track'] = getTrack($child); // update track based off tests
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
@@ -226,8 +229,8 @@ if (isset($_POST['grade'])) {
                     if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                     else echo "value='0'";
                     // for iyun we also look at cumulative marks
-//                    if ($i == 4 && (!showIyun($child, $child['highest_track']) || $tooLate)) echo " disabled";
-//                    else if ($i > $key || $tooLate) echo " disabled";
+                    if ($i == 4 && (!showIyun($child) || $tooLate)) echo " disabled";
+                    else if ($i > $key || $tooLate) echo " disabled";
                     echo " /></td>";
                 }
                 $level = $ct->getLevel($id, 'finals');
