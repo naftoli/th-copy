@@ -93,7 +93,7 @@ function passedKhk($id)
         $total = 0;
         foreach ($user_marks as $mark) $total += intval($mark);
         $total /= 3;
-        if ($total >= 80) return true;
+        if ($total >= 70) return true;
     }
     return false;
 }
@@ -114,6 +114,12 @@ function getAward($child)
 
     $track = getTrack($child);
     return $track ? $awards[$track] : 'no award yet';
+}
+
+function showIyun($child, $track) {
+    global $ct;
+    $cumulative_track = $ct->calculateCumulative($child['th_chidon_id']);
+    return $track == 'iyun' || $cumulative_track == 'iyun';
 }
 
 $info = [];
@@ -217,7 +223,9 @@ if (isset($_POST['grade'])) {
                     echo "<td><input type='text' name='{$track}[$id]' class='$track mark'";
                     if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                     else echo "value='0'";
-                    if ($i > $key || $tooLate) echo " disabled";
+                    // for iyun we also look at cumulative marks
+                    if ($i == 4 && (!showIyun($child, $child['highest_track']) || $tooLate)) echo " disabled";
+                    else if ($i > $key || $tooLate) echo " disabled";
                     echo " /></td>";
                 }
                 $level = $ct->getLevel($id, 'finals');

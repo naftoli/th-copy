@@ -369,6 +369,51 @@ class ChidonTests
         }
     }
 
+    public function calculateCumulative($id, $scores, $test_num = 0) {
+        $test_num = $test_num ?? $this->figureOutTestNum();
+        $num_questions = $this->getTestQuestions();
+        $types = $this->getTypes();
+
+        $questions = [];
+        $cumulative_scores = [];
+
+        // initialize cumulative scores
+        foreach ($types as $type => $desc) {
+            $cumulative_scores[$type] = 0;
+        }
+
+        $questions['maven'] = $num_questions['maven'];
+        $questions['pro'] = $num_questions['maven'] + $num_questions['pro'];
+        $questions['expert'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'];
+        $questions['genius'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'] + $num_questions['genius'];
+
+        if (! isset($scores[$id])) return '';
+
+        $marks = $scores[$id];
+        for ($i = 1; $i <= $test_num; $i++) {
+            foreach ($types as $type => $desc) {
+                if (isset($marks[$i][$type]) && $marks[$i][$type] > 0) $cumulative_scores[$type] += intval($marks[$i][$type]);
+            }
+        }
+
+        $cumulative_scores['genius'] += $cumulative_scores['expert'] + $cumulative_scores['pro'] + $cumulative_scores['maven'];
+        $cumulative_scores['expert'] += $cumulative_scores['pro'] + $cumulative_scores['maven'];
+        $cumulative_scores['pro'] += $cumulative_scores['maven'];
+
+        $cumulative = [];
+        foreach ($types as $type => $desc) {
+            $cumulative[$type] = round(($cumulative_scores[$type] / ($questions[$type] * $test_num)) * 100);
+        }
+
+        $reg_avg = 70;
+        $iyun_avg = 90;
+        if ($cumulative['genius'] >= $iyun_avg) return $types['genius'];
+        else if ($cumulative['expert'] >= $reg_avg) return $types['expert'];
+        else if ($cumulative['pro'] >= $reg_avg) return $types['pro'];
+        else if ($cumulative['maven'] >= $reg_avg) return $types['maven'];
+        else return '';
+    }
+
     public function getMarks() {
         return $this->marks;
     }
