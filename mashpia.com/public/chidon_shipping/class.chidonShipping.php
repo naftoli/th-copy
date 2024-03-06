@@ -842,6 +842,7 @@ class ChidonShipping
         $ct->setScores();
         $ct->calculateMarks();
         $marks = $ct->getMarks();
+        if (! isset($marks[$row['th_chidon_id']])) return '';
         $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
 
         $types = $ct->getTypes();
