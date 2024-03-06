@@ -592,6 +592,7 @@ class ChidonTests
         $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
         $this->setScores();
         $this->calculateMarks();
+
         // get child mark info
         if (! isset($this->marks[$child['th_chidon_id']])) {
             return [
@@ -600,45 +601,10 @@ class ChidonTests
                 'highest_track_avg' => 0
             ];
         }
-        $childMarkInfo = $this->marks[$child['th_chidon_id']];
 
-        $marksPerType = [];
-        $avgs = [];
-        foreach ($this->types as $type => $val) {
-            $marksPerType[$type] = 0;
-            $avgs[$type] = 0;
-        }
-
-        for ($i = 1; $i <= $numTests; $i++) {
-            if (isset($childMarkInfo[$i])) {
-                foreach ($childMarkInfo[$i] as $type => $mark) {
-                    if ($mark > 0) {
-                        $marksPerType[$type] += $mark;
-                    }
-                }
-            }
-        }
-
-        // needed avgs
-//        $neededAvgs['maven']    = 80;
-//        $neededAvgs['pro']      = 80;
-//        $neededAvgs['expert']   = 80;
-//        $neededAvgs['genius']   = 80;
-        $passingAvgs = $this->getPassingAvgs($child['user_id']);
-
-        // calculate avgs and highest type currently eligible for
-        $highest_type = '';
-        $highest_mark = 0;
-        foreach ($this->types as $type => $val) {
-            if ($numTests && ($marksPerType[$type])) {
-                $avgs[$type] = round($marksPerType[$type] / $numTests);
-                if ($avgs[$type] >= $passingAvgs[$type]) {
-                    $highest_type = $type;
-                    $highest_mark = $avgs[$type];
-                }
-                else break; // can't get higher if lower one was not passed
-            }
-        }
+        $highest = $this->getHighestTrack($this->marks[$child['th_chidon_id']], $child['user_id'], false, $numTests, true);
+        $highest_type = $highest['highest'];
+        $highest_avg = $highest['avg'];
 
         // check if child has a reward type set
         $sql = "select test_type, reward_type from th_chidon where th_chidon_id = " . $child['th_chidon_id'];
@@ -648,26 +614,24 @@ class ChidonTests
         $rewardType = $row['reward_type'];
 
         // check which type is higher
-        if (!empty($highest_type) && $rewardType && $rewardType != 'highest track passed') {
+        if (!empty($highest_type) && !empty($rewardType) && $rewardType != 'highest track passed') {
             $indexes = array_keys($this->types);
-            $key = array_search($testType, $indexes);
             $key1 = array_search($highest_type, $indexes);
             $key2 = array_search($rewardType, $indexes);
-            // make sure child passed the track they are on
-            if ($key1 >= $key && $key2 > $key1) $highest_type = $rewardType;
+            if ($key2 > $key1) $highest_type = $rewardType;
         }
 
         $markInfo = [];
         $markInfo['avg'] = $avgs[$child['test_type']] ?? 0;
         $markInfo['highest_track'] = $highest_type;
-        $markInfo['highest_track_avg'] = round($highest_mark);
+        $markInfo['highest_track_avg'] = $highest_avg;
         $markInfo['test_type'] = $testType;
         $markInfo['reward_type'] = $rewardType;
 
         return $markInfo;
     }
 
-    public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3) {
+    public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3, $needAvg = false) {
         $highest = $forEligibility ? 'maven' : '';
         $avgs = $this->getPassingAvgs($user_id);
 
@@ -686,10 +650,21 @@ class ChidonTests
         }
 
         // calculate avgs and highest type currently eligible for
+        $actualAvg = 0;
         foreach ($marksByTrack as $track => $total) {
             $avg = round($total / $numTests);
-            if ($avg >= $avgs[$track]) $highest = $track;
+            if ($avg >= $avgs[$track]) {
+                $highest = $track;
+                $actualAvg = $avg;
+            }
             else break; // can't go higher if lower one was not passed
+        }
+
+        if ($needAvg) {
+            return [
+                'highest' => $highest,
+                'avg'   => $actualAvg
+            ];
         }
 
         return $highest;
