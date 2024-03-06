@@ -798,7 +798,7 @@ class ChidonShipping
                     JOIN
                 users u USING (user_id)
             WHERE
-                tc.year = :year AND tc.reg_date > 0
+                tc.year = :year AND tc.date_registered > 0 
         ";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F";
@@ -814,15 +814,8 @@ class ChidonShipping
             'iyun' => 'medal / plaque / blue trophy',
         ];
 
-        $ct = new ChidonTests();
-        $types = $ct->getTypes();
         foreach ($rows as $row) {
-            if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
-                $highest_track = strtolower($types[ $row['award_type'] ]);
-            } else {
-                $tmp = $ct->getHighestTrackPassed($row)['highest_track'];
-                $highest_track = empty($tmp) ? '' : strtolower($types[$tmp]);
-            }
+            $highest_track = $this->getAwardTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
             if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
 
@@ -841,6 +834,37 @@ class ChidonShipping
         }
 
         return $info;
+    }
+
+    public function getAwardTrackByTests($row) {
+        $ct = new ChidonTests();
+        $types = $ct->getTypes();
+        $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
+        $ct->setScores();
+        $ct->calculateMarks();
+        $marks = $ct->getMarks();
+
+        $ht = $ct->getHighestTrack($marks, $row['user_id']);
+        $highest_track = empty($tmp) ? '' : strtolower($types[$ht]);
+        $highest_track2 = $row['reward_type'] ? strtolower($types[$row['reward_type']]) : '';
+        $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest award passed' ? strtolower($types[$row['award_type']]) : false;
+
+        // find a way of comparing them
+        $indexes = array_keys($ct->getTypes());
+        $key1 = array_search($highest_track, $indexes);
+        $key2 = array_search($highest_track2, $indexes);
+        $key3 = array_search($highest_track3, $indexes);
+
+        // find out which one is highest
+        if ($key2 && $key3) {
+            $highest_track = $key2 > $key1 ? $key3 > $key2 ? $highest_track3 : $highest_track2 : $highest_track;
+        } else if ($key2) {
+            $highest_track = $key2 > $key1 ? $highest_track2 : $highest_track;
+        } else if ($key3) {
+            $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
+        }
+
+        return $highest_track;
     }
 
     /**
