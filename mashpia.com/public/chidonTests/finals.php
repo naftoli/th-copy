@@ -93,92 +93,27 @@ function passedKhk($id)
         $total = 0;
         foreach ($user_marks as $mark) $total += intval($mark);
         $total /= 3;
-        if ($total >= 70) return true;
+        if ($total >= 80) return true;
     }
     return false;
 }
 
+function getTrack($child) {
+    global $cs;
+    return $cs->getTrackByTests($child);
+}
+
 function getAward($child)
 {
-    global $cs;
-
-    $types = [
-        'maven'   => 'yesod',
-        'pro'     => 'yediah',
-        'expert'  => 'havonah',
-        'genius'  => 'iyun'
-    ];
-
     $awards = [
-        'yesod'     => 'certificate',
-        'yediah'    => 'plaque',
-        'havonah'   => 'medal / plaque',
-        'iyun'      => 'medal / plaque / blue trophy',
+      'yesod' => 'certificate',
+      'yediah' => 'plaque',
+      'havonah' => 'medal / plaque',
+      'iyun' => 'medal / plaque / blue trophy',
     ];
 
-    // check if award was overriden by bc/hq
-    if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
-        $awardTrack = $types[$row['award_type']];
-    } else {
-        $awardTrack = $cs->getAwardTrack($child);
-    }
-    $award = $awardTrack ? $awards[$awardTrack] : 'no award yet';
-
-    return $award;
-
-//    global $final_marks;
-//
-//    $tracks = [
-//        1 => 'yesod',
-//        2 => 'yediah',
-//        3 => 'havonah',
-//        4 => 'iyun'
-//    ];
-//    $finals = [
-//        'yesod' => 20,
-//        'yediah' => 40,
-//        'havonah' => 60,
-//        'iyun' => 80
-//    ];
-//    $needed = [
-//        'yesod' => 60,
-//        'yediah' => 70,
-//        'havonah' => 80,
-//        'iyun' => 90
-//    ];
-//    $awards = [
-//        'yesod'     => 'certificate',
-//        'yediah'    => 'plaque',
-//        'havonah'   => 'medal / plaque',
-//        'iyun'      => 'medal / plaque / blue trophy',
-//    ];
-//
-//    $highest_track = $child['highest_track'];
-//    // find out if award is same as before final or not
-//    $award = false;
-//    $key = array_search($highest_track, $tracks);
-//    if ($key !== false) {
-//        // go down from key to find where the child is holding
-//        if (isset($final_marks[$child['user_id']])) {
-//            $row = $final_marks[$child['user_id']];
-//            $score = 0;
-//            for ($i = 1; $i <= $key; $i++) {
-//                $level = 'level_' . $i;
-//                if ($row[$level]) {
-//                    $score += $row[$level];
-//                }
-//            }
-//            for ($i = 1; $i <= $key; $i++) {
-//                $divide_by = $finals[$tracks[$i]];
-//                $final_score = number_format(($score / $divide_by) * 100, 2);
-//                if ($final_score >= $needed[$tracks[$i]]) {
-//                    $award = $tracks[$i];
-//                }
-//            }
-//        }
-//    }
-//    if ($award) return $awards[$award];
-//    else return 'no award yet';
+    $track = getTrack($child);
+    return $track ? $awards[$track] : 'no award yet';
 }
 
 $info = [];
@@ -265,6 +200,7 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
+            $child['highest_track'] = getTrack($child); // update track based off tests
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);

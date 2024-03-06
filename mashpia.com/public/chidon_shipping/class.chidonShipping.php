@@ -815,7 +815,7 @@ class ChidonShipping
         ];
 
         foreach ($rows as $row) {
-            $highest_track = $this->getAwardTrackByTests($row);
+            $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
             if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
 
@@ -836,7 +836,7 @@ class ChidonShipping
         return $info;
     }
 
-    public function getAwardTrackByTests($row) {
+    public function getTrackByTests($row) {
         $ct = new ChidonTests();
         $types = $ct->getTypes();
         $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
