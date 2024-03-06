@@ -56,7 +56,6 @@ $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
         join classes c on c.class_id = u.class_id 
-        left join thumbs t on u.user_photo_id = t.file_id 
         where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") 
         and c.class_grade = '8'";
 $result = mysql_query( $sql );
@@ -69,8 +68,10 @@ foreach ( $info as $id => $children ) {
     foreach ($children as $child) {
         $img_fallbacks = [
             ['from_db' => false, 'val' => $child['khk_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['khk_photo'])],
+            ['from_db' => false, 'val' => $child['chidon_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
             ['from_db' => false, 'val' => $child['mobile_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
-            ['from_db' => false, 'val' => $child['thumb'],         'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
+            ['from_db' => false, 'val' => $child['chidon_pic_5782'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5782'])],
+            ['from_db' => false, 'val' => $child['chidon_pic_5781'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5781'])],
             ['from_db' => true,  'val' => $child['user_photo_id']]
         ];
         // filter blank/invalid values

@@ -118,7 +118,6 @@ $info = [];
 $sql = "select * from th_chidon tc 
         join th_chidon_info tci using (user_id, year) 
         join users u using (user_id) 
-        left join thumbs t on u.user_photo_id = t.file_id 
         where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") 
         and highest_track = 'iyun'";
 $result = mysql_query( $sql );
@@ -132,7 +131,8 @@ foreach ( $info as $id => $children ) {
         $img_fallbacks = [
             ['from_db' => false, 'val' => $child['chidon_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
             ['from_db' => false, 'val' => $child['mobile_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
-            ['from_db' => false, 'val' => $child['thumb'],         'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
+            ['from_db' => false, 'val' => $child['chidon_pic_5782'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5782'])],
+            ['from_db' => false, 'val' => $child['chidon_pic_5781'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5781'])],
             ['from_db' => true,  'val' => $child['user_photo_id']]
         ];
         // filter blank/invalid values

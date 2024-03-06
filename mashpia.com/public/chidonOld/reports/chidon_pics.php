@@ -17,7 +17,6 @@ $sql = "select * from th_chidon tc
         join users u using (user_id) 
         join schools s on u.school_id = s.school_id 
         join classes c on c.class_id = u.class_id 
-        left join thumbs t on u.user_photo_id = t.file_id 
         where year = " . $year . " 
         and date_paid > 0 
         and tc.school_id in (" . implode(',', array_keys($schools)) . ")";
@@ -110,12 +109,12 @@ $imgs = []; // array for keeping track of all pictures that are showing up
       foreach ($children as $child) {
           $grade = $child['class_grade'] . ($child['class_sub'] ? '-' . $child['class_sub'] : '');
           $img_fallbacks = [
-              ['val' => $child['khk_photo'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['khk_photo'])],
-              ['val' => $child['chidon_photo'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
-              ['val' => $child['mobile_pic'], 'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
-              ['val' => $child['thumb'], 'url' => 'https://mashpia.com/mobile/reg/thumbs/' . custom_urlencode($child['thumb'])],
-              ['val' => $child['user_photo_id'], 'url' => 'https://mashpia.com/file_view.php?id=' . $child['user_photo_id']],
-              ['val' => true, 'url' => 'https://mashpia.com/mobile/reg/img/addphoto.png']
+              ['from_db' => false, 'val' => $child['khk_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['khk_photo'])],
+              ['from_db' => false, 'val' => $child['chidon_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
+              ['from_db' => false, 'val' => $child['mobile_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
+              ['from_db' => false, 'val' => $child['chidon_pic_5782'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5782'])],
+              ['from_db' => false, 'val' => $child['chidon_pic_5781'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5781'])],
+              ['from_db' => true,  'val' => $child['user_photo_id']]
           ];
           $img = null;
           // find first valid image
