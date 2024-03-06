@@ -403,7 +403,10 @@ class ChidonTests
 
         $cumulative = [];
         foreach ($types as $type => $desc) {
-            $cumulative[$type] = round(($cumulative_scores[$type] / ($questions[$type] * $test_num)) * 100);
+            if ($cumulative_scores[$type] > 0)
+                $cumulative[$type] = round(($cumulative_scores[$type] / ($questions[$type] * $test_num)) * 100);
+            else
+                $cumulative[$type] = 0;
         }
 
         $iyun_avg = 90;
