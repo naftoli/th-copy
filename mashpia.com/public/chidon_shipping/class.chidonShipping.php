@@ -836,38 +836,6 @@ class ChidonShipping
         return $info;
     }
 
-    public function getTrackByTests($row) {
-        $ct = new ChidonTests();
-        $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
-        $ct->setScores();
-        $ct->calculateMarks();
-        $marks = $ct->getMarks();
-        if (! isset($marks[$row['th_chidon_id']])) return '';
-        $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
-
-        $types = $ct->getTypes();
-        $highest_track = empty($ht) ? false : strtolower($types[$ht]);
-        $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? strtolower($types[$row['reward_type']]) : false;
-        $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest award passed' ? strtolower($types[$row['award_type']]) : false;
-
-        // find a way of comparing them
-        $indexes = array_keys($ct->getTypes());
-        $key1 = array_search($highest_track, $indexes);
-        $key2 = array_search($highest_track2, $indexes);
-        $key3 = array_search($highest_track3, $indexes);
-
-        // find out which one is highest
-        if ($key2 && $key3) {
-            $highest_track = $key2 > $key1 ? $key3 > $key2 ? $highest_track3 : $highest_track2 : $highest_track;
-        } else if ($key2) {
-            $highest_track = $key2 > $key1 ? $highest_track2 : $highest_track;
-        } else if ($key3) {
-            $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
-        }
-
-        return $highest_track ?? '';
-    }
-
     /**
      * @param $child
      * @return string
@@ -927,6 +895,38 @@ class ChidonShipping
             }
         }
         return $award;
+    }
+
+    public function getTrackByTests($row) {
+        $ct = new ChidonTests();
+        $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
+        $ct->setScores();
+        $ct->calculateMarks();
+        $marks = $ct->getMarks();
+        if (! isset($marks[$row['th_chidon_id']])) return '';
+        $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
+
+        $types = $ct->getTypes();
+        $highest_track = empty($ht) ? false : strtolower($types[$ht]);
+        $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? strtolower($types[$row['reward_type']]) : false;
+        $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest award passed' ? strtolower($types[$row['award_type']]) : false;
+
+        // find a way of comparing them
+        $indexes = array_keys($ct->getTypes());
+        $key1 = array_search($highest_track, $indexes);
+        $key2 = array_search($highest_track2, $indexes);
+        $key3 = array_search($highest_track3, $indexes);
+
+        // find out which one is highest
+        if ($key2 && $key3) {
+            $highest_track = $key2 > $key1 ? $key3 > $key2 ? $highest_track3 : $highest_track2 : $highest_track;
+        } else if ($key2) {
+            $highest_track = $key2 > $key1 ? $highest_track2 : $highest_track;
+        } else if ($key3) {
+            $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
+        }
+
+        return $highest_track ?? '';
     }
 
     public function addKHK($child) {
