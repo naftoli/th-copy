@@ -66,14 +66,15 @@ class ChidonTests
     public function figureOutTestNum() {
         $testNum = 0;
         $today = new DateTime();
-        foreach ($this->dates as $test => $date) {
+        foreach ($this->dates as $test_num => $date) {
             $start = new DateTime($date[1]);
             $end = new DateTime($date[2]);
             if ($today >= $start && $today <= $end) {
-                $testNum = $test + 1;
+                $testNum = $test_num + 1;
                 break;
             }
         }
+        if ($today > $end) $testNum = $test_num + 1;
         return $testNum;
     }
 
@@ -370,7 +371,7 @@ class ChidonTests
     }
 
     public function calculateCumulative($child, $scores, $test_num = 0) {
-        $test_num = $test_num ?? $this->figureOutTestNum();
+        $test_num = $test_num > 0 ? $test_num : $this->figureOutTestNum();
         $num_questions = $this->getTestQuestions();
         $types = $this->getTypes();
 
