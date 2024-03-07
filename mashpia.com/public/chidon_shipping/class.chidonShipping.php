@@ -882,7 +882,6 @@ class ChidonShipping
                 }
             }
         }
-
         return $award;
     }
 
