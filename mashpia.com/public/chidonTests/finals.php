@@ -222,6 +222,7 @@ if (isset($_POST['grade'])) {
                 for ($i = 1; $i <= 4; $i++) {
                     // find out which track the child can go up to
                     $key = array_search(ucwords($child['highest_track']), $tracks);
+                    if ($child['user_serial'] == 7774778) echo "key: $key";
                     $key++;
                     // create the proper input box
                     $track = 'track_' . $i;
