@@ -1,7 +1,9 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school');
 require('header.php');
-require_once('file_save.php');
 $ui_type = 'school';
 require_once('admin_ui.php');
 
@@ -19,7 +21,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 $class_result = mq("SELECT class_id, class_grade, class_sub FROM classes WHERE school_id = $school_id ORDER BY class_grade, class_sub");
-$usersSql = "select u.user_id, u.first, u.last, c.class_grade, c.class_sub, c.class_teacher, tc.chidon_photo,   
+$usersSql = "select u.user_id, u.first, u.last, c.class_grade, c.class_sub, c.class_teacher, tc.chidon_photo   
             from users u 
             join classes c using (class_id) 
             join th_chidon tc using (user_id) 
