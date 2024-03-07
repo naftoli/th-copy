@@ -718,6 +718,7 @@ class ChidonShipping
             switch ($award) {
                 case 'plaque':
                 case 'medal':
+                    echo "Checking for $award<br />";
                     $info += $this->getAwardsByTests($gender, $school, $award);
                     break;
                 case 'certificate':
