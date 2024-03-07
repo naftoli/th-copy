@@ -90,10 +90,57 @@ foreach ($list_of_schools as $schoolID) {
         if (!isset($info[$cat])) $info[$cat] = [];
         $listOfItems = array_keys($itemsPerCat);
         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        if ($cat == 'gear') $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
-        else $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
+        $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
+//        if ($cat == 'gear') $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
+//        else $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
     }
 }
+
+if ($ship_to != 'all') {
+    // extract user ids from info
+    $user_ids = [];
+    foreach ($info as $cat => $details) {
+        foreach ($details as $user => $items) {
+            if (!in_array($user, $user_ids)) $user_ids[] = $user;
+        }
+    }
+
+    // get admins based on user ids
+    $stmt = $MASHPIA_DB->query("
+        SELECT * FROM admins WHERE admin_id in (
+            SELECT admin_id FROM admin_auths WHERE id in (" . implode(",", $user_ids) . ")
+        )
+    ");
+    $rows = $stmt->fetchAll();
+
+    // create mapping between user ids and admin ids
+    // as well as mappings between admin id and row info
+    $admins = [];
+    $admin_users = [];
+    foreach ($rows as $row) {
+        $admins[$row['admin_id']] = $row;
+        $admin_users[$row['id']] = $row['admin_id'];
+    }
+
+    if ($ship_to == 'domestic') {
+        // remove all users that are not in the USA
+        foreach ($info as $cat) {
+            foreach ($cat as $user => $items) {
+                $admin_info = $admins[$admin_users[$user]];
+                if ($admin_info['admin_country'] != 'USA') unset($info[$cat][$user]);
+            }
+        }
+    } else if ($ship_to == 'intl') {
+        // remove all users that are in the USA
+        foreach ($info as $cat) {
+            foreach ($cat as $user => $items) {
+                $admin_info = $admins[$admin_users[$user]];
+                if ($admin_info['admin_country'] == 'USA') unset($info[$cat][$user]);
+            }
+        }
+    }
+}
+
 $info['status'] = $cs->getStatus();
 
 // find all unique tables to fetch from
