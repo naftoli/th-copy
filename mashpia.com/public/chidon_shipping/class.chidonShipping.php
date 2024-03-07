@@ -752,6 +752,7 @@ class ChidonShipping
         foreach ($rows as $row) {
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
+            if (empty($award)) continue;
 
             // check for khk plaque
             if ($this->addKHK($row)) $award .= ' / khk plaque';
@@ -803,6 +804,7 @@ class ChidonShipping
         foreach ($rows as $row) {
             $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
+            if (empty($award)) continue;
 
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
