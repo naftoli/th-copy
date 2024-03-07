@@ -124,7 +124,7 @@ function showIyun($child) {
     $ct->setScores();
     $scores = $ct->getScores();
     $cumulative_track = $ct->calculateCumulative($child, $scores);
-    return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun';
+    return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun' ? true : false;
 }
 
 $info = [];
@@ -132,6 +132,7 @@ foreach ($schools as $id => $school) {
     $ct->setStudents($id);
     $info[$id] = $ct->getStudents();
 }
+
 // initialize all tests to not be disabled
 $tooLate = false;
 // disable marking after certain dates for bc's
@@ -232,8 +233,11 @@ if (isset($_POST['grade'])) {
                     if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                     else echo "value='0'";
                     // for iyun we also look at cumulative marks
-                    if ($i == 4 && (!showIyun($child) || $tooLate)) echo " disabled";
-                    else if ($i > $key || $tooLate) echo " disabled";
+                    if ($i == 4) {
+                      if ($tooLate || !showIyun($child)) echo " disabled";
+                    } else if ($i > $key) {
+                      if ($tooLate) echo " disabled";
+                    }
                     echo " /></td>";
                 }
                 // add khk_final
