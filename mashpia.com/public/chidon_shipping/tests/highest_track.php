@@ -10,6 +10,19 @@ $year = GlobalSettings::getChidonYear();
 require_once '../class.chidonShipping.php';
 $cs = new ChidonShipping();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+$ct = new ChidonTests();
+
+function showIyun($child) {
+    global $ct;
+    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+    $ct->setScores();
+    $scores = $ct->getScores();
+    $cumulative_track = $ct->calculateCumulative($child, $scores);
+    return $cumulative_track;
+//    return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun';
+}
+
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
         where tc.year = $year 
@@ -17,4 +30,6 @@ $sql = "select * from th_chidon tc
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 
-echo $cs->getTrackByTests($row);
+//echo $cs->getTrackByTests($row);
+
+echo showIyun($row);

@@ -124,6 +124,9 @@ function showIyun($child) {
     $ct->setScores();
     $scores = $ct->getScores();
     $cumulative_track = $ct->calculateCumulative($child, $scores);
+    if ($child['user_id'] == 23136) {
+      echo "Cumulative Score for " . $child['user_id'] . ": " . $cumulative_track; exit;
+    }
     return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun';
 }
 
