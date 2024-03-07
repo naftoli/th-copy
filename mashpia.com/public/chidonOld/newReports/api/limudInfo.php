@@ -103,7 +103,7 @@ foreach ($students as $student) {
         'havonah'   => $avgs['expert'],
         'iyun'      => $avgs['genius'],
         'non_cumulative_track_passed'   => $track_passed ? $types[$track_passed] : '',
-        'cumulative_track_passed'   => calculateCumulative($student['th_chidon_id']),
+        'cumulative_track_passed'   => calculateCumulative($student),
         'time_committed'    => $learning_time[$student['test_type']] * $days,
         'time_learned'  => $learned,
         'dropped_out'   => intval($student['dropped_out']),
@@ -158,7 +158,7 @@ function calculateAvgs($id) {
     return $avgs;
 }
 
-function calculateCumulative($id) {
+function calculateCumulative($child) {
     global $ct, $scores, $test_num;
-    return $ct->calculateCumulative($id, $scores, $test_num);
+    return $ct->calculateCumulative($child, $scores, $test_num);
 }
