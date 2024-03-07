@@ -727,7 +727,7 @@ class ChidonShipping
                     break;
             }
         }
-
+        echo "<pre>"; print_r($info); echo "</pre>"; exit;
         return $info;
     }
 
