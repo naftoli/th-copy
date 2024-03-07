@@ -53,7 +53,7 @@ function custom_urlencode($url) {
 function passedKHK($child) {
     global $khk_marks;
     if (isset($khk_marks[$child['th_chidon_id']])) {
-        $user_marks = $khk_marks[$child]['th_chidon_id'];
+        $user_marks = $khk_marks[$child['th_chidon_id']];
         $total = 0;
         foreach ($user_marks as $mark) $total += intval($mark);
         $total /= 4;
