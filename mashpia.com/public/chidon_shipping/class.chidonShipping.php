@@ -750,6 +750,13 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
+        $limits = [
+            'yesod' => 'certificate',
+            'yediah' => 'plaque',
+            'havonah' => 'medal',
+            'iyun' => 'blue trophy',
+        ];
+
         $awards = [
             'yesod' => 'certificate',
             'yediah' => 'plaque',
@@ -759,13 +766,10 @@ class ChidonShipping
 
         $cat = 'awards';
         foreach ($rows as $row) {
-//            if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
-//            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+            $awardTrack = strtolower($this->getAwardTrack($row));
+            if (empty($awardTrack) || (!empty($toAward) && strpos($limits[$awardTrack], $toAward) === false)) continue;
 
-            $awardTrack = $this->getAwardTrack($row);
-            $award = $awardTrack ? $awards[$awardTrack] : '';
-            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
-
+            $award = $awards[$awardTrack];
             // check for khk plaque
             if ($this->addKHK($row)) $award .= ' / khk plaque';
             $award_info = explode(' / ', $award);
@@ -805,6 +809,13 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
+        $limits = [
+            'yesod' => 'certificate',
+            'yediah' => 'plaque',
+            'havonah' => 'medal',
+            'iyun' => 'blue trophy',
+        ];
+
         $awards = [
             'yesod' => 'certificate',
             'yediah' => 'plaque',
@@ -814,9 +825,9 @@ class ChidonShipping
 
         foreach ($rows as $row) {
             $highest_track = $this->getTrackByTests($row);
-            $award = $highest_track ? $awards[$highest_track] : '';
-            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
+            if (empty($highest_track) || (!empty($toAward) && strpos($limits[$highest_track], $toAward) === false)) continue;
 
+            $award = $awards[$highest_track];
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
                 $id = $this->getItemID('awards', $item);
