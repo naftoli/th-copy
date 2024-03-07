@@ -718,7 +718,9 @@ class ChidonShipping
             switch ($award) {
                 case 'plaque':
                 case 'medal':
-                    $info += $this->getAwardsByTests($gender, $school, $award);
+                    $result = $this->getAwardsByTests($gender, $school, $award);
+                    echo "<pre>"; print_r($result); echo "</pre>";
+                    $info += $result;
                     break;
                 case 'certificate':
                 case 'blue trophy':
@@ -727,7 +729,7 @@ class ChidonShipping
                     break;
             }
         }
-        echo "<pre>"; print_r($info); echo "</pre>"; exit;
+
         return $info;
     }
 
