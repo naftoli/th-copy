@@ -211,7 +211,10 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            $child['highest_track'] = getTrack($child); // update track based off tests
+            $highest = getTrack($child); // track based off tests
+            $idx1 = array_search(ucwords($child['highest_track']), $tracks);
+            $idx2 = array_search(ucwords($highest), $tracks);
+            if ($idx2 > $idx1) $child['highest_track'] = $highest;
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
@@ -222,7 +225,6 @@ if (isset($_POST['grade'])) {
                 for ($i = 1; $i <= 4; $i++) {
                     // find out which track the child can go up to
                     $key = array_search(ucwords($child['highest_track']), $tracks);
-                    if ($child['user_serial'] == 7774778) echo "key: $key";
                     $key++;
                     // create the proper input box
                     $track = 'track_' . $i;
