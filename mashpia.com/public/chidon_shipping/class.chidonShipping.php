@@ -738,9 +738,9 @@ class ChidonShipping
                 join th_chidon tc using (user_id, year) 
                 join users u using (user_id) 
                 where tcf.year = :year 
-                    AND (level_1 > 0 OR level_2 > 0
-                    OR level_3 > 0
-                    OR level_4 > 0
+                    AND (track_1 > 0 OR track_2 > 0
+                    OR track_3 > 0
+                    OR track_4 > 0
                     OR tcf.khk > 0)";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F";
@@ -764,27 +764,25 @@ class ChidonShipping
 
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
-            if (!empty($toAward) && strpos($award, $toAward) === false) continue;
+            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
 
-            if ($award) {
-                // check for khk plaque
-                if ($this->addKHK($row)) $award .= ' / khk plaque';
-                $award_info = explode(' / ', $award);
-                foreach ($award_info as $item) {
-                    $id = $this->getItemID($cat, $item);
-                    $info[$row['user_id']][] = [
-                        'item' => $item,
-                        'size' => '',
-                        'color' => '',
-                        'name' => '',
-                        'id' => $id,
-                        'cat' => $cat,
-                        'name' => $item == 'medal' ? '' : ($row['first_he'] . ' ' . $row['last_he'])
-                    ];
-                }
+            // check for khk plaque
+            if ($this->addKHK($row)) $award .= ' / khk plaque';
+            $award_info = explode(' / ', $award);
+            foreach ($award_info as $item) {
+                $id = $this->getItemID($cat, $item);
+                $info[$row['user_id']][] = [
+                    'item' => $item,
+                    'size' => '',
+                    'color' => '',
+                    'name' => '',
+                    'id' => $id,
+                    'cat' => $cat,
+                    'name' => $item == 'medal' ? '' : ($row['first_he'] . ' ' . $row['last_he'])
+                ];
             }
         }
-    //        echo "<pre>"; print_r($info); echo "</pre>";
+
         return $info;
     }
 
@@ -798,7 +796,7 @@ class ChidonShipping
                     JOIN
                 users u USING (user_id)
             WHERE
-                tc.year = :year AND tc.date_registered > 0 
+                tc.year = :year AND tc.date_paid > 0 
         ";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F";
@@ -817,6 +815,9 @@ class ChidonShipping
         foreach ($rows as $row) {
             $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
+            echo "award: $award<br />";
+            echo "toAward: $toAward<br />";
+            continue;
             if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
 
             $award_info = explode(' / ', $award);
@@ -880,7 +881,7 @@ class ChidonShipping
                 // go down from key to find where the child is holding
                 $score = 0;
                 for ($i = 1; $i <= $key; $i++) {
-                    $level = 'level_' . $i;
+                    $level = 'track_' . $i;
                     if (isset($child[$level])) {
                         $score += $child[$level];
                     }
@@ -894,6 +895,7 @@ class ChidonShipping
                 }
             }
         }
+
         return $award;
     }
 

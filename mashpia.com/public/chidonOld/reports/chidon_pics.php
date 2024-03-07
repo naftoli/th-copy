@@ -90,10 +90,16 @@ $imgs = []; // array for keeping track of all pictures that are showing up
   <button id="downloadPics">Download Pictures</button>
 </a>
 <a href="chidon_pics_iyun.php" target="__blank">
-  <button id="downloadPicsIyun">Download Iyun Only Pictures</button>
+  <button id="downloadPicsIyun">Download Iyun Only Pictures (Based on Finals)</button>
+</a>
+<a href="chidon_pics_iyun.php?type=tests" target="__blank">
+  <button id="downloadPicsIyun">Download Iyun Only Pictures (Based on Eligibility for Finals)</button>
 </a>
 <a href="chidon_pics_khk.php" target="__blank">
-  <button id="downloadPicsIyun">Download KHK Only Pictures</button>
+  <button id="downloadPicsIyun">Download KHK Only Pictures (Based on Finals)</button>
+</a>
+<a href="chidon_pics_khk.php?type=tests" target="__blank">
+  <button id="downloadPicsIyun">Download KHK Only Pictures (Based on Eligibility for Finals)</button>
 </a>
 <?php foreach ($info as $id => $children) : ?>
   <h2><?= $schools[$id] ?></h2>

@@ -159,11 +159,6 @@
       </interpreter>
     </phpInfoCache>
   </component>
-  <component name="PhpProjectServersManager">
-    <servers>
-      <server host="tzivos.local" id="e3543764-70e6-44fe-96e1-8e6e934d3f34" name="local" />
-    </servers>
-  </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="7.2">
     <option name="suggestChangeDefaultLanguageLevel" value="false" />
   </component>

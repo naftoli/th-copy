@@ -58,7 +58,7 @@ function getFinalMarks() {
     return $marks;
 }
 
-function getAward($child) {
+function passsedFinal($child) {
     global $final_marks;
 
     $tracks = [
@@ -112,6 +112,17 @@ function custom_urlencode($url) {
     return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
+function showIyun($child) {
+    global $ct;
+    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+    $ct->setScores();
+    $scores = $ct->getScores();
+    $cumulative_track = $ct->calculateCumulative($child, $scores);
+    return $cumulative_track == 'iyun';
+}
+
+$type = isset($_GET['type']) ? $_GET['type'] : 'finals';
+
 $final_marks = getFinalMarks();
 
 $info = [];
@@ -122,7 +133,11 @@ $sql = "select * from th_chidon tc
         and highest_track = 'iyun'";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    if (getAward($row)) $info[$row['school_id']][] = $row;
+    if ($type == 'finals') {
+        if (passsedFinal($row)) $info[$row['school_id']][] = $row;
+    } else if ($type == 'tests') {
+        if (showIyun($row)) $info[$row['school_id']][] = $row;
+    }
 }
 
 $imgs = []; // array for keeping track of all pictures that are showing up
