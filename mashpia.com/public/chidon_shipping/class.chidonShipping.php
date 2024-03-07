@@ -842,7 +842,7 @@ class ChidonShipping
         $ct = new ChidonTests();
         $types = $ct->getTypes();
 
-        if (!empty($row['award_type']) && $row['award_type'] != 'highest award passed') {
+        if (!empty($row['award_type']) && $row['award_type'] != 'highest final passed') {
             return $types[$row['award_type']];
         }
 
@@ -908,7 +908,7 @@ class ChidonShipping
         $types = $ct->getTypes();
         $highest_track = empty($ht) ? false : strtolower($types[$ht]);
         $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? strtolower($types[$row['reward_type']]) : false;
-        $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest award passed' ? strtolower($types[$row['award_type']]) : false;
+        $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest final passed' ? strtolower($types[$row['award_type']]) : false;
 
         // find a way of comparing them
         $indexes = array_keys($ct->getTypes());
