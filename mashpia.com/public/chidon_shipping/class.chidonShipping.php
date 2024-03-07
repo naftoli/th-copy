@@ -815,9 +815,6 @@ class ChidonShipping
         foreach ($rows as $row) {
             $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
-            echo "award: $award<br />";
-            echo "toAward: $toAward<br />";
-            continue;
             if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
 
             $award_info = explode(' / ', $award);
