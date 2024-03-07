@@ -412,10 +412,10 @@ class ChidonTests
 
         $iyun_avg = 90;
         $avgs = $this->getPassingAvgs($child['user_id']);
-        if ($cumulative['genius'] >= $iyun_avg) return $types['genius'];
-        else if ($cumulative['expert'] >= $avgs['expert']) return $types['expert'];
-        else if ($cumulative['pro'] >= $avgs['pro']) return $types['pro'];
-        else if ($cumulative['maven'] >= $avgs['maven']) return $types['maven'];
+        if ($cumulative['genius'] >= $iyun_avg) return strtolower($types['genius']);
+        else if ($cumulative['expert'] >= $avgs['expert']) return strtolower($types['expert']);
+        else if ($cumulative['pro'] >= $avgs['pro']) return strtolower($types['pro']);
+        else if ($cumulative['maven'] >= $avgs['maven']) return strtolower($types['maven']);
         else return '';
     }
 

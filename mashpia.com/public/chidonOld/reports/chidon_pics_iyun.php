@@ -123,7 +123,6 @@ function showIyun($child) {
     $ct->setScores();
     $scores = $ct->getScores();
     $cumulative_track = $ct->calculateCumulative($child, $scores);
-    echo "Cumulative Track for " . $child['user_id'] . ": " . $cumulative_track . '<br>';
     return $cumulative_track == 'iyun';
 }
 
