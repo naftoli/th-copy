@@ -17,6 +17,7 @@ function showIyun($child) {
     global $ct;
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
+    echo "<pre>"; print_r($ct->getScores()); echo "</pre>";
     $scores = $ct->getScores();
     $cumulative_track = $ct->calculateCumulative($child, $scores);
     return $cumulative_track;
