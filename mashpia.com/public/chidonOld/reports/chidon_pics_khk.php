@@ -52,6 +52,25 @@ function custom_urlencode($url) {
     return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
+function eligibleForKhk($child) {
+    global $khk_marks;
+    if (isset($khk_marks[$child['th_chidon_id']]) && $child['date_paid'] > 0) {
+        $user_marks = $khk_marks[$child]['th_chidon_id'];
+        $total = 0;
+        foreach ($user_marks as $mark) $total += intval($mark);
+        $total /= 4;
+        if ($total >= 70) return true;
+    }
+    return false;
+}
+
+$khk_marks = [];
+$sql = "select * from th_khk_marks";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $khk_marks[$row['th_chidon_id']][$row['test_number']] = $row['mark'];
+}
+
 $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
@@ -60,7 +79,7 @@ $sql = "select * from th_chidon tc
         and c.class_grade = '8'";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
-    if (KHK::getKHKEligibility([$row['user_id']])[0][$row['user_id']]) $info[$row['school_id']][] = $row;
+    if (eligibleForKhk($row)) $info[$row['school_id']][] = $row;
 }
 
 $imgs = []; // array for keeping track of all pictures that are showing up
