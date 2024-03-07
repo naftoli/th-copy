@@ -143,6 +143,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         if (showIyun($row)) $info[$row['school_id']][] = $row;
     }
 }
+echo "<pre>"; print_r($info); echo "</pre>";
 
 $imgs = []; // array for keeping track of all pictures that are showing up
 foreach ( $info as $id => $children ) {
