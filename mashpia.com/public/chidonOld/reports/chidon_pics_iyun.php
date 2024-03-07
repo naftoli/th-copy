@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors',1);
+ini_set('error_reporting' , E_ALL);
+
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -9,6 +11,9 @@ $schools = $as->getSchools();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+$ct = new ChidonTests();
 
 function createZip($files, $filename) {
     $image_extensions = explode(',', "jpg,jpeg,jpe,jif,jfif,jfi,png,gif,webp,tiff,tif,raw,arw,cr2,nrw,k25,bmp,dib,heif,heic,jp2,j2k,jpf,jpx,jpm,mj2,svg,svgz");
@@ -118,6 +123,7 @@ function showIyun($child) {
     $ct->setScores();
     $scores = $ct->getScores();
     $cumulative_track = $ct->calculateCumulative($child, $scores);
+    echo "Cumulative Track for " . $child['user_id'] . ": " . $cumulative_track . '<br>';
     return $cumulative_track == 'iyun';
 }
 
@@ -129,12 +135,11 @@ $info = [];
 $sql = "select * from th_chidon tc 
         join th_chidon_info tci using (user_id, year) 
         join users u using (user_id) 
-        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") 
-        and highest_track = 'iyun'";
+        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") ";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     if ($type == 'finals') {
-        if (passsedFinal($row)) $info[$row['school_id']][] = $row;
+        if ($row['highest_track'] == 'iyun' && passsedFinal($row)) $info[$row['school_id']][] = $row;
     } else if ($type == 'tests') {
         if (showIyun($row)) $info[$row['school_id']][] = $row;
     }

@@ -80,6 +80,11 @@ $imgs = []; // array for keeping track of all pictures that are showing up
       margin-right: auto;
       display: block;
     }
+
+    button {
+      font-size: 14px;
+      padding: 10px;
+    }
   </style>
 </HEAD>
 
@@ -89,17 +94,21 @@ $imgs = []; // array for keeping track of all pictures that are showing up
 <a href="chidon_pics_download.php" target="__blank">
   <button id="downloadPics">Download Pictures</button>
 </a>
+<br />
 <a href="chidon_pics_iyun.php" target="__blank">
-  <button id="downloadPicsIyun">Download Iyun Only Pictures (Based on Finals)</button>
+  <button id="downloadPicsIyun">Download Iyun Only Pictures</button>
 </a>
+<br />
 <a href="chidon_pics_iyun.php?type=tests" target="__blank">
-  <button id="downloadPicsIyun">Download Iyun Only Pictures (Based on Eligibility for Finals)</button>
+  <button id="downloadPicsIyun">Download Iyun Only Pictures (Eligibility)</button>
 </a>
+<br />
 <a href="chidon_pics_khk.php" target="__blank">
-  <button id="downloadPicsIyun">Download KHK Only Pictures (Based on Finals)</button>
+  <button id="downloadPicsIyun">Download KHK Only Pictures</button>
 </a>
+<br />
 <a href="chidon_pics_khk.php?type=tests" target="__blank">
-  <button id="downloadPicsIyun">Download KHK Only Pictures (Based on Eligibility for Finals)</button>
+  <button id="downloadPicsIyun">Download KHK Only Pictures (Eligibility)</button>
 </a>
 <?php foreach ($info as $id => $children) : ?>
   <h2><?= $schools[$id] ?></h2>
