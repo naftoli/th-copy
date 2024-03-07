@@ -123,8 +123,10 @@ function showIyun($child) {
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
     $scores = $ct->getScores();
+    // first make sure that they got at least 80 on all tests
+    $highest = $ct->getHighestTrack($child, $scores, false, 3, false, true);
     $cumulative_track = $ct->calculateCumulative($child, $scores);
-    return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun' ? true : false;
+    return $highest == 'iyun' || $cumulative_track == 'iyun';
 }
 
 $info = [];

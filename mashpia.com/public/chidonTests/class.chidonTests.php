@@ -638,7 +638,7 @@ class ChidonTests
         return $markInfo;
     }
 
-    public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3, $needAvg = false) {
+    public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3, $needAvg = false, $forIyun = false) {
         $highest = $forEligibility ? 'maven' : '';
         $avgs = $this->getPassingAvgs($user_id);
 
@@ -660,7 +660,9 @@ class ChidonTests
         $actualAvg = 0;
         foreach ($marksByTrack as $track => $total) {
             $avg = round($total / $numTests);
-            if ($avg >= $avgs[$track]) {
+            $avgNeeded = $avgs[$track];
+            if ($forIyun) $avgNeeded = $avgs['genius'];
+            if ($avg >= $avgNeeded) {
                 $highest = $track;
                 $actualAvg = $avg;
             }
