@@ -90,7 +90,7 @@ function passedKhk($child)
     global $marks;
 
     if (isset($marks[$child['th_chidon_id']]) && $child['date_paid'] > 0) {
-        $user_marks = $marks[$child]['th_chidon_id'];
+        $user_marks = $marks[$child['th_chidon_id']];
         $total = 0;
         foreach ($user_marks as $mark) $total += intval($mark);
         $total /= 4;
