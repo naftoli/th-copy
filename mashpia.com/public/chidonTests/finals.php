@@ -232,9 +232,6 @@ if (isset($_POST['grade'])) {
                     if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                     else echo "value='0'";
                     // for iyun we also look at cumulative marks
-                    if ($child['user_id'] == 23136) { // for testing
-                        echo "checking iyun for " . $child['user_id'] . " with highest track " . $child['highest_track'] . "<br />";
-                    }
                     if ($i == 4 && (!showIyun($child) || $tooLate)) echo " disabled";
                     else if ($i > $key || $tooLate) echo " disabled";
                     echo " /></td>";
