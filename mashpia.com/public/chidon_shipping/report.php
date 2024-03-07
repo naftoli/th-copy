@@ -97,46 +97,35 @@ foreach ($list_of_schools as $schoolID) {
 }
 
 if ($ship_to != 'all') {
-    // extract user ids from info
-    $user_ids = [];
-    foreach ($info as $cat => $details) {
-        foreach ($details as $user => $items) {
-            if (!in_array($user, $user_ids)) $user_ids[] = $user;
-        }
-    }
-
-    // get admins based on user ids
-    $stmt = $MASHPIA_DB->query("
-        SELECT * FROM admins WHERE admin_id in (
-            SELECT admin_id FROM admin_auths WHERE id in (" . implode(",", $user_ids) . ")
-        )
-    ");
-    $rows = $stmt->fetchAll();
-
-    // create mapping between user ids and admin ids
-    // as well as mappings between admin id and row info
-    $admins = [];
-    $admin_users = [];
-    foreach ($rows as $row) {
-        $admins[$row['admin_id']] = $row;
-        $admin_users[$row['id']] = $row['admin_id'];
-    }
-
+    // get users based on shipping destination
     if ($ship_to == 'domestic') {
-        // remove all users that are not in the USA
-        foreach ($info as $cat) {
-            foreach ($cat as $user => $items) {
-                $admin_info = $admins[$admin_users[$user]];
-                if ($admin_info['admin_country'] != 'USA') unset($info[$cat][$user]);
-            }
-        }
+        $stmt = $MASHPIA_DB->query("
+            SELECT aa.id FROM admin_auths aa 
+            JOIN users u on u.user_id = aa.id 
+            JOIN admins a on a.admin_id = aa.admin_id 
+            WHERE u.user_registered > 0 
+            AND a.admin_country in ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
+        ");
     } else if ($ship_to == 'intl') {
-        // remove all users that are in the USA
-        foreach ($info as $cat) {
-            foreach ($cat as $user => $items) {
-                $admin_info = $admins[$admin_users[$user]];
-                if ($admin_info['admin_country'] == 'USA') unset($info[$cat][$user]);
-            }
+        $stmt = $MASHPIA_DB->query("
+            SELECT aa.id FROM admin_auths aa 
+            JOIN users u on u.user_id = aa.id 
+            JOIN admins a on a.admin_id = aa.admin_id 
+            WHERE u.user_registered > 0 
+            AND a.admin_country not in ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
+        ");
+    }
+
+    $rows = $stmt->fetchAll();
+    $user_ids = [];
+    foreach ($rows as $row) {
+        $user_ids[] = $row['id'];
+    }
+
+    // remove all users that are not in the user_ids array
+    foreach ($info as $cat) {
+        foreach ($cat as $user => $items) {
+            if (! in_array($user, $user_ids)) unset($info[$cat][$user]);
         }
     }
 }
