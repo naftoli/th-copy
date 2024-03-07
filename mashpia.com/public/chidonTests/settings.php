@@ -320,7 +320,7 @@ if (count($schools) == 1) {
           return false
         }
         if (!info.get('tests') && !info.get('finals')) {
-          alert('Please select what you are applying the level to')
+          alert('Please select what you are applying the level to.')
           return false
         }
         break

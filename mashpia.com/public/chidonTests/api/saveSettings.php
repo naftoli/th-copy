@@ -17,6 +17,8 @@ if (!$school_id) {
     exit;
 }
 
+$super_admin = $admin_user['auth'] == 'super';
+
 if ($user_id > 0) {
     $school_id = 0;
     $class_id = 0;
@@ -24,6 +26,7 @@ if ($user_id > 0) {
     $school_id = 0;
 }
 
+$error_msg = '';
 $success = true;
 $elem = $_POST['elem'];
 switch ($elem) {
@@ -44,6 +47,11 @@ switch ($elem) {
         ");
         $MASHPIA_DB->beginTransaction();
         foreach ($tracks as $track) {
+            if ($super_admin && $track == 'genius' && $avg < 80) {
+                $success = false;
+                $error_msg = 'Iyun test average must be at least 80';
+                break;
+            }
             $res = $stmt->execute([
                 'school' => $school_id,
                 'class' => $class_id,
@@ -75,6 +83,11 @@ switch ($elem) {
         ");
         $MASHPIA_DB->beginTransaction();
         foreach ($tracks as $track) {
+            if ($super_admin && $track == 'genius' && $avg < 80) {
+                $success = false;
+                $error_msg = 'Iyun test average must be at least 80';
+                break;
+            }
             $res = $stmt->execute([
                 'school' => $school_id,
                 'class' => $class_id,
@@ -128,5 +141,5 @@ if ($success) {
     echo json_encode(['success' => true]);
 } else {
     $MASHPIA_DB->rollBack();
-    echo json_encode(['error' => 'Failed to save settings']);
+    echo json_encode(['error' => $error_msg ?? 'Failed to save settings']);
 }
