@@ -816,10 +816,6 @@ class ChidonShipping
             $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
             if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
-            if ($row['user_id'] == 64123) {
-                echo $row['user_id'] . ' - ' . $highest_track . "<br />";
-                exit;
-            }
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
                 $id = $this->getItemID('awards', $item);
