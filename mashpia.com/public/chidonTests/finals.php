@@ -233,7 +233,6 @@ if (isset($_POST['grade'])) {
                     else if ($i > $key || $tooLate) echo " disabled";
                     echo " /></td>";
                 }
-                $level = $ct->getLevel($id, 'finals');
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
