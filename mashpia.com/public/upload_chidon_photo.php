@@ -7,20 +7,75 @@ $ui_type = 'school';
 require_once('admin_ui.php');
 $school_name = "";
 
+require_once $_SERVER['DOCUMENT_ROOT'] . 'class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
+function addPhoto($file) {
+    // check for errors
+    if ($file['error'] > 0) {
+        return false;
+    }
+
+    // check for file type
+    switch ($file['type']) {
+        case 'image/jpeg':
+        case 'image/png':
+        case 'image/gif':
+            break;
+        default:
+            $file['msg'] = "Only JPG, PNG, and GIF files are allowed.";
+            return false;
+    }
+
+    $file_name = $file['name'];
+    $target_dir = "/mobile/reg/img/";
+    $target_file = $target_dir . basename($file_name);
+
+    if (move_uploaded_file($file["tmp_name"], $target_file)) {
+        // Resize the image
+        switch ($file['type']) {
+            case 'image/jpeg':
+                $image = imagecreatefromjpeg($target_file);
+                break;
+            case 'image/png':
+                $image = imagecreatefrompng($target_file);
+                break;
+            case 'image/gif':
+                $image = imagecreatefromgif($target_file);
+                break;
+        }
+        $resized_image = imagescale($image, 1080, 1080);
+
+        // Set DPI metadata (e.g., 300 DPI)
+        $dpi = 300;
+        imagesetresolution($resized_image, $dpi, $dpi);
+
+        // overwrite the original file
+        if (imagepng($resized_image, $target_file)) {
+            return $target_file;
+        }
+    }
+
+    return false;
+}
+
 if (isset($_POST['action'])) {
     $school_id = $_POST['school_id'];
     $user_id = $_POST['user_id'];
 
     if (isset($_FILES['user_photo']))  {
         $message = "Could not update system with new picture.";
-        if ($pic = addFileNew($_FILES['user_photo'])) {
-            $sql = "update users set chidon_pic_5782 = \"" . $pic . "\" where user_id = " . $user_id;
+        if ($pic = addPhoto($_FILES['user_photo'])) {
+//        if ($pic = addFileNew($_FILES['user_photo'])) {
+            $sql = "update th_chidon set chidon_photo = \"" . $pic . "\" where user_id = " . $user_id . " and year = " . $year;
             if (mysql_query($sql)) {
                 $str = "Location: http://mashpia.com/upload_chidon_photos.php?school_id=" . $school_id;
                 if ($_POST['class_id'] > 0) $str .= "&class_id=" . $_POST['class_id'];
                 header($str);
                 exit;
             }
+        } else if (isset($_FILES['user_photo']['msg'])) {
+            $message = $_FILES['user_photo']['msg'];
         }
     }
 }
@@ -88,8 +143,8 @@ $user = mysql_fetch_assoc($query);
                     </TD>
 
                     <TD>
-                        <? if (! is_null($user['chidon_pic_5782'])) : ?>
-                            <img src="/mobile/reg/<?= $user['chidon_pic_5782'] ?>" height="80" />
+                        <? if (! is_null($user['chidon_photo'])) : ?>
+                            <img src="/mobile/reg/<?= $user['chidon_photo'] ?>" height="80" />
                         <? endif; ?>
                     </TD>
                 </TR>

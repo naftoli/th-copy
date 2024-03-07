@@ -15,16 +15,19 @@ if (isset($_GET['missing'])) {
     $missing = 0;
 }
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
+
 $class_result = mq("SELECT class_id, class_grade, class_sub FROM classes WHERE school_id = $school_id ORDER BY class_grade, class_sub");
-$usersSql = "select u.user_id, u.first, u.last, u.chidon_pic_5782, c.class_grade, c.class_sub, c.class_teacher 
+$usersSql = "select u.user_id, u.first, u.last, c.class_grade, c.class_sub, c.class_teacher, tc.chidon_photo,   
             from users u 
             join classes c using (class_id) 
             join th_chidon tc using (user_id) 
-            where tc.year = 5782 
+            where tc.year = $year  
             and tc.date_paid > 0 
             and u.school_id = " . $school_id;
 if ($class_id != -1) $usersSql .= " and class_id = " . $class_id;
-if ($missing) $usersSql .= " and u.chidon_pic_5782 is null";
+if ($missing) $usersSql .= " and tc.chidon_photo is null";
 $usersSql .= " order by u.last, u.first";
 $edit_result = mq($usersSql);
 ?>
@@ -103,31 +106,33 @@ $edit_result = mq($usersSql);
                 <DIV class="content">
                     <H2><?=T_('Manage Photos')?></H2>
                     <DIV class="infobox">
-                        As we will be making a virtual award ceremony this year, we are relying on great photos to put it together!<br />
-                        <br />
-                        When taking photos, please pay close attention to the following guidelines.<br />
-                        <br />
-                        <input type="checkbox" /> Horizontal picture (when using a phone, make sure the phone is on the side, not upright)
-                        <br />
-                        <input type="checkbox" /> Every child in separate photos
-                        <br />
-                        <input type="checkbox" /> For girls: hair should be pulled back, neat and tidy
-                        <br />
-                        <input type="checkbox" /> Smiling and looking at the camera
-                        <br />
-                        <input type="checkbox" /> Waist up
-                        <br />
-                        <input type="checkbox" /> Hands should be down
-                        <br />
-                        <input type="checkbox" /> Chidon sweater 
-                        <br />
-                        <input type="checkbox" /> No stains on clothing
-                        <br />
-                        <input type="checkbox" /> Brightly-lit room
-                        <br />
-                        <input type="checkbox" /> Solid, dark background
-                        <br />
-                        <input type="checkbox" /> High-quality image
+                      For the Award Ceremony we are relying on great photos to put it together!<br />
+                      When taking photos, please pay close attention to the following guidelines.
+                      <br/>
+                      <input type="checkbox"/> Horizontal picture (when using a phone, make sure the phone is on the side, not
+                      upright)
+                      <br/>
+                      <input type="checkbox"/> Every child in separate photos
+                      <br/>
+                      <input type="checkbox"/> For boys: wear the Chidon Yarmulkah with the logo in the front
+                      <br/>
+                      <input type="checkbox"/> For girls: hair should be pulled back, neat and tidy
+                      <br/>
+                      <input type="checkbox"/> Smiling and looking at the camera
+                      <br/>
+                      <input type="checkbox"/> Waist up
+                      <br/>
+                      <input type="checkbox"/> Hands should be down
+                      <br/>
+                      <input type="checkbox"/> Chidon sweater (If you don't have one, wear your school uniform)
+                      <br/>
+                      <input type="checkbox"/> No stains on clothing
+                      <br/>
+                      <input type="checkbox"/> Brightly-lit room
+                      <br/>
+                      <input type="checkbox"/> Solid, dark background
+                      <br/>
+                      <input type="checkbox"/> High-quality image
                     </DIV>
                     <DIV class="infobox2">
                         <FORM action="upload_chidon_photos.php" method="get" accept-charset="UTF-8">
@@ -185,7 +190,7 @@ $edit_result = mq($usersSql);
                                         </TD>
 
                                         <TD name="td_<?=$row['user_id'];?>" id="td_<?=$row['user_id'];?>">
-                                            <? if(!is_null($row['chidon_pic_5782'])) : ?>
+                                            <? if(!is_null($row['chidon_photo'])) : ?>
 <!--                                                <LABEL>-->
 <!--                                                    --><?//=T_('Delete current photo')?>
 <!--                                                    <INPUT onclick="delete_photo(this, --><?//=$row['user_id'];?>
@@ -193,7 +198,7 @@ $edit_result = mq($usersSql);
 <!--                                                </LABEL>-->
 <!--                                                <BR>-->
                                                 <div class="inline_top">
-                                                    <img src="/mobile/reg/<?=$row['chidon_pic_5782']?>" height="80" />
+                                                    <img src="/mobile/reg/<?=$row['chidon_photo']?>" height="80" />
                                                 </div>
 <!--                                                    <div class="inline_top">-->
 <!--                                                        <form action="/tasks/flip_images.php" method="post">-->
