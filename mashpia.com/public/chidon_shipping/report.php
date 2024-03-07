@@ -104,7 +104,7 @@ if ($ship_to != 'all') {
             JOIN users u on u.user_id = aa.id 
             JOIN admins a on a.admin_id = aa.admin_id 
             WHERE u.user_registered > 0 
-            AND a.admin_country in ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
+            AND a.admin_country IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
         ");
     } else if ($ship_to == 'intl') {
         $stmt = $MASHPIA_DB->query("
@@ -112,7 +112,7 @@ if ($ship_to != 'all') {
             JOIN users u on u.user_id = aa.id 
             JOIN admins a on a.admin_id = aa.admin_id 
             WHERE u.user_registered > 0 
-            AND a.admin_country not in ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
+            AND a.admin_country NOT IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
         ");
     }
 
