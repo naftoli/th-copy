@@ -714,26 +714,16 @@ class ChidonShipping
         if (empty($limitTo)) $limitTo = ['certificate', 'plaque', 'medal', 'blue trophy'];
 
         $info = [];
-        foreach ($limitTo as $award) {
-            switch ($award) {
-                case 'plaque':
-                case 'medal':
-                    $result = $this->getAwardsByTests($gender, $school, $award);
-                    echo "<pre>"; print_r($result); echo "</pre>";
-                    $info += $result;
-                    break;
-                case 'certificate':
-                case 'blue trophy':
-                case 'khk plaque':
-                    $info += $this->getAwardsByFinals($gender, $school, $award);
-                    break;
-            }
+        if (in_array('plaque', $limitTo) || in_array('medal', $limitTo)) {
+            $info += $this->getAwardsByTests($gender, $school, $limitTo);
         }
-
+        if (in_array('certificate', $limitTo) || in_array('blue trophy', $limitTo) || in_array('khk plaque', $limitTo)) {
+            $info += $this->getAwardsByFinals($gender, $school, $limitTo);
+        }
         return $info;
     }
 
-    private function getAwardsByFinals($gender, $school, $toAward) {
+    private function getAwardsByFinals($gender, $school, $limitTo) {
         $info = [];
         $sql = "select *, tcf.khk as khk_final from th_chidon_finals tcf 
                 join th_chidon tc using (user_id, year) 
@@ -762,13 +752,13 @@ class ChidonShipping
         foreach ($rows as $row) {
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
-            if (empty($award) || strpos($award, $toAward) === false) continue;
 
             // check for khk plaque
             if ($this->addKHK($row)) $award .= ' / khk plaque';
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
-                if (!empty($toAward) && $item != $toAward) continue;
+                // make sure item was chosen
+                if (! in_array($item, $limitTo)) continue;
                 $id = $this->getItemID($cat, $item);
                 $info[$row['user_id']][] = [
                     'item' => $item,
@@ -781,11 +771,10 @@ class ChidonShipping
                 ];
             }
         }
-
         return $info;
     }
 
-    private function getAwardsByTests($gender, $school, $toAward) {
+    private function getAwardsByTests($gender, $school, $limitTo) {
         $info = [];
         $sql = "
             SELECT 
@@ -814,12 +803,11 @@ class ChidonShipping
         foreach ($rows as $row) {
             $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
-            if (empty($award) || strpos($award, $toAward) === false) continue;
 
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
                 // make sure item was chosen
-                if (!empty($toAward) && $item != $toAward) continue;
+                if (! in_array($item, $limitTo)) continue;
                 $id = $this->getItemID('awards', $item);
                 $info[$row['user_id']][] = [
                     'item' => $item,
@@ -831,7 +819,6 @@ class ChidonShipping
                 ];
             }
         }
-        echo "Checking for $toAward<br />";
         return $info;
     }
 
