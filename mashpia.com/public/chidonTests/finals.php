@@ -85,15 +85,15 @@ while ($row = mysql_fetch_assoc($result)) {
     $final_marks[$row['user_id']] = $row;
 }
 
-function passedKhk($id)
+function passedKhk($child)
 {
     global $marks;
 
-    if (isset($marks[$id])) {
-        $user_marks = $marks[$id];
+    if (isset($marks[$child['th_chidon_id']]) && $child['date_paid'] > 0) {
+        $user_marks = $marks[$child]['th_chidon_id'];
         $total = 0;
         foreach ($user_marks as $mark) $total += intval($mark);
-        $total /= 3;
+        $total /= 4;
         if ($total >= 70) return true;
     }
     return false;
@@ -237,7 +237,7 @@ if (isset($_POST['grade'])) {
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
-                if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id']) && !$tooLate) $disabled = '';
+                if (intval($child['khk_reg']) && passedKhk($child) && !$tooLate) $disabled = '';
                 echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
                 if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
                 else echo "value='0'";
