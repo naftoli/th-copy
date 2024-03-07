@@ -123,6 +123,7 @@ function showIyun($child) {
     $ct->setScores();
     $scores = $ct->getScores();
     $cumulative_track = $ct->calculateCumulative($child, $scores);
+    echo "Cumulative Track for " . $child['user_id'] . ": " . $cumulative_track . '<br>';
     return $cumulative_track == 'iyun';
 }
 
@@ -143,7 +144,6 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
         if (showIyun($row)) $info[$row['school_id']][] = $row;
     }
 }
-echo "<pre>"; print_r($info); echo "</pre>";
 
 $imgs = []; // array for keeping track of all pictures that are showing up
 foreach ( $info as $id => $children ) {
