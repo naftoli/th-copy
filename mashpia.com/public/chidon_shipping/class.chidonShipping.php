@@ -750,13 +750,6 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
-        $limits = [
-            'yesod' => 'certificate',
-            'yediah' => 'plaque',
-            'havonah' => 'medal',
-            'iyun' => 'blue trophy',
-        ];
-
         $awards = [
             'yesod' => 'certificate',
             'yediah' => 'plaque',
@@ -766,14 +759,18 @@ class ChidonShipping
 
         $cat = 'awards';
         foreach ($rows as $row) {
-            $awardTrack = strtolower($this->getAwardTrack($row));
-            if (empty($awardTrack) || (!empty($toAward) && strpos($limits[$awardTrack], $toAward) === false)) continue;
+//            if (!empty($this->toExclude) && in_array($row['user_id'], $this->toExclude)) continue;
+//            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
-            $award = $awards[$awardTrack];
+            $awardTrack = $this->getAwardTrack($row);
+            $award = $awardTrack ? $awards[$awardTrack] : '';
+            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
+
             // check for khk plaque
             if ($this->addKHK($row)) $award .= ' / khk plaque';
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
+                if (!empty($toAward) && $item != $toAward) continue;
                 $id = $this->getItemID($cat, $item);
                 $info[$row['user_id']][] = [
                     'item' => $item,
@@ -809,13 +806,6 @@ class ChidonShipping
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
 
-        $limits = [
-            'yesod' => 'certificate',
-            'yediah' => 'plaque',
-            'havonah' => 'medal',
-            'iyun' => 'blue trophy',
-        ];
-
         $awards = [
             'yesod' => 'certificate',
             'yediah' => 'plaque',
@@ -825,11 +815,13 @@ class ChidonShipping
 
         foreach ($rows as $row) {
             $highest_track = $this->getTrackByTests($row);
-            if (empty($highest_track) || (!empty($toAward) && strpos($limits[$highest_track], $toAward) === false)) continue;
+            $award = $highest_track ? $awards[$highest_track] : '';
+            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
 
-            $award = $awards[$highest_track];
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
+                // make sure item was chosen
+                if (!empty($toAward) && $item != $toAward) continue;
                 $id = $this->getItemID('awards', $item);
                 $info[$row['user_id']][] = [
                     'item' => $item,
