@@ -816,7 +816,10 @@ class ChidonShipping
             $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
             if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
-
+            if ($row['user_id'] == 64123) {
+                echo $row['user_id'] . ' - ' . $highest_track . "<br />";
+                exit;
+            }
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
                 $id = $this->getItemID('awards', $item);
@@ -906,26 +909,30 @@ class ChidonShipping
         $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
 
         $types = $ct->getTypes();
-        $highest_track = empty($ht) ? false : strtolower($types[$ht]);
-        $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? strtolower($types[$row['reward_type']]) : false;
-        $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest final passed' ? strtolower($types[$row['award_type']]) : false;
+        $highest_track = empty($ht) ? false : $types[$ht];
+        $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? $types[$row['reward_type']] : false;
+        $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest final passed' ? $types[$row['award_type']] : false;
 
         // find a way of comparing them
-        $indexes = array_keys($ct->getTypes());
+        $indexes = array_values($ct->getTypes());
         $key1 = array_search($highest_track, $indexes);
         $key2 = array_search($highest_track2, $indexes);
         $key3 = array_search($highest_track3, $indexes);
 
+//        echo "highest track: " . $highest_track . ' key1: ' . $key1 . "<br />";
+//        echo "highest track2: " . $highest_track2 . ' key2: ' . $key2 . "<br />";
+//        echo "highest track3: " . $highest_track3 . ' key3: ' . $key3 . "<br />";
+
         // find out which one is highest
-        if ($key2 && $key3) {
+        if ($key1 && $key2 && $key3) {
             $highest_track = $key2 > $key1 ? $key3 > $key2 ? $highest_track3 : $highest_track2 : $highest_track;
-        } else if ($key2) {
+        } else if ($key1 && $key2) {
             $highest_track = $key2 > $key1 ? $highest_track2 : $highest_track;
         } else if ($key3) {
             $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
         }
 
-        return $highest_track ?? '';
+        return strtolower($highest_track) ?? '';
     }
 
     public function addKHK($child) {
