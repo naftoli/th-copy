@@ -134,7 +134,8 @@ $info = [];
 $sql = "select * from th_chidon tc 
         join th_chidon_info tci using (user_id, year) 
         join users u using (user_id) 
-        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") ";
+        where year = " . $year . " and tc.school_id in (" . implode(',', array_keys( $schools )) . ") 
+        and tc.date_paid > 0";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     if ($type == 'finals') {
