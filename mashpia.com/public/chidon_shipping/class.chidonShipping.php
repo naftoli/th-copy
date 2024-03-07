@@ -711,8 +711,7 @@ class ChidonShipping
      * @return array
      */
     public function getAwards($gender, $school, $limitTo = []) {
-        $award_types = ['certificate', 'plaque', 'medal', 'blue trophy'];
-        if (empty($limitTo)) $limitTo = $award_types;
+        if (empty($limitTo)) $limitTo = ['certificate', 'plaque', 'medal', 'blue trophy'];
 
         $info = [];
         foreach ($limitTo as $award) {
@@ -761,7 +760,7 @@ class ChidonShipping
         foreach ($rows as $row) {
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
-            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
+            if (empty($award) || strpos($award, $toAward) === false) continue;
 
             // check for khk plaque
             if ($this->addKHK($row)) $award .= ' / khk plaque';
@@ -813,7 +812,7 @@ class ChidonShipping
         foreach ($rows as $row) {
             $highest_track = $this->getTrackByTests($row);
             $award = $highest_track ? $awards[$highest_track] : '';
-            if (empty($award) || (!empty($toAward) && strpos($award, $toAward) === false)) continue;
+            if (empty($award) || strpos($award, $toAward) === false) continue;
 
             $award_info = explode(' / ', $award);
             foreach ($award_info as $item) {
