@@ -218,7 +218,9 @@ if (isset($_POST['grade'])) {
             $highest = getTrack($child); // track based off tests
             $idx1 = array_search(ucwords($child['highest_track']), $tracks);
             $idx2 = array_search(ucwords($highest), $tracks);
-            if ($idx2 > $idx1) $child['highest_track'] = $highest;
+            $show_iyun = showIyun($child);
+            if ($show_iyun) $child['highest_track'] = 'iyun';
+            else if ($idx2 > $idx1) $child['highest_track'] = $highest;
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
@@ -237,7 +239,7 @@ if (isset($_POST['grade'])) {
                     else echo "value='0'";
                     // for iyun we also look at cumulative marks
                     if ($i == 4) {
-                      if ($tooLate || !showIyun($child)) echo " disabled";
+                      if ($tooLate || !$show_iyun) echo " disabled";
                     } else if ($i > $key) {
                       if ($tooLate) echo " disabled";
                     }
