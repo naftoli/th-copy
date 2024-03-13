@@ -33,6 +33,7 @@ $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
     $status = $cs->getStatus();
+    echo "<pre>"; print_r($status); echo "</pre>";
     foreach ($list_of_schools as $school_id) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
@@ -40,11 +41,11 @@ if ($report_type == 'file') {
             $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
         }
         // remove shipped items if needed
-        foreach ($limit_to_status as $limit_num) {
+        foreach ($limit_to_status as $status_num) {
             foreach ($info as $cat => $details) {
                 foreach ($details as $user => $items) {
                     foreach ($items as $idx => $item) {
-                        switch ($limit_num) {
+                        switch ($status_num) {
                             case 0:
                                 if (isset($status[$user][$item['id']]) && $status[$user][$item['id']]['shipped'] == 1) unset($info[$cat][$user][$idx]);
                                 break;
