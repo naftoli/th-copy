@@ -24,7 +24,7 @@ if (isset($_FILES['file'])) {
         $serial = $row[0];
         $color = $row[1];
         $code = $row[2];
-        $sql = "insert into chidon_lanyards (user_serial, color, code, year) values ('$serial', '$color', '$code', '$year')";
+        $sql = "insert into chidon_lanyards (user_serial, color, code, year) values ('$serial', '$color', \"$code\", '$year')";
         $qrys[] = $sql;
     }
     fclose($handle);
