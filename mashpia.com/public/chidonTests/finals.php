@@ -101,7 +101,7 @@ function passedKhk($child)
 
 function getTrack($child) {
     global $cs;
-    $track = $cs->getTrackByTests($child);
+    $track = $cs->getTrackByTests($child, true);
     return $track;
 }
 
@@ -123,8 +123,6 @@ function showIyun($child) {
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
     $scores = $ct->getScores();
-    // first make sure that they got at least 80 on all tests
-//    $highest = $ct->getHighestTrack($child, $scores, false, 3, false, true);
     $highest = $child['highest_track'];
     $cumulative_track = $ct->calculateCumulative($child, $scores);
     return $highest == 'iyun' || $cumulative_track == 'iyun';

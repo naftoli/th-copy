@@ -885,7 +885,7 @@ class ChidonShipping
         return $award;
     }
 
-    public function getTrackByTests($row) {
+    public function getTrackByTests($row, $forIyun = false) {
         $ct = new ChidonTests();
         $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
         $ct->setScores();
@@ -893,6 +893,7 @@ class ChidonShipping
         $marks = $ct->getMarks();
         if (! isset($marks[$row['th_chidon_id']])) return '';
         $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
+        if ($ht == 'genius' && $forIyun) $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id'], false, 3, false, true);
 
         $types = $ct->getTypes();
         $highest_track = empty($ht) ? false : $types[$ht];
