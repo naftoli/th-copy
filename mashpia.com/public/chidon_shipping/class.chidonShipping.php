@@ -1349,7 +1349,7 @@ class ChidonShipping
             'enrollment prize'      => ['kop cards'],
             'recruitment prizes'    => ['book light', 'rechargeable fan', 'watch', 'neck pillow', 'mini duffle bag'],
 //            'test prizes'           => ['kop cards game', 'leather book mark', 'drawstring bag', 'shape shifting cube'],
-            'sweaters'              => ['children sweaters', 'staff sweaters', 'parent/grandparent sweaters'],
+            'sweaters'              => ['children sweaters', 'parent/grandparent sweaters'],
             'celebration items'     => ['celebration boxes'],
             'gifts'                 => ['yarmulka', 'jewelry'],
             'ID cards'              => ['ID card'],

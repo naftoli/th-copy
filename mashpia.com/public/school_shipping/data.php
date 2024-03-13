@@ -170,6 +170,7 @@ function addToSummary($item, $school) {
     else $summary[$school][$key1][$key2] = $qty;
 }
 
+
 function getUpdatedSchools($schools) {
     global $MASHPIA_DB;
     $sql = "select * from schools where school_id in (" . implode(',', array_keys($schools)) . ")";
