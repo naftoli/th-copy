@@ -687,7 +687,7 @@ class ChidonShipping
         $id = $this->getItemID($cat, $item);
 
         // get extra info for ID cards
-        $extra_info = $this->getLanyardInfo($gender, $school);
+        $extra_info = $this->getLanyardInfo();
 
         foreach ($rows as $row) {
             if (in_array($row['user_id'], $this->toExclude)) continue;
@@ -705,10 +705,19 @@ class ChidonShipping
         return $info;
     }
 
-    private function getLanyardInfo($gender, $school)
+    private function getLanyardInfo()
     {
         $info = [];
         $sql = "select * from chidon_lanyards where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $info[$row['user_serial']] = [
+                'color' => $row['color'],
+                'code'  => $row['code']
+            ];
+        }
         return $info;
     }
 
