@@ -686,18 +686,29 @@ class ChidonShipping
         $item = 'ID card';
         $id = $this->getItemID($cat, $item);
 
+        // get extra info for ID cards
+        $extra_info = $this->getLanyardInfo($gender, $school);
+
         foreach ($rows as $row) {
             if (in_array($row['user_id'], $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
             $info[$row['user_id']][] = [
                 'item'  => 'ID card',
                 'size'  => '',
-                'color' => '',
+                'color' => $extra_info[$row['user_serial']]['color'] ?? '', // lanyard color
                 'name'  => '',
                 'id'    => $id,
-                'cat'   => $cat
+                'cat'   => $cat,
+                'code'  => $extra_info[$row['user_serial']]['code'] ?? ''
             ];
         }
+        return $info;
+    }
+
+    private function getLanyardInfo($gender, $school)
+    {
+        $info = [];
+        $sql = "select * from chidon_lanyards where year = :year";
         return $info;
     }
 
