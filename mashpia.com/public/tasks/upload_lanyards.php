@@ -35,7 +35,7 @@ if (isset($_FILES['file'])) {
     foreach ($qrys as $sql) {
         if (! mysql_query($sql)) {
             $success = false;
-            echo $qry . "<br />Error: " . mysql_error();
+            echo $sql . "<br />Error: " . mysql_error();
             break ;
         }
     }
