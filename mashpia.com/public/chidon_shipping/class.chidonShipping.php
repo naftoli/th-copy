@@ -1032,7 +1032,9 @@ class ChidonShipping
 
     public function getStatus() {
         $info = [];
-        $sql = "select * from th_chidon_shipping where year = :year";
+        $sql = "select * from th_chidon_shipping 
+                where year = :year 
+                order by user_id, item_id, item_num";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
