@@ -7,7 +7,7 @@ $ui_type = 'school';
 require_once('admin_ui.php');
 $school_name = "";
 
-require_once $_SERVER['DOCUMENT_ROOT'] . 'class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 function addPhoto($file) {
