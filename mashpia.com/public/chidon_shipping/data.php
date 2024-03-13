@@ -29,7 +29,8 @@ $item_details = [
     'color'     => 'Color/Gender',
     'name'      => 'Personalization Name',
     'cat'       => 'Category',
-    'rank'      => 'Rank (for Gear Category)'
+    'rank'      => 'Rank (for Gear Category)',
+    'code'      => 'Code (for Lanyards)'
 ];
 
 function build_fields() {
