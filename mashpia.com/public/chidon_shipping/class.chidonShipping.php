@@ -733,13 +733,12 @@ class ChidonShipping
     public function getAwards($gender, $school, $limitTo = []) {
         if (empty($limitTo)) $limitTo = ['certificate', 'plaque', 'medal', 'blue trophy'];
 
-        $info = [];
-        if (in_array('plaque', $limitTo) || in_array('medal', $limitTo)) {
-            $info += $this->getAwardsByTests($gender, $school, $limitTo);
-        }
-        if (in_array('certificate', $limitTo) || in_array('blue trophy', $limitTo) || in_array('khk plaque', $limitTo)) {
-            $info += $this->getAwardsByFinals($gender, $school, $limitTo);
-        }
+        $info = $this->getAwardsByFinals($gender, $school, $limitTo);
+//        if (in_array('plaque', $limitTo) || in_array('medal', $limitTo)) {
+//            $info += $this->getAwardsByTests($gender, $school, $limitTo);
+//        }
+//        else $info += $this->getAwardsByFinals($gender, $school, $limitTo);
+
         return $info;
     }
 
@@ -770,6 +769,8 @@ class ChidonShipping
 
         $cat = 'awards';
         foreach ($rows as $row) {
+            // remove any child from ms/ak that is coming to the east coast trip
+            if (in_array($row['school_id'], [61, 269]) && $row['trip'] == 'east') continue;
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
             if (empty($award)) continue;
@@ -780,6 +781,8 @@ class ChidonShipping
             foreach ($award_info as $item) {
                 // make sure item was chosen
                 if (! in_array($item, $limitTo)) continue;
+                // remove any child getting khk plaque that is going on ultimate trip
+                if ($item == 'khk plaque' && intval($row['ultimate_trip'])) continue;
                 $id = $this->getItemID($cat, $item);
                 $info[$row['user_id']][] = [
                     'item' => $item,
