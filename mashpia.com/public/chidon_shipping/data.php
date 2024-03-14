@@ -261,7 +261,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
     foreach ($info as $more) {
         foreach ($more as $user_id => $list) {
             foreach ($list as $item) {
-                if (! isset($admins[$children[$user_id]])) continue;
+                if (! isset($children[$user_id])) continue;
                 $admin = $admins[$children[$user_id]];
                 $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
                 $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
