@@ -6,6 +6,8 @@ set_time_limit(300);
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
+$super = $admin_user['auth'] == 'super';
+
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true); // add chidon schools
 $schools = $as->getSchools();
@@ -123,16 +125,18 @@ function showIyun($child) {
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
     $scores = $ct->getScores();
-    $highest = $child['highest_track'];
     $cumulative_track = $ct->calculateCumulative($child, $scores);
+    $highest = $child['highest_track'];
     return $highest == 'iyun' || $cumulative_track == 'iyun';
 }
 
 $info = [];
-foreach ($schools as $id => $school) {
-    $ct->setStudents($id);
-    $info[$id] = $ct->getStudents();
-}
+//foreach ($schools as $id => $school) {
+//    $ct->setStudents($id);
+//    $info[$id] = $ct->getStudents();
+//}
+$ct->setStudents(269);
+$info[269] = $ct->getStudents();
 
 // initialize all tests to not be disabled
 $tooLate = false;
@@ -207,18 +211,18 @@ if (isset($_POST['grade'])) {
         echo "<h2>" . $schools[$school] . "</h2>";
         echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
         foreach ($tracks as $track) {
-            echo "<th>$track</th>";
+            if ($track != 'iyun' || ($track == 'iyun' && ($super || in_array($school, [61, 269])))) {
+                echo "<th>$track</th>";
+            }
         }
-        echo "<th>KHK Final</th>";
+        if ($super || in_array($school, [61, 269])) echo "<th>KHK Final</th>";
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
             $highest = getTrack($child); // track based off tests
-            $idx1 = array_search(ucwords($child['highest_track']), $tracks);
-            $idx2 = array_search(ucwords($highest), $tracks);
+            $child['highest_track'] = $highest;
             $show_iyun = showIyun($child);
             if ($show_iyun) $child['highest_track'] = 'iyun';
-            else if ($idx2 > $idx1) $child['highest_track'] = $highest;
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
@@ -227,6 +231,7 @@ if (isset($_POST['grade'])) {
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
                     $child['highest_track'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
+                    if ($i == 4 && !$super && !in_array($school, [61, 269])) continue;
                     // find out which track the child can go up to
                     $key = array_search(ucwords($child['highest_track']), $tracks);
                     $key++;
@@ -238,19 +243,21 @@ if (isset($_POST['grade'])) {
                     // for iyun we also look at cumulative marks
                     if ($i == 4) {
                       if ($tooLate || !$show_iyun) echo " disabled";
-                    } else if ($i > $key) {
-                      if ($tooLate) echo " disabled";
                     }
+                    else if ($i > $key || $tooLate) echo " disabled";
                     echo " /></td>";
                 }
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
                 if (intval($child['khk_reg']) && passedKhk($child) && !$tooLate) $disabled = '';
-                echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
-                if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
-                else echo "value='0'";
-                echo " /></td><td>" . getAward($child) . "</td></tr>";
+                if ($super || in_array($school, [61, 269])) {
+                    echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
+                    if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
+                    else echo "value='0'";
+                    echo " /></td>";
+                }
+                echo "<td>" . getAward($child) . "</td></tr>";
             }
         }
         echo "</table>";

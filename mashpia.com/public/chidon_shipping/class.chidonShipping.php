@@ -907,15 +907,20 @@ class ChidonShipping
 
     public function getTrackByTests($row, $forIyun = false) {
         $ct = new ChidonTests();
-        $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
-        $ct->setScores();
-        $ct->calculateMarks();
-        $marks = $ct->getMarks();
-        if (! isset($marks[$row['th_chidon_id']])) return '';
-        $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
-        if ($ht == 'genius' && $forIyun) $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id'], false, 3, false, true);
-
         $types = $ct->getTypes();
+
+        if (!isset($row['highest_track']) || ($row['highest_track'] == 'iyun' && $forIyun)) {
+            $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
+            $ct->setScores();
+            $ct->calculateMarks();
+            $marks = $ct->getMarks();
+            if (!isset($marks[$row['th_chidon_id']])) return '';
+            $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
+            if ($ht == 'genius' && $forIyun) $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id'], false, 3, false, true);
+        } else {
+            $ht = array_search(ucwords($row['highest_track']), $types);
+        }
+
         $highest_track = empty($ht) ? false : $types[$ht];
         $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? $types[$row['reward_type']] : false;
         $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest final passed' ? $types[$row['award_type']] : false;
