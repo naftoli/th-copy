@@ -31,7 +31,7 @@ $msg = '';
 if (isset($_POST['submit']) && isset($_POST['track_1'])) {
 //    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
     $qrys = [];
-    for ($i = 1; $i <= 4; $i++) {
+    for ($i = 4; $i <= 4; $i++) {
         $track = 'track_' . $i;
         foreach ($_POST[$track] as $id => $mark) {
             if ($mark != '') {
