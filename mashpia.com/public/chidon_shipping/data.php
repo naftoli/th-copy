@@ -193,50 +193,60 @@ function checkShippingStatus($admin_id) {
         'id'    => $admin_id
     ]);
     $row = $stmt->fetch();
-    if ($row && $row['amount_paid'] > 0) $status = 'shipping';
+    if ($row && $row['amount_paid'] > 0) $status = 'ship';
     return $status;
 }
 
-function createCSV($items, $school_id, $shipTo = 'all') {
-    global $items_chosen, $MASHPIA_DB;
+function createCSV($items, $year, $school_id, $shipTo = 'all') {
+    global $MASHPIA_DB;
 
     // create sql to get all needed fields
     $sql = "SELECT 
-                a.*, u.user_id, u.first AS u_first, u.last AS u_last, u.user_serial, u.school_id 
+                a.*,
+                u.user_id,
+                u.first AS u_first,
+                u.last AS u_last,
+                u.user_serial,
+                u.school_id
             FROM
                 admins a
                     JOIN
                 admin_auths aa USING (admin_id)
                     JOIN
                 users u ON u.user_id = aa.id
+                    JOIN
+                th_chidon tc ON tc.user_id = u.user_id
             WHERE
-                aa.auth = 'user'
-                    AND u.school_id = :id";
+                aa.auth = 'user' AND u.school_id = :id 
+                    AND tc.year = :year ";
     if ($shipTo == 'domestic') $sql .= " AND a.admin_country IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
-    if ($shipTo == 'intl') $sql .= " AND a.admin_country NOT IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+    else if ($shipTo == 'intl') $sql .= " AND a.admin_country NOT IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+    $sql .= " GROUP BY u.user_id";
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute(['id' => $school_id]);
+    $stmt->execute([
+        'year'  => $year,
+        'id' => $school_id
+    ]);
     $rows = $stmt->fetchAll();
 
+    $users = [];
     $admins = [];
     $children = [];
-    $users = [];
     $shipping_status = [];
     foreach ($rows as $row) {
-        $admins[$row['admin_id']] = $row;
-        $children[$row['user_id']] = $row['admin_id'];
-        $users[$row['user_id']] = $row;
-        $shipping_status[$row['user_id']] = checkShippingStatus($row['admin_id']);
+        $user_id = $row['user_id'];
+        $admin_id = $row['admin_id'];
+        if (! isset($admins[$admin_id])) $admins[$admin_id] = $row;
+        $children[$user_id] = $admin_id;
+        $users[$user_id] = $row;
+        $shipping_status[$user_id] = checkShippingStatus($admin_id);
     }
 
     $info = [];
-    foreach ($children as $user_id => $admin_id) {
-        foreach ($items_chosen as $cat => $other) {
-            if (isset($items[$cat]) && isset($items[$cat][$user_id])) {
-                $details = $items[$cat][$user_id];
-                foreach ($details as $item) {
-                    $info[$user_id][] = $item;
-                }
+    foreach ($items as $cat => $more) {
+        foreach ($more as $user_id => $list) {
+            foreach ($list as $item) {
+                $info[$cat][$user_id][] = $item;
             }
         }
     }
@@ -248,23 +258,25 @@ function createCSV($items, $school_id, $shipTo = 'all') {
     $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
         'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
         'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email', 'Child Count', 'Comments', 'City, State, Country'];
-    foreach ($children as $user_id => $admin_id) {
-        if (isset($info[$user_id])) {
-            foreach ($info[$user_id] as $item) {
-                $admin = $admins[$admin_id];
+    foreach ($info as $more) {
+        foreach ($more as $user_id => $list) {
+            foreach ($list as $item) {
+                $admin = $admins[$children[$user_id]];
                 $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
                 $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
+
                 $user = $users[$user_id];
-                $school = $user['school_id'] == 61 ? 'MyShliach' : 'Anash Kinder';
-                $shipping = $shipping_status[$user_id];
                 $qty = $item['qty'] ?? 1;
+                $school = $user['school_id'] == 61 ? 'MyShliach' : $user['school_id'] == 269 ? 'Anash Kinder' : '';
+                $shipping = $shipping_status[$user_id];
+
                 $itemDesc = '';
                 if ($item['name']) $itemDesc .= "Personalized ";
                 $itemDesc .= $item['item'];
                 if ($item['color']) $itemDesc .= ", " . $item['color'];
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
 
-                $csv[$i++] = [$admin_id, ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
+                $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                     $phone, ($school . '-' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
                     $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc,
                     $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], '', '',
@@ -272,6 +284,7 @@ function createCSV($items, $school_id, $shipTo = 'all') {
             }
         }
     }
+
     return $csv;
 }
 

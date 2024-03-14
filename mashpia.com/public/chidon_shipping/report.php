@@ -66,14 +66,15 @@ if ($report_type == 'file') {
                 }
             }
         }
+
         if ($ship_to == 'domestic') {
-            $csv = createCSV($info, $school_id, true); // filter out all users that ONLY live in the usa
+            $csv = createCSV($info, $year, $school_id, true); // filter out all users that ONLY live in the usa
             $file = $school_id . '-usa.csv';
         } else if ($ship_to == 'intl') {
-            $csv = createCSV($info, $school_id, false, true); // filter out all users that do NOT live in the usa
+            $csv = createCSV($info, $year, $school_id, false, true); // filter out all users that do NOT live in the usa
             $file = $school_id . '-intl.csv';
         } else {
-            $csv = createCSV($info, $school_id);
+            $csv = createCSV($info, $year, $school_id);
             $file = $school_id . '.csv';
         }
         createFile($file, $csv);
