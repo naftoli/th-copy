@@ -690,8 +690,10 @@ class ChidonShipping
         $extra_info = $this->getLanyardInfo();
 
         foreach ($rows as $row) {
-            if (in_array($row['user_id'], $this->toExclude)) continue;
-            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+//            if (in_array($row['user_id'], $this->toExclude)) continue;
+//            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+            if (! isset($extra_info[$row['user_serial']]['code'])) continue;
+            if ($row['trip'] == 'east' || intval($row['ultimate_trip'])) continue;
             $info[$row['user_id']][] = [
                 'item'  => 'ID card',
                 'size'  => '',
