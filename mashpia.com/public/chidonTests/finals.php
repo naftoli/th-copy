@@ -131,12 +131,10 @@ function showIyun($child) {
 }
 
 $info = [];
-//foreach ($schools as $id => $school) {
-//    $ct->setStudents($id);
-//    $info[$id] = $ct->getStudents();
-//}
-$ct->setStudents(269);
-$info[269] = $ct->getStudents();
+foreach ($schools as $id => $school) {
+    $ct->setStudents($id);
+    $info[$id] = $ct->getStudents();
+}
 
 // initialize all tests to not be disabled
 $tooLate = false;
