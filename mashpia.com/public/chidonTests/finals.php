@@ -209,7 +209,7 @@ if (isset($_POST['grade'])) {
         echo "<h2>" . $schools[$school] . "</h2>";
         echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
         foreach ($tracks as $track) {
-            if ($track != 'iyun' || ($track == 'iyun' && ($super || in_array($school, [61, 269])))) {
+            if ($track != 'Iyun' || ($track == 'Iyun' && ($super || in_array($school, [61, 269])))) {
                 echo "<th>$track</th>";
             }
         }
