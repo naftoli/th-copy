@@ -49,7 +49,6 @@ if ($test_num == 4) {
                 foreach ($other as $testLevel => $marks) {
                     $mark = intval($mark);
                     $track = 'track_' . $levels[$type];
-                    $level = 'level_' . $levels[$type];
                     // make sure child is allowed to enter mark for this level
                     $allowed = checkTrack($user_id, $levels[$type]);
                     if ($allowed) {
@@ -57,8 +56,7 @@ if ($test_num == 4) {
                                 set year = $year, 
                                 user_id = $user_id, 
                                 $track = $mark, 
-                                $level = $testLevel   
-                                on duplicate key update $track = $mark, $level = $testLevel";
+                                on duplicate key update $track = $mark";
                         $qrys[] = $sql;
                     }
                 }
