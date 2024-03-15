@@ -101,7 +101,8 @@ if ($test_num == 4) {
             let test = <?= $test_num ?>;
             if (success) {
                 alert('Marks saved.')
-                location.href = "https://mashpia.com/chidonTests/marks.php?test_num=" + test;
+                if (test == 4) location.href = "https://mashpia.com/chidonTests/finals.php";
+                else location.href = "https://mashpia.com/chidonTests/marks.php?test_num=" + test;
             }
             else alert('Error saving marks.')
         </script>
