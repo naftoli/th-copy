@@ -103,23 +103,15 @@ foreach ($list_of_schools as $schoolID) {
 
 if ($ship_to != 'all') {
     // get users based on shipping destination
-    if ($ship_to == 'domestic') {
-        $stmt = $MASHPIA_DB->query("
-            SELECT aa.id FROM admin_auths aa 
+    $sql = "SELECT aa.id FROM admin_auths aa 
             JOIN users u on u.user_id = aa.id 
             JOIN admins a on a.admin_id = aa.admin_id 
-            WHERE u.user_registered > 0 
-            AND a.admin_country IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
-        ");
-    } else if ($ship_to == 'intl') {
-        $stmt = $MASHPIA_DB->query("
-            SELECT aa.id FROM admin_auths aa 
-            JOIN users u on u.user_id = aa.id 
-            JOIN admins a on a.admin_id = aa.admin_id 
-            WHERE u.user_registered > 0 
-            AND a.admin_country NOT IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')
-        ");
-    }
+            JOIN th_chidon tc on tc.user_id = u.user_id 
+            WHERE tc.year = :year  ";
+    if ($ship_to == 'domestic') $sql .= "AND a.admin_country IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+    else if ($ship_to == 'intl') $sql .= "AND a.admin_country NOT IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute(['year' => $year]);
 
     $rows = $stmt->fetchAll();
     $user_ids = [];
@@ -128,8 +120,8 @@ if ($ship_to != 'all') {
     }
 
     // remove all users that are not in the user_ids array
-    foreach ($info as $cat) {
-        foreach ($cat as $user => $items) {
+    foreach ($info as $cat => $more) {
+        foreach ($more as $user => $items) {
             if (! in_array($user, $user_ids)) unset($info[$cat][$user]);
         }
     }
