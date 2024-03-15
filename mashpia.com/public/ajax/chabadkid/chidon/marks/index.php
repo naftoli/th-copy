@@ -17,17 +17,18 @@ function getUserID($chidon_id) {
 }
 
 function checkTrack($user_id, $level) {
-    global $year;
+    global $year, $ct;
     $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 
-    $sql = "select highest_track from th_chidon_info where year = $year and user_id = $user_id";
+    $sql = "select * from th_chidon tc 
+            join users u using (user_id) 
+            where tc.year = $year and u.user_id = $user_id";
     $result = mysql_query($sql);
-    if (mysql_num_rows($result) > 0) {
-        $row = mysql_fetch_assoc($result);
-        $track = $row['highest_track'];
-        $key = array_search($track, $tracks);
-        if ($key && $level <= ++$key) return true; // only marks for levels that are less than or equal to the highest track can be saved
-    }
+    $row = mysql_fetch_assoc($result);
+    $ht = $ct->getHighestTrackPassed($row, 3, true, true)['highest_track'];
+
+    $key = array_search($ht, $tracks);
+    if ($key && $level <= ++$key) return true; // only marks for levels that are less than or equal to the highest track can be saved
     return false;
 }
 
@@ -42,24 +43,21 @@ if ($test_num == 4) {
 
     $qrys = [];
     $info = $_POST['scores'];
-    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     foreach ($info as $id => $more) {
         $user_id = getUserID($id);
         foreach ($more as $test_num => $scores) {
-            foreach ($scores as $type => $other) {
-                foreach ($other as $testLevel => $marks) {
-                    $mark = intval($mark);
-                    $track = 'track_' . $levels[$type];
-                    // make sure child is allowed to enter mark for this level
-                    $allowed = checkTrack($user_id, $levels[$type]);
-                    if ($allowed) {
-                        $sql = "insert into th_chidon_finals 
-                                set year = $year, 
-                                user_id = $user_id, 
-                                $track = $mark, 
-                                on duplicate key update $track = $mark";
-                        $qrys[] = $sql;
-                    }
+            foreach ($scores as $type => $mark) {
+                $mark = intval($mark);
+                $track = 'track_' . $levels[$type];
+                // make sure child is allowed to enter mark for this level
+                $allowed = checkTrack($user_id, $levels[$type]);
+                if ($allowed) {
+                    $sql = "insert into th_chidon_finals 
+                            set year = $year, 
+                            user_id = $user_id, 
+                            $track = $mark, 
+                            on duplicate key update $track = $mark";
+                    $qrys[] = $sql;
                 }
             }
         }
