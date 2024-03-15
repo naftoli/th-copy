@@ -42,6 +42,7 @@ if ($test_num == 4) {
 
     $qrys = [];
     $info = $_POST['scores'];
+    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     foreach ($info as $id => $more) {
         $user_id = getUserID($id);
         foreach ($more as $test_num => $scores) {
