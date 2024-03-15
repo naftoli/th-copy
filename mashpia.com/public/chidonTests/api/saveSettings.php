@@ -47,7 +47,7 @@ switch ($elem) {
         ");
         $MASHPIA_DB->beginTransaction();
         foreach ($tracks as $track) {
-            if ($super_admin && $track == 'genius' && $avg < 80) {
+            if (!$super_admin && $track == 'genius' && $avg < 80) {
                 $success = false;
                 $error_msg = 'Iyun test average must be at least 80';
                 break;
@@ -83,7 +83,7 @@ switch ($elem) {
         ");
         $MASHPIA_DB->beginTransaction();
         foreach ($tracks as $track) {
-            if ($super_admin && $track == 'genius' && $avg < 80) {
+            if (!$super_admin && $track == 'genius' && $avg < 80) {
                 $success = false;
                 $error_msg = 'Iyun test average must be at least 80';
                 break;
