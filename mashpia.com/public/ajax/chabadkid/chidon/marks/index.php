@@ -25,7 +25,7 @@ function checkTrack($user_id, $level) {
             where tc.year = $year and u.user_id = $user_id";
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
-    $ht = $ct->getHighestTrackPassed($row, 3, true, true)['highest_track'];
+    $ht = $ct->getHighestTrackPassed($row)['highest_track'];
 
     $key = array_search($ht, $tracks);
     if ($key && $level <= ++$key) return true; // only marks for levels that are less than or equal to the highest track can be saved

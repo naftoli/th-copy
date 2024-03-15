@@ -593,7 +593,7 @@ class ChidonTests
         return $details;
     }
 
-    public function getHighestTrackPassed( $child, $numTests = 3, $overwrite = true, $forIyun = false ) {
+    public function getHighestTrackPassed( $child, $numTests = 3, $overwrite = true ) {
         if ($overwrite) {
             $this->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
             $this->setScores();
@@ -609,7 +609,7 @@ class ChidonTests
             ];
         }
 
-        $highest = $this->getHighestTrack($this->marks[$child['th_chidon_id']], $child['user_id'], false, $numTests, true, $forIyun);
+        $highest = $this->getHighestTrack($this->marks[$child['th_chidon_id']], $child['user_id'], false, $numTests, true);
         $highest_type = $highest['highest'];
         $highest_avg = $highest['avg'];
 
