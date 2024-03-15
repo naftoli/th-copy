@@ -18,7 +18,7 @@ function getUserID($chidon_id) {
 
 function checkTrack($user_id, $level) {
     global $year, $ct;
-    $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
+    $tracks = ['maven', 'pro', 'expert', 'genius'];
 
     $sql = "select * from th_chidon tc 
             join users u using (user_id) 
@@ -55,14 +55,13 @@ if ($test_num == 4) {
                     $sql = "insert into th_chidon_finals 
                             set year = $year, 
                             user_id = $user_id, 
-                            $track = $mark, 
+                            $track = $mark 
                             on duplicate key update $track = $mark";
                     $qrys[] = $sql;
                 }
             }
         }
     }
-//    echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
     $success = true;
     mysql_query('set autocommit=0');
     mysql_query('begin');
