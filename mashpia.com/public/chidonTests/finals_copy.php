@@ -235,26 +235,14 @@ if (isset($_POST['grade'])) {
                     $key++;
                     // create the proper input box
                     $track = 'track_' . $i;
-                    echo "<td><input type='text' name='{$track}[$id]' class='$track mark'";
-                    if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
-                    else echo "value='0'";
-                    echo " disabled";
-                    // for iyun we also look at cumulative marks
-//                    if ($i == 4) {
-//                        if ($tooLate || !$show_iyun) echo " disabled";
-//                    }
-//                    else if ($i > $key || $tooLate) echo " disabled";
-                    echo " /></td>";
+                    echo "<td>" . (isset($final_marks[$id][$track]) ? $final_marks[$id][$track] : '') . "</td>";
                 }
                 // add khk_final
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
 //                if (intval($child['khk_reg']) && passedKhk($child) && !$tooLate) $disabled = '';
                 if ($super || in_array($school, [61, 269])) {
-                    echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
-                    if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
-                    else echo "value='0'";
-                    echo " /></td>";
+                    echo "<td>" . (isset($final_marks[$id]['khk']) ? $final_marks[$id]['khk'] : '') . "</td>";
                 }
                 echo "<td>" . getAward($child) . "</td></tr>";
             }
