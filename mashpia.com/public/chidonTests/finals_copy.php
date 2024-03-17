@@ -273,49 +273,4 @@ if (isset($_POST['grade'])) {
   </form>
 <?php } ?>
 </body>
-<script>
-  $(function () {
-    // BCM IA wants to have the page only show when entering a password. not secure but makes her believe it's secure.
-    const school_id = <?= $admin_user['auths']['school'][0] ?? 0 ?>;
-    if (school_id == 176) {
-      // password protect
-      const password = 'laky';
-      let pass = '';
-      while (pass != password) {
-        pass = prompt('Please enter password.');
-      }
-    }
-    $('body').show();
-      <?php if (!isset($_POST['submit'])) : ?>
-    alert('Please make sure to SAVE after entering scores.');
-      <?php endif; ?>
-  })
-
-  $(".mark").focus(function () {
-    let val = $(this).val()
-    if (parseInt(val) == 0) {
-      $(this).val('')
-    }
-  })
-
-  $(".mark").blur(function () {
-    const max = 20
-    checkAmount(this, max)
-  })
-
-  $(".khk").blur(function () {
-    const max = 200
-    checkAmount(this, max)
-  })
-
-  function checkAmount(elem, max) {
-    const amount = $(elem).val()
-    if (amount == '') $(elem).val(0)
-    else if (amount > max) {
-      alert('You cannot enter a number greater than ' + max)
-      $(elem).val('')
-      $(elem).focus()
-    }
-  }
-</script>
 </html>
