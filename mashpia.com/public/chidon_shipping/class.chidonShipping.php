@@ -857,9 +857,9 @@ class ChidonShipping
         $ct = new ChidonTests();
         $types = $ct->getTypes();
 
-        if (!empty($row['award_type']) && $row['award_type'] != 'highest final passed') {
-            return $types[$row['award_type']];
-        }
+//        if (!empty($row['award_type']) && $row['award_type'] != 'highest final passed') {
+//            return $types[$row['award_type']];
+//        }
 
         $tracks = [
             1   => 'yesod',
