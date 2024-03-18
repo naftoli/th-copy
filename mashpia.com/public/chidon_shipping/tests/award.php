@@ -11,7 +11,7 @@ require_once '../class.chidonShipping.php';
 $cs = new ChidonShipping();
 
 $user_id = $_GET['user'];
-$sql = "select * from th_chidon where year = 5784 and user_id = " . $user_id;
+$sql = "select * from th_chidon where year = $year and user_id = " . $user_id;
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $award = $cs->getAwardTrack($row);
