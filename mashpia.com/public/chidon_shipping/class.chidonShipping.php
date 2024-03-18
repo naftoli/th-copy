@@ -857,10 +857,6 @@ class ChidonShipping
         $ct = new ChidonTests();
         $types = $ct->getTypes();
 
-//        if (!empty($row['award_type']) && $row['award_type'] != 'highest final passed') {
-//            return $types[$row['award_type']];
-//        }
-
         $tracks = [
             1   => 'yesod',
             2   => 'yediah',
@@ -875,20 +871,13 @@ class ChidonShipping
             'iyun'      => 80
         ];
 
-//        $needed = [
-//            'yesod'     => 60,
-//            'yediah'    => 70,
-//            'havonah'   => 80,
-//            'iyun'      => 90
-//        ];
-
         $award = '';
         $needed = $ct->getPassingAvgs($child['user_id'], 'finals');
         for ($i = 1; $i <= 4; $i++) {
             $level = 'track_' . $i;
             if (isset($child[$level])) {
                 $score = $child[$level];
-                if (($score / $finals[$tracks[$i]]) * 100 >= $needed[$tracks[$i]]) {
+                if (($score / $finals[$tracks[$i]]) * 100 >= $needed[array_search(ucwords($tracks[$i]), $types)]) {
                     $award = $tracks[$i];
                 } else {
                     break;  // if one level is not passed, then no need to check the rest

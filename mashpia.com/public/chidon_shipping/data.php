@@ -194,7 +194,7 @@ function getShippingPaid($ship_to) {
             registration_charges
         WHERE
             year = :year 
-                AND type IN (" . implode(',', $type) . ") 
+                AND type IN ('" . implode("','", $type) . "') 
         ORDER BY admin_id";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute([
