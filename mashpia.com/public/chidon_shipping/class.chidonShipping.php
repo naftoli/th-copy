@@ -875,38 +875,25 @@ class ChidonShipping
             'iyun'      => 80
         ];
 
-        $needed = [
-            'yesod'     => 60,
-            'yediah'    => 70,
-            'havonah'   => 80,
-            'iyun'      => 90
-        ];
+//        $needed = [
+//            'yesod'     => 60,
+//            'yediah'    => 70,
+//            'havonah'   => 80,
+//            'iyun'      => 90
+//        ];
 
-        // highest track passed
-        $highest_track = $ct->getHighestTrackPassed($child)['highest_track'];
-
-        // find out if award is same as before final or not
         $award = '';
-        if ($highest_track) {
-            $key = array_search(strtolower($types[$highest_track]), $tracks);
-            if ($key !== false) {
-                // go down from key to find where the child is holding
-                $score = 0;
-                for ($i = 1; $i <= $key; $i++) {
-                    $level = 'track_' . $i;
-                    if (isset($child[$level])) {
-                        $score += $child[$level];
-                    }
-                }
-                for ($i = 1; $i <= $key; $i++) {
-                    $divide_by = $finals[$tracks[$i]];
-                    $final_score = number_format(($score / $divide_by) * 100, 2);
-                    if ($final_score >= $needed[$tracks[$i]]) {
-                        $award = $tracks[$i];
-                    }
+        $needed = $ct->getPassingAvgs($child['user_id'], 'finals');
+        for ($i = 1; $i <= 4; $i++) {
+            $level = 'track_' . $i;
+            if (isset($child[$level])) {
+                $score = $child[$level];
+                if (($score / $finals[$tracks[$i]]) * 100 >= $needed[$tracks[$i]]) {
+                    $award = $tracks[$i];
                 }
             }
         }
+
         return $award;
     }
 
