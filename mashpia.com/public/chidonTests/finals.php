@@ -217,9 +217,6 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            if ($child['user_serial'] == 7773748) {
-              echo "<pre>"; print_r($child); echo "</pre>"; exit;
-            }
             $highest = getTrack($child); // track based off tests
             $child['highest_track'] = $highest;
             $show_iyun = showIyun($child);
