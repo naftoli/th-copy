@@ -180,25 +180,32 @@ function addToSummary($item, $school) {
     else $grand_summary[$key][$school] = $qty;
 }
 
-function checkShippingStatus($admin_id) {
+function getShippingPaid($ship_to) {
     global $MASHPIA_DB, $year;
 
-    $status = 'pickup';
-    $sql = "select * from chidon_parent_shipping 
-            where year = :year 
-            and parent_id = :id";
+    $type = ['RRSUSA', 'RRSCAN', 'RRSINT'];
+    if ($ship_to == 'domestic') $type = ['RRSUSA'];
+    else if ($ship_to == 'intl') $type = ['RRSCAN', 'RRSINT'];
+
+    $sql = "
+        SELECT DISTINCT
+            admin_id
+        FROM
+            registration_charges
+        WHERE
+            year = :year 
+                AND type IN (" . explode(',', $type) . ") 
+        ORDER BY admin_id";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute([
-        'year'  => $year,
-        'id'    => $admin_id
+        'year'  => $year
     ]);
-    $row = $stmt->fetch();
-    if ($row && $row['amount_paid'] > 0) $status = 'ship';
-    return $status;
+    $rows = $stmt->fetchAll();
+    return $rows;
 }
 
 function createCSV($items, $year, $school_id, $shipTo = 'all') {
-    global $MASHPIA_DB;
+    global $MASHPIA_DB, $shipping_paid;
 
     // create sql to get all needed fields
     $sql = "SELECT 
@@ -239,7 +246,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
         if (! isset($admins[$admin_id])) $admins[$admin_id] = $row;
         $children[$user_id] = $admin_id;
         $users[$user_id] = $row;
-        $shipping_status[$user_id] = checkShippingStatus($admin_id);
+        $shipping_status[$user_id] = in_array($admin_id, $shipping_paid) ? 'ship' : 'pickup';
     }
 
     $info = [];
