@@ -890,6 +890,8 @@ class ChidonShipping
                 $score = $child[$level];
                 if (($score / $finals[$tracks[$i]]) * 100 >= $needed[$tracks[$i]]) {
                     $award = $tracks[$i];
+                } else {
+                    break;  // if one level is not passed, then no need to check the rest
                 }
             }
         }
