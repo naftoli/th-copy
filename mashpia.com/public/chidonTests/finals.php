@@ -183,6 +183,7 @@ if ($admin_user['auth'] != 'super') {
 <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate
   the correct mark.
 </div>
+here
 <?php
 if ($admin_user['auth'] == 'super') {
     $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $currentYear;
@@ -217,7 +218,7 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            $highest = getTrack($child); // track based off tests
+            $highest = $child['highest_track'] == 'iyun' ? $child['highest_track'] : getTrack($child); // track based off tests
             $child['highest_track'] = $highest;
             $show_iyun = showIyun($child);
             if ($show_iyun) $child['highest_track'] = 'iyun';
