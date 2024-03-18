@@ -141,10 +141,10 @@ $tooLate = false;
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-//    $shutdown = new DateTime('2023-03-06 19:20:00');
-//    if ($today >= $shutdown) {
-//        $tooLate = true;
-//    }
+    $shutdown = new DateTime('2024-03-18 18:00:00');
+    if ($today >= $shutdown) {
+        $tooLate = true;
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -217,6 +217,9 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
+            if ($child['user_serial'] == 7773748) {
+              echo "<pre>"; print_r($child); echo "</pre>"; exit;
+            }
             $highest = getTrack($child); // track based off tests
             $child['highest_track'] = $highest;
             $show_iyun = showIyun($child);
