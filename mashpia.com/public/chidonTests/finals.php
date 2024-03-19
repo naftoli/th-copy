@@ -109,7 +109,12 @@ function getTrack($child) {
 
 function getAward($child)
 {
-    global $cs;
+    global $cs, $final_marks;
+
+    if (isset($final_marks[$child['user_id']])) {
+        $child += $final_marks[$child['user_id']];
+    }
+
     $awards = [
       'yesod' => 'certificate',
       'yediah' => 'plaque',
@@ -235,7 +240,6 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            $child += $final_marks[$child['user_id']];
             $highest = $child['highest_track'] == 'iyun' ? $child['highest_track'] : getTrack($child); // track based off tests
             $child['highest_track'] = $highest;
             $show_iyun = showIyun($child);
