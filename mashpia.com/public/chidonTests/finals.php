@@ -201,7 +201,6 @@ while ($row = mysql_fetch_assoc($result)) {
 <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate
   the correct mark.
 </div>
-here
 <?php
 if ($admin_user['auth'] == 'super') {
     $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $currentYear;
