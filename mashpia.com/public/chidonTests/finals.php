@@ -153,7 +153,7 @@ $final_marks = [];
 $sql = "SELECT *, tcf.khk AS khk_final FROM th_chidon_finals tcf 
         JOIN th_chidon tc USING (user_id, year) 
         JOIN users u USING (user_id) 
-        WHERE tcf.year = :year 
+        WHERE tcf.year = $year 
             AND (track_1 > 0 OR track_2 > 0
             OR track_3 > 0
             OR track_4 > 0
