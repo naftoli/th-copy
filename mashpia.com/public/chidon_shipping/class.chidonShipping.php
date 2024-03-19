@@ -877,11 +877,12 @@ class ChidonShipping
         // get the
 
         $award = '';
+        $score = 0;
         $needed = $ct->getPassingAvgs($child['user_id'], 'finals');
         for ($i = 1; $i <= 4; $i++) {
             $level = 'track_' . $i;
             if (isset($child[$level])) {
-                $score = $child[$level];
+                $score += $child[$level];
                 $pass = $needed[array_search($tracks[$i], $types)];
                 $mark = round(($score / $finals[$tracks[$i]]) * 100);
 //                echo "User ID: " . $child['user_id'] . " - Track: " . $tracks[$i] . " - Score: " . $score . " - Pass: " . $pass . " - Mark: " . $mark . "<br />";
