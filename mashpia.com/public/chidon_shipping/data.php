@@ -183,6 +183,7 @@ function addToSummary($item, $school) {
 function getShippingPaid($ship_to) {
     global $MASHPIA_DB, $year;
 
+    $info = [];
     $type = ['RRSUSA', 'RRSCAN', 'RRSINT'];
     if ($ship_to == 'domestic') $type = ['RRSUSA'];
     else if ($ship_to == 'intl') $type = ['RRSCAN', 'RRSINT'];
@@ -201,7 +202,10 @@ function getShippingPaid($ship_to) {
         'year'  => $year
     ]);
     $rows = $stmt->fetchAll();
-    return $rows;
+    foreach ($rows as $row) {
+        $info[] = $row['admin_id'];
+    }
+    return $info;
 }
 
 function createCSV($items, $year, $school_id, $shipTo = 'all') {
