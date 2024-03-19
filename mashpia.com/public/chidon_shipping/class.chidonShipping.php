@@ -855,7 +855,10 @@ class ChidonShipping
      */
     public function getAwardTrack($child) {
         $ct = new ChidonTests();
-        $types = $ct->getTypes();
+        $types = array_combine(
+            array_keys($ct->getTypes()),
+            array_map(function($v) { return strtolower($v); }, $ct->getTypes())
+        );
 
         $tracks = [
             1   => 'yesod',
@@ -871,13 +874,18 @@ class ChidonShipping
             'iyun'      => 80
         ];
 
+        // get the
+
         $award = '';
         $needed = $ct->getPassingAvgs($child['user_id'], 'finals');
         for ($i = 1; $i <= 4; $i++) {
             $level = 'track_' . $i;
             if (isset($child[$level])) {
                 $score = $child[$level];
-                if (($score / $finals[$tracks[$i]]) * 100 >= $needed[array_search(ucwords($tracks[$i]), $types)]) {
+                $pass = $needed[array_search($tracks[$i], $types)];
+                $mark = round(($score / $finals[$tracks[$i]]) * 100);
+//                echo "User ID: " . $child['user_id'] . " - Track: " . $tracks[$i] . " - Score: " . $score . " - Pass: " . $pass . " - Mark: " . $mark . "<br />";
+                if ($mark >= $pass) {
                     $award = $tracks[$i];
                 } else {
                     break;  // if one level is not passed, then no need to check the rest
