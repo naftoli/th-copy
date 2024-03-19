@@ -191,7 +191,7 @@ function getShippingInfo($row) {
     $stmt = $db->prepare("
         SELECT * FROM registration_charges where year = :year and admin_id = (
             SELECT admin_id FROM admin_auths WHERE id = :id
-        ) AND type IN ('RRSUSA', 'RRSINT', 'RRSCAN') 
+        ) AND type IN ('RRSUSA', 'RRSCAN', 'RRSINT') 
     ");
    $stmt->execute([
         ':year' => $year,
