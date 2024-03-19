@@ -867,8 +867,6 @@ class ChidonShipping
             4   => 'iyun'
         ];
 
-        // get the
-
         $award = '';
         $max = 20;
         $needed = $ct->getPassingAvgs($child['user_id'], 'finals');
