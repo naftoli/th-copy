@@ -867,26 +867,19 @@ class ChidonShipping
             4   => 'iyun'
         ];
 
-        $finals = [
-            'yesod'     => 20,
-            'yediah'    => 40,
-            'havonah'   => 60,
-            'iyun'      => 80
-        ];
-
         // get the
 
         $award = '';
-        $score = 0;
+        $max = 20;
         $needed = $ct->getPassingAvgs($child['user_id'], 'finals');
         for ($i = 1; $i <= 4; $i++) {
             $level = 'track_' . $i;
             if (isset($child[$level])) {
-                $score += $child[$level];
-                $pass = $needed[array_search($tracks[$i], $types)];
-                $mark = round(($score / $finals[$tracks[$i]]) * 100);
+                $score = $child[$level];
+                $avg_needed = $needed[array_search($tracks[$i], $types)];
+                $mark = round(($score / $max) * 100);
 //                echo "User ID: " . $child['user_id'] . " - Track: " . $tracks[$i] . " - Score: " . $score . " - Pass: " . $pass . " - Mark: " . $mark . "<br />";
-                if ($mark >= $pass) {
+                if ($mark >= $avg_needed) {
                     $award = $tracks[$i];
                 } else {
                     break;  // if one level is not passed, then no need to check the rest
