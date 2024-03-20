@@ -32,7 +32,7 @@ if (isset($_POST['submit']) && isset($_POST['track_1'])) {
         foreach ($_POST[$track] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
-                $qrys[] = "insert into th_chidon_finals 
+                $qrys[] = "insert ignore into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
                             $track = $mark 
@@ -44,7 +44,7 @@ if (isset($_POST['submit']) && isset($_POST['track_1'])) {
         foreach ($_POST['khk'] as $id => $mark) {
             if ($mark != '') {
                 $mark = intval($mark);
-                $qrys[] = "insert into th_chidon_finals 
+                $qrys[] = "insert ignore into th_chidon_finals 
                             set year = $year, 
                             user_id = $id, 
                             khk = $mark 
@@ -151,23 +151,6 @@ if ($admin_user['auth'] != 'super') {
     if ($today >= $shutdown) {
         $tooLate = true;
     }
-}
-
-// get final marks for all children
-$final_marks = [];
-$sql = "SELECT *, tcf.khk AS khk_final FROM th_chidon_finals tcf 
-        JOIN th_chidon tc USING (user_id, year) 
-        JOIN users u USING (user_id) 
-        WHERE tcf.year = $year 
-            AND (track_1 > 0 OR track_2 > 0
-            OR track_3 > 0
-            OR track_4 > 0
-            OR tcf.khk > 0)";
-$sql .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ")";
-$sql .= " GROUP BY user_id";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $final_marks[$row['user_id']] = $row;
 }
 ?>
 <!DOCTYPE html>
