@@ -24,7 +24,7 @@ $cs = new ChidonShipping($year);
 
 // save marks
 $msg = '';
-if (isset($_POST['submit']) && isset($_POST['track_1'])) {
+if (isset($_POST['submit']) && isset($_POST['track_4'])) {
     echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
     $qrys = [];
     for ($i = 4; $i <= 4; $i++) {
