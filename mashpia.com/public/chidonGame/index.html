@@ -21,6 +21,10 @@
         	.table td {
         		text-align: center;
         	}
+          .table {
+            margin: auto;
+            width: 400px;
+          }
        		#saveTeams {
         		width: 200px;
         		float: right;
@@ -31,9 +35,8 @@
         	}
         	#teams {
         		margin: auto;
-        		width: 800px;
-            margin-bottom: 50px;
-            margin-top: 30px;
+        		width: 500px;
+            float: right;
         	}
         	#teamNames td:last-child {
         		text-align: center;
@@ -49,14 +52,16 @@
         		margin: 0;
         	}
 
+          .team_name {
+            text-align: center;
+            font-size: x-large;
+          }
+
           #main {
             margin-left: auto;
             margin-right: auto;
-            width: 365px;
-            background-color: #ffff00;
-            padding: 20px;
           }
-          #action {
+          .action {
             text-align: center;
           }
           #main select {
@@ -68,6 +73,15 @@
             font-size: 14px;
             margin-left: 10px;
           }
+
+          .bolts {
+            margin: auto;
+            width: 800px;
+            padding: 20px;
+          }
+          .bolts img {
+            width: 75px;
+          }
         </style>            
       </head>
 
@@ -75,116 +89,119 @@
     
     <br>
     <div class="container">
-		<table class="table table-bordered" id="round1">
-			<tbody><tr>
-				<th><h2>Round 1</h2></th>
-				<td>
-					<div class="tname t1n">Team 1</div>
-					<div class="tpoints t1p">0</div>
-				</td>
-				<td>
-					<div class="tname t2n">Team 2</div>
-					<div class="tpoints t2p">0</div>
-				</td>
-				<td>
-					<div class="tname t3n">Team 3</div>
-					<div class="tpoints t3p">0</div>
-        </td>
-        <td>
-					<div class="tname t4n">Team 4</div>
-					<div class="tpoints t4p">0</div>
-				</td>
-			</tr>
-		</tbody></table>
-		<table class="table table-bordered" id="round2">
-			<tbody><tr>
-				<th><h2>Round 2</h2></th>
-				<td>
-					<div class="tname t1n">Team 1</div>
-					<div class="tpoints t1p">0</div>
-				</td>
-				<td>
-					<div class="tname t2n">Team 2</div>
-					<div class="tpoints t2p">0</div>
-				</td>
-				<td>
-					<div class="tname t3n">Team 3</div>
-					<div class="tpoints t3p">0</div>
-        </td>
-        <td>
-					<div class="tname t4n">Team 4</div>
-					<div class="tpoints t4p">0</div>
-				</td>
-			</tr>
-		</tbody></table>
-		<table class="table table-bordered" id="round3">
-			<tbody><tr>
-				<th width="390px"><h2>Round 3</h2></th>
-				<td colspan="2">
-					<div class="tname t1n">Team 1</div>
-					<div class="tpoints t1p">0</div>
-				</td>
-				<td colspan="2">
-					<div class="tname t2n">Team 2</div>
-					<div class="tpoints t2p">0</div>
-				</td>
-			</tr>
-		</tbody></table>
-	</div>
-    	 	
- 	<div id="teams">
-	 		<div id="saveTeams">
-	 		<button id="save1">Save as Round 1</button>
-	 		<button id="save2">Save as Round 2</button>
-			<button id="save3">Save as Round 3</button>
-	 	</div>
- 		<table id="teamNames">
- 			<tbody><tr>
- 				<td class="teamName">משנה תורה</td>
- 				<td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
- 				<td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
-        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>
-        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>
- 				<td><input type="radio" name="t1" value="0" checked=""> None</td>
- 			</tr>
- 			<tr>
- 				<td class="teamName">אגרת הרמב"ם</td>
- 				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
- 				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
-        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>
-        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>
- 				<td><input type="radio" name="t2" value="0" checked=""> None</td>
- 			</tr>
- 			<tr>
- 				<td class="teamName">ספר המצוות</td>
- 				<td><input type="radio" name="t3" value="1" class="one"> Team 1</td>
- 				<td><input type="radio" name="t3" value="2" class="two"> Team 2</td>
-        <td><input type="radio" name="t3" value="3" class="three"> Team 3</td>
-        <td><input type="radio" name="t3" value="4" class="four"> Team 4</td>
- 				<td><input type="radio" name="t3" value="0" checked=""> None</td>
- 			</tr>
- 			<tr>
- 				<td class="teamName">פירוש המשניות</td>
- 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>
- 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>
-        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>
-        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>
- 				<td><input type="radio" name="t4" value="0" checked=""> None</td>
- 			</tr>
- 			<tr>
- 				<td colspan="5">
-					<br />
-					<button id="update">Update</button>
-				</td>
-             </tr>
-<!--             &lt;!&ndash; <tr>-->
-<!-- 				<td colspan="5">-->
-<!--					<br />-->
-<!--					<button id="round3">Change Boxes for Round 3</button>-->
+      <div style="float: left">
+        <table class="table table-bordered" id="round1">
+          <tbody><tr>
+            <th><h2>Round 1</h2></th>
+            <td>
+              <div class="tname t1n">Team 1</div>
+              <div class="tpoints t1p">0</div>
+            </td>
+            <td>
+              <div class="tname t2n">Team 2</div>
+              <div class="tpoints t2p">0</div>
+            </td>
+    <!--				<td>-->
+    <!--					<div class="tname t3n">Team 3</div>-->
+    <!--					<div class="tpoints t3p">0</div>-->
+    <!--        </td>-->
+    <!--        <td>-->
+    <!--					<div class="tname t4n">Team 4</div>-->
+    <!--					<div class="tpoints t4p">0</div>-->
+    <!--				</td>-->
+          </tr>
+        </tbody></table>
+        <table class="table table-bordered" id="round2">
+          <tbody><tr>
+            <th><h2>Round 2</h2></th>
+            <td>
+              <div class="tname t1n">Team 1</div>
+              <div class="tpoints t1p">0</div>
+            </td>
+            <td>
+              <div class="tname t2n">Team 2</div>
+              <div class="tpoints t2p">0</div>
+            </td>
+    <!--				<td>-->
+    <!--					<div class="tname t3n">Team 3</div>-->
+    <!--					<div class="tpoints t3p">0</div>-->
+    <!--        </td>-->
+    <!--        <td>-->
+    <!--					<div class="tname t4n">Team 4</div>-->
+    <!--					<div class="tpoints t4p">0</div>-->
+    <!--				</td>-->
+          </tr>
+        </tbody></table>
+      </div>
+<!--		<table class="table table-bordered" id="round3">-->
+<!--			<tbody><tr>-->
+<!--				<th width="390px"><h2>Round 3</h2></th>-->
+<!--				<td colspan="2">-->
+<!--					<div class="tname t1n">Team 1</div>-->
+<!--					<div class="tpoints t1p">0</div>-->
 <!--				</td>-->
-<!-- 			</tr> &ndash;&gt;-->
- 		</tbody></table>     		
- 	</div>
+<!--				<td colspan="2">-->
+<!--					<div class="tname t2n">Team 2</div>-->
+<!--					<div class="tpoints t2p">0</div>-->
+<!--				</td>-->
+<!--			</tr>-->
+<!--		</tbody></table>-->
+      <div id="teams">
+        <div id="saveTeams">
+          <button id="save1">Save as Round 1</button>
+          <button id="save2">Save as Round 2</button>
+          <!--			<button id="save3">Save as Round 3</button>-->
+        </div>
+        <table id="teamNames">
+          <tbody>
+          <tr>
+            <td class="teamName">ספר המצוות</td>
+            <td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
+            <td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
+            <!--        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>-->
+            <!--        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>-->
+            <td><input type="radio" name="t1" value="0" checked=""> None</td>
+          </tr>
+          <tr>
+            <td class="teamName">משנה תורה</td>
+            <td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
+            <td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
+            <!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
+            <!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
+            <td><input type="radio" name="t2" value="0" checked=""> None</td>
+          </tr>
+          <!-- 			<tr>-->
+          <!-- 				<td class="teamName">אגרת הרמב"ם</td>-->
+          <!-- 				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>-->
+          <!-- 				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>-->
+          <!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
+          <!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
+          <!-- 				<td><input type="radio" name="t2" value="0" checked=""> None</td>-->
+          <!-- 			</tr>-->
+          <!-- 			-->
+          <!-- 			<tr>-->
+          <!-- 				<td class="teamName">פירוש המשניות</td>-->
+          <!-- 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>-->
+          <!-- 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>-->
+          <!--        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>-->
+          <!--        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>-->
+          <!-- 				<td><input type="radio" name="t4" value="0" checked=""> None</td>-->
+          <!-- 			</tr>-->
+          <tr>
+            <td colspan="5">
+              <br />
+              <button id="update">Update</button>
+            </td>
+          </tr>
+          <!--             &lt;!&ndash; <tr>-->
+          <!-- 				<td colspan="5">-->
+          <!--					<br />-->
+          <!--					<button id="round3">Change Boxes for Round 3</button>-->
+          <!--				</td>-->
+          <!-- 			</tr> &ndash;&gt;-->
+          </tbody></table>
+      </div>
+	</div>
  	
     <!-- Pricing Table Section -->
     <section id="pricing-table">
@@ -193,19 +210,20 @@
                 <div class="pricing">
                     <div class="col-md-3 col-sm-12 col-xs-12">
                     	<div class="givePoints" id="1">
-                            <button class="plus">+10</button>
-                            <button class="plus">+20</button>
-                            <button class="minus">-10</button>
-                            <button class="minus">-20</button>
-                            <button class="plus">+400</button>
-                            <br />
-                            <input type="text" size="3" style="margin-top: 10px;">
-                            <button>Go</button><br>
-                            <label for="points">Set Points</label>
-                            <input type="text" name="points" size="5">
-                            <button class="setPoints">Set</button>
-                            <button class="resetPoints">Reset</button>
+                          <button class="plus">+10</button>
+                          <button class="plus">+20</button>
+                          <button class="minus">-10</button>
+                          <button class="minus">-20</button>
+                          <button class="plus">+400</button>
+                          <br />
+                          <input type="text" size="3" style="margin-top: 10px;">
+                          <button>Go</button><br>
+                          <label for="points">Set Points</label>
+                          <input type="text" name="points" size="5">
+                          <button class="setPoints">Set</button>
+                          <button class="resetPoints">Reset</button>
                     	</div>
+                      <div class="team_name"></div>
                     </div>
                     
                     <div class="col-md-3 col-sm-12 col-xs-12">
@@ -223,41 +241,42 @@
                             <button class="setPoints">Set</button>
                             <button class="resetPoints">Reset</button>
                     	</div>
+                      <div class="team_name"></div>
                     </div>
                     
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="givePoints" id="3">
-                          <button class="plus">+10</button>
-                          <button class="plus">+20</button>
-                          <button class="minus">-10</button>
-                          <button class="minus">-20</button>
-                          <button class="plus">+400</button>
-                          <br />
-                          <input type="text" size="3" style="margin-top: 10px;">
-                          <button>Go</button><br>
-                          <label for="points">Set Points</label>
-                          <input type="text" name="points" size="5">
-                          <button class="setPoints">Set</button>
-                          <button class="resetPoints">Reset</button>
-                    	</div>
-                    </div>
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="givePoints" id="3">-->
+<!--                          <button class="plus">+10</button>-->
+<!--                          <button class="plus">+20</button>-->
+<!--                          <button class="minus">-10</button>-->
+<!--                          <button class="minus">-20</button>-->
+<!--                          <button class="plus">+400</button>-->
+<!--                          <br />-->
+<!--                          <input type="text" size="3" style="margin-top: 10px;">-->
+<!--                          <button>Go</button><br>-->
+<!--                          <label for="points">Set Points</label>-->
+<!--                          <input type="text" name="points" size="5">-->
+<!--                          <button class="setPoints">Set</button>-->
+<!--                          <button class="resetPoints">Reset</button>-->
+<!--                    	</div>-->
+<!--                    </div>-->
 
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="givePoints" id="4">
-                          <button class="plus">+10</button>
-                          <button class="plus">+20</button>
-                          <button class="minus">-10</button>
-                          <button class="minus">-20</button>
-                          <button class="plus">+400</button>
-                          <br />
-                          <input type="text" size="3" style="margin-top: 10px;">
-                          <button>Go</button><br>
-                          <label for="points">Set Points</label>
-                          <input type="text" name="points" size="5">
-                          <button class="setPoints">Set</button>
-                          <button class="resetPoints">Reset</button>
-                    	</div>
-                    </div>
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="givePoints" id="4">-->
+<!--                          <button class="plus">+10</button>-->
+<!--                          <button class="plus">+20</button>-->
+<!--                          <button class="minus">-10</button>-->
+<!--                          <button class="minus">-20</button>-->
+<!--                          <button class="plus">+400</button>-->
+<!--                          <br />-->
+<!--                          <input type="text" size="3" style="margin-top: 10px;">-->
+<!--                          <button>Go</button><br>-->
+<!--                          <label for="points">Set Points</label>-->
+<!--                          <input type="text" name="points" size="5">-->
+<!--                          <button class="setPoints">Set</button>-->
+<!--                          <button class="resetPoints">Reset</button>-->
+<!--                    	</div>-->
+<!--                    </div>-->
             	</div>
             </div>
         </div>
@@ -266,42 +285,42 @@
     	
     <!-- Pricing Table Section -->
     <p>&nbsp;</p>
-    <div id="main" style="float: right;"></div>
+    <div id="scores"></div>
     <section id="pricing-table" style="width: 100%; padding-left: 20px; padding-right: 20px;">
         <div class="container">
             <div class="row scoreboard">
                 <div class="pricing">
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="pricing-table table1">-->
+<!--                        	<div class="pricing-list t1">-->
+<!--                                <ul>-->
+<!--                                    <li><span>אגרת הרמב"ם</span></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="pricing-header">-->
+<!--                                <p class="pricing-rate team1" style="display: block;">0</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    -->
+<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+<!--                        <div class="pricing-table table2">-->
+<!--                        	<div class="pricing-list t2">-->
+<!--                                <ul>-->
+<!--                                    <li><span>פירוש המשניות</span></li>-->
+<!--                                </ul>-->
+<!--                            </div>-->
+<!--                            -->
+<!--                            <div class="pricing-header">-->
+<!--                                <p class="pricing-rate team2" style="display: block;">0</p>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                    
                     <div class="col-md-3 col-sm-12 col-xs-12">
                         <div class="pricing-table table1">
                         	<div class="pricing-list t1">
-                                <ul>
-                                    <li><span>אגרת הרמב"ם</span></li>
-                                </ul>
-                            </div>
-                            
-                            <div class="pricing-header">
-                                <p class="pricing-rate team1" style="display: block;">0</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table2">
-                        	<div class="pricing-list t2">
-                                <ul>
-                                    <li><span>פירוש המשניות</span></li>
-                                </ul>
-                            </div>
-                            
-                            <div class="pricing-header">
-                                <p class="pricing-rate team2" style="display: block;">0</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table3">
-                        	<div class="pricing-list t3">
                                 <ul>
                                     <li><span>ספר המצוות</span></li>
                                 </ul>
@@ -314,8 +333,8 @@
                     </div>
 
                     <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table4">
-                        	<div class="pricing-list t4">
+                        <div class="pricing-table table2">
+                        	<div class="pricing-list t2">
                                 <ul>
                                     <li><span>משנה תורה</span></li>
                                 </ul>
@@ -330,6 +349,8 @@
             </div>
         </div>
     </section>
+
+    <div id="main"></div>
 	<!-- Pricing Table Section End -->
 
     <!-- <div style="margin-top: 100px;">
@@ -487,69 +508,72 @@
     			}
     		});
     		
-    		$(".three").click( function(e) {
-    			var checked = 0;
-    			$(".three").each( function() {
-    				if ($(this).is(":checked")) checked++;
-    			});
-    			if (checked > 1) {
-    				e.preventDefault();
-    			}
-    		});
-
-        $(".four").click( function(e) {
-    			var checked = 0;
-    			$(".four").each( function() {
-    				if ($(this).is(":checked")) checked++;
-    			});
-    			if (checked > 1) {
-    				e.preventDefault();
-    			}
-    		});
+    		// $(".three").click( function(e) {
+    		// 	var checked = 0;
+    		// 	$(".three").each( function() {
+    		// 		if ($(this).is(":checked")) checked++;
+    		// 	});
+    		// 	if (checked > 1) {
+    		// 		e.preventDefault();
+    		// 	}
+    		// });
+        //
+        // $(".four").click( function(e) {
+    		// 	var checked = 0;
+    		// 	$(".four").each( function() {
+    		// 		if ($(this).is(":checked")) checked++;
+    		// 	});
+    		// 	if (checked > 1) {
+    		// 		e.preventDefault();
+    		// 	}
+    		// });
     		
     		$("#update").click( function() {
-    			var t1, t2, t3, t4, tTotal = 0;
+    			var t1, t2, tTotal = 0;
     			$(".one").each( function() {
     				if ($(this).is(":checked")) {
     					t1 = $(this).parent().parent().find('.teamName').text();
-						tTotal++;
+						  tTotal++;
     					return;
     				}
     			});
     			$(".two").each( function() {
     				if ($(this).is(":checked")) {
     					t2 = $(this).parent().parent().find('.teamName').text();
-						tTotal++;
+						  tTotal++;
     					return;
     				}
     			});
-    			$(".three").each( function() {
-    				if ($(this).is(":checked")) {
-    					t3 = $(this).parent().parent().find('.teamName').text();
-						tTotal++;
-    					return;
-    				}
-    			});
-          $(".four").each( function() {
-    				if ($(this).is(":checked")) {
-    					t4 = $(this).parent().parent().find('.teamName').text();
-						tTotal++;
-    					return;
-    				}
-    			});
+    			// $(".three").each( function() {
+    			// 	if ($(this).is(":checked")) {
+    			// 		t3 = $(this).parent().parent().find('.teamName').text();
+					// 	tTotal++;
+    			// 		return;
+    			// 	}
+    			// });
+          // $(".four").each( function() {
+    			// 	if ($(this).is(":checked")) {
+    			// 		t4 = $(this).parent().parent().find('.teamName').text();
+					// 	tTotal++;
+    			// 		return;
+    			// 	}
+    			// });
 
-    			if (t1 == undefined || t2 == undefined || t3 == undefined || t4 == undefined) {
-    				alert('You have not chosen all four teams.');
+    			if (t1 == undefined || t2 == undefined) {
+    				alert('You have not chosen both teams.');
     				return;
     			}
 
     			$(".t1 span").text(t1);
     			$(".t2 span").text(t2);
-          $(".t3 span").text(t3);
-          $(".t4 span").text(t4);
 
-          if (tTotal == 4) {
-            for (var n = 1; n < 5; n++) {
+          $(".team_name").eq(0).text(t1);
+          $(".team_name").eq(1).text(t2);
+          // $(".t3 span").text(t3);
+          // $(".t4 span").text(t4);
+
+          if (tTotal == 2) {
+            for (var n = 1; n < 3; n++) {
               $("#" + n).show();
               $(".table" + n).show();
             }
@@ -625,23 +649,23 @@
 				if (conf) {
 					var t1 = $(".t1").eq(0).text().trim();
 					var t2 = $(".t2").eq(0).text().trim();
-					var t3 = $(".t3").eq(0).text().trim();
-          var t4 = $(".t4").eq(0).text().trim();
+					// var t3 = $(".t3").eq(0).text().trim();
+          // var t4 = $(".t4").eq(0).text().trim();
 					
 					var team1 = $(".team1").eq(0).text();
 					var team2 = $(".team2").eq(0).text();
-					var team3 = $(".team3").eq(0).text();
-          var team4 = $(".team4").eq(0).text();
+					// var team3 = $(".team3").eq(0).text();
+          // var team4 = $(".team4").eq(0).text();
 					
 					$("#round1 .t1n").text(t1);       			
 					$("#round1 .t2n").text(t2);
-					$("#round1 .t3n").text(t3);
-          $("#round1 .t4n").text(t4);
+					// $("#round1 .t3n").text(t3);
+          // $("#round1 .t4n").text(t4);
 					
 					$("#round1 .t1p").text(team1);
 					$("#round1 .t2p").text(team2);
-					$("#round1 .t3p").text(team3);
-          $("#round1 .t4p").text(team4);
+					// $("#round1 .t3p").text(team3);
+          // $("#round1 .t4p").text(team4);
 				}
     		});
     		
@@ -650,23 +674,23 @@
 				if (conf) {
 					var t1 = $(".t1").eq(0).text().trim();
 					var t2 = $(".t2").eq(0).text().trim();
-					var t3 = $(".t3").eq(0).text().trim();
-          var t4 = $(".t4").eq(0).text().trim();
+					// var t3 = $(".t3").eq(0).text().trim();
+          // var t4 = $(".t4").eq(0).text().trim();
 					
 					var team1 = $(".team1").eq(0).text();
 					var team2 = $(".team2").eq(0).text();
-					var team3 = $(".team3").eq(0).text();
-          var team4 = $(".team4").eq(0).text();
+					// var team3 = $(".team3").eq(0).text();
+          // var team4 = $(".team4").eq(0).text();
 					
 					$("#round2 .t1n").text(t1);       			
 					$("#round2 .t2n").text(t2);
-					$("#round2 .t3n").text(t3);
-          $("#round2 .t4n").text(t4);
+					// $("#round2 .t3n").text(t3);
+          // $("#round2 .t4n").text(t4);
 					
 					$("#round2 .t1p").text(team1);
 					$("#round2 .t2p").text(team2);
-					$("#round2 .t3p").text(team3);
-          $("#round2 .t4p").text(team4);
+					// $("#round2 .t3p").text(team3);
+          // $("#round2 .t4p").text(team4);
 				}
     		});
 			
@@ -675,19 +699,19 @@
 				if (conf) {
 					var t1 = $(".t1").eq(0).text().trim();
 					var t2 = $(".t2").eq(0).text().trim();
-					var t3 = $(".t3").eq(0).text().trim();
+					// var t3 = $(".t3").eq(0).text().trim();
 					
 					var team1 = $(".team1").eq(0).text();
 					var team2 = $(".team2").eq(0).text();
-					var team3 = $(".team3").eq(0).text();
+					// var team3 = $(".team3").eq(0).text();
 					
 					$("#round3 .t1n").text(t1);       			
 					$("#round3 .t2n").text(t2);
-					$("#round3 .t3n").text(t3);
+					// $("#round3 .t3n").text(t3);
 					
 					$("#round3 .t1p").text(team1);
 					$("#round3 .t2p").text(team2);
-					$("#round3 .t3p").text(team3);
+					// $("#round3 .t3p").text(team3);
 				}
     		});
     		
@@ -714,10 +738,6 @@
     				$(".team" + num).text('0');
     			}
     		});
-
-            $("#round3").click( function() {
-
-            });
     	});
     	
     	function updateTable(id) {
@@ -727,38 +747,45 @@
     	}
     </script>
     <script>
-      let total = 15
-      let teams = ['משנה תורה', 'אגרת הרמב"ם', 'ספר המצוות', 'פירוש המשניות']
+      let total = 30
+      let teams = ['משנה תורה', 'ספר המצוות']
 
-      $( function () {
-        let html = `<div id="bolts">`
-        let rows = 3
-        let columns = 5
+      function generateHtml(num_container) {
+        let html = `<div id="bolts_container_${num_container}"><div class="bolts">`
+        let rows = 10
+        let columns = 3
 
         outer:
           for (let i = 0; i < rows; i++) {
             for (let j = 1; j <= columns; j++) {
               let number = i * columns + j
               if (number > total) break outer
-              html += `<img id="bolt_${number}" src="5782/imgs/grey.png" />`;
+              html += `<img id="bolt_image_${num_container}_${number}" src="bolts/Lightning_Yellow.png" />`;
             }
           }
-        html += "</div><br /><br />"
-        html += `<div id="action">`
-        html += `<select id="team">`
+        html += "</div>"
+        html += `<div class="action">`
+        html += `<select class="team">`
         for (let i = 0; i < teams.length; i++) {
           html += `<option value='${teams[i]}'>${teams[i]}</option>`
         }
         html += '</select>&nbsp;&nbsp;&nbsp;'
-        html += `<select id="bolt">`
+        html += `<select id="bolt_${num_container}">`
         for (let k = 1; k <= total; k++) {
           html += `<option value=${k}>${k}</option>`
         }
         html += `</select><br />`
-        html += "<div id='buttons' style='margin-top: 10px; margin-bottom: 10px;'><button id='correct' class='mark'>Correct</button><button id='incorrect' class='mark'>Incorrect</button>"
-        html += "<button id='reset' class='mark'>Reset</button></div><div><button id='resetAll' class='mark'>Reset All</button></div>"
-        html += `</div>`
+        html += "<div class='buttons' style='margin-top: 10px; margin-bottom: 10px;'><button class='mark' data-action='correct'>Correct</button>" +
+          "<button class='mark' data-action='incorrect'>Incorrect</button>"
+        html += "<button class='mark' data-action='reset'>Reset</button></div><div><button class='mark' data-action='resetAll'>Reset All</button></div>"
+        html += `</div></div>`
         $("#main").append(html)
+      }
+
+      $( function () {
+        for ($i = 1; $i <= 2; $i++) {
+          generateHtml($i)
+        }
       })
 
       function updatePoints(team) {
@@ -780,28 +807,37 @@
       }
 
       $(document).on('click', '.mark', function() {
-        let image
-        let action = $(this).attr('id')
-        let number = $(this).parent().parent().find('#bolt').val()
-        let team = $(this).parent().parent().find('#team').val()
+        // first find the outer bolts container
+        let default_image = 'bolts/Lightning_Yellow.png'
+        let action = $(this).data('action')
+        let container = '#' + $(this).parent().parent().parent().attr('id')
+        let container_num = container[container.length - 1]
+
+        let number = $(container).find('#bolt_' + container_num).val()
+        let team = $(container).find('.team').val()
+
+        let id = 'bolt_' + container_num
+        let elem = 'bolt_image_' + container_num + '_' + number
 
         if (action === 'correct') {
-          image = '5782/imgs/green.png'
-          document.getElementById('bolt_' + number).src = image
+          document.getElementById(id).value = ++number
+          document.getElementById(elem).src = 'bolts/Lightning_Green.png'
           updatePoints(team)
         } else if (action === 'incorrect') {
-          image = '5782/imgs/red.png'
-          document.getElementById('bolt_' + number).src = image
+          document.getElementById(id).value = ++number
+          document.getElementById(elem).src = 'bolts/Lightning_Red.png'
         } else if (action === 'reset') {
-          image = '5782/imgs/grey.png'
-          document.getElementById('bolt_' + --number).src = image
+          document.getElementById(id).value = --number
+          elem = 'bolt_image_' + container_num + '_' + number
+          document.getElementById(elem).src = default_image
         }
 
-        if (number < total && !['reset', 'resetAll'].includes(action)) $(this).parent().parent().find('#bolt').val(++number)
-        else if (action === 'reset') $(this).parent().parent().find('#bolt').val(number)
-        else if (action === 'resetAll') {
-          for (let i = 1; i <= total; i++) document.getElementById('bolt_' + i).src = '5782/imgs/grey.png'
-          $(this).parent().parent().find('#bolt').val(1)
+        if (action === 'resetAll') {
+          for (let i = 1; i <= total; i++) {
+            elem = 'bolt_image_' + container_num + '_' + i
+            document.getElementById(elem).src = default_image
+          }
+          document.getElementById(id).value = 1
         }
       })
     </script>
