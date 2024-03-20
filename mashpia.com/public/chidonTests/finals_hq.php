@@ -231,11 +231,7 @@ if (isset($_POST['grade'])) {
         //    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
         echo "<h2>" . $schools[$school] . "</h2>";
         echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
-        foreach ($tracks as $track) {
-            if ($track != 'Iyun' || ($track == 'Iyun' && ($super || in_array($school, [61, 269])))) {
-                echo "<th>$track</th>";
-            }
-        }
+        echo "<th>Iyun</th>";
         if ($super || in_array($school, [61, 269])) echo "<th>KHK Final</th>";
         echo "<th>Award</th>";
         echo "</tr>";
