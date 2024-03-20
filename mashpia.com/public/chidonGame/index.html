@@ -327,7 +327,7 @@
                             </div>
 
                             <div class="pricing-header">
-                                <p class="pricing-rate team3" style="display: block;">0</p>
+                                <p class="pricing-rate team1" style="display: block;">0</p>
                             </div>
                         </div>
                     </div>
@@ -341,7 +341,7 @@
                             </div>
 
                             <div class="pricing-header">
-                                <p class="pricing-rate team4" style="display: block;">0</p>
+                                <p class="pricing-rate team2" style="display: block;">0</p>
                             </div>
                         </div>
                     </div>
@@ -784,13 +784,14 @@
 
       function updatePoints(team) {
         let team_number = 0
-        for (let i = 1; i < 5; i++) {
+        for (let i = 1; i < 3; i++) {
           let team_name = $(".t" + i).find('span').eq(0).text()
           if (team === team_name) {
             team_number = i
             break
           }
         }
+        console.log(team_number, team)
         if (team_number) {
           // add 10 points to team
           let elem = '.team' + team_number
@@ -827,9 +828,11 @@
           document.getElementById(id).value = ++number
           document.getElementById(elem).src = 'bolts/Lightning_Red.png'
         } else if (action === 'reset') {
-          document.getElementById(id).value = --number
-          elem = 'bolt_image_' + container_num + '_' + number
-          document.getElementById(elem).src = default_image
+          if (number > 1) {
+            document.getElementById(id).value = --number
+            elem = 'bolt_image_' + container_num + '_' + number
+            document.getElementById(elem).src = default_image
+          }
         }
 
         if (action === 'resetAll') {
