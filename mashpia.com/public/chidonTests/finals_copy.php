@@ -109,6 +109,12 @@ function getTrack($child) {
 
 function getAward($child)
 {
+    global $cs, $final_marks;
+
+    if (isset($final_marks[$child['user_id']])) {
+        $child += $final_marks[$child['user_id']];
+    }
+
     $awards = [
         'yesod' => 'certificate',
         'yediah' => 'plaque',
@@ -116,7 +122,7 @@ function getAward($child)
         'iyun' => 'medal / plaque / blue trophy',
     ];
 
-    $track = $child['highest_track'];
+    $track = $cs->getAwardTrack($child);
     return $track ? $awards[$track] : 'no award yet';
 }
 
@@ -141,10 +147,27 @@ $tooLate = false;
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-//    $shutdown = new DateTime('2023-03-06 19:20:00');
-//    if ($today >= $shutdown) {
-//        $tooLate = true;
-//    }
+    $shutdown = new DateTime('2024-03-18 18:00:00');
+    if ($today >= $shutdown) {
+        $tooLate = true;
+    }
+}
+
+// get final marks for all children
+$final_marks = [];
+$sql = "SELECT *, tcf.khk AS khk_final FROM th_chidon_finals tcf 
+        JOIN th_chidon tc USING (user_id, year) 
+        JOIN users u USING (user_id) 
+        WHERE tcf.year = $year 
+            AND (track_1 > 0 OR track_2 > 0
+            OR track_3 > 0
+            OR track_4 > 0
+            OR tcf.khk > 0)";
+$sql .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ")";
+$sql .= " GROUP BY user_id";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $final_marks[$row['user_id']] = $row;
 }
 ?>
 <!DOCTYPE html>
@@ -201,7 +224,7 @@ if (isset($_POST['grade'])) {
     $exceptions = [192, 63, 13, 42, 726];
     $types = $ct->getTypes();
     $tracks = array_values($types);
-    echo "<form action='finals_copy.php' method='post' enctype='multipart/form-data'>";
+    echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
     echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
@@ -217,7 +240,7 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            $highest = getTrack($child); // track based off tests
+            $highest = $child['highest_track'] == 'iyun' ? $child['highest_track'] : getTrack($child); // track based off tests
             $child['highest_track'] = $highest;
             $show_iyun = showIyun($child);
             if ($show_iyun) $child['highest_track'] = 'iyun';
@@ -230,19 +253,18 @@ if (isset($_POST['grade'])) {
                     $child['highest_track'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
                     if ($i == 4 && !$super && !in_array($school, [61, 269])) continue;
-                    // find out which track the child can go up to
-                    $key = array_search(ucwords($child['highest_track']), $tracks);
-                    $key++;
                     // create the proper input box
                     $track = 'track_' . $i;
-                    echo "<td>" . (isset($final_marks[$id][$track]) ? $final_marks[$id][$track] : '') . "</td>";
+                    echo "<td>";
+                    if (isset($final_marks[$id][$track])) echo $final_marks[$id][$track];
+                    echo "</td>";
                 }
                 // add khk_final
                 // check if child should be able to take the khk final
-                $disabled = 'disabled';
-//                if (intval($child['khk_reg']) && passedKhk($child) && !$tooLate) $disabled = '';
                 if ($super || in_array($school, [61, 269])) {
-                    echo "<td>" . (isset($final_marks[$id]['khk']) ? $final_marks[$id]['khk'] : '') . "</td>";
+                    echo "<td>";
+                    if (isset($final_marks[$id]['khk'])) echo $final_marks[$id]['khk'];
+                    echo "</td>";
                 }
                 echo "<td>" . getAward($child) . "</td></tr>";
             }
@@ -253,7 +275,7 @@ if (isset($_POST['grade'])) {
     echo "</form>";
 } else {
     ?>
-  <form action="finals_copy.php" method="post">
+  <form action="finals.php" method="post">
     Choose Class: <select name="grade">
       <option value="0">All Classes</option>
           <?php
@@ -286,6 +308,9 @@ if (isset($_POST['grade'])) {
       }
     }
     $('body').show();
+      <?php if (!isset($_POST['submit'])) : ?>
+    alert('Please make sure to SAVE after entering scores.');
+      <?php endif; ?>
   })
 </script>
 </html>
