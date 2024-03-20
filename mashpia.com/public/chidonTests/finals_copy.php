@@ -209,7 +209,7 @@ while ($row = mysql_fetch_assoc($result)) {
 <?php
 if ($admin_user['auth'] == 'super') {
     $selectedYr = isset($_POST['yr']) ? $_POST['yr'] : $currentYear;
-    echo '<form action="finals.php" method="post">';
+    echo '<form action="finals_copy.php" method="post">';
     echo "Change Year: <select name='yr' onchange='this.form.submit()'>";
     for ($i = 5782; $i <= $currentYear; $i++) {
         echo "<option value='$i'";
@@ -224,7 +224,7 @@ if (isset($_POST['grade'])) {
     $exceptions = [192, 63, 13, 42, 726];
     $types = $ct->getTypes();
     $tracks = array_values($types);
-    echo "<form action='finals.php' method='post' enctype='multipart/form-data'>";
+    echo "<form action='finals_copy.php' method='post' enctype='multipart/form-data'>";
     echo "<div style='float: right'><input type='submit' name='submit' value='Save' style='padding: 12px; font-size: large' /></div><br /><br />";
     foreach ($info as $school => $children) {
         if (empty($children)) continue;
@@ -275,7 +275,7 @@ if (isset($_POST['grade'])) {
     echo "</form>";
 } else {
     ?>
-  <form action="finals.php" method="post">
+  <form action="finals_copy.php" method="post">
     Choose Class: <select name="grade">
       <option value="0">All Classes</option>
           <?php
@@ -308,9 +308,6 @@ if (isset($_POST['grade'])) {
       }
     }
     $('body').show();
-      <?php if (!isset($_POST['submit'])) : ?>
-    alert('Please make sure to SAVE after entering scores.');
-      <?php endif; ?>
   })
 </script>
 </html>
