@@ -782,12 +782,6 @@
         $("#main").append(html)
       }
 
-      $( function () {
-        for ($i = 1; $i <= 2; $i++) {
-          generateHtml($i)
-        }
-      })
-
       function updatePoints(team) {
         let team_number = 0
         for (let i = 1; i < 5; i++) {
@@ -805,6 +799,12 @@
           $(elem).text(amount)
         }
       }
+
+      $( function () {
+        for ($i = 1; $i <= 2; $i++) {
+          generateHtml($i)
+        }
+      })
 
       $(document).on('click', '.mark', function() {
         // first find the outer bolts container
