@@ -7,10 +7,6 @@ $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 $super = $admin_user['auth'] == 'super';
-if (!$super) {
-    echo "No Permission.";
-    exit;
-}
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true); // add chidon schools
@@ -29,7 +25,7 @@ $cs = new ChidonShipping($year);
 // save marks
 $msg = '';
 if (isset($_POST['submit']) && isset($_POST['track_1'])) {
-//    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
     $qrys = [];
     for ($i = 4; $i <= 4; $i++) {
         $track = 'track_' . $i;
@@ -113,6 +109,12 @@ function getTrack($child) {
 
 function getAward($child)
 {
+    global $cs, $final_marks;
+
+    if (isset($final_marks[$child['user_id']])) {
+        $child += $final_marks[$child['user_id']];
+    }
+
     $awards = [
         'yesod' => 'certificate',
         'yediah' => 'plaque',
@@ -120,7 +122,7 @@ function getAward($child)
         'iyun' => 'medal / plaque / blue trophy',
     ];
 
-    $track = $child['highest_track'];
+    $track = $cs->getAwardTrack($child);
     return $track ? $awards[$track] : 'no award yet';
 }
 
@@ -145,47 +147,64 @@ $tooLate = false;
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-//    $shutdown = new DateTime('2023-03-06 19:20:00');
+//    $shutdown = new DateTime('2024-03-18 18:00:00');
 //    if ($today >= $shutdown) {
 //        $tooLate = true;
 //    }
+}
+
+// get final marks for all children
+$final_marks = [];
+$sql = "SELECT *, tcf.khk AS khk_final FROM th_chidon_finals tcf 
+        JOIN th_chidon tc USING (user_id, year) 
+        JOIN users u USING (user_id) 
+        WHERE tcf.year = $year 
+            AND (track_1 > 0 OR track_2 > 0
+            OR track_3 > 0
+            OR track_4 > 0
+            OR tcf.khk > 0)";
+$sql .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ")";
+$sql .= " GROUP BY user_id";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $final_marks[$row['user_id']] = $row;
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Enter Test Score</title>
-    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
-    <style>
-      tr, th, td {
-        font-size: 14px;
-        padding: 5px;
-      }
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Enter Test Score</title>
+  <link href="../admin_styles.css" rel="stylesheet" type="text/css">
+  <style>
+    tr, th, td {
+      font-size: 14px;
+      padding: 5px;
+    }
 
-      td:not(.type) {
-        vertical-align: top;
-      }
+    td:not(.type) {
+      vertical-align: top;
+    }
 
-      body {
-        display: none;
-      }
+    body {
+      display: none;
+    }
 
-      .mark, .khk {
-        width: 50px;
-      }
+    .mark, .khk {
+      width: 50px;
+    }
 
-      input:disabled {
-        background: #ccc;
-      }
-    </style>
+    input:disabled {
+      background: #ccc;
+    }
+  </style>
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Enter Test Score</h1>
 <?php if ($msg) echo "<div style='color: red'>$msg</div><br />"; ?>
 <div class="infobox">Please enter the <strong>number</strong> of questions scored correctly. The system will calculate
-    the correct mark.
+  the correct mark.
 </div>
 <?php
 if ($admin_user['auth'] == 'super') {
@@ -212,9 +231,16 @@ if (isset($_POST['grade'])) {
         //    if ($tooLate && in_array($school, $exceptions)) $tooLate = false;
         echo "<h2>" . $schools[$school] . "</h2>";
         echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Highest Track</th>";
-        echo "<th>Iyun</th><th>KHK Final</th><th>Award</th></tr>";
+        foreach ($tracks as $track) {
+            if ($track != 'Iyun' || ($track == 'Iyun' && ($super || in_array($school, [61, 269])))) {
+                echo "<th>$track</th>";
+            }
+        }
+        if ($super || in_array($school, [61, 269])) echo "<th>KHK Final</th>";
+        echo "<th>Award</th>";
+        echo "</tr>";
         foreach ($children as $child) {
-            $highest = getTrack($child); // track based off tests
+            $highest = $child['highest_track'] == 'iyun' ? $child['highest_track'] : getTrack($child); // track based off tests
             $child['highest_track'] = $highest;
             $show_iyun = showIyun($child);
             if ($show_iyun) $child['highest_track'] = 'iyun';
@@ -226,6 +252,7 @@ if (isset($_POST['grade'])) {
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td><td>" .
                     $child['highest_track'] . "</td>";
                 for ($i = 4; $i <= 4; $i++) {
+                    if (!$super && !in_array($school, [61, 269])) continue;
                     // find out which track the child can go up to
                     $key = array_search(ucwords($child['highest_track']), $tracks);
                     $key++;
@@ -242,10 +269,13 @@ if (isset($_POST['grade'])) {
                 // check if child should be able to take the khk final
                 $disabled = 'disabled';
                 if (intval($child['khk_reg']) && passedKhk($child) && !$tooLate) $disabled = '';
-                echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
-                if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
-                else echo "value='0'";
-                echo " /></td><td>" . getAward($child) . "</td></tr>";
+                if ($super || in_array($school, [61, 269])) {
+                    echo "<td><input type='text' name='khk[$id]' class='khk' $disabled ";
+                    if (isset($final_marks[$id]['khk'])) echo "value='" . $final_marks[$id]['khk'] . "'";
+                    else echo "value='0'";
+                    echo " /></td>";
+                }
+                echo "<td>" . getAward($child) . "</td></tr>";
             }
         }
         echo "</table>";
@@ -254,24 +284,24 @@ if (isset($_POST['grade'])) {
     echo "</form>";
 } else {
     ?>
-    <form action="finals_hq.php" method="post">
-        Choose Class: <select name="grade">
-            <option value="0">All Classes</option>
-            <?php
-            if (isset($admin_user['auths']['school'][0])) {
-                $sql = "select class_id, class_grade, class_sub from classes where school_id = " . $admin_user['auths']['school'][0];
-                $result = mysql_query($sql);
-                while ($row = mysql_fetch_assoc($result)) {
-                    if (intval($row['class_grade']) >= 4) {
-                        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-                        echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
-                    }
-                }
-            }
-            ?>
-        </select><br/><br/>
-        <input type="submit" name="submit" value="Submit"/>
-    </form>
+  <form action="finals_hq.php" method="post">
+    Choose Class: <select name="grade">
+      <option value="0">All Classes</option>
+          <?php
+          if (isset($admin_user['auths']['school'][0])) {
+              $sql = "select class_id, class_grade, class_sub from classes where school_id = " . $admin_user['auths']['school'][0];
+              $result = mysql_query($sql);
+              while ($row = mysql_fetch_assoc($result)) {
+                  if (intval($row['class_grade']) >= 4) {
+                      $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                      echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
+                  }
+              }
+          }
+          ?>
+    </select><br/><br/>
+    <input type="submit" name="submit" value="Submit"/>
+  </form>
 <?php } ?>
 </body>
 <script>
