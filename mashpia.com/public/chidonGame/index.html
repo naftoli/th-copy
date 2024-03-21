@@ -771,7 +771,7 @@
         }
         html += '</select>&nbsp;&nbsp;&nbsp;'
         html += `<select id="bolt_${num_container}">`
-        for (let k = 1; k <= total; k++) {
+        for (let k = 1; k <= (total + 1); k++) {
           html += `<option value=${k}>${k}</option>`
         }
         html += `</select><br />`
