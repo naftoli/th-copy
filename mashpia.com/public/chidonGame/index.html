@@ -782,7 +782,7 @@
         $("#main").append(html)
       }
 
-      function updatePoints(team) {
+      function updatePoints(team, action = 'add') {
         let team_number = 0
         for (let i = 1; i < 3; i++) {
           let team_name = $(".t" + i).find('span').eq(0).text()
@@ -796,7 +796,8 @@
           // add 10 points to team
           let elem = '.team' + team_number
           let amount = parseInt($(elem).text())
-          amount += 10
+          if (action == 'add') amount += 10
+          else if (action == 'subtract') amount -= 10
           $(elem).text(amount)
         }
       }
@@ -831,7 +832,12 @@
           if (number > 1) {
             document.getElementById(id).value = --number
             elem = 'bolt_image_' + container_num + '_' + number
+            const old_img = document.getElementById(elem).src
+            console.log(old_img)
             document.getElementById(elem).src = default_image
+            if (old_img.includes('bolts/Lightning_Green.png')) {
+              updatePoints(team, 'subtract')
+            }
           }
         }
 
