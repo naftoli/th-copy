@@ -1519,7 +1519,7 @@ class ChidonShipping
                 'plaque'        => 'CHI128',
                 'medal'         => 'CHI129',
                 'blue trophy'   => 'CHI130',
-                'khk trophy'    => 'CHI131',
+                'khk plaque'    => 'CHI131',
                 'trophy'    => [
                     'gold'      => 'CHI132',
                     'silver'    => 'CHI133',
