@@ -18,6 +18,9 @@ $schools = $as->getSchools();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.php';
+$cs = new ChidonShipping($year);
+
 $gender = $_REQUEST['type'];
 require 'functions.php';
 
