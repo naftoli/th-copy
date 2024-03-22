@@ -79,6 +79,7 @@ $awards = [
                 foreach ($sheet as $idx => $row) {
                     if ($idx == 0) continue; // skip first row
                     if (empty($row[1])) continue; // only show rows with names of children
+                    echo "<pre>"; print_r($row); echo "</pre>";
                     $track = $row[0];
                     $name = $row[1];
                     $serial = substr($row[2], 0, strpos($row[2], '.png'));
