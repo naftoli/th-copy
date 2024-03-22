@@ -884,6 +884,17 @@ class ChidonShipping
                 }
             }
         }
+        if ($award == 'iyun') {
+            // make sure that all four levels are also based on the iyun avg
+            for ($j = 1; $j <= 4; $j++) {
+                $level = 'track_' . $j;
+                $mark = round(($child[$level] / $max) * 100);
+                if ($mark < $needed['iyun']) {
+                    $award = 'havonah';
+                    break;
+                }
+            }
+        }
         if ($award != 'iyun') {
             // check cumulative
             if ($this->passedIyunFinalCumulative($child)) $award = 'iyun';
