@@ -889,7 +889,7 @@ class ChidonShipping
             for ($j = 1; $j <= 4; $j++) {
                 $level = 'track_' . $j;
                 $mark = round(($child[$level] / $max) * 100);
-                if ($mark < $needed['iyun']) {
+                if ($mark < $needed['genius']) {
                     $award = 'havonah';
                     break;
                 }
