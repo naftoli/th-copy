@@ -12,6 +12,9 @@ $schools = $as->getSchools();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.php';
+$cs = new ChidonShipping($year);
+
 $gender = $_REQUEST['type'];
 require 'functions.php';
 
@@ -23,11 +26,11 @@ $final_marks = getFinalMarks();
 $sheets = [];
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
-    if (!empty($children)) {
+    if (! empty($children)) {
         $sheets[$school_id] = createSpreadSheet($children);
     }
 }
-echo "<pre>"; print_r($sheets); echo "</pre>"; exit;
+
 $awards = [
     1 => 'certificate',
     2 => 'plaque',

@@ -27,11 +27,7 @@ require 'functions.php';
 $prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
-//$children = getChildren(0, $gender);
-//$sheet = createSpreadSheet($children);
-//$file_name = "schools.txt";
-//createFile($file_name, $sheet);
-//$allChildren = [];
+
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     if (! empty($children)) {
@@ -56,8 +52,6 @@ foreach ($schools as $school_id => $school) {
             $sheet = createSpreadSheet($children);
             $file_name = $school . ".tsv";
             createFile($file_name, $sheet);
-//            $allChildren += $children; // for images
-//        }
     }
 }
 

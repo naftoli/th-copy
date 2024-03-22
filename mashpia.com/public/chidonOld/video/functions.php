@@ -174,7 +174,7 @@ function createSpreadSheet($children, $type = 'ht') {
     $info = [];
     foreach ($children as $child) {
         $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
-        if (! $track) continue;
+        if (empty($track)) continue;
         $info[$track][] = $child;
     }
 

@@ -27,37 +27,13 @@ require 'functions.php';
 $prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
-//$children = getChildren(0, $gender);
-//$sheet = createSpreadSheet($children);
-//$file_name = "schools.txt";
-//createFile($file_name, $sheet);
-//$allChildren = [];
+
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     if (! empty($children)) {
-//        if (in_array($school_id, [54,106,255])) {
-//            // for OT do both, by school and by grade
-//            if ($school_id == 255) {
-//                $sheet = createSpreadSheet($children);
-//                $file_name = $school . ".tsv";
-//                createFile($file_name, $sheet);
-//            }
-//            // sort children by grade and create sheet for each grade
-//            $sorted = [];
-//            foreach ($children as $child) {
-//                $sorted[$child['class_grade']][] = $child;
-//            }
-//            foreach ($sorted as $grade => $details) {
-//                $sheet = createSpreadSheet($details);
-//                $file_name = $school . " Grade " . $grade . ".tsv";
-//                createFile($file_name, $sheet);
-//            }
-//        } else {
         $sheet = createSpreadSheet($children, 'award');
         $file_name = $school . ".tsv";
         createFile($file_name, $sheet);
-//            $allChildren += $children; // for images
-//        }
     }
 }
 

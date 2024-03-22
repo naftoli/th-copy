@@ -884,6 +884,7 @@ class ChidonShipping
                 }
             }
         }
+
         if ($award == 'iyun') {
             // make sure that all four levels are also based on the iyun avg
             for ($j = 1; $j <= 4; $j++) {
