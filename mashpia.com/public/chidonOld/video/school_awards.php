@@ -27,7 +27,7 @@ foreach ($schools as $school_id => $school) {
         $sheets[$school_id] = createSpreadSheet($children);
     }
 }
-//echo "<pre>"; print_r($sheets); echo "</pre>";
+echo "<pre>"; print_r($sheets); echo "</pre>"; exit;
 $awards = [
     1 => 'certificate',
     2 => 'plaque',

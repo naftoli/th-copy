@@ -876,7 +876,7 @@ class ChidonShipping
                 $score = $child[$level];
                 $avg_needed = $needed[array_search($tracks[$i], $types)];
                 $mark = round(($score / $max) * 100);
-//                echo "User ID: " . $child['user_id'] . " - Track: " . $tracks[$i] . " - Score: " . $score . " - Pass: " . $pass . " - Mark: " . $mark . "<br />";
+//                echo "User ID: " . $child['user_id'] . " - Score: " . $score . " - Mark: " . $mark . " - Avg Needed: " . $avg_needed . " - Award: " . $award . "<br />";
                 if ($mark >= $avg_needed) {
                     $award = $tracks[$i];
                 } else {
@@ -910,7 +910,7 @@ class ChidonShipping
                 $mark += $child[$level];
             }
         }
-        $avg = intval($mark / 4);
+        $avg = intval(($mark / 80) * 100);
         return $avg >= 90;
     }
 
