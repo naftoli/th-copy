@@ -244,9 +244,9 @@ if (isset($_POST['grade'])) {
                     echo "<td><input type='text' name='{$track}[$id]' class='$track mark'";
                     if (isset($final_marks[$id][$track])) echo " value='" . $final_marks[$id][$track] . "'";
                     else echo "value='0'";
-                    // for iyun we also look at cumulative marks
                     if ($i == 4) {
-                      if ($tooLate || !$show_iyun) echo " disabled";
+                        // for iyun we also look at cumulative marks
+                        if ($tooLate || !$show_iyun) echo " disabled";
                     }
                     else if ($i > $key || $tooLate) echo " disabled";
                     echo " /></td>";

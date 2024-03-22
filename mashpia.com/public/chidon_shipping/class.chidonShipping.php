@@ -884,8 +884,23 @@ class ChidonShipping
                 }
             }
         }
-
+        if ($award != 'iyun') {
+            // check cumulative
+            if ($this->passedIyunFinalCumulative($child)) $award = 'iyun';
+        }
         return $award;
+    }
+
+    private function passedIyunFinalCumulative($child) {
+        $mark = 0;
+        for ($i = 1; $i <= 4; $i++) {
+            $level = 'track_' . $i;
+            if (isset($child[$level])) {
+                $mark += $child[$level];
+            }
+        }
+        $avg = intval($mark / 4);
+        return $avg >= 90;
     }
 
     public function getTrackByTests($row, $forIyun = false) {
