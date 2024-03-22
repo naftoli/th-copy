@@ -142,11 +142,9 @@ function getAward($child) {
         4   => 'iyun'
     ];
 
-    $highest_track = $child['highest_track'];
-    if (! empty($highest_track)) {
-        if (isset($final_marks[$child['user_id']])) {
-            $child += $final_marks[$child['user_id']];
-        }
+    // awards based off the final marks
+    if (isset($final_marks[$child['user_id']])) {
+        $child += $final_marks[$child['user_id']];
         $award = $cs->getAwardTrack($child);
         if ($award) return array_search($award, $tracks);
     }
