@@ -32,10 +32,10 @@ foreach ($schools as $school_id => $school) {
 }
 
 $awards = [
-    1 => 'certificate',
-    2 => 'plaque',
-    3 => 'medal / plaque',
-    4 => 'trophy / medal / blue plaque',
+    'yesod'   => 'certificate',
+    'yediah'  => 'plaque',
+    'havonah' => 'medal / plaque',
+    'iyun'    => 'trophy / medal / blue plaque',
 ];
 ?>
 <!DOCTYPE html>
