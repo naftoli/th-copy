@@ -85,7 +85,7 @@ $awards = [
                     $grade = $row[3];
                     $award = $row[7] ? $awards[$row[7]] : '';
                     $prizes = [$row[9], $row[10], $row[11], $row[12], $row[13], $row[14]];
-                    $total_prizes = $row[15];
+                    $total_prizes = $row[15] ?? 0;
                     echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
                         "</td><td>" . $award . "</td>";
                     if ($track == 'yesod') {
