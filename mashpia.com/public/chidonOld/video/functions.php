@@ -61,7 +61,7 @@ function getChildren($school_id, $gender) {
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $award = $cs->getAwardTrack($row);
+        $award = getAward($row);
         $row['award_track'] = $award;
         $children[] = $row;
     }
@@ -70,13 +70,6 @@ function getChildren($school_id, $gender) {
 
 function getAllChildrenByGender($gender) {
     global $year;
-
-    $tracks = [
-        1   => 'yesod',
-        2   => 'yediah',
-        3   => 'havonah',
-        4   => 'iyun'
-    ];
 
     $children = [];
     $sql = "SELECT 
@@ -116,9 +109,8 @@ function getAllChildrenByGender($gender) {
     $sql .= " ORDER BY s.school_name, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-//        $award = getAward($row);
-//        if (empty($award)) continue;
-//        $row['award_track'] = $tracks[$award];
+        $award = getAward($row);
+        $row['award_track'] = $award;
         $children[] = $row;
     }
     return $children;
@@ -127,18 +119,11 @@ function getAllChildrenByGender($gender) {
 function getAward($child) {
     global $cs, $final_marks;
 
-    $tracks = [
-        1   => 'yesod',
-        2   => 'yediah',
-        3   => 'havonah',
-        4   => 'iyun'
-    ];
-
     // awards based off the final marks
     if (isset($final_marks[$child['user_id']])) {
         $child += $final_marks[$child['user_id']];
         $award = $cs->getAwardTrack($child);
-        if ($award) return array_search($award, $tracks);
+        return $award;
     }
     return '';
 }
@@ -189,8 +174,10 @@ function createSpreadSheet($children, $type = 'ht') {
     $info = [];
     foreach ($children as $child) {
         $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
+        if (! $track) continue;
         $info[$track][] = $child;
     }
+
     $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 
     $khk = [];
