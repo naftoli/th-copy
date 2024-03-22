@@ -12,14 +12,7 @@ function getFinalMarks() {
 }
 
 function getChildren($school_id, $gender) {
-    global $year;
-
-    $tracks = [
-        1   => 'yesod',
-        2   => 'yediah',
-        3   => 'havonah',
-        4   => 'iyun'
-    ];
+    global $year, $cs;
 
     if ($gender == 'boys') $gender = 'M';
     else if ($gender == 'girls') $gender = 'F';
@@ -48,8 +41,8 @@ function getChildren($school_id, $gender) {
                 tc.khk_reg,
                 tc.khk_trip, 
                 tc.rep_type, 
-                tc.trophy_type,
-                tci.highest_track
+                tc.trophy_type, 
+                tc.chidon_photo 
             FROM
                 users u
                     JOIN
@@ -58,8 +51,6 @@ function getChildren($school_id, $gender) {
                 classes c ON c.class_id = u.class_id
                     JOIN
                 th_chidon tc ON tc.user_id = u.user_id 
-                    JOIN
-                th_chidon_info tci ON tci.user_id = u.user_id AND tci.year = tc.year 
             WHERE
                 tc.year = $year AND tc.date_paid > 0 
                     AND u.gender = '$gender'";
@@ -68,9 +59,9 @@ function getChildren($school_id, $gender) {
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-//        $award = getAward($row);
-//        if (empty($award)) continue;
-//        $row['award_track'] = $tracks[$award];
+        $award = $cs->getAwardTrack($row);
+        if (empty($award)) continue;
+        $row['award_track'] = $award;
         $children[] = $row;
     }
     return $children;
@@ -142,15 +133,11 @@ function getAward($child) {
         4   => 'iyun'
     ];
 
-    $highest_track = $child['highest_track'];
-    if ($highest_track) {
-        if (isset($final_marks[$child['user_id']])) {
-            $child += $final_marks[$child['user_id']];
-        }
-        $award = $cs->getAwardTrack($child);
-        if ($award) return array_search($award, $tracks);
+    if (isset($final_marks[$child['user_id']])) {
+        $child += $final_marks[$child['user_id']];
     }
-    return '';
+    $award = $cs->getAwardTrack($child);
+    return $award ? array_search($award, $tracks) : '';
 }
 
 function getMarks() {
@@ -198,7 +185,7 @@ function createFile($name, $info, $csv = false) {
 function createSpreadSheet($children) {
     $info = [];
     foreach ($children as $child) {
-        $info[$child['highest_track']][] = $child;
+        $info[$child['award_track']][] = $child;
     }
     $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 
@@ -295,7 +282,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
 
     $name = trim($child['first']) . ' ' . trim($child['last']);
     $img_url = $child['user_serial'] . '.png';
-    $track = $khk ? 'khk' : $child['highest_track'];
+    $track = $khk ? 'khk' : $child['award_track'];
     $award = getAward($child);
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];

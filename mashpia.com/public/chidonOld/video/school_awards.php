@@ -32,7 +32,7 @@ $awards = [
     1 => 'certificate',
     2 => 'plaque',
     3 => 'medal / plaque',
-    4 => 'trophy / medal / plaque'
+    4 => 'trophy / medal / blue plaque',
 ];
 ?>
 <!DOCTYPE html>
