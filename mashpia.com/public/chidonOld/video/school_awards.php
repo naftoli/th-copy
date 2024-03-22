@@ -85,11 +85,11 @@ $awards = [
                     $grade = $row[3];
                     $award = $row[7] ? $awards[$row[7]] : '';
                     $prizes = [$row[9], $row[10], $row[11], $row[12], $row[13], $row[14]];
-                    $total_prizes = $row[15] ?? 0;
+                    $total_prizes = $row[15];
                     echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
                         "</td><td>" . $award . "</td>";
                     if ($track == 'yesod') {
-                        echo "<td colspan='6'></td></tr>";
+                        echo "<td colspan='7'></td></tr>";
                         continue;
                     } else {
                         foreach ($prizes as $prize) {
