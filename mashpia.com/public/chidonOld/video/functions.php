@@ -12,14 +12,7 @@ function getFinalMarks() {
 }
 
 function getChildren($school_id, $gender) {
-    global $year;
-
-    $tracks = [
-        1   => 'yesod',
-        2   => 'yediah',
-        3   => 'havonah',
-        4   => 'iyun'
-    ];
+    global $year, $cs;
 
     if ($gender == 'boys') $gender = 'M';
     else if ($gender == 'girls') $gender = 'F';
@@ -68,9 +61,8 @@ function getChildren($school_id, $gender) {
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-//        $award = getAward($row);
-//        if (empty($award)) continue;
-//        $row['award_track'] = $tracks[$award];
+        $award = $cs->getAwardTrack($row);
+        $row['award_track'] = $award;
         $children[] = $row;
     }
     return $children;
@@ -193,10 +185,11 @@ function createFile($name, $info, $csv = false) {
     fclose($fp);
 }
 
-function createSpreadSheet($children) {
+function createSpreadSheet($children, $type = 'ht') {
     $info = [];
     foreach ($children as $child) {
-        $info[$child['highest_track']][] = $child;
+        $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
+        $info[$track][] = $child;
     }
     $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
 
