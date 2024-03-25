@@ -42,7 +42,8 @@ function getChildren($school_id, $gender) {
                 tc.khk_trip, 
                 tc.rep_type, 
                 tc.trophy_type,
-                tci.highest_track
+                tc.ultimate_trip, 
+                tci.highest_track 
             FROM
                 users u
                     JOIN
