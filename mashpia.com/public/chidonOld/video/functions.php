@@ -161,7 +161,7 @@ function createFile($name, $info, $csv = false) {
     if (is_array($info)) {
         foreach ($info as $fields) {
             if ($csv) fputcsv($fp, $fields);
-            else fputcsv($fp, $fields, "\t");
+            else fputcsv($fp, $fields, "\t", ' ');
 //            else fputcsv($fp, $fields, "\t", ' ');
         }
     } else {
@@ -219,7 +219,7 @@ function createSpreadSheet($children, $type = 'ht') {
             $sheet[$i++] = [$track . '_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
                 $sheet[$i++] = addToSheet($child);
-                if (intval($child['khk_reg']) && passedKhk($child['th_chidon_id'])) $khk[] = $child;
+                if (intval($child['khk_reg']) && passedKhk($child)) $khk[] = $child;
 //                if ($child['trophy_type']) {
 //                    ${$child['trophy_type']}[$child['class_grade']][$child['rep_type']][] = $child;
 //                }
@@ -228,6 +228,7 @@ function createSpreadSheet($children, $type = 'ht') {
     }
 
     // khk
+    sort($khk);
     if (! empty($khk)) {
         $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as $child) {
@@ -255,26 +256,39 @@ function createSpreadSheet($children, $type = 'ht') {
     return $sheet;
 }
 
-function passedKhk($id) {
-    global $marks;
+function passedKhk($child) {
+    global $final_marks;
 
-    if (isset($marks[$id])) {
-        $user_marks = $marks[$id];
-        $total = 0;
-        foreach ($user_marks as $mark) $total += intval($mark);
-        $total /= 4;
-        if ($total >= 70) return true;
+    if (isset($final_marks[$child['user_id']])) {
+       $mark = intval($final_marks[$child['user_id']]['khk_mark']);
+       if ($mark >= 140) return true;
     }
     return false;
+
+//    if (isset($marks[$id])) {
+//        $user_marks = $marks[$id];
+//        $total = 0;
+//        foreach ($user_marks as $mark) $total += intval($mark);
+//        $total /= 4;
+//        if ($total >= 70) return true;
+//    }
+//    return false;
 }
 
 function addToSheet($child, $khk = false, $trophy = false) {
     global $prizes;
 
+    $tracks = [
+        1 => 'yesod',
+        2 => 'yediah',
+        3 => 'havonah',
+        4 => 'iyun'
+    ];
+
     $name = trim($child['first']) . ' ' . trim($child['last']);
     $img_url = $child['user_serial'] . '.png';
     $track = $khk ? 'khk' : $child['highest_track'];
-    $award = getAward($child);
+    $award = $tracks[ getAward($child) ];
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];
 
