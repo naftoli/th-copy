@@ -31,6 +31,13 @@ foreach ($schools as $school_id => $school) {
     }
 }
 
+$award_tracks = [
+    1 => 'yesod',
+    2 => 'yediah',
+    3 => 'havonah',
+    4 => 'iyun',
+];
+
 $awards = [
     'yesod'   => 'certificate',
     'yediah'  => 'plaque',
@@ -87,7 +94,7 @@ $awards = [
             $prizes = [$row[9], $row[10], $row[11], $row[12], $row[13], $row[14]];
             $total_prizes = $row[15];
             echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
-                "</td><td>" . $award . "</td>";
+                "</td><td>" . $award_tracks[$award] . "</td>";
             if ($track == 'yesod') {
                 echo "<td colspan='7'></td></tr>";
                 continue;

@@ -260,7 +260,7 @@ function passedKhk($child) {
     global $final_marks;
 
     if (isset($final_marks[$child['user_id']])) {
-       $mark = intval($final_marks[$child['user_id']]['khk_mark']);
+       $mark = intval($final_marks[$child['user_id']]['khk']);
        if ($mark >= 140) return true;
     }
     return false;
