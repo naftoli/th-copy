@@ -288,7 +288,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
     $name = trim($child['first']) . ' ' . trim($child['last']);
     $img_url = $child['user_serial'] . '.png';
     $track = $khk ? 'khk' : $child['highest_track'];
-    $award = $tracks[ array_search(getAward($child)) ];
+    $award = array_search(getAward($child), $tracks);
     $trip = intval($child['khk_trip']) ? 2 : 1;
     $grade = 'Grade ' . $child['class_grade'];
 
