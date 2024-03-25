@@ -12,7 +12,7 @@ function getFinalMarks() {
 }
 
 function getChildren($school_id, $gender) {
-    global $year, $cs;
+    global $year;
 
     if ($gender == 'boys') $gender = 'M';
     else if ($gender == 'girls') $gender = 'F';
@@ -229,10 +229,16 @@ function createSpreadSheet($children, $type = 'ht') {
     }
 
     // khk
-    sort($khk);
     if (! empty($khk)) {
+        // first sort by last name, first name
+        foreach ($khk as $key => $row) {
+            $first[$key] = $row['last'];
+            $last[$key] = $row['last'];
+        }
+        array_multisort($last, SORT_ASC, $first, SORT_ASC, $khk);
+
         $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
-        foreach ($khk as $child) {
+        foreach ($khk as  $child) {
             $sheet[$i++] = addToSheet($child, true);
         }
     }
@@ -290,7 +296,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
     $img_url = $child['user_serial'] . '.png';
     $track = $khk ? 'khk' : $child['highest_track'];
     $award = array_search(getAward($child), $tracks);
-    $trip = intval($child['ultimate_trip']) ? 2 : 1;
+    $trip = isset($child['ultimate_trip']) && intval($child['ultimate_trip']) == 1 ? 2: 1;
     $grade = 'Grade ' . $child['class_grade'];
 
     if ($trophy) {
