@@ -219,7 +219,7 @@ function createSpreadSheet($children, $type = 'ht') {
         if (isset($info[$track])) {
             $sheet[$i++] = [$track . '_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
-                $sheet[$i++] = addToSheet($child);
+                $sheet[$i++] = addToSheet($child, false, false, $track);
                 if (intval($child['khk_reg']) && passedKhk($child)) $khk[] = $child;
 //                if ($child['trophy_type']) {
 //                    ${$child['trophy_type']}[$child['class_grade']][$child['rep_type']][] = $child;
@@ -239,7 +239,8 @@ function createSpreadSheet($children, $type = 'ht') {
 
         $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as  $child) {
-            $sheet[$i++] = addToSheet($child, true);
+            $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
+            $sheet[$i++] = addToSheet($child, true, false, $track);
         }
     }
 
@@ -282,7 +283,7 @@ function passedKhk($child) {
 //    return false;
 }
 
-function addToSheet($child, $khk = false, $trophy = false) {
+function addToSheet($child, $khk = false, $trophy = false, $track = '') {
     global $prizes;
 
     $tracks = [
@@ -294,9 +295,9 @@ function addToSheet($child, $khk = false, $trophy = false) {
 
     $name = trim($child['first']) . ' ' . trim($child['last']);
     $img_url = $child['user_serial'] . '.png';
-    $track = $khk ? 'khk' : $child['highest_track'];
     $award = array_search(getAward($child), $tracks);
-    $trip = isset($child['ultimate_trip']) && intval($child['ultimate_trip']) == 1 ? 2: 1;
+    if (in_array($track, ['yesod', 'yediah'])) $trip = 0;
+    else $trip = isset($child['ultimate_trip']) && intval($child['ultimate_trip']) == 1 ? 2: 1;
     $grade = 'Grade ' . $child['class_grade'];
 
     if ($trophy) {
@@ -315,7 +316,8 @@ function addToSheet($child, $khk = false, $trophy = false) {
     }
 
     if ($khk || $trophy) {
-        return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
+        if ($khk) $track = 'khk';
+        return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip, '', '', '', '', '', '', ''];
     } else {
         // prizes
         $prize_amount = 0;
