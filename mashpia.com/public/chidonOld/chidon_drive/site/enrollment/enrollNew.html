@@ -632,7 +632,7 @@
 				{
 					elem: '.in_zone', type: 'hidden', error: '',
 					yes: [
-						{ elem: '#acc_street', type: 'val', error: 'You must enter the accomodation street.' },
+						{ elem: '#acc_street', type: 'val', error: 'You must choose the accomodation street.' },
 						{ elem: '#acc_cross1', type: 'val', error: 'You must enter a correct address OR choose that your are staying OUTSIDE of the walking zone.' },
 					],
 					no: [
@@ -968,17 +968,17 @@
 			$("#ch_info #acc_street_num").val(user.host_street_num)
 			$("#ch_info #acc_street_num_suffix").val(user.host_street_num_suffix)
 			$("#ch_info #acc_street_apt").val(user.host_street_apt)
-			if (parseInt(user.in_zone)) {
+			// if (parseInt(user.in_zone)) {
 				$("#ch_info #walking_zone").val(user.walking_zone)
 				$("#ch_info #acc_street").val(user.host_street)
 				$("#ch_info #acc_cross1").val(user.between_streets1)
 				$("#ch_info #acc_cross2").val(user.between_streets2)
-			} else {
-				$("#ch_info #toggleZone").click()
-				$("#ch_info #acc_street_outside_zone").val(user.host_street)
-				$("#ch_info #acc_cross1_outside_zone").val(user.between_streets1)
-				$("#ch_info #acc_cross2_outside_zone").val(user.between_streets2)
-			}
+			// } else {
+			// 	$("#ch_info #toggleZone").click()
+			// 	$("#ch_info #acc_street_outside_zone").val(user.host_street)
+			// 	$("#ch_info #acc_cross1_outside_zone").val(user.between_streets1)
+			// 	$("#ch_info #acc_cross2_outside_zone").val(user.between_streets2)
+			// }
 
 			// walking
 			if (user.thurs_walking) $("#ch_info .thurs_walking").eq(user.thurs_walking).attr('checked', true)

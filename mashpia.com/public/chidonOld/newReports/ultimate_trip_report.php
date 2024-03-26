@@ -65,7 +65,8 @@ $info = $stmt->fetchAll();
             <th>Apt. #</th>
             <th>Host Cross Street 1</th>
             <th>Host Cross Street 2</th>
-            <th>Permission to walk alone</th>
+            <th>Thursday Walking</th>
+            <th>Motzei Shabbos Walking</th>
             <th>Zone ID</th>
             <th>Comments</th>
             <th></th>
@@ -90,20 +91,38 @@ $info = $stmt->fetchAll();
             $zone = $row['walking_zone'];
             $cross1 = $row['between_streets1'];
             $cross2 = $row['between_streets2'];
-            $permission = $row['walking'];
             $poll = $row['poll'];
+            $thurs_walking = $row['thurs_walking'];
+            $thurs_walking_evening = $row['thurs_walking_evening'];
+            $ms_walking = $row['ms_walking'];
+            $ms_walking_evening = $row['ms_walking_evening'];
+
+            $thurs = intval($thurs_walking) == 1 ? 'parent dropping off': 'child walking alone';
+            if ($thurs_walking_evening) {
+                $thurs .= ' NEEDS TO BE BROUGHT HOME';
+            } else {
+                if (intval($thurs_walking) == 1) $thurs .= ' AND parent picking up';
+            }
+
+            $ms = intval($ms_walking) == 1 ? 'parent dropping off': 'child walking alone';
+            if ($ms_walking_evening) {
+                $ms .= ' NEEDS TO BE BROUGHT HOME';
+            } else {
+                if (intval($ms_walking) == 1) $ms .= ' AND parent picking up';
+            }
 
             echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
             echo $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes' : 'no') . "</td> 
                 <td><input type='text' class='host' value='" . $host . "' disabled /></td>
-                <td><input type='text' class='host_phone' value='" . "' disabled /></td>
+                <td><input type='text' class='host_phone' value='" . $host_phone . "' disabled /></td>
                 <td><input type='text' class='street_num' value='" . $street_num . "' size='3' disabled /></td>
                 <td><input type='text' class='suffix' value='" . $suffix . "' size='2' disabled /></td>
                 <td><input type='text' class='street' value='" . $street . "' disabled /></td>
                 <td><input type='text' class='apt' value='" . $apt . "' size='3' disabled /></td> 
                 <td><input type='text' class='cross1' value='" . $cross1 . "' disabled /></td>
                 <td><input type='text' class='cross2' value='" . $cross2 . "' disabled /></td>
-                <td>" . ($permission ? 'yes' : 'no') . "</td><td>" . $zone . "</td><td>" . $poll . "</td>
+                <td>" . $thurs . "</td><td>" . $ms . "</td>
+                <td>" . $zone . "</td><td>" . $poll . "</td>
                 <td><button class='save'>Save</button></td></tr>";
         }
         ?>

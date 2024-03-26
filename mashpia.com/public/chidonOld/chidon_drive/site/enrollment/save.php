@@ -62,10 +62,10 @@ function saveUltimateTripInfo() {
                     'zone' => $acc->zone,
                     'shoe' => $info->shoe,
                     'chidon_answer' => $info->chidon_answer,
-                    'thurs_walking' => $info->thurs_walking,
-                    'thurs_walking_evening' => $info->thurs_walking_evening,
-                    'ms_walking' => $info->ms_walking,
-                    'ms_walking_evening' => $info->ms_walking_evening,
+                    'thurs_walking' => $info->walking->thurs,
+                    'thurs_walking_evening' => $info->walking->thurs_evening,
+                    'ms_walking' => $info->walking->ms,
+                    'ms_walking_evening' => $info->walking->ms_evening,
                     'user' => $user_id,
                     'year' => $year
                 ]);

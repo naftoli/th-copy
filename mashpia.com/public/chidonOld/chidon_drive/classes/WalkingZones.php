@@ -60,7 +60,7 @@ class WalkingZones {
         return $row;
       }
     } else {
-      return "Error retreiving cross streets.";
+      return "Error retrieving cross streets.";
     }
   }
 }
