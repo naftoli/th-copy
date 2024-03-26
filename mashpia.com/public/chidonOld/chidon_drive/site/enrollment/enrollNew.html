@@ -439,6 +439,7 @@
 								<p>
 									<i>Address not showing up? Please click <a href="" id="toggleZone">here</a> to add your address.</i>
 								</p>
+								<input type="hidden" name="walking_zone" id="walking_zone" />
 							</div>
 
 							<div id="outsideZone" style="display: none;">
@@ -452,21 +453,53 @@
 									<label>And:</label>
 									<input type="text" id="acc_cross2_outside_zone" name="acc_cross2_outside_zone" />
 								</div>
-								<input type="hidden" name="walking_zone" id="walking_zone" />
 								<p></p>
 							</div>
-							<br />
+						</div>
+
+						<div class="modal-section">
+							<h5>Walking Information</h5>
+							<p>
+								Thursday:
+							</p>
 							<div class="flex checkbox-container">
 								<label>
-									<input type="radio" name="walking" class="walking" value="1" />
+									<input type="radio" name="thurs_walking" class="thurs_walking" value="0" />
 								</label>
-								My child will be walking alone to and from the program each day
+								My child will be walking alone to (and from) the program
 							</div>
 							<div class="flex checkbox-container">
 								<label>
-									<input type="radio" name="walking" class="walking" value="0" />
+									<input type="radio" name="thurs_walking" class="thurs_walking" value="1" />
 								</label>
-								My child will be dropped off and picked up from the program each day
+								My child will be dropped off to (and picked up from) the program
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="checkbox" name="thurs_walking_evening" class="thurs_walking_evening" value="1" />
+								</label>
+								My child needs to be brought home in the evening
+							</div>
+							<p>
+								Motzei Shabbos:
+							</p>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="radio" name="ms_walking" class="ms_walking" value="0" />
+								</label>
+								My child will be walking alone to (and from) the program
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="radio" name="ms_walking" class="ms_walking" value="1" />
+								</label>
+								My child will be dropped off to (and picked up from) the program
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="checkbox" name="ms_walking_evening" class="ms_walking_evening" value="1" />
+								</label>
+								My child needs to be brought home in the evening
 							</div>
 						</div>
 						<div class="modal-section">
@@ -488,10 +521,6 @@
 								Please read with your child and initial: I have signed the contract that I will follow all the rules,
 								Chas Veshalom, if I don't, I will be dismissed from the program with no refund.
 								<input type="text" id="initials" style="width: 40px;" />
-							</div>
-							<div class="flex checkbox-container">
-								<label><input type="checkbox" id="terms3" class="terms" /></label>
-								I am aware the Chidon HQ will <b>NOT</b> be providing transportation to pick up and drop off the children each day.
 							</div>
 						</div>
 					</form>
@@ -519,6 +548,7 @@
 			$("#insideZone").hide()
 			$("#outsideZone").show()
 			$(".in_zone").val(0)
+			$("#walking_zone").val(0)
 		})
 
 		function getCrossStreets(number, street) {
@@ -563,7 +593,7 @@
 		});
 
 		$("#acc_street_num").blur(function () {
-			if (parseInt($(".in_zone:checked").val()) == 1) {
+			if (parseInt($(".in_zone").val()) == 1) {
 				let number = $(this).val();
 				let street = $("#acc_street").val();
 				getCrossStreets(number, street);
@@ -612,11 +642,11 @@
 					]
 				},
 				{ elem: '#acc_phone', type: 'val', error: 'You must enter a phone number where you can be reached.' },
-				{ elem: '.walking', type: 'radio', error: 'You must indicate whether your child will be walking alone or not.' },
 				{ elem: '#terms1', type: 'checkbox', error: 'You must check off all Terms.' },
 				{ elem: '#terms2', type: 'checkbox', error: 'You must check off all Terms.' },
-				{ elem: '#terms3', type: 'checkbox', error: 'You must check off all Terms.' },
-				{ elem: '#initials', type: 'val', error: 'You must enter your initials in the last Term.' }
+				{ elem: '#initials', type: 'val', error: 'You must enter your initials in the last Term.' },
+				{ elem: '.thurs_walking', type: 'radio', error: 'You must enter walking information for Thursday.'},
+				{ elem: '.ms_walking', type: 'radio', error: 'You must enter walking information for Motzei Shabbos.'}
 			]
 			for (let obj of needed) {
 				switch (obj.type) {
@@ -673,8 +703,14 @@
 				const sandwich = $("#sandwich").val()
 				const allergy = $(".allegy:checked").val() === '1'
 				const allergies = $("#allergies").val()
-				const in_zone = $(".in_zone:checked").val() === '1'
-				const walk_alone = parseInt($(".walking:checked").val())
+				const in_zone = parseInt($(".in_zone").val())
+
+				const walking = {}
+				walking.thurs = parseInt($(".thurs_walking:checked").val())
+				walking.thurs_evening = $(".thurs_walking_evening").is(":checked") ? 1 : 0
+				walking.ms = parseInt($(".ms_walking:checked").val())
+				walking.ms_evening = $(".ms_walking_evening").is(":checked") ? 1 : 0
+
 				const chidon_answer = $("#chidonAnswer").val()
 				let acc = {}
 				acc.family = $("#acc_family").val()
@@ -698,7 +734,7 @@
 					acc.zone = 0
 				}
 				acc.phone = $("#acc_phone").val()
-				let info = { shoe, sandwich, allergy, allergies, in_zone, walk_alone, chidon_answer }
+				let info = { shoe, sandwich, allergy, allergies, in_zone, walking, chidon_answer }
 				info.accomodation = acc
 				ultimate_info[user_id] = info
 				if (editing_mode) {
@@ -914,6 +950,7 @@
 		}
 
 		function updateModal(user) {
+			console.log(user)
 			$("#ch_info #user_id").val(user.user_id)
 			$("#ch_info #shoe").val(user.shoe_size)
 			$("#ch_info #sandwich").val(user.sandwich)
@@ -930,25 +967,31 @@
 			$("#ch_info #acc_phone").val(user.host_number)
 			$("#ch_info #acc_street_num").val(user.host_street_num)
 			$("#ch_info #acc_street_num_suffix").val(user.host_street_num_suffix)
-			$("#ch_info #acc_street_apt").val(user.hos_street_apt)
+			$("#ch_info #acc_street_apt").val(user.host_street_apt)
 			if (parseInt(user.in_zone)) {
 				$("#ch_info #walking_zone").val(user.walking_zone)
-				$("#ch_info .in_zone").eq(0).trigger('click')
 				$("#ch_info #acc_street").val(user.host_street)
 				$("#ch_info #acc_cross1").val(user.between_streets1)
 				$("#ch_info #acc_cross2").val(user.between_streets2)
 			} else {
-				$("#ch_info .in_zone").eq(1).trigger('click')
+				$("#ch_info #toggleZone").click()
 				$("#ch_info #acc_street_outside_zone").val(user.host_street)
 				$("#ch_info #acc_cross1_outside_zone").val(user.between_streets1)
 				$("#ch_info #acc_cross2_outside_zone").val(user.between_streets2)
 			}
 
+			// walking
+			if (user.thurs_walking) $("#ch_info .thurs_walking").eq(user.thurs_walking).attr('checked', true)
+			if (parseInt(user.thurs_walking_evening) == 1) $("#ch_info .thurs_walking_evening").attr('checked', true)
+			if (user.ms_walking) $("#ch_info .ms_walking").eq(user.ms_walking).attr('checked', true)
+			if (parseInt(user.ms_walking_evening) == 1) $("#ch_info .ms_walking_evening").attr('checked', true)
+
 			$("#ch_info #terms1").attr('checked', true)
 			$("#ch_info #terms2").attr('checked', true)
 			$("#ch_info #initials").val(user.first.substr(0, 1) + user.last.substr(0, 1))
 
-			if (parseInt(user.walking)) $("#ch_info #walking").attr('checked', true)
+			// walking
+
 			$("#ch_info #chidonAnswer").val(user.poll)
 
 			if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')

@@ -67,7 +67,7 @@ $info = $stmt->fetchAll();
             <th>Host Cross Street 2</th>
             <th>Permission to walk alone</th>
             <th>Zone ID</th>
-            <th>Poll</th>
+            <th>Comments</th>
             <th></th>
         </tr>
         <?php
