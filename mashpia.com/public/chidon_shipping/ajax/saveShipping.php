@@ -58,7 +58,8 @@ foreach ($info as $row) {
         case 1:
             $shipped = 1;
             $received = 1;
-            // the rest will either default to 0 or stay at whatever it has been set to
+            $missing = 0;
+            $damaged = 0;
             break;
         case 2:
             $shipped = 1;
@@ -79,15 +80,15 @@ foreach ($info as $row) {
             $received = 1;
             break;
     }
-    if (intval($row['action']) == 1) {
-        $res = $stmtShipped->execute([
-            'year'      => $year,
-            'user'      => $row['user'],
-            'item'      => $row['item'],
-            'shipped'   => $shipped,
-            'num'       => $row['num']
-        ]);
-    } else {
+//    if (intval($row['action']) == 1) {
+//        $res = $stmtShipped->execute([
+//            'year'      => $year,
+//            'user'      => $row['user'],
+//            'item'      => $row['item'],
+//            'shipped'   => $shipped,
+//            'num'       => $row['num']
+//        ]);
+//    } else {
         $res = $stmt->execute([
             'year'      => $year,
             'user'      => $row['user'],
@@ -99,7 +100,7 @@ foreach ($info as $row) {
             'desc'      => $row['desc'],
             'num'       => $row['num']
         ]);
-    }
+//    }
     if (! $res) {
 //        $stmt->debugDumpParams();
         $success = false;
