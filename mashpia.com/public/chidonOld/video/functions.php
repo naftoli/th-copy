@@ -315,9 +315,9 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
 
+    $show_track = $child['highest_track'];
     if ($khk || $trophy) {
         if ($khk) $show_track = 'khk';
-        else $show_track = $child['highest_track'];
         return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip, '', '', '', '', '', '', ''];
     } else {
         // prizes
