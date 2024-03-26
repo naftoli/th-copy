@@ -316,8 +316,9 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
     }
 
     if ($khk || $trophy) {
-        if ($khk) $track = 'khk';
-        return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip, '', '', '', '', '', '', ''];
+        if ($khk) $show_track = 'khk';
+        else $show_track = $child['highest_track'];
+        return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip, '', '', '', '', '', '', ''];
     } else {
         // prizes
         $prize_amount = 0;
@@ -336,7 +337,7 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
             }
         }
 
-        return [$track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip,
+        return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip,
             $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
     }
 }
