@@ -321,6 +321,11 @@ if ( !empty( $users ) ) {
         // turn off chidon
         if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
 
+        // for editing ultimate trip
+        if (intval($row['ultimate_trip'])) {
+            $children[$row['user_id']]['editUltimateTrip'] = true;
+        }
+
         // find chosen prizes for those enrolled into chidon
         if ($children[$row['user_id']]['chidon5783']) {
             $sqlPrizes = "select * from chidon_user_prizes cup 
