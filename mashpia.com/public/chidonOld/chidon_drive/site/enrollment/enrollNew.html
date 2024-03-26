@@ -458,7 +458,7 @@
 						</div>
 
 						<div class="modal-section">
-							<h5>Walking Information</h5>
+							<h5>How will your child get home to where they are staying?</h5>
 							<p>
 								Thursday:
 							</p>
@@ -466,19 +466,19 @@
 								<label>
 									<input type="radio" name="thurs_walking" class="thurs_walking" value="0" />
 								</label>
-								My child will be walking alone to (and from) the program
+								My child will walk alone.
 							</div>
 							<div class="flex checkbox-container">
 								<label>
 									<input type="radio" name="thurs_walking" class="thurs_walking" value="1" />
 								</label>
-								My child will be dropped off to (and picked up from) the program
+								My child will be picked up.
 							</div>
 							<div class="flex checkbox-container">
 								<label>
-									<input type="checkbox" name="thurs_walking_evening" class="thurs_walking_evening" value="1" />
+									<input type="radio" name="thurs_walking" class="thurs_walking" value="2" />
 								</label>
-								My child needs to be brought home in the evening
+								I would like my child to be dropped off at the above address.
 							</div>
 							<p>
 								Motzei Shabbos:
@@ -487,19 +487,19 @@
 								<label>
 									<input type="radio" name="ms_walking" class="ms_walking" value="0" />
 								</label>
-								My child will be walking alone to (and from) the program
+								My child will walk alone.
 							</div>
 							<div class="flex checkbox-container">
 								<label>
 									<input type="radio" name="ms_walking" class="ms_walking" value="1" />
 								</label>
-								My child will be dropped off to (and picked up from) the program
+								My child will be picked up.
 							</div>
 							<div class="flex checkbox-container">
 								<label>
-									<input type="checkbox" name="ms_walking_evening" class="ms_walking_evening" value="1" />
+									<input type="radio" name="ms_walking" class="ms_walking" value="2" />
 								</label>
-								My child needs to be brought home in the evening
+								I would like my child to be dropped off at the above address.
 							</div>
 						</div>
 						<div class="modal-section">
@@ -708,9 +708,7 @@
 
 				const walking = {}
 				walking.thurs = parseInt($(".thurs_walking:checked").val())
-				walking.thurs_evening = $(".thurs_walking_evening").is(":checked") ? 1 : 0
 				walking.ms = parseInt($(".ms_walking:checked").val())
-				walking.ms_evening = $(".ms_walking_evening").is(":checked") ? 1 : 0
 
 				const chidon_answer = $("#chidonAnswer").val()
 				let acc = {}
@@ -982,10 +980,8 @@
 			// }
 
 			// walking
-			if (user.thurs_walking) $("#ch_info .thurs_walking").eq(user.thurs_walking).attr('checked', true)
-			if (parseInt(user.thurs_walking_evening) == 1) $("#ch_info .thurs_walking_evening").attr('checked', true)
-			if (user.ms_walking) $("#ch_info .ms_walking").eq(user.ms_walking).attr('checked', true)
-			if (parseInt(user.ms_walking_evening) == 1) $("#ch_info .ms_walking_evening").attr('checked', true)
+			if (user.thurs_walking != null) $("#ch_info .thurs_walking").eq(user.thurs_walking).attr('checked', true)
+			if (user.ms_walking != null) $("#ch_info .ms_walking").eq(user.ms_walking).attr('checked', true)
 
 			$("#ch_info #terms1").attr('checked', true)
 			$("#ch_info #terms2").attr('checked', true)

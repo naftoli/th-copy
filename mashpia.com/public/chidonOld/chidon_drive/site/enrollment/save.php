@@ -34,9 +34,7 @@ function saveUltimateTripInfo() {
             shoe_size = :shoe, 
             poll = :chidon_answer, 
             thurs_walking = :thurs_walking,
-            thurs_walking_evening = :thurs_walking_evening, 
-            ms_walking = :ms_walking,
-            ms_walking_evening = :ms_walking_evening
+            ms_walking = :ms_walking
         WHERE
             user_id = :user AND year = :year
     ");
@@ -63,9 +61,7 @@ function saveUltimateTripInfo() {
                     'shoe' => $info->shoe,
                     'chidon_answer' => $info->chidon_answer,
                     'thurs_walking' => $info->walking->thurs,
-                    'thurs_walking_evening' => $info->walking->thurs_evening,
                     'ms_walking' => $info->walking->ms,
-                    'ms_walking_evening' => $info->walking->ms_evening,
                     'user' => $user_id,
                     'year' => $year
                 ]);
