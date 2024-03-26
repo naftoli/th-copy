@@ -15,6 +15,11 @@
         <link rel="stylesheet" media="screen" href="assets/fonts/font-awesome/font-awesome.min.css">
         
         <style>
+          #outer {
+            width: 1920px;
+            height: 1080px;
+            margin-left: 20px;
+          }
         	.table h2 {
         		margin: 0;
         	}
@@ -37,7 +42,7 @@
         		float: left;
         		width: 600px;
             padding-left: 50px;
-            margin-bottom: 40px
+            margin-bottom: 10px
         	}
         	#teamNames td:last-child {
         		text-align: center;
@@ -60,7 +65,7 @@
 
           #main {
             float: left;
-            padding-left: 30px;
+            padding-left: 20px;
           }
           .action {
             text-align: center;
@@ -77,160 +82,142 @@
           }
 
           .bolts {
-            margin: auto;
-            width: 770px;
-            padding: 20px;
+            width: 720px;
+            padding: 10px;
             background-color: #ffff00;
           }
           .bolts img {
-            width: 120px;
+            width: 70px;
           }
         </style>            
       </head>
 
     <body data-pinterest-extension-installed="cr1.39.1">
-    
-    <br>
-    <div class="container" style="float: left;">
-      <div style="float: left; padding-right: 50px;">
-        <table class="table table-bordered" id="round1">
-          <tbody><tr>
-            <th><h2>Round 1</h2></th>
-            <td>
-              <div class="tname t1n">Team 1</div>
-              <div class="tpoints t1p">0</div>
-            </td>
-            <td>
-              <div class="tname t2n">Team 2</div>
-              <div class="tpoints t2p">0</div>
-            </td>
-    <!--				<td>-->
-    <!--					<div class="tname t3n">Team 3</div>-->
-    <!--					<div class="tpoints t3p">0</div>-->
-    <!--        </td>-->
-    <!--        <td>-->
-    <!--					<div class="tname t4n">Team 4</div>-->
-    <!--					<div class="tpoints t4p">0</div>-->
-    <!--				</td>-->
-          </tr>
-        </tbody></table>
-        <table class="table table-bordered" id="round2">
-          <tbody><tr>
-            <th><h2>Round 2</h2></th>
-            <td>
-              <div class="tname t1n">Team 1</div>
-              <div class="tpoints t1p">0</div>
-            </td>
-            <td>
-              <div class="tname t2n">Team 2</div>
-              <div class="tpoints t2p">0</div>
-            </td>
-    <!--				<td>-->
-    <!--					<div class="tname t3n">Team 3</div>-->
-    <!--					<div class="tpoints t3p">0</div>-->
-    <!--        </td>-->
-    <!--        <td>-->
-    <!--					<div class="tname t4n">Team 4</div>-->
-    <!--					<div class="tpoints t4p">0</div>-->
-    <!--				</td>-->
-          </tr>
-        </tbody></table>
-      </div>
-<!--		<table class="table table-bordered" id="round3">-->
-<!--			<tbody><tr>-->
-<!--				<th width="390px"><h2>Round 3</h2></th>-->
-<!--				<td colspan="2">-->
-<!--					<div class="tname t1n">Team 1</div>-->
-<!--					<div class="tpoints t1p">0</div>-->
-<!--				</td>-->
-<!--				<td colspan="2">-->
-<!--					<div class="tname t2n">Team 2</div>-->
-<!--					<div class="tpoints t2p">0</div>-->
-<!--				</td>-->
-<!--			</tr>-->
-<!--		</tbody></table>-->
-      <div id="teams">
-        <div id="saveTeams">
-          <button id="save1">Save as Round 1</button>
-          <button id="save2">Save as Round 2</button>
-          <!--			<button id="save3">Save as Round 3</button>-->
+
+    <div id="outer">
+      <br>
+      <div>
+        <div style="float: left; padding-right: 50px;">
+          <table class="table table-bordered" id="round1">
+            <tbody><tr>
+              <th><h2>Round 1</h2></th>
+              <td>
+                <div class="tname t1n">Team 1</div>
+                <div class="tpoints t1p">0</div>
+              </td>
+              <td>
+                <div class="tname t2n">Team 2</div>
+                <div class="tpoints t2p">0</div>
+              </td>
+      <!--				<td>-->
+      <!--					<div class="tname t3n">Team 3</div>-->
+      <!--					<div class="tpoints t3p">0</div>-->
+      <!--        </td>-->
+      <!--        <td>-->
+      <!--					<div class="tname t4n">Team 4</div>-->
+      <!--					<div class="tpoints t4p">0</div>-->
+      <!--				</td>-->
+            </tr>
+          </tbody></table>
+          <table class="table table-bordered" id="round2">
+            <tbody><tr>
+              <th><h2>Round 2</h2></th>
+              <td>
+                <div class="tname t1n">Team 1</div>
+                <div class="tpoints t1p">0</div>
+              </td>
+              <td>
+                <div class="tname t2n">Team 2</div>
+                <div class="tpoints t2p">0</div>
+              </td>
+      <!--				<td>-->
+      <!--					<div class="tname t3n">Team 3</div>-->
+      <!--					<div class="tpoints t3p">0</div>-->
+      <!--        </td>-->
+      <!--        <td>-->
+      <!--					<div class="tname t4n">Team 4</div>-->
+      <!--					<div class="tpoints t4p">0</div>-->
+      <!--				</td>-->
+            </tr>
+          </tbody></table>
         </div>
-        <table id="teamNames">
-          <tbody>
-          <tr>
-            <td class="teamName">ספר המצוות</td>
-            <td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
-            <td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
-            <!--        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>-->
-            <!--        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>-->
-            <td><input type="radio" name="t1" value="0" checked=""> None</td>
-          </tr>
-          <tr>
-            <td class="teamName">משנה תורה</td>
-            <td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
-            <td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
+  <!--		<table class="table table-bordered" id="round3">-->
+  <!--			<tbody><tr>-->
+  <!--				<th width="390px"><h2>Round 3</h2></th>-->
+  <!--				<td colspan="2">-->
+  <!--					<div class="tname t1n">Team 1</div>-->
+  <!--					<div class="tpoints t1p">0</div>-->
+  <!--				</td>-->
+  <!--				<td colspan="2">-->
+  <!--					<div class="tname t2n">Team 2</div>-->
+  <!--					<div class="tpoints t2p">0</div>-->
+  <!--				</td>-->
+  <!--			</tr>-->
+  <!--		</tbody></table>-->
+        <div id="teams">
+          <div id="saveTeams">
+            <button id="save1">Save as Round 1</button>
+            <button id="save2">Save as Round 2</button>
+            <!--			<button id="save3">Save as Round 3</button>-->
+          </div>
+          <table id="teamNames">
+            <tbody>
+            <tr>
+              <td class="teamName">ספר המצוות</td>
+              <td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
+              <td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
+              <!--        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>-->
+              <!--        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>-->
+              <td><input type="radio" name="t1" value="0" checked=""> None</td>
+            </tr>
+            <tr>
+              <td class="teamName">משנה תורה</td>
+              <td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
+              <td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
+              <!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
+              <!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
+              <td><input type="radio" name="t2" value="0" checked=""> None</td>
+            </tr>
+            <!-- 			<tr>-->
+            <!-- 				<td class="teamName">אגרת הרמב"ם</td>-->
+            <!-- 				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>-->
+            <!-- 				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>-->
             <!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
             <!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
-            <td><input type="radio" name="t2" value="0" checked=""> None</td>
-          </tr>
-          <!-- 			<tr>-->
-          <!-- 				<td class="teamName">אגרת הרמב"ם</td>-->
-          <!-- 				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>-->
-          <!-- 				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>-->
-          <!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
-          <!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
-          <!-- 				<td><input type="radio" name="t2" value="0" checked=""> None</td>-->
-          <!-- 			</tr>-->
-          <!-- 			-->
-          <!-- 			<tr>-->
-          <!-- 				<td class="teamName">פירוש המשניות</td>-->
-          <!-- 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>-->
-          <!-- 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>-->
-          <!--        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>-->
-          <!--        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>-->
-          <!-- 				<td><input type="radio" name="t4" value="0" checked=""> None</td>-->
-          <!-- 			</tr>-->
-          <tr>
-            <td colspan="5">
-              <br />
-              <button id="update">Update</button>
-            </td>
-          </tr>
-          <!--             &lt;!&ndash; <tr>-->
-          <!-- 				<td colspan="5">-->
-          <!--					<br />-->
-          <!--					<button id="round3">Change Boxes for Round 3</button>-->
-          <!--				</td>-->
-          <!-- 			</tr> &ndash;&gt;-->
-          </tbody></table>
-      </div>
-	</div>
- 	
-    <!-- Pricing Table Section -->
-    <section id="pricing-table">
-        <div class="container">
-            <div class="row">
-                <div class="pricing">
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                    	<div class="givePoints" id="1">
-                          <button class="plus">+10</button>
-                          <button class="plus">+20</button>
-                          <button class="minus">-10</button>
-                          <button class="minus">-20</button>
-                          <button class="plus">+400</button>
-                          <br />
-                          <input type="text" size="3" style="margin-top: 10px;">
-                          <button>Go</button><br>
-                          <label for="points">Set Points</label>
-                          <input type="text" name="points" size="5">
-                          <button class="setPoints">Set</button>
-                          <button class="resetPoints">Reset</button>
-                    	</div>
-                      <div class="team_name"></div>
-                    </div>
-                    
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="givePoints" id="2">
+            <!-- 				<td><input type="radio" name="t2" value="0" checked=""> None</td>-->
+            <!-- 			</tr>-->
+            <!-- 			-->
+            <!-- 			<tr>-->
+            <!-- 				<td class="teamName">פירוש המשניות</td>-->
+            <!-- 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>-->
+            <!-- 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>-->
+            <!--        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>-->
+            <!--        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>-->
+            <!-- 				<td><input type="radio" name="t4" value="0" checked=""> None</td>-->
+            <!-- 			</tr>-->
+            <tr>
+              <td colspan="5">
+                <br />
+                <button id="update">Update</button>
+              </td>
+            </tr>
+            <!--             &lt;!&ndash; <tr>-->
+            <!-- 				<td colspan="5">-->
+            <!--					<br />-->
+            <!--					<button id="round3">Change Boxes for Round 3</button>-->
+            <!--				</td>-->
+            <!-- 			</tr> &ndash;&gt;-->
+            </tbody></table>
+        </div>
+
+
+      <!-- Pricing Table Section -->
+      <section id="pricing-table" style="float: left">
+          <div class="container">
+              <div class="row">
+                  <div class="pricing">
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                        <div class="givePoints" id="1">
                             <button class="plus">+10</button>
                             <button class="plus">+20</button>
                             <button class="minus">-10</button>
@@ -243,118 +230,139 @@
                             <input type="text" name="points" size="5">
                             <button class="setPoints">Set</button>
                             <button class="resetPoints">Reset</button>
-                    	</div>
-                      <div class="team_name"></div>
-                    </div>
-                    
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="givePoints" id="3">-->
-<!--                          <button class="plus">+10</button>-->
-<!--                          <button class="plus">+20</button>-->
-<!--                          <button class="minus">-10</button>-->
-<!--                          <button class="minus">-20</button>-->
-<!--                          <button class="plus">+400</button>-->
-<!--                          <br />-->
-<!--                          <input type="text" size="3" style="margin-top: 10px;">-->
-<!--                          <button>Go</button><br>-->
-<!--                          <label for="points">Set Points</label>-->
-<!--                          <input type="text" name="points" size="5">-->
-<!--                          <button class="setPoints">Set</button>-->
-<!--                          <button class="resetPoints">Reset</button>-->
-<!--                    	</div>-->
-<!--                    </div>-->
-
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="givePoints" id="4">-->
-<!--                          <button class="plus">+10</button>-->
-<!--                          <button class="plus">+20</button>-->
-<!--                          <button class="minus">-10</button>-->
-<!--                          <button class="minus">-20</button>-->
-<!--                          <button class="plus">+400</button>-->
-<!--                          <br />-->
-<!--                          <input type="text" size="3" style="margin-top: 10px;">-->
-<!--                          <button>Go</button><br>-->
-<!--                          <label for="points">Set Points</label>-->
-<!--                          <input type="text" name="points" size="5">-->
-<!--                          <button class="setPoints">Set</button>-->
-<!--                          <button class="resetPoints">Reset</button>-->
-<!--                    	</div>-->
-<!--                    </div>-->
-            	</div>
-            </div>
-        </div>
-    </section>
-	<!-- Pricing Table Section End -->
-    	
-    <!-- Pricing Table Section -->
-    <p>&nbsp;</p>
-    <div id="scores"></div>
-    <section id="pricing-table" style="width: 100%; padding-left: 20px; padding-right: 20px;">
-        <div class="container">
-            <div class="row scoreboard">
-                <div class="pricing">
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="pricing-table table1">-->
-<!--                        	<div class="pricing-list t1">-->
-<!--                                <ul>-->
-<!--                                    <li><span>אגרת הרמב"ם</span></li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                            -->
-<!--                            <div class="pricing-header">-->
-<!--                                <p class="pricing-rate team1" style="display: block;">0</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    -->
-<!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-<!--                        <div class="pricing-table table2">-->
-<!--                        	<div class="pricing-list t2">-->
-<!--                                <ul>-->
-<!--                                    <li><span>פירוש המשניות</span></li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                            -->
-<!--                            <div class="pricing-header">-->
-<!--                                <p class="pricing-rate team2" style="display: block;">0</p>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-                    
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table1">
-                        	<div class="pricing-list t1">
-                                <ul>
-                                    <li><span>ספר המצוות</span></li>
-                                </ul>
-                            </div>
-
-                            <div class="pricing-header">
-                                <p class="pricing-rate team1" style="display: block;">0</p>
-                            </div>
                         </div>
-                    </div>
+                        <div class="team_name"></div>
+                      </div>
 
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table2">
-                        	<div class="pricing-list t2">
-                                <ul>
-                                    <li><span>משנה תורה</span></li>
-                                </ul>
-                            </div>
-
-                            <div class="pricing-header">
-                                <p class="pricing-rate team2" style="display: block;">0</p>
-                            </div>
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="givePoints" id="2">
+                              <button class="plus">+10</button>
+                              <button class="plus">+20</button>
+                              <button class="minus">-10</button>
+                              <button class="minus">-20</button>
+                              <button class="plus">+400</button>
+                              <br />
+                              <input type="text" size="3" style="margin-top: 10px;">
+                              <button>Go</button><br>
+                              <label for="points">Set Points</label>
+                              <input type="text" name="points" size="5">
+                              <button class="setPoints">Set</button>
+                              <button class="resetPoints">Reset</button>
                         </div>
-                    </div>
-            	</div>
-            </div>
-        </div>
-    </section>
+                        <div class="team_name"></div>
+                      </div>
 
-    <div id="main"></div>
-	<!-- Pricing Table Section End -->
+  <!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+  <!--                        <div class="givePoints" id="3">-->
+  <!--                          <button class="plus">+10</button>-->
+  <!--                          <button class="plus">+20</button>-->
+  <!--                          <button class="minus">-10</button>-->
+  <!--                          <button class="minus">-20</button>-->
+  <!--                          <button class="plus">+400</button>-->
+  <!--                          <br />-->
+  <!--                          <input type="text" size="3" style="margin-top: 10px;">-->
+  <!--                          <button>Go</button><br>-->
+  <!--                          <label for="points">Set Points</label>-->
+  <!--                          <input type="text" name="points" size="5">-->
+  <!--                          <button class="setPoints">Set</button>-->
+  <!--                          <button class="resetPoints">Reset</button>-->
+  <!--                    	</div>-->
+  <!--                    </div>-->
+
+  <!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+  <!--                        <div class="givePoints" id="4">-->
+  <!--                          <button class="plus">+10</button>-->
+  <!--                          <button class="plus">+20</button>-->
+  <!--                          <button class="minus">-10</button>-->
+  <!--                          <button class="minus">-20</button>-->
+  <!--                          <button class="plus">+400</button>-->
+  <!--                          <br />-->
+  <!--                          <input type="text" size="3" style="margin-top: 10px;">-->
+  <!--                          <button>Go</button><br>-->
+  <!--                          <label for="points">Set Points</label>-->
+  <!--                          <input type="text" name="points" size="5">-->
+  <!--                          <button class="setPoints">Set</button>-->
+  <!--                          <button class="resetPoints">Reset</button>-->
+  <!--                    	</div>-->
+  <!--                    </div>-->
+                </div>
+              </div>
+          </div>
+      </section>
+    <!-- Pricing Table Section End -->
+
+      <!-- Pricing Table Section -->
+      <p>&nbsp;</p>
+      <section id="pricing-table">
+          <div class="container">
+              <div class="row scoreboard">
+                  <div class="pricing">
+  <!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+  <!--                        <div class="pricing-table table1">-->
+  <!--                        	<div class="pricing-list t1">-->
+  <!--                                <ul>-->
+  <!--                                    <li><span>אגרת הרמב"ם</span></li>-->
+  <!--                                </ul>-->
+  <!--                            </div>-->
+  <!--                            -->
+  <!--                            <div class="pricing-header">-->
+  <!--                                <p class="pricing-rate team1" style="display: block;">0</p>-->
+  <!--                            </div>-->
+  <!--                        </div>-->
+  <!--                    </div>-->
+  <!--                    -->
+  <!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
+  <!--                        <div class="pricing-table table2">-->
+  <!--                        	<div class="pricing-list t2">-->
+  <!--                                <ul>-->
+  <!--                                    <li><span>פירוש המשניות</span></li>-->
+  <!--                                </ul>-->
+  <!--                            </div>-->
+  <!--                            -->
+  <!--                            <div class="pricing-header">-->
+  <!--                                <p class="pricing-rate team2" style="display: block;">0</p>-->
+  <!--                            </div>-->
+  <!--                        </div>-->
+  <!--                    </div>-->
+
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="pricing-table table1">
+                            <div class="pricing-list t1">
+                                  <ul>
+                                      <li><span>ספר המצוות</span></li>
+                                  </ul>
+                              </div>
+
+                              <div class="pricing-header">
+                                  <p class="pricing-rate team1" style="display: block;">0</p>
+                              </div>
+                          </div>
+                      </div>
+
+                      <div class="col-md-3 col-sm-12 col-xs-12">
+                          <div class="pricing-table table2">
+                            <div class="pricing-list t2">
+                                  <ul>
+                                      <li><span>משנה תורה</span></li>
+                                  </ul>
+                              </div>
+
+                              <div class="pricing-header">
+                                  <p class="pricing-rate team2" style="display: block;">0</p>
+                              </div>
+                          </div>
+                      </div>
+                </div>
+              </div>
+          </div>
+      </section>
+    <!-- Pricing Table Section End -->
+
+      </div>
+
+      <div id="main"></div>
+
+    </div>
 
     <!-- <div style="margin-top: 100px;">
         <section id="pricing-table" style="padding-top: 20px; padding-bottom: 20px;">
@@ -754,9 +762,11 @@
       let teams = ['משנה תורה', 'ספר המצוות']
 
       function generateHtml(num_container) {
-        let html = `<div id="bolts_container_${num_container}"><div class="bolts">`
-        let rows = 6
-        let columns = 5
+        let html
+        if (num_container == 2) html = `<div id="bolts_container_${num_container}" style="float: right; padding-left: 30px;"><div class="bolts">`
+        else html = `<div id="bolts_container_${num_container}" style="float: left"><div class="bolts">`
+        let rows = 3
+        let columns = 10
 
         outer:
           for (let i = 0; i < rows; i++) {
