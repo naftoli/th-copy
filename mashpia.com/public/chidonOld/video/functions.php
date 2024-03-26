@@ -162,7 +162,7 @@ function createFile($name, $info, $csv = false) {
     if (is_array($info)) {
         foreach ($info as $fields) {
             if ($csv) fputcsv($fp, $fields);
-            else fputcsv($fp, $fields, "\t", '');
+            else fputcsv($fp, $fields, "\t", ' ');
 //            else fputcsv($fp, $fields, "\t", ' ');
         }
     } else {
