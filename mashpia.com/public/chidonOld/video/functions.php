@@ -162,7 +162,7 @@ function createFile($name, $info, $csv = false) {
     if (is_array($info)) {
         foreach ($info as $fields) {
             if ($csv) fputcsv($fp, $fields);
-            else fputcsv($fp, $fields, "\t", ' ');
+            else fputcsv($fp, $fields, "\t", '');
 //            else fputcsv($fp, $fields, "\t", ' ');
         }
     } else {
@@ -296,7 +296,7 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
     $name = trim($child['first']) . ' ' . trim($child['last']);
     $img_url = $child['user_serial'] . '.png';
     $award = array_search(getAward($child), $tracks);
-    if (in_array($track, ['yesod', 'yediah'])) $trip = 0;
+    if (in_array($child['highest_track'], ['yesod', 'yediah'])) $trip = 0;
     else $trip = isset($child['ultimate_trip']) && intval($child['ultimate_trip']) == 1 ? 2: 1;
     $grade = 'Grade ' . $child['class_grade'];
 
