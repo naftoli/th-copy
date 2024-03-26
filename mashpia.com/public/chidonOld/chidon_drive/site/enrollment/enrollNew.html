@@ -423,7 +423,7 @@
 									</div>
 								</div>
 							</div>
-							<input type="hidden" name="in_zone" class="in_zone" value="1" />
+							<input type="hidden" name="in_zone" class="in_zone" value="0" />
 
 							<div id="insideZone">
 								<div class="flex">
@@ -569,6 +569,7 @@
 						$("#acc_cross1").val(cross.cross1);
 						$("#acc_cross2").val(cross.cross2);
 						$("#walking_zone").val(cross.zone_5780);
+						$(".in_zone").val(1);
 					} else {
 						alert(info.error);
 						$("#walking_zone").val(0);
