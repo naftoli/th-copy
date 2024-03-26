@@ -97,7 +97,6 @@ $awards = [
                 "</td><td>" . $award . "</td>";
             if ($track == 'yesod') {
                 echo "<td colspan='7'></td></tr>";
-                continue;
             } else {
                 foreach ($prizes as $prize) {
                     $desc = '';
