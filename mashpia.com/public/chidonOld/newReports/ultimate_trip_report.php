@@ -171,6 +171,7 @@ $info = $stmt->fetchAll();
 
         const data = await res.json()
         console.log(data)
+        if (! data.success) alert('Error saving data')
     })
 </script>
 </html>
