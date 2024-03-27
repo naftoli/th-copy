@@ -955,7 +955,7 @@
 		async function updateModal(user) {
 			console.log(user)
 			// find out if user is in the zone or not
-			if (user.host_street_num.trim() && user.host_street.trim()) {
+			if (user.host_street_num && user.host_street) {
 				const zone = await getCrossStreets(user.host_street_num, user.host_street, true)
 				if (zone.success) user.in_zone = 1
 			} else {
