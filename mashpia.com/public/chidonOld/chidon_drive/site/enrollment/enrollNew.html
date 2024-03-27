@@ -424,6 +424,7 @@
 								</div>
 							</div>
 							<input type="hidden" name="in_zone" class="in_zone" value="0" />
+							<input type="hidden" name="in_the_zone" class="in_the_zone" value="1" />
 
 							<div id="insideZone">
 								<div class="flex">
@@ -549,49 +550,51 @@
 			$("#outsideZone").show()
 			$(".in_zone").val(0)
 			$("#walking_zone").val(0)
+			$(".in_the_zone").val(0)
 		})
 
-		function getCrossStreets(number, street) {
-			if (street && street != 'Choose One' && parseInt($(".in_zone").val()) == 1) {
+		async function getCrossStreets(number, street, json = false) {
+			if (street && street != 'Choose One' && parseInt($(".in_the_zone").val()) == 1) {
 				if (!number) {
+					if (json) return { success: false, error: 'You must enter a Street Number.' }
 					alert('You must enter a Street Number.');
 					return false;
 				} else if (isNaN(number)) {
+					if (json) return { success: false, error: 'Street numbers can only contain digits, no alphanumeric characters are allowed.' }
 					alert('Street numbers can only contain digits, no alphanumeric characters are allowed.');
 					return false;
 				}
 
-				// $("#walkingException").hide();
-				$.post('../../ajax/getCrossStreets.php', { num: number, street: street }, function (result) {
-					let info = JSON.parse(result);
-					if (info.success) {
-						let cross = info.data;
-						$("#acc_cross1").val(cross.cross1);
-						$("#acc_cross2").val(cross.cross2);
-						$("#walking_zone").val(cross.zone_5780);
-						$(".in_zone").val(1);
-					} else {
-						alert(info.error);
-						$("#walking_zone").val(0);
-					}
-				});
+				const result = await $.post('../../ajax/getCrossStreets.php', { num: number, street: street })
+				let info = JSON.parse(result);
+				if (json) return info
+				if (info.success) {
+					let cross = info.data;
+					$("#acc_cross1").val(cross.cross1);
+					$("#acc_cross2").val(cross.cross2);
+					$("#walking_zone").val(cross.zone_5780);
+					$(".in_zone").val(1);
+				} else {
+					alert(info.error);
+					$("#walking_zone").val(0);
+				}
 			} else {
+				if (json) return { success: false, error: 'You must choose a street.' }
 				$("#walking_zone").val(0);
 			}
 		}
 
 		// get streets for dropdown
-		$.post('../../ajax/getStreets.php', function (result) {
-			$('select#acc_street').niceSelect('destroy');
+		async function getStreets() {
+			let result = await $.post('../../ajax/getStreets.php');
 			let data = JSON.parse(result);
 			let html = '<option>Choose One</option>';
 			for (s in data.streets) {
 				html += "<option>" + data.streets[s].street + "</option>";
 			}
-			// html += "<option>East Flatbush (out of the walking zone)</option>";
 			$("#acc_street").append(html);
 			$('select#acc_street').niceSelect();
-		});
+		}
 
 		$("#acc_street_num").blur(function () {
 			if (parseInt($(".in_zone").val()) == 1) {
@@ -933,6 +936,7 @@
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
 				if (to_edit.length) {
 					for (let c of to_edit) ultimate_trip.push(c.user_id)
+					await getStreets()
 					updateModal(to_edit[0])
 				} else {
 					alert('No children are eligible for registration or for editing their ultimate trip info.')
@@ -948,8 +952,16 @@
 			}
 		}
 
-		function updateModal(user) {
+		async function updateModal(user) {
 			console.log(user)
+			// find out if user is in the zone or not
+			if (user.host_street_num.trim() && user.host_street.trim()) {
+				const zone = await getCrossStreets(user.host_street_num, user.host_street, true)
+				if (zone.success) user.in_zone = 1
+			} else {
+				user.in_zone = 1
+			}
+
 			$("#ch_info #user_id").val(user.user_id)
 			$("#ch_info #shoe").val(user.shoe_size)
 			$("#ch_info #sandwich").val(user.sandwich)
@@ -967,17 +979,21 @@
 			$("#ch_info #acc_street_num").val(user.host_street_num)
 			$("#ch_info #acc_street_num_suffix").val(user.host_street_num_suffix)
 			$("#ch_info #acc_street_apt").val(user.host_street_apt)
-			// if (parseInt(user.in_zone)) {
+			if (parseInt(user.in_zone)) {
 				$("#ch_info #walking_zone").val(user.walking_zone)
 				$("#ch_info #acc_street").val(user.host_street)
 				$("#ch_info #acc_cross1").val(user.between_streets1)
 				$("#ch_info #acc_cross2").val(user.between_streets2)
-			// } else {
-			// 	$("#ch_info #toggleZone").click()
-			// 	$("#ch_info #acc_street_outside_zone").val(user.host_street)
-			// 	$("#ch_info #acc_cross1_outside_zone").val(user.between_streets1)
-			// 	$("#ch_info #acc_cross2_outside_zone").val(user.between_streets2)
-			// }
+				$("#ch_info .in_zone").val(1)
+				$("#ch_info .in_the_zone").val(1)
+			} else {
+				$("#ch_info #toggleZone").click()
+				$("#ch_info #acc_street_outside_zone").val(user.host_street)
+				$("#ch_info #acc_cross1_outside_zone").val(user.between_streets1)
+				$("#ch_info #acc_cross2_outside_zone").val(user.between_streets2)
+				$("#ch_info .in_zone").val(0)
+				$("#ch_info .in_the_zone").val(0)
+			}
 
 			// walking
 			if (user.thurs_walking != null) $("#ch_info .thurs_walking").eq(user.thurs_walking).attr('checked', true)
