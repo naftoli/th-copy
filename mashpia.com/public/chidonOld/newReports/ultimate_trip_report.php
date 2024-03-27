@@ -12,6 +12,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
+$superAdmin = $admin_user['auth'] == 'super';
+
 $sql = "SELECT 
             *
         FROM
@@ -93,37 +95,46 @@ $info = $stmt->fetchAll();
             $cross2 = $row['between_streets2'];
             $poll = $row['poll'];
             $thurs_walking = $row['thurs_walking'];
-            $thurs_walking_evening = $row['thurs_walking_evening'];
             $ms_walking = $row['ms_walking'];
-            $ms_walking_evening = $row['ms_walking_evening'];
 
-            $thurs = intval($thurs_walking) == 1 ? 'parent dropping off': 'child walking alone';
-            if ($thurs_walking_evening) {
-                $thurs .= ' NEEDS TO BE BROUGHT HOME';
-            } else {
-                if (intval($thurs_walking) == 1) $thurs .= ' AND parent picking up';
+            switch ($thurs_walking) {
+                case 0:
+                    $thurs = 'child walking alone';
+                    break;
+                case 1:
+                    $thurs = 'parent picking up';
+                    break;
+                case 2:
+                    $thurs = 'NEEDS TO BE DROPPED OFF';
+                    break;
             }
 
-            $ms = intval($ms_walking) == 1 ? 'parent dropping off': 'child walking alone';
-            if ($ms_walking_evening) {
-                $ms .= ' NEEDS TO BE BROUGHT HOME';
-            } else {
-                if (intval($ms_walking) == 1) $ms .= ' AND parent picking up';
+            switch ($ms_walking) {
+                case 0:
+                    $ms = 'child walking alone';
+                    break;
+                case 1:
+                    $ms = 'parent picking up';
+                    break;
+                case 2:
+                    $ms = 'NEEDS TO BE DROPPED OFF';
+                    break;
             }
 
             echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
             echo $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes' : 'no') . "</td> 
-                <td><input type='text' class='host' value='" . $host . "' disabled /></td>
-                <td><input type='text' class='host_phone' value='" . $host_phone . "' disabled /></td>
-                <td><input type='text' class='street_num' value='" . $street_num . "' size='3' disabled /></td>
-                <td><input type='text' class='suffix' value='" . $suffix . "' size='2' disabled /></td>
-                <td><input type='text' class='street' value='" . $street . "' disabled /></td>
-                <td><input type='text' class='apt' value='" . $apt . "' size='3' disabled /></td> 
-                <td><input type='text' class='cross1' value='" . $cross1 . "' disabled /></td>
-                <td><input type='text' class='cross2' value='" . $cross2 . "' disabled /></td>
+                <td><input type='text' class='host' value='" . $host . "' /></td>
+                <td><input type='text' class='host_phone' value='" . $host_phone . "' /></td>
+                <td><input type='text' class='street_num' value='" . $street_num . "' size='3'  /></td>
+                <td><input type='text' class='suffix' value='" . $suffix . "' size='2' /></td>
+                <td><input type='text' class='street' value='" . $street . "' /></td>
+                <td><input type='text' class='apt' value='" . $apt . "' size='3' /></td> 
+                <td><input type='text' class='cross1' value='" . $cross1 . "' /></td>
+                <td><input type='text' class='cross2' value='" . $cross2 . "' /></td>
                 <td>" . $thurs . "</td><td>" . $ms . "</td>
-                <td>" . $zone . "</td><td>" . $poll . "</td>
-                <td><button class='save'>Save</button></td></tr>";
+                <td>" . $zone . "</td><td>" . $poll . "</td><td>";
+            if ($superAdmin) echo "<button class='save'>Save</button>";
+            echo "</td></tr>";
         }
         ?>
     </table>
@@ -132,19 +143,34 @@ $info = $stmt->fetchAll();
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
         crossorigin="anonymous"></script>
 <script>
+    const superAdmin = <?= intval($superAdmin) ?>;
     $(function () {
-      $(".save").click( function () {
+      if (! superAdmin) $("input").attr('disabled', true)
+
+      $(".save").click( async function () {
         let row = $(this).parent().parent()
         let chidon_id = $(row).attr('id')
         let fields = ['host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2']
-        let info = {}
+        let info = {
+          chidon_id: chidon_id
+        }
         for (let field of fields) {
           let elem = '.' + field
           let val = $(row).find(elem).val()
           info[field] = val
         }
         console.log(info)
-      })
+
+        const res = await fetch('api/updateChidonInfo.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(info)
+        })
+
+        const data = await res.json()
+        console.log(data)
     })
 </script>
 </html>
