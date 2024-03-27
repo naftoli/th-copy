@@ -122,7 +122,11 @@ $info = $stmt->fetchAll();
             }
 
             echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
-            echo $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes' : 'no') . "</td> 
+            echo  "<input type='text' class='shoe' value='" . $shoe . "' /></td>
+                <td><input type='text' class='sandwhich' value='" . $sandwich . "' /></td>
+                <td><input type='text' class='alergies' value='" . $allergies . "' /></td>
+                <td><select name='in_zone' class='in_zone'><option value='yes'" . ($in_zone ? ' selected' : '') . "
+                >yes</option><option value='no'" . (!$in_zone ? ' selected' : '') . ">no</option></select></td> 
                 <td><input type='text' class='host' value='" . $host . "' /></td>
                 <td><input type='text' class='host_phone' value='" . $host_phone . "' /></td>
                 <td><input type='text' class='street_num' value='" . $street_num . "' size='3'  /></td>
@@ -150,7 +154,7 @@ $info = $stmt->fetchAll();
       $(".save").click( async function () {
         let row = $(this).parent().parent()
         let chidon_id = $(row).attr('id')
-        let fields = ['host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2']
+        let fields = ['shoe', 'sandwhich', 'allergies', 'in_zone', 'host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2']
         let info = {
           chidon_id: chidon_id
         }
