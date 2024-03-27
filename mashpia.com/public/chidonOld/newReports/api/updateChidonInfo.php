@@ -37,5 +37,6 @@ $success = $stmt->execute([
 ]);
 
 echo json_encode([
-    'success' => $success
+    'success' => $success,
+    'error' => $stmt->errorInfo()
 ]);
