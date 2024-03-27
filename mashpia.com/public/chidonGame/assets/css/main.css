@@ -52,8 +52,9 @@ body{
   font-family: 'Robot', sans-serif;
 }
 #pricing-table .pricing .pricing-table {
-  width: 384px;
+  width: 375px;
   height: 230px;
+  margin-top: 20px;
 }
 #bottom-table .pricing .pricing-table {
   padding-bottom: 0;	
@@ -113,10 +114,10 @@ body{
   text-transform: uppercase;
 }
 #pricing-table .pricing .pricing-list {
-  padding: 20px 0 20px 0;
+  /*padding: 20px 0 20px 0;*/
   /*color: #a7cded;*/
   font-family: oscar;
-  font-size: 60pt;
+  font-size: 50pt;
   /* background: #F8E0F7; */
   /*background: #ffffff;*/
   /* border: 1px solid #e3e3e3; */
