@@ -862,12 +862,12 @@
         let elem = 'bolt_image_' + container_num + '_' + number
 
         if (action === 'correct') {
-          if (number == 31) return
+          if (number == (total + 1)) return
           document.getElementById(id).value = ++number
           document.getElementById(elem).src = 'bolts/Lightning_Green.png'
           updatePoints(team)
         } else if (action === 'incorrect') {
-          if (number == 31) return
+          if (number == (total + 1)) return
           document.getElementById(id).value = ++number
           document.getElementById(elem).src = 'bolts/Lightning_Red.png'
         } else if (action === 'reset') {
