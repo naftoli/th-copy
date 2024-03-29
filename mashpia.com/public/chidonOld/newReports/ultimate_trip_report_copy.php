@@ -55,6 +55,7 @@ $info = $stmt->fetchAll();
         <th>Grade/Class</th>
         <th>Student</th>
         <th>Serial Number</th>
+        <th>Gender</th>
         <th>Shoe Size</th>
         <th>Sandwich</th>
         <th>Allergies</th>
