@@ -55,6 +55,7 @@ $info = $stmt->fetchAll();
             <th>Grade/Class</th>
             <th>Student</th>
             <th>Serial Number</th>
+            <th>Gender</th>
             <th>Shoe Size</th>
             <th>Sandwich</th>
             <th>Allergies</th>
@@ -80,6 +81,7 @@ $info = $stmt->fetchAll();
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $student = $row['first'] . ' ' . $row['last'];
             $serial = $row['user_serial'];
+            $gender = strtolower($row['gender']) == 'm' ? 'boys' : 'girls';
             $shoe = $row['shoe_size'];
             $sandwich = $row['sandwich'];
             $allergies = $row['allergies'];
@@ -121,8 +123,9 @@ $info = $stmt->fetchAll();
                     break;
             }
 
-            echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
-            echo  "<input type='text' class='shoe' value='" . $shoe . "' /></td>
+            echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "
+                </td><td>" . $serial . "</td><td> . $gender . </td>
+                <td><input type='text' class='shoe' value='" . $shoe . "' /></td>
                 <td><input type='text' class='sandwhich' value='" . $sandwich . "' /></td>
                 <td><input type='text' class='alergies' value='" . $allergies . "' /></td>
                 <td><select name='in_zone' class='in_zone'><option value='yes'" . ($in_zone ? ' selected' : '') . "

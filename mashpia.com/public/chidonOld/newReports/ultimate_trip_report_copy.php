@@ -79,6 +79,7 @@ $info = $stmt->fetchAll();
         $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
         $student = $row['first'] . ' ' . $row['last'];
         $serial = $row['user_serial'];
+        $gender = strtolower($row['gender']) == 'm' ? 'boys' : 'girls';
         $shoe = $row['shoe_size'];
         $sandwich = $row['sandwich'];
         $allergies = $row['allergies'];
@@ -120,8 +121,8 @@ $info = $stmt->fetchAll();
                 break;
         }
 
-        echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td><td>";
-        echo  $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes': 'no') . "</td> 
+        echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "</td><td>" . $serial . "</td>
+                <td>" . $gender . "</td><td>" . $shoe . "</td><td>" . $sandwich . "</td><td>" . $allergies . "</td><td>" . ($in_zone ? 'yes': 'no') . "</td> 
                 <td>" . $host . "</td><td>" . $host_phone . "</td><td>" . $street_num . "</td><td>" . $suffix . "</td>
                 <td>" . $street . "</td><td>" . $apt . "</td><td>" . $cross1 . "</td><td>" . $cross2 . "</td><td>" . $thurs . "</td><td>" . $ms . "</td>
                 <td>" . $zone . "</td><td>" . $poll . "</td></tr>";
