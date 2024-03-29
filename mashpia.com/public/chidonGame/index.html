@@ -17,7 +17,7 @@
         <style>
           #outer {
             width: 1280px;
-            height: 930px;
+            height: 800px;
             margin-left: 20px;
             overflow: hidden;
           }
@@ -96,12 +96,12 @@
           }
 
           .bolts {
-            width: 380px;
+            width: 370px;
             padding: 10px;
             background-color: #ffff00;
           }
           .bolts img {
-            width: 60px;
+            width: 50px;
           }
 
 
@@ -792,8 +792,8 @@
         // if (num_container == 2) html = `<div id="bolts_container_${num_container}" style="float: right; padding-left: 30px;"><div class="bolts">`
         // else html = `<div id="bolts_container_${num_container}" style="float: left"><div class="bolts">`
         let html = `<div id="bolts_container_${num_container}"><div class="bolts" style="float: left; margin-bottom: 20px;">`
-        let rows = 7
-        let columns = 6
+        let rows = 6
+        let columns = 7
 
         outer:
           for (let i = 0; i < rows; i++) {
