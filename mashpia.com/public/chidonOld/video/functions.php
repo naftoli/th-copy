@@ -110,8 +110,7 @@ function getAllChildrenByGender($gender) {
     $sql .= " ORDER BY s.school_name, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $award = getAward($row);
-        $row['award_track'] = $award;
+        $row['award_track'] = getAward($row);
         $children[] = $row;
     }
     return $children;
@@ -300,9 +299,9 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
     else $trip = isset($child['ultimate_trip']) && intval($child['ultimate_trip']) == 1 ? 2: 1;
     $grade = 'Grade ' . $child['class_grade'];
 
-    if ($trophy) {
-        $track = $child['trophy_type'] . '_trophy';
-    }
+//    if ($trophy) {
+//        $track = $child['trophy_type'] . '_trophy';
+//    }
 
     $school_name = '';
     $school_location = '';
@@ -315,7 +314,7 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
 
-    $show_track = $child['highest_track'];
+    $show_track = $track ?? $child['highest_track'];
     if ($khk || $trophy) {
         if ($khk) $show_track = 'khk';
         return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip, '', '', '', '', '', '', ''];
