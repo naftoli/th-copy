@@ -24,10 +24,17 @@ function showIyun($child) {
 //    return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun';
 }
 
-$sql = "select * from th_chidon tc 
+if (strlen($_GET['user']) == 7) {
+    $sql = "select * from th_chidon tc 
         join users u using (user_id) 
         where tc.year = $year 
-        and tc.user_id = " . $_GET['user'];
+        and u.user_serial = " . $_GET['user'];
+} else {
+    $sql = "select * from th_chidon tc 
+            join users u using (user_id) 
+            where tc.year = $year 
+            and tc.user_id = " . $_GET['user'];
+}
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 
