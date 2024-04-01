@@ -218,7 +218,7 @@ function createSpreadSheet($children, $type = 'ht') {
         if (isset($info[$track])) {
             $sheet[$i++] = [$track . '_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
-                $sheet[$i++] = addToSheet($child, false, false, $track);
+                $sheet[$i++] = addToSheet($child, false, false);
                 if (intval($child['khk_reg']) && passedKhk($child)) $khk[] = $child;
 //                if ($child['trophy_type']) {
 //                    ${$child['trophy_type']}[$child['class_grade']][$child['rep_type']][] = $child;
@@ -239,7 +239,7 @@ function createSpreadSheet($children, $type = 'ht') {
         $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as  $child) {
             $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
-            $sheet[$i++] = addToSheet($child, true, false, $track);
+            $sheet[$i++] = addToSheet($child, true, false);
         }
     }
 
@@ -282,7 +282,7 @@ function passedKhk($child) {
 //    return false;
 }
 
-function addToSheet($child, $khk = false, $trophy = false, $track = '') {
+function addToSheet($child, $khk = false, $trophy = false) {
     global $prizes;
 
     $tracks = [
@@ -314,7 +314,7 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
 
-    $show_track = $track ?? $child['highest_track'];
+    $show_track = $child['highest_track'];
     if ($khk || $trophy) {
         if ($khk) $show_track = 'khk';
         return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip, '', '', '', '', '', '', ''];
@@ -336,7 +336,7 @@ function addToSheet($child, $khk = false, $trophy = false, $track = '') {
             }
         }
 
-        return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award, $trip,
+        return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
             $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
     }
 }
