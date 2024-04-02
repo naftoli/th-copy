@@ -328,7 +328,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         $prize_4 = '';
         $prize_5 = '';
         $prize_6 = '';
-        if ($child['highest_track'] != 'yesod' && isset($prizes[$child['user_id']])) {
+        if ($child['highest_track'] != 'yesod' && isset($prizes[$child['user_id']]) && !intval($child['ultimate_trip'])) {
             $prize_amount = count($prizes[$child['user_id']]);
             foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
                 $key = $idx + 1;
