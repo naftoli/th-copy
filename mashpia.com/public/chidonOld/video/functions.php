@@ -178,7 +178,6 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
         if (empty($track)) continue;
         // remove any child not going on east coast trip or ultimate trip if east_only is true
         if ($east_only && !intval($child['ultimate_trip']) && $child['trip'] != 'east') continue;
-        else if (!$east_only && in_array($child['school_id'], [61, 269]) && (intval($child['ultimate_trip']) || $child['trip'] == 'east')) continue;
         $info[$track][] = $child;
     }
 
