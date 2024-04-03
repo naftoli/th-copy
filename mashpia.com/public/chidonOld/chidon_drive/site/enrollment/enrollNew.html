@@ -634,15 +634,15 @@
 				{ elem: '#acc_family', type: 'val', error: 'You must enter the accomodation family name.' },
 				{ elem: '#acc_street_num', type: 'val', error: 'You must enter the accomodation street number.' },
 				{
-					elem: '.in_zone', type: 'hidden', error: '',
+					elem: '.in_the_zone', type: 'hidden', error: '',
 					yes: [
-						{ elem: '#acc_street', type: 'val', error: 'You must choose the accomodation street.' },
-						{ elem: '#acc_cross1', type: 'val', error: 'You must enter a correct address OR choose that your are staying OUTSIDE of the walking zone.' },
+						{ elem: '#acc_street', error: 'You must choose the accomodation street.' },
+						{ elem: '#acc_cross1', error: 'You must enter a correct address OR choose that your are staying OUTSIDE of the walking zone.' },
 					],
 					no: [
-						{ elem: '#acc_street_outside_zone', type: 'val', error: 'You must enter the accomodation street.' },
-						{ elem: '#acc_cross1_outside_zone', type: 'val', error: 'You must enter the cross streets.' },
-						{ elem: '#acc_cross2_outside_zone', type: 'val', error: 'You must enter the cross streets.' },
+						{ elem: '#acc_street_outside_zone', error: 'You must enter the accomodation street.' },
+						{ elem: '#acc_cross1_outside_zone', error: 'You must enter the cross streets.' },
+						{ elem: '#acc_cross2_outside_zone', error: 'You must enter the cross streets.' },
 					]
 				},
 				{ elem: '#acc_phone', type: 'val', error: 'You must enter a phone number where you can be reached.' },
@@ -686,13 +686,14 @@
 						if (parseInt($(obj.elem).val()) === 1) {
 							if (obj.yes) {
 								for (let id of obj.yes) {
-									if (!$(id.elem).val().trim().length) errors.push(id.error)
+									console.log(id)
+									if (!$(id.elem).val()) errors.push(id.error)
 								}
 							}
 						} else if (parseInt($(obj.elem).val()) === 0) {
 							if (obj.no) {
 								for (let id of obj.no) {
-									if (!$(id.elem).val().trim().length) errors.push(id.error)
+									if (!$(id.elem).val()) errors.push(id.error)
 								}
 							}
 						}
