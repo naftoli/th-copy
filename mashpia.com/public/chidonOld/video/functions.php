@@ -38,6 +38,7 @@ function getChildren($school_id, $gender) {
                 s.school_city,
                 s.school_state,
                 tc.th_chidon_id, 
+                tc.trip, 
                 tc.khk_reg,
                 tc.khk_trip, 
                 tc.rep_type, 
