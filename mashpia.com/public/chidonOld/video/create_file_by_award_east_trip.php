@@ -14,6 +14,9 @@ if ($admin_user['auth'] != 'super') {
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
+foreach ($schools as $school_id => $school) {
+    if (! in_array($school_id, [61, 269])) unset($schools[$school_id]);
+}
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
@@ -31,7 +34,7 @@ $final_marks = getFinalMarks();
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     if (! empty($children)) {
-        $sheet = createSpreadSheet($children, 'award');
+        $sheet = createSpreadSheet($children, 'award', true);
         $file_name = $school . ".tsv";
         createFile($file_name, $sheet);
     }
