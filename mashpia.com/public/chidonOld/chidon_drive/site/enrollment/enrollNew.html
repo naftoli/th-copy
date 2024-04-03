@@ -967,7 +967,7 @@
 			$("#ch_info #sandwich").val(user.sandwich)
 
 			// allergies
-			if (user.allergies.length) {
+			if (user.allergies) {
 				$("#ch_info .allergy").eq(1).attr('checked', true)
 				$("#ch_info #allergies").val(user.allergies)
 			}
