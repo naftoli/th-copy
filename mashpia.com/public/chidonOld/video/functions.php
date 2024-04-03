@@ -170,11 +170,13 @@ function createFile($name, $info, $csv = false) {
     fclose($fp);
 }
 
-function createSpreadSheet($children, $type = 'ht') {
+function createSpreadSheet($children, $type = 'ht', $east_only = false) {
     $info = [];
     foreach ($children as $child) {
         $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
         if (empty($track)) continue;
+        // remove any child not going on east coast trip or ultimate trip
+        if (!intval($child['ultimate_trip']) && $child['trip'] != 'east') continue;
         $info[$track][] = $child;
     }
 
