@@ -34,6 +34,11 @@ foreach ($schools as $school_id => $school) {
         $sheet = createSpreadSheet($children, 'award');
         $file_name = $school . ".tsv";
         createFile($file_name, $sheet);
+        if (in_array($school_id, [61, 269])) {
+            $sheet = createSpreadSheet($children, 'award', true);
+            $file_name = $school . "_east_only.tsv";
+            createFile($file_name, $sheet);
+        }
     }
 }
 
