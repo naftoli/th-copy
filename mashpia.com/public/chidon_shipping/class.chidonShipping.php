@@ -277,6 +277,14 @@ class ChidonShipping
                 'year'      => $row['year']
             ];
         }
+        // add specific child as exception
+        if ($school == 269 || !$school) {
+            $children[55187] = [
+                'gender'    => 'M',
+                'credits'   => 4,
+                'year'      => 5784
+            ];
+        }
         return $children;
     }
 
