@@ -1,8 +1,8 @@
 {
   "dependencies": {
     "html2canvas": "^1.0.0-rc.1",
-    "jshint": "^2.13.4",
-    "jspdf": "^2.3.1",
+    "jshint": "^2.13.6",
+    "jspdf": "^1.5.3",
     "react-jss": "^10.5.0"
   },
   "devDependencies": {
