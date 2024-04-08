@@ -947,7 +947,7 @@ class ChidonShipping
             echo "highest track2: " . $highest_track2 . "<br />";
             echo "highest track3: " . $highest_track3 . "<br />";
         }
-        exit;
+
         // find a way of comparing them
         $indexes = array_values($ct->getTypes());
         $key1 = array_search($highest_track, $indexes);
