@@ -962,6 +962,11 @@ class ChidonShipping
         if ($key1 && $key2 && $key3) {
             $highest_track = $key2 > $key1 ? $key3 > $key2 ? $highest_track3 : $highest_track2 : $highest_track;
         } else if ($key1 && $key2) {
+            if ($row['user_serial'] == 7774619) {
+                echo 'here<br />';
+                echo "key1: " . $key1 . "<br />";
+                echo "key2: " . $key2 . "<br />";
+            }
             $highest_track = $key2 > $key1 ? $highest_track2 : $highest_track;
         } else if ($key3) {
             $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
