@@ -942,7 +942,12 @@ class ChidonShipping
         $highest_track = empty($ht) ? false : $types[$ht];
         $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? $types[$row['reward_type']] : false;
         $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest final passed' ? $types[$row['award_type']] : false;
-
+        if ($row['user_serial'] == 7774619) {
+            echo "highest track: " . $highest_track . "<br />";
+            echo "highest track2: " . $highest_track2 . "<br />";
+            echo "highest track3: " . $highest_track3 . "<br />";
+        }
+        exit;
         // find a way of comparing them
         $indexes = array_values($ct->getTypes());
         $key1 = array_search($highest_track, $indexes);
