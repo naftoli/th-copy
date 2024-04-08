@@ -942,17 +942,21 @@ class ChidonShipping
         $highest_track = empty($ht) ? false : $types[$ht];
         $highest_track2 = !empty($row['reward_type']) && $row['reward_type'] != 'highest track passed' ? $types[$row['reward_type']] : false;
         $highest_track3 = !empty($row['award_type']) && $row['award_type'] != 'highest final passed' ? $types[$row['award_type']] : false;
-        if ($row['user_serial'] == 7774619) {
-            echo "highest track: " . $highest_track . "<br />";
-            echo "highest track2: " . $highest_track2 . "<br />";
-            echo "highest track3: " . $highest_track3 . "<br />";
-        }
 
         // find a way of comparing them
         $indexes = array_values($ct->getTypes());
         $key1 = array_search($highest_track, $indexes);
         $key2 = array_search($highest_track2, $indexes);
         $key3 = array_search($highest_track3, $indexes);
+
+        if ($row['user_serial'] == 7774619) {
+            echo "highest track: " . $highest_track . "<br />";
+            echo "highest track2: " . $highest_track2 . "<br />";
+            echo "highest track3: " . $highest_track3 . "<br />";
+            echo "key1: " . $key1 . "<br />";
+            echo "key2: " . $key2 . "<br />";
+            echo "key3: " . $key3 . "<br />";
+        }
 
 //        echo "highest track: " . $highest_track . ' key1: ' . $key1 . "<br />";
 //        echo "highest track2: " . $highest_track2 . ' key2: ' . $key2 . "<br />";
@@ -962,11 +966,6 @@ class ChidonShipping
         if ($key1 && $key2 && $key3) {
             $highest_track = $key2 > $key1 ? $key3 > $key2 ? $highest_track3 : $highest_track2 : $highest_track;
         } else if ($key1 && $key2) {
-            if ($row['user_serial'] == 7774619) {
-                echo 'here<br />';
-                echo "key1: " . $key1 . "<br />";
-                echo "key2: " . $key2 . "<br />";
-            }
             $highest_track = $key2 > $key1 ? $highest_track2 : $highest_track;
         } else if ($key3) {
             $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
