@@ -443,7 +443,6 @@ class ChidonShipping
             }
             $sql .= " and item in ('" . implode("','", $fields) . "')";
         }
-        echo $sql . "<br />";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
