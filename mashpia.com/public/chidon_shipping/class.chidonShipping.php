@@ -950,6 +950,7 @@ class ChidonShipping
 
         // find a way of comparing them
         $indexes = array_values($ct->getTypes());
+        print_r($indexes);
         $key1 = array_search($highest_track, $indexes);
         $key2 = array_search($highest_track2, $indexes);
         $key3 = array_search($highest_track3, $indexes);
