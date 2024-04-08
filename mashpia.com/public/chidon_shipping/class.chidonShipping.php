@@ -443,7 +443,7 @@ class ChidonShipping
             }
             $sql .= " and item in ('" . implode("','", $fields) . "')";
         }
-//        echo $sql;
+        echo $sql . "<br />";
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
@@ -472,6 +472,7 @@ class ChidonShipping
         }
 
         $admin_info = $this->getOldestChild(array_keys($purchases));
+//        echo "<pre>"; print_r($admin_info); echo "</pre>"; exit;
         foreach ($purchases as $admin_id => $more) {
             foreach ($more as $purchase) {
                 if (isset($admin_info[$admin_id])) {
@@ -491,7 +492,7 @@ class ChidonShipping
      */
     private function getOldestChild(array $admin_ids) {
         // find oldest child in chidon
-        $sql = "select user_id, dob, school_id from users u 
+        $sql = "select user_id, dob, u.school_id from users u 
                 join admin_auths aa on aa.id = u.user_id 
                 join th_chidon tc using (user_id)
                 where admin_id = :id and auth = 'user' 
