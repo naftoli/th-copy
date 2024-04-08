@@ -945,9 +945,9 @@ class ChidonShipping
 
         // find a way of comparing them
         $indexes = array_values($ct->getTypes());
-        $key1 = array_search($highest_track, $indexes) + 1;
-        $key2 = array_search($highest_track2, $indexes) + 1;
-        $key3 = array_search($highest_track3, $indexes) + 1;
+        $key1 = array_search($highest_track, $indexes);
+        $key2 = array_search($highest_track2, $indexes);
+        $key3 = array_search($highest_track3, $indexes);
 
 //        if ($row['user_serial'] == 7774619) {
 //            echo "highest track: " . $highest_track . "<br />";
@@ -963,11 +963,11 @@ class ChidonShipping
 //        echo "highest track3: " . $highest_track3 . ' key3: ' . $key3 . "<br />";
 
         // find out which one is highest
-        if ($key1 && $key2 && $key3) {
+        if ($key1 !== false && $key2 !== false && $key3 !== false) {
             $highest_track = $key2 > $key1 ? $key3 > $key2 ? $highest_track3 : $highest_track2 : $highest_track;
-        } else if ($key1 && $key2) {
+        } else if ($key1 !== false && $key2 !== false) {
             $highest_track = $key2 > $key1 ? $highest_track2 : $highest_track;
-        } else if ($key3) {
+        } else if ($key3 !== false) {
             $highest_track = $key3 > $key1 ? $highest_track3 : $highest_track;
         }
 
