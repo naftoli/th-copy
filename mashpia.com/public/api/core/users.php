@@ -54,7 +54,7 @@ class UsersRouter {
         $users = [];
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
-            $soldier = new Soldier( ['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']] );
+            $soldier = new Soldier( ['user_id' => $row['user_id']] );
             $profilePicture = $soldier->profilePicture();
             $admin_id = $row['admin_id'] ?? $soldier->parentAccount()['admin_id'];
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
