@@ -907,26 +907,33 @@ class KHK {
      * one is whether that child is eligible for khk
      * the other is the details of which yr the child was or wasn't eligible
      */
-    public static function getKHKEligibility( array $ids, $year = 0, $numYrs = 4, array $marks = [] ) {
+    public static function getKHKEligibility( array $ids, $year = 0, $numYrs = 4, array $marks = [], $nextYr = false ) {
         // yr that we don't check registration but rather check highest track passed
         $rollover = 5782;
 
-        // figure out which years we need to check
         $years = [];
-        $curYr = $year > 0 ? $year : GlobalSettings::getChidonRegYear();
-        $yr = $curYr - $numYrs;
-        for (; $numYrs >= 0; $numYrs--) { // includes the year that is passed in or current yr
-            $years[] = $yr++;
-        }
+        if ($nextYr) {
+            $yr = $year - $numYrs;
+            for (; $numYrs > 0; $numYrs--) { // does not include the year that is passed in
+                $years[] = $yr++;
+            }
+        } else {
+            // figure out which years we need to check
+            $curYr = $year > 0 ? $year : GlobalSettings::getChidonRegYear();
+            $yr = $curYr - $numYrs;
+            for (; $numYrs >= 0; $numYrs--) { // includes the year that is passed in or current yr
+                $years[] = $yr++;
+            }
 
-        // for current yr, check if passed
-        $passed = KHK::getCurrentYrPassing($curYr, $ids, $marks);
+            // for current yr, check if passed
+            $passed = KHK::getCurrentYrPassing($curYr, $ids, $marks);
+        }
 
         foreach ($ids as $id) {
             $details[$id] = [];
             foreach ($years as $yr) {
                 // exceptions
-                if (in_array($id, [20838, 66871, 22672, 60580, 60581, 60635, 61306, 61534, 23136, 70488, 55346,
+                if (!$nextYr && in_array($id, [20838, 66871, 22672, 60580, 60581, 60635, 61306, 61534, 23136, 70488, 55346,
                     70488, 24896, 52414, 23150, 65097, 52861, 74871, 51691])) {
                     $details[$id][$yr] = true;
                     continue;
@@ -934,7 +941,7 @@ class KHK {
                 $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
                     // for current yr, check if passed
-                    if ($yr == $curYr) $details[$id][$yr] = $passed[$id];
+                    if (!$nextYr && $yr == $curYr) $details[$id][$yr] = $passed[$id];
                     else {
                         // check highest track passed
                         $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
