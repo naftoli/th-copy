@@ -13,7 +13,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $children = [];
-$sql = "select gender, user_id, user_serial, first, last, u.school_id, school_name   
+$sql = "select gender, user_id, user_serial, first, last, u.school_id, school_name, class_grade    
         from users u 
         join schools s using (school_id) 
         join classes c on c.class_id = u.class_id 
