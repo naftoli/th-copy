@@ -60,9 +60,9 @@ $eligible = KHK::getKHKEligibility(array_keys($children), ++$year, 3, [], true)[
             foreach ($children as $user_id => $child) {
                 if (isset($eligible[$user_id]) && $eligible[$user_id] == 1) {
                     echo "<tr>";
+                    echo "<td>" . $child['school_name'] . "</td>";
                     echo "<td>" . $child['class_grade'] . "</td>";
                     echo "<td>" . ($child['gender'] == 'M' ? 'boy' : 'girl') . "</td>";
-                    echo "<td>" . $child['school_name'] . "</td>";
                     echo "<td>" . $child['user_serial'] . "</td>";
                     echo "<td>" . $child['first'] . " " . $child['last'] . "</td>";
                     echo "</tr>";
