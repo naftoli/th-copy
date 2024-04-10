@@ -514,7 +514,7 @@ abstract class MissionDisplay {
 										<div class="row">
 											<div class='mandatoryImg'>&nbsp;
 											<?
-										    if ($weekly_task->mandatory_qty) {
+										    if ($weekly_task->mandatory_qty && isset($this->stickerOutlines[$weekly_task->subject_id])) {
 										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
@@ -622,7 +622,7 @@ abstract class MissionDisplay {
 										<div class="row">
 											<div class='mandatoryImg'>&nbsp;
 											<?
-										    if ($shabbos_task->mandatory_qty && !in_array($shabbos_task->subject_id, $this->daySchoolSubjects)) {
+										    if ($shabbos_task->mandatory_qty && isset($this->stickerOutlines[$shabbos_task->subject_id])) {
 										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
@@ -1141,7 +1141,7 @@ abstract class MissionDisplay {
 										<div class="row">
 											<div class='mandatoryImg'>&nbsp;
 											<?
-										    if ($weekly_task->mandatory_qty) {
+										    if ($weekly_task->mandatory_qty && isset($this->stickerOutlines[$weekly_task->subject_id])) {
 										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
@@ -1253,7 +1253,7 @@ abstract class MissionDisplay {
 										<div class="row">
 											<div class='mandatoryImg'>&nbsp;
 											<?
-										    if ($shabbos_task->mandatory_qty) {
+										    if ($shabbos_task->mandatory_qty && isset($this->stickerOutlines[$shabbos_task->subject_id])) {
 										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
@@ -1381,7 +1381,7 @@ abstract class MissionDisplay {
 								<div class="row">
 									<div class='mandatoryImg'>&nbsp;
 									<?
-								    if ($no_label_task->mandatory_qty) {
+								    if ($no_label_task->mandatory_qty && isset($this->stickerOutlines[$no_label_task->subject_id])) {
 								    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
 								    } else {
 								    	echo "<img src='' alt='' />";
@@ -1801,7 +1801,7 @@ abstract class MissionDisplay {
 										<div class="row">
 											<div class='mandatoryImg'>&nbsp;
 											<?
-										    if ($weekly_task->mandatory_qty) {
+										    if ($weekly_task->mandatory_qty && isset($this->stickerOutlines[$weekly_task->subject_id])) {
 										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$weekly_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
@@ -1910,7 +1910,7 @@ abstract class MissionDisplay {
 										<div class="row">
 											<div class='mandatoryImg'>&nbsp;
 											<?
-										    if ($shabbos_task->mandatory_qty) {
+										    if ($shabbos_task->mandatory_qty && isset($this->stickerOutlines[$shabbos_task->subject_id])) {
 										    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$shabbos_task->subject_id] . "' />";
 										    } else {
 										    	echo "<img src='' alt='' />";
@@ -2035,7 +2035,7 @@ abstract class MissionDisplay {
 								<div class="row">
 									<div class='mandatoryImg'>&nbsp;
 									<?
-								    if ($no_label_task->mandatory_qty) {
+								    if ($no_label_task->mandatory_qty && isset($this->stickerOutlines[$no_label_task->subject_id])) {
 								    	echo "<img src='/mission_report/stickerOutlines/" . $this->stickerOutlines[$no_label_task->subject_id] . "' />";
 								    } else {
 								    	echo "<img src='' alt='' />";
