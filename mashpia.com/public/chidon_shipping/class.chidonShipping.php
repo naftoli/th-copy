@@ -428,7 +428,7 @@ class ChidonShipping
      * @param $method
      * @return array
      */
-    public function getExtraPurchases($gender, $school, $items = []) {
+    public function getExtraPurchases($gender, $school, $items = [], $showMissing = false) {
         $info = [];
         $purchases = [];
         $sql = "select * from extra_purchases ep 
@@ -468,6 +468,11 @@ class ChidonShipping
                 'id'    => $id,
                 'cat'   => $cat
             ];
+        }
+
+        if ($showMissing) {
+            $missing = $this->getOldestChildMissing(array_keys($purchases));
+            return $missing;
         }
 
         $admin_info = $this->getOldestChild(array_keys($purchases));
@@ -525,6 +530,45 @@ class ChidonShipping
 
             if ($rows && count($rows)) $admin_info[$id] = $this->getOldest($rows);
             else $admin_info[$id] = 0;
+        }
+        return $admin_info;
+    }
+
+    private function getOldestChildMissing(array $admin_ids) {
+        // find oldest child registered in chayolei
+        $sql2 = "select user_id, dob, school_id from users u 
+                 join admin_auths aa on aa.id = u.user_id 
+                 where admin_id = :id and auth = 'user' 
+                 and u.user_registered > 0 
+                 and u.school_id != 612";
+//        if ($gender == 'm') $sql2 .= " and u.gender = 'M'";
+//        if ($gender == 'f') $sql2 .= " and u.gender = 'F'";
+//        if ($school > 0) $sql2 .= " and u.school_id = " . $school;
+        $stmt2 = $this->db->prepare($sql2);
+
+        // find oldest child in chidon
+        $sql = "select user_id, dob, u.school_id from users u 
+                join admin_auths aa on aa.id = u.user_id 
+                join th_chidon tc using (user_id)
+                where admin_id = :id and auth = 'user' 
+                and u.school_id != 612 
+                group by user_id";
+//        if ($gender == 'm') $sql .= " and u.gender = 'M'";
+//        if ($gender == 'f') $sql .= " and u.gender = 'F'";
+//        if ($school > 0) $sql .= " and u.school_id = " . $school;
+        $stmt = $this->db->prepare($sql);
+
+        $admin_info = [];
+        foreach ($admin_ids as $id) {
+            $stmt2->execute(['id' => $id]);
+            $rows = $stmt2->fetchAll();
+
+            if (! ($rows && count($rows))) {
+                $stmt->execute(['id' => $id]);
+                $rows = $stmt->fetchAll();
+                if ($rows && count($rows)) $admin_info[$id] = $this->getOldest($rows);
+                else $admin_info[$id] = 0;
+            }
         }
         return $admin_info;
     }
