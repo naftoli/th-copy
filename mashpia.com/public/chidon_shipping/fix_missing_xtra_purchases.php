@@ -38,7 +38,6 @@ $stmt = $MASHPIA_DB->prepare("
 );
 
 $purchases = $cs->getExtraPurchases('', 0, [], true);
-echo "<pre>"; print_r($purchases); echo "</pre>";
 foreach ($purchases as $user_id => $more) {
     foreach ($more as $purchase) {
         $stmt->execute([
