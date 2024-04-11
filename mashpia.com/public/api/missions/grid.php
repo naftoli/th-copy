@@ -177,7 +177,7 @@ class GridRouter {
         $missions = $missions_query->fetchAll();
 
         $missions = $this->sortMissions( $missions, $current_user->login->class_id, $type );
-        
+
         return $missions;
     }
     // * get start_date, end_date and value based on the date (parsha_id for weekly)
