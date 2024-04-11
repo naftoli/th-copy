@@ -212,7 +212,7 @@ class GridRouter {
         // sort the ones we can based on the users settings
         usort( $missions['sortable'], function ( $a, $b ) use ( $sorted_grid_ids ) {
             $a = $a['grid_id']; $b = $b['grid_id'];
-            if ( $a == $b ) { echo "0\n"; return 0; }
+            if ( $a == $b ) { return 0; }
             // return based on the index of the item in the sorted array where it goes
             return array_search( $a, $sorted_grid_ids ) > array_search( $b, $sorted_grid_ids ) ? 1 : -1;
         });
