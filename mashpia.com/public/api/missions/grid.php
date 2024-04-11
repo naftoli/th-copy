@@ -173,7 +173,7 @@ class GridRouter {
 
         $missions_query = $MASHPIA_DB->prepare( $missions_sql );
         $missions_query->execute( $params );
-//        $missions_query->debugDumpParams();
+        $missions_query->debugDumpParams(); exit;
         $missions = $missions_query->fetchAll();
 
         $missions = $this->sortMissions( $missions, $current_user->login->class_id, $type );

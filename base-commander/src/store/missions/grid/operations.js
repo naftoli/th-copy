@@ -10,7 +10,6 @@ export const getGrid = ( type, date ) => dispatch => {
     dispatch( actions.setMissions( type, missions ) );
   })
   .catch( e => {
-    console.log(e)
     dispatch( actions.setLoading( type, false ))
     return Promise.reject( e );
   });
