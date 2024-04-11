@@ -55,3 +55,25 @@ foreach ($purchases as $user_id => $more) {
     }
 }
 echo "done.";
+
+$stmt2 = $MASHPIA_DB->prepare("
+    SELECT * FROM th_chidon_shipping 
+    WHERE year = :year 
+    AND shipped = 1
+    AND missing = 1
+    AND user_id = :user
+    AND item_id = :item
+");
+foreach ($purchases as $user_id => $more) {
+    foreach ($more as $purchase) {
+        $stmt2->execute([
+            'year' => $year,
+            'user' => $user_id,
+            'item' => $purchase['id']
+        ]);
+        $row = $stmt2->fetch();
+        if (!$row) {
+            echo "Error: $user_id, {$purchase['id']}<br>";
+        }
+    }
+}
