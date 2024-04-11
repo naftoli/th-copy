@@ -470,12 +470,8 @@ class ChidonShipping
             ];
         }
 
-        if ($showMissing) {
-            $missing = $this->getOldestChildMissing(array_keys($purchases));
-            return $missing;
-        }
-
         $admin_info = $this->getOldestChild(array_keys($purchases));
+        if ($showMissing) $admin_info = $this->getOldestChildMissing(array_keys($purchases));
 //        echo "<pre>"; print_r($admin_info); echo "</pre>"; exit;
         foreach ($purchases as $admin_id => $more) {
             foreach ($more as $purchase) {

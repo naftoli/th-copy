@@ -51,7 +51,7 @@ foreach ($purchases as $user_id => $more) {
             'received' => 0,
             'desc' => '',
             'num' => 0
-        ];
+        ]);
     }
 }
 echo "done.";
