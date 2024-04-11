@@ -490,6 +490,17 @@ class ChidonShipping
      * @return array - list of admin IDs with oldest child's user ID
      */
     private function getOldestChild(array $admin_ids) {
+        // find oldest child registered in chayolei
+        $sql2 = "select user_id, dob, school_id from users u 
+                 join admin_auths aa on aa.id = u.user_id 
+                 where admin_id = :id and auth = 'user' 
+                 and u.user_registered > 0 
+                 and u.school_id != 612";
+//        if ($gender == 'm') $sql2 .= " and u.gender = 'M'";
+//        if ($gender == 'f') $sql2 .= " and u.gender = 'F'";
+//        if ($school > 0) $sql2 .= " and u.school_id = " . $school;
+        $stmt2 = $this->db->prepare($sql2);
+
         // find oldest child in chidon
         $sql = "select user_id, dob, school_id from users u 
                 join admin_auths aa on aa.id = u.user_id 
@@ -502,25 +513,14 @@ class ChidonShipping
 //        if ($school > 0) $sql .= " and u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
 
-        // find oldest child registered in chayolei
-        $sql2 = "select user_id, dob, school_id from users u 
-                 join admin_auths aa on aa.id = u.user_id 
-                 where admin_id = :id and auth = 'user' 
-                 and u.user_registered > 0 
-                 and u.school_id != 612";
-//        if ($gender == 'm') $sql2 .= " and u.gender = 'M'";
-//        if ($gender == 'f') $sql2 .= " and u.gender = 'F'";
-//        if ($school > 0) $sql2 .= " and u.school_id = " . $school;
-        $stmt2 = $this->db->prepare($sql2);
-
         $admin_info = [];
         foreach ($admin_ids as $id) {
-            $stmt->execute(['id' => $id]);
-            $rows = $stmt->fetchAll();
+            $stmt2->execute(['id' => $id]);
+            $rows = $stmt2->fetchAll();
 
             if (! ($rows && count($rows))) {
-                $stmt2->execute(['id' => $id]);
-                $rows = $stmt2->fetchAll();
+                $stmt->execute(['id' => $id]);
+                $rows = $stmt->fetchAll();
             }
 
             if ($rows && count($rows)) $admin_info[$id] = $this->getOldest($rows);
