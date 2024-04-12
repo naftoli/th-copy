@@ -1258,6 +1258,19 @@ class ChidonShipping
                 'cat'   => $cat
             ];
         }
+
+        // hardcode exceptions
+        $exceptions = [55187, 57065, 62354];
+        foreach ($exceptions as $user_id) {
+            $info[$user_id][] = [
+                'item'  => $item,
+                'size'  => '',
+                'color' => '',
+                'name'  => '',
+                'id'    => $id,
+                'cat'   => $cat
+            ];
+        }
         return $info;
     }
 
