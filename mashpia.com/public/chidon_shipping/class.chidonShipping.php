@@ -820,7 +820,7 @@ class ChidonShipping
         $cat = 'awards';
         foreach ($rows as $row) {
             // remove any child from ms/ak that is coming to the east coast trip
-            if (in_array($row['school_id'], [61, 269]) && $row['trip'] == 'east') continue;
+//            if (in_array($row['school_id'], [61, 269]) && $row['trip'] == 'east') continue;
             $awardTrack = $this->getAwardTrack($row);
             $award = $awardTrack ? $awards[$awardTrack] : '';
             if (empty($award)) continue;
