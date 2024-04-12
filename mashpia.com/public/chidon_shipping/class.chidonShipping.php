@@ -445,6 +445,7 @@ class ChidonShipping
         }
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
+        $stmt->debugDumpParams();
         $rows = $stmt->fetchAll();
 
         foreach ($rows as $row) {
@@ -503,7 +504,7 @@ class ChidonShipping
         $stmt2 = $this->db->prepare($sql2);
 
         // find oldest child in chidon
-        $sql = "select user_id, dob, school_id from users u 
+        $sql = "select user_id, dob, u.school_id from users u 
                 join admin_auths aa on aa.id = u.user_id 
                 join th_chidon tc using (user_id)
                 where admin_id = :id and auth = 'user' 
