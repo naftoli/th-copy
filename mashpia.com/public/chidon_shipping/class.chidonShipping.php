@@ -445,7 +445,6 @@ class ChidonShipping
         }
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
-        $stmt->debugDumpParams();
         $rows = $stmt->fetchAll();
 
         foreach ($rows as $row) {
