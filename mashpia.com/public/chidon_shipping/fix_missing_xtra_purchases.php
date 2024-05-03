@@ -76,3 +76,8 @@ foreach ($purchases as $user_id => $more) {
         }
     }
 }
+
+echo "<pre>";
+print_r(array_keys($purchases));
+print_r($purchases);
+echo "</pre>";
