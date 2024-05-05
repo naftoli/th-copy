@@ -59,13 +59,11 @@ class UsersRouter {
             // get all admin ids
             $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
             foreach ($info as $row) {
-                $stmt->execute([':id' => $row['user_id']]);
-                $row2 = $stmt->fetch();
-                if ($row2) {
+                $res2 = $stmt->execute([':id' => $row['user_id']]);
+                if ( $row2 = $res2->fetch() ) {
                     $admin_ids[intval($row['user_id'])] = $row2['admin_id'];
                 }
             }
-            echo "<pre>"; print_r($admin_ids); echo "</pre>"; exit;
         }
 
         $users = [];
