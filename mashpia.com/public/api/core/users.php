@@ -55,15 +55,14 @@ class UsersRouter {
 
         $admin_ids = [];
         if (! $current_user->login->code === 'PARENT' ) {
-            // get all user ids
-            $user_ids = [];
-            foreach ($info as $row) {
-                $user_ids[] = $row['user_id'];
-            }
             // get all admin ids
-            $stmt = $MASHPIA_DB->query("SELECT admin_id, id FROM admin_auths WHERE id IN (".implode(',', $user_ids).") AND auth = 'user'");
-            while ( $row = $stmt->fetch() ) {
-                $admin_ids[intval($row['id'])] = $row['admin_id'];
+            $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
+            foreach ($info as $row) {
+                $stmt->execute([':id' => $row['user_id']]);
+                $row2 = $stmt->fetch();
+                if ($row2) {
+                    $admin_ids[intval($row['user_id'])] = $row2['admin_id'];
+                }
             }
         }
 
