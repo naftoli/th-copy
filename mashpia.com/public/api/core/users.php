@@ -62,7 +62,7 @@ class UsersRouter {
         foreach ($info as $row) {
             if ( !$row['admin_id'] && !$current_user->isHQ() ) {
                 $stmt->execute([':id' => $row['user_id']]);
-                $row['admin_id'] = $stmt->fetch(PDO::FETCH_ASSOC)['admin_id'];
+                $row['admin_id'] = $stmt->fetch(PDO::FETCH_ASSOC)['admin_id'] ?? null;
             }
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
