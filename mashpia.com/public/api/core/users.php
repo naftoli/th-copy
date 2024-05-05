@@ -53,6 +53,7 @@ class UsersRouter {
             json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
         }
 
+        echo "<pre>"; print_r($info); echo "</pre>"; exit;
         $admin_ids = [];
         if (! $current_user->login->code === 'PARENT' ) {
             // get all admin ids
