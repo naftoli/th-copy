@@ -60,7 +60,7 @@ class UsersRouter {
         // fetch all results and parse them as models
         $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
         foreach ($info as $row) {
-            if (! $row['admin_id']) {
+            if ( !$row['admin_id'] && !$current_user->isHQ() ) {
                 $stmt->execute([':id' => $row['user_id']]);
                 $row['admin_id'] = $stmt->fetch(PDO::FETCH_ASSOC)['admin_id'];
             }
