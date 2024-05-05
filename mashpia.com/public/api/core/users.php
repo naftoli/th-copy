@@ -53,6 +53,7 @@ class UsersRouter {
             json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
         }
 
+        $admin_ids = [];
         if (! $current_user->login->code === 'PARENT' ) {
             // get all user ids
             $user_ids = [];
@@ -60,10 +61,8 @@ class UsersRouter {
                 $user_ids[] = $row['user_id'];
             }
             // get all admin ids
-            $stmt = $MASHPIA_DB->prepare("SELECT admin_id, id FROM admin_auths WHERE id IN (".implode(',', $user_ids).") AND auth = 'user'");
-            $stmt->execute();
-            $admin_ids = [];
-            while( $row = $stmt->fetch() ) {
+            $stmt = $MASHPIA_DB->query("SELECT admin_id, id FROM admin_auths WHERE id IN (".implode(',', $user_ids).") AND auth = 'user'");
+            while ( $row = $stmt->fetch() ) {
                 $admin_ids[$row['id']] = $row['admin_id'];
             }
         }
@@ -71,9 +70,6 @@ class UsersRouter {
         $users = [];
         // fetch all results and parse them as models
        foreach ($info as $row) {
-            if (! $current_user->login->code === 'PARENT' ) {
-                $row['admin_id'] = $admin_ids[$row['user_id']];
-            }
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
@@ -93,7 +89,7 @@ class UsersRouter {
                 'barcode' => '3'.$row['user_code'],
                 'platoon' => ( $platoon ? [ 'name' => $platoon ] : null ),
                 'rank'  => $ranks[$row['rank']],
-                'admin_id'  => $row['admin_id'],
+                'admin_id'  => $row['admin_id'] ?? $admin_ids[$row['user_id']] ?? null,
             ];
         }
         json_response( $users );
