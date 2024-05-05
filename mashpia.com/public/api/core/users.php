@@ -50,8 +50,8 @@ class UsersRouter {
 //            exit;
 //        }
         $query = $MASHPIA_DB->prepare( $sql );
-        $res = $query->execute();
-        $info = $res->fetchAll();
+        $query->execute();
+        $info = $query->fetchAll();
         if ($query->errorCode() !== "00000") {
             json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
         }
@@ -62,7 +62,8 @@ class UsersRouter {
             // get all admin ids
             $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
             foreach ($info as $row) {
-                $admin_ids[intval($row['user_id'])] = $stmt->execute([':id' => $row['user_id']])->fetch()['admin_id'];
+                $stmt->execute([':id' => $row['user_id']]);
+                $admin_ids[intval($row['user_id'])] = $stmt->fetch(PDO::FETCH_ASSOC)['admin_id'];
             }
         }
 
