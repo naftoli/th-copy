@@ -52,14 +52,27 @@ class UsersRouter {
             json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
         }
 
+        if (! $current_user->login->code === 'PARENT' ) {
+            // get all user ids
+            $user_ids = [];
+            while( $row = $query->fetch() ) {
+                $user_ids[] = $row['user_id'];
+            }
+            // get all admin ids
+            $stmt = $MASHPIA_DB->prepare("SELECT admin_id, id FROM admin_auths WHERE id IN (".implode(',', $user_ids).") AND auth = 'user'");
+            $stmt->execute();
+            $admin_ids = [];
+            while( $row = $stmt->fetch() ) {
+                $admin_ids[$row['id']] = $row['admin_id'];
+            }
+        }
+
         $users = [];
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
             // get admin id if it doesn't already exist
             if (! $row['admin_id'] ) {
-                $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
-                $stmt->execute([':id' => $row['user_id']]);
-                $row['admin_id'] = $stmt->fetch()['admin_id'];
+                $row['admin_id'] = $admin_ids[$row['user_id']];
             }
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
