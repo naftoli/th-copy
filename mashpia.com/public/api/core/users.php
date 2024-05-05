@@ -48,6 +48,7 @@ class UsersRouter {
 //        }
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute();
+        $info = $query->fetchAll();
         if ($query->errorCode() !== "00000") {
             json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
         }
@@ -55,7 +56,7 @@ class UsersRouter {
         if (! $current_user->login->code === 'PARENT' ) {
             // get all user ids
             $user_ids = [];
-            while( $row = $query->fetch() ) {
+            foreach ($info as $row) {
                 $user_ids[] = $row['user_id'];
             }
             // get all admin ids
@@ -69,7 +70,7 @@ class UsersRouter {
 
         $users = [];
         // fetch all results and parse them as models
-        while( $row = $query->fetch() ){
+       foreach ($info as $row) {
             if (! $current_user->login->code === 'PARENT' ) {
                 $row['admin_id'] = $admin_ids[$row['user_id']];
             }
