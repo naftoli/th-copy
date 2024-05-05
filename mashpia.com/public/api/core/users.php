@@ -30,6 +30,7 @@ class UsersRouter {
                 ORDER BY school_name, class_grade, class_sub, last, first
             ";
         } else {
+            // can't get admin id here b/c it creates bugs
             $sql = "
                 SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
                        MAX(rank_ord) as `rank` 
@@ -54,6 +55,12 @@ class UsersRouter {
         $users = [];
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
+            // get admin id if it doesn't already exist
+            if (! $row['admin_id'] ) {
+                $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
+                $stmt->execute([':id' => $row['user_id']]);
+                $row['admin_id'] = $stmt->fetch()['admin_id'];
+            }
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
