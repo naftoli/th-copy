@@ -64,6 +64,7 @@ class UsersRouter {
                     $admin_ids[intval($row['user_id'])] = $row2['admin_id'];
                 }
             }
+            echo "<pre>"; print_r($admin_ids); echo "</pre>"; exit;
         }
 
         $users = [];
