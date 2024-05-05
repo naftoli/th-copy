@@ -63,7 +63,7 @@ class UsersRouter {
             // get all admin ids
             $stmt = $MASHPIA_DB->query("SELECT admin_id, id FROM admin_auths WHERE id IN (".implode(',', $user_ids).") AND auth = 'user'");
             while ( $row = $stmt->fetch() ) {
-                $admin_ids[$row['id']] = $row['admin_id'];
+                $admin_ids[intval($row['id'])] = $row['admin_id'];
             }
         }
 
@@ -89,7 +89,7 @@ class UsersRouter {
                 'barcode' => '3'.$row['user_code'],
                 'platoon' => ( $platoon ? [ 'name' => $platoon ] : null ),
                 'rank'  => $ranks[$row['rank']],
-                'admin_id'  => $row['admin_id'] ?? $admin_ids[$row['user_id']] ?? null,
+                'admin_id'  => $row['admin_id'] ?? $admin_ids[intval($row['user_id'])] ?? null,
             ];
         }
         json_response( $users );
