@@ -70,8 +70,7 @@ class UsersRouter {
         $users = [];
         // fetch all results and parse them as models
         while( $row = $query->fetch() ){
-            // get admin id if it doesn't already exist
-            if (! $row['admin_id'] ) {
+            if (! $current_user->login->code === 'PARENT' ) {
                 $row['admin_id'] = $admin_ids[$row['user_id']];
             }
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
