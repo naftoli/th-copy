@@ -47,13 +47,13 @@ class UsersRouter {
 //            exit;
 //        }
         $query = $MASHPIA_DB->prepare( $sql );
-        $query->execute();
-        $info = $query->fetchAll();
+        $res = $query->execute();
+        $info = $res->fetchAll();
         if ($query->errorCode() !== "00000") {
             json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
         }
 
-        echo "<pre>"; print_r($info); echo "</pre>"; exit;
+//        echo "<pre>"; print_r($info); echo "</pre>"; exit;
         $admin_ids = [];
         if (! $current_user->login->code === 'PARENT' ) {
             // get all admin ids
