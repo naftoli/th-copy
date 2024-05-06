@@ -203,19 +203,35 @@ class ChidonShipping
         // find out list of children and how many credits they have
         $children  = $this->getChildrenRecruitments($gender, $school);
 
+        $years = [];
+        for ($i = 5782; $i <= $this->year; $i++) {
+            $years[] = $i;
+        }
+
+        // figure out which prizes to show per child
+        // child gets prize for each credit they have
+        // credits accumulate from year to year
+        $num_credits = [];
+        foreach ($children as $year => $more) {
+            foreach ($more as $user_id => &$info) {
+                $num_credits[$user_id] += $info['credits'];
+                if ($year == ($this->year - 1)) {
+                    $info['credit_start'] = $num_credits[$user_id] + 1;
+                }
+                if ($year == $this->year && !isset($info['credit_start'])) {
+                    $info['credit_start'] = 1;
+                }
+            }
+        }
+
         $cat = 'recruitment prizes';
-        foreach ($children as $user_id => $details) {
-            if (in_array($user_id, $this->toExclude)) continue;
-            if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
-            // skip if child did not recruit this yr
-            if (intval($details['year']) != $this->year) continue;
+        foreach ($children[$this->year] as $user_id => $details) {
+//            if (in_array($user_id, $this->toExclude)) continue;
+//            if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
 
             if ($details['credits'] > 5) $details['credits'] = 5;
-
-            $credits = [$details['credits']];
-            if ($user_id == 55248) $credits[] = 1;
-            foreach ($credits as $credit) {
-                $prize = $prizes[$credit];
+            for ($i = $details['credit_start']; $i <= $details['credits']; $i++) {
+                $prize = $prizes[$i];
                 if (in_array(strtolower($prize), $limitTo)) {
                     $color = '';
                     if (strtolower($prize) == 'watch') {
@@ -261,41 +277,45 @@ class ChidonShipping
      * @return array
      */
     private function getChildrenRecruitments($gender, $school) {
-        $children = [];
-        $start = 5782;
-        $sql = "select u.user_id, u.gender, count(*) as credits, MAX(year) as year 
+        $years = [];
+        for ($i = 5782; $i <= $this->year; $i++) {
+            $years[] = $i;
+        }
+
+        $sql = "select u.user_id, u.gender, count(*) as credits  
                 from users u 
                 join th_chidon tc on u.user_serial = tc.recruited_by 
-                where year >= :start";
+                where year = :year";
         if ($gender == 'm') $sql .= " and u.gender = 'M'";
         if ($gender == 'f') $sql .= " and u.gender = 'F'";
         if ($school > 0) $sql .= " and u.school_id = " . $school;
         $sql .= " group by u.user_id";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['start' => $start]);
-//        $stmt->debugDumpParams();
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            $children[$row['user_id']] = [
-                'gender'    => $row['gender'],
-                'credits'   => $row['credits'],
-                'year'      => $row['year']
-            ];
+
+        $children = [];
+        foreach ($years as $year) {
+            $stmt->execute(['year' => $year]);
+            //        $stmt->debugDumpParams();
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                $children[$year][$row['user_id']] = [
+                    'gender' => $row['gender'],
+                    'credits' => $row['credits']
+                ];
+            }
         }
         // add specific child as exception
         if ($school == 269 || !$school) {
-            $children[55187] = [
+            $children[5784][55187] = [
                 'gender'    => 'M',
-                'credits'   => 4,
-                'year'      => 5784
+                'credits'   => 4
             ];
         }
         // add another child as exception
         if ($school == 690 || !$school) {
-            $children[55248] = [
+            $children[5784][55248] = [
                 'gender'    => 'F',
-                'credits'   => 2,
-                'year'      => 5784
+                'credits'   => 2
             ];
         }
         return $children;
