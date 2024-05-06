@@ -205,29 +205,39 @@ class ChidonShipping
 
         $cat = 'recruitment prizes';
         foreach ($children as $user_id => $details) {
+            if ($user_id == 55248) {
+                // special case for this child
+                $details['year'] = 5784;
+                $details['credits'] = 2;
+            }
             if (in_array($user_id, $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
             // skip if child did not recruit this yr
             if (intval($details['year']) != $this->year) continue;
 
             if ($details['credits'] > 5) $details['credits'] = 5;
-            $prize = $prizes[$details['credits']];
-            if (in_array(strtolower($prize), $limitTo)) {
-                $color = '';
-                if (strtolower($prize) == 'watch') {
-                    if ($details['gender'] == 'M') $color = 'blue';
-                    else if ($details['gender'] == 'F') $color = 'burgundy';
+
+            $credits = [$details['credits']];
+            if ($user_id == 55248) $credits[] = 1;
+            foreach ($credits as $credit) {
+                $prize = $prizes[$credit];
+                if (in_array(strtolower($prize), $limitTo)) {
+                    $color = '';
+                    if (strtolower($prize) == 'watch') {
+                        if ($details['gender'] == 'M') $color = 'blue';
+                        else if ($details['gender'] == 'F') $color = 'burgundy';
+                    }
+                    if (empty($color)) $id = $this->getItemID($cat, strtolower($prize));
+                    else $id = $this->getItemID($cat, strtolower($prize), $color);
+                    $info[$user_id][] = [
+                        'item' => $prize,
+                        'size' => '',
+                        'color' => $color,
+                        'name' => '',
+                        'id' => $id,
+                        'cat' => $cat
+                    ];
                 }
-                if (empty($color)) $id = $this->getItemID($cat, strtolower($prize));
-                else $id = $this->getItemID($cat, strtolower($prize), $color);
-                $info[$user_id][] = [
-                    'item'  => $prize,
-                    'size'  => '',
-                    'color' => $color,
-                    'name'  => '',
-                    'id'    => $id,
-                    'cat'   => $cat
-                ];
             }
         }
         return $info;
