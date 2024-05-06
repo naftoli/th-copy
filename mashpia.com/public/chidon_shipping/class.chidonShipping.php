@@ -202,7 +202,7 @@ class ChidonShipping
         $prizes = $this->getListofRecruitmentPrizes();
         // find out list of children and how many credits they have
         $children = $this->getChildrenRecruitments($gender, $school);
-        if (! isset($children[$this->year])) return [];
+        if (! isset($children[$this->year])) return $info;
 
         $years = [];
         for ($i = 5782; $i <= $this->year; $i++) {
