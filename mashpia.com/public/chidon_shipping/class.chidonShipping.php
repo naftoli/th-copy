@@ -208,7 +208,6 @@ class ChidonShipping
             if ($user_id == 55248) {
                 // special case for this child
                 $details['year'] = 5784;
-                $details['credits'] = 2;
             }
             if (in_array($user_id, $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
@@ -218,7 +217,7 @@ class ChidonShipping
             if ($details['credits'] > 5) $details['credits'] = 5;
 
             $credits = [$details['credits']];
-            if ($user_id == 55248) $credits[] = 1;
+            if ($user_id == 55248) $credits = [1, 2];
             foreach ($credits as $credit) {
                 $prize = $prizes[$credit];
                 if (in_array(strtolower($prize), $limitTo)) {
