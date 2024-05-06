@@ -212,7 +212,7 @@ class ChidonShipping
         // child gets prize for each credit they have
         // credits accumulate from year to year
         $num_credits = [];
-        foreach ($children as $year => $more) {
+        foreach ($children as $year => &$more) {
             foreach ($more as $user_id => &$info) {
                 if (isset($num_credits[$user_id])) $num_credits[$user_id] += $info['credits'];
                 else $num_credits[$user_id] = $info['credits'];
