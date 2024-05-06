@@ -208,6 +208,7 @@ class ChidonShipping
             if ($user_id == 55248) {
                 // special case for this child
                 $details['year'] = 5784;
+                $details['gender'] = 'F';
             }
             if (in_array($user_id, $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
