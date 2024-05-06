@@ -214,7 +214,8 @@ class ChidonShipping
         $num_credits = [];
         foreach ($children as $year => $more) {
             foreach ($more as $user_id => &$info) {
-                $num_credits[$user_id] += $info['credits'];
+                if (isset($num_credits[$user_id])) $info['credits'] += $num_credits[$user_id];
+                else $num_credits[$user_id] = $info['credits'];
                 if ($year == ($this->year - 1)) {
                     $info['credit_start'] = $num_credits[$user_id] + 1;
                 }
