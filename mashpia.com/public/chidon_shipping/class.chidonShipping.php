@@ -205,11 +205,6 @@ class ChidonShipping
 
         $cat = 'recruitment prizes';
         foreach ($children as $user_id => $details) {
-            if ($user_id == 55248) {
-                // special case for this child
-                $details['year'] = 5784;
-                $details['gender'] = 'F';
-            }
             if (in_array($user_id, $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
             // skip if child did not recruit this yr
@@ -218,7 +213,7 @@ class ChidonShipping
             if ($details['credits'] > 5) $details['credits'] = 5;
 
             $credits = [$details['credits']];
-            if ($user_id == 55248) $credits = [1, 2];
+            if ($user_id == 55248) $credits[] = 1;
             foreach ($credits as $credit) {
                 $prize = $prizes[$credit];
                 if (in_array(strtolower($prize), $limitTo)) {
@@ -292,6 +287,14 @@ class ChidonShipping
             $children[55187] = [
                 'gender'    => 'M',
                 'credits'   => 4,
+                'year'      => 5784
+            ];
+        }
+        // add another child as exception
+        if ($school == 690 || !$school) {
+            $children[55248] = [
+                'gender'    => 'F',
+                'credits'   => 2,
                 'year'      => 5784
             ];
         }
