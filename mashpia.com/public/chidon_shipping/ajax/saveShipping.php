@@ -60,9 +60,8 @@ foreach ($info as $row) {
                 $received = 0;
                 break;
             case 1:
-            case 4:
                 $shipped = 1;
-                $received = 1;
+                $received = 0;
                 $missing = 0;
                 $damaged = 0;
                 break;
@@ -76,14 +75,14 @@ foreach ($info as $row) {
                 $shipped = 1;
                 $missing = 0;
                 $damaged = 1;
-                $received = 0;
+                $received = 1;
                 break;
-//            case 4:
-//                $shipped = 1;
-//                $missing = 0;
-//                $damaged = 0;
-//                $received = 1;
-//                break;
+            case 4:
+                $shipped = 1;
+                $missing = 0;
+                $damaged = 0;
+                $received = 1;
+                break;
         }
 //    }
 //    if (intval($row['action']) == 1 && intval($row['saveAll']) == 1) {
