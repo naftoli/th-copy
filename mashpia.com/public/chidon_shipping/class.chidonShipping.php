@@ -215,13 +215,12 @@ class ChidonShipping
         $num_credits = [];
         foreach ($children as $year => &$more) {
             foreach ($more as $user_id => &$info) {
+                if ($year == $this->year) {
+                    if (isset($num_credits[$user_id]) && $num_credits[$user_id] >= 5) continue; // doesn't get any more prizes
+                    $info['credit_start'] = isset($num_credits[$user_id]) ? $num_credits[$user_id]  + 1 : 1;
+                }
                 if (isset($num_credits[$user_id])) $num_credits[$user_id] += $info['credits'];
                 else $num_credits[$user_id] = $info['credits'];
-                if ($year == ($this->year - 1)) {
-                    $info['credit_start'] = $num_credits[$user_id] + 1;
-                } else if ($year == $this->year && !isset($info['credit_start'])) {
-                    $info['credit_start'] = 1;
-                }
             }
         }
 
@@ -230,8 +229,8 @@ class ChidonShipping
 //            if (in_array($user_id, $this->toExclude)) continue;
 //            if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
 
-            if ($details['credits'] > 5) $details['credits'] = 5;
-            for ($i = $details['credit_start']; $i <= $details['credits']; $i++) {
+            if ($num_credits[$user_id] > 5) $num_credits[$user_id] = 5;
+            for ($i = $details['credit_start']; $i <= $num_credits[$user_id]; $i++) {
                 $prize = $prizes[$i];
                 if (in_array(strtolower($prize), $limitTo)) {
                     $color = '';
