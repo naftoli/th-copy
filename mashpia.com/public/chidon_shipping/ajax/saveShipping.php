@@ -32,26 +32,29 @@ $stmt = $MASHPIA_DB->prepare($sql);
 
 // for setting as shipped when clicked "save all", we only need to change the shipping status
 // so as not to overwrite the other statuses
-//$sqlShipped = "INSERT IGNORE INTO th_chidon_shipping
-//        SET
-//            year = :year,
-//            user_id = :user,
-//            item_id = :item,
-//            shipped = :shipped,
-//            item_num = :num
-//        ON DUPLICATE KEY UPDATE
-//            shipped = :shipped,
-//            item_num = :num";
-//$stmtShipped = $MASHPIA_DB->prepare($sqlShipped);
+$sqlShipped = "INSERT IGNORE INTO th_chidon_shipping
+        SET
+            year = :year,
+            user_id = :user,
+            item_id = :item,
+            shipped = :shipped,
+            missing = :missing, 
+            damaged = :damaged,
+            item_num = :num
+        ON DUPLICATE KEY UPDATE
+            shipped = :shipped,
+            item_num = :num";
+$stmtShipped = $MASHPIA_DB->prepare($sqlShipped);
 
 $MASHPIA_DB->beginTransaction();
 $success = true;
 foreach ($info as $row) {
     // figure out shipped / missing / damaged
-//    if (intval($row['action']) == 1 && intval($row['saveAll']) == 1) {
-//        $shipped = 1;
-//        $missing = 1;
-//    } else {
+    if (intval($row['action']) == 1 && intval($row['saveAll']) == 1) {
+        $shipped = 1;
+        $missing = 0;
+        $damaged = 0;
+    } else {
         switch (intval($row['action'])) {
             case 0:
                 $shipped = 0;
@@ -84,16 +87,18 @@ foreach ($info as $row) {
                 $received = 1;
                 break;
         }
-//    }
-//    if (intval($row['action']) == 1 && intval($row['saveAll']) == 1) {
-//        $res = $stmtShipped->execute([
-//            'year'      => $year,
-//            'user'      => $row['user'],
-//            'item'      => $row['item'],
-//            'shipped'   => $shipped,
-//            'num'       => $row['num']
-//        ]);
-//    } else {
+    }
+    if (intval($row['action']) == 1 && intval($row['saveAll']) == 1) {
+        $res = $stmtShipped->execute([
+            'year'      => $year,
+            'user'      => $row['user'],
+            'item'      => $row['item'],
+            'shipped'   => $shipped,
+            'missing'   => $missing,
+            'damaged'   => $damaged,
+            'num'       => $row['num']
+        ]);
+    } else {
         $res = $stmt->execute([
             'year'      => $year,
             'user'      => $row['user'],
@@ -105,7 +110,7 @@ foreach ($info as $row) {
             'desc'      => $row['desc'],
             'num'       => $row['num']
         ]);
-//    }
+    }
     if (! $res) {
 //        $stmt->debugDumpParams();
         $success = false;
