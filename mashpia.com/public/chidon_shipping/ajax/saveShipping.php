@@ -50,43 +50,37 @@ $MASHPIA_DB->beginTransaction();
 $success = true;
 foreach ($info as $row) {
     // figure out shipped / missing / damaged
-//    if (intval($row['action']) == 1 && intval($row['saveAll']) == 1) {
-//        $shipped = 1;
-//        $missing = 0;
-//        $damaged = 0;
-//    } else {
-        switch (intval($row['action'])) {
-            case 0:
-                $shipped = 0;
-                $missing = 0;
-                $damaged = 0;
-                $received = 0;
-                break;
-            case 1:
-                $shipped = 1;
-                $missing = 0;
-                $damaged = 0;
-                break;
-            case 2:
-                $shipped = 1;
-                $missing = 1;
-                $damaged = 0;
-                $received = 0;
-                break;
-            case 3:
-                $shipped = 1;
-                $missing = 0;
-                $damaged = 1;
-                $received = 1;
-                break;
-            case 4:
-                $shipped = 1;
-                $missing = 0;
-                $damaged = 0;
-                $received = 1;
-                break;
-        }
-//    }
+    switch (intval($row['action'])) {
+        case 0:
+            $shipped = 0;
+            $missing = 0;
+            $damaged = 0;
+            $received = 0;
+            break;
+        case 1:
+            $shipped = 1;
+            $missing = 0;
+            $damaged = 0;
+            break;
+        case 2:
+            $shipped = 1;
+            $missing = 1;
+            $damaged = 0;
+            $received = 0;
+            break;
+        case 3:
+            $shipped = 1;
+            $missing = 0;
+            $damaged = 1;
+            $received = 1;
+            break;
+        case 4:
+            $shipped = 1;
+            $missing = 0;
+            $damaged = 0;
+            $received = 1;
+            break;
+    }
     if (intval($row['action']) == 1) {
         $res = $stmtShipped->execute([
             'year'      => $year,

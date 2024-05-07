@@ -256,7 +256,10 @@ ksort($grand_summary);
       if (!isset($summary[$school])) continue;
       if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
       echo "<h3>" . $schools[$school] . "</h3>";
-      echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
+      echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as ";
+      if ($super) echo "Shipped";
+      else echo "Received";
+      echo "</button>";
       $address = '';
       foreach ($fields_chosen as $field) {
           $pos = strpos($field, '.');
@@ -410,14 +413,14 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
 
-  function update(elem, action, desc = '', saveAll = 0) {
+  function update(elem, action, desc = '') {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
     const user = ids[1]
     const num = ids[2]
     // get description
-    info.push({action, item, user, desc, num, saveAll})
+    info.push({action, item, user, desc, num})
   }
 
   function save(reload = true) {
@@ -430,9 +433,15 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   $(".saveAll").click(function () {
-    $(".shipping").each(function () {
-      update(this, 1, '', 1)
-    })
+    if (super_admin) {
+      $(".shipping").each(function () {
+        update(this, 1)
+      })
+    } else {
+      $(".shipping").each(function () {
+        update(this, 4)
+      })
+    }
     save()
   })
 
