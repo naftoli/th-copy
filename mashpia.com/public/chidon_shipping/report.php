@@ -413,18 +413,18 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
 
-  function update(elem, action, desc = '') {
+  function update(elem, action, desc = '', all = false) {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
     const user = ids[1]
     const num = ids[2]
     // get description
-    info.push({action, item, user, desc, num})
+    info.push({action, item, user, desc, num, all})
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', {info}, function (result) {
+    $.post('ajax/saveShipping.php', { info }, function (result) {
       const res = JSON.parse(result)
       if (res.success) {
         if (reload) location.reload()
@@ -435,11 +435,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   $(".saveAll").click(function () {
     if (super_admin) {
       $(".shipping").each(function () {
-        update(this, 1)
+        update(this, 1, '', true)
       })
     } else {
       $(".shipping").each(function () {
-        update(this, 4)
+        update(this, 4, '', true)
       })
     }
     save()
@@ -481,6 +481,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   //     if (!res.success) alert(res.error)
   //   })
   // })
+  if (!super_admin) $(".shipping").attr('disabled', true)
 
   <!--  --><?php //if (!$super) : ?>
   // $("select").attr('disabled', true)
