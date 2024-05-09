@@ -216,7 +216,7 @@ class ChidonShipping
         foreach ($children as $year => &$more) {
             foreach ($more as $user_id => &$info) {
                 if ($year == $this->year) {
-                    if (isset($num_credits[$user_id]) && $num_credits[$user_id] >= 5) continue; // doesn't get any more prizes
+                    if (isset($num_credits[$user_id]) && $num_credits[$user_id] >= 5) unset($children[$year][$user_id]);
                     $info['credit_start'] = isset($num_credits[$user_id]) ? $num_credits[$user_id]  + 1 : 1;
                 }
                 if (isset($num_credits[$user_id])) $num_credits[$user_id] += $info['credits'];
