@@ -216,6 +216,7 @@ class ChidonShipping
         foreach ($children as $year => &$more) {
             foreach ($more as $user_id => &$info) {
                 if ($year == $this->year) {
+                    // remove children that have at least 5 credits from previous years
                     if (isset($num_credits[$user_id]) && $num_credits[$user_id] >= 5) unset($children[$year][$user_id]);
                     $info['credit_start'] = isset($num_credits[$user_id]) ? $num_credits[$user_id]  + 1 : 1;
                 }
@@ -226,9 +227,7 @@ class ChidonShipping
 
         $cat = 'recruitment prizes';
         foreach ($children[$this->year] as $user_id => $details) {
-//            if (in_array($user_id, $this->toExclude)) continue;
-//            if (!empty($this->only) && !in_array($user_id, $this->only)) continue;
-
+            // limit to 5 credits
             if ($num_credits[$user_id] > 5) $num_credits[$user_id] = 5;
             for ($i = $details['credit_start']; $i <= $num_credits[$user_id]; $i++) {
                 $prize = $prizes[$i];
