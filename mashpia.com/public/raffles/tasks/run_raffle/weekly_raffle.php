@@ -57,7 +57,6 @@ function weekly_raffle($raffle){
     
     // set up some variables for the raffle
     $winners = []; // an array of all the users so they can be added to the database in the end
-//    $winning_families = []; // array to keep track of what families have won in this raffle
     $remaining_users = []; // the users that are left after the first two rounds of picking
     
     /************************** ROUND ONE: GIVE ALL THE SCHOOLS THEIR QUOTA **************************/
@@ -68,10 +67,8 @@ function weekly_raffle($raffle){
             $draw_num++; // count up the drawing
             
             /************************** ONLY ONE CHILD PER FAMILY **************************/
-            // if the user is not the first in the family and the school has more then it's quota to give out...
-//            if(!check_first_in_family($user, $winning_families) && count($user_ids) <= $school_limits[$school_id]) {
-//            if (alreadyWon($user, $raffle) && count($user_ids) <= $school_limits[$school_id]) {
-            if (alreadyWon($user['user_id'], 'weekly')) {
+            // if the user is not the first in the family and the school has more children
+            if (alreadyWon($user['user_id'], 'weekly') && count($user_ids) > 1) {
                 echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " has already won this yr. Removing from raffle\n";
                 unset($user_ids[$user['user_id']]); // remove the user from the array
                 $i--; continue; // redo the draw

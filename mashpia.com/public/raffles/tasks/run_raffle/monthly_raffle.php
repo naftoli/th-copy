@@ -30,8 +30,7 @@ function monthly_raffle($raffle){
     
     // set up some variables for the raffle
     $winners = []; // an array of all the users so they can be added to the database in the end
-    $winning_families = []; // array to keep track of what families have won in this raffle
-    
+
     /************************** ROUND ONE: GIVE ALL THE SCHOOLS THEIR QUOTA **************************/
     foreach($prizes as $prize) { // for each school
         $user_ids = &$schools[$prize['school_id']];
@@ -39,9 +38,8 @@ function monthly_raffle($raffle){
         while (!$winner_found && $user_ids) {
             $user = $user_ids[array_rand($user_ids)];   // get a random id from the array of user arrays (keys)
             /************************** ONLY ONE CHILD PER FAMILY **************************/
-            // if the user is not the first in the family and the school has more then it's quota to give out...
-//             if(!check_first_in_family($user, $winning_families)){
-            if (alreadyWon($user['user_id'], 'monthly')) {
+            // if the user is not the first in the family and the school has more children
+            if (alreadyWon($user['user_id'], 'monthly') && count($user_ids) > 1) {
                  echo $user['school_id']."\t".$user['user_id'] . " has already won this yr. Removing from raffle\n";
                  unset($user_ids[$user['user_id']]); // remove the user from the array
                  continue; // try again
