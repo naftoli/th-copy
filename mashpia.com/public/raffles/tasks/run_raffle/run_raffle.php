@@ -100,13 +100,14 @@ foreach($raffles as $raffle){
     echo "\nDrawing compleated at ".date('m/d/Y H:m:s e').". Saving winners to database ";
     $i = 1;
     foreach($winners as $winner){
-        echo "Saving winner #: " . $i++ . "<br />";
+        echo "Saving winner #: " . $i++;
         $raffle_id = $raffle->raffle_id;
         $prize_id = $winner['prize_id'];
         $user_id = $winner['user_id'];
         
         $persist_sql = "INSERT IGNORE INTO raffle_winners VALUES($raffle_id, $prize_id, $user_id, 0)"; // insert the win into the raffle_winners table
-        echo mysql_query($persist_sql) ? "✓" : "x";
+        echo mysql_query($persist_sql) ? " ✓" : " x";
+        echo "<br />";
     }
     
     /***************************** UPDATE THE RAFFLE ROW ITSELF ********************************/
