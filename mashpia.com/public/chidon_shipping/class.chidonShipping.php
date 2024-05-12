@@ -376,7 +376,7 @@ class ChidonShipping
 //                    $info += $this->getStaffSweaters($gender, $school);
                     break;
                 case 'parent/grandparent sweaters':
-                    $info += $this->getExtraPurchases($gender, $school, ['sweaters']);
+                    $info += $this->getExtraPurchases($school, ['sweaters']);
                     break;
             }
         }
@@ -449,7 +449,7 @@ class ChidonShipping
     }
 
     public function getCelebrationItems($gender, $school, $items = []) {
-        $info = $this->getExtraPurchases($gender, $school, ['celebration boxes']);
+        $info = $this->getExtraPurchases($school, ['celebration boxes']);
         return $info;
     }
 
@@ -460,14 +460,14 @@ class ChidonShipping
      * @param $method
      * @return array
      */
-    public function getExtraPurchases($gender, $school, $items = [], $showMissing = false) {
+    public function getExtraPurchases($school, $items = [], $showMissing = false) {
         $info = [];
         $purchases = [];
         $sql = "select * from extra_purchases ep 
                 left join purchase_addresses pa using (purchase_id) 
                 where ep.year = :year 
                 and (ep.shipping_amount != 10 or ep.shipping_amount is null)";
-        if ($items && count($items)) {
+        if (count($items)) {
             $fields = [];
             foreach ($items as $item) {
                 if ($item == 'sweaters') $fields[] = "sweater";
@@ -475,6 +475,7 @@ class ChidonShipping
             }
             $sql .= " and item in ('" . implode("','", $fields) . "')";
         }
+//        echo $sql; exit;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
