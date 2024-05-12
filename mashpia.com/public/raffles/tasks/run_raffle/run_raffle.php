@@ -80,14 +80,14 @@ foreach($raffles as $raffle){
         $winners = monthly_raffle($raffle);
     }
     
-    $test_schools_array = [];
-    foreach($winners as $winner){
-        if(isset($test_schools_array[$winner['school_id']])){
-            $test_schools_array[$winner['school_id']] += 1;
-        } else {
-            $test_schools_array[$winner['school_id']] = 1;
-        }
-    }
+//    $test_schools_array = [];
+//    foreach($winners as $winner){
+//        if(isset($test_schools_array[$winner['school_id']])){
+//            $test_schools_array[$winner['school_id']] += 1;
+//        } else {
+//            $test_schools_array[$winner['school_id']] = 1;
+//        }
+//    }
     
     /***************************** SKIP THE SAVING IF THE WEB DID NOT SEND THE "SAVE" COMMAND ********************************/
     if($web && !$_GET['save']) {
@@ -98,7 +98,9 @@ foreach($raffles as $raffle){
     /***************************** SAVE THE WINNERS INTO THE DATABASE ********************************/
     // save the winners to the database    
     echo "\nDrawing compleated at ".date('m/d/Y H:m:s e').". Saving winners to database ";
+    $i = 1;
     foreach($winners as $winner){
+        echo "Saving winner #: " . $i++ . "<br />";
         $raffle_id = $raffle->raffle_id;
         $prize_id = $winner['prize_id'];
         $user_id = $winner['user_id'];
@@ -111,8 +113,8 @@ foreach($raffles as $raffle){
     echo "\nUpdating Raffle in Database...";
     
     $raffle->date_ran = new DateTime(); // log the time it ran into the database
-    if ($raffle->type == 'weekly') $raffle->show_on_mobile = 0 ; // show it on the mobile site
-    else $raffle->show_on_mobile = 0;
+//    if ($raffle->type == 'weekly') $raffle->show_on_mobile = 0 ; // show it on the mobile site
+//    else $raffle->show_on_mobile = 0;
     echo $raffle->update() ? "✓" : "x";
 } // end foreach raffle loop
 
