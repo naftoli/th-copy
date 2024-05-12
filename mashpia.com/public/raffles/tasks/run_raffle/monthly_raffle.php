@@ -37,10 +37,7 @@ function monthly_raffle($raffle){
         $winner_found = false;
         while (!$winner_found && $user_ids) {
             $user = $user_ids[array_rand($user_ids)];   // get a random id from the array of user arrays (keys)
-            if ($user) {
-                echo "User:" . print_r($user);
-                exit;
-            }
+
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more children
             if (alreadyWon($user['user_id'], 'monthly') && count($user_ids) > 1) {
