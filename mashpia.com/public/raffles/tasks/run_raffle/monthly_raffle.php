@@ -54,6 +54,7 @@ function monthly_raffle($raffle){
             echo $prize['school_id']."\t".$user['user_id']."\twon prize_id ".$prize['prize_id']."\n";
         }
     } // end round one
-    
+    echo "Raffle Complete\n";
+    echo "Winners: ".count($winners)."\n";
     return $winners; // return the winners array
 }
