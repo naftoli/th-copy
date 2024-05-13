@@ -42,6 +42,8 @@ $sqlShipped = "INSERT IGNORE INTO th_chidon_shipping
             item_num = :num
         ON DUPLICATE KEY UPDATE
             shipped = :shipped,
+            missing = :missing,
+            damaged = :damaged,
             item_num = :num";
 $stmtShipped = $MASHPIA_DB->prepare($sqlShipped);
 
@@ -50,7 +52,7 @@ $sqlReceived = "UPDATE th_chidon_shipping
             SET 
                 missing = :missing,
                 damaged = :damaged,
-                received = :received
+                received = :received, 
                 item_num = :num 
             WHERE
                 year = :year
@@ -104,6 +106,11 @@ foreach ($info as $row) {
             'damaged' => $damaged,
             'num' => $row['num']
         ]);
+        if (! $res) {
+            $stmtShipped->debugDumpParams();
+            $success = false;
+            break;
+        }
     } else if (intval($row['action']) == 4) {
         $res = $stmtReceived->execute([
             'year' => $year,
@@ -114,6 +121,11 @@ foreach ($info as $row) {
             'received' => $received,
             'num' => $row['num']
         ]);
+        if (! $res) {
+            $stmtReceived->debugDumpParams();
+            $success = false;
+            break;
+        }
     } else {
         $res = $stmt->execute([
             'year'      => $year,
@@ -126,11 +138,11 @@ foreach ($info as $row) {
             'desc'      => $row['desc'],
             'num'       => $row['num']
         ]);
-    }
-    if (! $res) {
-//        $stmt->debugDumpParams();
-        $success = false;
-        break;
+        if (! $res) {
+            $stmt->debugDumpParams();
+            $success = false;
+            break;
+        }
     }
 }
 if ($success) $MASHPIA_DB->commit();
