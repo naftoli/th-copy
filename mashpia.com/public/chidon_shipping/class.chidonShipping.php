@@ -370,16 +370,29 @@ class ChidonShipping
         foreach ($sweaters as $type) {
             switch ($type) {
                 case 'children sweaters':
-                    $info += $this->getChildrenSweaters($gender, $school);
+                    $sweaters = $this->getChildrenSweaters($gender, $school);
+                    $ids = array_keys($sweaters);
+                    foreach ($ids as $id) {
+                        foreach ($sweaters[$id] as $sweater) {
+                            $info[$id][] = $sweater;
+                        }
+                    }
                     break;
                 case 'staff sweaters':
 //                    $info += $this->getStaffSweaters($gender, $school);
                     break;
                 case 'parent/grandparent sweaters':
-                    $info += $this->getExtraPurchases($school, ['sweaters']);
+                    $extraSweaters = $this->getExtraPurchases($school, ['sweaters']);
+                    $ids = array_keys($extraSweaters);
+                    foreach ($ids as $id) {
+                        foreach ($extraSweaters[$id] as $sweater) {
+                            $info[$id][] = $sweater;
+                        }
+                    }
                     break;
             }
         }
+//        echo "<pre>"; print_r($info); echo "</pre>";
         return $info;
     }
 
@@ -516,6 +529,7 @@ class ChidonShipping
                 }
             }
         }
+//        echo "<pre>"; print_r($info); echo "</pre>"; exit;
         return $info;
     }
 
