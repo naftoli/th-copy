@@ -1,4 +1,7 @@
-<?
+<?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 //error_reporting(E_ALL);
 //ini_set("display_errors", 1);
 $admin_auth = ['school'];
@@ -10,16 +13,16 @@ require_once( dirname(__FILE__).'/../classes/Raffle.php' );
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
 // enforce admins only
-if ( isset( $_COOKIE['admin_id'] ) ){
-    $is_parent_query = mysql_query(
-        "SELECT auth FROM admin_auths WHERE auth != 'user' AND admin_id = " . mysql_escape_string( $_COOKIE['admin_id'] ) . ";"
-    );
-    if ( mysql_num_rows( $is_parent_query ) === 0 ){
-        http_response_code( 401 );
-        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
-        die();
-    };
-}
+//if ( isset( $_COOKIE['admin_id'] ) ){
+//    $is_parent_query = mysql_query(
+//        "SELECT auth FROM admin_auths WHERE auth != 'user' AND admin_id = " . mysql_escape_string( $_COOKIE['admin_id'] ) . ";"
+//    );
+//    if ( mysql_num_rows( $is_parent_query ) === 0 ){
+//        http_response_code( 401 );
+//        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
+//        die();
+//    };
+//}
 //else {
 //    http_response_code( 401 );
 //    echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
