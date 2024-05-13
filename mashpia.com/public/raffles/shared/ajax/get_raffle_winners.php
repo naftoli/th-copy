@@ -12,23 +12,6 @@ require_once( dirname(__FILE__).'/../classes/Raffle.php' );
 // namespace fixing
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
-// enforce admins only
-//if ( isset( $_COOKIE['admin_id'] ) ){
-//    $is_parent_query = mysql_query(
-//        "SELECT auth FROM admin_auths WHERE auth != 'user' AND admin_id = " . mysql_escape_string( $_COOKIE['admin_id'] ) . ";"
-//    );
-//    if ( mysql_num_rows( $is_parent_query ) === 0 ){
-//        http_response_code( 401 );
-//        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
-//        die();
-//    };
-//}
-//else {
-//    http_response_code( 401 );
-//    echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
-//    die();
-//}
-
 $school_id = isset($_POST['school_id']) ? $_POST['school_id'] : false;
 $raffle_id = isset($_POST['raffle_id']) ? $_POST['raffle_id'] : false;
 $seperate_genders = isset($_POST['single_list']) ? false : true;
