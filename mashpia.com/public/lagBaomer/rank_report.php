@@ -211,7 +211,6 @@ if ($admin->auth == 'super') {
     }
     echo "</table>";
 }
-//echo "Sum: " . $sum;
 ?>
 </body>
 </html>
