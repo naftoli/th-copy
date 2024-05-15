@@ -153,12 +153,12 @@ foreach ($schools as $id => $school) {
     if (!in_array($id, $schoolIds))
         continue;
     $sql = "select s.school_name, u.user_id, u.last, u.first, c.class_grade, c.class_sub, rm.rank_ord  
-                    from rank_marks rm 
-                    join users u using ( user_id ) 
-                    join classes c on (c.class_id = u.class_id) 
-                    join schools s on (s.school_id = u.school_id) 
-                    where u.user_registered > 0 
-                    and u.school_id = $id $orderBy";
+            from rank_marks rm 
+            join users u using ( user_id ) 
+            join classes c on (c.class_id = u.class_id) 
+            join schools s on (s.school_id = u.school_id) 
+            where u.user_registered > 0 
+            and u.school_id = $id $orderBy";
     //echo $sql;
 
     $result = mysql_query($sql);
