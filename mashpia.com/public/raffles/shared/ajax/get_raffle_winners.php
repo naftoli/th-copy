@@ -50,9 +50,6 @@ foreach($raffles as $raffle){
     
     $raffle_to = explode(' ', iconv('WINDOWS-1255', 'UTF-8', jdtojewish($raffle->end_date, true, CAL_JEWISH_ADD_GERESHAYIM)));
     $raffle_to = $raffle_to[0] . ' ' . $raffle_to[1];
-    /*$he = iconv('WINDOWS-1255', 'UTF-8', jdtojewish($temp, true, CAL_JEWISH_ADD_GERESHAYIM));
-    $heArr = explode(' ', $he);
-    $this->heDates[] = $heArr[0] . ' ' . $heArr[1];*/
     
     $return_array[] = ["raffle_name" => $raffle->name." (".$raffle->type.")",
                        "raffle_type" => $raffle->type,
