@@ -134,7 +134,6 @@ $users = array();
 $medals = array();
 $thumbs = array();
 $images = array();
-$grandTotals = array();
 $sum = 0;
 
 if ($admin->auth == 'super') {
@@ -168,8 +167,11 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 //display info
+$grandTotals['F'] = [];
+$grandTotals['M'] = [];
 foreach ($users as $school => $info) {
-    $totals = array();
+    $totals['F'] = [];
+    $totals['M'] = [];
     foreach ($info as $gender => $other) {
         foreach ($other as $grade => $user) {
             echo "<h2>" . $school . ' - ' . $grade . "</h2>";
@@ -177,14 +179,14 @@ foreach ($users as $school => $info) {
             echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
             foreach ($user as $name => $rank) {
                 echo "<tr><td>" . $gender . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td></tr>";
-                if (isset($totals[$rank]))
-                    $totals[$rank]++;
+                if (isset($totals[$gender][$rank]))
+                    $totals[$gender][$rank]++;
                 else
-                    $totals[$rank] = 1;
-                if (isset($grandTotals[$rank]))
-                    $grandTotals[$rank]++;
+                    $totals[$gender][$rank] = 1;
+                if (isset($grandTotals[$gender][$rank]))
+                    $grandTotals[$gender][$rank]++;
                 else
-                    $grandTotals[$rank] = 1;
+                    $grandTotals[$gender][$rank] = 1;
                 $sum++;
             }
             echo "</table>";
@@ -192,24 +194,32 @@ foreach ($users as $school => $info) {
         }
     }
 
-    ksort($totals);
+    foreach ($totals as $gender => $info) {
+        ksort($info);
+    }
     echo "<h2>" . $school . " Totals</h2>";
     echo "<table>";
-    echo "<tr><th>Rank</th><th>Total</th></tr>";
-    foreach ($totals as $rank => $total) {
-        echo "<tr><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+    echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
+    foreach ($totals as $gender => $other) {
+        foreach ($other as $rank => $total) {
+            echo "<tr><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+        }
     }
     echo "</table>";
     echo "<div class='page-break'></div>";
 }
 
 if ($admin->auth == 'super') {
-    ksort($grandTotals);
+    foreach ($grandTotals as $gender => $info) {
+        ksort($info);
+    }
     echo "<h2>Grand Totals</h2>";
     echo "<table>";
-    echo "<tr><th>Rank</th><th>Total</th><tr>";
-    foreach ($grandTotals as $rank => $total) {
-        echo "<tr><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+    echo "<tr><th>Gender</th><th>Rank</th><th>Total</th><tr>";
+    foreach ($grandTotals as $gender => $other) {
+        foreach ($other as $rank => $total) {
+            echo "<tr><td>" . $gender . "</td><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+        }
     }
     echo "</table>";
 }
