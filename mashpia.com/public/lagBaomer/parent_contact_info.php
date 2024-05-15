@@ -47,7 +47,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
                 font-size: 12px;
             }
             tr, th, td {
-                padding: 10px;
+                padding: 8px;
                 border-bottom: 1px solid black;
             }
         </style>
