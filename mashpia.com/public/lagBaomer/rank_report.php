@@ -202,7 +202,7 @@ foreach ($users as $school => $info) {
     echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
     foreach ($totals as $gender => $other) {
         foreach ($other as $rank => $total) {
-            echo "<tr><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+            echo "<tr><td>" . $gender . "</td><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
         }
     }
     echo "</table>";
