@@ -223,7 +223,7 @@ foreach ($users as $school => $info) {
     echo "</table><br />";
     foreach ($totalGenerals as $gender => $total) {
         if ($total > 0)
-            echo "<p>Total for all " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
+            echo "<p>Total " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
     }
     echo "<div class='page-break'></div>";
 }
@@ -242,10 +242,10 @@ if ($admin->auth == 'super') {
     }
     echo "</table>";
     echo "<div class='page-break'></div>";
-    echo "<h2>Grand Totals for All Generals</h2>";
+    echo "<h2>Grand Totals for Generals</h2>";
     foreach ($generalsTotals as $gender => $total) {
         if ($total > 0)
-            echo "<p>Total for " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
+            echo "<p>Total " . $genderLookup[$gender] . " Generals: " . $total . "</p>";
     }
 }
 ?>
