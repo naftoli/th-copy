@@ -172,6 +172,8 @@ $grandTotals['M'] = [];
 foreach ($users as $school => $info) {
     $totals['F'] = [];
     $totals['M'] = [];
+    $totalGenerals['F'] = 0;
+    $totalGenerals['M'] = 0;
     foreach ($info as $gender => $other) {
         foreach ($other as $grade => $user) {
             echo "<h2>" . $school . ' - ' . $grade . "</h2>";
@@ -179,10 +181,14 @@ foreach ($users as $school => $info) {
             echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
             foreach ($user as $name => $rank) {
                 echo "<tr><td>" . $gender . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td></tr>";
+                // deal with totals
                 if (isset($totals[$gender][$rank]))
                     $totals[$gender][$rank]++;
                 else
                     $totals[$gender][$rank] = 1;
+                // total generals
+                if ($rank >= 9) $totalGenerals[$gender]++;
+                // grand totals
                 if (isset($grandTotals[$gender][$rank]))
                     $grandTotals[$gender][$rank]++;
                 else
@@ -206,6 +212,9 @@ foreach ($users as $school => $info) {
         }
     }
     echo "</table>";
+    foreach ($totalGenerals as $gender => $total) {
+        echo "<p>Total Generals for " . $gender . ": " . $total . "</p>";
+    }
     echo "<div class='page-break'></div>";
 }
 
