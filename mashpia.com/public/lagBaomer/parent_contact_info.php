@@ -62,7 +62,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
             <?php foreach ( $users as $user ) : ?>
                 <tr>
                     <?php foreach ( $db_fields as $field ) : ?>
-                        <td><?= is_array( $field ) ? $user[$field[0]] . ' ' . $user[$field[1]] : $field == 'rank_ord' ? $user[$ranks[$field]] : $user[$field] ?></td>
+                        <td><?= is_array( $field ) ? $user[$field[0]] . ' ' . $user[$field[1]] : $field == 'rank_ord' ? $ranks[$user[$field]] : $user[$field] ?></td>
                     <?php endforeach; ?>
                 </tr>
             <?php endforeach; ?>
