@@ -14,7 +14,7 @@ $db_fields = ['admin_id', ['first', 'last'], 'mother', 'father', 'admin_phone_ho
 
 $users = [];
 // create sql statement
-$sql = "select a.*, u.user_serial, u.first as child_first, u.last as child_last, s.school_name, MAX(rm.rank_ord), r.rank_name
+$sql = "select a.*, u.user_serial, u.first as child_first, u.last as child_last, s.school_name, r.rank_name, MAX( rm.rank_ord ) as rank_ord 
         from users u
         join schools s using ( school_id )
         join rank_marks rm using ( user_id ) 
@@ -22,9 +22,9 @@ $sql = "select a.*, u.user_serial, u.first as child_first, u.last as child_last,
         join admin_auths aa on ( aa.id = u.user_id and aa.auth = 'user' ) 
         join admins a using ( admin_id ) 
         where u.user_registered > 0 
-        and r.rank_ord in (13, 14) 
-        group by u.user_id";
+        and r.rank_ord in (13, 14) ";
 $sql .= " and u.school_id in ( " . implode( ',', array_keys( $schools ) ) . " ) ";
+$sql .= " group by u.user_id ";
 $sql .= " order by u.last, u.first";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
