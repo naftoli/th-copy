@@ -87,7 +87,7 @@ foreach ($info as $row) {
             $shipped = 1;
             $missing = 0;
             $damaged = 1;
-            $received = 1;
+            $received = 0;
             break;
         case 4:
             $shipped = 1;
