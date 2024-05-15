@@ -14,7 +14,7 @@ $db_fields = ['admin_id', ['first', 'last'], 'mother', 'father', 'admin_phone_ho
 
 $users = [];
 // create sql statement
-$sql = "select a.*, u.user_serial, u.first as child_first, u.last as child_last, s.school_name, r.rank_name
+$sql = "select a.*, u.user_serial, u.first as child_first, u.last as child_last, s.school_name, MAX(rm.rank_ord), r.rank_name
         from users u
         join schools s using ( school_id )
         join rank_marks rm using ( user_id ) 
