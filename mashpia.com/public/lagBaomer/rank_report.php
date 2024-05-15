@@ -168,8 +168,8 @@ while ($row = mysql_fetch_assoc($result)) {
 
 //display info
 $genderLookup = [
-    'F' => 'girl',
-    'M' => 'boy'
+    'F' => 'Girl',
+    'M' => 'Boy'
 ];
 $grandTotals['F'] = [];
 $grandTotals['M'] = [];
