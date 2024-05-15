@@ -137,7 +137,7 @@ $images = array();
 $grandTotals = array();
 $sum = 0;
 
-if ($admin_user['auth'] == 'super') {
+if ($admin->auth == 'super') {
     $schoolIds = [7, 9, 21, 30, 33, 37, 49, 54, 60, 63, 81, 89, 105, 192, 255, 471, 542, 577, 585, 614, 621, 693, 739];
 } else {
     $schoolIds = array_keys($schools);
@@ -152,7 +152,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $rankNames[$row['rank_ord']] = $row['rank_name'];
 }
 
-$sql = "select s.school_name, u.user_id, u.last, u.first, c.class_grade, c.class_sub, rm.rank_ord  
+$sql = "select s.school_name, u.user_id, u.last, u.first, u.gender, c.class_grade, c.class_sub, rm.rank_ord  
         from rank_marks rm 
         join users u using ( user_id ) 
         join classes c on (c.class_id = u.class_id) 
@@ -164,30 +164,32 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
     $userName = $row['first'] . ' ' . $row['last'];
-    $users[$row['school_name']][$grade][$userName] = $row['rank_ord'];
+    $users[$row['school_name']][$row['gender']][$grade][$userName] = $row['rank_ord'];
 }
 
 //display info
 foreach ($users as $school => $info) {
     $totals = array();
-    foreach ($info as $grade => $user) {
-        echo "<h2>" . $school . ' - ' . $grade . "</h2>";
-        echo "<table>";
-        echo "<tr><th>Student</th><th>Rank</th></tr>";
-        foreach ($user as $name => $rank) {
-            echo "<tr><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td></tr>";
-            if (isset($totals[$rank]))
-                $totals[$rank]++;
-            else
-                $totals[$rank] = 1;
-            if (isset($grandTotals[$rank]))
-                $grandTotals[$rank]++;
-            else
-                $grandTotals[$rank] = 1;
-            $sum++;
+    foreach ($info as $gender => $other) {
+        foreach ($other as $grade => $user) {
+            echo "<h2>" . $school . ' - ' . $grade . "</h2>";
+            echo "<table>";
+            echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
+            foreach ($user as $name => $rank) {
+                echo "<tr><td>" . $gender . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td></tr>";
+                if (isset($totals[$rank]))
+                    $totals[$rank]++;
+                else
+                    $totals[$rank] = 1;
+                if (isset($grandTotals[$rank]))
+                    $grandTotals[$rank]++;
+                else
+                    $grandTotals[$rank] = 1;
+                $sum++;
+            }
+            echo "</table>";
+            echo "<div class='page-break'></div>";
         }
-        echo "</table>";
-        echo "<div class='page-break'></div>";
     }
 
     ksort($totals);
