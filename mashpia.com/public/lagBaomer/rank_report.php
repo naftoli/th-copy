@@ -213,8 +213,12 @@ foreach ($users as $school => $info) {
     }
     echo "</table><br />";
     foreach ($totalGenerals as $gender => $total) {
+        $genderLookup = [
+            'F' => 'girls',
+            'M' => 'boys'
+        ];
         if ($total > 0)
-            echo "<p>Total Generals for " . $gender . ": " . $total . "</p>";
+            echo "<p>Total Generals for " . $genderLookup[$gender] . ": " . $total . "</p>";
     }
     echo "<div class='page-break'></div>";
 }
