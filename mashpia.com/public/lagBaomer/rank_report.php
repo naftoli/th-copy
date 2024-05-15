@@ -137,7 +137,12 @@ $images = array();
 $grandTotals = array();
 $sum = 0;
 
-$schoolIds = [7, 9, 21, 30, 33, 37, 49, 54, 60, 63, 81, 89, 105, 192, 255, 471, 542, 577, 585, 614, 621, 693, 739];
+if ($admin_user['auth'] == 'super') {
+    $schoolIds = [7, 9, 21, 30, 33, 37, 49, 54, 60, 63, 81, 89, 105, 192, 255, 471, 542, 577, 585, 614, 621, 693, 739];
+} else {
+    $schoolIds = array_keys($schools);
+}
+
 
 //get rank names
 $rankNames = array();
@@ -147,26 +152,19 @@ while ($row = mysql_fetch_assoc($result)) {
     $rankNames[$row['rank_ord']] = $row['rank_name'];
 }
 
-//default sort method
-$orderBy = " order by s.school_name, c.class_grade, c.class_sub, u.last, u.first, rm.rank_ord";
-foreach ($schools as $id => $school) {
-    if (!in_array($id, $schoolIds))
-        continue;
-    $sql = "select s.school_name, u.user_id, u.last, u.first, c.class_grade, c.class_sub, rm.rank_ord  
-            from rank_marks rm 
-            join users u using ( user_id ) 
-            join classes c on (c.class_id = u.class_id) 
-            join schools s on (s.school_id = u.school_id) 
-            where u.user_registered > 0 
-            and u.school_id = $id $orderBy";
-    //echo $sql;
-
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
-        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-        $userName = $row['first'] . ' ' . $row['last'];
-        $users[$row['school_name']][$grade][$userName] = $row['rank_ord'];
-    }
+$sql = "select s.school_name, u.user_id, u.last, u.first, c.class_grade, c.class_sub, rm.rank_ord  
+        from rank_marks rm 
+        join users u using ( user_id ) 
+        join classes c on (c.class_id = u.class_id) 
+        join schools s on (s.school_id = u.school_id) 
+        where u.user_registered > 0 
+        and u.school_id in (" . implode(', ', $schoolIds) . ")";
+$sql .= " order by s.school_name, c.class_grade, c.class_sub, u.last";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+    $userName = $row['first'] . ' ' . $row['last'];
+    $users[$row['school_name']][$grade][$userName] = $row['rank_ord'];
 }
 
 //display info
