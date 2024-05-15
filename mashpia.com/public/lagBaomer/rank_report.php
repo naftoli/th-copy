@@ -211,9 +211,10 @@ foreach ($users as $school => $info) {
             echo "<tr><td>" . $gender . "</td><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
         }
     }
-    echo "</table>";
+    echo "</table><br />";
     foreach ($totalGenerals as $gender => $total) {
-        echo "<p>Total Generals for " . $gender . ": " . $total . "</p>";
+        if ($total > 0)
+            echo "<p>Total Generals for " . $gender . ": " . $total . "</p>";
     }
     echo "<div class='page-break'></div>";
 }
