@@ -169,6 +169,8 @@ while ($row = mysql_fetch_assoc($result)) {
 //display info
 $grandTotals['F'] = [];
 $grandTotals['M'] = [];
+$generalsTotals['F'] = 0;
+$generalsTotals['M'] = 0;
 foreach ($users as $school => $info) {
     $totals['F'] = [];
     $totals['M'] = [];
@@ -187,7 +189,10 @@ foreach ($users as $school => $info) {
                 else
                     $totals[$gender][$rank] = 1;
                 // total generals
-                if ($rank >= 9) $totalGenerals[$gender]++;
+                if ($rank >= 9) {
+                    $totalGenerals[$gender]++;
+                    $generalsTotals[$gender]++;
+                }
                 // grand totals
                 if (isset($grandTotals[$gender][$rank]))
                     $grandTotals[$gender][$rank]++;
@@ -236,6 +241,16 @@ if ($admin->auth == 'super') {
         }
     }
     echo "</table>";
+    echo "<div class='page-break'></div>";
+    echo "<h2>Grand Totals for Generals</h2>";
+    $genderLookup = [
+        'F' => 'girls',
+        'M' => 'boys'
+    ];
+    foreach ($generalsTotals as $gender => $total) {
+        if ($total > 0)
+            echo "<p>Total Generals for " . $genderLookup[$gender] . ": " . $total . "</p>";
+    }
 }
 ?>
 </body>
