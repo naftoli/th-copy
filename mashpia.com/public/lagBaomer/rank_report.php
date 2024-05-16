@@ -205,6 +205,10 @@ foreach ($users as $school => $info) {
         }
     }
 
+    foreach ($totals as $gender => &$more) {
+        ksort($more);
+    }
+
     echo "<h2>" . $school . " Totals</h2>";
     echo "<table>";
     echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
