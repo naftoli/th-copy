@@ -203,11 +203,11 @@ foreach ($users as $school => $info) {
             echo "</table>";
             echo "<div class='page-break'></div>";
         }
+        foreach ($totals[$gender] as &$total) {
+            ksort($total);
+        }
     }
 
-    foreach ($totals as $gender => &$more) {
-        ksort($more);
-    }
     echo "<h2>" . $school . " Totals</h2>";
     echo "<table>";
     echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
