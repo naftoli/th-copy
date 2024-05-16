@@ -140,7 +140,6 @@ if ($admin->auth == 'super') {
 } else {
     $schoolIds = array_keys($schools);
 }
-echo "<pre>"; print_r($schoolIds); echo "</pre>";
 
 //get rank names
 $rankNames = array();
@@ -179,6 +178,7 @@ foreach ($users as $school => $info) {
     $totals['M'] = [];
     $totalGenerals['F'] = 0;
     $totalGenerals['M'] = 0;
+    echo "<h1>" . $school . "</h1>";
     foreach ($info as $gender => $other) {
         foreach ($other as $grade => $user) {
             echo "<h2>" . $school . ' - ' . $grade . "</h2>";
