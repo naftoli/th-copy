@@ -209,7 +209,7 @@ foreach ($users as $school => $info) {
         }
     }
 
-    foreach ($totals as $gender => $info) {
+    foreach ($totals as $gender => &$info) {
         ksort($info);
     }
     echo "<h2>" . $school . " Totals</h2>";
@@ -229,7 +229,7 @@ foreach ($users as $school => $info) {
 }
 
 if ($admin->auth == 'super') {
-    foreach ($grandTotals as $gender => $info) {
+    foreach ($grandTotals as $gender => &$info) {
         ksort($info);
     }
     echo "<h2>Grand Totals</h2>";
