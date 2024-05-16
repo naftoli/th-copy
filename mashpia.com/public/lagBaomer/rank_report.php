@@ -178,7 +178,6 @@ foreach ($users as $school => $info) {
     $totals['M'] = [];
     $totalGenerals['F'] = 0;
     $totalGenerals['M'] = 0;
-    echo "<h1>" . $school . "</h1>";
     foreach ($info as $gender => $other) {
         foreach ($other as $grade => $user) {
             echo "<h2>" . $school . ' - ' . $grade . "</h2>";
@@ -213,8 +212,8 @@ foreach ($users as $school => $info) {
     echo "<h2>" . $school . " Totals</h2>";
     echo "<table>";
     echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
-    foreach ($totals as $gender => $other) {
-        foreach ($other as $rank => $total) {
+    foreach ($totals as $gender => $more) {
+        foreach ($more as $rank => $total) {
             echo "<tr><td>" . $gender . "</td><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
         }
     }
