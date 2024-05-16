@@ -222,6 +222,9 @@ foreach ($users as $school => $info) {
 }
 
 if ($admin->auth == 'super') {
+    foreach ($grandTotals as $gender => &$info) {
+        ksort($info);
+    }
     echo "<h2>Grand Totals</h2>";
     echo "<table>";
     echo "<tr><th>Gender</th><th>Rank</th><th>Total</th><tr>";
