@@ -175,6 +175,7 @@ $generalsTotals['F'] = 0;
 $generalsTotals['M'] = 0;
 foreach ($users as $school => $info) {
     foreach ($info as $gender => $other) {
+        // initialize totals
         $totals[$gender] = [];
         $totalsGenerals[$gender] = 0;
         foreach ($other as $grade => $user) {
