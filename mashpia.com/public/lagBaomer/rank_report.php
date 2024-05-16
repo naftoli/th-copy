@@ -174,11 +174,9 @@ $grandTotals['M'] = [];
 $generalsTotals['F'] = 0;
 $generalsTotals['M'] = 0;
 foreach ($users as $school => $info) {
-    $totals['F'] = [];
-    $totals['M'] = [];
-    $totalGenerals['F'] = 0;
-    $totalGenerals['M'] = 0;
     foreach ($info as $gender => $other) {
+        $totals[$gender] = [];
+        $totalsGenerals[$gender] = 0;
         foreach ($other as $grade => $user) {
             echo "<h2>" . $school . ' - ' . $grade . "</h2>";
             echo "<table>";
