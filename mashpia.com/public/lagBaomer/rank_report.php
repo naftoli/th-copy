@@ -156,12 +156,12 @@ $sql = "select s.school_name, u.user_id, u.last, u.first, u.gender, c.class_grad
         join schools s on (s.school_id = u.school_id) 
         where u.user_registered > 0 
         and u.school_id in (" . implode(', ', $schoolIds) . ")";
-$sql .= " order by s.school_name, c.class_grade, c.class_sub, u.last, u.first, rm.rank_ord";
+$sql .= " order by s.school_name, c.class_grade, c.class_sub, u.gender, u.last, u.first, rm.rank_ord";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
     $userName = $row['first'] . ' ' . $row['last'];
-    $users[$row['school_name']][$row['gender']][$grade][$userName] = $row['rank_ord'];
+    $users[$row['school_name']][$grade][$row['gender']][$userName] = $row['rank_ord'];
 }
 
 //display info
@@ -178,11 +178,11 @@ foreach ($users as $school => $info) {
     $totals['M'] = [];
     $totalGenerals['F'] = 0;
     $totalGenerals['M'] = 0;
-    foreach ($info as $gender => $other) {
-        foreach ($other as $grade => $user) {
-            echo "<h2>" . $school . ' - ' . $grade . "</h2>";
-            echo "<table>";
-            echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
+    foreach ($info as $grade => $other) {
+        echo "<h2>" . $school . ' - ' . $grade . "</h2>";
+        echo "<table>";
+        echo "<tr><th>Gender</th><th>Student</th><th>Rank</th></tr>";
+        foreach ($other as $gender => $user) {
             foreach ($user as $name => $rank) {
                 echo "<tr><td>" . $gender . "</td><td>" . $name . "</td><td>" . $rankNames[$rank] . "</td></tr>";
                 // deal with totals
@@ -201,9 +201,9 @@ foreach ($users as $school => $info) {
                 else
                     $grandTotals[$gender][$rank] = 1;
             }
-            echo "</table>";
-            echo "<div class='page-break'></div>";
         }
+        echo "</table>";
+        echo "<div class='page-break'></div>";
     }
 
     foreach ($totals as $gender => &$more) {
