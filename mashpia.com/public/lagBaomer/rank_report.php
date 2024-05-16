@@ -177,7 +177,7 @@ foreach ($users as $school => $info) {
     foreach ($info as $gender => $other) {
         // initialize totals
         $totals[$gender] = [];
-        $totalsGenerals[$gender] = 0;
+        $totalGenerals[$gender] = 0;
         foreach ($other as $grade => $user) {
             echo "<h2>" . $school . ' - ' . $grade . "</h2>";
             echo "<table>";
