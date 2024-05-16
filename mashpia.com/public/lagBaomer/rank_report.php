@@ -203,9 +203,6 @@ foreach ($users as $school => $info) {
             echo "</table>";
             echo "<div class='page-break'></div>";
         }
-        foreach ($totals[$gender] as &$total) {
-            ksort($total);
-        }
     }
 
     echo "<h2>" . $school . " Totals</h2>";
