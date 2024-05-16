@@ -158,7 +158,7 @@ $sql = "select s.school_name, u.user_id, u.last, u.first, u.gender, c.class_grad
         join schools s on (s.school_id = u.school_id) 
         where u.user_registered > 0 
         and u.school_id in (" . implode(', ', $schoolIds) . ")";
-$sql .= " order by s.school_name, c.class_grade, c.class_sub, u.last";
+$sql .= " order by s.school_name, c.class_grade, c.class_sub, u.last, u.first, rm.rank_ord";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
