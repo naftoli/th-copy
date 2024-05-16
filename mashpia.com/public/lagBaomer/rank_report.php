@@ -165,6 +165,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $userName = $row['first'] . ' ' . $row['last'];
     $users[$row['school_name']][$row['gender']][$grade][$userName] = $row['rank_ord'];
 }
+echo "<pre>"; print_r($users); echo "</pre>"; exit;
 
 //display info
 $genderLookup = [
