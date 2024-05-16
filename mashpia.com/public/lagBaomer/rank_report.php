@@ -134,14 +134,13 @@ $users = array();
 $medals = array();
 $thumbs = array();
 $images = array();
-$sum = 0;
 
 if ($admin->auth == 'super') {
     $schoolIds = [7, 9, 21, 30, 33, 37, 49, 54, 60, 63, 81, 89, 105, 192, 255, 471, 542, 577, 585, 614, 621, 693, 739];
 } else {
     $schoolIds = array_keys($schools);
 }
-
+echo "<pre>"; print_r($schoolIds); echo "</pre>";
 
 //get rank names
 $rankNames = array();
@@ -202,7 +201,6 @@ foreach ($users as $school => $info) {
                     $grandTotals[$gender][$rank]++;
                 else
                     $grandTotals[$gender][$rank] = 1;
-                $sum++;
             }
             echo "</table>";
             echo "<div class='page-break'></div>";
