@@ -213,10 +213,9 @@ foreach ($users as $school => $info) {
     echo "<h2>" . $school . " Totals</h2>";
     echo "<table>";
     echo "<tr><th>Gender</th><th>Rank</th><th>Total</th></tr>";
-    echo "<pre>"; print_r($totals); echo "</pre>";
-    foreach ($totals as $gender => $more) {
-        foreach ($more as $rank => $total) {
-            echo "<tr><td>" . $gender . "</td><td>" . $rankNames[$rank] . "</td><td>" . $total . "</td></tr>";
+    foreach ($totals as $gender => $other) {
+        foreach ($other as $rank => $num) {
+            echo "<tr><td>" . $gender . "</td><td>" . $rankNames[$rank] . "</td><td>" . $num . "</td></tr>";
         }
     }
     echo "</table><br />";
