@@ -32,7 +32,6 @@ $sql .= " and u.school_id in ( " . implode( ',', array_keys( $schools ) ) . " ) 
 $sql .= " group by u.user_id";
 $sql .= " having rank_ord = 12";
 $sql .= " order by u.last, u.first";
-echo $sql; exit;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $users[] = $row;
