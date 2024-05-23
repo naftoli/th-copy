@@ -1097,13 +1097,16 @@ var registrationApp = function() {
         }
 
         if (selected_charges.chidon && !selected_user.getChidonInfo) {
-            saveAddress()
-              .then(function (saved) {
-                  if (saved) nextStep()
-              })
-              .catch(function (err) {
-                  alert(err)
-              })
+            // only need to save address if it wasn't already saved once
+            if (! parseInt(selected_user.parentAccount['updated_address'])) {
+                saveAddress()
+                  .then(function (saved) {
+                      if (saved) nextStep()
+                  })
+                  .catch(function (err) {
+                      alert(err)
+                  })
+            }
         }
         else nextStep()
         // nextStep()
@@ -1119,10 +1122,53 @@ var registrationApp = function() {
             zip: $("#c-zip").val().trim(),
             country: $("#c-country").val().trim()
         }
-        console.log(address)
+
         // make sure there's a value for each field
         if (! (address.address1 && address.city && address.zip && address.country)) {
             alert("You must enter a value for your home address / city / zip / country")
+            return false
+        }
+
+        // do some more validations
+        // make sure address1 has at least 1 number followed by a space and at least 3 letters following
+        if (! /^[0-9]+ .{3,}/.test(address.address1)) {
+            alert("You must enter a valid address")
+            return false
+        }
+        // make sure city has at least 3 letters
+        if (address.city.length < 3) {
+            alert("You must enter a valid city")
+            return false
+        }
+        // make sure state has at least 2 letters
+        if (address.state.length < 2) {
+            alert("You must enter a valid state")
+            return false
+        }
+        // make sure zip has at least 4 alphanumeric characters
+        if (address.zip.length < 4) {
+            alert("You must enter a valid zip code")
+            return false
+        }
+        // make sure country has at least 3 letters
+        if (address.country.length < 3) {
+            alert("You must enter a valid country")
+            return false
+        }
+
+        // Add confirmation prompt to shipping address
+        const form = document.querySelector('#chidon-address')
+        const result = await mapboxsearch.confirmAddress(form, {
+            accessToken: ACCESS_TOKEN,
+            theme: { variables: {border: '3px solid rgba(0,0,0,0.35)', borderRadius: '18px'} },
+            minimap: {
+                defaultMapStyle: ['mapbox', 'outdoors-v11'],
+                satelliteToggle: true
+            },
+            skipConfirmModal: (feature) => false // overrides default behavior, show dialog every time
+        });
+        if (result.type == 'cancel') {
+            alert('You must fix up your address before continuing')
             return false
         }
 
@@ -1965,7 +2011,7 @@ var templates = function(){
                   "3 tests Shipping & Chidon Coordinator) costs $70 per child and is subsidized by our generous donors. I would like to pay:"
                 $("#reg_text").empty().append(text)
                 $("#advanced-registration").show()
-                $("#chidon-address").show()
+                if (parseInt(user.parentAccount['updated_address'])) $("#chidon-address").hide()
                 $("#chidon-learning").show()
                 $("#chidon-books").show()
                 $("#agreements").show()
@@ -2035,7 +2081,7 @@ var templates = function(){
             if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
             else $("#chidon-registration").show()
 
-            // determine if need to show non th school fields or not
+            // determine if we need to show non th school fields or not
             if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
                 if (user.non_th_school) {
                     $('#non_th_school_id').val(user.non_th_school_id);
@@ -2101,24 +2147,24 @@ var templates = function(){
             // show khk if relevant
             if (!user['registrationStatus']['khk']) {
                 $("#khk").show()
-                $("#khkWhatsapp").show()
+                // $("#khkWhatsapp").show()
             } else {
                 $("#khk").hide()
-                $("#khkWhatsapp").hide()
+                // $("#khkWhatsapp").hide()
             }
 
             // show/hide yarmulka
-            $("#chidonWhatsapp").show()
+            // $("#chidonWhatsapp").show()
             if (user.gender == 'M') {
                 $("#yarmulka").show()
-                $("#boysWhatsapp").show()
-                $("#girlsWhatsapp").hide()
+                // $("#boysWhatsapp").show()
+                // $("#girlsWhatsapp").hide()
                 $("#khkBoys").show()
                 $("#khkGirls").hide()
             } else {
                 $("#yarmulka").hide()
-                $("#girlsWhatsapp").show()
-                $("#boysWhatsapp").hide()
+                // $("#girlsWhatsapp").show()
+                // $("#boysWhatsapp").hide()
                 $("#khkBoys").hide()
                 $("#khkGirls").show()
             }
@@ -2162,8 +2208,14 @@ var templates = function(){
             }
             $("#yahadus-poll").empty().append(html)
 
-            // update the address info if editing
-            if (user.getChidonInfo) {
+            // update the address info
+            if (user.getChidonInfo ||
+              (user.parentAccount.admin_address1 && user.parentAccount.admin_address1 != '' &&
+                user.parentAccount.admin_city && user.parentAccount.admin_city != '' &&
+                user.parentAccount.admin_state && user.parentAccount.admin_state != '' &&
+                user.parentAccount.admin_postal && user.parentAccount.admin_postal != '' &&
+                user.parentAccount.admin_country && user.parentAccount.admin_country != ''))
+            {
                 if (user.parentAccount.admin_address1) $('#c-address').val(user.parentAccount.admin_address1);
                 if (user.parentAccount.admin_address2) $('#c-apt').val(user.parentAccount.admin_address2);
                 if (user.parentAccount.admin_city) $('#c-city').val(user.parentAccount.admin_city);

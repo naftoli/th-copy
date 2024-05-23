@@ -275,7 +275,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function parentAccount() {
         global $MASHPIA_DB;
         $query = $MASHPIA_DB->prepare(
-            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_phone_mobile2 AS phone2, admin_email as email, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country '
+            'SELECT admin_id, first, father, mother, last, admin_phone_mobile AS phone, admin_phone_mobile2 AS phone2, 
+                admin_email as email, admin_address1, admin_address2, admin_city, admin_state, admin_postal, admin_country, updated_address '
             .'FROM admins JOIN admin_auths aa USING (admin_id) WHERE aa.auth="user" and id=?;'
         );
         $query->execute( [$this->user_id] );

@@ -24,7 +24,8 @@ $stmt = $MASHPIA_DB->prepare("
     admin_state = :state, 
     admin_city = :city, 
     admin_postal = :zip, 
-    admin_country = :country 
+    admin_country = :country,  
+    updated_address = 1 
     where admin_id = :admin
 ");
 $res = $stmt->execute([
@@ -39,5 +40,5 @@ $res = $stmt->execute([
 if ( $res ) {
     json_response("Address Updated.");
 } else {
-    json_error("Eror updating address.");
+    json_error("Error updating address." . $stmt->errorInfo()[2]);
 }

@@ -120,15 +120,16 @@
     }
   </style>
 
-  <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.17/web.js"></script>
+<!--  <link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">-->
+  <script id="search-js" defer src="https://api.mapbox.com/search-js/v1.0.0-beta.21/web.js"></script>
   <script>
-    const accessToken = 'pk.eyJ1IjoibmFmdG9saXIiLCJhIjoiY2xsZTR5NHFuMDBzeTNzdWxqcnd1ZGJ0ZSJ9.7M6yPlYYDHRE-QcRUp_z9A';
-    const script = document.getElementById('search-js');
-    script.onload = function() {
+    const ACCESS_TOKEN = 'pk.eyJ1IjoibmFmdG9saXIiLCJhIjoiY2xsZTR5NHFuMDBzeTNzdWxqcnd1ZGJ0ZSJ9.7M6yPlYYDHRE-QcRUp_z9A';
+    document.getElementById("search-js").onload = () => {
       mapboxsearch.autofill({
-        accessToken
-      });
-    };
+        accessToken: ACCESS_TOKEN,
+        autocomplete: true
+      })
+    }
   </script>
 </head>
 <body>
@@ -729,47 +730,47 @@
                   <br/>
                 </div>
 
-                <div id="chidonWhatsapp" style="display: none;">
-                  <b>Chidon WhatsApp</b>
-                  <hr/>
-                  Please join your child's grades WhatsApp group so you stay updated on all Chidon updates.
-                  Please make sure to join the grades group that your child will be in <span class="chidon_year"></span>.<br/><br/>
-                  <div id="boysWhatsapp" class="whatsapp">
-                    <b>Boys</b><br/>
-                    <a href="https://chat.whatsapp.com/KovwrudLUWYJDRXdZlqWmu" target="_blank">Grade 4</a><br/>
-                    <a href="https://chat.whatsapp.com/CueqCOcB5Vz2eTJhfdxmbs" target="_blank">Grade 5</a><br/>
-                    <a href="https://chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS" target="_blank">Grade 6</a><br/>
-                    <a href="https://chat.whatsapp.com/GfVxwUI6hgF4ATMfoOW1sX" target="_blank">Grade 7</a><br/>
-                    <a href="https://chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x" target="_blank">Grade 8</a><br/>
-                    <!--                                            <div id="khkWhatsappBoys" class="khkWhatsapp">-->
-                    <!--                                                <a href="https://chat.whatsapp.com/I4IRgTxmVfO419sjJOz3Ii" target="_blank">Kol Hatorah Kula</a>-->
-                    <!--                                            </div>-->
-                  </div>
-                  <div id="girlsWhatsapp" class="whatsapp">
-                    <b>Girls</b><br/>
-                    <a href="https://chat.whatsapp.com/GZ1qHIwqKbO9dvDN8nz4l5" target="_blank">Grade 4</a><br/>
-                    <a href="https://chat.whatsapp.com/LVmzxooKBqN67oVzj1Pzcj" target="_blank">Grade 5</a><br/>
-                    <a href="https://chat.whatsapp.com/LAb11TFUss33HPYujpgMvj" target="_blank">Grade 6</a><br/>
-                    <a href="https://chat.whatsapp.com/JlTE5DTMgu8FjOeXmd2KSn" target="_blank">Grade 7</a><br/>
-                    <a href="https://chat.whatsapp.com/EHhpuZtvZsh4pIZneZFCf5" target="_blank">Grade 8</a><br/>
-                    <!--                                            <div id="khkWhatsappGirls" class="khkWhatsapp">-->
-                    <!--                                                <a href="https://chat.whatsapp.com/KzvkigrhabAI4XdxqPIUyM" target="_blank">Kol Hatorah Kula</a>-->
-                    <!--                                            </div>-->
-                  </div>
-                  <br/>
-                  <div id="khkWhatsapp" style="display: none">
-                    <b>KHK WhatsApp</b>
-                    <hr/>
-                    In addition to the regular 8th grade group:
-                    <div id="khkBoys">
-                      <a href="https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS" target="_blank">KHK Boys</a>
-                    </div>
-                    <div id="khkGirls">
-                      <a href="https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB" target="_blank">KHK Girls</a>
-                    </div>
-                  </div>
-                  <br/>
-                </div>
+<!--                <div id="chidonWhatsapp" style="display: none;">-->
+<!--                  <b>Chidon WhatsApp</b>-->
+<!--                  <hr/>-->
+<!--                  Please join your child's grades WhatsApp group so you stay updated on all Chidon updates.-->
+<!--                  Please make sure to join the grades group that your child will be in <span class="chidon_year"></span>.<br/><br/>-->
+<!--                  <div id="boysWhatsapp" class="whatsapp">-->
+<!--                    <b>Boys</b><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/KovwrudLUWYJDRXdZlqWmu" target="_blank">Grade 4</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/CueqCOcB5Vz2eTJhfdxmbs" target="_blank">Grade 5</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/C8izNcNSxCIC2xY9BLtsTS" target="_blank">Grade 6</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/GfVxwUI6hgF4ATMfoOW1sX" target="_blank">Grade 7</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/Ig9NovVSe0PBC6mSmKEz0x" target="_blank">Grade 8</a><br/>-->
+<!--                    &lt;!&ndash;                                            <div id="khkWhatsappBoys" class="khkWhatsapp">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                                <a href="https://chat.whatsapp.com/I4IRgTxmVfO419sjJOz3Ii" target="_blank">Kol Hatorah Kula</a>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                  </div>-->
+<!--                  <div id="girlsWhatsapp" class="whatsapp">-->
+<!--                    <b>Girls</b><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/GZ1qHIwqKbO9dvDN8nz4l5" target="_blank">Grade 4</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/LVmzxooKBqN67oVzj1Pzcj" target="_blank">Grade 5</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/LAb11TFUss33HPYujpgMvj" target="_blank">Grade 6</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/JlTE5DTMgu8FjOeXmd2KSn" target="_blank">Grade 7</a><br/>-->
+<!--                    <a href="https://chat.whatsapp.com/EHhpuZtvZsh4pIZneZFCf5" target="_blank">Grade 8</a><br/>-->
+<!--                    &lt;!&ndash;                                            <div id="khkWhatsappGirls" class="khkWhatsapp">&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                                <a href="https://chat.whatsapp.com/KzvkigrhabAI4XdxqPIUyM" target="_blank">Kol Hatorah Kula</a>&ndash;&gt;-->
+<!--                    &lt;!&ndash;                                            </div>&ndash;&gt;-->
+<!--                  </div>-->
+<!--                  <br/>-->
+<!--                  <div id="khkWhatsapp" style="display: none">-->
+<!--                    <b>KHK WhatsApp</b>-->
+<!--                    <hr/>-->
+<!--                    In addition to the regular 8th grade group:-->
+<!--                    <div id="khkBoys">-->
+<!--                      <a href="https://chat.whatsapp.com/Hxnr0G6wOxg0Wd8nRwkbTS" target="_blank">KHK Boys</a>-->
+<!--                    </div>-->
+<!--                    <div id="khkGirls">-->
+<!--                      <a href="https://chat.whatsapp.com/Fnu72KIc1RE3W94OdSX1aB" target="_blank">KHK Girls</a>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <br/>-->
+<!--                </div>-->
 
                 <div id="chidon-address">
                   <b>Home Address</b>
