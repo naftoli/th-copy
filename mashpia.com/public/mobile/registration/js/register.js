@@ -1108,8 +1108,7 @@ var registrationApp = function() {
                   })
             }
         }
-        else nextStep()
-        // nextStep()
+        nextStep()
     }
 
     async function saveAddress() {
@@ -1592,7 +1591,7 @@ var registrationApp = function() {
                     return false
                 } else {
                     let shipping = parseInt($("#chidon-shipping-fee:checked").val())
-                    if (shipping) {
+                    // if (shipping) {
                         // figure out code to use
                         let shipCode = ''
                         if (country === 'USA') shipCode = 'RRSUSA-'
@@ -1604,18 +1603,18 @@ var registrationApp = function() {
                         if (!exists.length) {
                             state.cart.push({
                                 description: "Early Chidon Registration Shipping",
-                                price: shippingFee,
+                                price: shipping ? shippingFee : 0,
                                 meta: {
                                     type: 'advance registration',
                                     registration_type: 'shipping',
-                                    paid: shippingFee,
+                                    paid: shipping ? shippingFee : 0,
                                     user_id: state.users[index].user_id,
                                     code: "F" + state.users[index].parentAccount.admin_id + ":" + state.users[index].school.school_id + ":" + shipCode + shippingFee,
                                     codeOnly: shipCode.substring(0, shipCode.length - 1)
                                 }
                             })
                         }
-                    }
+                    // }
                     checkForRegShipping = false
                     nextStep()
                 }
@@ -2159,14 +2158,14 @@ var templates = function(){
                 $("#yarmulka").show()
                 // $("#boysWhatsapp").show()
                 // $("#girlsWhatsapp").hide()
-                $("#khkBoys").show()
-                $("#khkGirls").hide()
+                // $("#khkBoys").show()
+                // $("#khkGirls").hide()
             } else {
                 $("#yarmulka").hide()
                 // $("#girlsWhatsapp").show()
                 // $("#boysWhatsapp").hide()
-                $("#khkBoys").hide()
-                $("#khkGirls").show()
+                // $("#khkBoys").hide()
+                // $("#khkGirls").show()
             }
 
             if (user.registrationStatus.new_to_chidon == 1) {

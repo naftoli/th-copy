@@ -397,8 +397,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'amount' => $amount, 'school_id' => $this->school_id,
             'discount' => $discount
         ]);
-
-        return true;
     }
     //get all of the soldiers registration charges
     public function registrationCharges() {
