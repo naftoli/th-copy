@@ -18,7 +18,7 @@ foreach ($rows as $row) {
     $children[] = $row['id'];
 }
 
-// check if there's any shipping fee already charged for any children of this admin
+// check if there's any shipping fee already set for any children of this admin
 $stmt = $MASHPIA_DB->prepare("
     select * from registration_charges where type in ('RRSUSA', 'RRSCAN', 'RRSINT') and year = :year 
     and user_id in (" . implode(',', $children) . ")
