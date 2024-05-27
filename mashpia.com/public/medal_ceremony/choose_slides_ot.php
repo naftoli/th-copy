@@ -57,7 +57,7 @@ $r = new Report();
             $total = count( $r->date_selection );
             $i = 0;
             foreach ( $r->date_selection as $jd => $date ) {
-                if ( $jd == 2459257 ) echo "<option value='" . $jd . "' selected>" . $date . "</option>";
+                if ( $jd == 2460375 ) echo "<option value='" . $jd . "' selected>" . $date . "</option>";
                 else echo "<option value='" . $jd . "'>" . $date . "</option>";
             }
             ?>
