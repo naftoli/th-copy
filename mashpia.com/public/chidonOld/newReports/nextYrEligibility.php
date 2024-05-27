@@ -27,7 +27,7 @@ while ($row = mysql_fetch_assoc($result)) {
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $year = GlobalSettings::getChidonYear();
-$eligible = KHK::getKHKEligibility(array_keys($children), ++$year, 3, [], true)[0];
+$eligible = KHK::getKHKEligibility(array_keys($children), ++$year, 4, [], true)[0];
 ?>
 <!DOCTYPE html>
 <html>

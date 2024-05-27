@@ -2144,7 +2144,7 @@ var templates = function(){
             }
 
             // show khk if relevant
-            if (!user['registrationStatus']['khk']) {
+            if (! user['registrationStatus']['khk']) {
                 $("#khk").show()
                 // $("#khkWhatsapp").show()
             } else {

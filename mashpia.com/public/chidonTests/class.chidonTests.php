@@ -900,6 +900,14 @@ class ChidonTests
 class KHK {
     public static $khkFee = 18;
 
+    // find out if child participated in chidon in past 4 yrs
+    public static function eligibility($user_id) {
+        $year = GlobalSettings::getChidonRegYear();
+        $sql = "select * from th_chidon where user_id = " . $user_id . " and year >= " . ($year - 4);
+        $result = mysql_query($sql);
+        return mysql_num_rows($result) >= 4;
+    }
+
     /**
      * Algorithm to determine if child is eligible for khk registration / tests
      * takes array of user ids
@@ -933,11 +941,7 @@ class KHK {
             $details[$id] = [];
             foreach ($years as $yr) {
                 // exceptions
-                if (!$nextYr && in_array($id, [20838, 66871, 22672, 60580, 60581, 60635, 61306, 61534, 23136, 70488, 55346,
-                    70488, 24896, 52414, 23150, 65097, 52861, 74871, 51691])) {
-                    $details[$id][$yr] = true;
-                    continue;
-                }
+                $exceptions = [];
                 $details[$id][$yr] = false;
                 if ($yr >= $rollover) {
                     // for current yr, check if passed
