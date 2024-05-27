@@ -46,7 +46,7 @@ $r = new Report();
         </select>
     </fieldset>
     <br />
-
+    <!--
     <fieldset>
         <legend>Date Options</legend>
         Choose the date period:
@@ -64,7 +64,7 @@ $r = new Report();
         </select>
     </fieldset>
     <br />
-
+    -->
     <fieldset>
         <legend>Name Options</legend>
         <input type="radio" name="name" value="en" checked /> Show names of chayolim in english<br />
