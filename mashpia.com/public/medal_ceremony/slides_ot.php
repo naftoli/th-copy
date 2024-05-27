@@ -2,7 +2,7 @@
 $admin_auth = array('school');
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
-if ( !isset( $_POST['type'] ) || !isset( $_POST['date'] ) ) {
+if ( !isset( $_POST['type'] ) ) {
     header("Location: choose_slides.php");
     exit;
 }
