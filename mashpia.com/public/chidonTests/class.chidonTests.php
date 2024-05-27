@@ -901,11 +901,15 @@ class KHK {
     public static $khkFee = 18;
 
     // find out if child participated in chidon in past 4 yrs
-    public static function eligibility($user_id) {
+    public static function eligibility(array $user_ids) {
+        $info = [];
         $year = GlobalSettings::getChidonRegYear();
-        $sql = "select * from th_chidon where user_id = " . $user_id . " and year >= " . ($year - 4);
-        $result = mysql_query($sql);
-        return mysql_num_rows($result) >= 4;
+        foreach ($user_ids as $id) {
+            $sql = "select * from th_chidon where user_id = " . $id . " and year >= " . ($year - 4);
+            $result = mysql_query($sql);
+            $info[$id] = mysql_num_rows($result) >= 4;
+        }
+        return $info;
     }
 
     /**
