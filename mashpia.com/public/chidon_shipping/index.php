@@ -8,6 +8,7 @@ $super = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
+$cur_year = GlobalSettings::getChidonYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
@@ -73,7 +74,7 @@ $items = $cs->getItems();
         <?php
         for ($y = 5782; $y <= $year; $y++) {
           echo "<option value='" . $y . "'";
-          if ($y == $year) echo " selected ";
+          if ($y == $cur_year) echo " selected ";
           echo ">" . $y . "</option>";
         }
         ?>
