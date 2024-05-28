@@ -440,6 +440,7 @@ ksort($grand_summary);
 
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
+  const year = <?= $year; ?>;
 
   function update(elem, action, desc = '') {
     const id = $(elem).attr('id')
@@ -448,7 +449,7 @@ ksort($grand_summary);
     const user = ids[1]
     const num = ids[2]
     // get description
-    info.push({ action, item, user, desc, num })
+    info.push({ action, item, user, desc, num, year })
   }
 
   function save(reload = true) {
