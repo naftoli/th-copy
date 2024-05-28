@@ -413,6 +413,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
+  const year = <?= $year ?>;
 
   function update(elem, action, desc = '', all = false) {
     const id = $(elem).attr('id')
@@ -421,7 +422,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const user = ids[1]
     const num = ids[2]
     // get description
-    info.push({action, item, user, desc, num, all})
+    info.push({ action, item, user, desc, num, all, year })
   }
 
   function save(reload = true) {

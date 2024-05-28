@@ -98,7 +98,7 @@ foreach ($info as $row) {
     }
     if (intval($row['action']) == 1) {
         $res = $stmtShipped->execute([
-            'year' => $year,
+            'year' => $row['year'] ?? $year,
             'user' => $row['user'],
             'item' => $row['item'],
             'shipped' => $shipped,
@@ -113,7 +113,7 @@ foreach ($info as $row) {
         }
     } else if (intval($row['action']) == 4) {
         $res = $stmtReceived->execute([
-            'year' => $year,
+            'year' => $row['year'] ?? $year,
             'user' => $row['user'],
             'item' => $row['item'],
             'missing' => $missing,
@@ -128,7 +128,7 @@ foreach ($info as $row) {
         }
     } else {
         $res = $stmt->execute([
-            'year'      => $year,
+            'year'      => $row['year'] ?? $year,
             'user'      => $row['user'],
             'item'      => $row['item'],
             'shipped'   => $shipped,
