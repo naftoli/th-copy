@@ -106,6 +106,7 @@ foreach ($info as $row) {
             'damaged' => $damaged,
             'num' => $row['num']
         ]);
+        $stmtShipped->debugDumpParams();
         if (! $res) {
             $stmtShipped->debugDumpParams();
             $success = false;

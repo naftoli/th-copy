@@ -429,7 +429,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       const res = JSON.parse(result)
       if (res.success) {
         if (reload) location.reload()
-      } else alert(res.error)
+      }
+      else alert(res.error)
     })
   }
 
