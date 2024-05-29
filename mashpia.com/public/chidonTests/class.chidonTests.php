@@ -905,7 +905,7 @@ class KHK {
         $info = [];
         $year = GlobalSettings::getChidonRegYear();
         foreach ($user_ids as $id) {
-            $sql = "select * from th_chidon where user_id = " . $id . " and year >= " . ($year - 4);
+            $sql = "select * from th_chidon where user_id = " . $id . " and date_paid > 0 and year >= " . ($year - 4);
             $result = mysql_query($sql);
             $info[$id] = mysql_num_rows($result) >= 4;
         }
