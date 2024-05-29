@@ -428,7 +428,7 @@ class Raffle
         if ($sorting == "school") $sql .= "ORDER BY schools.school_name, classes.class_grade, users.last, users.first";
         if ($sorting == "name") $sql .= "ORDER BY users.last, users.first"; // just sort by name
         if ($sorting == "prize_id") $sql .= "ORDER BY prize_id, users.last, users.first"; // added by Naftoli 1/3/18
-        // echo $sql;
+//        echo $sql; exit;
         $query = mysql_query($sql);
 
         // for every winner
@@ -504,9 +504,10 @@ class Raffle
                 }
             }
         } else {
-            $sql = "SELECT rm.prize_id, prize_name, rm.school_id, school_name FROM raffles_monthly rm "
+            $sql = "SELECT rm.prize_id, prize_name, rm.school_id, school_name, count(*) as num_prizes FROM raffles_monthly rm "
                 . "JOIN prizes_auction USING (prize_id) JOIN schools s ON rm.school_id = s.school_id "
-                . "WHERE raffle_id=" . $this->raffle_id . " ORDER BY s.school_name;";
+                . "WHERE raffle_id=" . $this->raffle_id . " GROUP BY school_id, prize_name ORDER BY s.school_name, prize_name;";
+//            echo $sql; exit;
             $query = mysql_query($sql);
             while ($row = mysql_fetch_assoc($query)) { // for each row
                 $this->prizes[] = $row;

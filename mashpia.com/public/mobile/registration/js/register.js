@@ -1286,14 +1286,21 @@ var registrationApp = function() {
                 else e.target.checked = !removeFromPrizes(prize)
             })
 
+            $(".he_name").focus( function (e) {
+                // first check off the prize (if it's not yet checked)
+                if (! $(this).parent().parent().find('.prize').is(":checked")) {
+                    $(this).parent().parent().find('.prize').trigger('click')
+                }
+            })
+
             $(".he_name").blur( function (e) {
                 var he_name = e.target.value
                 var id = $(this).data('info')
-                if (!addHeName(id, he_name)) {
+                if (! addHeName(id, he_name)) {
                     // alert('Error adding hebrew name')
                     // add prize to list
                     $(this).parent().parent().find('.prize').trigger('click')
-                    if (!addHeName(id, he_name)) {
+                    if (! addHeName(id, he_name)) {
                         setTimeout(function() {
                             alert('Error adding hebrew name')
                         }, 0)

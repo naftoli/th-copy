@@ -5,7 +5,7 @@ $raffle->get_winner_info(false, false);
 
 $prize_winners = [];
 foreach($raffle->winner_info as $winner){
-    $prize_winners[$winner['prize_id']][$winner['school_id']] = $winner;
+    $prize_winners[$winner['prize_id']][$winner['school_id']][] = $winner;
 }
 
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
@@ -26,29 +26,33 @@ while( $prize = mysql_fetch_assoc( $prizes_query ) ) $prizes[] = $prize;
     
     <tbody>
         <? foreach ($raffle->prizes as $index => $prize) { ?>
-            <tr>
-                <td><?=$index + 1?></td>
-                <td><?=$prize['school_name']?></td>
-                <td><?=$prize['prize_id']?></td>
-                <td><?=$prize['prize_name']?></td>
-                <? if( $raffle->date_ran ) {
-                    $winner = $prize_winners[$prize['prize_id']][$prize['school_id']]['name']; 
-                    if ( $winner ) { ?>
-                        <td> <?=$winner?> </td>
-                    <? } else { ?>
-                        <td> 
-                            <strong>No Eligible Winners.<br/>Please Set Manually:</strong><br/>
-                            <input class='manual_winner_serial' type='text' placeholder='Serial Number' />
-                            <button class='manual_winner' data-prize_id='<?=$prize['prize_id']?>'
-                                data-raffle_id='<?=$raffle->raffle_id?>' 
-                                data-school_id='<?=$prize['school_id']?>'>
-                                Save
-                            </button>
-                        </td>
-                    <? } ?>
-                <? } // only show the winner if the raffle ran...?>
-            </tr>
-        <? } ?>
+            <?php
+            $j = $prize['num_prizes'];
+            for ($k = 0; $k < $j; $k++) { ?>
+              <tr>
+                  <td><?=$index + 1?></td>
+                  <td><?=$prize['school_name']?></td>
+                  <td><?=$prize['prize_id']?></td>
+                  <td><?=$prize['prize_name']?></td>
+                  <? if( $raffle->date_ran ) {
+                      if (isset($prize_winners[$prize['prize_id']][$prize['school_id']][$k]['name'])) {
+                          $winner = $prize_winners[$prize['prize_id']][$prize['school_id']][$k]['name'];
+                          ?>
+                          <td> <?=$winner?> </td>
+                      <? } else { ?>
+                          <td>
+                              <strong>No Eligible Winners.<br/>Please Set Manually:</strong><br/>
+                              <input class='manual_winner_serial' type='text' placeholder='Serial Number' />
+                              <button class='manual_winner' data-prize_id='<?=$prize['prize_id']?>'
+                                  data-raffle_id='<?=$raffle->raffle_id?>'
+                                  data-school_id='<?=$prize['school_id']?>'>
+                                  Save
+                              </button>
+                          </td>
+                      <? } ?>
+                  <? } // only show the winner if the raffle ran...?>
+              </tr>
+        <? } } ?>
         <?php if ( !$raffle->date_ran ) { ?>
             <tr>
             <td colspan='4' style="text-align: center; font-size: 1.5em; padding-top: 15px;"><h3>Add Prize</h3></td>
