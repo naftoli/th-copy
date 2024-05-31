@@ -1242,7 +1242,7 @@ var registrationApp = function() {
                         <input type="checkbox" class="prize ${personalization ? 'personalize' : ''}" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" 
                             data-qty="${prize.quantity}" `
                 if (prize.selected) html += 'checked '
-                if (personalization) html += `onclick="alertPersonalization(this)" `
+                // if (personalization) html += `onclick="alertPersonalization(this)" `
                 // if (prize.quantity <= 0) html += 'disabled '
                 html += `/>
                         ${prize.prize_name} (${prize.quantity} left in stock)<br />
@@ -1282,29 +1282,45 @@ var registrationApp = function() {
                 if (checked) {
                     e.target.checked = qty && addToPrizes(prize, price, personalization)
                     if (!qty) alert('This prize has nothing left in stock, please choose a different prize.')
+                } else {
+                    e.target.checked = !removeFromPrizes(prize)
+                    if (! e.target.checked) $(this).parent().find(".he_name").val('')
                 }
-                else e.target.checked = !removeFromPrizes(prize)
             })
 
             $(".he_name").focus( function (e) {
-                // first check off the prize (if it's not yet checked)
-                if (! $(this).parent().parent().find('.prize').is(":checked")) {
+                // check if 75 points have been used up
+                let prize_id = $(this).data('info')
+                if (cartIsFull(prize_id)) {
+                    // $(".he_name").attr('disabled', true)
+                    setTimeout( function() {
+                        alert('You have already chosen 75 points worth of prizes, you cannot add any more.')
+                    }, 0)
+                    $(this).blur()
+                    return false
+                }
+            })
+
+            $(".he_name").keyup( function (e) {
+                let he_name = e.target.value
+                // add prize to list
+                if (he_name && !$(this).parent().parent().find('.prize').is(":checked")) {
                     $(this).parent().parent().find('.prize').trigger('click')
                 }
             })
 
             $(".he_name").blur( function (e) {
-                var he_name = e.target.value
-                var id = $(this).data('info')
-                if (! addHeName(id, he_name)) {
-                    // alert('Error adding hebrew name')
-                    // add prize to list
+                let he_name = e.target.value
+                // add prize to list
+                if (he_name && !$(this).parent().parent().find('.prize').is(":checked")) {
                     $(this).parent().parent().find('.prize').trigger('click')
-                    if (! addHeName(id, he_name)) {
-                        setTimeout(function() {
-                            alert('Error adding hebrew name')
-                        }, 0)
-                    }
+                }
+                // add hebrew name to list
+                let id = $(this).data('info')
+                if (he_name && !addHeName(id, he_name)) {
+                    setTimeout(function () {
+                        alert('Error adding hebrew name')
+                    }, 0)
                 }
             })
         })
@@ -1468,19 +1484,28 @@ var registrationApp = function() {
         }
     })
 
-    function addToPrizes(prize, price, personalization) {
+    function cartIsFull(prize_id = 0) {
         let MAX = 75
         let total = 0
+        for (var p of user_prizes[current_user]) {
+            if (p.id != prize_id)
+                total += parseInt(p.price)
+        }
+        return total >= MAX
+    }
+
+    function addToPrizes(prize, price, personalization) {
         let found = false
         for (var p of user_prizes[current_user]) {
-            total += parseInt(p.price)
             if (p.id == prize) {
                 found = true
             }
         }
         if (! found) {
-            if (total + parseInt(price) > MAX) {
-                alert('You cannot choose more than 75 credits worth of prizes.')
+            if (cartIsFull()) {
+                setTimeout( function() {
+                    alert('You have already chosen 75 points worth of prizes, you cannot add any more.')
+                }, 0)
                 return false
             } else {
                 let prizeToAdd = { id: prize, price: price, personalization: personalization }
