@@ -106,6 +106,11 @@ if (isset($_POST['delete'])) {
         </style>
     </head>
     <body>
+      <p>
+        Below you can see a list of children and how many extra points they have from achievement cards being scanned multiple times.<br />
+        You can choose to delete all the extra points if you choose to.<br />
+        The "extra" points are being calculated from "Sept 1, 2023".
+      </p>
         <form action="" method="post">
           <button id="delete" onclick="return false;">Delete all extra points</button>
           <input type="hidden" name="delete" />
