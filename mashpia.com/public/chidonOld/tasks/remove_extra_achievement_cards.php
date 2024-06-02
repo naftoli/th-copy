@@ -1,10 +1,13 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
 
 $sql = "SELECT 
             first,
@@ -23,9 +26,9 @@ $sql = "SELECT
                 JOIN
             mashpiadb.classes c ON c.class_id = u.class_id
         WHERE
-            institution_id = 255 
+            institution_id in (" . implode(',', array_keys($schools)) . ")
                 AND resource_name = 'specific achievement card'
-                AND created > '2022-12-13'
+                AND created >= '2023-09-01'
         ORDER BY class_grade, class_sub, last, first";
 $res = $mysqli->query($sql);
 $rows = $res->fetch_all(MYSQLI_ASSOC);
@@ -65,51 +68,56 @@ foreach ($points as $user => $more) {
 
 //echo "<pre>"; print_r($points); echo "</pre>";
 //echo "<pre>"; print_r($totals); echo "</pre>";
-
-$deleted = 0;
-$success = true;
-$mysqli->begin_transaction();
-foreach ($duplicates as $point_id) {
-    if (! $mysqli->query("delete from pointsDB.user_points where user_point_id = " . $point_id)) {
-        $success = false;
-        break;
+if (isset($_POST['delete'])) {
+  echo 'here';
+  exit;
+    $deleted = 0;
+    $success = true;
+    $mysqli->begin_transaction();
+    foreach ($duplicates as $point_id) {
+        if (!$mysqli->query("delete from pointsDB.user_points where user_point_id = " . $point_id)) {
+            $success = false;
+            break;
+        } else $deleted++;
     }
-    else $deleted++;
-}
-if ($success) {
-    $mysqli->commit();
-    echo "Deleted " . $deleted . " rows.";
-} else {
-    $mysqli->rollback();
-    echo "Error deleting rows.";
+    if ($success) {
+        $mysqli->commit();
+        echo "Deleted " . $deleted . " rows.";
+    } else {
+        $mysqli->rollback();
+        echo "Error deleting rows.";
+    }
 }
 ?>
-<!--<!DOCTYPE html>-->
-<!--<html>-->
-<!--    <head>-->
-<!--        <meta charset="utf8" />-->
-<!--        <title>Extra Points</title>-->
-<!--        <style>-->
-<!--          tr, th, td {-->
-<!--            font-family: Arial, Helvetica, sans-serif;-->
-<!--            padding: 6px;-->
-<!--            font-size: 12px;-->
-<!--            border-bottom: 1px solid grey;-->
-<!--          }-->
-<!--        </style>-->
-<!--    </head>-->
-<!--    <body>-->
-<!--        <table>-->
-<!--            <tr>-->
-<!--                <th>Class</th>-->
-<!--                <th>Student</th>-->
-<!--                <th>Points being removed</th>-->
-<!--            </tr>-->
-<!--            --><?php
-//            foreach ($totals as $user => $total) {
-//                echo "<tr><td>" . $users[$user]['class'] . "</td><td>" . $users[$user]['name'] . "</td><td>" . $total . "</td></tr>";
-//            }
-//            ?>
-<!--        </table>-->
-<!--    </body>-->
-<!--</html>-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf8" />
+        <title>Extra Points</title>
+        <style>
+          tr, th, td {
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 6px;
+            font-size: 12px;
+            border-bottom: 1px solid grey;
+          }
+        </style>
+    </head>
+    <body>
+        <form action="" method="post">
+          <button name="delete">Delete all extra points</button>
+        </form>
+        <table>
+            <tr>
+                <th>Class</th>
+                <th>Student</th>
+                <th>Extra Points</th>
+            </tr>
+            <?php
+            foreach ($totals as $user => $total) {
+                echo "<tr><td>" . $users[$user]['class'] . "</td><td>" . $users[$user]['name'] . "</td><td>" . $total . "</td></tr>";
+            }
+            ?>
+        </table>
+    </body>
+</html>
