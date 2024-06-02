@@ -69,8 +69,6 @@ foreach ($points as $user => $more) {
 //echo "<pre>"; print_r($points); echo "</pre>";
 //echo "<pre>"; print_r($totals); echo "</pre>";
 if (isset($_POST['delete'])) {
-  echo 'here';
-  exit;
     $deleted = 0;
     $success = true;
     $mysqli->begin_transaction();
@@ -101,12 +99,18 @@ if (isset($_POST['delete'])) {
             font-size: 12px;
             border-bottom: 1px solid grey;
           }
+          button {
+            padding: 5px;
+            font-size: 14px;
+          }
         </style>
     </head>
     <body>
         <form action="" method="post">
-          <button name="delete">Delete all extra points</button>
+          <button id="delete" onclick="return false;">Delete all extra points</button>
+          <input type="hidden" name="delete" />
         </form>
+        <br />
         <table>
             <tr>
                 <th>Class</th>
@@ -120,4 +124,12 @@ if (isset($_POST['delete'])) {
             ?>
         </table>
     </body>
+    <script>
+      const deleteBtn = document.querySelector('#delete')
+      deleteBtn.addEventListener('click', function() {
+        let res = confirm('Are you sure you want to delete all the extra points? This cannot be undone!')
+        if (res) document.forms[0].submit()
+        return false
+      })
+    </script>
 </html>
