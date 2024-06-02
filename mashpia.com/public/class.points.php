@@ -288,6 +288,13 @@ class Points
     public static function scanMiles($school_id, $class_id, $user_id, $card) {
         $msg = '';
         $success = false;
+        if (!$card) {
+            echo json_encode([
+                'success'   => $success,
+                'msg'       => "No card number provided."
+            ]);
+            exit;
+        }
         $sql = "SELECT * FROM pointsDB.achievement_cards where card_serial = " . $card;
 //        echo $sql;
         $result = mysql_query($sql);
@@ -301,10 +308,13 @@ class Points
                 } else if ($row['class_id'] > 0 && $row['class_id'] != $class_id) {
                     $msg = "You are not in the correct platoon to scan this card.";
                 }
-                if ($msg) return json_encode([
-                    'success'   => false,
-                    'msg'       => $msg
-                ]);
+                if ($msg) {
+                    echo json_encode([
+                        'success' => $success,
+                        'msg' => $msg
+                    ]);
+                    exit;
+                }
 
                 // insert into user_points
                 $sql4 = "INSERT into pointsDB.user_points SET 
@@ -321,6 +331,7 @@ class Points
                 if (mysql_query($sql4)) {
                     $success = true;
                     $msg = "Congratulations! You have just been awarded " . $row['card_points'] . " points!";
+                    self::updateScanned($card);
                 } else {
                     $msg = "Error awarding points.";
                 }
@@ -343,23 +354,25 @@ class Points
     }
 
     public static function updateScanned($card) {
-        if (! $card) {
-            return [
-                'success'   => false,
-                'msg'       => 'No card number provided.'
-            ];
-        }
         $sql = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . $card;
-        if (! mysql_query($sql)) {
-            return [
-                'success'   => false,
-                'msg'       => $sql
-            ];
-        } else {
-            return [
-                'success'   => true
-            ];
-        }
+        mysql_query($sql);
+//        if (! $card) {
+//            return [
+//                'success'   => false,
+//                'msg'       => 'No card number provided.'
+//            ];
+//        }
+//        $sql = "UPDATE pointsDB.achievement_cards SET status = 'scanned' WHERE card_serial = " . $card;
+//        if (! mysql_query($sql)) {
+//            return [
+//                'success'   => false,
+//                'msg'       => $sql
+//            ];
+//        } else {
+//            return [
+//                'success'   => true
+//            ];
+//        }
 //        $qrys = [];
 //        $sqlCopy = "INSERT INTO pointsDB.achievement_cards_scanned SELECT * FROM pointsDB.achievement_cards WHERE card_serial = " . $card;
 //        $qrys[] = $sqlCopy;

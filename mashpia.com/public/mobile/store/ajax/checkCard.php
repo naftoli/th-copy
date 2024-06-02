@@ -17,6 +17,6 @@ $class = $row['class_id'];
 
 $msg = Points::scanMiles($school, $class, $user, $card);
 echo $msg;
-$scanned = json_decode($msg, true);
-if ($scanned['success']) Points::updateScanned($card);
+//$scanned = json_decode($msg, true);
+//if ($scanned['success']) Points::updateScanned($card);
 ?>
