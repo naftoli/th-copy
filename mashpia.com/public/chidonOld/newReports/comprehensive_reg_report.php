@@ -180,7 +180,7 @@ $trackYr = 5782;
                                 if ($chidonInfo[$user['user_id']][$year - $i]['date_paid'] > 0) {
                                     if (isset($chidonInfo[$user['user_id']][$year - $i]['highest_track']))
                                         echo $chidonInfo[$user['user_id']][$year - $i]['highest_track'];
-                                    else echo "didn't pass"; // will never show b/c there's no kids that registered for chidon experience but didn't pass
+//                                    else echo "didn't pass"; // shows for kids that pre-registered but didn't take tests yet. needs to be fixed.
                                 } else {
                                   // if we are in the same year as enrollment, only say 'enrolled'
                                     if (GlobalSettings::getChidonRegYear() == $year) echo "enrolled";
