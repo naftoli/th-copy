@@ -56,6 +56,8 @@ var state = {
     shipping_type: 1 // 1 or 2 or 3
 }
 
+var non_th_schools = {}
+
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
 
@@ -198,6 +200,7 @@ var registrationApp = function() {
         // setup non th school list
         $.post('api/getNonThSchools.php', function(result) {
             const res = JSON.parse(result)
+            non_th_schools = res
             const sorted = sortByVal(res)
             autocomplete(document.getElementById("non_th_school"), sorted)
             $("#non_th_school").blur( function() {
@@ -262,27 +265,43 @@ var registrationApp = function() {
             this.parentNode.appendChild(a);
             /*for each item in the array...*/
             for (i = 0; i < arr.length; i++) {
-                let key = arr[i][0]
-                let value = arr[i][1]
+                let school_id = arr[i][0]
+                let school_info = arr[i][1].split(',')
+                let school_name = school_info[0]
+                let city = school_info[1]
+                let state = school_info[2]
+                let zip = school_info[3]
+                let country = school_info[4]
+                let full_name = school_name + ', ' + city + ', ' + state + ', ' + zip + ', ' + country
+                let friendly = school_name
+                if (city) friendly += ', ' + city
+                if (state) friendly += ', ' + state
+                if (zip) friendly += ', ' + zip
+                if (country) friendly += ', ' + country
                 /*check if the item starts with the same letters as the text field value:*/
                 // if (value.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
                 // check if value contains the same letters as the text field value:
-                if (value.toUpperCase().includes(val.toUpperCase())) {
+                if (school_name.toUpperCase().includes(val.toUpperCase())) {
                     /*create a div element for each matching element:*/
                     b = document.createElement("div");
                     /*make the matching letters bold:*/
                     // find out where the match is
-                    let index = value.toUpperCase().indexOf(val.toUpperCase())
-                    b.innerHTML = value.substr(0, index);
-                    b.innerHTML += "<strong>" + value.substr(index, val.length) + "</strong>";
-                    b.innerHTML += value.substr(index + val.length);
+                    let index = full_name.toUpperCase().indexOf(val.toUpperCase())
+                    b.innerHTML = friendly.substr(0, index);
+                    b.innerHTML += "<strong>" + friendly.substr(index, val.length) + "</strong>";
+                    b.innerHTML += friendly.substr(index + val.length);
                     /*insert an input field that will hold the current array item's value:*/
-                    b.innerHTML += "<input type='hidden' value='" + value + "'>";
+                    b.innerHTML += "<input type='hidden' value='" + full_name + "'>";
                     /*execute a function when someone clicks on the item value (div element):*/
                     b.addEventListener("click", function(e) {
                         /*insert the value for the autocomplete text field:*/
-                        inp.value = this.getElementsByTagName("input")[0].value;
-                        document.getElementById('non_th_school_id').value = key
+                        let school_info = this.getElementsByTagName("input")[0].value.split(',')
+                        document.getElementById('non_th_school_id').value = school_id
+                        document.getElementById('non_th_school').value = school_info[0]
+                        document.getElementById('non-th-city').value = school_info[1]
+                        document.getElementById('non-th-state').value = school_info[2]
+                        document.getElementById('non-th-zip').value = school_info[3]
+                        document.getElementById('non-th-country').value = school_info[4]
                         /*close the list of autocompleted values,
                         (or any other open lists of autocompleted values:*/
                         closeAllLists();
@@ -714,10 +733,51 @@ var registrationApp = function() {
             if ( selected_user[ item.name ] == '' ||
                 ( selected_user[ item.name ] && selected_user[ item.name ] != item.value  )
             ) {
-                user_changed = true;
+                if (!user_changed) user_changed = true;
                 selected_user[ item.name ] = postData[ item.name ] = item.value;
             }
-        });
+        })
+
+        // make sure non th school field is not empty
+        if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
+            let non_th_school_id = parseInt($("#non_th_school_id").val())
+            // if (non_th_school_id == 0) {
+            let non_th_school = $("#non_th_school").val().trim()
+            let non_th_city = $("#non-th-city").val().trim()
+            let non_th_state = $("#non-th-state").val().trim()
+            let non_th_zip = $("#non-th-zip").val().trim()
+            let non_th_country = $("#non-th-country").val().trim()
+
+            // make sure city has at least 4 alphanumeric characters
+            if (non_th_school.length < 4) {
+                return showError("You must enter a valid Non TH School Name")
+            }
+            if (non_th_city.length < 3) {
+                return showError("You must enter a valid Non TH School City")
+            }
+            // make sure state has at least 2 letters
+            if (non_th_state.length < 2) {
+                return showError("You must enter a valid Non TH School State")
+            }
+            // make sure zip has at least 4 alphanumeric characters
+            if (non_th_zip.length < 4) {
+                return showError("You must enter a valid Non TH School Zip/Postal Code")
+            }
+            // make sure country has at least 2 letters
+            if (non_th_country.length < 2) {
+                return showError("You must enter a valid Non TH School Country")
+            }
+            // }
+            // updating non th schools
+            postData['non_th_school_id'] = non_th_school_id
+            postData['non_th_school'] = non_th_school
+            postData['non_th_city'] = non_th_city
+            postData['non_th_state'] = non_th_state
+            postData['non_th_zip'] = non_th_zip
+            postData['non_th_country'] = non_th_country
+            user_changed = true // force user changed
+        }
+
         // if the user changed update him in the background...
         if ( user_changed ) {
             state.selected_users[ current_index ] = selected_user;
@@ -924,15 +984,6 @@ var registrationApp = function() {
             }
         }
 
-        // make sure non th school field is not empty
-        if ( [ 269, 61 ].includes( selected_user.school.school_id ) ) {
-            var non_th_school = $("#non_th_school_id").val();
-            if (non_th_school == 0 || non_th_school == '0' || non_th_school == '-1' || non_th_school == -1) {
-                non_th_school = $("#non_th_school").val().trim()
-                if (non_th_school.length < 3) return showError(Err10);
-            }
-        }
-
         // validate that they have accepted to be used in media campaigns
         // if ( $(event.target).find( "#media" )[0].checked ){
         //     $(event.target).find( "#media" )[0].checked = false;
@@ -1102,12 +1153,17 @@ var registrationApp = function() {
                 saveAddress()
                   .then(function (saved) {
                       if (saved) nextStep()
+                      else {
+                          alert("You must enter a valid address before continuing")
+                          return false
+                      }
                   })
                   .catch(function (err) {
                       alert(err)
                   })
             }
         }
+
         nextStep()
     }
 
@@ -2115,10 +2171,15 @@ var templates = function(){
             // determine if we need to show non th school fields or not
             if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
                 if (user.non_th_school) {
+                    let school_info = non_th_schools[user.non_th_school_id].split(',')
                     $('#non_th_school_id').val(user.non_th_school_id);
                     $('#non_th_school').val(user.non_th_school);
+                    $("#non-th-city").val(school_info[1])
+                    $("#non-th-state").val(school_info[2])
+                    $("#non-th-zip").val(school_info[3])
+                    $("#non-th-country").val(school_info[4])
                 }
-                $("#non_th_school_id_div").show()
+                $("#non_th_school_div").show()
                 // if (!user.non_th_school_id == 0) $("#non_th_school_div").show()
             }
 

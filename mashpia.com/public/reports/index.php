@@ -152,6 +152,14 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
               </div>
             </a>
           </div>
+          <h2>Non TH Schools</h2>
+          <div id="action-links">
+            <a href="/non_th_schools/report.html">
+              <div class="button">
+                <img src="/images/icon_report.png" height="32" alt="reports"/>
+                <span class="link-text">Non TH Schools Report</span>
+              </div>
+            </a>
         <?} // end admin only links ?>
         </div>
         

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous" />
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    #main {
+      margin-left: 2%;
+      margin-right: 2%;
+    }
+    button {
+      padding: 10px;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="main"></div>
+</body>
+<script type="text/babel">
+  const { useState, useEffect } = React
+  const { createRoot } = ReactDOM
+
+  const App = () => {
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
+
+    useEffect(() => {
+      fetch('/mobile/registration/api/getNonThSchools.php')
+        .then(response => response.json())
+        .then(data => {
+          let schools = []
+          for (let id in data) {
+            let row = data[id]
+            let school_info = row.split(',')
+            let school = {
+              id: id,
+              school_name: school_info[0],
+              city: school_info[1],
+              state: school_info[2],
+              zip: school_info[3],
+              country: school_info[4]
+            }
+            schools.push(school)
+          }
+          setData(schools)
+          setLoading(false)
+        })
+    }, [])
+
+    const printPage = () => {
+      window.print()
+    }
+
+    return (
+      <div>
+        <h1>Non TH Schools Report</h1>
+        <button onClick={printPage}>Print Report</button>
+        <br/>
+        {loading ? (
+          <div className="spinner-border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+        ) : (
+          <table className="table">
+            <thead>
+            <tr>
+              <th scope="col">Non TH School ID</th>
+              <th scope="col">School Name</th>
+              <th scope="col">City</th>
+              <th scope="col">State</th>
+              <th scope="col">Zip</th>
+              <th scope="col">Country</th>
+            </tr>
+            </thead>
+            <tbody>
+            {data.map(item => (
+              <tr key={item.id}>
+                <th>{item.id}</th>
+                <td>{item.school_name}</td>
+                <td>{item.city}</td>
+                <td>{item.state}</td>
+                <td>{item.zip}</td>
+                <td>{item.country}</td>
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        )}
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<App />)
+</script>
+</html>

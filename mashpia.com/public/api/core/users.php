@@ -218,6 +218,8 @@ class UsersRouter {
                     $user->{ $key } = $value;
                 }
             }
+            if (isset($_POST['non_th_school'])) $user->non_th_school_id = $this->setupNonThSchool($_POST);
+
             if ( !$user->is_valid() || !$user->save() )
                 json_error('Could not update soldier. Please check to make sure that the data is valid', 'CORE-USERS-90');
             // update the birthday missions if dob was changed
@@ -234,6 +236,45 @@ class UsersRouter {
         }
 
         json_response( $user->fullDetailSerialize() );
+    }
+
+    private function setupNonThSchool(array $info) {
+        global $MASHPIA_DB;
+        $id = $info['non_th_school_id'] ?? 0;
+        $school = $info['non_th_school'];
+        $city = $info['non_th_city'];
+        $state = $info['non_th_state'];
+        $zip = $info['non_th_zip'];
+        $country = $info['non_th_country'];
+        if ($id) {
+            $stmt = $MASHPIA_DB->prepare("
+                UPDATE non_th_schools 
+                SET school_name = :school, city = :city, state = :state, zip = :zip, country = :country 
+                WHERE non_th_school_id = :id
+            ");
+            $stmt->execute([
+                ':school' => $school,
+                ':city' => $city,
+                ':state' => $state,
+                ':zip' => $zip,
+                ':country' => $country,
+                ':id' => $id
+            ]);
+            return $id;
+        } else {
+            $stmt = $MASHPIA_DB->prepare("
+                INSERT INTO non_th_schools (school_name, city, state, zip, country) 
+                VALUES (:school, :city, :state, :zip, :country)
+            ");
+            $stmt->execute([
+                ':school' => $school,
+                ':city' => $city,
+                ':state' => $state,
+                ':zip' => $zip,
+                ':country' => $country
+            ]);
+            return $MASHPIA_DB->lastInsertId();
+        }
     }
 
     public function destroy( $id ) {

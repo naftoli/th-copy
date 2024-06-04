@@ -329,16 +329,34 @@
             </div>
           </div>
         </div>
-        <div class="row hide" id="non_th_school_id_div">
-          <input type="hidden" name="non_th_school_id" id="non_th_school_id" value="-1" />
-          <div class="col-12">
-            <label for="non_th_school_id" class="i18n" data-key="NameSchoolAttending">
-              Name of School Attending During Year (Actual school name, not MyShliach/Anash Kinder).
-            </label>
-            <div class="input-group">
-<!--              <select class="form-control" id="non_th_school_id" name="non_th_school_id" autocomplete="on">-->
-<!--              </select>-->
-              <input type="text" class="form-control" id="non_th_school" name="non_th_school" />
+        <div class="hide" id="non_th_school_div">
+          <div class="row">
+            <input type="hidden" name="non_th_school_id" id="non_th_school_id" value="0" />
+            <div class="col-lg-6 col-12">
+              <label for="non_th_school">
+                Name of School Attending During Year (Actual school name, not MyShliach/Anash Kinder).
+              </label>
+              <div class="input-group">
+                <input type="text" class="form-control" id="non_th_school" name="non_th_school" />
+              </div>
+            </div>
+            <div class="col-lg-6 col-12">
+              <label for="non-th-city"><br />School City</label>
+              <input type="text" name="non-th-city" id="non-th-city" class="form-control" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4 col-12">
+              <label for="non-th-state" style="margin-top: 10px;">School State</label>
+              <input type="text" name="non-th-state" id="non-th-state" class="form-control" />
+            </div>
+            <div class="col-lg-4 col-12" style="margin-top: 10px;">
+              <label for="non-th-zip">School Zip/Postal Code</label>
+              <input type="text" name="non-th-zip" id="non-th-zip" class="form-control" />
+            </div>
+            <div class="col-lg-4 col-12" style="margin-top: 10px;">
+              <label for="non-th-country">School Country</label>
+              <input type="text" name="non-th-country" id="non-th-country" class="form-control" />
             </div>
           </div>
         </div>
