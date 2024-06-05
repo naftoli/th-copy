@@ -769,7 +769,7 @@ class ChidonTests
         }
     }
 
-    public function getSettings($school_id, $class_id, $user_id) {
+    public function getSettings($school_id, $class_id, $user_id, $year = 0) {
         $info = [];
         foreach(['passing_avgs', 'final_passing_avgs', 'test_levels'] as $table) {
             $table = 'chidon_' . $table;
@@ -779,7 +779,7 @@ class ChidonTests
                     AND user_id = :id
                 ");
                 $stmt->execute([
-                    ':year' => $this->year,
+                    ':year' => $year ?? $this->year,
                     ':id'   => $user_id
                 ]);
             } else if ($class_id > 0) {
@@ -788,7 +788,7 @@ class ChidonTests
                     AND class_id = :id
                 ");
                 $stmt->execute([
-                    ':year' => $this->year,
+                    ':year' => $year ?? $this->year,
                     ':id'   => $class_id
                 ]);
             } else if ($school_id > 0) {
@@ -797,7 +797,7 @@ class ChidonTests
                     AND school_id = :id
                 ");
                 $stmt->execute([
-                    ':year' => $this->year,
+                    ':year' => $year ?? $this->year,
                     ':id'   => $school_id
                 ]);
             }

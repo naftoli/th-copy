@@ -13,7 +13,7 @@ $super = $admin_user['auth'] == 'super';
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $ct = new ChidonTests();
 $tracks = $ct->getTypes();
@@ -72,6 +72,14 @@ if (count($schools) == 1) {
   PLEASE NOTE: The settings for School/Grade/Child are all different, so changing one will NOT CHANGE the others.
 </div>
 <br />
+<div id="yearSelection">
+  Choose Year:
+  <select name="yearSelect" id="yearSelect">
+    <?php for ($i = $year; $i > 5783; $i--) {
+        echo "<option value='$i'>$i</option>";
+    } ?>
+  </select>
+</div>
 <div id="baseSelection">
   Choose Base:
   <select name="baseSelect" id="baseSelect" onchange="setPlatoons()" <?= $selected . $disabled ?>>
@@ -93,11 +101,12 @@ if (count($schools) == 1) {
   <h2></h2>
   <div id="settingsTable">
     <fieldset style="float: left;">
-      <legend>Avg Score</legend>
+      <legend>Avg for Tests</legend>
       <form id="avgScore">
         <p>
           <?php
           foreach ($tracks as $type => $desc) {
+            if ($desc == 'Iyun') break;
             echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' checked /> $desc ";
             echo "<span id='chidon_passing_avgs_$type'></span>";
             echo "<br />";
@@ -125,6 +134,7 @@ if (count($schools) == 1) {
         <p>
             <?php
             foreach ($tracks as $type => $desc) {
+                if ($desc == 'Iyun') break;
                 echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' checked /> $desc ";
                 echo "<span id='chidon_final_passing_avgs_$type'></span>";
                 echo "<br />";
@@ -143,6 +153,55 @@ if (count($schools) == 1) {
         </select>
         <br />
         <button class="save" onclick="save('avgScoreFinal'); return false;">Save</button>
+      </form>
+    </fieldset>
+
+    <div style="clear: both;"></div>
+    <br />
+
+    <fieldset style="float: left;">
+      <legend>Iyun Tests Avg</legend>
+      <form id="avgScoreIyun">
+        <p>
+          <input type="checkbox" class="tracks" name="tracks[]" value="genius" checked /> Iyun
+          <span id='chidon_passing_avgs_genius'></span>
+          <br />
+        </p>
+        <select name="avg" id="avg_score_iyun">
+          <option value="0">Select Avg</option>
+          <?php
+          $i = 80;
+          if ($super) $i = 50;
+          for (; $i <= 100; $i += 5) {
+            echo "<option value='$i'>$i</option>";
+          }
+          ?>
+        </select>
+        <br />
+        <button class="save" onclick="save('avgScoreIyun'); return false;">Save</button>
+      </form>
+    </fieldset>
+
+    <fieldset style="float: right;">
+      <legend>Iyun Final Avg</legend>
+      <form id="avgFinalIyun">
+        <p>
+          <input type="checkbox" class="tracks" name="tracks[]" value="genius" checked /> Iyun
+          <span id='chidon_final_passing_avgs_genius'></span>
+          <br />
+        </p>
+        <select name="avgFinal" id="avg_final_iyun">
+          <option value="0">Select Avg</option>
+            <?php
+            $i = 80;
+            if ($super) $i = 50;
+            for (; $i <= 100; $i += 5) {
+                echo "<option value='$i'>$i</option>";
+            }
+            ?>
+        </select>
+        <br />
+        <button class="save" onclick="save('avgFinalIyun'); return false;">Save</button>
       </form>
     </fieldset>
 
@@ -183,13 +242,14 @@ if (count($schools) == 1) {
   })
 
   async function getSettings() {
+    let year = document.getElementById('yearSelect').value
     let school_id = document.getElementById('baseSelect').value
     let class_id = document.getElementById('platoonSelect') ? document.getElementById('platoonSelect').value : 0
     let user_id = document.getElementById('userSelect') ? document.getElementById('userSelect').value : 0
     const res = await fetch('api/getSettings.php', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({ school_id, class_id, user_id })
+      body: JSON.stringify({ school_id, class_id, user_id, year })
     })
     const settings = await res.json()
     console.log(settings)
@@ -295,6 +355,7 @@ if (count($schools) == 1) {
   function validateForm(id, info) {
     switch (id) {
       case 'avgScore':
+      case 'avgScoreIyun':
         if (!info.get('avg') || info.get('avg') == 0) {
           alert('Please select an average score')
           return false
@@ -305,6 +366,7 @@ if (count($schools) == 1) {
         }
         break
       case 'avgScoreFinal':
+      case 'avgFinalIyun':
         if (!info.get('avgFinal') || info.get('avgFinal') == 0) {
           alert('Please select an average score')
           return false

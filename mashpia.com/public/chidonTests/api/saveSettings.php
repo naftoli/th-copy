@@ -6,7 +6,7 @@ $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $school_id = $_POST['school_id'];
 $class_id = $_POST['class_id'];
@@ -26,11 +26,14 @@ if ($user_id > 0) {
     $school_id = 0;
 }
 
+echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+
 $error_msg = '';
 $success = true;
 $elem = $_POST['elem'];
 switch ($elem) {
     case 'avgScore':
+    case 'avgScoreIyun':
         $tracks = $_POST['tracks'];
         $avg = $_POST['avg'];
         $stmt = $MASHPIA_DB->prepare("
@@ -67,6 +70,7 @@ switch ($elem) {
         }
         break;
     case 'avgScoreFinal':
+    case 'avgFinalIyun':
         $tracks = $_POST['tracks'];
         $avg = $_POST['avgFinal'];
         $stmt = $MASHPIA_DB->prepare("
