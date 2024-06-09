@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimPurchases.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getChidonRegYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
@@ -20,7 +20,7 @@ function purchaseItems() {
     $address = "";
     $state = "";
 
-    $description = "Hey Teves Sale - $$amount, Admin ID: " . $admin_id;
+    $description = "Yahadus Book Sale (end of yr) - $$amount, Admin ID: " . $admin_id;
 
     if ($total > 0) {
         // figure out if we are charging a credit card on file or a new one
@@ -106,7 +106,7 @@ function saveToDb($info) {
     $m = new MivtzoimPurchases();
     if ( $m->createPurchase( $info, $details ) ) {
         // send email
-        $m->sendEmail($info, $list, $cc_info, 'Hei Teves');
+        $m->sendEmail($info, $list, $cc_info, 'Yahadus Book Sale');
         return true;
     }
     else return false;

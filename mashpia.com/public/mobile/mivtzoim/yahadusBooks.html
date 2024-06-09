@@ -127,9 +127,8 @@
         <div style="font-size: larger">
           Get a head start for next year and order your Yahadus books at a great price!<br /><br />
           Please select which book/s you want for each child.<br /><br />
-          The sale ends on Erev Shavous (Thursday, 5 Sivan/May 25th).<br /><br />
-          We will start shipping all books to the schools <b>after</b> the sale is over, with the goal for them to arrive
-          before the end of the school year. Please be patient.<br /><br />
+<!--          We will start shipping all books to the schools <b>after</b> the sale is over, with the goal for them to arrive-->
+<!--          before the end of the school year. Please be patient.<br /><br />-->
           Please note that not all schools are participating in the sale, if you do not see the option below to
           add books to your cart, it means that your school is one of them, please click
           <a href="https://www.thechidon.com/resources/textbooks/">here</a> to order. <br /><br />
@@ -144,9 +143,9 @@
               {{#each children}}
                 <div class="child" id="{{user_id}}">
                   <div style="font-size: 14px;">
-                                        <span>
-                                            <span style="font-size: 18px;"><b>{{rank}}</b> {{first}} {{last}}</span><br />
-                                        </span>
+                    <span>
+                        <span style="font-size: 18px;"><b>{{rank}}</b> {{first}} {{last}}</span><br />
+                    </span>
                     <span class="listOfItems"></span>
                   </div>
                 </div>
@@ -229,19 +228,18 @@
   const setupItems = () => {
     $.post('ajax/getItems.php', { type }, function(result) {
       items = JSON.parse(result)
-      let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>Price</th><th>In Stock</th></tr>"
+      let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>Price</th></tr>"
       for (let item of items) {
-        html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock}"`
+        html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" min="1"`
         if (parseInt(item.stock) === 0) html += ' disabled';
         html += ` /></td><td style="padding: 0;"><image src="images/${item.thumb}" width="65px" /></td>
                   <td style="padding: 2px;">${item.item}</td><td><strike>${item.msrp}</strike><br />
                   <span style="color: red;">${item.sale}</span></td>
-                  <td>${item.stock > 0 ? item.stock : 'SOLD OUT'}</td></tr>`
+                  </tr>`
+        // <td>${item.stock > 0 ? item.stock : 'SOLD OUT'}</td>
       }
       html += "</table><hr />"
       $(".listOfItems").each( function() {
-        let id = $(this).parent().parent().attr('id')
-
         $(this).empty().append(html)
       })
     })
@@ -254,7 +252,6 @@
       if (qty > 0) {
         const id = $(this).parent().parent().attr('id')
         const info = id.split(':')
-        const item_id = info[0]
         const price = info[1]
         total += parseInt(price) * qty
       }
@@ -300,7 +297,7 @@
         cvv = $("#x_card_code").val().trim();
 
         if (!name || !num || !exp || !zip || !cvv) {
-          alert("You must fill in all fields.");
+          alert("You must fill in all credit card info.");
           return false;
         }
 
@@ -312,18 +309,18 @@
 
       // check that amounts do not exceed max
       let exceeded = false
-      $(".qty").each( function() {
-        if ($(this).val()) {
-          const qty = $(this).val()
-          const max = $(this).attr('max')
-          if (parseInt(qty) > parseInt(max)) {
-            alert("You cannot enter more than " + max + " for this item.")
-            $(this).focus()
-            $(this).select()
-            exceeded = true
-          }
-        }
-      })
+      // $(".qty").each( function() {
+      //   if ($(this).val()) {
+      //     const qty = $(this).val()
+      //     const max = $(this).attr('max')
+      //     if (parseInt(qty) > parseInt(max)) {
+      //       alert("You cannot enter more than " + max + " for this item.")
+      //       $(this).focus()
+      //       $(this).select()
+      //       exceeded = true
+      //     }
+      //   }
+      // })
 
       if (!exceeded) {
         // disable puchase button so that they don't accidentally or purposely click it again
@@ -348,7 +345,7 @@
         info.type = type
         info.purchases = getListOfSeforim()
 
-        $.post('ajax/purchaseSeforim.php', { info: JSON.stringify(info)}, function (info) {
+        $.post('ajax/purchaseSeforim.php', { info: JSON.stringify(info) }, function (info) {
           var result = JSON.parse(info);
           if (result.success) {
             alert("Thank you! Your purchase(s) have been saved. Your child(ren)'s school will receive them for your child(ren).");
@@ -364,47 +361,44 @@
     }
   }
 
-  document.addEventListener("DOMContentLoaded", function(event) {
+  document.addEventListener("DOMContentLoaded", async function(event) {
     // make sure we have a cookie
     admin = Cookies.get('admin');
     if (!admin) { window.close(); }
 
     // load children
-    $.post("/mobile/chidon/ajax/getYear.php", function( year ) {
-      $.post('/mobile/reg/ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
-        if ( success == -1 ) {
-          window.location = "index.html";
-        } else {
-          var data = $.parseJSON( success );
-          var children = data.children;
+    const year = await $.post("/mobile/chidon/ajax/getYear.php")
+    const data = await $.post('/mobile/reg/ajax/getChildren.php', { admin : admin, year : year })
+    if (data == -1) {
+      window.location = "index.html";
+    } else {
+      let children = JSON.parse(data).children;
 
-          var children_to_show = {}
-          var exceptions = [612, 61, 269, 66, 112, 55, 110, 180, 427, 709, 3, 265, 432]
+      let children_to_show = {}
+      let exceptions = [3, 265, 427, 432]
 
-          for (var c in children) {
-            var child = children[c];
-            if (exceptions.includes(parseInt(child.school_id))) continue;
-            children_to_show[c] = child;
-          }
+      for (let c in children) {
+        let child = children[c];
+        if (exceptions.includes(parseInt(child.school_id))) continue;
+        children_to_show[c] = child;
+      }
 
-          // Grab the template script
-          var tplScript = $("#childrenTpl").html();
+      // Grab the template script
+      let tplScript = $("#childrenTpl").html();
 
-          // Compile the template
-          var tpl = Handlebars.compile( tplScript );
+      // Compile the template
+      let tpl = Handlebars.compile(tplScript);
 
-          // Pass our data to the template
-          var html = tpl( { children : children_to_show } );
+      // Pass our data to the template
+      let html = tpl({children: children_to_show});
 
-          // Add the compiled html to the page
-          $(".chilrens").append( html );
+      // Add the compiled html to the page
+      $(".chilrens").append(html);
 
-          setupItems()
+      setupItems()
 
-          $("#purchases").show();
-        }
-      });
-    })
+      $("#purchases").show();
+    }
 
     $(document).on('keyup', '.qty', calcTotal)
     $(document).on('change', '.qty', calcTotal)
