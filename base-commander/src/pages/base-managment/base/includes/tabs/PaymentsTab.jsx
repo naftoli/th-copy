@@ -12,12 +12,12 @@ import { validateCC } from 'functions/validations';
 
 const CardDisplay = ({ info, profileId, onDelete }) => {
   let issuer, number;
-  if (info.creditCard) {
+  if (info.bankAccount) {
+    issuer = 'bank';
+    number = info.bankAccount.accountNumber.replace('XXXX', '**** **** **** ');
+  } else {
     issuer = info.creditCard.cardType === 'AmericanExpress' ? 'Amex' : info.creditCard.cardType.toLowerCase();
     number = info.creditCard.cardNumber.replace('XXXX', '**** **** **** ');
-  } else {
-    issuer = 'bank';
-    number = info.accountNumber.replace('XXXX', '**** **** **** ');
   }
 
   const onClick = ( e ) => onDelete( profileId );
