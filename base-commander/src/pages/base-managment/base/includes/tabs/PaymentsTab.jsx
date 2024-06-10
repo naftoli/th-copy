@@ -69,7 +69,7 @@ export class PaymentsTab extends Component {
       console.log( profile.paymentProfiles)
       cards = profile.paymentProfiles.map( ( profile, index ) =>
         <CardDisplay key={ index }
-           { profile.payment }
+           info={ profile.payment }
            profileId={ profile.customerPaymentProfileId }
            onDelete={ this.deleteCard } />
     )}
