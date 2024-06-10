@@ -16,8 +16,8 @@ const CardDisplay = ({ cardType, cardNumber, profileId, onDelete }) => {
   if ( cardType === 'AmericanExpress' ) {
     issuer = 'amex'; // fix AMEX
     number = cardNumber.replace( 'XXXX', '**** ****** *' );
-  } else {
-    issuer = cardType ? cardType.toLowerCase() : ''; // fix case
+  } else if (cardType) {
+    issuer = cardType.toLowerCase(); // fix case
     number = cardNumber.replace( 'XXXX', '**** **** **** ' );
   }
 
