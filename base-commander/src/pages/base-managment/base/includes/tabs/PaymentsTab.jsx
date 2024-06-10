@@ -10,36 +10,15 @@ import { deletePayment, addPayment } from 'store/base/bases/operations';
 import { toast } from 'react-toastify';
 import { validateCC } from 'functions/validations';
 
-const CardDisplay = ({ cardType, cardNumber, profileId, onDelete }) => {
+const CardDisplay = ({ info, profileId, onDelete }) => {
   let issuer, number;
-  // Amex is special no?
-  if ( cardType === 'AmericanExpress' ) {
-    issuer = 'amex'; // fix AMEX
-    number = cardNumber.replace( 'XXXX', '**** ****** *' );
+  if (info.creditCard) {
+    issuer = info.creditCard.cardType === 'AmericanExpress' ? 'Amex' : info.creditCard.cardType.toLowerCase();
+    number = info.creditCard.cardNumber.replace('XXXX', '**** **** **** ');
   } else {
-    issuer = cardType.toLowerCase(); // fix case
-    number = cardNumber.replace( 'XXXX', '**** **** **** ' );
+    issuer = 'bank';
+    number = info.accountNumber.replace('XXXX', '**** **** **** ');
   }
-
-  const onClick = ( e ) => onDelete( profileId );
-
-  return (
-    <div className='CardDisplay'>
-      <Cards
-        number={ number } preview
-        name={' '} expiry={''} cvc={'****'}
-        issuer={ issuer } focused='number' />
-      <Button color='danger' role='button' onClick={ onClick }>
-        <FontAwesome icon='trash'/> Delete Card
-      </Button>
-    </div>
-  )
-}
-
-const CardDisplayBank = ({ info, profileId, onDelete }) => {
-  let issuer, number;
-  issuer = 'bank'
-  number = info.accountNumber.replace( 'XXXX', '**** **** **** ' );
 
   const onClick = ( e ) => onDelete( profileId );
 
@@ -87,20 +66,12 @@ export class PaymentsTab extends Component {
 
     let cards;
     if ( profile && profile.paymentProfiles.length > 0 ) {
-      cards = profile.paymentProfiles.map( ( profile, index ) => {
-        return (
-          profile.payment.creditCard ? (
-            <CardDisplay key={ index }
-              { ...profile.payment.creditCard }
-              profileId={ profile.customerPaymentProfileId }
-              onDelete={ this.deleteCard } />
-        ) : (
-          <CardDisplayBank key={ index }
-            { ...profile.payment }
-            profileId={ profile.customerPaymentProfileId }
-            onDelete={ this.deleteCard } />
-        )
-      )}
+      console.log( profile.paymentProfiles)
+      cards = profile.paymentProfiles.map( ( profile, index ) =>
+        <CardDisplay key={ index }
+           { ...profile.payment.creditCard }
+           profileId={ profile.customerPaymentProfileId }
+           onDelete={ this.deleteCard } />
     )}
 
     return (
