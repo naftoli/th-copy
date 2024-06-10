@@ -67,6 +67,7 @@ export class PaymentsTab extends Component {
 
     let cards;
     if ( profile && profile.paymentProfiles.length > 0 ) {
+      console.log( profile.paymentProfiles)
       cards = profile.paymentProfiles.map( ( profile, index ) => 
         <CardDisplay key={ index } 
           { ...profile.payment.creditCard } 
