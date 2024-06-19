@@ -675,19 +675,7 @@ Tzivos Hashem HQ</body></html>";
             [$subject, $message] = $this->getInfoForEmail($items);
             $bcc = "enrollment@mashpia.com";
 //                $headers[] = "Bcc: " . $bcc;
-            if ($_SERVER['HTTP_HOST'] == 'mashpia.com') {
-                $headers[] = 'MIME-Version: 1.0';
-                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
-                $headers[] = "Bcc: " . $bcc;
-                if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
-                    $success = false;
-                    $msg = "Your information has been saved but there was an error sending the confirmation email.\n
-                        Please contact HQ (718-907-8884) to check that your information was saved correctly.";
-                    json_error($msg);
-                    @mail($bcc, $subject, $message, implode("\r\n", $headers));
-                }
-            } else {
+            if (in_array($_SERVER['HTTP_HOST'], ['tzivos.local', 'localhost'])) {
                 $mailer = new PHPMailer();
                 try {
                     // server settings
@@ -725,6 +713,18 @@ Tzivos Hashem HQ</body></html>";
                 } catch (Exception $e) {
                     $success = false;
                     json_error('Your information has been saved but there was an error sending the confirmation email.\nError: ' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
+                }
+            } else {
+                $headers[] = 'MIME-Version: 1.0';
+                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
+                $headers[] = "Bcc: " . $bcc;
+                if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
+                    $success = false;
+                    $msg = "Your information has been saved but there was an error sending the confirmation email.\n
+                        Please contact HQ (718-907-8884) to check that your information was saved correctly.";
+                    json_error($msg);
+                    @mail($bcc, $subject, $message, implode("\r\n", $headers));
                 }
             }
         } else {
