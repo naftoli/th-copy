@@ -668,7 +668,7 @@ Tzivos Hashem HQ</body></html>";
             [$subject, $message] = $this->getInfoForEmail($items);
             $bcc = "enrollment@mashpia.com";
 //                $headers[] = "Bcc: " . $bcc;
-//            if ($_SERVER['HTTP_HOST'] == 'tzivos.local') { // testing
+            if ($_SERVER['HTTP_HOST'] == 'tzivos.local') { // testing
                 $mailer = new PHPMailer(true);
                 try {
                     // server settings
@@ -676,19 +676,19 @@ Tzivos Hashem HQ</body></html>";
                     $mailer->isSMTP();
                     $mailer->SMTPAuth = true;
                     $mailer->AuthType = 'LOGIN';
-                    if ($_SERVER['HTTP_HOST'] == 'tzivos.local') {
+//                    if ($_SERVER['HTTP_HOST'] == 'tzivos.local') {
                         $mailer->Host = 'smtp.gmail.com';
                         $mailer->Username = 'naftolir@gmail.com';
                         $mailer->Password = 'rnkkcgdkmfytaodo';
                         $mailer->SMTPSecure = 'tls';
                         $mailer->Port = 587;
-                    } else {
-                        $mailer->Host = 'host2.tzivoshashem.com';
-                        $mailer->Username = 'enrollment@mashpia.com';
-                        $mailer->Password = 'Naftoli@8770!';
-                        $mailer->SMTPSecure = 'ssl';
-                        $mailer->Port = 456;
-                    }
+//                    } else {
+//                        $mailer->Host = 'host2.tzivoshashem.com';
+//                        $mailer->Username = 'enrollment@mashpia.com';
+//                        $mailer->Password = 'Naftoli@8770!';
+//                        $mailer->SMTPSecure = 'ssl';
+//                        $mailer->Port = 456;
+//                    }
                     // recipients
                     $mailer->isHTML();
                     $mailer->Subject = $subject;
@@ -704,21 +704,22 @@ Tzivos Hashem HQ</body></html>";
                     }
                 } catch (Exception $e) {
 //                    $MASHPIA_DB->commit();
-                    json_error('Your information has been saved but there was an error sending confirmation email.\n' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
+                    json_error('Your information has been saved but there was an error sending the confirmation email.\n' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
                 }
-//            } else {
-//                $headers[] = 'MIME-Version: 1.0';
-//                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-//                $headers[] = 'From: HQ Office <dev@tzivoshashem.org>';
-//                $headers[] = "Bcc: " . $bcc;
-//                if (! mail($to, $subject, $message, implode("\r\n", $headers))) {
-////                    $MASHPIA_DB->commit();
-//                    json_error('Your information has been saved but there was an error sending confirmation email.\n' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
-//                }
-//            }
+            } else {
+                $headers[] = 'MIME-Version: 1.0';
+                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                $headers[] = 'From: HQ Office <dev@tzivoshashem.org>';
+                $headers[] = "Bcc: " . $bcc;
+                if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
+//                    $MASHPIA_DB->commit();
+                    json_error('Your information has been saved but there was an error sending the confirmation email.');
+                    @mail($bcc, $subject, $message, implode("\r\n", $headers));
+                }
+            }
         } else {
 //            $MASHPIA_DB->commit();
-            json_error('Your information has been saved but there was an error sending confirmation email.\nNo email address found for this account.');
+            json_error('Your information has been saved but there was an error sending the confirmation email.\nNo email address found for this account.');
         }
     }
 }
