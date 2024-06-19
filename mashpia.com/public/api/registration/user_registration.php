@@ -598,7 +598,6 @@ class UserRegistrationRouter {
                     $message .= "<p>Sweater Size: " . $detail['reg_info']['size'] . "</p>";
                     $message .= "<p>Book Number: " . $detail['reg_info']['book'] . "</p>";
                     $message .= "<p>Yarmulka Size: " . $detail['reg_info']['yarmulka'] . "</p>";
-                    $message .= "<p>Name Preference: " . $detail['reg_info']['name_pref'] . "</p>";
                     $message .= "<p>Track: <b>" . $tracks[ $detail['reg_info']['track'] ] . "</b></p>";
                     if ($detail['reg_info']['purchased']) {
                         $location = $detail['purchasedWhere'];
