@@ -5,6 +5,8 @@ require_once(__DIR__ . '/../../header.php');
 require_once(__DIR__ . '/../../class.globalSettings.php');
 $year = GlobalSettings::getRegistrationYear();
 
+require_once(__DIR__ . '/../../chidon_shipping/class.chidonShipping.php');
+
 // get the totals
 $totals = [];
 $total_query = mysql_query(
@@ -16,7 +18,7 @@ $total_query = mysql_query(
 $grand_total = 0;
 while ($row = mysql_fetch_assoc($total_query)) {
     $grand_total += intval($row['total']);
-    $totals[getDescription($row['type'])] = intval($row['total']);
+    $totals[ChidonShipping::getDescription($row['type'])] = intval($row['total']);
 }
 ksort($totals);
 
@@ -190,44 +192,3 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     })
   </script>
   </html>
-<?php
-// lookup description for registration charges table by codeOnly property
-function getDescription($code)
-{
-    $descriptions = [
-        'chayolei' => 'CTH Enrollment',
-        'shipping' => 'Shipping Fee (before the codes)',
-
-        'THE' => 'CTH Enrollment',
-        'HACH' => 'Hachayol Subscription',
-
-        'THAKUSA' => 'CTH AK Shipping USA',
-        'THAKCAN' => 'CTH AK Shipping CAN',
-        'THAKINT' => 'CTH AK Shipping INT',
-
-        'THMSUSA' => 'CTH MS Shipping USA',
-        'THMSCAN' => 'CTH MS Shipping CAN',
-        'THMSINT' => 'CTH MS Shipping INT',
-
-        'LDE' => 'Chidon Enrollment',
-        'KHKE' => 'KHK Enrollment',
-        'LDE:MYSLDS-10' => 'MyShliach chidon enrollment shipping',
-        'LDE:AKLDS-10:AKLDBC-20' => 'Anash Kinder chidon enrollment shipping + bc fee',
-
-        'RRYSD' => 'Chidon Reg Yesod',
-        'RRYDA' => 'Chidon Reg Yediah',
-        'RRHVN' => 'Chidon Reg Havona / Iyun',
-        'RRKHK' => 'Chidon Reg KHK',
-
-        'RRSUSA' => 'Chidon Reg Shipping USA',
-        'RRSCAN' => 'Chidon Reg Shipping CAN',
-        'RRSINT' => 'Chidon Reg Shipping INT',
-
-        'YB1' => 'Yahadus Book 1',
-        'YB2' => 'Yahadus Book 2',
-        'YB3' => 'Yahadus Book 3',
-        'YB4' => 'Yahadus Book 4',
-        'YB5' => 'Yahadus Book 5',
-    ];
-    return $descriptions[$code];
-}

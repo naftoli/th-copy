@@ -1821,4 +1821,46 @@ class ChidonShipping
         else if (! empty($deep)) return $item_ids[$cat][$item][$deep];
         else return $item_ids[$cat][$item];
     }
+
+    public static function getDescription($code) {
+        $descriptions = [
+            'chayolei' => 'Chayolei Enrollment',
+            'shipping' => 'Shipping Fee (before the codes)',
+
+            'THE' => 'Chayolei Enrollment',
+            'HACH' => 'Hachayol Subscription',
+
+            'THAKUSA' => 'CTH AK Shipping USA',
+            'THAKCAN' => 'CTH AK Shipping CAN',
+            'THAKINT' => 'CTH AK Shipping INT',
+
+            'THMSUSA' => 'CTH MS Shipping USA',
+            'THMSCAN' => 'CTH MS Shipping CAN',
+            'THMSINT' => 'CTH MS Shipping INT',
+
+            'LDE' => 'Chidon Enrollment',
+            'KHKE' => 'KHK Enrollment',
+            'MYSLDS-10' => 'MyShliach Limmud Enrollment Shipping Fee',
+            'AKLDS-10' => 'Anash Kinder Limmud Enrollment Shipping Fee',
+            'AKLDBC-20' => 'Anash Kinder Limmud Enrollment BC Fee',
+            'LDE:MYSLDS-10' => 'MyShliach Limmud Enrollment Plus Shipping Fee',
+            'LDE:AKLDS-10:AKLDBC-20' => 'Anash Kinder Limmud Enrollment Plus Shipping & BC Fee',
+
+            'RRYSD' => 'Chidon Reg Yesod',
+            'RRYDA' => 'Chidon Reg Yediah',
+            'RRHVN' => 'Chidon Reg Havona / Iyun',
+            'RRKHK' => 'Chidon Reg KHK',
+
+            'RRSUSA' => 'Chidon Reg Shipping USA',
+            'RRSCAN' => 'Chidon Reg Shipping CAN',
+            'RRSINT' => 'Chidon Reg Shipping INT',
+
+            'YB1' => 'Yahadus Book 1',
+            'YB2' => 'Yahadus Book 2',
+            'YB3' => 'Yahadus Book 3',
+            'YB4' => 'Yahadus Book 4',
+            'YB5' => 'Yahadus Book 5',
+        ];
+        return $descriptions[$code];
+    }
 }

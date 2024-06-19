@@ -1999,12 +1999,17 @@ var registrationApp = function() {
     }
 
     function registerUsers( postData ){
+        console.log(postData)
         return new Promise( function( resolve, reject ){
+            $("#payment-button").attr('disabled', true)
             APIRequest( 'POST', api_url + '?action=registerUsers', postData, resolve)
         }).then( function( data ) {
             if ( typeof data === 'string' || typeof data === 'object' && data.success ) {
-                if (showClasses) $("#successModal #myshliach-extra").html("<br /><p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>");
-                $("#successModal").modal('show');
+                if (showClasses) $("#successModal #myshliach-extra").html("<br /><p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>")
+                $("#successModal").modal('show')
+            } else {
+                showError( data.error );
+                $("#payment-button").attr('disabled', false)
             }
         });
     }
