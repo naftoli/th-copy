@@ -153,7 +153,8 @@ class UserRegistrationRouter {
         /******************************** PAYMENT ********************************/
         $installmentsCreated = false;
         $trans_id = 0;
-        /*
+        if (isset($_COOKIE['naftoli'])) {}
+        else
         if ( $total != 0 ) {
             $customer_profile = $admin->customerProfile();
             // if we have a payment profile provided
@@ -246,7 +247,7 @@ class UserRegistrationRouter {
                 $trans_id = $MASHPIA_DB->lastInsertId() ?? 0;
             }
         }
-        */
+
         // prepare variables for confirmation email
         $itemsForEmail = [];
 
