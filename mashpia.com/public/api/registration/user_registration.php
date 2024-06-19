@@ -668,7 +668,7 @@ Tzivos Hashem HQ</body></html>";
             [$subject, $message] = $this->getInfoForEmail($items);
             $bcc = "enrollment@mashpia.com";
 //                $headers[] = "Bcc: " . $bcc;
-            if ($_SERVER['HTTP_HOST'] == 'mashpia.com') {
+//            if ($_SERVER['HTTP_HOST'] == 'mashpia.com') {
                 $headers[] = 'MIME-Version: 1.0';
                 $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                 $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
@@ -678,6 +678,7 @@ Tzivos Hashem HQ</body></html>";
                     json_error('Your information has been saved but there was an error sending the confirmation email.');
                     @mail($bcc, $subject, $message, implode("\r\n", $headers));
                 }
+                /*
             } else {
                 $mailer = new PHPMailer();
                 try {
@@ -706,7 +707,7 @@ Tzivos Hashem HQ</body></html>";
                     $mailer->AltBody = strip_tags($message);
                     $mailer->addAddress($to);
                     $mailer->setFrom('dev@tzivoshashem.org', 'Tzivos Hashem HQ');
-                    if (!$mailer->send()) {
+                    if (! $mailer->send()) {
                         json_error("Error sending confirmation email - " . $mailer->ErrorInfo);
                         $mailer->clearAddresses();
                         $mailer->addAddress($bcc);
@@ -717,6 +718,7 @@ Tzivos Hashem HQ</body></html>";
                     json_error('Your information has been saved but there was an error sending the confirmation email.\n' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
                 }
             }
+            */
         } else {
 //            $MASHPIA_DB->commit();
             json_error('Your information has been saved but there was an error sending the confirmation email.\nNo email address found for this account.');
