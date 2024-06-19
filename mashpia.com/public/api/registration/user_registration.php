@@ -449,6 +449,7 @@ class UserRegistrationRouter {
             if (! empty($itemsForEmail)) {
                 $sent = $this->sendEmailToParents($itemsForEmail);
                 if ($sent) json_response("Successfully Registered.");
+                // otherwise the error message comes from the email function
             } else {
                 json_response("Successfully Processed.");
             }
