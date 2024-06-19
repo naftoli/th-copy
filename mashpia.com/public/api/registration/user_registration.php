@@ -442,15 +442,15 @@ class UserRegistrationRouter {
                     $user->registrationCharge($registration['registration_type'], $amount, $trans_id, $chidonYr);
                 }
             }
-            if (!empty($itemsForEmail) && !$this->sendEmailToParents($itemsForEmail)) {
-                $MASHPIA_DB->rollBack();
+            // if we get here then all is good
+            $MASHPIA_DB->commit();
+
+            // send email to parents
+            if (! empty($itemsForEmail)) {
+                $sent = $this->sendEmailToParents($itemsForEmail);
+                if ($sent) json_response("Successfully Registered.");
             } else {
-                // if we get here then all is good
-                $MASHPIA_DB->commit();
-                if (empty($itemsForEmail))
-                    json_response( "Successfully Processed." );
-                else
-                    json_response( "Successfully Registered." );
+                json_response("Successfully Processed.");
             }
         } catch ( Exception $e ) {
             $MASHPIA_DB->rollBack();
