@@ -442,14 +442,16 @@ class UserRegistrationRouter {
                     $user->registrationCharge($registration['registration_type'], $amount, $trans_id, $chidonYr);
                 }
             }
-            if ($itemsForEmail) $this->sendEmailToParents($itemsForEmail);
+            if ($itemsForEmail) {
+                // if we get here then all is good
+                $MASHPIA_DB->commit();
+                if ($this->sendEmailToParents($itemsForEmail))
+                    json_response( "Successfully Registered." );
+            }
         } catch ( Exception $e ) {
             $MASHPIA_DB->rollBack();
-            json_error( $e->getMessage() );
+            json_error( 'Error: ' . $e->getMessage() );
         }
-
-//        $MASHPIA_DB->commit();
-        json_response( "Successfully Registered." );
     }
 
     // serializer for getUsers()
@@ -663,7 +665,6 @@ Tzivos Hashem HQ</body></html>";
         global $current_user, $MASHPIA_DB;
         $admin = $current_user; // $current_user global gets overwritten by wp
         $to = $admin->admin_email;
-        $MASHPIA_DB->rollBack();
         if ( $to ) {
             [$subject, $message] = $this->getInfoForEmail($items);
             $bcc = "enrollment@mashpia.com";
@@ -673,10 +674,12 @@ Tzivos Hashem HQ</body></html>";
                 $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                 $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
                 $headers[] = "Bcc: " . $bcc;
-                if (!@mail($to, $subject, $message, implode("\r\n", $headers))) {
-//                    $MASHPIA_DB->commit();
-                    json_error('Your information has been saved but there was an error sending the confirmation email.');
+                if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
+                    $msg = "Your information has been saved but there was an error sending the confirmation email.\n
+                        Please contact HQ (718-907-8884) to check that your information was saved correctly.";
+                    json_error($msg);
                     @mail($bcc, $subject, $message, implode("\r\n", $headers));
+                    return false;
                 }
             } else {
                 $mailer = new PHPMailer();
@@ -707,20 +710,22 @@ Tzivos Hashem HQ</body></html>";
                     $mailer->addAddress($to);
                     $mailer->setFrom('dev@tzivoshashem.org', 'Tzivos Hashem HQ');
                     if (! $mailer->send()) {
-                        json_error("Error sending confirmation email - " . $mailer->ErrorInfo);
+                        json_error('Your information has been saved but there was an error sending the confirmation email.\nError: ' . $mailer->ErrorInfo);
                         $mailer->clearAddresses();
                         $mailer->addAddress($bcc);
                         $mailer->send();
+                        return false;
                     }
                 } catch (Exception $e) {
-//                    $MASHPIA_DB->commit();
-                    json_error('Your information has been saved but there was an error sending the confirmation email.\n' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
+                    json_error('Your information has been saved but there was an error sending the confirmation email.\nError: ' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
+                    return false;
                 }
             }
         } else {
-//            $MASHPIA_DB->commit();
             json_error('Your information has been saved but there was an error sending the confirmation email.\nNo email address found for this account.');
+            return false;
         }
+        return true;
     }
 }
 
