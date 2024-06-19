@@ -154,8 +154,7 @@ class UserRegistrationRouter {
         $installmentsCreated = false;
         $trans_id = 0;
         if (isset($_COOKIE['naftoli'])) {}
-        else
-        if ( $total != 0 ) {
+        else if ( $total != 0 ) {
             $customer_profile = $admin->customerProfile();
             // if we have a payment profile provided
             if ( isset($payment_info['payment_profile']) && $payment_info['payment_profile'] )
