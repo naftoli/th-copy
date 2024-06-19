@@ -2001,12 +2001,12 @@ var registrationApp = function() {
     async function registerUsers( postData ){
         console.log(postData)
         $("#payment-button").attr('disabled', true)
-        let res = await $.post( api_url + '?action=registerUsers', postData )
+        const data = await $.post( api_url + '?action=registerUsers', postData )
         if (typeof data === 'string' || typeof data === 'object' && data.success) {
             if (showClasses) $("#successModal #myshliach-extra").html("<br /><p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>")
             $("#successModal").modal('show')
         } else {
-            showError( res.error );
+            showError( data.error );
             $("#payment-button").attr('disabled', false)
         }
         // return new Promise( function( resolve, reject ){
