@@ -596,10 +596,10 @@ class UserRegistrationRouter {
                 if (isset($detail['reg_info'])) {
                     $message .= "<p><b>Registration Information</b></p>";
                     $message .= "<p>Sweater Size: " . $detail['reg_info']['size'] . "</p>";
-                    $message .= "<p>Book: " . $detail['reg_info']['book'] . "</p>";
-                    $message .= "<p>Yarmulka: " . $detail['reg_info']['yarmulka'] . "</p>";
+                    $message .= "<p>Book Number: " . $detail['reg_info']['book'] . "</p>";
+                    $message .= "<p>Yarmulka Size: " . $detail['reg_info']['yarmulka'] . "</p>";
                     $message .= "<p>Name Preference: " . $detail['reg_info']['name_pref'] . "</p>";
-                    $message .= "<p>Track: " . $tracks[ $detail['reg_info']['track'] ] . "</p>";
+                    $message .= "<p>Track: <b>" . $tracks[ $detail['reg_info']['track'] ] . "</b></p>";
                     if ($detail['reg_info']['purchased']) {
                         $location = $detail['purchasedWhere'];
                         $store_name = $detail['store']['store_name'];
@@ -668,7 +668,17 @@ Tzivos Hashem HQ</body></html>";
             [$subject, $message] = $this->getInfoForEmail($items);
             $bcc = "enrollment@mashpia.com";
 //                $headers[] = "Bcc: " . $bcc;
-            if ($_SERVER['HTTP_HOST'] == 'tzivos.local') { // testing
+            if ($_SERVER['HTTP_HOST'] == 'mashpia.com') {
+                $headers[] = 'MIME-Version: 1.0';
+                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+                $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
+                $headers[] = "Bcc: " . $bcc;
+                if (!@mail($to, $subject, $message, implode("\r\n", $headers))) {
+//                    $MASHPIA_DB->commit();
+                    json_error('Your information has been saved but there was an error sending the confirmation email.');
+                    @mail($bcc, $subject, $message, implode("\r\n", $headers));
+                }
+            } else {
                 $mailer = new PHPMailer(true);
                 try {
                     // server settings
@@ -677,11 +687,11 @@ Tzivos Hashem HQ</body></html>";
                     $mailer->SMTPAuth = true;
                     $mailer->AuthType = 'LOGIN';
 //                    if ($_SERVER['HTTP_HOST'] == 'tzivos.local') {
-                        $mailer->Host = 'smtp.gmail.com';
-                        $mailer->Username = 'naftolir@gmail.com';
-                        $mailer->Password = 'rnkkcgdkmfytaodo';
-                        $mailer->SMTPSecure = 'tls';
-                        $mailer->Port = 587;
+                    $mailer->Host = 'smtp.gmail.com';
+                    $mailer->Username = 'naftolir@gmail.com';
+                    $mailer->Password = 'rnkkcgdkmfytaodo';
+                    $mailer->SMTPSecure = 'tls';
+                    $mailer->Port = 587;
 //                    } else {
 //                        $mailer->Host = 'host2.tzivoshashem.com';
 //                        $mailer->Username = 'enrollment@mashpia.com';
@@ -696,7 +706,7 @@ Tzivos Hashem HQ</body></html>";
                     $mailer->AltBody = strip_tags($message);
                     $mailer->addAddress($to);
                     $mailer->setFrom('dev@tzivoshashem.org', 'Tzivos Hashem HQ');
-                    if (! $mailer->send()) {
+                    if (!$mailer->send()) {
                         json_error("Error sending confirmation email - " . $mailer->ErrorInfo);
                         $mailer->clearAddresses();
                         $mailer->addAddress($bcc);
@@ -705,16 +715,6 @@ Tzivos Hashem HQ</body></html>";
                 } catch (Exception $e) {
 //                    $MASHPIA_DB->commit();
                     json_error('Your information has been saved but there was an error sending the confirmation email.\n' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
-                }
-            } else {
-                $headers[] = 'MIME-Version: 1.0';
-                $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-                $headers[] = 'From: HQ Office <dev@tzivoshashem.org>';
-                $headers[] = "Bcc: " . $bcc;
-                if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
-//                    $MASHPIA_DB->commit();
-                    json_error('Your information has been saved but there was an error sending the confirmation email.');
-                    @mail($bcc, $subject, $message, implode("\r\n", $headers));
                 }
             }
         } else {
