@@ -678,7 +678,8 @@ Tzivos Hashem HQ</body></html>";
                     json_error('Your information has been saved but there was an error sending the confirmation email.');
                     @mail($bcc, $subject, $message, implode("\r\n", $headers));
                 }
-            } else {                $mailer = new PHPMailer(true);
+            } else {
+                $mailer = new PHPMailer();
                 try {
                     // server settings
                     $mailer->SMTPDebug = 0;
