@@ -4,6 +4,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
     $year = GlobalSettings::getChidonYear();
     $school_number = mysql_real_escape_string($_POST['school']);
+    $user_id = mysql_real_escape_string($_POST['user']);
     $info = [];
     $sql = "
         SELECT 
@@ -24,7 +25,10 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
                 JOIN
             classes c ON c.class_id = u.class_id 
         WHERE
-            s.school_number = " . $school_number . " AND u.user_id = 75295";
+            s.school_number = " . $school_number;
+    if ($user_id > 0) {
+        $sql .= " AND u.user_id = $user_id";
+    }
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $row['th_chidon_id'] = 0;
