@@ -22,9 +22,8 @@ function alertPersonalization(evt) {
         // "to pay this in up to 4 installments)
         alert(
           "If you would like your child to have their name on their prize, please input it below, and you will need to " +
-          "pre-pay the registration fee now instead of at the end of the year.\n\nIf your child does not pass, " +
-          "you will NOT be refunded the portion that went towards the prize. The amount paid will be deducted from the " +
-          "end so your amount at the end may be $0."
+          "pre-pay the registration fee now instead of at the end of the year.\n\nThis amount is NON-REFUNDABLE and will be " +
+          "used towards their registration ONLY IF they pass Yediah or higher."
         )
     }
 }
@@ -2175,10 +2174,10 @@ var templates = function(){
 
             // determine if we need to show non th school fields or not
             if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
-                if (user.non_th_school) {
+                $('#non_th_school_id').val(user.non_th_school_id);
+                $('#non_th_school').val(user.non_th_school);
+                if (non_th_schools[user.non_th_school_id]) {
                     let school_info = non_th_schools[user.non_th_school_id].split(',')
-                    $('#non_th_school_id').val(user.non_th_school_id);
-                    $('#non_th_school').val(user.non_th_school);
                     $("#non-th-city").val(school_info[1])
                     $("#non-th-state").val(school_info[2])
                     $("#non-th-zip").val(school_info[3])
