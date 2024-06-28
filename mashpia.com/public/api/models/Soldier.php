@@ -326,7 +326,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if ($res) $info = $query->fetch();
 
-        // turn off any getting chidon info
+        // turn off getting chidon info
         $info = false;
 
         return $info;

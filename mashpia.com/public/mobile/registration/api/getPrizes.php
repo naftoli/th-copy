@@ -21,6 +21,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $exceptions[$row['prize_id']][] = $row['school_id'];
 }
 
+// get selected prizes
 $selected = [];
 $sql = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;
 $result = mysql_query($sql);

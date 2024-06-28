@@ -606,7 +606,7 @@ class UserRegistrationRouter {
                     $message .= "<p>Book Number: " . $detail['reg_info']['book'] . "</p>";
                     $message .= "<p>Yarmulka Size: " . $detail['reg_info']['yarmulka'] . "</p>";
                     $message .= "<p>Track: <b>" . $tracks[ $detail['reg_info']['track'] ] . "</b></p>";
-                    if ($detail['reg_info']['purchased']) {
+                    if (isset($detail['reg_info']['purchased'])) {
                         $location = $detail['purchasedWhere'];
                         $store_name = $detail['store']['store_name'];
                         $store_city = $detail['store']['store_city'];

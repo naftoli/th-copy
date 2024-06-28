@@ -1275,6 +1275,13 @@ var registrationApp = function() {
             //     height = 'height: 170px;'
             // }
 
+            // disable changing of prizes if prize has been paid for
+            // disable changing of prizes after a certain date
+            let disable = false
+            const date = new Date()
+            const cutoff = new Date('2024-12-01') // cutoff date for changing prizes
+            if (date > cutoff) disable = true
+
             for (let prize of res) {
                 // check if prize is not suppose to show for this school
                 if (prize.exceptions && prize.exceptions.length && checkForException(prize.exceptions)) continue
@@ -1292,6 +1299,8 @@ var registrationApp = function() {
                     }
                 }
                 let personalization = prize.personalization ? 1 : 0
+                // disable prizes that were already selected and paid for (all personalized prizes that have names need to be paid for)
+                if (personalization && prize.selected && prize.he_name.length > 1) disable = true
                 html += `<div style="height: ${height}px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="https://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize ${personalization ? 'personalize' : ''}" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" 
@@ -1299,6 +1308,7 @@ var registrationApp = function() {
                 if (prize.selected) html += 'checked '
                 // if (personalization) html += `onclick="alertPersonalization(this)" `
                 // if (prize.quantity <= 0) html += 'disabled '
+                if (disable) html += 'disabled '
                 html += `/>
                         ${prize.prize_name} (${prize.quantity} left in stock)<br />
                         ${parseInt(prize.price)} Credits`
@@ -1308,12 +1318,14 @@ var registrationApp = function() {
                 if (prize.size) {
                     html += `<br />Size: ${prize.size}`
                 }
-                if (prize.personalization) {
+                if (personalization) {
                     html += `<br /><span style="font-size: 12px">${prize.personalization}. `
                     if (id == 175) html += 'Limit 12 characters.'
                     else html += 'Limit 22 characters.'
                     html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" 
-                        data-info="${id}" dir="rtl" value="${prize.he_name ? prize.he_name : ''}" /></span>`
+                        data-info="${id}" dir="rtl" value="${prize.he_name ? prize.he_name : ''}" `
+                    if (disable) html += 'disabled '
+                    html += `/></span>`
                 }
                 html += `</div>`
 
