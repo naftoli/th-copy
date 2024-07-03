@@ -558,13 +558,13 @@ class user {
 		}
 		
 		ksort($this->sorted_daily_labels);        
-		foreach ($this->sorted_daily_labels as $daily_label) 
-		{
-			//echo "<input type='hidden' name='SORTED DAILY LABEL INFO' value='" . $daily_label . "'>\n";
-		}
+//		foreach ($this->sorted_daily_labels as $daily_label)
+//		{
+//			echo "<input type='hidden' name='SORTED DAILY LABEL INFO' value='" . $daily_label . "'>\n";
+//		}
 
-		// Report Missions task should come first instead of last, so we take the last elem and put it to the front; frequency id = 21
-        $frequency = 21;
+		// Report Missions task should come first instead of last, so we take the last elem and put it to the front; frequency id = 15
+        $frequency = 15;
         $keys = array_keys($this->sorted_daily_labels);
 		if (in_array($frequency, $keys)) {
             $task[$frequency] = $this->sorted_daily_labels[$frequency];
