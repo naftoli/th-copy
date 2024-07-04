@@ -242,23 +242,23 @@ $school_ids = $admin_user['auths']['school'];
         <?} // end admin only links ?>
         </div>
 
-        <h2>Prizes</h2>
-        <?php foreach ($school_ids as $id) : ?>
-        <div id="action-links">
-          <a href="<?= $links[$id] ?>">
-            <div class="button">
-              <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
-              <span class="link-text">Prizes Fulfillment Report</span>
-            </div>
-          </a>
-            <a href="/chidonOld/school_shipping/">
-                <div class="button">
-                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>
-                    <span class="link-text">Prizes Shipping Reports</span>
-                </div>
-            </a>
-        </div>
-        <?php endforeach; ?>
+<!--        <h2>Prizes</h2>-->
+        <?php // foreach ($school_ids as $id) : ?>
+<!--        <div id="action-links">-->
+<!--          <a href="--><?php //= $links[$id] ?><!--">-->
+<!--            <div class="button">-->
+<!--              <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>-->
+<!--              <span class="link-text">Prizes Fulfillment Report</span>-->
+<!--            </div>-->
+<!--          </a>-->
+<!--            <a href="/chidonOld/school_shipping/">-->
+<!--                <div class="button">-->
+<!--                    <img src="/images/icon_admin_medal.png" height="32" alt="tickets"/>-->
+<!--                    <span class="link-text">Prizes Shipping Reports</span>-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
+        <?php // endforeach; ?>
 
         <div style="margin-bottom: 30px;"> </div>
     </body>
