@@ -45,7 +45,11 @@ if (!empty($action)) {
 					$prize_image_id = addFile($_FILES['image'], $prize_image_id);
 					
 				mq('INSERT INTO prizes_auction SET in_stock=' . $in_stock . ', prize_name = ' . ms($prize_name) . ($admin_user['auth'] == 'super' ? ", prize_number = $prize_number" : '') . ', prize_description = ' . ms(gr('prize_description')) . ', min_grade = ' . nullif_ms(gr('min_grade'), '') . ', max_grade = ' . nullif_ms(gr('max_grade'), '') . ", school_id = $school_id, prize_points = $prize_points, prize_ratio = $prize_ratio, prize_image_id = $prize_image_id");
-				
+				// get id and create shipping id
+        $new_prize_id = mysql_insert_id();
+        $shipping_code = "TH" . $new_prize_id;
+        mq("UPDATE prizes_auction SET shipping_code = '$shipping_code' WHERE prize_id = $new_prize_id");
+
 				$message = T_('Prize added');
 			}
 		break;
