@@ -267,7 +267,7 @@ if (!empty($action)) {
 <?else:?>
 
 			<?//$result = mq('SELECT prize_id, prize_name, prize_number, prize_points, prize_ratio, prize_image_id, min_grade, max_grade, school_name, prizes_auction.school_id, in_stock FROM prizes_auction LEFT JOIN schools USING (school_id)' . ($admin_user['auth'] != 'super' ? ' WHERE school_id IS NULL OR school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : '') . ' ORDER BY prize_points, prize_number, prize_name, prize_id');?>
-			<?$result = mq('SELECT prize_id, prize_name, prize_number, prize_points, prize_ratio, prize_image_id, min_grade, max_grade, in_stock, archived FROM prizes_auction ORDER BY archived, prize_id');?>
+			<?$result = mq('SELECT prize_id, shipping_code, prize_name, prize_number, prize_points, prize_ratio, prize_image_id, min_grade, max_grade, in_stock, archived FROM prizes_auction ORDER BY archived, prize_id');?>
 
 			<A HREF="admin_prize_auction.php?action=add">
 				<?=T_('Add new Prize')?>
@@ -276,6 +276,7 @@ if (!empty($action)) {
 			<TABLE CLASS="list">
 				<TR>
 					<th>Prize ID</th>
+          <th>Shipping ID</th>
 					<TH><?=T_('Points')?></TH>
 					<TH><?=T_('In Stock')?></TH>
 					<TH width="100"><?=T_('Name')?></TH>
@@ -294,6 +295,7 @@ if (!empty($action)) {
 			<? while($row = mysql_fetch_assoc($result)) : ?>
 				<TR>
 					<td><?=$row['prize_id']?></td>
+          <td><?=$row['shipping_code']?></td>
 					<TD><?=$row['prize_points']?></TD>
 					<TD><?=$row['in_stock']?></TD>
 					<TD><?=es($row['prize_name'])?></TD>
