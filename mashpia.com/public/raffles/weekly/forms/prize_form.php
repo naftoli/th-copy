@@ -282,7 +282,7 @@ if($debug) echo "</pre>"; // end debugging preformatting
                         const hiddenElement = document.createElement('a');
                         hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
                         hiddenElement.target = '_blank'; // in a new tab
-                        hiddenElement.download = 'chidon-report.csv'; // with this file_name
+                        hiddenElement.download = '5M-report.csv'; // with this file_name
                         hiddenElement.click(); // and click it
                     }
                 });
