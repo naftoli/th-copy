@@ -43,7 +43,7 @@ $prizes = Prize::loadAll($filter);
 <table>
     <thead>
         <tr>
-          <th>Prize ID</th><th>Name</th><th>Type</th><th>Created On</th><th>Thumbnail</th>
+          <th>Prize ID</th><th>Shipping ID</th><th>Name</th><th>Type</th><th>Created On</th><th>Thumbnail</th>
 <!--          <th>Parsho(s)</th>-->
           <th>Actions</th>
         </tr>
@@ -52,6 +52,7 @@ $prizes = Prize::loadAll($filter);
         <? foreach($prizes as $prize) { // generate a row for each raffle
             echo "<tr>"; // start the row
             echo "<td>".$prize->prize_id."</td>";
+            echo "<td>".$prize->shipping_code."</td>"; // show the shipping id
             echo "<td>".$prize->name."</td>"; // show the name
             echo "<td>".$prize->type_of_prize."</td>"; // show the type
             echo "<td>".$prize->date_created->format('m/d/Y')."</td>"; // show the date created
