@@ -30,6 +30,7 @@ $sql = "SELECT
                 AND show_for_hq = 1 
                 AND run_date >= '$start_date' 
                 AND run_date <= '$end_date' 
+                AND show_for_hq = 1 
         ORDER BY date_ran DESC";
 $raffle_query = mysql_query($sql);
 while($raffle_info = mysql_fetch_assoc($raffle_query)){

@@ -28,6 +28,7 @@ if ( $ran_only )
 
 // for BC only show winners for raffles marked as show_for_bc
 if ( $admin_user['auth'] !== 'super' && $ran_only ) $filter[] = "show_for_bc = 1";
+else $filter[] = "show_for_hq = 1";
 
 //if ( $admin_user['auth'] !== 'super' )
     //$filter[] = 'year = '.GlobalSettings::getCurrentYear(); // only show raffles from this year
