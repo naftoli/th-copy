@@ -50,7 +50,7 @@ $parshos = get_parshos( $raffle->year );
 </div>
 
 <div class="input_group input_half">
-  <input type="checkbox" name="hq" id="show_hq" value="1" <?=$raffle->show_for_hq ? "checked" : "";?>> Show for HQ<br />
+  <input type="checkbox" name="hq" id="show_hq" value="1" <?=$raffle->show_for_hq ? "checked" : "";?>> Show for HQ Reports<br />
   <input type="checkbox" name="bc" id="show_bc" value="1" <?=$raffle->show_for_bc ? "checked" : "";?>> Show for BC<br />
   <input type="checkbox" name="kids" id="show_kids" value="1" <?=$raffle->show_for_kids ? "checked" : "";?>> Show on app/mobile site<br />
 </div>
