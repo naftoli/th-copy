@@ -24,6 +24,13 @@ $parshos = get_parshos( $raffle->year );
         <select id="start_week" name="start_week" required>
             <?foreach($parshos as $parsha){ // fill the list with parshos
                 $selected = $parsha['start'] == $raffle->start_date ? "selected" : "";
+                if (! $selected) {
+                    // decide by current date
+                    $current_jd = unixtojd(time());
+                    if ($current_jd >= $parsha['start'] && $current_jd <= $parsha['end']) {
+                        $selected = "selected";
+                    }
+                }
                 echo "<option value=".formatJdToDate($parsha['start'])." $selected >".$parsha["year"] ." - ".$parsha["name"]."</option>"; 
             }?>
         </select>
