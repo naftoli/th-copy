@@ -43,7 +43,9 @@ $prizes = Prize::loadAll($filter);
 <table>
     <thead>
         <tr>
-          <th>Prize ID</th><th>Name</th><th>Type</th><th>Created On</th><th>Thumbnail</th><th>Parsho(s)</th><th>Actions</th>
+          <th>Prize ID</th><th>Name</th><th>Type</th><th>Created On</th><th>Thumbnail</th>
+<!--          <th>Parsho(s)</th>-->
+          <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -55,13 +57,13 @@ $prizes = Prize::loadAll($filter);
             echo "<td>".$prize->date_created->format('m/d/Y')."</td>"; // show the date created
             echo "<td><img src='".$prize->thumbnail."' height='50'></td>"; // show the thumbnail at the full size
             // get parshos
-            $parshos = '';
-            $raffles = $prize->get_raffles($year);
-            foreach ($raffles as $raffle) {
-                $parshos .= $raffle->name.'<br />';
-            }
-//            // remove last comma
-            echo "<td>".$parshos."</td>"; // show the parshos
+//            $parshos = '';
+//            $raffles = $prize->get_raffles($year);
+//            foreach ($raffles as $raffle) {
+//                $parshos .= $raffle->name.'<br />';
+//            }
+////            // remove last comma
+//            echo "<td>".$parshos."</td>"; // show the parshos
             // show the view/edit button
             echo "<td>".
                 "<a href='prize_form.php?action=edit&prize_id=".$prize->prize_id.($debug ? "&debug=true" : "")."' class='button'>View/Edit</a>".
