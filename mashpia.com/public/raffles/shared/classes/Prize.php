@@ -86,6 +86,10 @@ class Prize {
         
         if($query){ // if it was inserted
             $instance->prize_id = mysql_insert_id(); // set the ID
+            // create shipping code
+            $instance->shipping_code = "WP" . $instance->prize_id;
+            $sql = "UPDATE prizes SET shipping_code='".$instance->shipping_code."' WHERE prize_id=".$instance->prize_id.";";
+            $query = mysql_query($sql);
             return $instance; // and return the instance
         } else { // the insert query failed
             echo 'MySQL error: ('.mysql_errno().') '.mysql_error(); // print the mysql error
