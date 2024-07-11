@@ -16,6 +16,9 @@ require 'data.php';
 $cs = new SchoolShipping();
 $categories = $cs->getCategories();
 $items = $cs->getItems();
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
 ?>
 <!DOCTYPE html>
 <html>
@@ -65,6 +68,14 @@ $items = $cs->getItems();
 
     <fieldset>
       <legend style="margin-bottom: -5px;">Limit To</legend>
+      <h4>Year</h4>
+      <select name="year">
+        <?php
+        for ($i = $year; $i >= $year - 5; $i--) {
+            echo "<option value=" . $i . ">" . $i . "</option>";
+        }
+        ?>
+      </select>
       <h4>School</h4>
       <select name="school">
           <?php if ($super) echo '<option value="0">All Schools</option>'; ?>

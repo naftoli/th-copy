@@ -12,10 +12,10 @@ class SchoolShipping
 {
     private $db, $year, $schools, $prizes, $raffles;
 
-    public function __construct() {
+    public function __construct($yr = 0) {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->year = GlobalSettings::getChidonYear();
+        $this->year = $yr ?? GlobalSettings::getRegistrationYear();
     }
 
     public function getCategories() {
@@ -28,7 +28,7 @@ class SchoolShipping
 
     public function getItems() {
         $items = [
-            'Raffles'   => ['5M Raffle', '60M Raffle', 'Auction 5783'],
+            'Raffles'   => ['5M Raffle', '60M Raffle', 'Auction'],
             'Chidon'    => ['Celeb Box Items', 'Sweaters']
         ];
         return $items;
@@ -94,7 +94,7 @@ class SchoolShipping
             case '60m raffle':
                 $prizes = $this->getSchoolMonthlyPrizes();
                 break;
-            case 'auction 5783':
+            case 'auction':
                 $prizes = $this->getSchoolAuctionPrizes();
                 break;
         }
@@ -108,7 +108,7 @@ class SchoolShipping
                 $qry = "select prize_id, name as prize_name, shipping_code from prizes";
                 break;
             case '60m raffle':
-            case 'auction 5783':
+            case 'auction':
                 $qry = "select prize_id, prize_name, shipping_code from prizes_auction";
                 break;
         }
@@ -131,7 +131,7 @@ class SchoolShipping
             case '60m raffle':
                 $this->setMonthlyRaffles();
                 break;
-            case 'auction 5783':
+            case 'auction':
                 $this->setAuction();
                 break;
         }
@@ -163,6 +163,22 @@ class SchoolShipping
     private function setMonthlyRaffles() {
         $raffles = [];
         // get last year's 4th 60m and the first three of this year's 60m
+        $sql1 = "select * from raffles where type = 'monthly' and year = :year order by run_date desc limit 1";
+        $stmt1 = $this->db->prepare($sql1);
+        $stmt1->execute(['year' => $this->year - 1]);
+        $row1 = $stmt1->fetch();
+        $raffles[$row1['raffle_id']] = $row1['name'] . ' (' . $row1['year'] . ')';
+
+        $sql2 = "select * from raffles where type = 'monthly' and year = :year order by run_date limit 3";
+        $stmt2 = $this->db->prepare($sql2);
+        $stmt2->execute(['year' => $this->year]);
+        $rows = $stmt2->fetchAll();
+        foreach ($rows as $row) {
+            $raffles[$row['raffle_id']] = $row['name'] . ' (' . $row['year'] . ')';
+        }
+
+        $this->raffles = $raffles;
+        /*
         $lastYr = $this->year - 1;
         $curYr = $this->year;
         $sql = "select * from raffles where type = 'monthly' and year in ($lastYr, $curYr) order by raffle_id";
@@ -175,6 +191,7 @@ class SchoolShipping
             $raffles[$row['raffle_id']] = $row['name'] . ' (' . $row['year'] . ')';
         }
         $this->raffles = $raffles;
+        */
     }
 
     private function setAuction() {

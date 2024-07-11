@@ -24,7 +24,7 @@ $report_type = $_POST['report_type'];
 
 $school_list = $_POST['school'] == 0 ? array_keys($schools) : [$_POST['school']];
 
-$cs = new SchoolShipping();
+$cs = new SchoolShipping($_POST['year']);
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
