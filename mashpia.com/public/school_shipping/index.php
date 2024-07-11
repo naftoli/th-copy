@@ -72,7 +72,9 @@ $year = GlobalSettings::getRegistrationYear();
       <select name="year">
         <?php
         for ($i = $year + 1; $i >= $year - 3; $i--) {
-            echo "<option value=" . $i . ">" . $i . "</option>";
+            echo "<option value=''" . $i . "'";
+            if ($i == $year) echo " selected";
+            echo ">" . $i . "</option>";
         }
         ?>
       </select>
