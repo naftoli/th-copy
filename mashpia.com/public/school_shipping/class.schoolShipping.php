@@ -139,11 +139,13 @@ class SchoolShipping
 
     private function setWeeklyRaffles() {
         $raffles = [];
-        // first get last raffle from prev year
-        $sql = "select * from raffles where type = 'weekly' and year = :year order by raffle_id desc limit 1";
+        // first get raffles from prev year
+        $start_yr = GlobalSettings::getCurYearDates()['start'];
+        $sql = "select * from raffles where type = 'weekly' and year = :year and end_date >= :start";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'year'  => intval($this->year) - 1,
+            'start' => $start_yr
         ]);
         $row = $stmt->fetch();
         $raffles[$row['raffle_id']] = $row['name'];
@@ -165,7 +167,7 @@ class SchoolShipping
         // get last year's 4th 60m and the first three of this year's 60m
         $sql1 = "select * from raffles where type = 'monthly' and year = :year order by run_date desc limit 1";
         $stmt1 = $this->db->prepare($sql1);
-        $stmt1->execute(['year' => $this->year - 1]);
+        $stmt1->execute(['year' => intval($this->year) - 1]);
         $row1 = $stmt1->fetch();
         $raffles[$row1['raffle_id']] = $row1['name'] . ' (' . $row1['year'] . ')';
 
@@ -178,26 +180,12 @@ class SchoolShipping
         }
 
         $this->raffles = $raffles;
-        /*
-        $lastYr = $this->year - 1;
-        $curYr = $this->year;
-        $sql = "select * from raffles where type = 'monthly' and year in ($lastYr, $curYr) order by raffle_id";
-        $stmt = $this->db->query($sql);
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            // filter out last year's 4th 60m and this year's first three 60m for monthly raffles
-            if ($row['year'] == ($this->year - 1) && strpos($row['name'], '4') === false) continue;
-            else if ($row['year'] == $this->year && strpos($row['name'], '4') !== false) continue;
-            $raffles[$row['raffle_id']] = $row['name'] . ' (' . $row['year'] . ')';
-        }
-        $this->raffles = $raffles;
-        */
     }
 
     private function setAuction() {
         $sql = "select * from auctions where year = :year order by auction_id desc limit 1";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['year' => ($this->year - 1)]); // auction is for end of last yr
+        $stmt->execute(['year' => intval($this->year) - 1]); // auction is for end of last yr
         $row = $stmt->fetch();
         $auction[$row['auction_id']] = $row['auction_name'];
         $this->raffles = $auction;

@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $superAdmin = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonYear();
+$year = $_POST['year'] > 0 ? $_POST['year'] : GlobalSettings::getChidonYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
@@ -24,7 +24,7 @@ $report_type = $_POST['report_type'];
 
 $school_list = $_POST['school'] == 0 ? array_keys($schools) : [$_POST['school']];
 
-$cs = new SchoolShipping($_POST['year']);
+$cs = new SchoolShipping($year);
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {

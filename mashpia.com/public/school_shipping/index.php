@@ -18,7 +18,7 @@ $categories = $cs->getCategories();
 $items = $cs->getItems();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getChidonRegYear();
 ?>
 <!DOCTYPE html>
 <html>
@@ -71,8 +71,8 @@ $year = GlobalSettings::getRegistrationYear();
       <h4>Year</h4>
       <select name="year">
         <?php
-        for ($i = $year + 1; $i >= $year - 3; $i--) {
-            echo "<option value=''" . $i . "'";
+        for ($i = $year; $i >= $year - 3; $i--) {
+            echo "<option value=" . $i;
             if ($i == $year) echo " selected";
             echo ">" . $i . "</option>";
         }
