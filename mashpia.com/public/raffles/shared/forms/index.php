@@ -228,7 +228,7 @@ $school_ids = $admin_user['auths']['school'];
             <div id="action-links">
                 <a href="winners_hachayol_form.php">
                     <div class="button">
-                        <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
+                        <img src="/battlefront/report.html" height="32" alt="medal"/>
                         <span class="link-text">Hachayol Winners</span>
                     </div>
                 </a>
