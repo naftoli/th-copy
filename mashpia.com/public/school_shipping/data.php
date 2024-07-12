@@ -20,7 +20,8 @@ $item_details = [
     'id'        => 'Item ID',
     'qty'       => 'Quantity',
     'item'      => 'Prize Name',
-    'cat'       => 'Category'
+    'cat'       => 'Category',
+    'location'  => 'Shipping Location'
 ];
 
 function build_fields() {

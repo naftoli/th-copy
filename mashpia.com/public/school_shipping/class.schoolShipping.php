@@ -143,7 +143,7 @@ class SchoolShipping
         $sql = "select * from raffles where type = 'weekly' and year = :year order by raffle_id desc limit 1";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'year'  => $this->year - 1,
+            'year'  => intval($this->year) - 1,
         ]);
         $row = $stmt->fetch();
         $raffles[$row['raffle_id']] = $row['name'];
