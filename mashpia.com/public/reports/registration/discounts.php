@@ -13,7 +13,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $regYear = GlobalSettings::getRegistrationYear();
 
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, false);
 $schools = $as->getSchools();
 
 $msg = '';
