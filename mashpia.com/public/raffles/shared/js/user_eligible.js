@@ -18,10 +18,10 @@ function selectType(event) {
         return false;
     }
     
-    $.post("/raffles/shared/ajax/list_raffles.php", {type: type}, function(data){
+    $.post("/raffles/shared/ajax/list_raffles.php", { type: type }, function(data){
         $("#raffle_select_container").html(data);
-        $("#generate").click(generate_report); // now that the raffle_id option is on the screen, set the on change function
         $("#eligible_list_container").html(""); // clear the list container
+        document.getElementById("generate").addEventListener("click", generate_report); // set up the handler for the generate button
     });
 }
 
@@ -35,14 +35,14 @@ function generate_report(event) {
     var raffle_id = $("#raffle_id").val(); // ge the raffle id
     var school_id = $("select#school_id").val();
     var type = $("input:radio[name ='report_type']:checked").val();
-    
+
     var url = "/raffles/shared/ajax/table_user_eligible.php";
     
     if (debug_mode) {
         url = "/raffles/shared/ajax/table_user_eligible.php?debug=true";
     }
     
-    if (test_mode) { // go into test mode (show all eligible users, not just maually entered ones)
+    if (test_mode) { // go into test mode (show all eligible users, not just manually entered ones)
         url = "/raffles/shared/ajax/table_user_eligible.php?test=true&debug=true";
     }
     

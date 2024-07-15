@@ -87,7 +87,7 @@ use raffles\shared\Constants as Constants;
         <p>Please click <a href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">here</a> for the Rewards Manual</p>
         
         <h2>Please select the raffle and manually override the students that are eligible</h2>
-        <p>Please note that checking off a student will make them eligible regardless of missions achived unless they have already won.</p>
+        <p>Please note that checking off a student will make them eligible regardless of missions achieved unless they have already won.</p>
         
         <div class="dropdowns">
             <? if(count($schools) == 1) {?>
