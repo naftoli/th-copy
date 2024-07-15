@@ -229,7 +229,7 @@ $school_ids = $admin_user['auths']['school'];
                 <a href="/battlefront/report.html">
                     <div class="button">
                         <img src="/images/icon_admin_medal.png" height="32" alt="medal"/>
-                        <span class="link-text">Hachayol Winners</span>
+                        <span class="link-text">Battlefront Report Winners</span>
                     </div>
                 </a>
                 <a href="winners_shamai_form.php">
