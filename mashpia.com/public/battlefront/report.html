@@ -51,6 +51,17 @@
       URL.revokeObjectURL(elem.href);
     }
   }
+
+  function initialize(name) {
+    const names = name.split(' ')
+    const last_name = names[names.length - 1]
+    // delete last name from names array
+    names.pop()
+    let initials = names.map(n => n[0])
+    // remove empty elements or non alphanumeric characters
+    initials = initials.filter(n => n.match(/[a-z]/i))
+    return initials.join('. ') + '. ' + last_name
+  }
 </script>
 <script type="text/babel">
   const {useState, useEffect} = React
@@ -219,7 +230,7 @@
         {info.map(winner => (
           <div key={winner.user_id}>
             {raffle == '60' && <div style={prizeStyle}>Prize: {winner.prize_name}</div>}
-            <div style={nameStyle}>{winner.name}</div>
+            <div style={nameStyle}>{initialize(winner.name)}</div>
             <div>{winner.shorthand ? winner.shorthand : winner.school_id}</div>
             {raffle == '0' && <br />}
           </div>
@@ -257,7 +268,7 @@
             <div style={{fontWeight: 'bold'}}>{heDates[birthdate]}</div>
             {birthdays[birthdate].map((birthday, i) => (
               <div key={i}>
-                <div>{birthday.name}</div>
+                <div>{initialize(birthday.name)}</div>
                 <div style={schoolStyle}>{birthday.school ? birthday.school : birthday.school_id}</div>
               </div>
             ))}
@@ -309,7 +320,7 @@
             <div style={{fontWeight: 'bold'}}>{ranks[rank]}</div>
             {info[rank].map(user => (
             <div key={user.user_serial}>
-              <div>{user.first + ' ' + user.last}</div>
+              <div>{initialize(user.first + ' ' + user.last)}</div>
               <div style={{fontStyle: 'italic'}}>{user.school}</div>
             </div>
             ))}
@@ -364,7 +375,7 @@
           const profile = general.mobile_pic ? `//mashpia.com/mobile/reg/${general.mobile_pic}` : general.user_photo_id ? `/file_view.php?id=${general.user_photo_id}` : ''
           return (
             <div key={general.user_serial}>
-              <div style={{fontWeight: 'bold'}}>{general.first + ' ' + general.last}</div>
+              <div style={{fontWeight: 'bold'}}>{initialize(general.first + ' ' + general.last)}</div>
               <div style={{textDecoration: 'underline'}}>{general.school}</div>
               <input type="hidden" className="profile" data-profile={profile} data-name={general.first + ' ' + general.last} />
             </div>
@@ -375,11 +386,6 @@
   }
 
   const LowerRanks = ({ info, ranks }) => {
-    const initials = name => {
-      const names = name.split(' ')
-      return names.map(n => n[0])
-    }
-
     // first split up the users by ranks then schools
     let sorted = []
     for (let rank in info) {
@@ -403,7 +409,7 @@
                 <div style={{fontWeight: 'bold'}}>{school}</div>
                 {sorted[rank][school].map(user => (
                   <div key={user.user_serial}>
-                    <div>{initials(user.first).join('. ') + ' ' + user.last}</div>
+                    <div>{initialize((user.first).join('. ') + ' ' + user.last)}</div>
                   </div>
                 ))}
               </div>
