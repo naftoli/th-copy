@@ -53,15 +53,16 @@
   }
 
   function initialize(name) {
-    return name
     const names = name.split(' ')
-    const last_name = names[names.length - 1]
-    // delete last name from names array
-    names.pop()
-    let initials = names.map(n => n[0])
-    // remove empty elements or non alphanumeric characters
-    initials = initials.filter(n => n.match(/[a-z]/i))
-    return initials.join('. ') + '. ' + last_name
+    if (names.length > 1) {
+      const last_name = names[names.length - 1]
+      // delete last name from names array
+      names.pop()
+      // remove empty elements or non alphanumeric characters
+      const initials = names.map(n => n[0]).filter(n => n && n.match(/[a-z]/i))
+      return initials.join('. ') + '. ' + last_name
+    }
+    return name
   }
 </script>
 <script type="text/babel">
@@ -410,7 +411,7 @@
                 <div style={{fontWeight: 'bold'}}>{school}</div>
                 {sorted[rank][school].map(user => (
                   <div key={user.user_serial}>
-                    <div>{initialize((user.first).join('. ') + ' ' + user.last)}</div>
+                    <div>{initialize(user.first + ' ' + user.last)}</div>
                   </div>
                 ))}
               </div>
