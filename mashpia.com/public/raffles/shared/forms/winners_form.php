@@ -76,7 +76,8 @@ if($debug) echo "</pre>";
         <h1>Raffles: Winners</h1>
         
         <p>Please click <a target="_blank" href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit?usp=sharing">here</a> for the Rewards Manual</p>
-        <p>Please click <a target="_blank" href="https://www.dropbox.com/sh/yzzhzkmh18aqzhi/AAAVmb8Hy9fDq-L17mycIu28a?dl=0">here</a> or the weekly designed poster and whatsapp images of winners</p>
+        <p>Please click <a target="_blank" href="https://mashpia.com/raffles/posters/weekly.php">here</a> for the weekly designed posters</p>
+        <p>Please click <a target="_blank" href="https://www.dropbox.com/scl/fo/v0yej2p4cxa50if5e0cws/AIAWP_jZ6NF5r-mlmG-t-Go?rlkey=yzrfan7enjwupr5kb0cynwsny&st=ii1mtjsd&dl=0">here</a> for the whatsapp images of winners</p>
         <p>
             <center>
                 <a class="button" style="display: inline-block" id="export-to-csv">Export to CSV</a>

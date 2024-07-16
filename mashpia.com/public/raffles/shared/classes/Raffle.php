@@ -112,6 +112,7 @@ class Raffle
      */
     public static function loadAll($filter = "", $db_conn = false)
     {
+
         if (!$db_conn) $db_conn = new DBAdapter(); // create a new DB adapter if one is not provided
         //$filter = mysql_real_escape_string($filter); // protect against SQL injection
         $raffles = []; // the array to return

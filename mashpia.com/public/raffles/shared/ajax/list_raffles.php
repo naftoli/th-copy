@@ -5,6 +5,7 @@ ini_set("display_errors", 1);
 $admin_auth = array('school'); 
 require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php';
+$year = GlobalSettings::getCurrentYear();
 
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
@@ -20,6 +21,7 @@ $ran_only = isset( $_POST['ran_only'] ) && $_POST['ran_only'] == "true";
 $all = isset( $_POST['all'] ) && $_POST['all'] == "true" ? true : false;
 
 $filter = []; // sorting
+$filter[] = "year >= " . ($year - 1);
 // load all the raffles
 if ( $type !== "" )
     $filter[] = "type='$type'"; // add the where clause before the order_by\
@@ -38,7 +40,7 @@ if ( count( $filter ) > 0 ) {
 } else {
     $filter = 'ORDER BY run_date DESC, type';
 }
-//echo "<pre>"; print_r( $filter ); echo "</pre>";
+//echo "<pre>"; print_r( $filter ); echo "</pre>"; exit;
 
 $raffles = Raffle::loadAll($filter);
 
