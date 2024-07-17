@@ -10,7 +10,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimSe
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getRegistrationYear();
 $schoolSettings = MivtzoimSetting::getSchools( $year, [2, 3] );
 ?>
 <!DOCTYPE html>
