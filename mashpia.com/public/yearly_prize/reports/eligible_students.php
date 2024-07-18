@@ -1,55 +1,50 @@
-<?
-/***************** DEBUGGING SETTINGS **********************/
-if ($_GET['debug']) {
-    //error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-    $debug = true;
-    echo "<h2>Debug Log: </h2>";
-}
-if($debug) echo "<pre>";
+<?php
+/*
+  * page should show all students that have registered for this year
+  * as well as base commanders, teachers, principals, etc
+  */
 
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
 require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
-if ( $admin_user['auth'] == 'super' ) {
-    header( 'Location: /yearly_prize/reports/' ); die();
-}
 /***************** EXTERNAL DEPENDENCIES **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
-require_once $_SERVER["DOCUMENT_ROOT"].'/class.schoolsUsers.php';
-
-require_once dirname(__FILE__).'/../functions/get_parsha_names.php';
-require_once dirname(__FILE__).'/../classes/TotalWeeklyTasks.php';
+require_once $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.reg.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.parshos.php';
 
 /***************** GET SOME BASIC INFORMATION **********************/
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
-// create a weekly tasks object
-$totalWeeklyTasks = new TotalWeeklyTasks(0, unixtojd());
-// set the start date in debugging mode
-if($debug && isset($_GET['start']) && $_GET['start']){
-    $totalWeeklyTasks->start_date = $_GET['start'];
+
+$year = GlobalSettings::getRegistrationYear();
+$parshos = Parshos::getParshos($year);
+
+$students = [];
+foreach ($schools as $school_id => $school_name) {
+    $reg = new Reg($school_id);
+    $students[$school_id] = $reg->getRegisteredChildren();
 }
-// generate the weeks array
-$totalWeeklyTasks->get_week_dates();
-// calculate the end_date for the last week and use that to get the parsha names
-$last_start_date = $totalWeeklyTasks->week_dates[count($totalWeeklyTasks->week_dates) - 1]['start']; // used to set the defaults in the dropdown
-$end_date = $totalWeeklyTasks->week_dates[count($totalWeeklyTasks->week_dates) - 1]['end'];
-$parshos = get_parsha_names($totalWeeklyTasks->start_date, $end_date);
 
-// set the dropdown to what the user expects
-$get_type = isset($_GET['type']) ? $_GET['type'] : false;
-if($debug) echo $get_type."\n";
-
-// end debugging
-if($debug) echo "</pre>";
+// order the students by grade, name
+foreach ($students as $school_id => $details) {
+    usort($students[$school_id], function($a, $b) {
+        if ($a['class_id'] == $b['class_id']) {
+            if ($a['last'] == $b['last']) {
+                return strcmp(strtolower($a['first']), strtolower($b['first']));
+            }
+            return strcmp(strtolower($a['last']), strtolower($b['last']));
+        }
+        return $a['class_id'] - $b['class_id'];
+    });
+}
 ?>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Tzivos Hashem | Yearly Gift Eligibility Report</title>
+        <title>Yearly Gift Eligibility Report</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css">
         <link href="../css/grey_select.css" rel="stylesheet" type="text/css">
@@ -121,12 +116,6 @@ if($debug) echo "</pre>";
             </select>
         </div>
         <div id="action-links">
-            <i class="fa fa-bar-chart" aria-hidden="true"></i> Report: 
-            <select id="type">
-                <option value="combined">Combined Report</option>
-                <option value="summary" <?= $get_type == "summary" ? "selected": "";?>>Summary Report</option>
-                <option value="form" <?= $get_type == "form" ? "selected": "";?>>Detailed Report</option>
-            </select>
             <a class="button" id="refresh">
                 <i class="fa fa-spinner" aria-hidden="true"></i> Load
             </a>
@@ -137,7 +126,6 @@ if($debug) echo "</pre>";
 
         <div id="eligible_users_report"></div>
         
-        <script>var debug = <?=$debug ? "true" : "false"?></script>
         <script src="../js/eligible_students.php.js?v=5.0"></script>
     </body>
 </html>
