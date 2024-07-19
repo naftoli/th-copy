@@ -408,13 +408,15 @@ var registrationApp = function() {
         if ( school_id == anash_kinder ) $("#anash_kinder_text").show();
         else $("#anash_kinder_text").hide();
 
+        let txt = "I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass"
         if ([61, 269].includes(school_id)) {
-            $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass a shipping fee (depending on your address).")
+            txt += " PLUS a shipping fee (depending on your address).";
             $("#myshliachTerms").show()
         } else {
-            $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass.")
+            txt += "."
             $("#myshliachTerms").hide()
         }
+        $("#terms-1").text(txt)
 
         // show the page
         templates.showUser( state.selected_users[0], 0 );
