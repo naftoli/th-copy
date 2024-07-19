@@ -385,7 +385,7 @@ require 'mobile/reg/ajax/encrypt.php';
                     height: 35px;
                     padding-top: 7px;
                     position: absolute;
-                    margin-left: 15px;
+                    margin-left: 12px;
                     margin-top: 10px;
                     width: 65px;
                   }
