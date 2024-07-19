@@ -355,30 +355,6 @@ require 'mobile/reg/ajax/encrypt.php';
                 	<div class="scan_card">
                     	<div class="scan_card_inside">
 							<script>
-	async function loadShadow(cardnum) {
-		if (cardnum.value.match(/^ *$/)) return;
-    document.getElementById('scanBtn').disabled = true
-    const user = <?= $user_id ?>;
-    const card = cardnum.value
-    if (card.length == 20) {
-      const res = await fetch('/mobile/store/ajax/checkCard.php', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          user, card
-        })
-      })
-      const data = await res.json()
-      if (data.msg) alert(data.msg)
-      cardnum.value='';
-    } else {
-      alert('Invalid card number');
-    }
-    document.getElementById('scanBtn').disabled = false
-    return false
-  }
 	
 	function confirm_points(intPoints)
 	{
@@ -397,20 +373,55 @@ require 'mobile/reg/ajax/encrypt.php';
 
                             <? if ($user['registered'] || $camp_season): ?>
 							
+								<form name="scancard" id="scancard">
 									Scanning Station<br>
 									<input name="scantext" id="scantext" type="text" autocomplete="off"  />
-                  <button id="scanBtn" onclick="loadShadow(document.getElementById('scantext')); return false;">Scan</button>
-                            <style>
-                              #scanBtn {
-                                padding: 10px;
-                                font-size: 16px;
-                                height: 35px;
-                                padding-top: 7px;
-                                position: absolute;
-                                margin-left: 15px;
-                                margin-top: 10px;
-                              }
-                            </style>
+                  <input type="submit" id="scanBtn" value="Scan" />
+								</form>
+                <style>
+                  #scanBtn {
+                    padding: 10px;
+                    font-size: 16px;
+                    height: 35px;
+                    padding-top: 7px;
+                    position: absolute;
+                    margin-left: 15px;
+                    margin-top: 10px;
+                    width: 65px;
+                  }
+                </style>
+
+								<script type="text/javascript">
+                  document.getElementById('scantext').focus();
+                  const form = document.getElementById('scancard');
+                  form.addEventListener('submit', async function (e) {
+                    e.preventDefault();
+                    const cardnum = document.getElementById('scantext');
+                    if (cardnum.value.match(/^ *$/)) return;
+                    const user = <?= $user_id ?>;
+                    const card = cardnum.value
+                    if (card.length == 20) {
+                      document.getElementById('scanBtn').disabled = true
+                      const res = await fetch('/mobile/store/ajax/checkCard.php', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                          user, card
+                        })
+                      })
+                      const data = await res.json()
+                      if (data.msg) alert(data.msg)
+                      cardnum.value = '';
+                      document.getElementById('scanBtn').disabled = false
+                    } else {
+                      alert('Invalid card number');
+                    }
+                    return false
+                  });
+                </script>
+
 
                              <? else: ?>
 
