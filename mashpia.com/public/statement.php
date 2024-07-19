@@ -357,14 +357,26 @@ require 'mobile/reg/ajax/encrypt.php';
 							<script>
 	async function loadShadow(cardnum) {
 		if (cardnum.value.match(/^ *$/)) return;
-    // open a welcome message as soon as the window loads
+    const user = <?= $user_id ?>;
     const card = cardnum.value
-    const res = await fetch('/cardpop.php?card=' + card + '&user_id=' + <?=$user_id?> + '&school_id=' + <?=$school_id?> + '&class_id=' + <?=$class_id?>)
-    const result = await res.json()
-    alert(result.msg)
-		cardnum.value='';
-		return false;
-	}
+    if (card.length == 20) {
+      const res = await fetch('/mobile/store/ajax/checkCard.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          user, card
+        })
+      })
+      const data = await res.json()
+      if (data.msg) alert(data.msg)
+      cardnum.value='';
+    } else {
+      alert('Invalid card number');
+    }
+    return false
+  }
 	
 	function confirm_points(intPoints)
 	{
