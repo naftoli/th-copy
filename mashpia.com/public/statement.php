@@ -357,6 +357,7 @@ require 'mobile/reg/ajax/encrypt.php';
 							<script>
 	async function loadShadow(cardnum) {
 		if (cardnum.value.match(/^ *$/)) return;
+    document.getElementById('scanBtn').disabled = true
     const user = <?= $user_id ?>;
     const card = cardnum.value
     if (card.length == 20) {
@@ -375,6 +376,7 @@ require 'mobile/reg/ajax/encrypt.php';
     } else {
       alert('Invalid card number');
     }
+    document.getElementById('scanBtn').disabled = false
     return false
   }
 	
@@ -395,11 +397,20 @@ require 'mobile/reg/ajax/encrypt.php';
 
                             <? if ($user['registered'] || $camp_season): ?>
 							
-								<form name="scancard" id="scancard" onSubmit="loadShadow(this.scantext); return false;">
 									Scanning Station<br>
 									<input name="scantext" id="scantext" type="text" autocomplete="off"  />
-								</form>
-								<script type="text/javascript">document.getElementById('scantext').focus();</script>
+                  <button id="scanBtn" onclick="loadShadow(document.getElementById('scantext')); return false;">Scan</button>
+                            <style>
+                              #scanBtn {
+                                padding: 10px;
+                                font-size: 16px;
+                                height: 35px;
+                                padding-top: 7px;
+                                position: absolute;
+                                margin-left: 15px;
+                                margin-top: 10px;
+                              }
+                            </style>
 
                              <? else: ?>
 
