@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 /*
   * page should show all students that have registered for this year
   * as well as base commanders, teachers, principals, etc
@@ -109,7 +112,7 @@ foreach ($students as $school_id => $details) {
             <label for="end_date">To</label>
             <select id="end">
                 <?foreach($parshos as $week_start => $parsha_name){?>
-                    <option value="<?= $week_start ?>" <?= $week_start == $last_start_date ? "selected" : "" ;?>>
+                    <option value="<?= $week_start ?>" <?//= $week_start == $last_start_date ? "selected" : "" ;?>>
                         <?= $parsha_name ?>
                     </option>
                 <?}?>
