@@ -322,7 +322,7 @@
             <div style={{fontWeight: 'bold'}}>{ranks[rank]}</div>
             {info[rank].map(user => (
             <div key={user.user_serial}>
-              <div>{initialize(user.first + ' ' + user.last)}</div>
+              <div>{user.first + ' ' + user.last}</div>
               <div style={{fontStyle: 'italic'}}>{user.school}</div>
             </div>
             ))}
@@ -377,7 +377,7 @@
           const profile = general.mobile_pic ? `//mashpia.com/mobile/reg/${general.mobile_pic}` : general.user_photo_id ? `/file_view.php?id=${general.user_photo_id}` : ''
           return (
             <div key={general.user_serial}>
-              <div style={{fontWeight: 'bold'}}>{initialize(general.first + ' ' + general.last)}</div>
+              <div style={{fontWeight: 'bold'}}>{general.first + ' ' + general.last}</div>
               <div style={{textDecoration: 'underline'}}>{general.school}</div>
               <input type="hidden" className="profile" data-profile={profile} data-name={general.first + ' ' + general.last} />
             </div>
