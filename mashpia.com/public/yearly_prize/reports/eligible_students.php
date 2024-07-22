@@ -9,7 +9,7 @@ ini_set('error_reporting', E_ALL);
 
 /***************** AUTHENTICATION **********************/
 $admin_auth = array('school'); 
-require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
+require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
 
 /***************** EXTERNAL DEPENDENCIES **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
