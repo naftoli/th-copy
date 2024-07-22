@@ -14,7 +14,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 /***************** EXTERNAL DEPENDENCIES **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.reg.php';
+//require_once $_SERVER['DOCUMENT_ROOT'] . '/class.reg.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.parshos.php';
 
 /***************** GET SOME BASIC INFORMATION **********************/
@@ -129,6 +129,6 @@ foreach ($students as $school_id => $details) {
 
         <div id="eligible_users_report"></div>
         
-        <script src="../js/eligible_students.php.js?v=5.0"></script>
+<!--        <script src="../js/eligible_students.php.js?v=5.0"></script>-->
     </body>
 </html>
