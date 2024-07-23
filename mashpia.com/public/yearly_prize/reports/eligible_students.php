@@ -63,10 +63,6 @@ foreach ($students as $school_id => $details) {
     <body>
         <? include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); // load the basic UI ?>
         <h1>Yearly Prize Eligibility Report</h1>
-        <div class="infobox">
-            It will show a chayol as having marked missions that week even if he/she only completed 1 task the entire week.<br />
-            (To see which chayolim checked off tasks for at least 5/7 days per week, go to Mission Marathon>Weekly Raffle>Eligible Students)
-        </div>
         <p class="center" style="text-align: center;">Click
             <a target="_blank" href="https://docs.google.com/document/d/1FKrfoxTUTORwW9lO3Kx0mUY9wVeCBFCn0noQzVoj4q8/edit">here</a>
             for the complete rewards manual
@@ -107,14 +103,15 @@ foreach ($students as $school_id => $details) {
             </label>
             <select id="start">
                 <?foreach($parshos as $parsho){?>
-                    <option value="<?= $parsho['start'] ?>"><?= $parsho['name'] ?></option>
+                    <option value="<?= $parsho['start'] ?>"><?= $parsho['name'] . '-' . $parsho['year'] ?></option>
                 <?}?>
             </select>
             <label for="end_date">To</label>
             <select id="end">
+                <?php $found = false; ?>
                 <?foreach($parshos as $parsho){?>
-                    <option value="<?= $parsho['start'] ?>" <?//= $week_start == $last_start_date ? "selected" : "" ;?>>
-                        <?= $parsho['name'] ?>
+                    <option value="<?= $parsho['end'] ?>" <?php if (!$found && unixtojd() < $parsho['end']) { echo 'selected'; $found = true; }?>>
+                        <?= $parsho['name'] . '-' . $parsho['year'] ?>
                     </option>
                 <?}?>
             </select>
