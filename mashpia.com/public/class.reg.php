@@ -27,7 +27,7 @@ class Reg
 //        echo $sql; exit;
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
-            $this->registered_children[] = $row;
+            $this->children[] = $row;
             $this->parents[$row['user_id']] = $row;
         }
     }
@@ -37,5 +37,12 @@ class Reg
             $this->setChildren();
         }
         return $this->children;
+    }
+
+    public function getParents() {
+        if (empty($this->parents)) {
+            $this->setChildren();
+        }
+        return $this->parents;
     }
 }
