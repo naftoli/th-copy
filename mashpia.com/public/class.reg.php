@@ -18,9 +18,9 @@ class Reg
                 left join schools s using (school_id) 
                 left join classes c on u.class_id = c.class_id 
                 left join admin_auths aa on aa.id = u.user_id 
-                left join admins a using (admin_id) 
-                where (aa.auth = 'user' or aa.auth is null) 
-                and u.user_registered > 0";
+                left join admins a on a.admin_id = aa.admin_id 
+                where u.user_registered > 0 
+                and (aa.auth = 'user' or aa.auth is null) ";
         if ($this->school_id > 0) $sql .= " and u.school_id = $this->school_id";
         if ($this->class_id > 0) $sql .= " and u.class_id = $this->class_id";
         if ($this->user_id > 0) $sql .= " and u.user_id = $this->user_id";
