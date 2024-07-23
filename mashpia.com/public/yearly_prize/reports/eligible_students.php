@@ -106,15 +106,15 @@ foreach ($students as $school_id => $details) {
                 <i class="fa fa-calendar" aria-hidden="true"></i> Dates: From
             </label>
             <select id="start">
-                <?foreach($parshos as $week_start => $parsha_name){?>
-                    <option value="<?= $week_start ?>"><?= $parsha_name ?></option>
+                <?foreach($parshos as $parsho){?>
+                    <option value="<?= $parsho['start'] ?>"><?= $parsho['name'] ?></option>
                 <?}?>
             </select>
             <label for="end_date">To</label>
             <select id="end">
-                <?foreach($parshos as $week_start => $parsha_name){?>
-                    <option value="<?= $week_start ?>" <?//= $week_start == $last_start_date ? "selected" : "" ;?>>
-                        <?= $parsha_name ?>
+                <?foreach($parshos as $parsho){?>
+                    <option value="<?= $parsho['start'] ?>" <?//= $week_start == $last_start_date ? "selected" : "" ;?>>
+                        <?= $parsho['name'] ?>
                     </option>
                 <?}?>
             </select>
