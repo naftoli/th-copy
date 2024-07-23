@@ -4,14 +4,13 @@ class Reg
     private $school_id;
     private $class_id;
     private $user_id;
-    private $registered_children;
-    private $unregistered_children;
+    private $children;
 
     public function __construct($school = 0, $grade = 0, $user = 0) {
         $this->school_id = $school;
         $this->class_id = $grade;
         $this->user_id = $user;
-        $this->registered_children = [];
+        $this->children = [];
     }
 
     private function setChildren() {
@@ -33,10 +32,10 @@ class Reg
         }
     }
 
-    public function getRegisteredChildren() {
-        if (empty($this->resistered_children)) {
+    public function getChildren() {
+        if (empty($this->children)) {
             $this->setChildren();
         }
-        return $this->registered_children;
+        return $this->children;
     }
 }

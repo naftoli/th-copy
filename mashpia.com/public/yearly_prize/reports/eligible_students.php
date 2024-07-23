@@ -27,7 +27,7 @@ $parshos = Parshos::getParshos($year);
 $students = [];
 foreach ($schools as $school_id => $school_name) {
     $reg = new Reg($school_id);
-    $students[$school_id] = $reg->getRegisteredChildren();
+    $students[$school_id] = $reg->getChildren();
 }
 
 // order the students by grade, name
