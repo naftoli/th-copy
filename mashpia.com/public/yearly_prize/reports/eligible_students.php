@@ -42,7 +42,7 @@ foreach ($students as $school_id => $details) {
         return $a['class_id'] - $b['class_id'];
     });
 }
-echo "<pre>"; print_r($students); echo "</pre>"; exit;
+//echo "<pre>"; print_r($students); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
