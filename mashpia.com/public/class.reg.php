@@ -24,7 +24,7 @@ class Reg
         if ($this->school_id > 0) $sql .= " and u.school_id = $this->school_id";
         if ($this->class_id > 0) $sql .= " and u.class_id = $this->class_id";
         if ($this->user_id > 0) $sql .= " and u.user_id = $this->user_id";
-        echo $sql; exit;
+//        echo $sql; exit;
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $this->registered_children[] = $row;
