@@ -342,7 +342,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
     if (bc && action == 0) {
-      this.value = originalVal
+      $(this).val(originalVal)
       alert('You cannot change to Not Yet Shipped')
       return false
     }
