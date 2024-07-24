@@ -61,7 +61,7 @@ function build_items() {
 }
 
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status, $superAdmin;
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$school])) {
             $items = $info[$cat][$school];
@@ -107,7 +107,8 @@ function createHtmlForItem($school, $row, $output = true) {
                         // add column for shipping info
                         echo "<td class='no-print'>";
                         echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping'>";
-                        $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
+                        if (!$superAdmin && (empty($status) || $status['shipped'] == 0)) $options = ['Not Yet Shipped'];
+                        else $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
                             /*

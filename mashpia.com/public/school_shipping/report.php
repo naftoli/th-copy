@@ -281,6 +281,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   });
 
   let info = []
+  let bc = <?= $superAdmin ? 0 : 1 ?>;
 
   function update(elem, action, qty = 1, desc = '') {
     const id = $(elem).attr('id')
@@ -339,14 +340,15 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const action = parseInt(this.value)
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
-    // if (action == 2 && !qty) {
-    //   alert('You must enter how many items are missing before it can be saved.')
-    //   return false
-    // } else
+    if (bc && action == 0) {
+      alert('You cannot change to Not Yet Shipped')
+      return false
+    }
     if (action == 3 && !(qty && desc)) {
       alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
       return false
     }
+    if ()
     update(this, action, qty)
     save(false)
   })
@@ -385,14 +387,5 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       if (!res.success) alert(res.error)
     })
   })
-  /*
-    $(function () {
-  //    <?php //if (!$superAdmin) : ?>
-      $(".shipping").attr('disabled', true)
-      $(".qty").attr('disabled', true)
-      $(".description").attr('disabled', true)
-//    <?php //endif; ?>
-  })
-*/
 </script>
 </html>
