@@ -14,7 +14,6 @@ require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
 /***************** EXTERNAL DEPENDENCIES **********************/
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.reg.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.parshos.php';
 
 /***************** GET SOME BASIC INFORMATION **********************/
@@ -23,26 +22,6 @@ $schools = $as->getSchools();
 
 $year = GlobalSettings::getRegistrationYear();
 $parshos = Parshos::getParshos($year);
-
-$students = [];
-foreach ($schools as $school_id => $school_name) {
-    $reg = new Reg($school_id);
-    $students[$school_id] = $reg->getChildren();
-}
-
-// order the students by grade, name
-foreach ($students as $school_id => $details) {
-    usort($students[$school_id], function($a, $b) {
-        if ($a['class_id'] == $b['class_id']) {
-            if ($a['last'] == $b['last']) {
-                return strcmp(strtolower($a['first']), strtolower($b['first']));
-            }
-            return strcmp(strtolower($a['last']), strtolower($b['last']));
-        }
-        return $a['class_id'] - $b['class_id'];
-    });
-}
-//echo "<pre>"; print_r($students); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -94,8 +73,6 @@ foreach ($students as $school_id => $details) {
                     <?}?>
                 </select>
             <?}?>
-            <i class="fa fa-users" aria-hidden="true"></i> Platoon:
-            <span id="classes"></span>
         </div>
         <div id="options">
             <label for="start_date">
@@ -125,8 +102,102 @@ foreach ($students as $school_id => $details) {
             </a>
         </div>
 
-        <div id="eligible_users_report"></div>
+        <div id="eligible_users_report">
+
+        </div>
         
-<!--        <script src="../js/eligible_students.php.js?v=5.0"></script>-->
     </body>
+<script>
+  $( function() {
+    $("#csv_export").click(csv_export);
+
+    $("#refresh").click( function() {
+      const school_id = $("#school_id").val();
+      const start = $("#start").val();
+      const end = $("#end").val();
+
+      $.ajax({
+        type: "POST",
+        url: "getRegInfo.php",
+        data: { school_id, start, end },
+        success: function(data) {
+          const info = JSON.parse(data);
+          // create table with following columns: School ID, School Name, Grade, First Name, Last Name, Date Registered
+          const table = $("<table>");
+          const header = $("<tr>");
+          header.append($("<th>").text("School ID"));
+          header.append($("<th>").text("School Name"));
+          header.append($("<th>").text("Grade"));
+          header.append($("<th>").text("First Name"));
+          header.append($("<th>").text("Last Name"));
+          header.append($("<th>").text("Date Registered"));
+          table.append(header);
+          for (let school_id in info) {
+            for (let student of info[school_id]) {
+              // make sure student has school and class and admin connection
+              if (!student.school_name || !student.class_grade || !student.admin_id) {
+                continue;
+              }
+              // make sure that the registration date is between the start and end dates
+              const date = new Date(student.user_registered);
+              const julianDate = gregorianToJulian(date);
+              if (julianDate < start || julianDate > end) {
+                continue;
+              }
+
+              const row = $("<tr>");
+              row.append($("<td>").text(school_id));
+              row.append($("<td>").text(student.school_name));
+              row.append($("<td>").text(student.class_grade + (student.class_sub ? '-' + student.class_sub : '')));
+              row.append($("<td>").text(student.first_name));
+              row.append($("<td>").text(student.last_name));
+              row.append($("<td>").text(student.user_registered));
+              table.append(row);
+            }
+          }
+          $("#eligible_users_report").empty().append(table);
+        }
+      });
+    })
+  })
+
+  function gregorianToJulian(date) {
+    // Get the year, month, and day of the date.
+    const y = date.getFullYear();
+    const m = date.getMonth() + 1;
+    const d = date.getDate();
+    return Math.floor((1461 * (y + 4800 + (m - 14) / 12)) / 4 + (367 * (m - 2 - 12 * ((m - 14) / 12))) / 12 - (3 * ((y + 4900 + (m - 14) / 12) / 100)) / 4 + d - 32075);
+  }
+
+  function csv_export() {
+    var rows = []; // the rows for the csv export
+    var universalBOM = "\uFEFF";
+    var csvContent = "";
+
+    $.each($("#eligible_users_report tr"), function(index, item) {
+      item = $(item);
+      var row = [];
+      // check if this is a header row....
+      $.each(item.find('th, td'), function(td_index, td) {
+        td = $(td); // cast to jquery object
+        if (td.find("input[type='checkbox']").length > 0) { // see if we can find a checkbox...
+          row.push(td.find("input[type='checkbox']")[0].checked ? "Yes" : "No");
+        } else {
+          row.push('"' + td.text() + '\t"');
+        }
+      });
+
+      rows.push(row); // add the row to the csv export
+      row = row.join(",");
+      csvContent += row + "\n";
+    });
+
+    // open the csv with a hidden element....
+    var hiddenElement = document.createElement('a');
+    hiddenElement.href = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM+csvContent); // set the data
+    hiddenElement.target = '_blank'; // in a new tab
+    hiddenElement.download = 'yearly_prize_report.csv'; // with this file_name
+    hiddenElement.click(); // and click it
+  }
+</script>
 </html>
