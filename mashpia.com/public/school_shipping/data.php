@@ -108,9 +108,9 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "<td class='no-print'>";
                         $originalValue = 0;
                         if (!empty($status)) {
-                            if ($status['shipped'] == 1) $originalValue = 1;
+                            if ($status['damaged'] == 1) $originalValue = 3;
                             else if ($status['missing'] == 1) $originalValue = 2;
-                            else if ($status['damaged'] == 1) $originalValue = 3;
+                            else if ($status['shipped'] == 1) $originalValue = 1;
                         }
                         echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping' data-original-value='$originalValue'>";
                         if (!$superAdmin && (empty($status) || $status['shipped'] == 0)) $options = ['Not Yet Shipped'];
@@ -128,14 +128,14 @@ function createHtmlForItem($school, $row, $output = true) {
                                     if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
                                     break;
                                 case 1:
-                                    if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
+                                    if (intval($status['shipped']) == 1 && intval($status['missing']) == 0
                                         && intval($status['damaged']) == 0) echo " selected ";
                                     break;
                                 case 2:
-                                    if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
+                                    if (intval($status['missing']) == 1) echo " selected ";
                                     break;
                                 case 3:
-                                    if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
+                                    if (intval($status['damaged']) == 1) echo " selected ";
                                     break;
                             }
                             echo ">" . $val . "</option>";
