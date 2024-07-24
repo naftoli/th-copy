@@ -69,7 +69,7 @@ function build_items() {
 }
 
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status, $superAdmin;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
@@ -118,11 +118,15 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "</td>";
                         // add column for shipping info
                         echo "<td class='no-print'>";
-                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . ':' . $item_num . "' class='shipping'";
-                        // figure out if it should be disabled or not
-//                        if (!$super && (empty($status) || intval($status['shipped']) == 0)) echo " disabled";
-                        echo ">";
-                        $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged', 'Received'];
+                        $originalValue = 0;
+                        if (!empty($status)) {
+                            if ($status['damaged'] == 1) $originalValue = 3;
+                            else if ($status['missing'] == 1) $originalValue = 2;
+                            else if ($status['shipped'] == 1) $originalValue = 1;
+                        }
+                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . ':' . $item_num . "' class='shipping' data-original-value='$originalValue'>";
+                        if (!$superAdmin && (empty($status) || $status['shipped'] == 0)) $options = ['Not Yet Shipped'];
+                        else $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
                             /*

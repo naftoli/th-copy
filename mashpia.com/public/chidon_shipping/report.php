@@ -456,8 +456,10 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   })
 
   $(".shipping").change(function () {
+    const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
     if (!super_admin && action == 0) {
+      $(this).val(originalVal)
       alert('You cannot change this to not yet shipped, it will not be saved.')
       return false
     } else if (!super_admin && action == 3) {
