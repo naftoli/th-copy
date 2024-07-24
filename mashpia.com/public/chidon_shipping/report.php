@@ -486,7 +486,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   //     if (!res.success) alert(res.error)
   //   })
   // })
-  if (!super_admin) $(".shipping").attr('disabled', true)
 
   <!--  --><?php //if (!$super) : ?>
   // $("select").attr('disabled', true)
