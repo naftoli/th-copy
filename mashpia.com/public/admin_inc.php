@@ -133,7 +133,7 @@ if (!isset($menu_type))
 			<LI><A HREF="admin_invoice_report.php"><?=T_('Invoices by Date/Time')?></A> <span><font size='1' color='red'>*NEW*</font></span>-->
 			<LI><A HREF="admin_shipping_report_02.php"><?=T_('Registrations by Date/Time')?></A> <span><font size='1' color='red'>*NEW*</font></span>
 			<LI><A HREF="admin_credit_card_report.php"><?=T_('Credit Card Transactions by Date')?></A> <span><font size='1' color='red'>*NEW*</font></span>
-			<LI><A HREF="admin_school_register_report.php"><?=T_('Registered Schools and Registered Students')?></A> <span><font size='1' color='red'>*NEW*</font></span>
+<!--			<LI><A HREF="admin_school_register_report.php">--><?php //=T_('Registered Schools and Registered Students')?><!--</A> <span><font size='1' color='red'>*NEW*</font></span>-->
 			<LI><A HREF="admin_school_teacher_report.php"><?=T_('List of Unique teacher names for current year')?></A> <span><font size='1' color='red'>*NEW*</font></span>
 			
 			<LI><BR>
