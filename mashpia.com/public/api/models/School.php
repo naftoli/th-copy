@@ -124,31 +124,14 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
         $early_bird = new DateTime() <  $this->earlyBird() && $this->school_id != 269; // anash kinder doesn't get early bird
 
-        // check if hq set the chayolei fee
-//        $stmt = $MASHPIA_DB->prepare("select child_fee from schools where school_id = :id");
-//        $result = $stmt->execute([':id' => $this->school_id]);
-//        if ( $result ) {
-//            $row = $stmt->fetch();
-//            $child_fee = $row['child_fee'];
-//            if ( $child_fee > 0 ) return $child_fee;
-//        }
-
         if ( $this->child_fee > 0 ) return $this->child_fee;
         
         // pass in whether its a ckids school or not; added by Naftoli 5/8/2020
-        $fee = GlobalSettings::calculateChildFee(
+        return GlobalSettings::calculateChildFee(
             $for_type,      $this->child_fee,
-            $to_soldier,    $early_bird,    $no_discount, 
-            $this->inst_id === 10
+            $to_soldier,    $early_bird,    $no_discount,
+            $this->inst_id === 10, $this->school_id == 61
         );
-
-//        if ( intval( $this->school_id ) == 61 ) {
-//            if ( new DateTime() < new DateTime( '2020-09-25 00:00:00' ) ) {
-//                $fee -= 5;
-//            }
-//        }
-
-        return $fee;
     }
 
     public function getRegStatus( $year = false ) {
