@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Modal, ModalHeader, ModalBody,
-  ModalFooter, Row, Col
+  ModalFooter, Row, Col, Input
 } from 'reactstrap';
 import { SaveButton } from 'components/buttons/index';
 import { MissionTypeSelect } from 'components/selects';
@@ -16,7 +16,8 @@ import { allMissionLanguages } from 'data/languages.json'
 
 const initialSoldier = {
   first: '', last: '', first_he: '',
-  last_he: '',  gender: 'M'
+  last_he: '',  gender: 'M', admin_id: 0,
+  admin_email: ''
 }
 
 class NewSoldierModal extends Component {
@@ -143,11 +144,15 @@ class NewSoldierModal extends Component {
             <Row>
               <Col sm='6'>
                 <label htmlFor='admin_id'>Parent Admin ID</label>
-                <input type='text' name='admin_id' id='admin_id' />
+                <Input
+                  type='number' name='admin_id'
+                  id='admin_id' onChange={ this.onInputChange } />
               </Col>
               <Col sm='6'>
                 <label htmlFor='admin_email'>Parent Email</label>
-                <input type='text' name='admin_email' id='admin_email' />
+                <Input
+                  type='email' name='admin_email'
+                  id='admin_email' onChange={ this.onInputChange } />
               </Col>
             </Row>
 
