@@ -90,8 +90,8 @@ export class SoldiersPage extends Component {
   createSoldier = soldier => {
     console.log(soldier)
     return
-    return this.props.createSoldier( soldier )
-    .then( () => this.setState({ create: { show: false, image: {} } } ) );
+    // return this.props.createSoldier( soldier )
+    // .then( () => this.setState({ create: { show: false, image: {} } } ) );
   }
 
   // download the content as a CSV

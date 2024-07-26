@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {
   Modal, ModalHeader, ModalBody,
-  ModalFooter, Row, Col, Input
+  ModalFooter, Row, Col
 } from 'reactstrap';
 import { SaveButton } from 'components/buttons/index';
 import { MissionTypeSelect } from 'components/selects';
