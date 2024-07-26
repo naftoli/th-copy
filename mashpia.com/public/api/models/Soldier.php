@@ -311,7 +311,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ($auth) return true;
         // connect parent to child
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO admin_auths (admin_id, id, auth) VALUES (:parent, :child, 'user')");
+            INSERT INTO admin_auths (admin_id, id, auth, role_id, position) VALUES (:parent, :child, 'user', 1, 'Parent')");
         $stmt->execute([
             ':parent' => $parent['admin_id'],
             ':child' => $this->user_id
