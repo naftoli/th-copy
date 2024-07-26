@@ -88,6 +88,8 @@ export class SoldiersPage extends Component {
   );
   // create a new soldier
   createSoldier = soldier => {
+    console.log(soldier)
+    return
     return this.props.createSoldier( soldier )
     .then( () => this.setState({ create: { show: false, image: {} } } ) );
   }

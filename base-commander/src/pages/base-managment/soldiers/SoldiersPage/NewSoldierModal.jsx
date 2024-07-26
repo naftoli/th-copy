@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { 
+import {
   Modal, ModalHeader, ModalBody,
-  ModalFooter,  Row,  Col
+  ModalFooter, Row, Col, Input
 } from 'reactstrap';
 import { SaveButton } from 'components/buttons/index';
 import { MissionTypeSelect } from 'components/selects';
@@ -139,6 +139,17 @@ class NewSoldierModal extends Component {
               classId={ soldier.class_id }
               schoolId={ soldier.school_id }
               onChange={ this.onSelectChange } />
+
+            <Row>
+              <Col sm='6'>
+                <label htmlFor='admin_id'>Parent Admin ID</label>
+                <input type='text' name='admin_id' id='admin_id' />
+              </Col>
+              <Col sm='6'>
+                <label htmlFor='admin_email'>Parent Email</label>
+                <input type='text' name='admin_email' id='admin_email' />
+              </Col>
+            </Row>
 
           </ModalBody>
 
