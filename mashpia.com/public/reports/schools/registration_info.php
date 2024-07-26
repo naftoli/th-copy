@@ -11,12 +11,10 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require_once( __DIR__ .'/../../api/header/db.php' );
+require_once( __DIR__ .'/../../class.adminSchools.php' );
 require_once( __DIR__ .'/../../class.globalSettings.php' );
-$year = GlobalSettings::getRegistrationYear();
-// get all chayolei schools
-$schools = \School::find_all_by_chayolei_and_test_school(
-    1, 0, ['order' => 'school_name']
-);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true, false); // add test schools
+$schools = $as->getSchools();
 ?>
 <!DOCTYPE html>
 <html>
@@ -120,7 +118,8 @@ $schools = \School::find_all_by_chayolei_and_test_school(
                 <th>Save</th>
             <thead>
             <tbody>
-            <?php foreach( $schools as $base ) { 
+            <?php foreach( $schools as $school_id => $school_name ) {
+                $base = \School::find()->where(['school_id' => $school_id])->one();
                 $year = GlobalSettings::getRegistrationYear( $base->school_id ); ?>
                 <tr class='base' data-school_id='<?= $base->school_id; ?>' data-year='<?= $year ?>'>
                     <td><?= $year ?></td>
