@@ -33,10 +33,8 @@ class UsersUploadRouter {
         } else {
             // columns to create users
             $columnNames = [
-                "*First Name",  "*Last Name", 
-                "*First Name Hebrew",  "*Last Name Hebrew",
-                "*Gender", "*English Date of Birth", 
-                "*Mission Type", "Parent / Family ID", "Parent Email"
+                "*First Name", "*Last Name", "*First Name Hebrew", "*Last Name Hebrew", "*Gender",
+                "*English Date of Birth", "*Mission Type", "Parent / Family ID", "Parent Email"
             ];
             $dbColumnNames = [
                 'first', 'last', 'first_he', 'last_he',
@@ -65,7 +63,9 @@ class UsersUploadRouter {
                     $headers[] = $cell->getValue();
                 }
                 // make sure that the headers are valid
-                if ( array_diff( $headers, $columnNames ) )
+                $diff = array_diff( $headers, $columnNames );
+                echo "<pre>"; print_r($diff); echo "</pre>";
+                if ( count($diff) > 0 )
                     json_error(
                          "You have an incorrect excel sheet.\n"
                         ."Please download the sample file again and do not modify the header information.",
