@@ -221,6 +221,9 @@ class UsersUploadRouter {
             $user['school_type_id'] = $type;
             $admin_id = $user['admin_id'];
             $email = $user['admin_email'];
+            // remove the admin id and email from the user array b/c the user object doesn't have those fields
+            unset($user['admin_id']);
+            unset($user['admin_email']);
 
             $user = new Soldier( $user );
             // copy over defaults from the school on creation...
