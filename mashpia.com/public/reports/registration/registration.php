@@ -122,7 +122,8 @@ foreach ($temp as $row) {
         // figure out soldier fee
 //        $early_bird = new DateTime($row['user_registered']) <=  GlobalSettings::earlyBird();
 //        echo "School ID: " . $school_id . " Reg Type: " . $row['school_type'] . "<br />";
-        $fee = GlobalSettings::calculateChildFee($row['reg_type'], $row['child_fee'], false, true);
+        $fee = GlobalSettings::calculateChildFee($row['reg_type'], $row['child_fee'], false, true, false, false,
+          $school_id == 61, $school_id == 269);
         echo "<tr><td>" . $school_info[$school_id]['type'] . "</td><td><a href='#$school_id'>" . $schools[$school_id] .
             "</a></td><td>" . $school_info[$school_id]['eligible'] . "</td><td>" . count($details[$school_id]) . "</td><td>" . $fee .
             "</td><td>" . ($fee * count($details[$school_id])) . "</td><td>" . $discounts[$school_id] . "</td><td>" .
@@ -195,7 +196,8 @@ foreach ($temp as $row) {
                 $reg_date = new DateTime($registered);
                 if ($reg_date > $early_bird) $early = false;
             }
-            $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], false, $early);
+            $fee = GlobalSettings::calculateChildFee($row['school_type'], $row['child_fee'], false, $early, false, false,
+              $school_id == 61, $school_id == 269);
 
             echo "<tr><td>" . $student['user_id'] . "</td><td>" . $row['user_serial'] . "</td><td>" . $row['school_number'] . "</td>";
             if ($idx == 0) echo "<td id='$school_id'>";

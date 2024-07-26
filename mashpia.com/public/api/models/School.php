@@ -122,7 +122,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         if ( !$for_type )
             $for_type = $this->reg_type;
 
-        $early_bird = new DateTime() <  $this->earlyBird() && $this->school_id != 269; // anash kinder doesn't get early bird
+        $early_bird = new DateTime() <  $this->earlyBird();
 
         if ( $this->child_fee > 0 ) return $this->child_fee;
         
@@ -130,7 +130,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return GlobalSettings::calculateChildFee(
             $for_type,      $this->child_fee,
             $to_soldier,    $early_bird,    $no_discount,
-            $this->inst_id === 10, $this->school_id == 61
+            $this->inst_id === 10, $this->school_id == 61, $this->school_id == 269
         );
     }
 

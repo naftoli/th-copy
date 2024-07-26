@@ -2,21 +2,18 @@
 //define( "MASHPIA_AUTH_REQUIRED", true );
 include_once $_SERVER['DOCUMENT_ROOT'] . "/api/header/header.php";
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
-$summer_start = GlobalSettings::getCurYearDates()['start'];
-
 $info = [
     [
         'title' => 'The beginning of the summer',
-        'jd'    => $summer_start,
-        'date'  => 'Sunday July 2nd, 2023',
-        'hDate' => 'Yud Gimmel Tamuz, 5783'
+        'jd'    => gregoriantojd(7, 1, 2024),
+        'date'  => 'Monday July 1st, 2023',
+        'hDate' => 'Chof Hey Sivan, 5784'
     ],
     [
         'title' => 'The beginning of the school year',
-        'date'  => 'Tuesday September 5th, 2023',
-        'jd'    => gregoriantojd(9, 5, 2023),
-        'hDate' => 'Yud Tes Elul, 5783'
+        'date'  => 'Tuesday September 3rd, 2024',
+        'jd'    => gregoriantojd(9, 3, 2024),
+        'hDate' => 'Rosh Chodesh Elul, 5784'
     ]
 ];
 

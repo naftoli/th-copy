@@ -66,26 +66,18 @@ class GlobalSettings {
      * @param boolean $school
      * @return integer
      */
-    public static function getRegCost(int $type, bool $early_bird, $myshliach = false) {
-        $cost = $myshliach ? 60 : 65;
-        if ($early_bird) {
+    public static function getRegCost(int $type, bool $early_bird, $myshliach = false, $anashKinder = false) {
+        if ($type == 1) return 50;
+        else if ($anashKinder) return 65;
+        else if ($early_bird) {
             switch ($type) {
-                case 1:
-                    $cost = 50;
-                    break;
                 case 2:
-                    $cost = 55;
-                    break;
+                    return 55;
                 case 3:
-                    if ( $myshliach ) {
-                        $cost = 50;
-                    } else {
-                        $cost = 60;
-                    }
-                    break;
+                    return $myshliach ? 50 : 60;
             }
         }
-        return $cost;
+        return 65;
     }
 
     /**
@@ -110,7 +102,7 @@ class GlobalSettings {
     public static function calculateChildFee(
         $type,  $fee = null,    $is_soldier = false, 
         $early_bird = false,    $no_discount = false, 
-        $ckids = false, $myshliach = false
+        $ckids = false, $myshliach = false, $anashKinder = false
     ) {
         // ckids has no fee
         if ( $ckids ) return 0;
@@ -122,7 +114,7 @@ class GlobalSettings {
             return intval($fee);
         }
 
-        $fee = self::getRegCost( $type, $early_bird, $myshliach );
+        $fee = self::getRegCost( $type, $early_bird, $myshliach, $anashKinder );
         return max($fee, 0);
     }
 
