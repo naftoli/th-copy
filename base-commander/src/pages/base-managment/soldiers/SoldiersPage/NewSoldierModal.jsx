@@ -145,13 +145,13 @@ class NewSoldierModal extends Component {
               <Col sm='6'>
                 <label htmlFor='admin_id'>Parent Admin ID</label>
                 <Input
-                  type='number' name='admin_id'
+                  type='number' name='admin_id' className='form-control'
                   id='admin_id' onChange={ this.onInputChange } />
               </Col>
               <Col sm='6'>
                 <label htmlFor='admin_email'>Parent Email</label>
                 <Input
-                  type='email' name='admin_email'
+                  type='email' name='admin_email' className='form-control'
                   id='admin_email' onChange={ this.onInputChange } />
               </Col>
             </Row>
