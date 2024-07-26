@@ -36,14 +36,11 @@ class UsersUploadRouter {
                 "*First Name",  "*Last Name", 
                 "*First Name Hebrew",  "*Last Name Hebrew",
                 "*Gender", "*English Date of Birth", 
-                "Address 1", "Address 2", "City", "State", "Zip", "Country", 
-                "Phone", "Parents Email", "*Mission Type"
+                "*Mission Type", "Parent / Family ID", "Parent Email"
             ];
             $dbColumnNames = [
                 'first', 'last', 'first_he', 'last_he',
-                'gender', 'dob', 'user_address1', 'user_address2',
-                'user_city', 'user_state', 'user_postal', 'user_country',
-                'user_phone', 'email', 'school_type_id'
+                'gender', 'dob', 'school_type_id', 'admin_id', 'admin_email'
             ];
         }
         
@@ -224,6 +221,8 @@ class UsersUploadRouter {
                     break;
             }
             $user['school_type_id'] = $type;
+            $admin_id = $user['admin_id'];
+            $email = $user['admin_email'];
 
             $user = new Soldier( $user );
             // copy over defaults from the school on creation...
@@ -239,6 +238,9 @@ class UsersUploadRouter {
             }
             
             $user->save();
+
+            // check if we can find a parent account to connect to
+            $user->connectToParent( $admin_id, $email );
         }
 
         json_response('success');

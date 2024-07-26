@@ -288,6 +288,37 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $parent;
     }
 
+    // connect soldier to parent account
+    public function connectToParent($admin_id, $admin_email) {
+        global $MASHPIA_DB;
+        // check if parent exists either with this email or admin_id
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * FROM admins WHERE admin_id = :admin OR admin_email = :email");
+        $stmt->execute([
+            ':admin' => $admin_id,
+            ':email' => $admin_email
+        ]);
+        $parent = $stmt->fetch();
+        if (!$parent) return false;
+        // check if parent is already connected to this child
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * FROM admin_auths WHERE id = :child AND admin_id = :parent AND auth = 'user'");
+        $stmt->execute([
+            ':child' => $this->user_id,
+            ':parent' => $parent['admin_id']
+        ]);
+        $auth = $stmt->fetch();
+        if ($auth) return true;
+        // connect parent to child
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO admin_auths (admin_id, id, auth) VALUES (:parent, :child, 'user')");
+        $stmt->execute([
+            ':parent' => $parent['admin_id'],
+            ':child' => $this->user_id
+        ]);
+        return true;
+    }
+
     // get regestration discount for soldier
     public function getDiscount() {
         global $MASHPIA_DB;
