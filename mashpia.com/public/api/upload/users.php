@@ -64,14 +64,12 @@ class UsersUploadRouter {
                 }
                 // make sure that the headers are valid
                 $diff = array_diff( $headers, $columnNames );
-                echo "<pre>"; print_r($diff); echo "</pre>";
                 if ( count($diff) > 0 )
                     json_error(
                          "You have an incorrect excel sheet.\n"
                         ."Please download the sample file again and do not modify the header information.",
                         'UPLOAD-USERS-57'
                     );
-
                 $firstRow = false;
             } else {
                 $cellIndex = 0;
