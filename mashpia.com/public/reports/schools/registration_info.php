@@ -119,7 +119,7 @@ $schools = $as->getSchools();
             <thead>
             <tbody>
             <?php foreach( $schools as $school_id => $school_name ) {
-                $base = \School::find()->where(['school_id' => $school_id])->one();
+                $base = \School::find($school_id);
                 $year = GlobalSettings::getRegistrationYear( $base->school_id ); ?>
                 <tr class='base' data-school_id='<?= $base->school_id; ?>' data-year='<?= $year ?>'>
                     <td><?= $year ?></td>
