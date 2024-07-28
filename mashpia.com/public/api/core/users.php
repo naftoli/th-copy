@@ -133,6 +133,12 @@ class UsersRouter {
         global $MASHPIA_DB;
         $cur_user = $current_user; // apparently there's a duplicate $current_user variable created by WP at some point in this function which is causing bugs
 
+        // check if admin_id and / or admin_email is in the POST
+        if (isset($_POST['admin_id'])) $admin_id = $_POST['admin_id'];
+        if (isset($_POST['admin_email'])) $admin_email = $_POST['admin_email'];
+        unset($_POST['admin_id']);
+        unset($_POST['admin_email']);
+
         $user = Soldier::build( $_POST );
         // if it's day school, change hachayol and medals/ranks modules to be turned off
         if ($cur_user->login->inst_id == 4) {
@@ -190,7 +196,9 @@ class UsersRouter {
             $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
             $stmt = $MASHPIA_DB->prepare( $sql );
             $stmt->execute($data);*/
-       }
+       } else {
+            $user->connectToParent($admin_id, $admin_email);
+        }
 
         // send the full soldier to the client
         json_response( $user );
