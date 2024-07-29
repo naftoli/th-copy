@@ -17,7 +17,7 @@ export class RegTypeRow extends Component {
   onChange = onNumberChange( this.props.onUpdate );
 
   render () {
-    let { prices, earlyBird, childFee, regType, early_bird_date } = this.props;
+    let { prices, childFee, regType, early_bird_date } = this.props;
 
     if ( regType ) {
       regType = regType.toString();

@@ -23,7 +23,7 @@ export class SettingsTab extends Component {
       onUpdate, back, onValidChange,
     } = this.props;
 
-    let { child_fee, reg_type, earlyBird } = base;
+    let { child_fee, reg_type } = base;
 
     return (
       <TabPane tabId={ tabId }>
@@ -52,7 +52,6 @@ export class SettingsTab extends Component {
                 regType={ reg_type }
                 onUpdate={ onUpdate }
                 childFee={ child_fee }
-                earlyBird={ earlyBird }
                 prices={ base.currentRegPrices } />
             </Fragment>
           }
