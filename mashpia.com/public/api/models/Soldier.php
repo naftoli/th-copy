@@ -1017,6 +1017,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 "INSERT INTO rank_marks (rank_ord, user_id, date_promoted) VALUES (1, ?, ?) "
             )->execute([ $this->user_id, unixtojd() ]);
         }
+        $this->rank = "Private";
     }
 
     // when setting a users tanya setting to off, we need to update the summary tables so that there's no discrepancy in campaign totals
