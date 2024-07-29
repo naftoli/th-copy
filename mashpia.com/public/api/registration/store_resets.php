@@ -6,7 +6,7 @@ $info = [
     [
         'title' => 'The beginning of the summer',
         'jd'    => gregoriantojd(7, 1, 2024),
-        'date'  => 'Monday July 1st, 2023',
+        'date'  => 'Monday July 1st, 2024',
         'hDate' => 'Chof Hey Sivan, 5784'
     ],
     [
