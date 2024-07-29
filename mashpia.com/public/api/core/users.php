@@ -196,7 +196,7 @@ class UsersRouter {
             $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
             $stmt = $MASHPIA_DB->prepare( $sql );
             $stmt->execute($data);*/
-       } else {
+       } else if (isset($admin_id) || isset($admin_email)) {
             $user->connectToParent($admin_id, $admin_email);
         }
 
