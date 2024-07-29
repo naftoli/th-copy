@@ -70,7 +70,7 @@ export class RegTypeRow extends Component {
             Eligible Discounts:
             <ul>
               <li>Guaranteed: $<NumberDisplay value={ prices.discounts.guaranteed } /></li>
-              <li>Early Bird (<DateDisplay value={earlyBird} />): $<NumberDisplay value={ prices.discounts.early_bird } /></li>
+              <li>Early Bird (<DateDisplay value={early_bird_date} />): $<NumberDisplay value={ prices.discounts.early_bird } /></li>
             </ul>
           </div>
           <div className='price'>

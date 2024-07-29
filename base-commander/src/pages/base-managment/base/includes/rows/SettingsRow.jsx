@@ -144,13 +144,13 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Allow students to spend miles earned from:</Label>
 
-          { this.state.storeResetOptions && this.state.storeResetOptions.map(reset => (
+          { this.state.storeResetOptions && this.state.storeResetOptions.map((reset, index) => (
             <Fragment key={ reset.jd }>
               <Radio value={ reset.jd }
                 name='store_miles_reset'
                 { ...storeResetProps }
                 onChange={ this.changeSchoolReset }
-                checked={ store_reset === undefined || store_reset_jd === parseInt(reset.jd, 10) }>
+                checked={ store_reset_jd === parseInt(reset.jd, 10) || (index === 0 && store_reset === undefined) }>
                 { reset.title } ({ reset.hDate } / { reset.date })
               </Radio>
               <br />
