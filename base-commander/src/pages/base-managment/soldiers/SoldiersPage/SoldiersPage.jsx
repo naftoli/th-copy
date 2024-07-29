@@ -88,7 +88,7 @@ export class SoldiersPage extends Component {
   );
   // create a new soldier
   createSoldier = soldier => {
-    return this.props.createSoldier( soldier )
+    this.props.createSoldier( soldier )
       .then( () => {
         this.setState({ create: { show: false, image: {} } } )
         return this.getSoldiers();
