@@ -141,7 +141,7 @@ class GlobalSettings {
      * @return int
      */
     public static function getEarlyBird(){
-//        return 5;
+        return 5;
     }
 
     /**
@@ -152,7 +152,7 @@ class GlobalSettings {
      * @return int
      */
     public static function getGuaranteedDiscount(){
-//        return 5;
+        return 5;
     }
 
     public static function isAustralian( $school_id ) {
