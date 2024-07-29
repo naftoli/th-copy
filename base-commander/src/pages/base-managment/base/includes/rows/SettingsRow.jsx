@@ -151,7 +151,7 @@ export class SettingsRow extends Component {
                 name='store_miles_reset'
                 { ...storeResetProps }
                 onChange={ this.changeSchoolReset }
-                checked={ store_reset_jd === parseInt(reset.jd, 10) || (index === 0 && store_reset === undefined) }>
+                checked={ store_reset_jd === parseInt(reset.jd, 10) || (index === 1 && store_reset === undefined) }>
                 { reset.title } ({ reset.hDate } / { reset.date })
               </Radio>
               <br />
