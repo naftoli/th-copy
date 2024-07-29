@@ -41,6 +41,7 @@ vendor/
 # composer folders
 /.cache/*
 /.config/*
+composer.lock
 
 # dependency managment files that we do not want
 error_log
@@ -49,7 +50,6 @@ error_log
 .vim
 
 mysql.log
-composer.lock
 
 public/chidonOld/chidon_drive/ajax/phplog
 
@@ -60,3 +60,5 @@ public/chidonOld/sweaters/img/*
 public/chidonOld/prizes/img/*
 public/storage/*
 public/chidonOld/invitations/*.jpg
+
+vendor/
