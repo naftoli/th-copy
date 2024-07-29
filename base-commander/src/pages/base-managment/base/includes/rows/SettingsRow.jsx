@@ -189,6 +189,7 @@ export class SettingsRow extends Component {
               <Radio value={ reset.jd }
                 name='one_time_prize_reset'
                 onChange={ this.onChange }
+                checked={ one_time_prize_reset === reset.jd || (one_time_prize_reset === null && i == 1) }>
                 required>
                 { reset.title } ({ reset.hDate } / { reset.date })
               </Radio>
