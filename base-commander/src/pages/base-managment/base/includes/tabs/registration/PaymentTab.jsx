@@ -47,6 +47,11 @@ export class PaymentTab extends React.Component {
     // make sure that if the yearly gift is checked, we alert the user
     if ( this.state.terms.yearly_gift ) {
       alert('I realize I have committed to learning Peirush Hamilos this year, thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.');
+      this.props.onGiftChange(true);
+      this.props.register()
+    }
+    else {
+      this.props.onGiftChange(false);
       this.props.register()
     }
   }
@@ -61,8 +66,6 @@ export class PaymentTab extends React.Component {
     const cart = getCart( base );
 
     const checkboxProps = { onChange: this.onTermsChange }
-
-    console.log(terms)
 
     return (
       <TabPane tabId={ tabId } id='PaymentTab'>

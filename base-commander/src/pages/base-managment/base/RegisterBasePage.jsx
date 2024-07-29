@@ -33,7 +33,7 @@ class RegistrationPage extends Component {
     cc: {},       base: {},
     valid: {},    terms: false,
     activeTab: 1, currentTab: 1,
-    discount: 0
+    discount: 0, siddur_gift: false,
   }
   // props
   static propTypes = {
@@ -41,6 +41,10 @@ class RegistrationPage extends Component {
     getBase: PropTypes.func.isRequired,
     getDefaults: PropTypes.func.isRequired,
     registerBase: PropTypes.func.isRequired,
+  }
+
+  updateSiddurGift = (gift) => {
+    this.setState({ siddur_gift: gift })
   }
 
   // load the state on mount if we can
@@ -136,7 +140,8 @@ class RegistrationPage extends Component {
   });
 
   register = () => {
-    const { base, cc, terms, valid, discount } = this.state;
+    const { base, cc, terms, valid, discount, siddur_gift } = this.state;
+    const yearly_gift = siddur_gift ? 1 : 0;
     // calculate the total registration cost
     let promise;
     // get the cart and total
@@ -157,10 +162,10 @@ class RegistrationPage extends Component {
     // if the total is greater then 0
     if ( total > 0 ) {
       promise = validateCC( cc )
-        .then( cc => this.props.registerBase({ base, cc, cart, total, discount }) );
+        .then( cc => this.props.registerBase({ base, cc, cart, total, discount, yearly_gift }) );
     // otherwise just register the base
     } else {
-      promise = this.props.registerBase({ base, total });
+      promise = this.props.registerBase({ base, total, yearly_gift });
     }
 
     // set the state
@@ -257,6 +262,7 @@ class RegistrationPage extends Component {
             terms={ terms }
             discount={ discount }
             register={ this.register }
+            onGiftChange={ this.updateSiddurGift }
             onStateUpdate={ this.onStateUpdate } />
         </TabContent>
       </div>

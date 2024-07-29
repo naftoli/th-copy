@@ -305,6 +305,15 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         return $saved;
     }
 
+    public function setYearlyGift($gift) {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("UPDATE schools SET siddur_gift = :gift WHERE school_id = :school");
+        $stmt->execute([
+            ':gift'     => $gift,
+            ':school'   => $this->school_id
+        ]);
+    }
+
     private function sendConfirmationEmail() {
         global $current_user;
         $to = $current_user->admin_email;
