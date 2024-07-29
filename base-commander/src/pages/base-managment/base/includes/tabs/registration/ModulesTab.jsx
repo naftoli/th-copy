@@ -121,7 +121,6 @@ export class ModulesTab extends React.Component {
                 <ul className='checkboxes'>
                   <li>Discount on Yahadus Books when ordering during soldier registration.</li>
                   <li>Promotional Materials and Test Resources.</li>
-                  <li>Invitations to join the world famous final test in NYC.</li>
                 </ul>
               </div>
 
