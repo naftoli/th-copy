@@ -114,7 +114,7 @@ export class PaymentTab extends React.Component {
             for this base (school). And that they may do with that data whatever it wants to.
           </Checkbox>
 
-          <Checkbox required checked={ terms.yearly_gift } name='yearly_gift' { ...checkboxProps }>
+          <Checkbox checked={ terms.yearly_gift } name='yearly_gift' { ...checkboxProps }>
             <b>Special for 5785:</b> I would like to receive a Siddur for each of my Chayolim and Teachers in my school
             sponsored by Rabbi Moshe and Ruti Weiss, and we are committed to learning Peirush Hamishniyos in my school.
           </Checkbox>
