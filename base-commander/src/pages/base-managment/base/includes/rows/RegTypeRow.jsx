@@ -17,7 +17,7 @@ export class RegTypeRow extends Component {
   onChange = onNumberChange( this.props.onUpdate );
 
   render () {
-    let { prices, earlyBird, childFee, regType } = this.props;
+    let { prices, earlyBird, childFee, regType, early_bird_date } = this.props;
 
     if ( regType ) {
       regType = regType.toString();
@@ -46,9 +46,9 @@ export class RegTypeRow extends Component {
           </div>
 
           <div className='price'>
-            Regular Rate: $60<br />
+            Regular Rate: $65<br />
             Final Rate: <Rate rate={ prices.rates[0] } childFee={ childFee } />
-            <br />Payment Due: (9/13/2022)
+            <br />Payment Due: ({ early_bird_date })
           </div>
         </div>
 
@@ -74,9 +74,9 @@ export class RegTypeRow extends Component {
             </ul>
           </div>
           <div className='price'>
-            Regular Rate: $60<br />
+            Regular Rate: $65<br />
             Final Rate: <Rate rate={ prices.rates[1] } childFee={ childFee } />
-            <br />Payment Due: (9/13/2022)
+            <br />Payment Due: ({ early_bird_date })
           </div>
         </div>
 
@@ -96,11 +96,11 @@ export class RegTypeRow extends Component {
           <div className='discounts'>
             Eligible Discounts:
             <ul>
-              <li>Early Bird (<DateDisplay value={earlyBird} />): $<NumberDisplay value={ prices.discounts.early_bird } /></li>
+              <li>Early Bird (<DateDisplay value={early_bird_date} />): $<NumberDisplay value={ prices.discounts.early_bird } /></li>
             </ul>
           </div>
           <div className='price'>
-            Regular Rate: $60<br />
+            Regular Rate: $65<br />
             Final Rate: <Rate rate={ prices.rates[2] } childFee={ childFee } />
           </div>
         </div>
