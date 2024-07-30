@@ -49,12 +49,12 @@ export class PaymentTab extends React.Component {
     console.log(this.state.terms)
     // make sure that if the yearly gift is checked, we alert the user
     if ( this.state.terms.siddur_gift ) {
-      this.props.onGiftChange(1);
       alert('I realize I have committed to learning Peirush Hamilos this year, thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.');
-      this.props.register()
+      this.props.onGiftChange(1);
+      // this.props.register()
     } else {
       this.props.onGiftChange(0);
-      this.props.register()
+      // this.props.register()
     }
   }
 
