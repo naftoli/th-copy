@@ -26,6 +26,7 @@ import { onInputChange, onCheckboxChange } from 'functions/events';
 import { getTotal, getCart } from './includes/tabs/registration/functions';
 import { getBase, getDefaults, registerBase, updateBase } from 'store/base/bases/operations';
 import axios from "axios";
+import {state} from "jshint/src/state";
 
 class RegistrationPage extends Component {
   // initial state
@@ -44,8 +45,7 @@ class RegistrationPage extends Component {
   }
 
   updateSiddurGift(gift) {
-    console.log("gift", gift)
-    this.setState({ siddur_gift: gift })
+    this.state.siddur_gift = gift
   }
 
   // load the state on mount if we can
@@ -61,11 +61,11 @@ class RegistrationPage extends Component {
 
     showError( // show error messages
       promise( login.id ) // load the base and update the state
-      .then( base => {
+      .then(base => {
         this.onUpdate( base )
         console.log(base)
-      } )
-          .then(this.checkDiscount())
+      })
+        .then(this.checkDiscount())
     );
   }
 
