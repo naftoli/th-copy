@@ -87,7 +87,7 @@ class BaseRouter {
         }
 
         $base->register( $current_user->admin_id, $cart, $total, $cc, false, $discount );
-        if (isset($_POST['yearly_gift'])) $base->setYearlyGift($_POST['yearly_gift']);
+        if (isset($_POST['siddur_gift'])) $base->setYearlyGift($_POST['siddur_gift']);
 
         json_response($base);
     }
