@@ -12,8 +12,8 @@ if ($admin_user['auth'] != 'super') {
 
 require_once ( __DIR__ . '/../../class.globalSettings.php' ); 
 $cur_year = GlobalSettings::getRegistrationYear();
+$year = $cur_year;
 if (isset($_GET['year'])) $year = $_GET['year'];
-else $year = $cur_year;
 
 require_once __DIR__ . '/../../class.adminSchools.php';
 $s = new AdminSchools($admin_user['admin_id'] ,$admin_user['auth'], true, true);
@@ -25,16 +25,6 @@ $types = [
     3 => 'Regular'
 ];
 
-//$main_query = "SELECT s.reg_type, s.school_id, s.school_number, s.school_name, sr.date_paid, sr.amount_paid, total, "
-//    ."total_registered, not_chayolei "
-//    ."FROM schools s LEFT JOIN school_registrations sr USING (school_id) "
-//    ."LEFT JOIN ( "
-//        ."SELECT  school_id, COUNT(*) AS total FROM users GROUP BY school_id "
-//    .") u USING (school_id) LEFT JOIN ( "
-//        ."SELECT school_id, COUNT(*) AS not_chayolei FROM users WHERE chayolei = 0 GROUP BY school_id"
-//    .") nc USING (school_id) LEFT JOIN ("
-//        ."SELECT school_id, COUNT(*) AS total_registered FROM user_registration WHERE year = $year GROUP BY school_id"
-//    .") ur USING (school_id) WHERE ( sr.year = $year OR sr.year IS NULL ) AND s.test_school=0 AND s.chayolei = 1 GROUP BY s.school_id ORDER BY s.school_name";
 $main_query = "
     SELECT 
         school_id,
