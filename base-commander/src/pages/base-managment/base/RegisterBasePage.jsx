@@ -43,7 +43,7 @@ class RegistrationPage extends Component {
     registerBase: PropTypes.func.isRequired,
   }
 
-  updateSiddurGift = gift => {
+  updateSiddurGift(gift) {
     console.log("gift", gift)
     this.setState({ siddur_gift: gift })
   }
