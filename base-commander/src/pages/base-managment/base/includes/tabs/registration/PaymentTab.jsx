@@ -50,8 +50,7 @@ export class PaymentTab extends React.Component {
       this.props.onGiftChange(1);
       alert('I realize I have committed to learning Peirush Hamilos this year, thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.');
       this.props.register()
-    }
-    else {
+    } else {
       this.props.onGiftChange(0);
       this.props.register()
     }
