@@ -43,10 +43,6 @@ class RegistrationPage extends Component {
     registerBase: PropTypes.func.isRequired,
   }
 
-  updateSiddurGift(gift) {
-    this.setState({ siddur_gift: gift })
-  }
-
   // load the state on mount if we can
   componentDidMount() {
     setTitle('Base Registration');
@@ -89,6 +85,10 @@ class RegistrationPage extends Component {
   // update the base that is in the state
   onUpdate = updates => {
     this.setState({ base: { ...this.state.base, ...updates } });
+  }
+
+  updateSiddurGift = gift => {
+    this.setState({ siddur_gift: gift })
   }
 
   // * event handlers
