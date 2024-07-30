@@ -158,14 +158,16 @@ class RegistrationPage extends Component {
       return toast.error('You must accept the Terms and Conditions.');
     }
 
+    console.log(siddur_gift)
+
     // if the total is greater then 0
-    if ( total > 0 ) {
-      promise = validateCC( cc )
-        .then( cc => this.props.registerBase({ base, cc, cart, total, discount, siddur_gift }) );
+    // if ( total > 0 ) {
+    //   promise = validateCC( cc )
+    //     .then( cc => this.props.registerBase({ base, cc, cart, total, discount, siddur_gift }) );
     // otherwise just register the base
-    } else {
-      promise = this.props.registerBase({ base, total, siddur_gift });
-    }
+    // } else {
+    //   promise = this.props.registerBase({ base, total, siddur_gift });
+    // }
 
     // set the state
     this.setState({ registering: true });
