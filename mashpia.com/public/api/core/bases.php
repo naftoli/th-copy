@@ -62,9 +62,6 @@ class BaseRouter {
     public function register() {
         global $current_user;
 
-        json_response($_POST);
-        exit;
-
         if ( $_POST['base']['tanya'] == 1 ) $_POST['base']['tehillim'] = 1; // make sure to turn on tehillim if tanya is checked
 
         $cc = isset( $_POST['cc'] ) ? $_POST['cc'] : false;

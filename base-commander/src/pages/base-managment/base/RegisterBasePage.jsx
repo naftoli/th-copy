@@ -88,7 +88,6 @@ class RegistrationPage extends Component {
   }
 
   updateSiddurGift = gift => {
-    alert(gift)
     this.setState({ siddur_gift: gift }, () => {
       this.register()
     })
