@@ -26,7 +26,6 @@ import { onInputChange, onCheckboxChange } from 'functions/events';
 import { getTotal, getCart } from './includes/tabs/registration/functions';
 import { getBase, getDefaults, registerBase, updateBase } from 'store/base/bases/operations';
 import axios from "axios";
-import {state} from "jshint/src/state";
 
 class RegistrationPage extends Component {
   // initial state
