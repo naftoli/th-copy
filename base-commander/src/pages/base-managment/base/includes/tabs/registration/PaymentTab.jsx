@@ -34,10 +34,12 @@ export class PaymentTab extends React.Component {
     let { terms } = this.state;
     // update the terms
     terms = { ...terms, ...update };
-    // check that all the checkboxes where checked
+    // check that all the checkboxes where checked except for the siddur gift
     const allTerms = Object.keys( terms )
-      .every( k =>  terms[k] );
-    
+      .filter( k => k !== 'siddur_gift' )
+      .map( k => terms[k] )
+      .reduce( ( a, b ) => a && b, true );
+
     this.setState({ terms });
     // update the master state.
     this.props.onStateUpdate( 'terms' )( allTerms );
