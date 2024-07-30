@@ -14,7 +14,7 @@ export class PaymentTab extends React.Component {
   //* initial state
   state = {
     terms: {
-      meet: 0, tools: 0, wwtc: 0, yan: 0, mivtzoim: 0, whatsapp: 0, data: 0, reg: 0, bc: 0, yearly_gift: 0
+      meet: 0, tools: 0, wwtc: 0, yan: 0, mivtzoim: 0, whatsapp: 0, data: 0, reg: 0, bc: 0, siddur_gift: 0
     }
   }
 
@@ -22,7 +22,7 @@ export class PaymentTab extends React.Component {
     if ( this.props.terms ) {
       this.setState({
         terms: {
-          meet: 1, tools: 1, wwtc: 1, yan: 1, mivtzoim: 1, whatsapp: 0, data: 1, reg: 1, bc: 1, yearly_gift: 0
+          ...this.props.terms
         }
       })
     }
@@ -45,13 +45,13 @@ export class PaymentTab extends React.Component {
 
   checkTerms = () => {
     // make sure that if the yearly gift is checked, we alert the user
-    if ( this.state.terms.yearly_gift ) {
+    if ( this.state.terms.siddur_gift ) {
+      this.props.onGiftChange(1);
       alert('I realize I have committed to learning Peirush Hamilos this year, thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.');
-      this.props.onGiftChange(true);
       this.props.register()
     }
     else {
-      this.props.onGiftChange(false);
+      this.props.onGiftChange(0);
       this.props.register()
     }
   }
@@ -117,7 +117,7 @@ export class PaymentTab extends React.Component {
             for this base (school). And that they may do with that data whatever it wants to.
           </Checkbox>
 
-          <Checkbox checked={ terms.yearly_gift } name='yearly_gift' { ...checkboxProps }>
+          <Checkbox checked={ terms.siddur_gift } name='siddur_gift' { ...checkboxProps }>
             <b>Special for 5785:</b> I would like to receive a Siddur for each of my Chayolim and Teachers in my school
             sponsored by Rabbi Moshe and Ruti Weiss, and we are committed to learning Peirush Hamishniyos in my school.
           </Checkbox>
