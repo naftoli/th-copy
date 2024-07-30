@@ -44,7 +44,7 @@ class RegistrationPage extends Component {
   }
 
   updateSiddurGift(gift) {
-    this.state.siddur_gift = gift
+    this.setState({ siddur_gift: gift })
   }
 
   // load the state on mount if we can
