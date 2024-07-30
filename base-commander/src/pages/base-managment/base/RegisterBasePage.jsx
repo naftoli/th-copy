@@ -90,6 +90,7 @@ class RegistrationPage extends Component {
   updateSiddurGift = gift => {
     alert(gift)
     this.setState({ siddur_gift: gift })
+    alert(this.state.siddur_gift)
   }
 
   // * event handlers
