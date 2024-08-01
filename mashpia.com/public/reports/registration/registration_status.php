@@ -54,7 +54,8 @@ $main_query = "
         FROM
             school_registration_details
         WHERE
-            type = 'chayolei' AND year = $year
+            year = $year 
+            AND (type = 'chayolei' or type = '' or type is null)
         GROUP BY school_id) chayolei USING (school_id)
             LEFT JOIN
         (SELECT 
