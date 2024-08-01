@@ -84,9 +84,11 @@ $main_query = "
         (SELECT 
             school_id, COUNT(*) AS total_registered
         FROM
-            registration_charges 
+            users u 
+            LEFT JOIN registration_charges rc using (user_id) 
         WHERE
-            type = 'chayolei' AND year = $year 
+            u.user_registered > 0 
+            AND (rc.year = $year or rc.year is null)  
         GROUP BY school_id) reg USING (school_id)
             LEFT JOIN
         (SELECT 
@@ -103,7 +105,7 @@ $main_query = "
             users
         WHERE
             chidon_eligible = 1
-        GROUP BY school_id) chidon_el USING (school_id)
+        GROUP BY school_id) chidon_el USING (school_id) 
     WHERE
         sr.year = $year 
 ";
@@ -159,7 +161,7 @@ ksort($data);
       </tr>
     </table>
     <br />
-    <form id="add_payment_form">
+    <form id="add_payment_form"> // using js to post it to addPayment.php
       <table>
         <tr>
           <td>Add Payment for:</td>
@@ -324,7 +326,7 @@ ksort($data);
             e.preventDefault()
             const school = $("#school_payment").val()
             const method = $("#payment_method").val()
-            const type = $("#payment").val()
+            const type = 'chayolei'
             const amount = parseFloat($("#payment_amount").val())
             if (school == '0') {
                 alert('You must choose a school')
