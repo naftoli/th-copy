@@ -94,7 +94,7 @@ foreach ($temp as $row) {
 <h1>Soldier Registration <?=$year?></h1>
 <h2>Base Totals</h2>
 <div class="note">
-  "Please Note: The balance may not be 100% accurate, since it’s based off the fee as it is today, and not when the child registered."
+  Please Note: The balance may not be 100% accurate, since it’s based off the fee as it is <b>today</b>, and <b>not</b> when the child registered."
 </div>
 <table id="table" class="table table-striped table-condensed">
     <thead>
