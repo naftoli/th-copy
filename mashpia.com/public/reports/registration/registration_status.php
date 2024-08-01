@@ -160,7 +160,7 @@ ksort($data);
       </tr>
     </table>
     <br />
-    <form id="add_payment_form"> // using js to post it to addPayment.php
+    <form id="add_payment_form">
       <table>
         <tr>
           <td>Add Payment for:</td>
