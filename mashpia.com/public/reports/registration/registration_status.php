@@ -16,7 +16,7 @@ $year = $cur_year;
 if (isset($_GET['year'])) $year = $_GET['year'];
 
 require_once __DIR__ . '/../../class.adminSchools.php';
-$s = new AdminSchools($admin_user['admin_id'] ,$admin_user['auth'], true, true);
+$s = new AdminSchools($admin_user['admin_id'] ,$admin_user['auth'], true, true, false);
 $all_schools = $s->getSchools();
 
 $types = [
