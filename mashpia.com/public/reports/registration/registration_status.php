@@ -324,7 +324,7 @@ ksort($data);
             e.preventDefault()
             const school = $("#school_payment").val()
             const method = $("#payment_method").val()
-            const type = 'chayolei'
+            const type = $("#payment").val()
             const amount = parseFloat($("#payment_amount").val())
             if (school == '0') {
                 alert('You must choose a school')
