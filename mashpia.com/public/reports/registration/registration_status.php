@@ -84,11 +84,9 @@ $main_query = "
         (SELECT 
             school_id, COUNT(*) AS total_registered
         FROM
-            users u 
-            LEFT JOIN registration_charges rc using (user_id) 
+            users  
         WHERE
-            u.user_registered > 0 
-            AND (rc.year = $year or rc.year is null)  
+            user_registered > 0 
         GROUP BY school_id) reg USING (school_id)
             LEFT JOIN
         (SELECT 
@@ -109,7 +107,6 @@ $main_query = "
     WHERE
         sr.year = $year 
 ";
-echo $main_query; exit;
 $main_query = mysql_query( $main_query );
 $data = [];
 while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['school_name']] = $row;
