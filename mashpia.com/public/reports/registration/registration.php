@@ -81,17 +81,19 @@ foreach ($temp as $row) {
             padding-left: 20px;
             padding-right: 20px;
         }
-        .info {
-          padding: 20px;
-          background-color: grey;
-          font-size: large;
+        .note {
+          padding: 10px;
+          background-color: #f9f9f9;
+          border: 1px solid black;
+          line-height: 1.4;
+          margin-bottom: 20px;
         }
     </style>
 </head>
 <body>
 <h1>Soldier Registration <?=$year?></h1>
 <h2>Base Totals</h2>
-<div class="info">
+<div class="note">
   "Please Note: The balance may not be 100% accurate, since it’s based off the fee as it is today, and not when the child registered."
 </div>
 <table id="table" class="table table-striped table-condensed">
