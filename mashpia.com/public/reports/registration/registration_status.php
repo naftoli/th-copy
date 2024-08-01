@@ -109,6 +109,7 @@ $main_query = "
     WHERE
         sr.year = $year 
 ";
+echo $main_query; exit;
 $main_query = mysql_query( $main_query );
 $data = [];
 while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['school_name']] = $row;
