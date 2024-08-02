@@ -6,68 +6,74 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = $_POST['year'] ?? GlobalSettings::getRegistrationYear();
 
 $info = $_POST['info'];
 
-$sql = "INSERT IGNORE INTO school_shipping 
-        SET 
-            year = :year, 
-            school_id = :school, 
-            item_id = :item, 
-            shipped = :shipped, 
-            missing = :missing, 
-            qty = :qty, 
-            damaged = :damaged, 
-            desc_of_damage = :desc
-        ON DUPLICATE KEY UPDATE 
-            shipped = :shipped, 
-            missing = :missing, 
-            qty = :qty, 
-            damaged = :damaged, 
-            desc_of_damage = :desc";
-$stmt = $MASHPIA_DB->prepare($sql);
+$table = 'school_shipping';
+
+$select = "SELECT * FROM $table WHERE year = :year AND school_id = :school AND item_id = :item";
+$stmtSelect = $MASHPIA_DB->prepare($select);
+
+// can only insert for not yet shipped or shipped
+$insert = "INSERT INTO $table  
+            SET 
+                year = :year, 
+                school_id = :school, 
+                item_id = :item, 
+                qty = :qty, 
+                status = :status";
+$stmtInsert = $MASHPIA_DB->prepare($insert);
+
+$update = "UPDATE $table 
+            SET 
+                qty = :qty, 
+                status = :status,
+                desc = :desc 
+            WHERE 
+                year = :year 
+                AND school_id = :school 
+                AND item_id = :item";
+$stmtUpdate = $MASHPIA_DB->prepare($update);
 
 $MASHPIA_DB->beginTransaction();
 $success = true;
 foreach ($info as $row) {
-    // figure out shipped / missing / damaged
-    switch (intval($row['action'])) {
-        case 0:
-            $shipped = 0;
-            $missing = 0;
-            $damaged = 0;
-            break;
-        case 1:
-            $shipped = 1;
-            $missing = 0;
-            $damaged = 0;
-            break;
-        case 2:
-            $shipped = 1;
-            $missing = 1;
-            $damaged = 0;
-            break;
-        case 3:
-            $shipped = 1;
-            $missing = 0;
-            $damaged = 1;
-            break;
-    }
-    $res = $stmt->execute([
+    $res = $stmtSelect->execute([
         'year'      => $year,
         'school'    => $row['school'],
-        'item'      => $row['item'],
-        'shipped'   => $shipped,
-        'missing'   => $missing,
-        'damaged'   => $damaged,
-        'qty'       => $row['qty'],
-        'desc'      => $row['desc']
+        'item'      => $row['item']
     ]);
     if (! $res) {
-        $stmt->debugDumpParams();
+        $stmtSelect->debugDumpParams();
         $success = false;
         break;
+    } else {
+        // find out if we need to insert or update
+        $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $res = $stmtUpdate->execute([
+                'qty'       => $row['qty'],
+                'status'    => intval($row['action']),
+                'desc'      => $row['desc'],
+                'year'      => $year,
+                'school'    => $row['school_id'],
+                'item'      => $row['item_id']
+            ]);
+        } else {
+            $res = $stmtInsert->execute([
+                'year'      => $year,
+                'school'    => $row['school'],
+                'item'      => $row['item'],
+                'qty'       => $row['qty'],
+                'status'    => intval($row['action'])
+            ]);
+        }
+        if (! $res) {
+            $stmtInsert->debugDumpParams();
+            $success = false;
+            break;
+        }
     }
 }
 if ($success) $MASHPIA_DB->commit();

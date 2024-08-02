@@ -11,7 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getCurrentYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 require 'class.chayoleiShipping.php';
@@ -449,29 +449,29 @@ ksort($grand_summary);
     const user = ids[1]
     const num = ids[2]
     // get description
-    info.push({ action, item, user, desc, num, year })
+    info.push({ action, item, user, desc, num })
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', { info }, function (result) {
+    $.post('ajax/saveShipping.php', { info, year }, function (result) {
       const res = JSON.parse(result)
-      if (res.success) {
-        if (reload) location.reload()
-      }
-      else alert(res.error)
+      if (res.success && reload) location.reload()
+      else if (res.error) alert(res.error)
     })
   }
 
   $(".saveAll").click( function () {
     $(".shipping").each( function () {
-      update(this, 1)
+      let action = super_admin ? 1 : 2
+      update(this, action)
     })
     save()
   })
 
   $(".saveSchool").click( function() {
     $(this).parent().find('.shipping').each( function () {
-      update(this, 1)
+      let action = super_admin ? 1 : 2
+      update(this, action)
     })
     save()
   })
@@ -481,9 +481,9 @@ ksort($grand_summary);
     const action = parseInt(this.value)
     if (!super_admin && action == 0) {
       $(this).val(originalVal)
-      alert('You cannot change this to not yet shipped, it will not be saved.')
+      alert('You cannot change to Not Yet Shipped!')
       return false
-    } else if (!super_admin && action == 3) {
+    } else if (!super_admin && action == 4) {
       alert('You must explain the damage before it can be saved.')
       return false
     }
@@ -498,19 +498,5 @@ ksort($grand_summary);
     update(elem, action, val)
     save(false)
   })
-
-  // $(".updated").click( function() {
-  //   const school_id = $(this).parent().parent().attr('id')
-  //   const checked = $(this).is(":checked") ? 1 : 0
-  //   $.post('ajax/updateSchool.php', { school_id, checked }, function (result) {
-  //     const res = JSON.parse(result)
-  //     if (!res.success) alert(res.error)
-  //   })
-  // })
-
-<!--  --><?php //if (!$super) : ?>
-  // $("select").attr('disabled', true)
-  // $("textarea").attr('disabled', true)
-<!--  --><?php //endif; ?>
 </script>
 </html>

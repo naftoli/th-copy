@@ -413,56 +413,50 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
-  const year = <?= $year ?>;
+  const year = <?= $year; ?>;
 
-  function update(elem, action, desc = '', all = false) {
+  function update(elem, action, desc = '') {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
     const user = ids[1]
     const num = ids[2]
     // get description
-    info.push({ action, item, user, desc, num, all, year })
+    info.push({ action, item, user, desc, num })
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', { info }, function (result) {
+    $.post('ajax/saveShipping.php', { info, year }, function (result) {
       const res = JSON.parse(result)
-      if (res.success) {
-        if (reload) location.reload()
-      }
-      else alert(res.error)
+      if (res.success && reload) location.reload()
+      else if (res.error) alert(res.error)
     })
   }
 
-  $(".saveAll").click(function () {
-    if (super_admin) {
-      $(".shipping").each(function () {
-        update(this, 1, '', true)
-      })
-    } else {
-      $(".shipping").each(function () {
-        update(this, 4, '', true)
-      })
-    }
-    save()
-  })
-
-  $(".saveSchool").click(function () {
-    $(this).parent().find('.shipping').each(function () {
-      update(this, 1)
+  $(".saveAll").click( function () {
+    $(".shipping").each( function () {
+      let action = super_admin ? 1 : 2
+      update(this, action)
     })
     save()
   })
 
-  $(".shipping").change(function () {
+  $(".saveSchool").click( function() {
+    $(this).parent().find('.shipping').each( function () {
+      let action = super_admin ? 1 : 2
+      update(this, action)
+    })
+    save()
+  })
+
+  $(".shipping").change( function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
     if (!super_admin && action == 0) {
       $(this).val(originalVal)
-      alert('You cannot change this to not yet shipped, it will not be saved.')
+      alert('You cannot change to Not Yet Shipped!')
       return false
-    } else if (!super_admin && action == 3) {
+    } else if (!super_admin && action == 4) {
       alert('You must explain the damage before it can be saved.')
       return false
     }
@@ -470,26 +464,12 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     save(false)
   })
 
-  $(".description").blur(function () {
+  $(".description").blur( function() {
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
     update(elem, action, val)
     save(false)
   })
-
-  // $(".updated").click( function() {
-  //   const school_id = $(this).parent().parent().attr('id')
-  //   const checked = $(this).is(":checked") ? 1 : 0
-  //   $.post('ajax/updateSchool.php', { school_id, checked }, function (result) {
-  //     const res = JSON.parse(result)
-  //     if (!res.success) alert(res.error)
-  //   })
-  // })
-
-  <!--  --><?php //if (!$super) : ?>
-  // $("select").attr('disabled', true)
-  // $("textarea").attr('disabled', true)
-  <!--  --><?php //endif; ?>
 </script>
 </html>
