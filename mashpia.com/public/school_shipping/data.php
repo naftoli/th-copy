@@ -120,7 +120,8 @@ function createHtmlForItem($school, $row, $output = true) {
                              * 4 = damaged
                              * 5 = replaced
                              */
-                            if ($i == $status['status']) echo " selected";
+                            if ($i == 0 && (empty($status) || $status['status'] == 0)) echo " selected";
+                            else if (!empty($status) && $i == $status['status']) echo " selected";
                             echo ">" . $val . "</option>";
                         }
                         echo "</select></td>";
