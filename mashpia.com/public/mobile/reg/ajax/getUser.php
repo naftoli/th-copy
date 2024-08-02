@@ -26,7 +26,6 @@ $sql = "SELECT
         WHERE
             u.user_id = " . $user . " AND aa.admin_id = " . $admin_id;
 $result = mysql_query( $sql );
-echo $sql;
 if ( mysql_num_rows($result) > 0 ) {
 	$row = mysql_fetch_assoc($result);
 	echo json_encode( $row );
