@@ -717,7 +717,9 @@
     		}); // finish updating the users information
     		// setup the edting link
     		$(".header-edit").click( function() {
-    			window.location = '/mobile/reg/re_register.html?child=' + id + '&e=1';
+					let url = '/mobile/reg/edit.html?id=' + id
+					alert(url)
+    			window.location = url
     		});
             // get the medal info for the user
 			medal_board( "#medals", id );
