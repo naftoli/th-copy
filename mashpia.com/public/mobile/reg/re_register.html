@@ -1592,8 +1592,7 @@
 					});
 					$("#btn_cancel").click(function (event) {
 						event.preventDefault(); // do not submit the form
-						window.location = "/mobile/reg/medals/index.html?id=" +
-							id; // redirect back to the users page
+						window.location = "/mobile/reg/medals/index.html?id=" + id; // redirect back to the users page
 					});
 					$(".reg").hide();
 					id = id.substr(0, pos2);
@@ -1618,7 +1617,8 @@
 						user: id
 					}, function (success) {
 						if (success == 0) {
-							window.location = "parent_detail.html";
+							alert()
+							// window.location = "parent_detail.html";
 						} else {
 							var info = $.parseJSON(success);
 							console.log(info);
