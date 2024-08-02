@@ -2,7 +2,7 @@
 require '../../../db.php';
 require 'encrypt.php';
 require '../../../class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getRegistrationYear();
 
 $user = mysql_real_escape_string( $_POST['user'] );
 $admin_id = mysql_real_escape_string( $_COOKIE['admin'] );
@@ -16,6 +16,7 @@ $sql = "select * from users u
 		and aa.admin_id = " . $admin_id . "
 		and tc.year = " . $year;
 $result = mysql_query( $sql );
+echo $sql;
 if ( mysql_num_rows($result) > 0 ) {
 	$row = mysql_fetch_assoc($result);
 	echo json_encode( $row );
