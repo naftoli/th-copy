@@ -1362,12 +1362,12 @@
 
 					<div class="row">
 						<div class="col-xs-12">
-							<button type="submit" id="btn_create" class="btn btn-primary btn-block H8 i18n"
-								data-key="RegisterNextChild1">
-								<!--<b class="i18n" data-key="RegisterNextChild1">REGISTER NEXT CHILD</b>-->
-								<span style="font-weight :bold;" class="i18n" data-key="RegisterNextChild1">REGISTER
-									NEXT CHILD</span>
-							</button>
+<!--							<button type="submit" id="btn_create" class="btn btn-primary btn-block H8 i18n"-->
+<!--								data-key="RegisterNextChild1">-->
+<!--								&lt;!&ndash;<b class="i18n" data-key="RegisterNextChild1">REGISTER NEXT CHILD</b>&ndash;&gt;-->
+<!--								<span style="font-weight :bold;" class="i18n" data-key="RegisterNextChild1">REGISTER-->
+<!--									NEXT CHILD</span>-->
+<!--							</button>-->
 							<button id="btn_cancel" class="btn btn-primary btn-block H8" style="display: none;">
 								<b class="i18n" data-key="CANCEL">CANCEL</b>
 
@@ -1574,12 +1574,12 @@
 			var pos = url.indexOf('=');
 			var pos2, id;
 
-			if (pos == -1) {
-				//new registration
-				$(".titler").text('NEW REGISTRATION');
-				$("#btn_create").html(i18next.t('SIGNUP'));
-				$(".reg").hide();
-			} else {
+			// if (pos == -1) {
+			// 	//new registration
+			// 	$(".titler").text('NEW REGISTRATION');
+			// 	$("#btn_create").html(i18next.t('SIGNUP'));
+			// 	$(".reg").hide();
+			// } else {
 				$(".newOnly").hide();
 				id = url.substring(pos + 1);
 				pos2 = id.indexOf('&');
@@ -1597,7 +1597,7 @@
 					$(".reg").hide();
 					id = id.substr(0, pos2);
 				}
-			}
+			// }
 
 			$(function () {
 				$('input').iCheck({
@@ -1617,8 +1617,8 @@
 						user: id
 					}, function (success) {
 						if (success == 0) {
-							alert()
-							// window.location = "parent_detail.html";
+							alert('Error getting user information');
+							window.location = "parent_detail.html";
 						} else {
 							var info = $.parseJSON(success);
 							console.log(info);
@@ -1812,7 +1812,7 @@
 					}
 				});
 
-				if (pos == -1) {
+				// if (pos == -1) {
 					$(".newOnly .remember input").on('ifChecked', function () {
 						alert(i18next.t('AssignedToschool'));
 						$("#school").val('269').change();
@@ -1822,7 +1822,7 @@
 					$(".newOnly .remember input").on('ifUnchecked', function () {
 						$("#school").attr('disabled', false);
 					});
-				}
+				// }
 			});
 
 			var admin = Cookies.get('admin');
@@ -1945,31 +1945,31 @@
 				update();
 
 				function update() {
-					if (pos == -1) { //new registration
-						$.post('ajax/newUser.php', {
-							admin: admin,
-							first: fname,
-							last: lname,
-							firsthe: fhname,
-							lasthe: lhname,
-							school_id: school,
-							class_id: grade,
-							dob: dob,
-							gender: gender,
-							photo: photo,
-							lang: lang,
-							type: type
-						}, function (success) {
-							var userID = parseInt(success);
-							if (userID) {
-								alert(i18next.t('NewSoldierCreated'));
-								window.location = "child-commit.html?child=" + userID;
-							} else {
-								alert(i18next.t('Errorchildinformation'));
-								return false;
-							}
-						});
-					} else { //re-registration
+					// if (pos == -1) { //new registration
+					// 	$.post('ajax/newUser.php', {
+					// 		admin: admin,
+					// 		first: fname,
+					// 		last: lname,
+					// 		firsthe: fhname,
+					// 		lasthe: lhname,
+					// 		school_id: school,
+					// 		class_id: grade,
+					// 		dob: dob,
+					// 		gender: gender,
+					// 		photo: photo,
+					// 		lang: lang,
+					// 		type: type
+					// 	}, function (success) {
+					// 		var userID = parseInt(success);
+					// 		if (userID) {
+					// 			alert(i18next.t('NewSoldierCreated'));
+					// 			window.location = "child-commit.html?child=" + userID;
+					// 		} else {
+					// 			alert(i18next.t('Errorchildinformation'));
+					// 			return false;
+					// 		}
+					// 	});
+					// } else { //re-registration
 						$.post('ajax/updateUser.php', {
 							user_id: id,
 							fname: fname,
@@ -2002,7 +2002,7 @@
 							}
 						});
 					}
-				}
+				// }
 
 				function findGetParameter(parameterName) {
 					var result = null,
