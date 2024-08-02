@@ -70,18 +70,17 @@ function createHtmlForItem($school, $row, $output = true) {
                 // get status and whether to show this item
                 $show_item = false;
                 $status = isset($info['status'][$school][$item['id']]) ? $info['status'][$school][$item['id']] : [];
-                $statusDesc = [
-                    1   => 'shipped',
-                    2   => 'missing',
-                    3   => 'damaged'
-                ];
                 if (empty($limit_to_status)) $show_item = true;
                 else {
                     foreach ($limit_to_status as $idx) {
-                        if ($idx == 0) {
-                            if (empty($status) || ($status['shipped'] == 0 && $status['missing'] == 0 && $status['damaged'] == 0)) $show_item = true;
+                        if ($idx == 0 && (empty($status) || $status['status'] == 0)) {
+                            $show_item = true;
+                            break;
                         }
-                        else if ($idx && !empty($status) && intval($status[$statusDesc[$idx]]) == 1) $show_item = true;
+                        else if (!empty($status) && $status['status'] == $idx) {
+                            $show_item = true;
+                            break;
+                        }
                     }
                 }
                 if ($show_item) {
@@ -107,37 +106,21 @@ function createHtmlForItem($school, $row, $output = true) {
                         // add column for shipping info
                         echo "<td class='no-print'>";
                         $originalValue = 0;
-                        if (!empty($status)) {
-                            if ($status['damaged'] == 1) $originalValue = 3;
-                            else if ($status['missing'] == 1) $originalValue = 2;
-                            else if ($status['shipped'] == 1) $originalValue = 1;
-                        }
+                        if (! empty($status)) $originalValue = $status['status'];
                         echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping' data-original-value='$originalValue'>";
-                        if (!$superAdmin && (empty($status) || $status['shipped'] == 0)) $options = ['Not Yet Shipped'];
-                        else $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
+                        if (!$superAdmin && (empty($status) || $status['status'] == 0)) $options = ['Not Yet Shipped'];
+                        else $options = ['Not Yet Shipped', 'Shipped', 'Received', 'Missing', 'Damaged', 'Replaced'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
                             /*
                              * 0 = not yet shipped
                              * 1 = shipped
-                             * 2 = missing
-                             * 3 = damaged
+                             * 2 = received
+                             * 3 = missing
+                             * 4 = damaged
+                             * 5 = replaced
                              */
-                            switch ($i) {
-                                case 0:
-                                    if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
-                                    break;
-                                case 1:
-                                    if (intval($status['shipped']) == 1 && intval($status['missing']) == 0
-                                        && intval($status['damaged']) == 0) echo " selected ";
-                                    break;
-                                case 2:
-                                    if (intval($status['missing']) == 1) echo " selected ";
-                                    break;
-                                case 3:
-                                    if (intval($status['damaged']) == 1) echo " selected ";
-                                    break;
-                            }
+                            if ($i == $status['status']) echo " selected";
                             echo ">" . $val . "</option>";
                         }
                         echo "</select></td>";
@@ -147,14 +130,13 @@ function createHtmlForItem($school, $row, $output = true) {
                         for ($i = 1; $i <= $total; $i++) {
                             echo "<option value='$i'";
                             if (
-                                !empty($status) && $status['qty'] == $i
-                                || empty($status) && $i == $total
+                                (!empty($status) && $status['qty'] == $i) || (empty($status) && $i == $total)
                             ) {
                                 echo " selected ";
                             }
                             echo ">$i</option>";
                         }
-                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['desc_of_damage'] . "</textarea></td></tr>";
+                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['desc'] . "</textarea></td></tr>";
                     } else {
                         // update summary
                         addToSummary($item, $school);

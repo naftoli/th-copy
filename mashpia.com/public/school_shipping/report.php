@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $superAdmin = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = $_POST['year'] > 0 ? $_POST['year'] : GlobalSettings::getChidonYear();
+$year = $_POST['year'] > 0 ? $_POST['year'] : GlobalSettings::getRegistrationYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
@@ -282,6 +282,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   let info = []
   let bc = <?= $superAdmin ? 0 : 1 ?>;
+  const year = <?= $year ?>;
 
   function update(elem, action, qty = 1, desc = '') {
     const id = $(elem).attr('id')
@@ -291,11 +292,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     // get description
     action = parseInt(action)
     if (
-      action < 2
+      (action == 3 && qty)
       ||
-      action == 2 && qty
+      (action == 4 && qty && desc)
       ||
-      action == 3 && qty && desc
+      action
     ) {
       // check if item already exists in array
       let found = false
@@ -313,25 +314,29 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', {info}, function (result) {
+    $.post('ajax/saveShipping.php', {info, year}, function (result) {
       const res = JSON.parse(result)
-      if (res.success) {
-        if (reload) location.reload()
-      } else alert(res.error)
+      if (res.success && reload) location.reload()
+      else if (res.error) alert(res.error)
     })
   }
 
   $("#saveAll").click(function () {
     $(".shipping").each(function () {
       let qty = $(this).parent().parent().find('td:eq(3)').text()
-      update(this, 1, qty)
+      let action = 1
+      if (bc) action = 2
+      update(this, action, qty)
     })
     save()
   })
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      update(this, 1)
+      let qty = $(this).parent().parent().find('td:eq(3)').text()
+      let action = 1
+      if (bc) action = 2
+      update(this, action, qty)
     })
     save()
   })
@@ -343,10 +348,10 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const desc = $(this).parent().parent().find('.description').val()
     if (bc && action == 0) {
       $(this).val(originalVal)
-      alert('You cannot change to Not Yet Shipped')
+      alert('You cannot change to Not Yet Shipped!')
       return false
     }
-    if (action == 3 && !(qty && desc)) {
+    if (action == 4 && !(qty && desc)) {
       alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
       return false
     }
@@ -359,7 +364,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
     const desc = $(this).parent().parent().find('.description').val()
-    if (action == 3 && !desc) {
+    if (action == 4 && !desc) {
       alert('You must explain the damage before it can be saved.')
       return false
     }
