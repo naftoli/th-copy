@@ -303,6 +303,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       for (let i = 0; i < info.length; i++) {
         if (info[i].item == item && info[i].school == school) {
           found = true
+          alert(action)
           info[i].action = action
           info[i].qty = qty
           info[i].desc = desc
