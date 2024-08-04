@@ -57,8 +57,8 @@ foreach ($info as $row) {
                 'status'    => intval($row['action']),
                 'desc'      => $row['desc'],
                 'year'      => $year,
-                'school'    => $row['school_id'],
-                'item'      => $row['item_id']
+                'school'    => $row['school'],
+                'item'      => $row['item']
             ]);
         } else {
             $res = $stmtInsert->execute([
