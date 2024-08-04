@@ -296,7 +296,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       ||
       (action == 4 && qty && desc)
       ||
-      action
+      [0, 1, 2, 5].includes(action)
     ) {
       // check if item already exists in array
       let found = false
@@ -359,7 +359,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
       return false
     }
-    alert(action)
     update(this, action, qty)
     save(false)
   })
