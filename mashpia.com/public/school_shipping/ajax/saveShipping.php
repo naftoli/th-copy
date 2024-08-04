@@ -45,7 +45,6 @@ foreach ($info as $row) {
         'item'      => $row['item']
     ]);
     if (! $res) {
-        $stmtSelect->debugDumpParams();
         $success = false;
         break;
     } else {
@@ -70,7 +69,6 @@ foreach ($info as $row) {
             ]);
         }
         if (! $res) {
-            $stmtInsert->debugDumpParams();
             $success = false;
             break;
         }
