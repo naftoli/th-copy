@@ -344,6 +344,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   $(".shipping").change(function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
+    alert(action)
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
     if (bc && action == 0) {
@@ -352,6 +353,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       return false
     }
     if (action == 4 && !(qty && desc)) {
+      $(this).val(originalVal)
       alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
       return false
     }
