@@ -317,7 +317,10 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     $.post('ajax/saveShipping.php', { info, year }, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
-      else if (res.error) alert(res.error)
+      else if (res.error) {
+        alert(res.error)
+        console.log(res.error_info)
+      }
     })
   }
 
@@ -344,7 +347,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   $(".shipping").change(function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
-    alert(action)
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
     if (bc && action == 0) {

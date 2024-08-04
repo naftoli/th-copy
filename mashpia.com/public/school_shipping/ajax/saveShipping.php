@@ -78,9 +78,9 @@ foreach ($info as $row) {
 }
 if ($success) $MASHPIA_DB->commit();
 else $MASHPIA_DB->rollBack();
-exit;
 
 echo json_encode([
     'success'   => $success,
-    'error'     => 'There was an error updating the status.'
+    'error'     => 'There was an error updating the status.',
+    'error_info'=> "Select Error: " . $stmtSelect->errorInfo() . " Insert Error: " . $stmtInsert->errorInfo() . " Update Error: " . $stmtUpdate->errorInfo()
 ]);
