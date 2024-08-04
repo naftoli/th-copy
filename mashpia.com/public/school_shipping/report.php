@@ -318,10 +318,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     $.post('ajax/saveShipping.php', { info, year }, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
-      else if (res.error) {
-        alert(res.error)
-        console.log(res.error_info)
-      }
+      else if (res.error) alert(res.error)
     })
   }
 
