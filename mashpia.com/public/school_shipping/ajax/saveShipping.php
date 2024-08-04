@@ -78,6 +78,7 @@ foreach ($info as $row) {
 }
 if ($success) $MASHPIA_DB->commit();
 else $MASHPIA_DB->rollBack();
+exit;
 
 echo json_encode([
     'success'   => $success,

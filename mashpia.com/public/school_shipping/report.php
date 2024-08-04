@@ -309,12 +309,12 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
           break
         }
       }
-      if (!found) info.push({action, item, school, qty, desc})
+      if (!found) info.push({ action, item, school, qty, desc })
     }
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', {info, year}, function (result) {
+    $.post('ajax/saveShipping.php', { info, year }, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
       else if (res.error) alert(res.error)
