@@ -82,6 +82,6 @@ else $MASHPIA_DB->rollBack();
 echo json_encode([
     'success'   => $success,
     'error'     => 'There was an error updating the status.',
-    'error_info'=> "Select Error: " . print_r($stmtSelect->errorInfo()) . " Insert Error: " .
-        print_r($stmtInsert->errorInfo()) . " Update Error: " . print_r($stmtUpdate->errorInfo())
+    'error_info'=> "Select Error: " . print_r($stmtSelect->debugDumpParams()) . " Insert Error: " .
+        print_r($stmtInsert->debugDumpParams()) . " Update Error: " . print_r($stmtUpdate->debugDumpParams())
 ]);
