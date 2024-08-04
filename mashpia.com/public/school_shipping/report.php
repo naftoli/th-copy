@@ -303,7 +303,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       for (let i = 0; i < info.length; i++) {
         if (info[i].item == item && info[i].school == school) {
           found = true
-          alert(action)
           info[i].action = action
           info[i].qty = qty
           info[i].desc = desc
@@ -319,6 +318,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
       else if (res.error) alert(res.error)
+      if (res.error_info) console.log(error_info.toString())
     })
   }
 

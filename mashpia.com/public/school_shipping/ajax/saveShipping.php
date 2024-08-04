@@ -52,12 +52,12 @@ foreach ($info as $row) {
         $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
         if ($found) {
             $res = $stmtUpdate->execute([
-                'qty'       => $row['qty'],
-                'status'    => intval($row['action']),
-                'desc'      => $row['desc'],
                 'year'      => $year,
                 'school'    => $row['school'],
-                'item'      => $row['item']
+                'item'      => $row['item'],
+                'qty'       => $row['qty'],
+                'status'    => intval($row['action']),
+                'desc'      => $row['desc']
             ]);
         } else {
             $res = $stmtInsert->execute([
@@ -79,5 +79,6 @@ else $MASHPIA_DB->rollBack();
 
 echo json_encode([
     'success'   => $success,
-    'error'     => 'There was an error updating the status.'
+    'error'     => 'There was an error updating the status.',
+    'error_info' => $stmtInsert->errorInfo()
 ]);
