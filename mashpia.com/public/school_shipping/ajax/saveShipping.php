@@ -29,7 +29,7 @@ $update = "UPDATE $table
             SET 
                 qty = :qty, 
                 status = :status,
-                desc = :desc 
+                description = :desc 
             WHERE 
                 year = :year 
                 AND school_id = :school 
@@ -79,6 +79,5 @@ else $MASHPIA_DB->rollBack();
 
 echo json_encode([
     'success'   => $success,
-    'error'     => 'There was an error updating the status.',
-    'error_info' => $stmtUpdate->debugDumpParams()
+    'error'     => 'There was an error updating the status.'
 ]);
