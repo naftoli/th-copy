@@ -80,5 +80,5 @@ else $MASHPIA_DB->rollBack();
 echo json_encode([
     'success'   => $success,
     'error'     => 'There was an error updating the status.',
-    'error_info' => $stmtUpdate->errorInfo()
+    'error_info' => $stmtUpdate->debugDumpParams()
 ]);
