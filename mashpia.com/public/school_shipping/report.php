@@ -359,6 +359,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
       return false
     }
+    alert(action)
     update(this, action, qty)
     save(false)
   })
