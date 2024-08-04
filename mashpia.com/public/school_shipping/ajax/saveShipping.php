@@ -50,8 +50,8 @@ foreach ($info as $row) {
         break;
     } else {
         // find out if we need to insert or update
-        $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
+        $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        if ($found) {
             $res = $stmtUpdate->execute([
                 'qty'       => $row['qty'],
                 'status'    => intval($row['action']),
