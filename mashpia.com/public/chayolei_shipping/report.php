@@ -449,7 +449,7 @@ ksort($grand_summary);
     const user = ids[1]
     const num = ids[2]
     action = parseInt(action)
-    if (action != 4 || (action == 4 && desc))
+    if (action != 4 || (action == 4 && desc)) {
       info.push({action, item, user, desc, num})
     } else {
       alert('You must explain the damage before it can be saved.')
