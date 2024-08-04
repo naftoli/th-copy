@@ -289,7 +289,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const ids = id.split(':')
     const item = ids[0]
     const school = ids[1]
-    // get description
     action = parseInt(action)
     if (
       (action == 3 && qty)
@@ -310,6 +309,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
         }
       }
       if (!found) info.push({ action, item, school, qty, desc })
+    } else {
+      alert('Could not update item ' + item + ' for school ' + school)
     }
   }
 

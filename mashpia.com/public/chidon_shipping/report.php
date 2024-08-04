@@ -421,8 +421,12 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const item = ids[0]
     const user = ids[1]
     const num = ids[2]
-    // get description
-    info.push({ action, item, user, desc, num })
+    action = parseInt(action)
+    if (action != 4 || (action == 4 && desc))
+      info.push({action, item, user, desc, num})
+    } else {
+      alert('You must explain the damage before it can be saved.')
+    }
   }
 
   function save(reload = true) {

@@ -46,13 +46,12 @@ foreach ($info as $row) {
         'num'       => $row['num']
     ]);
     if (! $res) {
-        $stmtSelect->debugDumpParams();
         $success = false;
         break;
     } else {
         // find out if we need to insert or update
-        $row = $stmtSelect->fetch(PDO::FETCH_ASSOC);
-        if ($row) {
+        $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        if ($found) {
             $res = $stmtUpdate->execute([
                 'year'      => $year,
                 'user'      => $row['user'],
@@ -71,7 +70,6 @@ foreach ($info as $row) {
             ]);
         }
         if (! $res) {
-            $stmtInsert->debugDumpParams();
             $success = false;
             break;
         }
