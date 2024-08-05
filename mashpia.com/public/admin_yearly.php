@@ -29,7 +29,7 @@ elseif (gr('school_era')) {
 				package_id = NULL,
 				add_on_one  = 0,  
 				add_on_two  = 0, 
-				school_reset = null 				
+				store_reset = null 				
 				WHERE school_era IS NULL AND school_id IN ($schools)");
 				
 	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $year);
