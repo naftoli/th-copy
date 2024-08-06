@@ -12,27 +12,44 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $sql = "SELECT 
-            aa.admin_id, u.user_id, u.dob, c.class_grade, u.hachayol
+            aa.admin_id, u.user_id, u.hachayol, c.class_grade
         FROM
             users u
+                JOIN
+            schools s USING (school_id)
                 JOIN
             admin_auths aa ON aa.id = u.user_id
                 JOIN
             classes c ON c.class_id = u.class_id
         WHERE
-            u.user_registered > 0
-        ORDER BY admin_id , class_grade DESC";
-
+            u.user_registered IS NOT NULL 
+            and u.school_id not in (66, 112) 
+        ORDER BY aa.admin_id , c.class_grade DESC 
+	";
 $result = $mysqli->query($sql);
 $info = $result->fetch_all(MYSQLI_ASSOC);
 
-$data = [];
+// organize data
+$admins = [];
 foreach ($info as $row) {
-    $data[$row['admin_id']][] = [
-        'user_id'   => $row['user_id'],
-        'grade'     => $row['class_grade'],
-        'hachayol'  => $row['hachayol']
-    ];
+    $admins[$row['admin_id']][] = $row;
 }
 
-echo "<pre>"; print_r($data); echo "</pre>";
+// find all family accounts with no hachayol set
+$missing = [];
+foreach ($admins as $admin_id => $children) {
+    $found = false;
+    foreach ($children as $user) {
+        if ($user['hachayol'] == 1) {
+            $found = true;
+            break;
+        }
+    }
+    if (!$found) {
+        $missing[] = $admin_id;
+    }
+}
+
+// show missing hachayols
+echo "Number of Admins without any Hachayols: " . count($missing) . "<br>";
+echo "<pre>"; print_r($missing); echo "</pre>";
