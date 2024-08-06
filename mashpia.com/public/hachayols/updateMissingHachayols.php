@@ -12,14 +12,20 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $sql = "SELECT 
-            admin_id, user_id, hachayol
+            aa.admin_id, u.user_id, u.hachayol, c.class_grade
         FROM
-            admin_auths aa
+            users u
                 JOIN
-            users u ON u.user_id = aa.id
+            schools s USING (school_id)
+                JOIN
+            admin_auths aa ON aa.id = u.user_id
+                JOIN
+            classes c ON c.class_id = u.class_id
         WHERE
-            u.user_registered > 0
-        ORDER BY admin_id , hachayol DESC";
+            u.user_registered IS NOT NULL 
+            and u.school_id not in (66, 112) 
+        ORDER BY aa.admin_id , c.class_grade DESC 
+	";
 $result = $mysqli->query($sql);
 $info = $result->fetch_all(MYSQLI_ASSOC);
 
@@ -44,18 +50,6 @@ foreach ($admins as $admin_id => $children) {
     }
 }
 
-// find first child per admin
-foreach ($missing as $admin_id) {
-    $children = $admins[$admin_id];
-    $first = $children[0];
-    $user_id = $first['user_id'];
-    $sql = "UPDATE users 
-            SET 
-                hachayol = 1
-            WHERE
-                user_id = ?";
-    $result = $mysqli->prepare($sql);
-    $result->bind_param("i", $user_id);
-    $result->execute();
-}
-echo "done";
+// show missing hachayols
+echo "Number of Admins without any Hachayols: " . count($missing) . "<br>";
+echo "<pre>"; print_r($missing); echo "</pre>";
