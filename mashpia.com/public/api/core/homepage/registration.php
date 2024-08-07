@@ -50,16 +50,17 @@ class RegistrationRouter {
             .' WHERE u.chayolei = 1 AND u.user_registered IS NOT NULL AND ' . $filter
         );
         $query->execute();
+        $query->debugDumpParams();
         extract( $query->fetch() );
 
         // year, status, soldiers, total, reg_open
-        json_response( [
-            'year' => $year,
-            'total' => $total,
-            'status' => $status,
-            'soldiers' => $soldiers,
-            'reg_open' => $reg_open
-        ], true, true );
+//        json_response( [
+//            'year' => $year,
+//            'total' => $total,
+//            'status' => $status,
+//            'soldiers' => $soldiers,
+//            'reg_open' => $reg_open
+//        ], true, true );
     }
 }
 
