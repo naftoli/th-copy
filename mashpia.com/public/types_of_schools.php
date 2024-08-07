@@ -40,7 +40,7 @@ if (isset($_POST['submit'])) {
 	//echo "<pre>"; print_r( $sqls ); echo "</pre>"; exit;
 	
 	//first delete all previously saved info
-	$sql = "update schools set chayolei = 0, chidon = 0, hachayols = 0, tanya = 0, tehillim = 0";
+	$sql = "update schools set chayolei = 0, chidon = 0, hachayols = 0, rewards = 0, tanya = 0, tehillim = 0, raffle_prizes = 0";
 	mysql_query( $sql );
 	
 	//then update based on form submission
