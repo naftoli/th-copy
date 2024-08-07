@@ -89,8 +89,10 @@ while ($row = mysql_fetch_assoc($result)) {
           <th>Chayolei</th>
           <th>Chidon</th>
           <th>Hachayols</th>
+          <th>Rewards</th>
           <th>Tanya/Mishna</th>
 					<th>Tehillim</th>
+          <th>Raffle / Auction Prizes</th>
 	    		</tr>
 	    		<?
 	    		foreach ($schools as $school) {
