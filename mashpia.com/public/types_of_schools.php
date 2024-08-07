@@ -85,14 +85,14 @@ while ($row = mysql_fetch_assoc($result)) {
 	    		<tr>
 					<th>School ID</th>
 					<th>Base Number</th>
-	    			<th>School</th>
-	    			<th>Chayolei</th>
-	    			<th>Tanya/Mishna</th>
+          <th>School</th>
+          <th>Chayolei</th>
+          <th>Chidon</th>
+          <th>Hachayols</th>
+          <th>Tanya/Mishna</th>
 					<th>Tehillim</th>
-					<th>Chidon</th>
 	    		</tr>
 	    		<?
-				$types = array('chayolei', 'tanya', 'tehillim', 'chidon');
 	    		foreach ($schools as $school) {
 	    			echo "<tr><td>" . $school['school_id'] . "</td><td>" . $school['school_number'] . "</td><td>" .	$school['school_name'] . "</td>";
 					foreach ($types as $type) {
