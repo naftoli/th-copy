@@ -2,7 +2,7 @@
 $admin_auth = array('school'); 
 require('header.php');
 
-$types = array('chayolei', 'chidon', 'hachayols', 'tanya', 'tehillim');
+$types = array('chayolei', 'chidon', 'hachayols', 'rewards', 'tanya', 'tehillim', 'raffle_prizes');
 
 if (isset($_POST['submit'])) {
 	
