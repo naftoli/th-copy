@@ -23,11 +23,12 @@ export class RegistrationWidget extends Component {
 
   render() {
     const { login, data } = this.props;
-    const { year, status, soldiers, total, reg_open } = data;
+    const { year, status, total, reg_open } = data;
     // x of y soldiers registered
+    // x soldiers registered
     let soldier_status = 'Loading...';
     if ( status ) {
-      soldier_status = <span><NumberDisplay value={ total || 0 } /> of <NumberDisplay value={ soldiers || 0 } /></span>;
+      soldier_status = <span><NumberDisplay value={ total || 0 } /></span>;
     }
 
     return (
