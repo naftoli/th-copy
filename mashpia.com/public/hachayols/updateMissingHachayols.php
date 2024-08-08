@@ -18,7 +18,7 @@ $sql = "SELECT
                 JOIN
             users u ON u.user_id = aa.id
         WHERE
-            u.user_registered > 0
+            u.user_registered > 0 AND u.school_id NOT IN (66, 112)
         ORDER BY admin_id , hachayol DESC";
 $result = $mysqli->query($sql);
 $info = $result->fetch_all(MYSQLI_ASSOC);
