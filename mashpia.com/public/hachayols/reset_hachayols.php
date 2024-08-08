@@ -12,44 +12,41 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $sql = "SELECT 
-            aa.admin_id, u.user_id, u.hachayol, c.class_grade
+            aa.admin_id, u.user_id, c.class_grade
         FROM
             users u
-                JOIN
-            schools s USING (school_id)
                 JOIN
             admin_auths aa ON aa.id = u.user_id
                 JOIN
             classes c ON c.class_id = u.class_id
         WHERE
-            u.user_registered IS NOT NULL 
-            and u.school_id not in (66, 112) 
-        ORDER BY aa.admin_id , c.class_grade DESC 
-	";
+            u.user_registered IS NOT NULL
+                AND u.school_id NOT IN (66 , 112)
+        ORDER BY aa.admin_id , c.class_grade DESC";
 $result = $mysqli->query($sql);
 $info = $result->fetch_all(MYSQLI_ASSOC);
 
 // organize data
 $admins = [];
 foreach ($info as $row) {
-    $admins[$row['admin_id']][] = $row;
+    $admins[$row['admin_id']][$row['user_id']] = $row['class_grade'];
 }
 
-// find all family accounts with no hachayol set
-$missing = [];
-foreach ($admins as $admin_id => $children) {
-    $found = false;
-    foreach ($children as $user) {
-        if ($user['hachayol'] == 1) {
-            $found = true;
+// set hachayol to first child in family that is lower than 6th grade unless there is no child in the family that is lower than 6th grade
+$i = 1;
+foreach ($admins as $admin_id => $admin) {
+    $hachayol = null;
+    foreach ($admin as $user_id => $class_grade) {
+        if ($class_grade < 6 || !is_numeric($class_grade)) {
+            $hachayol = $user_id;
             break;
         }
     }
-    if (!$found) {
-        $missing[] = $admin_id;
+    if ($hachayol === null) {
+        // get first child in family
+        $hachayol = key(reset((array_keys($admin))));
     }
+    $sql = "UPDATE users SET hachayol = 1 WHERE user_id = " . $hachayol;
+    echo $i++ . ": " . $sql . "<br />";
+//    $mysqli->query($sql);
 }
-
-// show missing hachayols
-echo "Number of Admins without any Hachayols: " . count($missing) . "<br>";
-echo "<pre>"; print_r($missing); echo "</pre>";
