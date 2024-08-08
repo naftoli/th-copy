@@ -32,21 +32,23 @@ foreach ($info as $row) {
     $admins[$row['admin_id']][$row['user_id']] = $row['class_grade'];
 }
 
+echo "<pre>"; print_r($admins); echo "</pre>"; exit;
+
 // set hachayol to first child in family that is lower than 6th grade unless there is no child in the family that is lower than 6th grade
-$i = 1;
-foreach ($admins as $admin_id => $users) {
-    $hachayol = null;
-    foreach ($users as $user_id => $class_grade) {
-        if (intval($class_grade) < 6 || !is_numeric($class_grade)) {
-            $hachayol = $user_id;
-            break;
-        }
-    }
-    if ($hachayol === null) {
-        // get first child in family
-        $hachayol = first(array_keys($users));
-    }
-    $sql = "UPDATE users SET hachayol = 1 WHERE user_id = " . $hachayol;
-    echo $i++ . ": " . $sql . "<br />";
-//    $mysqli->query($sql);
-}
+//$i = 1;
+//foreach ($admins as $admin_id => $users) {
+//    $hachayol = null;
+//    foreach ($users as $user_id => $class_grade) {
+//        if (intval($class_grade) < 6 || !is_numeric($class_grade)) {
+//            $hachayol = $user_id;
+//            break;
+//        }
+//    }
+//    if ($hachayol === null) {
+//        // get first child in family
+//        $hachayol = first(array_keys($users));
+//    }
+//    $sql = "UPDATE users SET hachayol = 1 WHERE user_id = " . $hachayol;
+//    echo $i++ . ": " . $sql . "<br />";
+////    $mysqli->query($sql);
+//}
