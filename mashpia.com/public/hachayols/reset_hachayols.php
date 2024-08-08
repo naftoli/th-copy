@@ -36,7 +36,7 @@ foreach ($info as $row) {
 // if there's no child in grade 5 or lower, give to the last child
 foreach ($admins as $admin_id => $children) {
     echo 'Admin ID: ' . $admin_id . '<br>';
-    echo 'Children: ' . "<pre>" . print_r($children) . "</pre>" . '<br>';
+    echo 'Children: ' . print_r($children) . '<br>';
     $hachayol = null;
     foreach ($children as $child_id => $grade) {
         if ($grade <= 5 || $grade == 'Pre1a') {
