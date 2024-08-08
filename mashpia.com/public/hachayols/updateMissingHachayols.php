@@ -44,20 +44,18 @@ foreach ($admins as $admin_id => $children) {
     }
 }
 
-echo "<pre>"; print_r($missing); echo "</pre>";
-
 // find first child per admin
-//foreach ($missing as $admin_id) {
-//    $children = $admins[$admin_id];
-//    $first = $children[0];
-//    $user_id = $first['user_id'];
-//    $sql = "UPDATE users
-//            SET
-//                hachayol = 1
-//            WHERE
-//                user_id = ?";
-//    $result = $mysqli->prepare($sql);
-//    $result->bind_param("i", $user_id);
-//    $result->execute();
-//}
-//echo "done";
+foreach ($missing as $admin_id) {
+    $children = $admins[$admin_id];
+    $first = $children[0];
+    $user_id = $first['user_id'];
+    $sql = "UPDATE users
+            SET
+                hachayol = 1
+            WHERE
+                user_id = ?";
+    $result = $mysqli->prepare($sql);
+    $result->bind_param("i", $user_id);
+    $result->execute();
+}
+echo "done";
