@@ -25,7 +25,7 @@ export class ShippingTab extends Component {
     } = this.props;
     // load the base
     const {
-      shipping_first,   shipping_last,
+      shipping_first,   shipping_last, shipping_phone,
       shipping_method,  shipping_requests,  ...base
     } = this.props.base;
 
@@ -58,6 +58,7 @@ export class ShippingTab extends Component {
             title={ 'School Shipping Address' }
             prefix='shipping_'
             required={ required }
+            shipping_phone={ shipping_phone }
             onChange={ this.onChange } />
 
           <br />
