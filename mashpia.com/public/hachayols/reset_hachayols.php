@@ -46,6 +46,6 @@ foreach ($admins as $admin_id => $children) {
         $hachayol = $child_id;
     }
     $sql = "UPDATE users SET hachayol = 1 WHERE user_id = $hachayol";
-    echo $sql . '<br>';
+    echo $sql . '<br /><br />';
     // $mysqli->query($sql);
 }
