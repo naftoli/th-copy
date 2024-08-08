@@ -44,7 +44,7 @@ foreach ($admins as $admin_id => $users) {
     }
     if ($hachayol === null) {
         // get first child in family
-        $hachayol = first((array_keys($users)));
+        $hachayol = first(array_keys($users));
     }
     $sql = "UPDATE users SET hachayol = 1 WHERE user_id = " . $hachayol;
     echo $i++ . ": " . $sql . "<br />";
