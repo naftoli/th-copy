@@ -20,12 +20,12 @@ class BirthdayRouter {
              " SELECT user_id, class_id, first, last, mobile_pic, user_photo_id, school_name, class_grade, class_sub, start_date, end_date "
             ." FROM birthdays JOIN users u USING (user_id) JOIN schools s USING (school_id) "
             ." JOIN classes c USING (class_id) JOIN date_tasks_missions USING (date_tasks_mission_id) "
-            ." WHERE start_date >= $start_date AND end_date < $end_date AND $filter "
+            ." WHERE start_date >= $start_date AND end_date < $end_date AND ($filter) AND u.user_registered IS NOT NULL "
             ." GROUP BY user_id ORDER BY start_date, first, last;"
         );
         $query->execute();
-        $query->debugDumpParams();
-        json_response([], true, true);
+//        $query->debugDumpParams();
+//        json_response([], true, true);
         $birthdays = [];
         while( $row = $query->fetch() ) {
             $soldier = [

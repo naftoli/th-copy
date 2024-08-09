@@ -21,11 +21,11 @@ class BirthdayRouter {
             ." FROM rank_marks JOIN ranks USING (rank_ord) JOIN users u USING (user_id) "
             ." JOIN schools s USING (school_id) JOIN classes c USING (class_id) "
             ." WHERE rank_ord > 1 AND date_promoted > $start_date AND date_promoted <= $end_date "
-            ." AND $filter "
+            ." AND ($filter) AND u.user_registered IS NOT NULL "
             ." GROUP BY user_id ORDER BY date_promoted DESC, rank_ord DESC, last, first;"
         );
-        $query->debugDumpParams();
-        json_response([], true, true);
+//        $query->debugDumpParams();
+//        json_response([], true, true);
         $query->execute();
         $promotions = [];
         while( $row = $query->fetch() ) {
