@@ -24,6 +24,8 @@ class BirthdayRouter {
             ." GROUP BY user_id ORDER BY start_date, first, last;"
         );
         $query->execute();
+        $query->debugDumpParams();
+        json_response([], true, true);
         $birthdays = [];
         while( $row = $query->fetch() ) {
             $soldier = [

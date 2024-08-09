@@ -24,7 +24,8 @@ class BirthdayRouter {
             ." AND $filter "
             ." GROUP BY user_id ORDER BY date_promoted DESC, rank_ord DESC, last, first;"
         );
-
+        $query->debugDumpParams();
+        json_response([], true, true);
         $query->execute();
         $promotions = [];
         while( $row = $query->fetch() ) {
