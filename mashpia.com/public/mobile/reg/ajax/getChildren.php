@@ -160,7 +160,7 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['chidon_registered'] = $row['date_paid'] > 0 ? 1 : 0;
 
         // turn on chidon registration for children from monsey schools
-        if (in_array($row['school_id'], [49, 192, 269])) {
+        if (in_array($row['school_id'], [49, 192])) {
             $children[$row['user_id']]['schoolRegistered'] = 1;
             $children[$row['user_id']]['schoolTypeRegistered'] = 1;
         }
