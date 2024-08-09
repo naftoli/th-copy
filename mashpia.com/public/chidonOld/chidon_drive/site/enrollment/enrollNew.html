@@ -930,7 +930,8 @@
 
 			// only let ultimate trip kids to update their trip info
 			let registered = children.filter(child => child.date_paid)
-			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			let eligible = registered
 			console.log(eligible)
 			if (registered.length && !eligible.length) {
 				editing_mode = true
