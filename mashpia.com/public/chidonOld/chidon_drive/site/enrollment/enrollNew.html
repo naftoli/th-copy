@@ -1018,9 +1018,10 @@
 		}
 
 		async function processPage(admin) {
-			let registered = children.filter(child => child.date_paid)
-			// let haveTrack = children.filter(child => child.track)
-			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			// let registered = children.filter(child => child.date_paid)
+			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			let registered = children
+			let eligible = children
 			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
 
 			// check if there's any family balance that can be applied to registration
