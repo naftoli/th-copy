@@ -1240,6 +1240,7 @@ var registrationApp = function() {
             alert(res.error)
             return false
         }
+        return false
     }
 
     const deviceType = () => {
