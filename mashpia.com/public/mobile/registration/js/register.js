@@ -1154,18 +1154,13 @@ var registrationApp = function() {
                 saveAddress()
                   .then(function (saved) {
                       if (saved) nextStep()
-                      else {
-                          alert("You must enter a valid address before continuing")
-                          return false
-                      }
                   })
                   .catch(function (err) {
                       alert(err)
                   })
             }
         }
-
-        nextStep()
+        else nextStep()
     }
 
     async function saveAddress() {
