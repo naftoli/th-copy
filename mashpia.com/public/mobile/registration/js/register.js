@@ -1213,7 +1213,7 @@ var registrationApp = function() {
         }
 
         // if country contains 'united states' or 'us' change to 'USA'
-        if (address.country.toLowerCase().includes('united states') || address.country.toLowerCase().includes('us')) {
+        if (address.country.toLowerCase().includes('united states')) {
             address.country = 'USA'
         }
 
@@ -1226,7 +1226,10 @@ var registrationApp = function() {
                 defaultMapStyle: ['mapbox', 'outdoors-v11'],
                 satelliteToggle: true
             },
-            skipConfirmModal: (feature) => false // overrides default behavior, show dialog every time
+            skipConfirmModal: (feature) => {
+                if (address.country == 'USA') return false // overrides default behavior, show dialog every time
+                return true
+            }
         });
         console.log(result)
         if (result.type == 'cancel') {

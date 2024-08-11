@@ -13,7 +13,7 @@ if ( !$admin_id ) json_error("There was an error.");
 
 $info = $_POST['info'];
 // make sure country is USA for Unites States
-if ($info['country'] == "United States") {
+if ($info['country'] == "US") {
     $info['country'] = "USA";
 }
 $stmt = $MASHPIA_DB->prepare("
