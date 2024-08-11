@@ -1184,27 +1184,37 @@ var registrationApp = function() {
         // make sure address1 has at least 1 number followed by a space and at least 3 letters following
         if (! /^[0-9]+ .{3,}/.test(address.address1)) {
             alert("You must enter a valid address")
+            $("#c-address").focus()
             return false
         }
         // make sure city has at least 3 letters
         if (address.city.length < 3) {
             alert("You must enter a valid city")
+            $("#c-city").focus()
             return false
         }
         // make sure state has at least 2 letters
         if (address.state.length < 2) {
             alert("You must enter a valid state")
+            $("#c-state").focus()
             return false
         }
         // make sure zip has at least 4 alphanumeric characters
         if (address.zip.length < 4) {
             alert("You must enter a valid zip code")
+            $("#c-zip").focus()
             return false
         }
         // make sure country has at least 3 letters
         if (address.country.length < 3) {
             alert("You must enter a valid country")
+            $("#c-country").focus()
             return false
+        }
+
+        // if country contains 'united states' or 'us' change to 'USA'
+        if (address.country.toLowerCase().includes('united states') || address.country.toLowerCase().includes('us')) {
+            address.country = 'USA'
         }
 
         // Add confirmation prompt to shipping address
@@ -1218,6 +1228,7 @@ var registrationApp = function() {
             },
             skipConfirmModal: (feature) => false // overrides default behavior, show dialog every time
         });
+        console.log(result)
         if (result.type == 'cancel') {
             alert('You must fix up your address before continuing')
             return false
