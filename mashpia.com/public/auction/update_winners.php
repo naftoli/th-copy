@@ -31,6 +31,11 @@ if ( isset( $_FILES['add'] ) ) {
                 // find out user id from serial
                 $sql = "select user_id from users where user_serial = " . $serial;
                 $result = mysql_query($sql);
+                if (! $result) {
+                    $success = false;
+                    echo mysql_error();
+                    break;
+                }
                 $row = mysql_fetch_assoc($result);
                 $user_id = $row['user_id'];
 
