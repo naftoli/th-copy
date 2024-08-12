@@ -18,8 +18,10 @@ if ( isset( $_FILES['add'] ) ) {
         $updated = 0;
         $numRows = 0;
 
-        if (! mysql_query("delete from auction_winners where auction_id = " . $auction_id)) {
+        $qry = "delete from auction_winners where auction_id = " . $auction_id;
+        if (! mysql_query($qry)) {
             $success = false;
+            echo mysql_error();
         } else {
             while ($data = fgetcsv($file)) {
                 $numRows++;
