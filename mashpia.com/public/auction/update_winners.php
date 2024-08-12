@@ -1,83 +1,80 @@
 <?php
 require '../db.php';
 
-$auction_id = 82;
-$winners = array(
-    218	=> 7764663,
-    255	=> 7765172,
-    323	=> 7764193,
-    357	=> 7764783,
-    259	=> 7771080,
-    200	=> 7773976,
-    214	=> 7774704,
-    75	=> 7756310,
-    335	=> 7762245,
-    154	=> 7764945,
-    328	=> 7770070,
-    225	=> 7748695,
-    69	=> 7764704,
-    346	=> 7756266,
-    388	=> 7763386,
-    306	=> 7771306,
-    217	=> 7754473,
-    150	=> 7770090,
-    425	=> 7765959,
-    405	=> 7771583,
-    326	=> 7756087,
-    169	=> 7771815,
-    197	=> 7758276,
-    439	=> 7774219,
-    285	=> 7752169,
-    440	=> 7772184,
-    129	=> 7775552,
-    167	=> 7763837,
-    153	=> 7756788,
-    283	=> 7774032,
-    162	=> 7759908,
-    431	=> 7753534,
-    445	=> 7756482,
-    301	=> 7762217,
-    443	=> 7774612,
-    155	=> 7771761,
-    253	=> 7761198,
-    404	=> 7760863,
-    199	=> 7759586,
-    184	=> 7756038,
-    79	=> 7750855,
-    403	=> 7764564,
-    84	=> 7749162,
-    81	=> 7755589,
-    348	=> 7773392,
-    442	=> 7770887,
-    198	=> 7774566,
-    159	=> 7752295,
-    257	=> 7775133,
-    140	=> 7753001,
-    205	=> 7765441,
-    77	=> 7763692,
-    215	=> 7746917,
-    78	=> 7748616,
-    250	=> 7775900,
-    201	=> 7756210,
-    165	=> 7758560,
-    322	=> 7751365,
-    206	=> 7756812,
-    147	=> 7771644
-);
+// get auction id
+$sql = "select auction_id from auctions order by auction_id desc limit 1";
+$result = mysql_query($sql);
+$row = mysql_fetch_assoc($result);
+$auction_id = $row['auction_id'];
 
-$sql = "delete from auction_winners where auction_id = " . $auction_id;
-mysql_query($sql);
+// get winners from file
+if ( isset( $_FILES['add'] ) ) {
+    if ( $file = fopen($_FILES['add']['tmp_name'], "r") ) {
+        // start transaction
+        mysql_query("set autocommit = 0");
+        mysql_query("start transaction");
 
-foreach ($winners as $prize => $user) {
-    $sql = "select user_id from users where user_serial = " . $user;
-    $result = mysql_query($sql);
-    $row = mysql_fetch_assoc($result);
-    $user_id = $row['user_id'];
+        $success = true;
+        $updated = 0;
+        $numRows = 0;
 
-	$sql = "insert into auction_winners 
-			set auction_id = " . $auction_id . ", 
-			prize_id = " . $prize . ", 
-			user_id = " . $user_id . ", 
-			quantity = 1";
-	mysql_query($sql) or die(mysql_error());
+        if (! mysql_query("delete from auction_winners where auction_id = " . $auction_id)) {
+            $success = false;
+        } else {
+            while ($data = fgetcsv($file)) {
+                $numRows++;
+                $prize = $data[0];
+                $serial = $data[1];
+
+                // find out user id from serial
+                $sql = "select user_id from users where user_serial = " . $serial;
+                $result = mysql_query($sql);
+                $row = mysql_fetch_assoc($result);
+                $user_id = $row['user_id'];
+
+                if ($auction_id && $user_id) {
+                    $sql = "insert into auction_winners 
+                            set quantity = 1,
+                            user_id = " . $user_id . ", 
+                            prize_id = " . $prize . ",  
+                            auction_id = " . $auction_id;
+                    echo $sql . "<br />";
+                    $updated++;
+//                    if (mysql_query($sql)) $updated++;
+//                    else {
+//                        $success = false;
+//                        break;
+//                    }
+                }
+            }
+        }
+
+        if ($success && $updated != $numRows) {
+            $success = false;
+        }
+
+        if ( $success ) {
+            mysql_query("commit");
+            echo "Auction winners have been set.";
+        } else {
+            mysql_query("rollback");
+            echo "Error setting auction winners.";
+        }
+        mysql_query("set autocommit = 1");
+    }
 }
+?>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>Set Auction Winners</title>
+  </head>
+
+  <body>
+    <form action="update_winners.php" method="post" enctype="multipart/form-data">
+      Select file to upload:<br />
+      <input type="file" name="add" id="add"><br /><br />
+      <input type="submit" value="upload" name="submit">
+    </form>
+  </body>
