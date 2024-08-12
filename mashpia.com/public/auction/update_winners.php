@@ -21,7 +21,7 @@ if ( isset( $_FILES['add'] ) ) {
         $qry = "delete from auction_winners where auction_id = " . $auction_id;
         if (! mysql_query($qry)) {
             $success = false;
-            echo mysql_error();
+            echo $qry . "<br />" . mysql_error();
         } else {
             while ($data = fgetcsv($file)) {
                 $numRows++;
@@ -33,13 +33,13 @@ if ( isset( $_FILES['add'] ) ) {
                 $result = mysql_query($sql);
                 if (! $result) {
                     $success = false;
-                    echo mysql_error();
+                    echo $sql . "<br />" . mysql_error();
                     break;
                 }
                 $row = mysql_fetch_assoc($result);
                 $user_id = $row['user_id'];
 
-                if ($auction_id && $user_id) {
+                if ($auction_id && $user_id && $prize) {
                     $sql = "insert into auction_winners 
                             set quantity = 1,
                             user_id = " . $user_id . ", 
@@ -52,6 +52,12 @@ if ( isset( $_FILES['add'] ) ) {
 //                        $success = false;
 //                        break;
 //                    }
+                } else {
+                    $success = false;
+                    echo "auction_id: " . $auction_id . "<br />";
+                    echo "user_id: " . $user_id . "<br />";
+                    echo "prize: " . $prize . "<br />";
+                    break;
                 }
             }
         }
