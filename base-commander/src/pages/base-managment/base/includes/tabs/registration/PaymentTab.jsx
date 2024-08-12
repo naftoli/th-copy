@@ -49,8 +49,10 @@ export class PaymentTab extends React.Component {
     console.log(this.state.terms)
     // make sure that if the yearly gift is checked, we alert the user
     if ( this.state.terms.siddur_gift ) {
-      alert('I realize I have committed to learning Peirush Hamilos this year, thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.');
-      this.props.onGiftChange(1);
+      const msg = "I realize I have committed to learning Peirush Hamilos this year, " +
+        "thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.\nIf you are not committed, please click 'cancel' and uncheck the box.";
+      const commited = confirm(msg);
+      if (commited) this.props.onGiftChange(1);
       // this.props.register()
     } else {
       this.props.onGiftChange(0);
@@ -121,10 +123,9 @@ export class PaymentTab extends React.Component {
 
           <Checkbox checked={ terms.siddur_gift } name='siddur_gift' { ...checkboxProps }>
             <b>Special for 5785:</b> I would like to receive a Siddur for each of my Chayolim and Teachers in my school
-            sponsored by Rabbi Moshe and Ruti Weiss, and we are committed to learning Peirush Hamishniyos in my school.
+            sponsored by Rabbi Moshe and Ruti Weiss, and we are committed to learning Peirush Hamilos in my school.
           </Checkbox>
         </Callout>
-
         
         <Row id='totals'>
           <Col lg={4}>
