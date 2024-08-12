@@ -29,13 +29,8 @@ if ( isset( $_FILES['add'] ) ) {
                 $user_id = $data[1];
 
                 if ($auction_id && $user_id && $prize) {
-                    $sql = "insert into auction_winners 
-                            set quantity = 1,
-                            user_id = " . $user_id . ", 
-                            prize_id = " . $prize . ",  
-                            auction_id = " . $auction_id;
-//                    echo $sql . "<br />";
-//                    $updated++;
+                    $sql = "insert into auction_winners (auction_id, user_id, prize_id, quantity) 
+                            values ($auction_id, $user_id, $prize, 1)";
                     if (mysql_query($sql)) $updated++;
                     else {
                         $success = false;
