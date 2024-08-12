@@ -55,6 +55,7 @@ if ( isset( $_FILES['add'] ) ) {
                 } else {
                     $success = false;
                     echo "auction_id: " . $auction_id . "<br />";
+                    echo "serial number: " . $serial . "<br />";
                     echo "user_id: " . $user_id . "<br />";
                     echo "prize: " . $prize . "<br />";
                     break;
