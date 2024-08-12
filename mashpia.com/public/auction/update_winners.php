@@ -5,7 +5,7 @@ require '../db.php';
 $sql = "select auction_id from auctions order by auction_id desc limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
-$auction_id = $row['auction_id'];
+$auction_id = intval($row['auction_id']);
 
 // get winners from file
 if ( isset( $_FILES['add'] ) ) {
@@ -25,11 +25,12 @@ if ( isset( $_FILES['add'] ) ) {
         } else {
             while ($data = fgetcsv($file)) {
                 $numRows++;
-                $prize = $data[0];
-                $user_id = $data[1];
+                $prize = intval($data[0]);
+                $user_id = intval($data[1]);
 
                 if ($auction_id && $user_id && $prize) {
-                    $sql = "insert into auction_winners (auction_id, user_id, prize_id, quantity) values ($auction_id, $user_id, $prize, 1)";
+                    $sql = "insert into auction_winners (auction_id, user_id, prize_id, quantity) 
+                            values ($auction_id, $user_id, $prize, 1)";
                     if (mysql_query($sql)) $updated++;
                     else {
                         $success = false;
