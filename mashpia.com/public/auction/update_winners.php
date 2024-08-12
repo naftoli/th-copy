@@ -34,13 +34,14 @@ if ( isset( $_FILES['add'] ) ) {
                             user_id = " . $user_id . ", 
                             prize_id = " . $prize . ",  
                             auction_id = " . $auction_id;
-                    echo $sql . "<br />";
-                    $updated++;
-//                    if (mysql_query($sql)) $updated++;
-//                    else {
-//                        $success = false;
-//                        break;
-//                    }
+//                    echo $sql . "<br />";
+//                    $updated++;
+                    if (mysql_query($sql)) $updated++;
+                    else {
+                        $success = false;
+                        echo $sql . "<br />" . mysql_error();
+                        break;
+                    }
                 } else {
                     $success = false;
                     echo "auction_id: " . $auction_id . "<br />";
