@@ -87,11 +87,11 @@ class RegistrationPage extends Component {
     this.setState({ base: { ...this.state.base, ...updates } });
   }
 
-  updateSiddurGift = gift => {
-    this.setState({ siddur_gift: gift }, () => {
-      this.register()
+  updateSiddurGift = ((gift, register = true) => {
+    this.setState({siddur_gift: gift}, () => {
+      if (register) this.register()
     })
-  }
+  })
 
   // * event handlers
   onChange = onInputChange( this.onUpdate );

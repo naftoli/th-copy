@@ -52,7 +52,7 @@ export class PaymentTab extends React.Component {
       const msg = "I realize I have committed to learning Peirush Hamilos this year, " +
         "thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.\nIf you are not committed, please click 'cancel'.";
       if (window.confirm(msg)) this.props.onGiftChange(1);
-      else this.props.onGiftChange(0);
+      else this.props.onGiftChange(0, false)
       // this.props.register()
     } else {
       this.props.onGiftChange(0);
