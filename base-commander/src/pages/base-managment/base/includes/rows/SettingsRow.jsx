@@ -39,16 +39,15 @@ export class SettingsRow extends Component {
     this.setState({ disabled: true, checked: true });
   }
 
-  enableSchoolReset = event => {
-    const store_reset = event.target.value;
-    this.props.onUpdate({ store_reset });
-    this.setState({ disabled: false, checked: true });
-  }
-
   changeSchoolReset = event => {
     const store_reset = event.target.value;
     this.props.onUpdate({ store_reset });
     this.setState({ disabled: true, checked: true });
+  }
+
+  changeOneTimeReset = event => {
+    const one_time_prize_reset = event.target.value;
+    this.props.onUpdate({ one_time_prize_reset });
   }
 
   enableCustom = event => {
@@ -188,7 +187,7 @@ export class SettingsRow extends Component {
             <Fragment key={ reset.jd }>
               <Radio value={ reset.jd }
                 name='one_time_prize_reset'
-                onChange={ this.onChange }
+                onChange={ this.changeOneTimeReset }
                 checked={ (i === 1 && !one_time_prize_reset) || one_time_prize_reset === reset.jd }
                 required
               >
