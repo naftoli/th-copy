@@ -65,15 +65,21 @@ export class PlatoonRow extends Component {
         </Col>
 
         <Col sm={6}>
+          <Radio
+            name='updated'
+            value={updated}
+            checked={updated}
+            {...inputProps} />
           <label>Updated</label>
           <Radio
             name='updated'
-            value={ updated }
-            checked={ updated }
-            { ...inputProps } />
+            value={!updated}
+            checked={!updated}
+            {...inputProps} />
+          <label>Not Updated</label>
         </Col>
 
-        { soldiers && soldiers.length === 0 && 
+        {soldiers && soldiers.length === 0 &&
           <Col sm={12}>
             <Button color='danger' onClick={ onDelete } id='delete'>
               <FontAwesome icon='trash' /> Delete Platoon
