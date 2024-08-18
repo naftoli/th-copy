@@ -14,7 +14,7 @@ if ($admin_user['auth'] != 'super') {
 $stmtUpdate = $MASHPIA_DB->prepare(
     "UPDATE non_th_schools 
             SET school_name = :school_name, city = :city, state = :state, zip = :zip, country = :country, phone = :phone 
-            WHERE school_id = :school_id"
+            WHERE non_th_school_id = :school_id"
 );
 
 $stmtInsert = $MASHPIA_DB->prepare(
