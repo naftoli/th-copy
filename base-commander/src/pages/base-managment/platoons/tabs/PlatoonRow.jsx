@@ -11,8 +11,9 @@ export class PlatoonRow extends Component {
     const { inputProps, onSelectChange, onDelete } = this.props;
     const { 
       class_grade, class_sub, class_teacher, cell, email,
-      soldiers, miles_per_soldier, miles_balance,
+      soldiers, miles_per_soldier, miles_balance, updated
     } = this.props.platoon;
+    console.log('updated', updated);
 
     let grades = [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ];
     grades = grades.map( grade => {
