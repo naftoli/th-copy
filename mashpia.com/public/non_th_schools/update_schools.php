@@ -64,6 +64,7 @@ if (isset($_FILES['file'])) {
                     );
                     if (!$result) {
                         $success = false;
+                        $stmtUpdate->debugDumpParams();
                         break;
                     }
                 } else {
@@ -79,6 +80,7 @@ if (isset($_FILES['file'])) {
                     );
                     if (!$result) {
                         $success = false;
+                        $stmtInsert->debugDumpParams();
                         break;
                     }
                 }
