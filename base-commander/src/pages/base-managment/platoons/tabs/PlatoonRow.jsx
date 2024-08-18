@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // components
-import { Select } from 'components/inputs';
+import {Radio, Select} from 'components/inputs';
 import { Row, Col, Input, Button } from 'reactstrap';
 import { findOption } from 'functions/selects';
 import { FontAwesome, NumberDisplay } from 'components/ui';
@@ -62,6 +62,15 @@ export class PlatoonRow extends Component {
             pattern='^(\s?[^\s,]+@[^\s,]+\.[^\s,]+\s?[,;])*(\s?[^\s,]+@[^\s,]+\.[^\s,]+)$'
             />
           <div className='invalid-message'>1 or more valid E-mail addresses (, or ; seperated)</div>
+        </Col>
+
+        <Col sm={6}>
+          <label>Updated</label>
+          <Radio
+            name='updated'
+            value={ updated }
+            checked={ updated }
+            { ...inputProps } />
         </Col>
 
         { soldiers && soldiers.length === 0 && 
