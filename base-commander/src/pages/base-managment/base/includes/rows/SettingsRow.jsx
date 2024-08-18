@@ -187,7 +187,7 @@ export class SettingsRow extends Component {
               <Radio value={ reset.jd }
                 name='one_time_prize_reset'
                 onChange={ this.onChange }
-                checked={ one_time_prize_reset === parseInt(reset.jd, 10) || (i === 1 && !one_time_prize_reset) }>
+                checked={ parseInt(one_time_prize_reset, 10) === parseInt(reset.jd, 10) || (i === 1 && !one_time_prize_reset) }>
                 { reset.title } ({ reset.hDate } / { reset.date })
               </Radio>
               <br />
