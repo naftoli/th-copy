@@ -186,7 +186,7 @@ export class SettingsRow extends Component {
             <Fragment key={ reset.jd }>
               <Radio value={ reset.jd }
                 name='one_time_prize_reset'
-                onChange={ this.changeOneTimeReset }
+                onChange={ this.onChange }
                 checked={ one_time_prize_reset === parseInt(reset.jd, 10) || (i === 1 && !one_time_prize_reset) }>
                 { reset.title } ({ reset.hDate } / { reset.date })
               </Radio>
