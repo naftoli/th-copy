@@ -59,7 +59,7 @@ echo "</pre>";
 foreach ($schoolsUsers as $school => $users) {
     echo "<h2>" . $schools[$school] . "</h2>";
     echo "<table>";
-    echo "<tr><th>Grade</th><th>Student</th><th>User ID</th><th>Start Date</th><th>Registered this year</th></tr>";
+    echo "<tr><th>Grade</th><th>Student</th><th>User ID</th><th>Start Date</th><th>Registered Date</th></tr>";
     foreach ($users as $user) {
         $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
         echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] .
