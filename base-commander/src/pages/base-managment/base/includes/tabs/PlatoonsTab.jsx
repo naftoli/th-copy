@@ -104,7 +104,7 @@ export class PlatoonsTab extends Component {
                     value='1'
                     className='form-check-input'
                     checked={ parseInt(platoon.updated, 10) === 1 }
-                    onChange={ e => this.setValue(platoon.class_id, e.target.name, e.target.value) }> This Teacher IS NOW BEING UPDATED for the coming yr </Radio><br />
+                    onChange={ e => this.setValue(platoon.class_id, e.target.name, e.target.value) }> This Teacher IS UPDATED for the coming yr </Radio><br />
                   <Radio
                     required
                     name={ platoon.class_id + '_updated' }
