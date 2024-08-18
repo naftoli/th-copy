@@ -148,7 +148,6 @@ export class SettingsRow extends Component {
             <Fragment key={ reset.jd }>
               <Radio value={ reset.jd }
                 name='store_miles_reset'
-                { ...storeResetProps }
                 onChange={ this.changeSchoolReset }
                 checked={ store_reset_jd === parseInt(reset.jd, 10) || (index === 1 && store_reset === undefined) }>
                 { reset.title } ({ reset.hDate } / { reset.date })
@@ -188,9 +187,7 @@ export class SettingsRow extends Component {
               <Radio value={ reset.jd }
                 name='one_time_prize_reset'
                 onChange={ this.changeOneTimeReset }
-                checked={ one_time_prize_reset === parseInt(reset.jd, 10) || (i === 1 && !one_time_prize_reset) }
-                required
-              >
+                checked={ one_time_prize_reset === parseInt(reset.jd, 10) || (i === 1 && !one_time_prize_reset) }>
                 { reset.title } ({ reset.hDate } / { reset.date })
               </Radio>
               <br />
