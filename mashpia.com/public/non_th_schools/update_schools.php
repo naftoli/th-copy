@@ -18,7 +18,7 @@ $stmtUpdate = $MASHPIA_DB->prepare(
 );
 
 $stmtInsert = $MASHPIA_DB->prepare(
-    "INSERT INTO non_th_schools (school_id, school_name, city, state, zip, country, phone) 
+    "INSERT INTO non_th_schools (non_th_school_id, school_name, city, state, zip, country, phone) 
             VALUES ('', :school_name, :city, :state, :zip, :country, :phone)"
 );
 
