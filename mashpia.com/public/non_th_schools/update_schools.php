@@ -51,7 +51,7 @@ if (isset($_FILES['file'])) {
                 $phone = $data[$i++];
 
                 if ($school_id > 0) {
-                    $result = $stmtInsert->execute(
+                    $result = $stmtUpdate->execute(
                         [
                             'school_id'     => $school_id,
                             'school_name'   => $school_name,
@@ -67,7 +67,7 @@ if (isset($_FILES['file'])) {
                         break;
                     }
                 } else {
-                    $result = $stmtUpdate->execute(
+                    $result = $stmtInsert->execute(
                         [
                             'school_name'   => $school_name,
                             'city'          => $city,
