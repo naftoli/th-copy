@@ -4,7 +4,6 @@ class TehillimTasks {
     private $year;
     private $dates;
     private $tasks;
-    private $langs;
     private $missions;
     private $schoolTypes;
     private $ages;
@@ -43,7 +42,6 @@ class TehillimTasks {
             'שבת מברכים מנחם-אב',
             'שבת מברכים אלול'
         ];
-        $this->langs = ['en', 'yi', 'he'];
     }
 
     private function setQuotas() {
