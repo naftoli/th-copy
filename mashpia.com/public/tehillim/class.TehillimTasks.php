@@ -6,9 +6,9 @@ class TehillimTasks {
     private $tasks;
     private $db;
 
-    public function __construct($year, $db) {
+    public function __construct($year, $dbHandler) {
         $this->year = $year;
-        $this->db = $db;
+        $this->db = $dbHandler;
         $this->quotas = $this->setQuotas();
         $this->dates = $this->setDates();
         $this->tasks = $this->setTasks();
