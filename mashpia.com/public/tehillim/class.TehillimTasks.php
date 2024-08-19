@@ -14,7 +14,7 @@ class TehillimTasks {
         $this->tasks = $this->setTasks();
     }
 
-    public function setQuotas() {
+    private function setQuotas() {
         $stmt = $this->db->query("SELECT * FROM tehillim_ladders");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
@@ -27,7 +27,23 @@ class TehillimTasks {
         }
     }
 
+    private function setDates() {
+        $this->dates = calculateSM($this->year);
+    }
+
+    private function setTasks() {
+        $this->tasks = [];
+    }
+
     public function getQuotas() {
         return $this->quotas;
+    }
+
+    public function getDates() {
+        return $this->dates;
+    }
+
+    public function getTasks() {
+        return $this->tasks;
     }
 }
