@@ -1816,11 +1816,12 @@ var registrationApp = function() {
         })
         let num = user_ids.length
         num -= numPaid
-        if (num > 0) {
+        if (num > 1) { // first child is free
             for (let i = 0; i < num; i++) {
                 let id = user_ids[i]
-                // only charge for EXTRA children
-                if (usersPaid.includes(id)) continue
+                // find out if child already has hachayol set
+                let child = state.users.find(user => user.user_id == id)
+                if (parseInt(child.hachayol)) continue
                 // make sure this id is not in cart already (for some reason it can be there when going "back")
                 const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
                 if (! inCart.length) {
