@@ -288,13 +288,8 @@ class TehillimTasks {
                                 $missionsCreated++;
 
                                 foreach ($details as $taskInfo) {
-                                    if ($taskInfo['mand']) {
-                                        $mand = 1;
-                                        $opt = 0;
-                                    } else {
-                                        $mand = 0;
-                                        $opt = 1;
-                                    }
+                                    $mand = intval($taskInfo['mand']);
+                                    $opt = $mand ? 0 : 1;
                                     if ($taskInfo['ord'] == 1) {
                                         $desc = $this->quotas[$track][$level][$actualMonth]['k'];
                                         $qty = $this->quotas[$track][$level][$actualMonth]['q'];
