@@ -425,6 +425,9 @@ class UserRegistrationRouter {
                                 // early registration
                                 if (! $installmentsCreated) $user->earlyReg($chidonYr, $user_id, $amount);
                                 break;
+                            case 'HACH':
+                                $user->addHachayol($user_id);
+                                break;
                         }
                         $itemsForEmail[$user_id][] = [
                             'first'     => $user->first,

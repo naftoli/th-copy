@@ -674,6 +674,14 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
         return $errors;
     }
+
+    public function addHachayol($user_id) {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("UPDATE users SET hachayol = 1 WHERE user_id = :user");
+        $res = $stmt->execute([':user' => $user_id]);
+        return $res;
+    }
+
     /**
      * registerChidon
      * 
