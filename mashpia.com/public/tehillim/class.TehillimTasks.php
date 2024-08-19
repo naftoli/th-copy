@@ -258,7 +258,6 @@ class TehillimTasks {
                     foreach ($this->schoolTypes[$missionType] as $schoolType) {
                         foreach ($this->ages as $level) {
                             foreach ($this->tracks as $track) {
-                                $speed = $this->quotas[$track][$level][$month]['s'];
                                 if ($missionType == 'chabad') {
                                     $missionDescription = $this->heMonths[$month];
                                 } else {
@@ -277,7 +276,7 @@ class TehillimTasks {
                                         end_date = $date, 
                                         default_on = 1, 
                                         lang_id = $lang_id, 
-                                        speed = $speed";
+                                        speed = " . $this->quotas[$track][$level][$month]['s'];
                                 echo $sql . "<br />";
                                 if (!$this->db->query($sql)) {
                                     $success = false;
