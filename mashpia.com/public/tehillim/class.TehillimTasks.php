@@ -17,6 +17,7 @@ class TehillimTasks {
     private function setQuotas() {
         $stmt = $this->db->query("SELECT * FROM tehillim_ladders");
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo "<pre>"; print_r($rows); echo "</pre>";
         foreach ($rows as $row) {
             $this->quotas[$row['ladder']][$row['age']][$row['month']] = [
                 'k' => $row['kapitelach'],
