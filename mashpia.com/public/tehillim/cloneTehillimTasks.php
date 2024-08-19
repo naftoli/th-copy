@@ -15,5 +15,4 @@ if ($admin_user['auth'] != 'super') {
 
 $year = GlobalSettings::getRegistrationYear();
 $tt = new TehillimTasks($year, $MASHPIA_DB);
-$tt->setLang();
 $tt->cloneTasks();
