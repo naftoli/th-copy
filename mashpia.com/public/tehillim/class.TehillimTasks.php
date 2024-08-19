@@ -59,7 +59,6 @@ class TehillimTasks {
 
     private function setDates() {
         $this->dates = calculateSM($this->year);
-        echo "<pre>"; print_r($this->dates); echo "</pre>";
     }
 
     private function setTasks() {
@@ -262,6 +261,7 @@ class TehillimTasks {
                                 } else {
                                     $missionDescription = 'Shabbos Mevarchim Tehillim';
                                 }
+                                $actualMonth = $month + 1;
                                 $sql = "insert into date_tasks_missions 
                                         set school_type_id = $schoolType, 
                                         subject_id = 1, 
@@ -275,7 +275,7 @@ class TehillimTasks {
                                         end_date = $date, 
                                         default_on = 1, 
                                         lang_id = $lang_id, 
-                                        speed = " . $this->quotas[$track][$level][$month]['s'];
+                                        speed = " . $this->quotas[$track][$level][$actualMonth]['s'];
                                 echo $sql . "<br />";
                                 if (!$this->db->query($sql)) {
                                     $success = false;
@@ -293,10 +293,10 @@ class TehillimTasks {
                                         $opt = 1;
                                     }
                                     if ($taskInfo['ord'] == 1) {
-                                        $desc = $this->quotas[$track][$level][$month]['k'];
-                                        $qty = $this->quotas[$track][$level][$month]['q'];
+                                        $desc = $this->quotas[$track][$level][$actualMonth]['k'];
+                                        $qty = $this->quotas[$track][$level][$actualMonth]['q'];
                                     } else if ($taskInfo['ord'] == 2) {
-                                        $desc = $this->quotas[$track][$level][$month]['m'];
+                                        $desc = $this->quotas[$track][$level][$actualMonth]['m'];
                                         $qty = $desc;
                                     } else if ($taskInfo['ord'] == 3) {
                                         $desc = '';
