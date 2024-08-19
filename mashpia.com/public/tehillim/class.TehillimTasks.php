@@ -29,6 +29,7 @@ class TehillimTasks {
 
     private function setDates() {
         $this->dates = calculateSM($this->year);
+        echo "<pre>"; print_r($this->dates); echo "</pre>";
     }
 
     private function setTasks() {
