@@ -11,11 +11,17 @@ $year = GlobalSettings::getRegistrationYear();
 // get all admins that have children in myshliach
 $admins = [];
 $stmt = $MASHPIA_DB->query("
-    select * from admins a 
-    join admin_auths aa using (admin_id)  
-    join users u on u.user_id = aa.id 
-    where u.user_registered > 0 
-    and u.school_id = 61
+    SELECT 
+        *
+    FROM
+        admins a
+            JOIN
+        admin_auths aa USING (admin_id)
+            JOIN
+        users u ON u.user_id = aa.id
+    WHERE
+        u.user_registered > 0
+            AND u.school_id = 61
 ");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $row) {
@@ -24,14 +30,16 @@ foreach ($rows as $row) {
 
 $charges = [];
 $stmt = $MASHPIA_DB->prepare("
-    SELECT rc.*, u.first, u.last
-    FROM registration_charges rc 
-    JOIN users u USING (user_id)
-    WHERE rc.year = :year  
-    AND (
-        type = 'THE' OR type LIKE 'THMS%'
-    ) 
-    AND user_id = :user
+    SELECT 
+        rc.*, u.first, u.last
+    FROM
+        registration_charges rc
+            JOIN
+        users u USING (user_id)
+    WHERE
+        rc.year = :year
+            AND (type = 'THE' OR type LIKE 'THMS%')
+            AND user_id = :user
 ");
 foreach ($admins as $children) {
     foreach ($children as $child) {
@@ -47,7 +55,7 @@ foreach ($admins as $children) {
 <html>
 <head>
   <meta charset="utf8"/>
-  <title>MyShliach Hachayol Shipping Report</title>
+  <title>MyShliach Hachayol Shipping Charges Report</title>
   <style>
     tr, th, td {
       font-size: 14px;
