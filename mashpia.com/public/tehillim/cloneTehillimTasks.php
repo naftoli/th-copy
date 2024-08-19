@@ -19,6 +19,5 @@ $quotas = $tt->getQuotas();
 $dates = $tt->getDates();
 
 echo "<pre>";
-print_r($quotas);
 print_r($dates);
 echo "</pre>";
