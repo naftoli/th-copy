@@ -1749,17 +1749,25 @@ var registrationApp = function() {
     }
 
     function chooseHachayols() {
-        const gettingRegistered = state.cart.filter(item => item.meta.registration_type === 'chayolei').map(item => item.meta.user_id)
-        const alreadyRegistered = state.users.filter(user => user.user_registered > 0).map(user => user.user_id)
-        const ids = [...gettingRegistered, ...alreadyRegistered]
-
-        const children = state.users.filter(user => ids.includes(user.user_id))
+        const children = state.users // all children
+        const hachayols = state.users.filter(user => parseInt(user.hachayol)) // only hachayol children
+        // figure out which children should get checked
+        let checked = []
+        if (hachayols.length) {
+            for (let h of hachayols) {
+                checked.push(h.user_id)
+            }
+        } else {
+            // if no hachayol children, check the first child
+            checked.push(children[0].user_id)
+        }
         let html = "<div style='margin-left: 2em; margin-top: -2em;'>"
         for (let c in children) {
             let child = children[c]
             html += `<label for="${child.user_id}">
                           <div style='float: left; margin-right: 10px;'>
-                            <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" ${c == 0 ? 'checked' : ''} /> 
+                            <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" 
+                              ${checked.includes(child.user_id) ? 'checked' : ''} /> 
                             <span class="checkbox"></span>
                           </div>
                           <div>
