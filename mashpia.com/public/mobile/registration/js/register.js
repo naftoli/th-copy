@@ -1780,7 +1780,6 @@ var registrationApp = function() {
 
         $("#hachayolChildren").empty().append(html)
         $("#hachayol").modal('show')
-
         $("#hachayol").on('hidden.bs.modal', processHachayol)
 
         $(document).on('click', '.hachayol', function(e) {
@@ -1795,75 +1794,20 @@ var registrationApp = function() {
     }
 
     async function processHachayol() {
-        const info = await calculateHachayolCost()
+        // remove any existing hachayol info in cart
+        state.cart = state.cart.filter(item => item.meta.type != 'hachayol')
+
+        // get info on who has already paid
+        const info = await fetch('/ajax/hachayols/getHachayolsPaid.php')
           .then(res => res.json())
-        // only charge for extra hachayols not paid for
-        if (info.success) {
-            const users = info.data
-            const numPaid = users.length
-            num -= numPaid
-            if (num > 1) {
-                // only charge for EXTRA children
-                for (i = 1; i < num; i++) {
-                    let id = user_ids[i]
-                    // make sure this id is not in cart already (for some reason it can be there when going "back")
-                    const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
-                    if (! inCart.length) {
-                        state.cart.push({
-                            description: `Extra Hachayol Fee (ID: ${id})`,
-                            price: 20,
-                            meta: {
-                                type: 'hachayol',
-                                paid: 20,
-                                user_id: id,
-                                code: "C" + selected_user.user_serial + ":HACH-" + 20,
-                                codeOnly: 'HACH'
-                            }
-                        })
-                    }
-                }
-                hachayolChosen = true
-                nextStep()
-            }
-            else await updateHachayol()
-              .then(res => res.json())
-              .then(data => {
-                  if (data.success) {
-                      hachayolChosen = true
-                      nextStep()
-                  } else {
-                      alert(data.error)
-                      $("#hachayol").modal('show')
-                      return false
-                  }
-              })
-        } else {
+        if (!info.success) {
             alert(info.error)
             $("#hachayol").modal('show')
             return false
         }
-    }
 
-    async function updateHachayol() {
-        let info = {}
-        $(".hachayol").each( function() {
-            let id = $(this).val()
-            let checked = $(this).is(":checked")
-            info[id] = checked ? 1 : 0
-        })
-        return await fetch('/ajax/hachayols/updateHachayol.php', {
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            method: 'POST',
-            body: JSON.stringify({ info })
-        })
-    }
-
-    async function calculateHachayolCost() {
-        // remove any existing hachayol info in cart
-        state.cart = state.cart.filter(item => item.meta.type != 'hachayol')
-
+        const usersPaid = info.data.map(user => user.user_id)
+        const numPaid = usersPaid.length
         let user_ids = []
         $(".hachayol").each( function() {
             let id = $(this).val()
@@ -1871,9 +1815,31 @@ var registrationApp = function() {
             if (checked) user_ids.push(id)
         })
         let num = user_ids.length
-
-        // check how many children were already paid for by this admin
-        return await fetch('/ajax/hachayols/getHachayolsPaid.php')
+        num -= numPaid
+        if (num > 0) {
+            for (let i = 0; i < num; i++) {
+                let id = user_ids[i]
+                // only charge for EXTRA children
+                if (usersPaid.includes(id)) continue
+                // make sure this id is not in cart already (for some reason it can be there when going "back")
+                const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
+                if (! inCart.length) {
+                    state.cart.push({
+                        description: `Extra Hachayol Fee (ID: ${id})`,
+                        price: 20,
+                        meta: {
+                            type: 'hachayol',
+                            paid: 20,
+                            user_id: id,
+                            code: "C" + selected_user.user_serial + ":HACH-" + 20,
+                            codeOnly: 'HACH'
+                        }
+                    })
+                }
+            }
+        }
+        hachayolChosen = true
+        nextStep()
     }
 
     function confirmShipping( event ) {

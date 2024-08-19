@@ -21,7 +21,7 @@ if (!$admin) {
         FROM
             registration_charges
         WHERE
-            year = :year AND type = 'hachayol'
+            year = :year AND type = 'HACH' 
                 AND user_id IN (SELECT 
                     id
                 FROM
