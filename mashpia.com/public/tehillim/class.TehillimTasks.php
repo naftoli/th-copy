@@ -4,7 +4,7 @@ class TehillimTasks {
     private $year;
     private $dates;
     private $tasks;
-    private $lang;
+    private $langs;
     private $missions;
     private $schoolTypes;
     private $ages;
@@ -43,6 +43,7 @@ class TehillimTasks {
             'שבת מברכים מנחם-אב',
             'שבת מברכים אלול'
         ];
+        $this->langs = ['en', 'yi', 'he'];
     }
 
     private function setQuotas() {
@@ -225,22 +226,6 @@ class TehillimTasks {
         ];
     }
 
-    public function setLang($lang = 'en') {
-        $this->lang = $lang;
-    }
-
-    public function getQuotas() {
-        return $this->quotas;
-    }
-
-    public function getDates() {
-        return $this->dates;
-    }
-
-    public function getTasks() {
-        return $this->tasks;
-    }
-
     private function getStartingMissionNumber() {
         $sql = "SELECT 
                     mission_number
@@ -263,88 +248,92 @@ class TehillimTasks {
         $this->db->beginTransaction();
 
         $missionNum = $this->getStartingMissionNumber();
-        $tasks = $this->tasks[$this->lang];
 
-        foreach ($tasks as $missionType => $details) {
-            foreach ($this->dates as $month => $date) {
-                foreach ($this->schoolTypes[$missionType] as $schoolType) {
-                    foreach ($this->ages as $level) {
-                        foreach ($this->tracks as $track) {
-                            $speed = $this->quotas[$track][$level][$month]['s'];
-                            if ($missionType == 'chabad') {
-                                $missionDescription = $this->heMonths[$month];
-                            } else {
-                                $missionDescription = 'Shabbos Mevarchim Tehillim';
-                            }
-                            $sql = "insert into date_tasks_missions 
-                                    set school_type_id = $schoolType, 
-                                    subject_id = 1, 
-                                    level = $level, 
-                                    track_id = $track, 
-                                    mission_name = '" . $this->missions[$missionType] . "',   
-                                    mission_value = 1.0, 
-                                    mission_number = " . $missionNum++ . ", 
-                                    mission_description = '" . $missionDescription . "', 
-                                    start_date = $date, 
-                                    end_date = $date, 
-                                    default_on = 1, 
-                                    lang_id = 1, 
-                                    speed = $speed";
-                            echo $sql . "<br />";
-                            if (!$this->db->query($sql)) {
-                                $success = false;
-                                break 5;
-                            }
-                            $id = $this->db->lastInsertId();
-                            $missionsCreated++;
-
-                            foreach ($details as $taskInfo) {
-                                if ($taskInfo['mand']) {
-                                    $mand = 1;
-                                    $opt = 0;
+        foreach ($this->tasks as $lang => $more) {
+            $lang_id = 1;
+            if ($lang == 'yi') $lang_id = 2;
+            else if ($lang == 'he') $lang_id = 4;
+            foreach ($more as $missionType => $details) {
+                foreach ($this->dates as $month => $date) {
+                    foreach ($this->schoolTypes[$missionType] as $schoolType) {
+                        foreach ($this->ages as $level) {
+                            foreach ($this->tracks as $track) {
+                                $speed = $this->quotas[$track][$level][$month]['s'];
+                                if ($missionType == 'chabad') {
+                                    $missionDescription = $this->heMonths[$month];
                                 } else {
-                                    $mand = 0;
-                                    $opt = 1;
+                                    $missionDescription = 'Shabbos Mevarchim Tehillim';
                                 }
-                                if ($taskInfo['ord'] == 1) {
-                                    $desc = $this->quotas[$track][$level][$month]['k'];
-                                    $qty = $this->quotas[$track][$level][$month]['q'];
-                                } else if ($taskInfo['ord'] == 2) {
-                                    $desc = $this->quotas[$track][$level][$month]['m'];
-                                    $qty = $desc;
-                                } else if ($taskInfo['ord'] == 3) {
-                                    $desc = '';
-                                    $qty = null;
-                                }
-                                $sql = "insert into date_tasks 
-                                        set date_tasks_mission_id = $id, 
-                                        name = '" . $taskInfo['name'] . "', 
-                                        cat = '" . $taskInfo['cat'] . "',
-                                        cat_ord_new = " . $taskInfo['cat_ord'] . ", 
-                                        points = 0.5, 
-                                        short_name = '" . $taskInfo['short'] . "', 
-                                        mandatory_qty = $mand, 
-                                        optional_qty = $opt, 
-                                        daily_task = 0, 
-                                        label_id = 37, 
-                                        ord = " . $taskInfo['ord'] . ", 
-                                        needed = 1,
-                                        focus_task = 0,
+                                $sql = "insert into date_tasks_missions 
+                                        set school_type_id = $schoolType, 
+                                        subject_id = 1, 
+                                        level = $level, 
+                                        track_id = $track, 
+                                        mission_name = '" . $this->missions[$missionType] . "',   
+                                        mission_value = 1.0, 
+                                        mission_number = " . $missionNum++ . ", 
+                                        mission_description = '" . $missionDescription . "', 
+                                        start_date = $date, 
+                                        end_date = $date, 
                                         default_on = 1, 
-                                        label_ord = 2,  
-                                        description = '" . $desc . "',
-                                        grid_id = " . $taskInfo['grid_id'] . ",
-                                        mission_marking = " . $taskInfo['mission_marking'] . ",
-                                        grid_marking = " . $taskInfo['grid_marking'];
-                                if ($qty) {
-                                    $sql .= ", quantity = $qty";
-                                }
+                                        lang_id = $lang_id, 
+                                        speed = $speed";
                                 echo $sql . "<br />";
                                 if (!$this->db->query($sql)) {
                                     $success = false;
-                                    break 6;
+                                    break 5;
                                 }
-                                $tasksCreated++;
+                                $id = $this->db->lastInsertId();
+                                $missionsCreated++;
+
+                                foreach ($details as $taskInfo) {
+                                    if ($taskInfo['mand']) {
+                                        $mand = 1;
+                                        $opt = 0;
+                                    } else {
+                                        $mand = 0;
+                                        $opt = 1;
+                                    }
+                                    if ($taskInfo['ord'] == 1) {
+                                        $desc = $this->quotas[$track][$level][$month]['k'];
+                                        $qty = $this->quotas[$track][$level][$month]['q'];
+                                    } else if ($taskInfo['ord'] == 2) {
+                                        $desc = $this->quotas[$track][$level][$month]['m'];
+                                        $qty = $desc;
+                                    } else if ($taskInfo['ord'] == 3) {
+                                        $desc = '';
+                                        $qty = null;
+                                    }
+                                    $sql = "insert into date_tasks 
+                                            set date_tasks_mission_id = $id, 
+                                            name = '" . $taskInfo['name'] . "', 
+                                            cat = '" . $taskInfo['cat'] . "',
+                                            cat_ord_new = " . $taskInfo['cat_ord'] . ", 
+                                            points = 0.5, 
+                                            short_name = '" . $taskInfo['short'] . "', 
+                                            mandatory_qty = $mand, 
+                                            optional_qty = $opt, 
+                                            daily_task = 0, 
+                                            label_id = 37, 
+                                            ord = " . $taskInfo['ord'] . ", 
+                                            needed = 1,
+                                            focus_task = 0,
+                                            default_on = 1, 
+                                            label_ord = 2,  
+                                            description = '" . $desc . "',
+                                            grid_id = " . $taskInfo['grid_id'] . ",
+                                            mission_marking = " . $taskInfo['mission_marking'] . ",
+                                            grid_marking = " . $taskInfo['grid_marking'];
+                                    if ($qty) {
+                                        $sql .= ", quantity = $qty";
+                                    }
+                                    echo $sql . "<br />";
+                                    if (!$this->db->query($sql)) {
+                                        $success = false;
+                                        break 6;
+                                    }
+                                    $tasksCreated++;
+                                }
                             }
                         }
                     }
