@@ -276,7 +276,7 @@ class TehillimTasks {
                                         default_on = 1, 
                                         lang_id = $lang_id, 
                                         speed = " . $this->quotas[$track][$level][$actualMonth]['s'];
-                                echo $sql . "<br />";
+//                                echo $sql . "<br />";
                                 if (!$this->db->query($sql)) {
                                     $success = false;
                                     break 6;
@@ -320,7 +320,7 @@ class TehillimTasks {
                                     if ($qty) {
                                         $sql .= ", quantity = $qty";
                                     }
-                                    echo $sql . "<br /><br />";
+//                                    echo $sql . "<br /><br />";
                                     if (!$this->db->query($sql)) {
                                         $success = false;
                                         break 7;
@@ -334,7 +334,6 @@ class TehillimTasks {
             }
         }
 
-        $success = false;
         if ($success) {
             $this->db->commit();
             echo "Missions created: $missionsCreated<br />";
