@@ -1795,14 +1795,52 @@ var registrationApp = function() {
     }
 
     async function processHachayol() {
-        const data = await updateHachayol().then(res => res.json())
-        if (! data.success) {
-            alert(data.error)
-            $("#hachayol").modal('show')
+        const info = await calculateHachayolCost()
+          .then(res => res.json())
+        // only charge for extra hachayols not paid for
+        if (info.success) {
+            const users = info.data
+            const numPaid = users.length
+            num -= numPaid
+            if (num > 1) {
+                // only charge for EXTRA children
+                for (i = 1; i < num; i++) {
+                    let id = user_ids[i]
+                    // make sure this id is not in cart already (for some reason it can be there when going "back")
+                    const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
+                    if (! inCart.length) {
+                        state.cart.push({
+                            description: `Extra Hachayol Fee (ID: ${id})`,
+                            price: 20,
+                            meta: {
+                                type: 'hachayol',
+                                paid: 20,
+                                user_id: id,
+                                code: "C" + selected_user.user_serial + ":HACH-" + 20,
+                                codeOnly: 'HACH'
+                            }
+                        })
+                    }
+                }
+                hachayolChosen = true
+                nextStep()
+            }
+            else await updateHachayol()
+              .then(res => res.json())
+              .then(data => {
+                  if (data.success) {
+                      hachayolChosen = true
+                      nextStep()
+                  } else {
+                      alert(data.error)
+                      $("#hachayol").modal('show')
+                      return false
+                  }
+              })
         } else {
-            await calculateHachayolCost()
-            hachayolChosen = true
-            nextStep()
+            alert(info.error)
+            $("#hachayol").modal('show')
+            return false
         }
     }
 
@@ -1835,36 +1873,7 @@ var registrationApp = function() {
         let num = user_ids.length
 
         // check how many children were already paid for by this admin
-        const info = await fetch('/ajax/hachayols/getHachayolsPaid.php').then(res => res.json())
-        // only charge for extra hachayols not paid for
-        if (info.success) {
-            const users = info.data
-            const numPaid = users.length
-            num -= numPaid
-        }
-        else alert(info.error)
-
-        if (num > 1) {
-            // only charge for EXTRA children
-            for (i = 1; i < num; i++) {
-                let id = user_ids[i]
-                // make sure this id is not in cart already (for some reason it can be there when going "back")
-                const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
-                if (! inCart.length) {
-                    state.cart.push({
-                        description: `Extra Hachayol Fee (ID: ${id})`,
-                        price: 20,
-                        meta: {
-                            type: 'hachayol',
-                            paid: 20,
-                            user_id: id,
-                            code: "C" + selected_user.user_serial + ":HACH-" + 20,
-                            codeOnly: 'HACH'
-                        }
-                    })
-                }
-            }
-        }
+        return await fetch('/ajax/hachayols/getHachayolsPaid.php')
     }
 
     function confirmShipping( event ) {
