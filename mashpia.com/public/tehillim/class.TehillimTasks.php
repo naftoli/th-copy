@@ -14,9 +14,6 @@ class TehillimTasks {
     public function __construct($year, $dbHandler) {
         $this->year = $year;
         $this->db = $dbHandler;
-        $this->quotas = $this->setQuotas();
-        $this->dates = $this->setDates();
-        $this->tasks = $this->setTasks();
         $this->missions = [
             'chabad' 	=>	'שבת מברכים תהילים',
             'frum'		=>	'Shabbos Mevarchim Tehillim'
@@ -42,6 +39,9 @@ class TehillimTasks {
             'שבת מברכים מנחם-אב',
             'שבת מברכים אלול'
         ];
+        $this->setQuotas();
+        $this->setDates();
+        $this->setTasks();
     }
 
     private function setQuotas() {
@@ -222,7 +222,6 @@ class TehillimTasks {
                 ]
             ]
         ];
-        echo "<pre>"; print_r($this->tasks); echo "</pre>";
     }
 
     private function getStartingMissionNumber() {
