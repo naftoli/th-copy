@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 // components
-import { Row, Col, Input } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import { Radio, Checkbox, Date, Label } from 'components/inputs';
 import { LEGACY_URL } from 'components/constants';
 // functions
@@ -56,7 +56,7 @@ export class SettingsRow extends Component {
     let {
       pic_mission_type,   store_reset,  school_gender,
       print_parent_tasks, allow_parent_tasks, rewards,
-      chidon_posters_boys, chidon_posters_girls, one_time_prize_reset
+      one_time_prize_reset
     } = base;
     console.log("One time prize reset: " + one_time_prize_reset)
 
