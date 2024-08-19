@@ -271,7 +271,6 @@ class TehillimTasks {
                     foreach ($this->ages as $level) {
                         foreach ($this->tracks as $track) {
                             $speed = $this->quotas[$track][$level][$month]['s'];
-                            $missionDescription = "";
                             if ($missionType == 'chabad') {
                                 $missionDescription = $this->heMonths[$month];
                             } else {
@@ -284,7 +283,7 @@ class TehillimTasks {
                                     track_id = $track, 
                                     mission_name = '" . $this->missions[$missionType] . "',   
                                     mission_value = 1.0, 
-                                    mission_number = " . $missionNumber++ . ", 
+                                    mission_number = " . $missionNum++ . ", 
                                     mission_description = '" . $missionDescription . "', 
                                     start_date = $date, 
                                     end_date = $date, 
