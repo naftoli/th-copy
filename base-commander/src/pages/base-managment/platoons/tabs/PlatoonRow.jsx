@@ -68,14 +68,14 @@ export class PlatoonRow extends Component {
           <Radio
             required
             name='updated'
-            value={1}
-            checked={updated === 1}
+            value='1'
+            checked={updated === '1'}
             {...inputProps} />
           <label>Updated</label>
           <Radio
             name='updated'
-            value={0}
-            checked={updated === 0}
+            value='0'
+            checked={updated === '0'}
             {...inputProps} />
           <label>Not Updated</label>
         </Col>
