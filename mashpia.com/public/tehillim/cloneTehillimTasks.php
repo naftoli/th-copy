@@ -16,5 +16,9 @@ if ($admin_user['auth'] != 'super') {
 $year = GlobalSettings::getRegistrationYear();
 $tt = new TehillimTasks($year, $MASHPIA_DB);
 $quotas = $tt->getQuotas();
+$dates = $tt->getDates();
 
-echo "<pre>"; print_r($quotas); echo "</pre>";
+echo "<pre>";
+print_r($quotas);
+print_r($dates);
+echo "</pre>";

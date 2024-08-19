@@ -25,7 +25,6 @@ class TehillimTasks {
                 's' => $row['speed']
             ];
         }
-        echo "<pre>"; print_r($this->quotas); echo "</pre>";
     }
 
     private function setDates() {
