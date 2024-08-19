@@ -19,7 +19,7 @@ class TehillimTasks {
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
             $this->quotas[$row['ladder']][$row['age']][$row['month']] = [
-                'k' => $row['kapitlach'],
+                'k' => $row['kapitelach'],
                 'm' => $row['minutes'],
                 'q' => $row['qty'],
                 's' => $row['speed']
