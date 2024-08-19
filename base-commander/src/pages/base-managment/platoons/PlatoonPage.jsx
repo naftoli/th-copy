@@ -42,6 +42,7 @@ export class PlatoonPage extends Component {
     this.setState({ loading: true });
     getPlatoon( match.params.id )
     .then( platoon => { this.setState({ platoon, loading: false }); })
+    .then(console.log(this.state.platoon))
     .catch( error => {
       toast.error( error.message );
       this.setState({ platoon: undefined }); }
