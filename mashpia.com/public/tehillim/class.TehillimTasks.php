@@ -248,6 +248,7 @@ class TehillimTasks {
         $missionNum = $this->getStartingMissionNumber();
 
         echo "<pre>"; print_r($this->tasks); echo "</pre>";
+        return;
 
         foreach ($this->tasks as $lang => $more) {
             $lang_id = 1;
