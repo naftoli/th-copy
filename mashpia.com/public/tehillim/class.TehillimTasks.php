@@ -281,7 +281,7 @@ class TehillimTasks {
                                 echo $sql . "<br />";
                                 if (!$this->db->query($sql)) {
                                     $success = false;
-                                    break 5;
+                                    break 6;
                                 }
                                 $id = $this->db->lastInsertId();
                                 $missionsCreated++;
@@ -327,10 +327,10 @@ class TehillimTasks {
                                     if ($qty) {
                                         $sql .= ", quantity = $qty";
                                     }
-                                    echo $sql . "<br />";
+                                    echo $sql . "<br /><br />";
                                     if (!$this->db->query($sql)) {
                                         $success = false;
-                                        break 6;
+                                        break 7;
                                     }
                                     $tasksCreated++;
                                 }
@@ -340,6 +340,7 @@ class TehillimTasks {
                 }
             }
         }
+
         $success = false;
         if ($success) {
             $this->db->commit();
