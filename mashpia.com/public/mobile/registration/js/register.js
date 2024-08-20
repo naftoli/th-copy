@@ -1866,6 +1866,7 @@ var registrationApp = function() {
 
         if (toAdd.length || toRemove.length) {
             const res = await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
+            console.log(res)
             if (res.success) {
                 // const res = JSON.parse(result)
                 // if (res.success) {
