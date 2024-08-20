@@ -1811,7 +1811,7 @@ var registrationApp = function() {
 
         let user_ids = []
         $(".hachayol").each( function() {
-            let id = $(this).val()
+            let id = parseInt($(this).val())
             let checked = $(this).is(":checked")
             if (checked) user_ids.push(id)
         })
