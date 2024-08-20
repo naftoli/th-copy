@@ -1846,7 +1846,7 @@ var registrationApp = function() {
 
         // remove hachayol from unchecked children
         let toRemove = []
-        let childrenWithHachayol = children.filter(user => parseInt(user.hachayol))
+        let childrenWithHachayol = state.users.filter(user => parseInt(user.hachayol))
         for (let i = 0; i < childrenWithHachayol.length; i++) {
             let child = childrenWithHachayol[i]
             if (! user_ids.includes(child.user_id)) {
