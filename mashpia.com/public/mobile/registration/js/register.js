@@ -1865,18 +1865,15 @@ var registrationApp = function() {
         console.log('To add:' + toAdd, 'To remove:' + toRemove)
 
         if (toAdd.length || toRemove.length) {
-            const res = await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
-            console.log(res)
+            const result = await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
+            const res = JSON.parse(result)
             if (res.success) {
-                // const res = JSON.parse(result)
-                // if (res.success) {
-                    hachayolChosen = true
-                    nextStep()
-                // } else {
-                //     alert(res.error)
-                //     $("#hachayol").modal('show')
-                //     return false
-                // }
+                hachayolChosen = true
+                nextStep()
+            } else {
+                alert(res.error)
+                $("#hachayol").modal('show')
+                return false
             }
         } else {
             hachayolChosen = true
