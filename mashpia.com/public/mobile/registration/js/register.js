@@ -1864,15 +1864,22 @@ var registrationApp = function() {
         }
         console.log(childrenWithHachayol, toAdd, toRemove)
 
-        const updated = await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
-        if (! updated.success) {
-            alert(updated.error)
-            $("#hachayol").modal('show')
-            return false
+        if (toAdd.length || toRemove.length) {
+            $.post('/ajax/hachayols/updateHachayol.php', {toAdd, toRemove}), function (result) {
+                const res = JSON.parse(result)
+                if (res.success) {
+                    hachayolChosen = true
+                    nextStep()
+                } else {
+                    alert(res.error)
+                    $("#hachayol").modal('show')
+                    return false
+                }
+            }
+        } else {
+            hachayolChosen = true
+            nextStep()
         }
-
-        hachayolChosen = true
-        nextStep()
     }
 
     function confirmShipping( event ) {
