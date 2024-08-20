@@ -5,6 +5,7 @@ include_once("../../api/header/header.php");
 $stmt = $MASHPIA_DB->prepare("UPDATE users SET hachayol = :val WHERE user_id = :user");
 
 $data = json_decode(file_get_contents("php://input"));
+if (empty($data)) echo json_error();
 echo "<pre>"; print_r($data); echo "</pre>"; exit;
 $toAdd = $data->toAdd;
 $toRemove = $data->toRemove;

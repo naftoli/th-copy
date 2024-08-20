@@ -1864,7 +1864,13 @@ var registrationApp = function() {
         }
         console.log(childrenWithHachayol, toAdd, toRemove)
 
-        await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
+        const updated = await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
+          .then(res => res.json())
+        if (! updated.success) {
+            alert(updated.error)
+            $("#hachayol").modal('show')
+            return false
+        }
 
         hachayolChosen = true
         nextStep()
