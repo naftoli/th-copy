@@ -1844,6 +1844,15 @@ var registrationApp = function() {
             }
         }
 
+        // add hachayol to checked children that are not already in cart
+        let toAdd = []
+        for (let i = 0; i < user_ids.length; i++) {
+            let id = user_ids[i]
+            if (! payingFor.includes(id)) {
+                toAdd.push(id)
+            }
+        }
+
         // remove hachayol from unchecked children
         let toRemove = []
         let childrenWithHachayol = state.users.filter(user => parseInt(user.hachayol))
@@ -1853,15 +1862,7 @@ var registrationApp = function() {
                 toRemove.push(child.user_id)
             }
         }
-
-        // add hachayol to checked children that are not already in cart
-        let toAdd = []
-        for (let i = 0; i < user_ids.length; i++) {
-            let id = user_ids[i]
-            if (! payingFor.includes(id)) {
-                toAdd.push(id)
-            }
-        }
+        console.log(childrenWithHachayol, toAdd, toRemove)
 
         await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
 
