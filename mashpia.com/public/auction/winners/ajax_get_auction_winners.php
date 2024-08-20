@@ -1,24 +1,24 @@
-<?
+<?php
 //ini_set("display_errors", 1);
 /***************** IMPORTS **********************/
 require_once( $_SERVER["DOCUMENT_ROOT"].'/db.php' ); // load the db so that the raffle can do its thing
 
 // enforce admins only
-if ( isset( $_COOKIE['admin_id'] ) ){
-    $is_parent_query = mysql_query(
-        "SELECT auth FROM admin_auths WHERE auth != 'user' AND admin_id = " . mysql_escape_string( $_COOKIE['admin_id'] ) . ";"
-    );
-    if ( mysql_num_rows( $is_parent_query ) === 0 ){
-        http_response_code( 401 );
-        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] ); 
-        die();
-    };
-} else {
+//if ( isset( $_COOKIE['admin_id'] ) ){
+//    $is_parent_query = mysql_query(
+//        "SELECT auth FROM admin_auths WHERE auth != 'user' AND admin_id = " . mysql_escape_string( $_COOKIE['admin_id'] ) . ";"
+//    );
+//    if ( mysql_num_rows( $is_parent_query ) === 0 ){
+//        http_response_code( 401 );
+//        echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] );
+//        die();
+//    };
+//} else {
+if ( !isset( $_COOKIE['admin_id'] ) ) {
     http_response_code( 401 );
     echo json_encode( [ "success" => false, "msg" => "Invalid Credentials" ] ); 
     die();
 }
-
 
 $school_id = isset($_POST['school_id']) ? $_POST['school_id'] : false;
 $auction_id = isset($_POST['auction_id']) ? $_POST['auction_id'] : false;
