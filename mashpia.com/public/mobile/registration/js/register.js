@@ -1862,19 +1862,20 @@ var registrationApp = function() {
                 toRemove.push(child.user_id)
             }
         }
-        console.log(childrenWithHachayol, toAdd, toRemove)
+        console.log('To add:' + toAdd, 'To remove:' + toRemove)
 
         if (toAdd.length || toRemove.length) {
-            $.post('/ajax/hachayols/updateHachayol.php', {toAdd, toRemove}), function (result) {
-                const res = JSON.parse(result)
-                if (res.success) {
+            const res = await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
+            if (res.success) {
+                // const res = JSON.parse(result)
+                // if (res.success) {
                     hachayolChosen = true
                     nextStep()
-                } else {
-                    alert(res.error)
-                    $("#hachayol").modal('show')
-                    return false
-                }
+                // } else {
+                //     alert(res.error)
+                //     $("#hachayol").modal('show')
+                //     return false
+                // }
             }
         } else {
             hachayolChosen = true

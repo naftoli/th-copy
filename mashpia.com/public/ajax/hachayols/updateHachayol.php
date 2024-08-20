@@ -12,8 +12,8 @@ $success = true;
 
 foreach ($toAdd as $user_id) {
     $res = $stmt->execute([
-        'val' => 1,
-        'user' => $user_id
+        'val'   => 1,
+        'user'  => $user_id
     ]);
     if (!$res) {
         $success = false;
@@ -22,8 +22,8 @@ foreach ($toAdd as $user_id) {
 }
 foreach ($toRemove as $user_id) {
     $res = $stmt->execute([
-        'val' => 0,
-        'user' => $user_id
+        'val'   => 0,
+        'user'  => $user_id
     ]);
     if (!$res) {
         $success = false;
