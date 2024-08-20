@@ -1808,6 +1808,7 @@ var registrationApp = function() {
 
         const usersPaid = info.data.map(user => user.user_id)
         const numPaid = usersPaid.length
+
         let user_ids = []
         $(".hachayol").each( function() {
             let id = $(this).val()
@@ -1816,6 +1817,8 @@ var registrationApp = function() {
         })
         let num = user_ids.length
         num -= numPaid
+
+        let payingFor = []
         if (num > 1) { // first child is free
             for (let i = 0; i < num; i++) {
                 let id = user_ids[i]
@@ -1825,6 +1828,7 @@ var registrationApp = function() {
                 // make sure this id is not in cart already (for some reason it can be there when going "back")
                 const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
                 if (! inCart.length) {
+                    payingFor.push(id)
                     state.cart.push({
                         description: `Extra Hachayol Fee (ID: ${id})`,
                         price: 20,
@@ -1839,6 +1843,30 @@ var registrationApp = function() {
                 }
             }
         }
+
+        // remove hachayol from unchecked children
+        let toRemove = []
+        let childrenWithHachayol = children.filter(user => parseInt(user.hachayol))
+        for (let i = 0; i < childrenWithHachayol.length; i++) {
+            let child = childrenWithHachayol[i]
+            if (! user_ids.includes(child.user_id)) {
+                let user_id = child.user_id
+                toRemove.push({ user_id : 0 })
+            }
+        }
+
+        // add hachayol to checked children that are not already in cart
+        let toAdd = []
+        for (let i = 0; i < user_ids.length; i++) {
+            let id = user_ids[i]
+            if (! payingFor.includes(id)) {
+                toAdd.push({ id : 1 })
+            }
+        }
+
+        let toUpdate = [...toRemove, ...toAdd]
+        await $.post('/ajax/hachayols/updateHachayol.php', { info : toUpdate })
+
         hachayolChosen = true
         nextStep()
     }
