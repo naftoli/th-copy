@@ -16,7 +16,8 @@ $stmt = $MASHPIA_DB->prepare("
     select u.*, c.*, aa.admin_id from users u 
     join admin_auths aa on aa.id = u.user_id 
     join classes c using (class_id) 
-    where u.school_id = :id
+    where u.school_id = :id 
+    and u.user_registered > 0 
     order by class_grade, class_sub, hachayol desc, last, first
 ");
 
@@ -43,8 +44,7 @@ foreach ($users as $school_id => $more) {
     foreach ($more as $grade => $other) {
         foreach ($other as $sub => $more) {
             foreach ($more as $user) {
-                $receives_hachayol = intval($user['hachayol']) ? 'yes' : 'no';
-                if ($receives_hachayol == 'no') {
+                if (intval($user['hachayol'])) {
                     // find out which child(ren) do get it
                     $stmt->execute(['admin_id' => $user['admin_id']]);
                     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
