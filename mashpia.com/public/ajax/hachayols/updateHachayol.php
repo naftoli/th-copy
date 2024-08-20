@@ -5,17 +5,40 @@ include_once("../../api/header/header.php");
 $stmt = $MASHPIA_DB->prepare("UPDATE users SET hachayol = :val WHERE user_id = :user");
 
 $data = json_decode(file_get_contents("php://input"));
-foreach ($data->info as $user_id => $val) {
+$toAdd = $data->toAdd;
+$toRemove = $data->toRemove;
+
+$MASHPIA_DB->beginTransaction();
+$success = true;
+
+foreach ($toAdd as $user_id) {
     $res = $stmt->execute([
-        'val'   => $val,
-        'user'  => $user_id
+        'val' => 1,
+        'user' => $user_id
     ]);
     if (!$res) {
-        echo json_encode([
-            'success'   => false,
-            'error'     => 'Error updating hachayol.'
-        ]);
+        $success = false;
         break;
     }
 }
-echo json_encode(['success' => true]);
+foreach ($toRemove as $user_id) {
+    $res = $stmt->execute([
+        'val' => 0,
+        'user' => $user_id
+    ]);
+    if (!$res) {
+        $success = false;
+        break;
+    }
+}
+
+if ($success) {
+    $MASHPIA_DB->commit();
+    echo json_encode(['success' => true]);
+} else {
+    $MASHPIA_DB->rollBack();
+    echo json_encode([
+        'success' => false,
+        'error' => 'Error updating hachayol(s).'
+    ]);
+}

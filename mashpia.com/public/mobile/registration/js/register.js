@@ -1850,8 +1850,7 @@ var registrationApp = function() {
         for (let i = 0; i < childrenWithHachayol.length; i++) {
             let child = childrenWithHachayol[i]
             if (! user_ids.includes(child.user_id)) {
-                let user_id = child.user_id
-                toRemove.push({ user_id : 0 })
+                toRemove.push(child.user_id)
             }
         }
 
@@ -1860,12 +1859,11 @@ var registrationApp = function() {
         for (let i = 0; i < user_ids.length; i++) {
             let id = user_ids[i]
             if (! payingFor.includes(id)) {
-                toAdd.push({ id : 1 })
+                toAdd.push(id)
             }
         }
 
-        let toUpdate = [...toRemove, ...toAdd]
-        await $.post('/ajax/hachayols/updateHachayol.php', { info : toUpdate })
+        await $.post('/ajax/hachayols/updateHachayol.php', { toAdd, toRemove })
 
         hachayolChosen = true
         nextStep()
