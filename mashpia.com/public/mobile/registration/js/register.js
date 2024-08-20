@@ -134,7 +134,7 @@ var registrationApp = function() {
     $(".start-step-3").click( step3 );
 
     $(".start-again").click(function() {
-        const conf = confirm('are you sure you want to go back?')
+        const conf = confirm("You will lose all the information that you put in, are you sure you want to start again?")
         if (conf) {
             // clear all state
             state = {
