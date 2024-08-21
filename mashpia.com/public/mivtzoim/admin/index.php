@@ -2,8 +2,12 @@
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim/classes/mivtzoim.php';
+
+if ($admin_user['auth'] != 'super') {
+    echo "You do not have permission to access this page.";
+    exit;
+}
 
 if ( isset( $_POST['submit'] ) ) {
     //echo "<pre>"; print_r( $_POST ); echo "</pre>"; 
