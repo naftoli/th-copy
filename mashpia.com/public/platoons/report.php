@@ -37,17 +37,11 @@ foreach ($schools as $school_id => $school_name) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Platoon Report</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
         th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
+            border-bottom: 1px solid black;
+            padding: 10px;
+            font-family: "Arial", sans-serif;
+            font-size: 14px;
         }
     </style>
 </head>
