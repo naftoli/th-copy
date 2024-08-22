@@ -56,6 +56,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Base Logos</span>
                 </div>
             </a>
+            <a href="/platoons/report.php">
+              <div class="button">
+                <img src="/v2/images/back-end/admin/icon_control.png" height="32" alt="platoons"/>
+                <span class="link-text">Updated Platoons</span>
+              </div>
+            </a>
         </div>
 
         <h2>Teachers</h2>
