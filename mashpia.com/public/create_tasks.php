@@ -428,9 +428,9 @@ if (isset($_POST['submit'])) {
                         if (empty($mission)) {
 //                            echo $start . "<br />";
 //                            echo $end . "<br />";
-                            $mission = array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] :
-                                isset($weeks[$start]) ? end($weeks[$start]) : $shortName; // if no mission name use short name
-                            echo "Mission: " . $mission . "<br />";
+                            $mission = isset($weeks[$start]) ? array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] :
+                                end($weeks[$start]) : $shortName; // if no mission name use short name
+//                            echo "Mission: " . $mission . "<br />";
                         }
                         //check if there's an array of dates for mandatory or focus
                         if (!empty($arrMandatory)) {
