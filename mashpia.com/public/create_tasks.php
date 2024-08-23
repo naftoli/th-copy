@@ -426,9 +426,10 @@ if (isset($_POST['submit'])) {
                     foreach ($types as $type) {
                         $mission = $missionName;
                         if (empty($mission)) {
-                            echo $start . "<br />";
-                            echo $end . "<br />";
-                            $mission = (array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] : end($weeks[$start]));
+//                            echo $start . "<br />";
+//                            echo $end . "<br />";
+                            $mission = array_key_exists($end, $weeks[$start]) ? $weeks[$start][$end] :
+                                isset($weeks[$start]) ? end($weeks[$start]) : $shortName; // if no mission name use short name
                             echo "Mission: " . $mission . "<br />";
                         }
                         //check if there's an array of dates for mandatory or focus
@@ -507,10 +508,10 @@ if (isset($_POST['submit'])) {
                 $missionName = "";
             }
             //exit;
-            echo "<pre>";
-            print_r($missions);
-            echo "</pre>";
-            exit;
+//            echo "<pre>";
+//            print_r($missions);
+//            echo "</pre>";
+//            exit;
 
             mysql_query("SET AUTOCOMMIT=0");
             mysql_query("BEGIN");
