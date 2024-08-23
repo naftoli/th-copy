@@ -120,9 +120,8 @@ if (isset($_POST['submit'])) {
     //echo $missionNumber;
 
     // get start and end from db
-//    require_once 'class.globalSettings.php';
-//    $missionYear = GlobalSettings::getRegistrationYear();
-    $missionYear = 5784;
+    require_once 'class.globalSettings.php';
+    $missionYear = GlobalSettings::getRegistrationYear();
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear - 1) . ',' . $missionYear . ')';
