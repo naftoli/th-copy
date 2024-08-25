@@ -151,7 +151,8 @@ export class SettingsRow extends Component {
 
           <Radio key={0} id='store_reset' value='0'
             name='store_miles_reset'
-            onChange={ this.changeSchoolReset } checked={ store_reset_jd === '0' || store_reset_jd === 0 }>
+            onChange={ this.changeSchoolReset }
+            checked={ store_reset_jd === '0' || store_reset_jd === 0 }>
             Always (This includes all miles from previous years)
           </Radio>
           <br />
