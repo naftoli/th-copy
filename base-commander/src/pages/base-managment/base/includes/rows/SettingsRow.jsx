@@ -33,11 +33,6 @@ export class SettingsRow extends Component {
   onDateChage = date =>
     this.props.onUpdate({ store_reset: date ? toJulian( date ) : date });
 
-  disableSchoolReset = () => {
-    this.setState({ disabled: true, checked: true });
-    this.props.onUpdate({ store_reset });
-  }
-
   changeSchoolReset = event => {
     const store_reset = event.target.value;
     this.props.onUpdate({ store_reset });
