@@ -155,7 +155,7 @@ export class SettingsRow extends Component {
             name='store_miles_reset'
             { ...storeResetProps }
             onChange={ this.disableSchoolReset }
-            checked={ store_reset_jd === 0 }>
+            checked={ store_reset_jd === '0' || store_reset_jd === 0 }>
             Always (This includes all miles from previous years)
           </Radio>
           <br />
