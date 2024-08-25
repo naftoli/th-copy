@@ -62,7 +62,6 @@ export class SettingsRow extends Component {
 
     const store_reset_jd = parseInt(store_reset, 10);
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
-    console.log(store_reset)
 
     // props for all inputs
     const checkboxProps = { onChange: this.handleCheckbox };
@@ -154,7 +153,7 @@ export class SettingsRow extends Component {
           <Radio key={0} id='store_reset' value='0'
             name='store_miles_reset'
             { ...storeResetProps }
-            onChange={ this.disableSchoolReset }
+            // onChange={ this.disableSchoolReset }
             checked={ store_reset_jd === '0' || store_reset_jd === 0 }>
             Always (This includes all miles from previous years)
           </Radio>
