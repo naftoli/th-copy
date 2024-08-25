@@ -112,6 +112,14 @@ class UsersUploadRouter {
 
                     // check character type
                     if ((
+                            $headers[$cellIndex] == "*First Name" ||
+                            $headers[$cellIndex] == "*Last Name"
+                        ) && strpos( urlencode( $value ), '%' ) !== false ) {
+                        $errors[] = "$errorString English name must be in english characters.";
+                    }
+
+                    // check character type
+                    if ((
                         $headers[$cellIndex] == "*First Name Hebrew" ||
                         $headers[$cellIndex] == "*Last Name Hebrew"
                     ) && strpos( urlencode( $value ), '%' ) === false ) {

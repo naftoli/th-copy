@@ -814,6 +814,22 @@ var registrationApp = function() {
         }
 
         if ( selected_charges.chayolei === true ) {
+            // check that name is in english characters
+            if (! /^[a-zA-Z\s]*$/.test(selected_user.first)) {
+                return showError('You must enter your name in English characters.')
+            }
+            if (! /^[a-zA-Z\s]*$/.test(selected_user.last)) {
+                return showError('You must enter your name in English characters.')
+            }
+
+            // check that he name is in hebrew characters
+            if (! /^[א-ת\s]*$/.test(selected_user.first_he)) {
+                return showError('You must enter your name in Hebrew characters.')
+            }
+            if (! /^[א-ת\s]*$/.test(selected_user.last_he)) {
+                return showError('You must enter your name in Hebrew characters.')
+            }
+
             // check that privacy policy is checked off
             if (! $("#media").is(":checked")) {
                 return showError('You must indicate your acceptance of our Privacy Policy.')
