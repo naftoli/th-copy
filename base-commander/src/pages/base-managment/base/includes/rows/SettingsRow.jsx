@@ -34,9 +34,8 @@ export class SettingsRow extends Component {
     this.props.onUpdate({ store_reset: date ? toJulian( date ) : date });
 
   disableSchoolReset = () => {
-    const store_reset = this.props.base.store_reset > 0 ? 0 : toJulian( moment() );
-    this.props.onUpdate({ store_reset });
     this.setState({ disabled: true, checked: true });
+    this.props.onUpdate({ store_reset });
   }
 
   changeSchoolReset = event => {
@@ -152,8 +151,7 @@ export class SettingsRow extends Component {
 
           <Radio key={0} id='store_reset' value='0'
             name='store_miles_reset'
-            { ...storeResetProps }
-            // onChange={ this.disableSchoolReset }
+            onChange={ this.disableSchoolReset }
             checked={ store_reset_jd === '0' || store_reset_jd === 0 }>
             Always (This includes all miles from previous years)
           </Radio>
