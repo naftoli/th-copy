@@ -57,10 +57,10 @@ export class SettingsRow extends Component {
       print_parent_tasks, allow_parent_tasks, rewards,
       one_time_prize_reset
     } = base;
-    console.log("One time prize reset: " + one_time_prize_reset)
 
     const store_reset_jd = parseInt(store_reset, 10);
     store_reset = store_reset > 0 ? moment( julian.toDate( store_reset ) ) : undefined;
+    console.log(store_reset_jd)
 
     // props for all inputs
     const checkboxProps = { onChange: this.handleCheckbox };
