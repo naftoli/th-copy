@@ -63,14 +63,13 @@ export class RegTypeRow extends Component {
           <ul className='checkboxes details'>
             <li>All chayolei soldiers will be registered by the deadline.</li>
             <li>Soldiers are given an additional discount.</li>
-            <li>If any soldiers are not registered by the deadline, you will be charged for the total discount given.</li>
+            <li>Any soldiers that are not registered by Chof Gimmel Elul will be charged by HQ.</li>
           </ul>
 
           <div className='discounts'>
             Eligible Discounts:
             <ul>
-              <li>Guaranteed: $<NumberDisplay value={ prices.discounts.guaranteed } /></li>
-              <li>Early Bird (<DateDisplay value={early_bird_date} />): $<NumberDisplay value={ prices.discounts.early_bird } /></li>
+              <li>Guaranteed: $10</li>
             </ul>
           </div>
           <div className='price'>
