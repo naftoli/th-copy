@@ -841,7 +841,7 @@ var registrationApp = function() {
             if (pic_uploaded == false) {
                 const res = confirm('We encourage you to upload a new picture of your child.\nWould you like to do that now?')
                 if (res) {
-                    $("#upload-image").click()
+                    $("#user-img").click()
                     return false
                 }
             }
