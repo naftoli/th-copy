@@ -832,6 +832,11 @@ var registrationApp = function() {
                 return showError('You must enter your hebrew last name in Hebrew characters.')
             }
 
+            // check that verification is checked off
+            if (! $("#he_name").is(":checked")) {
+                return showError('You must indicate your verification of the spelling of your hebrew name.')
+            }
+
             // check that privacy policy is checked off
             if (! $("#media").is(":checked")) {
                 return showError('You must indicate your acceptance of our Privacy Policy.')
