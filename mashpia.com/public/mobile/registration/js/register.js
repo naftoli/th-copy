@@ -57,6 +57,8 @@ var state = {
 
 var non_th_schools = {}
 
+var pic_uploaded = false
+
 var registrationApp = function() {
     var api_url = '/api/registration/user_registration.php'; // API endpoint for this page
 
@@ -833,6 +835,15 @@ var registrationApp = function() {
             // check that privacy policy is checked off
             if (! $("#media").is(":checked")) {
                 return showError('You must indicate your acceptance of our Privacy Policy.')
+            }
+
+            // encourage parents to upload new picture
+            if (pic_uploaded == false) {
+                const res = confirm('We encourage you to upload a new picture of your child.\nWould you like to do that now?')
+                if (res) {
+                    $("#upload-image").click()
+                    return false
+                }
             }
         }
 
@@ -2093,7 +2104,9 @@ var registrationApp = function() {
         $.post("/api/core/users?id=" + user_id, { mobile_pic: data.filename }, function( response ){
             if ( !response.success ){
                 showError( Err12);
-            };
+            } else {
+                pic_uploaded = true
+            }
         });
     }
 }();
