@@ -693,13 +693,11 @@ var registrationApp = function() {
         switch (field.type) {
             case 'value':
                 value = $(field.field).val()
-                console.log(field.field + '=' + value)
                 if (value == '' || value == 0 || value == '0' || !value.length) return field.error
                 break
             case 'amount':
                 // make sure we have a number greater than 0
                 value = parseInt($(field.field).val())
-                // console.log(field.field + '=' + value)
                 if (value <= 0) return field.error
                 break
             case 'check':
@@ -1189,8 +1187,10 @@ var registrationApp = function() {
                   })
                   .catch(function (err) {
                       alert(err)
+                      return false
                   })
             }
+            else nextStep()
         }
         else nextStep()
     }
