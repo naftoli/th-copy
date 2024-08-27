@@ -1834,6 +1834,16 @@
       }
     })
 
+    // alert user when choosing to pre register to check if they really want it or not
+    $("#chidon-reg").change( function() {
+      if ($(this).val() == '1') {
+        const msg = "You can only receive a refund for prepaid registration charges if you request it.\nAre you sure you want to prepay now?"
+        if (!confirm(msg)) {
+          $(this).val('0')
+        }
+      }
+    })
+
     // show recruited by if recruit is checked off
     $(".recruit").click(function () {
       $(this).val() == '1' ? $("#recruited_by").show() : $("#recruited_by").hide()
