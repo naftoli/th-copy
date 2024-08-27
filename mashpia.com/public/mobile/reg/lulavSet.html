@@ -208,13 +208,13 @@
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2500;
-                var alreadySold = 1120;
+                var alreadySold = 0;
                 if (sold) alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
                 $(".sold").text( alreadySold );
                 $("#leftToSell").text( leftToSell );
                 if ( soldOut || leftToSell < 1 ) {
-                    location.href = 'lulavSet2.html'
+                    // location.href = 'lulavSet2.html'
                     soldOut = true;
                     $("#sold-out").show();
                     $("#purchases").hide();
