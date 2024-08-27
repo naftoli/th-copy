@@ -27,6 +27,22 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php');
         ?>
         <h1>Hachayol Reports</h1>
+
+        <h2>Hachayol School Reports</h2>
+        <div id="action-links">
+            <a href="/hachayols/school_hachayols.php">
+                <div class="button">
+                    <img src="/images/cth_logo.png" height="32" alt="school report"/>
+                    <span class="link-text">Hachayol School Report</span>
+                </div>
+            </a>
+          <a href="/hachayols/report.php">
+            <div class="button">
+              <img src="/images/cth_logo.png" height="32" alt="school report"/>
+              <span class="link-text">Update Hachayols</span>
+            </div>
+          </a>
+        </div>
         
         <?if ($admin_user['auth'] == 'super') {?>
         <h2>Hachayol Shipping Reports</h2>
@@ -100,6 +116,5 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         </div>
         <?} // end admin only links ?>
         </div>
-        
     </body>
 </html>
