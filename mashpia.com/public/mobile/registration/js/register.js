@@ -1579,7 +1579,7 @@ var registrationApp = function() {
             }
             // add to cart
             state.cart.push({
-                description: selected_user.first + " Early Chidon Registration",
+                description: selected_user.first + " Early Chidon Registration Payment",
                 price: amount,
                 meta: {
                     type: 'advance registration',
