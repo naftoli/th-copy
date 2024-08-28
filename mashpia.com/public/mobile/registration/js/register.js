@@ -1541,14 +1541,15 @@ var registrationApp = function () {
   }
 
   async function alreadyPaidPrize(amount) {
-    const paid = await fetch('api/checkRegistrationPayment.php', {
+    const res = await fetch('api/checkRegistrationPayment.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({user: current_user, amount: amount})
     })
-    return paid ? true : false
+    const paid = await res.json()
+    return paid
   }
 
   $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
