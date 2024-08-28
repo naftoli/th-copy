@@ -1827,8 +1827,8 @@ class ChidonShipping
             'chayolei' => 'Chayolei Enrollment',
             'shipping' => 'Shipping Fee (before the codes)',
 
-            'THE' => 'Chayolei Enrollment',
-            'HACH' => 'Hachayol Subscription',
+            'THE'   => 'Chayolei Enrollment',
+            'HACH'  => 'Hachayol Subscription',
 
             'THAKUSA' => 'CTH AK Shipping USA',
             'THAKCAN' => 'CTH AK Shipping CAN',
@@ -1838,18 +1838,19 @@ class ChidonShipping
             'THMSCAN' => 'CTH MS Shipping CAN',
             'THMSINT' => 'CTH MS Shipping INT',
 
-            'LDE' => 'Chidon Enrollment',
-            'KHKE' => 'KHK Enrollment',
+            'LDE'       => 'Chidon Enrollment',
+            'KHKE'      => 'KHK Enrollment',
             'MYSLDS-10' => 'MyShliach Limmud Enrollment Shipping Fee',
-            'AKLDS-10' => 'Anash Kinder Limmud Enrollment Shipping Fee',
+            'AKLDS-10'  => 'Anash Kinder Limmud Enrollment Shipping Fee',
             'AKLDBC-20' => 'Anash Kinder Limmud Enrollment BC Fee',
-            'LDE:MYSLDS-10' => 'MyShliach Limmud Enrollment Plus Shipping Fee',
-            'LDE:AKLDS-10:AKLDBC-20' => 'Anash Kinder Limmud Enrollment Plus Shipping & BC Fee',
+            'LDE:MYSLDS-10'             => 'MyShliach Limmud Enrollment Plus Shipping Fee',
+            'LDE:AKLDS-10:AKLDBC-20'    => 'Anash Kinder Limmud Enrollment Plus Shipping & BC Fee',
 
             'RRYSD' => 'Chidon Reg Yesod',
             'RRYDA' => 'Chidon Reg Yediah',
             'RRHVN' => 'Chidon Reg Havona / Iyun',
             'RRKHK' => 'Chidon Reg KHK',
+            'RRFAM' => 'Chidon Reg Family Payment',
 
             'RRSUSA' => 'Chidon Reg Shipping USA',
             'RRSCAN' => 'Chidon Reg Shipping CAN',

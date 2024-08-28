@@ -429,7 +429,34 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'discount' => $discount
         ]);
     }
-    //get all of the soldiers registration charges
+
+    public function familyCharge( $type, $amount, $trans_id = '', $year = false ) {
+        global $MASHPIA_DB;
+        // set default year.
+        if (!$year) {
+            $year = GlobalSettings::getChidonRegYear();
+        }
+        // * prepare the query
+        $registration_info_query = $MASHPIA_DB->prepare(
+            "INSERT INTO registration_charges (trans_id, admin_id, user_id, school_id, type, amount, year) "
+            . "VALUES( :trans_id, :admin_id, 0, 0, :type, :amount, :year )"
+        );
+        // get admin id
+        $parent = $this->parentAccount();
+        if ($parent) {
+            // * execute the query
+            return $registration_info_query->execute([
+                'type'      => $type,
+                'trans_id'  => $trans_id,
+                'year'      => $year,
+                'admin_id'  => $parent['admin_id'],
+                'amount'    => $amount
+            ]);
+        }
+        return false;
+    }
+
+    //get all the registration charges
     public function registrationCharges() {
         global $MASHPIA_DB;
         $query = $MASHPIA_DB->query(
@@ -783,21 +810,21 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $result;
     }
 
-    public function earlyReg($year, $user_id, $amount) {
-        global $MASHPIA_DB;
-        $qry = $MASHPIA_DB->prepare("
-            UPDATE th_chidon SET 
-                prepaid = :amount,
-                early_registration = 1 
-            WHERE year = :year AND user_id = :user
-        ");
-        $result = $qry->execute([
-            'year'  => $year,
-            'user'  => $user_id,
-            'amount'    => $amount
-        ]);
-        return $result;
-    }
+//    public function earlyReg($year, $user_id, $amount) {
+//        global $MASHPIA_DB;
+//        $qry = $MASHPIA_DB->prepare("
+//            UPDATE th_chidon SET
+//                prepaid = :amount,
+//                early_registration = 1
+//            WHERE year = :year AND user_id = :user
+//        ");
+//        $result = $qry->execute([
+//            'year'  => $year,
+//            'user'  => $user_id,
+//            'amount'    => $amount
+//        ]);
+//        return $result;
+//    }
 
     /**
      * addBookPurchase

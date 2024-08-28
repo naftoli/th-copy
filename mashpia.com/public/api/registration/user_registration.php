@@ -208,7 +208,8 @@ class UserRegistrationRouter {
                 // find out if we need to change the amount in the code
                 // change amount to 0 for the advance registration if there's installments
                 if ($installmentsCreated) {
-                    if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
+//                    if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
+                    if ($codeOnly == 'RRFAM') {
                         $item['code'] = $codeOnly . '-0';
                     } else if (in_array($codeOnly, ['RRSUSA', 'RRSCAN', 'RRSINT']) !== false) {
                         $item['code'] = $codeOnly . '-0';
@@ -410,7 +411,8 @@ class UserRegistrationRouter {
                     } else {
                         $yr = $chidonYr;
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
-                        $user->registrationCharge($code, $amount, $trans_id, $chidonYr);
+                        if ($code === 'RRFAM') $user->familyCharge($amount, $trans_id, $chidonYr);
+                        else $user->registrationCharge($code, $amount, $trans_id, $chidonYr);
                         switch ($code) {
                             case 'KHKE':
                                 $user->addKhkReg($chidonYr, $user_id);
@@ -422,12 +424,12 @@ class UserRegistrationRouter {
                             case 'YB5':
                                 $user->addBookPurchase($chidonYr, $user_id, 'parent_account', $trans_id);
                                 break;
-                            case 'RRYSD':
-                            case 'RRYDA':
-                            case 'RRHVN':
-                                // early registration
-                                if (! $installmentsCreated) $user->earlyReg($chidonYr, $user_id, $amount);
-                                break;
+//                            case 'RRYSD':
+//                            case 'RRYDA':
+//                            case 'RRHVN':
+//                                // early registration
+//                                if (! $installmentsCreated) $user->earlyReg($chidonYr, $user_id, $amount);
+//                                break;
                             case 'HACH':
                                 $user->addHachayol($user_id);
                                 break;
