@@ -20,7 +20,7 @@ const initialState = {
     class_grade: '', class_sub: '', class_teacher: '',
     email: '', cell: '', miles_balance: 1000,
     miles_per_soldier: 100, pic_mission_type: 0, allow_parent_tasks: 0,
-    print_parent_tasks: 0, class_gender: null, whatsapp: 1
+    print_parent_tasks: 0, class_gender: null, whatsapp: 1, updated: 1
   },
   saving: false,
 }
@@ -77,10 +77,6 @@ class NewPlatoonModal extends Component {
           </Col>
         </Row>
       );
-    }
-
-    if (isOpen && this.state.platoon.updated === '0') {
-      this.onUpdate({ updated: '1' })
     }
 
     return (
