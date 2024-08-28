@@ -1554,7 +1554,6 @@ var registrationApp = function() {
             amount -= personalized_amount
 
             // add to cart
-            console.log(selected_user.parentAccount)
             const family_id = selected_user.parentAccount.admin_id
             const trackCode = 'RRFAM-'
             state.cart.push({
@@ -1711,7 +1710,7 @@ var registrationApp = function() {
     async function checkRegShipping() {
         const registering = state.cart.filter(item => item.meta.type === 'advance registration' && item.meta.registration_type === 'chidon')
         // get index of user in users array
-        const index = state.users.findIndex(user => user.user_id === registering[0].meta.user_id)
+        const index = state.users.findIndex(user => user.user_id === selected_user.user_id)
 
         // make sure that if editing chidon info, we check if parent already paid for shipping
         const paid = await fetch('api/checkShippingFee.php', {
@@ -1719,7 +1718,7 @@ var registrationApp = function() {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ admin: state.users[index].parentAccount.admin_id }),
+            body: JSON.stringify({ admin: selected_user.parentAccount.admin_id }),
         })
         if (parseInt(paid)) {
             checkForRegShipping = false
