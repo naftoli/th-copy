@@ -1554,6 +1554,7 @@ var registrationApp = function() {
             amount -= personalized_amount
 
             // add to cart
+            console.log(selected_user.parentAccount)
             const family_id = selected_user.parentAccount.admin_id
             const trackCode = 'RRFAM-'
             state.cart.push({
