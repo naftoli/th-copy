@@ -134,7 +134,7 @@ class UsersRouter {
         $cur_user = $current_user; // apparently there's a duplicate $current_user variable created by WP at some point in this function which is causing bugs
 
         // check if admin_id and / or admin_email is in the POST
-        if (isset($_POST['admin_id'])) $admin_id = $_POST['admin_id'];
+        if (isset($_POST['admin_id'])) $admin_id = intval($_POST['admin_id']);
         if (isset($_POST['admin_email'])) $admin_email = $_POST['admin_email'];
         unset($_POST['admin_id']);
         unset($_POST['admin_email']);
@@ -196,7 +196,7 @@ class UsersRouter {
             $sql = "INSERT INTO admin_auths (admin_id, auth, id, role_id) VALUES (:admin_id, :auth, :id, :role_id)";
             $stmt = $MASHPIA_DB->prepare( $sql );
             $stmt->execute($data);*/
-       } else if (isset($admin_id) || isset($admin_email)) {
+       } else if ((isset($admin_id) && $admin_id > 0) || (isset($admin_email) && !empty($admin_email))) {
             $user->connectToParent($admin_id, $admin_email);
         }
 
