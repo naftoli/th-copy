@@ -8,13 +8,14 @@ $year = GlobalSettings::getChidonRegYear();
 
 $info = json_decode(file_get_contents('php://input'), true);
 
-// check if there's any registration fee already charged for any children of this admin
+// check if there's any prize fee already charged for any children of this admin
 $stmt = $MASHPIA_DB->prepare("
-    select * from registration_charges where type in ('RRYSD', 'RRYDA', 'RRHVN') and year = :year and user_id = :user
+    select * from registration_charges where type in ('RRYSD', 'RRYDA', 'RRHVN') and year = :year and user_id = :user and amount = :amount 
     ");
 $stmt->execute([
     ':year' => $year,
-    ':user' => $info['user']
+    ':user' => $info['user'],
+    ':amount' => $info['amount']
 ]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 if (is_array($row)) echo 1;

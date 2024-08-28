@@ -1473,72 +1473,67 @@ var registrationApp = function() {
         let personalized_amount = 0
         for (let p of user_prizes[current_user]) {
             if (parseInt(p.personalization) && p.he_name && p.he_name != '') {
-                personalized_amount += parseInt(p.price)
+                personalized_amount = parseInt(p.price)
                 break
             }
         }
         return personalized_amount
     }
 
-    function checkForChidonPayment() {
-        // depends on whether any prizes that have names have been selected AND the parent has not yet paid for chidon registration
-        // OR if the parent indicated they would like to pay advanced registration
-        // let show = false
-        // let advancedPayment = parseInt($("#chidon-reg").val())
-        // if (advancedPayment) {
-        //     // check if parent already paid for chidon registration
-        //     const paid = await fetch('api/checkRegistrationPayment.php', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json'
-        //         },
-        //         body: JSON.stringify({ user: current_user })
-        //     })
-        //     if (!paid) show = true
-        // }
-        // console.log("Show: " + show)
-        //
-        // if (!show) {
-        //     chidonPayment[current_user] = true
-        //     nextStep()
-        // } else {
-        checkForRegShipping = true // set flag so we know to check for shipping
-        // create text for modal
-        let options = []
-        const track = $(".limmud:checked").val()
-        switch (track) {
-            case 'maven':
-                options = [36, 50, 75, 100, 136]
-                break
-            case 'pro':
-                options = [100, 120, 150, 180, 200]
-                break
-            case 'expert':
-            case 'genius':
-                options = [200, 225, 250, 300]
-                break
-        }
+    function checkPrePayment() {
+        const advancedPayment = parseInt($("#chidon-reg").val())
+        if (! advancedPayment) {
+            chidonPayment[current_user] = true
+            nextStep()
+        } else {
+            checkForRegShipping = true // set flag so we know to check for shipping
+            // create text for modal
+            let options = []
+            const track = $(".limmud:checked").val()
+            switch (track) {
+                case 'maven':
+                    options = [36, 50, 75, 100, 136]
+                    break
+                case 'pro':
+                    options = [100, 120, 150, 180, 200]
+                    break
+                case 'expert':
+                case 'genius':
+                    options = [200, 225, 250, 300]
+                    break
+            }
 
-        let html = `
-            <div class="col-12" style="padding: 10px 20px;">
-                Please choose the amount that you would like to prepay for Chidon Registration.<br />
-                <select id="chidonReg" class="form-control" style="margin-top: 10px;">
-                  <option value="0">Choose Amount</option>
-                  ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
-                </select>
-            </div>
-            <div class="col-12" style="padding: 10px 20px;">
-              <label for="early-reg-terms">
-                <input type="checkbox" id="early-reg-terms" name="early-reg-terms" style="display: inline !important; width: 25px; height: 25px;" />
-                I am aware that if my child ends up passing a lower track, 
-                so there is a lower registration fee, I will need to opt in for a refund of the difference at registration. 
-                If my child passes a higher track, I will need to pay the difference during registration.
-              </label>
-            </div>
-        `
-        $("#chidon-enrollment .modal-body").empty().append(html)
-        $("#chidon-enrollment").modal('show')
-        // }
+            let html = `
+                <div class="col-12" style="padding: 10px 20px;">
+                    Please choose the amount that you would like to prepay for Chidon Registration.<br />
+                    <select id="chidonReg" class="form-control" style="margin-top: 10px;">
+                      <option value="0">Choose Amount</option>
+                      ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
+                    </select>
+                </div>
+                <div class="col-12" style="padding: 10px 20px;">
+                  <label for="early-reg-terms">
+                    <input type="checkbox" id="early-reg-terms" name="early-reg-terms" style="display: inline !important; width: 25px; height: 25px;" />
+                    I am aware that if my child ends up passing a lower track, 
+                    so there is a lower registration fee, I will need to opt in for a refund of the difference at registration. 
+                    If my child passes a higher track, I will need to pay the difference during registration.
+                  </label>
+                </div>
+            `
+            $("#chidon-enrollment .modal-body").empty().append(html)
+            $("#chidon-enrollment").modal('show')
+        }
+    }
+
+    async function alreadyPaidPrize(amount) {
+        const paid = await fetch('api/checkRegistrationPayment.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ user: current_user, amount: amount })
+        })
+        return paid ? true : false
     }
 
     $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
@@ -1563,7 +1558,7 @@ var registrationApp = function() {
             const family_id = state.users[index].parentAccount.admin_id
             const trackCode = 'RRFAM-'
             state.cart.push({
-                description: selected_user.first + " Early Chidon Registration Payment",
+                description: selected_user.first + " Chidon Pre-Registration Payment",
                 price: amount,
                 meta: {
                     type: 'advance registration',
@@ -1633,7 +1628,7 @@ var registrationApp = function() {
         return false
     }
 
-    function addToCart() {
+    async function addToCart() {
         for (let item of state.cart) {
             if (item.meta.registration_type == 'chidon' && item.meta.user_id == current_user) {
                 item.meta.chidon_prizes = user_prizes[current_user]
@@ -1643,35 +1638,39 @@ var registrationApp = function() {
         // check if we need a separate entry for personalized prize
         const amount = checkPersonalizedPrize()
         if (amount) {
-            // find out track for code
-            const track = $(".limmud:checked").val()
-            let trackCode = ''
-            switch (track) {
-                case 'maven':
-                    trackCode = 'RRYSD-'
-                    break
-                case 'pro':
-                    trackCode = 'RRYDA-'
-                    break
-                case 'expert':
-                case 'genius':
-                    trackCode = 'RRHVN-'
-                    break
-            }
-
-            // add to cart
-            state.cart.push({
-                description: selected_user.first + " Early Chidon Payment for Personalized Prize",
-                price: amount,
-                meta: {
-                    type: 'advanced prize payment',
-                    registration_type: 'chidon',
-                    paid: amount,
-                    user_id: selected_user.user_id,
-                    code: "C" + selected_user.user_serial + ":" + trackCode + amount,
-                    codeOnly: trackCode.substring(0, trackCode.length - 1)
+            // check if child prize has already been paid
+            already_paid = await alreadyPaidPrize(amount)
+            if (! already_paid) {
+                // find out track for code
+                const track = $(".limmud:checked").val()
+                let trackCode = ''
+                switch (track) {
+                    case 'maven':
+                        trackCode = 'RRYSD-'
+                        break
+                    case 'pro':
+                        trackCode = 'RRYDA-'
+                        break
+                    case 'expert':
+                    case 'genius':
+                        trackCode = 'RRHVN-'
+                        break
                 }
-            })
+
+                // add to cart
+                state.cart.push({
+                    description: selected_user.first + " Early Chidon Payment for Personalized Prize",
+                    price: amount,
+                    meta: {
+                        type: 'advanced prize payment',
+                        registration_type: 'chidon',
+                        paid: amount,
+                        user_id: selected_user.user_id,
+                        code: "C" + selected_user.user_serial + ":" + trackCode + amount,
+                        codeOnly: trackCode.substring(0, trackCode.length - 1)
+                    }
+                })
+            }
         }
     }
 
@@ -1683,7 +1682,7 @@ var registrationApp = function() {
                 return false
             }
             if (!chidonPayment[current_user]) {
-                checkForChidonPayment()
+                checkPrePayment()
                 return false
             }
         }
