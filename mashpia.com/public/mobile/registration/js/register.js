@@ -1497,6 +1497,7 @@ var registrationApp = function() {
             })
             if (!paid) show = true
         }
+        console.log("Show: " + show)
 
         if (!show) {
             chidonPayment[current_user] = true
