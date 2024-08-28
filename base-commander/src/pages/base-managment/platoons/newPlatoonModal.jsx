@@ -79,6 +79,10 @@ class NewPlatoonModal extends Component {
       );
     }
 
+    if (isOpen && this.state.platoon.updated === '0') {
+      this.onUpdate({ updated: '1' })
+    }
+
     return (
       <Modal isOpen={ isOpen } toggle={ this.toggle } centered id='NewPlatoonModal'>
         <ModalHeader toggle={ this.toggle }>Create Platoon</ModalHeader>
