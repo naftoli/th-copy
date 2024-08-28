@@ -1480,66 +1480,65 @@ var registrationApp = function() {
         return personalized_amount
     }
 
-    async function checkForChidonPayment() {
+    function checkForChidonPayment() {
         // depends on whether any prizes that have names have been selected AND the parent has not yet paid for chidon registration
         // OR if the parent indicated they would like to pay advanced registration
-        // changed to only check if parent indicates they want to pay early registration 8/27/24
-        let show = false
-        let advancedPayment = parseInt($("#chidon-reg").val())
-        if (advancedPayment) {
-            // check if parent already paid for chidon registration
-            const paid = await fetch('api/checkRegistrationPayment.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ user: current_user })
-            })
-            if (!paid) show = true
+        // let show = false
+        // let advancedPayment = parseInt($("#chidon-reg").val())
+        // if (advancedPayment) {
+        //     // check if parent already paid for chidon registration
+        //     const paid = await fetch('api/checkRegistrationPayment.php', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify({ user: current_user })
+        //     })
+        //     if (!paid) show = true
+        // }
+        // console.log("Show: " + show)
+        //
+        // if (!show) {
+        //     chidonPayment[current_user] = true
+        //     nextStep()
+        // } else {
+        checkForRegShipping = true // set flag so we know to check for shipping
+        // create text for modal
+        let options = []
+        const track = $(".limmud:checked").val()
+        switch (track) {
+            case 'maven':
+                options = [36, 50, 75, 100, 136]
+                break
+            case 'pro':
+                options = [100, 120, 150, 180, 200]
+                break
+            case 'expert':
+            case 'genius':
+                options = [200, 225, 250, 300]
+                break
         }
-        console.log("Show: " + show)
 
-        if (!show) {
-            chidonPayment[current_user] = true
-            nextStep()
-        } else {
-            checkForRegShipping = true // set flag so we know to check for shipping
-            // create text for modal
-            let options = []
-            const track = $(".limmud:checked").val()
-            switch (track) {
-                case 'maven':
-                    options = [36, 50, 75, 100, 136]
-                    break
-                case 'pro':
-                    options = [100, 120, 150, 180, 200]
-                    break
-                case 'expert':
-                case 'genius':
-                    options = [200, 225, 250, 300]
-                    break
-            }
-
-            let html = `
-                <div class="col-12" style="padding: 10px 20px;">
-                    Please choose the amount that you would like to prepay for Chidon Registration.<br />
-                    <select id="chidonReg" class="form-control" style="margin-top: 10px;">
-                      <option value="0">Choose Amount</option>
-                      ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
-                    </select>
-                </div>
-                <div class="col-12" style="padding: 10px 20px;">
-                  <label for="early-reg-terms">
-                    <input type="checkbox" id="early-reg-terms" name="early-reg-terms" style="display: inline !important; width: 25px; height: 25px;" />
-                    I am aware that if my child ends up passing a lower track, 
-                    so there is a lower registration fee, I will need to opt in for a refund of the difference at registration. 
-                    If my child passes a higher track, I will need to pay the difference during registration.
-                  </label>
-                </div>
-            `
-            $("#chidon-enrollment .modal-body").empty().append(html)
-            $("#chidon-enrollment").modal('show')
-        }
+        let html = `
+            <div class="col-12" style="padding: 10px 20px;">
+                Please choose the amount that you would like to prepay for Chidon Registration.<br />
+                <select id="chidonReg" class="form-control" style="margin-top: 10px;">
+                  <option value="0">Choose Amount</option>
+                  ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
+                </select>
+            </div>
+            <div class="col-12" style="padding: 10px 20px;">
+              <label for="early-reg-terms">
+                <input type="checkbox" id="early-reg-terms" name="early-reg-terms" style="display: inline !important; width: 25px; height: 25px;" />
+                I am aware that if my child ends up passing a lower track, 
+                so there is a lower registration fee, I will need to opt in for a refund of the difference at registration. 
+                If my child passes a higher track, I will need to pay the difference during registration.
+              </label>
+            </div>
+        `
+        $("#chidon-enrollment .modal-body").empty().append(html)
+        $("#chidon-enrollment").modal('show')
+        // }
     }
 
     $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
