@@ -1555,8 +1555,7 @@ var registrationApp = function() {
 
             // add to cart
             const index = state.users.findIndex(user => user.user_id === selected_user.user_id)
-            console.log("Index: " + index)
-            const family_id = state.users[index].parentAccount.admin_id
+            const family_id = state.users[index]['parentAccount'].admin_id
             const trackCode = 'RRFAM-'
             state.cart.push({
                 description: selected_user.first + " Chidon Pre-Registration Payment",
