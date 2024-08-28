@@ -1655,9 +1655,7 @@ var registrationApp = function () {
     if (amount) {
       // check if child prize has already been paid
       already_paid = await alreadyPaidPrize(amount)
-      alert('already paid: ' + already_paid)
       if (! already_paid) {
-        alert()
         // find out track for code
         const track = $(".limmud:checked").val()
         let trackCode = ''
