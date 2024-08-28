@@ -18,5 +18,4 @@ $stmt->execute([
     ':amount' => $info['amount']
 ]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
-if (is_array($row)) echo 1;
-else echo 0;
+echo $row ? 1 : 0;
