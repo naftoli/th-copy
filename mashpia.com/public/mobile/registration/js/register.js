@@ -1636,8 +1636,8 @@ var registrationApp = function() {
 
         // check if we need a separate entry for personalized prize
         const amount = checkPersonalizedPrize()
-        console.log("Amount: " + amount)
         if (amount) {
+            alert()
             // check if child prize has already been paid
             already_paid = await alreadyPaidPrize(amount)
             if (! already_paid) {
