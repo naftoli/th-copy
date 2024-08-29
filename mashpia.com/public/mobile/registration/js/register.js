@@ -695,9 +695,8 @@ var registrationApp = function () {
       toggleLoading('payment', false);
 
       // figure out if we need to show recurring payment option
-      // let chidonReg = state.cart.filter(item => item.meta.registration_type === 'chidon' && item.meta.type === 'advance registration')
-      // console.log(chidonReg)
-      // if (chidonReg.length) $("#recurring").show()
+      let chidonReg = state.cart.filter(item => item.meta.registration_type === 'chidon' && item.meta.type === 'advance registration')
+      if (chidonReg.length) $("#recurring").show()
     })
   }
 
