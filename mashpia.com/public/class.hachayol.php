@@ -30,7 +30,7 @@ class Hachayol {
                 USING ( school_id )
                 WHERE u.user_registered > 0 
                 AND u.hachayol = 1 
-                AND s.test_school = 1 ";
+                AND s.test_school = 0 ";
         if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
         $sql .= " AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")";
         $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";
