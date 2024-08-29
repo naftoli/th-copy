@@ -75,25 +75,20 @@ if (isset($_GETPOST['show']) && $_GETPOST['show'] == 'form') {
     );
 }
 
-// find out if we are in the week prior to shabbos mevorchim
-$jdNow = unixtojd();
-$showTehillimQuota = 0;
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
+
+// find out if we are in the week prior to shabbos mevorchim
+$jdNow = unixtojd();
+$showTehillimQuota = false;
 $heNow = jdtojewish($jdNow);
 $heNowArr = explode("/", $heNow);
-//if ($heNowArr[0] == 13) $year++;
 $sm = calculateSM( $year );
 
-// structure, val => schools pre-closed
-$closed_schools = [
-	2458160 => [255]
-];
-
 foreach ($sm as $val) {
-//    echo "Now - " . $jdNow . " SM: " . $val . "<br />";
-	if ($jdNow >= ($val - 6) && $jdNow <= $val && !in_array($school_id, $closed_schools[$val])) {
-		$showTehillimQuota = 1;
+  echo "Now - " . $jdNow . " SM: " . $val . "<br />";
+	if ($jdNow >= ($val - 6) && $jdNow <= $val) {
+		$showTehillimQuota = true;
 		break;
 	}
 }
