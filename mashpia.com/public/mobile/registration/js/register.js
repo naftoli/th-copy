@@ -2369,8 +2369,9 @@ var templates = function () {
         // $("#khkWhatsapp").hide()
       }
 
-      // show/hide yarmulka
       // $("#chidonWhatsapp").show()
+
+      // show/hide yarmulka
       if (user.gender == 'M') {
         $("#yarmulka").show()
         // $("#boysWhatsapp").show()
