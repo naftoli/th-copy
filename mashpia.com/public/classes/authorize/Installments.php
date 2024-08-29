@@ -90,7 +90,7 @@ class Installments
         else return false;
     }
 
-    public function createSubscription($amount, $numInstallments) {
+    public function createSubscription($amount, $numInstallments, $start_date = null) {
         $this->total_amount = $amount;
         $this->number_of_installments = $numInstallments;
         $this->installment_amount = round(floatval($amount / $numInstallments), 2);
@@ -110,7 +110,7 @@ class Installments
 
         $paymentSchedule = new AnetAPI\PaymentScheduleType();
         $paymentSchedule->setInterval($interval);
-        $paymentSchedule->setStartDate(new \DateTime(date('Y-m-d', strtotime("+1 month"))));
+        $paymentSchedule->setStartDate(new \DateTime($start_date));
         $paymentSchedule->setTotalOccurrences($numInstallments);
 
         $subscription->setPaymentSchedule($paymentSchedule);

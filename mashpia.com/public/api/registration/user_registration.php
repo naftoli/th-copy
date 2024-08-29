@@ -180,7 +180,7 @@ class UserRegistrationRouter {
                     // create installments (called subscriptions in authorize)
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id, true, isset($payment_info['payment_profile']));
-                        $result = $subscription->createSubscription($amount, $installments);
+                        $result = $subscription->createSubscription($amount, $installments, "2024-11-01");
                         if (strpos($result, "Error") !== false) {
                             $MASHPIA_DB->rollBack();
                             json_error($result);
