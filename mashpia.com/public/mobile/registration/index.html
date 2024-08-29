@@ -1844,7 +1844,7 @@
     // alert user when choosing to pre register to check if they really want it or not
     $("#chidon-reg").change( function() {
       if ($(this).val() == '1') {
-        const msg = "You can only receive a refund for prepaid registration charges if you request it.\nAre you sure you want to prepay now?"
+        const msg = "You can only receive a refund for prepaid registration charges if you request it. Are you sure you want to prepay now?"
         if (!confirm(msg)) {
           $(this).val('0')
         }
