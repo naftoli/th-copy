@@ -12,14 +12,14 @@ export const NameRow = ( { inst, soldier, onChange } ) => {
       <Col sm='6'>
         <label htmlFor='first'>First Name</label>
         <Input id='first' required value={ first } { ...inputProps }
-          pattern='^[\D\s]{3,128}$' title="3-128 letters"/>
-        <div className='invalid-message'>3-128 letters</div>
+          pattern='^[a-zA-Z]{2,128}$' title="3-128 English letters"/>
+        <div className='invalid-message'>3-128 <em>English</em> letters</div>
       </Col>
       <Col sm='6'>
         <label htmlFor='last'>Last Name</label>
         <Input id='last' required value={ last } { ...inputProps }
-          pattern='^[\D\s]{3,128}$' title="3-128 letters"/>
-        <div className='invalid-message'>3-128 letters</div>
+          pattern='^[a-zA-Z]{2,128}$' title="3-128 English letters"/>
+        <div className='invalid-message'>3-128 <em>English</em> letters</div>
       </Col>
       { inst !== 10 &&
         <Fragment>
