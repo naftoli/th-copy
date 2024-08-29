@@ -33,87 +33,95 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/hachayols/school_hachayols.php">
                 <div class="button">
                     <img src="/images/cth_logo.png" height="32" alt="school report"/>
-                    <span class="link-text">Hachayol School Report</span>
+                    <span class="link-text">Hachayol Report by Family</span>
                 </div>
             </a>
           <a href="/hachayols/report.php">
             <div class="button">
               <img src="/images/cth_logo.png" height="32" alt="school report"/>
-              <span class="link-text">Update Hachayols</span>
+              <span class="link-text">Update Hachayol by Family</span>
             </div>
           </a>
+          <?php if ($admin_user['auth'] != 'super') : ?>
+          <a href="/hachayol_report_details.php<?=$debug ? "?debug=true": "";?>">
+            <div class="button">
+              <img src="/images/cth_logo.png" height="32" alt="tickets"/>
+              <span class="link-text">Hachayol Detail Report</span>
+            </div>
+          </a>
+          <?php endif; ?>
         </div>
         
-        <?if ($admin_user['auth'] == 'super') {?>
-        <h2>Hachayol Shipping Reports</h2>
-        <div id="action-links">
-            <a href="/hachayol_report.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/cth_logo.png" height="32" alt="tickets"/>
-                    <span class="link-text">Hachayol Report</span>
-                </div>
-            </a>
-            <a href="/hachayol_report_details.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/cth_logo.png" height="32" alt="tickets"/>
-                    <span class="link-text">Hachayol Detail Report</span>
-                </div>
-            </a>
-            <a href="/reports/shipping/hachayols/<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/box.png" height="32" alt="tickets"/>
-                    <span class="link-text">Hachayol Shipping Report</span>
-                </div>
-            </a>
-        </div>
-        <h2>MyShliach / Anash Kinder</h2>
-        <div id="action-links">
-            <a href="/myShliachHachayolReport.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/myshliach.png" height="32" alt="tickets"/>
-                    <span class="link-text">MyShliach Hachayol Report</span>
-                </div>
-            </a>
-            <a href="/myShliachHachayolLabels.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/myshliach.png" height="32" alt="tickets"/>
-                    <span class="link-text">MyShliach Label Report</span>
-                </div>
-            </a>
-            <a href="/anashHachayolReport.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/myshliach.png" height="32" alt="tickets"/>
-                    <span class="link-text">Anash Kinder Hachayol Report</span>
-                </div>
-            </a>
-            <a href="/anashHachayolLabels.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/myshliach.png" height="32" alt="tickets"/>
-                    <span class="link-text">Anash Kinder Label Report</span>
-                </div>
-            </a>
-        </div>
-        <h2>Other</h2>
-        <div id="action-links">
-            <a href="/raffles/shared/forms/winners_hachayol_form.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/icon_auction.png" height="32" alt="tickets"/>
-                    <span class="link-text">Raffle Winners</span>
-                </div>
-            </a>
-            <a href="hachayol_names.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/images/icon_admin_home.png" height="32" alt="tickets"/>
-                    <span class="link-text">Hachayol School Names</span>
-                </div>
-            </a>
-            <a href="/reports/ranks/rank_report.php<?=$debug ? "?debug=true": "";?>">
-                <div class="button">
-                    <img src="/mobile/img_new/calendar-color-gray-svg.svg" height="32" alt="tickets"/>
-                    <span class="link-text">Ranks Earned Between Dates</span>
-                </div>
-            </a>
-        </div>
+        <?php if ($admin_user['auth'] == 'super') {?>
+          <h2>Hachayol Shipping Reports</h2>
+          <div id="action-links">
+              <a href="/hachayol_report.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/cth_logo.png" height="32" alt="tickets"/>
+                      <span class="link-text">Hachayol Report</span>
+                  </div>
+              </a>
+              <a href="/hachayol_report_details.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/cth_logo.png" height="32" alt="tickets"/>
+                      <span class="link-text">Hachayol Detail Report</span>
+                  </div>
+              </a>
+              <a href="/reports/shipping/hachayols/<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/box.png" height="32" alt="tickets"/>
+                      <span class="link-text">Hachayol Shipping Report</span>
+                  </div>
+              </a>
+          </div>
+          <h2>MyShliach / Anash Kinder</h2>
+          <div id="action-links">
+              <a href="/myShliachHachayolReport.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/myshliach.png" height="32" alt="tickets"/>
+                      <span class="link-text">MyShliach Hachayol Report</span>
+                  </div>
+              </a>
+              <a href="/myShliachHachayolLabels.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/myshliach.png" height="32" alt="tickets"/>
+                      <span class="link-text">MyShliach Label Report</span>
+                  </div>
+              </a>
+              <a href="/anashHachayolReport.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/myshliach.png" height="32" alt="tickets"/>
+                      <span class="link-text">Anash Kinder Hachayol Report</span>
+                  </div>
+              </a>
+              <a href="/anashHachayolLabels.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/myshliach.png" height="32" alt="tickets"/>
+                      <span class="link-text">Anash Kinder Label Report</span>
+                  </div>
+              </a>
+          </div>
+          <h2>Other</h2>
+          <div id="action-links">
+              <a href="/raffles/shared/forms/winners_hachayol_form.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/icon_auction.png" height="32" alt="tickets"/>
+                      <span class="link-text">Raffle Winners</span>
+                  </div>
+              </a>
+              <a href="hachayol_names.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/images/icon_admin_home.png" height="32" alt="tickets"/>
+                      <span class="link-text">Hachayol School Names</span>
+                  </div>
+              </a>
+              <a href="/reports/ranks/rank_report.php<?=$debug ? "?debug=true": "";?>">
+                  <div class="button">
+                      <img src="/mobile/img_new/calendar-color-gray-svg.svg" height="32" alt="tickets"/>
+                      <span class="link-text">Ranks Earned Between Dates</span>
+                  </div>
+              </a>
+          </div>
         <?} // end admin only links ?>
         </div>
     </body>

@@ -116,7 +116,7 @@
     "items": [
       { "label": "Office Reports", "legacy": true, "path": "/reports/", "user_types": [ "HQ" ] },
       { "label": "Chayolei Shipping", "legacy": true, "path": "/chayolei_shipping/" },
-      { "label":  "Hachayol Report", "legacy":  true, "path": "/hachayol_report_details.php" },
+      { "label": "Hachayol Reports", "legacy":  true, "path": "/reports/hachayol/" },
       { "label": "Registered Report", "legacy": true, "path": "/registered_report.php" },
       { "label": "Parents Report", "legacy": true, "path": "/parent_report.php" },
       { "label": "Not Yet Registered Report", "legacy": true, "path": "/non_registered_report.php" },
