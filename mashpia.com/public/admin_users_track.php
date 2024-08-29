@@ -76,7 +76,7 @@ if (isset($_GETPOST['show']) && $_GETPOST['show'] == 'form') {
 }
 
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 // find out if we are in the week prior to shabbos mevorchim
 $jdNow = unixtojd();
