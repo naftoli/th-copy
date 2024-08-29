@@ -10,10 +10,11 @@ if ( $_SERVER['REQUEST_METHOD'] == "GET" ) {
        ." AND school_id NOT IN (61, 612, 269) " // remove 'unassigned school' and 'myshliach' and 'anash kinder'
        ." ORDER BY school_name;" // alphabetically
     );
+    json_response($schools_query);
 
-    $schools = fetch_results_assoc( $schools_query );
-    if ( $schools )
-        json_response( $schools );
-    else
-        render_json_error( "Could not load schools" );
+//    $schools = fetch_results_assoc( $schools_query );
+//    if ( $schools )
+//        json_response( $schools );
+//    else
+//        render_json_error( "Could not load schools" );
 }
