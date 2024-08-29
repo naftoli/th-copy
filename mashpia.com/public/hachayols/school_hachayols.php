@@ -136,60 +136,60 @@ foreach ($users as $school_id => $more) {
 <!---->
 <!--      const Table = () => {-->
 <!--        const schools = --><?php //= json_encode($schools) ?>//;
-<!--//        const users = --><?php ////= json_encode($users) ?><!--//;-->
-<!--//        const hachayols = --><?php ////= json_encode($hachayols) ?><!--//;-->
-<!--//-->
-<!--//        return (-->
-<!--//          {Object.keys(users).map(school_id => (-->
-<!--//            Object.keys(users[school_id]).map(grade => (-->
-<!--//              Object.keys(users[school_id][grade]).map(sub => (-->
-<!--//                <div style={{ pageBreakAfter: 'always' }}>-->
-<!--//                  <h3 className="mt-4">{schools[school_id]}</h3><hr />-->
-<!--//                  <table className="table table-striped">-->
-<!--//                    <thead>-->
-<!--//                      <tr>-->
-<!--//                        <th>Grade</th>-->
-<!--//                        <th>Hebrew Name</th>-->
-<!--//                        <th>Student</th>-->
-<!--//                        <th>Family ID</th>-->
-<!--//                        <th>Receives Hachayol</th>-->
-<!--//                        <th>Who gets Hachayol in Family</th>-->
-<!--//                      </tr>-->
-<!--//                    </thead>-->
-<!--//                    <tbody>-->
-<!--//                    {users[school_id][grade][sub].map(user) (-->
-<!--//                      <tr>-->
-<!--//                        <td>-->
-<!--//                          {grade}{sub ? '-' + sub : ''}-->
-<!--//                        </td>-->
-<!--//                        <td>-->
-<!--//                          {user.first_he} {user.last_he}-->
-<!--//                        </td>-->
-<!--//                        <td>-->
-<!--//                          {user.first} {user.last}-->
-<!--//                        </td>-->
-<!--//                        <td>-->
-<!--//                          {user.admin_id}-->
-<!--//                        </td>-->
-<!--//                        <td>-->
-<!--//                          {user.hachayol ? 'yes' : 'no'}-->
-<!--//                        </td>-->
-<!--//                        <td>-->
-<!--//                          {user.hachayol ? '' : hachayols[user.user_id].join('<br />')}-->
-<!--//                        </td>-->
-<!--//                      </tr>-->
-<!--//                    )}-->
-<!--//                    </tbody>-->
-<!--//                  </table>-->
-<!--//                </div>-->
-<!--//              ))-->
-<!--//            ))-->
-<!--//          ))}-->
-<!--//        )-->
-<!--//      }-->
-<!--//-->
-<!--//      const container = document.getElementById('main')-->
-<!--//      const root = createRoot(container)-->
-<!--//      root.render(<Table/>) // render the app-->
-<!--//    </script>-->
+<!--        const users = --><?php ////= json_encode($users) ?><!--//;-->
+<!--        const hachayols = --><?php ////= json_encode($hachayols) ?><!--//;-->
+<!---->
+<!--        return (-->
+<!--          {Object.keys(users).map(school_id => (-->
+<!--            Object.keys(users[school_id]).map(grade => (-->
+<!--              Object.keys(users[school_id][grade]).map(sub => (-->
+<!--                <div style={{ pageBreakAfter: 'always' }}>-->
+<!--                  <h3 className="mt-4">{schools[school_id]}</h3><hr />-->
+<!--                  <table className="table table-striped">-->
+<!--                    <thead>-->
+<!--                      <tr>-->
+<!--                        <th>Grade</th>-->
+<!--                        <th>Hebrew Name</th>-->
+<!--                        <th>Student</th>-->
+<!--                        <th>Family ID</th>-->
+<!--                        <th>Receives Hachayol</th>-->
+<!--                        <th>Who gets Hachayol in Family</th>-->
+<!--                      </tr>-->
+<!--                    </thead>-->
+<!--                    <tbody>-->
+<!--                    {users[school_id][grade][sub].map(user) (-->
+<!--                      <tr>-->
+<!--                        <td>-->
+<!--                          {grade}{sub ? '-' + sub : ''}-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                          {user.first_he} {user.last_he}-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                          {user.first} {user.last}-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                          {user.admin_id}-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                          {user.hachayol ? 'yes' : 'no'}-->
+<!--                        </td>-->
+<!--                        <td>-->
+<!--                          {user.hachayol ? '' : hachayols[user.user_id].join('<br />')}-->
+<!--                        </td>-->
+<!--                      </tr>-->
+<!--                    )}-->
+<!--                    </tbody>-->
+<!--                  </table>-->
+<!--                </div>-->
+<!--              ))-->
+<!--            ))-->
+<!--          ))}-->
+<!--        )-->
+<!--     }-->
+<!---->
+<!--      const container = document.getElementById('main')-->
+<!--      const root = createRoot(container)-->
+<!--      root.render(<Table/>) // render the app-->
+<!--    </script>-->
 </html>
