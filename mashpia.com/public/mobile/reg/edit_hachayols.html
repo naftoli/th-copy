@@ -73,6 +73,10 @@
       padding: 5px;
       line-height: 1.5;
     }
+    #purchase {
+      padding: 20px;
+      font-size: large;
+    }
   </style>
 </head>
 <body class="page-goals">
@@ -275,13 +279,13 @@
           $("button#purchase").attr('disabled',false); // allow button to be clicked again if needed
         } else {
           alert("Your payment has been received.\nYou have successfully updated your Hachayol settings.\nYou should be getting an email confirmation shortly.")
-          location.reload()
+          location.href = '/mobile'
         }
       } else {
         const hachayols = JSON.parse(await updateHachayols())
         if (hachayols.success) {
           alert('You have successfully updated your Hachayol Settings.')
-          location.reload()
+          location.href = '/mobile'
         }
         else alert(hachayols.error)
       }
