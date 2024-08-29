@@ -1859,9 +1859,9 @@
 				var dob = $("#dob").val();
 				var photo = $("#imgchild").attr('src');
 				if (photo == 'images/addphoto.png') {
-					photo = null;
-					//alert('You need to upload a photo.');
-					//return false;
+					// photo = null;
+					alert('You need to upload a photo.');
+					return false;
 				}
 				var lang = $("#lang").val();
 				var type = $("#type").val();
