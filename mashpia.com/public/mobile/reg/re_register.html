@@ -1161,7 +1161,7 @@
 								<div class="input-group">
 									<span class="input-group-addon"><img
 											src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-									<input id="firstname" name="firstname" type="text" class="form-control"
+									<input id="firstname" name="firstname" type="text" class="form-control" pattern='^[a-zA-Z]{2,128}$'
 										data-key="FirstName" placeholder="first name" required>
 								</div>
 								<!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
@@ -1177,7 +1177,7 @@
 								<div class="input-group">
 									<span class="input-group-addon"><img
 											src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-									<input id="lastname" name="lastname" type="text" class="form-control"
+									<input id="lastname" name="lastname" type="text" class="form-control" pattern='^[a-zA-Z]{2,128}$'
 										data-key="LastName" placeholder="last name" required>
 								</div>
 								<!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
@@ -1189,11 +1189,11 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<label for="fhname" class="i18n" data-key="FirstNameHe">First Name in Hebrew</label>
-							<div class="form-group has-feedback" id="divenname">
+							<div class="form-group has-feedback" id="divfirsthename">
 								<div class="input-group">
 									<span class="input-group-addon"><img
 											src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-									<input id="fhname" name="fhname" type="text" class="form-control keyboardInput"
+									<input id="fhname" name="fhname" type="text" class="form-control keyboardInput" pattern='^[^a-zA-Z]{2,128}$'
 										data-key="FirstNameHe" placeholder="first name hebrew letters" required>
 								</div>
 								<!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
@@ -1205,11 +1205,11 @@
 					<div class="row">
 						<div class="col-xs-12">
 							<label for="lhname" class="i18n" data-key="LastNameHe">Last Name in Hebrew</label>
-							<div class="form-group has-feedback" id="divenname">
+							<div class="form-group has-feedback" id="divlasthename">
 								<div class="input-group">
 									<span class="input-group-addon"><img
 											src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-									<input id="lhname" name="lhname" type="text" class="form-control keyboardInput"
+									<input id="lhname" name="lhname" type="text" class="form-control keyboardInput" pattern='^[^a-zA-Z]{2,128}$'
 										data-key="LastNameHe" placeholder="last name hebrew letters" required>
 								</div>
 								<!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
