@@ -8,7 +8,7 @@ class Hachayol {
     private $chidonYear;
     private $chidonNumbers;
     private $schoolExceptions;
-    
+
     public function __construct() {
         require_once 'class.db.php';
         $this->db = DB::getInstance();
@@ -17,9 +17,10 @@ class Hachayol {
         $this->chidonYear = GlobalSettings::getRegistrationYear();
         $this->chidonNumbers = array();
         $this->schoolExceptions = [55, 66, 110, 112, 180, 256, 584, 585, 588, 612, 432, 713, 709, 427, 434, 690, 480];
+        $this->testSchools = false;
     }
     
-    public function setSchools( $id = null ) {
+    public function setSchools( $id = null, $test_school = false ) {
         //get list of schools with totals per school of registered students
         $sql = "SELECT s.school_id, s.school_name, s.hachayol_name, count( u.user_id ) AS total, s.shipping_address1, s.shipping_address2, 
                     s.shipping_city, s.shipping_state, s.shipping_country, s.shipping_postal, s.shipping_method, s.principal, 
@@ -29,8 +30,9 @@ class Hachayol {
                 JOIN users u
                 USING ( school_id )
                 WHERE u.user_registered > 0 
-                AND u.hachayol = 1 
-                AND s.test_school = 0 ";
+                AND u.hachayol = 1 ";
+        if ( $test_school ) $sql .= "AND s.test_school = 1 ";
+        else $sql .= "AND s.test_school = 0 ";
         if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
         $sql .= " AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")";
         $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";

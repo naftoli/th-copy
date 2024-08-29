@@ -38,8 +38,13 @@ if ( $admin->auth == 'super' ) {
     $h->setSchools();    
     $h->setSchoolDetails();
 } else {
-    $h->setSchools( $admin->school_id );
-    $h->setSchoolDetails( $admin->school_id );
+    if (isset($_GET['test_school']) && $_GET['test_school'] == 1) {
+        $h->setSchools( $admin->school_id, true );
+        $h->setSchoolDetails( $admin->school_id );
+    } else {
+        $h->setSchools( $admin->school_id );
+        $h->setSchoolDetails( $admin->school_id );
+    }
 }
 
 $schools = $h->getSchools();
