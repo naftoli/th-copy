@@ -105,7 +105,7 @@ class Installments
         $subscription->setName("Subscription for " . $this->cp->description);
 
         $interval = new AnetAPI\PaymentScheduleType\IntervalAType();
-        $interval->setLength($numInstallments);
+        $interval->setLength(1);
         $interval->setUnit("months");
 
         $paymentSchedule = new AnetAPI\PaymentScheduleType();

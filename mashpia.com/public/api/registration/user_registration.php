@@ -12,8 +12,8 @@ use PHPMailer\PHPMailer\PHPMailer as PHPMailer;
 use PHPMailer\PHPMailer\SMTP as SMTP;
 use PHPMailer\PHPMailer\Exception as Exception;
 
-//require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/Installments.php'; // for subscriptions
-//use classes\authorize\Installments as Installments;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/Installments.php'; // for subscriptions
+use classes\authorize\Installments as Installments;
 
 class UserRegistrationRouter {
     // parents only
@@ -153,8 +153,9 @@ class UserRegistrationRouter {
         /******************************** PAYMENT ********************************/
         $installmentsCreated = false;
         $trans_id = 0;
-        if (isset($_COOKIE['naftoli'])) {}
-        else if ( $total != 0 ) {
+//        if (isset($_COOKIE['naftoli'])) {}
+//        else if ( $total != 0 ) {
+        if ( $total != 0 ) {
             $customer_profile = $admin->customerProfile();
             // if we have a payment profile provided
             if ( isset($payment_info['payment_profile']) && $payment_info['payment_profile'] )
