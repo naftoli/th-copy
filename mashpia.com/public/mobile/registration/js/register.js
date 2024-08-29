@@ -2009,8 +2009,7 @@ var registrationApp = function () {
       event.target.checkValidity();
       $(event.target).addClass('was-validated');
     }
-    // postData.payment['installments'] = $(".installments:checked").val()
-    postData.payment['installments'] = 0
+    postData.payment['installments'] = $(".installments:checked").val()
     postData.cart = state.cart.map(function (item) {
       return item.meta
     })
@@ -2772,25 +2771,25 @@ var templates = function () {
         }
       });
       // add future payment options
-      // if (futurePayment) {
-      //     $("#charges").append( '<div class="row total-row">' +
-      //       '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
-      //       '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
-      //       + "</div>" );
-      //     $("#charges").append( '<div class="row total-row">' +
-      //       '<div class="col-9 col-md-10"><strong>Eligible for installments</strong></div>' +
-      //       '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
-      //       + "</div>" );
-      //     // update amounts to be charged in installments
-      //     $("#earlyRegTotal").text(futurePayment.toFixed(2))
-      //     $("#earlyRegOne").text(futurePayment.toFixed(2))
-      //     const two = (futurePayment / 2).toFixed(2)
-      //     const three = (futurePayment / 3).toFixed(2)
-      //     const four = (futurePayment / 4).toFixed(2)
-      //     $("#earlyRegTwo").text(two)
-      //     $("#earlyRegThree").text(three)
-      //     $("#earlyRegFour").text(four)
-      // }
+      if (futurePayment) {
+          $("#charges").append( '<div class="row total-row">' +
+            '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
+            '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
+            + "</div>" );
+          $("#charges").append( '<div class="row total-row">' +
+            '<div class="col-9 col-md-10"><strong>Eligible for installments</strong></div>' +
+            '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
+            + "</div>" );
+          // update amounts to be charged in installments
+          $("#earlyRegTotal").text(futurePayment.toFixed(2))
+          $("#earlyRegOne").text(futurePayment.toFixed(2))
+          const two = (futurePayment / 2).toFixed(2)
+          const three = (futurePayment / 3).toFixed(2)
+          const four = (futurePayment / 4).toFixed(2)
+          $("#earlyRegTwo").text(two)
+          $("#earlyRegThree").text(three)
+          $("#earlyRegFour").text(four)
+      }
       // add the total row
       var text = "Total Balance";
       if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') text = "איזון כולל";
