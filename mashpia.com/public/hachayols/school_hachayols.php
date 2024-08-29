@@ -135,7 +135,7 @@ foreach ($users as $school_id => $more) {
 <!--      const { createRoot } = ReactDOM-->
 <!---->
 <!--      const Table = () => {-->
-<!--        const schools = --><?php //= json_encode($schools) ?>//;
+<!--        const schools = --><?php //= json_encode($schools) ?><!--//;-->
 <!--        const users = --><?php ////= json_encode($users) ?><!--//;-->
 <!--        const hachayols = --><?php ////= json_encode($hachayols) ?><!--//;-->
 <!---->
