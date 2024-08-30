@@ -140,7 +140,7 @@ class UserRegistrationRouter {
                 // we have an error and need to stop registration
                 json_error("There is an error in the amount being paid. please try again.");
             }
-            if (! in_array($reg['user_id'], $user_ids)) $user_ids[] = $reg['user_id'];
+            if (isset($reg['user_id']) && !in_array($reg['user_id'], $user_ids)) $user_ids[] = $reg['user_id'];
         }
 
         // * get all the user models
