@@ -94,7 +94,7 @@ class Installments
         $this->total_amount = $amount;
         $this->number_of_installments = $numInstallments;
         $this->installment_amount = round(floatval($amount / $numInstallments), 2);
-        $this->start_date = date('Y-m-d', strtotime("+1 month"));
+        if (!$start_date) $start_date = date('Y-m-d', strtotime("+1 month"));
 
         $merchantAuthentication = $this->setAuth();
         // Set the transaction's refId
