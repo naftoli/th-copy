@@ -1576,8 +1576,9 @@ var registrationApp = function () {
       amount -= personalized_amount
 
       // add to cart
-      const family_id = selected_user.parentAccount.admin_id
       const trackCode = 'RRFAM-'
+      const family_id = selected_user.parentAccount.admin_id
+      const index = state.users.findIndex(user => user.user_id === selected_user.user_id)
       state.cart.push({
         description: state.users[index].parentAccount.last + " Family Chidon Pre-Registration Payment",
         price: amount,
