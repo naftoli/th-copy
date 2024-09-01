@@ -1578,7 +1578,7 @@ var registrationApp = function () {
           type: 'advance registration',
           registration_type: 'chidon',
           paid: amount,
-          admin_id: family_id,
+          user_id: current_user,
           code: "F" + family_id + ":" + trackCode + amount,
           codeOnly: trackCode.substring(0, trackCode.length - 1)
         }
