@@ -470,9 +470,9 @@ class UserRegistrationRouter {
 
             // send email to parents
             if (! empty($itemsForEmail)) {
-                $sent = $this->sendEmailToParents($itemsForEmail);
-                if ($sent) json_response("Successfully Registered.");
-                // otherwise the error message comes from the email function
+                $error = $this->sendEmailToParents($itemsForEmail);
+                if ($error) json_response($error);
+                else json_response("Successfully Processed. You should be receiving a confirmation email shortly.");
             } else {
                 json_response("Successfully Processed.");
             }
@@ -567,7 +567,6 @@ class UserRegistrationRouter {
 
         $total_amount = 0;
         $pre_reg_amount = 0;
-        $pre_reg_details = [];
         $pre_reg_prize_amount = 0;
         foreach ($items as $details) {
             $name = $details[0]['first'] . ' ' . $details[0]['last'];
@@ -733,7 +732,6 @@ Tzivos Hashem HQ</body></html>";
         global $current_user, $MASHPIA_DB;
         $admin = $current_user; // $current_user global gets overwritten by wp
         $to = $admin->admin_email;
-        $success = true;
 
         if ( $to ) {
             [$subject, $message] = $this->getInfoForEmail($items);
@@ -768,15 +766,12 @@ Tzivos Hashem HQ</body></html>";
                     $mailer->addAddress($to);
                     $mailer->setFrom('dev@tzivoshashem.org', 'Tzivos Hashem HQ');
                     if (! $mailer->send()) {
-                        $success = false;
-                        json_error('Your information has been saved but there was an error sending the confirmation email.\nError: ' . $mailer->ErrorInfo);
-                        $mailer->clearAddresses();
-                        $mailer->addAddress($bcc);
-                        $mailer->send();
+                        $error = 'Your information has been saved but there was an error sending the confirmation email.\nError: ' . $mailer->ErrorInfo;
+                        return $error;
                     }
                 } catch (Exception $e) {
-                    $success = false;
-                    json_error('Your information has been saved but there was an error sending the confirmation email.\nError: ' . $e->getMessage() . "\n" . $mailer->ErrorInfo);
+                    $error = 'Your information has been saved but there was an error sending the confirmation email.\nError: ' . $e->getMessage() . "\n" . $mailer->ErrorInfo;
+                    return $error;
                 }
             } else {
                 $headers[] = 'MIME-Version: 1.0';
@@ -784,7 +779,6 @@ Tzivos Hashem HQ</body></html>";
                 $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
                 $headers[] = "Bcc: " . $bcc;
                 if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
-                    $success = false;
                     $msg = "Your information has been saved but there was an error sending the confirmation email.\n
                         Please contact HQ (718-907-8884) to check that your information was saved correctly.";
                     json_error($msg);
@@ -792,10 +786,10 @@ Tzivos Hashem HQ</body></html>";
                 }
             }
         } else {
-            $success = false;
-            json_error('Your information has been saved but there was an error sending the confirmation email.\nNo email address found for this account.');
+            $error = 'Your information has been saved but there was an error sending the confirmation email.\nNo email address found for this account.';
+            return $error;
         }
-        return $success;
+        return 0; // no error
     }
 }
 
