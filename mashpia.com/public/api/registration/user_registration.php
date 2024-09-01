@@ -151,8 +151,8 @@ class UserRegistrationRouter {
         $MASHPIA_DB->beginTransaction();
 
         /******************************** PAYMENT ********************************/
-        $installmentID = 0;
-        $installmentAmount = 0;
+        $installmentsID = 0;
+        $installmentsAmount = 0;
         $installmentsCreated = false;
         $trans_id = 0;
 //        if (isset($_COOKIE['naftoli'])) {}
@@ -179,7 +179,7 @@ class UserRegistrationRouter {
                     if ($reg['type'] == 'advance registration') $amount += intval($reg['paid']);
                 }
                 if ($amount) {
-                    $installmentAmount = $amount;
+                    $installmentsAmount = $amount;
                     // create installments (called subscriptions in authorize)
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id, true, isset($payment_info['payment_profile']));
@@ -190,7 +190,7 @@ class UserRegistrationRouter {
                         } else {
                             $total -= $amount; // subtract amount from total
                             $installmentsCreated = true;
-                            $installmentID = $subscription->getSubscriptionId();
+                            $installmentsID = $subscription->getSubscriptionId();
                             $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
                             if (!$saved) {
                                 $subscription->cancelSubscription();
@@ -423,10 +423,7 @@ class UserRegistrationRouter {
                             // add to email array
                             $itemsForEmail[$user_id][] = [
                                 'code'      => $code,
-                                'installment_id' => $installmentID,
-                                'installment'=> $installmentsCreated,
-                                'num_installments' => $installments,
-                                'amount'    => $installmentAmount > 0 ? $installmentAmount : $amount,
+                                'amount'    => $amount,
                                 'trans_id'  => $trans_id,
                                 'year'      => $chidonYr
                             ];
@@ -514,7 +511,7 @@ class UserRegistrationRouter {
     }
 
     private function getInfoForEmail($items) {
-        global $MASHPIA_DB;
+        global $MASHPIA_DB, $installments, $installmentsID, $installmentsAmount, $installmentsCreated;
 
         // get chidon prize name
         $stmt = $MASHPIA_DB->prepare("select prize_name from chidon_prizes where prize_id = ?");
@@ -618,7 +615,6 @@ class UserRegistrationRouter {
                         break;
                     case 'RRFAM':
                         $pre_reg_amount = $detail['amount'];
-                        $pre_reg_details = $detail;
                         break;
                     default:
                         $message .= "</p>";
@@ -691,9 +687,9 @@ class UserRegistrationRouter {
 
             if ($pre_reg_amount) {
                 $message .= "<p><b>Pre Registration Payment</b>";
-                if ($pre_reg_details['installment']) {
-                    $message .= "<br />You are paying $" . $pre_reg_amount . " toward's your family's registration in " . $pre_reg_details['num_installments'] . " installments.";
-                    $message .= "<br />Your Authorize.net Installment ID is: " . $pre_reg_details['installment_id'] . "</p>";
+                if ($installmentsCreated) {
+                    $message .= "<br />You are paying $" . $pre_reg_amount . " toward's your family's registration in " . $installments . " installments.";
+                    $message .= "<br />Your Authorize.net Installment ID is: " . $installmentsID . "</p>";
                 } else {
                     $message .= "<br />You paid $" . $pre_reg_amount . " toward's your family's registration.</p>";
                 }
