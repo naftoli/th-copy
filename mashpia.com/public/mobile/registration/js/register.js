@@ -1447,6 +1447,13 @@ var registrationApp = function () {
           setTimeout(function () {
             alert('Error adding hebrew name')
           }, 0)
+        } else {
+          if (parseInt($("#chidon-reg").val()) == 0) {
+            alert("You have selected a prize with your child\'s name on it so you will need to pre-pay the prize value of this prize " +
+              "NOW instead of during the Chidon Experience Registration. If your child does NOT earn their prize, you will NOT be refunded this charge. " +
+              "If your child DOES pass, this money is automatically applied towards this child’s registration fee.\nIf you would like, you can go back " +
+              "and remove the name from the prize or choose a different prize so that you don\'t need to prepay anything now. ")
+          }
         }
       })
     })
@@ -1519,7 +1526,7 @@ var registrationApp = function () {
 
       let html = `
                 <div class="col-12" style="padding: 10px 20px;">
-                    Please choose the amount that you would like to prepay for Chidon Registration.<br />
+                  Please choose the amount you would like to pre-pay towards your family’s account for Chidon Registration<br/>
                     <select id="chidonReg" class="form-control" style="margin-top: 10px;">
                       <option value="0">Choose Amount</option>
                       ${options.map(o => `<option value="${o}">$${o}</option>`).join('')}
@@ -1572,7 +1579,7 @@ var registrationApp = function () {
       const family_id = selected_user.parentAccount.admin_id
       const trackCode = 'RRFAM-'
       state.cart.push({
-        description: selected_user.first + " Chidon Pre-Registration Payment",
+        description: state.users[index].parentAccount.last + " Family Chidon Pre-Registration Payment",
         price: amount,
         meta: {
           type: 'advance registration',
@@ -1673,7 +1680,7 @@ var registrationApp = function () {
 
         // add to cart
         state.cart.push({
-          description: selected_user.first + " Early Chidon Payment for Personalized Prize",
+          description: selected_user.first + " Early Chidon Payment for Personalized Prize (Non-Refundable)",
           price: amount,
           meta: {
             type: 'advanced prize payment',
@@ -1777,7 +1784,7 @@ var registrationApp = function () {
           const exists = state.cart.filter(item => item.meta.codeOnly === shipCode.substring(0, shipCode.length - 1))
           if (!exists.length) {
             state.cart.push({
-              description: "Early Chidon Registration Shipping",
+              description: state.users[index].parentAccount.last + " Family Early Chidon Registration Shipping",
               price: shipping ? shippingFee : 0,
               meta: {
                 type: 'advance registration',

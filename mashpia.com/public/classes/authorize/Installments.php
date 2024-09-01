@@ -155,6 +155,10 @@ class Installments
         return $res;
     }
 
+    public function getSubscriptionId() {
+        return $this->subscription_id;
+    }
+
     public function removeFromDb($dbHandle) {
         $stmt = $dbHandle->prepare("DELETE FROM `th_chidon_installments` WHERE `subscription_id` = ?");
         $res = $stmt->execute([$this->subscription_id]);

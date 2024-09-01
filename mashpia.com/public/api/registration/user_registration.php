@@ -151,6 +151,8 @@ class UserRegistrationRouter {
         $MASHPIA_DB->beginTransaction();
 
         /******************************** PAYMENT ********************************/
+        $installmentID = 0;
+        $installmentAmount = 0;
         $installmentsCreated = false;
         $trans_id = 0;
 //        if (isset($_COOKIE['naftoli'])) {}
@@ -177,6 +179,7 @@ class UserRegistrationRouter {
                     if ($reg['type'] == 'advance registration') $amount += intval($reg['paid']);
                 }
                 if ($amount) {
+                    $installmentAmount = $amount;
                     // create installments (called subscriptions in authorize)
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id, true, isset($payment_info['payment_profile']));
@@ -187,6 +190,7 @@ class UserRegistrationRouter {
                         } else {
                             $total -= $amount; // subtract amount from total
                             $installmentsCreated = true;
+                            $installmentID = $subscription->getSubscriptionId();
                             $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
                             if (!$saved) {
                                 $subscription->cancelSubscription();
@@ -412,7 +416,21 @@ class UserRegistrationRouter {
                     } else {
                         $yr = $chidonYr;
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
-                        if ($code === 'RRFAM') $user->familyCharge($amount, $trans_id, $chidonYr);
+                        if ($code === 'RRFAM') {
+                            // only enter charge into system if it was done now, not through installments
+                            if (!$installmentsCreated)
+                                $user->familyCharge($amount, $trans_id, $chidonYr);
+                            // add to email array
+                            $itemsForEmail[$user_id][] = [
+                                'code'      => $code,
+                                'installment_id' => $installmentID,
+                                'installment'=> $installmentsCreated,
+                                'num_installments' => $installments,
+                                'amount'    => $installmentAmount > 0 ? $installmentAmount : $amount,
+                                'trans_id'  => $trans_id,
+                                'year'      => $chidonYr
+                            ];
+                        }
                         else $user->registrationCharge($code, $amount, $trans_id, $chidonYr);
                         switch ($code) {
                             case 'KHKE':
@@ -552,6 +570,8 @@ class UserRegistrationRouter {
 
         $total_amount = 0;
         $pre_reg_amount = 0;
+        $pre_reg_details = [];
+        $pre_reg_prize_amount = 0;
         foreach ($items as $details) {
             $name = $details[0]['first'] . ' ' . $details[0]['last'];
             $chidonReg = false;
@@ -594,7 +614,11 @@ class UserRegistrationRouter {
                     case 'RRYDA':
                     case 'RRHVN':
                     case 'RRKHK':
-                        $pre_reg_amount += $detail['amount'];
+                        $pre_reg_prize_amount += $detail['amount'];
+                        break;
+                    case 'RRFAM':
+                        $pre_reg_amount = $detail['amount'];
+                        $pre_reg_details = $detail;
                         break;
                     default:
                         $message .= "</p>";
@@ -658,11 +682,19 @@ class UserRegistrationRouter {
             }
             $message .= ", depending on the track passed on the tests.</p>";
 
+            if ($pre_reg_prize_amount) {
+                $message .= "<p><b>Pre Registration Prize Payment</b>";
+                $message .= "<br />You paid $" . $pre_reg_prize_amount . " for your presonalized prize. It will be applied towards your registration.</p>";
+            }
+
             if ($pre_reg_amount) {
                 $message .= "<p><b>Pre Registration Payment</b>";
-                $message .= "<br />You have already paid $" . $pre_reg_amount . " towards your registration.";
-                $message .= " If you end up needing to pay less, you will be able to get a refund. If you need to pay more, 
-                    you will be able to pay the difference during Reward Registration at the end.</p>";
+                if ($pre_reg_details['installment']) {
+                    $message .= "<br />You are paying $" . $pre_reg_amount . " toward's your family's registration in " . $pre_reg_details['num_installments'] . " installments.";
+                    $message .= "<br />Your Authorize.net Installment ID is: " . $pre_reg_details['installment_id'] . "</p>";
+                } else {
+                    $message .= "<br />You paid $" . $pre_reg_amount . " toward's your family's registration.</p>";
+                }
             }
             $message .= "</blockquote>";
         }
