@@ -84,6 +84,7 @@ class Installments
 
         $controller = new AnetController\UpdateCustomerPaymentProfileController($request);
         $response = $controller->executeWithApiResponse($this->endpoint);
+        echo "<pre>"; print_r($response); echo "</pre>";
 
         $res = $this->parseResponse($response);
         if (strpos($res, "Success") !== false) return true;
