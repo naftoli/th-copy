@@ -687,7 +687,7 @@ class UserRegistrationRouter {
             if ($pre_reg_amount) {
                 $message .= "<p><b>Pre Registration Payment</b>";
                 if ($installmentsCreated) {
-                    $message .= "<br />You are paying $" . $pre_reg_amount . " toward's your family's registration in " . $installments . " installments.";
+                    $message .= "<br />You are paying $" . $installmentsAmount . " toward's your family's registration in " . $installments . " installments.";
                     $message .= "<br />Your Authorize.net Installment ID is: " . $installmentsID . "</p>";
                 } else {
                     $message .= "<br />You paid $" . $pre_reg_amount . " toward's your family's registration.</p>";
