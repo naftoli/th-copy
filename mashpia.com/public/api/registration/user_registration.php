@@ -472,9 +472,9 @@ class UserRegistrationRouter {
             if (! empty($itemsForEmail)) {
                 $error = $this->sendEmailToParents($itemsForEmail);
                 if ($error) json_response($error);
-                else json_response("Successfully Processed. You should be receiving a confirmation email shortly.");
+                else json_response("Successfully Enrolled. You should be receiving a confirmation email shortly.");
             } else {
-                json_response("Successfully Processed.");
+                json_response("Successfully Enrolled.");
             }
         } catch ( Exception $e ) {
             $MASHPIA_DB->rollBack();
