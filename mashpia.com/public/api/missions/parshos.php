@@ -1,6 +1,5 @@
 <?php
 include_once( __DIR__ . "/../header/header.php" );
-include_once( __DIR__ . "/../header/db.php" );
 
 class ParshaRouter {
 
