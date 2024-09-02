@@ -22,12 +22,12 @@ function getDbHandle() {
 
 function getChidonYear() {
     require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-    return GlobalSettings::getChidonYear();
+    return GlobalSettings::getChidonRegYear();
 }
 
 function getChayoleiYear() {
     require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-    return GlobalSettings::getCurrentYear();
+    return GlobalSettings::getRegistrationYear();
 }
 
 function getSchools() {
