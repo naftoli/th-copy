@@ -2140,7 +2140,7 @@ var registrationApp = function () {
         $("#successModal").modal('show')
       } else {
         showError(data.error);
-        $("#payment-button").attr('disabled', false)
+        $("#payment-button").removeAttr('disabled')
       }
     });
   }
