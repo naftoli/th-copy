@@ -686,7 +686,7 @@ class UserRegistrationRouter {
             $message .= "</blockquote>";
         }
         $message .= "<p>Total Charged: $" . $total_charge . "</p>";
-        $message .= "<p>Transaction ID: " . $trans_id . "</p>";
+        $message .= "<p>Transaction ID #: " . $trans_id . "</p>";
 
         // link for whatsapps
         if (!empty($grade) || $khk) {
