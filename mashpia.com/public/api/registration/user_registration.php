@@ -470,7 +470,7 @@ class UserRegistrationRouter {
 
             // send email to parents
             if (! empty($itemsForEmail)) {
-                $error = $this->sendEmailToParents($itemsForEmail);
+                $error = $this->sendEmailToParents($itemsForEmail, $total);
                 if ($error) json_response($error);
                 else json_response("Successfully Enrolled. You should be receiving a confirmation email shortly.");
             } else {
@@ -499,18 +499,7 @@ class UserRegistrationRouter {
         }, $users );
     }
 
-    private function sendRegEmail($user, $chidonYr) {
-        // send email to anash kinder about registration
-        $headers[] = 'MIME-Version: 1.0';
-        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-        $headers[] = 'From: HQ Office <admin@tzivoshashem.org>';
-        $subject = "New Chayolei Registration";
-        $to = 'anash@tzivoshashem.org';
-        $msg = $user->first . ' ' . $user->last . '(User ID: ' . $user->user_id . ') just registered for chayolei tzivos hashem for the year of ' . $chidonYr;
-        return mail($to, $subject, $msg, implode("\r\n", $headers));
-    }
-
-    private function getInfoForEmail($items) {
+    private function getInfoForEmail($items, $total_charge) {
         global $MASHPIA_DB, $installments, $installmentsID, $installmentsAmount, $installmentsCreated;
 
         // get chidon prize name
@@ -565,7 +554,6 @@ class UserRegistrationRouter {
         }
         $message .= "<p>Below is a summary of your enrollment(s):</p>";
 
-        $total_amount = 0;
         $pre_reg_amount = 0;
         $pre_reg_prize_amount = 0;
         foreach ($items as $details) {
@@ -576,10 +564,9 @@ class UserRegistrationRouter {
             $message .= "<h3>" . $name . "</h3>";
             $message .= "<blockquote>";
             foreach ($details as $detail) {
-                $total_amount += floatval($detail['amount']);
                 if ($detail['code'] == 'THE' || strpos($detail['code'], 'LDE') !== false)
                     $message .= "<p><b>" . ChidonShipping::getDescription($detail['code']) . '</b>: $' . $detail['amount'];
-                else
+                else if ($detail['code'] !== 'RRFAM')
                     $message .= "<p>" . ChidonShipping::getDescription($detail['code']) . ': $' . $detail['amount'];
                 switch ($detail['code']) {
                     case 'THE':
@@ -604,7 +591,10 @@ class UserRegistrationRouter {
                     case 'YB3':
                     case 'YB4':
                     case 'YB5':
-                        $message .= "<br />The book will be shipped to your school.</p>";
+                        if (in_array($detail['school'], [61, 269]))
+                            $message .= "<br />The book will be shipped to your home.</p>";
+                        else
+                            $message .= "<br />The book will be shipped to your school.</p>";
                         break;
                     case 'RRYSD':
                     case 'RRYDA':
@@ -695,7 +685,7 @@ class UserRegistrationRouter {
             }
             $message .= "</blockquote>";
         }
-        $message .= "<p>Total Charged: $" . $total_amount . "</p>";
+        $message .= "<p>Total Charged: $" . $total_charge . "</p>";
         $message .= "<p>Transaction ID: " . $trans_id . "</p>";
 
         // link for whatsapps
@@ -728,13 +718,13 @@ Tzivos Hashem HQ</body></html>";
         return [$subject, $message];
     }
 
-    private function sendEmailToParents($items) {
-        global $current_user, $MASHPIA_DB;
+    private function sendEmailToParents($items, $total) {
+        global $current_user;
         $admin = $current_user; // $current_user global gets overwritten by wp
         $to = $admin->admin_email;
 
         if ( $to ) {
-            [$subject, $message] = $this->getInfoForEmail($items);
+            [$subject, $message] = $this->getInfoForEmail($items, $total);
             $bcc = "enrollment@mashpia.com";
 //                $headers[] = "Bcc: " . $bcc;
             if (in_array($_SERVER['HTTP_HOST'], ['tzivos.local', 'localhost'])) {
