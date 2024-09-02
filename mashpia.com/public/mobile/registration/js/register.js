@@ -73,7 +73,7 @@ var registrationApp = function () {
   var Msg3 = "CKids Enrollment for ";
   var Msg4 = "Chidon Enrollment for ";
   var Msg5 = " (includes coordinator and study guide)";//
-  var Msg6 = "Yahadus Book for ";
+  var Msg6 = "Yahadus Book ";
   var Msg7 = " (Shipping Included)";
   var Msg8 = "To Enroll for MyShliach's online weekly classes please click ";
   var Msg9 = "here";
@@ -1151,6 +1151,9 @@ var registrationApp = function () {
       var shipping_included = selected_user.school.shipping_method !== 'pickup';
       var shipping_charge = 0;
       var cost = 45
+      const currentDateTime = new Date();
+      const otherDateTime = new Date("2024-09-17T00:00:00");
+      if (currentDateTime < otherDateTime) cost = 40
       if (selected_user.school.school_id == anash_kinder) {
         shipping_included = true; // override for anash kinder to make sure shipping is being charged
         if (usa.includes(selected_user.parentAccount.admin_country)) shipping_charge = 15;
@@ -1168,7 +1171,7 @@ var registrationApp = function () {
       //     ( [ 269, 61 ].includes( selected_user.school.school_id ) && selected_user.parentAccount.admin_country.toUpperCase() == 'USA' )
       // ) {
       state.cart.push({
-        description: Msg6 + selected_user.first + (shipping_included ? Msg7 : ''),
+        description: Msg6 + $("select#chidon-book").val() + ' for ' + selected_user.first + (shipping_included ? Msg7 : ''),
         price: shipping_included ? (cost + shipping_charge) : cost,
         meta: {
           type: 'registration',
@@ -1526,6 +1529,9 @@ var registrationApp = function () {
 
       let html = `
                 <div class="col-12" style="padding: 10px 20px;">
+                  Important Note: This amount is on top of any personlized item chosen during prize selection - as that amount is non-refundable and will be due today.<br/>
+                  Example: If you plan to pass Havonah which will be $200 at Registeration, and you chose a $75 personalized item, 
+                  you would only need to pay at Registeration $125, so the amount you choose to prepay should reflect that amount.<br /><br/>
                   Please choose the amount you would like to pre-pay towards your family’s account for Chidon Registration<br/>
                     <select id="chidonReg" class="form-control" style="margin-top: 10px;">
                       <option value="0">Choose Amount</option>
@@ -1575,22 +1581,24 @@ var registrationApp = function () {
       let personalized_amount = checkPersonalizedPrize()
       amount -= personalized_amount
 
-      // add to cart
-      const trackCode = 'RRFAM-'
-      const family_id = selected_user.parentAccount.admin_id
-      const index = state.users.findIndex(user => user.user_id === selected_user.user_id)
-      state.cart.push({
-        description: state.users[index].parentAccount.last + " Family Chidon Pre-Registration Payment",
-        price: amount,
-        meta: {
-          type: 'advance registration',
-          registration_type: 'chidon',
-          paid: amount,
-          user_id: current_user,
-          code: "F" + family_id + ":" + trackCode + amount,
-          codeOnly: trackCode.substring(0, trackCode.length - 1)
-        }
-      })
+      if (amount > 0) {
+        // add to cart
+        const trackCode = 'RRFAM-'
+        const family_id = selected_user.parentAccount.admin_id
+        const index = state.users.findIndex(user => user.user_id === selected_user.user_id)
+        state.cart.push({
+          description: state.users[index].parentAccount.last + " Family Chidon Pre-Registration Payment",
+          price: amount,
+          meta: {
+            type: 'advance registration',
+            registration_type: 'chidon',
+            paid: amount,
+            user_id: current_user,
+            code: "F" + family_id + ":" + trackCode + amount,
+            codeOnly: trackCode.substring(0, trackCode.length - 1)
+          }
+        })
+      }
 
       chidonPayment[current_user] = true
       nextStep()
@@ -2401,7 +2409,7 @@ var templates = function () {
       }
 
       var bookHtml = "<option value='0'>Please choose</option>"
-      let maxBook = parseInt(user.regYears.chidon) - 3762
+      let maxBook = parseInt(user.regYears.chidon) - 3761
       for (var i = 2011; i <= maxBook; i++) {
         bookHtml += `<option value='${i}'>${i}</option>`
       }
@@ -2798,12 +2806,12 @@ var templates = function () {
           $("#earlyRegFour").text(four)
       }
       // add the total row
-      var text = "Total Balance";
-      if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') text = "איזון כולל";
-      $("#charges").append('<div class="row total-row">' +
-        '<div class="col-9 col-md-10"><strong>' + text + '</strong></div>' +
-        '<div class="col-3 col-md-2 reg_cost">$' + total + '</div>'
-        + "</div>");
+      // var text = "Total Balance";
+      // if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') text = "איזון כולל";
+      // $("#charges").append('<div class="row total-row">' +
+      //   '<div class="col-9 col-md-10"><strong>' + text + '</strong></div>' +
+      //   '<div class="col-3 col-md-2 reg_cost">$' + total + '</div>'
+      //   + "</div>");
       $("#total").val(total);
     },
     toggleNewCard: function (required) {
