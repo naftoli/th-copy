@@ -12,7 +12,6 @@ class ParshaRouter {
                 'end <= ' . $dates['end'],
             ]
         ]);
-        echo "<pre>"; print_r($parshos); echo "</pre>";
         json_response( $parshos, true, true );
     }
 }
