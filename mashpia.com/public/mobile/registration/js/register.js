@@ -203,9 +203,9 @@ var registrationApp = function () {
     });
   }
 
-  function setupNonThSchoolList() {
+  async function setupNonThSchoolList() {
     // setup non th school list
-    $.post('api/getNonThSchools.php', function (result) {
+    await $.post('api/getNonThSchools.php', function (result) {
       const res = JSON.parse(result)
       non_th_schools = res
       const sorted = sortByVal(res)
