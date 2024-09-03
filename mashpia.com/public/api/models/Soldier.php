@@ -578,6 +578,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // turn off chayolei
         if (! isset($_COOKIE['naftoli'])) $result['chayolei'] = true;
 
+        if ($this->user_id == 55548) {
+            $result['chayolei'] = false;
+            $result['chidon'] = false;
+        }
+
         return $result;
     }
 
