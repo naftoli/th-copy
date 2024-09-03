@@ -2310,6 +2310,7 @@ var templates = function () {
       if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
         $('#non_th_school_id').val(user.non_th_school_id);
         $('#non_th_school').val(user.non_th_school);
+        alert(user.non_th_school_id, user.non_th_school)
         if (non_th_schools[user.non_th_school_id]) {
           let school_info = non_th_schools[user.non_th_school_id].split(',')
           console.log(school_info)
