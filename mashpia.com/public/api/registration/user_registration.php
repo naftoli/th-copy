@@ -193,7 +193,7 @@ class UserRegistrationRouter {
                             $total -= $amount; // subtract amount from total
                             $this->installmentsCreated = true;
                             $this->installmentsID = $subscription->getSubscriptionId();
-                            $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
+                            $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id, $chidonYr);
                             if (! $saved) {
                                 $subscription->cancelSubscription();
                                 $MASHPIA_DB->rollBack();

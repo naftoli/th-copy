@@ -21,7 +21,6 @@ class Installments
     private $installment_amount;
     private $number_of_installments;
     private $start_date;
-    private $year;
 
     public function __construct($customerProfile, $payment_profile_id, $live = true, $updateBilling = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
@@ -34,8 +33,6 @@ class Installments
         if ($updateBilling && !$this->updateBillingInfo()) {
             throw new \Exception("Error updating billing info");
         }
-
-        $this->year = GlobalSettings::getChidonRegYear();
     }
 
     public function setAuth() {
@@ -148,13 +145,13 @@ class Installments
         }
     }
 
-    public function saveToDb($dbHandle, $admin_id) {
+    public function saveToDb($dbHandle, $admin_id, $year) {
         $stmt = $dbHandle->prepare(
             "INSERT INTO `th_chidon_installments` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`, `year`) 
                 VALUES (?, ?, ?, ?, ?, ?)"
         );
         $res = $stmt->execute([
-            $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date, $this->year
+            $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date, $year
         ]);
         if (!$res) echo $stmt->debugDumpParams();
         return $res;
