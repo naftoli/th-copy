@@ -2312,6 +2312,7 @@ var templates = function () {
         $('#non_th_school').val(user.non_th_school);
         if (non_th_schools[user.non_th_school_id]) {
           let school_info = non_th_schools[user.non_th_school_id].split(',')
+          console.log(school_info)
           $("#non-th-city").val(school_info[1])
           $("#non-th-state").val(school_info[2])
           $("#non-th-zip").val(school_info[3])
