@@ -194,7 +194,7 @@ class UserRegistrationRouter {
                             $this->installmentsCreated = true;
                             $this->installmentsID = $subscription->getSubscriptionId();
                             $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
-                            if (!$saved) {
+                            if (! $saved) {
                                 $subscription->cancelSubscription();
                                 $MASHPIA_DB->rollBack();
                                 json_error("Error saving installments to db");
