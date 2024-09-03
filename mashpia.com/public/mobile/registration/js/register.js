@@ -2810,7 +2810,7 @@ var templates = function () {
       } else {
         // just show total
         $("#charges").append( '<div class="row total-row">' +
-          '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
+          '<div class="col-9 col-md-10"><strong>Total</strong></div>' +
           '<div class="col-3 col-md-2 reg_cost">$' + total + '</div>'
           + "</div>" );
       }
