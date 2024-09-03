@@ -507,14 +507,15 @@ class UserRegistrationRouter {
         // get recruited by name
         $stmtRecruit = $MASHPIA_DB->prepare("select first, last from users where user_id = ? or user_serial = ?");
 
-        $links = [
-            '4' => 'https://chat.whatsapp.com/KAQkzbl7mVyFmKpX5p7ZSa',
-            '5' => 'https://chat.whatsapp.com/KYpcr9XUPdK4ovSQvO1Y8p',
-            '6' => 'https://chat.whatsapp.com/ECVmf06Wh8lIQmbhwcMYGG',
-            '7' => 'https://chat.whatsapp.com/KEVRJDkb1udJQdGCi89ckS',
-            '8' => 'https://chat.whatsapp.com/CKCF6j1gGg32WmIlLtc5YB',
-            'khk' => 'https://chat.whatsapp.com/KgGr8WvK5ex1kKHH01IhIz'
-        ];
+//        $links = [
+//            '4' => 'https://chat.whatsapp.com/KAQkzbl7mVyFmKpX5p7ZSa',
+//            '5' => 'https://chat.whatsapp.com/KYpcr9XUPdK4ovSQvO1Y8p',
+//            '6' => 'https://chat.whatsapp.com/ECVmf06Wh8lIQmbhwcMYGG',
+//            '7' => 'https://chat.whatsapp.com/KEVRJDkb1udJQdGCi89ckS',
+//            '8' => 'https://chat.whatsapp.com/CKCF6j1gGg32WmIlLtc5YB',
+//            'khk' => 'https://chat.whatsapp.com/KgGr8WvK5ex1kKHH01IhIz'
+//        ];
+        $link = 'https://chat.whatsapp.com/Fotwxa32fcFKKmibZKltSw';
 
         $tracks = [
             'maven'     => 'Yesod',
@@ -693,14 +694,15 @@ class UserRegistrationRouter {
         }
 
         // link for whatsapps
-        if (!empty($grade) || $khk) {
-            $message .= "<p>Join your child's WhatsApp group to stay up to date with all the latest information: ";
-            if ($khk) {
-                $message .= "<a href='" . $links['khk'] . "'>WhatsApp Group</a></p>";
-            } else {
-                $message .= "<a href='" . $links[$grade] . "'>WhatsApp Group</a></p>";
-            }
-        }
+        $message .= "<p>Join your child's WhatsApp group to stay up to date with all the latest information: <a href='$link'>WhatsApp Group</a></p>";
+//        if (!empty($grade) || $khk) {
+//            $message .= "<p>Join your child's WhatsApp group to stay up to date with all the latest information: ";
+//            if ($khk) {
+//                $message .= "<a href='" . $links['khk'] . "'>WhatsApp Group</a></p>";
+//            } else {
+//                $message .= "<a href='" . $links[$grade] . "'>WhatsApp Group</a></p>";
+//            }
+//        }
 
         // footer
         $message .= "<p><b>Customer Service</b><br />
