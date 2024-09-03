@@ -1764,14 +1764,14 @@ var registrationApp = function () {
     if (shippingFee) {
       // show modal
       let html = `
-                <div class="col-12" style="padding: 10px 20px;">
-                    <label for="chidon-shipping-fee">Early Registration Shipping Fee</label><br />
-                    <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="1" checked /> 
-                    I would like to have my registration items shipped to my address on file for $${shippingFee}<br />
-                    <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="0" /> 
-                    I will be picking up my registration items (Free)
-                </div>
-            `
+        <div class="col-12" style="padding: 10px 20px;">
+            <label for="chidon-shipping-fee">Early Registration Shipping Fee</label><br />
+            <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="1" checked /> 
+            I would like to have my registration items shipped to my address on file for $${shippingFee}<br />
+            <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="0" /> 
+            I will be picking up my registration items (Free)
+        </div>
+      `
       $("#chidon-shipping .modal-body").empty().append(html)
       $("#chidon-shipping").modal('show')
 
@@ -1792,12 +1792,12 @@ var registrationApp = function () {
           // for some reason this is showing more than once under certain circumstances
           // check if it doesn't already exist
           const exists = state.cart.filter(item => item.meta.codeOnly === shipCode.substring(0, shipCode.length - 1))
-          if (!exists.length) {
+          if (! exists.length) {
             state.cart.push({
               description: state.users[index].parentAccount.last + " Family Early Chidon Registration Shipping",
               price: shipping ? shippingFee : 0,
               meta: {
-                type: 'advance registration',
+                type: 'advance shipping registration',
                 registration_type: 'shipping',
                 paid: shipping ? shippingFee : 0,
                 user_id: state.users[index].user_id,

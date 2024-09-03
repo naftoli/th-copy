@@ -218,8 +218,6 @@ class UserRegistrationRouter {
 //                    if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
                     if ($codeOnly == 'RRFAM') {
                         $item['code'] = $codeOnly . '-0';
-                    } else if (in_array($codeOnly, ['RRSUSA', 'RRSCAN', 'RRSINT']) !== false) {
-                        $item['code'] = $codeOnly . '-0';
                     }
                 }
                 // don't add LDE to desc if editing only
