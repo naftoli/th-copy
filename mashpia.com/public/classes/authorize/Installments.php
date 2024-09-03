@@ -6,6 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/authorize_constants.php';
 use includes\authorize\AuthorizeConstants as Constants;
 
 require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
@@ -20,6 +21,7 @@ class Installments
     private $installment_amount;
     private $number_of_installments;
     private $start_date;
+    private $year;
 
     public function __construct($customerProfile, $payment_profile_id, $live = true, $updateBilling = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
@@ -32,6 +34,8 @@ class Installments
         if ($updateBilling && !$this->updateBillingInfo()) {
             throw new \Exception("Error updating billing info");
         }
+
+        $this->year = GlobalSettings::getChidonRegYear();
     }
 
     public function setAuth() {
@@ -94,7 +98,8 @@ class Installments
         $this->total_amount = $amount;
         $this->number_of_installments = $numInstallments;
         $this->installment_amount = round(floatval($amount / $numInstallments), 2);
-        if (!$start_date) $start_date = date('Y-m-d', strtotime("+1 month"));
+        if (! $start_date) $this->start_date = date('Y-m-d', strtotime("+1 month"));
+        else $this->start_date = $start_date;
 
         $merchantAuthentication = $this->setAuth();
         // Set the transaction's refId
@@ -110,7 +115,7 @@ class Installments
 
         $paymentSchedule = new AnetAPI\PaymentScheduleType();
         $paymentSchedule->setInterval($interval);
-        $paymentSchedule->setStartDate(new \DateTime($start_date));
+        $paymentSchedule->setStartDate(new \DateTime($this->start_date));
         $paymentSchedule->setTotalOccurrences($numInstallments);
 
         $subscription->setPaymentSchedule($paymentSchedule);
@@ -145,11 +150,11 @@ class Installments
 
     public function saveToDb($dbHandle, $admin_id) {
         $stmt = $dbHandle->prepare(
-            "INSERT INTO `th_chidon_installments` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`) 
+            "INSERT INTO `th_chidon_installments` (`admin_id`, `subscription_id`, `installment_amount`, `number_of_installments`, `total_amount`, `start_date`, `year`) 
                 VALUES (?, ?, ?, ?, ?, ?)"
         );
         $res = $stmt->execute([
-            $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date
+            $admin_id, $this->subscription_id, $this->installment_amount, $this->number_of_installments, $this->total_amount, $this->start_date, $this->year
         ]);
         if (!$res) echo $stmt->debugDumpParams();
         return $res;

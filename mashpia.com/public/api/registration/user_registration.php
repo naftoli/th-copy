@@ -217,7 +217,13 @@ class UserRegistrationRouter {
                 if ($this->installmentsCreated) {
 //                    if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
                     if ($codeOnly == 'RRFAM') {
-                        $item['code'] = $codeOnly . '-0';
+                        // first get the current code
+                        $code = $item['code'];
+                        // split code by colon
+                        $codes = explode(':', $code);
+                        // get first part of code
+                        $first_part = $codes[0];
+                        $item['code'] = $first_part . $codeOnly . '-0';
                     }
                 }
                 // don't add LDE to desc if editing only
