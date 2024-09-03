@@ -223,7 +223,7 @@ class UserRegistrationRouter {
                         $codes = explode(':', $code);
                         // get first part of code
                         $first_part = $codes[0];
-                        $item['code'] = $first_part . $codeOnly . '-0';
+                        $item['code'] = $first_part . ':' . $codeOnly . '-0';
                     }
                 }
                 // don't add LDE to desc if editing only
