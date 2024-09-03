@@ -1580,6 +1580,7 @@ var registrationApp = function () {
       // change amount if personalized prize was selected
       let personalized_amount = checkPersonalizedPrize()
       amount -= personalized_amount
+      if (amount < 0) amount = 0
 
       if (amount > 0) {
         // add to cart
@@ -2806,6 +2807,12 @@ var templates = function () {
           $("#earlyRegTwo").text(two)
           $("#earlyRegThree").text(three)
           $("#earlyRegFour").text(four)
+      } else {
+        // just show total
+        $("#charges").append( '<div class="row total-row">' +
+          '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
+          '<div class="col-3 col-md-2 reg_cost">$' + total + '</div>'
+          + "</div>" );
       }
       // add the total row
       // var text = "Total Balance";
