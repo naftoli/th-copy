@@ -16,6 +16,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/Installments.php'; 
 use classes\authorize\Installments as Installments;
 
 class UserRegistrationRouter {
+    private $installments = 0;
+    private $installmentsID = 0;
+    private $installmentsAmount = 0;
+    private $installmentsCreated = false;
+
     // parents only
     public function authenticate() {
         global $current_user;
@@ -131,7 +136,7 @@ class UserRegistrationRouter {
         $payment_info = $_POST['payment'];
         $cart = $_POST['cart'];
         $total = intval( $payment_info['total'] );
-        $installments = intval($payment_info['installments']) ?? 0;
+        $this->installments = intval($payment_info['installments']) ?? 0;
 
         // make sure info is correct and create array of user ids
         $user_ids = [];
@@ -151,9 +156,6 @@ class UserRegistrationRouter {
         $MASHPIA_DB->beginTransaction();
 
         /******************************** PAYMENT ********************************/
-        $installmentsID = 0;
-        $installmentsAmount = 0;
-        $installmentsCreated = false;
         $trans_id = 0;
 //        if (isset($_COOKIE['naftoli'])) {}
 //        else if ( $total != 0 ) {
@@ -172,25 +174,25 @@ class UserRegistrationRouter {
                 $payment_profile_id = $payment_profile->customerPaymentProfileId;
             }
 
-            if ($installments) {
+            if ($this->installments) {
                 // figure out amount for installments
                 $amount = 0;
                 foreach ($cart as $reg) {
                     if ($reg['type'] == 'advance registration') $amount += intval($reg['paid']);
                 }
                 if ($amount) {
-                    $installmentsAmount = $amount;
+                    $this->installmentsAmount = $amount;
                     // create installments (called subscriptions in authorize)
                     try {
                         $subscription = new Installments($customer_profile, $payment_profile_id, true, isset($payment_info['payment_profile']));
-                        $result = $subscription->createSubscription($amount, $installments, "2024-11-01");
+                        $result = $subscription->createSubscription($amount, $this->installments, "2024-11-01");
                         if (strpos($result, "Error") !== false) {
                             $MASHPIA_DB->rollBack();
                             json_error($result);
                         } else {
                             $total -= $amount; // subtract amount from total
-                            $installmentsCreated = true;
-                            $installmentsID = $subscription->getSubscriptionId();
+                            $this->installmentsCreated = true;
+                            $this->installmentsID = $subscription->getSubscriptionId();
                             $saved = $subscription->saveToDb($MASHPIA_DB, $admin->admin_id);
                             if (!$saved) {
                                 $subscription->cancelSubscription();
@@ -212,7 +214,7 @@ class UserRegistrationRouter {
                 $codeOnly = $item['codeOnly'];
                 // find out if we need to change the amount in the code
                 // change amount to 0 for the advance registration if there's installments
-                if ($installmentsCreated) {
+                if ($this->installmentsCreated) {
 //                    if (in_array($codeOnly, ['RRYSD', 'RRYDA', 'RRHVN'])) {
                     if ($codeOnly == 'RRFAM') {
                         $item['code'] = $codeOnly . '-0';
@@ -233,7 +235,7 @@ class UserRegistrationRouter {
                 );
                 if (!is_array($payment_response)) {
                     // undo the subscription
-                    if ($installmentsCreated) {
+                    if ($this->installmentsCreated) {
                         $subscription->cancelSubscription();
                         $subscription->removeFromDb($MASHPIA_DB);
                     }
@@ -418,7 +420,7 @@ class UserRegistrationRouter {
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
                         if ($code === 'RRFAM') {
                             // only enter charge into system if it was done now, not through installments
-                            if (!$installmentsCreated)
+                            if (! $this->installmentsCreated)
                                 $user->familyCharge($amount, $trans_id, $chidonYr);
                             // add to email array
                             $itemsForEmail[$user_id][] = [
@@ -500,7 +502,7 @@ class UserRegistrationRouter {
     }
 
     private function getInfoForEmail($items, $total_charge) {
-        global $MASHPIA_DB, $installments, $installmentsID, $installmentsAmount, $installmentsCreated;
+        global $MASHPIA_DB;
 
         // get chidon prize name
         $stmt = $MASHPIA_DB->prepare("select prize_name from chidon_prizes where prize_id = ?");
@@ -677,9 +679,9 @@ class UserRegistrationRouter {
 
             if ($pre_reg_amount) {
                 $message .= "<p><b>Pre Registration Payment</b>";
-                if ($installmentsCreated) {
-                    $message .= "<br />You are paying $" . $installmentsAmount . " toward's your family's registration in " . $installments . " installments.";
-                    $message .= "<br />Your Authorize.net Installment ID is: " . $installmentsID . "</p>";
+                if ($this->installmentsCreated) {
+                    $message .= "<br />You are paying $" . $this->installmentsAmount . " toward's your family's registration in " . $this->installments . " installments.";
+                    $message .= "<br />Your Authorize.net Installment ID is: " . $this->installmentsID . "</p>";
                 } else {
                     $message .= "<br />You paid $" . $pre_reg_amount . " toward's your family's registration.</p>";
                 }
@@ -689,8 +691,8 @@ class UserRegistrationRouter {
         $message .= "<p>Total Charged Today: $" . $total_charge . "</p>";
         $message .= "<p>Transaction ID #: " . $trans_id . "</p>";
 
-        if ($installmentsCreated) {
-            $message .= "<p>Total to be charged in " . $installments . " installments: $" . $installmentsAmount . "</p>";
+        if ($this->installmentsCreated) {
+            $message .= "<p>Total to be charged in " . $this->installments . " installments: $" . $this->installmentsAmount . "</p>";
         }
 
         // link for whatsapps

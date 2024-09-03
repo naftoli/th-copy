@@ -183,6 +183,7 @@ class Installments
     public function getName() {
         require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
         $sql = "select first, last from admins where authorize_customer_profile_id = " . $this->cp->customerProfileId;
+        echo $sql;
         $result = mysql_query($sql);
         $row = mysql_fetch_assoc($result);
         return [$row['first'], $row['last']];
