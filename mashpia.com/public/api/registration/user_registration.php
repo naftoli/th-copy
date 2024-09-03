@@ -423,9 +423,8 @@ class UserRegistrationRouter {
                         $yr = $chidonYr;
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
                         if ($code === 'RRFAM') {
-                            // only enter charge into system if it was done now, not through installments
-                            if (! $this->installmentsCreated)
-                                $user->familyCharge($amount, $trans_id, $chidonYr);
+                            // enter family charge (uses admin id)
+                            $user->familyCharge($amount, $trans_id, $chidonYr);
                             // add to email array
                             $itemsForEmail[$user_id][] = [
                                 'code'      => $code,
