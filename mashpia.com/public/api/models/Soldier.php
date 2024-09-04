@@ -423,7 +423,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, admin_id, type, amount, year, discount) "
-            . "VALUES( :trans_id, :user_id, :school_id, :admin_id :type, :amount, :year, :discount )"
+            . "VALUES( :trans_id, :user_id, :school_id, :admin_id, :type, :amount, :year, :discount )"
         );
         // * execute the query
         if ($admin_id) {
