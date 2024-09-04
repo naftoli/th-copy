@@ -219,11 +219,9 @@ class UserRegistrationRouter {
                     if ($codeOnly == 'RRFAM') {
                         // first get the current code
                         $code = $item['code'];
-                        // split code by colon
+                        // split code by colon to get first part of code
                         $codes = explode(':', $code);
-                        // get first part of code
-                        $first_part = $codes[0];
-                        $item['code'] = $first_part . ':' . $codeOnly . '-0';
+                        $item['code'] = $codes[0] . ':' . $codeOnly . '-0';
                     }
                 }
                 // don't add LDE to desc if editing only
@@ -422,7 +420,10 @@ class UserRegistrationRouter {
                     } else {
                         $yr = $chidonYr;
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
-                        if ($code == 'RRFAM') $user->registrationCharge($code, $amount, $trans_id, $yr, 0, $admin->admin_id);
+                        if ($code == 'RRFAM') {
+                            if ($this->installmentsCreated) $amount = 0;
+                            $user->registrationCharge($code, $amount, $trans_id, $yr, 0, $admin->admin_id);
+                        }
                         else $user->registrationCharge($code, $amount, $trans_id, $yr);
 
                         switch ($code) {
