@@ -440,13 +440,15 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         );
 
         // * execute the query
-        return $registration_info_query->execute([
+        $res = $registration_info_query->execute([
             'type'      => $type,
             'trans_id'  => $trans_id,
             'year'      => $year,
             'admin_id'  => $admin_id,
             'amount'    => $amount
         ]);
+        $registration_info_query->debugDumpParams();
+        return $res;
     }
 
     //get all the registration charges

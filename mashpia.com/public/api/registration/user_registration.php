@@ -425,6 +425,7 @@ class UserRegistrationRouter {
                         if ($code === 'RRFAM') {
                             // enter family charge (uses admin id)
                             $user->familyCharge($amount, $trans_id, $admin->admin_id, $chidonYr);
+                            $MASHPIA_DB->rollBack();
                             // add to email array
                             $itemsForEmail[$user_id][] = [
                                 'code'      => $code,
