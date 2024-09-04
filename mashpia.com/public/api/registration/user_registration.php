@@ -81,7 +81,7 @@ class UserRegistrationRouter {
         // shipping rates
         // Anash Kinder
         if ($anashKinder) {
-            // base rate for zone 1 is 67 with an additional 15 for each child
+            // base rate for zone 1 is 67 with an additional 20 for each child
             // base rate for zone 2 is 100 with an additional 20 for each child
             // base rate for zone 3 is 167 with an additional 20 for each child
             switch ($zone) {
