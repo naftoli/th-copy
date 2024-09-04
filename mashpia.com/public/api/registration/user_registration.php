@@ -277,6 +277,7 @@ class UserRegistrationRouter {
                     json_error( "User " . $user_id . " not found" );
                     exit;
                 }
+                echo "<pre>"; print_r($user_obj); echo "</pre>";
                 $user = $user_obj[0];
 
                 if ($registration['codeOnly']) {
