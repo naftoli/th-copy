@@ -147,6 +147,7 @@ class UserRegistrationRouter {
             }
             if (isset($reg['user_id']) && !in_array($reg['user_id'], $user_ids)) $user_ids[] = $reg['user_id'];
         }
+        echo "User IDs: " . implode(',', $user_ids) . "\n";
 
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
