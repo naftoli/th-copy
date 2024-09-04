@@ -276,6 +276,7 @@ class UserRegistrationRouter {
                 if ( empty( $user_obj ) ) {
                     $MASHPIA_DB->rollBack();
                     json_error( "User " . $user_id . " not found" );
+                    exit;
                 }
                 exit;
                 $user = $user_obj[0];
