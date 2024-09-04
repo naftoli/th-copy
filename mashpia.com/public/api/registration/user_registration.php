@@ -424,7 +424,7 @@ class UserRegistrationRouter {
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
                         if ($code === 'RRFAM') {
                             // enter family charge (uses admin id)
-                            $user->familyCharge($amount, $trans_id, $chidonYr);
+                            $user->familyCharge($amount, $trans_id, $admin->admin_id, $chidonYr);
                             // add to email array
                             $itemsForEmail[$user_id][] = [
                                 'code'      => $code,
