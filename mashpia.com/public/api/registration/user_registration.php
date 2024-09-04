@@ -422,7 +422,7 @@ class UserRegistrationRouter {
                     } else {
                         $yr = $chidonYr;
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
-                        if ($code == 'RRFAM') $user->registrationCharge($code, $amount, $trans_id, $yr, $admin->admin_id);
+                        if ($code == 'RRFAM') $user->registrationCharge($code, $amount, $trans_id, $yr, 0, $admin->admin_id);
                         else $user->registrationCharge($code, $amount, $trans_id, $yr);
 
                         switch ($code) {
