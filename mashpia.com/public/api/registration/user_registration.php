@@ -279,6 +279,7 @@ class UserRegistrationRouter {
                     exit;
                 }
                 continue;
+
                 $user = $user_obj[0];
 
                 if ($registration['codeOnly']) {
