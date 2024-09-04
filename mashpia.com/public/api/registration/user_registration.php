@@ -147,7 +147,6 @@ class UserRegistrationRouter {
             }
             if (isset($reg['user_id']) && !in_array($reg['user_id'], $user_ids)) $user_ids[] = $reg['user_id'];
         }
-        echo "User IDs: " . implode(',', $user_ids) . "\n";
 
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
@@ -160,7 +159,6 @@ class UserRegistrationRouter {
         $trans_id = 0;
 //        if (isset($_COOKIE['naftoli'])) {}
 //        else if ( $total != 0 ) {
-        $total = 0;
         if ( $total != 0 ) {
             $customer_profile = $admin->customerProfile();
             // if we have a payment profile provided
@@ -279,8 +277,6 @@ class UserRegistrationRouter {
                     json_error( "User " . $user_id . " not found" );
                     exit;
                 }
-                continue;
-
                 $user = $user_obj[0];
 
                 if ($registration['codeOnly']) {
