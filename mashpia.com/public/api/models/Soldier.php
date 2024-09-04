@@ -430,12 +430,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ]);
     }
 
-    public function familyCharge( $type, $amount, $trans_id = '', $admin_id, $year = false ) {
+    public function familyCharge( $type, $amount, $trans_id = '', $admin_id, $year ) {
         global $MASHPIA_DB;
-        // set default year.
-        if (!$year) {
-            $year = GlobalSettings::getChidonRegYear();
-        }
+
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
             "INSERT INTO registration_charges (trans_id, admin_id, user_id, school_id, type, amount, year) "
@@ -450,7 +447,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'admin_id'  => $admin_id,
             'amount'    => $amount
         ]);
-        return false;
     }
 
     //get all the registration charges
