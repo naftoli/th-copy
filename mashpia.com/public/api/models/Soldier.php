@@ -447,8 +447,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             'admin_id'  => $admin_id,
             'amount'    => $amount
         ]);
+        ob_start();
         $registration_info_query->debugDumpParams();
-        return $res;
+        $r = ob_get_contents();
+        ob_end_clean();
+        return $r;
     }
 
     //get all the registration charges
