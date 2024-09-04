@@ -184,8 +184,6 @@ var registrationApp = function () {
 
       if (users.length === 0) return noChildren();
 
-      setupNonThSchoolList()
-
       // initialize chidon payment for each user
       for (let user of users) {
         chidonPayment[user.user_id] = false
@@ -205,40 +203,30 @@ var registrationApp = function () {
 
   async function setupNonThSchoolList() {
     // setup non th school list
-    await $.post('api/getNonThSchools.php', function (result) {
-      const res = JSON.parse(result)
-      non_th_schools = res
-      const sorted = sortByVal(res)
-      autocomplete(document.getElementById("non_th_school"), sorted)
-      $("#non_th_school").blur(function () {
-        if ($(this).val().trim() == '') {
-          $("#non_th_school_id").val(0)
-        } else {
-          // find the school id from the sorted array
-          let found = false
-          for (let row of sorted) {
-            let key = row[0]
-            let value = row[1]
-            if (value == $(this).val().trim()) {
-              $("#non_th_school_id").val(key)
-              found = true
-              break
-            }
-          }
-          if (!found) {
-            $("#non_th_school_id").val(0)
+    const result = await $.post('api/getNonThSchools.php');
+    const res = JSON.parse(result)
+    non_th_schools = res
+    const sorted = sortByVal(res)
+    autocomplete(document.getElementById("non_th_school"), sorted)
+    $("#non_th_school").blur(function () {
+      if ($(this).val().trim() == '') {
+        $("#non_th_school_id").val(0)
+      } else {
+        // find the school id from the sorted array
+        let found = false
+        for (let row of sorted) {
+          let key = row[0]
+          let value = row[1]
+          if (value == $(this).val().trim()) {
+            $("#non_th_school_id").val(key)
+            found = true
+            break
           }
         }
-      })
-      // var html = '<option value="-1" selected>Please Choose</option>'
-      // for (let row of sorted) {
-      //     let key = row[0]
-      //     let value = row[1]
-      //     html += '<option value=' + key + '>' + value + "</option>";
-      // }
-      // html += '<option value="0">My school is not listed</option>'
-      // $("#non_th_school_id").empty()
-      // $("#non_th_school_id").append(html)
+        if (!found) {
+          $("#non_th_school_id").val(0)
+        }
+      }
     })
   }
 
@@ -431,6 +419,8 @@ var registrationApp = function () {
       $("#myshliachTerms").hide()
     }
     $("#terms-1").text(txt)
+
+    setupNonThSchoolList()
 
     // show the page
     templates.showUser(state.selected_users[0], 0);
@@ -2312,8 +2302,7 @@ var templates = function () {
       if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
         $('#non_th_school_id').val(user.non_th_school_id);
         $('#non_th_school').val(user.non_th_school);
-        console.log(non_th_schools)
-        alert()
+
         if (non_th_schools[user.non_th_school_id]) {
           let school_info = non_th_schools[user.non_th_school_id].split(',')
           // alert(school_info)
