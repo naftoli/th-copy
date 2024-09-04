@@ -1767,7 +1767,7 @@ var registrationApp = function () {
         <div class="col-12" style="padding: 10px 20px;">
             <label for="chidon-shipping-fee">Early Registration Shipping Fee</label><br />
             <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="1" checked /> 
-            I would like to have my registration items shipped to my address on file for $${shippingFee}<br />
+            I would like to have my registration items shipped to my address on file for an additional charge of $${shippingFee}<br />
             <input type="radio" name="chidon-shipping-fee" id="chidon-shipping-fee" value="0" /> 
             I will be picking up my registration items (Free)
         </div>
