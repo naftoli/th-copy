@@ -422,17 +422,17 @@ class UserRegistrationRouter {
                     } else {
                         $yr = $chidonYr;
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
-                        $user->registrationCharge($code, $amount, $trans_id, $chidonYr);
+                        $user->registrationCharge($code, $amount, $trans_id, $yr, $admin->admin_id);
                         switch ($code) {
                             case 'KHKE':
-                                $user->addKhkReg($chidonYr, $user_id);
+                                $user->addKhkReg($yr, $user_id);
                                 break;
                             case 'YB1':
                             case 'YB2':
                             case 'YB3':
                             case 'YB4':
                             case 'YB5':
-                                $user->addBookPurchase($chidonYr, $user_id, 'parent_account', $trans_id);
+                                $user->addBookPurchase($yr, $user_id, 'parent_account', $trans_id);
                                 break;
 //                            case 'RRYSD':
 //                            case 'RRYDA':
@@ -449,7 +449,7 @@ class UserRegistrationRouter {
                                 'code'      => $code,
                                 'amount'    => $amount,
                                 'trans_id'  => $trans_id,
-                                'year'      => $chidonYr
+                                'year'      => $yr
                             ];
                         } else {
                             $itemsForEmail[$user_id][] = [

@@ -416,6 +416,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             else $year = GlobalSettings::getChidonRegYear();
         }
 
+        if (! $admin_id) {
+            $admin_id = $this->parentAccount()['admin_id'];
+        }
+
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
             "INSERT INTO registration_charges (trans_id, user_id, school_id, admin_id, type, amount, year, discount) "
