@@ -57,7 +57,7 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$schools[] = $row;
 }
-echo "<pre>"; print_r($schools); echo "</pre>"; exit;
+//echo "<pre>"; print_r($schools); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
@@ -98,6 +98,7 @@ echo "<pre>"; print_r($schools); echo "</pre>"; exit;
           <th>Raffle / Auction Prizes</th>
 	    		</tr>
 	    		<?
+          $types = array('chayolei', 'chidon', 'hachayols', 'rewards', 'tanya', 'tehillim', 'raffle_prizes');
 	    		foreach ($schools as $school) {
 	    			echo "<tr><td>" . $school['school_id'] . "</td><td>" . $school['school_number'] . "</td><td>" .	$school['school_name'] . "</td>";
 					foreach ($types as $type) {
