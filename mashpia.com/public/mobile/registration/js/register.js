@@ -2302,7 +2302,6 @@ var templates = function () {
       if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
         $('#non_th_school_id').val(user.non_th_school_id);
         $('#non_th_school').val(user.non_th_school);
-        console.log(non_th_schools)
         if (non_th_schools[user.non_th_school_id]) {
           let school_info = non_th_schools[user.non_th_school_id].split(',')
           // alert(school_info)
@@ -2312,16 +2311,7 @@ var templates = function () {
           $("#non-th-country").val(school_info[4])
         }
         $("#non_th_school_div").show()
-        // if (!user.non_th_school_id == 0) $("#non_th_school_div").show()
       }
-
-      // $("#non_th_school_id").change( function () {
-      //     if ($(this).val() === '0') {
-      //         $("#non_th_school_div").show()
-      //     } else {
-      //         $("#non_th_school_div").hide()
-      //     }
-      // })
 
       // add the dropdown for naftali
       var class_select = $('#class_name select');
