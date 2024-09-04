@@ -433,7 +433,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function familyCharge( $type, $amount, $trans_id = '', $admin_id, $year ) {
         global $MASHPIA_DB;
 
-        return "Type: " . $type . " Amount: " . $amount . " Trans ID: " . $trans_id . " Admin ID: " . $admin_id . " Year: " . $year;
+        json_error("Type: " . $type . " Amount: " . $amount . " Trans ID: " . $trans_id . " Admin ID: " . $admin_id . " Year: " . $year);
 
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(

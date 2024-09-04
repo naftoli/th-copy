@@ -424,8 +424,8 @@ class UserRegistrationRouter {
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
                         if ($code === 'RRFAM') {
                             // enter family charge (uses admin id)
-                            $error = $user->familyCharge($amount, $trans_id, $admin->admin_id, $chidonYr);
                             $MASHPIA_DB->rollBack();
+                            $error = $user->familyCharge($amount, $trans_id, $admin->admin_id, $chidonYr);
                             json_error($error);
                             // add to email array
                             $itemsForEmail[$user_id][] = [
