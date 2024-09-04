@@ -214,6 +214,9 @@ ksort($data);
         that is being shown on the home page of the base commander's site, or any other reports. (This can also include
         situations where the child paid, and then "unenrolled" but was never removed from payment database).
     </p>
+    <p style="font-size: 18px;">
+      Please Note: In order to change an amount to 0 you MUST ENTER 0. If you leave the field BLANK it will NOT change the amount!
+    </p>
     <table id="table" class="table table-striped table-condensed">
         <thead>
             <th>Base Type</th>
