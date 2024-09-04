@@ -147,11 +147,11 @@ class UserRegistrationRouter {
             }
             if (isset($reg['user_id']) && !in_array($reg['user_id'], $user_ids)) $user_ids[] = $reg['user_id'];
         }
-        echo "User IDs: " . implode(',', $user_ids) . "\n";
 
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
+        echo "<pre>"; print_r($users); echo "</pre>"; exit;
 
         // start transaction
         $MASHPIA_DB->beginTransaction();
