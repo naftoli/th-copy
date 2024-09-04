@@ -5,6 +5,8 @@ require('header.php');
 $types = array('chayolei', 'chidon', 'hachayols', 'rewards', 'tanya', 'tehillim', 'raffle_prizes');
 
 if (isset($_POST['submit'])) {
+
+  echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
 	
 	foreach ($types as $type) {
 		${$type} = array();		
