@@ -316,14 +316,14 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chidon
-        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
+//        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
         // turn off chayolei
-        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
+//        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // for editing ultimate trip
-        if (intval($row['ultimate_trip'])) {
-            $children[$row['user_id']]['editUltimateTrip'] = true;
-        }
+//        if (intval($row['ultimate_trip'])) {
+//            $children[$row['user_id']]['editUltimateTrip'] = true;
+//        }
 
         // find chosen prizes for those enrolled into chidon
         if ($children[$row['user_id']]['chidon5783']) {

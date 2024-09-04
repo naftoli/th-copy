@@ -413,10 +413,14 @@
                             </div>
                           {{/if}}
 
+                          {{#if this.chidon_registered}}
+                            <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{ this.next_year_chidon }}</div>
+                          {{/if}}
+
                           {{#if this.bookPurchased}}
-                            <!--                                                        <div class="button-spacing">-->
-                            <!--                                                            <div class="chidonRegInfo" style="color: #FFA07A">Purchased Yahadus Book</div>-->
-                            <!--                                                        </div>-->
+                              <div class="button-spacing">
+                                  <div class="chidonRegInfo" style="color: #FFA07A">Purchased Yahadus Book</div>
+                              </div>
                           {{/if}}
 
                           <!--                                                    {{#if this.chidon5783}}-->
@@ -432,8 +436,6 @@
 <!--                              <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon-->
 <!--                                Experience {{ this.next_year_chidon }}</div>-->
                             {{/if}}
-                            <!--                                                        <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon-->
-                            <!--                                                            Limmud {{ this.next_year_chidon }}</div>-->
                             <!--                                                        {{#if this.editChidon}}-->
                             <!--                                                            <button class="btn btn-primary chidon_info" style="margin-bottom: 8px">-->
                             <!--                                                                <span>View / Edit Chidon Enrollment Options</span>-->
