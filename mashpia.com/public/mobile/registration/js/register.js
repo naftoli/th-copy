@@ -1802,7 +1802,7 @@ var registrationApp = function () {
                 registration_type: 'shipping',
                 paid: shipping ? shippingFee : 0,
                 user_id: state.users[index].user_id,
-                code: "F" + state.users[index].parentAccount.admin_id + ":" + state.users[index].school.school_id + ":" + shipCode + shipping_amount,
+                code: "F" + state.users[index].parentAccount.admin_id + ":" + shipCode + shipping_amount,
                 codeOnly: shipCode.substring(0, shipCode.length - 1)
               }
             })
