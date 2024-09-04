@@ -57,6 +57,7 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$schools[] = $row;
 }
+echo "<pre>"; print_r($schools); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
 <html>
