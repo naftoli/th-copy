@@ -411,7 +411,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationCharge( $type, $amount, $trans_id = '', $year = false, $discount = 0 ) {
         global $MASHPIA_DB;
         // set default year.
-        if (!$year) {
+        if (! $year) {
             if (strpos($type, 'THE') !== false) GlobalSettings::getRegistrationYear( $this->school_id );
             else $year = GlobalSettings::getChidonRegYear();
         }
