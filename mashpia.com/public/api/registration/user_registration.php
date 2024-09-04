@@ -151,7 +151,6 @@ class UserRegistrationRouter {
         // * get all the user models
         $users = \Soldier::find( $user_ids, [ 'include' => 'school' ] );
         if ( !is_array( $users ) ) $users = [ $users ]; // force an array, even if it is just one user
-        echo "<pre>"; print_r($users); echo "</pre>"; exit;
 
         // start transaction
         $MASHPIA_DB->beginTransaction();
@@ -160,6 +159,7 @@ class UserRegistrationRouter {
         $trans_id = 0;
 //        if (isset($_COOKIE['naftoli'])) {}
 //        else if ( $total != 0 ) {
+        $total = 0;
         if ( $total != 0 ) {
             $customer_profile = $admin->customerProfile();
             // if we have a payment profile provided
@@ -273,6 +273,7 @@ class UserRegistrationRouter {
                 $user_obj = array_filter( $users, function( $user ) use ( $user_id ) {
                     return $user->user_id == $user_id;
                 });
+                echo "User Obj: " . print_r($user_obj, true) . "\n"; exit;
                 $user = $user_obj[0];
 
                 if ($registration['codeOnly']) {
