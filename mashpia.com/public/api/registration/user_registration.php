@@ -273,7 +273,11 @@ class UserRegistrationRouter {
                 $user_obj = array_filter( $users, function( $user ) use ( $user_id ) {
                     return $user->user_id == $user_id;
                 });
-                echo "User Obj: " . print_r($user_obj, true) . "\n"; exit;
+                if ( empty( $user_obj ) ) {
+                    $MASHPIA_DB->rollBack();
+                    json_error( "User " . $user_id . " not found" );
+                }
+                exit;
                 $user = $user_obj[0];
 
                 if ($registration['codeOnly']) {
