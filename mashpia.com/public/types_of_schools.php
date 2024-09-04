@@ -6,7 +6,7 @@ $types = array('chayolei', 'chidon', 'hachayols', 'rewards', 'tanya', 'tehillim'
 
 if (isset($_POST['submit'])) {
 
-//  echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+  echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
 	
 	foreach ($types as $type) {
 		${$type} = array();		
