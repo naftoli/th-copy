@@ -2313,7 +2313,7 @@ var templates = function () {
         $('#non_th_school_id').val(user.non_th_school_id);
         $('#non_th_school').val(user.non_th_school);
         alert(user.non_th_school)
-        alert(non_th_schools[user.non_th_school_id])
+        alert(non_th_schools)
         if (non_th_schools[user.non_th_school_id]) {
           let school_info = non_th_schools[user.non_th_school_id].split(',')
           // alert(school_info)
