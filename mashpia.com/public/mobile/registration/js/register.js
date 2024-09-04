@@ -372,7 +372,7 @@ var registrationApp = function () {
   var pleaseSelectErr_he = "נא לבחור לפחות ילד אחד";
 
   // show selected users
-  function step2() {
+  async function step2() {
     window.location.hash = 'step-2';
     state.selected_users = [];
     // state.cart = [];
@@ -420,7 +420,7 @@ var registrationApp = function () {
     }
     $("#terms-1").text(txt)
 
-    setupNonThSchoolList()
+    await setupNonThSchoolList()
 
     // show the page
     templates.showUser(state.selected_users[0], 0);
