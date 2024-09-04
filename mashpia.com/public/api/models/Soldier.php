@@ -408,7 +408,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $result;
     }
 
-    public function registrationCharge( $type, $amount, $trans_id = '', $year = false, $discount = 0 ) {
+    public function registrationCharge( $type, $amount, $trans_id = '', $year = false, $discount = 0, $admin_id = 0 ) {
         global $MASHPIA_DB;
         // set default year.
         if (! $year) {
@@ -418,41 +418,25 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // * prepare the query
         $registration_info_query = $MASHPIA_DB->prepare(
-            "INSERT INTO registration_charges (trans_id, user_id, school_id, type, amount, year, discount) "
-            . "VALUES( :trans_id, :user_id, :school_id, :type, :amount, :year, :discount )"
+            "INSERT INTO registration_charges (trans_id, user_id, school_id, admin_id, type, amount, year, discount) "
+            . "VALUES( :trans_id, :user_id, :school_id, :admin_id :type, :amount, :year, :discount )"
         );
         // * execute the query
-        return $registration_info_query->execute([
-            'type' => $type, 'trans_id' => $trans_id,
-            'year' => $year, 'user_id' => $this->user_id,
-            'amount' => $amount, 'school_id' => $this->school_id,
-            'discount' => $discount
-        ]);
-    }
-
-    public function familyCharge( $type, $amount, $trans_id = '', $admin_id, $year ) {
-        global $MASHPIA_DB;
-
-        // * prepare the query
-        $registration_info_query = $MASHPIA_DB->prepare(
-            "INSERT INTO registration_charges (trans_id, admin_id, user_id, school_id, type, amount, year) "
-            . "VALUES( :trans_id, :admin_id, 0, 0, :type, :amount, :year )"
-        );
-
-        // * execute the query
-        $res = $registration_info_query->execute([
-            'type'      => $type,
-            'trans_id'  => $trans_id,
-            'year'      => $year,
-            'admin_id'  => $admin_id,
-            'amount'    => $amount
-        ]);
-        ob_start();
-        $registration_info_query->debugDumpParams();
-        $r = ob_get_contents();
-        ob_end_clean();
-        echo "<pre>"; print_r($r); echo "</pre>";
-        return $r;
+        if ($admin_id) {
+            return $registration_info_query->execute([
+                'type' => $type, 'trans_id' => $trans_id,
+                'year' => $year, 'user_id' => 0,
+                'amount' => $amount, 'school_id' => 0,
+                'discount' => $discount, 'admin_id' => $admin_id
+            ]);
+        } else {
+            return $registration_info_query->execute([
+                'type' => $type, 'trans_id' => $trans_id,
+                'year' => $year, 'user_id' => $this->user_id,
+                'amount' => $amount, 'school_id' => $this->school_id,
+                'discount' => $discount, 'admin_id' => 0
+            ]);
+        }
     }
 
     //get all the registration charges
