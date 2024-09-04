@@ -1451,12 +1451,12 @@ var registrationApp = function () {
             alert('Error adding hebrew name')
           }, 0)
         } else {
-          if (parseInt($("#chidon-reg").val()) == 0) {
+          // if (parseInt($("#chidon-reg").val()) == 0) {
             alert("You have selected a prize with your child\'s name on it so you will need to pre-pay the prize value of this prize " +
               "NOW instead of during the Chidon Experience Registration. If your child does NOT earn their prize, you will NOT be refunded this charge. " +
               "If your child DOES pass, this money is automatically applied towards this child’s registration fee.\nIf you would like, you can go back " +
               "and remove the name from the prize or choose a different prize so that you don\'t need to prepay anything now. ")
-          }
+          // }
         }
       })
     })
