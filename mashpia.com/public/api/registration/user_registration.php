@@ -87,7 +87,7 @@ class UserRegistrationRouter {
             switch ($zone) {
                 case 1:
                     $base = 67;
-                    $increaseBy = 15;
+                    $increaseBy = 20;
                     break;
                 case 2:
                     $base = 100;
