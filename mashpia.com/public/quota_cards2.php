@@ -104,7 +104,6 @@ foreach ( $schoolsUsers as $school => $users ) {
                             AND dtm.school_type_id = $school_type_id 
                             AND dtm.track_id = $track_id
                             AND dtm.level = $level
-                            AND ut.user_id = $user_id 
                             AND dtm.lang_id = $lang_id";
                 $result = mysql_query($sql);
                 $row = mysql_fetch_assoc($result);
