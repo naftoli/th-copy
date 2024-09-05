@@ -653,9 +653,9 @@ class UserRegistrationRouter {
                     $message .= "<p>Yarmulka Size: " . $detail['reg_info']['yarmulka'] . "</p>";
                     $message .= "<p>Track: <b>" . $tracks[ $detail['reg_info']['track'] ] . "</b></p>";
                     if (isset($detail['reg_info']['purchased']) && $detail['reg_info']['purchased']) {
-                        $location = $detail['purchasedWhere'];
-                        $store_name = $detail['store']['store_name'];
-                        $store_city = $detail['store']['store_city'];
+                        $location = $detail['reg_info']['purchasedWhere'];
+                        $store_name = $detail['reg_info']['store']['store_name'];
+                        $store_city = $detail['reg_info']['store']['store_city'];
                         $message .= "<p>Book Purchased: Yes</p>";
                         $message .= "<p>Book Version: " . $detail['reg_info']['bookVersion'] . "</p>";
                         $message .= "<p>Purchased Where: " . $detail['reg_info']['purchasedWhere'] . "</p>";
