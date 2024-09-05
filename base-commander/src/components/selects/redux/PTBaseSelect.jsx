@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { Select } from '../static/Select';
 // functions
 import { findOption } from 'functions/selects';
-import { getBases } from 'store/base/bases/operations';
+import { getBases, getEveryBase } from 'store/base/bases/operations';
 // import API from 'api/api';
 
 class PTBaseSelect extends Component {
@@ -54,7 +54,7 @@ class PTBaseSelect extends Component {
 
   getOptions = () => {
     const { showAllOption } = this.props;
-    const bases = this.props.bases;
+    const bases = this.props.getEveryBase();
     const options = bases.map( 
       ({ school_name, school_id }) => ({ value: school_id.toString(), label: school_name })
     );

@@ -13,6 +13,10 @@ export const getBases = () => dispatch => {
     });
 }
 
+export const getEveryBase = () => dispatch => {
+  return API.get( `/core/bases?action=all` )
+}
+
 // get a single base
 export const getBase = id => dispatch => {
   return API.get( `/core/bases?id=${id}` )

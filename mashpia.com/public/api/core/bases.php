@@ -26,6 +26,13 @@ class BaseRouter {
         json_response( $bases );
     }
 
+    public function all() {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->query("select * from schools were chayolei = 1 or chidon = 1");
+        $bases = $stmt->fetchAll();
+        json_response($bases);
+    }
+
     public function defaults() {
         $base = new \School();
         // format the response
