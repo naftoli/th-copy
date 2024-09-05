@@ -267,7 +267,6 @@ class UserRegistrationRouter {
                 $user_id = $registration['user_id'];
                 $amount = $registration['paid'];
 
-                echo "User ID: $user_id, Amount: $amount\n";
                 // get user modal;
                 $user_obj = array_values(array_filter( $users, function( $user ) use ( $user_id ) {
                     return $user->user_id == $user_id;
