@@ -246,10 +246,12 @@
             <label for="last" class="i18n" data-key="LastName">English Last Name</label>
           </div>
           <div class="col-6">
-            <input type="text" class="form-control" placeholder="First Name" id="first" name="first" required/>
+            <input type="text" class="form-control" placeholder="First Name" id="first" name="first"
+                   pattern="^[a-zA-Z\s-']{2,60}$" title="3-60 English letters" required/>
           </div>
           <div class="col-6">
-            <input type="text" class="form-control" placeholder="Last Name" id="last" name="last" required/>
+            <input type="text" class="form-control" placeholder="Last Name" id="last" name="last"
+                   pattern="^[a-zA-Z\s-']{2,60}$" title="3-60 English letters" required/>
           </div>
         </div>
         <div class="row">
@@ -261,11 +263,11 @@
           </div>
           <div class="col-6">
             <input type="text" class="form-control" placeholder="שם פרטי" id="first_he" name="first_he" dir="rtl"
-                   required/>
+                   pattern="^[^a-zA-Z][\s-']{2,60}$" title="3-60 Hebrew letters" required/>
           </div>
           <div class="col-6">
             <input type="text" class="form-control" placeholder="שם משפחה" id="last_he" name="last_he" dir="rtl"
-                   required/>
+                   pattern="^[^a-zA-Z][\s-']{2,60}$" title="3-60 Hebrew letters" required/>
           </div>
         </div>
         <!--                    <div class="row">-->
@@ -1858,94 +1860,6 @@
     $(".recruit").click(function () {
       $(this).val() == '1' ? $("#recruited_by").show() : $("#recruited_by").hide()
     })
-
-    $("#first").blur(isEnglish)
-
-    $("#last").blur(isEnglish)
-
-    $("#nameChoice").blur(isEnglish)
-
-    $(document).on('blur', ".he_name", isHebrew)
-
-    function isEnglish(event) {
-        let max = 60
-        if (event.target.id == 'nameChoice') max = 12
-        return checkLang(event, 'en', max)
-    }
-
-    function isHebrew(event) {
-      console.log(event)
-        let max = 22
-        if (event.target.className.includes('bracelet')) max = 12
-      return checkLang(event, 'he', max)
-    }
-
-    function checkLang(event, lang, maxLength) {
-        let errors = []
-      let str = event.target.value
-        if (str.length > maxLength) errors.push(`You cannot enter more than ${maxLength} characters.`)
-
-      let allowed = [32, 39, 45, 95, 96]
-      let ranges = [
-        [65, 90],
-        [97, 122]
-      ]
-      if (lang == 'he') {
-        ranges = [
-          [0x590, 0x5FF],
-          [0x590, 0x5FF]
-        ]
-      }
-
-      let msgs = {
-        en: [
-          'You can only enter english letters for the customized items.',
-          'You can only enter english letters for the first and last english name.'
-        ],
-        he: [
-          'You can only use hebrew letters for the prize name.'
-        ]
-      }
-
-      for (let s in str) {
-        let code = str.charCodeAt(s)
-        if (
-          (!allowed.includes(code)) &&
-          (!between(code, ranges[0][0], ranges[0][1])) &&
-          (!between(code, ranges[1][0], ranges[1][1]))
-        ) {
-            if (event.target.id == 'nameChoice') errors.push(msgs.en[0])
-            else if (['first', 'last'].includes(event.target.id)) errors.push(msgs.en[1])
-            else if (event.target.className.includes('he_name')) errors.push(msgs.he[0])
-            break
-        }
-      }
-
-      if (errors.length) {
-          $("#error2Modal").on('shown.bs.modal', function () {
-              let txt = ''
-              for (let e of errors) txt += e + "<br />"
-              $("#error2Body").empty().html(txt)
-              $("#error2Body").css({'textAlign': 'left'});
-          })
-          $("#error2Modal").modal('show');
-
-          $("#error2Modal").on('hide.bs.modal', function () {
-              // fix infinite loop by using setTimeout function
-              if (['first', 'last', 'nameChoice'].includes(event.target.id) || event.target.className.includes('he_name')) {
-                  setTimeout(function () {
-                      $(event.target).focus()
-                  }, 0)
-              }
-          })
-          return false
-      }
-      return true
-    }
-
-    function between(x, min, max) {
-      return x >= min && x <= max
-    }
   </script>
 </div>
 </body>
