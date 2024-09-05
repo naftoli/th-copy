@@ -95,7 +95,7 @@ $date = $dates[$month];
                         AND dtm.school_type_id = $school_type_id 
                         AND ut.user_id = $user_id 
                         AND dtm.lang_id = $lang_id 
-                        AND ut.enrolled =1";
+                        AND ut.enrolled = 1";
                 $result = mysql_query( $sql );
                 $row = mysql_fetch_assoc( $result );
                 if ( $grid == 8001 ) $quota = $row['total'];
