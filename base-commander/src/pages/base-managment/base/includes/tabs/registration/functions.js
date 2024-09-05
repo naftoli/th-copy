@@ -48,9 +48,11 @@ export const getTotal = ( base, addBalance = false, coupon = 0 ) => {
 
   if ( addBalance && base.balance ) {
     total += base.balance;
+    // set to 2 decimal points
+    total = parseFloat( total.toFixed(2) );
   }
 
-  total -= coupon
+  total -= parseFloat( coupon )
 
   return total;
 }
