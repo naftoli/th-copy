@@ -269,15 +269,14 @@ class UserRegistrationRouter {
 
                 echo "User ID: $user_id, Amount: $amount\n";
                 // get user modal;
-                $user_obj = array_filter( $users, function( $user ) use ( $user_id ) {
+                $user_obj = array_values(array_filter( $users, function( $user ) use ( $user_id ) {
                     return $user->user_id == $user_id;
-                });
+                }));
                 if ( empty( $user_obj ) ) {
                     $MASHPIA_DB->rollBack();
                     json_error( "User " . $user_id . " not found" );
                     exit;
                 }
-                echo "<pre>"; print_r($user_obj); echo "</pre>";
                 $user = $user_obj[0];
 
                 if ($registration['codeOnly']) {
