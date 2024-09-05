@@ -54,7 +54,7 @@ class PTBaseSelect extends Component {
 
   getOptions = () => {
     const { showAllOption } = this.props;
-    const bases = this.props.getEveryBase();
+    const bases = this.props.bases;
     const options = bases.map( 
       ({ school_name, school_id }) => ({ value: school_id.toString(), label: school_name })
     );
