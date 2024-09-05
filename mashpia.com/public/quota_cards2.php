@@ -19,14 +19,12 @@ require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.shabbosMevorchim.php';
 
 $year = GlobalSettings::getRegistrationYear();
-$sm = new ShabbosMevorchim( $year );
-//$sm->setQuotaCardDates();
-//$dates = $sm->getReportDates();
-//end( $dates );
-//$month = key( $dates );
-//$date = $dates[$month];
-$date = 2460554;
-$month = 'Elul';
+$sm = new ShabbosMevorchim( 5784 );
+$sm->setQuotaCardDates();
+$dates = $sm->getReportDates();
+end( $dates );
+$month = key( $dates );
+$date = $dates[$month];
 //echo "<pre>"; print_r( $dates ); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
