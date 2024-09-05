@@ -120,7 +120,7 @@ if(!$tehillim_school_id && count($schools) == 1){
                 <?php
                     foreach ( $users as $user ) {
                     // get level, track_id
-                    $sql = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $user['user_id'];
+                    $sql = "SELECT * FROM user_tracks WHERE subject_id = 1 AND user_id = " . $user['user_id'] . " AND enrolled = 1";
                     $result = mysql_query( $sql ) or die($sql . "<br />" . mysql_error());
                     if (mysql_num_rows($result) > 0) {
                         $row = mysql_fetch_assoc( $result );
