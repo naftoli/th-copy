@@ -2745,13 +2745,14 @@ var templates = function () {
       console.log(cart)
       let futurePayment = 0
       let total = cart.reduce(function (total, item) {
-        return parseInt(total) + parseInt(item.price)
+        return parseFloat(total) + parseFloat(item.price)
       }, 0);
       for (i = 0; i < cart.length; i++) {
-        if (cart[i].meta.discount) total -= parseInt(cart[i].meta.discount)
-        if (cart[i].meta.type === 'advance registration') futurePayment += parseInt(cart[i].price)
+        if (cart[i].meta.discount) total -= parseFloat(cart[i].meta.discount)
+        if (cart[i].meta.type === 'advance registration') futurePayment += parseFloat(cart[i].price)
       }
       if (total < 0) total = 0;
+      total = total.toFixed(2);
       $("#charges").html('');
       // add each item
       cart.forEach(function (item) {
