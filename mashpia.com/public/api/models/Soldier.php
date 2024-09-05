@@ -291,6 +291,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     // connect soldier to parent account
     public function connectToParent($admin_id, $admin_email) {
         global $MASHPIA_DB;
+
+        // make sure admin_id is an integer
+        if (! is_numeric($admin_id)) return false;
+
+        // if there's an email, make sure it's a valid email
+        if (!$admin_id && $admin_email && ! filter_var($admin_email, FILTER_VALIDATE_EMAIL)) return false;
+
         // check if parent exists either with this email or admin_id
         $stmt = $MASHPIA_DB->prepare("
             SELECT * FROM admins WHERE admin_id = :admin OR admin_email = :email");
