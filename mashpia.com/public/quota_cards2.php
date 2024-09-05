@@ -85,31 +85,32 @@ foreach ( $schoolsUsers as $school => $users ) {
 
         // get user tracks and reduce by one
         $sql = "select * from user_tracks where subject_id = 1 and user_id = " . $user['user_id'];
-        echo $sql . "<br />";
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         $level = intval($row['level']) - 1;
         $track_id = intval($row['track_id']) - 1;
+        $enrolled = intval($row['enrolled']);
 
-        foreach ( $grids as $grid ) {
-            $sql = "SELECT dt.quantity AS total, dt.date_task_id
-                        FROM date_tasks dt
-                        JOIN date_tasks_missions dtm
-                        USING ( date_tasks_mission_id )
-                        WHERE dtm.subject_id = 1
-                        AND dtm.start_date = $date
-                        AND dtm.end_date = $date
-                        AND dt.grid_id = $grid
-                        AND dtm.school_type_id = $school_type_id 
-                        AND dtm.track_id = $track_id
-                        AND dtm.level = $level
-                        AND ut.user_id = $user_id 
-                        AND dtm.lang_id = $lang_id 
-                        AND ut.enrolled =1";
-            $result = mysql_query( $sql );
-            $row = mysql_fetch_assoc( $result );
-            if ( $grid == 8001 ) $quota = $row['total'];
-            else if ( $grid == 8002 ) $minutes = $row['total'];
+        if ($enrolled == 0) {
+            foreach ($grids as $grid) {
+                $sql = "SELECT dt.quantity AS total, dt.date_task_id
+                            FROM date_tasks dt
+                            JOIN date_tasks_missions dtm
+                            USING ( date_tasks_mission_id )
+                            WHERE dtm.subject_id = 1
+                            AND dtm.start_date = $date
+                            AND dtm.end_date = $date
+                            AND dt.grid_id = $grid
+                            AND dtm.school_type_id = $school_type_id 
+                            AND dtm.track_id = $track_id
+                            AND dtm.level = $level
+                            AND ut.user_id = $user_id 
+                            AND dtm.lang_id = $lang_id";
+                $result = mysql_query($sql);
+                $row = mysql_fetch_assoc($result);
+                if ($grid == 8001) $quota = $row['total'];
+                else if ($grid == 8002) $minutes = $row['total'];
+            }
         }
         ?>
         <div class="card">
