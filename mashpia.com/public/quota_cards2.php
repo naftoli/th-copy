@@ -87,8 +87,9 @@ foreach ( $schoolsUsers as $school => $users ) {
         $sql = "select * from user_tracks where subject_id = 1 and user_id = " . $user['user_id'];
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
-        $level = $row['level'] > 6 ? intval($row['level']) - 1 : intval($row['level']); // last yrs level
+        $level = $row['level'] > 6 ? intval($row['level']) - 1 : intval($row['level']);
         $track_id =  intval($row['track_id']);
+        if ($track_id == 5) $track_id = 3;
         $enrolled = intval($row['enrolled']);
 
         if ($enrolled) {
