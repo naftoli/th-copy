@@ -190,7 +190,8 @@ class School extends ActiveRecord\Model implements JsonSerializable {
                 }
             }
 
-            if ( floatval($total) != floatval($cart_total) + floatval($this->balance) - floatval($discount) ) {
+            // need to use round b/c floats don't equal each other in php even when they are equal
+            if ( round($total, 2) != round(($cart_total + $this->balance - $discount), 2 ) ) {
                 throw new Exception(
                     "Invalid Total: Total ($total) does not match cart (".( $cart_total + $this->balance - $discount ).")"
                 );
