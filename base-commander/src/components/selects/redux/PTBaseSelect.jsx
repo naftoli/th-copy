@@ -91,4 +91,4 @@ const mapStateToProps = ( { base } ) => ({
   ...base.bases,
 })
 
-export default connect( mapStateToProps, { getBases } )( PTBaseSelect );
+export default connect( mapStateToProps, { getBases, getEveryBase } )( PTBaseSelect );
