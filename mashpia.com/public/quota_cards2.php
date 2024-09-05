@@ -25,7 +25,7 @@ $sm = new ShabbosMevorchim( $year );
 //end( $dates );
 //$month = key( $dates );
 //$date = $dates[$month];
-$date = 2460554;
+$date = 2460526;
 $month = 'Elul';
 //echo "<pre>"; print_r( $dates ); echo "</pre>"; exit;
 ?>
