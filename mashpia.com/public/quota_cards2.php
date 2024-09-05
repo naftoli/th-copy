@@ -25,7 +25,7 @@ $sm = new ShabbosMevorchim( $year );
 //end( $dates );
 //$month = key( $dates );
 //$date = $dates[$month];
-$date = 2460526;
+$date = 2460554;
 $month = 'Elul';
 //echo "<pre>"; print_r( $dates ); echo "</pre>"; exit;
 ?>
@@ -83,18 +83,25 @@ foreach ( $schoolsUsers as $school => $users ) {
         $lang_id = $user['lang_id'];
         $school_type_id = $user['school_type_id'];
 
+        // get user tracks and reduce by one
+        $sql = "select * from user_tracks where user_id = $user_id and subject_id = 1";
+        $result = mysql_query( $sql );
+        $row = mysql_fetch_assoc( $result );
+        $level = intval($row['level']) - 1;
+        $track_id = intval($row['track_id']) - 1;
+
         foreach ( $grids as $grid ) {
             $sql = "SELECT dt.quantity AS total, dt.date_task_id
                         FROM date_tasks dt
                         JOIN date_tasks_missions dtm
                         USING ( date_tasks_mission_id )
-                        JOIN user_tracks ut
-                        USING ( track_id, level, subject_id )
                         WHERE dtm.subject_id = 1
                         AND dtm.start_date = $date
                         AND dtm.end_date = $date
                         AND dt.grid_id = $grid
                         AND dtm.school_type_id = $school_type_id 
+                        AND dtm.track_id = $track_id
+                        AND dtm.level = $level
                         AND ut.user_id = $user_id 
                         AND dtm.lang_id = $lang_id 
                         AND ut.enrolled =1";
