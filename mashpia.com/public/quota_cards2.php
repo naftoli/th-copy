@@ -84,7 +84,7 @@ foreach ( $schoolsUsers as $school => $users ) {
         $school_type_id = $user['school_type_id'];
 
         // get user tracks and reduce by one
-        $sql = "select * from user_tracks where user_id = $user_id and subject_id = 1";
+        $sql = "select * from user_tracks where subject_id = 1 and user_id = " . $user['user_id'];
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
         $level = intval($row['level']) - 1;
