@@ -460,7 +460,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
-            "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type FROM users u "
+            "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type, s.chidon as school_chidon 
+                    FROM users u "
                 ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
                 ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
                 ."JOIN schools s ON u.school_id = s.school_id "
@@ -480,11 +481,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             $result['chayolei'] = true;
         }
         
-        // only add th_chidon_id if the user is in grade 4-8
+        // only add th_chidon_id if the user is in grade 4-8 and school is set as chidon school
         // chidonEdit key indicates true/false the way it's meant to mean
         $exceptions = [482,544,583];
-        if ( $this->platoon && $this->platoon->class_grade >= 3 && $this->platoon->class_grade <= 8 &&
-            $row['chidon'] && !in_array( $this->school_id, $exceptions )
+        if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && intval($this->platoon->class_grade) <= 8 &&
+            intval($row['school_chidon']) && intval($row['chidon']) && !in_array( $this->school_id, $exceptions )
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
@@ -556,10 +557,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
         // turn off chidon
-        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
+//        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
 
         // turn off chayolei
-        if (! isset($_COOKIE['naftoli'])) $result['chayolei'] = true;
+//        if (! isset($_COOKIE['naftoli'])) $result['chayolei'] = true;
 
         return $result;
     }

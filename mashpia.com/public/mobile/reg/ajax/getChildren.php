@@ -132,9 +132,12 @@ if ( !empty( $users ) ) {
                 tc.school_rep, 
                 tc.regional_rep, 
                 tc.intl_rep, 
-                tc.date_paid 
+                tc.date_paid, 
+                s.chidon as school_chidon 
             FROM
-                users u
+                users u 
+                    JOIN 
+                schools s ON u.school_id = s.school_id 
                     LEFT JOIN
                 th_chidon tc ON u.user_id = tc.user_id
                     AND tc.year = " . $chidon_year . "
@@ -296,7 +299,8 @@ if ( !empty( $users ) ) {
          if ( !$row['reg_chidon'] // if not in chidon
          	&& intval( $row['class_grade'] ) >= 4 // and in grade 4+
          	&& intval( $row['class_grade'] ) <= 8 // not in grade 8
-         	&& $row['chidon'] // make sure the kid is in chidon
+         	&& intval($row['chidon']) // make sure the kid is in chidon
+            && intval($row['school_chidon']) // make sure school has chidon
          	&& !in_array( intval( $children[$row['user_id']]['school_id'] ), $exceptions ) // make sure not one of these schools
          ) {
          	$children[ $row['user_id'] ]['needsReg'] = 1;
@@ -316,9 +320,9 @@ if ( !empty( $users ) ) {
         }
 
         // turn off chidon
-        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
+//        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
         // turn off chayolei
-        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
+//        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // for editing ultimate trip
 //        if (intval($row['ultimate_trip'])) {
