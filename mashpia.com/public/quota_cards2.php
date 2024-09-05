@@ -91,7 +91,7 @@ foreach ( $schoolsUsers as $school => $users ) {
         $track_id =  intval($row['track_id']);
         $enrolled = intval($row['enrolled']);
 
-        if ($enrolled == 0) {
+        if ($enrolled) {
             foreach ($grids as $grid) {
                 $sql = "SELECT dt.quantity AS total, dt.date_task_id
                             FROM date_tasks dt
