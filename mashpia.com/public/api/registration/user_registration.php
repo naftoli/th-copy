@@ -135,8 +135,8 @@ class UserRegistrationRouter {
         // * get the post data
         $payment_info = $_POST['payment'];
         $cart = $_POST['cart'];
-        $total = intval( $payment_info['total'] );
-        $this->installments = intval($payment_info['installments']) ?? 0;
+        $total = number_format( floatval( $payment_info['total'] ), 2 );
+        $this->installments = floatval($payment_info['installments']) ?? 0;
 
         // make sure info is correct and create array of user ids
         $user_ids = [];

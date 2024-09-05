@@ -2752,7 +2752,6 @@ var templates = function () {
         if (cart[i].meta.type === 'advance registration') futurePayment += parseFloat(cart[i].price)
       }
       if (total < 0) total = 0;
-      total = total.toFixed(2);
       $("#charges").html('');
       // add each item
       cart.forEach(function (item) {
