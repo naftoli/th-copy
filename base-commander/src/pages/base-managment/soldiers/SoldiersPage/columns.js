@@ -38,7 +38,7 @@ export default ( login, editPicture, updateToggle ) => {
       Header: "Serial Number", accessor: 'user_serial',
       Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`}>{props.value}</Link>,
     }, {
-      Header: 'Rank', accessor: 'rank',
+      Header: 'Rank', accessor: 'rank_ord',
       Cell: props => <Link to={`/bm/soldiers/${props.original.user_id}`}>{props.value}</Link>
     }, {
       Header: 'Date Of Birth', accessor: 'dob',
