@@ -20,3 +20,10 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# local files
+package-lock.json
+package.json
+yarn.lock
+
+/cli-6.14.18/
