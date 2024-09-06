@@ -39,27 +39,28 @@ if (isset($_POST['submit'])) {
 
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
-$sm = calculateSM($year);
-$months = array(
-    0 => 'Tishrei',
-    1 => 'Cheshvon',
-    2 => 'Kislev',
-    3 => 'Teves',
-    4 => 'Shvat',
-    5 => 'Adar I',
-    6 => 'Adar II',
-    7 => 'Nissan',
-    8 => 'Iyar',
-    9 => 'Sivan',
-    10 => 'Tamuz',
-    11 => 'Av',
-    12 => 'Elul'
-);
-// if plain yr change adar 1 to adar and remove adar 2
-if ($sm[6] == $sm[7]) {
-    unset($sm[6]);
-    $months[5] = 'Adar';
+
+function getMonthsAndSM($year) {
+    $months = ['Elul', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shvat', 'Adar I', 'Adar II', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av'];
+    $sm = calculateSM($year);
+    $sm_old = calculateSM($year - 1);
+
+    // Handle plain year (non-leap year)
+    if ($sm[6] == $sm[7]) {
+        $months[6] = 'Adar';
+        array_splice($months, 7, 1);
+        array_splice($sm, 6, 1);
+    }
+
+    // Adjust SM array
+    array_pop($sm);
+    array_unshift($sm, $sm_old[12]);
+
+    return [$months, $sm];
 }
+
+// Usage
+[$months, $sm] = getMonthsAndSM($year);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML>
