@@ -1,7 +1,7 @@
 <?php
 require __DIR__ . '/../../../api/header/db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
