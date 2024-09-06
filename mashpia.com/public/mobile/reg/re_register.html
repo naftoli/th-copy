@@ -1193,7 +1193,7 @@
 								<div class="input-group">
 									<span class="input-group-addon"><img
 											src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-									<input id="fhname" name="fhname" type="text" class="form-control keyboardInput" pattern="^[^a-zA-Z]{2,128}[\s\-']$"
+									<input id="fhname" name="fhname" type="text" class="form-control keyboardInput" pattern="^[\u0590-\u05FF\s\-']{1,80}$"
 												 title="Hebrew letters only"	data-key="FirstNameHe" placeholder="first name hebrew letters" required>
 								</div>
 								<!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
@@ -1209,7 +1209,7 @@
 								<div class="input-group">
 									<span class="input-group-addon"><img
 											src="/mobile/img_new/profile-1-color-gray-svg.svg" /></span>
-									<input id="lhname" name="lhname" type="text" class="form-control keyboardInput" pattern="^[^a-zA-Z]{2,128}[\s\-']$"
+									<input id="lhname" name="lhname" type="text" class="form-control keyboardInput" pattern="^[\u0590-\u05FF\s\-']{1,80}$"
 												 title="Hebrew letters only"	data-key="LastNameHe" placeholder="last name hebrew letters" required>
 								</div>
 								<!--<span class="glyphicon form-control-feedback" aria-hidden="true"></span>-->
@@ -1987,17 +1987,20 @@
 							var result = parseInt(success);
 							if (!result) {
 								alert(i18next.t('Errorchildinformation'));
+							} else {
+								alert('Updated successfully.');
 							}
 							if (pos2 == -1) {
 								// figure out where to go from here
-								checkReg();
+								// checkReg();
 								//location.href = checkReg();
+								location.href = "parent_detail.html";
 							} else {
 								if (success) {
 									if (window.location.href.indexOf("===") > -1) {
 										window.close();
-									} else
-										location.href = "/mobile/reg/medals/index.html?id=" + id;
+									}
+									location.href = "parent_detail.html";
 								}
 							}
 						});
