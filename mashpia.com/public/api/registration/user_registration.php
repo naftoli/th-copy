@@ -802,7 +802,7 @@ Tzivos Hashem HQ</body></html>";
         $subject = "Anash Kinder Registration $year";
         $message = "<html><body>";
         $message .= "<h2>Chidon Registration</h2>";
-        $message .= "<p>" . $user->first . ' ' . $user->last . " (ID: " . $user->user_id . ") has just registered for the CTH program.</p>";
+        $message .= "<p>" . $user->first . ' ' . $user->last . " (ID: " . $user->user_id . ") has just registered for the CTH program.</p></body></html>";
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'From: Tzivos Hashem HQ <admin@tzivoshashem.org>';
