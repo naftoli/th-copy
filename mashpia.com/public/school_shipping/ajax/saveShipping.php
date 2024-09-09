@@ -22,7 +22,8 @@ $insert = "INSERT INTO $table
                 school_id = :school, 
                 item_id = :item, 
                 qty = :qty, 
-                status = :status";
+                status = :status, 
+                description = :desc";
 $stmtInsert = $MASHPIA_DB->prepare($insert);
 
 $update = "UPDATE $table 
@@ -65,7 +66,8 @@ foreach ($info as $row) {
                 'school'    => $row['school'],
                 'item'      => $row['item'],
                 'qty'       => $row['qty'],
-                'status'    => intval($row['action'])
+                'status'    => intval($row['action']),
+                'desc'      => $row['desc']
             ]);
         }
         if (! $res) {
@@ -79,5 +81,6 @@ else $MASHPIA_DB->rollBack();
 
 echo json_encode([
     'success'   => $success,
-    'error'     => 'There was an error updating the status.'
+    'error'     => 'There was an error updating the status.',
+    'error_info'=> $success ? '' : $found ? $stmtUpdate->debugDumpParams() : $stmtInsert->debugDumpParams()
 ]);
