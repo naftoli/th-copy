@@ -62,11 +62,39 @@ class ParshaSelect extends Component {
       options.reverse();
 
     // map them to what react-select expects
-    console.log( options );
     return options.map( ({ id, name, start }) => ({
       value: id,
-      label: `${name} - ${ moment( start ).format( 'l' ) }`
+      label: `${name} - ${ moment( this.julianToGregorian(start) ).format( 'l' ) }`
     }) );
+  }
+
+  // convert julian date to gregorian date
+  julianToGregorian = julianDate => {
+    const jd = Math.floor(julianDate) + 0.5;
+    const z = Math.floor(jd);
+    const f = jd - z;
+
+    let a;
+    if (z < 2299161) {
+      a = z;
+    } else {
+      const alpha = Math.floor((z - 1867216.25) / 36524.25);
+      a = z + 1 + alpha - Math.floor(alpha / 4);
+    }
+
+    const b = a + 1524;
+    const c = Math.floor((b - 122.1) / 365.25);
+    const d = Math.floor(365.25 * c);
+    const e = Math.floor((b - d) / 30.6001);
+
+    const day = b - d - Math.floor(30.6001 * e) + f;
+    const month = e < 14 ? e - 1 : e - 13;
+    const year = month > 2 ? c - 4716 : c - 4715;
+
+    // Format the date as yyyy-mm-dd
+    const formattedDate = `${year}-${String(month).padStart(2, '0')}-${String(Math.floor(day)).padStart(2, '0')}`;
+
+    return formattedDate;
   }
 
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
