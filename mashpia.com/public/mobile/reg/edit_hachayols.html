@@ -201,36 +201,6 @@
       }
     })
 
-    // const calcFee = () => {
-    //   let fee
-    //   const today = new Date()
-    //   let dates = ['01/31/23', '02/28/23', '04/04/23', '05/02/23']
-    //   let hachayols = [17, 13, 8, 4]
-    //   // find out when the next shipment is
-    //   let d
-    //   for (d in dates) {
-    //     let day = new Date(dates[d])
-    //     if (day > today) break
-    //   }
-    //   fee = hachayols[d]
-    //   return fee
-    //
-    //   let dayOfWeek = today.getDay()
-    //   // get next Mon
-    //   let toAdd, nextMon
-    //   if (dayOfWeek > 1) toAdd = 8 - dayOfWeek
-    //   else if (dayOfWeek === 1) toAdd = 0
-    //   else toAdd = 1
-    //   nextMon = new Date()
-    //   nextMon.setDate(today.getDate() + toAdd)
-    //
-    //   // calculate how many weeks of hachayols child will be getting
-    //   let endDate = new Date('06/05/23') // last day that will work to still get a hachayol
-    //   let diff = Math.abs(endDate - nextMon)
-    //   let days = Math.ceil(diff / (1000 * 60 * 60 * 24)) // number of days
-    //   fee = Math.ceil(days / 7) // number of weeks / hachayols
-    // }
-
     let total
     const calcTotal = () => {
       let checked = 0
@@ -266,17 +236,34 @@
       $("#total").val(total)
     }
 
+    // get list of children and whether they should or shouldn't be getting hachayols
+    const getHachayolList = () => {
+      let list = []
+      $(".child").each( function () {
+        const user_id = $(this).attr('id')
+        const checked = $(this).is(":checked") ? 1 : 0
+        list.push({ user_id, checked })
+      })
+      return list
+    }
+
     const purchase = async ( e ) => {
       e.preventDefault();
 
-      let purchaseRes = {}
+      const errors = checkForErrors()
+      if (errors.length) {
+        alert(errors.join('\n'))
+        return false
+      }
+
       if (total > 0) {
+        if (!confirm('You are about to be charged $' + total + '.\nAre you sure you want to proceed?')) return false
         // disable puchase button so that they don't accidentally or purposely click it again
-        $("button#purchase").attr('disabled',true);
+        $("button#purchase").attr('disabled', true);
         purchaseRes = JSON.parse(await processPayment())
         if (purchaseRes.error) {
           alert(purchaseRes.error)
-          $("button#purchase").attr('disabled',false); // allow button to be clicked again if needed
+          $("button#purchase").attr('disabled', false); // allow button to be clicked again if needed
         } else {
           alert("Your payment has been received.\nYou have successfully updated your Hachayol settings.\nYou should be getting an email confirmation shortly.")
           location.href = '/mobile'
@@ -286,9 +273,27 @@
         if (hachayols.success) {
           alert('You have successfully updated your Hachayol Settings.')
           location.href = '/mobile'
-        }
-        else alert(hachayols.error)
+        } else if (hachayols.error) alert(hachayols.error)
+        else alert('There was an error updating your Hachayols. Please try again later.')
       }
+    }
+
+    const checkForErrors = () => {
+      const first = $("#cc-first").val().trim();
+      const last = $("#cc-last").val().trim();
+      const num = $("#cc-number").val().trim();
+      const exp = $("#cc-exp").val().trim();
+      const zip = $("#zip").val().trim();
+      const cvv = $("#x_card_code").val().trim();
+
+      let errors = []
+      if ( !first || !last || !num || !exp || !zip || !cvv ) {
+        errors.push("You must fill in all fields.")
+      }
+      if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
+        errors.push("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.")
+      }
+      return errors
     }
 
     const processPayment = async () => {
@@ -298,16 +303,6 @@
       const exp = $("#cc-exp").val().trim();
       const zip = $("#zip").val().trim();
       const cvv = $("#x_card_code").val().trim();
-
-      if ( !first || !last || !num || !exp || !zip || !cvv ) {
-        alert("You must fill in all fields.");
-        return false;
-      }
-
-      if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
-        alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
-        return false;
-      }
 
       // build data
       let info = {};
@@ -321,31 +316,12 @@
       info.cc.cvv = cvv;
       info.zip = zip;
 
-      // get list of children and send extra children that are purchasing
-      let list = []
-      let child_num = 0
-      $(".child").each( function () {
-        child_num++
-        if (child_num > numHachayols) {
-          const user_id = $(this).attr('id')
-          const checked = $(this).is(":checked") ? 1 : 0
-          if (checked) list.push( user_id )
-        }
-      })
-      console.log(list)
-
+      const list = getHachayolList()
       return await $.post('ajax/hachayolPayment.php', { info, list })
     }
 
     const updateHachayols = async () => {
-      // get list of children and whether they should or shouldn't be getting hachayols
-      let list = []
-      $(".child").each( function () {
-        const user_id = $(this).attr('id')
-        const checked = $(this).is(":checked") ? 1 : 0
-        list.push({ user_id, checked })
-      })
-      console.log(list)
+      const list = getHachayolList()
       return await $.post('ajax/updateHachayols.php', { list })
     }
 

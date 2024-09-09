@@ -4,12 +4,13 @@ require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 $stmt = $MASHPIA_DB->prepare("update users set hachayol = :val where user_id = :user");
 $users = $_POST['list'];
+$reverseList = $_POST['reverse'];
 
 $MASHPIA_DB->beginTransaction();
 foreach ($users as $user) {
     $res = $stmt->execute([
         'user'  => $user['user_id'],
-        'val'   => $user['checked']
+        'val'   => intval($reverseList) ? !$user['checked'] : $user['checked']
     ]);
     if (!$res) {
 //        $stmt->debugDumpParams();
