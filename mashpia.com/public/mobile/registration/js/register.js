@@ -821,20 +821,20 @@ var registrationApp = function () {
 
     if (selected_charges.chayolei === true) {
       // check that name is in english characters or apostrophe or hyphen or space or dot or double quote using regex
-      if (!/^[a-zA-Z\s'"-]+$/.test(selected_user.first)) {
-        return showError('You must enter your first name in English characters.')
-      }
-      if (!/^[a-zA-Z\s'"-]+$/.test(selected_user.last)) {
-        return showError('You must enter your last name in English characters.')
-      }
+      // if (!/^[a-zA-Z\s'"-]+$/.test(selected_user.first)) {
+      //   return showError('You must enter your first name in English characters.')
+      // }
+      // if (!/^[a-zA-Z\s'"-]+$/.test(selected_user.last)) {
+      //   return showError('You must enter your last name in English characters.')
+      // }
 
       // check that he name is in hebrew characters or apostrophe or hyphen or space or dot or double quote
-      if (!/^[א-ת\s'"\-\.]*$/.test(selected_user.first_he)) {
-        return showError('You must enter your hebrew first name in Hebrew characters.')
-      }
-      if (!/^[א-ת\s'"\-\.]*$/.test(selected_user.last_he)) {
-        return showError('You must enter your hebrew last name in Hebrew characters.')
-      }
+      // if (!/^[א-ת\s'"\-\.]*$/.test(selected_user.first_he)) {
+      //   return showError('You must enter your hebrew first name in Hebrew characters.')
+      // }
+      // if (!/^[א-ת\s'"\-\.]*$/.test(selected_user.last_he)) {
+      //   return showError('You must enter your hebrew last name in Hebrew characters.')
+      // }
 
       // check that verification is checked off
       if (!$("#he_name").is(":checked")) {
