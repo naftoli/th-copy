@@ -64,8 +64,19 @@ class ParshaSelect extends Component {
     // map them to what react-select expects
     return options.map( ({ id, name, start_date }) => ({
       value: id,
-      label: `${name} - ${ moment( start_date ).format( 'l' ) }`
+      label: `${name} - ${ moment( this.julianToGregorian(start_date) ).format( 'l' ) }`
     }) );
+  }
+
+  // convert julian date to gregorian date
+  julianToGregorian = ( julian ) => {
+    const j = julian + 32044;
+    const g = j + Math.floor( j / 146097 ) * 3 / 4;
+    const e = g + 30.6001 * 13;
+    const day = e % 1;
+    const month = e % 1;
+    const year = Math.floor( e / 1 );
+    return { year, month, day };
   }
 
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
