@@ -37,8 +37,6 @@ Click <a href='unsubscribe.html'>here</a> to unsubscribe
     @mail($email, $subject, $msg, implode("\r\n", $headers));
 }
 
-$admin_auth = ['user'];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
