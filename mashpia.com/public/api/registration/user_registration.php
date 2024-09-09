@@ -554,8 +554,6 @@ class UserRegistrationRouter {
             'genius'    => 'Iyun'
         ];
 
-        $grade = '';
-        $khk = false;
         $cth_names = [];
         $chidon_names = [];
 
@@ -566,10 +564,6 @@ class UserRegistrationRouter {
                 }
                 if (strpos($detail['code'], 'LDE') !== false) {
                     $chidon_names[] = $detail['first'];
-                    $grade = isset($detail['grade']) ? (string)$detail['grade'] : '';
-                }
-                if ($detail['code'] == 'KHKE') {
-                    $khk = true;
                 }
             }
         }
@@ -725,14 +719,6 @@ class UserRegistrationRouter {
 
         // link for whatsapps
         $message .= "<p>Join your child's WhatsApp group to stay up to date with all the latest information: <a href='$link'>WhatsApp Group</a></p>";
-//        if (!empty($grade) || $khk) {
-//            $message .= "<p>Join your child's WhatsApp group to stay up to date with all the latest information: ";
-//            if ($khk) {
-//                $message .= "<a href='" . $links['khk'] . "'>WhatsApp Group</a></p>";
-//            } else {
-//                $message .= "<a href='" . $links[$grade] . "'>WhatsApp Group</a></p>";
-//            }
-//        }
 
         // footer
         $message .= "<p><b>Customer Service</b><br />
@@ -751,7 +737,7 @@ Tzivos Hashem HQ</body></html>";
         } else if ($chidonReg) {
             $subject = "Chidon Enrollment Confirmation";
         }
-        return [$subject, $message];
+        return [$subject, $message, $chidonReg];
     }
 
     private function sendEmailToParents($items, $total) {
@@ -760,9 +746,22 @@ Tzivos Hashem HQ</body></html>";
         $to = $admin->admin_email;
 
         if ( $to ) {
-            [$subject, $message] = $this->getInfoForEmail($items, $total);
+            [$subject, $message, $chidon] = $this->getInfoForEmail($items, $total);
             $bcc = "enrollment@mashpia.com";
-//                $headers[] = "Bcc: " . $bcc;
+            $cc = false;
+
+            // if there's a chidon enrollment from myshliach, a copy should be sent to chidon@myshliach
+            if ($chidon) {
+                foreach ($items as $details) {
+                    foreach ($details as $detail) {
+                        if ($detail['school'] == 61) {
+                            $cc = 'chidon@myshliach.com';
+                            break;
+                        }
+                    }
+                }
+            }
+
             if (in_array($_SERVER['HTTP_HOST'], ['tzivos.local', 'localhost'])) {
                 $mailer = new PHPMailer();
                 try {
@@ -790,6 +789,7 @@ Tzivos Hashem HQ</body></html>";
                     $mailer->Body = $message;
                     $mailer->AltBody = strip_tags($message);
                     $mailer->addAddress($to);
+                    if ($cc) $mailer->addCC($cc);
                     $mailer->setFrom('dev@tzivoshashem.org', 'Tzivos Hashem HQ');
                     if (! $mailer->send()) {
                         $error = 'Your information has been saved but there was an error sending the confirmation email.\nError: ' . $mailer->ErrorInfo;
@@ -804,6 +804,7 @@ Tzivos Hashem HQ</body></html>";
                 $headers[] = 'Content-type: text/html; charset=iso-8859-1';
                 $headers[] = 'From: Tzivos Hashem HQ <dev@tzivoshashem.org>';
                 $headers[] = "Bcc: " . $bcc;
+                if ($cc) $headers[] = "Cc: " . $cc;
                 if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
                     $msg = "Your information has been saved but there was an error sending the confirmation email.\n
                         Please contact HQ (718-907-8884) to check that your information was saved correctly.";
