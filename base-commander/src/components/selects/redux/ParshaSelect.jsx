@@ -76,7 +76,7 @@ class ParshaSelect extends Component {
     const day = e % 1;
     const month = e % 1;
     const year = Math.floor( e / 1 );
-    return { year, month, day };
+    return '' + year + '-' + month + '-' + day;
   }
 
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
