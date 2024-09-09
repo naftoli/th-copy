@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // components
 import { Select } from '../static/Select';
 // functions
-import moment from 'moment';
+// import moment from 'moment';
 import { toast } from 'react-toastify';
 import { findOption } from 'functions/selects';
 // state
