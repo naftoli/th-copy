@@ -307,13 +307,10 @@ class UserRegistrationRouter {
                                         'year'      => $cthYr,
                                         'grade'     => intval($user->platoon->class_grade),
                                     ];
-//                                    if ($user->school_id == 269) {
-//                                        // send email to anash kinder about child's registration
-//                                        if (! $this->sendRegEmail($user, $cthYr)) {
-//                                            $MASHPIA_DB->rollBack();
-//                                            json_error("Error sending email to anash kinder");
-//                                        }
-//                                    }
+                                    if ($user->school_id == 269) {
+                                        // send email to anash kinder about child's registration
+                                        $this->sendEmailToAK($user, $cthYr);
+                                    }
                                 }
                             }
                         }
@@ -797,6 +794,19 @@ Tzivos Hashem HQ</body></html>";
             return $error;
         }
         return 0; // no error
+    }
+
+    private function sendEmailToAK($user, $year)
+    {
+        $to = 'anash@tzivoshashem.org';
+        $subject = "Anash Kinder Registration $year";
+        $message = "<html><body>";
+        $message .= "<h2>Chidon Registration</h2>";
+        $message .= "<p>" . $user->first . ' ' . $user->last . " (ID: " . $user->user_id . ") has just registered for the CTH program.</p>";
+        $headers[] = 'MIME-Version: 1.0';
+        $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+        $headers[] = 'From: Tzivos Hashem HQ <admin@tzivoshashem.org>';
+        @mail($to, $subject, $message, implode("\r\n", $headers));
     }
 }
 
