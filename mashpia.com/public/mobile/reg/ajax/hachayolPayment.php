@@ -46,7 +46,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $info = $_POST['info'];
 $user_ids = $_POST['list'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 
 $amount = (float)$info['amount'];
 $card_num = $info['cc']['num'];
@@ -100,38 +100,42 @@ if ( $amount > 0 ) {
             'admin'         => $admin_id
         ]);
 
-        if ($res) $trans_id = $MASHPIA_DB->lastInsertId();
-//        else $stmt->debugDumpParams();
+        if ($res) {
+            $trans_id = $MASHPIA_DB->lastInsertId();
 
-        // save to registration charges table
-        $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO registration_charges 
-            SET trans_id = :trans_id, 
-            user_id = :user, 
-            school_id = :school, 
-            type = :type, 
-            amount = 20, 
-            year = :year, 
-            discount = 0
-        ");
-        $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
-        foreach ($users as $user_id => $school_id) {
-            $stmt->execute([
-                'trans_id'  => $trans_id,
-                'user'      => $user_id,
-                'school'    => $school_id,
-                'type'      => 'HACH',
-                'year'      => $year
+            // save to registration charges table
+            $stmt = $MASHPIA_DB->prepare("
+                INSERT INTO registration_charges 
+                SET trans_id = :trans_id, 
+                user_id = :user, 
+                school_id = :school, 
+                type = :type, 
+                amount = 20, 
+                year = :year, 
+                discount = 0
+            ");
+            $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
+            foreach ($users as $user_id => $school_id) {
+                $stmt->execute([
+                    'trans_id' => $trans_id,
+                    'user' => $user_id,
+                    'school' => $school_id,
+                    'type' => 'HACH',
+                    'year' => $year
+                ]);
+                $stmt2->execute(['user' => $user_id]);
+            }
+            // send email confirmation
+            sendEmailConf($response_array[6]);
+            echo json_encode([
+                'success'   => true
             ]);
-            $stmt2->execute([ 'user' => $user_id ]);
+        } else {
+            echo json_encode([
+                'success'   => false,
+                'error'     => "There was an error saving your info, however your credit card WAS CHARGED. Please contact us. 718-907-8884. Your transaction ID is: " . $response_array[6]
+            ]);
         }
-
-        // send email confirmation
-        sendEmailConf($response_array[6]);
-
-        echo json_encode([
-            'success'   => true
-        ]);
     } else {
         echo json_encode([
             'success' => false,
