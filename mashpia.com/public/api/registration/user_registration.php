@@ -52,11 +52,33 @@ class UserRegistrationRouter {
     }
     // return shipping price for users submitted
     public function getShipping(){
-        global $current_user;
+        global $current_user, $MASHPIA_DB;
 
         if( !isset( $_POST[ 'school_ids' ] ) ){
             json_response( false );
         }
+
+        // check if family has already paid shipping for this year
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT 
+                count(*) as paid
+            FROM
+                registration_charges
+            WHERE
+                user_id IN (SELECT 
+                        id
+                    FROM
+                        admin_auths
+                    WHERE
+                        admin_id = :admin_id)
+                    AND year = :year
+                    AND type IN ('THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT')");
+        $stmt->execute([
+            'admin_id'  => $current_user->admin_id,
+            'year'      => GlobalSettings::getRegistrationYear()
+        ]);
+        $result = $stmt->fetch();
+        if ($result['paid']) json_response(false);
 
         $school_ids = $_POST[ 'school_ids' ];
         $schools_with_shipping = [
