@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // components
 import { Select } from '../static/Select';
 // functions
-// import moment from 'moment';
+import moment from 'moment';
 import { toast } from 'react-toastify';
 import { findOption } from 'functions/selects';
 // state
@@ -62,21 +62,11 @@ class ParshaSelect extends Component {
       options.reverse();
 
     // map them to what react-select expects
-    return options.map( ({ id, name, start_date }) => ({
+    console.log( options );
+    return options.map( ({ id, name, start }) => ({
       value: id,
-      label: `${name} - ${ this.julianToGregorian(start_date) }`
+      label: `${name} - ${ moment( start ).format( 'l' ) }`
     }) );
-  }
-
-  // convert julian date to gregorian date
-  julianToGregorian = ( julian ) => {
-    const j = julian + 32044;
-    const g = j + Math.floor( j / 146097 ) * 3 / 4;
-    const e = g + 30.6001 * 13;
-    const day = e % 1;
-    const month = e % 1;
-    const year = Math.floor( e / 1 );
-    return '' + month + '/' + day + '/' + year;
   }
 
   filter = ( option, value ) => option.label.toLowerCase().includes( value.toLowerCase() );
