@@ -8,7 +8,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 if ($admin_user['auth'] != 'super') exit;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonRegYear();
+$chayoleiYr = GlobalSettings::getRegistrationYear();
+$chidonYr = GlobalSettings::getChidonRegYear();
 
 $id = $_POST['id'];
 $amount = floatval(str_replace('$', '', $_POST['amount']));

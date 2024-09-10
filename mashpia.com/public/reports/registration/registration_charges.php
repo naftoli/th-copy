@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array();
 require_once(__DIR__ . '/../../header.php');
 
@@ -32,7 +35,7 @@ $detail_query = mysql_query(
     . "WHERE year = $year ORDER BY rc.date DESC, school_name, u.first, u.last, rc.amount;"
 );
 while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
-//echo "<pre>"; print_r($details); echo "</pre>"; exit;
+//echo "<pre>"; print_r($details); echo "</pre>";
 ?>
   <!DOCTYPE html>
   <html>
@@ -102,20 +105,20 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     </thead>
     <tbody>
     <?php
-    foreach ($details as $user) { ?>
-      <tr id="<?= $user['registration_charge_id'] ?>">
-        <td><?= $user['school_number'] ?></td>
-        <td><?= $user['school_name'] ?></td>
-        <td><?= $user['user_serial'] ?></td>
-        <td><?= $user['first'] . " " . $user['last'] ?></td>
-        <td><?= getDescription($user['type']) ?></td>
-        <td><?= $user['type'] ?></td>
-        <td><?= (new DateTime($user['date']))->format('m/d/Y g:i:sa e'); ?></td>
-        <td>$<?= $user['amount'] ?></td>
-        <td><?= intval($user['refunded']) ? 'Yes' : 'No'; ?></td>
+    foreach ($details as $detail) { ?>
+      <tr id="<?= $detail['registration_charge_id'] ?>">
+        <td><?= $detail['school_number'] ?></td>
+        <td><?= $detail['school_name'] ?></td>
+        <td><?= $detail['user_serial'] ?></td>
+        <td><?= $detail['first'] . " " . $detail['last'] ?></td>
+        <td><?= ChidonShipping::getDescription($detail['type']) ?></td>
+        <td><?= $detail['type'] ?></td>
+        <td><?= (new DateTime($detail['date']))->format('m/d/Y g:i:sa e'); ?></td>
+        <td>$<?= $detail['amount'] ?></td>
+        <td><?= intval($detail['refunded']) ? 'Yes' : 'No'; ?></td>
         <td>
           <button class="refund"
-              <?php if (intval($user['refunded'])) echo " disabled"; ?>
+              <?php if (intval($detail['refunded'])) echo " disabled"; ?>
           >Refund Charge
           </button>
         </td>
