@@ -32,6 +32,7 @@ $detail_query = mysql_query(
     . "WHERE year = $year ORDER BY rc.date DESC, school_name, u.first, u.last, rc.amount;"
 );
 while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
+//echo "<pre>"; print_r($details); echo "</pre>"; exit;
 ?>
   <!DOCTYPE html>
   <html>
