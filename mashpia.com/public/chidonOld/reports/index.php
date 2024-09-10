@@ -41,6 +41,7 @@ $info = array(
 		'allergies'		=>	'Allergies',
 		'sandwich'		=>	'Sandwich',
 		'sweater_size'	=>	'Sweater Size',
+    'yarmulka'    =>  'Yarmulka Size',
 		'shoe_size'		=>	'Shoe Size',
 		'test_type' 	=>	'Track',
 		'eligibility'   =>  'Eligibility Status',
