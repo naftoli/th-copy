@@ -44,6 +44,10 @@ class GlobalSettings {
         return self::getHelper('charidy_year');
     }
 
+    public static function getSummerMissionsStart() {
+        return self::getHelper('summer_missions_start');
+    }
+
     public static function getPointsDates() {
         $dates = [];
         $sql = "select * from global_settings where `key` in ('points_start','points_start_australia')";
