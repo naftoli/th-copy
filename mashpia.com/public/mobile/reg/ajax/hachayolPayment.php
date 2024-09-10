@@ -115,6 +115,9 @@ if ( $amount > 0 ) {
         $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
 
         foreach ($users as $user) {
+            if (!in_array($user['user_id'], $user_ids)) {
+                continue;
+            }
             $res = $stmt->execute([
                 'trans_id'  => $trans_id,
                 'user'      => $user['user_id'],
@@ -127,9 +130,12 @@ if ( $amount > 0 ) {
             ]);
             if (!$res || !$res2) {
                 $MASHPIA_DB->rollBack();
+                if (!$res) $details = $stmt->debugDumpParams();
+                if (!$res2) $details = $stmt2->debugDumpParams();
                 echo json_encode([
                     'success'   => false,
-                    'error'     => $error_msg
+                    'error'     => $error_msg,
+                    'details'   => $details
                 ]);
                 exit;
             }
