@@ -19,7 +19,7 @@ function sendEmailConf($trans_id) {
     $msg = "Dear $first $last, your payment of $" . $amount . " has been received. Your transaction ID for your records is: " . $trans_id;
     $msg .= "<br />Your Hachayol subscription has been updated.<br /><br />Sincerely,<br />Tzivos Hashem Headquarters<br /><br/>";
     $msg .= "<div>
-&copy; Tzivos Hashem 2020<br />
+&copy; Tzivos Hashem 2024<br />
 792 Eastern Pkwy<br />
 Brooklyn, NY 11213
 <a href='privacy.html'>Privacy Policy</a><br />
