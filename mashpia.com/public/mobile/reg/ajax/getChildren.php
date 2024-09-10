@@ -348,13 +348,6 @@ if ( !empty( $users ) ) {
             " and location = 'parent_account' and version = 0";
         $resBook = mysql_query($sqlBook);
         if (mysql_num_rows($resBook) > 0) $children[$row['user_id']]['bookPurchased'] = 1;
-        else {
-            // check from registration charges
-            $sqlBook2 = "select * from registration_charges where year = " . $chidon_year . " and user_id = " . $row['user_id'] .
-                " and type like 'YB%'";
-            $resBook2 = mysql_query($sqlBook2);
-            if (mysql_num_rows($resBook2) > 0) $children[$row['user_id']]['bookPurchased'] = 1;
-        }
 
 //        $trackSql = "select * from th_chidon where date_paid > 0 and year = " . $chidon_year . " and user_id = " . $row['user_id'];
 //        $trackRes = mysql_query($trackSql);
