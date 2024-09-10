@@ -9,7 +9,7 @@ $MASHPIA_DB->beginTransaction();
 foreach ($users as $user) {
     $res = $stmt->execute([
         'user'  => $user['user_id'],
-        'val'   => $user['checked']
+        'val'   => intval($user['checked'])
     ]);
     if (!$res) {
 //        $stmt->debugDumpParams();

@@ -1,41 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
-function sendEmailConf($trans_id) {
-    global $MASHPIA_DB, $admin_id, $amount, $first, $last;
-
-    // get email address
-    $stmt = $MASHPIA_DB->prepare("
-        SELECT admin_email FROM admins WHERE admin_id = :id
-    ");
-    $stmt->execute([
-        'id'    => $admin_id
-    ]);
-    $row = $stmt->fetch();
-    $email = $row['admin_email'];
-
-    $subject = "Hachayol Subscription";
-    $msg = "Dear $first $last, your payment of $" . $amount . " has been received. Your transaction ID for your records is: " . $trans_id;
-    $msg .= "<br />Your Hachayol subscription has been updated.<br /><br />Sincerely,<br />Tzivos Hashem Headquarters<br /><br/>";
-    $msg .= "<div>
-&copy; Tzivos Hashem 2024<br />
-792 Eastern Pkwy<br />
-Brooklyn, NY 11213
-<a href='privacy.html'>Privacy Policy</a><br />
-Click <a href='unsubscribe.html'>here</a> to unsubscribe
-</div>";
-
-    // To send HTML mail, the Content-type header must be set
-    $headers[] = 'MIME-Version: 1.0';
-    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-
-    // Additional headers
-    $headers[] = 'From: Tzivos Hashem <accounting@tzivoshashem.org>';
-
-    // Mail it
-    @mail($email, $subject, $msg, implode("\r\n", $headers));
-}
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
@@ -56,21 +21,29 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
-$MASHPIA_DB->beginTransaction();
+// figure out how many children are being charged
+$num_children = intval($amount / 20);
+
+// figure out which child(ren) is getting charged for hachayol
+$getting_charged = 0;
+$user_ids = [];
+foreach ($users as $user) {
+    if (intval($user['checked']) && !intval($user['paid'])) {
+        $user_ids[] = $user['user_id'];
+        $getting_charged++;
+        if ($getting_charged == $num_children) {
+            break;
+        }
+    }
+}
 
 $description = "";
 // get serial numbers for description
-$user_ids = array_map(function($user) {
-    if ($user['checked']) {
-        return $user['user_id'];
-    }
-}, $users);
 $user_info = [];
 $qry = "select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")";
 $stmt = $MASHPIA_DB->query($qry);
 $rows = $stmt->fetchAll();
 if (empty($rows)) {
-    $MASHPIA_DB->rollBack();
     echo json_encode([
         'success'   => false,
         'error'     => "No users selected."
@@ -94,6 +67,9 @@ if ( $amount > 0 ) {
         $response_array[6] . ':' .
         $response_array[9];
 
+        $error_msg = "There was an error saving your info, however your credit card WAS CHARGED. Please contact us by sending an email to 'support@tzivoshashem.org'. Your transaction ID is: " . $response_array[6];
+
+        $MASHPIA_DB->beginTransaction();
         // save to transactions table
         $stmt = $MASHPIA_DB->prepare("
                 INSERT INTO transactions 
@@ -117,48 +93,51 @@ if ( $amount > 0 ) {
             $MASHPIA_DB->rollBack();
             echo json_encode([
                 'success'   => false,
-                'error'     => "There was an error saving your info, however your credit card WAS CHARGED. Please contact us. F. Your transaction ID is: " . $response_array[6]
+                'error'     => $error_msg
             ]);
             exit;
         }
 
-        if ($res) {
-            $trans_id = $MASHPIA_DB->lastInsertId();
+        $trans_id = $MASHPIA_DB->lastInsertId();
 
-            // save to registration charges table
-            $stmt = $MASHPIA_DB->prepare("
-                INSERT INTO registration_charges 
-                SET trans_id = :trans_id, 
-                user_id = :user, 
-                school_id = :school, 
-                type = :type, 
-                amount = 20, 
-                year = :year, 
-                discount = 0
-            ");
-            $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
+        // save to registration charges table
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO registration_charges 
+            SET trans_id = :trans_id, 
+            user_id = :user, 
+            school_id = :school, 
+            type = :type, 
+            amount = 20, 
+            year = :year, 
+            discount = 0
+        ");
+        // update users table
+        $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
 
-            foreach ($users as $user) {
-                $res = $stmt->execute([
-                    'trans_id'  => $trans_id,
-                    'user'      => $user['user_id'],
-                    'school'    => $user_info[$user['user_id']],
-                    'type'      => 'HACH',
-                    'year'      => $year
+        foreach ($users as $user) {
+            $res = $stmt->execute([
+                'trans_id'  => $trans_id,
+                'user'      => $user['user_id'],
+                'school'    => $user_info[$user['user_id']],
+                'type'      => 'HACH',
+                'year'      => $year
+            ]);
+            $res2 = $stmt2->execute([
+                'user'  => $user['user_id']
+            ]);
+            if (!$res || !$res2) {
+                $MASHPIA_DB->rollBack();
+                echo json_encode([
+                    'success'   => false,
+                    'error'     => $error_msg
                 ]);
-                $res2 = $stmt2->execute([
-                    'user'  => $user['user_id']
-                ]);
+                exit;
             }
+
             // send email confirmation
             sendEmailConf($response_array[6]);
             echo json_encode([
                 'success'   => true
-            ]);
-        } else {
-            echo json_encode([
-                'success'   => false,
-                'error'     => "There was an error saving your info, however your credit card WAS CHARGED. Please contact us by emailing to 'support@tzivoshashem.org'. Your transaction ID is: " . $response_array[6]
             ]);
         }
     } else {
@@ -172,4 +151,39 @@ if ( $amount > 0 ) {
         'success'   => false,
         'error'     => "You have not selected anything to purchase."
     ]);
+}
+
+function sendEmailConf($trans_id) {
+    global $MASHPIA_DB, $admin_id, $amount;
+
+    // get email address
+    $stmt = $MASHPIA_DB->prepare("
+        SELECT admin_email FROM admins WHERE admin_id = :id
+    ");
+    $stmt->execute([
+        'id'    => $admin_id
+    ]);
+    $row = $stmt->fetch();
+    $email = $row['admin_email'];
+
+    $subject = "Hachayol Subscription";
+    $msg = "Your payment of $" . $amount . " has been received. Your transaction ID for your records is: " . $trans_id;
+    $msg .= "<br /><br />Sincerely,<br />Tzivos Hashem Headquarters<br /><br/>";
+    $msg .= "<div>
+&copy; Tzivos Hashem 2024<br />
+792 Eastern Pkwy<br />
+Brooklyn, NY 11213
+<a href='privacy.html'>Privacy Policy</a><br />
+Click <a href='unsubscribe.html'>here</a> to unsubscribe
+</div>";
+
+    // To send HTML mail, the Content-type header must be set
+    $headers[] = 'MIME-Version: 1.0';
+    $headers[] = 'Content-type: text/html; charset=iso-8859-1';
+
+    // Additional headers
+    $headers[] = 'From: Tzivos Hashem <accounting@tzivoshashem.org>';
+
+    // Mail it
+    @mail($email, $subject, $msg, implode("\r\n", $headers));
 }

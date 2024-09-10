@@ -190,7 +190,8 @@
               showChecked = true
             }
             html += `<div class="flex">
-                      <input type="checkbox" name="child" id="${child.user_id}" class="child inputCheckbox" ${showChecked ? 'checked' : ''} />
+                      <input type="checkbox" name="child" id="${child.user_id}" class="child inputCheckbox"
+                        ${showChecked ? 'checked' : ''} data-already-paid="${showChecked ? 1 : 0}" />
                       <span class="childName">${child.first}</span>
                     </div>`
           }
@@ -242,7 +243,8 @@
       $(".child").each( function () {
         const user_id = $(this).attr('id')
         const checked = $(this).is(":checked") ? 1 : 0
-        list.push({ user_id, checked })
+        const paid = parseInt($(this).data('already-paid'))
+        list.push({ user_id, checked, paid })
       })
       return list
     }
