@@ -171,8 +171,7 @@ if ( !empty( $users ) ) {
         $sqlLulav = "select ls.*
                      from lulav_settings ls
                      join schools s using (school_id)
-                     where school_country in ('United States','US','USA','U.S.A.','Canada','canada')
-                     and year = " . $reg_year;
+                     where year = " . $reg_year;
         $resLulav = mysql_query( $sqlLulav );
         while ( $rowLulav = mysql_fetch_assoc( $resLulav ) ) {
            if ( intval( $rowLulav['allow_lulav'] ) ) $lulavSchools[$rowLulav['school_id']] = $rowLulav['lulav_shipping'];
