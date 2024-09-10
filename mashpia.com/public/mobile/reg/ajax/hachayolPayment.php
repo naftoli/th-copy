@@ -125,6 +125,7 @@ if ( $amount > 0 ) {
                 'type'      => 'HACH',
                 'year'      => $year
             ]);
+//            $stmt->debugDumpParams();
             $res2 = $stmt2->execute([
                 'user'  => $user['user_id']
             ]);
@@ -135,11 +136,13 @@ if ( $amount > 0 ) {
                 echo json_encode([
                     'success'   => false,
                     'error'     => $error_msg,
-                    'details'   => $MASHPIA_DB->errorInfo()
+                    'details'   => $stmt->errorCode() > 0 ? $stmt->errorInfo() : $stmt2->errorInfo()
                 ]);
                 exit;
             }
         }
+        // commit transaction
+        $MASHPIA_DB->commit();
         // send email confirmation
         sendEmailConf($response_array[6]);
         echo json_encode([
