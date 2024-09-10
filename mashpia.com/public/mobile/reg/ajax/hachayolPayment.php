@@ -130,12 +130,12 @@ if ( $amount > 0 ) {
             ]);
             if (!$res || !$res2) {
                 $MASHPIA_DB->rollBack();
-                if (!$res) $details = $stmt->debugDumpParams();
-                if (!$res2) $details = $stmt2->debugDumpParams();
+//                if (!$res) $details = $stmt->debugDumpParams();
+//                if (!$res2) $details = $stmt2->debugDumpParams();
                 echo json_encode([
                     'success'   => false,
                     'error'     => $error_msg,
-                    'details'   => $details
+                    'details'   => $MASHPIA_DB->errorInfo()
                 ]);
                 exit;
             }
