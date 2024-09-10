@@ -139,13 +139,12 @@ if ( $amount > 0 ) {
                 ]);
                 exit;
             }
-
-            // send email confirmation
-            sendEmailConf($response_array[6]);
-            echo json_encode([
-                'success'   => true
-            ]);
         }
+        // send email confirmation
+        sendEmailConf($response_array[6]);
+        echo json_encode([
+            'success'   => true
+        ]);
     } else {
         echo json_encode([
             'success' => false,
