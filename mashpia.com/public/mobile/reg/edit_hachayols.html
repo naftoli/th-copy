@@ -267,6 +267,7 @@
         $("button#purchase").attr('disabled', false); // allow button to be clicked again if needed
         if (purchaseRes.error) {
           alert(purchaseRes.error)
+          console.log(purchaseRes.details)
         } else {
           const hachayols = JSON.parse(await updateHachayols(list))
           if (hachayols.success) {
