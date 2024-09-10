@@ -42,7 +42,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $info = $_POST['info'];
-$user_ids = $_POST['list'];
+$users = $_POST['list'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 $year = GlobalSettings::getRegistrationYear();
 
@@ -56,14 +56,19 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
-$users = [];
 $description = "";
 // get serial numbers for description
+$user_ids = array_map(function($user) {
+    if ($user['checked']) {
+        return $user['user_id'];
+    }
+}, $users);
+$user_info = [];
 $qry = "select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")";
 $stmt = $MASHPIA_DB->query($qry);
 $rows = $stmt->fetchAll();
 foreach ($rows as $row) {
-    $users[$row['user_id']] = $row['school_id'];
+    $user_info[$row['user_id']] = $row['school_id'];
     $description .= "C" . $row['user_serial'] . ":HACH-20,";
 }
 // remove trailing comma
@@ -113,15 +118,19 @@ if ( $amount > 0 ) {
                 discount = 0
             ");
             $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
-            foreach ($users as $user_id => $school_id) {
-                $stmt->execute([
-                    'trans_id' => $trans_id,
-                    'user' => $user_id,
-                    'school' => $school_id,
-                    'type' => 'HACH',
-                    'year' => $year
+
+            $MASHPIA_DB->beginTransaction();
+            foreach ($users as $user) {
+                $res = $stmt->execute([
+                    'trans_id'  => $trans_id,
+                    'user'      => $user['user_id'],
+                    'school'    => $user_info[$user['user_id']],
+                    'type'      => 'HACH',
+                    'year'      => $year
                 ]);
-                $stmt2->execute(['user' => $user_id]);
+                $res2 = $stmt2->execute([
+                    'user'  => $user['user_id']
+                ]);
             }
             // send email confirmation
             sendEmailConf($response_array[6]);

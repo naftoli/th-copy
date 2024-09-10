@@ -265,8 +265,14 @@
           alert(purchaseRes.error)
           $("button#purchase").attr('disabled', false); // allow button to be clicked again if needed
         } else {
-          alert("Your payment has been received.\nYou have successfully updated your Hachayol settings.\nYou should be getting an email confirmation shortly.")
-          location.href = '/mobile'
+          const hachayols = JSON.parse(await updateHachayols())
+          if (hachayols.success) {
+            alert("Your payment has been received.\nYou have successfully updated your Hachayol settings.\nYou should be getting an email confirmation shortly.")
+            location.href = '/mobile'
+          } else {
+            console.log(hachayols)
+            alert('You payment has been received but there was an error updating your Hachayols. Please contact us.')
+          }
         }
       } else {
         const hachayols = JSON.parse(await updateHachayols())
@@ -274,7 +280,7 @@
           alert('You have successfully updated your Hachayol Settings.')
           location.href = '/mobile'
         } else if (hachayols.error) alert(hachayols.error)
-        else alert('There was an error updating your Hachayols. Please try again later.')
+        else alert('There was an error updating your Hachayols. Please try again.')
       }
     }
 
