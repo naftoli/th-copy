@@ -807,7 +807,7 @@ Tzivos Hashem HQ</body></html>";
                 if ($cc) $headers[] = "Cc: " . $cc;
                 if (! @mail($to, $subject, $message, implode("\r\n", $headers))) {
                     $msg = "Your information has been saved but there was an error sending the confirmation email.\n
-                        Please contact HQ (718-907-8884) to check that your information was saved correctly.";
+                        Please contact HQ by sending an email to 'support@tzivoshashem.org' to check that your information was saved correctly.";
                     json_error($msg);
                     @mail($bcc, $subject, $message, implode("\r\n", $headers));
                 }

@@ -139,7 +139,7 @@ if ($result) {
 } else {
     echo json_encode([
         'success'   =>  false,
-        'error'     =>  'Your credit card was charged, however, there was an error saving your purchase. Please contact HQ (718-907-8884)
+        'error'     =>  'Your credit card was charged, however, there was an error saving your purchase. Please contact HQ via email - support@tzivoshashem.org - 
                                 and keep the following authorization code as proof of purchase: ' . $response_array[6]
     ]);
 }

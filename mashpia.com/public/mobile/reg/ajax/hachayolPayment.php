@@ -56,6 +56,8 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
+$MASHPIA_DB->beginTransaction();
+
 $description = "";
 // get serial numbers for description
 $user_ids = array_map(function($user) {
@@ -67,6 +69,14 @@ $user_info = [];
 $qry = "select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")";
 $stmt = $MASHPIA_DB->query($qry);
 $rows = $stmt->fetchAll();
+if (empty($rows)) {
+    $MASHPIA_DB->rollBack();
+    echo json_encode([
+        'success'   => false,
+        'error'     => "No users selected."
+    ]);
+    exit;
+}
 foreach ($rows as $row) {
     $user_info[$row['user_id']] = $row['school_id'];
     $description .= "C" . $row['user_serial'] . ":HACH-20,";
@@ -103,6 +113,15 @@ if ( $amount > 0 ) {
             'admin'         => $admin_id
         ]);
 
+        if (! $res) {
+            $MASHPIA_DB->rollBack();
+            echo json_encode([
+                'success'   => false,
+                'error'     => "There was an error saving your info, however your credit card WAS CHARGED. Please contact us. F. Your transaction ID is: " . $response_array[6]
+            ]);
+            exit;
+        }
+
         if ($res) {
             $trans_id = $MASHPIA_DB->lastInsertId();
 
@@ -119,7 +138,6 @@ if ( $amount > 0 ) {
             ");
             $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
 
-            $MASHPIA_DB->beginTransaction();
             foreach ($users as $user) {
                 $res = $stmt->execute([
                     'trans_id'  => $trans_id,
@@ -140,7 +158,7 @@ if ( $amount > 0 ) {
         } else {
             echo json_encode([
                 'success'   => false,
-                'error'     => "There was an error saving your info, however your credit card WAS CHARGED. Please contact us. 718-907-8884. Your transaction ID is: " . $response_array[6]
+                'error'     => "There was an error saving your info, however your credit card WAS CHARGED. Please contact us by emailing to 'support@tzivoshashem.org'. Your transaction ID is: " . $response_array[6]
             ]);
         }
     } else {

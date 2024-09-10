@@ -164,7 +164,7 @@
                     const data = $.parseJSON( success )
                     const parent = data.parent
                     if (!parent.showRefund) {
-                        alert('You need to request access to this page from HQ.\nPlease call 718-907-8884.')
+                        alert('You need to request access to this page from HQ.')
                         location.href = "index.html"
                     } else if (parent.alreadyRefunded) {
                         alert('You have already been refunded.')

@@ -160,8 +160,8 @@ var childApp = function(){
         // if ( !postData.mobile_pic ) {
         //     return showError( "Please upload a profile picture for your child." );
         // }
-        const responseMsgText = "\nPlease speak to Tzivos Hashem HQ (718-907-8884).\nOr send an email to 'cth@tzivosHashem.org'.";
-        const responseMsgText_he = " נא לדבר עם מטה צבאות ה בטלפון (718-907-8884) או לשלוח מייל בכתובת 'cth@tzivosHashem.org'  "
+        const responseMsgText = "\nPlease send an email to 'support@tzivosHashem.org'.";
+        const responseMsgText_he = " נא לדבר לשלוח מייל בכתובת 'support@tzivosHashem.org'  "
 
         var confirmation = confirm("IMPORTANT NOTE: If your child already had an account previously with a different school, " +
             "please email anash@tzivoshashem.org to transfer them to their new base. Do not create a new one or they will lose all the medals, " +

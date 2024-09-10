@@ -256,31 +256,32 @@
         return false
       }
 
+      const list = getHachayolList()
       if (total > 0) {
         if (!confirm('You are about to be charged $' + total + '.\nAre you sure you want to proceed?')) return false
         // disable puchase button so that they don't accidentally or purposely click it again
         $("button#purchase").attr('disabled', true);
-        purchaseRes = JSON.parse(await processPayment())
+        purchaseRes = JSON.parse(await processPayment(list))
+        $("button#purchase").attr('disabled', false); // allow button to be clicked again if needed
         if (purchaseRes.error) {
           alert(purchaseRes.error)
-          $("button#purchase").attr('disabled', false); // allow button to be clicked again if needed
         } else {
-          const hachayols = JSON.parse(await updateHachayols())
+          const hachayols = JSON.parse(await updateHachayols(list))
           if (hachayols.success) {
             alert("Your payment has been received.\nYou have successfully updated your Hachayol settings.\nYou should be getting an email confirmation shortly.")
             location.href = '/mobile'
           } else {
             console.log(hachayols)
-            alert('You payment has been received but there was an error updating your Hachayols. Please contact us.')
+            alert('You payment has been received but there was an error updating your Hachayols. Please contact us by emailing to "support@tzivoshashem.org"')
           }
         }
       } else {
-        const hachayols = JSON.parse(await updateHachayols())
+        const hachayols = JSON.parse(await updateHachayols(list))
         if (hachayols.success) {
           alert('You have successfully updated your Hachayol Settings.')
           location.href = '/mobile'
         } else if (hachayols.error) alert(hachayols.error)
-        else alert('There was an error updating your Hachayols. Please try again.')
+        else alert('There was an error updating your Hachayols. Please contact us by emailing to "support@tzivoshashem.org"')
       }
     }
 
@@ -302,7 +303,7 @@
       return errors
     }
 
-    const processPayment = async () => {
+    const processPayment = async (list) => {
       const first = $("#cc-first").val().trim();
       const last = $("#cc-last").val().trim();
       const num = $("#cc-number").val().trim();
@@ -322,12 +323,10 @@
       info.cc.cvv = cvv;
       info.zip = zip;
 
-      const list = getHachayolList()
       return await $.post('ajax/hachayolPayment.php', { info, list })
     }
 
-    const updateHachayols = async () => {
-      const list = getHachayolList()
+    const updateHachayols = async (list) => {
       return await $.post('ajax/updateHachayols.php', { list })
     }
 

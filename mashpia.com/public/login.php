@@ -384,9 +384,7 @@ if (isset($admin_auth))
 						<div class="col_content" style="min-height:0;">
 							<div class="module" id="module-info">
 								<div class="module_content">
-									<p>For more information, please contact:<br>
-									Mushkie Rosenblum<br>
-									718-907-8884<br>
+									<p>For more information, please email support@tzivoshashem.org<br />
 									<a href='ma&#105;lto&#58;CT%48&#64;T%7&#65;ivosHas&#104;em&#46;org'>CTH&#64;Tzi&#118;osH&#97;she&#109;&#46;o&#114;g</a></p>
 								</div>
 							</div>
