@@ -52,13 +52,7 @@ if ($res && !$duplicate) {
         case 'KHKE':
             $updated = updateKHK();
             break;
-        case 'RRYSD':
-        case 'RRYDA':
-        case 'RRHVN':
-        case 'RRKHK':
-        case 'RRSUSA':
-        case 'RRSCAN':
-        case 'RRSINT':
+        case 'RRFAM':
             $updated = updateChidonReg();
             break;
         case 'YB1':
@@ -68,6 +62,13 @@ if ($res && !$duplicate) {
         case 'YB5':
             $updated = updateYahadus();
             break;
+        case 'RRYSD':
+        case 'RRYDA':
+        case 'RRHVN':
+        case 'RRKHK':
+        case 'RRSUSA':
+        case 'RRSCAN':
+        case 'RRSINT':
         case 'shipping':
         case 'THAKUSA':
         case 'THAKCAN':
