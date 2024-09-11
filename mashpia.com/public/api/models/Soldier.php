@@ -469,7 +469,6 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type, s.chidon as school_chidon 
                     FROM users u "
-                ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
                 ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
                 ."JOIN schools s ON u.school_id = s.school_id "
                 ."WHERE u.user_id = :user_id;"
@@ -483,7 +482,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( $row['chayolei'] && !$isBC ) {
             $result[ 'chayolei' ] = !!$row['user_reg_id'];
         } else if ( $row['chayolei'] ) {
-            $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
+            $result[ 'chayolei' ] = $row['user_registered'] > 0;
         } else {
             $result['chayolei'] = true;
         }
