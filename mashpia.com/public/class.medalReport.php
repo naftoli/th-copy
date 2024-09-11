@@ -36,7 +36,7 @@ class MedalReport extends Report {
             AND (
                 (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
                 OR 
-                (mm.date_promoted > " . $this->dates[0] . " AND mm.date_awarded <= $end AND mm.date_shipped IS NULL)
+                (mm.date_awarded > " . $this->dates[0] . " AND mm.date_awarded <= $end AND mm.date_shipped IS NULL)
             ) 
         ";
         $sql = "
@@ -105,7 +105,7 @@ class MedalReport extends Report {
                         AND (
                             (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
                             OR 
-                            (mm.date_promoted > " . $this->dates[0] . " AND mm.date_awarded <= $end AND mm.date_shipped IS NULL)
+                            (mm.date_awarded > " . $this->dates[0] . " AND mm.date_awarded <= $end AND mm.date_shipped IS NULL)
                         ) 
                     ";
                     $sql = "
