@@ -469,20 +469,21 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $user_status_query = $MASHPIA_DB->prepare(
             "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, u.chidon, s.reg_type, s.chidon as school_chidon 
                     FROM users u "
+                ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
                 ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
                 ."JOIN schools s ON u.school_id = s.school_id "
                 ."WHERE u.user_id = :user_id;"
         );
-        $user_status_query->execute([ ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
+        $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
 
         // for some reason Mendel programmed it such that "true" means NOT to register, and "false" means YES to register
         $result = [];
 
-        if ( $row['chayolei'] ) {
-            $result[ 'chayolei' ] = $row['user_registered'] > 0;
-//        } else if ( $row['chayolei'] ) {
-//            $result[ 'chayolei' ] = $row['user_registered'] > 0;
+        if ( $row['chayolei'] && !$isBC ) {
+            $result[ 'chayolei' ] = !!$row['user_reg_id'];
+        } else if ( $row['chayolei'] ) {
+            $result[ 'chayolei' ] = !!$row['user_reg_id'] && !is_null($row['paid']);
         } else {
             $result['chayolei'] = true;
         }

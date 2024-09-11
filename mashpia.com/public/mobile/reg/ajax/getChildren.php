@@ -124,7 +124,7 @@ if ( !empty( $users ) ) {
                 ! ISNULL(tc.th_chidon_id) AS reg_chidon,
                 tc.th_chidon_id,
                 tc.invite_used, 
-                u.user_registered AS reg_chayolei,
+                ! ISNULL(ur.user_reg_id) AS reg_chayolei,
                 sri.date_paid AS registered,
                 u.chayolei,
                 u.chidon, 
@@ -141,6 +141,9 @@ if ( !empty( $users ) ) {
                     LEFT JOIN
                 th_chidon tc ON u.user_id = tc.user_id
                     AND tc.year = " . $chidon_year . "
+                    LEFT JOIN
+                user_registration ur ON u.user_id = ur.user_id
+                    AND ur.year = " . $reg_year . "
                     LEFT JOIN
                 school_registrations sri ON u.school_id = sri.school_id
                     AND sri.year = " . $reg_year . "
