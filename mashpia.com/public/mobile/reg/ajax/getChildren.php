@@ -124,7 +124,7 @@ if ( !empty( $users ) ) {
                 ! ISNULL(tc.th_chidon_id) AS reg_chidon,
                 tc.th_chidon_id,
                 tc.invite_used, 
-                ! ISNULL(ur.user_reg_id) AS reg_chayolei,
+                u.user_registered AS reg_chayolei,
                 sri.date_paid AS registered,
                 u.chayolei,
                 u.chidon, 
