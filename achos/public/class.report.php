@@ -5,12 +5,14 @@ class Report {
     protected $heReportDates;
     protected $users;
     protected $school_id;
+    protected $schoolExceptions;
     
     public function __construct() {
         $this->dates = array( 2458978, 2456224, 2456259, 2456300, 2456331, 2456359, 2456411, 2456441 );
         $this->users = array();
         $this->school_id = null;
         $this->setReportDates();
+        $this->schoolExceptions = [585, 588, 612, 709];
     }
     
     private function setReportDates() {
@@ -86,8 +88,9 @@ class Report {
             USING ( school_id ) 
             JOIN classes c 
             USING ( class_id ) 
-            WHERE u.user_registered >0 ";
+            WHERE u.user_registered > 0 ";
         if (is_null( $this->school_id )) {
+
             $sql .= "
                 AND s.school_era IS NULL 
                 AND s.school_id not in (61, 82, 66, 112, 180)

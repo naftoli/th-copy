@@ -160,8 +160,12 @@ class GlobalSettings {
     }
 
     public static function isAustralian( $school_id ) {
-        $australian = [ 66, 110, 112, 180, 713, 709 ];
+        $australian = self::getAustralian();
         return in_array( $school_id, $australian );
+    }
+
+    public static function getAustralian() {
+        return [ 66, 110, 112, 180, 713, 709 ];
     }
 
      /**

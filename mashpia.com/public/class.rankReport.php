@@ -8,7 +8,6 @@ class RankReport extends Report {
     protected $userInfo;
     protected $rankOrds;
     protected $userHeNames;
-    protected $schoolExceptions;
     protected $schoolLogos;
     protected $userSchool;
     protected $userPic;
@@ -20,7 +19,6 @@ class RankReport extends Report {
         $this->userInfo = array();
         $this->userHeNames = array();
         $this->rankOrds['Private'] = 1;
-        $this->schoolExceptions = [180, 585, 588, 612, 709];
         $this->schoolLogos = [];
         $this->userSchool = [];
         $this->userPic = [];
@@ -45,7 +43,7 @@ class RankReport extends Report {
             JOIN users u USING ( user_id )
             JOIN schools s USING ( school_id )
             JOIN classes c ON ( u.class_id = c.class_id ) 
-            WHERE u.medals_ranks = 1  
+            WHERE u.medals_ranks = 1 
             AND u.user_registered > 0 
             $filter ";
         if (!is_null($this->school_id)) {

@@ -10,7 +10,6 @@ class MedalReport extends Report {
     private $userInfo;
     private $medalOrds;
     private $subjects;
-    private $schoolExceptions;
     private $totalSchools = 0;
     private $totalGrades = 0;
     private $totalStudents = 0;
@@ -21,7 +20,6 @@ class MedalReport extends Report {
         $this->userInfo = array();
         $this->medalOrds = array();
         $this->subjects = array();
-        $this->schoolExceptions = [180,588,612];
     }
     
     public function setMedalSummary($forShipping = false) {
@@ -34,7 +32,13 @@ class MedalReport extends Report {
 //                )";
 //        }
 //        else $filter = " AND (mm.date_awarded >= $start AND mm.date_awarded <= $end) ";
-        $filter = " AND (mm.date_awarded >= $start AND mm.date_awarded <= $end) ";
+        $filter = " 
+            AND (
+                (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
+                OR 
+                (mm.date_promoted > " . $this->dates[0] . " AND mm.date_awarded <= $end AND mm.date_shipped IS NULL)
+            ) 
+        ";
         $sql = "
             SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total 
             FROM medal_marks mm

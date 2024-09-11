@@ -99,6 +99,10 @@ $userInfo = $m->getUserInfo();
         display: none;
       }
     }
+    button {
+      padding: 10px;
+      font-size: 14px;
+    }
   </style>
   <script type="text/javascript">
     function check() {
@@ -129,9 +133,10 @@ $userInfo = $m->getUserInfo();
     0.5 Top<br/>
     0.3 Left<br/>
     0.0 Right and Bottom<br/><br/>
-    <div align='center'>
+    <div>
       <input type='button' name='print' value='Print' onclick="check()"/>
     </div>
+    <br />
   </div>
 </div>
 
@@ -252,6 +257,9 @@ $userInfo = $m->getUserInfo();
 <div id="sheet">
   <p>
     Total Medals: <?= $totalNumMedals; ?>
+  </p>
+  <p>
+    <button>Set All As Shipped</button>
   </p>
   <table>
     <tr>
