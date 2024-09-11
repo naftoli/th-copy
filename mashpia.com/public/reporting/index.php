@@ -1,12 +1,16 @@
 <?php
-//ini_set('display_errors',1);
+ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school');
 require_once( __DIR__ . '/../header.php' );
 require_once( __DIR__ . '/../class.adminSchools.php' );
 require_once( __DIR__ . '/../class.schoolClasses.php' );
+require_once( __DIR__ . '/../class.globalSettings.php' );
 
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
+$yr = GlobalSettings::getRegistrationYear();
 
 // key corresponds to db table and field name and value corresponds to output text on form
 // when we are not pulling from a specific table I use the word 'calc' instead
@@ -28,7 +32,9 @@ $userInfo = [
     'calc|total_points'     => 'Total Miles', 
     'calc|total_this_yr'    => 'Total Miles from Beginning of Year',
     'sm|kapitlach'          => 'Shabbos Mevorchim Kapitlach (only works during the week of shabbos mevorchim)',
-    'sm|minutes'            => 'Shabbos Mevorchim Minutes (only works during the week of shabbos mevorchim)'
+    'sm|minutes'            => 'Shabbos Mevorchim Minutes (only works during the week of shabbos mevorchim)',
+    'user_registration|user_reg_id' => 'Chayolei Registered',
+    'th_chidon|th_chidon_id' => 'Chidon Registered'
 ];
 
 $adminInfo = [
@@ -99,6 +105,19 @@ function buildSelect( $info ) {
                 </legend>
                 <?= buildSelect( $adminInfo ); ?>
             </fieldset>
+
+            <fieldset id="yearSelect">
+              <legend>Year(s) (Only relevant for Chayoeli/Chidon Registered selection)</legend>
+              <select name="year">
+                <?php
+                $year = $yr;
+                for ( $i = 0; $i < 5; $i++  ) {
+                    echo "<option value='" . $year . "'>" . $year . "</option>";
+                    $year--;
+                }
+                ?>
+              </select>
+            </fieldset>
             
             <div style="clear: both"></div>
             <fieldset id="options">
@@ -106,7 +125,9 @@ function buildSelect( $info ) {
                 <?php 
                 if ( count( $schools ) > 1 ) {
                     echo "<select name='school' id='school'>";
+                    echo "<option value='-1'>All Schools</option>";
                     foreach ( $schools as $id => $school ) {
+                        if (empty($school)) continue;
                         echo "<option value='" . $id . "'>" . $school . "</option>";
                     }
                     echo "</select><br /><br />";

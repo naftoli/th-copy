@@ -13,6 +13,9 @@ class ReportingEngine {
     private $checkRank;
     private $checkPoints;
     private $checkSM;
+    private $year;
+    private $user_reg;
+    private $chidon_reg;
     
     public function __construct( $info ) {
         $this->createAliases();
@@ -26,6 +29,9 @@ class ReportingEngine {
         $this->checkRank = false;
         $this->checkPoints = false;
         $this->checkSM = false;
+        $this->year = '';
+        $this->user_reg = false;
+        $this->chidon_reg = false;
     }
     
     private function createAliases() {
@@ -33,7 +39,10 @@ class ReportingEngine {
             'users'         =>  'u',
             'admins'        =>  'a',
             'classes'       =>  'c',
-            'schools'       =>  's'
+            'schools'       =>  's',
+            'ranks'         =>  'r',
+            'user_registration' => 'ur',
+            'th_chidon'     => 'tc'
         );
     }
 
@@ -48,6 +57,11 @@ class ReportingEngine {
     public function setGrade( $grade ) {
         if ( $grade > 0 ) $this->grade = $grade;
     }
+
+    public function setYear( $year )
+    {
+        $this->year = $year;
+    }
     
     public function createQry() {
         $sql = $this->generateSelect();
@@ -59,7 +73,7 @@ class ReportingEngine {
     private function generateSelect() {
         $sql = "SELECT ";
         foreach ($this->data as $table => $columns) {
-            // skip rank, calc, and sm info - we will get that later
+            // skip rank, calc, sm, reg info - we will get that later
             if ( in_array( $table, ['calc','ranks', 'sm'] ) ) continue;
 
             // make sure to always have user_id when pulling from users table
@@ -113,6 +127,14 @@ class ReportingEngine {
                     case 'sm':
                         $this->checkSM = true;
                         break;
+                    case 'user_registration':
+                        $this->user_reg = true;
+                        $sql .= "LEFT JOIN user_registration ur ON ur.user_id = u.user_id ";
+                        break;
+                    case 'th_chidon':
+                        $this->chidon_reg = true;
+                        $sql .= "LEFT JOIN th_chidon tc ON tc.user_id = u.user_id ";
+                        break;
                 }
             }
         } else if ( $root == 'admins' ) {
@@ -142,6 +164,23 @@ class ReportingEngine {
             } else if ( $this->grade > 0 ) {
                 $sql .= " AND c.class_grade = '" . $this->grade . "'";
             }
+        }
+        // limit to year(s) if we are looking for registration info
+        // find out which registration tables are in the data array
+        $tables = array_keys( $this->data );
+        if ( in_array( 'user_registration', $tables )
+            && in_array( 'th_chidon', $tables )
+        ) {
+            $sql .= " AND ((ur.year IS NULL OR ur.year = $this->year) OR (tc.year IS NULL OR tc.year = $this->year))";
+            $sql .= " GROUP BY u.user_id";
+        }
+        else if ( in_array( 'user_registration', $tables ) ) {
+            $sql .= " AND (ur.year IS NULL OR ur.year = $this->year)";
+            $sql .= " GROUP BY u.user_id";
+        }
+        else if ( in_array( 'th_chidon', $tables ) ) {
+            $sql .= " AND (tc.year IS NULL OR tc.year = $this->year)";
+            $sql .= " GROUP BY u.user_id";
         }
 
         return $sql;
@@ -188,6 +227,13 @@ class ReportingEngine {
                                 break;
                         }
                     }
+                }
+                // check if we need to show chayolei / chidon registration
+                if ( $this->user_reg ) {
+                    $row['user_reg'] = $row['ur_user_reg_id'] ? 'yes' : 'no';
+                }
+                if ( $this->chidon_reg ) {
+                    $row['chidon_reg'] = $row['tc_th_chidon_id'] ? 'yes' : 'no';
                 }
                 // make sure there's at least one field that has info that's not blank
                 $addToResult = false;

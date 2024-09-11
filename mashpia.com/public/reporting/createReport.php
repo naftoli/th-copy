@@ -1,5 +1,7 @@
 <?php
-//echo "<pre>"; print_r( $_POST ); echo "</pre>";
+ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+
 require '../db.php';
 require 'classes/class.reportingEngine.php';
 
@@ -35,6 +37,7 @@ $engine = new ReportingEngine( $info );
 $engine->setSchool( mysql_real_escape_string( $_POST['school'] ) );
 $engine->setClass( mysql_real_escape_string( $_POST['grade'] ) );
 $engine->setGrade( mysql_real_escape_string( $_POST['gradeOnly'] ) );
+$engine->setYear( $_POST['year'] );
 
 $engine->createQry();
 if ( $engine->runQry() ) {
@@ -60,6 +63,7 @@ $fields = [
     'c_class_sub'       => 'Class Sub',
     's_school_name'     => 'School',
     'r_rank_name'       => 'Rank',
+    'a_admin_id'        => 'Family ID',
     'a_first'           => 'Parent First',
     'a_last'            => 'Parent Last',
     'a_admin_address1'  => 'Parent Address',
@@ -77,7 +81,9 @@ $fields = [
     'total_this_yr'     => 'Total Miles Earned this Year', 
     'user_id'           => 'User ID',
     'kapitlach'         => 'Shabbos Mevorchim Kapitlach',
-    'minutes'           => 'Shabbos Mevorchim Minutes'
+    'minutes'           => 'Shabbos Mevorchim Minutes',
+    'user_reg'          => 'Chayolei Registered',
+    'chidon_reg'        => 'Chidon Registered'
 ];
 ?>
 <!DOCTYPE html>
@@ -116,6 +122,7 @@ $fields = [
                     // all rows have same keys / fields so only need to get it from the first one
                     echo "<tr>";
                     foreach ( $result[0] as $field => $value ) {
+                        if (! isset($fields[$field])) continue;
                         echo "<th>" . $fields[$field] . "</th>";
                     }
                     echo "</tr>";
@@ -126,7 +133,8 @@ $fields = [
                 <?php
                     foreach ( $result as $info ) {
                         echo "<tr>";	
-                        foreach ( $info as $value ) {
+                        foreach ( $info as $field => $value ) {
+                            if (! isset($fields[$field])) continue;
                             if (is_numeric($value) && strlen($value) == 19) $value = '3' . $value;
                             echo "<td>" . $value . "</td>";
                         }
