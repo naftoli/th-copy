@@ -142,9 +142,6 @@ if ( !empty( $users ) ) {
                 th_chidon tc ON u.user_id = tc.user_id
                     AND tc.year = " . $chidon_year . "
                     LEFT JOIN
-                user_registration ur ON u.user_id = ur.user_id
-                    AND ur.year = " . $reg_year . "
-                    LEFT JOIN
                 school_registrations sri ON u.school_id = sri.school_id
                     AND sri.year = " . $reg_year . "
             WHERE
