@@ -473,7 +473,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 ."JOIN schools s ON u.school_id = s.school_id "
                 ."WHERE u.user_id = :user_id;"
         );
-        $user_status_query->execute([ ':year' => $year, ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
+        $user_status_query->execute([ ':chidon_year' => $chidon_year, ':user_id' => $this->user_id ]);
         $row = $user_status_query->fetch();
 
         // for some reason Mendel programmed it such that "true" means NOT to register, and "false" means YES to register
