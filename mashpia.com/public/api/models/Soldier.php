@@ -480,7 +480,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $result = [];
 
         if ( $row['chayolei'] ) {
-            $result[ 'chayolei' ] = !$row['user_registered'] > 0;
+            $result[ 'chayolei' ] = $row['user_registered'] > 0;
 //        } else if ( $row['chayolei'] ) {
 //            $result[ 'chayolei' ] = $row['user_registered'] > 0;
         } else {
