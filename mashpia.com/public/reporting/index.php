@@ -107,7 +107,7 @@ function buildSelect( $info ) {
             </fieldset>
 
             <fieldset id="yearSelect">
-              <legend>Year(s) (Only relevant for Chayoeli/Chidon Registered selection)</legend>
+              <legend>Year (Only relevant for Chayoeli/Chidon Registered selection)</legend>
               <select name="year">
                 <?php
                 $year = $yr;
