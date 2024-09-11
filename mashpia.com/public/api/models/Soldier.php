@@ -479,10 +479,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // for some reason Mendel programmed it such that "true" means NOT to register, and "false" means YES to register
         $result = [];
 
-        if ( $row['chayolei'] && !$isBC ) {
-            $result[ 'chayolei' ] = !!$row['user_reg_id'];
-        } else if ( $row['chayolei'] ) {
+        if ( $row['chayolei'] ) {
             $result[ 'chayolei' ] = $row['user_registered'] > 0;
+//        } else if ( $row['chayolei'] ) {
+//            $result[ 'chayolei' ] = $row['user_registered'] > 0;
         } else {
             $result['chayolei'] = true;
         }
