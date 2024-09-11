@@ -19,13 +19,12 @@ $heDates = $m->getHeReportDates();
 $m->setMedalDetails();
 $details = $m->getMedalDetails();
 $userInfo = $m->getUserInfo();
+$medals_info = $m->getMedalsInfo();
+$for_shipping = [];
 //echo "<pre>"; print_r($details); echo "</pre>";
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-
 <HTML DIR="<?= $dir ?>">
-
 <HEAD>
   <TITLE>Medals Labels Report</TITLE>
   <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
@@ -99,6 +98,7 @@ $userInfo = $m->getUserInfo();
         display: none;
       }
     }
+
     button {
       padding: 10px;
       font-size: 14px;
@@ -108,6 +108,11 @@ $userInfo = $m->getUserInfo();
     function check() {
       if (confirm("Have you made sure to set your printer margins properly?\nIf not, please click 'cancel', set your margins, and then click 'print' again."))
         window.print();
+    }
+
+    function setAsShipped() {
+      const for_shipping = <?= json_encode($for_shipping) ?>;
+      console.log(for_shipping)
     }
   </script>
 </HEAD>
@@ -134,9 +139,9 @@ $userInfo = $m->getUserInfo();
     0.3 Left<br/>
     0.0 Right and Bottom<br/><br/>
     <div>
-      <input type='button' name='print' value='Print' onclick="check()"/>
+      <button onclick="check()">Print</button>
     </div>
-    <br />
+    <br/>
   </div>
 </div>
 
@@ -208,6 +213,8 @@ $userInfo = $m->getUserInfo();
                                 }
                                 echo "<span class='medal'>" . $subject . "-" . $medal . "</span>";
                                 $sheet[$school_id][$user][$userInfo[$user]][$grade][$subject][] = $medal;
+                                $medal_info = $medals_info[$user]['shipped_specific'][$subject][$medal];
+                                $for_shipping[$user][$medal_info['subject_id']][] = $medal_info['medal_ord'];
                                 $numMedals++;
                                 $totalNumMedals++;
                             }
@@ -252,6 +259,7 @@ $userInfo = $m->getUserInfo();
         }
         $i++;
     }
+
     ?>
 </div>
 <div id="sheet">
@@ -259,7 +267,7 @@ $userInfo = $m->getUserInfo();
     Total Medals: <?= $totalNumMedals; ?>
   </p>
   <p>
-    <button>Set All As Shipped</button>
+    <button onclick="setAsShipped()">Set All As Shipped</button>
   </p>
   <table>
     <tr>
