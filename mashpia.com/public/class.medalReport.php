@@ -101,6 +101,13 @@ class MedalReport extends Report {
             	$students = $this->users[$school_id][$name];
                 //foreach ( $user as $student ) {
                     //echo $school_id . ":" . $name . ":" . $student;
+                    $filter = " 
+                        AND (
+                            (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
+                            OR 
+                            (mm.date_promoted > " . $this->dates[0] . " AND mm.date_awarded <= $end AND mm.date_shipped IS NULL)
+                        ) 
+                    ";
                     $sql = "
                         SELECT s.subject_name, m.medal_name, u.user_id, u.last, u.first, 
                         c.class_grade, c.class_sub, c.class_teacher, mm.*, s.subject_id
@@ -110,12 +117,11 @@ class MedalReport extends Report {
                         JOIN subjects s USING ( subject_id )
                         JOIN schools sch USING ( school_id ) 
                         LEFT JOIN classes c using (class_id)  
-                        WHERE mm.date_awarded >= $start 
-                        AND mm.date_awarded <= $end  
-                        and sch.school_id = $school_id  
+                        WHERE sch.school_id = $school_id 
                         and u.user_id in (" . implode(',', $students) . ")
 						and s.subject_id != 106 
-                        ORDER BY u.user_id, s.subject_id, mm.medal_ord
+                        $filter 
+                        ORDER BY u.user_id, s.subject_id, mm.medal_ord 
                     ";
                     //echo $sql . "<br />"; continue;
                     $result = mysql_query($sql) or die(mysql_error());

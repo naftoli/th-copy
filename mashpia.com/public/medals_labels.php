@@ -109,11 +109,6 @@ $for_shipping = [];
       if (confirm("Have you made sure to set your printer margins properly?\nIf not, please click 'cancel', set your margins, and then click 'print' again."))
         window.print();
     }
-
-    function setAsShipped() {
-      const for_shipping = <?= json_encode($for_shipping) ?>;
-      console.log(for_shipping)
-    }
   </script>
 </HEAD>
 
@@ -296,5 +291,19 @@ $for_shipping = [];
       ?>
   </table>
 </div>
+<script>
+  const setAsShipped = () => {
+    const for_shipping = <?= json_encode($for_shipping) ?>;
+    console.log(for_shipping)
+    $.post('medals/set_as_shipped.php', { info : for_shipping }, (res) => {
+      const result = JSON.parse(res)
+      if (result.success) {
+        alert('All medals have been set as shipped')
+      } else {
+        alert('There was an error setting the medals as shipped')
+      }
+    })
+  }
+</script>
 </BODY>
 </HTML>
