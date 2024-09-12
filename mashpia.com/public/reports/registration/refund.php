@@ -7,8 +7,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') exit;
 
-echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $chayoleiYr = GlobalSettings::getRegistrationYear();
 $chidonYr = GlobalSettings::getChidonRegYear();
