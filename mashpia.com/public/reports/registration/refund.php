@@ -21,7 +21,7 @@ $duplicate = $_POST['duplicate'];
 
 $stmt = $MASHPIA_DB->prepare("
     update registration_charges 
-    set refunded = 1, refund_reason = :reason, 
+    set refunded = 1, refund_reason = :reason 
     where registration_charge_id = :id and amount = :amount 
 ");
 
@@ -88,7 +88,7 @@ else $MASHPIA_DB->rollBack();
 
 echo json_encode([
     'success' => $res && $updated,
-    'error_msg' => $stmt->debugDumpParams(),
+    'error_msg' => $stmt->errorInfo(),
     'error' => 'There was an error updating the database.'
 ]);
 
