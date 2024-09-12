@@ -123,7 +123,7 @@ class MedalReport extends Report {
                         $filter 
                         ORDER BY u.user_id, s.subject_id, mm.medal_ord 
                     ";
-                    //echo $sql . "<br />"; continue;
+//                    echo $sql . "<br />"; continue;
                     $result = mysql_query($sql) or die(mysql_error());
                     while ($row = mysql_fetch_assoc($result)) {
                         if ($row['last'] != "") {

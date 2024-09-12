@@ -1,4 +1,7 @@
 <?php
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school');
 require('header.php');
 
@@ -21,7 +24,7 @@ $details = $m->getMedalDetails();
 $userInfo = $m->getUserInfo();
 $medals_info = $m->getMedalsInfo();
 $for_shipping = [];
-//echo "<pre>"; print_r($details); echo "</pre>";
+//echo "<pre>"; print_r($details); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML DIR="<?= $dir ?>">

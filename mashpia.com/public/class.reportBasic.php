@@ -118,7 +118,7 @@ class ReportBasic {
     }
     
     public function setException( $id ) {
-        if (!in_array($id, $this->exceptions)) $this->exceptions[] = $id;
+        if (!in_array($id, $this->schoolExceptions)) $this->schoolExceptions[] = $id;
     }
     
     public function setSchoolId( $id ) {
@@ -142,7 +142,7 @@ class ReportBasic {
         if (is_null($this->school_id)) {
             $sql .= "
                 AND s.school_era IS NULL 
-                AND s.school_id not in (" . implode(',', $this->exceptions) . ") 
+                AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ") 
                 ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first 
             ";
         } else {
