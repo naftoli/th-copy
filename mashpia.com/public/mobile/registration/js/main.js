@@ -17,6 +17,7 @@ $.ajaxSetup({
 function showError( message ){
     $("#errorBody").empty().html( message );
     $("#errorModal").modal('show');
+    $("#payment-button").attr('disabled', false)
     $("#payment-button").html('Pay And Register');
     return false;
 }

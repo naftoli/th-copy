@@ -2132,7 +2132,6 @@ var registrationApp = function () {
         $("#successModal").modal('show')
       } else {
         showError(data.error);
-        $("#payment-button").removeAttr('disabled')
       }
     });
   }
