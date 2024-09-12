@@ -130,9 +130,9 @@ $subject_medals = getInfo();
   </div>
 </div>
 
-<div class="no-print">
-  <button id="medalsBtnAll">Set All Medals as Shipped</button>
-</div>
+<!--<div class="no-print">-->
+<!--  <button id="medalsBtnAll">Set All Medals as Shipped</button>-->
+<!--</div>-->
 
 <div id="report_div" name="report_div">
   <h2>Totals</h2>
@@ -196,7 +196,7 @@ $subject_medals = getInfo();
 <script>
   $(function () {
     $("#medalsBtnAll").click(function () {
-
+      alert('Not implemented yet');
     })
   })
 </script>
