@@ -6,14 +6,14 @@ require_once('calendar.php');
 function getInfo()
 {
     $sql = "SELECT 
-            s.subject_name, m.medal_name, ms.subject_id, ms.medal_ord 
-        FROM
-            medals_subjects ms
-                JOIN
-            medals m USING (medal_ord)
-                JOIN
-            subjects s USING (subject_id)
-        ORDER BY subject_id , medal_ord";
+              s.subject_name, m.medal_name, ms.subject_id, ms.medal_ord 
+          FROM
+              medals_subjects ms
+                  JOIN
+              medals m USING (medal_ord)
+                  JOIN
+              subjects s USING (subject_id)
+          ORDER BY subject_id , medal_ord";
     $result = mysql_query($sql);
     $info = [];
     while ($row = mysql_fetch_assoc($result)) {
@@ -49,11 +49,8 @@ $totalStudents = $m->getTotalStudents();
 
 $subject_medals = getInfo();
 ?>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-
 <HTML DIR="<?= $dir ?>">
-
 <HEAD>
   <TITLE>Medals Summary Report</TITLE>
   <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
@@ -106,6 +103,11 @@ $subject_medals = getInfo();
         height: 10.5in;
       }
     }
+
+    button {
+      padding: 10px;
+      font-size: 14px;
+    }
   </style>
 </HEAD>
 
@@ -147,20 +149,6 @@ $subject_medals = getInfo();
       foreach ($summary as $school => $line) {
           $totalSchools++;
           echo "Medals Summary for " . $school . "<br /><br />";
-//          foreach ($line as $subject => $medals) {
-//              echo "<div class='label'>" . $subject . "<br />";
-//              echo "<div class='medals'>";
-//              foreach ($medals as $medal => $total) {
-//                  echo $medal . " - " . $total . "<br />";
-//                  if (isset($grandtotals[$subject][$medal])) {
-//                      $grandtotals[$subject][$medal] += $total;
-//                  } else {
-//                      $grandtotals[$subject][$medal] = $total;
-//                  }
-//              }
-//              echo "</div></div>";
-//              echo "<div class='break'></div>";
-//          }
           foreach ($subject_medals as $subject => $medals) {
               echo "<div class='label'>" . $subject . "<br />";
               echo "<div class='medals'>";
@@ -206,20 +194,9 @@ $subject_medals = getInfo();
 
 </BODY>
 <script>
-  const start = <?= $dates['start']; ?>;
-  const end = <?= $dates['end']; ?>;
-
   $(function () {
     $("#medalsBtnAll").click(function () {
-      $.getJSON('edit_functions.php?function_name=update_medals_all&parameters=' + start + '_' + end, function (data) {
-        if (success == 1) {
-          alert('All medals have been set as shipped.');
-        } else {
-          alert('There was an error setting all medals as shipped.');
-        }
-      }).fail(function () {
-        alert('There was an error setting all medals as shipped.');
-      })
+
     })
   })
 </script>

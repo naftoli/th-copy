@@ -59,7 +59,7 @@ class MedalReport extends Report {
             GROUP BY sch.school_name, s.subject_id, mm.medal_ord  
             ORDER BY sch.school_name, s.subject_id, mm.medal_ord
         ";
-        //echo $sql; return;
+//        echo $sql; return;
         $this->medalsTotal = array();
         $this->medalTotals = array();
         $result = mysql_query($sql);

@@ -5,13 +5,13 @@ class ReportBasic {
     protected $heReportDates;
     protected $users;
     protected $school_id;
-    protected $exceptions;
+    protected $schoolExceptions;
     protected $grades;
     
     public function __construct() {
         $this->users = [];
         $this->school_id = null;
-        $this->exceptions = [61, 82, 66, 112, 110, 180, 269];
+        $this->schoolExceptions = [61, 82, 66, 112, 110, 180, 269];
         $this->grades = [];
 	}
     
