@@ -2062,7 +2062,7 @@ var registrationApp = function () {
     cardInput.removeClass("visa mastercard amex discover");
     $("#x_card_code").attr("placeholder", "XXX");
     // digits only
-    if (!event.key.match(/[0-9]/))
+    if (event.key && !event.key.match(/[0-9]/))
       event.target.value = event.target.value.replace(/[^0-9 ]/g, '');
     // decect card type from: https://www.regular-expressions.info/creditcard.html
     var cardNumber = event.target.value.replace(/\D/g, '');
