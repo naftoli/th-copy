@@ -252,14 +252,13 @@
     const purchase = async ( e ) => {
       e.preventDefault();
 
-      const errors = checkForErrors()
-      if (errors.length) {
-        alert(errors.join('\n'))
-        return false
-      }
-
       const list = getHachayolList()
       if (total > 0) {
+        const errors = checkForErrors()
+        if (errors.length) {
+          alert(errors.join('\n'))
+          return false
+        }
         if (!confirm('You are about to be charged $' + total + '.\nAre you sure you want to proceed?')) return false
         // disable puchase button so that they don't accidentally or purposely click it again
         $("button#purchase").attr('disabled', true);
