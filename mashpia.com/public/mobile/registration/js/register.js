@@ -1223,7 +1223,7 @@ var registrationApp = function () {
 
     // do some more validations
     // make sure address1 has at least 1 number followed by a space and at least 3 letters following
-    if (!/^[0-9]+ .{3,}/.test(address.address1)) {
+    if (address.country == 'USA' && !/^[0-9]+ .{3,}/.test(address.address1)) {
       alert("You must enter a valid address")
       $("#c-address").focus()
       return false
