@@ -42,10 +42,10 @@ $m->setMedalSummary(true);
 $summary = $m->getMedalSummary();
 $dates = $m->getReportDates();
 
-$m->setMedalDetails();
-$totalSchools = $m->getTotalSchools();
-$totalGrades = $m->getTotalGrades();
-$totalStudents = $m->getTotalStudents();
+//$m->setMedalDetails();
+//$totalSchools = $m->getTotalSchools();
+//$totalGrades = $m->getTotalGrades();
+//$totalStudents = $m->getTotalStudents();
 
 $subject_medals = getInfo();
 ?>
@@ -135,12 +135,12 @@ $subject_medals = getInfo();
 <!--</div>-->
 
 <div id="report_div" name="report_div">
-  <h2>Totals</h2>
-  <p>
-    Total Schools: <?= $totalSchools; ?><br/>
-    Total Classes: <?= $totalGrades; ?><br/>
-    Total Students: <?= $totalStudents ?><br/>
-  </p>
+<!--  <h2>Totals</h2>-->
+<!--  <p>-->
+<!--    Total Schools: --><?php //= $totalSchools; ?><!--<br/>-->
+<!--    Total Classes: --><?php //= $totalGrades; ?><!--<br/>-->
+<!--    Total Students: --><?php //= $totalStudents ?><!--<br/>-->
+<!--  </p>-->
 
   <h2>Medals Summary</h2>
   <div class='page'>
