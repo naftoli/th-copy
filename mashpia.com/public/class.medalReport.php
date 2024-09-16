@@ -59,7 +59,7 @@ class MedalReport extends Report {
             GROUP BY sch.school_name, s.subject_id, mm.medal_ord  
             ORDER BY sch.school_name, s.subject_id, mm.medal_ord
         ";
-//        echo $sql; return;
+        echo $sql; return;
         $this->medalsTotal = array();
         $this->medalTotals = array();
         $result = mysql_query($sql);
@@ -105,7 +105,7 @@ class MedalReport extends Report {
                         AND (
                             (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
                             OR 
-                            (mm.date_awarded > " . $this->dates[0] . " AND mm.date_awarded <= $end AND mm.date_shipped IS NULL)
+                            (mm.date_awarded > " . $this->dates[1] . " AND mm.date_awarded < $start AND mm.date_shipped IS NULL)
                         ) 
                     ";
                     $sql = "
