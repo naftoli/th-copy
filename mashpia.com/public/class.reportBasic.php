@@ -138,7 +138,7 @@ class ReportBasic {
             ON s.school_id = u.school_id 
             JOIN classes c 
             ON c.class_id = u.class_id 
-            WHERE u.user_registered >0 ";
+            WHERE u.user_registered > 0 ";
         if (is_null($this->school_id)) {
             $sql .= "
                 AND s.school_era IS NULL 

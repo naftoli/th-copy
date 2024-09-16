@@ -13,7 +13,7 @@ class MedalReport extends Report {
     private $totalSchools = 0;
     private $totalGrades = 0;
     private $totalStudents = 0;
-    
+
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
         $this->medalsInfo = array();
@@ -21,17 +21,11 @@ class MedalReport extends Report {
         $this->medalOrds = array();
         $this->subjects = array();
     }
-    
-    public function setMedalSummary($forShipping = false) {
+
+    private function createSql($detailed = false)
+    {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
-//        if ($forShipping) {
-//            $filter = "
-//                AND (
-//                    (mm.date_awarded >= $start AND mm.date_awarded <= $end and mm.date_shipped is null) OR mm.date_shipped is null
-//                )";
-//        }
-//        else $filter = " AND (mm.date_awarded >= $start AND mm.date_awarded <= $end) ";
         $filter = " 
             AND (
                 (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
@@ -39,27 +33,55 @@ class MedalReport extends Report {
                 (mm.date_awarded > " . $this->dates[1] . " AND mm.date_awarded < $start AND mm.date_shipped IS NULL)
             ) 
         ";
-        $sql = "
-            SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total 
-            FROM medal_marks mm
-            JOIN medals m USING ( medal_ord )
-            JOIN users u USING ( user_id )
-            JOIN subjects s USING ( subject_id )
-            JOIN schools sch USING ( school_id )
-            WHERE u.medals_ranks = 1 
-            AND u.user_registered > 0 
-            AND s.subject_id != 106 
-            $filter ";
-        if ( !is_null( $this->school_id ) ) 
-            $sql .= " AND sch.school_id = $this->school_id ";
-        $sql .= "
-            AND sch.school_id not in (" . implode(',', $this->schoolExceptions) . ")
-        ";
-        $sql .= "
-            GROUP BY sch.school_name, s.subject_id, mm.medal_ord  
-            ORDER BY sch.school_name, s.subject_id, mm.medal_ord
-        ";
-        echo $sql; return;
+        if ($detailed) {
+            $sql = "
+                SELECT sch.school_name, s.subject_name, m.medal_name, u.user_id, u.first, u.last, mm.*, c.*  
+                FROM medal_marks mm
+                JOIN medals m USING ( medal_ord )
+                JOIN users u USING ( user_id )
+                JOIN subjects s USING ( subject_id )
+                JOIN schools sch USING ( school_id ) 
+                JOIN classes c ON c.class_id = u.class_id 
+                WHERE u.medals_ranks = 1 
+                AND u.user_registered > 0 
+                AND s.subject_id != 106 
+                $filter ";
+            if ( $this->school_id > 0 )
+                $sql .= " AND u.school_id = $this->school_id ";
+            $sql .= "
+                AND u.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+            ";
+            $sql .= "
+                ORDER BY sch.school_name, s.subject_id, mm.medal_ord, u.last, u.first 
+            ";
+        } else {
+            $sql = "
+                SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total 
+                FROM medal_marks mm
+                JOIN medals m USING ( medal_ord )
+                JOIN users u USING ( user_id )
+                JOIN subjects s USING ( subject_id )
+                JOIN schools sch USING ( school_id )
+                WHERE u.medals_ranks = 1 
+                AND u.user_registered > 0 
+                AND s.subject_id != 106 
+                $filter ";
+            if ( $this->school_id > 0 )
+                $sql .= " AND u.school_id = $this->school_id ";
+            $sql .= "
+                AND u.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+            ";
+            $sql .= "
+                GROUP BY sch.school_name, s.subject_id, mm.medal_ord   
+                ORDER BY sch.school_name, s.subject_id, mm.medal_ord
+            ";
+        }
+        return $sql;
+    }
+
+    public function setMedalSummary() {
+        $sql = $this->createSql();
+//        echo $sql . "<br />"; return;
         $this->medalsTotal = array();
         $this->medalTotals = array();
         $result = mysql_query($sql);
@@ -89,72 +111,35 @@ class MedalReport extends Report {
     }
     
     public function setMedalDetails() {
-        $this->setUsers();
-		        
-        $start = $this->reportDates['start'];
-        $end = $this->reportDates['end']; 
+        $sql = $this->createSql(true);
+//        echo $sql . "<br />"; return;
+        $prevGrade = "";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            if ($row['last'] != "") {
+                $this->totalStudents++;
+                $user_id = $row['user_id'];
+                $teacher = $row['class_teacher'];
+                $grade = $row['class_grade'] . (empty( $row['class_sub']) ? '' : "-" . $row['class_sub']);
+                if ($prevGrade != $grade) {
+                    $this->totalGrades++;
+                    $prevGrade = $grade;
+                }
+                $user_name = $row['first'] . " " . $row['last'];
+                $subject = $row['subject_name'];
+                if ( $subject == 'שבת מברכים תהילים' ) $subject = "WWTC";
+                $this->medalDetails[$row['school_name']][$teacher][$grade][$user_id][$subject][] = $row['medal_name'];
 
-        foreach ( $this->users as $school_id => $school ) {
-            $this->totalSchools++;
-            $prevGrade = '';
-            foreach ( $school as $name => $user ) {
-            	$students = $this->users[$school_id][$name];
-                //foreach ( $user as $student ) {
-                    //echo $school_id . ":" . $name . ":" . $student;
-                    $filter = " 
-                        AND (
-                            (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
-                            OR 
-                            (mm.date_awarded > " . $this->dates[1] . " AND mm.date_awarded < $start AND mm.date_shipped IS NULL)
-                        ) 
-                    ";
-                    $sql = "
-                        SELECT s.subject_name, m.medal_name, u.user_id, u.last, u.first, 
-                        c.class_grade, c.class_sub, c.class_teacher, mm.*, s.subject_id
-                        FROM medal_marks mm
-                        JOIN medals m USING ( medal_ord )
-                        JOIN users u USING ( user_id )
-                        JOIN subjects s USING ( subject_id )
-                        JOIN schools sch USING ( school_id ) 
-                        LEFT JOIN classes c using (class_id)  
-                        WHERE sch.school_id = $school_id 
-                        and u.user_id in (" . implode(',', $students) . ")
-						and s.subject_id != 106 
-                        $filter 
-                        ORDER BY u.user_id, s.subject_id, mm.medal_ord 
-                    ";
-//                    echo $sql . "<br />"; continue;
-                    $result = mysql_query($sql) or die(mysql_error());
-                    while ($row = mysql_fetch_assoc($result)) {
-                        if ($row['last'] != "") {
-                            $this->totalStudents++;
-                            $user_id = $row['user_id'];
-                            $teacher = $row['class_teacher']; 
-                            $grade = $row['class_grade'] . (empty( $row['class_sub']) ? '' : "-" . $row['class_sub']);
-                            if ($prevGrade != $grade) {
-                                $this->totalGrades++;
-                                $prevGrade = $grade;
-                            }
-                            $user_name = $row['first'] . " " . $row['last']; 
-                            $subject = $row['subject_name'];
-                            if ( $subject == 'שבת מברכים תהילים' ) $subject = "WWTC";
-                            $this->medalDetails[$name][$teacher][$grade][$user_id][$subject][] = $row['medal_name']; 
-                            
-                            $this->medalsInfo[$user_id]['earned'] = $row['date_awarded'];
-                            $this->medalsInfo[$user_id]['shipped'] = $row['date_shipped'];
-                            $this->medalsInfo[$user_id]['received'] = $row['date_received'];
-							
-							$this->medalsInfo[$user_id]['shipped_specific'][$subject][$row['medal_name']] = ['medal_ord' => $row['medal_ord'],
-																											 'shipped' => $row['date_shipped'],
-																											 'subject_id' => $row['subject_id'],
-																											 'date_awarded' => $row['date_awarded']]; 
-                            
-                            //$this->userInfo[$user_name] = $row['user_id'];
-                            $this->userInfo[$user_id] = $user_name;
-                        }
-                    }
-					//sleep(2);
-                //}
+                $this->medalsInfo[$user_id]['earned'] = $row['date_awarded'];
+                $this->medalsInfo[$user_id]['shipped'] = $row['date_shipped'];
+                $this->medalsInfo[$user_id]['received'] = $row['date_received'];
+
+                $this->medalsInfo[$user_id]['shipped_specific'][$subject][$row['medal_name']] = ['medal_ord' => $row['medal_ord'],
+                    'shipped' => $row['date_shipped'],
+                    'subject_id' => $row['subject_id'],
+                    'date_awarded' => $row['date_awarded']];
+
+                $this->userInfo[$user_id] = $user_name;
             }
         }
     }

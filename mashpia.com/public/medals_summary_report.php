@@ -147,7 +147,7 @@ $subject_medals = getInfo();
       <?
       $grandtotals = array();
       foreach ($summary as $school => $line) {
-          $totalSchools++;
+//          $totalSchools++;
           echo "Medals Summary for " . $school . "<br /><br />";
           foreach ($subject_medals as $subject => $medals) {
               echo "<div class='label'>" . $subject . "<br />";
