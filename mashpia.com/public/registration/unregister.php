@@ -16,7 +16,7 @@ if (!$serial) {
     exit;
 }
 
-$sql = "SELECT user_id FROM `users` WHERE `user_serial` = '$serial'";
+$sql = "SELECT user_id, school_id FROM `users` WHERE `user_serial` = '$serial'";
 $result = mysql_query($sql);
 if (!$result) {
     echo 'Error: ' . mysql_error();
@@ -28,6 +28,8 @@ if (!$result) {
         exit;
     } else {
         $user = $row['user_id'];
+        $school = $row['school_id'];
+        $year = GlobalSettings::getRegistrationYear($school);
     }
 }
 
