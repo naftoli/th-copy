@@ -1142,7 +1142,7 @@ var registrationApp = function () {
       var shipping_charge = 0;
       var cost = 45
       const currentDateTime = new Date();
-      const otherDateTime = new Date("2024-09-17T00:00:00");
+      const otherDateTime = new Date("2024-09-19T00:00:00");
       if (currentDateTime < otherDateTime) cost = 40
       if (selected_user.school.school_id == anash_kinder) {
         shipping_included = true; // override for anash kinder to make sure shipping is being charged
