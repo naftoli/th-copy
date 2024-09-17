@@ -25,6 +25,22 @@ $userInfo = $m->getUserInfo();
 $medals_info = $m->getMedalsInfo();
 $for_shipping = [];
 //echo "<pre>"; print_r($details); echo "</pre>"; exit;
+function checkForBreak()
+{
+    global $i, $rows;
+    if (($i % 3) != 0) {
+        echo "<div class='space'></div>";
+    } else {
+        $i = 0; //reset i so that it will show new row
+        $rows++; //add row
+        if (($rows % 11) == 0) {
+            $rows = 1; //reset rows counter and add space to top of new page
+            echo "<div class='page-break'></div><div class='topSpace'></div>";
+        }
+    }
+    $i++;
+}
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML DIR="<?= $dir ?>">
@@ -242,30 +258,14 @@ $for_shipping = [];
             }
         }
     }
-    function checkForBreak()
-    {
-        global $i, $rows;
-        if (($i % 3) != 0) {
-            echo "<div class='space'></div>";
-        } else {
-            $i = 0; //reset i so that it will show new row
-            $rows++; //add row
-            if (($rows % 11) == 0) {
-                $rows = 1; //reset rows counter and add space to top of new page
-                echo "<div class='page-break'></div><div class='topSpace'></div>";
-            }
-        }
-        $i++;
-    }
-
-    ?>
+?>
 </div>
 <div id="sheet">
   <p>
     Total Medals: <?= $totalNumMedals; ?>
   </p>
   <p>
-    <button onclick="setAsShipped()">Set All As Shipped</button>
+    <button id="medalsBtnAll">Set All As Shipped</button>
   </p>
   <table>
     <tr>
@@ -295,10 +295,21 @@ $for_shipping = [];
   </table>
 </div>
 <script>
+  $(document).ready(() => {
+    $('#medalsBtnAll').click(() => {
+      setAsShipped()
+    })
+  })
   const setAsShipped = () => {
     const for_shipping = <?= json_encode($for_shipping) ?>;
     console.log(for_shipping)
-    alert("Medals to be set as shipped: " + count(for_shipping))
+    let total = 0
+    for (const user in for_shipping) {
+      for (const subject in for_shipping[user]) {
+        total += for_shipping[user][subject].length
+      }
+    }
+    alert("Medals to be set as shipped: " + total)
     alert("This feature is disabled for now")
     // if (confirm('Are you sure you want to set all medals as shipped? You cannot undo this action!')) {
     //   $.post('medals/set_as_shipped.php', {info: for_shipping}, (res) => {
