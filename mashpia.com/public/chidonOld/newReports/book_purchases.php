@@ -86,7 +86,7 @@ foreach ($info as $gender => $other) {
             foreach ($other as $school => $more) {
                 foreach ($more as $row) {
                     // check if child bought book
-                    $sql = "select * from registration_charges where type = 'yahadus' and year = " . $year . " and user_id = " . $row['user_id'];
+                    $sql = "select * from registration_charges where type like 'YB%' and year = " . $year . " and user_id = " . $row['user_id'];
                     $result = mysql_query($sql);
                     $bookPurchased = false;
                     if (mysql_num_rows($result) > 0) $bookPurchased = true;
