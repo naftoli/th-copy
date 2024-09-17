@@ -35,23 +35,39 @@ $removed = true;
 mysql_query('SET AUTOCOMMIT=0');
 mysql_query('START TRANSACTION');
 
-$sql = "update users set user_registered = null where user_id = $user";
-$result = mysql_query($sql);
-if (!$result) {
-    echo 'Error: ' . $sql . "<br />" . mysql_error();
-    $removed = false;
-} else {
-    $sql = "delete from user_registration where user_id = $user and year = $year";
+if (isset($_GET['chidon'])) {
+    $sql = "delete from th_chidon where user_id = $user and year = $year";
     $result = mysql_query($sql);
     if (!$result) {
         echo 'Error: ' . $sql . "<br />" . mysql_error();
         $removed = false;
     } else {
-        $sql = "delete from registration_charges where user_id = $user and year = $year and type like '%THE%'";
+        $sql = "delete from chidon_user_prizes where user_id = $user and year = $year";
         $result = mysql_query($sql);
         if (!$result) {
             echo 'Error: ' . $sql . "<br />" . mysql_error();
             $removed = false;
+        }
+    }
+} else {
+    $sql = "update users set user_registered = null where user_id = $user";
+    $result = mysql_query($sql);
+    if (!$result) {
+        echo 'Error: ' . $sql . "<br />" . mysql_error();
+        $removed = false;
+    } else {
+        $sql = "delete from user_registration where user_id = $user and year = $year";
+        $result = mysql_query($sql);
+        if (!$result) {
+            echo 'Error: ' . $sql . "<br />" . mysql_error();
+            $removed = false;
+        } else {
+            $sql = "delete from registration_charges where user_id = $user and year = $year and type like '%THE%'";
+            $result = mysql_query($sql);
+            if (!$result) {
+                echo 'Error: ' . $sql . "<br />" . mysql_error();
+                $removed = false;
+            }
         }
     }
 }
