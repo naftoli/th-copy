@@ -42,7 +42,6 @@ $engine->setYear( $_POST['year'] );
 $engine->createQry();
 if ( $engine->runQry() ) {
     $result = $engine->getResult();
-//    echo "<pre>"; print_r( $result ); echo "</pre>";
 } else {
     echo $engine->getError();
     exit;

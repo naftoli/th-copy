@@ -63,11 +63,15 @@ class ReportingEngine {
         $this->year = $year;
     }
     
-    public function createQry() {
+    public function createQry($debug = false) {
         $sql = $this->generateSelect();
         $sql .= $this->generateFrom();
         $sql .= $this->generateWhere();
         $this->qry = $sql;
+        if ($debug) {
+            echo $sql;
+            exit;
+        }
     }
     
     private function generateSelect() {
