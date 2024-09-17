@@ -1408,12 +1408,15 @@ var registrationApp = function () {
       })
 
       $(".he_name").focus(function (e) {
-        // check if 75 points have been used up
-        let prize_id = $(this).data('info')
-        if (cartIsFull(prize_id)) {
-          // $(".he_name").attr('disabled', true)
+        // check if we are going to go over 75 points
+        let info = $(this).parent().parent().find('.personalize').data('info')
+        let infoArr = info.split(':')
+        let prize_id = infoArr[0]
+        let price = infoArr[1]
+        if (cartIsFull(price)) {
+          let text = 'You cannot add this prize as it will put you over the 75 point limit.'
           setTimeout(function () {
-            alert('You have already chosen 75 points worth of prizes, you cannot add any more.')
+            alert(text)
           }, 0)
           $(this).blur()
           return false
@@ -1596,17 +1599,26 @@ var registrationApp = function () {
     }
   })
 
-  function cartIsFull(prize_id = 0) {
+  function cartIsFull(price = 0) {
     let MAX = 75
     let total = 0
     for (var p of user_prizes[current_user]) {
-      if (p.id != prize_id)
-        total += parseInt(p.price)
+      total += parseInt(p.price)
     }
+    total += parseInt(price)
     return total >= MAX
   }
 
   function addToPrizes(prize, price, personalization) {
+    // check if we can add it
+    if (cartIsFull(price)) {
+      let text = 'You cannot add this prize as it will put you over the 75 point limit.'
+      setTimeout(function () {
+        alert(text)
+      }, 0)
+      return false
+    }
+    // check if it's already in the cart
     let found = false
     for (var p of user_prizes[current_user]) {
       if (p.id == prize) {
@@ -1614,16 +1626,9 @@ var registrationApp = function () {
       }
     }
     if (!found) {
-      if (cartIsFull()) {
-        setTimeout(function () {
-          alert('You have already chosen 75 points worth of prizes, you cannot add any more.')
-        }, 0)
-        return false
-      } else {
-        let prizeToAdd = {id: prize, price: price, personalization: personalization}
-        user_prizes[current_user].push(prizeToAdd)
-        return true
-      }
+      let prizeToAdd = {id: prize, price: price, personalization: personalization}
+      user_prizes[current_user].push(prizeToAdd)
+      return true
     }
   }
 
