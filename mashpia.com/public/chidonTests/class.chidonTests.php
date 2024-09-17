@@ -958,10 +958,20 @@ class KHK {
                             $highest_track = mysql_fetch_assoc($result)['highest_track'];
                             // make sure child is at least on the yediah track (not on 'yesod')
                             if ($highest_track != 'yesod') $details[$id][$yr] = true;
+                        } else {
+                            $details[$id][$yr] = false;
                         }
                     }
+                } else {
+                    // make sure child was enrolled in that yr
+                    $sql = "select * from th_chidon where user_id = " . $id . " and year = " . $yr;
+                    $result = mysql_query($sql);
+                    if (mysql_num_rows($result) > 0) {
+                        $details[$id][$yr] = true;
+                    } else {
+                        $details[$id][$yr] = false;
+                    }
                 }
-                else $details[$id][$yr] = true;
             }
         }
 
