@@ -107,6 +107,21 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             </a>
         </div>
         <?if ($admin_user['auth'] == 'super') {?>
+        <h2>Mivtzoim School Settings</h2>
+        <div id="action-links">
+          <a href="/mivtzoim/lulav_settings_report.php">
+            <div class="button">
+              <img src="/images/icon_report.png" height="32" alt="reports"/>
+              <span class="link-text">Lulav School Settings</span>
+            </div>
+          </a>
+          <a href="/mivtzoim_purchases/settings_report.php">
+            <div class="button">
+              <img src="/images/icon_report.png" height="32" alt="reports"/>
+              <span class="link-text">Chanuka School Settings</span>
+            </div>
+          </a>
+        </div>
         <h2>Management Links</h2>
         <div id="action-links">
             <a href="/blog/wp-admin">
