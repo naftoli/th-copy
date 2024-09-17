@@ -1606,7 +1606,7 @@ var registrationApp = function () {
       total += parseInt(p.price)
     }
     total += parseInt(price)
-    return total >= MAX
+    return total > MAX
   }
 
   function addToPrizes(prize, price, personalization) {
