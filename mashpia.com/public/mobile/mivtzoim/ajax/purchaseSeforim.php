@@ -8,10 +8,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimPu
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
-if (isset($_COOKIE['year'])) {
-    $year = $_COOKIE['year'];
-}
-
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
 use classes\authorize\CustomerProfile;
