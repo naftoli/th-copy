@@ -1,4 +1,4 @@
-<?php
+ <?php
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
@@ -7,6 +7,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimPurchases.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
+
+if (isset($_COOKIE['year'])) {
+    $year = $_COOKIE['year'];
+}
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';

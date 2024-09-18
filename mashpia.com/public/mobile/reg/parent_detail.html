@@ -240,7 +240,7 @@
       </div>
       <div class="col-xs-4" id="chidonDriveButton">
         <div class="button-spacing childrens-content" style="float:right;">
-<!--                                  <button class="btn btn-primary yahadusSale">Yahadus Book Sale</button>-->
+                                  <button class="btn btn-primary yahadusSale" style="display: none;">Yahadus Book Sale</button>
           <!--                        <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button>-->
           <!--                    <button class="btn btn-info chanuka">Chanuka Purchase(s)</button>-->
           <!--                            <button class="btn btn-info gameSet">Nisseui Hanosi Cards</button>-->
@@ -598,6 +598,8 @@
 
     if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
+    if (Cookies.get('naftoli')) $(".yahadusSale").show()
+
     // allow parents to swipe to open a child's account.
     function setSwiper() {
       $("#children .row").each(function () {
@@ -883,7 +885,8 @@
     })
 
     $(document).on('click', '.yahadusSale', function () {
-      // location.href = '/mobile/mivtzoim/yahadusBooks.html'
+      Cookies.set('year', 5784)
+      location.href = '/mobile/mivtzoim/yahadusBooks.html'
     })
 
     // $(document).on('click', '.editChidon', function() {
