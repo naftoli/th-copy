@@ -80,11 +80,12 @@ if ( isset( $schools['pickup'] ) ) {
             echo "<div class='details'>";
             echo "School: " . $school['name'] . "<br />";    
             echo "<b>(" . $num_hachayols . ")</b> Grade: <span>" . $class . "</span><br />";
-            echo "<div class='students'>";
-            foreach ( $users as $user ) {
-                echo $user . "<br />";
-            }
-            echo "</div></div><br />";
+//            echo "<div class='students'>";
+//            foreach ( $users as $user ) {
+//                echo $user . "<br />";
+//            }
+//            echo "</div></div><br />";
+            echo "</div><br />";
         }
         echo "<div class='page-break'></div>";
     }

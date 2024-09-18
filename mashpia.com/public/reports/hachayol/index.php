@@ -33,7 +33,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/hachayols/school_hachayols.php">
                 <div class="button">
                     <img src="/images/cth_logo.png" height="32" alt="school report"/>
-                    <span class="link-text">Hachayol Report by Family</span>
+                    <span class="link-text">Hachayol Teacher Report</span>
                 </div>
             </a>
           <a href="/hachayols/report.php">
@@ -42,14 +42,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
               <span class="link-text">Update Hachayol by Family</span>
             </div>
           </a>
-          <?php if ($admin_user['auth'] != 'super') : ?>
           <a href="/hachayol_report_details.php<?=$debug ? "?debug=true": "";?>">
             <div class="button">
               <img src="/images/cth_logo.png" height="32" alt="tickets"/>
-              <span class="link-text">Hachayol Detail Report</span>
+              <span class="link-text">Hachayol Office Report</span>
             </div>
           </a>
-          <?php endif; ?>
         </div>
         
         <?php if ($admin_user['auth'] == 'super') {?>
@@ -59,12 +57,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                   <div class="button">
                       <img src="/images/cth_logo.png" height="32" alt="tickets"/>
                       <span class="link-text">Hachayol Report</span>
-                  </div>
-              </a>
-              <a href="/hachayol_report_details.php<?=$debug ? "?debug=true": "";?>">
-                  <div class="button">
-                      <img src="/images/cth_logo.png" height="32" alt="tickets"/>
-                      <span class="link-text">Hachayol Detail Report</span>
                   </div>
               </a>
               <a href="/reports/shipping/hachayols/<?=$debug ? "?debug=true": "";?>">

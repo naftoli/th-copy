@@ -93,7 +93,7 @@ foreach ($users as $school_id => $more) {
         foreach ($more as $class_grade => $other) {
             foreach ($other as $class_sub => $more) {
                 $grade = $class_grade . ($class_sub ? '-' . $class_sub : '');
-                echo "<h3>" . $schools[$school_id] . "</h3><hr />";
+                echo "<h3>" . $schools[$school_id] . " (" . $grade . ")</h3><hr />";
                 ?>
                 <table>
                     <tr>
