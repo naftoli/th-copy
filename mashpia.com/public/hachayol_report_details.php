@@ -19,9 +19,9 @@ require('header.php');
     .hide {
         display: none;
     }
-    .details {
-      page-break-after: always;
-    }
+    /*.details {*/
+    /*  page-break-after: always;*/
+    /*}*/
 }
 </style>
 </head>
@@ -111,7 +111,7 @@ if ( isset( $schools['deliver'] ) ) {
             echo "<div class='details'>";
             echo "School: " . $school['name'] . "<br />";    
             echo "<b>(" . $num_hachayols . ")</b> Grade: <span>" . $class . "</span><br />";
-            echo "<div class='students'>";
+//            echo "<div class='students'>";
 //            foreach ( $users as $user ) {
 //                echo $user . "<br />";
 //            }
