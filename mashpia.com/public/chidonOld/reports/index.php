@@ -18,6 +18,8 @@ $info = array(
 		'last_name'		=>	'Last Name',
 		'he_first_name'	=>	'Hebrew First Name',
 		'he_last_name'	=>	'Hebrew Last Name',
+    'reg_date'  => 'Enrollment Date',
+    'khk_reg'   => 'KHK',
 		'gender'		=>	'Gender',
 		'dob'			=>	'Date of Birth',
 		'book'			=>	'Book',
@@ -85,7 +87,7 @@ $info = array(
 		'sunday_pm_bus' =>	'Sunday Bus',
 		//'seat_type'		=>	'Seat Type',
 		//'seat_number'	=>	'Seat Number',
-		'date_paid'		=>	'Enrolled',
+		'date_paid'		=>	'Registered Date',
 		'paid'			=>	'Amount Paid',
 		'cert_number'	=>  'Certificate Code', 
 		'transportation'=>	'Transportation after Event', 
@@ -358,7 +360,7 @@ if (isset($_POST['submit'])) {
                           echo "<td></td>";
                           break;
                   }
-              } else if (in_array($column, ['shabbaton_trophy', 'khk_rep', 'school_rep'])) {
+              } else if (in_array($column, ['shabbaton_trophy', 'khk_rep', 'school_rep', 'khk_reg'])) {
                   if ( intval( $row[$column] == 1 ) ) echo "<td>Yes</td>";
                   else echo "<td>No</td>";
               } else if ($column == 'chidon_final_mark') {
