@@ -87,7 +87,7 @@ if ( isset( $schools['pickup'] ) ) {
 //            echo "</div></div><br />";
             echo "</div><br />";
         }
-        echo "<div class='page-break'></div>";
+//        echo "<div class='page-break'></div>";
     }
 }
 
