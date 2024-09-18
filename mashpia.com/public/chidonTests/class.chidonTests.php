@@ -906,10 +906,10 @@ class KHK {
         $year = GlobalSettings::getChidonRegYear();
         foreach ($user_ids as $id) {
             // check if eligibility was turned on
-            $sql = "select khk from th_chidon where user_id = " . $id . " and year = " . $year;
+            $sql = "select khk_eligible from users where user_id = " . $id;
             $result = mysql_query($sql);
             $row = mysql_fetch_assoc($result);
-            if (intval($row['khk'])) $info[$id] = true;
+            if (intval($row['khk_eligible'])) $info[$id] = true;
             else {
                 // check if child participated in chidon in past 4 yrs
                 $sql = "select * from th_chidon where user_id = " . $id . " and date_paid > 0 and year >= " . ($year - 4);
