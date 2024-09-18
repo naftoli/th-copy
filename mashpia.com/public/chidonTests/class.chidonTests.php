@@ -912,7 +912,7 @@ class KHK {
                 $info[$id] = true;
             } else {
                 // check if eligibility was turned on
-                $sql = "select khk_eligible from th_chidon where user_id = " . $id;
+                $sql = "select khk_eligible from th_chidon where user_id = " . $id . " and year = " . $year;
                 $result = mysql_query($sql);
                 $row = mysql_fetch_assoc($result);
                 if (intval($row['khk_eligible']) == 1) $info[$id] = true;
