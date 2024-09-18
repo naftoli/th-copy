@@ -51,6 +51,14 @@ class Reports
                 'table'     =>  'users',
                 'column'    =>  'last as last_name',
             ),
+            'reg_date'  => array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'reg_date',
+            ),
+            'khk_reg'  => array(
+                'table'     =>  'th_chidon',
+                'column'    =>  'khk_reg',
+            ),
             'school_id' =>  array(
                 'table'     =>  'schools',
                 'column'    =>  'school_id'
