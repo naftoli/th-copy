@@ -900,14 +900,24 @@ class ChidonTests
 class KHK {
     public static $khkFee = 18;
 
-    // find out if child participated in chidon in past 4 yrs
+    // find out if child participated in chidon in past 4 yrs or was marked as eligible
     public static function eligibility(array $user_ids) {
         $info = [];
         $year = GlobalSettings::getChidonRegYear();
         foreach ($user_ids as $id) {
             $sql = "select * from th_chidon where user_id = " . $id . " and date_paid > 0 and year >= " . ($year - 4);
             $result = mysql_query($sql);
-            $info[$id] = mysql_num_rows($result) >= 4;
+            $eligible = mysql_num_rows($result) >= 4;
+            if ($eligible) {
+                $info[$id] = true;
+            } else {
+                // check if eligibility was turned on
+                $sql = "select khk_eligible from th_chidon where user_id = " . $id;
+                $result = mysql_query($sql);
+                $row = mysql_fetch_assoc($result);
+                if (intval($row['khk_eligible']) == 1) $info[$id] = true;
+                else $info[$id] = false;
+            }
         }
         return $info;
     }
@@ -940,6 +950,8 @@ class KHK {
             // for current yr, check if passed
             $passed = KHK::getCurrentYrPassing($curYr, $ids, $marks);
         }
+
+        $eligibility_status = KHK::eligibility($ids);
 
         foreach ($ids as $id) {
             $details[$id] = [];
@@ -979,7 +991,7 @@ class KHK {
         foreach ($details as $id => $yrs) {
             $khk[$id] = true;
             foreach ($yrs as $eligible) {
-                if (! $eligible) {
+                if (!$eligible && !$eligibility_status[$id]) {
                     $khk[$id] = false;
                     break;
                 }
