@@ -35,9 +35,9 @@ $stmt = $MASHPIA_DB->prepare("
     SELECT 
         school_id, IFNULL(SUM(discount), 0) AS discount
     FROM
-        registration_charges rc
+        registration_charges 
     WHERE
-        rc.year = :year AND rc.type = 'chayolei'
+        year = :year AND type IN ('chayolei', 'THE') AND discount > 0  
     GROUP BY school_id
 ");
 $stmt->execute([':year' => $year]);
