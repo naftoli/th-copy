@@ -44,7 +44,8 @@ $sql = "SELECT
                 JOIN
             classes c ON u.class_id = c.class_id
         WHERE
-            u.user_registered > 0
+            u.user_registered > 0 
+                AND u.school_id NOT IN (180, 585, 808) 
         GROUP BY u.user_id 
         HAVING rank_ord NOT IN (1, 9, 12)
         ORDER BY school_name , u.last , u.first";
