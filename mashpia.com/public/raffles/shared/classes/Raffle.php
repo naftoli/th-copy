@@ -24,7 +24,7 @@ class Raffle
     public $type; // the type of raffle (weekly, monthly, or yearly)
     public $date_created; // the date it was created
     public $date_ran; // the date it actually ran
-    public $show_on_mobile; // if it should be shown on the mobile website
+//    public $show_on_mobile; // if it should be shown on the mobile website
     public $year; // raffle year
     public $days_of_tasks; // amount of days with completed tasks required to be in raffle
 
