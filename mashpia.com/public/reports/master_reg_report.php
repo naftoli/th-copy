@@ -76,6 +76,15 @@ foreach ($rows as $row) {
     $user_ranks[$row['user_id']] = $row['rank_ord'];
 }
 
+// get all chidon registered kids for 5785
+$year = GlobalSettings::getChidonRegYear();
+$stmt = $MASHPIA_DB->prepare("select * from th_chidon where year = ?");
+$res = $stmt->execute([$year]);
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($rows as $row) {
+    $chidon[$row['user_id']] = $row;
+}
+
 // get all user ids from both the users array and the registration array
 $user_ids = array_unique(array_merge(array_keys($users), array_keys($registrations)));
 ?>
@@ -106,6 +115,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             <th>Date Registered for 5785</th>
             <th>Currently registered (Users Table)</th>
             <th>Currently registered Date</th>
+            <th>Registered for Chidon</th>
             <th>School</th>
             <th>Grade</th>
             <th>Rank</th>
@@ -114,7 +124,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
         <?php
         $totals['registered'] = 0;
         $totals['user_registered'] = 0;
-        foreach ($user_ids as $user_id) {
+        foreach ($user_ids as $idx => $user_id) {
             if (isset($users[$user_id]) && $users[$user_id]['user_registered'] > 0) {
                 $totals['user_registered']++;
             }
@@ -123,14 +133,15 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             }
             ?>
             <tr>
-                <td></td>
+                <td><?php echo $idx + 1; ?></td>
                 <td><?php echo $user_id; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_serial'] : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['first'] . ' ' . $users[$user_id]['last'] : 'Not Found'; ?></td>
                 <td><?php echo isset($registrations[$user_id]) ? $registrations[$user_id]['reg_date'] : 'No'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_registered'] > 0 ? 'yes' : 'no' : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_registered'] > 0 ? $users[$user_id]['user_registered'] : 'Not Registered' : 'Not Found'; ?></td>
-                <td><?php echo isset($users[$user_id]['school_id']) ? $schools[$users[$user_id]['school_id']] : 'Not in a School'; ?></td>
+                <td><?php echo isset($chidon[$user_id]) ? $chidon[$user_id]['reg_date'] : 'No'; ?></td>
+                <td><?php echo isset($users[$user_id]['school_id']) ? $schools[$users[$user_id]['school_id']] : 'Not in a School'; ?></>
                 <td><?php echo isset($users[$user_id]['class_id']) ? $classes[$users[$user_id]['class_id']] : 'Not in a Grade'; ?></td>
                 <td><?php echo isset($user_ranks[$user_id]) ? $ranks[$user_ranks[$user_id]] : 'Not Found'; ?></td>
                 <td><?php echo isset($user_admins[$user_id]) ? $user_admins[$user_id] : 'No Family Account Found'; ?></td>
