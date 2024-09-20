@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -14,9 +14,10 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+// prepare the statement
 $stmt = $MASHPIA_DB->prepare("INSERT INTO rank_medals_shipped (user_id, rank_ord) VALUES (?, ?)");
-$info = json_decode($_POST['info'], true);
-$total = 0;
+$data = trim(file_get_contents("php://input"));
+$info = json_decode($data, true);
 
 $MASHPIA_DB->startTransaction();
 $success = true;

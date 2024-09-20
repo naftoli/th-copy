@@ -342,20 +342,18 @@ $for_shipping = [];
       setAsShipped()
     })
   })
-  const setAsShipped = () => {
+  const setAsShipped = async () => {
     const for_shipping = <?= json_encode($for_shipping) ?>;
     const info = JSON.stringify(for_shipping);
     if (confirm('Are you sure you want to set all rank medals as shipped? You cannot undo this action!')) {
-      $.post('ajax/set_as_shipped.php', { info }, (res) => {
-        const result = JSON.parse(res)
-        if (result.success) {
-          alert(result.total + ' rank medals have been set as shipped!')
-          // refresh the page
-          location.reload()
-        } else {
-          alert(result.error)
+      const res = await fetch('ajax/set_as_shipped.php', {
+        method: 'POST',
+        body: info,
+        headers: {
+          'Content-Type': 'application/json'
         }
       })
+      const data = await res.json()
     }
   }
 </script>
