@@ -133,7 +133,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
                 <td><?php echo isset($users[$user_id]['school_id']) ? $schools[$users[$user_id]['school_id']] : 'Not in a School'; ?></td>
                 <td><?php echo isset($users[$user_id]['class_id']) ? $classes[$users[$user_id]['class_id']] : 'Not in a Grade'; ?></td>
                 <td><?php echo isset($user_ranks[$user_id]) ? $ranks[$user_ranks[$user_id]] : 'Not Found'; ?></td>
-                <td><?php echo isset($admin_users[$user_id]) ? $admin_users[$user_id] : 'No Family Account Found'; ?></td>
+                <td><?php echo isset($user_admins[$user_id]) ? $user_admins[$user_id] : 'No Family Account Found'; ?></td>
             </tr>
             <?php
         }
