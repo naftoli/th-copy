@@ -6,6 +6,7 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 function getRanks() {
+    $ranks = [];
     $sql = "select * from ranks";
     $result = mysql_query($sql);
     if (!$result) {
@@ -18,6 +19,7 @@ function getRanks() {
 }
 
 function getClasses() {
+    $classes = [];
     $sql = "select * from classes where class_era = 0";
     $result = mysql_query($sql);
     if (!$result) {
@@ -26,6 +28,7 @@ function getClasses() {
     while ($row = mysql_fetch_assoc($result)) {
         $classes[$row['class_id']] = $row;
     }
+    return $classes;
 }
 
 $sql = "SELECT 
@@ -72,7 +75,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[$school][$teacher][$grade][$user_id] = $rank_ord;
 }
 
-//echo "<pre>"; print_r($details); echo "</pre>"; exit;
+//echo "<pre>"; print_r($info); echo "</pre>"; exit;
 function checkForBreak()
 {
     global $i, $rows;
@@ -88,7 +91,6 @@ function checkForBreak()
     }
     $i++;
 }
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML DIR="<?= $dir ?>">
@@ -262,12 +264,12 @@ function checkForBreak()
                     echo "<span class='name'>" . $school . "<br />" . $user_info[$user] . " (Grade: " . $grade . ")</span><br />";
                     // show all rank up to and including current rank based off rank ord
                     // figure out what rank we should start with
-                    if ($rank_ord >= 12) $i = 13;
-                    else if ($rank_ord >= 9) $i = 10;
-                    else $i = 2;
-                    for (; $i <= $rank_ord; $i++) {
-                        echo "<span class='medal'>" . $ranks[$i] . "</span>";
-                        $sheet[$school_id][$user][$user_info[$user]][$grade][] = $ranks[$i];
+                    if ($rank_ord >= 12) $ord = 13;
+                    else if ($rank_ord >= 9) $ord = 10;
+                    else $ord = 2;
+                    for (; $ord <= $rank_ord; $ord++) {
+                        echo "<span class='medal'>" . $ranks[$ord] . "</span>";
+                        $sheet[$school_id][$user][$user_info[$user]][$grade][] = $ranks[$ord];
                         $numRanks++;
                         $totalRanks++;
                     }
