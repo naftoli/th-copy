@@ -103,26 +103,39 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Master Registration List</title>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+    <style>
+      body {
+        font-family: sans-serif;
+        font-size: 12px;
+        padding-left: 3%;
+        padding-right: 3%;
+      }
+      tr, th, td {
+        padding: 10px;
+        font-font: "Arial", sans-serif;
+        font-size: large;
+      }
+    </style>
 </head>
 <body>
     <h1>Master Registration List</h1>
     <table id="table" class="table table-striped table-condensed cell-border hover row-order order-column">
         <thead>
-            <tr>
-                <th></th>
-                <th>User ID</th>
-                <th>User Serial</th>
-                <th>User Name</th>
-                <th>Date Registered for 5785</th>
-                <th>Currently registered Date (Users Table)</th>
-                <th>Registration Payment</th>
-                <th>Registered for Chidon</th>
-                <th>Chidon Payment</th>
-                <th>School</th>
-                <th>Grade</th>
-                <th>Rank</th>
-                <th>Family ID</th>
-            </tr>
+        <tr>
+            <th>&nbsp;</th>
+            <th>User ID</th>
+            <th>User Serial</th>
+            <th>User Name</th>
+            <th>Date Registered for 5785</th>
+            <th>Currently registered Date (Users Table)</th>
+            <th>Registration Payment</th>
+            <th>Registered for Chidon</th>
+            <th>Chidon Payment</th>
+            <th>School</th>
+            <th>Grade</th>
+            <th>Rank</th>
+            <th>Family ID</th>
+        </tr>
         </thead>
         <tbody>
         <?php
@@ -138,29 +151,36 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             ?>
             <tr>
                 <td><?php echo ($num + 1); ?></td>
-                <td><?php echo $user_id; ?></td>
-                <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_serial'] : 'Not Found'; ?></td>
-                <td><?php echo isset($users[$user_id]) ? $users[$user_id]['first'] . ' ' . $users[$user_id]['last'] : 'Not Found'; ?></td>
-                <td><?php echo isset($registrations[$user_id]) ? $registrations[$user_id]['reg_date'] : 'No'; ?></td>
-                <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_registered'] > 0 ? $users[$user_id]['user_registered'] : 'Not Registered' : 'Not Found'; ?></td>
-                <td><?php echo isset($charges['THE'][$user_id]) ? $charges['THE'][$user_id] : 'Not Found'; ?></td>
-                <td><?php echo isset($chidon[$user_id]) ? $chidon[$user_id]['reg_date'] : 'No'; ?></td>
-                <td><?php echo isset($charges['LDE'][$user_id]) ? $charges['LDE'][$user_id] : 'Not Found'; ?></td>
-                <td><?php echo isset($users[$user_id]['school_id']) ? $schools[$users[$user_id]['school_id']] : 'Not in a School'; ?></>
-                <td><?php echo isset($users[$user_id]['class_id']) ? $classes[$users[$user_id]['class_id']] : 'Not in a Grade'; ?></td>
-                <td><?php echo isset($user_ranks[$user_id]) ? $ranks[$user_ranks[$user_id]] : 'Not Found'; ?></td>
-                <td><?php echo isset($user_admins[$user_id]) ? $user_admins[$user_id] : 'No Family Account Found'; ?></td>
+                <td><?php echo htmlspecialchars($user_id); ?></td>
+                <td><?php echo isset($users[$user_id]) ? htmlspecialchars($users[$user_id]['user_serial']) : 'Not Found'; ?></td>
+                <td><?php echo isset($users[$user_id]) ? htmlspecialchars($users[$user_id]['first'] . ' ' . $users[$user_id]['last']) : 'Not Found'; ?></td>
+                <td><?php echo isset($registrations[$user_id]) ? htmlspecialchars($registrations[$user_id]['reg_date']) : 'No'; ?></td>
+                <td><?php echo isset($users[$user_id]) ? ($users[$user_id]['user_registered'] > 0 ? htmlspecialchars($users[$user_id]['user_registered']) : 'Not Registered') : 'Not Found'; ?></td>
+                <td><?php echo isset($charges['THE'][$user_id]) ? htmlspecialchars($charges['THE'][$user_id]) : 'Not Found'; ?></td>
+                <td><?php echo isset($chidon[$user_id]) ? htmlspecialchars($chidon[$user_id]['reg_date']) : 'No'; ?></td>
+                <td><?php echo isset($charges['LDE'][$user_id]) ? htmlspecialchars($charges['LDE'][$user_id]) : 'Not Found'; ?></td>
+                <td><?php echo isset($users[$user_id]['school_id']) ? htmlspecialchars($schools[$users[$user_id]['school_id']]) : 'Not in a School'; ?></td>
+                <td><?php echo isset($users[$user_id]['class_id']) ? htmlspecialchars($classes[$users[$user_id]['class_id']]) : 'Not in a Grade'; ?></td>
+                <td><?php echo isset($user_ranks[$user_id]) ? htmlspecialchars($ranks[$user_ranks[$user_id]]) : 'Not Found'; ?></td>
+                <td><?php echo isset($user_admins[$user_id]) ? htmlspecialchars($user_admins[$user_id]) : 'No Family Account Found'; ?></td>
             </tr>
             <?php
         }
         ?>
         <tr>
-            <th>Totals:</th>
-            <td><?= count($user_ids); ?></td>
-            <td colspan="2"></td>
+            <td>Totals:</td>
+            <td><?php echo count($user_ids); ?></td>
+            <td></td>
+            <td></td>
             <td><?php echo $totals['registered']; ?></td>
             <td><?php echo $totals['user_registered']; ?></td>
-            <td colspan="7"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
         </tr>
         </tbody>
     </table>
