@@ -135,16 +135,16 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
                 <td><?php echo isset($user_ranks[$user_id]) ? $ranks[$user_ranks[$user_id]] : 'Not Found'; ?></td>
                 <td><?php echo isset($admin_users[$user_id]) ? $admin_users[$user_id] : 'No Family Account Found'; ?></td>
             </tr>
-            <tr>
-                <th colspan="2">Totals:</th>
-                <td><?php echo $totals['combined']; ?></td>
-                <td><?php echo $totals['registered']; ?></td>
-                <td><?php echo $totals['user_registered']; ?></td>
-                <td colspan="5"></td>
-            </tr>
             <?php
         }
         ?>
+        <tr>
+            <th colspan="2">Totals:</th>
+            <td><?php echo $totals['combined']; ?></td>
+            <td><?php echo $totals['registered']; ?></td>
+            <td><?php echo $totals['user_registered']; ?></td>
+            <td colspan="5"></td>
+        </tr>
     </table>
 </body>
 </html>
