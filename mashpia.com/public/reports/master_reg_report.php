@@ -113,7 +113,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
       tr, th, td {
         padding: 10px;
         font-font: "Arial", sans-serif;
-        font-size: large;
+        font-size: 14px;
       }
     </style>
 </head>
