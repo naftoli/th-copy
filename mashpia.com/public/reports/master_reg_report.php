@@ -85,6 +85,14 @@ foreach ($rows as $row) {
     $chidon[$row['user_id']] = $row;
 }
 
+// get all accounting info for registered users
+$stmt = $MASHPIA_DB->prepare("select * from registration_charges where type in ('THE', 'LDE') and year = ?");
+$res = $stmt->execute([$year]);
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($rows as $row) {
+    $charges[$row['type']][$row['user_id']] = $row['amount'];
+}
+
 // get all user ids from both the users array and the registration array
 $user_ids = array_unique(array_merge(array_keys($users), array_keys($registrations)));
 ?>
@@ -113,9 +121,10 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             <th>User Serial</th>
             <th>User Name</th>
             <th>Date Registered for 5785</th>
-            <th>Currently registered (Users Table)</th>
-            <th>Currently registered Date</th>
+            <th>Currently registered Date (Users Table)</th>
+            <th>Registration Payment</th>
             <th>Registered for Chidon</th>
+            <th>Chidon Payment</th>
             <th>School</th>
             <th>Grade</th>
             <th>Rank</th>
@@ -138,9 +147,10 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_serial'] : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['first'] . ' ' . $users[$user_id]['last'] : 'Not Found'; ?></td>
                 <td><?php echo isset($registrations[$user_id]) ? $registrations[$user_id]['reg_date'] : 'No'; ?></td>
-                <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_registered'] > 0 ? 'yes' : 'no' : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_registered'] > 0 ? $users[$user_id]['user_registered'] : 'Not Registered' : 'Not Found'; ?></td>
+                <td><?php echo isset($charges['THE'][$user_id]) ? $charges['THE'][$user_id] : 'Not Found'; ?></td>
                 <td><?php echo isset($chidon[$user_id]) ? $chidon[$user_id]['reg_date'] : 'No'; ?></td>
+                <td><?php echo isset($charges['LDE'][$user_id]) ? $charges['LDE'][$user_id] : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]['school_id']) ? $schools[$users[$user_id]['school_id']] : 'Not in a School'; ?></>
                 <td><?php echo isset($users[$user_id]['class_id']) ? $classes[$users[$user_id]['class_id']] : 'Not in a Grade'; ?></td>
                 <td><?php echo isset($user_ranks[$user_id]) ? $ranks[$user_ranks[$user_id]] : 'Not Found'; ?></td>
