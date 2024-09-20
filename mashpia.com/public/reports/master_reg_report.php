@@ -142,7 +142,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             }
             ?>
             <tr>
-                <td><?php echo $idx + 1; ?></td>
+                <td><?php echo ($idx + 1); ?></td>
                 <td><?php echo $user_id; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_serial'] : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['first'] . ' ' . $users[$user_id]['last'] : 'Not Found'; ?></td>
@@ -161,11 +161,11 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
         ?>
         <tr>
             <th>Totals:</th>
-            <td><?php echo count($user_ids); ?></td>
-            <td colspan="2"></td>
+            <td></td>
+            <td colspan="3"></td>
             <td><?php echo $totals['registered']; ?></td>
             <td><?php echo $totals['user_registered']; ?></td>
-            <td colspan="5"></td>
+            <td colspan="7"></td>
         </tr>
     </table>
 </body>
