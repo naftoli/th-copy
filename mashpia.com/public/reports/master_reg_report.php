@@ -150,7 +150,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             }
             ?>
             <tr>
-                <td><?php echo ($num + 1); ?></td>
+                <td>&nbsp;</td>
                 <td><?php echo htmlspecialchars($user_id); ?></td>
                 <td><?php echo isset($users[$user_id]) ? htmlspecialchars($users[$user_id]['user_serial']) : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? htmlspecialchars($users[$user_id]['first'] . ' ' . $users[$user_id]['last']) : 'Not Found'; ?></td>
