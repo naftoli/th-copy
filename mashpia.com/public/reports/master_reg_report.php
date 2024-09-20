@@ -103,17 +103,6 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Master Registration List</title>
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-    <style>
-      tr, th, td {
-        font-family: "Arial", sans-serif;
-        font-size: 14px;
-        padding: 10px;
-        border-bottom: 1px solid #f2f2f2;
-      }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
 </head>
 <body>
     <h1>Master Registration List</h1>
