@@ -21,13 +21,19 @@ $total = 0;
 $MASHPIA_DB->startTransaction();
 $success = true;
 
+// execute the prepared statement for each user_id and rank_ord
+// after every 500 qrys, the transaction will be committed
+// if any qry fails, the transaction will be rolled back
 foreach ($info as $user_id => $rank_ords) {
-    $total += count($rank_ords);
-    foreach ($rank_ords as $rank_ord) {
+    foreach ($rank_ords as $idx => $rank_ord) {
         $result = $stmt->execute([ $user_id, $rank_ord ]);
         if (!$result) {
             $success = false;
             break 2;
+        }
+        if ($idx % 500 == 0) {
+            $MASHPIA_DB->commit();
+            $MASHPIA_DB->startTransaction();
         }
     }
 }
@@ -36,7 +42,7 @@ if ($success) {
     $MASHPIA_DB->commit();
     echo json_encode([
         'success' => true,
-        'total' => $total
+        'total' => $idx + 1
     ]);
 } else {
     $MASHPIA_DB->rollback();
