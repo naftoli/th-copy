@@ -132,7 +132,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
         <?php
         $totals['registered'] = 0;
         $totals['user_registered'] = 0;
-        foreach ($user_ids as $idx => $user_id) {
+        foreach ($user_ids as $num => $user_id) {
             if (isset($users[$user_id]) && $users[$user_id]['user_registered'] > 0) {
                 $totals['user_registered']++;
             }
@@ -141,7 +141,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             }
             ?>
             <tr>
-                <td><?php echo ($idx + 1); ?></td>
+                <td><?php echo ($num + 1); ?></td>
                 <td><?php echo $user_id; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['user_serial'] : 'Not Found'; ?></td>
                 <td><?php echo isset($users[$user_id]) ? $users[$user_id]['first'] . ' ' . $users[$user_id]['last'] : 'Not Found'; ?></td>
@@ -160,8 +160,8 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
         ?>
         <tr>
             <th>Totals:</th>
-            <td></td>
-            <td colspan="3"></td>
+            <td><?= count($user_ids); ?></td>
+            <td colspan="2"></td>
             <td><?php echo $totals['registered']; ?></td>
             <td><?php echo $totals['user_registered']; ?></td>
             <td colspan="7"></td>
