@@ -354,6 +354,19 @@ $for_shipping = [];
         }
       })
       const data = await res.json()
+      if (data.success) {
+        alert('All rank medals have been set as shipped.')
+        location.reload()
+      } else {
+        let text = 'Error setting all rank medals as shipped.'
+        if (data.total) {
+          text += ' However, ' + data.total + ' rank medals were set as shipped.'
+          alert(text)
+          location.reload()
+        } else {
+          alert(text)
+        }
+      }
     }
   }
 </script>
