@@ -342,26 +342,63 @@ $for_shipping = [];
       setAsShipped()
     })
   })
+
+  function downloadAsCSV(data, filename = 'rank_medals_shipped.csv') {
+    // Get all unique keys from the objects
+    const keys = Object.keys(data)
+
+    // create new array
+    const csvData = []
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i]
+      const value = data[key]
+      for (let j = 0; j < value.length; j++) {
+        csvData.push({
+          [key]: value[j]
+        })
+      }
+    }
+
+    // Create CSV header row
+    const csvRows = ['User ID, Rank Medal'];
+
+    // Create CSV data rows
+    for (let i in csvData) {
+      const row = csvData[i];
+      const key = Object.keys(row);
+      const values = Object.values(row);
+      csvRows.push(`${key},${values}`);
+    }
+
+    // Join all rows into a single string
+    const csvString = csvRows.join('\n');
+
+    // Create a Blob with the CSV content
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+
+    // Create a temporary URL for the Blob
+    const url = window.URL.createObjectURL(blob);
+
+    // Create a hidden anchor element
+    const link = document.createElement("a");
+    link.style.display = "none";
+    link.href = url;
+    link.download = filename;
+
+    // Append the link to the body
+    document.body.appendChild(link);
+
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Clean up by removing the link and revoking the URL
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  }
+
   const setAsShipped = () => {
     const for_shipping = <?= json_encode($for_shipping) ?>;
-    const info = JSON.stringify(for_shipping);
-    if (confirm('Are you sure you want to set all rank medals as shipped? You cannot undo this action!')) {
-      $.post('ajax/set_as_shipped.php', { info }, (res) => {
-        const result = JSON.parse(res)
-        if (result.success) {
-          alert(result.total + ' rank medals have been set as shipped!')
-          // refresh the page
-          location.reload()
-        } else {
-          let text = result.error
-          if (result.total) {
-            text += ' however, ' + result.total + ' rank medals have been set as shipped!'
-          }
-          alert(result.error)
-          if (result.total) location.refresh()
-        }
-      })
-    }
+    downloadAsCSV(for_shipping)
   }
 </script>
 </BODY>

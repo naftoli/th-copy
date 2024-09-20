@@ -18,38 +18,3 @@ $stmt = $MASHPIA_DB->prepare("INSERT INTO rank_medals_shipped (user_id, rank_ord
 $info = json_decode($_POST['info'], true);
 $total = 0;
 
-$MASHPIA_DB->startTransaction();
-$success = true;
-
-// execute the prepared statement for each user_id and rank_ord
-// after every 500 qrys, the transaction will be committed
-// if any qry fails, the transaction will be rolled back
-$num = 1;
-foreach ($info as $user_id => $rank_ords) {
-    foreach ($rank_ords as $rank_ord) {
-        $result = $stmt->execute([ $user_id, $rank_ord ]);
-        if (!$result) {
-            $success = false;
-            break 2;
-        }
-        if ($num >= 250 && $num++ % 250 == 0) {
-            $MASHPIA_DB->commit();
-            $MASHPIA_DB->startTransaction();
-        }
-    }
-}
-
-if ($success) {
-    $MASHPIA_DB->commit();
-    echo json_encode([
-        'success' => true,
-        'total' => $num
-    ]);
-} else {
-    $MASHPIA_DB->rollback();
-    echo json_encode([
-        'success' => false,
-        'error' => 'Error setting all rank medals as shipped.',
-        'total' => $num
-    ]);
-}
