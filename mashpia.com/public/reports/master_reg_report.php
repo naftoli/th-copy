@@ -92,8 +92,8 @@ foreach ($rows as $row) {
     $charges[$row['type']][$row['user_id']] = $row['amount'];
 }
 
-// get all user ids from both the users array and the registration array
-$user_ids = array_unique(array_merge(array_keys($users), array_keys($registrations)));
+// get all user ids from both the users array and the registration array and chidon array
+$user_ids = array_unique(array_merge(array_keys($users), array_keys($registrations), array_keys($chidon)));
 ?>
 <!DOCTYPE html>
 <html>
