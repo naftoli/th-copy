@@ -49,6 +49,7 @@ if ($success) {
     $MASHPIA_DB->rollback();
     echo json_encode([
         'success' => false,
-        'error' => 'Error setting rank medals as shipped.'
+        'error' => 'Error setting rank medals as shipped.',
+        'total' => $num
     ]);
 }
