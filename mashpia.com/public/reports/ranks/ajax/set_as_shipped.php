@@ -32,7 +32,7 @@ foreach ($info as $user_id => $rank_ords) {
             $success = false;
             break 2;
         }
-        if ($num++ % 500 == 0) {
+        if ($num++ % 250 == 0) {
             $MASHPIA_DB->commit();
             $MASHPIA_DB->startTransaction();
         }
