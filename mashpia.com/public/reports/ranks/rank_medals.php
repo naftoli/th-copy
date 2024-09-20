@@ -1,9 +1,25 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+function checkForBreak()
+{
+    global $i, $rows;
+    if (($i % 3) != 0) {
+        echo "<div class='space'></div>";
+    } else {
+        $i = 0; //reset i so that it will show new row
+        $rows++; //add row
+        if (($rows % 11) == 0) {
+            $rows = 1; //reset rows counter and add space to top of new page
+            echo "<div class='page-break'></div><div class='topSpace'></div>";
+        }
+    }
+    $i++;
+}
 
 function getRanks() {
     $ranks = [];
@@ -29,6 +45,19 @@ function getClasses() {
         $classes[$row['class_id']] = $row;
     }
     return $classes;
+}
+
+function getShipped() {
+    $shipped = [];
+    $sql = "select * from rank_medals_shipped";
+    $result = mysql_query($sql);
+    if (!$result) {
+        die('Invalid query: ' . mysql_error());
+    }
+    while ($row = mysql_fetch_assoc($result)) {
+        $shipped[$row['user_id']][] = $row['rank_ord'];
+    }
+    return $shipped;
 }
 
 $sql = "SELECT 
@@ -59,10 +88,18 @@ if (!$result) {
 
 $ranks = getRanks();
 $classes = getClasses();
+$shipped = getShipped();
 
 $info = [];
 $user_info = [];
 while ($row = mysql_fetch_assoc($result)) {
+    // check if already shipped rank
+    if (isset($shipped[$row['user_id']])) {
+        $shipped_ranks = $shipped[$row['user_id']];
+        if (in_array($row['rank_ord'], $shipped_ranks)) {
+            continue;
+        }
+    }
     $school = $row['school_name'];
     $user_id = $row['user_id'];
     $name = $row['first'] . ' ' . $row['last'];
@@ -76,21 +113,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
-function checkForBreak()
-{
-    global $i, $rows;
-    if (($i % 3) != 0) {
-        echo "<div class='space'></div>";
-    } else {
-        $i = 0; //reset i so that it will show new row
-        $rows++; //add row
-        if (($rows % 11) == 0) {
-            $rows = 1; //reset rows counter and add space to top of new page
-            echo "<div class='page-break'></div><div class='topSpace'></div>";
-        }
-    }
-    $i++;
-}
+$for_shipping = [];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
 <HTML DIR="<?= $dir ?>">
@@ -270,6 +293,7 @@ function checkForBreak()
                     for (; $ord <= $rank_ord; $ord++) {
                         echo "<span class='medal'>" . $ranks[$ord] . "</span>";
                         $sheet[$school_id][$user][$user_info[$user]][$grade][] = $ranks[$ord];
+                        $for_shipping[$user][] = $ord;
                         $numRanks++;
                         $totalRanks++;
                     }
@@ -319,26 +343,20 @@ function checkForBreak()
     })
   })
   const setAsShipped = () => {
-    const for_shipping = <?= json_encode() ?>;
-    console.log(for_shipping)
-    let total = 0
-    for (const user in for_shipping) {
-      for (const subject in for_shipping[user]) {
-        total += for_shipping[user][subject].length
-      }
+    const for_shipping = <?= json_encode($for_shipping) ?>;
+    const info = JSON.stringify(for_shipping);
+    if (confirm('Are you sure you want to set all rank medals as shipped? You cannot undo this action!')) {
+      $.post('ajax/set_as_shipped.php', { info }, (res) => {
+        const result = JSON.parse(res)
+        if (result.success) {
+          alert(result.total + ' rank medals have been set as shipped!')
+          // refresh the page
+          location.reload()
+        } else {
+          alert(result.error)
+        }
+      })
     }
-    alert("Medals to be set as shipped: " + total)
-    alert("This feature is disabled for now")
-    // if (confirm('Are you sure you want to set all medals as shipped? You cannot undo this action!')) {
-    //   $.post('medals/set_as_shipped.php', {info: for_shipping}, (res) => {
-    //     const result = JSON.parse(res)
-    //     if (result.success) {
-    //       alert('All medals have been set as shipped')
-    //     } else {
-    //       alert('There was an error setting the medals as shipped')
-    //     }
-    //   })
-    // }
   }
 </script>
 </BODY>
