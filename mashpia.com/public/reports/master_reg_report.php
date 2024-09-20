@@ -141,12 +141,16 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
         <?php
         $totals['registered'] = 0;
         $totals['user_registered'] = 0;
+        $totals['chidon_registered'] = 0;
         foreach ($user_ids as $num => $user_id) {
             if (isset($users[$user_id]) && $users[$user_id]['user_registered'] > 0) {
                 $totals['user_registered']++;
             }
             if (isset($registrations[$user_id])) {
                 $totals['registered']++;
+            }
+            if (isset($chidon[$user_id])) {
+                $totals['chidon_registered']++;
             }
             ?>
             <tr>
@@ -175,7 +179,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             <td><?php echo $totals['registered']; ?></td>
             <td><?php echo $totals['user_registered']; ?></td>
             <td></td>
-            <td></td>
+            <td><?php echo $totals['chidon_registered']; ?></td>
             <td></td>
             <td></td>
             <td></td>
