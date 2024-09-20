@@ -342,31 +342,25 @@ $for_shipping = [];
       setAsShipped()
     })
   })
-  const setAsShipped = async () => {
+  const setAsShipped = () => {
     const for_shipping = <?= json_encode($for_shipping) ?>;
     const info = JSON.stringify(for_shipping);
     if (confirm('Are you sure you want to set all rank medals as shipped? You cannot undo this action!')) {
-      const res = await fetch('ajax/set_as_shipped.php', {
-        method: 'POST',
-        body: info,
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      const data = await res.json()
-      if (data.success) {
-        alert('All rank medals have been set as shipped.')
-        location.reload()
-      } else {
-        let text = 'Error setting all rank medals as shipped.'
-        if (data.total) {
-          text += ' However, ' + data.total + ' rank medals were set as shipped.'
-          alert(text)
+      $.post('ajax/set_as_shipped.php', { info }, (res) => {
+        const result = JSON.parse(res)
+        if (result.success) {
+          alert(result.total + ' rank medals have been set as shipped!')
+          // refresh the page
           location.reload()
         } else {
-          alert(text)
+          let text = result.error
+          if (result.total) {
+            text += ' however, ' + result.total + ' rank medals have been set as shipped!'
+          }
+          alert(result.error)
+          if (result.total) location.refresh()
         }
-      }
+      })
     }
   }
 </script>

@@ -14,10 +14,9 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-// prepare the statement
 $stmt = $MASHPIA_DB->prepare("INSERT INTO rank_medals_shipped (user_id, rank_ord) VALUES (?, ?)");
-$data = trim(file_get_contents("php://input"));
-$info = json_decode($data, true);
+$info = json_decode($_POST['info'], true);
+$total = 0;
 
 $MASHPIA_DB->startTransaction();
 $success = true;
@@ -50,7 +49,7 @@ if ($success) {
     $MASHPIA_DB->rollback();
     echo json_encode([
         'success' => false,
-        'error' => 'Error setting rank medals as shipped.',
+        'error' => 'Error setting all rank medals as shipped.',
         'total' => $num
     ]);
 }
