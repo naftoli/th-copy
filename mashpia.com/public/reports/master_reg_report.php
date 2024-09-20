@@ -53,7 +53,6 @@ $qry = "SELECT
 $stmt = $MASHPIA_DB->query($qry);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $row) {
-    $admin_users[$row['admin_id']][] = $row['id'];
     $user_admins[$row['id']] = $row['admin_id'];
 }
 
