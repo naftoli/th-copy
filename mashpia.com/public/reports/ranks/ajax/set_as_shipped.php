@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -24,7 +24,7 @@ $success = true;
 foreach ($info as $user_id => $rank_ords) {
     $total += count($rank_ords);
     foreach ($rank_ords as $rank_ord) {
-        $result = $stmt->execute([$user_id, $rank_ord]);
+        $result = $stmt->execute([ $user_id, $rank_ord ]);
         if (!$result) {
             $success = false;
             break 2;
