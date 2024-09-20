@@ -98,7 +98,11 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Master Registration List</title>
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
     <style>
       tr, th, td {
         font-family: "Arial", sans-serif;
@@ -113,22 +117,25 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
 </head>
 <body>
     <h1>Master Registration List</h1>
-    <table>
-        <tr>
-            <th></th>
-            <th>User ID</th>
-            <th>User Serial</th>
-            <th>User Name</th>
-            <th>Date Registered for 5785</th>
-            <th>Currently registered Date (Users Table)</th>
-            <th>Registration Payment</th>
-            <th>Registered for Chidon</th>
-            <th>Chidon Payment</th>
-            <th>School</th>
-            <th>Grade</th>
-            <th>Rank</th>
-            <th>Family ID</th>
-        </tr>
+    <table id="table" class="table table-striped table-condensed cell-border hover row-order order-column">
+        <thead>
+            <tr>
+                <th></th>
+                <th>User ID</th>
+                <th>User Serial</th>
+                <th>User Name</th>
+                <th>Date Registered for 5785</th>
+                <th>Currently registered Date (Users Table)</th>
+                <th>Registration Payment</th>
+                <th>Registered for Chidon</th>
+                <th>Chidon Payment</th>
+                <th>School</th>
+                <th>Grade</th>
+                <th>Rank</th>
+                <th>Family ID</th>
+            </tr>
+        </thead>
+        <tbody>
         <?php
         $totals['registered'] = 0;
         $totals['user_registered'] = 0;
@@ -166,6 +173,14 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             <td><?php echo $totals['user_registered']; ?></td>
             <td colspan="7"></td>
         </tr>
+        </tbody>
     </table>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script>
+  $('#table').DataTable({
+    paging: false
+  });
+</script>
 </html>
