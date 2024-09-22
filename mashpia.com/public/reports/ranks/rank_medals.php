@@ -4,6 +4,9 @@
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
+$australian = GlobalSettings::getAustralian();
 
 function checkForBreak()
 {
@@ -60,6 +63,7 @@ function getShipped() {
     return $shipped;
 }
 
+$exceptions = array_unique( array_merge([180, 585, 808, 612], $australian) );
 $sql = "SELECT 
             s.school_name,
             c.class_id, 
@@ -75,9 +79,11 @@ $sql = "SELECT
             rank_marks rm USING (user_id)
                 JOIN
             classes c ON u.class_id = c.class_id 
+                JOIN 
+            user_registration ur ON u.user_id = ur.user_id 
         WHERE
-            u.user_registered > 0 
-                AND u.school_id NOT IN (180, 585, 808, 612) 
+            u.user_registered > 0 AND ur.year = $year 
+                AND u.school_id NOT IN (" . implode(',', $exceptions) . ") 
         GROUP BY u.user_id 
         HAVING rank_ord NOT IN (1, 9, 12)
         ORDER BY school_name , u.last , u.first";
@@ -396,9 +402,23 @@ $for_shipping = [];
     window.URL.revokeObjectURL(url);
   }
 
-  const setAsShipped = () => {
+  const setAsShipped = async () => {
     const for_shipping = <?= json_encode($for_shipping) ?>;
     downloadAsCSV(for_shipping)
+    const res = await fetch('ajax/set_as_shipped.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ info: for_shipping })
+    })
+    const data = await res.json()
+    if (data.error) {
+      alert(data.error)
+    } else {
+      alert(`Successfully set ${data.total} records as shipped.`)
+      location.reload()
+    }
   }
 </script>
 </BODY>
