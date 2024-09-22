@@ -405,20 +405,20 @@ $for_shipping = [];
   const setAsShipped = async () => {
     const for_shipping = <?= json_encode($for_shipping) ?>;
     downloadAsCSV(for_shipping)
-    const res = await fetch('ajax/set_as_shipped.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ info: for_shipping })
-    })
-    const data = await res.json()
-    if (data.error) {
-      alert(data.error)
-    } else {
-      alert(`Successfully set ${data.total} records as shipped.`)
-      location.reload()
-    }
+    // const res = await fetch('ajax/set_as_shipped.php', {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   body: JSON.stringify({ info: for_shipping })
+    // })
+    // const data = await res.json()
+    // if (data.error) {
+    //   alert(data.error)
+    // } else {
+    //   alert(`Successfully set ${data.total} records as shipped.`)
+    //   location.reload()
+    // }
   }
 </script>
 </BODY>
