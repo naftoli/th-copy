@@ -42,10 +42,16 @@ $year = isset($_GET['year']) ? $_GET['year'] : globalSettings::getRegistrationYe
 $schoolsUsers = array();
 $totals = array();
 //ksort($schools);
-foreach ($schools as $id => $school) {
-    $s = new SchoolsUsers($id);
+if ($admin_user['auth'] == 'super') {
+    $school_users[0] = $s = new SchoolsUsers(0);
     $s->setYear($year);
-    $schoolsUsers[$id] = $s->getUsers(true, true);
+    $schoolsUsers[0] = $s->getUsers(true, true);
+} else {
+    foreach ($schools as $id => $school) {
+        $s = new SchoolsUsers($id);
+        $s->setYear($year);
+        $schoolsUsers[$id] = $s->getUsers(true, true);
+    }
 }
 
 /*
@@ -61,12 +67,15 @@ for ($i = $year; $year > $i - 5; $i--) {
 echo "</select>";
 
 foreach ($schoolsUsers as $school => $users) {
-    echo "<h2>" . $schools[$school] . "</h2>";
+    if ($school != 0) {
+        echo "<h2>" . $schools[$school] . "</h2>";
+    }
     echo "<table>";
-    echo "<tr><th>Grade</th><th>Student</th><th>User ID</th><th>TH Start Date</th><th>Registered Date</th></tr>";
+    echo "<tr><th>School</th><th>Grade</th><th>Student</th><th>User ID</th><th>TH Start Date</th><th>Registered Date</th></tr>";
     foreach ($users as $user) {
+        $school = $user['school_id'];
         $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
-        echo "<tr><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] .
+        echo "<tr><td>" . $schools[$school] . "</td><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] .
             "</td><td>" . $user['user_id'] . "</td><td>" . jdtogregorian($user['user_start_date']) .
             "</td><td>" . $user['reg_date'] . "</td></tr>";
         if (isset($totals[$schools[$school]][$grade]))

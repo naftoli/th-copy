@@ -40,7 +40,10 @@ class SchoolsUsers {
             $sql .= "left join user_registration ur using (user_id) ";
         }
         $sql .= "join schools s on s.school_id = u.school_id ";
-		$sql .= "where u.school_id = " . $this->school;
+        if ($this->school)
+            $sql .= "where u.school_id = " . $this->school;
+        else
+            $sql .= "where 1";
 		if ($this->year > 0) {
 			$sql .= " and ur.year = " . $this->year;
 		}
@@ -52,7 +55,7 @@ class SchoolsUsers {
         if ( !empty( $this->classes ) && $this->classes != 'all' ) 
             $sql .= "and class_id in (" . implode( ',', $this->classes ) . ") ";        
         $sql .= " order by c.class_grade, c.class_sub, u.last, u.first";
-		//echo $sql;
+//		echo $sql; exit;
         //echo "<input type='hidden' name='classSql' value='$sql' />";
         $result = mysql_query( $sql );
         
