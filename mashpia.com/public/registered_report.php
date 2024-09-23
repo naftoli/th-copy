@@ -43,7 +43,7 @@ $schoolsUsers = array();
 $totals = array();
 //ksort($schools);
 if ($admin_user['auth'] == 'super') {
-    $school_users[0] = $s = new SchoolsUsers(0);
+    $s = new SchoolsUsers(0);
     $s->setYear($year);
     $schoolsUsers[0] = $s->getUsers(true, true);
 } else {
