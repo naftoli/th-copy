@@ -342,6 +342,7 @@ ksort($grand_summary);
                       if ($field == 'cat') $field = 'category';
                       else if ($field == 'name') $field = 'name preference';
                       else if ($field == 'id') $field = 'Item ID';
+                      else if ($field == 'date') $field = 'Date Shipped';
                       echo "<th>" . ucwords($field) . "</th>";
                   }
               }

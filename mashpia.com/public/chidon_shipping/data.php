@@ -30,7 +30,8 @@ $item_details = [
     'name'      => 'Personalization Name',
     'cat'       => 'Category',
     'rank'      => 'Rank (for Gear Category)',
-    'code'      => 'Code (for Lanyards)'
+    'code'      => 'Code (for Lanyards)',
+    'date'      => 'Date (for Shipments)'
 ];
 
 function build_fields() {
@@ -111,6 +112,7 @@ function createHtmlForItem($school, $row, $output = true) {
                                 echo "</td><td>";
                                 if ($field == 'cat') echo $cat;
                                 else if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
+                                else if ($field == 'date' && isset($status['date_shipped'])) echo $status['date_shipped'];
                                 else if (isset($item[$field])) echo $item[$field];
                             }
                         }
