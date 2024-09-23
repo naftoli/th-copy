@@ -22,7 +22,8 @@ $insert = "INSERT INTO $table
                 user_id = :user, 
                 item_id = :item, 
                 item_num = :num,
-                status = :status";
+                status = :status, 
+                date_shipped = :date";
 $stmtInsert = $MASHPIA_DB->prepare($insert);
 
 $update = "UPDATE $table 
@@ -31,10 +32,34 @@ $update = "UPDATE $table
                 description = :desc 
             WHERE 
                 year = :year 
-                AND user_id = :user 
-                AND item_id = :item 
-                AND item_num = :num";
+            AND user_id = :user 
+            AND item_id = :item 
+            AND item_num = :num";
 $stmtUpdate = $MASHPIA_DB->prepare($update);
+
+$updateWithDate = "UPDATE $table 
+                    SET 
+                        status = :status,
+                        description = :desc,
+                        date_shipped = NOW() 
+                    WHERE 
+                        year = :year 
+                    AND user_id = :user 
+                    AND item_id = :item 
+                    AND item_num = :num";
+$stmtUpdateWithDate = $MASHPIA_DB->prepare($updateWithDate);
+
+$updateRemoveDate = "UPDATE $table 
+                    SET 
+                        status = :status,
+                        description = :desc,
+                        date_shipped = NULL 
+                    WHERE 
+                        year = :year 
+                    AND user_id = :user 
+                    AND item_id = :item 
+                    AND item_num = :num";
+$stmtUpdateRemoveDate = $MASHPIA_DB->prepare($updateRemoveDate);
 
 $MASHPIA_DB->beginTransaction();
 $success = true;
@@ -51,22 +76,44 @@ foreach ($info as $row) {
     } else {
         // find out if we need to insert or update
         $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        $action = intval($row['action']);
         if ($found) {
-            $res = $stmtUpdate->execute([
-                'year'      => $year,
-                'user'      => $row['user'],
-                'item'      => $row['item'],
-                'num'       => $row['num'],
-                'status'    => intval($row['action']),
-                'desc'      => $row['desc']
-            ]);
+            if ($action == 1) {
+                $res = $stmtUpdateWithDate->execute([
+                    'year'      => $year,
+                    'user'      => $row['user'],
+                    'item'      => $row['item'],
+                    'num'       => $row['num'],
+                    'status'    => $action,
+                    'desc'      => $row['desc']
+                ]);
+            } else if ($action == 0) {
+                $res = $stmtUpdateRemoveDate->execute([
+                    'year'      => $year,
+                    'user'      => $row['user'],
+                    'item'      => $row['item'],
+                    'num'       => $row['num'],
+                    'status'    => $action,
+                    'desc'      => $row['desc']
+                ]);
+            } else {
+                $res = $stmtUpdate->execute([
+                    'year'      => $year,
+                    'user'      => $row['user'],
+                    'item'      => $row['item'],
+                    'num'       => $row['num'],
+                    'status'    => $action,
+                    'desc'      => $row['desc']
+                ]);
+            }
         } else {
             $res = $stmtInsert->execute([
                 'year'      => $year,
                 'user'      => $row['user'],
                 'item'      => $row['item'],
                 'num'       => $row['num'],
-                'status'    => intval($row['action'])
+                'status'    => $action,
+                'date'      => $action == 1 ? date('Y-m-d H:i:s') : NULL
             ]);
         }
         if (! $res) {
