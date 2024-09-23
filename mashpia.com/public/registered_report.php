@@ -38,7 +38,7 @@ require_once 'class.globalSettings.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
-$year = globalSettings::getRegistrationYear();
+$year = isset($_GET['year']) ? $_GET['year'] : globalSettings::getRegistrationYear();
 $schoolsUsers = array();
 $totals = array();
 //ksort($schools);
@@ -54,6 +54,11 @@ print_r( $schoolsUsers );
 echo "</pre>";
  *
  */
+echo "<select name='year' id='year'>";
+for ($i = $year; $year > $i - 5; $i--) {
+    echo "<option value='$i' " . ($i == $year ? 'selected' : '') . ">$i</option>";
+}
+echo "</select>";
 
 foreach ($schoolsUsers as $school => $users) {
     echo "<h2>" . $schools[$school] . "</h2>";
@@ -90,4 +95,9 @@ foreach ($totals as $school => $info) {
 }
 ?>
 </body>
+<script>
+    document.getElementById('year').addEventListener('change', function () {
+        window.location.href = 'registered_report.php?year=' + this.value;
+    });
+</script>
 </html>
