@@ -1,20 +1,24 @@
-<?
+<?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school');
 require('header.php');
 
-if (isset($_GET['debug'])) {
-    //error_reporting(E_ALL);
-    ini_set("display_errors", 1);
-}
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-<HTML>
+require_once 'class.adminSchools.php';
+require_once 'class.globalSettings.php';
 
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+$year = GlobalSettings::getRegistrationYear();
+?>
+<!DOCTYPE html>
+<HTML>
 <HEAD>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>Registered Report</title>
   <link href="admin_styles.css" rel="stylesheet" type="text/css">
-  <style type='text/css'>
+  <style>
     tr, th, td {
       padding: 10px;
       font-size: 14px;
@@ -30,83 +34,39 @@ if (isset($_GET['debug'])) {
 <BODY>
 <? include('admin_header.php'); ?>
 <h1>Registered Report</h1>
-<?
-require_once 'class.adminSchools.php';
-require_once 'class.schoolsUsers.php';
-require_once 'class.globalSettings.php';
-
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
-$schools = $as->getSchools();
-
-$year = isset($_GET['year']) ? $_GET['year'] : globalSettings::getRegistrationYear();
-$schoolsUsers = array();
-$totals = array();
-//ksort($schools);
-if ($admin_user['auth'] == 'super') {
-    $s = new SchoolsUsers(0);
-    $s->setYear($year);
-    $schoolsUsers[0] = $s->getUsers(true, true);
-} else {
-    foreach ($schools as $id => $school) {
-        $s = new SchoolsUsers($id);
-        $s->setYear($year);
-        $schoolsUsers[$id] = $s->getUsers(true, true);
+<select name="year" id="year">
+    <?php
+    for (; $year > ($year - 5); $year--) {
+        echo "<option value='$year'>$year</option>";
     }
-}
-
-/*
-echo "<pre>";
-print_r( $schoolsUsers );
-echo "</pre>";
- *
- */
-echo "<select name='year' id='year'>";
-for ($i = $year; $year > $i - 5; $i--) {
-    echo "<option value='$i' " . ($i == $year ? 'selected' : '') . ">$i</option>";
-}
-echo "</select>";
-
-foreach ($schoolsUsers as $school => $users) {
-    if ($school != 0) {
-        echo "<h2>" . $schools[$school] . "</h2>";
-    }
-    echo "<table>";
-    echo "<tr><th>School</th><th>Grade</th><th>Student</th><th>User ID</th><th>TH Start Date</th><th>Registered Date</th></tr>";
-    foreach ($users as $user) {
-        $school = $user['school_id'];
-        $grade = $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']);
-        echo "<tr><td>" . $schools[$school] . "</td><td>" . $grade . "</td><td>" . $user['first'] . " " . $user['last'] .
-            "</td><td>" . $user['user_id'] . "</td><td>" . jdtogregorian($user['user_start_date']) .
-            "</td><td>" . $user['reg_date'] . "</td></tr>";
-        if (isset($totals[$schools[$school]][$grade]))
-            $totals[$schools[$school]][$grade]++;
-        else
-            $totals[$schools[$school]][$grade] = 1;
-    }
-    echo "</table><br /><div class='page-break'></div>";
-}
-
-echo "<div class='page-break'></div>";
-echo "<h2>Totals</h2>";
-foreach ($totals as $school => $info) {
-    $grandTotal = 0;
-    echo "Total number of children registered in " . $school . "<br />";
-    echo "<table>";
-    echo "<tr><th>Grade</th><th>Total</th></tr>";
-    foreach ($info as $grade => $total) {
-        echo "<tr><td>" . $grade . "</td><td>" . $total . "</td></tr>";
-        $grandTotal += $total;
-    }
-    echo "<tr><td><b>Grand Total</b></td><td><b>" . $grandTotal . "</b></td></tr>";
-    echo "</table>";
-    echo "<br /><br />";
-    echo "<div class='page-break'></div>";
-}
-?>
+    ?>
+</select>
+<br /><br />
+<div id="main"></div>
 </body>
 <script>
     document.getElementById('year').addEventListener('change', function () {
         window.location.href = 'registered_report.php?year=' + this.value;
     });
+
+    // once document loaded get info for table as json
+    document.onload( async () => {
+      const year = document.getElementById('year')
+      const res = fetch('/registration/getRegistration.php', {
+        method: 'GET',
+        body: JSON.stringify(year),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await res.json()
+      console.log(data)
+      let html = ''
+      for (let school in data) {
+        if (school != 0) {
+          html +=
+        }
+      }
+    })
 </script>
 </html>
