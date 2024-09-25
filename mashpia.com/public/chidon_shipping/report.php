@@ -34,7 +34,7 @@ $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
     $status = $cs->getStatus();
-//    echo "<pre>"; print_r($status); echo "</pre>";
+//    echo "<pre>"; print_r($status); echo "</pre>"; exit;
     foreach ($list_of_schools as $school_id) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
@@ -51,16 +51,14 @@ if ($report_type == 'file') {
                         if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
                         switch ($status_num) {
                             case 0:
-                                if (isset($status[$user][$item['id']]) && $status[$user][$item['id']][$item_num]['shipped'] == 1) unset($info[$cat][$user][$idx]);
+                                if (isset($status[$user][$item['id']]) && $status[$user][$item['id']][$item_num]['status'] != $status_num) unset($info[$cat][$user][$idx]);
                                 break;
                             case 1:
-                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']][$item_num]['shipped'] == 0) unset($info[$cat][$user][$idx]);
-                                break;
                             case 2:
-                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']][$item_num]['missing'] == 0) unset($info[$cat][$user][$idx]);
-                                break;
                             case 3:
-                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']][$item_num]['received'] == 0) unset($info[$cat][$user][$idx]);
+                            case 4:
+                            case 5:
+                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']][$item_num]['status'] != $status_num) unset($info[$cat][$user][$idx]);
                                 break;
                         }
                     }
