@@ -54,7 +54,7 @@ class SchoolsUsers {
             $sql .= " and u.user_registered is null ";
         if ( !empty( $this->classes ) && $this->classes != 'all' ) 
             $sql .= "and class_id in (" . implode( ',', $this->classes ) . ") ";        
-        $sql .= " order by c.class_grade, c.class_sub, u.last, u.first";
+        $sql .= " order by s.school_name, c.class_grade, c.class_sub, u.last, u.first";
 //		echo $sql; exit;
         //echo "<input type='hidden' name='classSql' value='$sql' />";
         $result = mysql_query( $sql );
