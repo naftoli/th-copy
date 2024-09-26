@@ -563,13 +563,24 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // if tuition school, turn off chayolei
         if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
-        // turn off chidon
-//        if (! isset($_COOKIE['naftoli'])) $result['chidon'] = true;
+        // turn off chidon after certain date
+        if (!isset($_COOKIE['naftoli']) && self::turnOffChidon()) $result['chidon'] = true;
 
         // turn off chayolei
 //        if (! isset($_COOKIE['naftoli'])) $result['chayolei'] = true;
 
         return $result;
+    }
+
+    public static function turnOffChidon() {
+        $timezone = new DateTimeZone('America/New_York');
+
+        // Create DateTime objects for the target date and current time
+        $targetDate = new DateTime('2024-09-26 03:00:00', $timezone);
+        $now = new DateTime('now', $timezone);
+
+        // Compare the dates
+        return $now > $targetDate;
     }
 
     /*

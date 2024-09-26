@@ -318,8 +318,8 @@ if ( !empty( $users ) ) {
             $children[ $row['user_id'] ]['reg_types'] = [];
         }
 
-        // turn off chidon
-//        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chidon'] = false;
+        // turn off chidon past certain date
+        if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon()) $children[$row['user_id']]['reg_types']['chidon'] = false;
         // turn off chayolei
 //        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
