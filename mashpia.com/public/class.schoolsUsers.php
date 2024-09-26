@@ -44,9 +44,12 @@ class SchoolsUsers {
             $sql .= "where u.school_id = " . $this->school;
         else
             $sql .= "where 1";
-		if ($this->year > 0) {
+		if ($this->year > 0 && $registered) {
 			$sql .= " and ur.year = " . $this->year;
 		}
+        else if ($this->year > 0 && !$registered) {
+            $sql .= " and (ur.year is null or u.user_registered is null) ";
+        }
         else if ($registered && $only) {
 			$sql .= " and u.user_registered > 0 ";
         }

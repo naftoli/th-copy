@@ -74,6 +74,7 @@ $year = GlobalSettings::getRegistrationYear();
     const data = info.data
     // console.log(data)
     const schools = info.schools
+    const totals = {}
     let html = ''
     for (let school in data) {
       if (school != 0) {
@@ -84,7 +85,10 @@ $year = GlobalSettings::getRegistrationYear();
         <th>${year} Registration Date</th></tr>
       `
       for (let user of data[school]) {
+        if (!totals[user.school_id]) totals[user.school_id] = {}
         const grade = user.class_grade + (user.class_sub ? '-' + user.class_sub : '')
+        if (!totals[user.school_id][grade]) totals[user.school_id][grade] = 0
+        totals[user.school_id][grade]++
         html += `
           <tr>${school > 0 ? '' : "<td>" + schools[user.school_id] + "</td>"}<td>${grade}</td><td>${user.first + ' ' + user.last}</td>
           <td>${user.user_serial}</td><td>${jdToGreg(user.user_start_date).toDateString()}</td><td>${user.reg_date}</td></tr>
@@ -92,6 +96,16 @@ $year = GlobalSettings::getRegistrationYear();
       }
       html += "</table><div class='page-break'></div>"
     }
+    let grandTotal = 0
+    html += "<h2>Totals</h2>"
+    html += "<table><tr><th>School<th>Grade</th><th>Total</th></tr>"
+    for (let school in totals) {
+      for (let grade in totals[school]) {
+        grandTotal += totals[school][grade]
+        html += "<tr><td>" + schools[school] + "</td><td>" + grade + "</td><td>" + totals[school][grade] + "</td></tr>"
+      }
+    }
+    html += "<tr><td><b>Grand Total</b></td><td></td><td><b>" + grandTotal + "</b></td></tr></table>"
     document.getElementById('reg').innerHTML = html
   })
 </script>
