@@ -52,16 +52,16 @@ $year = GlobalSettings::getRegistrationYear();
   const jdToGreg = jd => {
     // convert a Julian number to a Gregorian Date.
     //    S.Boisseau / BubblingApp.com / 2014
-    var a = Number(jd) + 32044;
-    var b = Math.floor(((4*a) + 3)/146097);
-    var c = a - Math.floor((146097*b)/4);
-    var d = Math.floor(((4*c) + 3)/1461);
-    var e = c - Math.floor((1461 * d)/4);
-    var f = Math.floor(((5*e) + 2)/153);
+    const a = Number(jd) + 32044;
+    const b = Math.floor(((4*a) + 3)/146097);
+    const c = a - Math.floor((146097*b)/4);
+    const d = Math.floor(((4*c) + 3)/1461);
+    const e = c - Math.floor((1461 * d)/4);
+    const f = Math.floor(((5*e) + 2)/153);
 
-    var D = e + 1 - Math.floor(((153*f) + 2)/5);
-    var M = f + 3 - 12 - Math.round(f/10);
-    var Y = (100*b) + d - 4800 + Math.floor(f/10);
+    const D = e + 1 - Math.floor(((153*f) + 2)/5);
+    const M = f + 3 - 12 - Math.round(f/10);
+    const Y = (100*b) + d - 4800 + Math.floor(f/10);
 
     return new Date(Y,M,D);
   }
@@ -72,7 +72,7 @@ $year = GlobalSettings::getRegistrationYear();
     const res = await fetch('/registration/getRegistration.php?year=' + year)
     const info = await res.json()
     const data = info.data
-    console.log(data)
+    // console.log(data)
     const schools = info.schools
     let html = ''
     for (let school in data) {
