@@ -49,18 +49,8 @@ if ($report_type == 'file') {
                     foreach ($items as $idx => $item) {
                         // find out how many of the same item we have
                         if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
-                        switch ($status_num) {
-                            case 0:
-                                if (isset($status[$user][$item['id']]) && $status[$user][$item['id']][$item_num]['status'] != $status_num) unset($info[$cat][$user][$idx]);
-                                break;
-                            case 1:
-                            case 2:
-                            case 3:
-                            case 4:
-                            case 5:
-                                if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']][$item_num]['status'] != $status_num) unset($info[$cat][$user][$idx]);
-                                break;
-                        }
+                        if ($status_num == 0 && isset($status[$user][$item['id']]) && $status[$user][$item['id']][$item_num]['status'] != $status_num) unset($info[$cat][$user][$idx]);
+                        else if (!isset($status[$user][$item['id']]) || $status[$user][$item['id']][$item_num]['status'] != $status_num) unset($info[$cat][$user][$idx]);
                     }
                 }
             }
