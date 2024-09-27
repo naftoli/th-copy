@@ -51,101 +51,102 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 ?>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Hachayol Report</title>
-        <link href="../admin_styles.css" rel="stylesheet" type="text/css">
-        <script type="text/javascript" src="../scripts/jquery-1.8.3.js"></script>
-        <style>
-          table {
-            font-size: 12px;
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Hachayol Report</title>
+  <link href="../admin_styles.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="../scripts/jquery-1.8.3.js"></script>
+  <style>
+    table {
+      font-size: 12px;
+    }
+
+    th, td {
+      padding: 3px 10px;
+      border-bottom: 1px solid grey;
+    }
+  </style>
+</head>
+<body>
+<?php include('../admin_header.php'); ?>
+<h1>Hachayol Report</h1>
+<?php foreach ($schools as $school_id => $school_name) : ?>
+    <?= "<h2>" . $school_name . "</h2>" ?>
+  <table>
+    <tr>
+      <th>Family ID</th>
+      <th>Family</th>
+      <th>Children/Hachayol</th>
+    </tr>
+      <?php
+      $info = [];
+      $stmtAdmins->execute(['school' => $school_id]);
+      $admins = $stmtAdmins->fetchAll();
+      foreach ($admins as $admin) {
+          $stmtUsers->execute(['id' => $admin['admin_id']]);
+          $children = $stmtUsers->fetchAll();
+          // find out if hachayol child is in this school or not
+          $disable = false;
+          foreach ($children as $child) {
+              if (!$super && $child['hachayol'] == 1 && $child['school_id'] != $school_id) {
+                  $disable = true;
+                  break;
+              }
           }
-          th, td {
-            padding: 3px 10px;
-            border-bottom: 1px solid grey;
+
+          echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
+          foreach ($children as $child) {
+              // find out child's school / grade
+              $school = $all_schools[$child['school_id']];
+              $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+
+              $toCheck = $child['hachayol'] == 1 ? 'toCheck' : '';
+              echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
+              if ($disable) echo " disabled";
+              echo " />";
+              echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
           }
-        </style>
-    </head>
-    <body>
-        <?php include('../admin_header.php'); ?>
-        <h1>Hachayol Report</h1>
-        <?php foreach ($schools as $school_id => $school_name) : ?>
-            <?= "<h2>" . $school_name . "</h2>" ?>
-            <table>
-                <tr>
-                    <th>Family ID</th>
-                    <th>Family</th>
-                    <th>Children/Hachayol</th>
-                </tr>
-                <?php
-                $info = [];
-                $stmtAdmins->execute(['school' => $school_id]);
-                $admins = $stmtAdmins->fetchAll();
-                foreach ($admins as $admin) {
-                    $stmtUsers->execute(['id' => $admin['admin_id']]);
-                    $children = $stmtUsers->fetchAll();
-                    // find out if hachayol child is in this school or not
-                    $disable = false;
-                    foreach ($children as $child) {
-                        if (!$super && $child['hachayol'] == 1 && $child['school_id'] != $school_id) {
-                            $disable = true;
-                            break;
-                        }
-                    }
+          echo "</td></tr>";
+      }
+      // find kids with missing parent account
+      $stmtMissing->execute(['school' => $school_id]);
+      $missing = $stmtMissing->fetchAll();
+      foreach ($missing as $idx => $child) {
+          $school = $all_schools[$child['school_id']];
+          $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
 
-                    echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
-                    foreach ($children as $child) {
-                        // find out child's school / grade
-                        $school = $all_schools[$child['school_id']];
-                        $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
+          echo "<tr><td colspan='2'>No Parent Account</td><td>";
+          $toCheck = $child['hachayol'] == 1 ? 'toCheck' : '';
+          echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
+          echo " />";
+          echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
+      }
+      ?>
+  </table>
+<?php endforeach; ?>
+</body>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    $(".toCheck").each(function () {
+      $(this).attr('checked', true)
+    })
+  })
+  $(".hachayol").click(function () {
+    let list = []
+    let elem = $(this).parent()
+    // get all kids in this admin and remove from the rest
+    let children = $(elem).find('input').each(function () {
+      let user_id = $(this).attr('id')
+      let checked = $(this).is(":checked") ? 1 : 0
+      list.push({user_id, checked})
+    })
 
-                        $toCheck = $child['hachayol'] == 1 ? 'toCheck' : '';
-                        echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
-                        if ($disable) echo " disabled";
-                        echo " />";
-                        echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
-                    }
-                    echo "</td></tr>";
-                }
-                // find kids with missing parent account
-                $stmtMissing->execute(['school' => $school_id]);
-                $missing = $stmtMissing->fetchAll();
-                foreach ($missing as $idx => $child) {
-                    $school = $all_schools[$child['school_id']];
-                    $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-
-                    echo "<tr><td colspan='2'>No Parent Account</td><td>";
-                    $toCheck = $child['hachayol'] == 1 ? 'toCheck' : '';
-                    echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
-                    echo " />";
-                    echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
-                }
-                ?>
-            </table>
-        <?php endforeach; ?>
-    </body>
-    <script>
-      window.addEventListener('DOMContentLoaded', (event) => {
-        $(".toCheck").each( function () {
-          $(this).attr('checked', true)
-        })
-      })
-      $(".hachayol").click( function () {
-        let list = []
-        let elem = $(this).parent()
-        // get all kids in this admin and remove from the rest
-        let children = $(elem).find('input').each( function () {
-          let user_id = $(this).attr('id')
-          let checked = $(this).is(":checked") ? 1 : 0
-          list.push({ user_id, checked })
-        })
-
-        // update db
-        $.post('/mobile/reg/ajax/updateHachayols.php', { list }, function(result) {
-          const res = JSON.parse(result)
-          if (res.success) alert('updated')
-          else alert('error updating')
-        })
-      })
-    </script>
+    // update db
+    $.post('/mobile/reg/ajax/updateHachayols.php', {list}, function (result) {
+      const res = JSON.parse(result)
+      if (res.success) alert('updated')
+      else alert('error updating')
+    })
+  })
+</script>
 </html>
