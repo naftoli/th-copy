@@ -125,10 +125,9 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
         <?php endforeach; ?>
     </body>
     <script>
-      $( function() {
-        $(".toCheck").each( function() {
-          let id = $(this).attr('id')
-          document.getElementById(id).checked = true
+      window.addEventListener('DOMContentLoaded', (event) => {
+        $(".toCheck").each( function () {
+          $(this).attr('checked', true)
         })
       })
       $(".hachayol").click( function () {
