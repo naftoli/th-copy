@@ -123,11 +123,11 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
         <?php endforeach; ?>
     </body>
     <script>
-      window.addEventListener('DOMContentLoaded', (event) => {
-        $(".toCheck").each( function () {
-          $(this).attr('checked', true)
-        })
-      })
+      // window.addEventListener('DOMContentLoaded', (event) => {
+      //   $(".toCheck").each( function () {
+      //     $(this).attr('checked', true)
+      //   })
+      // })
       $(".hachayol").click( function () {
         let list = []
         let elem = $(this).parent()
