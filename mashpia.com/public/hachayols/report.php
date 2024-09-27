@@ -126,7 +126,8 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
     </body>
     <script>
       window.addEventListener('DOMContentLoaded', (event) => {
-        $(".toCheck").attr('checked', true)
+        $(".toCheck").each( function () {
+          $(this).trigger('click')
       })
       $(".hachayol").click( function () {
         let list = []
