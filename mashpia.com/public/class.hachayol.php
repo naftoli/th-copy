@@ -151,7 +151,7 @@ class Hachayol {
             FROM users u 
             JOIN schools s ON s.school_id = u.school_id 
             JOIN classes c ON c.class_id = u.class_id 
-            join user_registration ur on (ur.user_id = u.user_id) 
+            left join user_registration ur on (ur.user_id = u.user_id) 
             WHERE (
                 (u.chayolei = 1 AND u.user_registered > 0 AND ur.year = " . $this->chidonYear . ")  
                 or u.chidon = 1
