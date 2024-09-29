@@ -27,7 +27,10 @@ $stmt = $MASHPIA_DB->prepare("
 
 $users = [];
 foreach ($schools as $id => $name) {
-    $stmt->execute(['id' => $id]);
+    $stmt->execute([
+      'id' => $id,
+      'year' => $year
+    ]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
         $users[$id][$row['class_grade']][$row['class_sub']][] = $row;
