@@ -37,7 +37,7 @@ class Hachayol {
         if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
         $sql .= " AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")";
         $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";
-        //echo $sql; exit;
+        echo $sql; exit;
         
         foreach ( $this->db->query( $sql ) as $row ) {
             $school = $row['school_id']; 
@@ -85,7 +85,7 @@ class Hachayol {
             
             // find out how many kids in school are registered for chayolei / chidon
             $sqlReg = "select count(u.user_id) as registered from users u 
-                              join user_registration ur using (user_id) 
+                        join user_registration ur using (user_id) 
                         where u.user_registered > 0 and u.school_id = " . $school . " 
                         and ur.year = " . $this->chidonYear;
             $stmtReg = $this->db->query($sqlReg);

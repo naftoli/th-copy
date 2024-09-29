@@ -26,8 +26,10 @@ foreach ($rows as $row) {
 $sqlAdmins = "select a.* from admins a 
                 join admin_auths aa using (admin_id) 
                 join users u on u.user_id = aa.id 
+                join user_registration ur on ur.user_id = u.user_id 
                 where u.user_registered > 0 
                 and u.school_id = :school 
+                and ur.year = :year 
                 group by admin_id 
                 order by a.last, a.first";
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
@@ -36,7 +38,9 @@ $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 $sqlUsers = "select user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub from users u 
             join classes c on c.class_id = u.class_id 
             join admin_auths aa on u.user_id = aa.id 
+            join user_registration ur on ur.user_id = u.user_id 
             where u.user_registered > 0 and aa.admin_id = :id 
+            and ur.year = :year 
             order by u.dob";
 $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
@@ -44,9 +48,11 @@ $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 $sqlMissing = "select user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub from users u 
                 join classes c on c.class_id = u.class_id 
                 left join admin_auths aa on aa.id = u.user_id 
+                join user_registration ur on ur.user_id = u.user_id 
                 where u.user_registered > 0 
                 and aa.admin_id is null 
-                and u.school_id = :school";
+                and u.school_id = :school 
+                and ur.year = :year";
 $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 ?>
 <!DOCTYPE html>
@@ -80,10 +86,16 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
     </tr>
       <?php
       $info = [];
-      $stmtAdmins->execute(['school' => $school_id]);
+      $stmtAdmins->execute([
+        'school' => $school_id,
+        'year' => $year
+      ]);
       $admins = $stmtAdmins->fetchAll();
       foreach ($admins as $admin) {
-          $stmtUsers->execute(['id' => $admin['admin_id']]);
+          $stmtUsers->execute([
+            'id' => $admin['admin_id'],
+            'year' => $year
+          ]);
           $children = $stmtUsers->fetchAll();
           // find out if hachayol child is in this school or not
           $disable = false;
@@ -110,7 +122,10 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           echo "</td></tr>";
       }
       // find kids with missing parent account
-      $stmtMissing->execute(['school' => $school_id]);
+      $stmtMissing->execute([
+        'school' => $school_id,
+        'year' => $year
+      ]);
       $missing = $stmtMissing->fetchAll();
       foreach ($missing as $idx => $child) {
           $school = $all_schools[$child['school_id']];

@@ -8,6 +8,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
@@ -16,8 +18,10 @@ $stmt = $MASHPIA_DB->prepare("
     select u.*, c.*, aa.admin_id from users u 
     join admin_auths aa on aa.id = u.user_id 
     join classes c using (class_id) 
+    join user_registration ur on ur.user_id = u.user_id 
     where u.school_id = :id 
     and u.user_registered > 0 
+    and ur.year = :year 
     order by class_grade, class_sub, hachayol desc, last, first
 ");
 
@@ -34,8 +38,10 @@ $stmt = $MASHPIA_DB->prepare("
     select u.*, s.school_name from users u 
     join schools s using (school_id) 
     join admin_auths aa on aa.id = u.user_id 
+    join user_registration ur on ur.user_id = u.user_id 
     where u.hachayol = 1 
     and u.user_registered > 0 
+    and ur.year = :year
     and aa.admin_id = :admin_id
 ");
 
@@ -46,7 +52,10 @@ foreach ($users as $school_id => $more) {
             foreach ($more as $user) {
                 if (intval($user['hachayol'])) {
                     // find out which child(ren) do get it
-                    $stmt->execute(['admin_id' => $user['admin_id']]);
+                    $stmt->execute([
+                      'admin_id' => $user['admin_id'],
+                      'year' => $year
+                    ]);
                     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     foreach ($rows as $row) {
                         $hachayols[$row['user_id']] = $row['first'] . ' ' . $row['last'] . ' (' . $row['school_name'] . ')';
