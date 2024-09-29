@@ -105,6 +105,9 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           }
 
           echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
+          if (!$children) {
+              echo "No children registered";
+          }
           foreach ($children as $child) {
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
