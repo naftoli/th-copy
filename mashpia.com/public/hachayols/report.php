@@ -108,11 +108,11 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           if (!$children) {
               echo "No children registered for this year";
           }
-          foreach ($children as $child) {
+          foreach ($children as $i => $child) {
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
               $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-              echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
+              echo "<input type='checkbox' name='hachayol[" . $admin['admin_id'] . "][$school]' class='hachayol' id='" . $child['user_id'] . "'";
               if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
               if ($disable) echo " disabled";
               echo " />";
@@ -130,7 +130,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           $school = $all_schools[$child['school_id']];
           $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
           echo "<tr><td colspan='2'>No Parent Account</td><td>";
-          echo "<input type='radio' name='hachayol[" . ($idx + 1) . "][$school_id]' class='hachayol' id='" . $child['user_id'] . "'";
+          echo "<input type='checkbox' name='hachayol[" . ($idx + 1) . "][$school_id]' class='hachayol' id='" . $child['user_id'] . "'";
           if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
           echo " />";
           echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
