@@ -6,6 +6,7 @@ class Hachayol {
     private $schools;
     private $schoolDetails;
     private $chidonYear;
+    private $year;
     private $chidonNumbers;
     private $schoolExceptions;
 
@@ -15,6 +16,7 @@ class Hachayol {
         $this->schools = array();
         $this->schoolDetails = array();
         $this->chidonYear = GlobalSettings::getChidonRegYear();
+        $this->year = GlobalSettings::getRegistrationYear();
         $this->chidonNumbers = array();
         $this->schoolExceptions = [55, 66, 110, 112, 180, 256, 584, 585, 588, 612, 432, 713, 709, 427, 434, 690, 480];
         $this->testSchools = false;
@@ -30,14 +32,14 @@ class Hachayol {
                 JOIN users u USING ( school_id ) 
                 JOIN user_registration ur USING ( user_id ) 
                 WHERE u.user_registered > 0 
-                AND ur.year = " . $this->chidonYear . "
+                AND ur.year = " . $this->year . "
                 AND u.hachayol = 1 ";
         if ( $test_school ) $sql .= "AND s.test_school = 1 ";
         else $sql .= "AND s.test_school = 0 ";
         if ( !is_null( $id ) ) $sql .= " AND s.school_id = " . $id; 
         $sql .= " AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")";
         $sql .= " GROUP BY s.school_id ORDER BY s.shipping_method, s.school_name ";
-        echo $sql; exit;
+//        echo $sql; exit;
         
         foreach ( $this->db->query( $sql ) as $row ) {
             $school = $row['school_id']; 
@@ -87,7 +89,7 @@ class Hachayol {
             $sqlReg = "select count(u.user_id) as registered from users u 
                         join user_registration ur using (user_id) 
                         where u.user_registered > 0 and u.school_id = " . $school . " 
-                        and ur.year = " . $this->chidonYear;
+                        and ur.year = " . $this->year;
             $stmtReg = $this->db->query($sqlReg);
             $resReg = $stmtReg->fetch(PDO::FETCH_OBJ);
             $this->schools[$method][$school]['totalReg'] = $resReg->registered;
@@ -122,7 +124,7 @@ class Hachayol {
         if ( is_null( $id ) ) { 
             foreach ( $this->schools as $schools ) {
                 foreach ( $schools as $id => $school ) {
-                    $stmt->execute( array( $id, $this->chidonYear ) );
+                    $stmt->execute( array( $id, $this->year ) );
                     $rows = $stmt->fetchAll();
                     foreach ( $rows as $row ) {
                         $user = $row['first'] . " " . $row['last'];
@@ -132,7 +134,7 @@ class Hachayol {
                 }
             }
         } else {             
-             $stmt->execute( array( $id, $this->chidonYear ) );
+             $stmt->execute( array( $id, $this->year ) );
              $rows = $stmt->fetchAll();
              foreach ( $rows as $row ) {             
                  $user = $row['first'] . " " . $row['last'];
