@@ -26,29 +26,27 @@ foreach ($rows as $row) {
 $sqlAdmins = "select a.* from admins a 
                 join admin_auths aa using (admin_id) 
                 join users u on u.user_id = aa.id 
-                join user_registration ur on ur.user_id = u.user_id 
                 where u.user_registered > 0 
                 and u.school_id = :school 
-                and ur.year = :year 
                 group by admin_id 
                 order by a.last, a.first";
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 
 // then get all users per admin
-$sqlUsers = "select user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub from users u 
+$sqlUsers = "select user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date from users u 
             join classes c on c.class_id = u.class_id 
             join admin_auths aa on u.user_id = aa.id 
-            join user_registration ur on ur.user_id = u.user_id 
+            left join user_registration ur on ur.user_id = u.user_id 
             where u.user_registered > 0 and aa.admin_id = :id 
             and ur.year = :year 
             order by u.dob";
 $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
 // get users that don't have an admin account
-$sqlMissing = "select user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub from users u 
+$sqlMissing = "select user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub, ur.reg_date from users u 
                 join classes c on c.class_id = u.class_id 
                 left join admin_auths aa on aa.id = u.user_id 
-                join user_registration ur on ur.user_id = u.user_id 
+                left join user_registration ur on ur.user_id = u.user_id 
                 where u.user_registered > 0 
                 and aa.admin_id is null 
                 and u.school_id = :school 
@@ -88,7 +86,6 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       $info = [];
       $stmtAdmins->execute([
         'school' => $school_id,
-        'year' => $year
       ]);
       $admins = $stmtAdmins->fetchAll();
       foreach ($admins as $admin) {
@@ -111,10 +108,8 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
               $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-
-              $toCheck = $child['hachayol'] == 1 ? 'toCheck' : '';
-              echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
-              if ($child['hachayol'] == 1) echo " checked";
+              echo "<input type='radio' name='hachayol[" . $admin['admin_id'] . "]' class='hachayol' id='" . $child['user_id'] . "'";
+              if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
               if ($disable) echo " disabled";
               echo " />";
               echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
@@ -130,11 +125,9 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       foreach ($missing as $idx => $child) {
           $school = $all_schools[$child['school_id']];
           $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-
           echo "<tr><td colspan='2'>No Parent Account</td><td>";
-          $toCheck = $child['hachayol'] == 1 ? 'toCheck' : '';
-          echo "<input type='radio' name='hachayol[" . ($idx + 1) . "][$school_id]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
-          if ($child['hachayol'] == 1) echo " checked";
+          echo "<input type='radio' name='hachayol[" . ($idx + 1) . "][$school_id]' class='hachayol' id='" . $child['user_id'] . "'";
+          if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
           echo " />";
           echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
       }
