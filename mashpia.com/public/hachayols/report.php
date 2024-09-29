@@ -94,6 +94,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
             'year' => $year
           ]);
           $children = $stmtUsers->fetchAll();
+          if (!$children) $stmtUsers->debugDumpParams();
           // find out if hachayol child is in this school or not
           $disable = false;
           foreach ($children as $child) {
