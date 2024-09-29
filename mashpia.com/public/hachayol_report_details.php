@@ -1,49 +1,53 @@
-<? 
-$admin_auth = array('school','user'); 
-require('header.php'); 
+<?
+$admin_auth = array('school', 'user');
+require('header.php');
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<link href="admin_styles.css" rel="stylesheet" type="text/css">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Hachayol Detail Report</title>
-<style type='text/css'>
-.page-break {
-    page-break-after: always;
-}
-.students {
-    margin-left: 50px;
-}
-@media print {
-    .hide {
-        display: none;
+  <link href="admin_styles.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Hachayol Detail Report</title>
+  <style type='text/css'>
+    .page-break {
+      page-break-after: always;
     }
-    /*.details {*/
-    /*  page-break-after: always;*/
-    /*}*/
-}
-</style>
+
+    .students {
+      margin-left: 50px;
+    }
+
+    @media print {
+      .hide {
+        display: none;
+      }
+
+      /*.details {*/
+      /*  page-break-after: always;*/
+      /*}*/
+    }
+  </style>
 </head>
 
 <body>
-<? include('admin_header.php');?>
+<? include('admin_header.php'); ?>
 <h1 class='hide'>Hachayol Detail Report</h1>
 <?
 require_once 'class.hachayol.php';
 $h = new Hachayol;
 
 //find out if admin is super
-if ( $admin->auth == 'super' ) {
-    $h->setSchools();    
+if ($admin->auth == 'super') {
+    $h->setSchools();
     $h->setSchoolDetails();
 } else {
     if (isset($_GET['test_school']) && $_GET['test_school'] == 1) {
-        $h->setSchools( $admin->school_id, true );
-        $h->setSchoolDetails( $admin->school_id );
+        $h->setSchools($admin->school_id, true);
+        $h->setSchoolDetails($admin->school_id);
     } else {
-        $h->setSchools( $admin->school_id );
-        $h->setSchoolDetails( $admin->school_id );
+        $h->setSchools($admin->school_id);
+        $h->setSchoolDetails($admin->school_id);
     }
 }
 
@@ -60,12 +64,12 @@ $totals['deliver'] = 0;
 
 echo "<div align='center' class='hide'><input type='button' value='Print' onclick='window.print()' /></div>";
 
-if ( isset( $schools['pickup'] ) ) {
+if (isset($schools['pickup'])) {
     echo "<h2>For Pickup</h2>";
-    foreach( $schools['pickup'] as $id => $school ) {
+    foreach ($schools['pickup'] as $id => $school) {
         echo $school['name'] . "<br />";
         echo $school['address'] . "<br />";
-        foreach( $school['admins'] as $admin ) {
+        foreach ($school['admins'] as $admin) {
             echo "Admin: " . $admin . "<br />";
         }
         echo "Total Teachers: " . $school['teachers'] . "<br />";
@@ -74,11 +78,11 @@ if ( isset( $schools['pickup'] ) ) {
         echo "Total: " . $total . "<br /><br />";
         $grandTotal += $total;
         $totals['pickup'] += $total;
-        
-        foreach ( $schoolDetails[$id] as $class => $users ) {
+
+        foreach ($schoolDetails[$id] as $class => $users) {
             $num_hachayols = count($users);
             echo "<div class='details'>";
-            echo "School: " . $school['name'] . "<br />";    
+            echo "School: " . $school['name'] . "<br />";
             echo "<b>(" . $num_hachayols . ")</b> Grade: <span>" . $class . "</span><br />";
 //            echo "<div class='students'>";
 //            foreach ( $users as $user ) {
@@ -91,12 +95,12 @@ if ( isset( $schools['pickup'] ) ) {
     }
 }
 
-if ( isset( $schools['deliver'] ) ) {
-    echo "<h2>For Delivery</h2>"; 
-    foreach ( $schools['deliver'] as $id => $school ) {
+if (isset($schools['deliver'])) {
+    echo "<h2>For Delivery</h2>";
+    foreach ($schools['deliver'] as $id => $school) {
         echo $school['name'] . "<br />";
         echo $school['address'] . "<br />";
-        foreach( $school['admins'] as $admin ) {
+        foreach ($school['admins'] as $admin) {
             echo "Admin: " . $admin . "<br />";
         }
         echo "Total Teachers: " . $school['teachers'] . "<br />";
@@ -105,11 +109,11 @@ if ( isset( $schools['deliver'] ) ) {
         echo "Total: " . $total . "<br /><br />";
         $grandTotal += $total;
         $totals['deliver'] += $total;
-        
-        foreach ( $schoolDetails[$id] as $class => $users ) {
+
+        foreach ($schoolDetails[$id] as $class => $users) {
             $num_hachayols = count($users);
             echo "<div class='details'>";
-            echo "School: " . $school['name'] . "<br />";    
+            echo "School: " . $school['name'] . "<br />";
             echo "<b>(" . $num_hachayols . ")</b> Grade: <span>" . $class . "</span><br />";
 //            echo "<div class='students'>";
 //            foreach ( $users as $user ) {

@@ -85,13 +85,13 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       <?php
       $info = [];
       $stmtAdmins->execute([
-        'school' => $school_id,
+          'school' => $school_id,
       ]);
       $admins = $stmtAdmins->fetchAll();
       foreach ($admins as $admin) {
           $stmtUsers->execute([
-            'id' => $admin['admin_id'],
-            'year' => $year
+              'id' => $admin['admin_id'],
+              'year' => $year
           ]);
           $children = $stmtUsers->fetchAll();
 //          if (!$children) $stmtUsers->debugDumpParams();
@@ -122,8 +122,8 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       }
       // find kids with missing parent account
       $stmtMissing->execute([
-        'school' => $school_id,
-        'year' => $year
+          'school' => $school_id,
+          'year' => $year
       ]);
       $missing = $stmtMissing->fetchAll();
       foreach ($missing as $idx => $child) {
