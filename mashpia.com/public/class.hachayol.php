@@ -27,9 +27,10 @@ class Hachayol {
                     s.shipping_requests, s.school_gender, s.shipping_first, s.shipping_last, s.chidon_posters_boys, s.chidon_posters_girls, 
                     s.res_address1, s.res_address2, s.res_city, s.res_state, s.res_postal, s.res_country 
                 FROM schools s
-                JOIN users u
-                USING ( school_id )
+                JOIN users u USING ( school_id ) 
+                JOIN user_registration ur USING ( user_id ) 
                 WHERE u.user_registered > 0 
+                AND ur.year = " . $this->chidonYear . "
                 AND u.hachayol = 1 ";
         if ( $test_school ) $sql .= "AND s.test_school = 1 ";
         else $sql .= "AND s.test_school = 0 ";
