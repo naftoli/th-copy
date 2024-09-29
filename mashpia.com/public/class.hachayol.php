@@ -110,9 +110,9 @@ class Hachayol {
                 from users u 
                 join classes c using (class_id) 
                 join schools s on (u.school_id = s.school_id) 
-                join user_registrations ur on (ur.user_id = u.user_id) 
+                join user_registration ur on (ur.user_id = u.user_id) 
                 where u.user_registered > 0 
-                and u.hachayol = 1   
+                and u.hachayol = 1 
                 and s.school_id = ? 
                 and ur.year = ? 
                 order by c.class_grade, c.class_sub, u.last, u.first";
@@ -151,7 +151,7 @@ class Hachayol {
             FROM users u 
             JOIN schools s ON s.school_id = u.school_id 
             JOIN classes c ON c.class_id = u.class_id 
-            join user_registrations ur on (ur.user_id = u.user_id) 
+            join user_registration ur on (ur.user_id = u.user_id) 
             WHERE (
                 (u.chayolei = 1 AND u.user_registered > 0 AND ur.year = " . $this->chidonYear . ")  
                 or u.chidon = 1
