@@ -118,7 +118,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 
           echo "<tr><td colspan='2'>No Parent Account</td><td>";
           $toCheck = $child['hachayol'] == 1 ? 'toCheck' : '';
-          echo "<input type='radio' name='hachayol[" . ($idx + 1) . "]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
+          echo "<input type='radio' name='hachayol[" . ($idx + 1) . "][$school_id]' class='hachayol $toCheck' id='" . $child['user_id'] . "'";
           if ($child['hachayol'] == 1) echo " checked";
           echo " />";
           echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
@@ -128,12 +128,12 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 <?php endforeach; ?>
 </body>
 <script>
-  window.addEventListener('DOMContentLoaded', (event) => {
-    $(".toCheck").each(function () {
-      let id = $(this).attr('id')
-      document.getElementById(id).checked = true
-    })
-  })
+  // window.addEventListener('DOMContentLoaded', (event) => {
+  //   $(".toCheck").each(function () {
+  //     let id = $(this).attr('id')
+  //     document.getElementById(id).checked = true
+  //   })
+  // })
   $(".hachayol").click(function () {
     let list = []
     let elem = $(this).parent()
