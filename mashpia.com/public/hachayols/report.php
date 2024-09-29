@@ -33,7 +33,7 @@ $sqlAdmins = "select a.* from admins a
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 
 // then get all users per admin
-$sqlUsers = "select user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date from users u 
+$sqlUsers = "select u.user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date from users u 
             join classes c on c.class_id = u.class_id 
             join admin_auths aa on u.user_id = aa.id 
             left join user_registration ur on ur.user_id = u.user_id 
@@ -43,7 +43,7 @@ $sqlUsers = "select user_id, u.school_id, hachayol, first, c.class_grade, c.clas
 $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
 // get users that don't have an admin account
-$sqlMissing = "select user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub, ur.reg_date from users u 
+$sqlMissing = "select u.user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub, ur.reg_date from users u 
                 join classes c on c.class_id = u.class_id 
                 left join admin_auths aa on aa.id = u.user_id 
                 left join user_registration ur on ur.user_id = u.user_id 
@@ -94,7 +94,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
             'year' => $year
           ]);
           $children = $stmtUsers->fetchAll();
-          if (!$children) $stmtUsers->debugDumpParams();
+//          if (!$children) $stmtUsers->debugDumpParams();
           // find out if hachayol child is in this school or not
           $disable = false;
           foreach ($children as $child) {
