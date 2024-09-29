@@ -14,7 +14,7 @@ class Hachayol {
         $this->db = DB::getInstance();
         $this->schools = array();
         $this->schoolDetails = array();
-        $this->chidonYear = GlobalSettings::getRegistrationYear();
+        $this->chidonYear = GlobalSettings::getChidonRegYear();
         $this->chidonNumbers = array();
         $this->schoolExceptions = [55, 66, 110, 112, 180, 256, 584, 585, 588, 612, 432, 713, 709, 427, 434, 690, 480];
         $this->testSchools = false;
@@ -83,7 +83,10 @@ class Hachayol {
             $this->schools[$method][$school]['teachers'] = $stmt3->rowCount();
             
             // find out how many kids in school are registered for chayolei / chidon
-            $sqlReg = "select count(*) as registered from users where user_registered > 0 and school_id = " . $school;
+            $sqlReg = "select count(u.user_id) as registered from users u 
+                              join user_registration ur using (user_id) 
+                        where u.user_registered > 0 and u.school_id = " . $school . " 
+                        and ur.year = " . $this->chidonYear;
             $stmtReg = $this->db->query($sqlReg);
             $resReg = $stmtReg->fetch(PDO::FETCH_OBJ);
             $this->schools[$method][$school]['totalReg'] = $resReg->registered;
@@ -107,16 +110,18 @@ class Hachayol {
                 from users u 
                 join classes c using (class_id) 
                 join schools s on (u.school_id = s.school_id) 
+                join user_registrations ur on (ur.user_id = u.user_id) 
                 where u.user_registered > 0 
                 and u.hachayol = 1   
-                and s.school_id = ?  
+                and s.school_id = ? 
+                and ur.year = ? 
                 order by c.class_grade, c.class_sub, u.last, u.first";
         $stmt = $this->db->prepare( $sql );
          
         if ( is_null( $id ) ) { 
             foreach ( $this->schools as $schools ) {
                 foreach ( $schools as $id => $school ) {
-                    $stmt->execute( array( $id ) );                
+                    $stmt->execute( array( $id, $this->chidonYear ) );
                     $rows = $stmt->fetchAll();
                     foreach ( $rows as $row ) {
                         $user = $row['first'] . " " . $row['last'];
@@ -126,7 +131,7 @@ class Hachayol {
                 }
             }
         } else {             
-             $stmt->execute( array( $id ) );
+             $stmt->execute( array( $id, $this->chidonYear ) );
              $rows = $stmt->fetchAll();
              foreach ( $rows as $row ) {             
                  $user = $row['first'] . " " . $row['last'];
@@ -146,8 +151,9 @@ class Hachayol {
             FROM users u 
             JOIN schools s ON s.school_id = u.school_id 
             JOIN classes c ON c.class_id = u.class_id 
+            join user_registrations ur on (ur.user_id = u.user_id) 
             WHERE (
-                (u.chayolei = 1 AND u.user_registered > 0) 
+                (u.chayolei = 1 AND u.user_registered > 0 AND ur.year = " . $this->chidonYear . ")  
                 or u.chidon = 1
             ) 
             AND c.class_grade in ('4','5','6','7','8') 
