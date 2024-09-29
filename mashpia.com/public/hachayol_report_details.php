@@ -49,9 +49,9 @@ if ( $admin->auth == 'super' ) {
 
 $schools = $h->getSchools();
 $schoolDetails = $h->getSchoolDetails();
-//echo "<pre>";
-//print_r( $schoolDetails );
-//echo "</pre>";
+echo "<pre>";
+print_r( $schoolDetails );
+echo "</pre>";
 
 //variables for grand totals
 $grandTotal = 0;
