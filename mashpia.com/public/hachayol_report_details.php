@@ -8,7 +8,7 @@ require('header.php');
 <head>
   <link href="admin_styles.css" rel="stylesheet" type="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <title>Hachayol Detail Report</title>
+  <title>Hachayol Office Report</title>
   <style type='text/css'>
     .page-break {
       page-break-after: always;
@@ -32,7 +32,7 @@ require('header.php');
 
 <body>
 <? include('admin_header.php'); ?>
-<h1 class='hide'>Hachayol Detail Report</h1>
+<h1 class='hide'>Hachayol Office Report</h1>
 <?
 require_once 'class.hachayol.php';
 $h = new Hachayol;
