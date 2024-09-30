@@ -88,8 +88,9 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           'school' => $school_id,
       ]);
       $admins = $stmtAdmins->fetchAll();
-      $j = 0; // for id in input of children
+      $j = []; // for id in input of children
       foreach ($admins as $admin) {
+          if (isset($j[$admin['admin_id']])) $j[$admin['admin_id']]++;
           $stmtUsers->execute([
               'id' => $admin['admin_id'],
               'year' => $year
@@ -113,14 +114,13 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
               $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-              $id = $admin['admin_id'] . ':' . $j;
+              $id = $admin['admin_id'] . ':' . $j[$admin['admin_id']];
               echo "<input type='radio' name='hachayol[$id]' class='hachayol' id='" . $child['user_id'] . "'";
               if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
               if ($disable) echo " disabled";
               echo " />";
               echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
           }
-          $j++;
           echo "</td></tr>";
       }
       // find kids with missing parent account
