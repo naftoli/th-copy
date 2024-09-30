@@ -74,6 +74,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 <body>
 <?php include('../admin_header.php'); ?>
 <h1>Hachayol Report</h1>
+<?php $j = []; // for id in input of children ?>
 <?php foreach ($schools as $school_id => $school_name) : ?>
     <?= "<h2>" . $school_name . "</h2>" ?>
   <table>
@@ -88,7 +89,6 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           'school' => $school_id,
       ]);
       $admins = $stmtAdmins->fetchAll();
-      $j = []; // for id in input of children
       foreach ($admins as $admin) {
           if (isset($j[$admin['admin_id']])) $j[$admin['admin_id']]++;
           else $j[$admin['admin_id']] = 1;
