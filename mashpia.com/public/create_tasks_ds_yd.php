@@ -222,6 +222,8 @@ function getStartEnd($arr) {
                                 }
                                 ${$fieldNames[$i]} = $val;
                                 break;
+                            case 16:
+                                ${$fieldNames[$i]} = 0.5; // default points
                             // set the language to one by default or the input if it was a valid number greater then 1
                             case 21:
                                 $lang = 1;
