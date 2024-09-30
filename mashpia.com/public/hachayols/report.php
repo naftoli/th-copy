@@ -89,6 +89,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       $info = [];
       $stmtAdmins->execute([
           'school' => $school_id,
+          'year' => $year
       ]);
       $admins = $stmtAdmins->fetchAll();
       foreach ($admins as $admin) {
