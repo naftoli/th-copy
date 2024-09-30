@@ -26,8 +26,10 @@ foreach ($rows as $row) {
 $sqlAdmins = "select a.* from admins a 
                 join admin_auths aa using (admin_id) 
                 join users u on u.user_id = aa.id 
+                join user_registration ur on ur.user_id = u.user_id 
                 where u.user_registered > 0 
                 and u.school_id = :school 
+                and ur.year = :year 
                 group by admin_id 
                 order by a.last, a.first";
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
@@ -97,6 +99,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
               'year' => $year
           ]);
           $children = $stmtUsers->fetchAll();
+          if (!$children) continue;
 //          if (!$children) $stmtUsers->debugDumpParams();
           // find out if hachayol child is in this school or not
           $disable = false;
@@ -108,9 +111,6 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           }
 
           echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
-          if (!$children) {
-              echo "No children registered for this year";
-          }
           foreach ($children as $i => $child) {
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
