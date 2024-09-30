@@ -48,6 +48,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
               <span class="link-text">Hachayol Office Report</span>
             </div>
           </a>
+          <a href="/hachayols/detailed_family_report.php<?=$debug ? "?debug=true": "";?>">
+            <div class="button">
+              <img src="/images/cth_logo.png" height="32" alt="tickets"/>
+              <span class="link-text">Hachayol Office Report</span>
+            </div>
+          </a>
         </div>
         
         <?php if ($admin_user['auth'] == 'super') {?>
