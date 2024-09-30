@@ -91,6 +91,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       $j = []; // for id in input of children
       foreach ($admins as $admin) {
           if (isset($j[$admin['admin_id']])) $j[$admin['admin_id']]++;
+          else $j[$admin['admin_id']] = 1;
           $stmtUsers->execute([
               'id' => $admin['admin_id'],
               'year' => $year
