@@ -88,6 +88,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           'school' => $school_id,
       ]);
       $admins = $stmtAdmins->fetchAll();
+      $j = 0; // for id in input of children
       foreach ($admins as $admin) {
           $stmtUsers->execute([
               'id' => $admin['admin_id'],
@@ -108,9 +109,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           if (!$children) {
               echo "No children registered for this year";
           }
-          $j = 0;
           foreach ($children as $i => $child) {
-              if ($i == 0) $j = count($children);
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
               $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
@@ -121,6 +120,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
               echo " />";
               echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
           }
+          $j++;
           echo "</td></tr>";
       }
       // find kids with missing parent account
