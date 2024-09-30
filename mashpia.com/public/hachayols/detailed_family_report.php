@@ -59,7 +59,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>Hachayol Report</title>
+    <title>Hachayol Family Report</title>
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <script type="text/javascript" src="../scripts/jquery-1.8.3.js"></script>
     <style>
@@ -75,7 +75,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 </head>
 <body>
 <?php include('../admin_header.php'); ?>
-<h1>Hachayol Report</h1>
+<h1>Hachayol Family Report</h1>
 <?php $j = []; // for id in input of children ?>
 <?php foreach ($schools as $school_id => $school_name) : ?>
     <?= "<h2>" . $school_name . "</h2>" ?>
