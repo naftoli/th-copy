@@ -211,6 +211,7 @@
                 var alreadySold = 1011;
                 if (sold) alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
+                if ( leftToSell < 0 ) leftToSell = 0;
                 $(".sold").text( alreadySold );
                 $("#leftToSell").text( leftToSell );
                 if ( soldOut || leftToSell < 1 ) {
