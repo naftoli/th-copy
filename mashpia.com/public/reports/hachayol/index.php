@@ -36,12 +36,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Hachayol Teacher Report</span>
                 </div>
             </a>
-<!--          <a href="/hachayols/report.php">-->
-<!--            <div class="button">-->
-<!--              <img src="/images/cth_logo.png" height="32" alt="school report"/>-->
-<!--              <span class="link-text">Update Hachayol by Family</span>-->
-<!--            </div>-->
-<!--          </a>-->
+          <a href="/hachayols/report.php">
+            <div class="button">
+              <img src="/images/cth_logo.png" height="32" alt="school report"/>
+              <span class="link-text">Update Hachayol by Family</span>
+            </div>
+          </a>
           <a href="/hachayol_report_details.php<?=$debug ? "?debug=true": "";?>">
             <div class="button">
               <img src="/images/cth_logo.png" height="32" alt="tickets"/>
