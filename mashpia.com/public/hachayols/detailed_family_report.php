@@ -26,8 +26,10 @@ foreach ($rows as $row) {
 $sqlAdmins = "select a.* from admins a 
                 join admin_auths aa using (admin_id) 
                 join users u on u.user_id = aa.id 
+                join user_registration ur on ur.user_id = u.user_id 
                 where u.user_registered > 0 
                 and u.school_id = :school 
+                and ur.year = :year 
                 group by admin_id 
                 order by a.last, a.first";
 $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
@@ -87,6 +89,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
         $info = [];
         $stmtAdmins->execute([
             'school' => $school_id,
+            'year' => $year
         ]);
         $admins = $stmtAdmins->fetchAll();
         foreach ($admins as $admin) {
