@@ -58,7 +58,7 @@ foreach ($admins as $admin_id => $children) {
         }
     }
     if (!$found) {
-        $child_id = reset($children);
+        $child_id = array_keys($children)[0];
         $sql = "UPDATE users SET hachayol = 1 WHERE user_id = $child_id";
         $qrys[] = $sql;
         echo $sql . '<br />';
