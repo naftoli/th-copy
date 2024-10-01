@@ -146,16 +146,16 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 <?php endforeach; ?>
 </body>
 <script>
-  // $(".toCheck").each( function() {
-  //   $(this).trigger('click')
-  // })
-  // $(".parent").each( function() {
-  //   const found = $(this).find('input:checked').length
-  //   if (!found) {
-  //     // check off first child
-  //     $(this).find('input').first().trigger('click')
-  //   }
-  // })
+  $(".toCheck").each( function() {
+    $(this).trigger('click')
+  })
+  $(".parent").each( function() {
+    const found = $(this).find('input:checked').length
+    if (!found) {
+      // check off first child
+      $(this).find('input').eq(0).trigger('click')
+    }
+  })
   $(".hachayol").click(function () {
     let list = []
     let elem = $(this).parent()
