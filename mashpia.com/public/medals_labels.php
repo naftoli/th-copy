@@ -8,14 +8,15 @@ require('header.php');
 require_once 'class.medalReport.php';
 $m = new MedalReport;
 
-$previous = false;
-if (isset($_GET['go']) && $_GET['go'] == 'back') {
-    $previous = true;
-    $m->setPreviousDates();
+if (isset($_GET['start']) && isset($_GET['end'])) {
+    $m->overrideDates($_GET['start'], $_GET['end']);
 }
 
-if (isset($_POST['br']) && $_POST['br'] == 'no') {
-    $m->setException(54);
+if (isset($_POST['date_selection'])) {
+    $dates = explode(':', $_POST['date_selection']);
+    $start = $dates[0];
+    $end = $dates[1];
+    $m->overrideDates($start, $end);
 }
 
 $heDates = $m->getHeReportDates();
@@ -136,15 +137,19 @@ function checkForBreak()
 
 <div class="no-print">
   <h1>Medals Labels Report</h1>
-  <div>
-    Current Report is calculated from <?= $heDates['start_he'] ?> up to <?= $heDates['end_he'] ?>.<br/>
-      <? if ($previous) { ?>
-        Click <a href='medals_labels.php'>here</a> to show next report dates.<br/>
-        Click <a href='medals_labels.php?go=back&br=no'>here</a> to exclude Beis Rivka from report.<br/><br/>
-      <? } else { ?>
-        Click <a href='medals_labels.php?go=back'>here</a> to show previous report dates.<br/>
-        Click <a href='medals_labels.php?br=no'>here</a> to exclude Beis Rivka from report.<br/><br/>
-      <? } ?>
+  <div class="no-print">
+    <h1>Medals Report Summary</h1>
+    <div>
+      Current Report is calculated from <?= $heDates['start_he'] ?> up to <?= $heDates['end_he'] ?>.<br/>
+      <form action="" method="post">
+        <p>
+            <?php
+            echo $m->getHtmlSelect();
+            ?>
+          <input type="submit" name="submit" value="Modify Report"/>
+        </p>
+      </form>
+    </div>
   </div>
   <div class='instructions'>
     <b>Printing Instructions</b><br/>
