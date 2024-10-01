@@ -39,8 +39,7 @@ foreach ($info as $row) {
 
 // give hachayol to the oldest child that is in grade 5 or lower
 // if there's no child in grade 5 or lower, give to the last child
-$success = true;
-$mysqli->begin_transaction();
+$qrys = [];
 $updated = 0;
 foreach ($admins as $admin_id => $children) {
     echo 'Admin ID: ' . $admin_id . '<br>';
@@ -61,23 +60,24 @@ foreach ($admins as $admin_id => $children) {
     if (!$found) {
         $child_id = reset($children);
         $sql = "UPDATE users SET hachayol = 1 WHERE user_id = $child_id";
+        $qrys[] = $sql;
 //        echo $sql . '<br />';
-        if ($mysqli->query($sql)) {
-            $updated++;
-        } else {
-            $success = false;
-            break 2;
-        }
         // remove hachayol from other children
         foreach ($non_registered[$admin_id] as $child_id => $hachayol) {
-            $sql = "UPDATE users SET hachayol = 0 WHERE user_id = $child_id";
-            echo $sql . '<br />';
-            if (!$mysqli->query($sql)) {
-                $success = false;
-                break 3;
+            if ($hachayol) {
+                $sql = "UPDATE users SET hachayol = 0 WHERE user_id = $child_id";
+                $qrys[] = $sql;
             }
         }
     }
+}
+
+$success = true;
+$mysqli->begin_transaction();
+foreach ($qrys as $sql) {
+    $success = $mysqli->query($sql);
+    if ($success) $updated++;
+    else break;
 }
 if ($success) {
     $mysqli->commit();
