@@ -61,12 +61,14 @@ foreach ($admins as $admin_id => $children) {
         $child_id = reset($children);
         $sql = "UPDATE users SET hachayol = 1 WHERE user_id = $child_id";
         $qrys[] = $sql;
-//        echo $sql . '<br />';
+        echo $sql . '<br />';
         // remove hachayol from other children
-        foreach ($non_registered[$admin_id] as $child_id => $hachayol) {
-            if ($hachayol) {
-                $sql = "UPDATE users SET hachayol = 0 WHERE user_id = $child_id";
-                $qrys[] = $sql;
+        if (isset($non_registered[$admin_id])) {
+            foreach ($non_registered[$admin_id] as $child_id => $hachayol) {
+                if ($hachayol) {
+                    $sql = "UPDATE users SET hachayol = 0 WHERE user_id = $child_id";
+                    $qrys[] = $sql;
+                }
             }
         }
     }
