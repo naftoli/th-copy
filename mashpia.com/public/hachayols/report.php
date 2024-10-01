@@ -111,7 +111,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
               }
           }
 
-          echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
+          echo "<tr id='" . $admin['admin_id'] . "' class='parent'><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
           foreach ($children as $i => $child) {
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
@@ -136,7 +136,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
           $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
           $id = $idx + 1;
           echo "<tr><td colspan='2'>No Parent Account</td><td>";
-          echo "<input type='radio' name='hachayol[$id]' class='hachayol' id='" . $child['user_id'] . "'";
+          echo "<input type='radio' name='hachayol[$id]' class='hachayol toCheck' id='" . $child['user_id'] . "'";
           if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
           echo " />";
           echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
@@ -146,6 +146,16 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 <?php endforeach; ?>
 </body>
 <script>
+  $(".toCheck").each( function() {
+    $(this).trigger('click')
+  })
+  $(".parent").each( function() {
+    const found = $(this).find('input:checked').length
+    if (!found) {
+      // check off first child
+      $(this).find('input').first().trigger('click')
+    }
+  })
   $(".hachayol").click(function () {
     let list = []
     let elem = $(this).parent()
