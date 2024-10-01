@@ -1,5 +1,6 @@
 <?php
 require_once 'class.report.php';
+require_once 'class.globalSettings.php';
 
 class MedalReport extends Report {
     private $medalSummary;
@@ -13,6 +14,7 @@ class MedalReport extends Report {
     private $totalSchools = 0;
     private $totalGrades = 0;
     private $totalStudents = 0;
+    private $year;
 
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -20,6 +22,7 @@ class MedalReport extends Report {
         $this->userInfo = array();
         $this->medalOrds = array();
         $this->subjects = array();
+        $this->year = GlobalSettings::getRegistrationYear();
     }
 
     private function createSql($detailed = false)
@@ -42,9 +45,11 @@ class MedalReport extends Report {
                 JOIN subjects s USING ( subject_id )
                 JOIN schools sch USING ( school_id ) 
                 JOIN classes c ON c.class_id = u.class_id 
+                JOIN user_registration ur ON ur.user_id = u.user_id 
                 WHERE u.medals_ranks = 1 
                 AND u.user_registered > 0 
                 AND s.subject_id != 106 
+                AND ur.year = " . $this->year . " 
                 $filter ";
             if ( $this->school_id > 0 )
                 $sql .= " AND u.school_id = $this->school_id ";
@@ -61,10 +66,12 @@ class MedalReport extends Report {
                 JOIN medals m USING ( medal_ord )
                 JOIN users u USING ( user_id )
                 JOIN subjects s USING ( subject_id )
-                JOIN schools sch USING ( school_id )
+                JOIN schools sch USING ( school_id ) 
+                JOIN user_registration ur ON ur.user_id = u.user_id 
                 WHERE u.medals_ranks = 1 
                 AND u.user_registered > 0 
                 AND s.subject_id != 106 
+                AND ur.year = " . $this->year . " 
                 $filter ";
             if ( $this->school_id > 0 )
                 $sql .= " AND u.school_id = $this->school_id ";
