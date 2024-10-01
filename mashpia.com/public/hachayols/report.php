@@ -77,6 +77,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 <?php include('../admin_header.php'); ?>
 <h1>Hachayol Update Family Report</h1>
 <?php $j = []; // for id in input of children ?>
+<?php $unique_id = 1; ?>
 <?php foreach ($schools as $school_id => $school_name) : ?>
     <?= "<h2>" . $school_name . "</h2>" ?>
   <table>
@@ -86,7 +87,6 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       <th>Children/Hachayol</th>
     </tr>
       <?php
-      $unique_id = 1;
       $info = [];
       $stmtAdmins->execute([
           'school' => $school_id,
