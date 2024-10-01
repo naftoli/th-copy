@@ -86,6 +86,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       <th>Children/Hachayol</th>
     </tr>
       <?php
+      $unique_id = 1;
       $info = [];
       $stmtAdmins->execute([
           'school' => $school_id,
@@ -134,9 +135,8 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
       foreach ($missing as $idx => $child) {
           $school = $all_schools[$child['school_id']];
           $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
-          $id = $idx + 1;
           echo "<tr><td colspan='2'>No Parent Account</td><td>";
-          echo "<input type='radio' name='hachayol[$id]' class='hachayol toCheck' id='" . $child['user_id'] . "'";
+          echo "<input type='radio' name='hachayol[" . $unique_id++ . "]' class='hachayol toCheck' id='" . $child['user_id'] . "'";
           if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
           echo " />";
           echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
