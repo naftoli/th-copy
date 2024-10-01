@@ -60,14 +60,13 @@ foreach ($admins as $admin_id => $children) {
     }
     if (!$found) {
         $child_id = reset($children);
-        $hachayol = $children[$child_id];
-        $sql = "UPDATE users SET hachayol = 1 WHERE user_id = $hachayol";
-        echo $sql . '<br />';
+        $sql = "UPDATE users SET hachayol = 1 WHERE user_id = $child_id";
+//        echo $sql . '<br />';
         if ($mysqli->query($sql)) {
             $updated++;
         } else {
             $success = false;
-            break;
+            break 2;
         }
         // remove hachayol from other children
         foreach ($non_registered[$admin_id] as $child_id => $hachayol) {
@@ -75,7 +74,7 @@ foreach ($admins as $admin_id => $children) {
             echo $sql . '<br />';
             if (!$mysqli->query($sql)) {
                 $success = false;
-                break 2;
+                break 3;
             }
         }
     }
