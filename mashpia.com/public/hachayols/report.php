@@ -111,7 +111,7 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
               }
           }
 
-          echo "<tr id='" . $admin['admin_id'] . "' class='parent'><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
+          echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
           foreach ($children as $i => $child) {
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
@@ -148,13 +148,6 @@ $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 <script>
   $(".toCheck").each( function() {
     $(this).trigger('click')
-  })
-  $(".parent").each( function() {
-    const found = $(this).find('input:checked').length
-    if (!found) {
-      // check off first child
-      $(this).find('input').eq(0).trigger('click')
-    }
   })
   $(".hachayol").click(function () {
     let list = []
