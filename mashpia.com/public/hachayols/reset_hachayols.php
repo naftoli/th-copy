@@ -12,14 +12,14 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $sql = "SELECT 
-            aa.admin_id, u.user_id, c.class_grade, u.hachayol 
+            aa.admin_id, u.user_id, c.class_grade, u.hachayol, ur.reg_date  
         FROM
             users u
                 JOIN
             admin_auths aa ON aa.id = u.user_id
                 JOIN
             classes c ON c.class_id = u.class_id 
-                JOIN 
+                LEFT JOIN 
             user_registration ur ON ur.user_id = u.user_id 
         WHERE
             u.user_registered IS NOT NULL
@@ -31,12 +31,16 @@ $info = $result->fetch_all(MYSQLI_ASSOC);
 
 // organize data
 $admins = [];
+$non_registered = [];
 foreach ($info as $row) {
-    $admins[$row['admin_id']][$row['user_id']] = $row['hachayol'];
+    if ($row['reg_date']) $admins[$row['admin_id']][$row['user_id']] = $row['hachayol'];
+    else $non_registered[$row['admin_id']][$row['user_id']] = $row['hachayol'];
 }
 
 // give hachayol to the oldest child that is in grade 5 or lower
 // if there's no child in grade 5 or lower, give to the last child
+$success = true;
+$mysqli->begin_transaction();
 $updated = 0;
 foreach ($admins as $admin_id => $children) {
     echo 'Admin ID: ' . $admin_id . '<br>';
@@ -59,8 +63,28 @@ foreach ($admins as $admin_id => $children) {
         $hachayol = $children[$child_id];
         $sql = "UPDATE users SET hachayol = 1 WHERE user_id = $hachayol";
         echo $sql . '<br />';
-        $mysqli->query($sql);
-        $updated++;
+        if ($mysqli->query($sql)) {
+            $updated++;
+        } else {
+            $success = false;
+            break;
+        }
+        // remove hachayol from other children
+        foreach ($non_registered[$admin_id] as $child_id => $hachayol) {
+            $sql = "UPDATE users SET hachayol = 0 WHERE user_id = $child_id";
+            echo $sql . '<br />';
+            if (!$mysqli->query($sql)) {
+                $success = false;
+                break 2;
+            }
+        }
     }
 }
-echo 'Updated ' . $updated . ' records';
+if ($success) {
+    $mysqli->commit();
+    echo 'Updated ' . $updated . ' records';
+} else {
+    $mysqli->rollback();
+    echo 'Failed to update';
+}
+?>
