@@ -68,14 +68,12 @@ if ( isset( $_POST['submit'] ) ) {
         $medal_ord = intval(array_search($medal, $medals));
 //        $sql = "update medal_marks set date_shipped = '$shipped_date' where user_id = $user_id and subject_id = $subject_id and medal_ord = $medal_ord";
 //        echo $idx++ . ": " . $sql . "<br />";
-        if ($subject_id == 1) echo $idx++ . ": " . $school . " - " . $user_id . " - " . $subject . " - " . $medal . "<br />";
         $res = $stmt->execute([$shipped_date, $shipped_date, $medal_ord, $subject_id, $user_id]);
         if (!$res) {
             $success = false;
             break;
         }
     }
-    $success = false;
     if ($success) {
         $MASHPIA_DB->commit();
         echo "Successfully updated shipped date.";
