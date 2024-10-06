@@ -66,8 +66,6 @@ if ( isset( $_POST['submit'] ) ) {
         $subject_id = intval(array_search($subject, $subjects));
         if ($subject_id == 0) $subject_id = 1; // tehillim had different name in csv file
         $medal_ord = intval(array_search($medal, $medals));
-//        $sql = "update medal_marks set date_shipped = '$shipped_date' where user_id = $user_id and subject_id = $subject_id and medal_ord = $medal_ord";
-//        echo $idx++ . ": " . $sql . "<br />";
         $res = $stmt->execute([$shipped_date, $shipped_date, $medal_ord, $subject_id, $user_id]);
         if (!$res) {
             $success = false;
