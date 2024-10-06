@@ -19,8 +19,14 @@ if (isset($_POST['date_selection'])) {
     $m->overrideDates($start, $end);
 }
 
+if (isset($_GET['show_shipped'])) {
+    $show_shipped = intval($_GET['show_shipped']);
+} else {
+    $show_shipped = 0;
+}
+
 $heDates = $m->getHeReportDates();
-$m->setMedalDetails();
+$m->setMedalDetails($show_shipped);
 $details = $m->getMedalDetails();
 $userInfo = $m->getUserInfo();
 $medals_info = $m->getMedalsInfo();

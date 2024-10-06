@@ -25,17 +25,25 @@ class MedalReport extends Report {
         $this->year = GlobalSettings::getRegistrationYear();
     }
 
-    private function createSql($detailed = false)
+    private function createSql($detailed = false, $remove_shipped = true)
     {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
-        $filter = " 
-            AND (
-                (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
-                OR 
-                (mm.date_awarded > " . $this->dates[1] . " AND mm.date_awarded < $start AND mm.date_shipped IS NULL)
-            ) 
-        ";
+        if ($remove_shipped) {
+            $filter = " 
+                AND (
+                    (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
+                    OR 
+                    (mm.date_awarded > " . $this->dates[1] . " AND mm.date_awarded < $start AND mm.date_shipped IS NULL)
+                ) 
+            ";
+        } else {
+            $filter = " 
+                AND (
+                    mm.date_awarded >= $start AND mm.date_awarded <= $end 
+                ) 
+            ";
+        }
         if ($detailed) {
             $sql = "
                 SELECT sch.school_name, s.subject_name, m.medal_name, u.user_id, u.first, u.last, mm.*, c.*  
@@ -117,8 +125,8 @@ class MedalReport extends Report {
         return $this->medalTotals;
     }
     
-    public function setMedalDetails() {
-        $sql = $this->createSql(true);
+    public function setMedalDetails($show_shipped = false) {
+        $sql = $this->createSql(true, !$show_shipped);
 //        echo $sql . "<br />"; return;
         $prevGrade = "";
         $result = mysql_query($sql);
