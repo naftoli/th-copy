@@ -40,7 +40,9 @@ class MedalReport extends Report {
         } else {
             $filter = " 
                 AND (
-                    mm.date_awarded >= $start AND mm.date_awarded <= $end 
+                    (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
+                    OR
+                    (mm.date_awarded > " . $this->dates[1] . " AND mm.date_awarded < $start)  
                 ) 
             ";
         }
