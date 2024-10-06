@@ -42,6 +42,8 @@ if ( isset( $_POST['submit'] ) ) {
     $medals = getMedals();
     $shipped_date = '2024-09-15';
 
+    $success = true;
+    $MASHPIA_DB->beginTransaction();
     $stmt = $MASHPIA_DB->prepare("UPDATE medal_marks SET date_shipped = ?  
                                           WHERE medal_ord = ?
                                           AND subject_id = ?
@@ -64,8 +66,20 @@ if ( isset( $_POST['submit'] ) ) {
         $subject_id = intval(array_search($subject, $subjects));
         if ($subject_id == 0) $subject_id = 1; // tehillim had different name in csv file
         $medal_ord = intval(array_search($medal, $medals));
-        $sql = "update medal_marks set date_shipped = '$shipped_date' where user_id = $user_id and subject_id = $subject_id and medal_ord = $medal_ord";
-        echo $idx++ . ": " . $sql . "<br />";
+//        $sql = "update medal_marks set date_shipped = '$shipped_date' where user_id = $user_id and subject_id = $subject_id and medal_ord = $medal_ord";
+//        echo $idx++ . ": " . $sql . "<br />";
+        $res = $stmt->execute([$shipped_date, $medal_ord, $subject_id, $user_id]);
+        if (!$res) {
+            $success = false;
+            break;
+        }
+    }
+    if ($success) {
+        $MASHPIA_DB->commit();
+        echo "Successfully updated shipped date.";
+    } else {
+        $MASHPIA_DB->rollBack();
+        echo "Failed to update shipped date.";
     }
     fclose($handle);
 }
