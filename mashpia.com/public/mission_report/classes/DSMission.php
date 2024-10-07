@@ -14,9 +14,9 @@ class DSMission extends MissionDisplay {
          **/
 
         $columnizeFirst = 13;
-        $newPageFirst = 23;
+        $newPageFirst = 25;
         $columnizeReg = 13;
-        $newPageReg = 24;
+        $newPageReg = 26;
         $columnizeLast = 12;
         $newPageLast = 24;
 
