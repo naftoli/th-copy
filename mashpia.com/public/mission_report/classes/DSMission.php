@@ -13,7 +13,7 @@ class DSMission extends MissionDisplay {
          * returns 1 to columnize and 2 to pagify (0 to do nothing)
          **/
 
-        $columnizeFirst = 13;
+        $columnizeFirst = 14;
         $newPageFirst = 23;
         $columnizeReg = 12;
         $newPageReg = 24;
