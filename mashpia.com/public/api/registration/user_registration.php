@@ -502,9 +502,9 @@ class UserRegistrationRouter {
             if (! empty($itemsForEmail)) {
                 $error = $this->sendEmailToParents($itemsForEmail, $total);
                 if ($error) json_response($error);
-                else json_response("Successfully Enrolled. You should be receiving a confirmation email shortly.");
+                else json_response("Successfully Enrolled or Updated. You should be receiving a confirmation email shortly.");
             } else {
-                json_response("Successfully Enrolled.");
+                json_response("Successfully Enrolled or Updated.");
             }
         } catch ( Exception $e ) {
             $MASHPIA_DB->rollBack();
@@ -747,7 +747,7 @@ Tzivos Hashem HQ</body></html>";
 
         if ( $to ) {
             [$subject, $message, $chidon] = $this->getInfoForEmail($items, $total);
-            $bcc = "enrollment@mashpia.com";
+            $bcc = "enrollment@tzivoshashem.org";
             $cc = false;
 
             // if there's a chidon enrollment from myshliach, a copy should be sent to chidon@myshliach
