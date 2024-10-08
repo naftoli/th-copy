@@ -365,7 +365,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ($res) $info = $query->fetch();
 
         // turn off getting chidon info
-        $info = false;
+//        $info = false;
 
         return $info;
     }
@@ -492,13 +492,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // chidonEdit key indicates true/false the way it's meant to mean
         $exceptions = [482,544,583];
         if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && intval($this->platoon->class_grade) <= 8 &&
-            intval($row['school_chidon']) && intval($row['chidon']) && !in_array( $this->school_id, $exceptions )
+            (intval($row['school_chidon']) || in_array($this->school_id, [49, 192])) && intval($row['chidon']) && !in_array( $this->school_id, $exceptions )
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
-            if ($result['chidon'] && !isset($_COOKIE['naftoli'])) {
-                $result['chidonEdit'] = false;
-            }
         } else {
             $result['chidon'] = true;
             $result['chidonEdit'] = false;
