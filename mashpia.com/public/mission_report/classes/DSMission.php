@@ -15,10 +15,10 @@ class DSMission extends MissionDisplay {
 
         $columnizeFirst = 12;
         $newPageFirst = 23;
-        $columnizeReg = 13;
-        $newPageReg = 26;
-        $columnizeLast = 12;
-        $newPageLast = 24;
+        $columnizeReg = 14;
+        $newPageReg = 28;
+        $columnizeLast = 13;
+        $newPageLast = 26;
 
         // added to fix overflow issue from footer when there was 49 total tasks (tasks + labels/2)
         if ($totalRows == 49) {
