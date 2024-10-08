@@ -81,6 +81,9 @@ $objMissions = [];
 foreach ( $missions as $info ) {
     foreach ( $info as $mission ) {
         $type = $mission->pic_mission_type;
+        if (in_array($mission->school_type_id, [4,5])) {
+            $type = 4;
+        }
         $objMissions[] = MissionDisplay::getInstance( $type, $mission );
     }
 }
