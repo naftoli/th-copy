@@ -1200,8 +1200,12 @@ var registrationApp = function () {
             alert(err)
             return false
           })
-      } else nextStep()
-    } else nextStep()
+      }
+      else
+        nextStep()
+    }
+    else
+      nextStep()
   }
 
   async function saveAddress() {
@@ -1700,7 +1704,7 @@ var registrationApp = function () {
     }
   }
 
-  function nextStep() {
+  async function nextStep() {
     // first check if we need to show prizes or early chidon registration
     if (checkForChidonReg()) {
       if (!user_prizes[current_user] || !user_prizes[current_user].length) {
@@ -1724,10 +1728,33 @@ var registrationApp = function () {
         checkRegShipping()
         return false
       }
+      // if child is editing enrollment, make sure that they acknowledge that everthing is correct
+      if (selected_user.getChidonInfo) {
+        const update = confirm("By clicking on 'OK' you are confirming that all information is correct and accurate. " +
+          "If NOT, please click on 'Cancel' so that you can make more changes.")
+        if (!update) return false
+        // update child to confirmed
+        const updated = await fetch(
+          'api/confirmUser.php',
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              user_id: current_user
+            })
+          }
+        )
+        if (!updated) {
+          alert("'There was an error confirming child's information")
+          return false
+        }
+      }
       return step3()
     } else {
       selected_user = state.selected_users[current_index]
-      current_user = selected_user.user_id // for using current_user in chidon prizes cart
+      current_user = selected_user.user_id // update current_user
       school_id = selected_user.school.school_id
       templates.showUser(selected_user, current_index);
       $('html, body').animate({scrollTop: 0}, 'fast'); // scroll to the top of the page
