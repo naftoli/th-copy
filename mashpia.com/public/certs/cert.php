@@ -9,7 +9,7 @@ if (! isset($_GET['user'])) {
 $user_id = $_GET['user'];
 // find out user gender, grade and school_type_id
 $stmt = $MASHPIA_DB->prepare("
-    SELECT gender, school_type_id, class_grade 
+    SELECT first_he, last_he, gender, school_type_id, class_grade 
     FROM users u 
     JOIN classes c ON u.class_id = c.class_id 
     WHERE user_id = :user_id");
@@ -35,12 +35,11 @@ if ($user) {
 
     // check if file exists
     $file_path = "https://mashpia.com/certs/" . $file;
-    header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file));
-    /*
+//    header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file));
     if (file_exists($file_path)) {
-        header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file));
+        $he_name = $user['first_he'] . ' ' . $user['last_he'];
+        header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file) . '&he_name=' . urlencode($he_name));
     } else {
         die('File not found');
     }
-    */
 }
