@@ -1,19 +1,20 @@
 <?php
 ini_set('display_errors', 1);
-$admin_auth = array('school','user'); 
+$admin_auth = array('school');
 require('header.php');
 
-$posters = array(
-    2	=> 2,   3	=> 1,   4	=> 2,   5	=> 2,   7	=> 2,   9	=> 4,   11	=> 1,
-    19	=> 2,   21	=> 1,   30	=> 0,   33	=> 1,   37	=> 1,   39	=> 1,   40	=> 1,
-    42	=> 2,   45	=> 2,   48	=> 1,   49	=> 2,   50	=> 1,   54	=> 5,   55	=> 0,
-    58	=> 2,   60	=> 1,   61	=> 0,   63	=> 2,   66	=> 0,   80	=> 0,   81	=> 2,
-    84	=> 1,   86  => 0,   87	=> 1,   89	=> 1,   105	=> 1,   106	=> 2,   110	=> 0,   
-    112	=> 0,   162	=> 2,   176	=> 2,   185	=> 2,   192	=> 2,   194	=> 1,   255	=> 2,  
-    263	=> 1,   264	=> 1,   265	=> 1,   269	=> 0,   427	=> 1,   470	=> 1,   471	=> 2,   
-    472 => 0,   474 => 0,   475 => 0,   480 => 0,   517 => 1,   542 => 1,   554 => 1,   
-    560 => 0
-);
+// authenticate and only allow super users
+if ($admin_user['auth'] != 'super') {
+    die('You are not authorized to view this page');
+}
+
+// get the number of posters for each school
+$posters = [];
+$sql = "SELECT * FROM posters";
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $posters[$row['school_id']] = $row;
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -89,7 +90,7 @@ $posters = array(
             foreach ($other as $school_id => $school) {
                 $grandTotal += $total;
                 $totals[$type] += $total;
-                $chidonNum = $h->getChidonNumber( $id );
+//                $chidonNum = $h->getChidonNumber( $id );
                 if ($type == 'pickup') echo "<h2>For Pickup</h2>";
                 else if ($type == 'deliver') echo "<h2>For Delivery</h2>";
                 echo "<div class='info'>";
@@ -112,10 +113,13 @@ $posters = array(
                 <span style="font-size: 50px; font-weight: bold;">Total: <?=$total?></span><br />
                 Total Registered Children: <?= $school['totalReg']?><br />
                 Total Registered for Chidon: <?=$school['chidonReg']?><br />
-                Number of posters: <?=$posters[$id] ?? 0?><br />
-                Number of boys posters: <?=$school['chidon_posters_boys'] ?? 0?><br />
-                Number of girls posters: <?=$school['chidon_posters_girls'] ?? 0?><br />
-                Possible Chidon Children: <?=$chidonNum?><br />
+                Number of Chayolei Boy Posters: <?=$posters[$school_id]['chayolei_b']?><br />
+                Number of Chayolei Girl Posters: <?=$posters[$school_id]['chayolei_g']?><br />
+                Number of Chayolei Boy/Girl Posters: <?=$posters[$school_id]['chayolei_bg']?><br />
+                Number of Chidon Boy Posters: <?=$posters[$school_id]['chidon_b']?><br />
+                Number of Chidon Girl Posters: <?=$posters[$school_id]['chidon_g']?><br />
+                Number of Chidon Boy/Girl Posters: <?=$posters[$school_id]['chidon_bg']?><br />
+<!--                Possible Chidon Children: --><?php //=$chidonNum?><!--<br />-->
                 Shipping Requests: <?=$school['shipping_requests']?><br /><br />
                 </div>
                 <div class='page-break'></div>
