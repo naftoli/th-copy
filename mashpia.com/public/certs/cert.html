@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chidon Certificate</title>
+  <title>Responsive Image with HTML Overlay for Accurate Text Scaling</title>
   <style>
     @font-face {
       font-family: 'FB';
@@ -23,9 +23,36 @@
       align-items: center;
       flex-direction: column;
     }
+    #container {
+      position: relative;
+      max-width: 90%;
+      max-height: 80vh;
+    }
     canvas {
-      max-width: 95%;
-      max-height: 95%;
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+    }
+    #overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+    }
+    #name {
+      margin-bottom: 10px;
+    }
+    #fontSizeDisplay {
+      font-size: 16px;
+      color: yellow;
     }
     #debug {
       margin-top: 10px;
@@ -34,7 +61,13 @@
   </style>
 </head>
 <body>
-<canvas id="imageCanvas"></canvas>
+<div id="container">
+  <canvas id="imageCanvas"></canvas>
+  <div id="overlay">
+    <div id="name"></div>
+    <div id="fontSizeDisplay"></div>
+  </div>
+</div>
 <div id="debug"></div>
 
 <script>
@@ -45,17 +78,25 @@
 
   const canvas = document.getElementById('imageCanvas');
   const ctx = canvas.getContext('2d');
+  const overlay = document.getElementById('overlay');
+  const nameElement = document.getElementById('name');
+  const fontSizeDisplay = document.getElementById('fontSizeDisplay');
   const debugDiv = document.getElementById('debug');
   const img = new Image();
   img.src = decodeURIComponent(file);
 
-  function drawImageAndText() {
-    const maxWidth = window.innerWidth * 0.9;
-    const maxHeight = window.innerHeight * 0.8; // Reduced to accommodate debug info
+  function updateImageAndText() {
+    const containerWidth = container.clientWidth;
+    const containerHeight = container.clientHeight;
+    const imageAspectRatio = img.width / img.height;
+    const containerAspectRatio = containerWidth / containerHeight;
 
-    let scaleFactorWidth = maxWidth / img.width;
-    // let scaleFactorHeight = maxHeight / img.height;
-    let scaleFactor = Math.min(scaleFactorWidth, 1);
+    let scaleFactor;
+    if (containerAspectRatio > imageAspectRatio) {
+      scaleFactor = containerHeight / img.height;
+    } else {
+      scaleFactor = containerWidth / img.width;
+    }
 
     const scaledWidth = img.width * scaleFactor;
     const scaledHeight = img.height * scaleFactor;
@@ -67,45 +108,27 @@
 
     const baseSize = 20;
     const minSize = 16;
-    const maxSize = 60; // Increased for better visibility
+    const maxSize = 60;
 
     // Font size calculation
     const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * (scaleFactor + 1.5)));
 
-    ctx.font = `${fontSize}px Arial`;
-    ctx.fillStyle = 'white';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle'; // Ensure vertical centering
+    nameElement.style.fontSize = `${fontSize}px`;
+    nameElement.textContent = he_name;
 
-    const textX = scaledWidth / 2;
-    const textY = scaledHeight / 2;
+    fontSizeDisplay.textContent = `Font Size: ${fontSize.toFixed(1)}px`;
 
-    // Draw a rectangle behind the text for visibility
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-    const textWidth = ctx.measureText(name).width;
-    ctx.fillRect(textX - textWidth / 2 - 5, textY - fontSize / 2 - 5, textWidth + 10, fontSize + 10);
-
-    // Draw the text
-    ctx.fillStyle = 'white';
-    ctx.fillText(name, textX, textY);
-
-    // Draw font size indicator
-    ctx.fillStyle = 'yellow';
-    ctx.font = '16px Arial';
-    ctx.fillText(`Font Size: ${fontSize.toFixed(1)}px`, textX, textY + fontSize / 2 + 20);
-
-    // Debug information
     debugDiv.innerHTML = `
-                Window size: ${window.innerWidth} x ${window.innerHeight}<br>
+                Container size: ${containerWidth.toFixed(0)} x ${containerHeight.toFixed(0)}<br>
                 Scale factor: ${scaleFactor.toFixed(2)}<br>
                 Image size: ${scaledWidth.toFixed(0)} x ${scaledHeight.toFixed(0)}<br>
-                Font size: ${fontSize.toFixed(1)}px
+                Calculated font size: ${fontSize.toFixed(1)}px
             `;
   }
 
   img.onload = function() {
-    drawImageAndText();
-    window.addEventListener('resize', drawImageAndText);
+    updateImageAndText();
+    window.addEventListener('resize', updateImageAndText);
   };
 </script>
 </body>
