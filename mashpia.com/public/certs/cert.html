@@ -49,12 +49,7 @@
       text-align: center;
     }
     #name {
-      margin-bottom: 10px;
-    }
-    #fontSizeDisplay {
-      font-family: 'FB';
-      font-size: 16px;
-      color: yellow;
+      font-family: 'FB', sans-serif;
     }
     #debug {
       margin-top: 10px;
@@ -67,7 +62,6 @@
   <canvas id="imageCanvas"></canvas>
   <div id="overlay">
     <div id="name"></div>
-    <div id="fontSizeDisplay"></div>
   </div>
 </div>
 <div id="debug"></div>
@@ -83,7 +77,6 @@
   const ctx = canvas.getContext('2d');
   const overlay = document.getElementById('overlay');
   const nameElement = document.getElementById('name');
-  const fontSizeDisplay = document.getElementById('fontSizeDisplay');
   const debugDiv = document.getElementById('debug');
   const img = new Image();
   img.src = decodeURIComponent(file);
@@ -120,8 +113,6 @@
 
     nameElement.style.fontSize = `${fontSize}px`;
     nameElement.textContent = he_name;
-
-    fontSizeDisplay.textContent = `Font Size: ${fontSize.toFixed(1)}px`;
 
     debugDiv.innerHTML = `
                 Container size: ${containerWidth.toFixed(0)} x ${containerHeight.toFixed(0)}<br>
