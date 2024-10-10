@@ -34,8 +34,13 @@
   const img = new Image();
   img.src = decodeURIComponent(file); // Replace with your PNG file path
 
-  img.onload = function() {
-    const scaleFactor = 0.25; // Adjust this to change the scale (0.5 = 50% of original size)
+  function drawImageAndText() {
+    const maxWidth = window.innerWidth * 0.9; // 90% of window width
+    const maxHeight = window.innerHeight * 0.9; // 90% of window height
+
+    let scaleFactor = Math.min(maxWidth / img.width, maxHeight / img.height);
+    scaleFactor = Math.min(scaleFactor, 1); // Ensure we don't scale up beyond original size
+
     const scaledWidth = img.width * scaleFactor;
     const scaledHeight = img.height * scaleFactor;
 
@@ -46,18 +51,46 @@
     ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
 
     // Set text properties
-    // load font from file
-    ctx.font = '36px FB';
+    const fontSize = Math.max(16, 20 * scaleFactor); // Minimum font size of 16px
+    ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'white';
-    ctx.textAlign = 'center'; // This centers the text horizontally
-
-    // Example name from database
-    const name = "John Doe"; // Replace this with your database query
+    ctx.textAlign = 'center';
 
     // Add centered text
-    const textX = scaledWidth / 2; // Center of the canvas
-    ctx.fillText(he_name, textX, 465);
+    const textX = scaledWidth / 2;
+    const textY = scaledHeight / 2;
+    ctx.fillText(he_name, textX, textY);
+  }
+
+  img.onload = function() {
+    drawImageAndText();
+    window.addEventListener('resize', drawImageAndText);
   };
+
+  // img.onload = function() {
+  //   const scaleFactor = 0.25; // Adjust this to change the scale (0.5 = 50% of original size)
+  //   const scaledWidth = img.width * scaleFactor;
+  //   const scaledHeight = img.height * scaleFactor;
+  //
+  //   canvas.width = scaledWidth;
+  //   canvas.height = scaledHeight;
+  //
+  //   // Draw the scaled image
+  //   ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
+  //
+  //   // Set text properties
+  //   // load font from file
+  //   ctx.font = '36px FB';
+  //   ctx.fillStyle = 'white';
+  //   ctx.textAlign = 'center'; // This centers the text horizontally
+  //
+  //   // Example name from database
+  //   const name = "John Doe"; // Replace this with your database query
+  //
+  //   // Add centered text
+  //   const textX = scaledWidth / 2; // Center of the canvas
+  //   ctx.fillText(he_name, textX, 465);
+  // };
 </script>
 </body>
 </html>
