@@ -69,7 +69,7 @@
     const minSize = 16;
     const maxSize = 40;
     // Correct font size calculation
-    const fontScaleFactor = 2 - scaleFactor; // Inverse relationship
+    const fontScaleFactor = 1 + scaleFactor; // Inverse relationship
     const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * fontScaleFactor));
 
     ctx.font = `${fontSize}px Arial`;
