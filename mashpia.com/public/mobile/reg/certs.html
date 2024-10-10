@@ -124,11 +124,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 <script>
   const url = window.location.search
   const urlParams = new URLSearchParams(url)
-  const ids = urlParams.get('ids')
-  // separate serial number from user id
-  const info = ids.split(':')
-  const serial = info[0]
-  const user_id = info[1]
+  const user_id = urlParams.get('id')
 
   window.onload = event => {
     $.post('ajax/getHeName.php', { user_id }, function(res) {
@@ -145,7 +141,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
   }
 
   $("#viewCert").click( function () {
-    window.open('/chidonOld/invitations/index.html?id=' + serial, '_blank')
+    window.open('/certs/cert.php?user=' + user_id, '_blank')
   })
 
   $("#reviewed").click( function() {

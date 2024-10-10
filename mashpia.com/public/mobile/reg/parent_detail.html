@@ -427,7 +427,6 @@
                           <div class="button-spacing">
 <!--                            <button class="btn btn-danger invitation" id="{{this.user_serial}}">Share your Invitation-->
 <!--                            </button>-->
-                            <!--                                                                <button class="btn btn-danger reviewCert" id="{{this.user_serial}}:{{this.user_id}}">Review your Certificate</button>-->
                             <!--                                                                {{#if
                             this.chidon_registered}}-->
                             <!--                                                                    <button class="btn btn-primary chidonPhoto">Update your Chidon Photo</button>-->
@@ -800,6 +799,8 @@
         html += `</h5></li>`
       }
       html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
+      html += `<br /><h5>Please make sure to review and update your child's certificate before the Chidon Limmud event!
+            Click <a href="/certs/cert.php?user=${child.user_id}">here</a> to review the certificate.</h5>`
       $("#exampleModalCenter .modal-body").html(html)
       $("#exampleModalCenter").modal('show')
     })
@@ -839,7 +840,7 @@
 
     $(document).on('click', '.reviewCert', function () {
       var id = $(this).attr('id')
-      window.open('certs.html?ids=' + id, '_blank')
+      window.open('certs.html?id=' + id, '_blank')
     })
 
     $(document).on('click', '.chidonPhoto', function () {

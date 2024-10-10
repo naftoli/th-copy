@@ -1,9 +1,11 @@
 <?php
 $admin_auth = ['user'];
-require_once $_SERVER['DOCUMENT_ROOT'] . "/db.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/api/header/db.php";
 
-$user_id = mysql_real_escape_string($_POST['user_id']);
-$heName = mysql_real_escape_string($_POST['name']);
+$stmt = $MASHPIA_DB->prepare("UPDATE users SET first_he = :first_he, last_he = :last_he WHERE user_id = :user_id");
+
+$user_id = $_POST['user_id'];
+$heName = $_POST['name'];
 
 // first split he name into first / last
 $nameInfo = explode(' ', $heName);
@@ -15,6 +17,9 @@ for ($i = 0; $i < $end; $i++) {
 }
 $first = trim($first);
 
-$sql = "update users set first_he = '" . $first . "', last_he = '" . $last . "' where user_id = " . $user_id;
-$result = mysql_query($sql);
-echo intval($result);
+$res = $stmt->execute([
+    'first_he' => $first,
+    'last_he' => $last,
+    'user_id' => $user_id
+]);
+echo intval($res);
