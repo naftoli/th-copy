@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chidon Certificate</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+      max-width: 100%;
+    }
+  </style>
+</head>
+<body>
+<canvas id="imageCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('imageCanvas');
+  const ctx = canvas.getContext('2d');
+
+  const url = window.location.search
+  const urlParams = new URLSearchParams(url)
+  const file = urlParams.get('url')
+  // decode url
+  const png = decodeURIComponent(file)
+
+  const img = new Image();
+  img.src = png; // Replace with your PNG file path
+
+  img.onload = function() {
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    // Draw the image
+    ctx.drawImage(img, 0, 0);
+
+    // Set text properties
+    ctx.font = '20px Arial';
+    ctx.fillStyle = 'white';
+
+    // Add text at specific positions
+    ctx.fillText('Hello', 50, 50);
+    ctx.fillText('World', 200, 150);
+  };
+</script>
+</body>
+</html>

@@ -34,11 +34,13 @@ if ($user) {
     }
 
     // check if file exists
-    $file_path = $_SERVER['DOCUMENT_ROOT'] . '/certs/' . $file;
+    $file_path = "https://mashpia.com/certs/" . $file;
+    header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file));
+    /*
     if (file_exists($file_path)) {
-        header('Content-Type: image/png');
-        readfile($file_path);
+        header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file));
     } else {
         die('File not found');
     }
+    */
 }
