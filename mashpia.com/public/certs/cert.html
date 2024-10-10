@@ -49,9 +49,14 @@
     // load font from file
     ctx.font = '36px FB';
     ctx.fillStyle = 'white';
+    ctx.textAlign = 'center'; // This centers the text horizontally
 
-    // Add text at specific positions
-    ctx.fillText(he_name, 250, 465);
+    // Example name from database
+    const name = "John Doe"; // Replace this with your database query
+
+    // Add centered text
+    const textX = scaledWidth / 2; // Center of the canvas
+    ctx.fillText(he_name, textX, 465);
   };
 </script>
 </body>
