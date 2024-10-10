@@ -30,13 +30,9 @@
   img.onload = function() {
     // find ratio of image
     const ratio = img.height / img.width
-    // set width to 800px
-    img.width = 800
-    // set height to width * ratio
-    img.height = img.width * ratio
     // Set canvas dimensions to match the image
-    canvas.width = img.width;
-    canvas.height = img.height;
+    canvas.height = 800;
+    canvas.width = canvas.height * ratio;
 
     // Draw the image
     ctx.drawImage(img, 0, 0);
