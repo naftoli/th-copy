@@ -800,7 +800,7 @@
       }
       html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
       html += `<br /><h5>Please make sure to review and update your child's certificate before the Chidon Limmud event!
-            Click <a href="/certs/cert.php?user=${child.user_id}">here</a> to review the certificate.</h5>`
+            Click <a href="javascript:window.open('/certs/cert.php?user=${child.user_id}', '_blank')">here</a> to review the certificate.</h5>`
       $("#exampleModalCenter .modal-body").html(html)
       $("#exampleModalCenter").modal('show')
     })
