@@ -47,7 +47,7 @@
     const maxWidth = window.innerWidth * 0.9; // 90% of window width
     const maxHeight = window.innerHeight * 0.9; // 90% of window height
 
-    let scaleFactor = Math.min(maxWidth / img.width, maxHeight / img.height);
+    let scaleFactor = maxWidth / img.width; // Scale to fit width by default
     scaleFactor = Math.min(scaleFactor, 1); // Ensure we don't scale up beyond original size
 
     const scaledWidth = img.width * scaleFactor;
@@ -60,7 +60,7 @@
     ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
 
     // Set text properties
-    const fontSize = Math.max(14, 100 * scaleFactor); // Minimum font size of 16px
+    const fontSize = Math.max(14, 20 * scaleFactor); // Minimum font size of 14px
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'white';
     ctx.textAlign = 'center';
