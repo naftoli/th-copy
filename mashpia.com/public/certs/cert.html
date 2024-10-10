@@ -48,8 +48,9 @@
     const maxWidth = window.innerWidth * 0.9;
     const maxHeight = window.innerHeight * 0.8; // Reduced to accommodate debug info
 
-    let scaleFactorHeight = maxHeight / img.height;
-    let scaleFactor = Math.min(scaleFactorHeight, 1);
+    let scaleFactorWidth = maxWidth / img.width;
+    // let scaleFactorHeight = maxHeight / img.height;
+    let scaleFactor = Math.min(scaleFactorWidth, 1);
 
     const scaledWidth = img.width * scaleFactor;
     const scaledHeight = img.height * scaleFactor;
