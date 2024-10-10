@@ -60,14 +60,19 @@
     ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
 
     // Set text properties
-    const fontSize = Math.max(14, 20 * scaleFactor); // Minimum font size of 14px
+    // Set text properties
+    const baseSize = 20; // Base font size
+    const minSize = 16; // Minimum font size
+    const maxSize = 40; // Maximum font size
+    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * scaleFactor));
+
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'white';
     ctx.textAlign = 'center';
 
     // Add centered text
     const textX = scaledWidth / 2;
-    const textY = scaledHeight / 2 + 25;
+    const textY = scaledHeight / 2;
     ctx.fillText(he_name, textX, textY);
   }
 
