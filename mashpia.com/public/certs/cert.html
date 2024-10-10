@@ -68,9 +68,8 @@
     const baseSize = 20;
     const minSize = 16;
     const maxSize = 40;
-    // Correct font size calculation
-    const fontScaleFactor = 1 - scaleFactor; // Inverse relationship
-    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * (fontScaleFactor + 1)));
+    // Font size calculation
+    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * scaleFactor));
 
     ctx.font = `${fontSize}px Arial`;
     ctx.fillStyle = 'white';
