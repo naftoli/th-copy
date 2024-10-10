@@ -35,11 +35,14 @@ if ($user) {
 
     // check if file exists
     $file_path = "https://mashpia.com/certs/" . $file;
-//    header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file));
+    $he_name = $user['first_he'] . ' ' . $user['last_he'];
+    header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file) . '&he_name=' . urlencode($he_name));
+    /*
     if (file_exists($file_path)) {
         $he_name = $user['first_he'] . ' ' . $user['last_he'];
         header('Location: https://mashpia.com/certs/cert.html?url=' . urlencode($file) . '&he_name=' . urlencode($he_name));
     } else {
         die('File not found');
     }
+    */
 }
