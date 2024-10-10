@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Image with HTML Overlay for Accurate Text Scaling</title>
+  <title>Responsive Image with Correct Container Sizing and Text Scaling</title>
   <style>
     @font-face {
       font-family: 'FB';
@@ -25,13 +25,15 @@
     }
     #container {
       position: relative;
+      width: 90vw;
+      height: 80vh;
       max-width: 90%;
       max-height: 80vh;
     }
     canvas {
-      max-width: 100%;
-      max-height: 100%;
-      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
     #overlay {
       position: absolute;
@@ -48,10 +50,10 @@
       background: rgba(0, 0, 0, 0.5);
     }
     #name {
-      font-family: 'FB';
       margin-bottom: 10px;
     }
     #fontSizeDisplay {
+      font-family: 'FB';
       font-size: 16px;
       color: yellow;
     }
@@ -77,6 +79,7 @@
   const file = urlParams.get('url')
   const he_name = urlParams.get('he_name')
 
+  const container = document.getElementById('container');
   const canvas = document.getElementById('imageCanvas');
   const ctx = canvas.getContext('2d');
   const overlay = document.getElementById('overlay');
@@ -92,15 +95,14 @@
     const imageAspectRatio = img.width / img.height;
     const containerAspectRatio = containerWidth / containerHeight;
 
-    let scaleFactor;
+    let scaledWidth, scaledHeight;
     if (containerAspectRatio > imageAspectRatio) {
-      scaleFactor = containerHeight / img.height;
+      scaledHeight = containerHeight;
+      scaledWidth = scaledHeight * imageAspectRatio;
     } else {
-      scaleFactor = containerWidth / img.width;
+      scaledWidth = containerWidth;
+      scaledHeight = scaledWidth / imageAspectRatio;
     }
-
-    const scaledWidth = img.width * scaleFactor;
-    const scaledHeight = img.height * scaleFactor;
 
     canvas.width = scaledWidth;
     canvas.height = scaledHeight;
@@ -111,8 +113,11 @@
     const minSize = 16;
     const maxSize = 40;
 
+    // Calculate scale factor based on the smaller dimension
+    const scaleFactor = Math.min(scaledWidth / img.width, scaledHeight / img.height);
+
     // Font size calculation
-    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * (scaleFactor + 1.5)));
+    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * (2 - scaleFactor)));
 
     nameElement.style.fontSize = `${fontSize}px`;
     nameElement.textContent = he_name;
