@@ -1,112 +1,177 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--  <meta charset="UTF-8">-->
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--  <title>Responsive Image with Correct Container Sizing and Text Scaling</title>-->
+<!--  <style>-->
+<!--    @font-face {-->
+<!--      font-family: 'FB';-->
+<!--      src: url('https://mashpia.com/certs/FbTrick-Regular.otf') format('opentype');-->
+<!--    }-->
+<!--    @font-face {-->
+<!--      font-family: 'FB_Black';-->
+<!--      src: url('https://mashpia.com/certs/FbTrick-Black.otf') format('opentype');-->
+<!--    }-->
+<!--    body, html {-->
+<!--      margin: 0;-->
+<!--      padding: 0;-->
+<!--      width: 100%;-->
+<!--      height: 100%;-->
+<!--      justify-content: center;-->
+<!--    }-->
+<!--    #container {-->
+<!--      position: relative;-->
+<!--      padding: 10px;-->
+<!--      width: 95vw;-->
+<!--      max-width: 95%;-->
+<!--      max-height: 95%;-->
+<!--    }-->
+<!--    canvas {-->
+<!--      width: 100%;-->
+<!--      height: 100%;-->
+<!--      object-fit: contain;-->
+<!--    }-->
+<!--    #overlay {-->
+<!--      position: absolute;-->
+<!--      top: 53%;-->
+<!--      left: 0;-->
+<!--      width: 100%;-->
+<!--      justify-content: center;-->
+<!--      align-items: center;-->
+<!--      color: white;-->
+<!--      text-align: center;-->
+<!--    }-->
+<!--    #name {-->
+<!--      font-family: 'FB', sans-serif;-->
+<!--    }-->
+<!--  </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div id="container">-->
+<!--  <canvas id="imageCanvas"></canvas>-->
+<!--  <div id="overlay">-->
+<!--    <div id="name"></div>-->
+<!--  </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--  const url = window.location.search-->
+<!--  const urlParams = new URLSearchParams(url)-->
+<!--  const file = urlParams.get('url')-->
+<!--  const he_name = urlParams.get('he_name')-->
+
+<!--  const container = document.getElementById('container');-->
+<!--  const canvas = document.getElementById('imageCanvas');-->
+<!--  const ctx = canvas.getContext('2d');-->
+<!--  const overlay = document.getElementById('overlay');-->
+<!--  const nameElement = document.getElementById('name');-->
+<!--  const img = new Image();-->
+<!--  img.src = decodeURIComponent(file);-->
+
+<!--  function updateImageAndText() {-->
+<!--    const containerWidth = container.clientWidth;-->
+<!--    const containerHeight = container.clientHeight;-->
+<!--    const imageAspectRatio = img.width / img.height;-->
+<!--    const containerAspectRatio = containerWidth / containerHeight;-->
+
+<!--    let scaledWidth, scaledHeight;-->
+<!--    if (containerAspectRatio > imageAspectRatio) {-->
+<!--      scaledHeight = containerHeight;-->
+<!--      scaledWidth = scaledHeight * imageAspectRatio;-->
+<!--    } else {-->
+<!--      scaledWidth = containerWidth;-->
+<!--      scaledHeight = scaledWidth / imageAspectRatio;-->
+<!--    }-->
+
+<!--    canvas.width = scaledWidth;-->
+<!--    canvas.height = scaledHeight;-->
+
+<!--    ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);-->
+
+<!--    const baseSize = 20;-->
+<!--    const minSize = 16;-->
+<!--    const maxSize = 40;-->
+
+<!--    // Calculate scale factor based on the smaller dimension-->
+<!--    const scaleFactor = Math.min(scaledWidth / img.width, scaledHeight / img.height);-->
+
+<!--    // Font size calculation-->
+<!--    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * (2 - scaleFactor)));-->
+
+<!--    nameElement.style.fontSize = `${fontSize}px`;-->
+<!--    nameElement.textContent = he_name;-->
+<!--  }-->
+
+<!--  img.onload = function() {-->
+<!--    updateImageAndText();-->
+<!--    window.addEventListener('resize', updateImageAndText);-->
+<!--  };-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Image with Correct Container Sizing and Text Scaling</title>
+  <title>Responsive PNG Image Display</title>
   <style>
-    @font-face {
-      font-family: 'FB';
-      src: url('https://mashpia.com/certs/FbTrick-Regular.otf') format('opentype');
-    }
-    @font-face {
-      font-family: 'FB_Black';
-      src: url('https://mashpia.com/certs/FbTrick-Black.otf') format('opentype');
-    }
     body, html {
       margin: 0;
       padding: 0;
-      width: 100%;
       height: 100%;
-      justify-content: center;
-    }
-    #container {
-      position: relative;
-      padding: 10px;
-      width: 95vw;
-      max-width: 95%;
-      max-height: 95%;
-    }
-    canvas {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    #overlay {
-      position: absolute;
-      top: 53%;
-      left: 0;
-      width: 100%;
+      display: flex;
       justify-content: center;
       align-items: center;
-      color: white;
-      text-align: center;
+      background-color: #f0f0f0;
     }
-    #name {
-      font-family: 'FB', sans-serif;
+    .image-container {
+      max-width: 90%;
+      max-height: 90vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    #debug {
+      position: fixed;
+      bottom: 10px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 12px;
     }
   </style>
 </head>
 <body>
-<div id="container">
-  <canvas id="imageCanvas"></canvas>
-  <div id="overlay">
-    <div id="name"></div>
-  </div>
+<div class="image-container">
+  <img src="/api/placeholder/800/600" alt="Responsive Image" id="responsiveImage">
 </div>
+<div id="debug"></div>
 
 <script>
-  const url = window.location.search
-  const urlParams = new URLSearchParams(url)
-  const file = urlParams.get('url')
-  const he_name = urlParams.get('he_name')
+  const img = document.getElementById('responsiveImage');
+  const debugDiv = document.getElementById('debug');
 
-  const container = document.getElementById('container');
-  const canvas = document.getElementById('imageCanvas');
-  const ctx = canvas.getContext('2d');
-  const overlay = document.getElementById('overlay');
-  const nameElement = document.getElementById('name');
-  const img = new Image();
-  img.src = decodeURIComponent(file);
-
-  function updateImageAndText() {
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
-    const imageAspectRatio = img.width / img.height;
-    const containerAspectRatio = containerWidth / containerHeight;
-
-    let scaledWidth, scaledHeight;
-    if (containerAspectRatio > imageAspectRatio) {
-      scaledHeight = containerHeight;
-      scaledWidth = scaledHeight * imageAspectRatio;
-    } else {
-      scaledWidth = containerWidth;
-      scaledHeight = scaledWidth / imageAspectRatio;
-    }
-
-    canvas.width = scaledWidth;
-    canvas.height = scaledHeight;
-
-    ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
-
-    const baseSize = 20;
-    const minSize = 16;
-    const maxSize = 40;
-
-    // Calculate scale factor based on the smaller dimension
-    const scaleFactor = Math.min(scaledWidth / img.width, scaledHeight / img.height);
-
-    // Font size calculation
-    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * (2 - scaleFactor)));
-
-    nameElement.style.fontSize = `${fontSize}px`;
-    nameElement.textContent = he_name;
+  function updateDebugInfo() {
+    const rect = img.getBoundingClientRect();
+    debugDiv.innerHTML = `
+                Window size: ${window.innerWidth} x ${window.innerHeight}<br>
+                Image size: ${rect.width.toFixed(0)} x ${rect.height.toFixed(0)}<br>
+                Image natural size: ${img.naturalWidth} x ${img.naturalHeight}
+            `;
   }
 
-  img.onload = function() {
-    updateImageAndText();
-    window.addEventListener('resize', updateImageAndText);
-  };
+  window.addEventListener('load', updateDebugInfo);
+  window.addEventListener('resize', updateDebugInfo);
 </script>
 </body>
 </html>
