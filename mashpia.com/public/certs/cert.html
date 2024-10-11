@@ -139,13 +139,14 @@
     }
     .text-overlay {
       position: absolute;
-      left: 0;
-      width: 100%;
+      left: 50%;
+      transform: translateX(-50%);
       text-align: center;
       color: white;
       font-family: Arial, sans-serif;
-      font-size: 24px;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      background-color: rgba(0, 0, 0, 0.5);
+      padding: 5px 10px;
     }
     #debug {
       position: fixed;
@@ -181,14 +182,16 @@ const url = window.location.search
   const verticalPosition = 0.56; // 56% down from the top
   const minFontSize = 16; // Minimum font size in pixels
   const maxFontSize = 48; // Maximum font size in pixels
-  const minWidth = 300; // Minimum viewport width to start scaling
-  const maxWidth = 1200; // Maximum viewport width to stop scaling
+  const fontSizeRatio = 0.05; // Font size as a ratio of image height
 
-  function calculateFontSize() {
-    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    if (vw <= minWidth) return minFontSize;
-    if (vw >= maxWidth) return maxFontSize;
-    return minFontSize + (maxFontSize - minFontSize) * ((vw - minWidth) / (maxWidth - minWidth));
+  function updateTextPosition() {
+    const rect = img.getBoundingClientRect();
+    const topPosition = rect.height * verticalPosition;
+    nameOverlay.style.top = `${topPosition}px`;
+    nameOverlay.textContent = he_name;
+    // Update font size based on image height
+    const fontSize = calculateFontSize(rect.height);
+    nameOverlay.style.fontSize = `${fontSize}px`;
   }
 
   function updateTextPosition() {
