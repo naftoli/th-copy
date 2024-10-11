@@ -44,6 +44,7 @@
       font-family: Arial, sans-serif;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
       padding: 5px 10px;
+      pointer-events: none;
     }
     #debug {
       position: fixed;
@@ -84,6 +85,9 @@
 
   function calculateFontSize() {
     const rect = img.getBoundingClientRect();
+    const containerRect = img.parentElement.getBoundingClientRect();
+    const topPosition = (containerRect.height - rect.height) / 2 + rect.height * verticalPosition;
+    nameOverlay.style.top = `${topPosition}px`;
     const fontSize = rect.height * fontSizeRatio;
     return Math.max(minFontSize, Math.min(maxFontSize, fontSize));
   }
@@ -111,6 +115,8 @@
                 Text position: ${(verticalPosition * 100).toFixed(0)}% from top<br>
                 Text center: ${(textRect.left + textRect.width / 2).toFixed(0)}px<br>
                 Image center: ${(rect.left + rect.width / 2).toFixed(0)}px<br>
+                Text top: ${textRect.top.toFixed(0)}px<br>
+                Image top: ${rect.top.toFixed(0)}px<br>
                 Font size: ${fontSize.toFixed(1)}px
             `;
   }
@@ -120,6 +126,7 @@
     updateDebugInfo();
   }
 
+  img.addEventListener('load', updateLayout);
   window.addEventListener('load', updateLayout);
   window.addEventListener('resize', updateLayout);
 </script>
