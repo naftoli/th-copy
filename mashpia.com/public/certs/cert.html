@@ -129,8 +129,8 @@
       width: 100%;
       display: flex;
       justify-content: center;
-      background-color: #000; /* Added for visibility */
-      padding: 20px 0; /* Added some padding */
+      padding: 20px 0;
+      position: relative;
     }
     img {
       max-width: 90%;
@@ -145,7 +145,6 @@
       color: white;
       font-family: Arial, sans-serif;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-      background-color: rgba(0, 0, 0, 0.5);
       padding: 5px 10px;
     }
     #debug {
@@ -180,9 +179,9 @@ const url = window.location.search
 
   // Configuration
   const verticalPosition = 0.56; // 56% down from the top
-  const minFontSize = 16; // Minimum font size in pixels
+  const minFontSize = 12; // Minimum font size in pixels
   const maxFontSize = 48; // Maximum font size in pixels
-  const fontSizeRatio = 0.05; // Font size as a ratio of image height
+  const fontSizeRatio = 0.04; // Font size as a ratio of image height
 
   function calculateFontSize() {
     const viewportHeight = window.innerHeight;
