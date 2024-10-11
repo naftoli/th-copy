@@ -124,7 +124,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 <script>
   const url = window.location.search
   const urlParams = new URLSearchParams(url)
-  const user_id = urlParams.get('id')
+  const user_id = urlParams.get('user')
 
   window.onload = event => {
     $.post('ajax/getHeName.php', { user_id }, function(res) {
