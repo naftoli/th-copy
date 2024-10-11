@@ -137,6 +137,16 @@
       max-height: 80vh;
       object-fit: contain;
     }
+    .text-overlay {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 24px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
     #debug {
       position: fixed;
       bottom: 10px;
@@ -152,6 +162,7 @@
 <body>
 <div class="image-container">
   <img src="" alt="Responsive Image" id="responsiveImage">
+  <div class="text-overlay" id="nameOverlay"></div>
 </div>
 <div id="debug"></div>
 
@@ -166,17 +177,33 @@ const url = window.location.search
 
   img.src = decodeURIComponent(file);
 
+  // Configuration
+  const verticalPosition = 0.55; // 55% down from the top
+
+  function updateTextPosition() {
+    const rect = img.getBoundingClientRect();
+    const topPosition = rect.height * verticalPosition;
+    nameOverlay.style.top = `${topPosition}px`;
+    nameOverlay.textContent = name;
+  }
+
   function updateDebugInfo() {
     const rect = img.getBoundingClientRect();
     debugDiv.innerHTML = `
-                Window size: ${window.innerWidth} x ${window.innerHeight}<br>
-                Image size: ${rect.width.toFixed(0)} x ${rect.height.toFixed(0)}<br>
-                Image natural size: ${img.naturalWidth} x ${img.naturalHeight}
-            `;
+                  Window size: ${window.innerWidth} x ${window.innerHeight}<br>
+                  Image size: ${rect.width.toFixed(0)} x ${rect.height.toFixed(0)}<br>
+                  Image natural size: ${img.naturalWidth} x ${img.naturalHeight}<br>
+                  Text position: ${(verticalPosition * 100).toFixed(0)}% from top
+              `;
   }
 
-  window.addEventListener('load', updateDebugInfo);
-  window.addEventListener('resize', updateDebugInfo);
+  function updateLayout() {
+    updateTextPosition();
+    updateDebugInfo();
+  }
+
+  window.addEventListener('load', updateLayout);
+  window.addEventListener('resize', updateLayout);
 </script>
 </body>
 </html>
