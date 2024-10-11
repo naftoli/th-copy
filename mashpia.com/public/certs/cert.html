@@ -71,11 +71,13 @@
   const name = urlParams.get('he_name')
 
   const img = document.getElementById('responsiveImage');
+  img.src = decodeURIComponent(file);
+
   const nameOverlay = document.getElementById('nameOverlay');
   const debugDiv = document.getElementById('debug');
 
   // Configuration
-  const verticalPosition = 0.7; // 70% down from the top
+  const verticalPosition = 0.55; // % down from the top
   const minFontSize = 12;
   const maxFontSize = 48;
   const fontSizeRatio = 0.04;
