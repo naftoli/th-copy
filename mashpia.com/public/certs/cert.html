@@ -1,10 +1,9 @@
-<!--
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive Image with Correct Container Sizing and Text Scaling</title>
+  <title>Responsive PNG Image Display</title>
   <style>
     @font-face {
       font-family: 'FB';
@@ -17,124 +16,22 @@
     body, html {
       margin: 0;
       padding: 0;
-      width: 100%;
       height: 100%;
-      justify-content: center;
-    }
-    #container {
-      position: relative;
-      padding: 10px;
-      width: 95vw;
-      max-width: 95%;
-      max-height: 95%;
-    }
-    canvas {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    #overlay {
-      position: absolute;
-      top: 53%;
-      left: 0;
-      width: 100%;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      text-align: center;
-    }
-    #name {
-      font-family: 'FB', sans-serif;
-    }
-  </style>
-</head>
-<body>
-<div id="container">
-  <canvas id="imageCanvas"></canvas>
-  <div id="overlay">
-    <div id="name"></div>
-  </div>
-</div>
-
-<script>
-  const url = window.location.search
-  const urlParams = new URLSearchParams(url)
-  const file = urlParams.get('url')
-  const he_name = urlParams.get('he_name')
-
-  const container = document.getElementById('container');
-  const canvas = document.getElementById('imageCanvas');
-  const ctx = canvas.getContext('2d');
-  const overlay = document.getElementById('overlay');
-  const nameElement = document.getElementById('name');
-  const img = new Image();
-  img.src = decodeURIComponent(file);
-
-  function updateImageAndText() {
-    const containerWidth = container.clientWidth;
-    const containerHeight = container.clientHeight;
-    const imageAspectRatio = img.width / img.height;
-    const containerAspectRatio = containerWidth / containerHeight;
-
-    let scaledWidth, scaledHeight;
-    if (containerAspectRatio > imageAspectRatio) {
-      scaledHeight = containerHeight;
-      scaledWidth = scaledHeight * imageAspectRatio;
-    } else {
-      scaledWidth = containerWidth;
-      scaledHeight = scaledWidth / imageAspectRatio;
-    }
-
-    canvas.width = scaledWidth;
-    canvas.height = scaledHeight;
-
-    ctx.drawImage(img, 0, 0, scaledWidth, scaledHeight);
-
-    const baseSize = 20;
-    const minSize = 16;
-    const maxSize = 40;
-
-    // Calculate scale factor based on the smaller dimension
-    const scaleFactor = Math.min(scaledWidth / img.width, scaledHeight / img.height);
-
-    // Font size calculation
-    const fontSize = Math.max(minSize, Math.min(maxSize, baseSize * (2 - scaleFactor)));
-
-    nameElement.style.fontSize = `${fontSize}px`;
-    nameElement.textContent = he_name;
-  }
-
-  img.onload = function() {
-    updateImageAndText();
-    window.addEventListener('resize', updateImageAndText);
-  };
-</script>
-</body>
-</html>
--->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Responsive PNG Image Display</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      min-height: 100%;
+      display: flex;
+      flex-direction: column;
       background-color: #f0f0f0;
     }
     .image-container {
-      width: 100%;
+      flex-grow: 1;
       display: flex;
       justify-content: center;
+      align-items: center;
+      overflow: hidden;
       padding: 20px 0;
-      position: relative;
     }
     img {
-      max-width: 90%;
-      max-height: 80vh;
+      max-width: 100%;
+      max-height: 100%;
       object-fit: contain;
     }
     .text-overlay {
@@ -143,7 +40,7 @@
       transform: translateX(-50%);
       text-align: center;
       color: white;
-      font-family: Arial, sans-serif;
+      font-family: 'FB', sans-serif;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
       padding: 5px 10px;
     }
@@ -184,17 +81,15 @@ const url = window.location.search
   const fontSizeRatio = 0.04; // Font size as a ratio of image height
 
   function calculateFontSize() {
-    const viewportHeight = window.innerHeight;
+    const containerRect = img.parentElement.getBoundingClientRect();
     const imageAspectRatio = img.naturalWidth / img.naturalHeight;
-    const viewportAspectRatio = window.innerWidth / viewportHeight;
+    const containerAspectRatio = containerRect.width / containerRect.height;
 
     let effectiveHeight;
-    if (viewportAspectRatio > imageAspectRatio) {
-      // Image height is constrained by viewport height
-      effectiveHeight = viewportHeight * 0.8; // 80% of viewport height
+    if (containerAspectRatio > imageAspectRatio) {
+      effectiveHeight = containerRect.height;
     } else {
-      // Image width is constrained by viewport width
-      effectiveHeight = (window.innerWidth / imageAspectRatio) * 0.9; // 90% of scaled height
+      effectiveHeight = containerRect.width / imageAspectRatio;
     }
 
     const fontSize = effectiveHeight * fontSizeRatio;
