@@ -28,6 +28,7 @@
       align-items: center;
       overflow: hidden;
       padding: 20px 0;
+      position: relative;
     }
     img {
       max-width: 100%;
@@ -81,18 +82,8 @@ const url = window.location.search
   const fontSizeRatio = 0.04; // Font size as a ratio of image height
 
   function calculateFontSize() {
-    const containerRect = img.parentElement.getBoundingClientRect();
-    const imageAspectRatio = img.naturalWidth / img.naturalHeight;
-    const containerAspectRatio = containerRect.width / containerRect.height;
-
-    let effectiveHeight;
-    if (containerAspectRatio > imageAspectRatio) {
-      effectiveHeight = containerRect.height;
-    } else {
-      effectiveHeight = containerRect.width / imageAspectRatio;
-    }
-
-    const fontSize = effectiveHeight * fontSizeRatio;
+    const rect = img.getBoundingClientRect();
+    const fontSize = rect.height * fontSizeRatio;
     return Math.max(minFontSize, Math.min(maxFontSize, fontSize));
   }
 
@@ -100,8 +91,8 @@ const url = window.location.search
     const rect = img.getBoundingClientRect();
     const topPosition = rect.height * verticalPosition;
     nameOverlay.style.top = `${topPosition}px`;
-    nameOverlay.textContent = he_name;
-    // Update font size
+    nameOverlay.textContent = name;
+
     const fontSize = calculateFontSize();
     nameOverlay.style.fontSize = `${fontSize}px`;
   }
