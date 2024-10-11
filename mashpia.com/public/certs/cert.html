@@ -65,7 +65,7 @@
 <div id="debug"></div>
 
 <script>
-const url = window.location.search
+  const url = window.location.search
   const urlParams = new URLSearchParams(url)
   const file = urlParams.get('url')
   const he_name = urlParams.get('he_name')
@@ -91,7 +91,7 @@ const url = window.location.search
     const rect = img.getBoundingClientRect();
     const topPosition = rect.height * verticalPosition;
     nameOverlay.style.top = `${topPosition}px`;
-    nameOverlay.textContent = name;
+    nameOverlay.textContent = he_name;
 
     const fontSize = calculateFontSize();
     nameOverlay.style.fontSize = `${fontSize}px`;
