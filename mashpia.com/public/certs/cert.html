@@ -178,13 +178,27 @@ const url = window.location.search
   img.src = decodeURIComponent(file);
 
   // Configuration
-  const verticalPosition = 0.55; // 55% down from the top
+  const verticalPosition = 0.56; // 56% down from the top
+  const minFontSize = 16; // Minimum font size in pixels
+  const maxFontSize = 48; // Maximum font size in pixels
+  const minWidth = 300; // Minimum viewport width to start scaling
+  const maxWidth = 1200; // Maximum viewport width to stop scaling
+
+  function calculateFontSize() {
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    if (vw <= minWidth) return minFontSize;
+    if (vw >= maxWidth) return maxFontSize;
+    return minFontSize + (maxFontSize - minFontSize) * ((vw - minWidth) / (maxWidth - minWidth));
+  }
 
   function updateTextPosition() {
     const rect = img.getBoundingClientRect();
     const topPosition = rect.height * verticalPosition;
     nameOverlay.style.top = `${topPosition}px`;
     nameOverlay.textContent = he_name;
+    // Update font size
+    const fontSize = calculateFontSize();
+    nameOverlay.style.fontSize = `${fontSize}px`;
   }
 
   function updateDebugInfo() {
