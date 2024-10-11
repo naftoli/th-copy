@@ -184,14 +184,22 @@ const url = window.location.search
   const maxFontSize = 48; // Maximum font size in pixels
   const fontSizeRatio = 0.05; // Font size as a ratio of image height
 
-  function updateTextPosition() {
-    const rect = img.getBoundingClientRect();
-    const topPosition = rect.height * verticalPosition;
-    nameOverlay.style.top = `${topPosition}px`;
-    nameOverlay.textContent = he_name;
-    // Update font size based on image height
-    const fontSize = calculateFontSize(rect.height);
-    nameOverlay.style.fontSize = `${fontSize}px`;
+  function calculateFontSize() {
+    const viewportHeight = window.innerHeight;
+    const imageAspectRatio = img.naturalWidth / img.naturalHeight;
+    const viewportAspectRatio = window.innerWidth / viewportHeight;
+
+    let effectiveHeight;
+    if (viewportAspectRatio > imageAspectRatio) {
+      // Image height is constrained by viewport height
+      effectiveHeight = viewportHeight * 0.8; // 80% of viewport height
+    } else {
+      // Image width is constrained by viewport width
+      effectiveHeight = (window.innerWidth / imageAspectRatio) * 0.9; // 90% of scaled height
+    }
+
+    const fontSize = effectiveHeight * fontSizeRatio;
+    return Math.max(minFontSize, Math.min(maxFontSize, fontSize));
   }
 
   function updateTextPosition() {
