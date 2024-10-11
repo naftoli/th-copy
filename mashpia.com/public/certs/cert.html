@@ -41,7 +41,7 @@
       transform: translateX(-50%);
       text-align: center;
       color: white;
-      font-family: 'FB', sans-serif;
+      font-family: Arial, sans-serif;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
       padding: 5px 10px;
     }
@@ -68,18 +68,17 @@
   const url = window.location.search
   const urlParams = new URLSearchParams(url)
   const file = urlParams.get('url')
-  const he_name = urlParams.get('he_name')
+  const name = urlParams.get('he_name')
 
   const img = document.getElementById('responsiveImage');
+  const nameOverlay = document.getElementById('nameOverlay');
   const debugDiv = document.getElementById('debug');
 
-  img.src = decodeURIComponent(file);
-
   // Configuration
-  const verticalPosition = 0.56; // 56% down from the top
-  const minFontSize = 12; // Minimum font size in pixels
-  const maxFontSize = 48; // Maximum font size in pixels
-  const fontSizeRatio = 0.04; // Font size as a ratio of image height
+  const verticalPosition = 0.7; // 70% down from the top
+  const minFontSize = 12;
+  const maxFontSize = 48;
+  const fontSizeRatio = 0.04;
 
   function calculateFontSize() {
     const rect = img.getBoundingClientRect();
@@ -91,19 +90,27 @@
     const rect = img.getBoundingClientRect();
     const topPosition = rect.height * verticalPosition;
     nameOverlay.style.top = `${topPosition}px`;
-    nameOverlay.textContent = he_name;
+    nameOverlay.textContent = name;
+
     const fontSize = calculateFontSize();
     nameOverlay.style.fontSize = `${fontSize}px`;
   }
 
   function updateDebugInfo() {
     const rect = img.getBoundingClientRect();
+    const containerRect = img.parentElement.getBoundingClientRect();
+    const textRect = nameOverlay.getBoundingClientRect();
+    const fontSize = parseFloat(window.getComputedStyle(nameOverlay).fontSize);
     debugDiv.innerHTML = `
-                  Window size: ${window.innerWidth} x ${window.innerHeight}<br>
-                  Image size: ${rect.width.toFixed(0)} x ${rect.height.toFixed(0)}<br>
-                  Image natural size: ${img.naturalWidth} x ${img.naturalHeight}<br>
-                  Text position: ${(verticalPosition * 100).toFixed(0)}% from top
-              `;
+                Window size: ${window.innerWidth} x ${window.innerHeight}<br>
+                Container size: ${containerRect.width.toFixed(0)} x ${containerRect.height.toFixed(0)}<br>
+                Image size: ${rect.width.toFixed(0)} x ${rect.height.toFixed(0)}<br>
+                Image natural size: ${img.naturalWidth} x ${img.naturalHeight}<br>
+                Text position: ${(verticalPosition * 100).toFixed(0)}% from top<br>
+                Text center: ${(textRect.left + textRect.width / 2).toFixed(0)}px<br>
+                Image center: ${(rect.left + rect.width / 2).toFixed(0)}px<br>
+                Font size: ${fontSize.toFixed(1)}px
+            `;
   }
 
   function updateLayout() {
