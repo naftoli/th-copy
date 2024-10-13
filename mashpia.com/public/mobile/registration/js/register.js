@@ -1379,7 +1379,7 @@ var registrationApp = function () {
           if (id == 175) html += 'Limit 12 characters.'
           else html += 'Limit 22 characters.'
           html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" 
-                        data-info="${id}" dir="rtl" value="${prize.he_name ? prize.he_name : ''}" `
+                        data-info="${id}:${prize.price}" dir="rtl" value="${prize.he_name ? prize.he_name : ''}" `
           if (disable) html += 'disabled '
           html += `/></span>`
         }
@@ -1442,15 +1442,15 @@ var registrationApp = function () {
           $(this).parent().parent().find('.prize').trigger('click')
         }
         // add hebrew name to list
-        let id = $(this).data('info')
+        let info = $(this).data('info').split(':')
+        const id = info[0]
+        const prize_fee = info[1]
         if (he_name.length && !addHeName(id, he_name)) {
           setTimeout(function () {
             alert('Error adding hebrew name')
           }, 0)
         } else if (he_name.length) {
           // find out the fee for this prize
-          const prize_info = $(this).parent().parent().find('prize personalize').data('info').split(':')
-          const prize_fee = parseFloat(prize_info[1])
           addPrizeFee(prize_fee)
           setTimeout(function () {
             alert("You have selected a prize with your child\'s name on it so you will need to pre-pay the prize value of this prize " +
