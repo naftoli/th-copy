@@ -1442,10 +1442,11 @@ var registrationApp = function () {
           $(this).parent().parent().find('.prize').trigger('click')
         }
         // add hebrew name to list
-        const id = $(this).data('info')
+        let id = $(this).data('info')
         if (he_name.length && !addHeName(id, he_name)) {
           setTimeout(function () {
             alert('Error adding hebrew name')
+            console.log(id, he_name)
           }, 0)
         } else if (he_name.length) {
           setTimeout(function () {
