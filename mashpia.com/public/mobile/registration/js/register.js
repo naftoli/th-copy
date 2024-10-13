@@ -1460,9 +1460,9 @@ var registrationApp = function () {
   }
 
   $("#prizes").on('hidden.bs.modal', async function (e) {
+    await checkForPrizeFee()
     if (validatePrizes()) {
       addToCart() // add prizes to cart
-      await checkForPrizeFee() // check if we need to pay for prizes now
       nextStep()
     }
     else $("#prizes").modal('show')
