@@ -1459,11 +1459,13 @@ var registrationApp = function () {
     })
   }
 
-  $("#prizes").on('hidden.bs.modal', function (e) {
+  $("#prizes").on('hidden.bs.modal', async function (e) {
     if (validatePrizes()) {
       addToCart() // add prizes to cart
+      checkForPrizeFee() // check if we need to pay for prizes now
       nextStep()
-    } else $("#prizes").modal('show')
+    }
+    else $("#prizes").modal('show')
   })
 
   function validatePrizes() {
@@ -1490,14 +1492,9 @@ var registrationApp = function () {
   }
 
   function checkPersonalizedPrize() {
+    alert()
     // check if any prizes that have names have been selected
-    let personalized_amount = 0
-    for (let p of user_prizes[current_user]) {
-      if (parseInt(p.personalization) && p.he_name && p.he_name != '') {
-        personalized_amount = parseInt(p.price)
-        break
-      }
-    }
+
     return personalized_amount
   }
 
@@ -1658,15 +1655,24 @@ var registrationApp = function () {
     return false
   }
 
-  async function addToCart() {
+  function addToCart() {
     for (let item of state.cart) {
       if (item.meta.registration_type == 'chidon' && item.meta.user_id == current_user) {
         item.meta.chidon_prizes = user_prizes[current_user]
       }
     }
+  }
 
+  async function checkForPrizeFee() {
     // check if we need a separate entry for personalized prize
-    const amount = checkPersonalizedPrize()
+    let amount = 0
+    for (let p of user_prizes[current_user]) {
+      if (parseInt(p.personalization) && p.he_name.trim().length) {
+        amount = parseInt(p.price)
+        break
+      }
+    }
+
     if (amount) {
       // check if child prize has already been paid
       already_paid = await alreadyPaidPrize(amount)
