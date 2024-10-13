@@ -416,12 +416,12 @@
                 var price = infoArr[1]
                 var personalization = infoArr[2]
                 if ($(this).is(":checked")) {
-                    if (!addToPrizes(user_id, prize, price, personalization)) {
+                    if (! addToPrizes(user_id, prize, price, personalization)) {
                         e.target.checked = false
                         return false
                     }
                 } else {
-                    if (!removeFromPrizes(user_id, prize)) {
+                    if (! removeFromPrizes(user_id, prize)) {
                         e.target.checked = true
                         return false
                     }
@@ -430,18 +430,13 @@
             })
 
             $(".he_name").blur( function (e) {
-                var he_name = e.target.value
-                var id = $(this).data('info')
-                if (!addHeName(user_id, id, he_name)) {
-                    // alert('Error adding hebrew name')
-                    // add prize to list
+                const he_name = e.target.value
+                const id = $(this).data('info')
+                if (! $(this).parent().parent().find('.prize').is(":checked"))
                     $(this).parent().parent().find('.prize').trigger('click')
-                    if ($(this).parent().parent().find('.prize').is(":checked")) {
-                        if (!addHeName(user_id, id, he_name)) {
-                            alert('Error adding hebrew name')
-                            $(this).focus()
-                        }
-                    }
+                if (! addHeName(user_id, id, he_name)) {
+                    alert('Error adding hebrew name')
+                    $(this).focus()
                 }
             })
         })
