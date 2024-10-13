@@ -1379,7 +1379,7 @@ var registrationApp = function () {
           if (id == 175) html += 'Limit 12 characters.'
           else html += 'Limit 22 characters.'
           html += ` <input type="text" name="he_name_${id}" id="he_name_${id}" class="he_name${id == 175 ? ' bracelet' : ''}" 
-                        data-info="${id}:${prize.price}" dir="rtl" value="${prize.he_name ? prize.he_name : ''}" `
+                        data-info="${id}" dir="rtl" value="${prize.he_name ? prize.he_name : ''}" `
           if (disable) html += 'disabled '
           html += `/></span>`
         }
@@ -1435,23 +1435,19 @@ var registrationApp = function () {
       //   }
       // })
 
-      $(".he_name").blur(async (e) => {
+      $(".he_name").blur((e) => {
         let he_name = e.target.value.trim()
         // add prize to list
         if (he_name.length && !$(this).parent().parent().find('.prize').is(":checked")) {
           $(this).parent().parent().find('.prize').trigger('click')
         }
         // add hebrew name to list
-        let info = $(this).data('info').split(':')
-        const id = info[0]
-        const prize_fee = info[1]
+        const id = $(this).data('info')
         if (he_name.length && !addHeName(id, he_name)) {
           setTimeout(function () {
             alert('Error adding hebrew name')
           }, 0)
         } else if (he_name.length) {
-          // find out the fee for this prize
-          addPrizeFee(prize_fee)
           setTimeout(function () {
             alert("You have selected a prize with your child\'s name on it so you will need to pre-pay the prize value of this prize " +
               "NOW instead of during the Chidon Experience Registration. If your child does NOT earn their prize, you will NOT be refunded this charge. " +
@@ -1463,7 +1459,10 @@ var registrationApp = function () {
     })
   }
 
-  $("#prizes").on('hidden.bs.modal', function (e) {
+  $("#prizes").on('hidden.bs.modal', async e => {
+    alert('one moment')
+    await checkForPrizeFee()
+    alert('checked')
     if (validatePrizes()) {
       addToCart() // add prizes to cart
       nextStep()
@@ -1495,9 +1494,14 @@ var registrationApp = function () {
   }
 
   function checkPersonalizedPrize() {
-    alert()
     // check if any prizes that have names have been selected
-
+    personalized_amount = 0
+    for (var p of user_prizes[current_user]) {
+      if (p.he_name && p.he_name.trim().length) {
+        personalized_amount = parseInt(p.price)
+        break;
+      }
+    }
     return personalized_amount
   }
 
@@ -1666,7 +1670,9 @@ var registrationApp = function () {
     }
   }
 
-  async function addPrizeFee(amount) {
+  async function checkForPrizeFee() {
+    // check if personalized prize was selected
+    let amount = checkPersonalizedPrize()
     // check if child prize has already been paid
     already_paid = await alreadyPaidPrize(amount)
     if (! already_paid) {
