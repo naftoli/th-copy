@@ -1447,7 +1447,7 @@ var registrationApp = function () {
           setTimeout(function () {
             alert('Error adding hebrew name')
           }, 0)
-        } else {
+        } else if (he_name.length) {
           setTimeout(function () {
             alert("You have selected a prize with your child\'s name on it so you will need to pre-pay the prize value of this prize " +
               "NOW instead of during the Chidon Experience Registration. If your child does NOT earn their prize, you will NOT be refunded this charge. " +
