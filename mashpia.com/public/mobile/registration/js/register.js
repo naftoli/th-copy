@@ -1435,7 +1435,7 @@ var registrationApp = function () {
       //   }
       // })
 
-      $(".he_name").blur((e) => {
+      $(".he_name").blur(function(e) {
         let he_name = e.target.value.trim()
         // add prize to list
         if (he_name.length && !$(this).parent().parent().find('.prize').is(":checked")) {
@@ -1461,9 +1461,8 @@ var registrationApp = function () {
   }
 
   $("#prizes").on('hidden.bs.modal', async e => {
-    alert('one moment')
+    alert('checking for prize fee')
     await checkForPrizeFee()
-    alert('checked')
     if (validatePrizes()) {
       addToCart() // add prizes to cart
       nextStep()
