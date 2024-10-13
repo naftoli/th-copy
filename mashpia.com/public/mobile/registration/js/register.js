@@ -1461,8 +1461,9 @@ var registrationApp = function () {
   }
 
   $("#prizes").on('hidden.bs.modal', async e => {
-    alert('checking for prize fee')
+    $(".confirm").attr('disabled', true)
     await checkForPrizeFee()
+    $(".confirm").attr('disabled', false)
     if (validatePrizes()) {
       addToCart() // add prizes to cart
       nextStep()
