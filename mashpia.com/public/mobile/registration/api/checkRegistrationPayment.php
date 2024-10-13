@@ -15,7 +15,7 @@ $stmt = $MASHPIA_DB->prepare("
 $stmt->execute([
     ':year' => $year,
     ':user' => $info['user'],
-    ':amount' => $info['amount']
+    ':amount' => floatval($info['amount'])
 ]);
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 echo $row ? 1 : 0;

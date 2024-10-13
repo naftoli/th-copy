@@ -1435,7 +1435,7 @@ var registrationApp = function () {
       //   }
       // })
 
-      $(".he_name").blur(function (e) {
+      $(".he_name").blur(async (e) => {
         let he_name = e.target.value.trim()
         // add prize to list
         if (he_name.length && !$(this).parent().parent().find('.prize').is(":checked")) {
@@ -1448,6 +1448,10 @@ var registrationApp = function () {
             alert('Error adding hebrew name')
           }, 0)
         } else if (he_name.length) {
+          // find out the fee for this prize
+          const prize_info = $(this).parent().parent().find('prize personalize').data('info').split(':')
+          const prize_fee = parseFloat(prize_info[1])
+          addPrizeFee(prize_fee)
           setTimeout(function () {
             alert("You have selected a prize with your child\'s name on it so you will need to pre-pay the prize value of this prize " +
               "NOW instead of during the Chidon Experience Registration. If your child does NOT earn their prize, you will NOT be refunded this charge. " +
@@ -1459,8 +1463,7 @@ var registrationApp = function () {
     })
   }
 
-  $("#prizes").on('hidden.bs.modal', async function (e) {
-    await checkForPrizeFee()
+  $("#prizes").on('hidden.bs.modal', function (e) {
     if (validatePrizes()) {
       addToCart() // add prizes to cart
       nextStep()
@@ -1552,7 +1555,7 @@ var registrationApp = function () {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({user: current_user, amount: amount})
+      body: JSON.stringify({ user: current_user, amount: amount })
     })
     const paid = await res.json()
     return paid
@@ -1663,50 +1666,39 @@ var registrationApp = function () {
     }
   }
 
-  async function checkForPrizeFee() {
-    // check if we need a separate entry for personalized prize
-    let amount = 0
-    for (let p of user_prizes[current_user]) {
-      if (parseInt(p.personalization) && p.he_name.trim().length) {
-        amount = parseInt(p.price)
-        break
+  async function addPrizeFee(amount) {
+    // check if child prize has already been paid
+    already_paid = await alreadyPaidPrize(amount)
+    if (! already_paid) {
+      // find out track for code
+      const track = $(".limmud:checked").val()
+      let trackCode = ''
+      switch (track) {
+        case 'maven':
+          trackCode = 'RRYSD-'
+          break
+        case 'pro':
+          trackCode = 'RRYDA-'
+          break
+        case 'expert':
+        case 'genius':
+          trackCode = 'RRHVN-'
+          break
       }
-    }
 
-    if (amount) {
-      // check if child prize has already been paid
-      already_paid = await alreadyPaidPrize(amount)
-      if (! already_paid) {
-        // find out track for code
-        const track = $(".limmud:checked").val()
-        let trackCode = ''
-        switch (track) {
-          case 'maven':
-            trackCode = 'RRYSD-'
-            break
-          case 'pro':
-            trackCode = 'RRYDA-'
-            break
-          case 'expert':
-          case 'genius':
-            trackCode = 'RRHVN-'
-            break
+      // add to cart
+      state.cart.push({
+        description: selected_user.first + " Early Chidon Payment for Personalized Prize (Non-Refundable)",
+        price: amount,
+        meta: {
+          type: 'advanced prize payment',
+          registration_type: 'chidon',
+          paid: amount,
+          user_id: selected_user.user_id,
+          code: "C" + selected_user.user_serial + ":" + trackCode + amount,
+          codeOnly: trackCode.substring(0, trackCode.length - 1)
         }
-
-        // add to cart
-        state.cart.push({
-          description: selected_user.first + " Early Chidon Payment for Personalized Prize (Non-Refundable)",
-          price: amount,
-          meta: {
-            type: 'advanced prize payment',
-            registration_type: 'chidon',
-            paid: amount,
-            user_id: selected_user.user_id,
-            code: "C" + selected_user.user_serial + ":" + trackCode + amount,
-            codeOnly: trackCode.substring(0, trackCode.length - 1)
-          }
-        })
-      }
+      })
     }
   }
 
