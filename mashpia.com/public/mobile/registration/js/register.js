@@ -1411,39 +1411,39 @@ var registrationApp = function () {
         }
       })
 
-      $(".he_name").focus(function (e) {
-        // check if we are going to go over 75 points
-        let info = $(this).parent().parent().find('.personalize').data('info')
-        let infoArr = info.split(':')
-        let prize_id = infoArr[0]
-        let price = infoArr[1]
-        if (cartIsFull(price)) {
-          let text = 'You cannot add this prize as it will put you over the 75 point limit.'
-          setTimeout(function () {
-            alert(text)
-          }, 0)
-          $(this).blur()
-          return false
-        }
-      })
+      // $(".he_name").focus(function (e) {
+      //   // check if we are going to go over 75 points
+      //   let info = $(this).parent().parent().find('.personalize').data('info')
+      //   let infoArr = info.split(':')
+      //   let prize_id = infoArr[0]
+      //   let price = infoArr[1]
+      //   if (cartIsFull(price)) {
+      //     let text = 'You cannot add this prize as it will put you over the 75 point limit.'
+      //     setTimeout(function () {
+      //       alert(text)
+      //     }, 0)
+      //     $(this).blur()
+      //     return false
+      //   }
+      // })
 
-      $(".he_name").keyup(function (e) {
-        let he_name = e.target.value
-        // add prize to list
-        if (he_name && !$(this).parent().parent().find('.prize').is(":checked")) {
-          $(this).parent().parent().find('.prize').trigger('click')
-        }
-      })
+      // $(".he_name").keyup(function (e) {
+      //   let he_name = e.target.value
+      //   // add prize to list
+      //   if (he_name && !$(this).parent().parent().find('.prize').is(":checked")) {
+      //     $(this).parent().parent().find('.prize').trigger('click')
+      //   }
+      // })
 
       $(".he_name").blur(function (e) {
-        let he_name = e.target.value
+        let he_name = e.target.value.trim()
         // add prize to list
-        if (he_name && !$(this).parent().parent().find('.prize').is(":checked")) {
+        if (he_name.length && !$(this).parent().parent().find('.prize').is(":checked")) {
           $(this).parent().parent().find('.prize').trigger('click')
         }
         // add hebrew name to list
         let id = $(this).data('info')
-        if (he_name && !addHeName(id, he_name)) {
+        if (he_name.length && !addHeName(id, he_name)) {
           setTimeout(function () {
             alert('Error adding hebrew name')
           }, 0)
