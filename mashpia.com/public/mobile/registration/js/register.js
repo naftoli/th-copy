@@ -1193,9 +1193,11 @@ var registrationApp = function () {
             alert(err)
             return false
           })
-      } else
+      }
+      else
         nextStep()
-    } else
+    }
+    else
       nextStep()
   }
 
@@ -1376,7 +1378,7 @@ var registrationApp = function () {
         }
         html += `</div>`
 
-        if (prize.selected) addToPrizes(id, prize.price, personalization)
+        if (prize.selected) addToPrizes(id, prize.price, personalization, false)
         if (prize.he_name) addHeName(id, prize.he_name)
       }
       $("#listOfPrizes").empty()
@@ -1451,14 +1453,15 @@ var registrationApp = function () {
     })
   }
 
-  $("#prizes").on('hidden.bs.modal', async e => {
+  $("#prizes").on('hidden.bs.modal', async (e) => {
     $(".confirm").attr('disabled', true)
     await checkForPrizeFee()
     $(".confirm").attr('disabled', false)
     if (validatePrizes()) {
       addToCart() // add prizes to cart
       nextStep()
-    } else $("#prizes").modal('show')
+    }
+    else $("#prizes").modal('show')
   })
 
   function validatePrizes() {
@@ -1467,7 +1470,12 @@ var registrationApp = function () {
       return false
     }
 
-    // make sure we have at least 65 credits
+    // make sure cart does not have more than 75 points worth of prizes
+    if (cartIsFull()) {
+      alert('You cannot have more than 75 points worth of prizes selected.')
+      return false
+    }
+
     var total = 0
     // make sure that he name was filled out if its needed
     for (var p of user_prizes[current_user]) {
@@ -1477,10 +1485,12 @@ var registrationApp = function () {
         if (!conf) return false
       }
     }
+    // make sure we have at least 65 credits
     if (total < 65) {
       alert('You must choose at least 65 credits worth of prizes.')
       return false
     }
+
     return true
   }
 
@@ -1608,9 +1618,9 @@ var registrationApp = function () {
     return total > MAX
   }
 
-  function addToPrizes(prize, price, personalization) {
+  function addToPrizes(prize, price, personalization, checkCart = true) {
     // check if we can add it
-    if (cartIsFull(price)) {
+    if (checkCart && cartIsFull(price)) {
       let text = 'You cannot add this prize as it will put you over the 75 point limit.'
       setTimeout(function () {
         alert(text)
@@ -1664,38 +1674,40 @@ var registrationApp = function () {
   async function checkForPrizeFee() {
     // check if personalized prize was selected
     let amount = checkPersonalizedPrize()
-    // check if child prize has already been paid
-    already_paid = await alreadyPaidPrize(amount)
-    if (!already_paid) {
-      // find out track for code
-      const track = $(".limmud:checked").val()
-      let trackCode = ''
-      switch (track) {
-        case 'maven':
-          trackCode = 'RRYSD-'
-          break
-        case 'pro':
-          trackCode = 'RRYDA-'
-          break
-        case 'expert':
-        case 'genius':
-          trackCode = 'RRHVN-'
-          break
-      }
-
-      // add to cart
-      state.cart.push({
-        description: selected_user.first + " Early Chidon Payment for Personalized Prize (Non-Refundable)",
-        price: amount,
-        meta: {
-          type: 'advanced prize payment',
-          registration_type: 'chidon',
-          paid: amount,
-          user_id: selected_user.user_id,
-          code: "C" + selected_user.user_serial + ":" + trackCode + amount,
-          codeOnly: trackCode.substring(0, trackCode.length - 1)
+    if (amount > 0) {
+      // check if child prize has already been paid
+      already_paid = await alreadyPaidPrize(amount)
+      if (!already_paid) {
+        // find out track for code
+        const track = $(".limmud:checked").val()
+        let trackCode = ''
+        switch (track) {
+          case 'maven':
+            trackCode = 'RRYSD-'
+            break
+          case 'pro':
+            trackCode = 'RRYDA-'
+            break
+          case 'expert':
+          case 'genius':
+            trackCode = 'RRHVN-'
+            break
         }
-      })
+
+        // add to cart
+        state.cart.push({
+          description: selected_user.first + " Early Chidon Payment for Personalized Prize (Non-Refundable)",
+          price: amount,
+          meta: {
+            type: 'advanced prize payment',
+            registration_type: 'chidon',
+            paid: amount,
+            user_id: selected_user.user_id,
+            code: "C" + selected_user.user_serial + ":" + trackCode + amount,
+            codeOnly: trackCode.substring(0, trackCode.length - 1)
+          }
+        })
+      }
     }
   }
 
@@ -1728,23 +1740,6 @@ var registrationApp = function () {
         const update = confirm("By clicking on 'OK' you are confirming that all information is correct and accurate. " +
           "If NOT, please click on 'Cancel' so that you can make more changes.")
         if (!update) return false
-        // update child to confirmed
-        const updated = await fetch(
-          'api/confirmUser.php',
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              user_id: current_user
-            })
-          }
-        )
-        if (!updated) {
-          alert("'There was an error confirming child's information")
-          return false
-        }
       }
       return step3()
     } else {

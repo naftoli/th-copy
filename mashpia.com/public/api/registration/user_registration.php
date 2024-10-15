@@ -284,6 +284,10 @@ class UserRegistrationRouter {
 
         /******************************** REGISTRATION ********************************/
         try {
+            // prepare statement to confirm user
+            $stmtConfirm = $MASHPIA_DB->prepare("
+                UPDATE th_chidon SET confirmed_info = 1 WHERE user_id = :user_id AND year = :year 
+            ");
             // process each item in the cart
             foreach ( $cart as $registration ) {
                 $user_id = $registration['user_id'];
@@ -350,6 +354,15 @@ class UserRegistrationRouter {
                                     $MASHPIA_DB->rollBack();
                                     json_error("Could not update " . $user_id . " for chidon");
                                 } else {
+                                    // update th_chidon table to confirm user
+                                    $resConfirm = $stmtConfirm->execute([
+                                        ':year'     => $chidonYr,
+                                        ':user_id'  => $user_id
+                                    ]);
+                                    if (! $resConfirm) {
+                                        $MASHPIA_DB->rollBack();
+                                        json_error("Could not confirm " . $user_id . " for chidon");
+                                    }
                                     $itemsForEmail[$user_id][] = [
                                         'first'     => $user->first,
                                         'last'      => $user->last,
