@@ -230,15 +230,9 @@ var registrationApp = function () {
     })
   }
 
+  // sorts an object by value
   function sortByVal(obj) {
-    let sorted = []
-    for (let i in obj) {
-      sorted.push([i, obj[i]])
-    }
-    sorted.sort(function (a, b) {
-      return a[1].localeCompare(b[1])
-    })
-    return sorted
+    return Object.entries(obj).sort((a, b) => a[1].localeCompare(b[1]));
   }
 
   function autocomplete(inp, arr) {
@@ -655,6 +649,7 @@ var registrationApp = function () {
     showSection("step-4");
 
     console.log(state.cart)
+    templates.renderCheckout(state.cart);
 
     var total = state.cart.reduce(function (total, item) {
       return parseInt(total) + parseInt(item.price)
@@ -669,8 +664,6 @@ var registrationApp = function () {
       })
       return registerUsers(postData);
     }
-
-    templates.renderCheckout(state.cart);
 
     toggleLoading('payment', true);
     getPaymentProfiles().then(function (payment_profiles) {
@@ -1200,11 +1193,9 @@ var registrationApp = function () {
             alert(err)
             return false
           })
-      }
-      else
+      } else
         nextStep()
-    }
-    else
+    } else
       nextStep()
   }
 
@@ -1435,7 +1426,7 @@ var registrationApp = function () {
       //   }
       // })
 
-      $(".he_name").blur(function(e) {
+      $(".he_name").blur(function (e) {
         let he_name = e.target.value.trim()
         // add prize to list
         if (he_name.length && !$(this).parent().parent().find('.prize').is(":checked")) {
@@ -1467,8 +1458,7 @@ var registrationApp = function () {
     if (validatePrizes()) {
       addToCart() // add prizes to cart
       nextStep()
-    }
-    else $("#prizes").modal('show')
+    } else $("#prizes").modal('show')
   })
 
   function validatePrizes() {
@@ -1560,7 +1550,7 @@ var registrationApp = function () {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ user: current_user, amount: amount })
+      body: JSON.stringify({user: current_user, amount: amount})
     })
     const paid = await res.json()
     return paid
@@ -1676,7 +1666,7 @@ var registrationApp = function () {
     let amount = checkPersonalizedPrize()
     // check if child prize has already been paid
     already_paid = await alreadyPaidPrize(amount)
-    if (! already_paid) {
+    if (!already_paid) {
       // find out track for code
       const track = $(".limmud:checked").val()
       let trackCode = ''
@@ -1820,7 +1810,7 @@ var registrationApp = function () {
           // check if it doesn't already exist
           const exists = state.cart.filter(item => item.meta.codeOnly === shipCode.substring(0, shipCode.length - 1))
           const shipping_amount = shipping ? shippingFee : 0
-          if (! exists.length) {
+          if (!exists.length) {
             state.cart.push({
               description: state.users[index].parentAccount.last + " Family Early Chidon Registration Shipping",
               price: shipping_amount,
@@ -2222,13 +2212,13 @@ var templates = function () {
         '</div>' +
         '</label></div>';
     },
-    changeFee: function() {
+    changeFee: function () {
       const targetDate = new Date('2024-09-26T03:00:00');
       const now = new Date();
 
       // Convert both dates to EST
-      const targetEST = new Date(targetDate.toLocaleString('en-US', { timeZone: 'America/New_York' }));
-      const nowEST = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
+      const targetEST = new Date(targetDate.toLocaleString('en-US', {timeZone: 'America/New_York'}));
+      const nowEST = new Date(now.toLocaleString('en-US', {timeZone: 'America/New_York'}));
 
       return nowEST > targetEST;
     },
@@ -2244,9 +2234,9 @@ var templates = function () {
       let html = '<option value="0">Select Amount to Pay</option>'
       let fees = [20, 25, 30, 40]
       if (user.school.school_id == 61) fees = [30, 35, 40, 50]
-      // if (this.changeFee() && !Cookies.get('naftoli')) {
-      //   fees = [40]
-      //   if (user.school.school_id == 61) fees = [40, 50]
+        // if (this.changeFee() && !Cookies.get('naftoli')) {
+        //   fees = [40]
+        //   if (user.school.school_id == 61) fees = [40, 50]
       // }
       else if (user.school.school_id == 269) fees = [50, 55, 60, 70]
       for (let fee of fees) {
@@ -2821,29 +2811,29 @@ var templates = function () {
       });
       // add future payment options
       if (futurePayment) {
-          $("#charges").append( '<div class="row total-row">' +
-            '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
-            '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
-            + "</div>" );
-          $("#charges").append( '<div class="row total-row">' +
-            '<div class="col-9 col-md-10"><strong>Eligible for installments</strong></div>' +
-            '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
-            + "</div>" );
-          // update amounts to be charged in installments
-          $("#earlyRegTotal").text(futurePayment.toFixed(2))
-          $("#earlyRegOne").text(futurePayment.toFixed(2))
-          const two = (futurePayment / 2).toFixed(2)
-          const three = (futurePayment / 3).toFixed(2)
-          const four = (futurePayment / 4).toFixed(2)
-          $("#earlyRegTwo").text(two)
-          $("#earlyRegThree").text(three)
-          $("#earlyRegFour").text(four)
+        $("#charges").append('<div class="row total-row">' +
+          '<div class="col-9 col-md-10"><strong>Due Today</strong></div>' +
+          '<div class="col-3 col-md-2 reg_cost">$' + (total - futurePayment) + '</div>'
+          + "</div>");
+        $("#charges").append('<div class="row total-row">' +
+          '<div class="col-9 col-md-10"><strong>Eligible for installments</strong></div>' +
+          '<div class="col-3 col-md-2 reg_cost">$' + futurePayment + '</div>'
+          + "</div>");
+        // update amounts to be charged in installments
+        $("#earlyRegTotal").text(futurePayment.toFixed(2))
+        $("#earlyRegOne").text(futurePayment.toFixed(2))
+        const two = (futurePayment / 2).toFixed(2)
+        const three = (futurePayment / 3).toFixed(2)
+        const four = (futurePayment / 4).toFixed(2)
+        $("#earlyRegTwo").text(two)
+        $("#earlyRegThree").text(three)
+        $("#earlyRegFour").text(four)
       } else {
         // just show total
-        $("#charges").append( '<div class="row total-row">' +
+        $("#charges").append('<div class="row total-row">' +
           '<div class="col-9 col-md-10"><strong>Total</strong></div>' +
           '<div class="col-3 col-md-2 reg_cost">$' + total + '</div>'
-          + "</div>" );
+          + "</div>");
       }
       // add the total row
       // var text = "Total Balance";
