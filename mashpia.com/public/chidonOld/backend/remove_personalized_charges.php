@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
         while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
             $user_serial = $row[0];
             $type = $row[1];
-            $amount = intval($row[2]);
+            $amount = floatval($row[2]);
             $res = $stmt->execute(['type' => $type, 'amount' => $amount, 'year' => 5785, 'serial' => $user_serial]);
             $stmt->debugDumpParams();
             if (!$res) {
@@ -32,7 +32,6 @@ if (isset($_POST['submit'])) {
                 break;
             }
         }
-        $success = false;
         fclose($handle);
         if ($success) {
             $MASHPIA_DB->commit();
