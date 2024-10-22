@@ -10,7 +10,6 @@ if ($admin_user['auth'] != 'super') {
     die('No permission');
 }
 
-
 $stmt = $MASHPIA_DB->prepare("DELETE FROM registration_charges WHERE type = :type AND amount = :amount AND year = :year AND user_id in (
     SELECT user_id FROM users WHERE user_serial = :serial)");
 
