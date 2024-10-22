@@ -26,7 +26,6 @@ if (isset($_POST['submit'])) {
             $type = $row[1];
             $amount = floatval($row[2]);
             $res = $stmt->execute(['type' => $type, 'amount' => $amount, 'year' => 5785, 'serial' => $user_serial]);
-            $stmt->debugDumpParams();
             if (!$res) {
                 $success = false;
                 break;
