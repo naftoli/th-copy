@@ -1186,8 +1186,8 @@ var registrationApp = function () {
       // only need to save address if it wasn't already saved once
       if (!parseInt(selected_user.parentAccount['updated_address'])) {
         saveAddress()
-          .then(function (saved) {
-            if (saved) nextStep()
+          .then(async function (saved) {
+            if (saved) await nextStep()
           })
           .catch(function (err) {
             alert(err)
@@ -1195,10 +1195,10 @@ var registrationApp = function () {
           })
       }
       else
-        nextStep()
+        await nextStep()
     }
     else
-      nextStep()
+      await nextStep()
   }
 
   async function saveAddress() {
@@ -1459,7 +1459,7 @@ var registrationApp = function () {
     $(".confirm").attr('disabled', false)
     if (validatePrizes()) {
       addToCart() // add prizes to cart
-      nextStep()
+      await nextStep()
     }
     else $("#prizes").modal('show')
   })
@@ -1506,11 +1506,11 @@ var registrationApp = function () {
     return personalized_amount
   }
 
-  function checkPrePayment() {
+  async function checkPrePayment() {
     const advancedPayment = parseInt($("#chidon-reg").val())
     if (!advancedPayment) {
       chidonPayment[current_user] = true
-      nextStep()
+      await nextStep()
     } else {
       checkForRegShipping = true // set flag so we know to check for shipping
       // create text for modal
@@ -1566,7 +1566,7 @@ var registrationApp = function () {
     return paid
   }
 
-  $("#chidon-enrollment").on('hidden.bs.modal', function (e) {
+  $("#chidon-enrollment").on('hidden.bs.modal', async function (e) {
     let amount = parseInt($("#chidonReg").val())
     if (!amount) {
       alert('You must select an amount to pay for early chidon experience registration!')
@@ -1604,7 +1604,7 @@ var registrationApp = function () {
       }
 
       chidonPayment[current_user] = true
-      nextStep()
+      await nextStep()
     }
   })
 
@@ -1692,6 +1692,9 @@ var registrationApp = function () {
           case 'genius':
             trackCode = 'RRHVN-'
             break
+          default:
+            trackCode = 'RRHVN-' // default to havonah
+            break
         }
 
         // add to cart
@@ -1735,7 +1738,7 @@ var registrationApp = function () {
         checkRegShipping()
         return false
       }
-      // if child is editing enrollment, make sure that they acknowledge that everthing is correct
+      // if child is editing enrollment, make sure that they acknowledge that everything is correct
       if (selected_user.getChidonInfo) {
         const update = confirm("By clicking on 'OK' you are confirming that all information is correct and accurate. " +
           "If NOT, please click on 'Cancel' so that you can make more changes.")
@@ -1766,7 +1769,7 @@ var registrationApp = function () {
     })
     if (parseInt(paid)) {
       checkForRegShipping = false
-      nextStep()
+      await nextStep()
     }
 
     const school_id = state.users[index].school.school_id
@@ -1787,7 +1790,7 @@ var registrationApp = function () {
       $("#chidon-shipping .modal-body").empty().append(html)
       $("#chidon-shipping").modal('show')
 
-      $("#chidon-shipping").on('hidden.bs.modal', function (e) {
+      $("#chidon-shipping").on('hidden.bs.modal', async function (e) {
         // check if shipping option was selected
         if (!$("#chidon-shipping-fee:checked").val()) {
           alert('You must select a shipping option!')
@@ -1821,12 +1824,12 @@ var registrationApp = function () {
           }
           // }
           checkForRegShipping = false
-          nextStep()
+          await nextStep()
         }
       })
     } else {
       checkForRegShipping = false
-      nextStep()
+      await nextStep()
     }
   }
 
@@ -1963,7 +1966,7 @@ var registrationApp = function () {
       const res = JSON.parse(result)
       if (res.success) {
         hachayolChosen = true
-        nextStep()
+        await nextStep()
       } else {
         alert(res.error)
         $("#hachayol").modal('show')
@@ -1971,7 +1974,7 @@ var registrationApp = function () {
       }
     } else {
       hachayolChosen = true
-      nextStep()
+      await nextStep()
     }
   }
 
