@@ -76,7 +76,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
     }
     ?>
   <tr>
-    <th colspan="5" style="text-align: right">Total Balance</th>
+    <th colspan="5" style="text-align: right">Total Balance:</th>
     <th>$<?= number_format($total, 2) ?></th>
   </tr>
 </table>
