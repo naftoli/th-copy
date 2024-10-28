@@ -51,6 +51,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
     <th>Balance</th>
   </tr>
     <?php
+    $total = 0;
     foreach ($payments as $serial => $amount) {
         $stmtUser->execute([':serial' => $serial]);
         $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
@@ -61,6 +62,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
         ]);
         $charge = $stmtCharges->fetch(PDO::FETCH_ASSOC);
         $balance = $charge ? 0 : $amount;
+        $total += $balance;
         ?>
       <tr>
         <td><?= $user['user_id'] ?></td>
@@ -69,6 +71,10 @@ $stmtCharges = $MASHPIA_DB->prepare("
         <td><?= $amount ?></td>
         <td><?= $charge ? $charge['amount'] : 0 ?></td>
         <td><?= $balance ?></td>
+      </tr>
+      <tr>
+        <th colspan="5" style="text-align: right">Total Balance</th>
+        <th><?= $total ?></th>
       </tr>
         <?php
     }
