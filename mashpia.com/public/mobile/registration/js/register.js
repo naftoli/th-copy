@@ -2151,6 +2151,16 @@ var registrationApp = function () {
     }).then(function (data) {
       if (typeof data === 'string' || typeof data === 'object' && data.success) {
         if (showClasses) $("#successModal #myshliach-extra").html("<br /><p>" + Msg8 + "<a href='https://merkos302.formstack.com/forms/chidon_shiurim_registration'>" + Msg9 + "</a></p>")
+        // figure out if we are updating or enrolling
+        let editing = false
+        for (let user of postData.cart) {
+          if (user.editingOnly) {
+            editing = true
+            break
+          }
+        }
+        if (editing) $("#updatingText").show()
+        else $("#enrollingText").show()
         $("#successModal").modal('show')
       } else {
         showError(data.error);

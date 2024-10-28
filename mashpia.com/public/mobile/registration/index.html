@@ -1680,8 +1680,11 @@
           </svg>
         </div>
         <p id="success" class="primary i18n2" data-key="YourchildRegistered">
-          Your child(ren) has(have) been enrolled and / or updated & confirmed!<br/>
-          If you are enrolling children, you should be receiving a confirmation email shortly.<br/>
+          <span id="enrollingText" style="display: none">Your child(ren) has(have) been successfully enrolled in Chidon <span class="chidon_year"></span>!
+            You will be receiving a confirmation email shortly.</span>
+          <span id="updatingText" style="display: none">Your child(ren) has(have) been successfully updated for Chidon <span class="chidon_year"></span>!
+            You will be receiving a confirmation email shortly.</span>
+          <br />
           <span id="myshliach-extra"></span>
         </p>
         <div class="alert alert-danger" id="error-message"></div>
