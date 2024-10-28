@@ -101,8 +101,15 @@
         <input type="text" id="heName" /> <button id="update">Update</button>
         <br />
         <br />
-        <input type="checkbox" id="reviewed" /> I have reviewed (and updated if necessary) my hebrew name, and confirm
-        that it is good.
+        If you would like to change the book that you are learning, please change it below.<br />
+        <br />
+        <select name="book" id="book">
+          <option value="1">4th Grade: Book 1</option>
+          <option value="2">5th Grade: Book 2</option>
+          <option value="3">6th Grade: Book 3</option>
+          <option value="4">7th Grade: Book 4</option>
+          <option value="5">8th Grade: Book 5</option>
+        </select>
       </div>
     </div>
   </section>
@@ -131,6 +138,7 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
         const name = result.heName
         $("#name").text(name)
         $("#heName").val(name)
+        $("#book").val(result.book)
       } else {
         alert('Could not find hebrew name.')
         // location.href = "parent_detail.html"
@@ -159,6 +167,14 @@ if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
         else alert('Error updating hebrew name.')
       })
     }
+  })
+
+  $("#book").change( function () {
+    const book = $("#book").val()
+    $.post('ajax/saveBook.php', { user_id, book }, function (success) {
+      if (success) alert('Your book has been updated!')
+      else alert('Error updating book.')
+    })
   })
 
   function between(x, min, max) {

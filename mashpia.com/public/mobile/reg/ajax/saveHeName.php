@@ -1,5 +1,5 @@
 <?php
-$admin_auth = ['user'];
+//$admin_auth = ['user'];
 require_once $_SERVER['DOCUMENT_ROOT'] . "/api/header/db.php";
 
 $stmt = $MASHPIA_DB->prepare("UPDATE users SET first_he = :first_he, last_he = :last_he WHERE user_id = :user_id");
