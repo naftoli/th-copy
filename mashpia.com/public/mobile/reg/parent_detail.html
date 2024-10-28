@@ -437,7 +437,7 @@
                             {{/if}}
                             <!--                                                        {{#if this.editChidon}}-->
                                                                                         <button class="btn btn-primary chidon_info" style="margin-bottom: 8px">
-                                                                                            <span>View / Edit Chidon Enrollment Options</span>
+                                                                                            <span>View Chidon Enrollment Info</span>
                                                                                         </button><br/>
                             <!--                                                        {{/if}}-->
                             {{#if this.editUltimateTrip}}
@@ -790,19 +790,59 @@
                 `
       if (child.gender == 'M') html += `<h5>Yarmulka Size: ${child.chidon_info.yarmulka}</h5>`
       if (parseInt(child.chidon_info.recruited_by) > 0) html += `<h5>Recruited by: ${child.chidon_info.recruited_by}</h5>`
+      html += `<h5>Hebrew Name as shown on Certificate: ${child.first_he} ${child.last_he}</h5>`
       html += `<h5>Chidon Prizes:</h5><ul>`
+      // get prizes and total points used to know if we need to disable the checkbox or not
+      let total = 0
+      let disabled = false // flag to know if input checkbox should be disabled
+      let paid = true // flag to know if all prizes have been paid for
       for (let i = 0; i < child.chidon_prizes.length; i++) {
         let prize = child.chidon_prizes[i]
+        total += prize.price
+        if (!prize.paid) paid = false
         let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
         html += `<li><h5>${desc}`
         if (prize.he_name) html += `<br />Personalized name on prize: ${prize.he_name}`
         html += `</h5></li>`
       }
-      html += `</ul><br /><h5>To change / update these choices, please click <a href="/mobile/registration/?user_id=${child.user_id}">here</a></h5>`
-      html += `<h5>Please make sure to review and update your child's certificate before the Chidon Limmud event!
-            Click <a href="javascript:window.open('certs.html?user=${child.user_id}', '_blank')">here</a> to review the certificate.</h5>`
+      if (total > 75 || total < 65) disabled = true
+      html += `</ul><br /><h5>To change / update this information INCLUDING prizes, please click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a></h5>`
+      html += `<h5>Click <a href="javascript:window.open('certs.html?user=${child.user_id}', '_blank')">here</a> to review the certificate.</h5>`
+      html += `<h5><input type="checkbox" id="confirmation" ${disabled || !paid ? 'disabled' : ''} /> I certify that all the information is correct, including how the name appears on the certificate.
+        Please Note: ALL information MUST be confirmed BEFORE י' חשון - November 11, 2024!</h5>`
+      if (disabled || !paid) {
+        html += '<h5>'
+        if (! paid) html += `The checkbox has been DISABLED because you have NOT PAID for all the prizes.`
+        else if (total == 0) html += `The checkbox has been DISABLED because you have NOT selected any prizes.`
+        else if (total < 65) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is UNDER $65.`
+        else if (total > 75) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is OVER $75.`
+        html += `You MUST click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a> to update your prizes.`
+        html += '</h5>'
+      }
       $("#exampleModalCenter .modal-body").html(html)
       $("#exampleModalCenter").modal('show')
+      // on close, check if the checkbox is checked, if so, update the database, otherwise confirm that user wants to close without confirming
+      $("#exampleModalCenter").on('hidden.bs.modal', function () {
+        if ($("#confirmation").is(':checked')) {
+          $.post('ajax/updateChidonInfo.php', {
+            user_id: child.user_id,
+            confirmed: 1
+          }, function (success) {
+            if (success) {
+              alert('Your information has been confirmed. Thank you!')
+            } else {
+              alert('There was an error confirming your information. Please try again later.')
+            }
+          })
+        } else {
+          if (!disabled && paid) {
+            let close = confirm('Are you sure you want to close without confirming your information? You MUST confirm BEFORE י\' חשון - November 11, 2024!')
+            if (!close) {
+              $("#exampleModalCenter").modal('show')
+            }
+          }
+        }
+      })
     })
 
     $(document).on('click', '.notify', function () {

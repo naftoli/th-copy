@@ -10,8 +10,7 @@ $info = json_decode(file_get_contents('php://input'), true);
 
 // check if there's any prize fee already charged for any children of this admin
 $stmt = $MASHPIA_DB->prepare("
-    select * from registration_charges where type in ('RRYSD', 'RRYDA', 'RRHVN') and year = :year and user_id = :user and amount = :amount 
-    ");
+    select * from registration_charges where type in ('RRYSD', 'RRYDA', 'RRHVN') and year = :year and user_id = :user and amount = :amount");
 $stmt->execute([
     ':year' => $year,
     ':user' => $info['user'],

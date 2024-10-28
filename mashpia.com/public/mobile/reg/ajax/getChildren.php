@@ -77,6 +77,8 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['user_id']       = $row['user_id'];
         $children[$row['user_id']]['first'] 	    = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	    = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
+        $children[$row['user_id']]['first_he'] 	    = $row['first_he'];
+        $children[$row['user_id']]['last_he'] 	    = $row['last_he'];
         $children[$row['user_id']]['gender']        = $row['gender'];
         $children[$row['user_id']]['school'] 	    = (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he' ? $row['school_name_he'] : $row['school_name']);
         $children[$row['user_id']]['city'] 		    = $row['school_city'];
@@ -304,10 +306,10 @@ if ( !empty( $users ) ) {
          ) {
          	$children[ $row['user_id'] ]['needsReg'] = 1;
          	$children[ $row['user_id'] ]['reg_types']['chidon'] = true;
-         } else if ( $row['reg_chidon'] ) {
-         	if (isset($_COOKIE['naftoli'])) {
-                $children[$row['user_id']]['editChidon'] = true;
-            }
+         } else if ( $row['reg_chidon'] && !$rowChidon['confirmed_info'] ) {
+             $children[$row['user_id']]['editChidon'] = true;
+         } else if ( $row['reg_chidon'] && $rowChidon['confirmed_info'] ) { // turn off editing if already confirmed
+             $children[$row['user_id']]['editChidon'] = false;
          }
 
          // turn off chidon edit if no cookie
@@ -316,6 +318,7 @@ if ( !empty( $users ) ) {
         // if school hasn't registered, turn off chayolei, chidon registration
         if ( !$children[$row['user_id']]['schoolTypeRegistered'] ) {
             $children[ $row['user_id'] ]['reg_types'] = [];
+            $children[$row['user_id']]['editChidon'] = false;
         }
 
         // turn off chidon past certain date
@@ -337,6 +340,17 @@ if ( !empty( $users ) ) {
             $resPrizes = mysql_query($sqlPrizes);
             $children[$row['user_id']]['chidon_prizes'] = [];
             while ($rowPrizes = mysql_fetch_assoc($resPrizes)) {
+                // if it's personalized prize check if prize was paid for if it's a personalized prize
+                if (trim($rowPrizes['personalization']) != '') {
+                    $amount = $rowPrizes['price'];
+                    $sqlPrizeFee = "select * from registration_charges where type in ('RRYSD', 'RRYDA', 'RRHVN') 
+                                     and year = $chidon_year and amount = $amount and user_id = " . $row['user_id'];
+                    $resPrizeFee = mysql_query($sqlPrizeFee);
+                    $rowPrizeFee = mysql_fetch_assoc($resPrizeFee);
+                    $rowPrizes['paid'] = $rowPrizeFee ? 1 : 0;
+                } else {
+                    $rowPrizes['paid'] = 1;
+                }
                 $children[$row['user_id']]['chidon_prizes'][] = $rowPrizes;
             }
         }
