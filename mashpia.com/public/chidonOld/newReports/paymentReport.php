@@ -69,7 +69,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
         <td><?= $user['user_serial'] ?></td>
         <td><?= $user['first'] . ' ' . $user['last'] ?></td>
         <td><?= $amount ?></td>
-        <td><?= $charge ? $charge['amount'] : 0 ?></td>
+        <td><?= $charge ? $amount : 0 ?></td>
         <td><?= $balance ?></td>
       </tr>
         <?php
