@@ -1,24 +1,31 @@
 <?php
 $admin_auth = ['user'];
 require_once $_SERVER['DOCUMENT_ROOT'] . "/api/header/db.php";
+require_once $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 
 if (! isset($_GET['user'])) {
     die('No user specified');
 }
 
 $user_id = $_GET['user'];
+$year = GlobalSettings::getChidonRegYear();
 // find out user gender, grade and school_type_id
 $stmt = $MASHPIA_DB->prepare("
-    SELECT first_he, last_he, gender, school_type_id, class_grade 
+    SELECT first_he, last_he, gender, school_type_id, class_grade, book  
     FROM users u 
     JOIN classes c ON u.class_id = c.class_id 
-    WHERE user_id = :user_id");
-$stmt->execute(['user_id' => $user_id]);
+    JOIN th_schools tc USING(user_id) 
+    WHERE user_id = :user_id 
+    AND year = :year");
+$stmt->execute([
+    'user_id' => $user_id,
+    'year' => $year
+]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user) {
+    $book = $user['book'];
     $gender = $user['gender'];
-    $grade = $user['class_grade'];
     $school_type_id = $user['school_type_id'];
 
     if (strtoupper($gender) == 'F') {
@@ -28,9 +35,9 @@ if ($user) {
     }
 
     if (in_array($school_type_id, [2, 3])) {
-        $file = $gender . $grade . '.png';
+        $file = $gender . $book . '.png';
     } else {
-        $file = $gender . $grade . ' Non Chabad.png';
+        $file = $gender . $book . ' Non Chabad.png';
     }
 
     // check if file exists
