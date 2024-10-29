@@ -817,10 +817,11 @@
         html += '<h5>'
         if (! paid) html += `The checkbox has been DISABLED because you have NOT PAID for all the prizes.`
         else if (total == 0) html += `The checkbox has been DISABLED because you have NOT selected any prizes.`
-        else if (total < 65) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is UNDER $65.`
-        else if (total > 75) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is OVER $75.`
+        else if (total < 65) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is UNDER 65 credits.`
+        else if (total > 75) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is OVER 75 credits.`
         if (! paid) html += `You MUST click <a href="/mobile/chidon/chidon_purchases.html">here</a> to pay for your prize(s).`
         else html += `You MUST click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a> to update your prize(s).`
+        html += ' For additional help please contact Zalman Engel at (714)661-0630.'
         html += '</h5>'
       }
       $("#exampleModalCenter .modal-body").html(html)
