@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
 require_once $_SERVER['DOCUMENT_ROOT'] . "/api/header/db.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 
@@ -20,8 +17,8 @@ $stmt = $MASHPIA_DB->prepare("
     WHERE user_id = :user_id 
     AND year = :year");
 $stmt->execute([
-    'user_id' => $user_id,
-    'year' => $year
+    'user_id'   => $user_id,
+    'year'      => $year
 ]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 print_r($user);
