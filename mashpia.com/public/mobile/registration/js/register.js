@@ -1397,10 +1397,14 @@ var registrationApp = function () {
 
         if (checked) {
           e.target.checked = qty && addToPrizes(prize, price, personalization)
-          if (!qty) alert('This prize has nothing left in stock, please choose a different prize.')
+          if (! qty) alert('This prize has nothing left in stock, please choose a different prize.')
         } else {
           e.target.checked = !removeFromPrizes(prize)
-          if (!e.target.checked) $(this).parent().find(".he_name").val('')
+          if (!e.target.checked) {
+            $(this).parent().find(".he_name").val('')
+            // update qty
+            $(this).data('qty', qty + 1)
+          }
         }
       })
 
