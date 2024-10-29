@@ -838,7 +838,7 @@
         }, function (success) {
           if (success) {
             alert('Your information has been confirmed. Thank you!')
-            $("#exampleModalCenter .modal-body").empty()
+            location.reload()
           } else {
             alert('There was an error confirming your information. Please try again later.')
             $("#exampleModalCenter .modal-body").empty()
