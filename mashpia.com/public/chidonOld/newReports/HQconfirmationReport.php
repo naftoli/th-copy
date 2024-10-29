@@ -132,6 +132,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
 <h1>HQ Confirmation Report</h1>
 <table>
     <tr>
+        <th></th>
         <th>User ID</th>
         <th>User Serial</th>
         <th>School</th>
@@ -149,6 +150,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
         <th>Parent Home</th>
     </tr>
     <?php
+    $i = 1;
     foreach ($allUsers as $serial) {
         if (in_array($serial, $deleted)) {
             $problem = 'Over 75 credits of personalized prizes were chosen and not paid so prizes were deleted';
@@ -163,6 +165,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
         if (! $user) continue;
         ?>
         <tr>
+            <td><?= $i++ ?></td>
             <td><?= $user['user_id'] ?></td>
             <td><?= $user['user_serial'] ?></td>
             <td><?= $user['school_name'] ?></td>
