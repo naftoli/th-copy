@@ -13,15 +13,17 @@ $stmt = $MASHPIA_DB->prepare("
     SELECT first_he, last_he, gender, school_type_id, class_grade, book  
     FROM users u 
     JOIN classes c ON u.class_id = c.class_id 
-    JOIN th_schools tc USING(user_id) 
+    JOIN th_chidon tc USING(user_id) 
     WHERE user_id = :user_id 
     AND year = :year");
-$stmt->execute([
+$res = $stmt->execute([
     'user_id'   => $user_id,
     'year'      => $year
 ]);
+if (! $res) {
+    die('User not found' . $stmt->debugDumpParams());
+}
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
-print_r($user);
 
 if ($user) {
     $book = $user['book'];
@@ -35,9 +37,9 @@ if ($user) {
     }
 
     if (in_array($school_type_id, [2, 3])) {
-        $file = $gender . $book . '.png';
+        $file = $gender . (intval($book) + 3) . '.png';
     } else {
-        $file = $gender . $book . ' Non Chabad.png';
+        $file = $gender . (intval($book) + 3) . ' Non Chabad.png';
     }
 
     // redirect to correct certificate
