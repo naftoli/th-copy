@@ -1359,7 +1359,7 @@ var registrationApp = function () {
         // if (prize.quantity <= 0) html += 'disabled '
         if (disable) html += 'disabled '
         html += `/>
-                        ${prize.prize_name} (${prize.quantity} left in stock)<br />
+                        ${prize.prize_name} (<span class="prize-qty">${prize.quantity}</span> left in stock)<br />
                         ${parseInt(prize.price)} Credits`
         if (prize.color) {
           html += `<br />Color: ${prize.color}`
@@ -1404,6 +1404,7 @@ var registrationApp = function () {
             $(this).parent().find(".he_name").val('')
             // update qty
             $(this).data('qty', qty + 1)
+            $(this).parent().find('.prize-qty').text(qty + 1)
           }
         }
       })
