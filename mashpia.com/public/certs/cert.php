@@ -1,5 +1,7 @@
 <?php
-$admin_auth = ['user'];
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 require_once $_SERVER['DOCUMENT_ROOT'] . "/api/header/db.php";
 require_once $_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php";
 
@@ -22,6 +24,7 @@ $stmt->execute([
     'year' => $year
 ]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
+print_r($user);
 
 if ($user) {
     $book = $user['book'];
