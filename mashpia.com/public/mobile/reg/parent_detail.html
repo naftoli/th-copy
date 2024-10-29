@@ -546,6 +546,7 @@
       <div class="modal-body">
 
       </div>
+      <span id="conf_user_id"></span>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
       </div>
@@ -778,6 +779,7 @@
 
     $(document).on('click', '.chidon_info', function () {
       let id = $(this).parent().parent().parent().attr('id')
+      $("#exampleModalCenter #conf_user_id").val(id)
       let child = allChildren[id]
       let title = "Chidon Enrollment Information for <b>" + child.first + " " + child.last + "</b>"
       $("#exampleModalLongTitle").html(title)
@@ -816,33 +818,39 @@
         else if (total == 0) html += `The checkbox has been DISABLED because you have NOT selected any prizes.`
         else if (total < 65) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is UNDER $65.`
         else if (total > 75) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is OVER $75.`
-        html += `You MUST click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a> to update your prizes.`
+        if (! paid) html += `You MUST click <a href="/mobile/chidon/chidon_purchases.html">here</a> to pay for your prize(s).`
+        else html += `You MUST click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a> to update your prize(s).`
         html += '</h5>'
       }
       $("#exampleModalCenter .modal-body").html(html)
       $("#exampleModalCenter").modal('show')
-      // on close, check if the checkbox is checked, if so, update the database, otherwise confirm that user wants to close without confirming
-      $("#exampleModalCenter").on('hidden.bs.modal', function () {
-        if ($("#confirmation").is(':checked')) {
-          $.post('ajax/updateChidonInfo.php', {
-            user_id: child.user_id,
-            confirmed: 1
-          }, function (success) {
-            if (success) {
-              alert('Your information has been confirmed. Thank you!')
-            } else {
-              alert('There was an error confirming your information. Please try again later.')
-            }
-          })
-        } else {
-          if (!disabled && paid) {
-            let close = confirm('Are you sure you want to close without confirming your information? You MUST confirm BEFORE י\' חשון - November 11, 2024!')
-            if (!close) {
-              $("#exampleModalCenter").modal('show')
-            }
+    })
+
+    // on close, check if the checkbox is checked, if so, update the database, otherwise confirm that user wants to close without confirming
+    $("#exampleModalCenter").on('hidden.bs.modal', function () {
+      if ($("#confirmation").is(':checked')) {
+        $.post('ajax/updateChidonInfo.php', {
+          user_id: $("#exampleModalCenter #conf_user_id").val(),
+          confirmed: 1
+        }, function (success) {
+          if (success) {
+            alert('Your information has been confirmed. Thank you!')
+            $("#exampleModalCenter .modal-body").empty()
+          } else {
+            alert('There was an error confirming your information. Please try again later.')
+            $("#exampleModalCenter .modal-body").empty()
+          }
+        })
+      } else {
+        if (!disabled && paid) {
+          let close = confirm('Are you sure you want to close without confirming your information? You MUST confirm BEFORE י\' חשון - November 11, 2024!')
+          if (! close) {
+            $("#exampleModalCenter").modal('show')
+          } else {
+            $("#exampleModalCenter .modal-body").empty()
           }
         }
-      })
+      }
     })
 
     $(document).on('click', '.notify', function () {

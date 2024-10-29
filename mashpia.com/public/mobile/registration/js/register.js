@@ -2241,7 +2241,7 @@ var templates = function () {
       let html = '<option value="0">Select Amount to Pay</option>'
       let fees = [20, 25, 30, 40]
       if (user.school.school_id == 61) fees = [30, 35, 40, 50]
-      if (this.changeFee() && !Cookies.get('naftoli')) {
+      if (this.changeFee()) {
         fees = [40]
         if (user.school.school_id == 61) fees = [40, 50]
       }
