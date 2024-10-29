@@ -810,7 +810,7 @@
       console.log("Total: " + total)
       const url = `/mobile/registration/index.html?user_id=${child.user_id}`;
       if (total > 75 || total < 65) disabled = true
-      html += `</ul><br /><h5>To change / update this information INCLUDING prizes, please click <a href=${url}>here</a></h5>`
+      html += `</ul><br /><h5>To change / update this information INCLUDING prizes, please click <a href=${url} target="_blank">here</a></h5>`
       html += `<h5>Click <a href="javascript:window.open('certs.html?user=${child.user_id}', '_blank')">here</a> to review the certificate.</h5>`
       html += `<h5><input type="checkbox" id="confirmation" ${disabled || !paid ? 'disabled' : ''} /> I certify that all the information is correct, including how the name appears on the certificate.
         Please Note: ALL information MUST be confirmed BEFORE י' חשון - November 11, 2024!</h5>`
@@ -820,8 +820,8 @@
         else if (total == 0) html += `The checkbox has been DISABLED because you have NOT selected any prizes.`
         else if (total < 65) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is UNDER 65 credits.`
         else if (total > 75) html += `The checkbox has been DISABLED because the total value of the prizes you have selected is OVER 75 credits.`
-        if (! paid) html += `You MUST click <a href=${url}>here</a> to pay for your prize(s).`
-        else html += `You MUST click <a href=${url}>here</a> to update your prize(s).`
+        if (! paid) html += `You MUST click <a href=${url} target="_blank">here</a> to pay for your prize(s).`
+        else html += `You MUST click <a href=${url} target="_blank">here</a> to update your prize(s).`
         html += ' For additional help please contact Zalman Engel at (714)661-0630.'
         html += '</h5>'
       }
