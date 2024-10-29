@@ -71,9 +71,9 @@ $stmtUserInfo = $MASHPIA_DB->prepare("
         schools s ON s.school_id = u.school_id
             JOIN
         th_chidon tc USING (user_id)
-            JOIN
+            LEFT JOIN
         admin_auths aa ON aa.id = u.user_id
-            JOIN
+            LEFT JOIN
         admins a USING (admin_id)
     WHERE
         tc.year = :year
@@ -115,40 +115,40 @@ $stmtCharges = $MASHPIA_DB->prepare("
 <!DOCTYPE html>
 <html>
 <head>
-    <title>HQ Confirmation Report</title>
-    <style>
-      table {
-        font-family: Arial, sans-serif;
-        font-size: 14px;
-      }
+  <title>HQ Confirmation Report</title>
+  <style>
+    table {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+    }
 
-      tr, th, td {
-        border-bottom: #f0f0f0 1px solid;
-        padding: 10px;
-      }
-    </style>
+    tr, th, td {
+      border-bottom: #f0f0f0 1px solid;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
 <h1>HQ Confirmation Report</h1>
 <table>
-    <tr>
-        <th></th>
-        <th>User ID</th>
-        <th>User Serial</th>
-        <th>School</th>
-        <th>Grade/Class</th>
-        <th>Child Name</th>
-        <th>Problem</th>
-        <th>Current Prize Selection Total</th>
-        <th>Chose personalized Prize</th>
-        <th>Paid</th>
-        <th>Confirmed Information</th>
-        <th>Parent Name</th>
-        <th>Parent Email</th>
-        <th>Parent Mobile</th>
-        <th>Parent Work</th>
-        <th>Parent Home</th>
-    </tr>
+  <tr>
+    <th></th>
+    <th>User ID</th>
+    <th>User Serial</th>
+    <th>School</th>
+    <th>Grade/Class</th>
+    <th>Child Name</th>
+    <th>Problem</th>
+    <th>Current Prize Selection Total</th>
+    <th>Chose personalized Prize</th>
+    <th>Paid</th>
+    <th>Confirmed Information</th>
+    <th>Parent Name</th>
+    <th>Parent Email</th>
+    <th>Parent Mobile</th>
+    <th>Parent Work</th>
+    <th>Parent Home</th>
+  </tr>
     <?php
     $i = 1;
     foreach ($allUsers as $serial) {
@@ -162,67 +162,75 @@ $stmtCharges = $MASHPIA_DB->prepare("
             $problem = '';
         }
         $user = $user_info[$serial];
-        if (! $user) continue;
+        if (!$user) continue;
         ?>
-        <tr>
-            <td><?= $i++ ?></td>
-            <td><?= $user['user_id'] ?></td>
-            <td><?= $user['user_serial'] ?></td>
-            <td><?= $user['school_name'] ?></td>
-            <td><?= $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '') ?></td>
-            <td><?= $user['first'] . ' ' . $user['last'] ?></td>
-            <td><?= $problem ?></td>
-            <td>
-                <?php
-                if (isset($user_prizes[$user['user_id']])) {
-                    $total = 0;
-                    foreach ($user_prizes[$user['user_id']] as $prize) {
-                        $total += intval($prize['price']);
+      <tr>
+        <td><?= $i++ ?></td>
+        <td><?= $user['user_id'] ?></td>
+        <td><?= $user['user_serial'] ?></td>
+        <td><?= $user['school_name'] ?></td>
+        <td><?= $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '') ?></td>
+        <td><?= $user['first'] . ' ' . $user['last'] ?></td>
+        <td><?= $problem ?></td>
+        <td>
+            <?php
+            if (isset($user_prizes[$user['user_id']])) {
+                $total = 0;
+                foreach ($user_prizes[$user['user_id']] as $prize) {
+                    $total += intval($prize['price']);
+                }
+                echo $total;
+            } else {
+                echo 0;
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if (isset($user_prizes[$user['user_id']])) {
+                $personalized = false;
+                foreach ($user_prizes[$user['user_id']] as $prize) {
+                    if (!empty($prize['personalization'])) {
+                        $personalized = true;
+                        break;
                     }
-                    echo $total;
-                } else {
-                    echo 0;
                 }
-                ?>
-            </td>
-            <td>
-                <?php
-                if (isset($user_prizes[$user['user_id']])) {
-                    $personalized = false;
-                    foreach ($user_prizes[$user['user_id']] as $prize) {
-                        if (! empty($prize['personalization'])) {
-                            $personalized = true;
-                            break;
-                        }
-                    }
-                    echo $personalized ? 'Yes' : 'No';
-                } else {
-                    echo 'No';
-                }
-                ?>
-            </td>
-            <td>
-                <?php
-                if (isset($payments[$serial])) {
-                    $stmtCharges->execute([
-                        ':year' => $year,
-                        ':user' => $user['user_id'],
-                        ':amount' => floatval($payments[$serial])
-                    ]);
-                    $charge = $stmtCharges->fetch(PDO::FETCH_ASSOC);
-                    echo $charge ? 'Yes' : 'No';
-                } else {
-                    echo 'No';
-                }
-                ?>
-            </td>
-            <td><?= $user['confirmed_info'] ? 'Yes' : 'No' ?></td>
-            <td><?= $user['aFirst'] . ' ' . $user['aLast'] ?></td>
-            <td><?= $user['admin_email'] ?></td>
-            <td><?= $user['admin_phone_mobile'] ?></td>
-            <td><?= $user['admin_phone_work'] ?></td>
-            <td><?= $user['admin_phone_home'] ?></td>
-        </tr>
+                echo $personalized ? 'Yes' : 'No';
+            } else {
+                echo 'No';
+            }
+            ?>
+        </td>
+        <td>
+            <?php
+            if (isset($payments[$serial])) {
+                $stmtCharges->execute([
+                    ':year' => $year,
+                    ':user' => $user['user_id'],
+                    ':amount' => floatval($payments[$serial])
+                ]);
+                $charge = $stmtCharges->fetch(PDO::FETCH_ASSOC);
+                echo $charge ? 'Yes' : 'No';
+            } else {
+                echo 'No';
+            }
+            ?>
+        </td>
+        <td><?= $user['confirmed_info'] ? 'Yes' : 'No' ?></td>
+        <?php if ($user['aFirst'] || $user['aLast']) { ?>
+          <td><?= $user['aFirst'] . ' ' . $user['aLast'] ?></td>
+          <td><?= $user['admin_email'] ?></td>
+          <td><?= $user['admin_phone_mobile'] ?></td>
+          <td><?= $user['admin_phone_work'] ?></td>
+          <td><?= $user['admin_phone_home'] ?></td>
+        <?php } else { ?>
+          <td>no parent account found</td>
+          <td>no parent account found</td>
+          <td>no parent account found</td>
+          <td>no parent account found</td>
+          <td>no parent account found</td>
+        <?php } ?>
+      </tr>
         <?php
     }
     ?>
