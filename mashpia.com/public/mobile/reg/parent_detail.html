@@ -800,13 +800,14 @@
       let paid = true // flag to know if all prizes have been paid for
       for (let i = 0; i < child.chidon_prizes.length; i++) {
         let prize = child.chidon_prizes[i]
-        total += prize.price
-        if (!prize.paid) paid = false
+        total += parseFloat(prize.price)
+        if (! prize.paid) paid = false
         let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
         html += `<li><h5>${desc}`
         if (prize.he_name) html += `<br />Personalized name on prize: ${prize.he_name}`
         html += `</h5></li>`
       }
+      console.log("Total: " + total)
       if (total > 75 || total < 65) disabled = true
       html += `</ul><br /><h5>To change / update this information INCLUDING prizes, please click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a></h5>`
       html += `<h5>Click <a href="javascript:window.open('certs.html?user=${child.user_id}', '_blank')">here</a> to review the certificate.</h5>`
