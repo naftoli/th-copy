@@ -800,7 +800,7 @@
       let paid = true // flag to know if all prizes have been paid for
       for (let i = 0; i < child.chidon_prizes.length; i++) {
         let prize = child.chidon_prizes[i]
-        total += parseFloat(prize.price)
+        total += parseInt(prize.price)
         if (! prize.paid) paid = false
         let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
         html += `<li><h5>${desc}`
