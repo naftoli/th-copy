@@ -115,7 +115,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Confirmation Report</title>
+    <title>HQ Confirmation Report</title>
     <style>
       table {
         font-family: Arial, sans-serif;
@@ -129,7 +129,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
     </style>
 </head>
 <body>
-<h1>Confirmation Report</h1>
+<h1>HQ Confirmation Report</h1>
 <table>
     <tr>
         <th>User ID</th>
