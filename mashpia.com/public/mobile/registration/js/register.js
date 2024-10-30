@@ -1702,19 +1702,27 @@ var registrationApp = function () {
             break
         }
 
-        // add to cart
-        state.cart.push({
-          description: selected_user.first + " Early Chidon Payment for Personalized Prize (Non-Refundable)",
-          price: amount,
-          meta: {
-            type: 'advanced prize payment',
-            registration_type: 'chidon',
-            paid: amount,
-            user_id: selected_user.user_id,
-            code: "C" + selected_user.user_serial + ":" + trackCode + amount,
-            codeOnly: trackCode.substring(0, trackCode.length - 1)
-          }
+        // check if it's already in cart using code, user_id and amount
+        let exists = state.cart.filter(item => {
+          item.meta.codeOnly === trackCode.substring(0, trackCode.length - 1)
+          && item.meta.user_id === selected_user.user_id
+          && item.price === amount
         })
+        if (! exists.length) {
+          // add to cart
+          state.cart.push({
+            description: selected_user.first + " Early Chidon Payment for Personalized Prize (Non-Refundable)",
+            price: amount,
+            meta: {
+              type: 'advanced prize payment',
+              registration_type: 'chidon',
+              paid: amount,
+              user_id: selected_user.user_id,
+              code: "C" + selected_user.user_serial + ":" + trackCode + amount,
+              codeOnly: trackCode.substring(0, trackCode.length - 1)
+            }
+          })
+        }
       }
     }
   }
