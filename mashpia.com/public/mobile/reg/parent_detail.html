@@ -777,6 +777,7 @@
       genius: 'Iyun'
     }
 
+    let conf_disabled = false // flag to know if input checkbox should be disabled
     $(document).on('click', '.chidon_info', function () {
       let id = $(this).parent().parent().parent().attr('id')
       $("#exampleModalCenter #conf_user_id").val(id)
@@ -796,7 +797,6 @@
       html += `<h5>Chidon Prizes:</h5><ul>`
       // get prizes and total points used to know if we need to disable the checkbox or not
       let total = 0
-      let disabled = false // flag to know if input checkbox should be disabled
       let paid = true // flag to know if all prizes have been paid for
       for (let i = 0; i < child.chidon_prizes.length; i++) {
         let prize = child.chidon_prizes[i]
@@ -809,12 +809,12 @@
       }
       console.log("Total: " + total)
       const url = `/mobile/registration/index.html?user_id=${child.user_id}`;
-      if (total > 75 || total < 65) disabled = true
+      if (total > 75 || total < 65) conf_disabled = true
       html += `</ul><br /><h5>To change / update this information INCLUDING prizes, please click <a href=${url} target="_blank">here</a></h5>`
       html += `<h5>Click <a href="javascript:window.open('certs.html?user=${child.user_id}', '_blank')">here</a> to review the certificate.</h5>`
-      html += `<h5><input type="checkbox" id="confirmation" ${disabled || !paid ? 'disabled' : ''} /> I certify that all the information is correct, including how the name appears on the certificate.
+      html += `<h5><input type="checkbox" id="confirmation" ${conf_disabled || !paid ? 'disabled' : ''} /> I certify that all the information is correct, including how the name appears on the certificate.
         Please Note: ALL information MUST be confirmed BEFORE י' חשון - November 11, 2024!</h5>`
-      if (disabled || !paid) {
+      if (conf_disabled || !paid) {
         html += '<h5>'
         if (! paid) html += `The checkbox has been DISABLED because you have NOT PAID for all the prizes.`
         else if (total == 0) html += `The checkbox has been DISABLED because you have NOT selected any prizes.`
@@ -845,7 +845,7 @@
           }
         })
       } else {
-        if (!disabled && paid) {
+        if (!conf_disabled && paid) {
           let close = confirm('Are you sure you want to close without confirming your information? You MUST confirm BEFORE י\' חשון - November 11, 2024!')
           if (! close) {
             $("#exampleModalCenter").modal('show')

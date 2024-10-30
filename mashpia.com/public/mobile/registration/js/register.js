@@ -1384,7 +1384,12 @@ var registrationApp = function () {
       $("#listOfPrizes").empty()
       $("#listOfPrizes").append(html)
       hebrew_keyboard.attach(".he_name"); // use hebrew in the right places
-      $("#prizes").modal('show')
+      // $("#prizes").modal('show')
+      $("#prizes").modal({
+        backdrop: 'static',
+        keyboard: false,
+        show: true
+      })
 
       $(".prize").click(function (e) {
         var info = $(this).data('info')
@@ -1459,11 +1464,13 @@ var registrationApp = function () {
   }
 
   $("#prizes").on('hidden.bs.modal', async (e) => {
-    $(".confirm").attr('disabled', true)
-    await checkForPrizeFee()
-    $(".confirm").attr('disabled', false)
-    if (validatePrizes()) {
+    const valid = validatePrizes()
+    if (valid) {
+      $(".confirm").attr('disabled', true)
+      await checkForPrizeFee()
+      $(".confirm").attr('disabled', false)
       addToCart() // add prizes to cart
+      $("#prizes").modal('hide')
       await nextStep()
     }
     else $("#prizes").modal('show')
@@ -1755,7 +1762,10 @@ var registrationApp = function () {
       if (selected_user.getChidonInfo) {
         const update = confirm("By clicking on 'OK' you are confirming that all information is correct and accurate. " +
           "If NOT, please click on 'Cancel' so that you can make more changes.")
-        if (!update) return false
+        if (! update) {
+          user_prizes[current_user] = [] // reset prizes
+          return false
+        }
       }
       return step3()
     } else {
