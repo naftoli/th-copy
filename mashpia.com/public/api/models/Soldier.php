@@ -467,8 +467,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
-            "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, IFNULL(tc.confirmed_info, 0) as confirmed, 
-                    u.chidon, s.reg_type, s.chidon as school_chidon 
+            "SELECT user_reg_id, ur.paid, u.chayolei, th_chidon_id, tc.confirmed_info, u.chidon, s.reg_type, s.chidon as school_chidon 
                     FROM users u "
                 ."LEFT JOIN user_registration ur ON ur.user_id = u.user_id AND ur.year = :year "
                 ."LEFT JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = :chidon_year "
@@ -497,7 +496,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
-            if ($result['chidonEdit'] && intval($result['confirmed'])) $result['chidonEdit'] = false; // turn off editing if already confirmed
+            if ($result['chidonEdit'] && intval($row['confirmed_info'])) $result['chidonEdit'] = false; // turn off editing if already confirmed
         } else {
             $result['chidon'] = true;
             $result['chidonEdit'] = false;
