@@ -85,8 +85,9 @@ foreach ($info as $user) {
     $user_info[$user['user_serial']] = $user;
 }
 
-// create array with all user_ids
-$allUsers = $deleted + array_keys($payments) + array_keys($over75);
+// create array with all serials
+$allUsers = array_merge($deleted, array_keys($payments), array_keys($over75));
+$allUsers = array_unique($allUsers);
 // order by school, grade, class, last name, first name
 usort($allUsers, function ($a, $b) use ($user_info) {
     $a = $user_info[$a];
