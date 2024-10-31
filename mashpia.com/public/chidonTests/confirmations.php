@@ -209,7 +209,6 @@ foreach ($info as $school => $students) {
         echo "<img src='$file_path' style='width: 100%; max-width: 400px;'>";
         echo "<div class='text-overlay'>" . $he_name . "</div>";
         echo "<br /><div style='page-break-after: always;'></div></div>";
-        break;
     }
 }
 ?>
