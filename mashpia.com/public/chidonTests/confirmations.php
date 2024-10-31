@@ -110,7 +110,7 @@ while (($data = fgetcsv($handle)) !== false) {
         top: -245px;
         width: 400px;
         text-align: center;
-        font-family: 'FB_Black';
+        font-family: 'FB';
         color: white;
       }
       button {
