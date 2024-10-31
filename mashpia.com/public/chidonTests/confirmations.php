@@ -41,7 +41,7 @@ $stmt = $MASHPIA_DB->prepare("
             JOIN
         classes c ON u.class_id = c.class_id
     WHERE
-        tc.year = :year AND u.school_id = :school
+        tc.year = :year AND u.school_id = :school 
     ORDER BY c.class_grade , c.class_sub , u.last , u.first
 ");
 foreach ($schools as $school_id => $name) {
@@ -110,8 +110,8 @@ while (($data = fgetcsv($handle)) !== false) {
     .text-overlay {
       font-size: 18px;
       position: relative;
-      top: -186px;
-      width: 300px;
+      top: -200px;
+      width: 320px;
       text-align: center;
       font-family: 'FB';
       color: white;
@@ -241,7 +241,7 @@ foreach ($info as $school => $students) {
       }
 
       $file_path = "https://mashpia.com/certs/" . $file;
-      echo "<img src='$file_path' style='width: 100%; max-width: 300px;' />";
+      echo "<img src='$file_path' style='width: 100%; max-width: 320px;' />";
       echo "<div class='text-overlay'>" . $he_name . "</div>";
       echo "<br /></div><div style='page-break-after: always;'></div>";
     }
