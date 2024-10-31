@@ -220,8 +220,9 @@ foreach ($info as $school => $students) {
         </div>
       </div>
       <br/>
+      <p><?= $problem ?></p>
+      <br/>
       <?php
-      echo "<p><?= $problem ?></p>";
       // figure out which certificate to use
       $book = $student['book'];
       $gender = $student['gender'];
