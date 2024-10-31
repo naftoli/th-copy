@@ -117,15 +117,23 @@ while (($data = fgetcsv($handle)) !== false) {
         padding: 10px;
         font-size: 16px;
       }
+      @media print {
+        button {
+          display: none;
+        }
+        .noprint {
+          display: none;
+        }
+      }
     </style>
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
-<h1>Confirmations</h1>
+<h1 class="noprint">Confirmations</h1>
 <button onclick="window.print()">Print</button>
 <?php
 foreach ($info as $school => $students) {
-    echo "<h2>" . $schools[$school] . "</h2>";
+    echo "<h2 class='noprint'>" . $schools[$school] . "</h2>";
     foreach ($students as $student) {
         $serial = $student['user_serial'];
         $name = $student['first'] . ' ' . $student['last'];
