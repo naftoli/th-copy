@@ -161,13 +161,10 @@ foreach ($info as $school => $students) {
         } else {
             $problem = '';
         }
-
-        if (!empty($problem)) {
-          echo "<div style='color: red; font-weight: bold;'>" . $problem . "</div>";
-        }
         ?>
         <h3><?= $name ?> (<?= $serial ?>)</h3>
         <h4><?= $grade ?></h4>
+        <p><?= $problem ?></p>
         <div class="conf">
         <br />
         Hebrew Name spelling for awards: <?= $he_name ?><br />
