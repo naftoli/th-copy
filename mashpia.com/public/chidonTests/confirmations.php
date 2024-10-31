@@ -70,18 +70,40 @@ $tracks = [
     <title>Confirmations</title>
     <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
-      div.conf {
-        font-size: 12px;
+      @font-face {
+        font-family: 'FB';
+        src: url('https://mashpia.com/certs/FbTrick-Regular.otf') format('opentype');
+      }
+      @font-face {
+        font-family: 'FB_Black';
+        src: url('https://mashpia.com/certs/FbTrick-Black.otf') format('opentype');
+      }
+      body {
+        font-size: 14px;
         line-height: 1.2;
       }
       div.indent {
         margin-left: 30px;
+      }
+      .text-overlay {
+        font-size: 24px;
+        position: relative;
+        top: -310px;
+        width: 500px;
+        text-align: center;
+        font-family: 'FB_Black';
+        color: white;
+      }
+      button {
+        padding: 10px;
+        font-size: 16px;
       }
     </style>
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Confirmations</h1>
+<button onclick="window.print()">Print</button>
 <?php
 foreach ($info as $school => $students) {
     echo "<h2>" . $schools[$school] . "</h2>";
@@ -122,8 +144,28 @@ foreach ($info as $school => $students) {
             if ($prize['he_name']) echo "<div class='indent'>Engraved: " . $prize['he_name'] . "</div>";
         }
         echo "</div><br />";
-        echo "<img src='/chidonOld/certs/Jpegs/$serial.jpg' style='max-height: 600px' /><br /><br />";
-        echo "<div style='page-break-after: always;'></div></div>";
+        // figure out which certificate to use
+        $book = $student['book'];
+        $gender = $student['gender'];
+        $school_type_id = $student['school_type_id'];
+
+        if (strtoupper($gender) == 'F') {
+            $gender = 'G';
+        } else {
+            $gender = 'B';
+        }
+
+        if (in_array($school_type_id, [2, 3])) {
+            $file = $gender . (intval($book) + 3) . '.png';
+        } else {
+            $file = $gender . (intval($book) + 3) . ' Non Chabad.png';
+        }
+
+        $file_path = "https://mashpia.com/certs/" . $file;
+        echo "<img src='$file_path' style='width: 100%; max-width: 500px;'>";
+        echo "<div class='text-overlay'>" . $he_name . "</div>";
+        echo "<br /><div style='page-break-after: always;'></div></div>";
+        break;
     }
 }
 ?>
