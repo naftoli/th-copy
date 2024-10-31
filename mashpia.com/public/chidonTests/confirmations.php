@@ -164,9 +164,9 @@ foreach ($info as $school => $students) {
         ?>
         <h3><?= $name ?> (<?= $serial ?>)</h3>
         <h4><?= $grade ?></h4>
+        <br />
         <p><?= $problem ?></p>
         <div class="conf">
-        <br />
         Hebrew Name spelling for awards: <?= $he_name ?><br />
         Chosen Track: <?= $track ?><br />
         Sweater Size: <?= $sweater ?><br />
