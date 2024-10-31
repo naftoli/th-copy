@@ -2268,7 +2268,7 @@ var templates = function () {
         fees = [40]
         if (user.school.school_id == 61) fees = [40, 50]
       }
-      else if (user.school.school_id == 269) fees = [50, 55, 60, 70]
+      else if (user.school.school_id == 269) fees = [60, 70]
       for (let fee of fees) {
         html += `<option value="${fee}">$${fee}</option>`
       }
