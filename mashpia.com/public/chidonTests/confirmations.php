@@ -1,7 +1,6 @@
 <?php
-
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -58,8 +57,8 @@ foreach ($schools as $school_id => $name) {
 //echo "<pre>"; print_r($prizes); echo "</pre>"; exit;
 $tracks = [
     'maven' => 'Yesod',
-    'pro'   => 'Yediah',
-    'expert'  => 'Havanah',
+    'pro' => 'Yediah',
+    'expert' => 'Havanah',
     'genius' => 'Iyun'
 ];
 
@@ -85,47 +84,60 @@ while (($data = fgetcsv($handle)) !== false) {
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Confirmations</title>
-    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
-    <style>
-      @font-face {
-        font-family: 'FB';
-        src: url('https://mashpia.com/certs/FbTrick-Regular.otf') format('opentype');
-      }
-      @font-face {
-        font-family: 'FB_Black';
-        src: url('https://mashpia.com/certs/FbTrick-Black.otf') format('opentype');
-      }
-      body {
-        font-size: 14px;
-        line-height: 1.2;
-      }
-      div.indent {
-        margin-left: 30px;
-      }
-      .text-overlay {
-        font-size: 18px;
-        position: relative;
-        top: -245px;
-        width: 400px;
-        text-align: center;
-        font-family: 'FB';
-        color: white;
-      }
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <title>Confirmations</title>
+  <link href="../admin_styles.css" rel="stylesheet" type="text/css">
+  <style>
+    @font-face {
+      font-family: 'FB';
+      src: url('https://mashpia.com/certs/FbTrick-Regular.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'FB_Black';
+      src: url('https://mashpia.com/certs/FbTrick-Black.otf') format('opentype');
+    }
+
+    body {
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    div.indent {
+      margin-left: 30px;
+    }
+
+    .text-overlay {
+      font-size: 18px;
+      position: relative;
+      top: -186px;
+      width: 300px;
+      text-align: center;
+      font-family: 'FB';
+      color: white;
+    }
+
+    button {
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    @media print {
       button {
-        padding: 10px;
-        font-size: 16px;
+        display: none;
       }
-      @media print {
-        button {
-          display: none;
-        }
-        .no_print {
-          display: none;
-        }
+
+      .no_print {
+        display: none;
       }
-    </style>
+    }
+
+    .outer {
+      margin-top: 20px;
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+  </style>
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
@@ -133,89 +145,107 @@ while (($data = fgetcsv($handle)) !== false) {
 <button onclick="window.print()">Print</button>
 <?php
 foreach ($info as $school => $students) {
-    echo "<h2 class='no_print'>" . $schools[$school] . "</h2>";
-    foreach ($students as $student) {
-        $serial = $student['user_serial'];
-        $name = $student['first'] . ' ' . $student['last'];
-        $grade = $student['class_grade'] . (empty($student['class_sub']) ? '' : '-' . $student['class_sub']);
-        $he_name = $student['first_he'] . ' ' . $student['last_he'];
-        $track = $tracks[$student['test_type']];
-        $sweater = $student['size'];
-        $book = $student['book'];
-        $yarmulka = $student['yarmulka'];
-        $gender = $student['gender'];
-        $user_id = $student['user_id'];
-        $prizes_chosen = isset($prizes[$school][$user_id]) ? $prizes[$school][$user_id] : [];
+  echo "<h2 class='no_print'>" . $schools[$school] . "</h2>";
+  foreach ($students as $student) {
+    $serial = $student['user_serial'];
+    $name = $student['first'] . ' ' . $student['last'];
+    $grade = $student['class_grade'] . (empty($student['class_sub']) ? '' : '-' . $student['class_sub']);
+    $he_name = $student['first_he'] . ' ' . $student['last_he'];
+    $track = $tracks[$student['test_type']];
+    $sweater = $student['size'];
+    $book = $student['book'];
+    $yarmulka = $student['yarmulka'];
+    $gender = $student['gender'];
+    $user_id = $student['user_id'];
+    $prizes_chosen = isset($prizes[$school][$user_id]) ? $prizes[$school][$user_id] : [];
 
-        // figure out if we need to let the parent know that they need to review the prizes
-        $serial = $student['user_serial'];
-        if (in_array($serial, $deleted)) {
-            $problem = "Important note: There was a bug in the system and when you enrolled, 
-              it allowed you to choose more than 75 credits worth of personalized prizes which were not even paid for. 
-              As a result, we had to remove those prizes. Please login and choose up to 75 credits worth of prizes. 
-              If you don't choose the prizes before the 10th of cheshvan, you will not receive any prizes.  
-              Sorry for the inconvenience.";
-        } else if (isset($payments[$serial])) {
-            $problem = "Important note: When a personalized prizes is chosen, it must be paid for in advance and 
-              there is no refunds for this prize, even if you don't register for the prizes after test three, unfortunately, 
-              there was a bug in the system and when you chose your personalized prizes it did not charge the card on file. 
-              Please make sure to login and pay now so that your prizes can be personalized. If you don't pay by the 10th of 
-              cheshvan, your prizes will not be personalized. Sorry for the inconvenience.";
-        } else if (isset($over75[$serial])) {
-            $problem = "Important note: There was a bug in the system and when you enrolled, 
-              it allowed you to choose more than 75 credits worth of prizes. Please edit your choice of prizes with up to 75 credits. 
-              If you don't edit the prizes before the 10th of cheshvan, HQ will determine which prizes you will receive. 
-              Sorry for the inconvenience.";
-        } else {
-            $problem = '';
-        }
-        ?>
-        <h3><?= $name ?> (<?= $serial ?>)</h3>
-        <h4><?= $grade ?></h4>
-        <br />
-        <p><?= $problem ?></p>
-        <div class="conf">
-        Hebrew Name spelling for awards: <?= $he_name ?><br />
-        Chosen Track: <?= $track ?><br />
-        Sweater Size: <?= $sweater ?><br />
-        Book Number: <?= $book ?><br />
-        <?php if ($gender == 'M') : ?>
-            Yarmulka Size: <?= $yarmulka ?><br />
-        <?php endif; ?>
-        Prizes:<br />
-        <div class="indent">
-        <?php
-        foreach ($prizes_chosen as $prize) {
-            $name = $prize['prize_name'];
-            if ($prize['size']) $name .= ' ' . $prize['size'];
-            if ($prize['color']) $name .= ' ' . $prize['color'];
-            echo $name . "<br />";
-            if ($prize['he_name']) echo "<div class='indent'>Engraved: " . $prize['he_name'] . "</div>";
-        }
-        echo "</div><br />";
-        // figure out which certificate to use
-        $book = $student['book'];
-        $gender = $student['gender'];
-        $school_type_id = $student['school_type_id'];
-
-        if (strtoupper($gender) == 'F') {
-            $gender = 'G';
-        } else {
-            $gender = 'B';
-        }
-
-        if (in_array($school_type_id, [2, 3])) {
-            $file = $gender . (intval($book) + 3) . '.png';
-        } else {
-            $file = $gender . (intval($book) + 3) . ' Non Chabad.png';
-        }
-
-        $file_path = "https://mashpia.com/certs/" . $file;
-        echo "<img src='$file_path' style='width: 100%; max-width: 400px;'>";
-        echo "<div class='text-overlay'>" . $he_name . "</div>";
-        echo "<br /><div style='page-break-after: always;'></div></div>";
+    // figure out if we need to let the parent know that they need to review the prizes
+    $serial = $student['user_serial'];
+    if (in_array($serial, $deleted)) {
+        $problem = "Important note: There was a bug in the system and when you enrolled, 
+                  it allowed you to choose more than 75 credits worth of personalized prizes which were not even paid for. 
+                  As a result, we had to remove those prizes. Please login and choose up to 75 credits worth of prizes. 
+                  If you don't choose the prizes before the 10th of cheshvan, you will not receive any prizes.  
+                  Sorry for the inconvenience.";
+    } else if (isset($payments[$serial])) {
+        $problem = "Important note: When a personalized prizes is chosen, it must be paid for in advance and 
+                  there is no refunds for this prize, even if you don't register for the prizes after test three, unfortunately, 
+                  there was a bug in the system and when you chose your personalized prizes it did not charge the card on file. 
+                  Please make sure to login and pay now so that your prizes can be personalized. If you don't pay by the 10th of 
+                  cheshvan, your prizes will not be personalized. Sorry for the inconvenience.";
+    } else if (isset($over75[$serial])) {
+        $problem = "Important note: There was a bug in the system and when you enrolled, 
+                  it allowed you to choose more than 75 credits worth of prizes. Please edit your choice of prizes with up to 75 credits. 
+                  If you don't edit the prizes before the 10th of cheshvan, HQ will determine which prizes you will receive. 
+                  Sorry for the inconvenience.";
+    } else {
+        $problem = '';
     }
-}
-?>
+    ?>
+    <div class="outer">
+      <div class="inner">
+        <h3>Dear <?= $name ?> (<?= $serial ?>) - <?= $grade ?></h3>
+        <br/>
+        <p>We want to ensure that all your chidon information is accurate. This is your final opportunity to make
+          changes to your Chidon details. You have until 10 Cheshvan • November 11 to make any changes,
+          after that point, no changes will be possible.</p>
+        <div class="conf">
+          Hebrew Name spelling for awards: <?= $he_name ?><br/>
+          Chosen Track: <?= $track ?><br/>
+          Sweater Size: <?= $sweater ?><br/>
+          Book Number: <?= $book ?><br/>
+            <?php if ($gender == 'M') : ?>
+              Yarmulka Size: <?= $yarmulka ?><br/>
+            <?php endif; ?>
+          <br/>
+          Prizes:<br/>
+          <div class="indent">
+              <?php
+              foreach ($prizes_chosen as $prize) {
+                  $name = $prize['prize_name'];
+                  if ($prize['size']) $name .= ' ' . $prize['size'];
+                  if ($prize['color']) $name .= ' ' . $prize['color'];
+                  echo $name . "<br />";
+                  if ($prize['he_name']) echo "<div class='indent'>Engraved: " . $prize['he_name'] . "</div>";
+              }
+              ?>
+          </div>
+        </div>
+        <br/>
+        If you would like to make any changes please ask your parents to:<br/>
+        <div class="indent">Log in to your parent account.<br/>
+          Click "Edit Chidon Enrollment."<br/>
+          Make any updates needed and confirm that all is good.<br/>
+          You’ll then receive an email confirming the changes.<br/>
+        </div>
+      </div>
+      <br/>
+      <?php
+      echo "<p><?= $problem ?></p>";
+      // figure out which certificate to use
+      $book = $student['book'];
+      $gender = $student['gender'];
+      $school_type_id = $student['school_type_id'];
+
+      if (strtoupper($gender) == 'F') {
+          $gender = 'G';
+      } else {
+          $gender = 'B';
+      }
+
+      if (in_array($school_type_id, [2, 3])) {
+          $file = $gender . (intval($book) + 3) . '.png';
+      } else {
+          $file = $gender . (intval($book) + 3) . ' Non Chabad.png';
+      }
+
+      $file_path = "https://mashpia.com/certs/" . $file;
+      echo "<img src='$file_path' style='width: 100%; max-width: 300px;' />";
+      echo "<div class='text-overlay'>" . $he_name . "</div>";
+      echo "<br /></div><div style='page-break-after: always;'></div>";
+      break;
+    }
+  }
+  ?>
 </body>
 </html>
