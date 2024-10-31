@@ -503,7 +503,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // turn off chidon edit if no cookie
-        if (! isset($_COOKIE['naftoli'])) $result['chidonEdit'] = false;
+//        if (! isset($_COOKIE['naftoli'])) $result['chidonEdit'] = false;
 
         // turn off chayolei and chidon reg if school has not registered yet
         if (
@@ -562,7 +562,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
         // turn off chidon after certain date
-        if (!isset($_COOKIE['naftoli']) && self::turnOffChidon()) $result['chidon'] = true;
+//        if (!isset($_COOKIE['naftoli']) && self::turnOffChidon()) $result['chidon'] = true;
 
         // turn off chayolei
 //        if (! isset($_COOKIE['naftoli'])) $result['chayolei'] = true;

@@ -434,7 +434,7 @@ class UserRegistrationRouter {
                                 if ($recruited_by) {
                                     $recruitedChild = $user->first . ' ' . $user->last;
                                     $r = new Recruits($recruited_by);
-                                    if (! isset($_COOKIE['naftoli']))
+//                                    if (! isset($_COOKIE['naftoli']))
                                         $r->sendEmail($recruitedChild);
                                 }
                             }
@@ -500,7 +500,7 @@ class UserRegistrationRouter {
             $MASHPIA_DB->commit();
 
             // send email to parents
-            if (!isset($_COOKIE['naftoli']) && !empty($itemsForEmail)) {
+            if (!empty($itemsForEmail)) {
                 $error = $this->sendEmailToParents($itemsForEmail, $total);
                 if ($error) json_response($error);
                 else json_response("Successfully Enrolled or Updated. You should be receiving a confirmation email shortly.");
