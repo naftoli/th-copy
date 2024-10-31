@@ -99,6 +99,8 @@
 
       { "label":  "Enrollment / Award Confirmation", "legacy": true, "path": "/chidonTests/confirmations.php" },
 
+      { "label":  "Confirmation Report", "legacy": true, "path": "/chidonOld/newReports/confirmationReport.php" },
+
       { "label": "Chidon Shipping", "legacy": true, "path": "/chidon_shipping/" },
 
       { "label": "Eligibility & Registered Report", "legacy": true, "path": "/chidonOld/newReports/registered_report.html" },
