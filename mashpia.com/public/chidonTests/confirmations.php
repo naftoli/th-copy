@@ -62,6 +62,25 @@ $tracks = [
     'expert'  => 'Havanah',
     'genius' => 'Iyun'
 ];
+
+// list of children whose prizes were deleted b/c they had more than one personalized prize
+$deleted = [7754689, 7758082, 7758438, 7760528, 7763104, 7763344, 7763352, 7763585, 7764789, 7765193, 7770020, 7770948,
+    7771049, 7771259, 7771422, 7772403, 7772617, 7773774, 7774117, 7774204, 7774528, 7774550, 7774695, 7775756, 7777592,
+    7778891, 7779021, 7779959, 7781249, 7782388, 7785394];
+
+// load csv file with payments that need to be done
+$payments = [];
+$handle = fopen('https://mashpia.com/chidonOld/newReports/needsPayment.csv', 'r');
+while (($data = fgetcsv($handle)) !== false) {
+    $payments[$data[0]] = $data[1];
+}
+
+// load csv file with ppl that have more than 75 credits worth of prizes
+$over75 = [];
+$handle = fopen('https://mashpia.com/chidonOld/newReports/over75.csv', 'r');
+while (($data = fgetcsv($handle)) !== false) {
+    $over75[$data[0]] = $data[1];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -86,10 +105,10 @@ $tracks = [
         margin-left: 30px;
       }
       .text-overlay {
-        font-size: 24px;
+        font-size: 18px;
         position: relative;
-        top: -310px;
-        width: 500px;
+        top: -245px;
+        width: 400px;
         text-align: center;
         font-family: 'FB_Black';
         color: white;
@@ -119,14 +138,39 @@ foreach ($info as $school => $students) {
         $gender = $student['gender'];
         $user_id = $student['user_id'];
         $prizes_chosen = isset($prizes[$school][$user_id]) ? $prizes[$school][$user_id] : [];
-        ?>
 
+        // figure out if we need to let the parent know that they need to review the prizes
+        $serial = $student['user_serial'];
+        if (in_array($serial, $deleted)) {
+            $problem = "Important note: There was a bug in the system and when you enrolled, 
+              it allowed you to choose more than 75 credits worth of personalized prizes which were not even paid for. 
+              As a result, we had to remove those prizes. Please login and choose up to 75 credits worth of prizes. 
+              If you don't choose the prizes before the 10th of cheshvan, you will not receive any prizes.  
+              Sorry for the inconvenience.";
+        } else if (isset($payments[$serial])) {
+            $problem = "Important note: When a personalized prizes is chosen, it must be paid for in advance and 
+              there is no refunds for this prize, even if you don't register for the prizes after test three, unfortunately, 
+              there was a bug in the system and when you chose your personalized prizes it did not charge the card on file. 
+              Please make sure to login and pay now so that your prizes can be personalized. If you don't pay by the 10th of 
+              cheshvan, your prizes will not be personalized. Sorry for the inconvenience.";
+        } else if (isset($over75[$serial])) {
+            $problem = "Important note: There was a bug in the system and when you enrolled, 
+              it allowed you to choose more than 75 credits worth of prizes. Please edit your choice of prizes with up to 75 credits. 
+              If you don't edit the prizes before the 10th of cheshvan, HQ will determine which prizes you will receive. 
+              Sorry for the inconvenience.";
+        } else {
+            $problem = '';
+        }
+
+        if (!empty($problem)) {
+          echo "<div style='color: red; font-weight: bold;'>" . $problem . "</div>";
+        }
+        ?>
         <h3><?= $name ?> (<?= $serial ?>)</h3>
         <h4><?= $grade ?></h4>
         <div class="conf">
         <br />
         Hebrew Name spelling for awards: <?= $he_name ?><br />
-        <br />
         Chosen Track: <?= $track ?><br />
         Sweater Size: <?= $sweater ?><br />
         Book Number: <?= $book ?><br />
@@ -162,7 +206,7 @@ foreach ($info as $school => $students) {
         }
 
         $file_path = "https://mashpia.com/certs/" . $file;
-        echo "<img src='$file_path' style='width: 100%; max-width: 500px;'>";
+        echo "<img src='$file_path' style='width: 100%; max-width: 400px;'>";
         echo "<div class='text-overlay'>" . $he_name . "</div>";
         echo "<br /><div style='page-break-after: always;'></div></div>";
         break;
