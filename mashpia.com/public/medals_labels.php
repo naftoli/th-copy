@@ -315,6 +315,7 @@ function checkForBreak()
       setAsShipped()
     })
   })
+
   const setAsShipped = async () => {
     // use fetch
     const res = await fetch('/medals/set_as_shipped.php', {

@@ -333,76 +333,21 @@ $for_shipping = [];
     })
   })
 
-  function downloadAsCSV(data, filename = 'rank_medals_shipped.csv') {
-    // Get all unique keys from the objects
-    const keys = Object.keys(data)
-
-    // create new array
-    const csvData = []
-    for (let i = 0; i < keys.length; i++) {
-      const key = keys[i]
-      const value = data[key]
-      for (let j = 0; j < value.length; j++) {
-        csvData.push({
-          [key]: value[j]
-        })
-      }
-    }
-
-    // Create CSV header row
-    const csvRows = ['User ID, Rank Medal'];
-
-    // Create CSV data rows
-    for (let i in csvData) {
-      const row = csvData[i];
-      const key = Object.keys(row);
-      const values = Object.values(row);
-      csvRows.push(`${key},${values}`);
-    }
-
-    // Join all rows into a single string
-    const csvString = csvRows.join('\n');
-
-    // Create a Blob with the CSV content
-    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-
-    // Create a temporary URL for the Blob
-    const url = window.URL.createObjectURL(blob);
-
-    // Create a hidden anchor element
-    const link = document.createElement("a");
-    link.style.display = "none";
-    link.href = url;
-    link.download = filename;
-
-    // Append the link to the body
-    document.body.appendChild(link);
-
-    // Programmatically click the link to trigger the download
-    link.click();
-
-    // Clean up by removing the link and revoking the URL
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-  }
-
   const setAsShipped = async () => {
-    const for_shipping = <?= json_encode($for_shipping) ?>;
-    downloadAsCSV(for_shipping)
-    // const res = await fetch('ajax/set_as_shipped.php', {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   body: JSON.stringify({ info: for_shipping })
-    // })
-    // const data = await res.json()
-    // if (data.error) {
-    //   alert(data.error)
-    // } else {
-    //   alert(`Successfully set ${data.total} records as shipped.`)
-    //   location.reload()
-    // }
+    // use fetch
+    const res = await fetch('ajax/set_as_shipped.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({total: <?= $totalRanks ?>, info: <?= json_encode($for_shipping); ?>})
+    })
+    const data = await res.json()
+    if (data.success) {
+      alert(data.ranks_count + ' ranks set as shipped.')
+    } else {
+      alert(data.error)
+    }
   }
 </script>
 </BODY>
