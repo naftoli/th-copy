@@ -92,7 +92,11 @@ foreach ($info as $school_name => $users) {
             </td>
             <td id="<?= $user['user_id'] ?>" style="padding-left: 30px;">
                 <?php foreach ($prizes as $prize) {
-                    echo '<input type="checkbox" class="prize" id="' . $prize['prize_id'] . '" checked /> ' . $prize['prize_name'] . '<br>';
+                    echo '<input type="checkbox" class="prize" id="' . $prize['prize_id'] . '" checked /> ' . $prize['prize_name'];
+                    if (!empty($prize['he_name'])) {
+                      echo '<input type="text" class="he_name" value="' . $prize['he_name'] . '" />';
+                    }
+                    echo "<br />";
                 } ?>
             </td>
         </tr>
@@ -151,6 +155,28 @@ foreach ($info as $school_name => $users) {
           } else {
             e.target.checked = true
           }
+        }
+      })
+    })
+
+    const heNameInputs = document.querySelectorAll('.he_name')
+    heNameInputs.forEach(input => {
+      input.addEventListener('change', async (e) => {
+        const prize_id = e.target.previousElementSibling.id
+        const user_id = e.target.parentElement.id
+        const he_name = e.target.value
+        const response = await fetch('api/updateHeName.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({user_id, prize_id, he_name})
+        });
+        const data = await response.json()
+        if (data.success) {
+          alert('Updated.')
+        } else {
+          alert('Error updating.')
         }
       })
     })
