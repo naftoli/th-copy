@@ -20,6 +20,7 @@ if (isset($_FILES['file']['tmp_name'])) {
         $res = $stmt->execute([$data[0], $data[1]]);
         if (!$res) {
             $MASHPIA_DB->rollBack();
+            $stmt->debugDumpParams();
             die('Failed to insert all records');
         }
     }
