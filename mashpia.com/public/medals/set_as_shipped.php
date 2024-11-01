@@ -32,7 +32,10 @@ foreach ($info as $user_id => $more) {
     }
 }
 if ($medals != $total) {
-    echo json_encode(['success' => false]);
+    echo json_encode([
+        'success'   => false,
+        'error'     => 'Error:corrupted file. Total medals count does not match.'
+    ]);
     exit;
 }
 
