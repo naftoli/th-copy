@@ -1463,10 +1463,12 @@ var registrationApp = function () {
     })
   }
 
+  let prizes_are_good = true
+
   $("#prizes").on('hide.bs.modal', async (e) => {
     // e.preventDefault()
-    const valid = validatePrizes()
-    if (valid) {
+    prizes_are_good = validatePrizes()
+    if (prizes_are_good) {
       $(".confirm").attr('disabled', true)
       await checkForPrizeFee()
       $(".confirm").attr('disabled', false)
@@ -1474,7 +1476,10 @@ var registrationApp = function () {
       $("#prizes").modal('hide')
       await nextStep()
     }
-    else $("#prizes").modal('show')
+  })
+
+  $("#prizes").on('hidden.bs.modal', (e) => {
+    if (!prizes_are_good) $("#prizes").modal('show')
   })
 
   function validatePrizes() {
