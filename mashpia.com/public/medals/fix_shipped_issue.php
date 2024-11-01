@@ -24,7 +24,7 @@ if ( isset( $_POST['submit'] ) ) {
         WHERE medal_ord = ?
         AND subject_id = ?
         AND user_id = ?
-      ");
+    ");
 
     $file = $_FILES['file']['tmp_name'];
     $handle = fopen($file, "r");
