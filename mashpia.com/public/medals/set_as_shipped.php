@@ -65,5 +65,5 @@ if ($success) {
     echo json_encode(['success' => true]);
 } else {
     $MASHPIA_DB->rollBack();
-    echo json_encode(['success' => false]);
+    echo json_encode(['success' => false, 'medals_count' => $updated]);
 }
