@@ -16,3 +16,7 @@ if (!isset($input['prize_id']) || !isset($input['user_id'])) {
 
 $stmt = $MASHPIA_DB->prepare("UPDATE chidon_user_prizes SET he_name = :name WHERE prize_id = :prize_id AND user_id = :user_id AND year = :year");
 $res = $stmt->execute([':name' => $input['he_name'], ':prize_id' => $input['prize_id'], ':user_id' => $input['user_id'], ':year' => $year]);
+
+echo json_encode([
+    'success' => intval($res)
+]);
