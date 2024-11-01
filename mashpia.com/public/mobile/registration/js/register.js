@@ -1463,7 +1463,8 @@ var registrationApp = function () {
     })
   }
 
-  $("#prizes").on('hidden.bs.modal', async (e) => {
+  $("#prizes").on('hide.bs.modal', async (e) => {
+    // e.preventDefault()
     const valid = validatePrizes()
     if (valid) {
       $(".confirm").attr('disabled', true)
