@@ -46,7 +46,7 @@ $stmtPrizes = $MASHPIA_DB->prepare("
     SELECT 
         cp.*, prize_name
     FROM
-        th_chidon_prizes cp 
+        chidon_user_prizes cp 
     JOIN 
         chidon_prizes p ON cp.prize_id = p.prize_id 
     WHERE
