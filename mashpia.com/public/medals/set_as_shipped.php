@@ -39,6 +39,7 @@ if ($medals != $total) {
 $MASHPIA_DB->beginTransaction();
 $success = true;
 
+$error = '';
 $updated = 0;
 foreach ($info as $user_id => $more) {
     foreach ($more as $subject_id => $medals) {
@@ -50,8 +51,7 @@ foreach ($info as $user_id => $more) {
             ]);
             if (!$res) {
                 $success = false;
-                echo 'Failed to update medal for user ' . $user_id . ' and medal ' . $medal_ord;
-                $stmt->debugDumpParams();
+                $error = 'Failed to update medal for user ' . $user_id . ' and medal ' . $medal_ord. '\nNo medals where set as shipped.';
                 break;
             }
             $updated++;
@@ -59,17 +59,16 @@ foreach ($info as $user_id => $more) {
     }
 }
 
-$success = false;
 if ($success) {
     $MASHPIA_DB->commit();
     echo json_encode([
-        'success' => true,
-        'medals_count' => $updated
+        'success'       => true,
+        'medals_count'  => $updated
     ]);
 } else {
     $MASHPIA_DB->rollBack();
     echo json_encode([
-        'success' => false,
-        'medals_count' => $updated
+        'success'   => false,
+        'error'     => $error
     ]);
 }

@@ -325,11 +325,10 @@ function checkForBreak()
       body: JSON.stringify({total: <?= $totalNumMedals ?>, info: <?= json_encode($for_shipping); ?>})
     })
     const data = await res.json()
-    alert(data.medals_count + ' medals set as shipped.')
     if (data.success) {
-      alert('Successfully set all as shipped.')
+      alert(data.medals_count + ' medals set as shipped.')
     } else {
-      alert('Error setting all as shipped.')
+      alert(data.error)
     }
   }
 </script>
