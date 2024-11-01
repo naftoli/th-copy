@@ -11,6 +11,22 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO rank_medals_shipped (user_id, rank_ord) VALUES (?, ?)");
+
+if (isset($_FILES['file']['tmp_name'])) {
+    $MASHPIA_DB->beginTransaction();
+    $file = $_FILES['file']['tmp_name'];
+    $handle = fopen($file, "r");
+    while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        $res = $stmt->execute([$data[0], $data[1]]);
+        if (!$res) {
+            $MASHPIA_DB->rollBack();
+            die('Failed to insert all records');
+        }
+    }
+    fclose($handle);
+    $MASHPIA_DB->commit();
+    echo 'Done';
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,21 +35,4 @@ $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO rank_medals_shipped (user_id, r
         <input type="file" name="file" />
         <input type="submit" value="Upload" />
     </form>
-    <?php
-    if (isset($_FILES['file'])) {
-        $MASHPIA_DB->beginTransaction();
-        $file = $_FILES['file']['tmp_name'];
-        $handle = fopen($file, "r");
-        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-            $res = $stmt->execute([$data[0], $data[1]]);
-            if (!$res) {
-                $MASHPIA_DB->rollBack();
-                die('Failed to insert all records');
-            }
-        }
-        fclose($handle);
-        $MASHPIA_DB->commit();
-        echo 'Done';
-    }
-    ?>
 </body>
