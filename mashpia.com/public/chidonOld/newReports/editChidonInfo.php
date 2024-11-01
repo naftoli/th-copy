@@ -44,7 +44,7 @@ foreach ($schools as $school_id => $school_name) {
 
 $stmtPrizes = $MASHPIA_DB->prepare("
     SELECT 
-        cp.prize_id, prize_name
+        cp.*, prize_name
     FROM
         th_chidon_prizes cp 
     JOIN 
