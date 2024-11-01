@@ -6,6 +6,12 @@ $admin_auth = ['school'];
 require_once '../header.php';
 require_once '../api/header/db.php';
 
+// make sure it's hq
+if ($admin_user['auth'] != 'super') {
+    echo 'You are not authorized to view this page.';
+    exit;
+}
+
 $stmt = $MASHPIA_DB->prepare("
     update medal_marks 
     set date_shipped = now() 
@@ -14,10 +20,26 @@ $stmt = $MASHPIA_DB->prepare("
     and medal_ord = :medal
 ");
 
+$data = json_decode(file_get_contents('php://input'), true);
+$info = $data['info'];
+$total = $data['total'];
+
+// make sure our total is same as info total
+$medals = 0;
+foreach ($info as $user_id => $more) {
+    foreach ($more as $subject_id => $medal_ord) {
+        $medals += count($medal_ord);
+    }
+}
+if ($medals != $total) {
+    echo json_encode(['success' => false]);
+    exit;
+}
+
 $MASHPIA_DB->beginTransaction();
 $success = true;
 
-$info = $_POST['info'];
+$updated = 0;
 foreach ($info as $user_id => $more) {
     foreach ($more as $subject_id => $medals) {
         foreach ($medals as $medal_ord) {
@@ -28,12 +50,16 @@ foreach ($info as $user_id => $more) {
             ]);
             if (!$res) {
                 $success = false;
+                echo 'Failed to update medal for user ' . $user_id . ' and medal ' . $medal_ord;
+                $stmt->debugDumpParams();
                 break;
             }
+            $updated++;
         }
     }
 }
 
+$success = false;
 if ($success) {
     $MASHPIA_DB->commit();
     echo json_encode(['success' => true]);

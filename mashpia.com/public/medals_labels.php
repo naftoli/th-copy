@@ -259,6 +259,8 @@ function checkForBreak()
                                 }
                                 echo "<span class='medal'>" . $subject . "-" . $medal . "</span>";
                                 $sheet[$school_id][$user][$userInfo[$user]][$grade][$subject][] = $medal;
+                                $medal_info = $medals_info[$user]['shipped_specific'][$subject][$medal];
+                                $for_shipping[$user][$medal_info['subject_id']][] = $medal_info['medal_ord'];
                                 $numMedals++;
                                 $totalNumMedals++;
                             }
@@ -306,33 +308,29 @@ function checkForBreak()
       ?>
   </table>
 </div>
+</p>
 <script>
   $(document).ready(() => {
     $('#medalsBtnAll').click(() => {
       setAsShipped()
     })
   })
-  const setAsShipped = () => {
-    const for_shipping = <?= json_encode($for_shipping) ?>;
-    console.log(for_shipping)
-    let total = 0
-    for (const user in for_shipping) {
-      for (const subject in for_shipping[user]) {
-        total += for_shipping[user][subject].length
-      }
+  const setAsShipped = async () => {
+    // use fetch
+    const res = await fetch('/medals/set_as_shipped.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({total: <?= $totalNumMedals ?>, info: <?= json_encode($for_shipping); ?>})
+    })
+    const data = await res.json()
+    alert(data.medals_count + ' medals set as shipped.')
+    if (data.success) {
+      alert('Successfully set all as shipped.')
+    } else {
+      alert('Error setting all as shipped.')
     }
-    alert("Medals to be set as shipped: " + total)
-    alert("This feature is disabled for now")
-    // if (confirm('Are you sure you want to set all medals as shipped? You cannot undo this action!')) {
-    //   $.post('medals/set_as_shipped.php', {info: for_shipping}, (res) => {
-    //     const result = JSON.parse(res)
-    //     if (result.success) {
-    //       alert('All medals have been set as shipped')
-    //     } else {
-    //       alert('There was an error setting the medals as shipped')
-    //     }
-    //   })
-    // }
   }
 </script>
 </BODY>
