@@ -90,9 +90,9 @@ foreach ($info as $school_name => $users) {
             <td id="<?= $user['user_id'] ?>">
                 <input type="checkbox" class="confirmed" <?= $user['confirmed_info'] ? 'checked' : '' ?> />
             </td>
-            <td>
+            <td id="<?= $user['user_id'] ?>" style="padding-left: 30px;">
                 <?php foreach ($prizes as $prize) {
-                    echo $prize['prize_name'] . '<br>';
+                    echo '<input type="checkbox" class="prize" id="' . $prize['prize_id'] . '" checked /> ' . $prize['prize_name'] . '<br>';
                 } ?>
             </td>
         </tr>
@@ -101,8 +101,6 @@ foreach ($info as $school_name => $users) {
 <?php } ?>
 </body>
 <script>
-  // Only super admins can update confirmation status
-  <?php if ($superAdmin) : ?>
   // Add event listeners to checkboxes on document load
   document.addEventListener('DOMContentLoaded', function () {
     const checkboxes = document.querySelectorAll('.confirmed')
@@ -125,7 +123,32 @@ foreach ($info as $school_name => $users) {
         }
       })
     })
+
+    const prizeCheckboxes = document.querySelectorAll('.prize')
+    prizeCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('change', async (e) => {
+        const prize_id = e.target.id
+        const user_idd = e.target.parentElement.id
+        const unchecked = e.target.checked ? 0 : 1
+        if (unchecked) {
+          const response = await fetch('api/removePrize.php', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({user_id, prize_id})
+          });
+          const data = await response.json()
+          if (data.success) {
+            alert('Removed.')
+            // find prize in DOM and remove it
+            e.target.parentElement.removeChild(e.target)
+          } else {
+            alert(data.error)
+          }
+        }
+      })
+    })
   })
-  <?php endif; ?>
 </script>
 </html>
