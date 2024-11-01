@@ -94,7 +94,7 @@ foreach ($info as $school_name => $users) {
                 <?php foreach ($prizes as $prize) {
                     echo '<input type="checkbox" class="prize" id="' . $prize['prize_id'] . '" checked /> ' . $prize['prize_name'];
                     if (!empty($prize['he_name'])) {
-                      echo '<input type="text" class="he_name" value="' . $prize['he_name'] . '" />';
+                      echo ' <input type="text" class="he_name" value="' . $prize['he_name'] . '" />';
                     }
                     echo "<br />";
                 } ?>
