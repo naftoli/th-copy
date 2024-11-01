@@ -62,8 +62,14 @@ foreach ($info as $user_id => $more) {
 $success = false;
 if ($success) {
     $MASHPIA_DB->commit();
-    echo json_encode(['success' => true]);
+    echo json_encode([
+        'success' => true,
+        'medals_count' => $updated
+    ]);
 } else {
     $MASHPIA_DB->rollBack();
-    echo json_encode(['success' => false, 'medals_count' => $updated]);
+    echo json_encode([
+        'success' => false,
+        'medals_count' => $updated
+    ]);
 }
