@@ -128,7 +128,7 @@ foreach ($info as $school_name => $users) {
     prizeCheckboxes.forEach(checkbox => {
       checkbox.addEventListener('change', async (e) => {
         const prize_id = e.target.id
-        const user_idd = e.target.parentElement.id
+        const user_id = e.target.parentElement.id
         const unchecked = e.target.checked ? 0 : 1
         if (unchecked) {
           const confirmed = confirm('Are you sure you want to remove this prize?')
