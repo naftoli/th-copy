@@ -131,20 +131,25 @@ foreach ($info as $school_name => $users) {
         const user_idd = e.target.parentElement.id
         const unchecked = e.target.checked ? 0 : 1
         if (unchecked) {
-          const response = await fetch('api/removePrize.php', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({user_id, prize_id})
-          });
-          const data = await response.json()
-          if (data.success) {
-            alert('Removed.')
-            // find prize in DOM and remove it
-            e.target.parentElement.removeChild(e.target)
+          const confirmed = confirm('Are you sure you want to remove this prize?')
+          if (confirmed) {
+            const response = await fetch('api/removePrize.php', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({user_id, prize_id})
+            });
+            const data = await response.json()
+            if (data.success) {
+              alert('Removed.')
+              // find prize in DOM and remove it
+              e.target.parentElement.removeChild(e.target)
+            } else {
+              alert(data.error)
+            }
           } else {
-            alert(data.error)
+            e.target.checked = true
           }
         }
       })
