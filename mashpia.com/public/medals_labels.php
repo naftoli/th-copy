@@ -91,10 +91,11 @@ function checkForBreak()
       width: 50%;
     }
 
-    .sheet {
+    tr, th, td {
       font-family: "Arial", sans-serif;
-      padding: 5px;
+      padding: 10px;
       font-size: 14px;
+      border-bottom: 1px #f0f0f0 solid;
     }
 
     @media screen {
