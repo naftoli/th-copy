@@ -91,6 +91,12 @@ function checkForBreak()
       width: 50%;
     }
 
+    .sheet {
+      font-family: "Arial", sans-serif;
+      padding: 5px;
+      font-size: 14px;
+    }
+
     @media screen {
       #report_div {
         display: none;
