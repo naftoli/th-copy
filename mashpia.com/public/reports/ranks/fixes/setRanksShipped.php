@@ -31,7 +31,7 @@ if (isset($_FILES['file']['tmp_name'])) {
 <!DOCTYPE html>
 <html>
 <body>
-    <form method="post" action="setAsShipped.php" enctype="multipart/form-data">
+    <form method="post" action="setRanksShipped.php" enctype="multipart/form-data">
         <input type="file" name="file" />
         <input type="submit" value="Upload" />
     </form>
