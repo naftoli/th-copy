@@ -52,13 +52,13 @@ function getClasses() {
 
 function getShipped() {
     $shipped = [];
-    $sql = "select * from rank_medals_shipped";
+    $sql = "SELECT DISTINCT user_id FROM rank_medals_shipped";
     $result = mysql_query($sql);
     if (!$result) {
         die('Invalid query: ' . mysql_error());
     }
     while ($row = mysql_fetch_assoc($result)) {
-        $shipped[$row['user_id']][] = $row['rank_ord'];
+        $shipped[] = $row['user_id'];
     }
     return $shipped;
 }
@@ -99,13 +99,8 @@ $shipped = getShipped();
 $info = [];
 $user_info = [];
 while ($row = mysql_fetch_assoc($result)) {
-    // check if already shipped rank
-    if (isset($shipped[$row['user_id']])) {
-        $shipped_ranks = $shipped[$row['user_id']];
-        if (in_array($row['rank_ord'], $shipped_ranks)) {
-            continue;
-        }
-    }
+    // check if already shipped to this user
+    if (in_array($row['user_id'], $shipped)) continue;
     $school = $row['school_name'];
     $user_id = $row['user_id'];
     $name = $row['first'] . ' ' . $row['last'];
