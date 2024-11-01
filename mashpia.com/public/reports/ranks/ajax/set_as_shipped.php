@@ -12,7 +12,6 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-
 $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO rank_medals_shipped (user_id, rank_ord) VALUES (?, ?)");
 
 $data = json_decode(file_get_contents('php://input'), true);
