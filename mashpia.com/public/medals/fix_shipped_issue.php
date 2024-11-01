@@ -12,43 +12,19 @@ if ( $admin_user['auth'] != 'super' ) {
     exit;
 }
 
-function getSubjects() {
-    global $MASHPIA_DB;
-    $sql = "SELECT * FROM subjects";
-    $stmt = $MASHPIA_DB->query($sql);
-    $rows = $stmt->fetchAll();
-    $subjects = [];
-    foreach ( $rows as $row ) {
-        $subjects[$row['subject_id']] = $row['subject_name'];
-    }
-    return $subjects;
-}
-
-function getMedals() {
-    global $MASHPIA_DB;
-    $sql = "SELECT * FROM medals";
-    $stmt = $MASHPIA_DB->query($sql);
-    $rows = $stmt->fetchAll();
-    $medals = [];
-    foreach ( $rows as $row ) {
-        $medals[$row['medal_ord']] = $row['medal_name'];
-    }
-    return $medals;
-}
-
 // get uploaded file as csv and parse
 if ( isset( $_POST['submit'] ) ) {
-    $subjects = getSubjects();
-    $medals = getMedals();
-    $shipped_date = '2024-09-15';
+    $shipped_date = '2024-10-06';
 
     $success = true;
     $MASHPIA_DB->beginTransaction();
-    $stmt = $MASHPIA_DB->prepare("UPDATE medal_marks 
-                                        SET date_shipped = ?, date_received = ? 
-                                        WHERE medal_ord = ?
-                                        AND subject_id = ?
-                                        AND user_id = ?");
+    $stmt = $MASHPIA_DB->prepare("
+        UPDATE medal_marks 
+        SET date_shipped = ?, date_received = ? 
+        WHERE medal_ord = ?
+        AND subject_id = ?
+        AND user_id = ?
+      ");
 
     $file = $_FILES['file']['tmp_name'];
     $handle = fopen($file, "r");
@@ -59,13 +35,9 @@ if ( isset( $_POST['submit'] ) ) {
             $first = false;
             continue;
         }
-        $school = $row[0];
         $user_id = intval($row[1]);
-        $subject = $row[2];
-        $medal = $row[3];
-        $subject_id = intval(array_search($subject, $subjects));
-        if ($subject_id == 0) $subject_id = 1; // tehillim had different name in csv file
-        $medal_ord = intval(array_search($medal, $medals));
+        $subject_id = intval($row[2]);
+        $medal_ord = intval($row[3]);
         $res = $stmt->execute([$shipped_date, $shipped_date, $medal_ord, $subject_id, $user_id]);
         if (!$res) {
             $success = false;
