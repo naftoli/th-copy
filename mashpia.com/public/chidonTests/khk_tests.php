@@ -65,23 +65,23 @@ for ($i = 1; $i <= 4; $i++) {
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-//    $shutdown1 = new DateTime('2023-11-06 05:00:00');
-//    $shutdown2 = new DateTime('2023-12-21 05:00:00');
-//    $shutdown3 = new DateTime('2021-02-02 05:00:00');
-//    $shutdown4 = new DateTime('2021-02-24 05:00:00');
+    $shutdown1 = new DateTime('2024-11-12 05:00:00');
+    $shutdown2 = new DateTime('2023-12-02 05:00:00');
+    $shutdown3 = new DateTime('2025-01-15 05:00:00');
+    $shutdown4 = new DateTime('2025-02-10 05:00:00');
 
-//    if ($today >= $shutdown1) {
-//        $disable[1] = true;
-//    }
-//    if ($today >= $shutdown2) {
-//        $disable[2] = true;
-//    }
-//    if ($today >= $shutdown3) {
-//        $disable[3] = true;
-//    }
-//    if ($today >= $shutdown4) {
-//        $disable[4] = true;
-//    }
+    if ($today >= $shutdown1) {
+        $disable[1] = true;
+    }
+    if ($today >= $shutdown2) {
+        $disable[2] = true;
+    }
+    if ($today >= $shutdown3) {
+        $disable[3] = true;
+    }
+    if ($today >= $shutdown4) {
+        $disable[4] = true;
+    }
 }
 ?>
 <!DOCTYPE html>
