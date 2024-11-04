@@ -20,10 +20,10 @@ if ( isset( $_POST['submit'] ) ) {
     $MASHPIA_DB->beginTransaction();
     $stmt = $MASHPIA_DB->prepare("
         UPDATE medal_marks 
-        SET date_shipped = ?, date_received = ? 
-        WHERE medal_ord = ?
-        AND subject_id = ?
-        AND user_id = ?
+        SET date_shipped = :shipped, date_received = :shipped 
+        WHERE medal_ord = :ord
+        AND subject_id = :subject
+        AND user_id = :user
     ");
 
     $file = $_FILES['file']['tmp_name'];
@@ -38,7 +38,12 @@ if ( isset( $_POST['submit'] ) ) {
         $user_id = intval($row[1]);
         $subject_id = intval($row[2]);
         $medal_ord = intval($row[3]);
-        $res = $stmt->execute([$shipped_date, $shipped_date, $medal_ord, $subject_id, $user_id]);
+        $res = $stmt->execute([
+            'shipped' => $shipped_date,
+            'ord'     => $medal_ord,
+            'subject' => $subject_id,
+            'user'    => $user_id
+        ]);
         if (!$res) {
             $success = false;
             break;
