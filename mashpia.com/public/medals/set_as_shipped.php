@@ -14,7 +14,8 @@ if ($admin_user['auth'] != 'super') {
 
 $stmt = $MASHPIA_DB->prepare("
     update medal_marks 
-    set date_shipped = now() 
+    set date_shipped = now(), 
+        date_received = now() 
     where user_id = :user
     and subject_id = :subject
     and medal_ord = :medal
