@@ -1326,12 +1326,13 @@ var registrationApp = function () {
 
       // disable changing of prizes if prize has been paid for
       // disable changing of prizes after a certain date
-      let disable = false
       const date = new Date()
       const cutoff = new Date('2024-12-01') // cutoff date for changing prizes
       if (date > cutoff) disable = true
 
       for (let prize of res) {
+        let disable = false // disable prize if it's personalized
+
         // check if prize is not suppose to show for this school
         if (prize.exceptions && prize.exceptions.length && checkForException(prize.exceptions)) continue
 
@@ -1349,7 +1350,7 @@ var registrationApp = function () {
         }
         let personalization = prize.personalization ? 1 : 0
         // disable prizes that were already selected and paid for (all personalized prizes that have names need to be paid for)
-        if (personalization && prize.selected && prize.he_name.length > 1) disable = true
+        if (personalization && prize.selected && prize.he_name.trim().length > 1) disable = true
         html += `<div style="height: ${height}px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">
                         <img src="https://mashpia.com${prize.prize_picture}" style="float: right; height: 50px;" />
                         <input type="checkbox" class="prize ${personalization ? 'personalize' : ''}" name="prize_${id}" data-info="${id}:${prize.price}:${personalization}" 
