@@ -340,8 +340,8 @@ if ( !empty( $users ) ) {
             $resPrizes = mysql_query($sqlPrizes);
             $children[$row['user_id']]['chidon_prizes'] = [];
             while ($rowPrizes = mysql_fetch_assoc($resPrizes)) {
-                // if it's personalized prize check if prize was paid for if it's a personalized prize
-                if (trim($rowPrizes['personalization']) != '') {
+                // if it's personalized prize and there's a name put in, check if prize was paid for
+                if (trim($rowPrizes['he_name']) != '') {
                     $amount = $rowPrizes['price'];
                     $sqlPrizeFee = "select * from registration_charges where type in ('RRYSD', 'RRYDA', 'RRHVN') 
                                      and year = $chidon_year and amount = $amount and user_id = " . $row['user_id'];
