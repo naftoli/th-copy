@@ -12,7 +12,7 @@ $year = GlobalSettings::getChidonRegYear();
 
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        * 
+        *, cup.he_name as heName 
     FROM
         chidon_user_prizes cup
             JOIN
@@ -81,7 +81,7 @@ $total = count($rows);
                 <td><?= $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']) ?></td>
                 <td><?= $row['first'] ?></td>
                 <td><?= $row['last'] ?></td>
-                <td><?= $row['he_name'] ?></td>
+                <td><?= $row['heName'] ?></td>
                 <td><?= $row['prize_name'] ?></td>
             </tr>
         <?php endforeach; ?>
