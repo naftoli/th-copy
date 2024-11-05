@@ -57,6 +57,12 @@ $shipped = $rr->getRankBooksShipped();
       #main {
         font-size: 14px;
       }
+
+      select, button, input[type="button"], input[type="submit"] {
+        padding: 5px 10px;
+        font-size: 16px;
+        cursor: pointer;
+      }
     </style>
 </HEAD>
 
