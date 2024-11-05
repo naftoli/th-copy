@@ -7,6 +7,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
+$schools = $as->getSchools();
+
 function checkForBreak()
 {
     global $i, $rows;
@@ -23,8 +27,22 @@ function checkForBreak()
     $i++;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT']. '/class.rankReport.php';
+function getRanks()
+{
+    $ranks = [];
+    $sql = "select * from ranks";
+    $res = mysql_query($sql);
+    while ($r = mysql_fetch_assoc($res)) {
+        $ranks[$r['rank_ord']] = $r['rank_name'];
+    }
+    return $ranks;
+}
+
+$rankNames = getRanks();
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 $rr = new RankReport();
+$rr->setYear($year);
 
 if (isset($_POST['date_selection'])) {
     $dates = explode(':', $_POST['date_selection']);
@@ -33,37 +51,14 @@ if (isset($_POST['date_selection'])) {
     $rr->overrideDates($start, $end);
 }
 
-$rr->setRankNames();
-$rankNames = $rr->getRankNames();
 $reportDates = $rr->getReportDates();
 $heDatesRanks = $rr->getHeReportDates();
 $shipped = $rr->getRankMedalsShipped();
 $super = $admin_user['auth'] == 'super';
-
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
-$schools = $as->getSchools();
-/*
-$info = [];
-$user_info = [];
-while ($row = mysql_fetch_assoc($result)) {
-    $school = $row['school_name'];
-    $user_id = $row['user_id'];
-    $name = $row['first'] . ' ' . $row['last'];
-    $user_info[$user_id] = $name;
-    $class_id = $row['class_id'];
-    $class_info = $classes[$class_id];
-    $teacher = $class_info['class_teacher'];
-    $grade = $class_info['class_grade'] . (empty($class_info['class_sub']) ? '' : '-' . $class_info['class_sub']);
-    $rank_ord = $row['rank_ord'];
-    $info[$school][$teacher][$grade][$user_id] = $rank_ord;
-}
-//echo "<pre>"; print_r($info); echo "</pre>"; exit;
-*/
 $for_shipping = [];
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-<HTML DIR="<?= $dir ?>">
+<!DOCTYPE html>
+<HTML>
 <HEAD>
     <TITLE>Rank Medals Report</TITLE>
     <LINK href="../../admin_styles.css" rel="stylesheet" type="text/css">
@@ -149,6 +144,12 @@ $for_shipping = [];
         font-size: 14px;
         border-bottom: 1px #f0f0f0 solid;
       }
+
+      select, button, input[type="button"], input[type="submit"] {
+        padding: 5px 10px;
+        font-size: 16px;
+        cursor: pointer;
+      }
     </style>
     <script type="text/javascript">
       function check() {
@@ -175,12 +176,6 @@ $for_shipping = [];
         </form>
     </div>
     <br />
-    <?php if ($super) : ?>
-        <div>
-            <button id='booksBtnAll'>Set All Books as Shipped</button>
-        </div>
-        <br />
-    <?php endif; ?>
     <div class='instructions'>
         <b>Printing Instructions</b><br/>
         Please set your printer margins to the following:<br/>
@@ -197,16 +192,16 @@ $for_shipping = [];
 <div id="report_div" name="report_div">
     <div class='topSpace'></div>
     <?php
+    $sheet = []; // array to hold all labels
+    $totalRanks = 0;
     foreach ($schools as $school_id => $school_name) {
         if (in_array($school_id, [180, 585, 588, 612, 709])) continue;
         $rr->setSchoolId($school_id);
-        $rr->setRanks();
+        $rr->setRanks('byUser');
         $ranks = $rr->getRanks();
         $userInfo = $rr->getUserInfo();
         $heNames = $rr->getUserHeNames();
 
-        $sheet = []; // array to hold all labels
-        $totalRanks = 0;
         $i = 1; //counter for columns
         $rows = 1; //counter for rows
         $tempSchool = '';
@@ -235,8 +230,7 @@ $for_shipping = [];
                         $gradeChanged = true;
                     }
                     $tempGrade = $grade;
-                    foreach ($users as $user => $rank_ord) {
-                        $numRanks = 1;
+                    foreach ($users as $user => $rank_ords) {
                         if ($schoolChanged || $gradeChanged) {
                             if ($schoolChanged) {
                                 //echo "</div>";
@@ -260,16 +254,14 @@ $for_shipping = [];
                         }
                         echo "<div class='label'>";
                         echo "<span class='name'>" . $school . "<br />" . $userInfo[$user] . " (Grade: " . $grade . ")</span><br />";
-                        // show all rank up to and including current rank based off rank ord
-                        // figure out what rank we should start with
-                        if ($rank_ord >= 12) $ord = 13;
-                        else if ($rank_ord >= 9) $ord = 10;
-                        else $ord = 2;
-                        for (; $ord <= $rank_ord; $ord++) {
-                            echo "<span class='medal'>" . $ranks[$ord] . "</span>";
-                            $sheet[$school_id][$user][$userInfo[$user]][$grade][] = $ranks[$ord];
+                        foreach ($rank_ords as $ord) {
+                            // check if it was already shipped
+                            if (isset($shipped[$user]) && in_array($ord, $shipped[$user])) {
+                                continue;
+                            }
+                            echo "<span class='medal'>" . $rankNames[$ord] . "</span>";
+                            $sheet[$school_id][$grade][$user][] = $ord;
                             $for_shipping[$user][] = $ord;
-                            $numRanks++;
                             $totalRanks++;
                         }
                         echo "</div>";
@@ -297,14 +289,13 @@ $for_shipping = [];
             <th>Rank Medal</th>
         </tr>
         <?php
-        foreach ($sheet as $school => $more) {
-            foreach ($more as $user_id => $info) {
-                foreach ($info as $user => $other) {
-                    foreach ($other as $grade => $more) {
-                        foreach ($more as $medal) {
-                            echo "<tr><td>" . $school . "</td><td>" . $user_id . "</td><td>" . $user . "</td><td>" .
-                                $grade . "</td><td>" . $medal . "</td></tr>";
-                        }
+        foreach ($sheet as $school => $grades) {
+            foreach ($grades as $grade => $users) {
+                foreach ($users as $user => $ords) {
+                    foreach ($ords as $ord) {
+                        $name = $userInfo[$user];
+                        echo "<tr><td>" . $school . "</td><td>" . $user . "</td><td>" . $name . "</td><td>" .
+                            $grade . "</td><td>" . $rankNames[$ord] . "</td></tr>";
                     }
                 }
             }
@@ -330,7 +321,7 @@ $for_shipping = [];
     })
     const data = await res.json()
     if (data.success) {
-      alert(data.ranks_count + ' ranks set as shipped.')
+      alert(data.ranks_count + ' medal ranks set as shipped.')
     } else {
       alert(data.error)
     }
