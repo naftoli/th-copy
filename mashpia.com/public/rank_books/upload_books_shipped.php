@@ -9,7 +9,7 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
+if (isset($_FILES['file'])) {
     $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO rank_books_shipped (user_id, book) VALUES (?, ?)");
 
     $file = $_FILES['file'];
@@ -17,12 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     // Validate file upload
     if ($file['error'] !== UPLOAD_ERR_OK) {
         echo "Error uploading file: " . getUploadErrorMessage($file['error']);
-        exit;
-    }
-
-    // Validate file type
-    if ($file['type'] !== 'text/csv' && $file['type'] !== 'application/vnd.ms-excel') {
-        echo "Invalid file type. Please upload a CSV file.";
         exit;
     }
 
@@ -61,12 +55,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     // get user_ids
     $serials = array_keys($info);
     try {
-        $resUsers = $stmtUsers->query("SELECT user_id, user_serial FROM users WHERE user_serial IN ('" . implode("','", $serials) . "')");
+        $resUsers = $MASHPIA_DB->query("SELECT user_id, user_serial FROM users WHERE user_serial IN ('" . implode("','", $serials) . "')");
         if (!$resUsers) {
             throw new Exception('Failed to get user_ids');
         }
 
-        $rows = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
+        $rows = $resUsers->fetchAll(PDO::FETCH_ASSOC);
         if (empty($rows)) {
             throw new Exception('No matching users found for the provided serials');
         }
