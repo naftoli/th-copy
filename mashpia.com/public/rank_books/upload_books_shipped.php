@@ -9,64 +9,117 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-if (isset($_FILES['file'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO rank_books_shipped (user_id, book) VALUES (?, ?)");
-    $stmtUsers = $MASHPIA_DB->prepare("SELECT user_serial, user_id FROM users WHERE user_serial in (?)");
+    $stmtUsers = $MASHPIA_DB->prepare("SELECT user_serial, user_id FROM users WHERE user_serial IN (" .
+        str_repeat('?,', count(array_keys($_FILES['file'])) - 1) . '?)');
 
     $file = $_FILES['file'];
+
+    // Validate file upload
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        echo "Error uploading file: " . getUploadErrorMessage($file['error']);
+        exit;
+    }
+
+    // Validate file type
+    if ($file['type'] !== 'text/csv' && $file['type'] !== 'application/vnd.ms-excel') {
+        echo "Invalid file type. Please upload a CSV file.";
+        exit;
+    }
+
     $file_path = $file['tmp_name'];
-    $file = fopen($file_path, 'r');
+    if (!file_exists($file_path)) {
+        echo "Error: Uploaded file not found.";
+        exit;
+    }
+
+    $fileHandle = fopen($file_path, 'r');
+    if ($fileHandle === false) {
+        echo "Error: Unable to open uploaded file.";
+        exit;
+    }
+
     $total = 0;
     $info = [];
-    while (($line = fgetcsv($file)) !== FALSE) {
+    while (($line = fgetcsv($fileHandle)) !== FALSE) {
+        if (count($line) < 2) {
+            echo "Error: Invalid CSV format. Each row must have at least 2 columns.";
+            fclose($fileHandle);
+            exit;
+        }
         $info[$line[0]] = $line[1];
         $total++;
     }
-    fclose($file);
+    fclose($fileHandle);
 
     // make sure our total is same as info total
     $bookTotal = count($info);
-    if ($bookTotal != $total) {
-        echo "Error: corrupted file. Total books count does not match.'";
+    if ($bookTotal != $total || $bookTotal === 0) {
+        echo "Error: corrupted file or empty file. Total books count does not match.";
         exit;
     }
 
     // get user_ids
     $serials = array_keys($info);
-    $resUsers = $stmtUsers->execute([$serials]);
-    if (!$resUsers) {
-        $success = false;
-        echo 'Failed to get user_ids';
-        exit;
-    }
-    $rows = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
-    $user_ids = [];
-    foreach ($rows as $row) {
-        $user_ids[$row['user_serial']] = $row['user_id'];
-    }
-
-    $MASHPIA_DB->beginTransaction();
-    $success = true;
-
-    $error = '';
-    $updated = 0;
-    foreach ($info as $serial => $book) {
-        $user_id = $user_ids[$serial];
-        $res = $stmt->execute([$user_id, $book]);
-        if (!$res) {
-            $success = false;
-            $error = 'Failed to update book #' . $book . ' for user ' . $user_id . '\nNo books were set as shipped.';
-            break;
+    try {
+        $resUsers = $stmtUsers->execute($serials);
+        if (!$resUsers) {
+            throw new Exception('Failed to get user_ids');
         }
-        $updated++;
-    }
 
-    if ($success) {
+        $rows = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($rows)) {
+            throw new Exception('No matching users found for the provided serials');
+        }
+
+        $user_ids = [];
+        foreach ($rows as $row) {
+            $user_ids[$row['user_serial']] = $row['user_id'];
+        }
+
+        $MASHPIA_DB->beginTransaction();
+        $updated = 0;
+
+        foreach ($info as $serial => $book) {
+            if (!isset($user_ids[$serial])) {
+                throw new Exception('User serial ' . htmlspecialchars($serial) . ' not found in database');
+            }
+
+            $user_id = $user_ids[$serial];
+            if (!$stmt->execute([$user_id, $book])) {
+                throw new Exception('Failed to update book #' . htmlspecialchars($book) . ' for user ' . $user_id);
+            }
+            $updated++;
+        }
+
         $MASHPIA_DB->commit();
         echo $updated . ' books were set as shipped.';
-    } else {
+
+    } catch (Exception $e) {
         $MASHPIA_DB->rollBack();
-        echo "Error setting books as shipped: " . $error;
+        echo "Error setting books as shipped: " . htmlspecialchars($e->getMessage());
+    }
+}
+
+function getUploadErrorMessage($error_code) {
+    switch ($error_code) {
+        case UPLOAD_ERR_INI_SIZE:
+            return "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+        case UPLOAD_ERR_FORM_SIZE:
+            return "The uploaded file exceeds the MAX_FILE_SIZE directive in the HTML form";
+        case UPLOAD_ERR_PARTIAL:
+            return "The uploaded file was only partially uploaded";
+        case UPLOAD_ERR_NO_FILE:
+            return "No file was uploaded";
+        case UPLOAD_ERR_NO_TMP_DIR:
+            return "Missing a temporary folder";
+        case UPLOAD_ERR_CANT_WRITE:
+            return "Failed to write file to disk";
+        case UPLOAD_ERR_EXTENSION:
+            return "File upload stopped by extension";
+        default:
+            return "Unknown upload error";
     }
 }
 ?>
@@ -75,21 +128,29 @@ if (isset($_FILES['file'])) {
 <head>
     <title>Upload Books Shipped</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        tr, th, td {
-          padding: 10px;
-          font-size: 14px;
-          border: 1px solid #f0f0f0;
-        }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      form {
+        margin: 20px 0;
+      }
+      tr, th, td {
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #f0f0f0;
+      }
+      .error {
+        color: red;
+        margin: 10px 0;
+      }
     </style>
 </head>
 <body>
-    <!-- create a form to upload the file -->
-    <form id="upload_form" enctype="multipart/form-data">
-        <input type="file" name="file" id="file">
-        <input type="submit" value="Upload">
-    </form>
+<h1>Upload Books Shipped</h1>
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" id="file" accept=".csv" required>
+    <input type="submit" value="Upload">
+</form>
 </body>
 </html>
