@@ -21,7 +21,7 @@ $shipped = $rr->getRankBooksShipped();
 <!DOCTYPE html>
 <HTML DIR="<?= $dir ?>">
 <HEAD>
-    <TITLE>Medals Ranks Ceremony</TITLE>
+    <TITLE>Book Report</TITLE>
     <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <style type="text/css">
@@ -80,7 +80,7 @@ $schools = $as->getSchools();
 $for_shipping = [];
 ?>
 <div class='no-print'>
-    <h1>Isser's Ranks Summary Sheet</h1>
+    <h1>Book Report</h1>
 
     <div>
         Current Report is calculated from <?= $heDatesRanks['start_he'] ?> up to <?= $heDatesRanks['end_he'] ?>.<br/>
