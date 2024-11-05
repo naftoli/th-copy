@@ -213,6 +213,7 @@ class RankReport extends Report {
     }
 
     public function setHighestRanks() {
+        $this->ranks = [];
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
         $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
