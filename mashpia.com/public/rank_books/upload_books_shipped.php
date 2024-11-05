@@ -11,8 +11,6 @@ if ($admin_user['auth'] != 'super') {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO rank_books_shipped (user_id, book) VALUES (?, ?)");
-    $stmtUsers = $MASHPIA_DB->prepare("SELECT user_serial, user_id FROM users WHERE user_serial IN (" .
-        str_repeat('?,', count(array_keys($_FILES['file'])) - 1) . '?)');
 
     $file = $_FILES['file'];
 
@@ -63,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file'])) {
     // get user_ids
     $serials = array_keys($info);
     try {
-        $resUsers = $stmtUsers->execute($serials);
+        $resUsers = $stmtUsers->query("SELECT user_id, user_serial FROM users WHERE user_serial IN ('" . implode("','", $serials) . "')");
         if (!$resUsers) {
             throw new Exception('Failed to get user_ids');
         }
