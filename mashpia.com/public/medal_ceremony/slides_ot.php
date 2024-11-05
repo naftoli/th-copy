@@ -33,8 +33,8 @@ $m = new Slides( $prevMedals, $prevMedalsLight );
 
 // figure out which dates to show
 $m->setDateSelection();
-$start = 2460375;
-$end = 2460447;
+$start = 2460567; // Sept. 13, 2024
+$end = 2460614; // Oct. 30, 2024
 $m->overrideDates( $start, $end );
 
 if ( isset( $_POST['currentOnly'] ) ) $m->setToCurrentOnly();
