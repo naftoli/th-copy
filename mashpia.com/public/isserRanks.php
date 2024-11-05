@@ -129,19 +129,29 @@ $for_shipping = [];
                         foreach ($users as $user_id) {
                             $info = $userInfo[$user_id];
                             $heName = $heNames[$user_id];
+                            $addToTotal = true;
+
                             echo "<tr><td>";
-                            echo "<input type='checkbox' name='book_" . $book . "[" . $user_id . "]' id='book_" . $book . "_" . $user_id . "' " .
-                                (isset($shipped[$user_id][$book]) ? 'checked' : '') . " />";
+                            echo "<input type='checkbox' id='book_" . $book . "_" . $user_id . "' ";
+                            if (isset($shipped[$user_id]) && in_array($book, $shipped[$user_id])) {
+                                $addToTotal = false;
+                                echo 'checked ';
+                            }
+                            if (!$super) echo 'disabled ';
+                            echo "/>";
                             echo "</td><td>". $grade . "</td><td>" . $info['user_serial'] . "</td><td>";
                             echo $heName . ' - ' . $info['first'] . ' ' . $info['last'] . "</td></tr>";
-                            $totals[$book]++;
-                            $for_shipping[$user_id] = $book;
 
-                            // grand totals
-                            if (isset($bookTotals[$book])) {
-                                $bookTotals[$book]++;
-                            } else {
-                                $bookTotals[$book] = 1;
+                            if ($addToTotal) {
+                                $totals[$book]++;
+                                $for_shipping[$user_id] = $book;
+
+                                // grand totals
+                                if (isset($bookTotals[$book])) {
+                                    $bookTotals[$book]++;
+                                } else {
+                                    $bookTotals[$book] = 1;
+                                }
                             }
                         }
                     }

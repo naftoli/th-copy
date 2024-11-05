@@ -206,7 +206,7 @@ class RankReport extends Report {
         $sql = "select * from rank_books_shipped";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
-            $this->shipped[$row['user_id']] = $row['book'];
+            $this->shipped[$row['user_id']][] = $row['book'];
         }
     }
 
