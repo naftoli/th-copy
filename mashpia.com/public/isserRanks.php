@@ -5,6 +5,9 @@ require('header.php');
 require_once 'class.rankReport.php';
 $rr = new RankReport();
 
+require_once 'class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
+
 if (isset($_POST['date_selection'])) {
     $dates = explode(':', $_POST['date_selection']);
     $start = $dates[0];
@@ -12,14 +15,22 @@ if (isset($_POST['date_selection'])) {
     $rr->overrideDates($start, $end);
 }
 
+$rr->setYear($year);
 $rr->setRankNames();
 $rankNames = $rr->getRankNames();
 $reportDates = $rr->getReportDates();
 $heDatesRanks = $rr->getHeReportDates();
 $shipped = $rr->getRankBooksShipped();
+$super = $admin_user['auth'] == 'super';
+
+require_once 'class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
+$schools = $as->getSchools();
+
+$for_shipping = [];
 ?>
 <!DOCTYPE html>
-<HTML DIR="<?= $dir ?>">
+<HTML>
 <HEAD>
     <TITLE>Book Report</TITLE>
     <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
@@ -68,17 +79,6 @@ $shipped = $rr->getRankBooksShipped();
 
 <BODY>
 <?php include('admin_header.php'); ?>
-<?php
-$super = $admin->auth == 'super';
-
-//if it's a super user, loop through all schools
-//otherwise show school associated with account
-require_once 'class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
-$schools = $as->getSchools();
-
-$for_shipping = [];
-?>
 <div class='no-print'>
     <h1>Book Report</h1>
 

@@ -6,6 +6,7 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
+$australian = GlobalSettings::getAustralian();
 
 function checkForBreak()
 {
@@ -23,27 +24,67 @@ function checkForBreak()
     $i++;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT']. '/class.rankReport.php';
-$rr = new RankReport();
-
-if (isset($_POST['date_selection'])) {
-    $dates = explode(':', $_POST['date_selection']);
-    $start = $dates[0];
-    $end = $dates[1];
-    $rr->overrideDates($start, $end);
+function getRanks() {
+    $ranks = [];
+    $sql = "select * from ranks";
+    $result = mysql_query($sql);
+    if (!$result) {
+        die('Invalid query: ' . mysql_error());
+    }
+    while ($row = mysql_fetch_assoc($result)) {
+        $ranks[$row['rank_ord']] = $row['rank_name'];
+    }
+    return $ranks;
 }
 
-$rr->setRankNames();
-$rankNames = $rr->getRankNames();
-$reportDates = $rr->getReportDates();
-$heDatesRanks = $rr->getHeReportDates();
-$shipped = $rr->getRankMedalsShipped();
-$super = $admin_user['auth'] == 'super';
+function getClasses() {
+    $classes = [];
+    $sql = "select * from classes where class_era = 0";
+    $result = mysql_query($sql);
+    if (!$result) {
+        die('Invalid query: ' . mysql_error());
+    }
+    while ($row = mysql_fetch_assoc($result)) {
+        $classes[$row['class_id']] = $row;
+    }
+    return $classes;
+}
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
-$schools = $as->getSchools();
-/*
+$exceptions = array_unique( array_merge([180, 585, 808, 612], $australian) );
+$sql = "SELECT 
+            s.school_name,
+            c.class_id, 
+            u.user_id, 
+            u.first,
+            u.last,
+            MAX(rm.rank_ord) AS rank_ord
+        FROM
+            users u
+                JOIN
+            schools s USING (school_id)
+                JOIN
+            rank_marks rm USING (user_id)
+                JOIN
+            classes c ON u.class_id = c.class_id 
+                JOIN 
+            user_registration ur ON u.user_id = ur.user_id 
+                LEFT JOIN
+            rank_medals_shipped rms ON u.user_id = rms.user_id 
+        WHERE
+            u.user_registered > 0 AND ur.year = $year 
+                AND u.school_id NOT IN (" . implode(',', $exceptions) . ") 
+                AND rms.user_id IS NULL
+        GROUP BY u.user_id 
+        HAVING rank_ord NOT IN (1, 9, 12)
+        ORDER BY school_name , u.last , u.first";
+$result = mysql_query($sql);
+if (!$result) {
+    die('Invalid query: ' . mysql_error());
+}
+
+$ranks = getRanks();
+$classes = getClasses();
+
 $info = [];
 $user_info = [];
 while ($row = mysql_fetch_assoc($result)) {
@@ -58,8 +99,8 @@ while ($row = mysql_fetch_assoc($result)) {
     $rank_ord = $row['rank_ord'];
     $info[$school][$teacher][$grade][$user_id] = $rank_ord;
 }
+
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
-*/
 $for_shipping = [];
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -162,25 +203,7 @@ $for_shipping = [];
 <?php include('../../admin_header.php'); ?>
 
 <div class="no-print">
-    <h1>Rank Medals Report</h1>
-    <div>
-        Current Report is calculated from <?= $heDatesRanks['start_he'] ?> up to <?= $heDatesRanks['end_he'] ?>.<br/>
-        <form action="" method="post">
-            <p>
-                <?php
-                echo $rr->getHtmlSelect(3);
-                ?>
-                <input type="submit" name="submit" value="Modify Report"/>
-            </p>
-        </form>
-    </div>
-    <br />
-    <?php if ($super) : ?>
-        <div>
-            <button id='booksBtnAll'>Set All Books as Shipped</button>
-        </div>
-        <br />
-    <?php endif; ?>
+    <h1>Rank Medals Catchup Report</h1>
     <div class='instructions'>
         <b>Printing Instructions</b><br/>
         Please set your printer margins to the following:<br/>
@@ -197,83 +220,75 @@ $for_shipping = [];
 <div id="report_div" name="report_div">
     <div class='topSpace'></div>
     <?php
-    foreach ($schools as $school_id => $school_name) {
-        if (in_array($school_id, [180, 585, 588, 612, 709])) continue;
-        $rr->setSchoolId($school_id);
-        $ranks = $rr->getRanks();
-        $userInfo = $rr->getUserInfo();
-        $heNames = $rr->getUserHeNames();
-
-        $sheet = []; // array to hold all labels
-        $totalRanks = 0;
-        $i = 1; //counter for columns
-        $rows = 1; //counter for rows
-        $tempSchool = '';
-        $schoolChanged = false; //variable to find out when school changes
-        $shippingName = '';
-        $shippingAddress = '';
-        $tempGrade = '';
-        $gradeChanged = false; //variable to find out when grade changes
-        $firstTime = true;
-        foreach ($ranks as $school => $line) {
-            if ($tempSchool != $school) {
-                $qry = "select * from schools where school_name = '" . $school . "'";
-                $res = mysql_query($qry);
-                $r = mysql_fetch_assoc($res);
-                $school_id = $r['school_id'];
-                $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
-                $shipping = empty($r['shipping_address2']) ? '' : $r['shipping_address2'] . "<br />";
-                $shippingAddress = $r['shipping_address1'] . "<br />" . $shipping . $r['shipping_city'] .
-                    ", " . $r['shipping_state'] . " " . $r['shipping_postal'] . "<br />" . $r['shipping_country'];
-                $schoolChanged = true;
-            }
-            $tempSchool = $school;
-            foreach ($line as $teacher => $class) {
-                foreach ($class as $grade => $users) {
-                    if ($tempGrade != $grade) {
-                        $gradeChanged = true;
-                    }
-                    $tempGrade = $grade;
-                    foreach ($users as $user => $rank_ord) {
-                        $numRanks = 1;
-                        if ($schoolChanged || $gradeChanged) {
-                            if ($schoolChanged) {
-                                //echo "</div>";
-                                //checkForBreak();
-                                //echo "<div class='page-break'></div><div class='topSpace'></div><div class='label'>";
-                                if (!$firstTime) {
-                                    echo "<div class='page-break'></div><div class='topSpace'></div>";
-                                    $i = 1;
-                                } else $firstTime = false;
-                                echo "<div class='label'>";
-                                echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
-                                $schoolChanged = false;
-                            } else if ($gradeChanged) {
-                                echo "<div class='label'>";
-                                echo "<span class='name'><b>" . $school . "</b><br />" . $teacher . "<br />" . $grade . "</span>";
-                                $gradeChanged = false;
-                            }
-                            //put current user info on new label so that we don't lose this user
-                            echo "</div>";
-                            checkForBreak();
+    $sheet = []; // array to hold all labels
+    $totalRanks = 0;
+    $i = 1; //counter for columns
+    $rows = 1; //counter for rows
+    $tempSchool = '';
+    $schoolChanged = false; //variable to find out when school changes
+    $shippingName = '';
+    $shippingAddress = '';
+    $tempGrade = '';
+    $gradeChanged = false; //variable to find out when grade changes
+    $firstTime = true;
+    foreach ($info as $school => $line) {
+        if ($tempSchool != $school) {
+            $qry = "select * from schools where school_name = '" . $school . "'";
+            $res = mysql_query($qry);
+            $r = mysql_fetch_assoc($res);
+            $school_id = $r['school_id'];
+            $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
+            $shipping = empty($r['shipping_address2']) ? '' : $r['shipping_address2'] . "<br />";
+            $shippingAddress = $r['shipping_address1'] . "<br />" . $shipping . $r['shipping_city'] .
+                ", " . $r['shipping_state'] . " " . $r['shipping_postal'] . "<br />" . $r['shipping_country'];
+            $schoolChanged = true;
+        }
+        $tempSchool = $school;
+        foreach ($line as $teacher => $class) {
+            foreach ($class as $grade => $info) {
+                if ($tempGrade != $grade) {
+                    $gradeChanged = true;
+                }
+                $tempGrade = $grade;
+                foreach ($info as $user => $rank_ord) {
+                    $numRanks = 1;
+                    if ($schoolChanged || $gradeChanged) {
+                        if ($schoolChanged) {
+                            //echo "</div>";
+                            //checkForBreak();
+                            //echo "<div class='page-break'></div><div class='topSpace'></div><div class='label'>";
+                            if (!$firstTime) {
+                                echo "<div class='page-break'></div><div class='topSpace'></div>";
+                                $i = 1;
+                            } else $firstTime = false;
+                            echo "<div class='label'>";
+                            echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
+                            $schoolChanged = false;
+                        } else if ($gradeChanged) {
+                            echo "<div class='label'>";
+                            echo "<span class='name'><b>" . $school . "</b><br />" . $teacher . "<br />" . $grade . "</span>";
+                            $gradeChanged = false;
                         }
-                        echo "<div class='label'>";
-                        echo "<span class='name'>" . $school . "<br />" . $userInfo[$user] . " (Grade: " . $grade . ")</span><br />";
-                        // show all rank up to and including current rank based off rank ord
-                        // figure out what rank we should start with
-                        if ($rank_ord >= 12) $ord = 13;
-                        else if ($rank_ord >= 9) $ord = 10;
-                        else $ord = 2;
-                        for (; $ord <= $rank_ord; $ord++) {
-                            echo "<span class='medal'>" . $ranks[$ord] . "</span>";
-                            $sheet[$school_id][$user][$userInfo[$user]][$grade][] = $ranks[$ord];
-                            $for_shipping[$user][] = $ord;
-                            $numRanks++;
-                            $totalRanks++;
-                        }
+                        //put current user info on new label so that we don't lose this user
                         echo "</div>";
                         checkForBreak();
                     }
+                    echo "<div class='label'>";
+                    echo "<span class='name'>" . $school . "<br />" . $user_info[$user] . " (Grade: " . $grade . ")</span><br />";
+                    // show all rank up to and including current rank based off rank ord
+                    // figure out what rank we should start with
+                    if ($rank_ord >= 12) $ord = 13;
+                    else if ($rank_ord >= 9) $ord = 10;
+                    else $ord = 2;
+                    for (; $ord <= $rank_ord; $ord++) {
+                        echo "<span class='medal'>" . $ranks[$ord] . "</span>";
+                        $sheet[$school_id][$user][$user_info[$user]][$grade][] = $ranks[$ord];
+                        $for_shipping[$user][] = $ord;
+                        $numRanks++;
+                        $totalRanks++;
+                    }
+                    echo "</div>";
+                    checkForBreak();
                 }
             }
         }

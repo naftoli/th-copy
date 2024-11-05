@@ -13,6 +13,9 @@ class RankReport extends Report {
     protected $userPic;
     protected $picOnly;
     protected $books;
+    protected $year;
+    protected $shipped;
+    protected $medalsShipped;
 
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -25,6 +28,12 @@ class RankReport extends Report {
         $this->userPic = [];
         $this->picOnly = [];
         $this->books = [];
+        $this->shipped = [];
+        $this->medalsShipped = [];
+    }
+
+    public function setYear($yr) {
+        $this->year = $yr;
     }
 
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
@@ -46,8 +55,10 @@ class RankReport extends Report {
             JOIN users u USING ( user_id )
             JOIN schools s USING ( school_id )
             JOIN classes c ON ( u.class_id = c.class_id ) 
+            JOIN user_registration ur ON u.user_id = ur.user_id 
             WHERE u.medals_ranks = 1 
             AND u.user_registered > 0 
+            AND ur.year = $this->year 
             $filter ";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
@@ -201,24 +212,7 @@ class RankReport extends Report {
         }
     }
 
-    public function setRankBooksShipped() {
-        $this->shipped = [];
-        $sql = "select * from rank_books_shipped";
-        $result = mysql_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {
-            $this->shipped[$row['user_id']][] = $row['book'];
-        }
-    }
-
-    public function getRankBooksShipped() {
-        if (empty($this->shipped)) {
-            $this->setRankBooksShipped();
-        }
-        return $this->shipped;
-    }
-
-    public function getBooksToSend() {
-        $this->books = [];
+    public function setHighestRanks() {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
         $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
@@ -232,7 +226,7 @@ class RankReport extends Report {
             JOIN user_registration ur ON u.user_id = ur.user_id 
             WHERE u.medals_ranks = 1 
             AND u.user_registered > 0 
-            AND ur.year = 5785 
+            AND ur.year = $this->year  
             $filter ";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
@@ -252,19 +246,63 @@ class RankReport extends Report {
             $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
             $this->userInfo[$user_id] = $row;
             $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
+            $this->ranks[$school][$teacher][$grade][$user_id] = $row['rank'];
+        }
+    }
 
-            $rank_ord = $row['rank'];
-            $book = 0;
-            if ($rank_ord == 1) {
-                $book = 1;
-            } else if ($rank_ord == 9) {
-                $book = 2;
-            } else if ($rank_ord == 12) {
-                $book = 3;
+    public function getBooksToSend() {
+        $this->setHighestRanks();
+        $this->books = [];
+        foreach ($this->ranks as $school => $teachers) {
+            foreach ($teachers as $teacher => $grades) {
+                foreach ($grades as $grade => $users) {
+                    foreach ($users as $user_id => $rank_ord) {
+                        $book = 0;
+                        if ($rank_ord == 1) {
+                            $book = 1;
+                        } else if ($rank_ord == 9) {
+                            $book = 2;
+                        } else if ($rank_ord == 12) {
+                            $book = 3;
+                        }
+                        if ($book) $this->books[$school][$book][$teacher][$grade][] = $user_id;
+                    }
+                }
             }
-            if ($book) $this->books[$school][$book][$teacher][$grade][] = $user_id;
         }
         return $this->books;
+    }
+
+    public function setRankBooksShipped() {
+        $this->shipped = [];
+        $sql = "select * from rank_books_shipped";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $this->shipped[$row['user_id']][] = $row['book'];
+        }
+    }
+
+    public function getRankBooksShipped() {
+        if (empty($this->shipped)) {
+            $this->setRankBooksShipped();
+        }
+        return $this->shipped;
+    }
+
+    public function setRankMedalsShipped() {
+        $this->medalsShipped = [];
+        $sql = "select * from rank_medals_shipped";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $this->medalsShipped[$row['user_id']][] = $row['rank_ord'];
+        }
+    }
+
+    public function getRankMedalsShipped() {
+        if (empty($this->medalsShipped)) {
+            $this->setRankMedalsShipped();
+        }
+        return $this->medalsShipped;
     }
 
     public function getRanks() {
