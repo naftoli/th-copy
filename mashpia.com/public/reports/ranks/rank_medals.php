@@ -277,9 +277,11 @@ $for_shipping = [];
     <p>
         Total Rank Medals: <?= $totalRanks; ?>
     </p>
+    <?php if ($super) : ?>
     <p>
         <button id="medalsBtnAll">Set All As Shipped</button>
     </p>
+    <?php endif; ?>
     <table>
         <tr>
             <th>School ID</th>
