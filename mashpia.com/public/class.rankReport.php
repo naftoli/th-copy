@@ -229,11 +229,10 @@ class RankReport extends Report {
             JOIN users u USING ( user_id )
             JOIN schools s USING ( school_id )
             JOIN classes c ON ( u.class_id = c.class_id ) 
-            JOIN registration_charges rc using ( user_id )
+            JOIN user_registration ur ON u.user_id = ur.user_id 
             WHERE u.medals_ranks = 1 
             AND u.user_registered > 0 
-            AND rc.year = 5785 
-            AND rc.type = 'THE' 
+            AND ur.year = 5785 
             $filter ";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
