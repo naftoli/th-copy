@@ -69,16 +69,15 @@ $shipped = $rr->getRankBooksShipped();
 <BODY>
 <?php include('admin_header.php'); ?>
 <?php
-$super = false;
-$schools = array();
+$super = $admin->auth == 'super';
+
 //if it's a super user, loop through all schools
 //otherwise show school associated with account
-if ($admin->auth == 'super') {
-    $super = true;
-}
 require_once 'class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
 $schools = $as->getSchools();
+
+$for_shipping = [];
 ?>
 <div class='no-print'>
     <h1>Isser's Ranks Summary Sheet</h1>
@@ -88,7 +87,7 @@ $schools = $as->getSchools();
         <form action="" method="post">
             <p>
                 <?php
-                echo $rr->getHtmlSelect();
+                echo $rr->getHtmlSelect(3);
                 ?>
                 <input type="submit" name="submit" value="Modify Report"/>
             </p>
@@ -99,10 +98,11 @@ $schools = $as->getSchools();
         <input type='button' name='print' value='Print' onclick="window.print()"/>
     </div>
 
+    <?php if ($super) : ?>
     <div>
-        <button id='bookBtnAll'
-        '>Set All Books as Shipped</button>
+        <button id='booksBtnAll'>Set All Books as Shipped</button>
     </div>
+    <?php endif; ?>
 </div>
 <div id='main'>
     <?php
@@ -135,6 +135,7 @@ $schools = $as->getSchools();
                             echo "</td><td>". $grade . "</td><td>" . $info['user_serial'] . "</td><td>";
                             echo $heName . ' - ' . $info['first'] . ' ' . $info['last'] . "</td></tr>";
                             $totals[$book]++;
+                            $for_shipping[$user_id] = $book;
 
                             // grand totals
                             if (isset($bookTotals[$book])) {
@@ -179,32 +180,41 @@ $schools = $as->getSchools();
             <th>Book</th>
             <th>Total</th>
         </tr>
-        <?
-        $gtotal = 0;
+        <?php
+        $grandTotal = 0;
         foreach ($bookTotals as $book => $total) {
-            $gtotal += $total;
+            $grandTotal += $total;
             echo "<tr><td>" . $book . "</td><td>" . $total . "</td></tr>";
         }
-        echo "<tr><th>Grand Total:</th><th>" . $gtotal . "</th></tr>";
+        echo "<tr><th>Grand Total:</th><th><span id='grandTotal'>" . $grandTotal . "</span></th></tr>";
         ?>
     </table>
 </div>
 </BODY>
 <script>
-  const start = <?= $reportDates['start'] ?>;
-  const end = <?= $reportDates['end'] ?>;
-
-
   $(function () {
-    $('#bookBtnAll').click(function () {
-      $.post('ajax.php', {
-        action: 'setAllBooksShipped',
-        start: start,
-        end: end
-      }, function (data) {
-        alert(data);
-      });
-    });
+    $(document).ready(() => {
+      $('#booksBtnAll').click(() => {
+        setAsShipped()
+      })
+    })
+
+    const setAsShipped = async () => {
+      // use fetch
+      const res = await fetch('/ranks/set_as_shipped.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({total: <?= $grandTotal ?>, info: <?= json_encode($for_shipping); ?>})
+      })
+      const data = await res.json()
+      if (data.success) {
+        alert(data.books_count + ' books set as shipped.')
+      } else {
+        alert(data.error)
+      }
+    }
   })
 </script>
 </HTML>
