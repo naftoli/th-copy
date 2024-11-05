@@ -200,6 +200,7 @@ $for_shipping = [];
     foreach ($schools as $school_id => $school_name) {
         if (in_array($school_id, [180, 585, 588, 612, 709])) continue;
         $rr->setSchoolId($school_id);
+        $rr->setRanks();
         $ranks = $rr->getRanks();
         $userInfo = $rr->getUserInfo();
         $heNames = $rr->getUserHeNames();
