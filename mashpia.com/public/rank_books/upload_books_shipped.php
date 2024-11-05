@@ -73,11 +73,12 @@ if (isset($_FILES['file'])) {
         $MASHPIA_DB->beginTransaction();
         $updated = 0;
 
+        $missing = array_diff($serials, array_keys($user_ids));
         foreach ($info as $serial => $book) {
-            if (!isset($user_ids[$serial])) {
-                throw new Exception('User serial ' . htmlspecialchars($serial) . ' not found in database');
+            if (in_array($serial, $missing)) {
+                echo "Error: No user found for serial " . htmlspecialchars($serial);
+                continue;
             }
-
             $user_id = $user_ids[$serial];
             if (!$stmt->execute([$user_id, $book])) {
                 throw new Exception('Failed to update book #' . htmlspecialchars($book) . ' for user ' . $user_id);
