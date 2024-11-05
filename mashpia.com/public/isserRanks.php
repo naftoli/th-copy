@@ -16,80 +16,48 @@ $rr->setRankNames();
 $rankNames = $rr->getRankNames();
 $reportDates = $rr->getReportDates();
 $heDatesRanks = $rr->getHeReportDates();
-
-$rankOrds = [];
-$sql = "select * from ranks order by rank_ord";
-$result = mysql_query($sql) or die(mysql_error());
-while ($row = mysql_fetch_assoc($result)) {
-    $rankOrds[$row['rank_name']] = $row['rank_ord'];
-}
-
-function getRank($user)
-{
-    $name = explode(" ", $user);
-    $sql = "select rank_name 
-			from ranks r 
-			join rank_marks rm 
-			using (rank_ord) 
-			join users u 
-			using (user_id) 
-			where u.last = \"$name[1]\"   
-			and u.first = \"$name[0]\"  
-			order by rm.rank_ord desc 
-			limit 0,1";
-    $result = mysql_query($sql) or die(mysql_error());
-    $row = mysql_fetch_assoc($result);
-    return $row['rank_name'];
-}
-
+$shipped = $rr->getRankBooksShipped();
 ?>
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-
+<!DOCTYPE html>
 <HTML DIR="<?= $dir ?>">
-
 <HEAD>
-  <TITLE>Medals Ranks Ceremony</TITLE>
-  <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <style type="text/css">
-    @media screen {
-      .no-print {
-        display: block;
+    <TITLE>Medals Ranks Ceremony</TITLE>
+    <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <style type="text/css">
+      @media screen {
+        .no-print {
+          display: block;
+        }
+
+        .print-only {
+          display: none;
+        }
       }
 
-      .print-only {
-        display: none;
+      @media print {
+        .no-print {
+          display: none;
+        }
+
+        .print-only {
+          display: block;
+        }
       }
-    }
 
-    @media print {
-      .no-print {
-        display: none;
+      th, td {
+        padding: 3px 10px;
+        vertical-align: top;
       }
 
-      .print-only {
-        display: block;
+      .page-break {
+        page-break-after: always;
       }
-    }
 
-    th, td {
-      padding: 3px 10px;
-      vertical-align: top;
-    }
-
-    .page-break {
-      page-break-after: always;
-    }
-
-    #main {
-      font-size: 14px;
-    }
-
-    .medals {
-      margin-left: 30px;
-    }
-  </style>
+      #main {
+        font-size: 14px;
+      }
+    </style>
 </HEAD>
 
 <BODY>
@@ -107,108 +75,91 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false);
 $schools = $as->getSchools();
 ?>
 <div class='no-print'>
-  <h1>Isser's Ranks Summary Sheet</h1>
+    <h1>Isser's Ranks Summary Sheet</h1>
 
-  <div>
-    Current Report is calculated from <?= $heDatesRanks['start_he'] ?> up to <?= $heDatesRanks['end_he'] ?>.<br/>
-    <form action="" method="post">
-      <p>
-          <?php
-          echo $rr->getHtmlSelect();
-          ?>
-        <input type="submit" name="submit" value="Modify Report"/>
-      </p>
-    </form>
-  </div>
+    <div>
+        Current Report is calculated from <?= $heDatesRanks['start_he'] ?> up to <?= $heDatesRanks['end_he'] ?>.<br/>
+        <form action="" method="post">
+            <p>
+                <?php
+                echo $rr->getHtmlSelect();
+                ?>
+                <input type="submit" name="submit" value="Modify Report"/>
+            </p>
+        </form>
+    </div>
 
-  <div align='center'>
-    <input type='button' name='print' value='Print' onclick="window.print()"/>
-  </div>
+    <div align='center'>
+        <input type='button' name='print' value='Print' onclick="window.print()"/>
+    </div>
 
-  <div>
-    <button id='cardBtnAll'>Set All Cards as Shipped</button>
-    <button id='bookBtnAll'
-    '>Set All Books as Shipped</button>
-  </div>
+    <div>
+        <button id='bookBtnAll'
+        '>Set All Books as Shipped</button>
+    </div>
 </div>
 <div id='main'>
-    <?
-    $ranktotals = array();
+    <?php
+    $bookTotals = [];
     foreach ($schools as $school_id => $school_name) {
         if (in_array($school_id, [180, 585, 588, 612, 709])) continue;
         $rr->setSchoolId($school_id);
-        $rr->setRanks('byRank', 0, ' ', '', true);
-        $ranks = $rr->getRanks();
+        $books = $rr->getBooksToSend();
         $userInfo = $rr->getUserInfo();
         $heNames = $rr->getUserHeNames();
 
-        foreach ($ranks as $school => $line) {
+        foreach ($books as $school => $more) {
             if ($school != $school_name) continue;
             echo "<h2>" . $school_name . "</h2>";
-            echo "Ranks earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br /><br />";
+            echo "Books earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br /><br />";
             $totals = [];
 
-            foreach ($line as $rank => $info) {
-                foreach ($rankNames as $rankName => $needed) {
-                    //echo $rankName . "<br />";
-                    if ($rankName == $rank) {
-                        echo "<h2>" . $rank . "</h2><table>";
-                        echo "<tr><th>Card Sent</th><th>Book Sent</th><th>Serial #</th><th>Name</th></tr>";
-                        foreach ($info as $teacher => $class) {
-                            foreach ($class as $grade => $info) {
-                                $add = count($info);
-                                if (isset($ranktotals[$rank]))
-                                    $ranktotals[$rank] += $add;
-                                else
-                                    $ranktotals[$rank] = $add;
-                                if (isset($totals[$rank]))
-                                    $totals[$rank] += $add;
-                                else
-                                    $totals[$rank] = $add;
+            foreach ($more as $book => $other) {
+                $totals[$book] = 0;
+                echo "<h2>Book #" . $book . "</h2>";
+                echo "<table><tr><th></th><th>Grade</th><th>Serial Number</th><th>Name</th></tr>";
+                foreach ($other as $teacher => $more) {
+                    foreach ($more as $grade => $users) {
+                        foreach ($users as $user_id) {
+                            $info = $userInfo[$user_id];
+                            $heName = $heNames[$user_id];
+                            echo "<tr><td>";
+                            echo "<input type='checkbox' name='book_" . $book . "[" . $user_id . "]' id='book_" . $book . "_" . $user_id . "' " .
+                                (isset($shipped[$user_id][$book]) ? 'checked' : '') . " />";
+                            echo "</td><td>". $grade . "</td><td>" . $info['user_serial'] . "</td><td>";
+                            echo $heName . ' - ' . $info['first'] . ' ' . $info['last'] . "</td></tr>";
+                            $totals[$book]++;
 
-                                foreach ($info as $student) {
-                                    $user_id = $student['user_id'];
-                                    $sql = "select user_serial from users where user_id = " . $user_id;
-                                    $result = mysql_query($sql);
-                                    $row = mysql_fetch_assoc($result);
-                                    $id = $user_id . '|' . $rankOrds[$rank];
-                                    $cardChecked = $student['date_card_shipped'];
-                                    $bookChecked = $student['date_book_shipped'];
-                                    echo "<tr><td><input type='checkbox' class='rank_card' id='$id' ";
-                                    if ($cardChecked) echo "checked";
-                                    echo "></td><td><input type='checkbox' class='rank_book' id='$id' ";
-                                    if ($bookChecked) echo "checked";
-                                    echo "></td><td>" . $row['user_serial'] . "</td><td>";
-                                    if (!empty($heNames[$user_id]))
-                                        echo $heNames[$user_id] . ' - ';
-                                    echo $userInfo[$user_id];
-                                    echo " (" . $grade . ")";
-                                    echo "</td></tr>";
-                                }
+                            // grand totals
+                            if (isset($bookTotals[$book])) {
+                                $bookTotals[$book]++;
+                            } else {
+                                $bookTotals[$book] = 1;
                             }
                         }
-                        echo "<tr><td><button class='cardBtn'>Toggle</button></td><td><button class='bookBtn'>Toggle</button></td></tr>";
-                        echo "</table><br />";
                     }
                 }
+                echo "</table>";
             }
+
+            // show totals
             if ($super) {
                 ?>
-              <h2><?= $school ?> Totals</h2>
-              <table>
-                <tr>
-                  <th>Rank</th>
-                  <th>Total</th>
-                </tr>
-                  <?
-                  $gtotal = 0;
-                  foreach ($totals as $rank => $total) {
-                      $gtotal += $total;
-                      echo "<tr><td>" . $rank . "</td><td>" . $total . "</td></tr>";
-                  }
-                  echo "<tr><th></th><th>" . $gtotal . "</th></tr>";
-                  ?>
-              </table>
+                <h2><?= $school ?> Totals</h2>
+                <table>
+                    <tr>
+                        <th>Book</th>
+                        <th>Total</th>
+                    </tr>
+                    <?
+                    $gtotal = 0;
+                    foreach ($totals as $book => $total) {
+                        $gtotal += $total;
+                        echo "<tr><td>" . $book . "</td><td>" . $total . "</td></tr>";
+                    }
+                    echo "<tr><th>Grand Total:</th><th>" . $gtotal . "</th></tr>";
+                    ?>
+                </table>
                 <?
             }
             echo "<br /><br />";
@@ -216,80 +167,38 @@ $schools = $as->getSchools();
         }
     }
     ?>
-  <h2><?= $super ? 'Grand ' : '' ?>Totals</h2>
-  <table>
-    <tr>
-      <th>Rank</th>
-      <th>Total</th>
-    </tr>
-      <?
-      $gtotal = 0;
-      foreach ($ranktotals as $rank => $total) {
-          $gtotal += $total;
-          echo "<tr><td>" . $rank . "</td><td>" . $total . "</td></tr>";
-      }
-      echo "<tr><th></th><th>" . $gtotal . "</th></tr>";
-      ?>
-  </table>
+    <h2><?= $super ? 'Grand ' : '' ?>Totals</h2>
+    <table>
+        <tr>
+            <th>Book</th>
+            <th>Total</th>
+        </tr>
+        <?
+        $gtotal = 0;
+        foreach ($bookTotals as $book => $total) {
+            $gtotal += $total;
+            echo "<tr><td>" . $book . "</td><td>" . $total . "</td></tr>";
+        }
+        echo "<tr><th>Grand Total:</th><th>" . $gtotal . "</th></tr>";
+        ?>
+    </table>
 </div>
 </BODY>
 <script>
   const start = <?= $reportDates['start'] ?>;
   const end = <?= $reportDates['end'] ?>;
 
-  function update(elem, type, checked) {
-    let id = $(elem).attr('id');
-    let info = id.split('|');
-    let user_id = info[0];
-    let rank = info[1];
-    let url = 'edit_functions.php?function_name=update_ranks&parameters=' + user_id + '_' + rank + '_' + checked + '_' + type
-    $.getJSON(url, function (success) {
-      if (success = 0) {
-        alert('Error updating rank ' + type)
-      }
-    })
-  }
 
   $(function () {
-    $(".rank_card").click(function () {
-      // we want to toggle the value so if it's only getting checked now, the condition will be false and vice versa
-      let checked = $(this).is(":checked") ? 0 : 1;
-      update(this, 'card', checked)
-    })
-    $(".rank_book").click(function () {
-      // we want to toggle the value so if it's only getting checked now, the condition will be false and vice versa
-      let checked = $(this).is(":checked") ? 0 : 1;
-      update(this, 'book', checked)
-    })
-
-    $("#cardBtnAll").click(function () {
-      $.getJSON('edit_functions.php?function_name=update_ranks&parameters=' + start + '_' + end + '_card', function (success) {
-        if (success = 0) {
-          alert('Error updating rank cards.')
-        }
-      })
-    })
-
-    $("#bookBtnAll").click(function () {
-      $.getJSON('edit_functions.php?function_name=update_ranks&parameters=' + start + '_' + end + '_card', function (success) {
-        if (success = 0) {
-          alert('Error updating rank books.')
-        }
-      })
-    })
-
-    $(".cardBtn").click(function () {
-      $(this).closest('table').find('.rank_card').each(function () {
-        $(this).trigger('click')
-      })
-    })
-
-    $(".bookBtn").click(function () {
-      $(this).closest('table').find('.rank_book').each(function () {
-        $(this).trigger('click')
-      })
-    })
+    $('#bookBtnAll').click(function () {
+      $.post('ajax.php', {
+        action: 'setAllBooksShipped',
+        start: start,
+        end: end
+      }, function (data) {
+        alert(data);
+      });
+    });
   })
 </script>
 </HTML>
- 

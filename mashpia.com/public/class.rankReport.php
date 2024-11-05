@@ -12,6 +12,7 @@ class RankReport extends Report {
     protected $userSchool;
     protected $userPic;
     protected $picOnly;
+    protected $books;
 
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -22,6 +23,8 @@ class RankReport extends Report {
         $this->schoolLogos = [];
         $this->userSchool = [];
         $this->userPic = [];
+        $this->picOnly = [];
+        $this->books = [];
     }
 
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
@@ -198,12 +201,75 @@ class RankReport extends Report {
         }
     }
 
+    public function setRankBooksShipped() {
+        $this->shipped = [];
+        $sql = "select * from rank_books_shipped";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $this->shipped[$row['user_id']] = $row['book'];
+        }
+    }
+
+    public function getRankBooksShipped() {
+        if (empty($this->shipped)) {
+            $this->setRankBooksShipped();
+        }
+        return $this->shipped;
+    }
+
+    public function getBooksToSend() {
+        $this->books = [];
+        $start = $this->reportDates['start'];
+        $end = $this->reportDates['end'];
+        $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
+        $sql = "
+            SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, 
+                   u.*, rm.*, MAX(rm.rank_ord) as rank 
+            FROM rank_marks rm
+            JOIN users u USING ( user_id )
+            JOIN schools s USING ( school_id )
+            JOIN classes c ON ( u.class_id = c.class_id ) 
+            WHERE u.medals_ranks = 1 
+            AND u.user_registered > 0 
+            $filter ";
+        if (!is_null($this->school_id)) {
+            $sql .= "AND s.school_id = $this->school_id ";
+        } else {
+            $sql .= "
+                AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+            ";
+        }
+        $sql .= "GROUP BY u.user_id ";
+        $sql .= "ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first";
+
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $user_id = $row['user_id'];
+            $school = $row['school_name'];
+            $teacher = $row['class_teacher'];
+            $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+            $this->userInfo[$user_id] = $row;
+            $this->userHeNames[$row['user_id']] = $row['first_he'] . ' ' . $row['last_he'];
+
+            $rank_ord = $row['rank'];
+            $book = 0;
+            if ($rank_ord == 1) {
+                $book = 1;
+            } else if ($rank_ord == 9) {
+                $book = 2;
+            } else if ($rank_ord == 12) {
+                $book = 3;
+            }
+            if ($book) $this->books[$school][$book][$teacher][$grade][] = $user_id;
+        }
+        return $this->books;
+    }
+
     public function getRanks() {
         return $this->ranks;
     }
 
     public function setRankNames() {
-        //$sql = "select * from ranks where medals_required > 0 order by rank_ord";
         $sql = "select * from ranks order by rank_ord";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
