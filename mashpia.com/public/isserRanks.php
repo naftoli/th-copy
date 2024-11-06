@@ -209,7 +209,7 @@ $for_shipping = [];
       })
 
       // set individual book as shipped
-      $('.book').on('click', async function () {
+      $('.book').on('click', (async function () {
         const [book, user] = $(this).attr('id').split('_').slice(1)
         const checked = $(this).is(':checked')
         const res = await fetch('/rank_books/update_shipped.php', {
@@ -225,7 +225,7 @@ $for_shipping = [];
           const elem = document.getElementById(`book_${book}_${user}`)
           elem.checked = !checked
         }
-      })
+      }))
     })
 
     const setAsShipped = async () => {
