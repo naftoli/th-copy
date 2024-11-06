@@ -35,27 +35,34 @@ class Report extends ReportBasic {
         return $this->dates;
     }
 
-    public function getHtmlSelect($join = false) {
+    public function getHtmlSelect($join = 0) {
+        $first = 1;
+        if ($join) {
+            // change dates
+            $start = $this->dates[$first] + 1;
+            $end = $this->dates[$first + $join];
+        }
+
         $reportDates = $this->getReportDates();
 
         $str = "<select name='date_selection' id='date_selection'>";
         $num = count($this->dates)-1;
 
+        // figure out where to start the loop from
+        $i = $first;
         if ($join) {
-            // check how many to join
-            $start = intval($this->dates[1]) + 1;
-            $end = intval($this->dates[$join]);
+            $i += $join;
             $str1 = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
             $start_he = iconv('WINDOWS-1255', 'UTF-8', $str1);
             $str2 = jdtojewish($end, true, CAL_JEWISH_ADD_GERESHAYIM);
             $end_he = iconv('WINDOWS-1255', 'UTF-8', $str2);
-            $str .= "<option value='" . ($this->dates[1] . ':' . $this->dates[3]) . "'";
-            if ( $this->dates[1] == $reportDates['start'] )
+            $str .= "<option value='" . ($start . ':' . $end) . "'";
+            if ( $this->dates[$i] == $reportDates['start'] )
                 $str .= " selected='selected'";
             $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
         }
 
-        for ( $i = 4; $i < $num; $i++ ) {
+        for ( ; $i < $num; $i++ ) {
             $start = $this->dates[$i]+1;
             $end = $this->dates[$i+1];
 
