@@ -289,6 +289,7 @@ $for_shipping = [];
             <th>Student</th>
             <th>Grade</th>
             <th>Rank Medal</th>
+            <th>Rank Ord</th>
         </tr>
         <?php
         foreach ($sheet as $school => $grades) {
@@ -297,7 +298,7 @@ $for_shipping = [];
                     foreach ($ords as $ord) {
                         $name = $userInfo[$user];
                         echo "<tr><td>" . $school . "</td><td>" . $user . "</td><td>" . $name . "</td><td>" .
-                            $grade . "</td><td>" . $rankNames[$ord] . "</td></tr>";
+                            $grade . "</td><td>" . $rankNames[$ord] . "</td><td>" . $ord . "</td></tr>";
                     }
                 }
             }
