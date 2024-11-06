@@ -2271,11 +2271,12 @@ var templates = function () {
       let html = '<option value="0">Select Amount to Pay</option>'
       let fees = [20, 25, 30, 40]
       if (user.school.school_id == 61) fees = [30, 35, 40, 50]
+      else if (user.school.school_id == 269) fees = [50, 60, 70]
       if (this.changeFee()) {
         fees = [40]
         if (user.school.school_id == 61) fees = [40, 50]
+        else if (user.school.school_id == 269) fees = [60, 70]
       }
-      else if (user.school.school_id == 269) fees = [60, 70]
       for (let fee of fees) {
         html += `<option value="${fee}">$${fee}</option>`
       }
