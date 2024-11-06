@@ -45,15 +45,7 @@ if (isset($_FILES['file'])) {
     }
     fclose($fileHandle);
 
-    // make sure our total is same as info total
-    $rankTotal = count($info);
-    if ($rankTotal != $total || $rankTotal === 0) {
-        echo "Error: corrupted file or empty file. Total ranks count does not match.";
-        exit;
-    }
-
     // get user_ids
-    $serials = array_keys($info);
     try {
         $MASHPIA_DB->beginTransaction();
         $updated = 0;
