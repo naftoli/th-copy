@@ -42,7 +42,6 @@ $rankNames = getRanks();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 $rr = new RankReport();
-$rr->setYear($year);
 
 if (isset($_POST['date_selection'])) {
     $dates = explode(':', $_POST['date_selection']);

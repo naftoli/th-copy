@@ -8,10 +8,6 @@ require('header.php');
 require_once 'class.medalReport.php';
 $m = new MedalReport;
 
-if (isset($_GET['start']) && isset($_GET['end'])) {
-    $m->overrideDates($_GET['start'], $_GET['end']);
-}
-
 if (isset($_POST['date_selection'])) {
     $dates = explode(':', $_POST['date_selection']);
     $start = $dates[0];
@@ -126,9 +122,10 @@ function checkForBreak()
       }
     }
 
-    button {
-      padding: 10px;
-      font-size: 14px;
+    select, button, input[type="button"], input[type="submit"] {
+      padding: 5px 10px;
+      font-size: 16px;
+      cursor: pointer;
     }
   </style>
   <script type="text/javascript">
@@ -143,32 +140,29 @@ function checkForBreak()
 <?php include('admin_header.php'); ?>
 
 <div class="no-print">
-  <h1>Medals Labels Report</h1>
-  <div class="no-print">
-    <h1>Medals Report Summary</h1>
-    <div>
-      Current Report is calculated from <?= $heDates['start_he'] ?> up to <?= $heDates['end_he'] ?>.<br/>
-      <form action="" method="post">
-        <p>
-            <?php
-            echo $m->getHtmlSelect();
-            ?>
-          <input type="submit" name="submit" value="Modify Report"/>
-        </p>
-      </form>
-    </div>
+  <h1>Medals Report Summary</h1>
+  <div>
+    Current Report is calculated from <?= $heDates['start_he'] ?> up to <?= $heDates['end_he'] ?>.<br/>
+    <form action="" method="post">
+      <p>
+          <?php
+          echo $m->getHtmlSelect();
+          ?>
+        <input type="submit" name="submit" value="Modify Report"/>
+      </p>
+    </form>
   </div>
-  <div class='instructions'>
-    <b>Printing Instructions</b><br/>
-    Please set your printer margins to the following:<br/>
-    0.5 Top<br/>
-    0.3 Left<br/>
-    0.0 Right and Bottom<br/><br/>
-    <div>
-      <button onclick="check()">Print</button>
-    </div>
-    <br/>
+</div>
+<div class='instructions no-print'>
+  <b>Printing Instructions</b><br/>
+  Please set your printer margins to the following:<br/>
+  0.5 Top<br/>
+  0.3 Left<br/>
+  0.0 Right and Bottom<br/><br/>
+  <div>
+    <button onclick="check()">Print</button>
   </div>
+  <br/>
 </div>
 
 <div id="report_div" name="report_div">

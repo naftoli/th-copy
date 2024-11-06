@@ -34,11 +34,11 @@ class RankReport extends Report {
         $this->year = GlobalSettings::getRegistrationYear();
     }
 
-    public function setYear($yr) {
-        $this->year = $yr;
-    }
-
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
+        // if there's a school ID, update year
+        if ($this->school_id) {
+            $this->year = GlobalSettings::getRegistrationYear($this->school_id);
+        }
         $this->ranks = [];
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
@@ -156,6 +156,11 @@ class RankReport extends Report {
     }
 
     public function setOtherChildren($nameBreak, $users) {
+        // if there's a school ID, update year
+        if ($this->school_id) {
+            $this->year = GlobalSettings::getRegistrationYear($this->school_id);
+        }
+
         $this->ranks = [];
         $this->setRankNames();
 
@@ -165,7 +170,9 @@ class RankReport extends Report {
             JOIN users u USING ( user_id )
             JOIN schools s USING ( school_id )
             JOIN classes c ON ( u.class_id = c.class_id ) 
+            JOIN user_registration ur ON u.user_id = ur.user_id 
             WHERE u.user_registered > 0 
+            AND ur.year = $this->year
             AND u.user_id NOT IN (" . implode(',', $users) . ") ";
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
