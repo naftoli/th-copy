@@ -40,21 +40,23 @@ if (isset($_FILES['file'])) {
             fclose($fileHandle);
             exit;
         }
-        $info[$line[0]] = $line[1];
+        $info[$line[0]][] = $line[1];
         $total++;
     }
     fclose($fileHandle);
 
-    // get user_ids
+    // update ranks
     try {
         $MASHPIA_DB->beginTransaction();
         $updated = 0;
 
-        foreach ($info as $user_id => $rank) {
-            if (!$stmt->execute([$user_id, $rank])) {
-                throw new Exception('Failed to update rank #' . htmlspecialchars($rank) . ' for user ' . $user_id);
+        foreach ($info as $user_id => $ranks) {
+            foreach ($ranks as $rank) {
+                if (!$stmt->execute([$user_id, $rank])) {
+                    throw new Exception('Failed to update rank #' . htmlspecialchars($rank) . ' for user ' . $user_id);
+                }
+                $updated++;
             }
-            $updated++;
         }
 
         $MASHPIA_DB->commit();
