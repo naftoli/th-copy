@@ -1,5 +1,6 @@
 <?php
 require_once 'class.report.php';
+require_once 'class.globalSettings.php';
 
 class RankReport extends Report {
     protected $ranks;
@@ -30,6 +31,7 @@ class RankReport extends Report {
         $this->books = [];
         $this->shipped = [];
         $this->medalsShipped = [];
+        $this->year = GlobalSettings::getRegistrationYear();
     }
 
     public function setYear($yr) {
