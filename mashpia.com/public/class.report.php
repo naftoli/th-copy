@@ -43,8 +43,8 @@ class Report extends ReportBasic {
 
         if ($join) {
             // check how many to join
-            $start = $this->dates[1];
-            $end = $this->dates[$join];
+            $start = intval($this->dates[1]) + 1;
+            $end = intval($this->dates[$join]);
             $str1 = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
             $start_he = iconv('WINDOWS-1255', 'UTF-8', $str1);
             $str2 = jdtojewish($end, true, CAL_JEWISH_ADD_GERESHAYIM);
