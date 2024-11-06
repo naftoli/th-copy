@@ -207,25 +207,6 @@ $for_shipping = [];
       $('#booksBtnAll').click(() => {
         setAsShipped()
       })
-
-      // set individual book as shipped
-      $('.book').on('click', (async function () {
-        const [book, user] = $(this).attr('id').split('_').slice(1)
-        const checked = $(this).is(':checked')
-        const res = await fetch('/rank_books/update_shipped.php', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({user, book, checked})
-        })
-        const data = await res.json()
-        if (!data.success) {
-          alert('Error updating shipped status.')
-          const elem = document.getElementById(`book_${book}_${user}`)
-          elem.checked = !checked
-        }
-      }))
     })
 
     const setAsShipped = async () => {
@@ -244,6 +225,26 @@ $for_shipping = [];
         alert(data.error)
       }
     }
+
+    const books = document.querySelectorAll('.book')
+    books.forEach(book => {
+      book.addEventListener('change', async (e) => {
+        const [book, user] = e.target.id.split('_').slice(1)
+        const checked = e.target.checked
+        const res = await fetch('/rank_books/update_shipped.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({user, book, checked})
+        })
+        const data = await res.json()
+        if (!data.success) {
+          alert('Failed to update shipped status.')
+          document.getElementById(e.target.id).checked = !checked
+        }
+      })
+    })
   })
 </script>
 </HTML>
