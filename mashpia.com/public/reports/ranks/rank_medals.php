@@ -252,20 +252,32 @@ $for_shipping = [];
                             echo "</div>";
                             checkForBreak();
                         }
-                        echo "<div class='label'>";
-                        echo "<span class='name'>" . $school . "<br />" . $userInfo[$user] . " (Grade: " . $grade . ")</span><br />";
+
+                        // first check if we have anything to send to this user that wasn't sent yet
+                        $num_ords = count($rank_ords);
                         foreach ($rank_ords as $ord) {
                             // check if it was already shipped
                             if (isset($shipped[$user]) && in_array($ord, $shipped[$user])) {
-                                continue;
+                                $num_ords--;
                             }
-                            echo "<span class='medal'>" . $rankNames[$ord] . "</span>";
-                            $sheet[$school_id][$grade][$user][] = $ord;
-                            $for_shipping[$user][] = $ord;
-                            $totalRanks++;
                         }
-                        echo "</div>";
-                        checkForBreak();
+
+                        if ($num_ords) {
+                            echo "<div class='label'>";
+                            echo "<span class='name'>" . $school . "<br />" . $userInfo[$user] . " (Grade: " . $grade . ")</span><br />";
+                            foreach ($rank_ords as $ord) {
+                                // check if it was already shipped
+                                if (isset($shipped[$user]) && in_array($ord, $shipped[$user])) {
+                                    continue;
+                                }
+                                echo "<span class='medal'>" . $rankNames[$ord] . "</span>";
+                                $sheet[$school_id][$grade][$user][] = $ord;
+                                $for_shipping[$user][] = $ord;
+                                $totalRanks++;
+                            }
+                            echo "</div>";
+                            checkForBreak();
+                        }
                     }
                 }
             }
