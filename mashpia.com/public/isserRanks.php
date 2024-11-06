@@ -132,7 +132,7 @@ $for_shipping = [];
                             $addToTotal = true;
 
                             echo "<tr><td>";
-                            echo "<input type='checkbox' id='book_" . $book . "_" . $user_id . "' ";
+                            echo "<input type='checkbox' class='book' id='book_" . $book . "_" . $user_id . "' ";
                             if (isset($shipped[$user_id]) && in_array($book, $shipped[$user_id])) {
                                 $addToTotal = false;
                                 echo 'checked ';
@@ -207,11 +207,30 @@ $for_shipping = [];
       $('#booksBtnAll').click(() => {
         setAsShipped()
       })
+
+      // set individual book as shipped
+      $('.book').change(async function () {
+        const [book, user] = $(this).attr('id').split('_').slice(1)
+        const checked = $(this).is(':checked')
+        const res = await fetch('/rank_books/update_shipped.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({user, book, checked})
+        })
+        const data = await res.json()
+        if (!data.success) {
+          alert('Error updating shipped status.')
+          const elem = document.getElementById(`book_${book}_${user}`)
+          elem.checked = !checked
+        }
+      })
     })
 
     const setAsShipped = async () => {
       // use fetch
-      const res = await fetch('/ranks/set_as_shipped.php', {
+      const res = await fetch('/rank_books/set_as_shipped.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
