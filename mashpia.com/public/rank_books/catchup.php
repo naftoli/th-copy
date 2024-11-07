@@ -139,7 +139,7 @@ $ranks = get_ranks();
 <BODY>
 <?php include('../admin_header.php'); ?>
 
-<h1>Rank Books Catchup Report</h1>
+<h1 class="no-print">Rank Books Catchup Report</h1>
 <div>
     <div class="no-print">
       <button onclick="window.print()">Print</button>
