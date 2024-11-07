@@ -8,9 +8,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 $australian = GlobalSettings::getAustralian();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
-$schools = $as->getSchools();
+// make sure it's hq
+if ($admin_user['auth'] != 'super') {
+    echo 'You are not authorized to view this page.';
+    exit;
+}
 
 function checkForBreak()
 {
@@ -68,7 +70,6 @@ $sql = "SELECT
         WHERE
             u.user_registered > 0 AND ur.year = $year 
                 AND u.school_id NOT IN (" . implode(',', $exceptions) . ") 
-                AND u.school_id IN (" . implode(',', array_keys($schools)) . ") 
                 AND rms.user_id IS NULL
         GROUP BY u.user_id 
         HAVING rank_ord > 1  
@@ -143,9 +144,7 @@ $ranks = get_ranks();
 <div>
     <div class="no-print">
       <button onclick="window.print()">Print</button>
-      <?php if ($admin_user['auth'] == 'super') { ?>
-          <button id="medalsBtnAll">Set All as Shipped</button>
-      <?php } ?>
+      <button id="medalsBtnAll">Set All as Shipped</button>
     </div>
     <?php
     $totalBooks = [];
