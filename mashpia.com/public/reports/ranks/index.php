@@ -81,6 +81,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Missing Medals Printout Report</span>
                 </div>
             </a>
+            <a href="/medals_labels.php">
+              <div class="button">
+                <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                <span class="link-text">Medals Label / Shipping Report</span>
+              </div>
+            </a>
             <a href="/medals_summary_report.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
