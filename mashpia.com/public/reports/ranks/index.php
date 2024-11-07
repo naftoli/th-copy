@@ -104,6 +104,22 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
+
+        <h2>Rank Books</h2>
+        <div id="action-links">
+            <a href="/isserRanks.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Rank Books Report</span>
+                </div>
+            </a>
+            <a href="/rank_books/catchup.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Rank Books Catchup Report</span>
+                </div>
+            </a>
+        </div>
         <?} // end admin only links ?>
 
     </body>
