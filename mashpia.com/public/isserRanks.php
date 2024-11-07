@@ -15,7 +15,6 @@ if (isset($_POST['date_selection'])) {
     $rr->overrideDates($start, $end);
 }
 
-$rr->setYear($year);
 $rr->setRankNames();
 $rankNames = $rr->getRankNames();
 $reportDates = $rr->getReportDates();
