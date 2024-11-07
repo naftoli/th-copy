@@ -88,8 +88,23 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <?} // end admin only links ?>
+
+        <h2>Rank Medals</h2>
+        <div id="action-links">
+            <a href="rank_medals.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Rank Medals Report</span>
+                </div>
+            </a>
+            <a href="rank_medals_catchup.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Rank Medals Catchup Report</span>
+                </div>
+            </a>
         </div>
-        
+        <?} // end admin only links ?>
+
     </body>
 </html>
