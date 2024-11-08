@@ -147,10 +147,10 @@ $ranks = get_ranks();
       <button id="medalsBtnAll">Set All as Shipped</button>
     </div>
     <?php
-    $totalBooks = [];
     $grandTotal = [];
     // first show summaries
     foreach ($info as $school => $grades) {
+        $totalBooks = [];
         foreach ($grades as $grade => $users) {
             foreach ($users as $user_id => $rank_ord) {
                 if ($rank_ord > 11) {
