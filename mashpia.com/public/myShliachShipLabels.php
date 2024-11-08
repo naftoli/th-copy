@@ -240,7 +240,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                         echo "Rank Medals:<br />";
                         $j = 1; // flag for when to make new label
                         for ($idx = 1; $idx <= $rank_ord; $idx++) {
-                            if ($j > 12) {
+                            if ($j > 10) {
                                 echo "</span></div>";
                                 checkForBreak();
                                 echo "<div class='label'>";
