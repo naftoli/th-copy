@@ -65,8 +65,6 @@ $sql = "SELECT
             classes c ON u.class_id = c.class_id 
                 JOIN 
             user_registration ur ON u.user_id = ur.user_id 
-                LEFT JOIN
-            rank_medals_shipped rms ON u.user_id = rms.user_id 
         WHERE
             u.user_registered > 0 AND ur.year = $year 
                 AND u.school_id NOT IN (" . implode(',', $exceptions) . ") 
