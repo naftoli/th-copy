@@ -2,11 +2,11 @@
 $admin_auth = array('school');
 require('header.php');
 
-require_once 'class.rankReport.php';
-$rr = new RankReport();
-
 require_once 'class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
+
+require_once 'class.rankReport.php';
+$rr = new RankReport();
 
 if (isset($_POST['date_selection'])) {
     $dates = explode(':', $_POST['date_selection']);
