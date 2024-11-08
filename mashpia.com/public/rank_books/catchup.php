@@ -70,7 +70,12 @@ $sql = "SELECT
         WHERE
             u.user_registered > 0 AND ur.year = $year 
                 AND u.school_id NOT IN (" . implode(',', $exceptions) . ") 
-                AND rms.user_id IS NULL
+                AND u.user_id NOT IN (
+                    SELECT 
+                        user_id
+                    FROM
+                        rank_books_shipped
+                )
         GROUP BY u.user_id 
         HAVING rank_ord > 1  
         ORDER BY school_name , u.last , u.first";
