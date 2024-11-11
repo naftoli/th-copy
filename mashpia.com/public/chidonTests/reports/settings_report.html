@@ -38,76 +38,129 @@
   const { createRoot } = ReactDOM
 
   const App = () => {
+    // Calculate current Hebrew year based on current date
+    const getCurrentHebrewYear = () => {
+      const today = new Date()
+      const month = today.getMonth() // 0-11
+      const gregorianYear = today.getFullYear()
+      // If we're before September (month 8), subtract 3761, otherwise subtract 3760
+      return gregorianYear + (month < 8 ? 3760 : 3761)
+    }
+
     const [data, setData] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [year, setYear] = useState(getCurrentHebrewYear())  // Use calculated year
 
     useEffect(() => {
       async function fetchData() {
-        const res = await fetch('../api/getReportInfo.php', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        const data = await res.json()
-        setData(data)
+        try {
+          const res = await fetch(`../api/getReportInfo.php?year=${year}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          const data = await res.json()
+          setData(data)
+        } catch (error) {
+          console.error('Error fetching data:', error)
+        } finally {
+          setIsLoading(false)
+        }
       }
       fetchData()
-    }, [])
+    }, [year])
 
     let i = 1 // for the key of the row if needed
     return (
       <>
-      {!!data.length && (
-        <table className="table table-bordered table-responsive table-striped">
-          <thead>
-            <tr>
-              <th colSpan="5">Personal Info</th>
-              <th colSpan="2">Level</th>
-              <th colSpan="4">Test Avg</th>
-              <th colSpan="4">Final Avg</th>
-            </tr>
-            <tr>
-              <th>School</th>
-              <th>Grade</th>
-              <th>Serial</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Tests</th>
-              <th>Final</th>
-              <th>Yesod</th>
-              <th>Yediah</th>
-              <th>Havonah</th>
-              <th>Iyun</th>
-              <th>Yesod</th>
-              <th>Yediah</th>
-              <th>Havonah</th>
-              <th>Iyun</th>
-            </tr>
-          </thead>
-          <tbody>
-          {data.map(row => (
-            <tr key={i++}>
-              <td>{row.school}</td>
-              <td>{row.grade}</td>
-              <td>{row.serial}</td>
-              <td>{row.first_name}</td>
-              <td>{row.last_name}</td>
-              <td>{row.level}</td>
-              <td>{row.final_level}</td>
-              <td>{row.yesod}</td>
-              <td>{row.yediah}</td>
-              <td>{row.havonah}</td>
-              <td>{row.iyun}</td>
-              <td>{row.final_yesod}</td>
-              <td>{row.final_yediah}</td>
-              <td>{row.final_havonah}</td>
-              <td>{row.final_iyun}</td>
-            </tr>
-          ))}
-          </tbody>
-        </table>
-      )}
-    </>
+        <div className="mb-3">
+          <label htmlFor="yearSelect" className="form-label">Select Year:</label>
+          <select 
+            id="yearSelect"
+            className="form-select" 
+            style={{ width: '200px' }}
+            value={year}
+            onChange={(e) => {
+              setIsLoading(true);
+              setYear(e.target.value);
+            }}
+          >
+            {Array.from(
+              { length: getCurrentHebrewYear() - 5783 }, // Calculate number of years to show
+              (_, i) => getCurrentHebrewYear() - i // Start from current year and count down
+            ).map(yearOption => (
+              <option key={yearOption} value={yearOption}>
+                {yearOption}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {isLoading ? (
+          <div className="alert alert-info" role="alert">
+            Loading data...
+          </div>
+        ) : (
+          <>
+            {data.length && (
+              <table className="table table-bordered table-responsive table-striped">
+                <thead>
+                  <tr>
+                    <th colSpan="5">Personal Info</th>
+                    <th colSpan="2">Level</th>
+                    <th colSpan="4">Test Avg</th>
+                    <th colSpan="4">Final Avg</th>
+                  </tr>
+                  <tr>
+                    <th>School</th>
+                    <th>Grade</th>
+                    <th>Serial</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Tests</th>
+                    <th>Final</th>
+                    <th>Yesod</th>
+                    <th>Yediah</th>
+                    <th>Havonah</th>
+                    <th>Iyun</th>
+                    <th>Yesod</th>
+                    <th>Yediah</th>
+                    <th>Havonah</th>
+                    <th>Iyun</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {data.map(row => (
+                  <tr key={i++}>
+                    <td>{row.school}</td>
+                    <td>{row.grade}</td>
+                    <td>{row.serial}</td>
+                    <td>{row.first_name}</td>
+                    <td>{row.last_name}</td>
+                    <td>{row.level}</td>
+                    <td>{row.final_level}</td>
+                    <td>{row.yesod}</td>
+                    <td>{row.yediah}</td>
+                    <td>{row.havonah}</td>
+                    <td>{row.iyun}</td>
+                    <td>{row.final_yesod}</td>
+                    <td>{row.final_yediah}</td>
+                    <td>{row.final_havonah}</td>
+                    <td>{row.final_iyun}</td>
+                  </tr>
+                ))}
+                </tbody>
+              </table>
+            )}
+            {!data.length && (
+              <div className="alert alert-warning" role="alert">
+                No data to display
+              </div>
+            )}
+          </>
+        )}
+      </>
     )
   }
 
