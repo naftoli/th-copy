@@ -286,7 +286,7 @@ if (count($schools) == 1) {
       for (let track of ['maven', 'pro', 'expert', 'genius']) {
         let elem = '#' + table + '_' + track
         let avg = settings[id] && settings[id][table] && settings[id][table][track] ? settings[id][table][track] : ''
-        if (track == 'genius' && avg) {
+        if (track == 'genius' && avg && avg == 80) {
           $(elem).text('(80 non-cumulative or 90 cumulative)')
         } else if (avg) {
           $(elem).text('(' + avg + ')')
