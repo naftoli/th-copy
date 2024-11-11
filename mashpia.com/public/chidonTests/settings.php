@@ -109,8 +109,8 @@ if (count($schools) == 1) {
   <button id="settings_report">View Settings Report</button>
 </div>
 <div style="clear: both;"></div>
+<h2></h2>
 <div id="settings" style="display: none">
-  <h2></h2>
   <div id="settingsTable">
     <fieldset style="float: left;">
       <legend>Avg for Tests</legend>
@@ -266,7 +266,9 @@ if (count($schools) == 1) {
   })
 
   async function getSettings() {
+    let disableInputs = false
     let year = document.getElementById('yearSelect').value
+    if (year != <?= $year ?>) disableInputs = true
     let school_id = document.getElementById('baseSelect').value
     let class_id = document.getElementById('platoonSelect') ? document.getElementById('platoonSelect').value : 0
     let user_id = document.getElementById('userSelect') ? document.getElementById('userSelect').value : 0
@@ -304,6 +306,12 @@ if (count($schools) == 1) {
     else $('#chidon_test_levels_finals').html('<span style="color: red">(1)</span>')
 
     // show settings
+    if (disableInputs) {
+      // set all inputs to disabled
+      document.getElementById('settings').querySelectorAll('input, select, button').forEach(elem => {
+        elem.disabled = true
+      })
+    }
     document.getElementById('settings').style.display = 'block'
   }
 
