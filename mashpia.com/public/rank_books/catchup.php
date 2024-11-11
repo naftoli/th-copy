@@ -67,6 +67,7 @@ $sql = "SELECT
             user_registration ur ON u.user_id = ur.user_id 
         WHERE
             u.user_registered > 0 AND ur.year = $year 
+                AND u.school_id NOT IN (61, 269) 
                 AND u.school_id NOT IN (" . implode(',', $exceptions) . ") 
                 AND u.user_id NOT IN (
                     SELECT 
