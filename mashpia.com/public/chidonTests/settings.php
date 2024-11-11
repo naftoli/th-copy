@@ -311,6 +311,11 @@ if (count($schools) == 1) {
       document.getElementById('settings').querySelectorAll('input, select, button').forEach(elem => {
         elem.disabled = true
       })
+    } else {
+      // set all inputs to enabled
+      document.getElementById('settings').querySelectorAll('input, select, button').forEach(elem => {
+        elem.disabled = false
+      })
     }
     document.getElementById('settings').style.display = 'block'
   }
