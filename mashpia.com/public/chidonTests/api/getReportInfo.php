@@ -1,13 +1,12 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $yr = isset($_GET['yr']) ? $_GET['yr'] : GlobalSettings::getChidonRegYear();
 
 $ct = new ChidonTests($yr);
@@ -18,6 +17,7 @@ $data = [];
 $types = ['school', 'class', 'user'];
 
 foreach ($schools as $school_id => $school) {
+    if (! $school_id) continue;
     $info = $ct->getSettingsForReport($school_id);
     $settings = $info['settings'];
     $details = $info['details'];
