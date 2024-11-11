@@ -7,8 +7,10 @@ require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$yr = isset($_GET['yr']) ? $_GET['yr'] : GlobalSettings::getChidonRegYear();
 
-$ct = new ChidonTests();
+$ct = new ChidonTests($yr);
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 

@@ -26,7 +26,7 @@ if ($user_id > 0) {
     $school_id = 0;
 }
 
-echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
+//echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
 
 $error_msg = '';
 $success = true;

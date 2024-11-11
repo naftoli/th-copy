@@ -55,21 +55,27 @@ if (count($schools) == 1) {
           display: none;
         }
       <?php endif; ?>
+      select, button {
+        font-size: 14px;
+        padding: 5px;
+      }
     </style>
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Chidon Test Settings</h1>
 <div class="infobox">
-  Chidon HQ has set the standard that an 80% is needed to pass each track and that all are taking the test on level 2 (Harder test).
+  Chidon HQ has set the standard that an 80% is needed to pass each track and that all are taking the test on level 1.
   <br /><br />
-  You have the option to change the passing mark up/down as well as change the test to level 1 (Easier test).
+  You have the option to change the passing mark up/down as well as change the test to level 2 (Harder test).
   You can either do this for your full school, individual platoon (class) or per child. Remember to press save!
   <br /><br />
   Please note that the lowest you can choose is 70%. If there is a particular child who needs a lower average.
   Please contact HQ and they will adjust it for you.
   <br /><br />
   PLEASE NOTE: The settings for School/Grade/Child are all different, so changing one will NOT CHANGE the others.
+  <br /><br />
+  IF you see a RED number, it means that the setting has not yet been set and saved, so please make sure to save it.
 </div>
 <br />
 <div id="yearSelection">
@@ -96,8 +102,14 @@ if (count($schools) == 1) {
 <div id="platoonSelection"></div>
 <div id="userSelection"></div>
 <br />
-<button id="showSettings" onclick="getSettings(); return false;">Show / Refresh Settings</button>
-<div id="settings">
+<div style="float: left;">
+  <button id="showSettings" onclick="getSettings(); return false;">Show / Refresh Settings</button>
+</div>
+<div style="float: right;">
+  <button id="settings_report">View Settings Report</button>
+</div>
+<div style="clear: both;"></div>
+<div id="settings" style="display: none">
   <h2></h2>
   <div id="settingsTable">
     <fieldset style="float: left;">
@@ -168,13 +180,9 @@ if (count($schools) == 1) {
           <br />
         </p>
         <select name="avg" id="avg_score_iyun">
-          <option value="0">Select Avg</option>
           <?php
           $i = 80;
-          if ($super) $i = 50;
-          for (; $i <= 100; $i += 5) {
-            echo "<option value='$i'>$i</option>";
-          }
+          echo "<option value='$i'>$i</option>";
           ?>
         </select>
         <br />
@@ -191,13 +199,9 @@ if (count($schools) == 1) {
           <br />
         </p>
         <select name="avgFinal" id="avg_final_iyun">
-          <option value="0">Select Avg</option>
             <?php
             $i = 80;
-            if ($super) $i = 50;
-            for (; $i <= 100; $i += 5) {
-                echo "<option value='$i'>$i</option>";
-            }
+            echo "<option value='$i'>$i</option>";
             ?>
         </select>
         <br />
@@ -207,14 +211,12 @@ if (count($schools) == 1) {
 
     <div style="clear: both;"></div>
     <br />
-    <fieldset>
+    <fieldset style="float: left;">
       <legend>Test Level</legend>
-      <form id="levels">
+      <form id="levelsTests">
         <p>
           <input type="checkbox" name="tests" id="tests" value="1" checked /> Tests
           <span id='chidon_test_levels_tests'></span><br />
-          <input type="checkbox" name="finals" id="finals" value="1" checked /> Finals
-          <span id='chidon_test_levels_finals'></span><br />
         </p>
         <select name="level" class="level">
           <option value="0">Select Level</option>
@@ -225,6 +227,23 @@ if (count($schools) == 1) {
         <button class="save" onclick="save('levels'); return false;">Save</button>
       </form>
     </fieldset>
+
+    <fieldset style="float: right;">
+      <legend>Test Level</legend>
+      <form id="levelsFinals">
+        <p>
+          <input type="checkbox" name="finals" id="finals" value="1" checked /> Finals
+          <span id='chidon_test_levels_finals'></span><br />
+        </p>
+        <select name="level" class="level">
+          <option value="1">Level 1</option>
+        </select>
+        <br />
+        <button class="save" onclick="save('levels'); return false;">Save</button>
+      </form>
+    </fieldset>
+
+    <div style="clear: both;"></div>
     <br />
     <div style="clear:both;">
       <button onclick="location.href='enterScores.php'; return false;">Go to Enter Marks Page</button>
@@ -239,6 +258,11 @@ if (count($schools) == 1) {
     let fromMarks = url.searchParams.get('fromMarks')
     if (fromMarks) alert('You can only enter the marks once you have set the avgs per track and level for your school.')
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
+  })
+
+  $("#settings_report").click( function() {
+    // open in new tab
+    window.open('reports/settings_report.html', '_blank')
   })
 
   async function getSettings() {
@@ -260,7 +284,13 @@ if (count($schools) == 1) {
       for (let track of ['maven', 'pro', 'expert', 'genius']) {
         let elem = '#' + table + '_' + track
         let avg = settings[id] && settings[id][table] && settings[id][table][track] ? settings[id][table][track] : ''
-        if (avg) $(elem).text('(' + avg + ')')
+        if (track == 'genius' && avg) {
+          $(elem).text('(80 non-cumulative or 90 cumulative)')
+        } else if (avg) {
+          $(elem).text('(' + avg + ')')
+        } else {
+          $(elem).html('<span style="color: red">(80)</span>')
+        }
       }
     }
     // set levels
@@ -269,7 +299,9 @@ if (count($schools) == 1) {
     let finalLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['finals'] ?
       settings[id]['chidon_test_levels']['finals'] : ''
     if (testLevel) $('#chidon_test_levels_tests').text('(' + testLevel + ')')
+    else $('#chidon_test_levels_tests').html('<span style="color: red">(1)</span>')
     if (finalLevel) $('#chidon_test_levels_finals').text('(' + finalLevel + ')')
+    else $('#chidon_test_levels_finals').html('<span style="color: red">(1)</span>')
 
     // show settings
     document.getElementById('settings').style.display = 'block'
