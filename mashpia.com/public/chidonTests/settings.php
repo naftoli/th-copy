@@ -129,7 +129,7 @@ if (count($schools) == 1) {
           <option value="0">Select Avg</option>
           <?php
           $i = 70;
-          if ($super) $i = 50;
+          if ($super) $i = 0;
           for (; $i <= 100; $i += 5) {
             echo "<option value='$i'>$i</option>";
           }
@@ -157,7 +157,7 @@ if (count($schools) == 1) {
           <option value="0">Select Avg</option>
             <?php
             $i = 70;
-            if ($super) $i = 50;
+            if ($super) $i = 0;
             for (; $i <= 100; $i += 5) {
                 echo "<option value='$i'>$i</option>";
             }
@@ -182,7 +182,15 @@ if (count($schools) == 1) {
         <select name="avg" id="avg_score_iyun">
           <?php
           $i = 80;
-          echo "<option value='$i'>$i</option>";
+          if ($super) {
+            echo "<option value='0'>Select Avg</option>";
+            $i = 0;
+            for (; $i <= 100; $i += 5) {
+              echo "<option value='$i'>$i</option>";
+            }
+          } else {
+            echo "<option value='$i'>$i</option>";
+          }
           ?>
         </select>
         <br />
@@ -201,7 +209,15 @@ if (count($schools) == 1) {
         <select name="avgFinal" id="avg_final_iyun">
             <?php
             $i = 80;
-            echo "<option value='$i'>$i</option>";
+            if ($super) {
+              echo "<option value='0'>Select Avg</option>";
+              $i = 0;
+              for (; $i <= 100; $i += 5) {
+                echo "<option value='$i'>$i</option>";
+              }
+            } else {
+              echo "<option value='$i'>$i</option>";
+            }
             ?>
         </select>
         <br />
