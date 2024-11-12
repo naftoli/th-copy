@@ -23,7 +23,8 @@ function checkForBreak()
     $cols++;
 }
 
-function getRankNames() {
+function getRankNames()
+{
     $ranks = [];
     $sql = "SELECT * FROM ranks";
     $result = mysql_query($sql);
@@ -34,7 +35,11 @@ function getRankNames() {
 }
 
 require 'class.myShliachShipLabels.php';
-$myshliach = new MyShliachShipLabels();
+$school_id = 61;
+if (isset($_GET['school'])) {
+    $school_id = $_GET['school'];
+}
+$myshliach = new MyShliachShipLabels($school_id);
 
 $reportDates = $myshliach->getReportDates();
 $heDatesRanks = $myshliach->getHeReportDates();
@@ -96,7 +101,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
 
     @media screen {
       #report_div {
-        display: none;
+        display: block;
       }
 
       .no-print {
@@ -219,8 +224,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                     echo "<div class='label'>";
                     echo "<span class='name'>";
                     echo "Name : " . $userInfo[$child] . "<br />";
-                    echo "Rank : " . $rankNames[$rank_ord] . "<br />" .
-                         "Rank Book #: " . $book;
+                    echo "Rank : " . $rankNames[$rank_ord] . "<br />Rank Book #: " . $book;
                     echo "</span></div>";
                     checkForBreak();
 

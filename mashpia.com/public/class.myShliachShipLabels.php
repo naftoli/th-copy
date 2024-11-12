@@ -70,13 +70,13 @@ class MyShliachShipLabels extends Report {
 	private function setRanks() {
         // always get the highest rank and then see which books / ranks have not yet been shipped
         $sql = "SELECT u.user_id, u.user_serial, u.first, u.last, MAX(rm.rank_ord) AS rank_ord
-            FROM rank_marks rm  
-            JOIN users u USING ( user_id ) 
-            JOIN user_registration ur using ( user_id ) 
-            WHERE u.user_registered > 0 
-            and u.school_id = " . $this->school . " 
-            and ur.year = " . $this->year . "    
-            GROUP BY u.user_id";
+                FROM rank_marks rm  
+                JOIN users u USING ( user_id ) 
+                JOIN user_registration ur using ( user_id ) 
+                WHERE u.user_registered > 0 
+                and u.school_id = " . $this->school . " 
+                and ur.year = " . $this->year . "    
+                GROUP BY u.user_id";
 //            $sql = "SELECT r.rank_name, u.user_id, u.user_serial, u.first, u.last, rm.*
 //                    FROM rank_marks rm
 //                    JOIN ranks r USING ( rank_ord )
