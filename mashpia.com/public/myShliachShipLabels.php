@@ -109,7 +109,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
 
     @media screen {
       #report_div {
-        display: block;
+        display: none;
       }
 
       .no-print {
