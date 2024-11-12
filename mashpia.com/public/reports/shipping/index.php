@@ -80,7 +80,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Anash Kinder Hachayol Labels</span>
                 </div>
             </a>
-            <a href="/anashShipLabels.php<?=$debug ? "?debug=true": "";?>">
+            <a href="/myShliachShipLabels.php?school=269">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text">Anash Kinder Shipping Medals Labels</span>
@@ -92,7 +92,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">School Campaign Medals Shipping Lables</span>
                 </div>
             </a>
-            <a href="/myShliachShipLabels.php<?=$debug ? "?debug=true": "";?>">
+            <a href="/myShliachShipLabels.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
                     <span class="link-text">MyShliach Shipping Medals Labels</span>
