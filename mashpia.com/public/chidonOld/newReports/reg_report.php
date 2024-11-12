@@ -1,5 +1,6 @@
 <?php
 ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -198,7 +199,7 @@ $pollKeys = array_keys($poll);
                 echo $prize['prize_name'];
                 if ($prize['size']) echo " Size: " . $prize['size'];
                 if ($prize['color']) echo " Color: " . $prize['color'];
-                if ($i < count($prizes[$row['user_id']]) - 1) echo "<hr />";
+                if ($i < count($prizes[$row['user_id']]) - 1) echo ", ";
             }
         }
         echo "</td><td>";
