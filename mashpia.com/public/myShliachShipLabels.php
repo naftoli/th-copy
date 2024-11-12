@@ -149,7 +149,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
     Current Report is calculated from <?= $heDatesRanks['start_he'] ?> up to <?= $heDatesRanks['end_he'] ?>.<br/>
     <form action="" method="post">
       <p>
-          <?= $myshliach->getHtmlSelect(3); ?>
+          <?= $myshliach->getHtmlSelect(4); ?>
         <input type="submit" name="submit" value="Modify Report"/>
       </p>
     </form>
