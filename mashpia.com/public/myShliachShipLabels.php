@@ -42,6 +42,13 @@ if (isset($_GET['school'])) {
     $myshliach = new MyShliachShipLabels();
 }
 
+// deal with dates
+if (isset($_POST['date_selection'])) {
+    $dates = explode(':', $_POST['date_selection']);
+    $myshliach->overrideDates($dates[0], $dates[1]);
+}
+
+$myshliach->setInfo(); // set all the info for the report
 $reportDates = $myshliach->getReportDates();
 $heDatesRanks = $myshliach->getHeReportDates();
 $rankNames = getRankNames();

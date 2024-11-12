@@ -26,12 +26,9 @@ class MyShliachShipLabels extends Report {
 		$this->ranks = array();
         $this->school = $id;
         $this->year = GlobalSettings::getRegistrationYear($id);
-		$this->setMedals();
-        $this->setRanks();
-        $this->setParents();
 	}
 
-    public function resetInfo() {
+    public function setInfo() {
         $this->admins = [];
         $this->parents = [];
         $this->users = [];
