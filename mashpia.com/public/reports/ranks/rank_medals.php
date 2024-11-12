@@ -104,6 +104,13 @@ $for_shipping = [];
         width: 50%;
       }
 
+      tr, th, td {
+        font-family: "Arial", sans-serif;
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: 1px #f0f0f0 solid;
+      }
+
       @media screen {
         #report_div {
           display: none;
@@ -130,18 +137,6 @@ $for_shipping = [];
         .no-print {
           display: none;
         }
-      }
-
-      button {
-        padding: 10px;
-        font-size: 14px;
-      }
-
-      tr, th, td {
-        font-family: "Arial", sans-serif;
-        padding: 10px;
-        font-size: 14px;
-        border-bottom: 1px #f0f0f0 solid;
       }
 
       select, button, input[type="button"], input[type="submit"] {
