@@ -23,14 +23,6 @@ switch ($table) {
                 classes
             WHERE
                 school_id = :id 
-                    AND class_id IN (SELECT 
-                        class_id
-                    FROM
-                        users u
-                            JOIN
-                        th_chidon tc USING (user_id)
-                    WHERE
-                        tc.year = 5784)
             ORDER BY class_grade, class_sub");
         $stmt->execute([
             'id'    => $id
