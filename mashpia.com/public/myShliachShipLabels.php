@@ -35,11 +35,12 @@ function getRankNames()
 }
 
 require 'class.myShliachShipLabels.php';
-$school_id = 61;
 if (isset($_GET['school'])) {
     $school_id = $_GET['school'];
+    $myshliach = new MyShliachShipLabels($school_id);
+} else {
+    $myshliach = new MyShliachShipLabels();
 }
-$myshliach = new MyShliachShipLabels($school_id);
 
 $reportDates = $myshliach->getReportDates();
 $heDatesRanks = $myshliach->getHeReportDates();

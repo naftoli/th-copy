@@ -14,8 +14,8 @@ class MyShliachShipLabels extends Report {
 	private $school;
     private $year;
 	
-	public function __construct($previousStart = false, $id = 61) {
-        parent::__construct($previousStart);
+	public function __construct($id = 61) {
+        parent::__construct();
 		$this->start = $this->reportDates['start'];
         $this->end = $this->reportDates['end'];
 		$this->admins = array();
