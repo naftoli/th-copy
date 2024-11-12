@@ -186,9 +186,10 @@ function checkForBreak()
             $r = mysql_fetch_assoc($res);
             $school_id = $r['school_id'];
             $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
-            $shipping = empty($r['shipping_address2']) ? '' : $r['shipping_address2'] . "<br />";
-            $shippingAddress = $r['shipping_address1'] . "<br />" . $shipping . $r['shipping_city'] .
-                ", " . $r['shipping_state'] . " " . $r['shipping_postal'] . "<br />" . $r['shipping_country'];
+            $shippingAddress = $r['shipping_address1'] .
+                (empty($r['shipping_address2']) ? '' : ' ' . $r['shipping_address2']) . "<br />" .
+                $r['shipping_city'] . ", " . $r['shipping_state'] . " " . $r['shipping_postal'] .
+                "<br />" . $r['shipping_country'];
             $schoolChanged = true;
         }
         $tempSchool = $school;
@@ -202,13 +203,11 @@ function checkForBreak()
                     $numMedals = 1;
                     if ($schoolChanged || $gradeChanged) {
                         if ($schoolChanged) {
-                            //echo "</div>";
-                            //checkForBreak();
-                            //echo "<div class='page-break'></div><div class='topSpace'></div><div class='label'>";
                             if (!$firstTime) {
                                 echo "<div class='page-break'></div><div class='topSpace'></div>";
                                 $i = 1;
-                            } else $firstTime = false;
+                            }
+                            else $firstTime = false;
                             echo "<div class='label'>";
                             echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
                             $schoolChanged = false;

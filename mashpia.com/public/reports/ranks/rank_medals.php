@@ -188,6 +188,15 @@ $for_shipping = [];
     <?php
     $sheet = []; // array to hold all labels
     $totalRanks = 0;
+    $i = 1; //counter for columns
+    $rows = 1; //counter for rows
+    $tempSchool = '';
+    $schoolChanged = false; //variable to find out when school changes
+    $shippingName = '';
+    $shippingAddress = '';
+    $tempGrade = '';
+    $gradeChanged = false; //variable to find out when grade changes
+    $firstTime = true;
     foreach ($schools as $school_id => $school_name) {
         if (in_array($school_id, [180, 585, 588, 612, 709])) continue;
         $rr->setSchoolId($school_id);
@@ -196,15 +205,6 @@ $for_shipping = [];
         $userInfo = $rr->getUserInfo();
         $heNames = $rr->getUserHeNames();
 
-        $i = 1; //counter for columns
-        $rows = 1; //counter for rows
-        $tempSchool = '';
-        $schoolChanged = false; //variable to find out when school changes
-        $shippingName = '';
-        $shippingAddress = '';
-        $tempGrade = '';
-        $gradeChanged = false; //variable to find out when grade changes
-        $firstTime = true;
         foreach ($ranks as $school => $line) {
             if ($tempSchool != $school) {
                 $qry = "select * from schools where school_name = '" . $school . "'";
@@ -212,9 +212,10 @@ $for_shipping = [];
                 $r = mysql_fetch_assoc($res);
                 $school_id = $r['school_id'];
                 $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
-                $shipping = empty($r['shipping_address2']) ? '' : $r['shipping_address2'] . "<br />";
-                $shippingAddress = $r['shipping_address1'] . "<br />" . $shipping . $r['shipping_city'] .
-                    ", " . $r['shipping_state'] . " " . $r['shipping_postal'] . "<br />" . $r['shipping_country'];
+                $shippingAddress = $r['shipping_address1'] .
+                    (empty($r['shipping_address2']) ? '' : ' ' . $r['shipping_address2']) . "<br />" .
+                    $r['shipping_city'] . ", " . $r['shipping_state'] . " " . $r['shipping_postal'] .
+                    "<br />" . $r['shipping_country'];
                 $schoolChanged = true;
             }
             $tempSchool = $school;
@@ -225,28 +226,6 @@ $for_shipping = [];
                     }
                     $tempGrade = $grade;
                     foreach ($users as $user => $rank_ords) {
-                        if ($schoolChanged || $gradeChanged) {
-                            if ($schoolChanged) {
-                                //echo "</div>";
-                                //checkForBreak();
-                                //echo "<div class='page-break'></div><div class='topSpace'></div><div class='label'>";
-                                if (!$firstTime) {
-                                    echo "<div class='page-break'></div><div class='topSpace'></div>";
-                                    $i = 1;
-                                } else $firstTime = false;
-                                echo "<div class='label'>";
-                                echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
-                                $schoolChanged = false;
-                            } else if ($gradeChanged) {
-                                echo "<div class='label'>";
-                                echo "<span class='name'><b>" . $school . "</b><br />" . $teacher . "<br />" . $grade . "</span>";
-                                $gradeChanged = false;
-                            }
-                            //put current user info on new label so that we don't lose this user
-                            echo "</div>";
-                            checkForBreak();
-                        }
-
                         // first check if we have anything to send to this user that wasn't sent yet
                         $num_ords = count($rank_ords);
                         foreach ($rank_ords as $ord) {
@@ -257,6 +236,26 @@ $for_shipping = [];
                         }
 
                         if ($num_ords) {
+                            if ($schoolChanged || $gradeChanged) {
+                                if ($schoolChanged) {
+                                    if (!$firstTime) {
+                                        echo "<div class='page-break'></div><div class='topSpace'></div>";
+                                        $i = 1;
+                                    }
+                                    else $firstTime = false;
+                                    echo "<div class='label'>";
+                                    echo "<span class='name'><b>" . $school . "</b><br />" . $shippingName . "<br />" . $shippingAddress . "</span>";
+                                    $schoolChanged = false;
+                                } else if ($gradeChanged) {
+                                    echo "<div class='label'>";
+                                    echo "<span class='name'><b>" . $school . "</b><br />" . $teacher . "<br />" . $grade . "</span>";
+                                    $gradeChanged = false;
+                                }
+                                //put current user info on new label so that we don't lose this user
+                                echo "</div>";
+                                checkForBreak();
+                            }
+
                             echo "<div class='label'>";
                             echo "<span class='name'>" . $school . "<br />" . $userInfo[$user] . " (Grade: " . $grade . ")</span><br />";
                             foreach ($rank_ords as $ord) {
