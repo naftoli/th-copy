@@ -283,8 +283,10 @@ if (count($schools) == 1) {
 
   async function getSettings() {
     let disableInputs = false
+    const cur_year = <?= $year ?>;
     let year = document.getElementById('yearSelect').value
-    if (year != <?= $year ?>) disableInputs = true
+    if (year != cur_year) disableInputs = true
+
     let school_id = document.getElementById('baseSelect').value
     let class_id = document.getElementById('platoonSelect') ? document.getElementById('platoonSelect').value : 0
     let user_id = document.getElementById('userSelect') ? document.getElementById('userSelect').value : 0
@@ -294,9 +296,9 @@ if (count($schools) == 1) {
       body: JSON.stringify({ school_id, class_id, user_id, year })
     })
     const settings = await res.json()
-    console.log(settings)
-    if (!settings) {
+    if (!(settings && settings.length) && year != cur_year) {
       alert('No settings found for ' + year)
+      document.getElementById('yearSelect').value = cur_year
       return false
     }
 
