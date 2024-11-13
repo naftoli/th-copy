@@ -15,8 +15,4 @@ $class_id = $input['class_id'];
 $user_id = $input['user_id'];
 
 $settings = $ct->getSettings($school_id, $class_id, $user_id, $year);
-// if settings are empty and year is current, get from previous year
-if (empty($settings) && $year == GlobalSettings::getChidonRegYear()) {
-    $settings = $ct->getSettings($school_id, $class_id, $user_id, $year - 1);
-}
 echo json_encode($settings);

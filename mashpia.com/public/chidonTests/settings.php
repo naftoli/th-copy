@@ -295,6 +295,10 @@ if (count($schools) == 1) {
     })
     const settings = await res.json()
     console.log(settings)
+    if (!settings.length) {
+      alert('No settings found for ' + year)
+      return false
+    }
 
     // set avgs
     let id = user_id > 0 ? user_id : class_id > 0 ? class_id : school_id > 0 ? school_id : 0
