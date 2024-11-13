@@ -295,7 +295,7 @@ if (count($schools) == 1) {
     })
     const settings = await res.json()
     console.log(settings)
-    if (!settings.length) {
+    if (!settings) {
       alert('No settings found for ' + year)
       return false
     }
