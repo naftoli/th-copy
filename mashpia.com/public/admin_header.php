@@ -92,7 +92,7 @@ function getMenuReducer( $default_users = [ 'HQ', 'INST', 'BC' ] ) {
 }
 
 // render the sidebar items correctly
-function renderSidebarItem( $item, $nested = false ) {
+function renderSidebarItem( $item, $nested = false, $level = 0 ) {
 	// if the url is in the path
 	$label = T_( $item['label'] );
 	$url = isset( $item['path'] ) ? $item['path'] : false;
@@ -119,24 +119,32 @@ function renderSidebarItem( $item, $nested = false ) {
 							."<a href='#'>".$label."</a>";
 	} else {
 		$html = "<li class='$class'>"
-			."<a href='".( $url ? $url : '#' )."'>"
-				."<span class='icon'>"
-					. $icon . $label
-				."</span>"
-			."</a>"
-		."</li>";
+				."<a href='".( $url ? $url : '#' )."'>"
+					."<span class='icon'>"
+						. $icon . $label
+					."</span>"
+				."</a>"
+			."</li>";
 	}
 
 	if ( isset( $item['items'] ) ) {
-		$html .= '<ul class="'.( $nested ? '' : 'list_second' ).'">';
-		// render each submenu item
-		foreach( $item['items'] as $item ) {
-			$html .= renderSidebarItem( $item, true );
+		// Initialize $ulClass before conditionals
+		$ulClass = '';
+		
+		if ( !$nested ) {
+			$ulClass = 'list_second';
+		} else if ( $level == 1 ) {
+			$ulClass = 'list_third';
+		} else if ( $level == 2 ) {
+			$ulClass = 'list_fourth';
 		}
-		// close the list
+		
+		$html .= '<ul class="' . $ulClass . '">';
+		foreach( $item['items'] as $item ) {
+			$html .= renderSidebarItem( $item, true, $level + 1 );
+		}
 		$html .= '</ul>';
 
-		// if nested list we need to close the tag li here.
 		if ( $nested ) $html .= '</li>';
 	// for top level items without kids, add the list second item to fix js problems
 	} else if ( !$nested ) {
@@ -181,45 +189,50 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 		$(function() {
 			// get the current tab from the server
 			var curr_tab = $("li.list_parent").index($("li.list_parent.current"));
-			if ( curr_tab < 0 ) curr_tab = 0;
+			if (curr_tab < 0) curr_tab = 0;
+			
 			// setup the dropdown functionality
-			$( ".list_first:not(.list_small,.user_list)" ).tabs( 
-				".list_first > ul", 
+			$(".list_first:not(.list_small,.user_list)").tabs(
+				".list_first > ul",
 				{ tabs: '.list_parent', effect: 'slide', initialIndex: curr_tab }
 			);
-			// add submenus to the UI
-			$( '#nav li:has(ul)' ).addClass( 'submenu' );
+			
+			// Handle submenu behavior
+			$('#nav li').each(function() {
+				if ($(this).find('ul').length > 0) {
+					$(this).addClass('submenu');
+				}
+			});
+
+			// Hide all fourth level menus initially
+			$('#nav .list_fourth').hide();
+
+			// Handle third level hover
+			$('#nav .list_third > li').hover(
+				function() {
+					// Hide any other visible fourth level menus first
+					$('#nav .list_fourth').hide();
+					
+					var $fourthMenu = $(this).children('.list_fourth');
+					if ($fourthMenu.length) {
+						// Position the fourth level menu relative to its parent
+						var parentOffset = $(this).offset();
+						$fourthMenu.css({
+							'top': $(this).position().top + 'px',
+							'left': '30px'
+						}).show();
+					}
+				},
+				function() {
+					$(this).children('.list_fourth').hide();
+				}
+			);
+
 			// fix links and make them work
-			$('.list_parent a').click( function(){
-				if ( window.location !== $( this ).attr( 'href' ) )
-					window.location = $( this ).attr( 'href' );
+			$('.list_parent a').click(function() {
+				if (window.location !== $(this).attr('href'))
+					window.location = $(this).attr('href');
 			});
-
-			$( ".blog" ).click( function() {
-				document.blog.submit();
-			});
-
-			// $('.col_title_bg > select').change( function( e ) {
-			// 	var selected = $(':selected', this);
-			// 	var label = selected.closest('optgroup').attr('id');
-			// 	// if they selected a link, navigate to that link
-			// 	if ( label === 'links-select' ) {
-			// 		return window.location.href = e.target.value;
-			// 	}
-			// 	// change the login and refresh the page
-			// 	var login = e.target.value;
-			// 	var expires = new Date();
-			// 	expires.setFullYear(new Date().getFullYear() + 10);
-			// 	// set the login cookie
-			// 	if ( login.split('-')[0] !== 'PARENT' ) {
-			// 		Cookies.set( 'login', login, { path: '/', expires: expires } );
-			// 		window.location.reload(); // refresh the page
-			// 	// set the login key and navigate to the parent site
-			// 	} else {
-			// 		Cookies.set( 'admin', selected[0].dataset.key, { path: '/', expires: expires } );
-			// 		window.location.href = '/mobile/reg/parent_detail.html';
-			// 	}
-			// });
 		});
 		// run correctHeight when the page loads
 		$( window ).load( function() {

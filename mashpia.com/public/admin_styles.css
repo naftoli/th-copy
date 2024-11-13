@@ -2818,3 +2818,95 @@ body pre {
     text-align: left;
 }
 
+
+/* Update submenu positioning and display */
+#nav ul.list_second ul {
+    background: #D5D8DE;
+    position: absolute;
+    margin-left: 250px; /* Increased from 220px */
+    z-index: 2; /* Increased from 1 */
+    width: 250px;
+    top: 0;
+    display: none;
+    -moz-box-shadow: 0px 0px 10px #666;    
+    -webkit-box-shadow: 0px 0px 10px #666;    
+}
+
+/* Only show second level when parent is hovered */
+#nav li.list_parent:hover > ul.list_second {
+    display: block;
+}
+
+/* Only show third level when direct parent is hovered */
+#nav ul.list_second li.submenu:hover > ul {
+    display: block;
+}
+
+/* Hide all third level menus by default */
+#nav ul.list_second ul {
+    display: none;
+}
+
+/* Third level menu positioning */
+#nav ul.list_second ul.list_third {
+    background: #D5D8DE;
+    position: absolute;
+    margin-left: 250px;
+    z-index: 2;
+    width: 250px;
+    top: 0;
+    display: none;
+    -moz-box-shadow: 0px 0px 10px #666;    
+    -webkit-box-shadow: 0px 0px 10px #666;    
+}
+
+/* Only show third level when parent is hovered */
+#nav ul.list_second li.submenu:hover > ul.list_third {
+    display: block;
+}
+
+/* Base styles for all nested menus */
+#nav ul.list_second ul.list_third,
+#nav ul.list_second ul.list_fourth {
+    background: #D5D8DE !important;
+    position: absolute !important;
+    width: 250px !important;
+    top: 0 !important;
+    display: none !important;
+    -moz-box-shadow: 0px 0px 10px #666 !important;    
+    -webkit-box-shadow: 0px 0px 10px #666 !important;    
+}
+
+/* Third level positioning */
+#nav ul.list_second ul.list_third {
+    margin-left: 250px !important;
+    z-index: 2 !important;
+}
+
+/* Fourth level positioning */
+#nav ul.list_third ul.list_fourth {
+    margin-left: 250px !important;
+    z-index: 3 !important;
+}
+
+/* Explicitly hide fourth level by default */
+#nav ul.list_third ul.list_fourth {
+    display: none !important;
+}
+
+/* Show third level only when second level parent is hovered */
+#nav ul.list_second > li.submenu:hover > ul.list_third {
+    display: block !important;
+}
+
+/* Show fourth level only when third level parent is hovered */
+#nav ul.list_third > li.submenu:hover > ul.list_fourth {
+    display: block !important;
+}
+
+/* Hide all other cases */
+#nav ul.list_second li:not(:hover) > ul.list_third,
+#nav ul.list_third li:not(:hover) > ul.list_fourth {
+    display: none !important;
+}
+
