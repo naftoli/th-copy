@@ -779,7 +779,7 @@ class ChidonTests
                     AND user_id = :id
                 ");
                 $stmt->execute([
-                    ':year' => $year ?? $this->year,
+                    ':year' => $year > 0 ? $year : $this->year,
                     ':id'   => $user_id
                 ]);
             } else if ($class_id > 0) {
@@ -788,7 +788,7 @@ class ChidonTests
                     AND class_id = :id
                 ");
                 $stmt->execute([
-                    ':year' => $year ?? $this->year,
+                    ':year' => $year > 0 ? $year : $this->year,
                     ':id'   => $class_id
                 ]);
             } else if ($school_id > 0) {
@@ -797,7 +797,7 @@ class ChidonTests
                     AND school_id = :id
                 ");
                 $stmt->execute([
-                    ':year' => $year ?? $this->year,
+                    ':year' => $year > 0 ? $year : $this->year,
                     ':id'   => $school_id
                 ]);
             }
