@@ -228,7 +228,7 @@ if (count($schools) == 1) {
     <div style="clear: both;"></div>
     <br />
     <fieldset style="float: left;">
-      <legend>Test Level</legend>
+      <legend>Tests Level</legend>
       <form id="levelsTests">
         <p>
           <input type="checkbox" name="tests" id="tests" value="1" checked /> Tests
@@ -240,12 +240,12 @@ if (count($schools) == 1) {
           <option value="2">Level 2</option>
         </select>
         <br />
-        <button class="save" onclick="save('levels'); return false;">Save</button>
+        <button class="save" onclick="save('levelsTests'); return false;">Save</button>
       </form>
     </fieldset>
 
     <fieldset style="float: right;">
-      <legend>Test Level</legend>
+      <legend>Finals Level</legend>
       <form id="levelsFinals">
         <p>
           <input type="checkbox" name="finals" id="finals" value="1" checked /> Finals
@@ -255,7 +255,7 @@ if (count($schools) == 1) {
           <option value="1">Level 1</option>
         </select>
         <br />
-        <button class="save" onclick="save('levels'); return false;">Save</button>
+        <button class="save" onclick="save('levelsFinals'); return false;">Save</button>
       </form>
     </fieldset>
 
@@ -443,13 +443,10 @@ if (count($schools) == 1) {
           return false
         }
         break
-      case 'levels':
+      case 'levelsTests':
+      case 'levelsFinals':
         if (!info.get('level') || info.get('level') == 0) {
           alert('Please select a level')
-          return false
-        }
-        if (!info.get('tests') && !info.get('finals')) {
-          alert('Please select what you are applying the level to.')
           return false
         }
         break

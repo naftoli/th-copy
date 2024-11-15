@@ -111,7 +111,7 @@ switch ($elem) {
         $level = $_POST['level'];
         if ($elem == 'levelsTests') {
             $type = 'tests';
-        } else if ($elem == 'levelsFinals') {
+        } else {
             $type = 'finals';
         }
         $stmt = $MASHPIA_DB->prepare("

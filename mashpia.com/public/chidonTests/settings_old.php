@@ -1,0 +1,495 @@
+<?php
+//ini_set('display_errors', 1);
+//ini_set('error_reporting', E_ALL);
+
+$admin_auth = ['school'];
+require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+
+$super = $admin_user['auth'] == 'super';
+
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+$year = GlobalSettings::getChidonRegYear();
+
+$ct = new ChidonTests();
+$tracks = $ct->getTypes();
+
+if (count($schools) == 1) {
+    $editOnly = true;
+    $disabled = ' disabled';
+    $selected = ' selected';
+} else {
+    $editOnly = false;
+    $disabled = '';
+    $selected = '';
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Chidon Test Settings</title>
+    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
+    <style>
+      tr, th, td {
+        font-size: 14px;
+        padding: 10px;
+      }
+      fieldset {
+        border-radius: 10px;
+        border: 1px solid grey;
+        padding: 10px;
+        width: 45%;
+      }
+      legend {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 5px;
+      }
+      <?php if (!$super) : ?>
+      #settings {
+        display: none;
+      }
+      <?php endif; ?>
+      select, button {
+        font-size: 14px;
+        padding: 5px;
+      }
+    </style>
+</head>
+<body>
+<?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
+<h1>Chidon Test Settings</h1>
+<div class="infobox">
+    Chidon HQ has set the standard that an 80% is needed to pass each track and that all are taking the test on level 1.
+    <br /><br />
+    You have the option to change the passing mark up/down as well as change the test to level 2 (Harder test).
+    You can either do this for your full school, individual platoon (class) or per child. Remember to press save!
+    <br /><br />
+    Please note that the lowest you can choose is 70%. If there is a particular child who needs a lower average.
+    Please contact HQ and they will adjust it for you.
+    <br /><br />
+    PLEASE NOTE: The settings for School/Grade/Child are all different, so changing one will NOT CHANGE the others.
+    <br /><br />
+    IF you see a RED number, it means that the setting has not yet been set and saved, so please make sure to save it.
+</div>
+<br />
+<div id="yearSelection">
+    Choose Year:
+    <select name="yearSelect" id="yearSelect">
+        <?php for ($i = $year; $i > 5783; $i--) {
+            echo "<option value='$i'>$i</option>";
+        } ?>
+    </select>
+</div>
+<div id="baseSelection">
+    Choose Base:
+    <select name="baseSelect" id="baseSelect" onchange="setPlatoons()" <?= $selected . $disabled ?>>
+        <?php if (! $editOnly) { ?>
+            <option value="0">Select Base</option>
+            <?php
+        }
+        foreach ($schools as $id => $name) {
+            echo "<option value='$id'>$name</option>";
+        }
+        ?>
+    </select>
+</div>
+<div id="platoonSelection"></div>
+<div id="userSelection"></div>
+<br />
+<div style="float: left;">
+    <button id="showSettings" onclick="getSettings(); return false;">Show / Refresh Settings</button>
+</div>
+<div style="float: right;">
+    <button id="settings_report">View Settings Report</button>
+</div>
+<div style="clear: both;"></div>
+<h2></h2>
+<div id="settings" style="display: none">
+    <div style="margin: auto; text-align: center;">
+        <button id="saveAll">Save All Settings</button>
+    </div>
+    <div id="settingsTable">
+        <fieldset style="float: left;">
+            <legend>Avg for Tests</legend>
+            <form id="avgScore">
+                <p>
+                    <?php
+                    foreach ($tracks as $type => $desc) {
+                        if ($desc == 'Iyun') break;
+                        echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' checked /> $desc ";
+                        echo "<span id='chidon_passing_avgs_$type'></span>";
+                        echo "<br />";
+                    }
+                    ?>
+                </p>
+                <select name="avg" id="avg">
+                    <option value="0">Select Avg</option>
+                    <?php
+                    $i = 70;
+                    if ($super) $i = 0;
+                    for (; $i <= 100; $i += 5) {
+                        echo "<option value='$i'>$i</option>";
+                    }
+                    ?>
+                </select>
+                <br />
+                <button class="save" onclick="save('avgScore'); return false;">Save</button>
+            </form>
+        </fieldset>
+
+        <fieldset style="float: right;">
+            <legend>Avg for Final</legend>
+            <form id="avgScoreFinal">
+                <p>
+                    <?php
+                    foreach ($tracks as $type => $desc) {
+                        if ($desc == 'Iyun') break;
+                        echo "<input type='checkbox' class='tracks' name='tracks[]' value='$type' checked /> $desc ";
+                        echo "<span id='chidon_final_passing_avgs_$type'></span>";
+                        echo "<br />";
+                    }
+                    ?>
+                </p>
+                <select name="avgFinal" id="avg_final">
+                    <option value="0">Select Avg</option>
+                    <?php
+                    $i = 70;
+                    if ($super) $i = 0;
+                    for (; $i <= 100; $i += 5) {
+                        echo "<option value='$i'>$i</option>";
+                    }
+                    ?>
+                </select>
+                <br />
+                <button class="save" onclick="save('avgScoreFinal'); return false;">Save</button>
+            </form>
+        </fieldset>
+
+        <div style="clear: both;"></div>
+        <br />
+
+        <fieldset style="float: left;">
+            <legend>Iyun Tests Avg</legend>
+            <form id="avgScoreIyun">
+                <input type="hidden" name="tracks[]" value="genius" />
+                <select name="avg" id="avg_score_iyun" <?= $super ? '' : 'disabled' ?>>
+                    <?php
+                    $i = 80;
+                    if ($super) {
+                        echo "<option value='0'>Select Avg</option>";
+                        $i = 0;
+                        for (; $i <= 100; $i += 5) {
+                            echo "<option value='$i'>$i</option>";
+                        }
+                    } else {
+                        echo "<option value='$i'>$i</option>";
+                    }
+                    ?>
+                </select>
+                <br />
+                <button class="save" <?= $super ? '' : 'disabled'; ?> onclick="save('avgScoreIyun'); return false;">Save</button>
+            </form>
+        </fieldset>
+
+        <fieldset style="float: right;">
+            <legend>Iyun Final Avg</legend>
+            <form id="avgFinalIyun">
+                <input type="hidden" name="tracks[]" value="genius" />
+                <select name="avgFinal" id="avg_final_iyun" <?= $super ? '' : 'disabled' ?>>
+                    <?php
+                    $i = 80;
+                    if ($super) {
+                        echo "<option value='0'>Select Avg</option>";
+                        $i = 0;
+                        for (; $i <= 100; $i += 5) {
+                            echo "<option value='$i'>$i</option>";
+                        }
+                    } else {
+                        echo "<option value='$i'>$i</option>";
+                    }
+                    ?>
+                </select>
+                <br />
+                <button class="save" <?= $super ? '' : 'disabled'; ?> onclick="save('avgFinalIyun'); return false;">Save</button>
+            </form>
+        </fieldset>
+
+        <div style="clear: both;"></div>
+        <br />
+        <fieldset style="float: left;">
+            <legend>Tests Level</legend>
+            <form id="levelsTests">
+                <select name="level" class="level">
+                    <option value="0">Select Level</option>
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                </select>
+                <br />
+                <button class="save" onclick="save('levelsTests'); return false;">Save</button>
+            </form>
+        </fieldset>
+
+        <fieldset style="float: right;">
+            <legend>Finals Level</legend>
+            <form id="levelsFinals">
+                <select name="level" class="level" disabled>
+                    <option value="1">Level 1</option>
+                </select>
+                <br />
+                <button class="save" <?= $super ? '' : 'disabled'; ?> onclick="save('levelsFinals'); return false;">Save</button>
+            </form>
+        </fieldset>
+
+        <div style="clear: both;"></div>
+        <br />
+        <div style="clear:both;">
+            <button onclick="location.href='enterScores.php'; return false;">Go to Enter Marks Page</button>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+  const cur_year = <?= $year ?>;
+  const year = document.getElementById('yearSelect').value
+
+  $( function() {
+    // find out if coming from entering marks page
+    let url = new URL(window.location.href)
+    let fromMarks = url.searchParams.get('fromMarks')
+    if (fromMarks) alert('You can only enter the marks once you have set the avgs per track and level for your school.')
+    if (document.getElementById('baseSelect').value != 0) setPlatoons()
+  })
+
+  $("#settings_report").click( function() {
+    // open in new tab
+    window.open('reports/settings_report.html', '_blank')
+  })
+
+  document.getElementById('saveAll').addEventListener('click', async function() {
+    if (year != cur_year) {
+      alert('You can only save settings for the current year.')
+      return false
+    } else {
+      await saveAll()
+    }
+  })
+
+  async function saveAll() {
+    // get all forms and save them
+    let success = false
+    let forms = document.querySelectorAll('form')
+    for (let form of forms) {
+      let id = form.id
+      saved = await save(id, true)
+      alert(id + ' saved: ' + saved)
+      if (saved) success = true
+    }
+    if (success) {
+      alert('Settings saved.')
+      getSettings()
+    }
+  }
+
+  async function getSettings() {
+    let disableInputs = false
+    const cur_year = <?= $year ?>;
+    const year = document.getElementById('yearSelect').value
+    if (year != cur_year) disableInputs = true
+
+    let school_id = document.getElementById('baseSelect').value
+    let class_id = document.getElementById('platoonSelect') ? document.getElementById('platoonSelect').value : 0
+    let user_id = document.getElementById('userSelect') ? document.getElementById('userSelect').value : 0
+    const res = await fetch('api/getSettings.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ school_id, class_id, user_id, year })
+    })
+    const settings = await res.json()
+    if (!(settings && settings.length) && year != cur_year) {
+      alert('No settings found for ' + year)
+      document.getElementById('yearSelect').value = cur_year
+      return false
+    }
+
+    // set avgs
+    let id = user_id > 0 ? user_id : class_id > 0 ? class_id : school_id > 0 ? school_id : 0
+    for (let table of ['chidon_passing_avgs', 'chidon_final_passing_avgs']) {
+      for (let track of ['maven', 'pro', 'expert', 'genius']) {
+        let elem = '#' + table + '_' + track
+        let avg = settings[id] && settings[id][table] && settings[id][table][track] ? settings[id][table][track] : ''
+        if (track == 'genius' && avg && avg == 80) {
+          $(elem).text('(80 non-cumulative or 90 cumulative)')
+        } else if (avg) {
+          $(elem).text('(' + avg + ')')
+        } else {
+          $(elem).html('<span style="color: red">(80)</span>')
+        }
+      }
+    }
+
+    // set levels
+    let testLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['tests'] ?
+      settings[id]['chidon_test_levels']['tests'] : ''
+    let finalLevel = settings[id] && settings[id]['chidon_test_levels'] && settings[id]['chidon_test_levels']['finals'] ?
+      settings[id]['chidon_test_levels']['finals'] : ''
+    if (testLevel) $('#chidon_test_levels_tests').text('(' + testLevel + ')')
+    else $('#chidon_test_levels_tests').html('<span style="color: red">(1)</span>')
+    if (finalLevel) $('#chidon_test_levels_finals').text('(' + finalLevel + ')')
+    else $('#chidon_test_levels_finals').html('<span style="color: red">(1)</span>')
+
+    // show settings
+    const isSuper = <?= $super ? 1 : 0 ?>;
+    if (disableInputs) {
+      // set all inputs to disabled
+      document.getElementById('settings').querySelectorAll('input, select, button').forEach(elem => {
+        elem.disabled = true
+      })
+    } else {
+      // set all inputs to enabled
+      document.getElementById('settings').querySelectorAll('input, select, button').forEach(elem => {
+        if (!isSuper && (
+          elem.id === 'avg_score_iyun' ||
+          elem.id === 'avg_final_iyun' ||
+          (elem.closest('form')?.id === 'avgScoreIyun') ||
+          (elem.closest('form')?.id === 'avgFinalIyun') ||
+          (elem.closest('form')?.id === 'levelsFinals')
+        )) {
+          elem.disabled = true;
+        } else {
+          if (elem.closest('form')?.id === 'levelsFinals') elem.disabled = true;
+          else elem.disabled = false;
+        }
+      })
+    }
+    document.getElementById('settings').style.display = 'block'
+  }
+
+  async function setPlatoons() {
+    // create platoon selection
+    let html = ''
+    let info = await getInfo('baseSelect', 'classes')
+    if (! info.length) document.getElementById('userSelection').innerHTML = html
+    else {
+      html += 'Choose Platoon: '
+      html += '<select name="platoonSelect" id="platoonSelect" onchange="setUsers()">'
+      html += '<option value="0">All Platoons</option>'
+      info.map(platoon => {
+        let grade = platoon.class_grade + (platoon.class_sub ? '-' + platoon.class_sub : '')
+        html += `<option value="${platoon.class_id}">${grade}</option>`
+      })
+    }
+    document.getElementById('platoonSelection').innerHTML = html;
+  }
+
+  async function setUsers() {
+    // create user selection
+    let html = '';
+    let info = await getInfo('platoonSelect', 'users')
+    if (info.length) {
+      html += 'Choose Chayol: '
+      html += '<select name="userSelect" id="userSelect">'
+      html += '<option value="0">All Chayolim</option>'
+      info.map(user => {
+        html += `<option value="${user.user_id}">${user.first} ${user.last}</option>`
+      })
+    }
+    document.getElementById('userSelection').innerHTML = html;
+  }
+
+  async function getInfo(elem, table) {
+    let info = []
+    let id = document.getElementById(elem).value
+    if (id > 0) {
+      const res = await fetch('api/getInfo.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ id, table })
+      })
+      info = await res.json()
+    }
+    return info
+  }
+
+  async function save(id, all = false) {
+    let info = new FormData(document.forms[id])
+    info.set('elem', id)
+    let school_id = document.getElementById('baseSelect') ? document.getElementById('baseSelect').value : 0
+    let class_id = document.getElementById('platoonSelect') ? document.getElementById('platoonSelect').value : 0
+    let user_id = document.getElementById('userSelect') ? document.getElementById('userSelect').value : 0
+    info.set('school_id', school_id)
+    info.set('class_id', class_id)
+    info.set('user_id', user_id)
+
+    if (validateForm(id, info, all)) {
+      let conf = true
+      if (user_id == 0) {
+        conf = confirm('Please note, if you have already changed settings in the past, those children will stay ' +
+          'with the same settings and will not be updated with what you are doing now, you will need to update those children manually.' +
+          '\n\nAre you sure you want to save?')
+      }
+      if (conf == false) return false
+      const res = await fetch('api/saveSettings.php', {
+        method: 'POST',
+        body: info
+      })
+      const data = await res.json()
+      if (data.error) {
+        alert(data.error)
+        return false
+      } else {
+        if (!all) {
+          alert('Saved!')
+          getSettings()
+        }
+        return true
+      }
+    } else {
+      return false
+    }
+  }
+
+  function validateForm(id, info, supressAlert = false) {
+    switch (id) {
+      case 'avgScore':
+      case 'avgScoreIyun':
+        if (!info.get('avg') || info.get('avg') == 0) {
+          if (!supressAlert) alert('Please select an average score')
+          return false
+        }
+        if (!info.get('tracks[]')) {
+          if (!supressAlert) alert('Please select at least one track')
+          return false
+        }
+        break
+      case 'avgScoreFinal':
+      case 'avgFinalIyun':
+        if (!info.get('avgFinal') || info.get('avgFinal') == 0) {
+          if (!supressAlert) alert('Please select an average score')
+          else alert('Please select an average score for ' + id)
+          return false
+        }
+        if (!info.get('tracks[]')) {
+          if (!supressAlert) alert('Please select at least one track')
+          else alert('Please select at least one track for ' + id)
+          return false
+        }
+        break
+      case 'levelsTests':
+      case 'levelsFinals':
+        if (!info.get('level') || info.get('level') == 0) {
+          if (!supressAlert) alert('Please select a level')
+          else alert('Please select a level for ' + id)
+          return false
+        }
+        break
+    }
+    return true
+  }
+</script>
+</html>
