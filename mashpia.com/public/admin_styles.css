@@ -2871,7 +2871,6 @@ body pre {
     background: #D5D8DE !important;
     position: absolute !important;
     width: 250px !important;
-    top: 0 !important;
     display: none !important;
     -moz-box-shadow: 0px 0px 10px #666 !important;    
     -webkit-box-shadow: 0px 0px 10px #666 !important;    
@@ -2879,13 +2878,13 @@ body pre {
 
 /* Third level positioning */
 #nav ul.list_second ul.list_third {
-    margin-left: 250px !important;
+    margin-left: 220px !important;
     z-index: 2 !important;
 }
 
 /* Fourth level positioning */
 #nav ul.list_third ul.list_fourth {
-    margin-left: 250px !important;
+    margin-left: 220px !important;
     z-index: 3 !important;
 }
 

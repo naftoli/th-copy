@@ -216,7 +216,6 @@ if ( !isset($_SESSION['program_name']) || $_SESSION['program_name'] != 'children
 					var $fourthMenu = $(this).children('.list_fourth');
 					if ($fourthMenu.length) {
 						// Position the fourth level menu relative to its parent
-						var parentOffset = $(this).offset();
 						$fourthMenu.css({
 							'top': $(this).position().top + 'px',
 							'left': '30px'
