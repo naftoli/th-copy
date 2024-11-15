@@ -173,40 +173,14 @@ if (count($schools) == 1) {
 
     <fieldset style="float: left;">
       <legend>Iyun Tests Avg</legend>
-      <form id="avgScoreIyun">
-        <p>
-          <input type="checkbox" class="tracks" name="tracks[]" value="genius" checked /> Iyun
-          <span id='chidon_passing_avgs_genius'></span>
-          <br />
-        </p>
-        <select name="avg" id="avg_score_iyun">
-          <?php
-          $i = 80;
-          if ($super) {
-            echo "<option value='0'>Select Avg</option>";
-            $i = 0;
-            for (; $i <= 100; $i += 5) {
-              echo "<option value='$i'>$i</option>";
-            }
-          } else {
-            echo "<option value='$i'>$i</option>";
-          }
-          ?>
-        </select>
-        <br />
-        <button class="save" onclick="save('avgScoreIyun'); return false;">Save</button>
-      </form>
-    </fieldset>
-
-    <fieldset style="float: right;">
-      <legend>Iyun Final Avg</legend>
-      <form id="avgFinalIyun">
-        <p>
-          <input type="checkbox" class="tracks" name="tracks[]" value="genius" checked /> Iyun
-          <span id='chidon_final_passing_avgs_genius'></span>
-          <br />
-        </p>
-        <select name="avgFinal" id="avg_final_iyun">
+      <?php if ($super) : ?>
+        <form id="avgScoreIyun">
+          <p>
+            <input type="checkbox" class="tracks" name="tracks[]" value="genius" checked /> Iyun
+            <span id='chidon_passing_avgs_genius'></span>
+            <br />
+          </p>
+          <select name="avg" id="avg_score_iyun">
             <?php
             $i = 80;
             if ($super) {
@@ -219,10 +193,50 @@ if (count($schools) == 1) {
               echo "<option value='$i'>$i</option>";
             }
             ?>
-        </select>
-        <br />
-        <button class="save" onclick="save('avgFinalIyun'); return false;">Save</button>
-      </form>
+          </select>
+          <br />
+          <button class="save" onclick="save('avgScoreIyun'); return false;">Save</button>
+        </form>
+      <?php else : ?>
+        <p>
+          The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
+          The Iyun test avg is set to <b>80 non-cumulative or 90 cumulative</b>.
+        </p>
+      <?php endif; ?>
+    </fieldset>
+
+    <fieldset style="float: right;">
+      <legend>Iyun Final Avg</legend>
+        <?php if ($super) : ?>
+        <form id="avgFinalIyun">
+          <p>
+            <input type="checkbox" class="tracks" name="tracks[]" value="genius" checked /> Iyun
+            <span id='chidon_final_passing_avgs_genius'></span>
+            <br />
+          </p>
+          <select name="avgFinal" id="avg_final_iyun">
+              <?php
+              $i = 80;
+              if ($super) {
+                echo "<option value='0'>Select Avg</option>";
+                $i = 0;
+                for (; $i <= 100; $i += 5) {
+                  echo "<option value='$i'>$i</option>";
+                }
+              } else {
+                echo "<option value='$i'>$i</option>";
+              }
+              ?>
+          </select>
+          <br />
+          <button class="save" onclick="save('avgFinalIyun'); return false;">Save</button>
+        </form>
+      <?php else : ?>
+        <p>
+          The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
+          The Iyun test final avg is set to <b>80 non-cumulative or 90 cumulative</b>.
+        </p>
+      <?php endif; ?>
     </fieldset>
 
     <div style="clear: both;"></div>
@@ -246,17 +260,24 @@ if (count($schools) == 1) {
 
     <fieldset style="float: right;">
       <legend>Finals Level</legend>
-      <form id="levelsFinals">
-        <p>
-          <input type="checkbox" name="finals" id="finals" value="1" checked /> Finals
-          <span id='chidon_test_levels_finals'></span><br />
-        </p>
-        <select name="level" class="level">
-          <option value="1">Level 1</option>
-        </select>
-        <br />
-        <button class="save" onclick="save('levelsFinals'); return false;">Save</button>
-      </form>
+      <?php if ($super) : ?>
+        <form id="levelsFinals">
+          <p>
+            <input type="checkbox" name="finals" id="finals" value="1" checked /> Finals
+            <span id='chidon_test_levels_finals'></span><br />
+          </p>
+          <select name="level" class="level">
+            <option value="1">Level 1</option>
+          </select>
+          <br />
+          <button class="save" onclick="save('levelsFinals'); return false;">Save</button>
+        <?php else : ?>
+          <p>
+            The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
+            The finals are set to <b>Level 1</b>.
+          </p>
+        </form>
+      <?php endif; ?>
     </fieldset>
 
     <div style="clear: both;"></div>
@@ -308,9 +329,7 @@ if (count($schools) == 1) {
       for (let track of ['maven', 'pro', 'expert', 'genius']) {
         let elem = '#' + table + '_' + track
         let avg = settings[id] && settings[id][table] && settings[id][table][track] ? settings[id][table][track] : ''
-        if (track == 'genius' && avg && avg == 80) {
-          $(elem).text('(80 non-cumulative or 90 cumulative)')
-        } else if (avg) {
+        if (avg) {
           $(elem).text('(' + avg + ')')
         } else {
           $(elem).html('<span style="color: red">(80)</span>')
