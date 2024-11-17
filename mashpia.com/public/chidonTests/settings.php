@@ -273,7 +273,6 @@ if (count($schools) == 1) {
           <button class="save" onclick="save('levelsFinals'); return false;">Save</button>
         <?php else : ?>
           <p>
-            The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
             The finals are set to <b>Level 1</b>.
           </p>
         </form>
