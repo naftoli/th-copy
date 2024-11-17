@@ -59,23 +59,43 @@ if (count($schools) == 1) {
         font-size: 14px;
         padding: 5px;
       }
+      .indent {
+        margin-left: 20px;
+      }
     </style>
 </head>
 <body>
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'); ?>
 <h1>Chidon Test Settings</h1>
 <div class="infobox">
-  Chidon HQ has set the standard that an 80% is needed to pass each track and that all are taking the test on level 1.
-  <br /><br />
-  You have the option to change the passing mark up/down as well as change the test to level 2 (Harder test).
-  You can either do this for your full school, individual platoon (class) or per child. Remember to press save!
-  <br /><br />
-  Please note that the lowest you can choose is 70%. If there is a particular child who needs a lower average.
-  Please contact HQ and they will adjust it for you.
-  <br /><br />
-  PLEASE NOTE: The settings for School/Grade/Child are all different, so changing one will NOT CHANGE the others.
-  <br /><br />
-  IF you see a RED number, it means that the setting has not yet been set and saved, so please make sure to save it.
+    Chidon HQ has set the standard that an 80% is needed to pass each track and that all are taking the test on level 1.
+    <br /><br />
+    You have the option to change the passing mark up/down as well as change the test to level 2 (Harder test).
+    You can either do this for your full school, individual platoon (class) or per child. Remember to press save!
+    <br /><br />
+    Please note that the lowest you can choose is 70%. If there is a particular child who needs a lower average.
+    Please contact 714-661-0630 and they will adjust it for you.
+    <br /><br />
+    <b>Important Note Regarding Data Independence:</b>
+    <br /><br />
+    All averages at the individual, platoon, and school levels are maintained independently. Changes made at one level do not automatically cascade to other levels.
+    <br /><br/>
+    Specifically:<br /><br />
+    <div class="indent">
+        <b>Individual Student Records:</b><br />
+        Changes to a student's average are isolated to that student's record
+        These changes will not be affected by subsequent modifications to platoon or school-wide averages.<br /><br />
+        <b>Platoon Averages:</b><br />
+        Adjustments to platoon averages remain specific to that platoon
+        Changes to school-wide averages will not override individual platoon values<br /><br />
+        <b>School-wide Averages:</b><br />
+        Modifications at the school level do not affect existing platoon or individual student averages
+        Example: If you set a student's average to 75%, then later adjust their platoon's average to 80%, the student's individual average will remain at 75% unless manually updated.
+        <br /><br/>
+        Each level of data must be maintained and updated independently to ensure accurate record-keeping.
+        <br /><br />
+    </div>
+    IF you see a RED number, it means that the setting has not yet been set and saved, so please make sure to save it.
 </div>
 <br />
 <div id="yearSelection">
