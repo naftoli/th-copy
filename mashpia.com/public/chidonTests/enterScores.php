@@ -1,6 +1,6 @@
 <?php
-//ini_set('display_errors', 1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -69,10 +69,10 @@ $exceptions = [];
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = [];
-    $shutdown[1] = new DateTime('2023-12-07 04:59:00');
-    $shutdown[2] = new DateTime('2024-01-17 04:59:00');
-//    $shutdown[3] = new DateTime('2024-02-17 04:59:00');
-//    $shutdown[3] = new DateTime('2024-03-19 04:59:00');
+    $shutdown[1] = new DateTime('2024-11-25 04:59:00');
+    $shutdown[2] = new DateTime('2025-01-17 04:59:00');
+    $shutdown[3] = new DateTime('2025-02-17 04:59:00');
+    $shutdown[3] = new DateTime('2025-03-19 04:59:00');
     if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions)) {
         $disabled = true;
     }
