@@ -271,10 +271,6 @@ if (count($schools) == 1) {
           </select>
           <br />
           <button class="save" onclick="save('levelsFinals'); return false;">Save</button>
-        <?php else : ?>
-          <p>
-            The finals are set to <b>Level 1</b>.
-          </p>
         </form>
       <?php endif; ?>
     </fieldset>
