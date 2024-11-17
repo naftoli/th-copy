@@ -258,9 +258,9 @@ if (count($schools) == 1) {
       </form>
     </fieldset>
 
-    <fieldset style="float: right;">
-      <legend>Finals Level</legend>
-      <?php if ($super) : ?>
+    <?php if ($super) : ?>
+      <fieldset style="float: right;">
+        <legend>Finals Level</legend>
         <form id="levelsFinals">
           <p>
             <input type="checkbox" name="finals" id="finals" value="1" checked /> Finals
@@ -272,8 +272,8 @@ if (count($schools) == 1) {
           <br />
           <button class="save" onclick="save('levelsFinals'); return false;">Save</button>
         </form>
-      <?php endif; ?>
-    </fieldset>
+      </fieldset>
+    <?php endif; ?>
 
     <div style="clear: both;"></div>
     <br />
