@@ -344,6 +344,7 @@
         info.total = total
         info.type = type
         info.purchases = getListOfSeforim()
+        info.yom_tov = 'Yahadus Book Sale'
 
         $.post('ajax/purchaseSeforim.php', { info: JSON.stringify(info) }, function (info) {
           var result = JSON.parse(info);

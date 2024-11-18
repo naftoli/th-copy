@@ -15,7 +15,7 @@
     <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
     <script>!function(e){"use strict";var t=function(t,n,r){function o(e){if(i.body)return e();setTimeout(function(){o(e)})}function a(){d.addEventListener&&d.removeEventListener("load",a),d.media=r||"all"}var l,i=e.document,d=i.createElement("link");if(n)l=n;else{var s=(i.body||i.getElementsByTagName("head")[0]).childNodes;l=s[s.length-1]}var u=i.styleSheets;d.rel="stylesheet",d.href=t,d.media="only x",o(function(){l.parentNode.insertBefore(d,n?l:l.nextSibling)});var f=function(e){for(var t=d.href,n=u.length;n--;)if(u[n].href===t)return e();setTimeout(function(){f(e)})};return d.addEventListener&&d.addEventListener("load",a),d.onloadcssdefined=f,f(a),d};"undefined"!=typeof exports?exports.loadCSS=t:e.loadCSS=t}("undefined"!=typeof global?global:this),function(e){if(e.loadCSS){var t=loadCSS.relpreload={};if(t.support=function(){try{return e.document.createElement("link").relList.supports("preload")}catch(e){return!1}},t.poly=function(){for(var t=e.document.getElementsByTagName("link"),n=0;n<t.length;n++){var r=t[n];"preload"===r.rel&&"style"===r.getAttribute("as")&&(e.loadCSS(r.href,r,r.getAttribute("media")),r.rel=null)}},!t.support()){t.poly();var n=e.setInterval(t.poly,300);e.addEventListener&&e.addEventListener("load",function(){t.poly(),e.clearInterval(n)}),e.attachEvent&&e.attachEvent("onload",function(){e.clearInterval(n)})}}}(this);</script>
     <script src="/mobile/reg/js/all.js" defer></script>
-    <!--    Bug Report code -->
+    <!-- Bug Report code -->
     <link rel="stylesheet" href="/mobile/css/bug_report.css" />
     <script src="/mobile/js/bug_report.js?v=2.0" defer></script>
     <style>
@@ -322,8 +322,9 @@
       return list
   }
 
-  const purchaseSets = e => {
+  const purchaseSets = async e => {
       e.preventDefault()
+      $("#purchase").attr('disabled', true)
       const total = parseInt($("#total").val())
       if ( total > 0 ) {
           const first = $("#cc-first").val().trim();
@@ -335,11 +336,13 @@
 
           if ( !first || !last || !num || !exp || !zip || !cvv ) {
               alert("You must fill in all fields.");
+              $("#purchase").attr('disabled', false)
               return false;
           }
 
           if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
               alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+              $("#purchase").attr('disabled', false)
               return false;
           }
 
@@ -353,15 +356,14 @@
                       alert("You cannot enter more than " + max + " for this item.")
                       $(this).focus()
                       $(this).select()
+                      $("#purchase").attr('disabled', false)
                       exceeded = true
+                      return false
                   }
               }
           })
 
           if (!exceeded) {
-              // disable puchase button so that they don't accidentally or purposely click it again
-              $("button#purchase").attr('disabled', true);
-
               // build data
               let info = {};
               info.cc = {};
@@ -374,8 +376,9 @@
               info.admin = admin;
               info.total = total;
               info.purchases = getListOfSeforim()
+              info.yom_tov = 'Hei Teves'
 
-              $.post('ajax/purchaseSeforim.php', {info: JSON.stringify(info)}, function (info) {
+              await $.post('ajax/purchaseSeforim.php', {info: JSON.stringify(info)}), function (info) {
                   var result = JSON.parse(info);
                   if (result.success) {
                       var msg = "Thank you! Your purchase(s) have been saved. Your child(ren)'s school will receive them for your child(ren).";
@@ -383,13 +386,14 @@
                       location.reload();
                   } else {
                       alert(result.error);
-                      $("button#purchase").attr('disabled', false);
+                      $("#purchase").attr('disabled', false);
                   }
               });
           }
       } else {
           alert("You have not chosen anything to purchase.");
       }
+      $("#purchase").attr('disabled', false)
   }
 
   document.addEventListener("DOMContentLoaded", function(event) {

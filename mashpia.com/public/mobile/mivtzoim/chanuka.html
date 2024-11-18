@@ -376,8 +376,9 @@
                 $("#total").val( amount );
             }
 
-            function purchaseSets( e ) {
+            async function purchaseSets( e ) {
                 e.preventDefault();
+                $("#purchase").attr('disabled', true);
                 var total = $("#total").val();
                 if ( total > 0 ) {
                     
@@ -390,16 +391,15 @@
 
                     if ( !first || !last || !num || !exp || !zip || !cvv ) {
                         alert("You must fill in all fields.");
+                        $("button#purchase").attr('disabled', false);
                         return false;
                     }
 
                     if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
                         alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+                        $("button#purchase").attr('disabled', false);
                         return false;
                     }
-
-                    // disable puchase button so that they don't accidentally or purposely click it again
-                    $("button#purchase").attr('disabled',true);
 
                     // build data
                     var info = {};
@@ -442,7 +442,7 @@
                         }
                     });
                     
-                    $.post('ajax/payment.php', { info: info }, function( info ) {
+                    await $.post('ajax/payment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
                         if ( result.success ) {
                             var msg = "Thank you! You have successfully purchased " + totalMenorahs + " Menorah Box(es) and " + totalBrochures + 
@@ -451,13 +451,14 @@
                             location.reload();
                         } else {
                             alert( result.error );
-                            $("button#purchase").attr('disabled',false);
+                            $("#purchase").attr('disabled', false);
                         }
                     });
 
                 } else {
                     alert("You have not indicated what you are purchasing.");
                 }
+                $("#purchase").attr('disabled', false);
             }
         });
     </script>

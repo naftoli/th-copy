@@ -20,7 +20,8 @@ function purchaseItems() {
     $address = "";
     $state = "";
 
-    $description = "Yahadus Book Sale (end of yr) - $$amount, Admin ID: " . $admin_id;
+//    $description = "Yahadus Book Sale (end of yr) - $$amount, Admin ID: " . $admin_id;
+    $description = "Hey Teves Book Sale - $$amount, Admin ID: " . $admin_id;
 
     if ($total > 0) {
         // figure out if we are charging a credit card on file or a new one
@@ -106,7 +107,7 @@ function saveToDb($info) {
     $m = new MivtzoimPurchases();
     if ( $m->createPurchase( $info, $details ) ) {
         // send email
-        $m->sendEmail($info, $list, $cc_info, 'Yahadus Book Sale');
+        $m->sendEmail($info, $list, $cc_info, $info['yom_tov']);
         return true;
     }
     else return false;
