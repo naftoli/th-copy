@@ -183,7 +183,6 @@ class MivtzoimPurchases {
         $year = $info['year'];
         $admin = $info['admin'];
         $amount = $info['amount'];
-        $authorization = $info['auth'];
 
         $stmt = $this->pdo->prepare("
             INSERT INTO mashpia_purchases.purchases 
@@ -207,30 +206,60 @@ class MivtzoimPurchases {
         $res = $stmt->execute([
             ':year'     =>  $year, 
             ':admin'    =>  $admin, 
-            ':amount'   =>  $amount, 
-            ':auth'     =>  $authorization
+            ':amount'   =>  $amount
         ]);
         // $stmt->debugDumpParams(); exit;
-        $purchase_id = $this->pdo->lastInsertId();
-        
+
         $success = true;
-        foreach ( $details as $user => $items ) {
-            foreach ( $items as $item => $qty ) {
-                $res2 = $stmt2->execute([
-                    ':id'   =>  $purchase_id, 
-                    ':user' =>  $user, 
-                    ':item' =>  $item, 
-                    ':qty'  =>  $qty
-                ]);
-                // $stmt2->debugDumpParams(); exit;
-                if ( !$res2 ) {
-                    $success = false;
-                    break 2;
+        $purchase_id = 0;
+        if ($res) {
+            $purchase_id = $this->pdo->lastInsertId();
+            foreach ( $details as $user => $items ) {
+                foreach ( $items as $item => $qty ) {
+                    $res2 = $stmt2->execute([
+                        ':id'   =>  $purchase_id, 
+                        ':user' =>  $user, 
+                        ':item' =>  $item, 
+                        ':qty'  =>  $qty
+                    ]);
+                    // $stmt2->debugDumpParams(); exit;
+                    if ( !$res2 ) {
+                        $success = false;
+                        break 2;
+                    }
                 }
             }
         }
 
         if ( $res && $success ) {
+            $this->pdo->commit();
+        } else {
+            $this->pdo->rollBack();
+        }
+        return $purchase_id;
+    }
+
+    /**
+     * updates purchase with authorization
+     */
+    public function updatePurchase($purchase_id, $authorization) {
+        $stmt = $this->pdo->prepare("
+            UPDATE mashpia_purchases.purchases SET authorization = :auth WHERE purchase_id = :id
+        ");
+        return $stmt->execute([ ':auth' => $authorization, ':id' => $purchase_id ]);
+    }
+
+    /**
+     * deletes purchase
+     */
+    public function deletePurchase($purchase_id) {
+        $this->pdo->beginTransaction();
+        $stmt = $this->pdo->prepare("DELETE FROM mashpia_purchases.purchases WHERE purchase_id = :id");
+        $res1 = $stmt->execute([ ':id' => $purchase_id ]);
+        // delete purchase details
+        $stmt2 = $this->pdo->prepare("DELETE FROM mashpia_purchases.purchase_details WHERE purchase_id = :id");
+        $res2 = $stmt2->execute([ ':id' => $purchase_id ]);
+        if ( $res1 && $res2 ) {
             $this->pdo->commit();
             return true;
         } else {

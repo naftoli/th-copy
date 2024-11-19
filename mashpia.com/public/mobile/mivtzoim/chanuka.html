@@ -376,89 +376,90 @@
                 $("#total").val( amount );
             }
 
-            async function purchaseSets( e ) {
+            async function purchaseSets(e) {
                 e.preventDefault();
+                
+                // Prevent double-submission
+                if ($("#purchase").attr('data-processing') === 'true') {
+                    return false;
+                }
+                
+                $("#purchase").attr('data-processing', 'true');
                 $("#purchase").attr('disabled', true);
-                var total = $("#total").val();
-                if ( total > 0 ) {
-                    
-                    var first = $("#cc-first").val().trim();
-                    var last = $("#cc-last").val().trim();
-                    var num = $("#cc-number").val().trim();
-                    var exp = $("#cc-exp").val().trim();
-                    var zip = $("#zip").val().trim();
-                    var cvv = $("#x_card_code").val().trim();
+                
+                try {
+                    const total = parseFloat($("#total").val());
+                    if (total > 0) {
+                        // Validation code
+                        const first = $("#cc-first").val().trim();
+                        const last = $("#cc-last").val().trim();
+                        const num = $("#cc-number").val().trim();
+                        const exp = $("#cc-exp").val().trim();
+                        const zip = $("#zip").val().trim();
+                        const cvv = $("#x_card_code").val().trim();
 
-                    if ( !first || !last || !num || !exp || !zip || !cvv ) {
-                        alert("You must fill in all fields.");
-                        $("button#purchase").attr('disabled', false);
-                        return false;
-                    }
-
-                    if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
-                        alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
-                        $("button#purchase").attr('disabled', false);
-                        return false;
-                    }
-
-                    // build data
-                    var info = {};
-                    info.year = year;
-                    info.admin = admin;
-                    info.amount = total;
-                    info.cc = {};
-                    info.cc.first = first;
-                    info.cc.last = last;
-                    info.cc.num = num;
-                    info.cc.exp = exp;
-                    info.cc.cvv = cvv;
-                    info.zip = zip;
-                    info.menorah = [];
-                    info.brochure = [];
-
-                    var totalMenorahs = 0;
-                    $.each($("input.menorah"), function() {
-                        var id = parseInt( $(this).attr('id') );
-                        var qty = parseInt( $(this).val() );
-                        if ( qty > 0 ) {
-                            info.menorah.push({
-                                'user': id, 
-                                'qty' : qty
-                            });
-                            totalMenorahs += qty;
+                        if (!first || !last || !num || !exp || !zip || !cvv) {
+                            alert("You must fill in all fields.");
+                            return false;
                         }
-                    });
 
-                    var totalBrochures = 0;
-                    $.each($("input.brochure"), function() {
-                        var id = parseInt( $(this).attr('id') );
-                        var qty = parseInt( $(this).val() );
-                        if ( qty > 0 ) {
-                            info.brochure.push({
-                                'user': id, 
-                                'qty' : qty
-                            });
-                            totalBrochures += qty;
+                        if (isNaN(num) || isNaN(exp) || isNaN(cvv)) {
+                            alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+                            return false;
                         }
-                    });
-                    
-                    await $.post('ajax/payment.php', { info: info }, function( info ) {
-                        var result = JSON.parse( info );
-                        if ( result.success ) {
-                            var msg = "Thank you! You have successfully purchased " + totalMenorahs + " Menorah Box(es) and " + totalBrochures + 
-                                 " Brochure(s). Your child(ren)'s school will receive them for your child(ren).";
-                            alert( msg );
+
+                        // Build data object
+                        const info = {
+                            year,
+                            admin,
+                            amount: total,
+                            cc: { first, last, num, exp, cvv },
+                            zip,
+                            menorah: [],
+                            brochure: [],
+                            transaction_id: Date.now() + Math.random().toString(36).substring(7)
+                        };
+
+                        // Collect menorah purchases
+                        $("input.menorah").each(function() {
+                            const id = parseInt($(this).attr('id'));
+                            const qty = parseInt($(this).val());
+                            if (qty > 0) {
+                                info.menorah.push({ user: id, qty });
+                            }
+                        });
+
+                        // Collect brochure purchases
+                        $("input.brochure").each(function() {
+                            const id = parseInt($(this).attr('id'));
+                            const qty = parseInt($(this).val());
+                            if (qty > 0) {
+                                info.brochure.push({ user: id, qty });
+                            }
+                        });
+
+                        const response = await $.post('ajax/payment.php', { info });
+                        const result = JSON.parse(response);
+                        
+                        if (result.success) {
+                            const totalMenorahs = info.menorah.reduce((sum, item) => sum + item.qty, 0);
+                            const totalBrochures = info.brochure.reduce((sum, item) => sum + item.qty, 0);
+                            const msg = `Thank you! You have successfully purchased ${totalMenorahs} Menorah Box(es) and ${totalBrochures} Brochure(s). Your child(ren)'s school will receive them for your child(ren).`;
+                            alert(msg);
                             location.reload();
                         } else {
-                            alert( result.error );
-                            $("#purchase").attr('disabled', false);
+                            alert(result.error);
                         }
-                    });
-
-                } else {
-                    alert("You have not indicated what you are purchasing.");
+                    } else {
+                        alert("You have not indicated what you are purchasing.");
+                    }
+                } catch (error) {
+                    console.error(error);
+                    alert("An error occurred while processing your purchase. Please try again.");
+                } finally {
+                    $("#purchase").attr('data-processing', 'false');
+                    $("#purchase").attr('disabled', false);
                 }
-                $("#purchase").attr('disabled', false);
             }
         });
     </script>

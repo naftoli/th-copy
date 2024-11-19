@@ -21,7 +21,7 @@ function purchaseItems() {
     $state = "";
 
 //    $description = "Yahadus Book Sale (end of yr) - $$amount, Admin ID: " . $admin_id;
-    $description = "Hey Teves Book Sale - $$amount, Admin ID: " . $admin_id;
+    $description = "5 Teves Book Sale - $$amount, Admin ID: " . $admin_id;
 
     if ($total > 0) {
         // figure out if we are charging a credit card on file or a new one
@@ -105,12 +105,7 @@ function saveToDb($info) {
     }
 
     $m = new MivtzoimPurchases();
-    if ( $m->createPurchase( $info, $details ) ) {
-        // send email
-        $m->sendEmail($info, $list, $cc_info, $info['yom_tov']);
-        return true;
-    }
-    else return false;
+    return $m->createPurchase( $info, $details );
 }
 // **************** END FUNCTIONS **************** //
 
@@ -120,27 +115,35 @@ $total = $info->total;
 $cc_info = $info->cc;
 $type = $info->type;
 $admin_id = encrypt_decrypt('decrypt', $info->admin);
-$response_array = [];
 
-$result = false;
-if ($res = purchaseItems()) {
-    $purchaseInfo = [
-        'year'      =>  $year,
-        'admin'     =>  $admin_id,
-        'amount'    =>  $total,
-        'auth'      =>  $res
-    ];
-    $result = saveToDb($purchaseInfo);
-}
-
-if ($result) {
-    echo json_encode([
-        'success'   => true
-    ]);
+// first save to db
+$purchaseInfo = [
+    'year'      =>  $year,
+    'admin'     =>  $admin_id,
+    'amount'    =>  $total
+];
+$purchase_id = saveToDb($purchaseInfo);
+if ($purchase_id > 0) {
+    // charge the card
+    $res = purchaseItems();
+    if ($res) {
+        // update db with authorization
+        $m->updatePurchase($purchase_id, $res);
+        // send email
+        $m->sendEmail($purchaseInfo, $list, $cc_info, $type, $info->yom_tov);
+        echo json_encode([
+            'success'   => true
+        ]);
+    } else {
+        $m->deletePurchase($purchase_id);
+        echo json_encode([
+            'success'   => false,
+            'error'     => 'There was an error charging your card. You have not been charged. Please try again.'
+        ]);
+    }
 } else {
     echo json_encode([
-        'success'   =>  false,
-        'error'     =>  'Your credit card was charged, however, there was an error saving your purchase. Please contact HQ via email - support@tzivoshashem.org - 
-                                and keep the following authorization code as proof of purchase: ' . $response_array[6]
+        'success'   => false,
+        'error'     => 'There was an error saving your purchase. You have not been charged. Please try again.'
     ]);
 }

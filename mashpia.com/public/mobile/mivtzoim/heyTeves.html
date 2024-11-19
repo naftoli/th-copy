@@ -324,76 +324,89 @@
 
   const purchaseSets = async e => {
       e.preventDefault()
-      $("#purchase").attr('disabled', true)
-      const total = parseInt($("#total").val())
-      if ( total > 0 ) {
-          const first = $("#cc-first").val().trim();
-          const last = $("#cc-last").val().trim();
-          const num = $("#cc-number").val().trim();
-          const exp = $("#cc-exp").val().trim();
-          const zip = $("#zip").val().trim();
-          const cvv = $("#x_card_code").val().trim();
-
-          if ( !first || !last || !num || !exp || !zip || !cvv ) {
-              alert("You must fill in all fields.");
-              $("#purchase").attr('disabled', false)
-              return false;
-          }
-
-          if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
-              alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
-              $("#purchase").attr('disabled', false)
-              return false;
-          }
-
-          // check that amounts do not exceed max
-          let exceeded = false
-          $(".qty").each( function() {
-              if ($(this).val()) {
-                  const qty = $(this).val()
-                  const max = $(this).attr('max')
-                  if (parseInt(qty) > parseInt(max)) {
-                      alert("You cannot enter more than " + max + " for this item.")
-                      $(this).focus()
-                      $(this).select()
-                      $("#purchase").attr('disabled', false)
-                      exceeded = true
-                      return false
-                  }
-              }
-          })
-
-          if (!exceeded) {
-              // build data
-              let info = {};
-              info.cc = {};
-              info.cc.first = first;
-              info.cc.last = last;
-              info.cc.num = num;
-              info.cc.exp = exp;
-              info.cc.cvv = cvv;
-              info.cc.zip = zip;
-              info.admin = admin;
-              info.total = total;
-              info.purchases = getListOfSeforim()
-              info.yom_tov = 'Hei Teves'
-
-              await $.post('ajax/purchaseSeforim.php', {info: JSON.stringify(info)}), function (info) {
-                  var result = JSON.parse(info);
-                  if (result.success) {
-                      var msg = "Thank you! Your purchase(s) have been saved. Your child(ren)'s school will receive them for your child(ren).";
-                      alert(msg);
-                      location.reload();
-                  } else {
-                      alert(result.error);
-                      $("#purchase").attr('disabled', false);
-                  }
-              });
-          }
-      } else {
-          alert("You have not chosen anything to purchase.");
+      
+      // Prevent double-submission
+      if ($("#purchase").attr('data-processing') === 'true') {
+          return false;
       }
-      $("#purchase").attr('disabled', false)
+      
+      $("#purchase").attr('data-processing', 'true')
+      $("#purchase").attr('disabled', true)
+      
+      try {
+          const total = parseInt($("#total").val())
+          if (total > 0) {
+              const first = $("#cc-first").val().trim();
+              const last = $("#cc-last").val().trim();
+              const num = $("#cc-number").val().trim();
+              const exp = $("#cc-exp").val().trim();
+              const zip = $("#zip").val().trim();
+              const cvv = $("#x_card_code").val().trim();
+
+              if ( !first || !last || !num || !exp || !zip || !cvv ) {
+                  alert("You must fill in all fields.");
+                  $("#purchase").attr('disabled', false)
+                  return false;
+              }
+
+              if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
+                  alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+                  $("#purchase").attr('disabled', false)
+                  return false;
+              }
+
+              // check that amounts do not exceed max
+              let exceeded = false
+              $(".qty").each( function() {
+                  if ($(this).val()) {
+                      const qty = $(this).val()
+                      const max = $(this).attr('max')
+                      if (parseInt(qty) > parseInt(max)) {
+                          alert("You cannot enter more than " + max + " for this item.")
+                          $(this).focus()
+                          $(this).select()
+                          $("#purchase").attr('disabled', false)
+                          exceeded = true
+                          return false
+                      }
+                  }
+              })
+
+              if (!exceeded) {
+                  // build data
+                  let info = {};
+                  info.cc = {};
+                  info.cc.first = first;
+                  info.cc.last = last;
+                  info.cc.num = num;
+                  info.cc.exp = exp;
+                  info.cc.cvv = cvv;
+                  info.cc.zip = zip;
+                  info.admin = admin;
+                  info.total = total;
+                  info.purchases = getListOfSeforim()
+                  info.yom_tov = 'Hei Teves'
+
+                  await $.post('ajax/purchaseSeforim.php', {info: JSON.stringify(info)}, function (info) {
+                      var result = JSON.parse(info);
+                      if (result.success) {
+                          var msg = "Thank you! Your purchase(s) have been saved...";
+                          alert(msg);
+                          location.reload();
+                      } else {
+                          alert(result.error);
+                      }
+                  });
+              }
+          } else {
+              alert("You have not chosen anything to purchase.");
+          }
+      } catch (error) {
+          alert("An error occurred. Please try again.");
+      } finally {
+          $("#purchase").attr('data-processing', 'false')
+          $("#purchase").attr('disabled', false)
+      }
   }
 
   document.addEventListener("DOMContentLoaded", function(event) {
