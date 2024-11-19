@@ -324,15 +324,15 @@
 
   const purchaseSets = async e => {
       e.preventDefault()
-      
+
       // Prevent double-submission
       if ($("#purchase").attr('data-processing') === 'true') {
           return false;
       }
-      
+
       $("#purchase").attr('data-processing', 'true')
       $("#purchase").attr('disabled', true)
-      
+
       try {
           const total = parseInt($("#total").val())
           if (total > 0) {
@@ -387,17 +387,16 @@
                   info.purchases = getListOfSeforim()
                   info.yom_tov = 'Hei Teves'
 
-                  await $.post('ajax/purchaseSeforim.php', {info: JSON.stringify(info)}, function (info) {
-                      var result = JSON.parse(info);
-                      if (result.success) {
-                          var msg = "Thank you! Your purchase(s) have been saved...";
-                          alert(msg);
-                          location.reload();
-                      } else {
-                          alert(result.error);
-                      }
-                  });
-              }
+                const res = await $.post('ajax/purchaseSeforim.php', { info: JSON.stringify(info) })
+                const result = JSON.parse(res);
+                if (result.success) {
+                    var msg = "Thank you! Your purchase(s) have been created. You should receive an email shortly.";
+                    alert(msg);
+                    location.reload();
+                } else {
+                    alert(result.error);
+                }
+            }
           } else {
               alert("You have not chosen anything to purchase.");
           }
