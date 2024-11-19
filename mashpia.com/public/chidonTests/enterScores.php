@@ -4,6 +4,7 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true ); // add chidon schools
@@ -85,9 +86,10 @@ if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
 
 // find out which schools to disable
 $locked = [];
-$sql = "SELECT * FROM chidon_confirmations where year = " . $year;
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
+$stmt = $MASHPIA_DB->prepare("SELECT * FROM chidon_confirmations WHERE year = ?");
+$stmt->execute([$year]);
+$result = $stmt->fetchAll();
+foreach ($result as $row) {
     $locked[] = $row['school_id'];
 }
 ?>
@@ -147,6 +149,8 @@ while ($row = mysql_fetch_assoc($result)) {
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                     $name = $child['first'] . ' ' . $child['last'];
                     $id = $child['th_chidon_id'];
+                    $levelValue = $ct->getLevel($child['user_id'], 'tests');
+
                     echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                     if (empty($child['test_type'])) $default = true;
                     else $default = false;
@@ -159,12 +163,13 @@ while ($row = mysql_fetch_assoc($result)) {
                     foreach ($types as $type => $value) {
                         $class = 'score';
                         if ($type == 'expert') $class = 'expert';
+                        if ($type == 'expert' && $levelValue == 1) $disabled = true;
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
                         if ($disabled) echo "disabled ";
                         echo "/></td>";
                     }
-                    $levelValue = $ct->getLevel($child['user_id'], 'tests');
+
                     if (isset($levels[$school][$id][$testNumber]))
                         $levelValue = $levels[$school][$id][$testNumber];
                     echo "<td><select name='levels[$id][$testNumber]'";
