@@ -390,7 +390,7 @@
                 const res = await $.post('ajax/purchaseSeforim.php', { info: JSON.stringify(info) })
                 const result = JSON.parse(res);
                 if (result.success) {
-                    var msg = "Thank you! Your purchase(s) have been created. You should receive an email shortly.";
+                    var msg = "Thank you! Your purchase(s) have been received. You should receive an email confirmation shortly.";
                     alert(msg);
                     location.reload();
                 } else {
