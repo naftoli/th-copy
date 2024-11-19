@@ -254,11 +254,12 @@ class MivtzoimPurchases {
      */
     public function deletePurchase($purchase_id) {
         $this->pdo->beginTransaction();
-        $stmt = $this->pdo->prepare("DELETE FROM mashpia_purchases.purchases WHERE purchase_id = :id");
-        $res1 = $stmt->execute([ ':id' => $purchase_id ]);
-        // delete purchase details
+        // delete purchase details first
         $stmt2 = $this->pdo->prepare("DELETE FROM mashpia_purchases.purchase_details WHERE purchase_id = :id");
         $res2 = $stmt2->execute([ ':id' => $purchase_id ]);
+        // now delete purchase
+        $stmt = $this->pdo->prepare("DELETE FROM mashpia_purchases.purchases WHERE purchase_id = :id");
+        $res1 = $stmt->execute([ ':id' => $purchase_id ]);
         if ( $res1 && $res2 ) {
             $this->pdo->commit();
             return true;
