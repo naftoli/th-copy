@@ -135,8 +135,6 @@ foreach ($result as $row) {
             echo "<div style='float: right'><input type='submit' name='submit' value='Save & Review Marks' style='padding: 12px; font-size: large' /></div>";
             echo "<a href='settings.php'><input type='button' value='Marks/Levels Settings' style='padding: 12px; font-size: large' /></a>";
             foreach ($info as $school => $children) {
-                // check locked
-                if (in_array($school, $locked) && $admin_user['auth'] != 'super') $disabled = true;
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
                 echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Card for Test #" . $testNumber . " on Parent Accounts</p>";
@@ -146,6 +144,9 @@ foreach ($result as $row) {
                 }
                 echo "</tr>";
                 foreach ($children as $child) {
+                    $disabled = false;
+                    // check locked
+                    if (in_array($school, $locked) && $admin_user['auth'] != 'super') $disabled = true;
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                     $name = $child['first'] . ' ' . $child['last'];
                     $id = $child['th_chidon_id'];
