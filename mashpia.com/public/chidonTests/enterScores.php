@@ -78,9 +78,6 @@ if ($admin_user['auth'] != 'super') {
         $disabled = true;
     }
 }
-if (! isset($_COOKIE['naftoli'])) {
-    $disabled = true;
-}
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
 
