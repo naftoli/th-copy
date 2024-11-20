@@ -153,6 +153,8 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
         <input type="submit" name="submit" value="Modify Report"/>
       </p>
     </form>
+    <button id="csvDownload" disabled>Download CSV</button>
+    <br /><br />
   </div>
   <div class='instructions'>
     <b>Printing Instructions</b><br/>
@@ -169,8 +171,9 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
 <div id="report_div" name="report_div">
   <div class='topSpace'></div>
     <?php
-    $cols = 1; //counter for columns
-    $rows = 1; //counter for rows
+    $cols = 1; // counter for columns
+    $rows = 1; // counter for rows
+    $csv = []; // variable for csv data
 
     foreach ($parents as $admin => $children) {
         $parent = $admins[$admin];
@@ -181,8 +184,13 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
 
         echo "<div class='label'>";
         echo "<span class='name'>";
-        echo "<b>" . $name . "</b><br />" . $address . "</span></div>";
+        echo "<b>" . $name . " (" . $admin . ")</b><br />" . $address . "</span></div>";
         checkForBreak();
+
+        $totalCampaignMedals = 0;
+        $totalRankBooks = 0;
+        $totalRankMedalsSmall = 0;
+        $totalRankMedalsBig = 0;
 
         foreach ($children as $child) {
             if (isset($medals[$child]) || isset($ranks[$child])) {
@@ -207,6 +215,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                     }
                     echo "</div>";
                     checkForBreak();
+                    $totalCampaignMedals += count($medals[$child]);
                 }
 
                 if (isset($ranks[$child])) {
@@ -235,10 +244,12 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                     echo "Rank : " . $rankNames[$rank_ord] . "<br />Rank Book #: " . $book;
                     echo "</span></div>";
                     checkForBreak();
+                    $totalRankBooks++;
 
                     // add rank medals that were not yet shipped
+                    // rank medals start from 2
                     $ship = false;
-                    for ($idx = 1; $idx <= $rank_ord; $idx++) {
+                    for ($idx = 2; $idx <= $rank_ord; $idx++) {
                         if (!isset($medals_shipped[$child]) || (isset($medals_shipped[$child]) && !in_array($idx, $medals_shipped[$child]))) {
                             $ship = true;
                             break;
@@ -251,7 +262,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                         echo "Name : " . $userInfo[$child] . "<br />";
                         echo "Rank Medals:<br />";
                         $j = 1; // flag for when to make new label
-                        for ($idx = 1; $idx <= $rank_ord; $idx++) {
+                        for ($idx = 2; $idx <= $rank_ord; $idx++) {
                             if ($j > 10) {
                                 echo "</span></div>";
                                 checkForBreak();
@@ -267,6 +278,11 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                             }
                             echo "<span class='medal'>" . $rankNames[$idx] . "</span>";
                             $j++;
+                            if ($idx < 9) {
+                                $totalRankMedalsSmall++;
+                            } else {
+                                $totalRankMedalsBig++;
+                            }
                         }
                         echo "</span></div>";
                         checkForBreak();
@@ -274,8 +290,40 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                 }
             }
         }
+        $csv[] = [
+            'family_id' => $admin,
+            'total_campaign_medals' => $totalCampaignMedals,
+            'total_rank_books' => $totalRankBooks,
+            'total_rank_medals_small' => $totalRankMedalsSmall,
+            'total_rank_medals_large' => $totalRankMedalsBig,
+        ];
     }
     ?>
 </div>
 </body>
+<script>
+    function downloadCSV(csvData) {
+        const csvContent = "data:text/csvcharset=utf-8,";
+        const headers = ["family_id", "total_campaign_medals", "total_rank_books", "total_rank_medals_small", "total_rank_medals_big"];
+        const rows = csvData.map(row => [row.family_id, row.total_campaign_medals, row.total_rank_books, row.total_rank_medals_small, row.total_rank_medals_large].join(","));
+        const csv = csvContent + headers.join(",") + "\n" + rows.join("\n");
+        const encodedUri = encodeURI(csv);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "medals_ranks_report.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // after page is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('csvDownload').disabled = false;
+    })
+
+    // when button is clicked
+    document.getElementById('csvDownload').addEventListener('click', function() {
+        downloadCSV(<?= json_encode($csv) ?>)
+    })
+</script>
 </html>
