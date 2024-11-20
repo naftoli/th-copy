@@ -20,7 +20,6 @@ if (! $admin_id) {
     ]);
     exit;
 }
-
 function getChildren() {
     global $MASHPIA_DB, $admin_id, $year;
 
