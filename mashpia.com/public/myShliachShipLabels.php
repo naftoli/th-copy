@@ -302,6 +302,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
 </div>
 </body>
 <script>
+    const school = <?= isset($school_id) ? 'anash_kinder' : 'myshliach'; ?>;
     function downloadCSV(csvData) {
         const csvContent = "data:text/csvcharset=utf-8,";
         const headers = ["family_id", "total_campaign_medals", "total_rank_books", "total_rank_medals_small", "total_rank_medals_big"];
@@ -310,7 +311,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
         const encodedUri = encodeURI(csv);
         const link = document.createElement("a");
         link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "medals_ranks_report.csv");
+        link.setAttribute("download", school + "_medals_ranks_report.csv");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
