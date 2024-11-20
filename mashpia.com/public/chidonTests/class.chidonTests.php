@@ -755,9 +755,9 @@ class ChidonTests
             }
         }
 
-        // if there's no setting, default to 2
-        $test_level = $levels['user']['tests'] ?? $levels['class']['tests'] ?? $levels['school']['tests'] ?? 2;
-        $final_level = $levels['user']['finals'] ?? $levels['class']['finals'] ?? $levels['school']['finals'] ?? 2;
+        // if there's no setting, default to 1
+        $test_level = $levels['user']['tests'] ?? $levels['class']['tests'] ?? $levels['school']['tests'] ?? 1;
+        $final_level = $levels['user']['finals'] ?? $levels['class']['finals'] ?? $levels['school']['finals'] ?? 1;
 
         if ($type == 'tests') return $test_level;
         else if ($type == 'finals') return $final_level;
