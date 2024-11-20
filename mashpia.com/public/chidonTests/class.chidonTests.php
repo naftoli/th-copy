@@ -267,7 +267,7 @@ class ChidonTests
         foreach ($info as $id => $more) {
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
-                    if (intval($details[$type]) > 0) {
+                    if (isset($details[$type]) && intval($details[$type]) > 0) {
                         if (! $stmtInsert->execute([
                                 ':id' => $id,
                                 ':type' => $type,

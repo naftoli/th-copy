@@ -164,10 +164,10 @@ foreach ($result as $row) {
                     foreach ($types as $type => $value) {
                         $class = 'score';
                         if ($type == 'expert') $class = 'expert';
-                        if ($type == 'genius' && $levelValue == 1) $disabled = true;
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
                         echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
                         if ($disabled) echo "disabled ";
+                        if ($type == 'genius' && $levelValue == 1) echo "disabled "; // don't set variable to disabled b/c then the test levels will be disabled
                         echo "/></td>";
                     }
 
