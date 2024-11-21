@@ -92,7 +92,7 @@ function Medal(config) {
 }
 
 Medal.prototype.getColor = function (current) {
-    var CompleationText = "Compleation";
+    var CompleationText = "Completion";
     if (localStorage.getItem("locallang") == "he") {
         CompleationText = "הסתיים";
     }
