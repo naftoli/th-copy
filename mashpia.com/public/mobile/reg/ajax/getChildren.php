@@ -62,7 +62,7 @@ if ( !empty( $users ) ) {
     $children = [];
     $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, s.school_country, c.class_grade, "
         ." u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, u.hachayol, "
-        ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, u.gender, s.school_id, c.class_id, s.show_report_cards, "
+        ." u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, u.gender, s.school_id, c.class_id, s.show_report_card_1, "
         ." s.show_report_card_2, s.show_report_card_3 "
         ." FROM users u "
         ." JOIN schools s USING (school_id) "
@@ -104,8 +104,8 @@ if ( !empty( $users ) ) {
         $children[$row['user_id']]['user_serial']    = $row['user_serial'];
         $children[$row['user_id']]['hachayol']       = $row['hachayol'];
         $children[$row['user_id']]['admin_id']       = $admin;
-        $children[$row['user_id']]['show_report_cards'] = intval($row['show_report_cards']) || intval($row['show_report_card_2']) || intval($row['show_report_card_3']) ? 1 : 0;
-        $children[$row['user_id']]['show_report_card_1'] = intval($row['show_report_cards']);
+        $children[$row['user_id']]['show_report_cards'] = intval($row['show_report_card_1']) || intval($row['show_report_card_2']) || intval($row['show_report_card_3']) ? 1 : 0;
+        $children[$row['user_id']]['show_report_card_1'] = intval($row['show_report_card_1']);
         $children[$row['user_id']]['show_report_card_2'] = intval($row['show_report_card_2']);
         $children[$row['user_id']]['show_report_card_3'] = intval($row['show_report_card_3']);
 
