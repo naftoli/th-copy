@@ -53,12 +53,13 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['hei teves'];
+        $categories = ['chanuka', 'hei teves'];
         return $categories;
     }
 
     public function getItems() {
-        $items['hei teves'] = $this->getHeiTevesItems();
+        $items['chanuka'] = $this->getYomTovItems('Chanuka');
+        $items['hei teves'] = $this->getYomTovItems('Hei Teves');
         return $items;
     }
 
@@ -74,7 +75,7 @@ class ChayoleiShipping
         return $info;
     }
 
-    public function getHeiTevesItems() {
+    private function getYomTovItems($yom_tov) {
         $items = [];
         $sql = "
             SELECT 
@@ -82,9 +83,10 @@ class ChayoleiShipping
             FROM    
                 mashpia_purchases.mivtzoim_items 
             WHERE
-                yom_tov = 'Hei Teves' 
+                yom_tov = :yom_tov 
             ORDER BY ord";
-        $stmt = $this->db->query($sql);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['yom_tov' => $yom_tov]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $items[] = $row['item'];
@@ -92,7 +94,7 @@ class ChayoleiShipping
         return $items;
     }
 
-    public function getHeiTeves($gender, $school, $items) {
+    private function getPurchases($gender, $school, $items, $yom_tov) {
         $purchases = [];
         $sql = "
             SELECT 
@@ -106,13 +108,16 @@ class ChayoleiShipping
                     JOIN
                 users u USING (user_id)
             WHERE
-                mi.yom_tov = 'Hei Teves'
+                mi.yom_tov = :yom_tov
                     AND p.year = :year";
         if ($gender == 'M') $sql .= " AND u.gender = 'M'";
         else if ($gender == 'F') $sql .= " AND u.gender = 'F'";
         if ($school > 0) $sql .= " AND u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['year' => $this->year]);
+        $stmt->execute([
+            'year'      => $this->year,
+            'yom_tov'   => $yom_tov
+        ]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             if (count($items) && !in_array(strtolower($row['item']), $items)) continue;
@@ -127,5 +132,12 @@ class ChayoleiShipping
         }
 
         return $purchases;
+    }
+
+    public function getHeiTeves($gender, $school, $items) {
+        return $this->getPurchases($gender, $school, $items, 'Hei Teves');
+    }
+    public function getChanuka($gender, $school, $items) {
+        return $this->getPurchases($gender, $school, $items, 'Chanuka');
     }
 }
