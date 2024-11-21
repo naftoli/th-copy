@@ -59,7 +59,6 @@ foreach ($info as $user_id => $other) {
     }
 }
 
-$success = false;
 if ($success) {
     $MASHPIA_DB->commit();
     echo json_encode([
