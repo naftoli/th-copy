@@ -18,9 +18,34 @@ $zip = $info['zip'];
 $address = "";
 $state = "";
 
-$description = "Mivtza Chanuka " . $year . " purchase - Admin ID: " . $admin_id;
-
 if ( $amount > 0 ) {
+    // first save to db
+    // create arrays to use for purchasing function
+    $purchase = [
+        'year'  =>  $year, 
+        'admin' =>  $admin_id, 
+        'amount' =>  $amount, 
+    ];
+
+    // 2 and 3 refer to mivtzoim item id
+    $details = [];
+    foreach ( $info['menorah'] as $detail ) {
+        $id = $detail['user'];
+        $qty = $detail['qty'];
+        $details[$id][2] = $qty;
+    }
+    foreach ( $info['brochure'] as $detail ) {
+        $id = $detail['user'];
+        $qty = $detail['qty'];
+        $details[$id][3] = $qty;
+    }
+
+    $p = new MivtzoimPurchases();
+    $purchase_id = $p->createPurchase( $purchase, $details );
+
+    // now process cc
+    $description = "Mivtza Chanuka " . $year . " purchase - Admin ID: " . $admin_id;
+    
     chdir('../../../');
     require_once 'authorize.php';
     chdir('mobile/reg/ajax/');
@@ -31,40 +56,13 @@ if ( $amount > 0 ) {
                         $response_array[6] . ':' . 
                         $response_array[9];	
 
-        // create arrays to use for purchasing function
-        $purchase = [
-            'year'  =>  $year, 
-            'admin' =>  $admin_id, 
-            'amount' =>  $amount, 
-            'auth'  =>  $strResponse
-        ];
-
-        $details = [];
-        foreach ( $info['menorah'] as $detail ) {
-            $id = $detail['user'];
-            $qty = $detail['qty'];
-            $details[$id][2] = $qty;
-        }
-
-        foreach ( $info['brochure'] as $detail ) {
-            $id = $detail['user'];
-            $qty = $detail['qty'];
-            $details[$id][3] = $qty;
-        }
-
-        $p = new MivtzoimPurchases();
-        if ( $p->createPurchase( $purchase, $details ) ) {
-            echo json_encode([
-                'success'   => true 
-            ]);
-        } else {
-            echo json_encode([
-                'success'   =>  false, 
-                'error'     =>  'Your credit card was charged, however, there was an error saving your purchase. Please contact HQ by emailing support@tzivoshashem.org 
-                                and keep the following authorization code as proof of purchase: ' . $response_array[6]
-            ]);
-        }
+        $p->updatePurchase($purchase_id, $strResponse);
+        echo json_encode([
+            'success'   => true 
+        ]);
     } else {
+        // delete from db
+        $p->deletePurchase($purchase_id);
         echo json_encode([
             'success' => false,
             'error' => $response_array[3]
