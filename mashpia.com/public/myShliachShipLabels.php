@@ -39,6 +39,7 @@ if (isset($_GET['school'])) {
     $school_id = $_GET['school'];
     $myshliach = new MyShliachShipLabels($school_id);
 } else {
+    $school_id = 61;
     $myshliach = new MyShliachShipLabels();
 }
 
@@ -60,6 +61,7 @@ $userInfo = $myshliach->getUserInfo();
 $heDates = $myshliach->getHeReportDates();
 $books_shipped = $myshliach->getRankBooksShipped();
 $medals_shipped = $myshliach->getRankMedalsShipped();
+$for_shipping = []; // variable for info to set as shipped
 ?>
 <!DOCTYPE html>
 <html>
@@ -153,9 +155,15 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
         <input type="submit" name="submit" value="Modify Report"/>
       </p>
     </form>
-    <button id="csvDownload" disabled>Download CSV</button>
-    <br /><br />
+      <div style="float: left;">
+          <button id="medalsBtnAll" disabled>Set All As Shipped</button>
+      </div>
+      <div style="float: right">
+          <button id="csvDownload" disabled>Download CSV</button>
+      </div>
   </div>
+    <div style="clear: both;"></div>
+    <br />
   <div class='instructions'>
     <b>Printing Instructions</b><br/>
     Please set your printer margins to the following:<br/>
@@ -212,6 +220,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                         if ($medal['subject_name'] == 'שבת מברכים תהילים') $medal['subject_name'] = 'תהילים';
                         echo "<span class='medal'>" . $medal['subject_name'] . "-" . $medal['medal_name'] . "</span>";
                         $numMedals++;
+                        $for_shipping[$child]['medals'][$medal['subject_id']][] = $medal['medal_ord'];
                     }
                     echo "</div>";
                     checkForBreak();
@@ -245,6 +254,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                     echo "</span></div>";
                     checkForBreak();
                     $totalRankBooks++;
+                    $for_shipping[$child]['book'] = $book;
 
                     // add rank medals that were not yet shipped
                     // rank medals start from 2
@@ -283,6 +293,7 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
                             } else {
                                 $totalRankMedalsBig++;
                             }
+                            $for_shipping[$child]['rank_medals'][] = $idx;
                         }
                         echo "</span></div>";
                         checkForBreak();
@@ -302,7 +313,8 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
 </div>
 </body>
 <script>
-    const school = <?= isset($school_id) ? 'anash_kinder' : 'myshliach'; ?>;
+    const school_id = <?= $school_id ?>;
+    const school = school_id == 61 ? 'myshliach' : 'anash_kinder'
     function downloadCSV(csvData) {
         const csvContent = "data:text/csvcharset=utf-8,";
         const headers = ["family_id", "total_campaign_medals", "total_rank_books", "total_rank_medals_small", "total_rank_medals_big"];
@@ -320,11 +332,33 @@ $medals_shipped = $myshliach->getRankMedalsShipped();
     // after page is loaded
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('csvDownload').disabled = false;
+        document.getElementById('medalsBtnAll').disabled = false;
     })
 
     // when button is clicked
     document.getElementById('csvDownload').addEventListener('click', function() {
         downloadCSV(<?= json_encode($csv) ?>)
     })
+
+    document.getElementById('medalsBtnAll').addEventListener('click', function() {
+        setAsShipped()
+    })
+
+    const setAsShipped = async () => {
+        // use fetch
+        const res = await fetch('/ajax/set_as_shipped.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ info: <?= json_encode($for_shipping); ?> })
+        })
+        const data = await res.json()
+        if (data.success) {
+            alert('All medals, books, and rank medals have been set as shipped.')
+        } else {
+            alert(data.error)
+        }
+    }
 </script>
 </html>

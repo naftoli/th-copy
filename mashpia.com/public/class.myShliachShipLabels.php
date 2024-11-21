@@ -29,6 +29,8 @@ class MyShliachShipLabels extends Report {
 	}
 
     public function setInfo() {
+        $this->start = $this->reportDates['start']; // need to redo it b/c it may have been overriden after construction of the object
+        $this->end = $this->reportDates['end']; // need to redo it b/c it may have been overriden after construction of the object
         $this->admins = [];
         $this->parents = [];
         $this->users = [];
