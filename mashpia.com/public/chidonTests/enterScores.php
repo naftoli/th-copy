@@ -290,7 +290,7 @@ foreach ($result as $row) {
                 iyunInput.attr('disabled', false);
             } else {
                 iyunInput.attr('disabled', true);
-                iyunInput.val(''); // Clear the value if disabled
+                iyunInput.val('0'); // Clear the value if disabled
             }
         })
     </script>
