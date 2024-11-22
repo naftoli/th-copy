@@ -287,9 +287,9 @@ foreach ($result as $row) {
 
             // Enable or disable the iyun input based on the selected level
             if (selectedLevel == '2') { // Assuming level 2 enables the iyun input
-                iyunInput.attr('disabled', false);
+                iyunInput.prop('disabled', false);
             } else {
-                iyunInput.attr('disabled', true);
+                iyunInput.prop('disabled', true);
                 iyunInput.val(''); // Clear the value if disabled
             }
         })
