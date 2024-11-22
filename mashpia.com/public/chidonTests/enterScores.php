@@ -281,15 +281,15 @@ foreach ($result as $row) {
             })
         })
 
-        $(document).on('change', '.level', function() {
+        $('.level').change( function() {
             const selectedLevel = $(this).val();
             const iyunInput = $(this).closest('tr').find('.genius'); // Find the corresponding iyun input in the same row
 
             // Enable or disable the iyun input based on the selected level
             if (selectedLevel == '2') { // Assuming level 2 enables the iyun input
-                iyunInput.prop('disabled', false);
+                iyunInput.attr('disabled', false);
             } else {
-                iyunInput.prop('disabled', true);
+                iyunInput.attr('disabled', true);
                 iyunInput.val(''); // Clear the value if disabled
             }
         })
