@@ -196,7 +196,9 @@ $for_shipping = []; // variable for info to set as shipped
         checkForBreak();
 
         $totalCampaignMedals = 0;
-        $totalRankBooks = 0;
+        $totalRankBook1 = 0;
+        $totalRankBook2 = 0;
+        $totalRankBook3 = 0;
         $totalRankMedalsSmall = 0;
         $totalRankMedalsBig = 0;
 
@@ -253,7 +255,9 @@ $for_shipping = []; // variable for info to set as shipped
                     echo "Rank : " . $rankNames[$rank_ord] . "<br />Rank Book #: " . $book;
                     echo "</span></div>";
                     checkForBreak();
-                    $totalRankBooks++;
+
+                    $totalBook = 'totalRankBook' . $book;
+                    $$totalBook++;
                     $for_shipping[$child]['book'] = $book;
 
                     // add rank medals that were not yet shipped
@@ -317,7 +321,7 @@ $for_shipping = []; // variable for info to set as shipped
     const school = school_id == 61 ? 'myshliach' : 'anash_kinder'
     function downloadCSV(csvData) {
         const csvContent = "data:text/csvcharset=utf-8,";
-        const headers = ["family_id", "total_campaign_medals", "total_rank_books", "total_rank_medals_small", "total_rank_medals_big"];
+        const headers = ["family_id", "total_campaign_medals", "total_rank_book_1", "total_rank_book_2", "total_rank_book_3", "total_rank_medals_small", "total_rank_medals_big"];
         const rows = csvData.map(row => [row.family_id, row.total_campaign_medals, row.total_rank_books, row.total_rank_medals_small, row.total_rank_medals_large].join(","));
         const csv = csvContent + headers.join(",") + "\n" + rows.join("\n");
         const encodedUri = encodeURI(csv);
