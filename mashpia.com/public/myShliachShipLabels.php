@@ -307,10 +307,12 @@ $for_shipping = []; // variable for info to set as shipped
         }
         $csv[] = [
             'family_id' => $admin,
-            'total_campaign_medals' => $totalCampaignMedals,
-            'total_rank_books' => $totalRankBooks,
-            'total_rank_medals_small' => $totalRankMedalsSmall,
-            'total_rank_medals_large' => $totalRankMedalsBig,
+            'total_campaign_medals'     => $totalCampaignMedals,
+            'total_rank_book_1'         => $totalRankBook1,
+            'total_rank_book_2'         => $totalRankBook2,
+            'total_rank_book_3'         => $totalRankBook3,
+            'total_rank_medals_small'   => $totalRankMedalsSmall,
+            'total_rank_medals_large'   => $totalRankMedalsBig,
         ];
     }
     ?>
@@ -322,7 +324,7 @@ $for_shipping = []; // variable for info to set as shipped
     function downloadCSV(csvData) {
         const csvContent = "data:text/csvcharset=utf-8,";
         const headers = ["family_id", "total_campaign_medals", "total_rank_book_1", "total_rank_book_2", "total_rank_book_3", "total_rank_medals_small", "total_rank_medals_big"];
-        const rows = csvData.map(row => [row.family_id, row.total_campaign_medals, row.total_rank_books, row.total_rank_medals_small, row.total_rank_medals_large].join(","));
+        const rows = csvData.map(row => [row.family_id, row.total_campaign_medals, row.total_rank_book_1, row.total_rank_book_2, row.total_rank_book_3, row.total_rank_medals_small, row.total_rank_medals_large].join(","));
         const csv = csvContent + headers.join(",") + "\n" + rows.join("\n");
         const encodedUri = encodeURI(csv);
         const link = document.createElement("a");
