@@ -8,7 +8,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 $stmt_test_1 = $MASHPIA_DB->prepare("
     UPDATE schools 
-    SET show_report_cards = :val 
+    SET show_report_card_1 = :val 
     WHERE school_id = :id
 ");
 
