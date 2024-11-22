@@ -293,5 +293,14 @@ foreach ($result as $row) {
                 iyunInput.val('0'); // Clear the value if disabled
             }
         })
+
+        document.addEventListener('DOMContentLoaded', function () {
+            $(".level").each( function() {
+                if ($(this).val() == '1') {
+                    const iyunInput = $(this).closest('tr').find('.genius');
+                    iyunInput.attr('disabled', true)
+                }
+            })
+        })
     </script>
 </html>
