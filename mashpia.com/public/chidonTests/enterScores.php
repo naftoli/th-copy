@@ -162,7 +162,7 @@ foreach ($result as $row) {
                         $class = 'score';
                         if ($type == 'expert') $class = 'expert';
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
-                        echo "<td><input type='text' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
+                        echo "<td><input type='text' class='$type' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
                         if ($disabled) echo "disabled ";
                         if ($type == 'genius' && $levelValue == 1) echo "disabled "; // don't set variable to disabled b/c then the test levels will be disabled
                         echo "/></td>";
@@ -170,7 +170,7 @@ foreach ($result as $row) {
 
                     if (isset($levels[$school][$id][$testNumber]))
                         $levelValue = $levels[$school][$id][$testNumber];
-                    echo "<td><select name='levels[$id][$testNumber]'";
+                    echo "<td><select class='level' name='levels[$id][$testNumber]'";
                     if ($disabled) echo " disabled";
                     echo ">";
                     echo "<option value='1'";
@@ -279,6 +279,19 @@ foreach ($result as $row) {
               if (res.success) alert('Saved.')
               else alert('Error saving.')
             })
+        })
+
+        $(document).on('change', '.level', function() {
+            const selectedLevel = $(this).val();
+            const iyunInput = $(this).closest('tr').find('.genius'); // Find the corresponding iyun input in the same row
+
+            // Enable or disable the iyun input based on the selected level
+            if (selectedLevel == '2') { // Assuming level 2 enables the iyun input
+                iyunInput.attr('disabled', false);
+            } else {
+                iyunInput.attr('disabled', true);
+                iyunInput.val(''); // Clear the value if disabled
+            }
         })
     </script>
 </html>
