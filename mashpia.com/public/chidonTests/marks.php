@@ -93,6 +93,7 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 $cumulative_passing = 90;
                 $cumulative_mark = 0;
                 if (isset($scores[$id])) {
+                    print_r($child);
                     $cumulative_score = $ct->getCumulativeScore($child, $scores[$id], $testNumber);
                     if (isset($cumulative_score['genius'])) $cumulative_mark = $cumulative_score['genius'];
                 }
