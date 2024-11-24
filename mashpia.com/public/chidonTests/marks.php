@@ -90,11 +90,21 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 $id = $child['th_chidon_id'];
 
                 // stuff for iyun calculations
+                // Add these debug lines:
                 $cumulative_passing = 90;
                 $cumulative_mark = 0;
                 if (isset($scores[$id])) {
+                    echo "Debug - Scores exist for ID: $id<br>";
                     $cumulative_score = $ct->getCumulativeScore($child, $scores[$id], $testNumber);
-                    if (isset($cumulative_score['genius'])) $cumulative_mark = $cumulative_score['genius'];
+                    echo "Debug - Cumulative Score: " . print_r($cumulative_score, true) . "<br>";
+                    if (isset($cumulative_score['genius'])) {
+                        $cumulative_mark = $cumulative_score['genius'];
+                        echo "Debug - Genius score found: $cumulative_mark<br>";
+                    } else {
+                        echo "Debug - No genius score found in cumulative score<br>";
+                    }
+                } else {
+                    echo "Debug - No scores found for ID: $id<br>";
                 }
 
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
