@@ -405,7 +405,7 @@ class ChidonTests
         $id = $child['th_chidon_id'];
         if (! isset($scores[$id])) return '';
 
-        if ($child['user_serial'] == 7774254) {
+        if ($child['user_serial'] == 7774884) {
             echo "<pre>"; print_r($scores[$id]); echo "</pre>";
         }
 
