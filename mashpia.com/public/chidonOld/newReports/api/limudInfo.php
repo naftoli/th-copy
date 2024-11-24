@@ -32,13 +32,13 @@ $num_questions = $ct->getTestQuestions();
 $dates = $ct->getDates();
 $types = $ct->getTypes();
 
-$learning_time = [
-    'maven'     => 10,
-    'pro'       => 20,
-    'expert'    => 30,
-    'genius'    => 45,
-];
-$total_days = [32, 37, 37];
+//$learning_time = [
+//    'maven'     => 10,
+//    'pro'       => 20,
+//    'expert'    => 30,
+//    'genius'    => 45,
+//];
+//$total_days = [32, 37, 37];
 
 $summary = [];
 $outcomes = ['maven', 'pro', 'expert', 'genius', 'did not take test', 'did not pass', 'dropped out'];
@@ -49,11 +49,11 @@ foreach ($types as $type => $desc) {
 }
 
 // calculate total days
-$days = 0;
-for ($i = 0; $i < $test_num; $i++) {
-    $days += $total_days[$i];
-}
-$untilToday = new DateTime() <= new DateTime($dates[$test_num - 1][2]); // for getting total minutes learned
+//$days = 0;
+//for ($i = 0; $i < $test_num; $i++) {
+//    $days += $total_days[$i];
+//}
+//$untilToday = new DateTime() <= new DateTime($dates[$test_num - 1][2]); // for getting total minutes learned
 
 // calculate khk eligibility
 $ids = [];
@@ -104,8 +104,8 @@ foreach ($students as $student) {
         'iyun'      => $avgs['genius'],
         'non_cumulative_track_passed'   => $track_passed ? $types[$track_passed] : '',
         'cumulative_track_passed'   => calculateCumulative($student),
-        'time_committed'    => $learning_time[$student['test_type']] * $days,
-        'time_learned'  => $learned,
+//        'time_committed'    => $learning_time[$student['test_type']] * $days,
+//        'time_learned'  => $learned,
         'dropped_out'   => intval($student['dropped_out']),
         'reason'        => $student['reason'] ?? '',
         'khk_eligible'  => isset($khk[$student['user_id']]) && $khk[$student['user_id']] ? true : false,

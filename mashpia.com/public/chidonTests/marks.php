@@ -17,6 +17,7 @@ $yr = isset($_POST['yr']) ? $_POST['yr'] : $year;
 $ct = new ChidonTests($yr);
 
 $info = [];
+$scores = [];
 $marks = [];
 $levels = [];
 foreach ($schools as $id => $school) {
@@ -25,6 +26,7 @@ foreach ($schools as $id => $school) {
     $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
+    $scores += $ct->getScores();
     $marks += $ct->getMarks();
     $levels += $ct->getLevels();
 }
@@ -87,6 +89,7 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
+                $cumulative_passed = $ct->calculateCumulative($child, $scores[$id]);
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 foreach ($types as $type => $value) {
                     if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
@@ -96,7 +99,11 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                     $color = 'grey';
                     if ($child['test_type'] == $type) {
                         $color = 'black';
-                        if ($mark < $avgs[$type]) $color = 'red';
+                        if ($type != 'genius') {
+                            if ($mark < $avgs[$type]) $color = 'red';
+                        } else if ($mark < $avgs[$type] && $cumulative_passed[$id] != 'Iyun') {
+                            $color = 'red';
+                        }
                     }
                     echo "<td style='color: $color;'>" . $mark . "%</td>";
                 }

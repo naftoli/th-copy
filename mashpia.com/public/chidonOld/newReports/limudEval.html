@@ -375,7 +375,7 @@
 
     // constants for table
     const headers = ['Serial', 'Name', 'Class', 'Track', 'Non Cumulative Track Passed', 'Cumulative Track Passed',
-      'Passing Avg', 'Yesod Mark/Avg', 'Yediah Mark/Avg', 'Havonah Mark/Avg', 'Iyun Mark/Avg', 'Reward', 'Award', 'KHK Experience', 'Time Committed', 'Time Learned', 'Dropped Out', 'Reason']
+      'Passing Avg', 'Yesod Mark/Avg', 'Yediah Mark/Avg', 'Havonah Mark/Avg', 'Iyun Mark/Avg', 'Reward', 'Award', 'KHK Experience', 'Dropped Out', 'Reason']
     const reasons = ['', 'Not Interested', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test', 'Other']
     const khk_options = ['Eligible', 'KHK Experience', 'Regional Trip']
     const avgs = [70, 75, 80, 85, 90]
@@ -453,8 +453,8 @@
                   </select>
                 }
               </td>
-              <td>{row.time_committed}</td>
-              <td>{row.time_learned}</td>
+              <!--<td>{row.time_committed}</td>-->
+              <!--<td>{row.time_learned}</td>-->
               <td>
                 <input type="checkbox" name="dropped_out" className="form-check-label dropped_out" disabled={locked}
                        defaultChecked={row.dropped_out ? true : false}
