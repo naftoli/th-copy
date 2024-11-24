@@ -92,8 +92,8 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 
                 // stuff for iyun calculations
                 $cumulative_passing = 90;
-                $cumulative_mark['genius'] = 0;
-                if (isset($scores[$id])) $cumulative_mark = $ct->getCumulativeScore($child, $scores[$id], $testNumber);
+                $cumulative_mark = 0;
+                if (isset($scores[$id])) $cumulative_mark = $ct->getCumulativeScore($child, $scores[$id], $testNumber)['genius'];
 
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 foreach ($types as $type => $value) {
@@ -106,7 +106,7 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                         $color = 'black';
                         if ($type != 'genius') {
                             if ($mark < $avgs[$type]) $color = 'red';
-                        } else if ($mark < $avgs[$type] && $cumulative_mark[$type] < $cumulative_passing) {
+                        } else if ($mark < $avgs[$type] && $cumulative_mark < $cumulative_passing) {
                             $color = 'red';
                         }
                     }
