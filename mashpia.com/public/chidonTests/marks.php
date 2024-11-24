@@ -102,7 +102,8 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                         if ($type != 'genius') {
                             if ($mark < $avgs[$type]) $color = 'red';
                         } else if (
-                            (!isset($cumulative_passed[$id]) && $mark < $avgs[$type]) ||
+                            (!isset($cumulative_passed[$id]) && $mark < $avgs[$type])
+                            ||
                             ($mark < $avgs[$type] && $cumulative_passed[$id] != 'Iyun')
                         ) {
                             $color = 'red';
