@@ -90,7 +90,6 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 $name = $child['first'] . ' ' . $child['last'];
                 $id = $child['th_chidon_id'];
                 if (isset($scores[$id])) $cumulative_passed = $ct->calculateCumulative($child, $scores[$id]);
-                else $cumulative_passed[$id] = '';
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 foreach ($types as $type => $value) {
                     if ($child['test_type'] == $type) echo "<td>" . ucwords($value) . "</td>";
@@ -102,7 +101,10 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                         $color = 'black';
                         if ($type != 'genius') {
                             if ($mark < $avgs[$type]) $color = 'red';
-                        } else if ($mark < $avgs[$type] && $cumulative_passed[$id] != 'Iyun') {
+                        } else if (
+                            (!isset($cumulative_passed[$id]) && $mark < $avgs[$type]) ||
+                            ($mark < $avgs[$type] && $cumulative_passed[$id] != 'Iyun')
+                        ) {
                             $color = 'red';
                         }
                     }
