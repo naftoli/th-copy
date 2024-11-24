@@ -93,7 +93,10 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 // stuff for iyun calculations
                 $cumulative_passing = 90;
                 $cumulative_mark = 0;
-                if (isset($scores[$id])) $cumulative_mark = $ct->getCumulativeScore($child, $scores[$id], $testNumber)['genius'];
+                if (isset($scores[$id])) {
+                    $cumulative_score = $ct->getCumulativeScore($child, $scores[$id], $testNumber);
+                    if (isset($cumulative_score['genius'])) $cumulative_mark = $cumulative_score['genius'];
+                }
 
                 echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                 foreach ($types as $type => $value) {
