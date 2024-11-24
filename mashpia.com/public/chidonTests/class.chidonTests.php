@@ -233,7 +233,6 @@ class ChidonTests
                             $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
                             if (! isset($this->levels[$id][$row['test_number']]))
                                 $this->levels[$id][$row['test_number']] = $row['level'];
-                            if ($id == 36335) echo $this->levels[$id][$row['test_number']];
                         }
                     }
                 }
