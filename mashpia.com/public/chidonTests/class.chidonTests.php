@@ -423,6 +423,9 @@ class ChidonTests
             else
                 $cumulative[$type] = 0;
         }
+        if ($child['user_serial'] == 7774884) {
+            echo "<pre>"; print_r($cumulative); echo "</pre>";
+        }
 
         return $cumulative;
     }

@@ -110,9 +110,6 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                         if ($type != 'genius') {
                             if ($mark < $avgs[$type]) $color = 'red';
                         } else {
-                            if ($child['user_serial'] == 7774884) {
-                                echo "Mark: " . $mark . " Avg: " . $avgs[$type] . " Cumulative: " . $cumulative_mark;
-                            }
                             if ($mark < $avgs[$type] && $cumulative_mark < $cumulative_passing) {
                                 $color = 'red';
                             }
