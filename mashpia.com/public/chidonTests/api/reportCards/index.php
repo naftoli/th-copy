@@ -36,8 +36,8 @@ foreach ($schools as $id => $school) {
     $info[$id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
-    $marks[$id] = $ct->getMarks();
-    $scores[$id] = $ct->getScores();
+    $marks += $ct->getMarks();
+    $scores += $ct->getScores();
 }
 
 $result = [];
@@ -49,19 +49,27 @@ foreach ($info as $school => $users) {
 
         $tests = [];
         for ($i = 1; $i <= $test_num; $i++) {
-            if (isset($marks[$school][$id][$i])) {
+            if (isset($marks[$id][$i])) {
                 $tests[$i] = [
-                    'maven' => $marks[$school][$id][$i]['maven'],
-                    'pro' => $marks[$school][$id][$i]['pro'],
-                    'expert' => $marks[$school][$id][$i]['expert'],
-                    'genius' => $marks[$school][$id][$i]['genius']
+                    'maven' => $marks[$id][$i]['maven'],
+                    'pro'   => $marks[$id][$i]['pro'],
+                    'expert' => $marks[$id][$i]['expert'],
+                    'genius' => $marks[$id][$i]['genius']
                 ];
             }
         }
 
         $avgs = $ct->getPassingAvgs($user['user_id']);
-        $highestTrack = $ct->getHighestTrack($marks[$school][$user['th_chidon_id']], $user['user_id'], false, $test_num);
+        $highestTrack = $ct->getHighestTrack($marks[$id], $user['user_id'], false, $test_num);
         $highestTrackPassed = $types[ $highestTrack ];
+
+        // find out if passed iyun
+        $iyun_score = $ct->getCumulativeScore($user, $tests, $test_num);
+        $iyun_passed = $iyun_score['genius'] >= 90;
+        if ($highestTrack != 'genius' && $iyun_passed) {
+            $highestTrack = 'genius';
+            $highestTrackPassed = $types[ $highestTrack ];
+        }
 
         $result[] = [
             'id'                    => $id,
@@ -77,7 +85,7 @@ foreach ($info as $school => $users) {
             'currentTrack'          => $types[$user['test_type']],
             'types'                 => $types,
             'user_id'               => $user['user_id'],
-            'track'                 => $user['test_type']
+            'track'                 => $user['test_type'],
         ];
     }
 }
