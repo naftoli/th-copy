@@ -67,12 +67,12 @@ if ($ids) $khk = KHK::getKHKEligibility($ids, 0, 4, $marks)[0];
 $info = [];
 foreach ($students as $student) {
     if (! isset($marks[$student['th_chidon_id']])) {
-        $learned = 0;
+//        $learned = 0;
         $avgs = ['maven' => 0, 'pro' => 0, 'expert' => 0, 'genius' => 0];
         $passing_avg = 0;
         $track_passed = '';
     } else {
-        $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[0], true, $untilToday);
+//        $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[0], true, $untilToday);
         $avgs = calculateAvgs($student['th_chidon_id']);
         $passing_avg = getPassingAvg($student['user_id']);
         $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id'], false, $test_num) : '';
