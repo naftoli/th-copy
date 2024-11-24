@@ -405,6 +405,10 @@ class ChidonTests
         $id = $child['th_chidon_id'];
         if (! isset($scores[$id])) return '';
 
+        if ($child['user_serial'] == 7774254) {
+            echo "<pre>"; print_r($scores[$id]); echo "</pre>";
+        }
+
         $marks = $scores[$id];
         for ($i = 1; $i <= $test_num; $i++) {
             foreach ($types as $type => $desc) {
@@ -423,7 +427,7 @@ class ChidonTests
             else
                 $cumulative[$type] = 0;
         }
-        
+
         return $cumulative;
     }
 
