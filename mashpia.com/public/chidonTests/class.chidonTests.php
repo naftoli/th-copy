@@ -402,17 +402,9 @@ class ChidonTests
         $questions['expert'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'];
         $questions['genius'] = $num_questions['maven'] + $num_questions['pro'] + $num_questions['expert'] + $num_questions['genius'];
 
-        $id = $child['th_chidon_id'];
-        if (! isset($scores[$id])) return '';
-
-        if ($child['user_serial'] == 7774884) {
-            echo "<pre>"; print_r($scores[$id]); echo "</pre>";
-        }
-
-        $marks = $scores[$id];
         for ($i = 1; $i <= $test_num; $i++) {
             foreach ($types as $type => $desc) {
-                if (isset($marks[$i][$type]) && $marks[$i][$type] > 0) $cumulative_scores[$type] += intval($marks[$i][$type]);
+                if (isset($scores[$i][$type]) && $scores[$i][$type] > 0) $cumulative_scores[$type] += intval($scores[$i][$type]);
             }
         }
 
