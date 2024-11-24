@@ -104,7 +104,7 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 // check if there's a level set for this test
                 if (isset($levels[$school][$id][$testNumber]))
                     $levelValue = $levels[$school][$id][$testNumber];
-                if ($child['user_id'] == 63595) echo $levelValue;
+                if ($child['user_id'] == 63595) echo $id . ':' . $levelValue;
                 echo "<td>" . $levelValue . "</td>";
                 // figure out avg
                 $avg = 0;
