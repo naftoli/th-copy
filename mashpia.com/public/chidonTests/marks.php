@@ -28,7 +28,7 @@ foreach ($schools as $id => $school) {
     $marks += $ct->getMarks();
     $levels += $ct->getLevels();
 }
-echo "<pre>"; print_r($levels); echo "</pre>";
+//echo "<pre>"; print_r($levels); echo "</pre>";
 $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 ?>
 <!DOCTYPE html>
@@ -102,9 +102,8 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
                 }
                 $levelValue = $ct->getLevel($child['user_id'], 'tests');
                 // check if there's a level set for this test
-                if (isset($levels[$school][$id][$testNumber]))
-                    $levelValue = $levels[$school][$id][$testNumber];
-                if ($child['user_id'] == 63595) echo $id . ':' . $levelValue;
+                if (isset($levels[$id][$testNumber]))
+                    $levelValue = $levels[$id][$testNumber];
                 echo "<td>" . $levelValue . "</td>";
                 // figure out avg
                 $avg = 0;
