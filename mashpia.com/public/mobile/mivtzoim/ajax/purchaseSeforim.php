@@ -140,6 +140,7 @@ $purchaseInfo = [
     'amount'    =>  $total
 ];
 $purchase_id = saveToDb($purchaseInfo);
+
 if ($purchase_id > 0) {
     // charge the card
     $res = purchaseItems();
