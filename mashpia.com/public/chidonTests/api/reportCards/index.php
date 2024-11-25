@@ -60,7 +60,7 @@ foreach ($info as $school => $users) {
         $highestTrackPassed = $types[ $highestTrack ];
 
         // find out if passed iyun
-        $iyun_score = $ct->getCumulativeScore($user, $tests, $test_num);
+        $iyun_score = $ct->getCumulativeScore($scores[$id], $test_num);
         $iyun_passed = $iyun_score['genius'] >= 90;
         if ($highestTrack != 'genius' && $iyun_passed) {
             $highestTrack = 'genius';

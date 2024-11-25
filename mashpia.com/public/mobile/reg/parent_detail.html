@@ -601,7 +601,6 @@
     if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
     if (Cookies.get('naftoli')) {
-      $(".report-card").show()
       $(".yahadusSale").show()
     }
 
@@ -755,6 +754,9 @@
         if (show_reg) {
           $(".chidon_reg").show()
         }
+
+        if (Cookies.get('naftoli'))
+          $(".report-card").show()
       }
     });
 
@@ -1118,10 +1120,11 @@
             let test = report_card.tests[i]
             html += '<tr><td rowspan="2" style="text-align: center; vertical-align: middle">' + i + '</td><td>Answered Correctly</td>'
             for (let track of tracks) {
-              if (track == 'genius' && report_card.scores[i][track]) showIyun = true
+              if (track == 'genius' && report_card.scores[i][track] && report_card.scores[i][track] > 0) showIyun = true
               if (report_card.highestTrack == track) html += '<td style="font-weight: bold" class="' + track + '">'
               else html += '<td class="' + track + '">'
-              html += report_card.scores[i][track] + ' / ' + report_card.questions[track] + '</td>'
+              let score = report_card.scores[i][track] ? report_card.scores[i][track] : 0
+              html += score + ' / ' + report_card.questions[track] + '</td>'
             }
             html += '</tr><tr><td>Mark</td>'
             for (let track of tracks) {
@@ -1158,7 +1161,6 @@
 
       $("#report-card-table").html(html)
       if (showIyun) $(".genius").show()
-
       $("#reportCard").modal('show')
     })
   });
