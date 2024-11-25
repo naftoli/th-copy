@@ -89,6 +89,12 @@ $result = $stmt->fetchAll();
 foreach ($result as $row) {
     $locked[] = $row['school_id'];
 }
+
+// find out if school set the report cards to show on parent accounts
+$field = 'show_report_card_' . $testNumber;
+$stmtReportCards = $MASHPIA_DB->prepare("
+    SELECT " . $$field . " FROM schools WHERE school_id = ?
+")
 ?>
 <!DOCTYPE html>
 <html>
@@ -134,7 +140,14 @@ foreach ($result as $row) {
             foreach ($info as $school => $children) {
                 if (empty($children)) continue;
                 echo "<h2>" . $schools[$school] . "</h2>";
-                echo "<p><input type='checkbox' class='report_cards' id='" . $school . "' /> Show Report Card for Test #" . $testNumber . " on Parent Accounts</p>";
+
+                $field = 'show_report_card_' . $testNumber;
+                $resReportCard = $stmtReportCards->execute([$school]);
+                $reportCard = $stmtReportCards->fetch()['' . $field . ''];
+
+                echo "<p><input type='checkbox' class='report_cards' id='" . $school . "'";
+                if ($reportCard == 1) echo " checked";
+                echo " /> Show Report Card for Test #" . $testNumber . " on Parent Accounts</p>";
                 echo "<table><tr><th>Serial Number</th><th>Grade</th><th>Student</th><th>Track Chosen</th>";
                 foreach ($types as $type => $value) {
                     echo "<th>" . ucwords($value) . " Score</th>";

@@ -40,7 +40,6 @@ $res = $stmt->execute([
     'val'   => $value ? 1 : 0,
     'id'    => $school_id
 ]);
-$stmt->debugDumpParams();
 
 echo json_encode([
     'success'   => $res
