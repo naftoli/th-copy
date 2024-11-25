@@ -10,11 +10,11 @@ class UsersRouter {
     public function index() {
         global $current_user; global $MASHPIA_DB;
 
-        $ranks = [];
+        $rankNames = [];
         $sql = "SELECT * FROM ranks";
         $stmt = $MASHPIA_DB->query( $sql );
         while( $row = $stmt->fetch() ) {
-            $ranks[$row['rank_ord']] = $row['rank_name'];
+            $rankNames[$row['rank_ord']] = $row['rank_name'];
         }
 
         $filters = $current_user->login->getFilter( 's.', 'u.' );
@@ -56,14 +56,23 @@ class UsersRouter {
             json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
         }
 
+        if ($current_user->login->code !== 'PARENT') {
+            // get all admin_ids
+            $admin_ids = [];
+            $sql = "select aa.* from admin_auths aa 
+                    join users u on aa.id = u.user_id 
+                    where aa.auth = 'user' 
+                    and u.user_registered > 0";
+            $stmtAdmins = $MASHPIA_DB->query( $sql );
+            while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
+                $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
+            }
+        }
+
         $users = [];
         // fetch all results and parse them as models
         $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
         foreach ($info as $row) {
-            if ( !$row['admin_id'] && !$current_user->isHQ() ) {
-                $stmt->execute([':id' => $row['user_id']]);
-                $row['admin_id'] = $stmt->fetch(PDO::FETCH_ASSOC)['admin_id'] ?? null;
-            }
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
@@ -72,18 +81,18 @@ class UsersRouter {
             // $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
             // format and return just the data we want...
             $users[] = [
-                'user_id' => intval($row['user_id']), 'user_serial' => intval($row['user_serial']), 
-                'first' => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'], 
-                'first_he' => $row['first_he'], 'last_he' => $row['last_he'], 
+                'user_id'   => intval($row['user_id']), 'user_serial' => intval($row['user_serial']),
+                'first'     => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'],
+                'first_he'  => $row['first_he'], 'last_he' => $row['last_he'],
                 'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
-                'chayolei' => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']), 
+                'chayolei'  => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']),
                 'school_id' => $row['school_id'], 'class_id' => $row['class_id'] ? $row['class_id'] : false,
-                'school' => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'], 
+                'school'    => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'],
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
-                'barcode' => '3'.$row['user_code'],
-                'platoon' => ( $platoon ? [ 'name' => $platoon ] : null ),
-                'rank'  => $ranks[$row['rank']],
-                'admin_id'  => $row['admin_id'],
+                'barcode'   => '3'.$row['user_code'],
+                'platoon'   => ( $platoon ? [ 'name' => $platoon ] : null ),
+                'rank_name' => $rankNames[$row['rank']],
+                'admin_id'  => $row['admin_id'] ?? $admin_ids[$row['user_id']],
             ];
         }
         json_response( $users );
