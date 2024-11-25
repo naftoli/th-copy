@@ -94,7 +94,7 @@ function getCustomerID($admin_id) {
 }
 
 function saveToDb($info) {
-    global $list, $cc_info;
+    global $list, $m;
 
     $details = [];
     foreach ($list as $item) {
@@ -104,7 +104,6 @@ function saveToDb($info) {
         $details[$user_id][$item_id] = $qty;
     }
 
-    $m = new MivtzoimPurchases();
     return $m->createPurchase( $info, $details );
 }
 // **************** END FUNCTIONS **************** //
@@ -132,6 +131,8 @@ if ($row[0] > 0) {
 // Insert a record to indicate a purchase is in progress
 $sql = "INSERT INTO purchase_processing (admin_id) VALUES ($admin_id)";
 mysql_query($sql);
+
+$m = new MivtzoimPurchases();
 
 // first save to db
 $purchaseInfo = [
