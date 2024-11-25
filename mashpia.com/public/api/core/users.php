@@ -23,7 +23,7 @@ class UsersRouter {
         if ( $current_user->login->code === 'PARENT' ) {
             $sql = "
                 SELECT u.*, aa.admin_id, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
-                       MAX(rank_ord) as `rank` 
+                       MAX(rank_ord) as rank_name 
                 FROM users u 
                 JOIN schools s USING ( school_id ) 
                 JOIN rank_marks using ( user_id ) 
@@ -36,7 +36,7 @@ class UsersRouter {
             // can't get admin id here b/c it creates bugs
             $sql = "
                 SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
-                       MAX(rank_ord) as `rank` 
+                       MAX(rank_ord) as rank_name 
                 FROM users u 
                 JOIN schools s USING ( school_id ) 
                 JOIN rank_marks using ( user_id ) 
@@ -91,7 +91,7 @@ class UsersRouter {
                     'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
                 'barcode'   => '3'.$row['user_code'],
                 'platoon'   => ( $platoon ? [ 'name' => $platoon ] : null ),
-                'rank_name' => $rankNames[$row['rank']],
+                'rank_name' => $rankNames[$row['rank_name']],
                 'admin_id'  => $row['admin_id'] ?? $admin_ids[$row['user_id']],
             ];
         }
