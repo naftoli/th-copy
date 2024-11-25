@@ -93,7 +93,7 @@ foreach ($result as $row) {
 // find out if school set the report cards to show on parent accounts
 $field = 'show_report_card_' . $testNumber;
 $stmtReportCards = $MASHPIA_DB->prepare("
-    SELECT " . $$field . " FROM schools WHERE school_id = ?
+    SELECT " . $field . " FROM schools WHERE school_id = ?
 ")
 ?>
 <!DOCTYPE html>
