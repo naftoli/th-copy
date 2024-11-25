@@ -7,6 +7,23 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimPu
 $info = $_POST['info'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 
+// Check if there's already a payment in progress
+$sql = "SELECT COUNT(*) FROM payment_processing WHERE admin_id = $admin_id";
+$result = mysql_query($sql);
+$row = mysql_fetch_row($result);
+
+if ($row[0] > 0) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Your payment is already being processed. Please wait for it to complete.'
+    ]);
+    exit;
+}
+
+// Insert a record to indicate a payment is in progress
+$sql = "INSERT INTO payment_processing (admin_id) VALUES ($admin_id)";
+mysql_query($sql);
+
 $year = $info['year'];
 $amount = (float)$info['amount'];
 $card_num = $info['cc']['num'];
@@ -74,3 +91,7 @@ if ( $amount > 0 ) {
         'error'     => "You have not selected anything to purchase."
     ]);
 }
+
+// After processing, remove the record
+$sql = "DELETE FROM payment_processing WHERE admin_id = $admin_id";
+mysql_query($sql);

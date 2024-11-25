@@ -1,4 +1,4 @@
- <?php
+<?php
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
@@ -116,6 +116,23 @@ $cc_info = $info->cc;
 $type = $info->type;
 $admin_id = encrypt_decrypt('decrypt', $info->admin);
 
+// Check if there's already a purchase in progress
+$sql = "SELECT COUNT(*) FROM purchase_processing WHERE admin_id = $admin_id";
+$result = mysql_query($sql);
+$row = mysql_fetch_row($result);
+
+if ($row[0] > 0) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Your purchase is already being processed. Please wait for it to complete.'
+    ]);
+    exit;
+}
+
+// Insert a record to indicate a purchase is in progress
+$sql = "INSERT INTO purchase_processing (admin_id) VALUES ($admin_id)";
+mysql_query($sql);
+
 // first save to db
 $purchaseInfo = [
     'year'      =>  $year,
@@ -147,3 +164,7 @@ if ($purchase_id > 0) {
         'error'     => 'There was an error saving your purchase. You have not been charged. Please try again.'
     ]);
 }
+
+// After processing, remove the record
+$sql = "DELETE FROM purchase_processing WHERE admin_id = $admin_id";
+mysql_query($sql);
