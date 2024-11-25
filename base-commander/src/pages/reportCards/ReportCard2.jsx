@@ -262,6 +262,21 @@ function ReportCard(info) {
         if (totalMarks[k] % 1) totalMarks[k] = totalMarks[k].toFixed(2)
     }
 
+    /*
+    <table className={classes.table}>
+        <thead>
+            <tr>
+                <th>Test</th>
+                <th>Total commited Learning Time</th>
+                <th>Amount of time you Logged</th>
+            </tr>
+        </thead>
+        <tbody id={elem}>
+            {fillTable(learningTime[report.track])}
+        </tbody>
+    </table>
+     */
+
     return (
         <div className="main" style={mainStyle}>
             <span id="bsd">בס"ד</span>
@@ -275,18 +290,6 @@ function ReportCard(info) {
                     <p><b>Highest track you passed:</b> {report.highestTrackPassed}</p>
                     <p><b>Learning commitment per day:</b> {learningTime[report.track]} minutes</p>
                     <br />
-                    <table className={classes.table}>
-                        <thead>
-                            <tr>
-                                <th>Test</th>
-                                <th>Total commited Learning Time</th>
-                                <th>Amount of time you Logged</th>
-                            </tr>
-                        </thead>
-                        <tbody id={elem}>
-                            {fillTable(learningTime[report.track])}
-                        </tbody>
-                    </table>
                 </div>
                 <table className="mainTable">
                     <thead>
