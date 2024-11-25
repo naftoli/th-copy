@@ -172,6 +172,10 @@
     button > span {
       color: #fff;
     }
+
+    .genius {
+      display: none;
+    }
   </style>
 </head>
 
@@ -446,8 +450,8 @@
 <!--                              </button>-->
                             {{/if}}
                             {{#if this.show_report_cards}}
-<!--                              <button class="btn btn-primary report-card"><span>View Report Card</span></button>-->
-<!--                              <br/>-->
+                              <button class="btn btn-primary report-card" style="display: none;"><span>View Report Card</span></button>
+                              <br/>
                             {{/if}}
                             <!--                                                                <button class="btn btn-primary re_register"><span>Purchase-->
                             <!--
@@ -596,7 +600,10 @@
 
     if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
-    if (Cookies.get('naftoli')) $(".yahadusSale").show()
+    if (Cookies.get('naftoli')) {
+      $(".report-card").show()
+      $(".yahadusSale").show()
+    }
 
     // allow parents to swipe to open a child's account.
     function setSwiper() {
@@ -1059,6 +1066,7 @@
       location.href = '/mobile/sweaters'
     })
 
+    let showIyun = false
     $(document).on('click', '.report-card', async function () {
       const tracks = ['maven', 'pro', 'expert', 'genius']
       const learningTime = {
@@ -1092,7 +1100,7 @@
                         <th>Yesod</th>
                         <th>Yediah</th>
                         <th>Havonah</th>
-                        <th>Iyun</th>
+                        <th class="genius">Iyun</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1110,14 +1118,15 @@
             let test = report_card.tests[i]
             html += '<tr><td rowspan="2" style="text-align: center; vertical-align: middle">' + i + '</td><td>Answered Correctly</td>'
             for (let track of tracks) {
-              if (report_card.highestTrack == track) html += '<td style="font-weight: bold">'
-              else html += '<td>'
+              if (track == 'genius' && report_card.scores[i][track]) showIyun = true
+              if (report_card.highestTrack == track) html += '<td style="font-weight: bold" class="' + track + '">'
+              else html += '<td class="' + track + '">'
               html += report_card.scores[i][track] + ' / ' + report_card.questions[track] + '</td>'
             }
             html += '</tr><tr><td>Mark</td>'
             for (let track of tracks) {
-              if (report_card.highestTrack == track) html += '<td style="font-weight: bold">'
-              else html += '<td>'
+              if (report_card.highestTrack == track) html += '<td style="font-weight: bold" class="' + track + '">'
+              else html += '<td class="' + track + '">'
               html += (test[track] ? test[track] : '') + '%</td>'
               totals[track] += test[track] ? test[track] : 0
             }
@@ -1126,25 +1135,29 @@
         }
         html += '<tr><td>Needed Avg</td><td></td>'
         for (let track of tracks) {
-          if (report_card.highestTrack == track) html += '<td style="font-weight: bold">'
-          else html += '<td>'
+          if (report_card.highestTrack == track) html += '<td style="font-weight: bold" class="' + track + '">'
+          else html += '<td class="' + track + '">'
           html += report_card.avgs[track] + '%</td>'
         }
         html += '</tr>';
         // if (actualTests > 1) {
         html += '<tr><th>Total Avg</th><th></th>'
         for (let track of tracks) {
-          html += '<th>' + Math.round(totals[track] / actualTests) + '%</th>'
+          html += '<th class="' + track + '">' + Math.round(totals[track] / actualTests) + '%</th>'
         }
         html += '</tr>'
         // }
         html += '<tr><th colspan="2">Reward</th><th>Sweater & Gift</th><th>Sweater, Gift & Prizes</th>' +
-          '<th>Sweater, Gift, Prizes & Regional Trip</th><th>Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</th></tr>'
+          '<th>Sweater, Gift, Prizes & Regional Trip</th>'
+        if (showIyun) html += '<th class="genius">Sweater, Gift, Prizes, Regional Trip & Trophy Contestant</th>'
+        html += '</tr>'
         html += '</tbody></table>'
       } else {
         html += '<h5>No test marks are available yet.</h5>'
       }
+
       $("#report-card-table").html(html)
+      if (showIyun) $(".genius").show()
 
       $("#reportCard").modal('show')
     })

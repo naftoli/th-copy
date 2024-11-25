@@ -6,38 +6,45 @@ header('Access-Control-Allow-Origin: '. ( isset( $_SERVER['HTTP_ORIGIN'] ) ? $_S
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$ct = new ChidonTests();
-
-$test_num = intval($_GET['test']);
-$school_id = intval($_GET['school_id']);
-$class_id = intval($_GET['class_id']);
-$user_id = intval($_GET['user_id']);
-
-if ($school_id > 0) {
-    $sql = "select school_name from schools where school_id = " . $school_id;
-    $result = mysql_query($sql);
-    $school_name = mysql_fetch_assoc($result)['school_name'];
-    $schools = [$school_id => $school_name];
-} else {
-    $as = new AdminSchools(175069, 'super', true, true); // add chidon schools
-    $schools = $as->getSchools();
-}
 
 $ct = new ChidonTests();
 $types = $ct->getTypes();
 $testQuestions = $ct->getTestQuestions();
 
+$test_num = isset($_GET['test']) ? intval($_GET['test']) : $ct->figureOutTestNum();;
+$school_id = intval($_GET['school_id']);
+$class_id = intval($_GET['class_id']);
+$user_id = intval($_GET['user_id']);
+
 $info = [];
 $marks = [];
 $scores = [];
 
-foreach ($schools as $id => $school) {
-    $ct->setStudents($id, $class_id, $user_id);
-    $info[$id] = $ct->getStudents();
+if ($user_id > 0 || $class_id > 0) {
+    $ct->setStudents($school_id, $class_id, $user_id);
+    $info[$school_id] = $ct->getStudents();
     $ct->setScores();
     $ct->calculateMarks();
     $marks += $ct->getMarks();
     $scores += $ct->getScores();
+} else {
+    if ($school_id > 0) {
+        $sql = "select school_name from schools where school_id = " . $school_id;
+        $result = mysql_query($sql);
+        $school_name = mysql_fetch_assoc($result)['school_name'];
+        $schools = [$school_id => $school_name];
+    } else {
+        $as = new AdminSchools(175069, 'super', true, true); // add chidon schools
+        $schools = $as->getSchools();
+    }
+    foreach ($schools as $id => $school) {
+        $ct->setStudents($id, $class_id, $user_id);
+        $info[$id] = $ct->getStudents();
+        $ct->setScores();
+        $ct->calculateMarks();
+        $marks += $ct->getMarks();
+        $scores += $ct->getScores();
+    }
 }
 
 $result = [];
@@ -46,18 +53,7 @@ foreach ($info as $school => $users) {
         $id = $user['th_chidon_id'];
         $name = $user['first'] . ' ' . $user['last'];
         $grade = $user['class_grade'] . ($user['class_sub'] ? '-' . $user['class_sub'] : '');
-
-        $tests = [];
-        for ($i = 1; $i <= $test_num; $i++) {
-            if (isset($marks[$id][$i])) {
-                $tests[$i] = [
-                    'maven' => $marks[$id][$i]['maven'],
-                    'pro'   => $marks[$id][$i]['pro'],
-                    'expert' => $marks[$id][$i]['expert'],
-                    'genius' => $marks[$id][$i]['genius']
-                ];
-            }
-        }
+        $tests = $marks[$id];
 
         $avgs = $ct->getPassingAvgs($user['user_id']);
         $highestTrack = $ct->getHighestTrack($marks[$id], $user['user_id'], false, $test_num);
@@ -79,7 +75,7 @@ foreach ($info as $school => $users) {
             'highestTrack'          => $highestTrack,
             'highestTrackPassed'    => $highestTrackPassed,
             'tests'                 => $tests,
-            'scores'                => $scores[$school][$id],
+            'scores'                => $scores[$id],
             'questions'             => $testQuestions,
             'school'                => $schools[$school],
             'currentTrack'          => $types[$user['test_type']],

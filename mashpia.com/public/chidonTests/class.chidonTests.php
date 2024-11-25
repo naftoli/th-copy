@@ -238,7 +238,6 @@ class ChidonTests
                 }
             }
         }
-//        echo "<pre>"; print_r($this->scores); echo "</pre>";
     }
 
     public function getScores() {
@@ -311,7 +310,7 @@ class ChidonTests
                                     ':id' => $id,
                                     ':type' => $type,
                                     ':number' => $testNum,
-                                    ':level' => $levels[$id][$testNum][$type]
+                                    ':level' => $levels[$id][$testNum][$type] ?? 1
                                 ])) {
                                 $success = false;
                             }
