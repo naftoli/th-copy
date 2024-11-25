@@ -450,7 +450,7 @@
 <!--                              </button>-->
                             {{/if}}
                             {{#if this.show_report_cards}}
-                              <button class="btn btn-primary report-card" style="display: none;"><span>View Report Card</span></button>
+                              <button class="btn btn-primary report-card"><span>View Report Card</span></button>
                               <br/>
                             {{/if}}
                             <!--                                                                <button class="btn btn-primary re_register"><span>Purchase-->
@@ -754,9 +754,6 @@
         if (show_reg) {
           $(".chidon_reg").show()
         }
-
-        if (Cookies.get('naftoli'))
-          $(".report-card").show()
       }
     });
 
