@@ -62,7 +62,7 @@ class UsersRouter {
             $sql = "select aa.* from admin_auths aa 
                     join users u on aa.id = u.user_id 
                     where aa.auth = 'user' 
-                    and u.user_registered > 0";
+                    and u.school_id > 0";
             $stmtAdmins = $MASHPIA_DB->query( $sql );
             while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
                 $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
