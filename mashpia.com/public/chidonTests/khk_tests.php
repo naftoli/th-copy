@@ -66,7 +66,7 @@ for ($i = 1; $i <= 4; $i++) {
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown1 = new DateTime('2024-11-12 05:00:00');
-    $shutdown2 = new DateTime('2023-12-02 05:00:00');
+    $shutdown2 = new DateTime('2024-12-02 05:00:00');
     $shutdown3 = new DateTime('2025-01-15 05:00:00');
     $shutdown4 = new DateTime('2025-02-10 05:00:00');
 
