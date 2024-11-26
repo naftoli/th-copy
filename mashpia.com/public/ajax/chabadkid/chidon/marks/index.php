@@ -20,13 +20,13 @@ function checkTrackAndSchool($user_id, $level) {
     global $year, $ct;
     $tracks = ['maven', 'pro', 'expert', 'genius'];
 
-    $sql = "select * from th_chidon tc 
+    $sql = "select tc.*, u.school_id as school from th_chidon tc 
             join users u using (user_id) 
             where tc.year = $year and u.user_id = $user_id";
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
     // check school - only Lubavitcher Yeshiva (school id: 9)
-    $school_id = $row['school_id'];
+    $school_id = $row['school'];
     if ($school_id != 9) return false;
     // check track
     $ht = $ct->getHighestTrackPassed($row)['highest_track'];
