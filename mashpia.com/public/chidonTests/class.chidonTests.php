@@ -372,7 +372,7 @@ class ChidonTests
     public function calculateCumulative($child, $scores, $test_num = 0) {
         $types = $this->getTypes();
         $cumulative = $this->getCumulativeScore($scores, $test_num);
-        if ($cumulative == '') return $cumulative;
+        if (empty($cumulative)) return '';
 
         $iyun_avg = 90;
         $avgs = $this->getPassingAvgs($child['user_id']);
