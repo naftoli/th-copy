@@ -75,7 +75,6 @@ if ($test_num == 4) {
     else mysql_query('rollback');
     mysql_query('set autocommit=1');
 } else {
-    echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
     $marks = [];
     $levels = [];
     $info = $_POST['scores'];
