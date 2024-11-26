@@ -16,7 +16,7 @@ function getUserID($chidon_id) {
     return $row['user_id'];
 }
 
-function checkTrack($user_id, $level) {
+function checkTrackAndSchool($user_id, $level) {
     global $year, $ct;
     $tracks = ['maven', 'pro', 'expert', 'genius'];
 
@@ -25,8 +25,11 @@ function checkTrack($user_id, $level) {
             where tc.year = $year and u.user_id = $user_id";
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
+    // check school - only Lubavitcher Yeshiva (school id: 9)
+    $school_id = $row['school_id'];
+    if ($school_id != 9) return false;
+    // check track
     $ht = $ct->getHighestTrackPassed($row)['highest_track'];
-
     $key = array_search($ht, $tracks);
     if ($key && $level <= ++$key) return true; // only marks for levels that are less than or equal to the highest track can be saved
     return false;
@@ -50,7 +53,7 @@ if ($test_num == 4) {
                 $mark = intval($mark);
                 $track = 'track_' . $levels[$type];
                 // make sure child is allowed to enter mark for this level
-                $allowed = checkTrack($user_id, $levels[$type]);
+                $allowed = checkTrackAndSchool($user_id, $levels[$type]);
                 if ($allowed) {
                     $sql = "insert into th_chidon_finals 
                             set year = $year, 
