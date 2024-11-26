@@ -273,7 +273,7 @@ class ChidonTests
                                 ':number' => $testNum,
                                 ':questions' => $questions,
                                 ':answered' => $details[$type],
-                                ':level'    => $levels[$id][$testNum][$type] ?? 1
+                                ':level'    => isset($levels[$id][$testNum][$type]) ? $levels[$id][$testNum][$type] : 1
                             ])) {
                             $success = false;
                         }
