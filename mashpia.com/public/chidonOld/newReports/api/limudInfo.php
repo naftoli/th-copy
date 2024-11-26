@@ -160,5 +160,8 @@ function calculateAvgs($id) {
 
 function calculateCumulative($child) {
     global $ct, $scores, $test_num;
-    return $ct->calculateCumulative($child, $scores[$child['th_chidon_id']], $test_num);
+    if (isset($scores[$child['th_chidon_id']]))
+        return $ct->calculateCumulative($child, $scores[$child['th_chidon_id']], $test_num);
+    else
+        return '';
 }
