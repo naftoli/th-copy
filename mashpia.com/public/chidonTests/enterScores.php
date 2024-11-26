@@ -161,6 +161,8 @@ $stmtReportCards = $MASHPIA_DB->prepare("
                     $name = $child['first'] . ' ' . $child['last'];
                     $id = $child['th_chidon_id'];
                     $levelValue = $ct->getLevel($child['user_id'], 'tests');
+                    if (isset($levels[$school][$id][$testNumber]))
+                        $levelValue = $levels[$school][$id][$testNumber];
 
                     echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $grade . "</td><td>" . $name . "</td>";
                     if (empty($child['test_type'])) $default = true;
@@ -181,8 +183,6 @@ $stmtReportCards = $MASHPIA_DB->prepare("
                         echo "/></td>";
                     }
 
-                    if (isset($levels[$school][$id][$testNumber]))
-                        $levelValue = $levels[$school][$id][$testNumber];
                     echo "<td><select class='level' name='levels[$id][$testNumber]'";
                     if ($disabled) echo " disabled";
                     echo ">";
