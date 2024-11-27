@@ -139,7 +139,7 @@
                                                     <table>
                                                         <tr>
                                                             <td><input type="text" class="menorah" style="width: 30px;" id="{{@key}}" /></td>
-                                                            <td>Menorah Box(es): <strong>$<span class="menoraCost"></span> </strong>/ea</td>
+                                                            <td>Menorah Box(es): <strong>$<span>{{menoraCost}}</span> </strong>/ea</td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
@@ -151,7 +151,7 @@
                                                     <table>
                                                         <tr>
                                                             <td><input type="text" class="brochure" style="width: 30px;" id="{{@key}}" /></td>
-                                                            <td>Brochure(s): <strong>$<span class="brochureCost"></span> </strong>/ea</td>
+                                                            <td>Brochure(s): <strong>$<span>{{brochureCost}}</span> </strong>/ea</td>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
@@ -241,7 +241,6 @@
             var soldOut = false;
 
             // find out how many sets have been sold
-            var soldOut = false;
             // var now = Math.floor( new Date().getTime() / 1000);
             // console.log( now );
             // if ( now >= 1606435200 ) {
@@ -311,7 +310,9 @@
                     
                     for (var c in children) {
                         var child = children[c];
-                        if (child.menorah || child.brochure) {
+                        child.menoraCost = menoraCost
+                        child.brochureCost = brochureCost
+                        if (child.menorah || child.brochure || Cookies.get('naftoli')) {
                             registred_children[c] = child;
                         } else {
                             unregistered_children[c] = child;
@@ -366,7 +367,8 @@
                         var qty = parseInt( $(this).val() );
                         if ( qty ) {
                             var shipping = parseFloat( $(this).parent().parent().next().find('.shipping-charge').text() );
-                            total += (cost + shipping) * qty;
+                            if (!isNaN(shipping) && shipping) total += (cost + shipping) * qty;
+                            else total += cost * qty;
                         }
                     });
                 }

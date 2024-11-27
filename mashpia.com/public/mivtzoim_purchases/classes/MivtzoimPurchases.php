@@ -8,12 +8,6 @@ class MivtzoimPurchases {
     public function __construct() {
         global $MASHPIA_DB;
         $this->pdo = $MASHPIA_DB;
-        // $this->items = [];
-        // $stmt = $MASHPIA_DB->query("SELECT * FROM mashpia_purchases.mivtzoim_items");
-        // $rows = $stmt->fetchAll();
-        // foreach ( $rows as $row ) {
-        //     $this->items[$row['mivtzoim_item_id']] = $row['item'];
-        // }
     }
 
     /**
