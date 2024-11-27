@@ -154,7 +154,6 @@ $stmtReportCards = $MASHPIA_DB->prepare("
                 }
                 echo "</tr>";
                 foreach ($children as $child) {
-                    $disabled = false;
                     // check locked
                     if (in_array($school, $locked) && $admin_user['auth'] != 'super') $disabled = true;
                     $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
