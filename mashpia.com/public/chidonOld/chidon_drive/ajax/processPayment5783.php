@@ -39,6 +39,27 @@ $celebBoxes = 0;
 $celebBoxShipping = 0;
 $sweater_info = [];
 $emailMsg = '';
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
+$admin_id = encrypt_decrypt('decrypt', $admin_id);
+
+// Check if there's already a purchase in progress
+$sql = "SELECT COUNT(*) FROM purchase_processing WHERE admin_id = $admin_id";
+$result = mysql_query($sql);
+$row = mysql_fetch_row($result);
+
+if ($row[0] > 0) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'Your purchase is already being processed. Please wait for it to complete.'
+    ]);
+    exit;
+}
+
+// Insert a record to indicate a purchase is in progress
+$sql = "INSERT INTO purchase_processing (admin_id) VALUES ($admin_id)";
+mysql_query($sql);
+
 if (isset($_POST['coupons'])) {
     $couponsArr = json_decode($_POST['coupons']);
     $coupons = arrayByField($couponsArr, 'user_id', 'coupon');
@@ -888,43 +909,43 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
             $info['success'] = false;
             $info['error'] = 'There seems to have been an issue with your new card.';
             echo json_encode($info);
-            exit;
-        }
-        if (is_array($payment)) {
-            $trans_id = $payment['transactionResponse']['transId'];
-            $last_four = $payment['transactionResponse']['accountNumber'];
-            // payment went through so commit to db
-            $MASHPIA_DB->commit();
-            // update registration_charges table
-            $inserted = insertIntoRegCharges($trans_id);
-            $updated = updateFamilyBalance();
-            if (!$inserted || !$updated) {
-                // send email to myself
-                if (!$inserted && !$updated) {
-                    $error = 'There was an error inserting into the registration_charges table and updating the family balance. Please check the database.';
-                    $desc = getDescriptions();
-                    $desc[] = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
-                } else if (!$inserted) {
-                    $error = 'There was an error inserting into the registration_charges table. Please check the database.';
-                    $desc = getDescriptions();
-                } else if (!$updated) {
-                    $error = 'There was an error updating the family balance. Please check the database.';
-                    $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
-                }
-                sendMyselfEmail($error, $desc);
-            }
-            // redeem coupons and update family balance
-            redeemCoupons();
-            $info['success'] = true;
-            $msg = 'Congratulations! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
-                'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
-                'You should receive an email confirmation shortly with all the details.' . "\r\n" .
-                'If you do not receive an email, please check your SPAM folder'. "\r\n" . 'Thank You!';
-            $info['msg'] = $msg;
         } else {
-            $MASHPIA_DB->rollBack();
-            $info['success'] = false;
-            $info['error'] = $payment;
+            if (is_array($payment)) {
+                $trans_id = $payment['transactionResponse']['transId'];
+                $last_four = $payment['transactionResponse']['accountNumber'];
+                // payment went through so commit to db
+                $MASHPIA_DB->commit();
+                // update registration_charges table
+                $inserted = insertIntoRegCharges($trans_id);
+                $updated = updateFamilyBalance();
+                if (!$inserted || !$updated) {
+                    // send email to myself
+                    if (!$inserted && !$updated) {
+                        $error = 'There was an error inserting into the registration_charges table and updating the family balance. Please check the database.';
+                        $desc = getDescriptions();
+                        $desc[] = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
+                    } else if (!$inserted) {
+                        $error = 'There was an error inserting into the registration_charges table. Please check the database.';
+                        $desc = getDescriptions();
+                    } else if (!$updated) {
+                        $error = 'There was an error updating the family balance. Please check the database.';
+                        $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
+                    }
+                    sendMyselfEmail($error, $desc);
+                }
+                // redeem coupons and update family balance
+                redeemCoupons();
+                $info['success'] = true;
+                $msg = 'Congratulations! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
+                    'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
+                    'You should receive an email confirmation shortly with all the details.' . "\r\n" .
+                    'If you do not receive an email, please check your SPAM folder'. "\r\n" . 'Thank You!';
+                $info['msg'] = $msg;
+            } else {
+                $MASHPIA_DB->rollBack();
+                $info['success'] = false;
+                $info['error'] = $payment;
+            }
         }
     } else {
         $MASHPIA_DB->commit();
@@ -945,6 +966,10 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     $info['success'] = false;
     $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
 }
+
+// After processing, remove the record
+$sql = "DELETE FROM purchase_processing WHERE admin_id = $admin_id";
+mysql_query($sql);
 
 echo json_encode($info);
 

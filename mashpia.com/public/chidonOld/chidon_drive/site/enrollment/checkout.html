@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="google" content="notranslate">
     <title>Chidon Enrollment | Chidon Drive</title>
-    <meta name=”description” content="Every Child, Every Mitzvah: Making it Happen">
+    <meta name="description" content="Every Child, Every Mitzvah: Making it Happen">
     <link rel="icon" type="image/png" href="../img/favicon.png" />
     <link rel="stylesheet" href="../css/font.css" type="text/css" />
     <link rel="stylesheet" href="../css/style.css" type="text/css" />
@@ -630,64 +630,24 @@
             }
         })
 
+        let isProcessing = false;
         $(document).on('click', '.processPayment', function (evt) {
-            evt.preventDefault()
-            $(".processPayment").attr('disabled', true)
+            if (isProcessing) return; // Prevent further clicks
+            isProcessing = true;
+            $(".processPayment").attr('disabled', true);
 
-            if ((totalAfterCredit > 0) && !$(".payment:checked").length) {
-                alert('You must indicate how your are going to pay!')
-                $(".processPayment").attr('disabled', false)
-                return false
+            // Call the validation function
+            if (!validatePayment()) {
+                $(".processPayment").attr('disabled', false); // Re-enable the button if validation fails
+                return false; // Stop further processing
             }
 
-            let creditVal = 0
-            let paypal_email = ''
-            if (totalAfterCredit > 0) {
-                if (parseInt($(".payment:checked").val()) === 0) {
-                    card_id = parseInt($(".payment-card").val())
-                    // check if cvc is correct
-                    // let cvc = $("#cvc").val()
-                } else {
-                    let num = $("#cc_num").val()
-                    cc.num = num.replaceAll(' ', '')
-                    cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val()
-                    cc.cvv = $("#cc_cvv").val()
-                    if (!(cc.num && cc.exp && cc.cvv)) {
-                        alert('You are missing credit card info or it is inaccurate.')
-                        $(".processPayment").attr('disabled', false)
-                        return false
-                    }
-                }
-            } else if (totalAfterCredit < 0) {
-                // check credit and paypal_email
-                creditVal = parseInt($(".credit:checked").val())
-                if (!creditVal) {
-                    alert('You must indicate what you would like to do with your credit.')
-                    $(".processPayment").attr('disabled', false)
-                    return false
-                }
-                if (creditVal === 3) {
-                    paypal_email = $("#paypal_email").val().trim()
-                    if (!paypal_email) {
-                        alert('You must enter a PayPal email to receive your refund.')
-                        $(".processPayment").attr('disabled', false)
-                        return false
-                    }
-                }
-            }
-
-            // check terms
-            if (!($("#terms1").is(":checked") && $("#terms2").is(":checked"))) {
-                $(".processPayment").attr('disabled', false)
-                alert("You must indicate your acceptance of our terms.")
-                return false
-            }
-
-            const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks')
-            const country = shipping ? window.localStorage ? window.localStorage.getItem('country') : Cookies.get('country') : ''
+            // Proceed with the AJAX request if validation passes
+            const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks');
+            const country = shipping ? window.localStorage ? window.localStorage.getItem('country') : Cookies.get('country') : '';
 
             $.post('../../ajax/processPayment5783.php', {
-                admin_id: admin.admin_id,
+                admin_id: Cookies.get('chidon_admin'),
                 admin_email,
                 cart_total,
                 shipping,
@@ -708,23 +668,79 @@
                 paypal_email,
                 already_used_credit
             }, function (result) {
-                const res = JSON.parse(result)
+                const res = JSON.parse(result);
                 if (res.success) {
-                    alert(res.msg)
-                    let items = ['cart', 'addresses', 'coupons', 'raised', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks', 'needs_shipping', 'credit']
+                    alert(res.msg);
+                    let items = ['cart', 'addresses', 'coupons', 'raised', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks', 'needs_shipping', 'credit'];
                     for (let item of items) {
-                        if (window.localStorage) window.localStorage.removeItem(item)
-                        else Cookies.remove(item)
+                        if (window.localStorage) window.localStorage.removeItem(item);
+                        else Cookies.remove(item);
                     }
-                    Cookies.remove('myshliach')
-                    location.href = 'http://mashpia.com/mobile'
+                    Cookies.remove('myshliach');
+                    location.href = 'http://mashpia.com/mobile';
                 } else {
-                    alert(res.error)
-                    $(".processPayment").attr('disabled', false)
+                    alert(res.error || "An unknown error occurred.");
+                    $(".processPayment").attr('disabled', false);
                 }
-                console.log(res)
-            })
-        })
+                console.log(res);
+            }).fail(function() {
+                alert("Failed to connect to the server. Please try again later.");
+                $(".processPayment").attr('disabled', false);
+            });
+        });
+
+        // Validation function
+        function validatePayment() {
+            let creditVal = 0;
+            let paypal_email = '';
+
+            if (totalAfterCredit > 0) {
+                if (!$(".payment:checked").length) {
+                    alert('You must indicate how you are going to pay!');
+                    return false;
+                }
+
+                if (parseInt($(".payment:checked").val()) === 0) {
+                    card_id = parseInt($(".payment-card").val());
+                    // Additional checks for CVC can be added here
+                } else {
+                    let num = $("#cc_num").val();
+                    cc.num = num.replaceAll(' ', '');
+                    const cardNumberPattern = /^(3\d{14}|4\d{15}|5\d{15})$/;
+                    if (!cardNumberPattern.test(cc.num)) {
+                        alert('Invalid credit card number.');
+                        return false;
+                    }
+                    cc.exp = $("#exp_yy").val() + '-' + $("#exp_mm").val();
+                    cc.cvv = $("#cc_cvv").val();
+                    if (!(cc.num && cc.exp && cc.cvv)) {
+                        alert('You are missing credit card info or it is inaccurate.');
+                        return false;
+                    }
+                }
+            } else if (totalAfterCredit < 0) {
+                creditVal = parseInt($(".credit:checked").val());
+                if (!creditVal) {
+                    alert('You must indicate what you would like to do with your credit.');
+                    return false;
+                }
+                if (creditVal === 3) {
+                    paypal_email = $("#paypal_email").val().trim();
+                    if (!paypal_email) {
+                        alert('You must enter a PayPal email to receive your refund.');
+                        return false;
+                    }
+                }
+            }
+
+            // Check terms
+            if (!($("#terms1").is(":checked") && $("#terms2").is(":checked"))) {
+                alert("You must indicate your acceptance of our terms.");
+                return false;
+            }
+
+            return true; // All validations passed
+        }
     </script>
 
     <script>
