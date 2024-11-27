@@ -103,9 +103,9 @@ function saveToDb($info) {
         $qty = $item->qty;
         $details[$user_id][$item_id] = $qty;
     }
-
-
-    return $m->createPurchase( (array) $info, $details );
+    $info = (array) $info;
+    print_r($info);
+    return $m->createPurchase( $info, $details );
 }
 // **************** END FUNCTIONS **************** //
 
