@@ -32,7 +32,7 @@ function purchaseItems() {
                     'success' => false,
                     'msg' => 'You do not have a valid credit card on file, please enter a new credit card and try again.'
                 ]);
-                exit;
+                return false;
             }
 
             // charge credit card on file
@@ -43,7 +43,7 @@ function purchaseItems() {
                     'success'   => false,
                     'error'     => $response
                 ]);
-                exit;
+                return false;
             }
 
             $msg = $response['transactionResponse']['messages'][0]['description'] . ':' .
@@ -80,7 +80,7 @@ function purchaseItems() {
                     'success'   => false,
                     'error'     => $response_array[3]
                 ]);
-                exit;
+                return false;
             }
         }       
     }
@@ -155,10 +155,10 @@ if ($purchase_id > 0) {
         ]);
     } else {
         $m->deletePurchase($purchase_id);
-        echo json_encode([
-            'success'   => false,
-            'error'     => 'There was an error charging your card. You have not been charged. Please try again.'
-        ]);
+//        echo json_encode([
+//            'success'   => false,
+//            'error'     => 'There was an error charging your card. You have not been charged. Please try again.'
+//        ]);
     }
 } else {
     echo json_encode([

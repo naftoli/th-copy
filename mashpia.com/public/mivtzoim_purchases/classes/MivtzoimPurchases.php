@@ -183,15 +183,13 @@ class MivtzoimPurchases {
         $year = $info['year'];
         $admin = $info['admin'];
         $amount = $info['amount'];
-        print_r($info); exit;
 
         $stmt = $this->pdo->prepare("
             INSERT INTO mashpia_purchases.purchases 
             SET 
                 year = :year, 
                 admin_id = :admin, 
-                amount_paid = :amount, 
-                authorization = :auth
+                amount_paid = :amount
         ");
 
         $stmt2 = $this->pdo->prepare("
