@@ -65,18 +65,20 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
 
 // initialize all tests to not be disabled
 $disabled = false;
+$disableIyun = false;
 $exceptions = [];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = [];
-    $shutdown[1] = new DateTime('2024-11-26 16:59:00');
-    $shutdown[2] = new DateTime('2025-01-17 04:59:00');
-    $shutdown[3] = new DateTime('2025-02-17 04:59:00');
-    $shutdown[3] = new DateTime('2025-03-19 04:59:00');
-    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions)) {
+    $shutdown[1] = new DateTime('2024-11-26 12:00:00', new DateTimeZone('America/New_York'));
+    $shutdown[2] = new DateTime('2025-01-17 00:00:00', new DateTimeZone('America/New_York'));
+    $shutdown[3] = new DateTime('2025-02-17 00:00:00', new DateTimeZone('America/New_York'));
+    $shutdown[3] = new DateTime('2025-03-19 00:00:00', new DateTimeZone('America/New_York'));
+    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions))
         $disabled = true;
-    }
+    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')))
+        $disableIyun = true;
 }
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
@@ -177,8 +179,8 @@ $stmtReportCards = $MASHPIA_DB->prepare("
                         if ($type == 'expert') $class = 'expert';
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
                         echo "<td><input type='text' class='$type' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
-                        if ($disabled) echo "disabled ";
-                        else if ($type == 'genius' && $levelValue == 1) echo "disabled "; // don't set variable to disabled b/c then the test levels will be disabled
+                        if ($type != 'genius' && $disabled) echo "disabled ";
+                        else if ($type == 'genius' && ($levelValue == 1 || $disableIyun)) echo "disabled "; // don't set variable to disabled b/c then the test levels will be disabled
                         echo "/></td>";
                     }
 
