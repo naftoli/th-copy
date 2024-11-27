@@ -235,8 +235,11 @@ class MivtzoimPurchases {
             $this->pdo->commit();
         } else {
             $this->pdo->rollBack();
-            $stmt->debugDumpParams();
-            $stmt2->debugDumpParams();
+            if ($purchase_id) {
+                $stmt2->debugDumpParams();
+            } else {
+                $stmt->debugDumpParams();
+            }
         }
         return $purchase_id;
     }
