@@ -104,12 +104,12 @@ function saveToDb($info) {
         $details[$user_id][$item_id] = $qty;
     }
 
-    return $m->createPurchase( $info, $details );
+
+    return $m->createPurchase( (array) $info, $details );
 }
 // **************** END FUNCTIONS **************** //
 
 $info = json_decode($_POST['info']);
-echo "<pre>"; print_r($info); echo "</pre>";
 $list = $info->purchases;
 $total = $info->total;
 $cc_info = $info->cc;

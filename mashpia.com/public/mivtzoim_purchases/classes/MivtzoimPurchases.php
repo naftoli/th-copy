@@ -179,7 +179,7 @@ class MivtzoimPurchases {
         return false;
     }
 
-    public function createPurchase( $info, $details ) {
+    public function createPurchase( array $info, array $details ) {
         $year = $info['year'];
         $admin = $info['admin'];
         $amount = $info['amount'];
