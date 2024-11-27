@@ -249,7 +249,6 @@ class ChidonTests
     }
 
     public function insertScores($info, $levels) {
-        echo "<pre>"; print_r($info); print_r($levels); echo "</pre>"; exit;
         $success = true;
         $stmtInsert = $this->db->prepare("
             INSERT IGNORE INTO th_chidon_marks 
