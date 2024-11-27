@@ -66,7 +66,7 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
 // initialize all tests to not be disabled
 $disabled = false;
 $disableIyun = false;
-$exceptions = [];
+$exceptions = [269];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
@@ -77,7 +77,7 @@ if ($admin_user['auth'] != 'super') {
     $shutdown[3] = new DateTime('2025-03-19 00:00:00', new DateTimeZone('America/New_York'));
     if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions))
         $disabled = true;
-    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')))
+    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
         $disableIyun = true;
 }
 
