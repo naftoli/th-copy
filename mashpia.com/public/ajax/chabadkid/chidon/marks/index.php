@@ -86,7 +86,7 @@ if ($test_num == 4) {
             foreach ($other as $type => $scores) {
                 foreach ($scores as $level => $mark) {
                     $marks[$id][$test_num]["$type"] = $mark;
-                    $levels[$id][$test_num]["$type"] = $level;
+                    $levels[$id][$test_num] = $level;
                 }
             }
         }
