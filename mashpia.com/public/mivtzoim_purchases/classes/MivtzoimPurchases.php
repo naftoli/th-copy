@@ -183,6 +183,7 @@ class MivtzoimPurchases {
         $year = $info['year'];
         $admin = $info['admin'];
         $amount = $info['amount'];
+        print_r($info); exit;
 
         $stmt = $this->pdo->prepare("
             INSERT INTO mashpia_purchases.purchases 
@@ -235,11 +236,6 @@ class MivtzoimPurchases {
             $this->pdo->commit();
         } else {
             $this->pdo->rollBack();
-            if ($purchase_id) {
-                $stmt2->debugDumpParams();
-            } else {
-                $stmt->debugDumpParams();
-            }
         }
         return $purchase_id;
     }
