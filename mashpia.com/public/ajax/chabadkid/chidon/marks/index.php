@@ -85,9 +85,8 @@ if ($test_num == 4) {
         foreach ($more as $test_num => $other) {
             foreach ($other as $type => $scores) {
                 foreach ($scores as $level => $mark) {
-                    // levels for teleshevsky goes by each type b/c originally that's the way it was setup even thought it's not like that now
                     $marks[$id][$test_num]["$type"] = $mark;
-                    $levels[$id][$test_num]["$type"] = $level;
+                    $levels[$id][$test_num] = $level;
                 }
             }
         }
