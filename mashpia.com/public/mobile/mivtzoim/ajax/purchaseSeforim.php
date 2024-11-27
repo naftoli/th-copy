@@ -149,7 +149,7 @@ if ($purchase_id > 0) {
         // update db with authorization
         $m->updatePurchase($purchase_id, $res);
         // send email
-        $m->sendEmail($purchaseInfo, $list, $cc_info, $type, $info->yom_tov);
+        $m->sendEmail($purchaseInfo, $list, $cc_info, $info->yom_tov);
         echo json_encode([
             'success'   => true
         ]);
