@@ -145,6 +145,7 @@ $purchase_id = saveToDb($purchaseInfo);
 if ($purchase_id > 0) {
     // charge the card
     $res = purchaseItems();
+    $res = false;
     if ($res) {
         // update db with authorization
         $m->updatePurchase($purchase_id, $res);

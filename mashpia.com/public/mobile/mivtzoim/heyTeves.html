@@ -742,7 +742,7 @@
                 <td style="padding: 2px;">
                   Tzivos Hashem Sweater ${g}
                   <select name="sweater_size" id="sweater_size">
-                    <option value="">Select Size</option>
+                    <option value="0">Select Size</option>
                     ${sizes.map(size => `<option value="${sweaters[g][size]}">${size} -
                         ${sweaters_stock[sweaters[g][size]] > 0 ? 'IN STOCK' : 'SOLD OUT'}</option>`)}
                   </select>
@@ -793,10 +793,14 @@
         $(".qty").each(function () {
             const qty = parseInt($(this).val())
             if (qty > 0) {
-                const user_id = $(this).parent().parent().parent().parent().parent().parent().parent().attr('id')
-                const id = $(this).parent().parent().attr('id')
+                const user_id = $(this).closest('.child').attr('id')
+                const id = $(this).closest('tr').attr('id')
                 const info = id.split(':')
                 const item_id = info[0] > 0 ? info[0] : parseInt($(this).parent().parent().find("#sweater_size").val())
+                if (!item_id) {
+                    alert('You must select a size.')
+                    return false
+                }
                 const price = info[1]
                 if (item_id && price) list.push({user_id, item_id, price, qty})
             }
@@ -806,6 +810,11 @@
 
     const purchaseSets = async e => {
         e.preventDefault()
+
+        let seforim = getListOfSeforim();
+        if (!seforim) {
+            return false
+        }
 
         // Prevent double-submission
         if ($("#purchase").attr('data-processing') === 'true') {
@@ -821,6 +830,14 @@
                 let info = {};
                 info.cc = {};
 
+                // make sure we have a payment method selected
+                if (!$(".payment:checked").length) {
+                    alert("You must choose a payment method.");
+                    $("#purchase").attr('data-processing', 'false')
+                    $("#purchase").attr('disabled', false);
+                    return false;
+                }
+
                 // Add this section to handle saved cards
                 const paymentMethod = $(".payment:checked").val();
                 if (parseInt(paymentMethod) === 0) {
@@ -835,13 +852,15 @@
                     const cvv = $("#x_card_code").val().trim();
 
                     if (!first || !last || !num || !exp || !zip || !cvv) {
-                        alert("You must fill in all fields.");
+                        alert("You must fill in all credit card fields.");
+                        $("#purchase").attr('data-processing', 'false')
                         $("#purchase").attr('disabled', false);
                         return false;
                     }
 
                     if (isNaN(num) || isNaN(exp) || isNaN(cvv)) {
                         alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+                        $("#purchase").attr('data-processing', 'false')
                         $("#purchase").attr('disabled', false);
                         return false;
                     }
@@ -857,7 +876,7 @@
 
                 info.admin = admin;
                 info.total = total;
-                info.purchases = getListOfSeforim();
+                info.purchases = seforim;
                 info.yom_tov = 'Hei Teves';
 
                 const res = await $.post('ajax/purchaseSeforim.php', {info: JSON.stringify(info)})
@@ -947,4 +966,4 @@
         $(document).on('change', '#sweater_size', calcTotal)
     });
 </script>
-</html>
+</html>++
