@@ -655,6 +655,7 @@
 <script>
     // force https
     if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
+    let sweaters_stock = {}, children = {}
 
     // Add this new function to get saved cards
     function getSavedCards() {
@@ -885,8 +886,6 @@
         if (!admin) {
             window.close();
         }
-
-        let sweaters_stock = {}, children = {}
 
         getSavedCards();
 
