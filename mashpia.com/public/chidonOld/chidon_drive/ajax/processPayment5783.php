@@ -3,20 +3,20 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ini_set('max_execution_time', 300);
 
-require_once '../../../api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once '../../../api/models/Admin.php';
 
 //***************** LOAD CURRENT YEAR **********************/
-require_once '../../../class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once '../../../classes/authorize/CustomerProfile.php';
-require_once '../../../classes/authorize/PaymentProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
 use classes\authorize\CustomerProfile as Customer;
 
 //******************* Coupon Codes ************************/
-require_once '../../../chidonOld/coupons/class.couponCode.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 $coupon = new CouponCode($MASHPIA_DB, $year);
 
 //******************* GLOBAL VARIABLES ***********************/
@@ -214,10 +214,9 @@ function processFee() {
                 $cp = new Customer($customer_profile_id);
                 $response = $cp->chargeCard($to_charge, $payment_id, null, null, $desc);
                 return $response;
-            } else return false;
-        } else {
-            return $payment;
-        }
+            }
+        } 
+        return false;
     }
 }
 
@@ -238,11 +237,14 @@ function insertIntoRegCharges($trans_id = 0) {
     global $MASHPIA_DB, $users, $year;
 
     $user_ids = array_keys($users);
-    $stmtSchoolIDs = $MASHPIA_DB->query("
+    $school_ids = [];
+
+    $stmtSchoolIDs = $MASHPIA_DB->prepare("
         SELECT user_id, school_id 
         FROM users 
         WHERE user_id in (" . implode(',', $user_ids) . ")
     ");
+    $stmtSchoolIDs->execute();
     $rows = $stmtSchoolIDs->fetchAll();
     foreach ($rows as $row) {
         $school_ids[$row['user_id']] = $row['school_id'];
@@ -266,7 +268,7 @@ function insertIntoRegCharges($trans_id = 0) {
     $MASHPIA_DB->beginTransaction();
     foreach ($descriptions as $item) {
         if ($item['prefix'] == 'C') {
-            if (! $stmt->execute([
+            if (!$stmt->execute([
                 'trans_id' => $trans_id,
                 'user' => $item['id'],
                 'school' => isset($item['school_id']) ? $item['school_id'] : $school_ids[$item['id']],
@@ -279,7 +281,7 @@ function insertIntoRegCharges($trans_id = 0) {
                 break;
             }
         } else if ($item['prefix'] == 'F') {
-            if (! $stmt->execute([
+            if (!$stmt->execute([
                 'trans_id' => $trans_id,
                 'user' => 0,
                 'school' => 0,
@@ -298,7 +300,6 @@ function insertIntoRegCharges($trans_id = 0) {
         $MASHPIA_DB->commit();
         return true;
     } else {
-//        $stmt->debugDumpParams();
         $MASHPIA_DB->rollBack();
         return false;
     }
@@ -877,20 +878,10 @@ function sendMyselfEmail($error, $desc) {
 processCart();
 setSweaterInfo();
 
-// if we are only refunding credit, then we don't need to do anything else
-//if ($credit && $_POST['cart_total'] == 0) {
-//    $registered = processReg(); // there could be registration even with no charge
-//    $success = updateFamilyBalance();
-//    $info['success'] = $success;
-//    $info['msg'] = 'Your credit has been refunded. Thank you!';
-//    $info['error'] = 'There was a problem refunding your credit.';
-//    echo json_encode($info);
-//    exit;
-//}
-
-// process everything
+// Start the transaction
 $MASHPIA_DB->beginTransaction();
-// first do all the db stuff and only save if payment goes through
+
+// Perform all database operations first
 $registered = processReg();
 $shippingUpdated = updateShipping();
 $celebBoxesProcessed = processCelebBoxes();
@@ -901,39 +892,39 @@ $ultimate = saveUltimateTripInfo();
 $info = [];
 $trans_id = 0;
 $last_four = 0;
+
+// Check if all database operations were successful
 if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
+    // Now process the credit card
     if ($to_charge > 0) {
-        $payment = processFee();
-        if (! $payment) {
+        $payment = processFee(); // Process the credit card payment
+        if (!$payment) {
+            // Roll back the transaction if payment fails
             $MASHPIA_DB->rollBack();
             $info['success'] = false;
             $info['error'] = 'There seems to have been an issue with your new card.';
             echo json_encode($info);
+            exit; // Exit after sending the error response
         } else {
+            // Payment was successful
             if (is_array($payment)) {
                 $trans_id = $payment['transactionResponse']['transId'];
                 $last_four = $payment['transactionResponse']['accountNumber'];
-                // payment went through so commit to db
+                // Commit the transaction since payment was successful
                 $MASHPIA_DB->commit();
-                // update registration_charges table
+                
+                // Update registration_charges table
                 $inserted = insertIntoRegCharges($trans_id);
                 $updated = updateFamilyBalance();
                 if (!$inserted || !$updated) {
-                    // send email to myself
-                    if (!$inserted && !$updated) {
-                        $error = 'There was an error inserting into the registration_charges table and updating the family balance. Please check the database.';
-                        $desc = getDescriptions();
-                        $desc[] = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
-                    } else if (!$inserted) {
-                        $error = 'There was an error inserting into the registration_charges table. Please check the database.';
-                        $desc = getDescriptions();
-                    } else if (!$updated) {
-                        $error = 'There was an error updating the family balance. Please check the database.';
-                        $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
-                    }
+                    // Handle errors in inserting or updating
+                    $error = 'There was an error inserting into the registration_charges table or updating the family balance. Please check the database.';
+                    $desc = getDescriptions();
+                    $desc[] = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
                     sendMyselfEmail($error, $desc);
                 }
-                // redeem coupons and update family balance
+                
+                // Redeem coupons and update family balance
                 redeemCoupons();
                 $info['success'] = true;
                 $msg = 'Congratulations! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
@@ -942,15 +933,17 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
                     'If you do not receive an email, please check your SPAM folder'. "\r\n" . 'Thank You!';
                 $info['msg'] = $msg;
             } else {
+                // Roll back if payment processing returns an unexpected result
                 $MASHPIA_DB->rollBack();
                 $info['success'] = false;
-                $info['error'] = $payment;
+                $info['error'] = $payment; // Handle payment error
             }
         }
     } else {
+        // If no charge, just commit the transaction
         $MASHPIA_DB->commit();
-        // update family balance
-        if (! updateFamilyBalance()) {
+        // Update family balance
+        if (!updateFamilyBalance()) {
             $error = 'There was an error updating the family balance. Please check the database.';
             $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
             sendMyselfEmail($error, $desc);
@@ -962,21 +955,23 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
         $info['msg'] = $msg;
     }
 } else {
+    // Roll back if any of the database operations failed
     $MASHPIA_DB->rollBack();
     $info['success'] = false;
-    $info['error'] = 'There was an error saving your registration(s) and / or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
+    $info['error'] = 'There was an error saving your registration(s) and/or your extra purchase(s). Please try again. If this continues, please send an email to chidon@tzivoshashem.org';
 }
 
 // After processing, remove the record
 $sql = "DELETE FROM purchase_processing WHERE admin_id = $admin_id";
 mysql_query($sql);
 
+// Return the response
 echo json_encode($info);
 
-// send email confirmation
+// Send email confirmation if successful
 if ($info['success']) {
     $msg = getEmailMsg($trans_id, $last_four);
-    if (! sendEmail($msg)) {
+    if (!sendEmail($msg)) {
         sendMyselfEmail('There was an error sending the confirmation email.', $msg);
     }
 }
