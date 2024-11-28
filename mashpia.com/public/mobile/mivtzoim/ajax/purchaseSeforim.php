@@ -37,7 +37,7 @@ function purchaseItems() {
 
             // charge credit card on file
             $cp = new CustomerProfile( $customer_id );
-            $response = $cp->chargeCard( $total, $cc_info->profile_id, null, null, $description );
+            $response = $cp->chargeCard( $total, $cc_info->card_id, null, null, $description );
             if (! is_array($response)) {
                 echo json_encode([
                     'success'   => false,
