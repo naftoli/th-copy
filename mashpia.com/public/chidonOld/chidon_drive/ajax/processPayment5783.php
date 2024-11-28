@@ -525,7 +525,6 @@ function updateFamilyBalance() {
 //            $stmt->debugDumpParams();
             return false;
         }
-        return true;
     }
     return true;
 }
@@ -915,7 +914,9 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
                 
                 // Update registration_charges table
                 $inserted = insertIntoRegCharges($trans_id);
+                // Redeem coupons and update family balance
                 $updated = updateFamilyBalance();
+                redeemCoupons();
                 if (!$inserted || !$updated) {
                     // Handle errors in inserting or updating
                     $error = 'There was an error inserting into the registration_charges table or updating the family balance. Please check the database.';
@@ -923,9 +924,7 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
                     $desc[] = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
                     sendMyselfEmail($error, $desc);
                 }
-                
-                // Redeem coupons and update family balance
-                redeemCoupons();
+
                 $info['success'] = true;
                 $msg = 'Congratulations! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                     'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
