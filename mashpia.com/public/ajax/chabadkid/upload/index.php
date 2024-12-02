@@ -1,4 +1,5 @@
 <?php
+echo "<pre>"; print_r($_POST); echo "</pre>";
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
