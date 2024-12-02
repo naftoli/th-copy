@@ -72,8 +72,8 @@ if ( !empty( $users ) ) {
 
     $result = mysql_query( $sql );
     while ( $row = mysql_fetch_assoc($result) ) {
-        $reg_year = GlobalSettings::getRegistrationYear( $row['school_id'] );
-        $chidon_year                                = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
+        $reg_year       = GlobalSettings::getRegistrationYear( $row['school_id'] );
+        $chidon_year    = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
         $children[$row['user_id']]['user_id']       = $row['user_id'];
         $children[$row['user_id']]['first'] 	    = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last']  	    = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
@@ -117,9 +117,9 @@ if ( !empty( $users ) ) {
 					order by rank_ord desc limit 1";
         $resRank = mysql_query( $sqlRank );
         $rowRank = mysql_fetch_assoc( $resRank );
-        $children[$row['user_id']]['rank'] 		= $rowRank['rank_name'] ? $rowRank['rank_name'] : '';
-        $children[$row['user_id']]['rankOrd']	= $rowRank['rank_ord'] ? $rowRank['rank_ord'] : 0;
-        $children[$row['user_id']]['rankImg'] 	= $rowRank['rank_image_id'] ? $rowRank['rank_image_id'] : '';
+        $children[$row['user_id']]['rank'] 		= isset($rowRank['rank_name']) ? $rowRank['rank_name'] : '';
+        $children[$row['user_id']]['rankOrd']	= isset($rowRank['rank_ord']) ? $rowRank['rank_ord'] : 0;
+        $children[$row['user_id']]['rankImg'] 	= isset($rowRank['rank_image_id']) ? $rowRank['rank_image_id'] : '';
 
         $qry = "
             SELECT 

@@ -4,6 +4,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimPurchases.php';
 
+//*************** LOAD AUTHORIZE FUNCTIONS *********************/
+require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
+use classes\authorize\CustomerProfile;
+
 $info = $_POST['info'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 
@@ -34,6 +38,7 @@ $last_name = $info['cc']['last'];
 $zip = $info['zip'];
 $address = "";
 $state = "";
+$on_file = $info['cc']['on_file'];
 
 if ( $amount > 0 ) {
     // first save to db
@@ -65,27 +70,56 @@ if ( $amount > 0 ) {
         // now process cc
         $description = "Mivtza Chanuka " . $year . " purchase - Admin ID: " . $admin_id;
 
-        chdir('../../../');
-        require_once 'authorize.php';
-        chdir('mobile/reg/ajax/');
-
-        if ($response_array[0] == 1) { // success
-            $strResponse =  $response_array[3] . ':' .
-                $response_array[4] . ':' .
-                $response_array[6] . ':' .
-                $response_array[9];
-
-            $p->updatePurchase($purchase_id, $strResponse);
-            echo json_encode([
-                'success'   => true
-            ]);
+        // figure out if we are charging a credit card on file or a new one
+        if (intval($on_file) == 1) {
+            $customer_id = getCustomerID($admin_id);
+            if (!$customer_id || empty($customer_id)) {
+                $p->deletePurchase($purchase_id);
+                echo json_encode([
+                    'success' => false,
+                    'msg' => 'You do not have a valid credit card on file, please enter a new credit card and try again.'
+                ]);
+            } else {
+                // charge credit card on file
+                $cp = new CustomerProfile($customer_id);
+                $response = $cp->chargeCard($amount, $info['cc']['card_id'], null, null, $description);
+                if (!is_array($response)) {
+                    // delete from db
+                    $p->deletePurchase($purchase_id);
+                    echo json_encode([
+                        'success' => false,
+                        'error' => $response
+                    ]);
+                } else {
+                    $msg = $response['transactionResponse']['messages'][0]['description'] . ':' .
+                        $response['transactionResponse']['authCode'] . ':' . $response['transactionResponse']['transId'] . ':' .
+                        $amount;
+                    $p->updatePurchase($purchase_id, $msg);
+                }
+            }
         } else {
-            // delete from db
-            $p->deletePurchase($purchase_id);
-            echo json_encode([
-                'success' => false,
-                'error' => $response_array[3]
-            ]);
+            chdir('../../../');
+            require_once 'authorize.php';
+            chdir('mobile/reg/ajax/');
+
+            if ($response_array[0] == 1) { // success
+                $strResponse = $response_array[3] . ':' .
+                    $response_array[4] . ':' .
+                    $response_array[6] . ':' .
+                    $response_array[9];
+
+                $p->updatePurchase($purchase_id, $strResponse);
+                echo json_encode([
+                    'success' => true
+                ]);
+            } else {
+                // delete from db
+                $p->deletePurchase($purchase_id);
+                echo json_encode([
+                    'success' => false,
+                    'error' => $response_array[3]
+                ]);
+            }
         }
     } else {
         echo json_encode([

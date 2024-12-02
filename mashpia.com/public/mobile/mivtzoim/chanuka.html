@@ -178,35 +178,50 @@
                     <form action="" method="post">
                         <div class="row">
                             <h2>Checkout</h2>
-                            <div class="form-group">
-                                <label for="cc-first" class="control-label mb-1">First Name on Card</label>
-                                <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
-                                <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+
+                            <div id="cc_selection">
+                                <div class="form-group">
+                                    <input type="radio" name="payment" class="payment" id="payment_1" value="0"/>
+                                    <label for="payment_1">Use credit card on file ending in</label>
+                                    <span id="creditCards"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="radio" name="payment" class="payment" id="payment_2" value="1"/>
+                                    <label for="payment_2">Enter a new card</label>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
-                                <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
-                                <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-                            </div>
-                            <div class="form-group">
-                                <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
-                                <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
-                                <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-                            </div>
-                            <div class="form-group">
-                                <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
-                                <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
-                                <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
-                            </div>
-                            <label for="x_card_code" class="control-label mb-1">Security code</label>
-                            <div class="form-group">
-                                <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
-                                <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
-                            </div>
-                            <div class="form-group">
-                                <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
-                                <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
-                                <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
+
+                            <div id="cc_form" style="display:none;">
+                                <div class="form-group">
+                                    <label for="cc-first" class="control-label mb-1">First Name on Card</label>
+                                    <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
+                                    <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
+                                    <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
+                                    <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
+                                    <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
+                                    <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
+                                    <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
+                                    <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
+                                </div>
+                                <label for="x_card_code" class="control-label mb-1">Security code</label>
+                                <div class="form-group">
+                                    <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
+                                    <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
+                                </div>
+                                <div class="form-group">
+                                    <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
+                                    <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
+                                    <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
+                                </div>
                             </div>
                         </div>
                         <div class="row" style="padding: 20px !important; text-align: center;">
@@ -224,9 +239,45 @@
         if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
             $(".bug-report").hide()
         }
+        // Add this new function to get saved cards
+        function getSavedCards() {
+            $.post('../../chidonOld/chidon_drive/ajax/getAdminInfo.php', {admin}, function (result) {
+                const adminInfo = JSON.parse(result);
+                let cards = [];
+                if (adminInfo['cards']) {
+                    for (let i in adminInfo['cards']) {
+                        let cardInfo = adminInfo['cards'][i];
+                        let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4);
+                        let card = {
+                            profile: cardInfo.customerPaymentProfileId,
+                            type: info,
+                            number: cardInfo.payment.creditCard.cardNumber
+                        };
+                        cards.push(card);
+                    }
+                }
+
+                let html = '<select name="payment-card" class="payment-card">';
+                for (let card of cards) {
+                    html += `<option value=${card.profile}>${card.type}</option>`;
+                }
+                html += '</select>';
+                $("#creditCards").html(html);
+            });
+        }
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
+            getSavedCards();
+
+            $(document).on('click', '.payment', function () {
+                if (parseInt($(this).val()) === 1) {
+                    $("#cc_form").show();
+                } else {
+                    $("#cc_form").hide();
+                }
+            });
+
             // make sure we have a cookie
             var admin = Cookies.get('admin');
             if (!admin) { window.close(); }
@@ -392,57 +443,80 @@
                 try {
                     const total = parseFloat($("#total").val());
                     if (total > 0) {
-                        // Validation code
-                        const first = $("#cc-first").val().trim();
-                        const last = $("#cc-last").val().trim();
-                        const num = $("#cc-number").val().trim();
-                        const exp = $("#cc-exp").val().trim();
-                        const zip = $("#zip").val().trim();
-                        const cvv = $("#x_card_code").val().trim();
+                        let info = {};
+                        info.cc = {};
 
-                        if (!first || !last || !num || !exp || !zip || !cvv) {
-                            alert("You must fill in all fields.");
+                        // make sure we have a payment method selected
+                        if (!$(".payment:checked").length) {
+                            alert("You must choose a payment method.");
+                            $("#purchase").attr('data-processing', 'false')
+                            $("#purchase").attr('disabled', false);
                             return false;
                         }
 
-                        if (isNaN(num) || isNaN(exp) || isNaN(cvv)) {
-                            alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
-                            return false;
+                        // Add this section to handle saved cards
+                        const paymentMethod = $(".payment:checked").val();
+                        if (parseInt(paymentMethod) === 0) {
+                            info.cc.on_file = 1
+                            info.cc.card_id = parseInt($(".payment-card").val());
+                        } else {
+                            // Validation code
+                            const first = $("#cc-first").val().trim();
+                            const last = $("#cc-last").val().trim();
+                            const num = $("#cc-number").val().trim();
+                            const exp = $("#cc-exp").val().trim();
+                            const zip = $("#zip").val().trim();
+                            const cvv = $("#x_card_code").val().trim();
+
+                            if (!first || !last || !num || !exp || !zip || !cvv) {
+                                alert("You must fill in all fields.");
+                                return false;
+                            }
+
+                            if (isNaN(num) || isNaN(exp) || isNaN(cvv)) {
+                                alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+                                return false;
+                            }
+
+                            info.cc.on_file = 0
+                            info.cc.first = first;
+                            info.cc.last = last;
+                            info.cc.num = num;
+                            info.cc.exp = exp;
+                            info.cc.cvv = cvv;
+                            info.cc.zip = zip;
+                            info.zip = zip;
                         }
 
-                        // Build data object
-                        const info = {
-                            year,
-                            admin,
-                            amount: total,
-                            cc: { first, last, num, exp, cvv },
-                            zip,
-                            menorah: [],
-                            brochure: [],
-                            transaction_id: Date.now() + Math.random().toString(36).substring(7)
-                        };
+                        info.year = year;
+                        info.admin = admin;
+                        info.amount = total;
+                        info.transaction_id = Date.now() + Math.random().toString(3).substring(7);
+                        info.menorah = []
+                        info.brochure = []
+                        info.yom_tov = 'Chanuka';
 
                         // Collect menorah purchases
-                        $("input.menorah").each(function() {
+                        $("input.menorah").each(function () {
                             const id = parseInt($(this).attr('id'));
                             const qty = parseInt($(this).val());
                             if (qty > 0) {
-                                info.menorah.push({ user: id, qty });
+                                info.menorah.push({user: id, qty});
                             }
                         });
 
                         // Collect brochure purchases
-                        $("input.brochure").each(function() {
+                        $("input.brochure").each(function () {
                             const id = parseInt($(this).attr('id'));
                             const qty = parseInt($(this).val());
                             if (qty > 0) {
-                                info.brochure.push({ user: id, qty });
+                                info.brochure.push({user: id, qty});
                             }
                         });
 
-                        const response = await $.post('ajax/payment.php', { info });
+                        const response = await $.post('ajax/payment.php', {info});
                         const result = JSON.parse(response);
-                        
+
                         if (result.success) {
                             const totalMenorahs = info.menorah.reduce((sum, item) => sum + item.qty, 0);
                             const totalBrochures = info.brochure.reduce((sum, item) => sum + item.qty, 0);
