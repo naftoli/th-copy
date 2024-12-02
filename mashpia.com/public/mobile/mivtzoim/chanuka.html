@@ -180,7 +180,7 @@
                             <h2>Checkout</h2>
 
                             <div id="cc_selection">
-                                <div class="form-group">
+                                <div class="form-group" style="width: 300px;">
                                     <input type="radio" name="payment" class="payment" id="payment_1" value="0"/>
                                     <label for="payment_1">Use credit card on file ending in</label>
                                     <span id="creditCards"></span>
@@ -239,37 +239,16 @@
         if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
             $(".bug-report").hide()
         }
-        // Add this new function to get saved cards
-        function getSavedCards() {
-            $.post('../../chidonOld/chidon_drive/ajax/getAdminInfo.php', {admin}, function (result) {
-                const adminInfo = JSON.parse(result);
-                let cards = [];
-                if (adminInfo['cards']) {
-                    for (let i in adminInfo['cards']) {
-                        let cardInfo = adminInfo['cards'][i];
-                        let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4);
-                        let card = {
-                            profile: cardInfo.customerPaymentProfileId,
-                            type: info,
-                            number: cardInfo.payment.creditCard.cardNumber
-                        };
-                        cards.push(card);
-                    }
-                }
-
-                let html = '<select name="payment-card" class="payment-card">';
-                for (let card of cards) {
-                    html += `<option value=${card.profile}>${card.type}</option>`;
-                }
-                html += '</select>';
-                $("#creditCards").html(html);
-            });
-        }
     </script>
     <script>
         document.addEventListener("DOMContentLoaded", function(event) {
-            getSavedCards();
+            // make sure we have a cookie
+            var admin = Cookies.get('admin');
+            if (!admin) { window.close(); }
 
+            // Get saved cards
+            getSavedCards();
+            // update which form to show
             $(document).on('click', '.payment', function () {
                 if (parseInt($(this).val()) === 1) {
                     $("#cc_form").show();
@@ -277,10 +256,6 @@
                     $("#cc_form").hide();
                 }
             });
-
-            // make sure we have a cookie
-            var admin = Cookies.get('admin');
-            if (!admin) { window.close(); }
 
             var menoraCost = 2.5
             var brochureCost = 0.25
@@ -536,6 +511,33 @@
                     $("#purchase").attr('data-processing', 'false');
                     $("#purchase").attr('disabled', false);
                 }
+            }
+
+            // Add this new function to get saved cards
+            function getSavedCards() {
+                $.post('../../chidonOld/chidon_drive/ajax/getAdminInfo.php', {admin}, function (result) {
+                    const adminInfo = JSON.parse(result);
+                    let cards = [];
+                    if (adminInfo['cards']) {
+                        for (let i in adminInfo['cards']) {
+                            let cardInfo = adminInfo['cards'][i];
+                            let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4);
+                            let card = {
+                                profile: cardInfo.customerPaymentProfileId,
+                                type: info,
+                                number: cardInfo.payment.creditCard.cardNumber
+                            };
+                            cards.push(card);
+                        }
+                    }
+
+                    let html = '<select name="payment-card" class="payment-card">';
+                    for (let card of cards) {
+                        html += `<option value=${card.profile}>${card.type}</option>`;
+                    }
+                    html += '</select>';
+                    $("#creditCards").html(html);
+                });
             }
         });
     </script>
