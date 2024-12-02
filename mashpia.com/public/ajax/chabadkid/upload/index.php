@@ -1,10 +1,11 @@
 <?php
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
-
+echo 'first';
 $admin_auth = ['school'];
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
+    echo 'hi';
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
     $year = GlobalSettings::getChidonYear();
     $school_number = isset($_POST['school']) ? mysql_real_escape_string($_POST['school']) : 0;
