@@ -465,11 +465,14 @@
 					},
 					createOrder: function (data, actions) {
 						const amount = $("#donationAmount").val();
+						const name = $("#name").val().trim();
 						return actions.order.create({
 							purchase_units: [{
 								amount: {
 									value: amount
-								}
+								},
+								description: "Chidon Drive Donation from " + name + " for the family of " +
+										admin_id + "."
 							}]
 						});
 					},
