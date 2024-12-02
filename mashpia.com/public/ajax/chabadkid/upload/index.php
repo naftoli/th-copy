@@ -42,7 +42,6 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
         $resultChidon = $MASHPIA_DB->query($sqlChidon);
         if ($chidon = $resultChidon->fetch()) {
             $enrolled = true;
-            $chidon = $resultChidon->fetch_assoc();
             $row['th_chidon_id'] = $chidon['th_chidon_id'];
         }
         $row['chidon_enrolled'] = $enrolled ? 1 : 0;
