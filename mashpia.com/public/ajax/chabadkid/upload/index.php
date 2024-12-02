@@ -2,7 +2,7 @@
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
-    $year = GlobalSettings::getChidonYear();
+    $year = GlobalSettings::getChidonYear(); // GlobalSettings class already loaded in header
     $school_number = isset($_POST['school']) ? mysql_real_escape_string($_POST['school']) : 0;
     $user_id = isset($_POST['user']) ? mysql_real_escape_string($_POST['user']) : 0;
     $info = [];
@@ -40,9 +40,8 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
         $enrolled = false;
         $sqlChidon = "select * from th_chidon where year = $year and user_id = " . $row['user_id'];
         $resultChidon = $MASHPIA_DB->query($sqlChidon);
-        if ($resultChidon->num_rows > 0) {
+        if ($chidon = $resultChidon->fetch()) {
             $enrolled = true;
-            $chidon = $resultChidon->fetch_assoc();
             $row['th_chidon_id'] = $chidon['th_chidon_id'];
         }
         $row['chidon_enrolled'] = $enrolled ? 1 : 0;
