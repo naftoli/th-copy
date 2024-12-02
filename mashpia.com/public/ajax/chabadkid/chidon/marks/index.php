@@ -37,7 +37,6 @@ function checkTrackAndSchool($user_id, $level) {
 
 $test_num = intval($_POST['test_num']);
 $closing_dates = ChidonTests::getClosingDates();
-$closing_dates[1] = new DateTime('2024-12-03 00:00:00', new DateTimeZone('America/New_York'));
 $today = new DateTime();
 if ($today > $closing_dates[$test_num - 1]) { // closing date of tests
     echo json_encode([
@@ -97,7 +96,7 @@ if ($test_num == 4) {
             foreach ($other as $type => $scores) {
                 foreach ($scores as $level => $mark) {
                     $marks[$id][$test_num]["$type"] = $mark;
-                    $levels[$id][$test_num]["$type"] = $level;
+                    $levels[$id][$test_num] = $level;
                 }
             }
         }
