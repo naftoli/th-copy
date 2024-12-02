@@ -65,10 +65,10 @@ for ($i = 1; $i <= 4; $i++) {
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown1 = new DateTime('2024-11-12 05:00:00');
-    $shutdown2 = new DateTime('2024-12-01 05:00:00');
-    $shutdown3 = new DateTime('2025-01-15 05:00:00');
-    $shutdown4 = new DateTime('2025-02-10 05:00:00');
+    $shutdown1 = new DateTime('2024-11-12 00:00:00', new DateTimeZone('America/New_York'));
+    $shutdown2 = new DateTime('2024-12-05 00:00:00', new DateTimeZone('America/New_York'));
+    $shutdown3 = new DateTime('2025-01-15 00:00:00', new DateTimeZone('America/New_York'));
+    $shutdown4 = new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'));
 
     if ($today >= $shutdown1) {
         $disable[1] = true;
