@@ -1,12 +1,8 @@
 <?php
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-echo 'first';
-$admin_auth = ['school'];
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
-    echo 'hi';
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+    require $_SERVER['DOCUMENT_ROOT'] . '/class.globalsettings.php';
     $year = GlobalSettings::getChidonYear();
     $school_number = isset($_POST['school']) ? mysql_real_escape_string($_POST['school']) : 0;
     $user_id = isset($_POST['user']) ? mysql_real_escape_string($_POST['user']) : 0;
@@ -36,16 +32,18 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
     } else if ($user_id > 0) {
         $sql .= "WHERE u.user_id = $user_id";
     }
-    $result = mysql_query($sql);
-    while ($row = mysql_fetch_assoc($result)) {
+    $stmt = $MASHPIA_DB->query($sql);
+    $rows = $stmt->fetchAll(MYSQLI_ASSOC);
+    foreach ($rows as $row) {
+        // add chidon id to row (if exists)
         $row['th_chidon_id'] = 0;
         // find out if child is currently enrolled into chidon this yr
         $enrolled = false;
         $sqlChidon = "select * from th_chidon where year = $year and user_id = " . $row['user_id'];
-        $resultChidon = mysql_query($sqlChidon);
-        if (mysql_num_rows($resultChidon) > 0) {
+        $resultChidon = $MASHPIA_DB->query($sqlChidon);
+        if ($resultChidon->num_rows > 0) {
             $enrolled = true;
-            $chidon = mysql_fetch_assoc($resultChidon);
+            $chidon = $resultChidon->fetch_assoc();
             $row['th_chidon_id'] = $chidon['th_chidon_id'];
         }
         $row['chidon_enrolled'] = $enrolled ? 1 : 0;
