@@ -2,7 +2,6 @@
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
-    require $_SERVER['DOCUMENT_ROOT'] . '/class.globalsettings.php';
     $year = GlobalSettings::getChidonYear();
     $school_number = isset($_POST['school']) ? mysql_real_escape_string($_POST['school']) : 0;
     $user_id = isset($_POST['user']) ? mysql_real_escape_string($_POST['user']) : 0;
