@@ -1,5 +1,4 @@
 <?php
-echo "<pre>"; print_r($_POST); echo "</pre>";
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
@@ -33,7 +32,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
         $sql .= "WHERE u.user_id = $user_id";
     }
     $stmt = $MASHPIA_DB->query($sql);
-    $rows = $stmt->fetchAll(MYSQLI_ASSOC);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
         // add chidon id to row (if exists)
         $row['th_chidon_id'] = 0;

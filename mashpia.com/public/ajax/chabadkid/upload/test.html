@@ -1,0 +1,8 @@
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script>
+    auth = "JTaMd105nT" ;
+    school = 613777
+    $.post("index.php", {auth,school}, result => {
+        console.log(result)
+    })
+</script>
