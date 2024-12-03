@@ -142,14 +142,19 @@ function get_board_date(form, name, required)
 }
 
 
-function get_report()
+function get_report(file_num = 1)
 {
 	if ($("#class_id").val() == null)
 		var class_id = 0;
 	else
 		var class_id = $("#class_id").val();
 
-	var url = "user_possible_medals.php?school_id=" + $("#school_id").val() + "&class_id=" + class_id + "&start_date=" + $("#start_date").val() + "&end_date=" + $("#end_date").val();
+	files = {
+		1: 'user_possible_medals.php',
+		2: 'user_possible_medals2.php'
+	}
+
+	var url = files[file_num] + "?school_id=" + $("#school_id").val() + "&class_id=" + class_id + "&start_date=" + $("#start_date").val() + "&end_date=" + $("#end_date").val();
 	
 	var http = getHTTPObject();
 	http.open("GET", url, true);
