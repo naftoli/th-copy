@@ -37,14 +37,14 @@ curl_close($ch);
 
 if (!$resp->success) {
     $error = "Please click on the reCAPTCHA box.";
-    header("Location: https://mashpia.com/donate/index.php?error=" . urlencode($error));
+    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode($error));
     exit;
 }
 
 $amount = (int)$_POST['amount'];
 if ($amount <= 0) {
     $error = "You have not entered a valid amount!";
-    header("Location: https://mashpia.com/donate/payment.php?error=" . urlencode($error));
+    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode($error));
     exit;
 }
 
@@ -64,10 +64,11 @@ $zip		= $_POST['cczip'];
 $email 		= $_POST['email'];
 $phone		= $_POST['phone'];
 $cvv		= $_POST['cccvv'];
+$country    = $_POST['cccountry'] ?? '';
 
 if (! ($card_num && $exp_date && $first_name && $last_name && $address && $city && $state && $zip && $email && $phone && $cvv) ) {
     $error = "All fields are mandatory, please try again.";
-    header("Location: https://mashpia.com/donate/payment.php?error=" . urlencode( $error ));
+    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode( $error ));
     exit;
 }
 
@@ -137,10 +138,10 @@ if ($charged) {
     $send_mail->send_mail($mail_parms);
 
     $successMessage = "Thank you for your payment of $" . $formattedAmount . ". You should receive an email confirmation shortly.";
-    header("Location: " . SITE_URL . "/donate/payment.php?msg=" . urlencode($successMessage));
+    header("Location: " . SITE_URL . "/payment/index.php?msg=" . urlencode($successMessage));
     exit;
 } else {
-    header("Location: " . SITE_URL . "/donate/payment.php?error=" . urlencode($response));
+    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode($response));
     exit;
 }
 ?>

@@ -29,7 +29,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
     <div class="row">
         <div class="col-xs-2"></div>
         <div class="col-xs-8">
-            <img src="/mobile/img_new/TH Logo-colorful-svg.svg" class="img-responsive center-block">
+            <img src="/mobile/img_new/TH%20Logo-colorful-svg.svg" class="img-responsive center-block">
         </div>
         <div class="col-xs-2"></div>
     </div>
@@ -47,7 +47,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
         </div>
     <? endif; ?>
 
-    <form action="https://mashpia.com/donate/process_payment.php" method="post">
+    <form action="process_payment.php" method="post">
         <div class="col-xs-12">
             <div class="form-group">
                 <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" required />
