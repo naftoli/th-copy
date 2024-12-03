@@ -104,10 +104,15 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
             </div>
         </div>
 
-        <div class="col-xs-12">
-            <div align="center">
-                $ <input type="text" inputmode="numeric" id="amount" name="amount" pattern="^\d*\.?\d{0,2}$"
-                         placeholder="00.00" step=".01" min="0.01" max="99999.99" style="width: 75px;" required />
+        <div class="col-xs-6">
+            <div class="form-group">
+                <input type="text" name="invoice" id="invoice" class="form-control" placeholder="Invoice Number" required />
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="form-group">
+                <input type="text" inputmode="numeric" id="amount" name="amount" pattern="^\d*\.?\d{0,2}$" class="form-control"
+                       placeholder="Payment Amount (numbers only)" step=".01" min="0.01" max="99999.99" required />
             </div>
         </div>
 
