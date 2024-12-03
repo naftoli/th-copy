@@ -1,6 +1,7 @@
 <?php
 class upm_subject_user {
 	public $user_id;
+    public $user_serial;
 	public $first;
 	public $last;
 	public $school_type_id;
@@ -24,6 +25,7 @@ class upm_subject_user {
 	function __construct($row)
 	{
 		$this->user_id = $row['user_id'];
+        $this->user_serial = $row['user_serial'];
 		$this->first = $row['first'];
 		$this->last = $row['last'];	
 		$this->school_type_id = $row['school_type_id'];

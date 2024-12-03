@@ -42,7 +42,7 @@ class upm_subject {
 	
 	function get_subject_users($school_id, $class_id, $start_date, $end_date)
 	{
-		$sql = "SELECT u.user_id, u.first, u.last, u.school_type_id, u.class_id, c.class_grade, c.class_sub ";
+		$sql = "SELECT u.user_id, u.user_serial, u.first, u.last, u.school_type_id, u.class_id, c.class_grade, c.class_sub ";
 		$sql = $sql . "FROM users AS u ";
 		$sql = $sql . "LEFT JOIN classes AS c USING (class_id) ";
 		$sql = $sql . "JOIN user_tracks AS ut ON (ut.user_id=u.user_id AND ut.subject_id=" . $this->subject_id . ") ";
