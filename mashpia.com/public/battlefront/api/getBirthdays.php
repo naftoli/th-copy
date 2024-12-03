@@ -87,6 +87,10 @@ foreach ( $schools as $id => $school ) {
         $he_birthday = jewishtojd($hMonth, $hDay, $hYear);
         $he_birthday_str = jdtojewish($he_birthday, true, CAL_JEWISH_ADD_GERESHAYIM);
         $he_birthday_str = iconv('WINDOWS-1255', 'UTF-8', $he_birthday_str);
+        // convert to array based on spaces and then remove the last element which is the year
+        $he_birthday_arr = explode(" ", $he_birthday_str);
+        unset($he_birthday_arr[count($he_birthday_arr)-1]);
+        $he_birthday_str = implode(" ", $he_birthday_arr);
         if (! in_array($he_birthday, array_keys($heDates))) $heDates[$he_birthday] = $he_birthday_str;
 
         if ($he_birthday >= $start && $he_birthday <= $end) {
