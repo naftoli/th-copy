@@ -55,11 +55,21 @@
   function initialize(name) {
     const names = name.split(' ')
     if (names.length > 1) {
-      const last_name = names[names.length - 1]
+      let last_name = names[names.length - 1]
+      // if last name is empty remove from names array and then get the last name from the previous element
+      // repeat until we have a valid last name
+      while (last_name.trim() == '') {
+        names.pop()
+        last_name = names[names.length - 1]
+      }
+      // capitalize first letter of last name
+      last_name = last_name.charAt(0).toUpperCase() + last_name.slice(1);
       // delete last name from names array
       names.pop()
       // remove empty elements or non alphanumeric characters
       const initials = names.map(n => n[0]).filter(n => n && n.match(/[a-z]/i))
+      // capitalize each initial
+      initials.map((initial, i) => initials[i] = initial.toUpperCase())
       return initials.join('. ') + '. ' + last_name
     }
     return name

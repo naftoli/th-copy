@@ -27,6 +27,7 @@ $schoolsUsers = [];
 $heDates = [];
 
 foreach ( $schools as $id => $school ) {
+    if ($id == 612) continue;
     $s = new SchoolsUsers( $id );
     //get all users and filter out correct ones
     $users = $s->getUsers();
