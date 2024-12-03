@@ -156,7 +156,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 		<br />
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 		<script>
-			//var ip = "<?=$ip?>";
+			//var ip = "<?php //=$ip?>";
 			$( function() {
 				//checkFraud();
 				//$(".alert").hide();
