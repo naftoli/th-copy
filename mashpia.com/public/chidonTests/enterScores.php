@@ -68,15 +68,15 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
 // initialize all tests to not be disabled
 $disabled = false;
 $disableIyun = false;
-$exceptions = [4,54,269];
+$exceptions = [];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = ChidonTests::getClosingDates();
     if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions))
         $disabled = true;
-    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
-        $disableIyun = true;
+//    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
+//        $disableIyun = true;
 }
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
@@ -177,8 +177,10 @@ $stmtReportCards = $MASHPIA_DB->prepare("
                         if ($type == 'expert') $class = 'expert';
                         $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
                         echo "<td><input type='text' class='$type' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
-                        if ($type != 'genius' && $disabled) echo "disabled ";
-                        else if ($type == 'genius' && ($levelValue == 1 || $disableIyun)) echo "disabled "; // don't set variable to disabled b/c then the test levels will be disabled
+//                        if ($type != 'genius' && $disabled) echo "disabled ";
+//                        else if ($type == 'genius' && ($levelValue == 1 || $disableIyun)) echo "disabled "; // don't set variable to disabled b/c then the test levels will be disabled
+                        if ($disabled) echo "disabled ";
+                        else if ($type == 'genius' && $levelValue == 1) echo "disabled ";
                         echo "/></td>";
                     }
 
