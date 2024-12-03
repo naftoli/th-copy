@@ -70,7 +70,7 @@ $exceptions = [4,54,269];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown = ChidonTests::getShutdownDates();
+    $shutdown = ChidonTests::getClosingDates();
     if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions))
         $disabled = true;
     if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
