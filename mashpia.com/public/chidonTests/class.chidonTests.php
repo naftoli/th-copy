@@ -898,6 +898,20 @@ class ChidonTests
             'details'   => $details
         ];
     }
+
+    /**
+     * Create function to find out which dates to close marking
+     * @param string $date
+     * @return boolean
+     */
+    public static function getClosingDates() {
+        $shutdown = [];
+        $shutdown[1] = new DateTime('2024-11-26 12:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[2] = new DateTime('2025-01-17 00:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[3] = new DateTime('2025-02-17 00:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[3] = new DateTime('2025-03-19 00:00:00', new DateTimeZone('America/New_York'));
+        return $shutdown;
+    }
 }
 
 class KHK {
@@ -1057,19 +1071,5 @@ class KHK {
             }
         }
         return $passed;
-    }
-
-    /**
-     * Create function to find out which dates to close marking
-     * @param string $date
-     * @return boolean
-     */
-    public static function getClosingDates() {
-        $shutdown = [];
-        $shutdown[1] = new DateTime('2024-11-26 12:00:00', new DateTimeZone('America/New_York'));
-        $shutdown[2] = new DateTime('2025-01-17 00:00:00', new DateTimeZone('America/New_York'));
-        $shutdown[3] = new DateTime('2025-02-17 00:00:00', new DateTimeZone('America/New_York'));
-        $shutdown[3] = new DateTime('2025-03-19 00:00:00', new DateTimeZone('America/New_York'));
-        return $shutdown;
     }
 }

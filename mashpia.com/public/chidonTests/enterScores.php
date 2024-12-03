@@ -42,10 +42,12 @@ if ($admin_user['auth'] != 'super') {
 }
 
 if (isset($_POST['scores'])) {
-    if (isset($_POST['yr']) && $_POST['yr'] != $year) {} // make sure not to save marks from prev yrs
-    else $ct->insertScores($_POST['scores'], $_POST['levels']);
-    header("Location: marks.php?test_num=" . $testNumber);
-    exit;
+    // make sure not to save marks from prev yrs
+    if (!isset($_POST['yr']) || (isset($_POST['yr']) && $_POST['yr'] == $year)) {
+        $ct->insertScores($_POST['scores'], $_POST['levels']);
+        header("Location: marks.php?test_num=" . $testNumber);
+        exit;
+    }
 }
 
 if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
