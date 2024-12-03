@@ -11,8 +11,10 @@
 //    exit;
 //}
 
+define('SITE_URL', 'https://mashpia.com');
+
 chdir('../');
-require_once 'db.php';
+require_once '/api/header/db.php';
 foreach ($_POST as $k => $v) {
     $_POST[$k] = mysql_real_escape_string(trim($v));
 }
@@ -82,45 +84,63 @@ if ($response_array) {
         $response .= $response_array[6] . ":";
         $response .= $response_array[9];
         $charged = true;
-    }
-    else {
+    } else {
         $response .= $response_array[3] . "\n";
     }
 }
-//} else {
-//	$charged = true;
-//	$response = 'testing';
-//}
 
 if ($charged) {
-    $sql = "insert into payments set 
-			email = '$email', 
-			phone = '$phone', 
-			amount = $amount, 
-			response = '$response', 
-			name = \"" . $first_name . ' ' . $last_name . "\", 
-			address = \"" . $address . ' ' . $city . ',' . $state . ' ' . $zip . ' ' . $country . "\"";
-    @mysql_query($sql);
-
     // send confirmation email
-    // if you want to modify who gets this email, then change lines following the BCC
     include_once("classes/send_mail.php");
     include_once("constant_file.php");
 
-    $mail_parms = array();
-    $mail_parms['to'] = "$email";
-    $mail_parms['subject'] = "Confirmation of Credit Card Transaction";
-    $mail_parms['message'] = "Thank you for your payment to Tzivos Hashem. Your credit card has been charged $" . number_format( $amount, 2 ) .". Your authorization ID is: " . $response_array[4];
-    $mail_parms['headers'] .= "From: cth@mashpia.com" . "\r\n" ;
+    try {
+        $pdo = $MASHPIA_DB;
+        $stmt = $pdo->prepare("INSERT INTO payments (email, phone, amount, response, name, address) 
+                              VALUES (:email, :phone, :amount, :response, :name, :address)");
+        
+        $fullName = $first_name . ' ' . $last_name;
+        $fullAddress = $address . ' ' . $city . ',' . $state . ' ' . $zip . ' ' . $country;
+        
+        $stmt->execute([
+            ':email' => $email,
+            ':phone' => $phone,
+            ':amount' => $amount,
+            ':response' => $response,
+            ':name' => $fullName,
+            ':address' => $fullAddress
+        ]);
+    } catch (PDOException $e) {
+        error_log("Payment processing error: " . $e->getMessage());
+        
+        // Send admin notification
+        $adminMail = new MailClass();
+        $adminMail->send_mail([
+            'to' => "naftolir@gmail.com",
+            'subject' => "Payment Processing Error",
+            'message' => $e->getMessage(),
+            'headers' => "From: cth@mashpia.com\r\n"
+        ]);
+    }
+    // Format amount consistently
+    $formattedAmount = number_format($amount, 2);
+    
+    // Email notification
+    $mail_parms = [
+        'to' => $email,
+        'subject' => "Confirmation of Credit Card Transaction",
+        'message' => "Thank you for your payment to Tzivos Hashem. Your credit card has been charged $" . $formattedAmount . ". Your authorization ID is: " . $response_array[4],
+        'headers' => "From: cth@mashpia.com\r\n"
+    ];
 
     $send_mail = new MailClass();
     $send_mail->send_mail($mail_parms);
 
-    $str = "Thank you for your payment of $" . $amount . ".00. <br />You should receive an email confirmation shortly.";
-    header("Location: https://mashpia.com/donate/payment.php?msg=" . urlencode($str));
+    $successMessage = "Thank you for your payment of $" . $formattedAmount . ". You should receive an email confirmation shortly.";
+    header("Location: " . SITE_URL . "/donate/payment.php?msg=" . urlencode($successMessage));
     exit;
 } else {
-    header("Location: https://mashpia.com/donate/payment.php?error=" . urlencode($response));
+    header("Location: " . SITE_URL . "/donate/payment.php?error=" . urlencode($response));
     exit;
 }
 ?>
