@@ -58,7 +58,7 @@ $end_date = gri('end_date', unixtojd()+30);
                     $("#class_id").change(function ()
                     {
                         // ***** in icalendar.js ***** //
-                        get_report_two();
+                        // get_report_two();
                     });
 
                     get_classes();
@@ -74,33 +74,33 @@ $end_date = gri('end_date', unixtojd()+30);
                             $("#class_id").html(options);
 
                             // ***** in icalendar.js ***** //
-                            get_report();
+                            // get_report();
                         });
                     }
 
-                    function get_report_two()
-                    {
-                        if ($("#class_id").val() == null)
-                            var class_id = 0;
-                        else
-                            var class_id = $("#class_id").val();
-
-                        var url = "user_possible_medals2.php?school_id=" + $("#school_id").val() + "&class_id=" + class_id + "&start_date=" + $("#start_date").val() + "&end_date=" + $("#end_date").val();
-
-                        var http = getHTTPObject();
-                        http.open("GET", url, true);
-
-                        http.onreadystatechange = function() {
-
-                            if (http.readyState == 4 && http.status == 200)
-                            {
-                                $("#report_div").html(http.responseText);
-                            }
-
-                        }
-
-                        http.send(null);
-                    }
+                    // function get_report_two()
+                    // {
+                    //     if ($("#class_id").val() == null)
+                    //         var class_id = 0;
+                    //     else
+                    //         var class_id = $("#class_id").val();
+                    //
+                    //     var url = "user_possible_medals2.php?school_id=" + $("#school_id").val() + "&class_id=" + class_id + "&start_date=" + $("#start_date").val() + "&end_date=" + $("#end_date").val();
+                    //
+                    //     var http = getHTTPObject();
+                    //     http.open("GET", url, true);
+                    //
+                    //     http.onreadystatechange = function() {
+                    //
+                    //         if (http.readyState == 4 && http.status == 200)
+                    //         {
+                    //             $("#report_div").html(http.responseText);
+                    //         }
+                    //
+                    //     }
+                    //
+                    //     http.send(null);
+                    // }
 
                 });
             </script>
@@ -145,6 +145,8 @@ $end_date = gri('end_date', unixtojd()+30);
                 <INPUT type="hidden" name="end_date" id="end_date" value="<?=$end_date?>"> <?=T_('Usually, last day of school or term.')?>
 
                 <BR>
+
+                <button onclick="get_report();"><?=T_('Get Report')?></button><br /><br />
 
             </p>
 

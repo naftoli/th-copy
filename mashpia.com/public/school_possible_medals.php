@@ -58,7 +58,7 @@ $end_date = gri('end_date', unixtojd()+30);
 								$("#class_id").change(function () 
 								{
 									// ***** in icalendar.js ***** //
-									get_report_two();
+									// get_report_two();
 								});
 																		
 								get_classes();
