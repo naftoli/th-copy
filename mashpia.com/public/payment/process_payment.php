@@ -56,7 +56,8 @@ $card_num 	= $_POST['ccnum'];
 $exp_date 	= $_POST['ccexp'];
 $first_name = $_POST['ccfname'];
 $last_name	= $_POST['cclname'];
-$description = "Payment from " . ucwords($first_name) . ' ' . ucwords($last_name) . " - " . $_POST['desc'];
+$invoice    = $_POST['invoice'];
+$description = "Payment from " . ucwords($first_name) . ' ' . ucwords($last_name) . " for Invoice #" . $invoice . " (" . $_POST['desc'] . ")";
 $address	= $_POST['ccaddress'] . ' ' . $_POST['ccaddress2'];
 $city		= $_POST['cccity'];
 $state		= $_POST['ccstate'];
@@ -71,7 +72,6 @@ if (! ($card_num && $exp_date && $first_name && $last_name && $address && $city 
     header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode( $error ));
     exit;
 }
-
 
 //if ($email != 'naftolir@gmail.com') {
 require_once 'authorize.php';
@@ -95,34 +95,6 @@ if ($charged) {
     include_once("classes/send_mail.php");
     include_once("constant_file.php");
 
-    try {
-        $pdo = $MASHPIA_DB;
-        $stmt = $pdo->prepare("INSERT INTO payments (email, phone, amount, response, name, address) 
-                              VALUES (:email, :phone, :amount, :response, :name, :address)");
-        
-        $fullName = $first_name . ' ' . $last_name;
-        $fullAddress = $address . ' ' . $city . ',' . $state . ' ' . $zip . ' ' . $country;
-        
-        $stmt->execute([
-            ':email' => $email,
-            ':phone' => $phone,
-            ':amount' => $amount,
-            ':response' => $response,
-            ':name' => $fullName,
-            ':address' => $fullAddress
-        ]);
-    } catch (PDOException $e) {
-        error_log("Payment processing error: " . $e->getMessage());
-        
-        // Send admin notification
-        $adminMail = new MailClass();
-        $adminMail->send_mail([
-            'to' => "naftolir@gmail.com",
-            'subject' => "Payment Processing Error",
-            'message' => $e->getMessage(),
-            'headers' => "From: cth@mashpia.com\r\n"
-        ]);
-    }
     // Format amount consistently
     $formattedAmount = number_format($amount, 2);
     
@@ -136,6 +108,36 @@ if ($charged) {
 
     $send_mail = new MailClass();
     $send_mail->send_mail($mail_parms);
+
+    try {
+        $pdo = $MASHPIA_DB;
+        $stmt = $pdo->prepare("INSERT INTO payments (email, phone, amount, response, name, address, invoice) 
+                              VALUES (:email, :phone, :amount, :response, :name, :address, :invoice)");
+
+        $fullName = $first_name . ' ' . $last_name;
+        $fullAddress = $address . ' ' . $city . ',' . $state . ' ' . $zip . ' ' . $country;
+
+        $stmt->execute([
+            ':email' => $email,
+            ':phone' => $phone,
+            ':amount' => $amount,
+            ':response' => $response,
+            ':name' => $fullName,
+            ':address' => $fullAddress,
+            ':invoice' => $invoice
+        ]);
+    } catch (PDOException $e) {
+        error_log("Payment Database Error: " . $e->getMessage());
+
+        // Send admin notification
+        $adminMail = new MailClass();
+        $adminMail->send_mail([
+            'to' => "naftolir@gmail.com",
+            'subject' => "Payment Database Error",
+            'message' => $e->getMessage(),
+            'headers' => "From: cth@mashpia.com\r\n"
+        ]);
+    }
 
     $successMessage = "Thank you for your payment of $" . $formattedAmount . ". You should receive an email confirmation shortly.";
     header("Location: " . SITE_URL . "/payment/index.php?msg=" . urlencode($successMessage));
