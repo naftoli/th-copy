@@ -29,6 +29,13 @@ function paymentInProgress() {
 }
 // ************** END PAYMENT FUNCTIONS ***************************/
 
+function getCustomerID($admin_id) {
+    $sql = "select authorize_customer_profile_id from admins where admin_id = " . $admin_id;
+    $result = mysql_query($sql);
+    $row = mysql_fetch_assoc($result);
+    return $row['authorize_customer_profile_id'];
+}
+
 $info = $_POST['info'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 
