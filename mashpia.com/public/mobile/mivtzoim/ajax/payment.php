@@ -9,7 +9,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php
 use classes\authorize\CustomerProfile;
 
 // ****************** PAYMENT FUNCTIONS ***************************/
-class PaymentProcessing {}
 function startPayment() {
     global $admin_id;
     $sql = "INSERT INTO payment_processing (admin_id) VALUES ($admin_id)";
@@ -28,7 +27,6 @@ function paymentInProgress() {
     $result = mysql_query($sql);
     return mysql_num_rows($result) > 0;
 }
-
 // ************** END PAYMENT FUNCTIONS ***************************/
 
 $info = $_POST['info'];

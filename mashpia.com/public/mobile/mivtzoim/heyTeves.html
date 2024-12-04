@@ -662,7 +662,7 @@
         $.post('../../chidonOld/chidon_drive/ajax/getAdminInfo.php', {admin}, function (result) {
             const adminInfo = JSON.parse(result);
             let cards = [];
-            if (adminInfo['cards']) {
+            if (adminInfo['cards'] && adminInfo['cards'].length) {
                 for (let i in adminInfo['cards']) {
                     let cardInfo = adminInfo['cards'][i];
                     let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4);
@@ -673,14 +673,16 @@
                     };
                     cards.push(card);
                 }
+                let html = '<select name="payment-card" class="payment-card">';
+                for (let card of cards) {
+                    html += `<option value=${card.profile}>${card.type}</option>`;
+                }
+                html += '</select>';
+                $("#creditCards").html(html);
+            } else {
+                $(".payment").eq(0).attr('disabled', true)
+                $(".payment").eq(1).trigger('click')
             }
-
-            let html = '<select name="payment-card" class="payment-card">';
-            for (let card of cards) {
-                html += `<option value=${card.profile}>${card.type}</option>`;
-            }
-            html += '</select>';
-            $("#creditCards").html(html);
         });
     }
 
