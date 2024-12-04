@@ -504,20 +504,20 @@
                         } else {
                             alert(result.error);
                         }
-                        $("#purchase").attr('data-processing', 'false');
-                        $("#purchase").attr('disabled', false);
-                        if (result.success) location.href = '/mobile';
+                        if (result.success) {
+                            $("#purchase").attr('data-processing', 'false');
+                            $("#purchase").attr('disabled', false);
+                            location.href = '/mobile';
+                        }
                     } catch (error) {
                         console.error(error);
                         alert("An error occurred while processing your purchase. Please try again.");
-                        $("#purchase").attr('data-processing', 'false');
-                        $("#purchase").attr('disabled', false);
                     }
                 } else {
                     alert("You have not indicated what you are purchasing.");
-                    $("#purchase").attr('data-processing', 'false');
-                    $("#purchase").attr('disabled', false);
                 }
+                $("#purchase").attr('data-processing', 'false');
+                $("#purchase").attr('disabled', false);
             }
 
             // Add this new function to get saved cards
