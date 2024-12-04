@@ -12,6 +12,28 @@ $year = GlobalSettings::getChidonRegYear();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
 use classes\authorize\CustomerProfile;
 
+// ****************** PAYMENT FUNCTIONS ***************************/
+function startPayment() {
+    global $admin_id;
+    $sql = "INSERT INTO payment_processing (admin_id) VALUES ($admin_id)";
+    mysql_query($sql);
+}
+
+function endPayment() {
+    global $admin_id;
+    $sql = "DELETE FROM payment_processing WHERE admin_id = $admin_id";
+    mysql_query($sql);
+}
+
+function paymentInProgress() {
+    global $admin_id;
+    $sql = "SELECT * FROM payment_processing WHERE admin_id = $admin_id";
+    $result = mysql_query($sql);
+    return mysql_num_rows($result) > 0;
+}
+// ************** END PAYMENT FUNCTIONS ***************************/
+
+
 // **************** FUNCTIONS **************** //
 function purchaseItems() {
     global $total, $admin_id, $cc_info;
@@ -115,22 +137,18 @@ $cc_info = $info->cc;
 $type = $info->type;
 $admin_id = encrypt_decrypt('decrypt', $info->admin);
 
-// Check if there's already a purchase in progress
-$sql = "SELECT COUNT(*) FROM purchase_processing WHERE admin_id = $admin_id";
-$result = mysql_query($sql);
-$row = mysql_fetch_row($result);
-
-if ($row[0] > 0) {
+// Check if there's already a payment in progress
+if (paymentInProgress()) {
+    // There's already a payment in progress
     echo json_encode([
         'success' => false,
-        'error' => 'Your purchase is already being processed. Please wait for it to complete.'
+        'error' => 'Your payment is already being processed. Please wait for it to complete.'
     ]);
     exit;
 }
 
-// Insert a record to indicate a purchase is in progress
-$sql = "INSERT INTO purchase_processing (admin_id) VALUES ($admin_id)";
-mysql_query($sql);
+// Insert a record to indicate a payment is in progress
+startPayment();
 
 $m = new MivtzoimPurchases();
 
@@ -149,6 +167,7 @@ if ($purchase_id > 0) {
     if ($res) {
         // update db with authorization
         $m->updatePurchase($purchase_id, $res);
+        endPayment();
         // send email
         $m->sendEmail($purchaseInfo, $list, $cc_info, $info->yom_tov);
         echo json_encode([
@@ -156,18 +175,16 @@ if ($purchase_id > 0) {
         ]);
     } else {
         $m->deletePurchase($purchase_id);
+        endPayment();
 //        echo json_encode([
 //            'success'   => false,
 //            'error'     => 'There was an error charging your card. You have not been charged. Please try again.'
 //        ]);
     }
 } else {
+    endPayment();
     echo json_encode([
         'success'   => false,
         'error'     => 'There was an error saving your purchase. You have not been charged. Please try again.'
     ]);
 }
-
-// After processing, remove the record
-$sql = "DELETE FROM purchase_processing WHERE admin_id = $admin_id";
-mysql_query($sql);
