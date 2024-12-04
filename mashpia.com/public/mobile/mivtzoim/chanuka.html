@@ -336,7 +336,6 @@
                     
                     for (var c in children) {
                         var child = children[c];
-                        console.log(child.user_registered)
                         child.menoraCost = menoraCost
                         child.brochureCost = brochureCost
                         if (
@@ -411,89 +410,89 @@
 
             async function purchaseSets(e) {
                 e.preventDefault();
-                
+
                 // Prevent double-submission
                 if ($("#purchase").attr('data-processing') === 'true') {
                     return false;
                 }
-                
+
                 $("#purchase").attr('data-processing', 'true');
                 $("#purchase").attr('disabled', true);
-                
-                try {
-                    const total = parseFloat($("#total").val());
-                    if (total > 0) {
-                        let info = {};
-                        info.cc = {};
 
-                        // make sure we have a payment method selected
-                        if (!$(".payment:checked").length) {
-                            alert("You must choose a payment method.");
-                            $("#purchase").attr('data-processing', 'false')
-                            $("#purchase").attr('disabled', false);
+                const total = parseFloat($("#total").val());
+                if (total > 0) {
+                    let info = {};
+                    info.cc = {};
+
+                    // make sure we have a payment method selected
+                    if (!$(".payment:checked").length) {
+                        alert("You must choose a payment method.");
+                        $("#purchase").attr('data-processing', 'false')
+                        $("#purchase").attr('disabled', false);
+                        return false;
+                    }
+
+                    // Add this section to handle saved cards
+                    const paymentMethod = $(".payment:checked").val();
+                    if (parseInt(paymentMethod) === 0) {
+                        info.cc.on_file = 1
+                        info.cc.card_id = parseInt($(".payment-card").val());
+                    } else {
+                        // Validation code
+                        const first = $("#cc-first").val().trim();
+                        const last = $("#cc-last").val().trim();
+                        const num = $("#cc-number").val().trim();
+                        const exp = $("#cc-exp").val().trim();
+                        const zip = $("#zip").val().trim();
+                        const cvv = $("#x_card_code").val().trim();
+
+                        if (!first || !last || !num || !exp || !zip || !cvv) {
+                            alert("You must fill in all fields.");
                             return false;
                         }
 
-                        // Add this section to handle saved cards
-                        const paymentMethod = $(".payment:checked").val();
-                        if (parseInt(paymentMethod) === 0) {
-                            info.cc.on_file = 1
-                            info.cc.card_id = parseInt($(".payment-card").val());
-                        } else {
-                            // Validation code
-                            const first = $("#cc-first").val().trim();
-                            const last = $("#cc-last").val().trim();
-                            const num = $("#cc-number").val().trim();
-                            const exp = $("#cc-exp").val().trim();
-                            const zip = $("#zip").val().trim();
-                            const cvv = $("#x_card_code").val().trim();
-
-                            if (!first || !last || !num || !exp || !zip || !cvv) {
-                                alert("You must fill in all fields.");
-                                return false;
-                            }
-
-                            if (isNaN(num) || isNaN(exp) || isNaN(cvv)) {
-                                alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
-                                return false;
-                            }
-
-                            info.cc.on_file = 0
-                            info.cc.first = first;
-                            info.cc.last = last;
-                            info.cc.num = num;
-                            info.cc.exp = exp;
-                            info.cc.cvv = cvv;
-                            info.cc.zip = zip;
-                            info.zip = zip;
+                        if (isNaN(num) || isNaN(exp) || isNaN(cvv)) {
+                            alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+                            return false;
                         }
 
-                        info.year = year;
-                        info.admin = admin;
-                        info.amount = total;
-                        info.transaction_id = Date.now() + Math.random().toString(3).substring(7);
-                        info.menorah = []
-                        info.brochure = []
-                        info.yom_tov = 'Chanuka';
+                        info.cc.on_file = 0
+                        info.cc.first = first;
+                        info.cc.last = last;
+                        info.cc.num = num;
+                        info.cc.exp = exp;
+                        info.cc.cvv = cvv;
+                        info.cc.zip = zip;
+                        info.zip = zip;
+                    }
 
-                        // Collect menorah purchases
-                        $("input.menorah").each(function () {
-                            const id = parseInt($(this).attr('id'));
-                            const qty = parseInt($(this).val());
-                            if (qty > 0) {
-                                info.menorah.push({user: id, qty});
-                            }
-                        });
+                    info.year = year;
+                    info.admin = admin;
+                    info.amount = total;
+                    info.transaction_id = Date.now() + Math.random().toString(3).substring(7);
+                    info.menorah = []
+                    info.brochure = []
+                    info.yom_tov = 'Chanuka';
 
-                        // Collect brochure purchases
-                        $("input.brochure").each(function () {
-                            const id = parseInt($(this).attr('id'));
-                            const qty = parseInt($(this).val());
-                            if (qty > 0) {
-                                info.brochure.push({user: id, qty});
-                            }
-                        });
+                    // Collect menorah purchases
+                    $("input.menorah").each(function () {
+                        const id = parseInt($(this).attr('id'));
+                        const qty = parseInt($(this).val());
+                        if (qty > 0) {
+                            info.menorah.push({user: id, qty});
+                        }
+                    });
 
+                    // Collect brochure purchases
+                    $("input.brochure").each(function () {
+                        const id = parseInt($(this).attr('id'));
+                        const qty = parseInt($(this).val());
+                        if (qty > 0) {
+                            info.brochure.push({user: id, qty});
+                        }
+                    });
+
+                    try {
                         const response = await $.post('ajax/payment.php', {info});
                         const result = JSON.parse(response);
 
@@ -502,17 +501,20 @@
                             const totalBrochures = info.brochure.reduce((sum, item) => sum + item.qty, 0);
                             const msg = `Thank you! You have successfully purchased ${totalMenorahs} Menorah Box(es) and ${totalBrochures} Brochure(s). Your child(ren)'s school will receive them for your child(ren).`;
                             alert(msg);
-                            location.reload();
                         } else {
                             alert(result.error);
                         }
-                    } else {
-                        alert("You have not indicated what you are purchasing.");
+                        $("#purchase").attr('data-processing', 'false');
+                        $("#purchase").attr('disabled', false);
+                        if (result.success) location.href = '/mobile';
+                    } catch (error) {
+                        console.error(error);
+                        alert("An error occurred while processing your purchase. Please try again.");
+                        $("#purchase").attr('data-processing', 'false');
+                        $("#purchase").attr('disabled', false);
                     }
-                } catch (error) {
-                    console.error(error);
-                    alert("An error occurred while processing your purchase. Please try again.");
-                } finally {
+                } else {
+                    alert("You have not indicated what you are purchasing.");
                     $("#purchase").attr('data-processing', 'false');
                     $("#purchase").attr('disabled', false);
                 }
@@ -540,6 +542,10 @@
                         }
                         html += '</select>';
                         $("#creditCards").html(html);
+                        // if payment card selection is being chosen, make sure the radio button is checked
+                        $(".payment-card").change( function() {
+                            $(".payment").eq(0).attr('checked', true);
+                        })
                     } else {
                         // select new card
                         $(".payment").eq(0).attr('disabled', true)

@@ -107,22 +107,34 @@ if ( $amount > 0 ) {
                 ]);
             } else {
                 // charge credit card on file
-                $cp = new CustomerProfile($customer_id);
-                $response = $cp->chargeCard($amount, $card_id, null, null, $description);
-                if (!is_array($response)) {
-                    // delete from db
+                try {
+                    $cp = new CustomerProfile($customer_id);
+                    $response = $cp->chargeCard($amount, $card_id, null, null, $description);
+                    if (!is_array($response)) {
+                        // delete from db
+                        $p->deletePurchase($purchase_id);
+                        endPayment();
+                        echo json_encode([
+                            'success' => false,
+                            'error' => $response
+                        ]);
+                    } else {
+                        $msg = $response['transactionResponse']['messages'][0]['description'] . ':' .
+                            $response['transactionResponse']['authCode'] . ':' . $response['transactionResponse']['transId'] . ':' .
+                            $amount;
+                        $p->updatePurchase($purchase_id, $msg);
+                        endPayment();
+                        echo json_encode([
+                            'success' => true
+                        ]);
+                    }
+                } catch (Exception $e) {
                     $p->deletePurchase($purchase_id);
                     endPayment();
                     echo json_encode([
                         'success' => false,
-                        'error' => $response
+                        'error' => $e->getMessage()
                     ]);
-                } else {
-                    $msg = $response['transactionResponse']['messages'][0]['description'] . ':' .
-                        $response['transactionResponse']['authCode'] . ':' . $response['transactionResponse']['transId'] . ':' .
-                        $amount;
-                    $p->updatePurchase($purchase_id, $msg);
-                    endPayment();
                 }
             }
         } else {
