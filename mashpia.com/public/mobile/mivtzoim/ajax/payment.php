@@ -8,15 +8,35 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mivtzoim_purchases/classes/MivtzoimPu
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
 use classes\authorize\CustomerProfile;
 
+// ****************** PAYMENT FUNCTIONS ***************************/
+class PaymentProcessing {}
+function startPayment() {
+    global $admin_id;
+    $sql = "INSERT INTO payment_processing (admin_id) VALUES ($admin_id)";
+    mysql_query($sql);
+}
+
+function endPayment() {
+    global $admin_id;
+    $sql = "DELETE FROM payment_processing WHERE admin_id = $admin_id";
+    mysql_query($sql);
+}
+
+function paymentInProgress() {
+    global $admin_id;
+    $sql = "SELECT * FROM payment_processing WHERE admin_id = $admin_id";
+    $result = mysql_query($sql);
+    return mysql_num_rows($result) > 0;
+}
+
+// ************** END PAYMENT FUNCTIONS ***************************/
+
 $info = $_POST['info'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
 
 // Check if there's already a payment in progress
-$sql = "SELECT COUNT(*) FROM payment_processing WHERE admin_id = $admin_id";
-$result = mysql_query($sql);
-$row = mysql_fetch_row($result);
-
-if ($row[0] > 0) {
+if (paymentInProgress()) {
+    // There's already a payment in progress
     echo json_encode([
         'success' => false,
         'error' => 'Your payment is already being processed. Please wait for it to complete.'
@@ -25,8 +45,7 @@ if ($row[0] > 0) {
 }
 
 // Insert a record to indicate a payment is in progress
-$sql = "INSERT INTO payment_processing (admin_id) VALUES ($admin_id)";
-mysql_query($sql);
+startPayment();
 
 $year = $info['year'];
 $amount = (float)$info['amount'];
@@ -73,8 +92,10 @@ if ( $amount > 0 ) {
         // figure out if we are charging a credit card on file or a new one
         if (intval($on_file) == 1) {
             $customer_id = getCustomerID($admin_id);
-            if (!$customer_id || empty($customer_id)) {
+            $card_id = isset($info['cc']['card_id']) ? $info['cc']['card_id'] : 0;
+            if (!$customer_id || empty($customer_id) || !$card_id) {
                 $p->deletePurchase($purchase_id);
+                endPayment();
                 echo json_encode([
                     'success' => false,
                     'msg' => 'You do not have a valid credit card on file, please enter a new credit card and try again.'
@@ -82,10 +103,11 @@ if ( $amount > 0 ) {
             } else {
                 // charge credit card on file
                 $cp = new CustomerProfile($customer_id);
-                $response = $cp->chargeCard($amount, $info['cc']['card_id'], null, null, $description);
+                $response = $cp->chargeCard($amount, $card_id, null, null, $description);
                 if (!is_array($response)) {
                     // delete from db
                     $p->deletePurchase($purchase_id);
+                    endPayment();
                     echo json_encode([
                         'success' => false,
                         'error' => $response
@@ -95,6 +117,7 @@ if ( $amount > 0 ) {
                         $response['transactionResponse']['authCode'] . ':' . $response['transactionResponse']['transId'] . ':' .
                         $amount;
                     $p->updatePurchase($purchase_id, $msg);
+                    endPayment();
                 }
             }
         } else {
@@ -109,12 +132,14 @@ if ( $amount > 0 ) {
                     $response_array[9];
 
                 $p->updatePurchase($purchase_id, $strResponse);
+                endPayment();
                 echo json_encode([
                     'success' => true
                 ]);
             } else {
                 // delete from db
                 $p->deletePurchase($purchase_id);
+                endPayment();
                 echo json_encode([
                     'success' => false,
                     'error' => $response_array[3]
@@ -122,18 +147,16 @@ if ( $amount > 0 ) {
             }
         }
     } else {
+        endPayment();
         echo json_encode([
             'success'   => false,
             'error'     => 'There was an error saving your purchase. You have not been charged. Please try again.'
         ]);
     }
 } else {
+    endPayment();
     echo json_encode([
         'success'   => false,
         'error'     => "You have not selected anything to purchase."
     ]);
 }
-
-// After processing, remove the record
-$sql = "DELETE FROM payment_processing WHERE admin_id = $admin_id";
-mysql_query($sql);

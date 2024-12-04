@@ -128,6 +128,7 @@ class ChayoleiShipping
                 'id'    => $row['shipping_code'],
                 'cat'   => 'hei teves',
                 'size'  => $row['size'],
+                'qty'   => $row['qty']
             ];
         }
 
