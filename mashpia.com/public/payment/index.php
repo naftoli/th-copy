@@ -22,6 +22,23 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 
     <link rel="stylesheet" href="/mobile/reg/plugins/bootstrap-select/dist/css/bootstrap-select.css">
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <style>
+        .donation-input {
+            position: relative;
+            display: inline-block;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .donation-input input {
+            padding-left: 25px;
+        }
+    </style>
 </head>
 
 <body>
@@ -110,9 +127,21 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
             </div>
         </div>
         <div class="col-xs-6">
-            <div class="form-group">
-                <input type="text" inputmode="numeric" id="amount" name="amount" pattern="^\d*\.?\d{0,2}$" class="form-control"
-                       placeholder="Payment Amount (numbers only)" step=".01" min="0.01" max="99999.99" required />
+            <div class="form-group donation-input">
+                <span class="currency-symbol">$</span>
+                <input 
+                    type="number" 
+                    name="amount" 
+                    id="amount"
+                    min="1" 
+                    step="0.01" 
+                    inputmode="decimal"
+                    required
+                    pattern="^\d*\.?\d{0,2}$"
+                    placeholder="Enter amount"
+                    onchange="formatAmount(this)"
+                    class="form-control"
+                />
             </div>
         </div>
 
@@ -141,6 +170,21 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 <script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 <script>
     //var ip = "<?php //=$ip?>";
+    function formatAmount(input) {
+        // Remove any non-numeric characters except decimal point
+        let value = input.value.replace(/[^\d.]/g, '');
+        
+        // Ensure only two decimal places
+        let parts = value.split('.');
+        if (parts.length > 1) {
+            parts[1] = parts[1].slice(0, 2);
+            value = parts.join('.');
+        }
+        
+        // Update input value
+        input.value = value;
+    }
+
     $( function() {
         //checkFraud();
         //$(".alert").hide();
