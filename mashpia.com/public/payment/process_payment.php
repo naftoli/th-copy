@@ -1,8 +1,9 @@
 <?php
-//echo "<pre>";
-//print_r( $_POST );
-//echo "</pre>";
-//ini_set('display_errors',1);
+echo "<pre>";
+print_r( $_POST );
+echo "</pre>";
+ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
 
 //$ip = $_SERVER['SERVER_ADDR'];
 //if ($ip == '39.53.201.236') {
@@ -10,11 +11,9 @@
 //    header("Location: https://mashpia.com/donate/payment.php?error=" . $msg);
 //    exit;
 //}
+const SITE_URL = 'https://mashpia.com/payment/index.php';
 
-define('SITE_URL', 'https://mashpia.com');
-
-chdir('../');
-require_once '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 foreach ($_POST as $k => $v) {
     $_POST[$k] = mysql_real_escape_string(trim($v));
 }
@@ -37,14 +36,14 @@ curl_close($ch);
 
 if (!$resp->success) {
     $error = "Please click on the reCAPTCHA box.";
-    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode($error));
+    header("Location: " . SITE_URL . "?error=" . urlencode($error));
     exit;
 }
 
 $amount = (int)$_POST['amount'];
 if ($amount <= 0) {
     $error = "You have not entered a valid amount!";
-    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode($error));
+    header("Location: " . SITE_URL . "?error=" . urlencode($error));
     exit;
 }
 
@@ -69,12 +68,11 @@ $country    = $_POST['cccountry'] ?? '';
 
 if (! ($card_num && $exp_date && $first_name && $last_name && $address && $city && $state && $zip && $email && $phone && $cvv) ) {
     $error = "All fields are mandatory, please try again.";
-    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode( $error ));
+    header("Location: " . SITE_URL . "?error=" . urlencode( $error ));
     exit;
 }
 
-//if ($email != 'naftolir@gmail.com') {
-require_once 'authorize.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/authorize.php';
 $charged = false;
 $response = '';
 if ($response_array) {
@@ -102,7 +100,8 @@ if ($charged) {
     $mail_parms = [
         'to' => $email,
         'subject' => "Confirmation of Credit Card Transaction",
-        'message' => "Thank you for your payment to Tzivos Hashem. Your credit card has been charged $" . $formattedAmount . ". Your authorization ID is: " . $response_array[4],
+        'message' => "Thank you for your payment to Tzivos Hashem. Your credit card has been charged $" . $formattedAmount .
+            ". Your authorization ID is: " . $response_array[4],
         'headers' => "From: cth@mashpia.com\r\n"
     ];
 
@@ -127,8 +126,7 @@ if ($charged) {
             ':invoice' => $invoice
         ]);
     } catch (PDOException $e) {
-        error_log("Payment Database Error: " . $e->getMessage());
-
+//        error_log("Payment Database Error: " . $e->getMessage());
         // Send admin notification
         $adminMail = new MailClass();
         $adminMail->send_mail([
@@ -140,10 +138,10 @@ if ($charged) {
     }
 
     $successMessage = "Thank you for your payment of $" . $formattedAmount . ". You should receive an email confirmation shortly.";
-    header("Location: " . SITE_URL . "/payment/index.php?msg=" . urlencode($successMessage));
+    header("Location: " . SITE_URL . "?msg=" . urlencode($successMessage));
     exit;
 } else {
-    header("Location: " . SITE_URL . "/payment/index.php?error=" . urlencode($response));
+    header("Location: " . SITE_URL . "?error=" . urlencode($response));
     exit;
 }
 ?>
