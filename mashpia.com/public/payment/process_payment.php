@@ -2,8 +2,8 @@
 //echo "<pre>";
 //print_r( $_POST );
 //echo "</pre>";
-//ini_set('display_errors',1);
-//ini_set('error_reporting', E_ALL);
+ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
 
 //$ip = $_SERVER['SERVER_ADDR'];
 //if ($ip == '39.53.201.236') {
@@ -19,6 +19,7 @@ foreach ($_POST as $k => $v) {
 }
 
 // check captcha
+/*
 $privatekey = '6LcPSR0UAAAAAMMBnZpu9a4Ru5sNmrfgeEYVmWPw';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
@@ -39,7 +40,7 @@ if (!$resp->success) {
     header("Location: " . SITE_URL . "?error=" . urlencode($error));
     exit;
 }
-
+*/
 $amount = (int)$_POST['amount'];
 if ($amount <= 0) {
     $error = "You have not entered a valid amount!";
@@ -90,8 +91,8 @@ if ($response_array) {
 
 if ($charged) {
     // send confirmation email
-    include_once("classes/send_mail.php");
-    include_once("constant_file.php");
+    include_once("../classes/send_mail.php");
+    include_once("../constant_file.php");
 
     // Format amount consistently
     $formattedAmount = number_format($amount, 2);
@@ -141,7 +142,8 @@ if ($charged) {
     header("Location: " . SITE_URL . "?msg=" . urlencode($successMessage));
     exit;
 } else {
-    header("Location: " . SITE_URL . "?error=" . urlencode($response));
+//    header("Location: " . SITE_URL . "?error=" . urlencode($response));
+    echo "Error: " . $response;
     exit;
 }
 ?>

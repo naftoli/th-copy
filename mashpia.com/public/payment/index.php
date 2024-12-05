@@ -1,7 +1,7 @@
 <?php
 // make sure using secure page
 if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443)) {
-    header("Location: https://mashpia.com/donate/payment.php");
+    header("Location: https://mashpia.com/payment");
     exit;
 }
 //$ip = $_SERVER['SERVER_ADDR'];
