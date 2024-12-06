@@ -941,11 +941,12 @@
 			}
 
 			// only let ultimate trip kids to update their trip info
-			// let registered = children.filter(child => child.date_paid)
-			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
-			let registered = children
-			let eligible = children
-			console.log(eligible)
+			let registered = children.filter(child => child.date_paid)
+			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			if (Cookies.get('naftoli')) {
+				registered = children
+				eligible = children
+			}
 			if (registered.length && !eligible.length) {
 				editing_mode = true
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
@@ -1041,7 +1042,8 @@
 			if (bal > 0) {
 				if (window.localStorage) localStorage.setItem('credit', bal)
 				else Cookies.set('credit', bal)
-				const text = `You have $${bal} credit from pre registration which will be reflected on the payment page. If for any reason you are not planning on registering, please continue to the payment page to see your options.`
+				const text = `You have $${bal} credit from pre registration which will be reflected on the payment page.
+						If for any reason you are not planning on registering, please continue to the payment page to see your options.`
 				alert(text)
 			}
 
