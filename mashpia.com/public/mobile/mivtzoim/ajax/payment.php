@@ -140,7 +140,7 @@ if ( $amount > 0 ) {
         } else {
             chdir('../../../');
             require_once 'authorize.php';
-            chdir('mobile/reg/ajax/');
+            chdir('mobile/mivtzoim/ajax/');
 
             if ($response_array[0] == 1) { // success
                 $strResponse = $response_array[3] . ':' .
