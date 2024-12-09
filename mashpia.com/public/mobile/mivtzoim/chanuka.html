@@ -251,6 +251,10 @@
         }
     </script>
     <script>
+        var menorahSoldOut = false;
+        var brochureSoldOut = false;
+        var soldOut = false;
+
         document.addEventListener("DOMContentLoaded", function(event) {
             // make sure we have a cookie
             var admin = Cookies.get('admin');
@@ -271,10 +275,6 @@
             var brochureCost = 0.25
             $(".menoraCost").text(menoraCost)
             $(".brochureCost").text(brochureCost)
-            
-            var menorahSoldOut = false;
-            var brochureSoldOut = false;
-            var soldOut = false;
 
             // when to shutdown this page
             var now = Math.floor( new Date().getTime() / 1000);
@@ -297,7 +297,7 @@
                 if ( menorahLeft <= 0 ) {
                     menorahSoldOut = true;
                 }
-                if (soldout || (menorahSoldOut && brochureSoldOut)) {
+                if (menorahSoldOut && brochureSoldOut) {
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
@@ -313,7 +313,7 @@
                 if ( brochureLeft <= 0 ) {
                     brochureSoldOut = true;
                 }
-                if (soldout || (menorahSoldOut && brochureSoldOut)) {
+                if (menorahSoldOut && brochureSoldOut) {
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
