@@ -138,28 +138,37 @@ if ( $amount > 0 ) {
                 }
             }
         } else {
-            chdir('../../../');
-            require_once 'authorize.php';
-            chdir('mobile/mivtzoim/ajax/');
+            try {
+                chdir('../../../');
+                require_once 'authorize.php';
+                chdir('mobile/mivtzoim/ajax/');
 
-            if ($response_array[0] == 1) { // success
-                $strResponse = $response_array[3] . ':' .
-                    $response_array[4] . ':' .
-                    $response_array[6] . ':' .
-                    $response_array[9];
+                if ($response_array[0] == 1) { // success
+                    $strResponse = $response_array[3] . ':' .
+                        $response_array[4] . ':' .
+                        $response_array[6] . ':' .
+                        $response_array[9];
 
-                $p->updatePurchase($purchase_id, $strResponse);
-                endPayment();
-                echo json_encode([
-                    'success' => true
-                ]);
-            } else {
-                // delete from db
+                    $p->updatePurchase($purchase_id, $strResponse);
+                    endPayment();
+                    echo json_encode([
+                        'success' => true
+                    ]);
+                } else {
+                    // delete from db
+                    $p->deletePurchase($purchase_id);
+                    endPayment();
+                    echo json_encode([
+                        'success' => false,
+                        'error' => $response_array[3]
+                    ]);
+                }
+            } catch (Exception $e) {
                 $p->deletePurchase($purchase_id);
                 endPayment();
                 echo json_encode([
-                    'success' => false,
-                    'error' => $response_array[3]
+                    'success'   => false, 
+                    'error'     => 'There was an error processing your purchase.'
                 ]);
             }
         }
