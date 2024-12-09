@@ -322,10 +322,19 @@
 	<script type="text/javascript">
 
 		async function checkCaptcha(token) {
-			res = await $.post('https://www.google.com/recaptcha/api/siteverify', {
-				secret: '6LcPSR0UAAAAAMMBnZpu9a4Ru5sNmrfgeEYVmWPw',
-				response: token
+			res = await $.ajax({
+				type: 'POST',
+				url: 'https://www.google.com/recaptcha/api/siteverify',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+					'Access-Control-Allow-Origin': '*'
+				},
+				data: {
+					secret: '6LcPSR0UAAAAAMMBnZpu9a4Ru5sNmrfgeEYVmWPw',
+					response: token
+				}
 			})
+			result = JSON.parse(await res.json())
 			if (res.success) {
 				$("#donate").show()
 				return true
