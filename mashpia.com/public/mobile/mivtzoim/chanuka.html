@@ -90,7 +90,7 @@
                         We will only ship the sets to your child's school. Shipping charges vary by School 
                         depending on how many sets are being purchased (by school).
                         <hr />
-                        <h2>Number of Menorah Boxes: 2226</h2>
+                        <h2>Number of Menorah Boxes: 2228</h2>
                         <h2>Already Sold: <span class="menorahSold"></span></h2>
                         <h2>Currently Available: <span class="menorahLeft"></span></h2>
                         <h2>Number of Brochures: 2000</h2>
@@ -290,7 +290,7 @@
             // $("#sold-out").show();
             // $("#purchases").hide();
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
-                var menorahStart = 2226;
+                var menorahStart = 2228;
                 var menorahSold = parseInt( sold );
                 // menorahSold += ;
                 var menorahLeft = menorahStart - menorahSold;
