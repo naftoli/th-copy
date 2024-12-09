@@ -170,7 +170,7 @@
 
                     <div class="row">
                         <h2>Total: $<span id="amount">0</span></h2>
-                        <div style="font-style: italic">**Minimum order $5 (for CC to work)</div>
+                        <div style="font-style: italic">**Minimum order $3.50 (for CC to work)</div>
                         <input type="hidden" id="total" />
                     </div>
                     <hr />
@@ -418,7 +418,7 @@
                 $("#purchase").attr('disabled', true);
 
                 const total = parseFloat($("#total").val());
-                if (total > 0) {
+                if (total >= 3.5) {
                     let info = {};
                     info.cc = {};
 
@@ -511,7 +511,8 @@
                         alert("An error occurred while processing your purchase. Please try again.");
                     }
                 } else {
-                    alert("You have not indicated what you are purchasing.");
+                    if (total == 0) alert("You have not indicated what you are purchasing.");
+                    else alert("You must make a purchase of at least $3.50.");
                 }
                 $("#purchase").attr('data-processing', 'false');
                 $("#purchase").attr('disabled', false);
