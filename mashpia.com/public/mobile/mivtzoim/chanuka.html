@@ -143,7 +143,12 @@
                                                         </tr>
                                                         <tr>
                                                             <td></td>
-                                                            <td>Shipping Charge: <strong>$<span class="shipping-charge">{{menorah_shipping}}</span></strong>/ea</td>
+                                                            <td>
+                                                                Shipping Charge: <strong>$<span class="shipping-charge">{{menorah_shipping}}</span></strong>/ea
+                                                                {{if myshliach}}
+                                                                    <br /><i>Please Note: These items will NOT BE SHIPPED. They must be PICKED UP. NO REFUNDS.</i>
+                                                                {{/if}}
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -155,7 +160,12 @@
                                                         </tr>
                                                         <tr>
                                                             <td></td>
-                                                            <td>Shipping Charge: <strong>$<span class="shipping-charge">{{brochure_shipping}}</span></strong>/ea</td>
+                                                            <td>
+                                                                Shipping Charge: <strong>$<span class="shipping-charge">{{brochure_shipping}}</span></strong>/ea
+                                                                {{if myshliach}}
+                                                                    <br /><i>Please Note: These items will NOT BE SHIPPED. They must be PICKED UP. NO REFUNDS.</i>
+                                                                {{/if}}
+                                                            </td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -336,6 +346,10 @@
                         var child = children[c];
                         child.menoraCost = menoraCost
                         child.brochureCost = brochureCost
+                        if (intval(child.school_id) == 61)
+                            child.myshliach = true
+                        else
+                            child.myshliach = false
                         if (
                             child.user_registered &&
                             child.school_id != 612 &&
