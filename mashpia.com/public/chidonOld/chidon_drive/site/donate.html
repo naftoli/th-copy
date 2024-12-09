@@ -323,10 +323,8 @@
 
 		async function checkCaptcha(token) {
 			// use fetch to check captcha
-			res = await fetch('verifyCaptcha.php', {
-				method: 'POST',
-				body: token
-			})
+			res = await $.post('verifyCaptcha.php', { token: token })
+			alert(res)
 			if (res) {
 				$("#donate").show()
 				return true
