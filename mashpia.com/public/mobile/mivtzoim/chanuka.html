@@ -287,11 +287,10 @@
                 if ( menorahLeft <= 0 ) {
                     menorahSoldOut = true;
                 }
-                if ( menorahSoldOut && brochureSoldOut ) {
-                    soldOut = true;
+                if (soldout || (menorahSoldOut && brochureSoldOut)) {
                     $("#sold-out").show();
                     $("#purchases").hide();
-                }   
+                }
             });
 
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
@@ -304,8 +303,7 @@
                 if ( brochureLeft <= 0 ) {
                     brochureSoldOut = true;
                 }
-                if ( menorahSoldOut && brochureSoldOut ) {
-                    soldOut = true;
+                if (soldout || (menorahSoldOut && brochureSoldOut)) {
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
