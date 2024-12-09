@@ -1,11 +1,14 @@
 <?php
 header("X-Robots-Tag: noindex");
 
-require __DIR__ . '/../../../api/header/db.php';
-require __DIR__. '/../../../class.globalSettings.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 if (!isset($_POST['key']) || $_POST['key'] != 'chidondrive@' . $year) {
+    echo json_encode([
+        'success'   =>  false,
+    ]);
     exit;
 }
 
