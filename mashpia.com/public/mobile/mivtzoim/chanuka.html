@@ -281,12 +281,13 @@
             console.log( now );
             if ( now >= 1734411600 ) {
                 soldOut = true;
+                $("#sold-out").show();
+                $("#purchases").hide();
             }
 
             // soldOut = true;
             // $("#sold-out").show();
             // $("#purchases").hide();
-
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
                 var menorahStart = 2228;
                 var menorahSold = parseInt( sold );
@@ -297,7 +298,7 @@
                 if ( menorahLeft <= 0 ) {
                     menorahSoldOut = true;
                 }
-                if (menorahSoldOut && brochureSoldOut) {
+                if (soldOut || (menorahSoldOut && brochureSoldOut)) {
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
@@ -313,7 +314,7 @@
                 if ( brochureLeft <= 0 ) {
                     brochureSoldOut = true;
                 }
-                if (menorahSoldOut && brochureSoldOut) {
+                if (soldOut || (menorahSoldOut && brochureSoldOut)) {
                     $("#sold-out").show();
                     $("#purchases").hide();
                 }
