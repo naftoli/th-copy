@@ -251,10 +251,6 @@
         }
     </script>
     <script>
-        var menorahSoldOut = false;
-        var brochureSoldOut = false;
-        var soldOut = false;
-
         document.addEventListener("DOMContentLoaded", function(event) {
             // make sure we have a cookie
             var admin = Cookies.get('admin');
@@ -275,6 +271,9 @@
             var brochureCost = 0.25
             $(".menoraCost").text(menoraCost)
             $(".brochureCost").text(brochureCost)
+            var menorahSoldOut = false;
+            var brochureSoldOut = false;
+            var soldOut = false;
 
             // when to shutdown this page
             var now = Math.floor( new Date().getTime() / 1000);
@@ -349,6 +348,7 @@
                         child.brochureCost = brochureCost
                         if (parseInt(child.school_id) == 61) {
                             child.myshliach = true
+                            child.brochure_shipping = 0
                         } else {
                             child.myshliach = false
                         }
