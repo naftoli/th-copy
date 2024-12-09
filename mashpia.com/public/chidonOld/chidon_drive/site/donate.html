@@ -320,12 +320,10 @@
 	<script src='js/circles.min.js'></script>
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<script type="text/javascript">
-
 		async function checkCaptcha(token) {
 			// use fetch to check captcha
 			res = await $.post('verifyCaptcha.php', { token: token })
-			alert(res)
-			if (res) {
+			if (res > 0) {
 				$("#donate").show()
 				return true
 			} else {
