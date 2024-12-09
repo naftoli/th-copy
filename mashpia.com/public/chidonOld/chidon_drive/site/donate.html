@@ -322,7 +322,7 @@
 	<script type="text/javascript">
 		async function checkCaptcha(token) {
 			// use fetch to check captcha
-			res = await $.post('verifyCaptcha.php', { token: token })
+			res = await $.post('verifyCaptcha.php', { token })
 			if (res > 0) {
 				$("#donate").show()
 				return true

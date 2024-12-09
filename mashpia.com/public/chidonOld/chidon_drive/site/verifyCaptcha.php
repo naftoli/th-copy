@@ -8,7 +8,7 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 curl_setopt($ch, CURLOPT_POST, 1);
 curl_setopt($ch, CURLOPT_POSTFIELDS, [
     'secret'   => $privatekey,
-    'response' => $_POST['g-recaptcha-response'],
+    'response' => $_POST['token'],
     'remoteip' => $_SERVER['REMOTE_ADDR']
 ]);
 
