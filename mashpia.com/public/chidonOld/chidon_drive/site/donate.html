@@ -324,10 +324,10 @@
 			// use fetch to check captcha
 			res = await $.post('verifyCaptcha.php', { token })
 			if (res > 0) {
-				$("#donate").show()
+				$("#donateBtn").show()
 				return true
 			} else {
-				$("#donate").hide()
+				$("#donateBtn").hide()
 				alert('Captcha failed, please try again!')
 				return false
 			}
