@@ -346,12 +346,6 @@
                         var child = children[c];
                         child.menoraCost = menoraCost
                         child.brochureCost = brochureCost
-                        if (parseInt(child.school_id) == 61) {
-                            child.myshliach = true
-                            child.brochure_shipping = 0
-                        }
-                        else
-                            child.myshliach = false
                         if (
                             child.user_registered &&
                             child.school_id != 612 &&
@@ -386,8 +380,8 @@
                         if ( brochureSoldOut )
                             $("input.brochure").attr('disabled', true);
 
-                        // if ( soldOut ) $("#sold-out").show();
-                        // else $("#purchases").show();
+                        if ( soldOut ) $("#sold-out").show();
+                        else $("#purchases").show();
                     } 
                 }
             });
