@@ -186,22 +186,24 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
     }
 
     $( function() {
-        //checkFraud();
+        checkFraud();
         //$(".alert").hide();
         $('.selectpicker').selectpicker();
 
         $("#submit").click( function(e) {
+            e.preventDefault()
             // check if same ip has been requesting this in the past few minutes more than 3 times
-            // if ( checkFraud() ) {
-            // 	alert("You cannot submit multiple requests in such a short time span.");
-            // 	return false;
-            // }
+            if ( checkFraud() ) {
+            	// alert("You cannot submit multiple requests in such a short time span.");
+            	return false;
+            }
 
             var val = parseInt($("#amount").val());
             if (val <= 0) {
                 alert("You have not chosen a valid amount to pay!");
                 return false;
             }
+            $("form").submit()
         });
     });
 
