@@ -321,8 +321,17 @@
 	<script src='https://www.google.com/recaptcha/api.js'></script>
 	<script type="text/javascript">
 
-		function checkCaptcha(response) {
-			console.log(response);
+		async function checkCaptcha(token) {
+			res = await $.post('https://www.google.com/recaptcha/api/siteverify', {
+				secret: '6LcPSR0UAAAAAMMBnZpu9a4Ru5sNmrfgeEYVmWPw',
+				response: token
+			})
+			if (res.success) {
+				return true
+			} else {
+				alert('Captcha failed, please try again!')
+				return false
+			}
 		}
 
 		$(function () {
