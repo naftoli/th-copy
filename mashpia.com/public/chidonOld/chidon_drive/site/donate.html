@@ -323,7 +323,7 @@
 		async function checkCaptcha(token) {
 			// use fetch to check captcha
 			res = await $.post('verifyCaptcha.php', { token })
-			if (res > 0) {
+			if (parseInt(res)) {
 				$("#donateBtn").show()
 				return true
 			} else {
