@@ -110,13 +110,13 @@ if ( $amount > 0 ) {
                 try {
                     $cp = new CustomerProfile($customer_id);
                     $response = $cp->chargeCard($amount, $card_id, null, null, $description);
-                    if (!is_array($response)) {
+                    if (!is_array($response) || in_array($response['transactionResponse']['authCode'], [2, 3])) {
                         // delete from db
                         $p->deletePurchase($purchase_id);
                         endPayment();
                         echo json_encode([
                             'success' => false,
-                            'error' => $response
+                            'error' => is_string($response) ? $response : $response['transactionResponse']['errors'][0]['errorText']
                         ]);
                     } else {
                         $msg = $response['transactionResponse']['messages'][0]['description'] . ':' .
@@ -143,7 +143,7 @@ if ( $amount > 0 ) {
                 require_once 'authorize.php';
                 chdir('mobile/mivtzoim/ajax/');
 
-                if ($response_array[0] == 1) { // success
+                if (in_array($response_array[0], [1, 4])) { // success; 1 = approved; 4 = held for review
                     $strResponse = $response_array[3] . ':' .
                         $response_array[4] . ':' .
                         $response_array[6] . ':' .
@@ -160,7 +160,7 @@ if ( $amount > 0 ) {
                     endPayment();
                     echo json_encode([
                         'success' => false,
-                        'error' => $response_array
+                        'error' => $response_array[3]
                     ]);
                 }
             } catch (Exception $e) {
