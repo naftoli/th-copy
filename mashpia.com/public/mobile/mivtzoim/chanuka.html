@@ -347,6 +347,12 @@
                         var child = children[c];
                         child.menoraCost = menoraCost
                         child.brochureCost = brochureCost
+                        if (parseInt(child.school_id) == 61) {
+                            child.myshliach = true
+                        } else {
+                            child.myshliach = false
+                        }
+
                         if (
                             child.user_registered &&
                             child.school_id != 612 &&
