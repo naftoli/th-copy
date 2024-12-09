@@ -24,7 +24,7 @@ $res = $stmt->execute([
 ]);
 if ( $res ) {
   $row = $stmt->fetch();
-  $data['totalAmount'] = $row['total'];
+  $data['total'] = $row['total'];
 } else {
   $success = false;
 }
