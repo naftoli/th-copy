@@ -495,19 +495,18 @@
                     try {
                         const response = await $.post('ajax/payment.php', {info});
                         const result = JSON.parse(response);
+                        console.log(result)
 
                         if (result.success) {
                             const totalMenorahs = info.menorah.reduce((sum, item) => sum + item.qty, 0);
                             const totalBrochures = info.brochure.reduce((sum, item) => sum + item.qty, 0);
                             const msg = `Thank you! You have successfully purchased ${totalMenorahs} Menorah Box(es) and ${totalBrochures} Brochure(s). Your child(ren)'s school will receive them for your child(ren).`;
                             alert(msg);
-                        } else {
-                            alert(result.error);
-                        }
-                        if (result.success) {
                             $("#purchase").attr('data-processing', 'false');
                             $("#purchase").attr('disabled', false);
                             location.href = '/mobile';
+                        } else {
+                            alert(result.error);
                         }
                     } catch (error) {
                         console.error(error);
