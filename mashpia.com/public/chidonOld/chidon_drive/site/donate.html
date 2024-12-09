@@ -227,7 +227,7 @@
 								<div class="g-recaptcha" data-callback="checkCaptcha" data-sitekey="6LcPSR0UAAAAADTTGGdFV71lEqIKFxf52FFN0An8"></div>
 							</div>
 						</div>
-						<input type="submit" class="button donate" value="Donate" style="margin-top: 10px;" />
+						<input type="submit" id="donateBtn" class="button donate" value="Donate" style="margin-top: 10px; display: none;" />
 					</form>
 				</div>
 				<div class="activity">
@@ -327,8 +327,10 @@
 				response: token
 			})
 			if (res.success) {
+				$("#donate").show()
 				return true
 			} else {
+				$("#donate").hide()
 				alert('Captcha failed, please try again!')
 				return false
 			}
