@@ -160,7 +160,7 @@ if ( $amount > 0 ) {
                     endPayment();
                     echo json_encode([
                         'success' => false,
-                        'error' => $response_array[3]
+                        'error' => $response_array
                     ]);
                 }
             } catch (Exception $e) {
