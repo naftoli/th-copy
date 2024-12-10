@@ -107,7 +107,7 @@ function getEligibleMedals($user_id) {
 //******************** SCRIPT START HERE ************************//
 
 // get school id from post
-$school_id = $_POST['school_id'];
+$school_id = $_REQUEST['school_id'];
 // get all registered users in this school
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
 $u = new SchoolUsers($school_id);
