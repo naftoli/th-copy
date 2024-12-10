@@ -66,16 +66,17 @@ function getSubjects($school_id) {
 
     $subjects = [];
     $sql = "
-    SELECT 
-        user_id, subject_id
-    FROM
-        user_tracks ut
-            JOIN
-        users u USING (user_id)
-    WHERE
-        u.school_id = :school AND ut.enrolled = 1
-    ORDER BY user_id";
+        SELECT 
+            user_id, subject_id
+        FROM
+            user_tracks ut
+                JOIN
+            users u USING (user_id)
+        WHERE
+            u.school_id = :school AND ut.enrolled = 1
+        ORDER BY user_id";
     $result = $MASHPIA_DB->prepare($sql);
+    $result->execute([':school' => $school_id]);
     $rows = $result->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
         $subjects[$row['user_id']][] = $row['subject_id'];
