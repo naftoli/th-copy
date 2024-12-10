@@ -56,7 +56,7 @@ $end_date = gri('end_date', unixtojd()+30);
                             const medals = JSON.parse(response);
                             const users = await get_users();
                             // create html
-                            let html = "<tr><th>Grade</th><th>Student</th><th>Eligibile Medals</th></tr>";
+                            let html = "<tr><th>Grade</th><th>Student</th><th>Eligible Medals</th></tr>";
                             for (let i = 0; i < users.length; i++) {
                                 let user = users[i];
                                 let grade = user.class_grade + (user.class_sub ? "-" + user.class_sub : '')
