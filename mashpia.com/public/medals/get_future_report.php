@@ -3,8 +3,8 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
-require_once '../header.php';
-require_once '../api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 // make sure it's hq
 if ($admin_user['auth'] != 'super') {
