@@ -26,6 +26,15 @@ $end_date = gri('end_date', unixtojd()+30);
     <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
     <SCRIPT type="text/javascript" src="icalendar.js"></SCRIPT>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style>
+        tr, th, td {
+            font-size: 14px;
+            padding: 10px;
+        }
+        th, td {
+            border-bottom: 1px solid #cccccc;
+        }
+    </style>
 </HEAD>
 
 
