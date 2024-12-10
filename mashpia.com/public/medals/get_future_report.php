@@ -34,6 +34,33 @@ function getUsers($school) {
     return $users;
 }
 
+function getMissionsDone($school_id) {
+    global $MASHPIA_DB;
+
+    // find out where the child is holding in terms of how many missions were already done for this subject
+    $sql = "
+        SELECT 
+            user_id, subject_id, COUNT(*) AS total
+        FROM
+            date_tasks_mission_marks dtm
+                JOIN
+            users u USING (user_id)
+        WHERE
+            u.school_id = 2
+        GROUP BY user_id , subject_id
+    ";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([':user' => $school_id]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $missions_by_subject = [];
+    foreach ($rows as $row) {
+        $missions_by_subject[$row['user_id']][$row['subject_id']] = intval($row['total']);
+    }
+
+    return $missions_by_subject;
+}
+
 function getSubjects($user_id) {
     global $MASHPIA_DB;
 
@@ -46,31 +73,6 @@ function getSubjects($user_id) {
     }
 
     return $subjects;
-}
-
-function missionsDone($user_id) {
-    global $MASHPIA_DB;
-
-    // find out where the child is holding in terms of how many missions were already done for this subject
-    $sql = "
-            SELECT 
-                subject_id, COUNT(*) AS total
-            FROM
-                date_tasks_mission_marks
-            WHERE
-                user_id = :user
-            GROUP BY subject_id
-    ";
-    $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([':user' => $user_id]);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    $missions_by_subject = [];
-    foreach ($rows as $row) {
-        $missions_by_subject[$row['subject_id']] = intval($row['total']);
-    }
-
-    return $missions_by_subject;
 }
 
 function futureMissions($subject_id, $user_id, $end_date) {
@@ -102,19 +104,16 @@ function futureMissions($subject_id, $user_id, $end_date) {
 }
 
 function getEligibleMedals($user_id) {
-    global $end_date, $ms;
+    global $end_date, $ms, $missions_done;
 
     // get subjects that user is enrolled into
     $subjects = getSubjects($user_id);
-
-    // find out how many missions were already done
-    $missions_done = missionsDone($user_id);
 
     // find out how many more medals can be earned by certain date by subject
     $numMedals = 0;
     foreach ($subjects as $subject) {
         $future = futureMissions($subject, $user_id, $end_date);
-        $current = $missions_done[$subject] ?? 0;
+        $current = $missions_done[$user_id][$subject] ?? 0;
         $total = $current + $future;
         $current_medal = $ms->calcHighestMedal($subject, $current);
         $future_medal = $ms->calcHighestMedal($subject, $total);
@@ -135,6 +134,7 @@ $end_date = $_REQUEST['end_date'];
 
 // get all registered users in this school
 $users = getUsers($school_id);
+$missions_done = getMissionsDone($school_id);
 
 require_once 'class.medalsSubjects.php';
 $ms = new MedalsSubjects();
