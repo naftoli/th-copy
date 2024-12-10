@@ -119,6 +119,8 @@ function futureMissions($user_id) {
         FROM
             date_tasks_missions dtm
                 JOIN
+            date_tasks dt USING (date_tasks_mission_id)
+                JOIN
             user_tracks ut USING (subject_id)
                 JOIN
             users u USING (user_id)
@@ -130,13 +132,14 @@ function futureMissions($user_id) {
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
                 AND u.lang_id = dtm.lang_id
-                AND u.user_id = :user ";
+                AND u.user_id = :user 
+                AND dt.mandatory_qty = 1";
 
     $stmt = $MASHPIA_DB->prepare($sql);
     foreach ($user_subjects[$user_id] as $subject_id) {
         $stmt->execute([
             ':subject'  => $subject_id,
-            ':today'    => floor(unixtojd()),
+            ':today'    => unixtojd(),
             ':end_date' => $end_date,
             ':user'     => $user_id
         ]);

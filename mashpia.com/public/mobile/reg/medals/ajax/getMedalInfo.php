@@ -11,7 +11,7 @@ $ds_daily = [121, 122, 124, 125, 129, 130, 131, 132, 133, 134, 135];
 function calculateNextDate($subject, $needed) {
     global $user, $monthly_subjects, $MASHPIA_DB;
     // find date of task for this subject in $needed times
-    $jd = floor(unixtojd());
+    $jd = unixtojd();
     $limit_by = $needed;
     if (! in_array($subject, $monthly_subjects)) {
         $jd = $jd + ($needed * 7);
