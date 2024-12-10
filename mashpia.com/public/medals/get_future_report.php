@@ -134,7 +134,7 @@ function futureMissions($user_id) {
         GROUP BY user_id";
 
     $stmt = $MASHPIA_DB->prepare($sql);
-    foreach ($user_subjects as $subject_id) {
+    foreach ($user_subjects[$user_id] as $subject_id) {
         $stmt->execute([
             ':subject'  => $subject_id,
             ':today'    => unixtojd(),
