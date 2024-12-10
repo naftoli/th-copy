@@ -140,6 +140,7 @@ function futureMissions($user_id) {
             ':end_date' => $end_date,
             ':user'     => $user_id
         ]);
+        if ($user_id == 19274) $stmt->debugDumpParams();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         $missions[$subject_id] = intval($row['num_missions']);
     }
