@@ -51,7 +51,7 @@ $end_date = gri('end_date', unixtojd()+30);
 
                 async function get_medals() {
                     const medals = await $.post('/medals/get_future_report.php', { school_id: $("#school_id").val(), end_date: $("#end_date").val() })
-                    return JSON.parse(medals)
+                    return medals
                 }
 
                 async function get_future_report() {
