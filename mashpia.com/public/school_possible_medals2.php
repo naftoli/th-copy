@@ -101,7 +101,23 @@ $end_date = gri('end_date', unixtojd()+30);
                     //
                     //     http.send(null);
                     // }
-
+                    function get_future_report() {
+                        $.ajax({
+                            type: "POST",
+                            url: "/medals/get_future_report.php",
+                            data: {
+                                school_id: $("#school_id").val()
+                            },
+                            success: function(response) {
+                                // $("#report_div").html(response);
+                                const res = JSON.parse(response);
+                                console.log(res);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Failed to get future report: " + error);
+                            }
+                        });
+                    }
                 });
             </script>
 

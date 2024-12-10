@@ -174,7 +174,6 @@ $subject_medals = [];
 foreach ($subjects as $subject) {
     $sql = "SELECT medal_ord, missions_required, profile_photo_id FROM medals_subjects 
              WHERE subject_id = " . $subject . " 
-             
              ORDER BY medal_ord";
     $result = mysql_query($sql);
     $needed = 0;
