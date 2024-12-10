@@ -86,7 +86,7 @@ $end_date = gri('end_date', unixtojd()+30);
                         error: function(xhr, status, error) {
                             console.error("Failed to get users report: " + error);
                         }
-                    }
+                    })
                 }
 
                 $(document).ready(function()
