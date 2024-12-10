@@ -23,8 +23,6 @@ class medalsSubjects
     }
 
     function calcHighestMedal($subject_id, $num_missions) {
-        global $MASHPIA_DB;
-
         $medals_subjects = $this->getMedalsSubjects();
         // loop through medals subjects to find out which medal ord is eligible based on num missions
         $eligible_medal_ord = 0;
