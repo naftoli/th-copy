@@ -53,7 +53,7 @@ $end_date = gri('end_date', unixtojd()+30);
                             end_date: $("#end_date").val(),
                         },
                         success: async function(response) {
-                            const medals = response;
+                            const medals = JSON.parse(response);
                             const users = await get_users();
                             console.log(users, medals);
                             // create html
