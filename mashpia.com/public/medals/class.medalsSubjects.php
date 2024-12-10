@@ -26,11 +26,13 @@ class medalsSubjects
         $medals_subjects = $this->getMedalsSubjects();
         // loop through medals subjects to find out which medal ord is eligible based on num missions
         $eligible_medal_ord = 0;
-        foreach ($medals_subjects[$subject_id] as $medal_ord => $missions_required) {
-            if ($num_missions >= $missions_required) {
-                $eligible_medal_ord = $medal_ord;
-            } else {
-                break; // Stop checking once we find the first medal that requires more missions than we have
+        if (isset($medals_subjects[$subject_id])) {
+            foreach ($medals_subjects[$subject_id] as $medal_ord => $missions_required) {
+                if ($num_missions >= $missions_required) {
+                    $eligible_medal_ord = $medal_ord;
+                } else {
+                    break; // Stop checking once we find the first medal that requires more missions than we have
+                }
             }
         }
 
