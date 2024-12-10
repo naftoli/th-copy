@@ -109,12 +109,12 @@ function getEligibleMedals($user_id) {
 // get school id from post
 $school_id = $_POST['school_id'];
 // get all registered users in this school
-require_once $_SERVER['DOCUMENT_ROOT'] . '/medals/class.schoolUsers.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolUsers.php';
 $u = new SchoolUsers($school_id);
 $u->setUsers();
 $users_by_class = $u->getUserNames();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/medals/class.medalsSubjects.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . 'class.medalsSubjects.php';
 $ms = new MedalsSubjects();
 
 $possible_medals = [];
