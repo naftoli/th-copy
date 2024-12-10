@@ -101,6 +101,8 @@ function getEligibleMedals($user_id) {
     return $numMedals;
 }
 
+//******************** SCRIPT START HERE ************************//
+
 // get school id from post
 $school_id = $_POST['school_id'];
 // get all registered users in this school
