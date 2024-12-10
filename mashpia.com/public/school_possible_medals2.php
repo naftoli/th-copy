@@ -15,7 +15,7 @@ while ($row = mysql_fetch_assoc($query))
 }
 // ********** SCHOOLS ********** //
 
-$start_date = beginning_of_hebrew_year();
+//$start_date = beginning_of_hebrew_year();
 $end_date = gri('end_date', unixtojd()+30);
 ?>
 
@@ -154,14 +154,14 @@ $end_date = gri('end_date', unixtojd()+30);
 
                 <br />
 
-                <label>
-                    Start Date
-                    <input type="text" name="start_date_disp" id="start_date_disp" value="<?=es(dateToHebrew($start_date))?>" onClick="get_date(this.form, 'start_date', true);">
-                </label>
-
-                <INPUT type="hidden" name="start_date" id="start_date" value="<?=$start_date?>">
-
-                <br />
+<!--                <label>-->
+<!--                    Start Date-->
+<!--                    <input type="text" name="start_date_disp" id="start_date_disp" value="--><?php //=es(dateToHebrew($start_date))?><!--" onClick="get_date(this.form, 'start_date', true);">-->
+<!--                </label>-->
+<!---->
+<!--                <INPUT type="hidden" name="start_date" id="start_date" value="--><?php //=$start_date?><!--">-->
+<!---->
+<!--                <br />-->
 
                 <label>
                     End Date
