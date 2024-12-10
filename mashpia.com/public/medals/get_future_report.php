@@ -156,7 +156,7 @@ function getEligibleMedals($user_id) {
     $numMedals = 0;
     $future_missions = futureMissions($user_id);
     // find out how many more medals can be earned by certain date by subject
-    foreach ($user_subjects as $subject) {
+    foreach ($user_subjects[$user_id] as $subject) {
         $future = $future_missions[$subject] ?? 0;
         $current = $missions_done[$user_id][$subject] ?? 0;
         $total = $current + $future;
