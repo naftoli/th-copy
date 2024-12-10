@@ -45,6 +45,7 @@ $end_date = gri('end_date', unixtojd()+30);
 
             <script>
                 async function get_future_report() {
+                    const users = await fetch_users();
                     $.ajax({
                         type: "POST",
                         url: "/medals/get_future_report.php",
@@ -52,10 +53,8 @@ $end_date = gri('end_date', unixtojd()+30);
                             school_id: $("#school_id").val(),
                             end_date: $("#end_date").val(),
                         },
-                        success: async function(res) {
+                        success: function(res) {
                             const medals = JSON.parse(res);
-                            const users = await get_users();
-                            console.log(users, medals);
                             // create html
                             let html = "<tr><th>Grade</th><th>Student</th><th>Eligible Medals</th></tr>";
                             for (let i = 0; i < users.length; i++) {
