@@ -151,21 +151,22 @@ function futureMissions($school_id) {
 }
 
 function getEligibleMedals($user_id) {
-    global $missions_done, $subjects, $ms, $future_missions;
+    global $ms, $missions_done, $subjects, $user_subjects, $future_missions;
 
     $numMedals = 0;
-    $user_subjects = $subjects[$user_id];
     // find out how many more medals can be earned by certain date by subject
-    foreach ($user_subjects as $subject) {
-        $future = $future_missions[$user_id][$subject];
-        $current = $missions_done[$user_id][$subject] ?? 0;
-        $total = $current + $future;
-        $current_medal = $ms->calcHighestMedal($subject, $current);
-        $future_medal = $ms->calcHighestMedal($subject, $total);
-        $medal_difference = $future_medal - $current_medal;
-        // make sure there's no negative even though that would be a big issue if there was
-        if ($medal_difference < 0) $medal_difference = 0;
-        $numMedals += $medal_difference;
+    foreach ($subjects as $subject) {
+        if (in_array($subject, $user_subjects[$user_id])) {
+            $future = $future_missions[$user_id][$subject] ?? 0;
+            $current = $missions_done[$user_id][$subject] ?? 0;
+            $total = $current + $future;
+            $current_medal = $ms->calcHighestMedal($subject, $current);
+            $future_medal = $ms->calcHighestMedal($subject, $total);
+            $medal_difference = $future_medal - $current_medal;
+            // make sure there's no negative even though that would be a big issue if there was
+            if ($medal_difference < 0) $medal_difference = 0;
+            $numMedals += $medal_difference;
+        }
     }
 
     return $numMedals;
