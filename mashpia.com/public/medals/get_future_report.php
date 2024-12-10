@@ -5,11 +5,32 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getCurrentYear();
 
 // make sure it's hq
 if ($admin_user['auth'] != 'super') {
     echo 'You are not authorized to view this page.';
     exit;
+}
+
+function getUsers($school) {
+    global $year, $MASHPIA_DB;
+
+    $users = [];
+    $sql = "select * from users u 
+            join user_registration ur on ur.user_id = u.user_id 
+            where u.school_id = :school 
+            and ur.year = :year 
+            and u.user_registered > 0";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute(['school' => $school, 'year' => $year]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $users[] = $row['user_id'];
+    }
+
+    return $users;
 }
 
 function getSubjects($user_id) {
@@ -22,6 +43,7 @@ function getSubjects($user_id) {
     foreach ($rows as $row) {
         $subjects[] = $row['subject_id'];
     }
+
     return $subjects;
 }
 
@@ -108,23 +130,19 @@ function getEligibleMedals($user_id) {
 
 // get school id from post
 $school_id = $_REQUEST['school_id'];
+
 // get all registered users in this school
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
-$u = new SchoolUsers($school_id);
-$u->setUsers();
-$users_by_class = $u->getUserNames();
+$users = getUsers($school_id);
 
 require_once 'class.medalsSubjects.php';
 $ms = new MedalsSubjects();
 
 $possible_medals = [];
-foreach ($users_by_class as $grade => $more) {
-    foreach ($more as $user_id => $name) {
-        echo "User ID: " . $user_id . "\n";
-        $num_medals = getEligibleMedals($user_id);
-        echo "Num Medals: " . $num_medals . "\n";
-        $possible_medals[$grade][$user_id] = $num_medals;
-    }
+foreach ($users as $user_id) {
+    echo "User ID: " . $user_id . "\n";
+    $num_medals = getEligibleMedals($user_id);
+    echo "Num Medals: " . $num_medals . "\n";
+    $possible_medals[$user_id] = $num_medals;
 }
 
 echo json_encode($possible_medals);
