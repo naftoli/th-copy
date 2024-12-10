@@ -162,7 +162,7 @@ $end_date = gri('end_date', unixtojd()+30);
 
                 <BR>
 
-                <button onclick="get_report(2);"><?=T_('Get Report')?></button><br /><br />
+                <button onclick="get_future_report();"><?=T_('Get Report')?></button><br /><br />
 
             </p>
 
