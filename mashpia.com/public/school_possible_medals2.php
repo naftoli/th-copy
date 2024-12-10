@@ -54,16 +54,15 @@ $end_date = gri('end_date', unixtojd()+30);
                             school_id: $("#school_id").val(),
                             end_date: $("#end_date").val(),
                         },
-                        success: function(response) {
+                        success: async function(response) {
                             const medals = JSON.parse(response);
+                            const users = await get_users();
                             // create html
                             let html = "<tr><th>Grade</th><th>Student</th><th>Eligibile Medals</th></tr>";
-                            const users = get_users();
                             for (let i = 0; i < users.length; i++) {
                                 let user = users[i];
                                 let grade = user.class_grade + (user.class_sub ? "-" + user.class_sub : '')
-                                html += `
-                                        <tr><td>${grade}</td><td>${user.first + ' ' + user.last}</td><td>${medals[user.user_id]}</td></tr>`;
+                                html += `<tr><td>${grade}</td><td>${user.first + ' ' + user.last}</td><td>${medals[user.user_id]}</td></tr>`;
                             }
                             $("#report_div").html(html)
                         },
@@ -74,19 +73,9 @@ $end_date = gri('end_date', unixtojd()+30);
                 }
 
                 async function get_users() {
-                    await $.ajax({
-                        type: "POST",
-                        url: "/medals/get_users.php",
-                        data: {
-                            school_id: $("#school_id").val(),
-                        },
-                        success: function(response) {
-                            return JSON.parse(response);
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Failed to get users report: " + error);
-                        }
-                    })
+                    const res = await $.post({'/medals/get_users.php', { school_id: $("#school_id").val() })
+                    const users = await res.json();
+                    return users;
                 }
 
                 $(document).ready(function()
