@@ -112,21 +112,15 @@ function getEligibleMedals($user_id) {
     // find out how many more medals can be earned by certain date by subject
     $numMedals = 0;
     foreach ($subjects as $subject) {
-        echo "User: " . $user_id . "<br />";
-        echo "Subject: " . $subject . "<br />";
         $future = futureMissions($subject, $user_id, $end_date);
-        echo "Future: " . $future . "<br />";
         $current = $missions_done[$subject] ?? 0;
-        echo "Current: " . $current . "<br />";
         $total = $current + $future;
         $current_medal = $ms->calcHighestMedal($subject, $current);
-        echo "Current Medal: " . $current_medal . "<br />";
         $future_medal = $ms->calcHighestMedal($subject, $total);
-        echo "Future Medal: " . $future_medal . "<br />";
         $medal_difference = $future_medal - $current_medal;
-        echo "Difference: " . $medal_difference . "<br />";
         // make sure there's no negative even though that would be a big issue if there was
         if ($medal_difference < 0) $medal_difference = 0;
+        echo "User ID: " . $user_id . " Difference: " . $medal_difference . "<br>";
         $numMedals += $medal_difference;
     }
 
@@ -150,5 +144,6 @@ foreach ($users as $user_id) {
     $num_medals = getEligibleMedals($user_id);
     $possible_medals[$user_id] = $num_medals;
 }
+echo "<pre>"; print_r($possible_medals); echo "</pre>"; exit;
 
 echo json_encode($possible_medals);
