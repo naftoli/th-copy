@@ -44,35 +44,27 @@ $end_date = gri('end_date', unixtojd()+30);
             <H1>Reports</H1>
 
             <script>
-                async function get_future_report() {
-                    const users = await get_users();
-                    $.ajax({
-                        type: "POST",
-                        url: "/medals/get_future_report.php",
-                        data: {
-                            school_id: $("#school_id").val(),
-                            end_date: $("#end_date").val(),
-                        },
-                        success: function(res) {
-                            const medals = JSON.parse(res);
-                            // create html
-                            let html = "<tr><th>Grade</th><th>Student</th><th>Eligible Medals</th></tr>";
-                            for (let i = 0; i < users.length; i++) {
-                                let user = users[i];
-                                let grade = user.class_grade + (user.class_sub ? "-" + user.class_sub : '')
-                                html += `<tr><td>${grade}</td><td>${user.first + ' ' + user.last}</td><td>${medals[user.user_id]}</td></tr>`;
-                            }
-                            $("#report_div").html(html)
-                        },
-                        error: function(xhr, status, error) {
-                            console.error("Failed to get future report: " + error);
-                        }
-                    });
-                }
-
                 async function get_users() {
                     const users = await $.post('/medals/get_users.php', { school_id: $("#school_id").val() })
                     return users;
+                }
+
+                async function get_medals() {
+                    const medals = await $.post('/medals/get_future_report.php', { school_id: $("#school_id").val(), end_date: $("#end_date").val() })
+                    return medals
+                }
+
+                async function get_future_report() {
+                    const users = await get_users();
+                    const medals = await get_medals();
+                    // create html
+                    let html = "<tr><th>Grade</th><th>Student</th><th>Eligible Medals</th></tr>";
+                    for (let i = 0; i < users.length; i++) {
+                        let user = users[i];
+                        let grade = user.class_grade + (user.class_sub ? "-" + user.class_sub : '')
+                        html += `<tr><td>${grade}</td><td>${user.first + ' ' + user.last}</td><td>${medals[user.user_id]}</td></tr>`;
+                    }
+                    $("#report_div").html(html)
                 }
 
                 $(document).ready(function()
