@@ -112,8 +112,12 @@ function getEligibleMedals($user_id) {
     // find out how many more medals can be earned by certain date by subject
     $numMedals = 0;
     foreach ($subjects as $subject) {
+        echo "User: " . $user_id . "<br />";
+        echo "Subject: " . $subject . "<br />";
         $future = futureMissions($subject, $user_id, $end_date);
+        echo "Future: " . $future . "<br />";
         $current = $missions_done[$subject];
+        echo "Current: " . $current . "<br />";
         $total = $current + $future;
         $current_medal = $ms->calcHighestMedal($subject, $current);
         $future_medal = $ms->calcHighestMedal($subject, $total);
@@ -130,6 +134,7 @@ function getEligibleMedals($user_id) {
 
 // get school id from post
 $school_id = $_REQUEST['school_id'];
+$end_date = $_REQUEST['end_date'];
 
 // get all registered users in this school
 $users = getUsers($school_id);
