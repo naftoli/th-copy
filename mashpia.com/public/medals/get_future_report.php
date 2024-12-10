@@ -116,7 +116,7 @@ function getEligibleMedals($user_id) {
         echo "Subject: " . $subject . "<br />";
         $future = futureMissions($subject, $user_id, $end_date);
         echo "Future: " . $future . "<br />";
-        $current = $missions_done[$subject];
+        $current = $missions_done[$subject] ?? 0;
         echo "Current: " . $current . "<br />";
         $total = $current + $future;
         $current_medal = $ms->calcHighestMedal($subject, $current);
