@@ -46,7 +46,7 @@ $end_date = gri('end_date', unixtojd()+30);
             <H1>Reports</H1>
 
             <script>
-                function get_future_report() {
+                async function get_future_report() {
                     $.ajax({
                         type: "POST",
                         url: "/medals/get_future_report.php",
@@ -55,15 +55,40 @@ $end_date = gri('end_date', unixtojd()+30);
                             end_date: $("#end_date").val(),
                         },
                         success: function(response) {
-                            // $("#report_div").html(response);
-                            const res = JSON.parse(response);
-                            console.log(res);
+                            const medals = JSON.parse(response);
+                            // create html
+                            let html = "<tr><th>Grade</th><th>Student</th><th>Eligibile Medals</th></tr>";
+                            const users = get_users();
+                            for (let i = 0; i < users.length; i++) {
+                                let user = users[i];
+                                let grade = user.class_grade + (user.class_sub ? "-" + user.class_sub : '')
+                                html += `
+                                        <tr><td>${grade}</td><td>${user.first + ' ' + user.last}</td><td>${medals[user.user_id]}</td></tr>`;
+                            }
+                            $("#report_div").html(html)
                         },
                         error: function(xhr, status, error) {
                             console.error("Failed to get future report: " + error);
                         }
                     });
                 }
+
+                async function get_users() {
+                    await $.ajax({
+                        type: "POST",
+                        url: "/medals/get_users.php",
+                        data: {
+                            school_id: $("#school_id").val(),
+                        },
+                        success: function(response) {
+                            return JSON.parse(response);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error("Failed to get users report: " + error);
+                        }
+                    }
+                }
+
                 $(document).ready(function()
                 {
                     var page_loaded = false;
