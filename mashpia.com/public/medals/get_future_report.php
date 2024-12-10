@@ -128,11 +128,11 @@ function futureMissions($user_id) {
             dtm.subject_id = :subject 
                 AND dtm.start_date >= :today 
                 AND dtm.end_date <= :end_date 
+                AND u.user_id = :user
                 AND u.school_type_id = dtm.school_type_id
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
-                AND u.lang_id = dtm.lang_id
-                AND u.user_id = :user 
+                AND u.lang_id = dtm.lang_id 
                 AND dt.mandatory_qty = 1";
 
     $stmt = $MASHPIA_DB->prepare($sql);
