@@ -120,7 +120,6 @@ function getEligibleMedals($user_id) {
         $medal_difference = $future_medal - $current_medal;
         // make sure there's no negative even though that would be a big issue if there was
         if ($medal_difference < 0) $medal_difference = 0;
-        echo "User ID: " . $user_id . " Difference: " . $medal_difference . "<br>";
         $numMedals += $medal_difference;
     }
 
@@ -144,6 +143,5 @@ foreach ($users as $user_id) {
     $num_medals = getEligibleMedals($user_id);
     $possible_medals[$user_id] = $num_medals;
 }
-echo "<pre>"; print_r($possible_medals); echo "</pre>"; exit;
 
 echo json_encode($possible_medals);
