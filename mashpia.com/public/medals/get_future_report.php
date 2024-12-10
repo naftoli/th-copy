@@ -109,8 +109,8 @@ function getUserSubjects($school_id) {
     return $subjects;
 }
 
-function futureMissions($school_id) {
-    global $end_date, $subjects, $MASHPIA_DB;
+function futureMissions($user_id) {
+    global $end_date, $user_subjects, $MASHPIA_DB;
 
     $missions = [];
     $sql = "
@@ -130,20 +130,20 @@ function futureMissions($school_id) {
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
                 AND u.lang_id = dtm.lang_id
-                AND u.school_id = :school 
+                AND u.user_id = :user 
         GROUP BY user_id";
 
     $stmt = $MASHPIA_DB->prepare($sql);
-    foreach ($subjects as $subject_id) {
+    foreach ($user_subjects as $subject_id) {
         $stmt->execute([
-            ':subject' => $subject_id,
-            ':today' => unixtojd(),
+            ':subject'  => $subject_id,
+            ':today'    => unixtojd(),
             ':end_date' => $end_date,
-            ':school' => $school_id
+            ':user'     => $user_id
         ]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
-            $missions[$row['user_id']][$subject_id] = intval($row['num_missions']);
+            $missions[$subject_id] = intval($row['num_missions']);
         }
     }
 
@@ -151,22 +151,21 @@ function futureMissions($school_id) {
 }
 
 function getEligibleMedals($user_id) {
-    global $ms, $missions_done, $subjects, $user_subjects, $future_missions;
+    global $ms, $missions_done, $user_subjects, $future_missions;
 
     $numMedals = 0;
+    $future_missions = futureMissions($user_id);
     // find out how many more medals can be earned by certain date by subject
-    foreach ($subjects as $subject) {
-        if (in_array($subject, $user_subjects[$user_id])) {
-            $future = $future_missions[$user_id][$subject] ?? 0;
-            $current = $missions_done[$user_id][$subject] ?? 0;
-            $total = $current + $future;
-            $current_medal = $ms->calcHighestMedal($subject, $current);
-            $future_medal = $ms->calcHighestMedal($subject, $total);
-            $medal_difference = $future_medal - $current_medal;
-            // make sure there's no negative even though that would be a big issue if there was
-            if ($medal_difference < 0) $medal_difference = 0;
-            $numMedals += $medal_difference;
-        }
+    foreach ($user_subjects as $subject) {
+        $future = $future_missions[$subject] ?? 0;
+        $current = $missions_done[$user_id][$subject] ?? 0;
+        $total = $current + $future;
+        $current_medal = $ms->calcHighestMedal($subject, $current);
+        $future_medal = $ms->calcHighestMedal($subject, $total);
+        $medal_difference = $future_medal - $current_medal;
+        // make sure there's no negative even though that would be a big issue if there was
+        if ($medal_difference < 0) $medal_difference = 0;
+        $numMedals += $medal_difference;
     }
 
     return $numMedals;
@@ -185,9 +184,8 @@ $ms = new MedalsSubjects();
 // get all registered users in this school
 $users = getUsers($school_id);
 $missions_done = getMissionsDone($school_id);
-$subjects = getSubjects($school_id);
+//$subjects = getSubjects($school_id);
 $user_subjects = getUserSubjects($school_id);
-$future_missions = futureMissions($school_id);
 
 // calculate possible medals
 $possible_medals = [];
