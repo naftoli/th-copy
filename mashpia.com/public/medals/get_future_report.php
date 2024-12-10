@@ -46,11 +46,11 @@ function getMissionsDone($school_id) {
                 JOIN
             users u USING (user_id)
         WHERE
-            u.school_id = 2
+            u.school_id = :school
         GROUP BY user_id , subject_id
     ";
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([':user' => $school_id]);
+    $stmt->execute([':school' => $school_id]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $missions_by_subject = [];
