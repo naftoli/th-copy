@@ -45,7 +45,7 @@ $end_date = gri('end_date', unixtojd()+30);
 
             <script>
                 async function get_future_report() {
-                    const users = await fetch_users();
+                    const users = await get_users();
                     $.ajax({
                         type: "POST",
                         url: "/medals/get_future_report.php",
