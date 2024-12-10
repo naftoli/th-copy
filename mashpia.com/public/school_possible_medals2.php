@@ -46,12 +46,12 @@ $end_date = gri('end_date', unixtojd()+30);
             <script>
                 async function get_users() {
                     const users = await $.post('/medals/get_users.php', { school_id: $("#school_id").val() })
-                    return await users.json()
+                    return JSON.parse(users)
                 }
 
                 async function get_medals() {
                     const medals = await $.post('/medals/get_future_report.php', { school_id: $("#school_id").val(), end_date: $("#end_date").val() })
-                    return await medals.json()
+                    return JSON.parse(medals)
                 }
 
                 async function get_future_report() {
