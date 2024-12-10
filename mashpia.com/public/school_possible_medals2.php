@@ -71,8 +71,7 @@ $end_date = gri('end_date', unixtojd()+30);
                 }
 
                 async function get_users() {
-                    const res = await $.post('/medals/get_users.php', { school_id: $("#school_id").val() })
-                    const users = JSON.parse(res)
+                    const users = await $.post('/medals/get_users.php', { school_id: $("#school_id").val() })
                     return users;
                 }
 
