@@ -85,8 +85,8 @@ function getSubjects($school_id) {
     return $subjects;
 }
 
-function futureMissions($school_id, $subject_id, $end_date) {
-    global $MASHPIA_DB;
+function futureMissions($subject_id, $user_id) {
+    global $end_date, $MASHPIA_DB;
 
     $missions = [];
     $sql = "
@@ -106,7 +106,7 @@ function futureMissions($school_id, $subject_id, $end_date) {
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
                 AND u.lang_id = dtm.lang_id
-                AND u.school_id = :school
+                AND u.user_id = :user
         GROUP BY user_id";
 
     $stmt = $MASHPIA_DB->prepare($sql);
@@ -114,7 +114,7 @@ function futureMissions($school_id, $subject_id, $end_date) {
         ':subject'  => $subject_id,
         ':today'    => unixtojd(),
         ':end_date' => $end_date,
-        ':school'   => $school_id
+        ':user'     => $user_id
     ]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
@@ -123,14 +123,13 @@ function futureMissions($school_id, $subject_id, $end_date) {
 }
 
 function getEligibleMedals($user_id) {
-    global $end_date, $missions_done, $subjects, $ms;
+    global $missions_done, $subjects, $ms;
 
     $user_subjects = $subjects[$user_id];
-
     // find out how many more medals can be earned by certain date by subject
     $numMedals = 0;
     foreach ($user_subjects as $subject) {
-        $future = futureMissions($subject, $user_id, $end_date);
+        $future = futureMissions($subject, $user_id);
         $current = $missions_done[$user_id][$subject] ?? 0;
         $total = $current + $future;
         $current_medal = $ms->calcHighestMedal($subject, $current);
