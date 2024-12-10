@@ -51,7 +51,8 @@ $end_date = gri('end_date', unixtojd()+30);
                         type: "POST",
                         url: "/medals/get_future_report.php",
                         data: {
-                            school_id: $("#school_id").val()
+                            school_id: $("#school_id").val(),
+                            end_date: $("#end_date").val(),
                         },
                         success: function(response) {
                             // $("#report_div").html(response);
