@@ -78,7 +78,6 @@ function getSubjects($user_id) {
 function futureMissions($subject_id, $user_id, $end_date) {
     global $MASHPIA_DB;
 
-    $jd = unixtojd(); // today
     $sql = "
         SELECT 
             COUNT(*) as mission_count
@@ -89,15 +88,16 @@ function futureMissions($subject_id, $user_id, $end_date) {
                 JOIN
             users u USING (user_id)
         WHERE
-            dtm.subject_id = $subject_id 
-                AND dtm.end_date >= $jd
-                AND dtm.end_date <= $end_date
+            dtm.subject_id = :subject 
+                AND dtm.end_date >= :today
+                AND dtm.end_date <= :end_date
                 AND u.school_type_id = dtm.school_type_id
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
-                AND u.user_id = $user_id";
+                AND u.user_id = :user";
 
-    $stmt = $MASHPIA_DB->query($sql);
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([':subject' => $subject_id, ':today' => unixtojd(), ':user' => $user_id, ':end_date' => $end_date]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return intval($row['mission_count']);
