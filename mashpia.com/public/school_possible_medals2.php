@@ -52,8 +52,8 @@ $end_date = gri('end_date', unixtojd()+30);
                             school_id: $("#school_id").val(),
                             end_date: $("#end_date").val(),
                         },
-                        success: async function(response) {
-                            const medals = JSON.parse(response);
+                        success: async function(res) {
+                            const medals = JSON.parse(res.response);
                             const users = await get_users();
                             console.log(users, medals);
                             // create html
