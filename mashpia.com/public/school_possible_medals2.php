@@ -55,8 +55,10 @@ $end_date = gri('end_date', unixtojd()+30);
                 }
 
                 async function get_future_report() {
-                    const users = await get_users();
-                    const medals = await get_medals();
+                    let users = await get_users();
+                    users = JSON.parse(users.response)
+                    let medals = await get_medals();
+                    medals = JSON.parse(medals.response)
                     console.log(users)
                     console.log(medals)
                     // create html
