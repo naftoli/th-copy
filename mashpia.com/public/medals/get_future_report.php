@@ -115,7 +115,7 @@ function futureMissions($user_id) {
     $missions = [];
     $sql = "
         SELECT 
-            user_id, COUNT(*) AS num_missions
+            COUNT(*) AS num_missions
         FROM
             date_tasks_missions dtm
                 JOIN
@@ -140,10 +140,8 @@ function futureMissions($user_id) {
             ':end_date' => $end_date,
             ':user'     => $user_id
         ]);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($rows as $row) {
-            $missions[$subject_id] = intval($row['num_missions']);
-        }
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        $missions[$subject_id] = intval($row['num_missions']);
     }
 
     return $missions;
