@@ -70,22 +70,6 @@ function getRank($user) {
         .medals {
             margin-left: 30px;
         }
-        select, button, input[type="button"], input[type="submit"] {
-            padding: 5px 10px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        table {
-            border-collapse: collapse;
-            margin-bottom: 15px;
-        }
-        table th {
-            background-color: #f5f5f5;
-            text-align: left;
-        }
-        table td, table th {
-            border: 1px solid #ddd;
-        }
     </style>
 </HEAD>
 
@@ -106,20 +90,16 @@ $schools = $as->getSchools();
 <div class='no-print'>
     <h1>Isser's Ranks Summary Sheet</h1>
 
-    <div>
-        Current Report is calculated from <?= $heDatesRanks['start_he'] ?> up to <?= $heDatesRanks['end_he'] ?>.<br/>
-        <form action="" method="post">
-            <p>
-                <?php
-                echo $rr->getHtmlSelect(3);
-                ?>
-                <input type="submit" name="submit" value="Modify Report"/>
-            </p>
-        </form>
-    </div>
+    <p>
+        <? if ($prev) : ?>
+            <a href="isserRanksSummary.php">Show next shipment</a>
+        <? else : ?>
+            <a href="isserRanksSummary.php?prev=1">Show previous shipment</a>
+        <? endif; ?>
+    </p>
 
     <div align='center'>
-        <input type='button' name='print' value='Print' onclick="window.print()"/>
+        <input type='button' name='print' value='Print' onclick="window.print()" />
     </div>
 </div>
 <div id='main'>
@@ -141,27 +121,36 @@ $schools = $as->getSchools();
 
             foreach ( $line as $rank => $info ) {
                 foreach ( $rankNames as $rankName => $needed ) {
+                    //echo $rankName . "<br />";
                     if ( $rankName == $rank ) {
-                        echo "<h2>" . $rank . "</h2>";
-                        echo "<table><tr><th>Grade</th><th>Serial Number</th><th>Name</th><th>Teacher</th></tr>";
+//                        echo "<h2>" . $rank . "</h2><table>";
                         foreach ( $info as $teacher => $class ) {
-                            foreach ( $class as $grade => $students ) {
-                                foreach ( $students as $student ) {
-                                    $sql = "select user_serial, first, last from users where user_id = " . $student;
-                                    $result = mysql_query($sql);
-                                    $row = mysql_fetch_assoc($result);
-                                    
-                                    echo "<tr><td>" . $grade . "</td>";
-                                    echo "<td>" . $row['user_serial'] . "</td>";
-                                    echo "<td>";
-                                    if (!empty($heNames[$student]))
-                                        echo $heNames[$student] . ' - ';
-                                    echo $row['first'] . ' ' . $row['last'] . "</td>";
-                                    echo "<td>" . $teacher . "</td></tr>";
-                                }
+                            foreach ( $class as $grade => $info ) {
+                                $add = count($info);
+                                if (isset($ranktotals[$rank]))
+                                    $ranktotals[$rank] += $add;
+                                else
+                                    $ranktotals[$rank] = $add;
+                                if (isset($totals[$rank]))
+                                    $totals[$rank] += $add;
+                                else
+                                    $totals[$rank] = $add;
+
+//                                foreach ($info as $student) {
+//                                    $sql = "select user_serial from users where user_id = " . $student;
+//                                    $result = mysql_query($sql);
+//                                    $row = mysql_fetch_assoc($result);
+//                                    echo "<tr><td><input type='checkbox'></td><td>" . $row['user_serial'] . "</td><td>";
+//                                    if (!empty($heNames[$student]))
+//                                        echo $heNames[$student] . ' - ';
+//                                    echo $userInfo[$student];
+//                                    echo " (" . $grade . ")";
+//                                    echo "</td></tr>";
+//                                    echo "<div class='students'>" . $student . " " . $row['user_serial'] . " <input type='checkbox' /></div>";
+//                                }
                             }
                         }
-                        echo "</table><br />";
+//                        echo "</table><br />";
                     }
                 }
             }
