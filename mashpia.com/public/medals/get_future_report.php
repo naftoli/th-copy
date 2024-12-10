@@ -66,6 +66,30 @@ function getSubjects($school_id) {
 
     $subjects = [];
     $sql = "
+        SELECT DISTINCT
+            subject_id
+        FROM
+            user_tracks ut
+                JOIN
+            users u USING (user_id)
+        WHERE
+            u.school_id = :school AND ut.enrolled = 1
+        ORDER BY subject_id";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([':school' => $school_id]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $subjects[] = $row['subject_id'];
+    }
+
+    return $subjects;
+}
+
+function getUserSubjects($school_id) {
+    global $MASHPIA_DB;
+
+    $subjects = [];
+    $sql = "
         SELECT 
             user_id, subject_id
         FROM
@@ -85,8 +109,8 @@ function getSubjects($school_id) {
     return $subjects;
 }
 
-function futureMissions($subject_id, $user_id) {
-    global $end_date, $MASHPIA_DB;
+function futureMissions($school_id) {
+    global $end_date, $subjects, $MASHPIA_DB;
 
     $missions = [];
     $sql = "
@@ -99,37 +123,41 @@ function futureMissions($subject_id, $user_id) {
                 JOIN
             users u USING (user_id)
         WHERE
-            dtm.subject_id = :subject
-                AND dtm.end_date >= :today
-                AND dtm.end_date <= :end_date
+            dtm.subject_id = :subject 
+                AND dtm.end_date >= :today 
+                AND dtm.end_date <= :end_date 
                 AND u.school_type_id = dtm.school_type_id
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
                 AND u.lang_id = dtm.lang_id
-                AND u.user_id = :user
+                AND u.school_id = :school 
         GROUP BY user_id";
 
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([
-        ':subject'  => $subject_id,
-        ':today'    => unixtojd(),
-        ':end_date' => $end_date,
-        ':user'     => $user_id
-    ]);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($rows as $row) {
-        $missions[$row['user_id']][$row['subject_id']] = intval($row['num_missions']);
+    foreach ($subjects as $subject_id) {
+        $stmt->execute([
+            ':subject' => $subject_id,
+            ':today' => unixtojd(),
+            ':end_date' => $end_date,
+            ':school' => $school_id
+        ]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $missions[$row['user_id']][$subject_id] = intval($row['num_missions']);
+        }
     }
+
+    return $missions;
 }
 
 function getEligibleMedals($user_id) {
-    global $missions_done, $subjects, $ms;
+    global $missions_done, $subjects, $ms, $future_missions;
 
+    $numMedals = 0;
     $user_subjects = $subjects[$user_id];
     // find out how many more medals can be earned by certain date by subject
-    $numMedals = 0;
     foreach ($user_subjects as $subject) {
-        $future = futureMissions($subject, $user_id);
+        $future = $future_missions[$user_id][$subject];
         $current = $missions_done[$user_id][$subject] ?? 0;
         $total = $current + $future;
         $current_medal = $ms->calcHighestMedal($subject, $current);
@@ -149,14 +177,18 @@ function getEligibleMedals($user_id) {
 $school_id = $_REQUEST['school_id'];
 $end_date = $_REQUEST['end_date'];
 
+// needed for knowing how many missions are needed per subject per medal
+require_once 'class.medalsSubjects.php';
+$ms = new MedalsSubjects();
+
 // get all registered users in this school
 $users = getUsers($school_id);
 $missions_done = getMissionsDone($school_id);
 $subjects = getSubjects($school_id);
+$user_subjects = getUserSubjects($school_id);
+$future_missions = futureMissions($school_id);
 
-require_once 'class.medalsSubjects.php';
-$ms = new MedalsSubjects();
-
+// calculate possible medals
 $possible_medals = [];
 foreach ($users as $user_id) {
     $num_medals = getEligibleMedals($user_id);
