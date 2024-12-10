@@ -124,7 +124,7 @@ function futureMissions($user_id) {
             users u USING (user_id)
         WHERE
             dtm.subject_id = :subject 
-                AND dtm.end_date >= :today 
+                AND dtm.start_date >= :today 
                 AND dtm.end_date <= :end_date 
                 AND u.school_type_id = dtm.school_type_id
                 AND ut.track_id = dtm.track_id
