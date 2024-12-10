@@ -19,10 +19,8 @@ $start_date = beginning_of_hebrew_year();
 $end_date = gri('end_date', unixtojd()+30);
 ?>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
-
-<HTML DIR="<?=$dir?>">
-
+<!DOCTYPE html>
+<HTML>
 <HEAD>
     <TITLE><?=T_('Mission Report'), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
     <LINK href="admin_styles.css" rel="stylesheet" type="text/css">
