@@ -11,7 +11,7 @@ $ds_daily = [121, 122, 124, 125, 129, 130, 131, 132, 133, 134, 135];
 function calculateNextDate($subject, $needed) {
     global $user, $monthly_subjects, $MASHPIA_DB;
     // find date of task for this subject in $needed times
-    $jd = unixtojd();
+    $jd = floor(unixtojd());
     $limit_by = $needed;
     if (! in_array($subject, $monthly_subjects)) {
         $jd = $jd + ($needed * 7);
@@ -31,7 +31,8 @@ function calculateNextDate($subject, $needed) {
                 AND dtm.end_date >= $jd
                 AND u.school_type_id = dtm.school_type_id
                 AND ut.track_id = dtm.track_id
-                AND ut.level = dtm.level
+                AND ut.level = dtm.level 
+                AND u.lang_id = dtm.lang_id 
                 AND u.user_id = $user
         GROUP BY dtm.end_date 
         LIMIT $limit_by";
