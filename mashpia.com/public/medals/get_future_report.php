@@ -166,6 +166,13 @@ function getEligibleMedals($user_id) {
         // make sure there's no negative even though that would be a big issue if there was
         if ($medal_difference < 0) $medal_difference = 0;
         $numMedals += $medal_difference;
+        if ($user_id == 19274) {
+            echo "Subject: " . $subject . "\n";
+            echo "Current Missions: " . $current_medal . "\n";
+            echo "Future Missions: " . $future_medal . "\n";
+            echo "Total Missions: " . $total . "\n";
+            echo "Difference: " . $medal_difference . "\n";
+        }
     }
 
     return $numMedals;
