@@ -120,8 +120,11 @@ function getEligibleMedals($user_id) {
         echo "Current: " . $current . "<br />";
         $total = $current + $future;
         $current_medal = $ms->calcHighestMedal($subject, $current);
+        echo "Current Medal: " . $current_medal . "<br />";
         $future_medal = $ms->calcHighestMedal($subject, $total);
+        echo "Future Medal: " . $future_medal . "<br />";
         $medal_difference = $future_medal - $current_medal;
+        echo "Difference: " . $medal_difference . "<br />";
         // make sure there's no negative even though that would be a big issue if there was
         if ($medal_difference < 0) $medal_difference = 0;
         $numMedals += $medal_difference;
@@ -144,9 +147,7 @@ $ms = new MedalsSubjects();
 
 $possible_medals = [];
 foreach ($users as $user_id) {
-    echo "User ID: " . $user_id . "\n";
     $num_medals = getEligibleMedals($user_id);
-    echo "Num Medals: " . $num_medals . "\n";
     $possible_medals[$user_id] = $num_medals;
 }
 
