@@ -15,7 +15,10 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-$school_id = $_POST['school_id'];
+$info = file_get_contents("php://input");
+$info = json_decode($info, true);
+$school_id = $info['school_id'];
+
 $sql = "
     SELECT 
         user_id, first, last, class_grade, class_sub

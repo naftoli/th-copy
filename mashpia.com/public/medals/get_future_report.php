@@ -173,9 +173,11 @@ function getEligibleMedals($user_id) {
 
 //******************** SCRIPT START HERE ************************//
 
-// get school id from post
-$school_id = $_REQUEST['school_id'];
-$end_date = $_REQUEST['end_date'];
+$info = file_get_contents("php://input");
+$info = json_decode($info, true);
+
+$school_id = $info['school_id'];
+$end_date = $info['end_date'];
 
 // needed for knowing how many missions are needed per subject per medal
 require_once 'class.medalsSubjects.php';
