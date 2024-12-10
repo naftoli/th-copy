@@ -97,7 +97,12 @@ function futureMissions($subject_id, $user_id, $end_date) {
                 AND u.user_id = :user";
 
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([':subject' => $subject_id, ':today' => unixtojd(), ':user' => $user_id, ':end_date' => $end_date]);
+    $stmt->execute(['
+        :subject' => $subject_id,
+        ':today' => unixtojd(),
+        ':user' => $user_id,
+        ':end_date' => $end_date
+    ]);
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     return intval($row['mission_count']);
