@@ -136,7 +136,7 @@ function futureMissions($user_id) {
     foreach ($user_subjects[$user_id] as $subject_id) {
         $stmt->execute([
             ':subject'  => $subject_id,
-            ':today'    => unixtojd(),
+            ':today'    => floor(unixtojd()),
             ':end_date' => $end_date,
             ':user'     => $user_id
         ]);
@@ -169,15 +169,15 @@ function getEligibleMedals($user_id) {
         // make sure there's no negative even though that would be a big issue if there was
         if ($medal_difference < 0) $medal_difference = 0;
         $numMedals += $medal_difference;
-        if ($user_id == 19274) {
-            echo "Subject: " . $subject . "\n";
-            echo "Current Missions: " . $current . "\n";
-            echo "Future Missions: " . $future . "\n";
-            echo "Current Medal: " . $current_medal . "\n";
-            echo "Future Medal: " . $future_medal . "\n";
-            echo "Difference: " . $medal_difference . "\n";
-            echo "\n";
-        }
+//        if ($user_id == 19274) {
+//            echo "Subject: " . $subject . "\n";
+//            echo "Current Missions: " . $current . "\n";
+//            echo "Future Missions: " . $future . "\n";
+//            echo "Current Medal: " . $current_medal . "\n";
+//            echo "Future Medal: " . $future_medal . "\n";
+//            echo "Difference: " . $medal_difference . "\n";
+//            echo "\n";
+//        }
     }
 
     return $numMedals;
