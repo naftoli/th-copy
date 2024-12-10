@@ -114,7 +114,7 @@ $u = new SchoolUsers($school_id);
 $u->setUsers();
 $users_by_class = $u->getUserNames();
 
-require_once $_SERVER['DOCUMENT_ROOT'] . 'class.medalsSubjects.php';
+require_once 'class.medalsSubjects.php';
 $ms = new MedalsSubjects();
 
 $possible_medals = [];
