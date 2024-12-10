@@ -130,8 +130,7 @@ function futureMissions($user_id) {
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
                 AND u.lang_id = dtm.lang_id
-                AND u.user_id = :user 
-        GROUP BY user_id";
+                AND u.user_id = :user ";
 
     $stmt = $MASHPIA_DB->prepare($sql);
     foreach ($user_subjects[$user_id] as $subject_id) {
@@ -172,7 +171,6 @@ function getEligibleMedals($user_id) {
             echo "Future Missions: " . $future . "\n";
             echo "Current Medal: " . $current_medal . "\n";
             echo "Future Medal: " . $future_medal . "\n";
-            echo "Total Medals: " . $total . "\n";
             echo "Difference: " . $medal_difference . "\n";
             echo "\n";
         }
