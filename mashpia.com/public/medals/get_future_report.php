@@ -120,7 +120,9 @@ $ms = new MedalsSubjects();
 $possible_medals = [];
 foreach ($users_by_class as $grade => $more) {
     foreach ($more as $user_id => $name) {
+        echo "User ID: " . $user_id . "\n";
         $num_medals = getEligibleMedals($user_id);
+        echo "Num Medals: " . $num_medals . "\n";
         $possible_medals[$grade][$user_id] = $num_medals;
     }
 }
