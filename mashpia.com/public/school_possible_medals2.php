@@ -44,23 +44,9 @@ $end_date = gri('end_date', unixtojd()+30);
             <H1>Reports</H1>
 
             <script>
-                async function get_users() {
-                    const users = await $.post('/medals/get_users.php', { school_id: $("#school_id").val() })
-                    return users
-                }
-
-                async function get_medals() {
-                    const medals = await $.post('/medals/get_future_report.php', { school_id: $("#school_id").val(), end_date: $("#end_date").val() })
-                    return medals
-                }
-
                 async function get_future_report() {
-                    let users = await get_users();
-                    users = JSON.parse(users.response)
-                    let medals = await get_medals();
-                    medals = JSON.parse(medals.response)
-                    console.log(users)
-                    console.log(medals)
+                    let users = await $.post('/medals/get_users.php', { school_id: $("#school_id").val() })
+                    let medals = await $.post('/medals/get_future_report.php', { school_id: $("#school_id").val(), end_date: $("#end_date").val() })
                     // create html
                     let html = "<tr><th>Grade</th><th>Student</th><th>Eligible Medals</th></tr>";
                     for (let i = 0; i < users.length; i++) {
