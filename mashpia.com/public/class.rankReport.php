@@ -271,11 +271,11 @@ class RankReport extends Report {
                 foreach ($grades as $grade => $users) {
                     foreach ($users as $user_id => $rank_ord) {
                         $book = 0;
-                        if ($rank_ord == 1) {
+                        if ($rank_ord >= 1 && $rank_ord < 9) {
                             $book = 1;
-                        } else if ($rank_ord == 9) {
+                        } else if ($rank_ord >= 9 && $rank_ord < 12) {
                             $book = 2;
-                        } else if ($rank_ord == 12) {
+                        } else if ($rank_ord >= 12) {
                             $book = 3;
                         }
                         if ($book) $this->books[$school][$book][$teacher][$grade][] = $user_id;

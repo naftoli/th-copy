@@ -114,7 +114,7 @@ $for_shipping = [];
         $heNames = $rr->getUserHeNames();
 
         foreach ($books as $school => $more) {
-            if ($school != $school_name) continue;
+//            if ($school != $school_name) continue;
             echo "<h2>" . $school_name . "</h2>";
             echo "Books earned in " . $school . " from " . $heDatesRanks['start_he'] . " until " . $heDatesRanks['end_he'] . ". <br /><br />";
             $totals = [];
