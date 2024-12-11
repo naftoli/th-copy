@@ -36,7 +36,7 @@ function calculateNextDate($subject, $needed) {
                 AND u.user_id = $user 
                 AND dtm.personal = 0 
         GROUP BY dtm.end_date 
-        ORDER BY dtm.end_date DESC 
+        ORDER BY dtm.end_date  
         LIMIT $limit_by";
 //    echo $sql . "<br />";
     $stmt = $MASHPIA_DB->query($sql);
