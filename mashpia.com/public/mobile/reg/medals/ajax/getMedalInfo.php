@@ -33,8 +33,10 @@ function calculateNextDate($subject, $needed) {
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level 
                 AND u.lang_id = dtm.lang_id 
-                AND u.user_id = $user
+                AND u.user_id = $user 
+                AND dtm.personal = 0 
         GROUP BY dtm.end_date 
+        ORDER BY dtm.end_date DESC 
         LIMIT $limit_by";
 //    echo $sql . "<br />";
     $stmt = $MASHPIA_DB->query($sql);

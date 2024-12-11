@@ -133,7 +133,8 @@ function futureMissions($user_id) {
                 AND ut.track_id = dtm.track_id
                 AND ut.level = dtm.level
                 AND u.lang_id = dtm.lang_id 
-                AND dt.mandatory_qty = 1";
+                AND dt.mandatory_qty = 1 
+                AND dtm.personal = 0";
 
     $stmt = $MASHPIA_DB->prepare($sql);
     foreach ($user_subjects[$user_id] as $subject_id) {
@@ -156,11 +157,11 @@ function getEligibleMedals($user_id) {
 
     $numMedals = 0;
     $future_missions = futureMissions($user_id);
-    if ($user_id == 19274) {
-        echo "<pre>";
-        print_r($future_missions);
-        echo "</pre>";
-    }
+//    if ($user_id == 19274) {
+//        echo "<pre>";
+//        print_r($future_missions);
+//        echo "</pre>";
+//    }
     // find out how many more medals can be earned by certain date by subject
     foreach ($user_subjects[$user_id] as $subject) {
         $future = $future_missions[$subject] ?? 0;
