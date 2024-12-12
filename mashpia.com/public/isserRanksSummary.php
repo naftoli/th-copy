@@ -132,8 +132,9 @@ $for_shipping = [];
 
                             // echo "<tr><td>";
                             // echo "<input type='checkbox' class='book' id='book_" . $book . "_" . $user_id . "' ";
-                            // if (isset($shipped[$user_id]) && in_array($book, $shipped[$user_id])) {
-                            //     $addToTotal = false;
+                             if (isset($shipped[$user_id]) && in_array($book, $shipped[$user_id])) {
+                                 $addToTotal = false;
+                             }
                             //     echo 'checked ';
                             // }
                             // if (!$super) echo 'disabled ';
