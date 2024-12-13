@@ -119,15 +119,43 @@ class ChayoleiShipping
             'yom_tov'   => $yom_tov
         ]);
         $rows = $stmt->fetchAll();
+        // find all items related to same individual and add up all the qtys of that item into one entity
+        $userItems = [];
+        foreach ($rows as $row) {
+            $userKey = $row['user_id'] . '-' . $row['item'];
+            if (!isset($userItems[$userKey])) {
+                $userItems[$userKey] = [
+                    'item'  => $row['item'],
+                    'qty'   => $row['qty'],
+                    'info'  => $row
+                ];
+            } else {
+                $userItems[$userKey]['qty'] += $row['qty'];
+            }
+        }
+        $rows = [];
+        foreach ($userItems as $key => $details) {
+            $user_id = explode('-', $key)[0];
+            $item = $details['item'];
+            $qty = $details['qty'];
+            $info = $details['info'];
+            $rows[] = [
+                'user_id'   => $user_id,
+                'item'      => $item,
+                'qty'       => $qty,
+                'info'      => $info
+            ];
+        }
         foreach ($rows as $row) {
             if (count($items) && !in_array(strtolower($row['item']), $items)) continue;
+            $info = $row['info'];
             $purchases[$row['user_id']][] = [
                 'item'  => $row['item'],
                 'size'  => '',
                 'name'  => '',
-                'id'    => $row['shipping_code'],
+                'id'    => $info['shipping_code'],
                 'cat'   => 'hei teves',
-                'size'  => $row['size'],
+                'size'  => $info['size'],
                 'qty'   => $row['qty']
             ];
         }
