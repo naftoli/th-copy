@@ -1031,10 +1031,12 @@
 		}
 
 		async function processPage(admin) {
-			// let registered = children.filter(child => child.date_paid)
-			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
-			let registered = children
-			let eligible = children
+			let registered = children.filter(child => child.date_paid)
+			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			if (Cookies.get('naftoli')) {
+				registered = children
+				eligible = children
+			}
 			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
 
 			// check if there's any family balance that can be applied to registration
@@ -1183,7 +1185,6 @@
 
 			// find out if we need to charge for shipping
 			// only get shipping fee if we do not have any kids that have registered
-			let shipping = 0
 			if (!registered.length) {
 				// check if we need to charge for shipping
 				shipping = getShippingFee(parseInt(eligible[0]['school_id']), eligible[0]['admin_country'].trim(), eligible.length)

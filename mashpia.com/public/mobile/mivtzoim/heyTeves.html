@@ -580,7 +580,7 @@
 
             <div class="row">
                 <h2>Total: $<span id="amount">0</span></h2>
-                <div style="font-style: italic">**Minimum order $5 (for CC to work)</div>
+                <div style="font-style: italic">**Minimum order $3.50 (for CC to work)</div>
                 <input type="hidden" id="total"/>
             </div>
             <hr/>
@@ -830,8 +830,8 @@
         $("#purchase").attr('data-processing', 'true')
         $("#purchase").attr('disabled', true)
 
-        const total = parseInt($("#total").val());
-        if (total > 0) {
+        const total = parseFloat($("#total").val());
+        if (total >= 3.5) {
             let info = {};
             info.cc = {};
 
@@ -903,7 +903,8 @@
                 alert("An error occurred. Please try again.");
             }
         } else {
-            alert("You have not chosen anything to purchase.");
+            if (total == 0) alert("You have not indicated what you are purchasing.");
+            else alert("You must make a purchase of at least $3.50.");
         }
         $("#purchase").attr('data-processing', 'false')
         $("#purchase").attr('disabled', false)
@@ -942,7 +943,11 @@
                     const exceptions = [61, 55, 58, 66, 110, 112, 180, 256, 643, 709, 713, 690]
                     for (let c in children) {
                         let child = children[c];
-                        if ((child.user_registered || child.chidon5783) && !exceptions.includes(parseInt(child.school_id))) {
+                        if (
+                            child.school_id != 612 &&
+                            (child.user_registered || child.chidon5783) &&
+                            !exceptions.includes(parseInt(child.school_id))
+                        ){
                             registred_children[c] = child;
                         } else {
                             unregistered_children[c] = child;

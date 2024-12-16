@@ -36,7 +36,7 @@ function paymentInProgress() {
 
 // **************** FUNCTIONS **************** //
 function purchaseItems() {
-    global $total, $admin_id, $cc_info;
+    global $total, $admin_id, $cc_info, $m, $purchase_id;
 
     $amount = $total; // the authorize script expects a variable called amount
     $address = "";
@@ -50,6 +50,8 @@ function purchaseItems() {
         if (intval($cc_info->on_file) == 1) {
             $customer_id = getCustomerID($admin_id);
             if (!$customer_id || empty($customer_id)) {
+                $m->deletePurchase($purchase_id);
+                endPayment();
                 echo json_encode([
                     'success' => false,
                     'msg' => 'You do not have a valid credit card on file, please enter a new credit card and try again.'
@@ -61,6 +63,8 @@ function purchaseItems() {
             $cp = new CustomerProfile( $customer_id );
             $response = $cp->chargeCard( $total, $cc_info->card_id, null, null, $description );
             if (! is_array($response)) {
+                $m->deletePurchase($purchase_id);
+                endPayment();
                 echo json_encode([
                     'success'   => false,
                     'error'     => $response
@@ -98,6 +102,8 @@ function purchaseItems() {
                     $response_array[9];
                 return $strResponse;
             } else {
+                $m->deletePurchase($purchase_id);
+                endPayment();
                 echo json_encode([
                     'success'   => false,
                     'error'     => $response_array[3]
@@ -163,7 +169,7 @@ $purchase_id = saveToDb($purchaseInfo);
 if ($purchase_id > 0) {
     // charge the card
     $res = purchaseItems();
-    $res = false;
+//    $res = false;
     if ($res) {
         // update db with authorization
         $m->updatePurchase($purchase_id, $res);
@@ -173,9 +179,9 @@ if ($purchase_id > 0) {
         echo json_encode([
             'success'   => true
         ]);
-    } else {
-        $m->deletePurchase($purchase_id);
-        endPayment();
+//    } else {
+//        $m->deletePurchase($purchase_id);
+//        endPayment();
 //        echo json_encode([
 //            'success'   => false,
 //            'error'     => 'There was an error charging your card. You have not been charged. Please try again.'
