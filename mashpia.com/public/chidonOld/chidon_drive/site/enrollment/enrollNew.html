@@ -1070,15 +1070,14 @@
 				let trackText = getTrackText(child.track, ultimate)
 
 				const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
-				html += `
-										<div class="kid flex-kids" id="${child.user_id}">
-												<div>
-														<img class="childImg" src="//mashpia.com/${childPic}" />
-												</div>
-												 <div style="margin-left: 20px;">
-														<h5 class="formDetails">Dear ${child.first},<br /><br />
-														Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
-														Track. You are eligible for ${trackText}.<h5>`
+				html += `<div class="kid flex-kids" id="${child.user_id}">
+							<div>
+								<img class="childImg" src="//mashpia.com/${childPic}" />
+							</div>
+							 <div style="margin-left: 20px;">
+								<h5 class="formDetails">Dear ${child.first},<br /><br />
+								Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
+								Track. You are eligible for ${trackText}.<h5>`
 
 				const tripDates = {
 					M: 'Wednesday, 24 Adar 2/April 3 6:30pm - Sunday, 28 Adar 2/April 7 1:00pm',
@@ -1133,22 +1132,22 @@
 						// add few options for myshliach only
 						else if (parseInt(child.school_id) === 61) {
 							text += `<option value="east">MyShliach NY Retreat</option>
-											<option value="europe">MyShliach EU Retreat</option>`
+									 <option value="europe">MyShliach EU Retreat</option>`
 						}
 						text += `<option value="west">West Coast</option>
-											<option value="no_trip">No Trip</option></select>`
+								 <option value="no_trip">No Trip</option></select>`
 					}
 					let style = ''
 					if (ultimate) style = 'display: none'
 					html += `<div class="regional_trip" style="${style}"><h5 class="formDetails"><span class="title">Regional Trip</span><br />${text}</h5>`
 					if (!myshliach) {
 						html += `<div class="flex">
-												<input class="inputCheckbox trip_terms" type="checkbox" name="trip" id="trip_terms_${child.user_id}" />
-												<label for="trip_terms_${child.user_id}" style="display: inline; text-transform: none;">
-												I understand that if I can't make it to my regional trip and need to be switched to a different regional trip,
-												I will email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE registration closes.
-												</label>
-											</div>`
+									<input class="inputCheckbox trip_terms" type="checkbox" name="trip" id="trip_terms_${child.user_id}" />
+									<label for="trip_terms_${child.user_id}" style="display: inline; text-transform: none;">
+									I understand that if I can't make it to my regional trip and need to be switched to a different regional trip,
+									I will email <a mailto:'chidon@tzivoshashem.org'>chidon@tzivoshashem.org</a> BEFORE registration closes.
+									</label>
+								</div>`
 					}
 					html += '</div>'
 				}
@@ -1166,18 +1165,18 @@
 				const coupon = child.coupon
 				if (coupon) {
 					html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
-												You have $${coupon} in coupon code(s) which will be applied to your registration cost.</h5>`
+							 You have $${coupon} in coupon code(s) which will be applied to your registration cost.</h5>`
 				}
 
 				// chidon drive
 				if (parseFloat(child.raised) > 0) {
 					html += `<h5 class="formDetails"><span class="title">Chidon Drive</span><br />
-												You raised $${child.raised} which will be applied to your registration cost.</h5>`
+							 You raised $${child.raised} which will be applied to your registration cost.</h5>`
 				}
 
 				html += `<div class='reg-details'></div>
-									</div>
 								</div>
+							</div>
 						</div>
 						<div style="clear: both"></div>
 						<br />`
@@ -1203,20 +1202,20 @@
 			}
 			if (needsShipping) {
 				html += `<div id="shipping_charges">
-								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-								<div class="flex">
-									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
-									<label>
-										(FREE) ${pickupText[eligible[0]['school_id']]}
-									</label>
-								</div>
-								<div class="flex">
-									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping}" />
-									<label>
-										($${shipping}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
-										please update the address on your mashpia.com parent account.
-									</label>
-								</div></div>`
+							<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+							<div class="flex">
+								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+								<label>
+									(FREE) ${pickupText[eligible[0]['school_id']]}
+								</label>
+							</div>
+							<div class="flex">
+								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping}" />
+								<label>
+									($${shipping}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+									please update the address on your mashpia.com parent account.
+								</label>
+							</div></div>`
 			}
 
 			$(".login").hide();
