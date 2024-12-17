@@ -271,7 +271,7 @@ ksort($grand_summary);
         display: none;
       }
     }
-    button {
+    button, select {
       padding: 8px;
       font-size: 14px;
     }
@@ -282,13 +282,27 @@ ksort($grand_summary);
   </style>
 </head>
 <body>
-  <?php foreach ($resultsBySchool as $school => $more) : ?>
+  <?php
+  $idx = 0;
+  $ordering = [];
+  foreach ($fields_chosen as $field) {
+    if (strpos($field, 'shipping') === false) $ordering[] = $field;
+  }
+  echo "Order by: <select name='orderBy' id='orderBy'>";
+  echo "<option value='-1'>Choose ordering</option>";
+  foreach ($ordering as $col) {
+    echo "<option value='" . $idx++ . "'>" . $fields[$col] . "</option>";
+  }
+  foreach ($item_details_chosen as $field) {
+    echo "<option value='" . $idx++ . "'>" . ucwords($field) . "</option>";
+  }
+  echo "</select><br /><br />";
+  if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+  foreach ($resultsBySchool as $school => $more) : ?>
     <div class="header" id="<?=$school?>">
       <?php
-
       if (! isset($schools[$school])) continue;
       if (! isset($summary[$school])) continue;
-      if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
       echo "<h3>" . $schools[$school] . "</h3>";
       if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
       $address = '';
@@ -325,7 +339,7 @@ ksort($grand_summary);
 <!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
-        <table class="table table-striped table-condensed cell-border hover row-order order-column">
+        <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
           <thead>
             <tr>
               <th>Item ID</th>
@@ -433,10 +447,23 @@ ksort($grand_summary);
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<!-- <style src="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"></style>
+<script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script> -->
 <script>
-  $('.table').DataTable({
+  // summary tables don't need to be ordered
+  $(".table.summary").DataTable({
     paging: false
-  });
+  })
+
+  const table = $(".table").not(".summary").DataTable({
+    paging: false
+  })
+
+  document.getElementById('orderBy').addEventListener('change', function() {
+    const orderby = this.value
+    if (orderby >= 0)
+      table.order([orderby, 'asc']).draw();
+  })
 
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
