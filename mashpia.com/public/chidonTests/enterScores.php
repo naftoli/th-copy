@@ -41,9 +41,26 @@ if ($admin_user['auth'] != 'super') {
     }
 }
 
+// initialize all tests to not be disabled
+$disabled = false;
+$disableIyun = false;
+$exceptions = [54];
+// disable marking after certain dates for bc's
+if ($admin_user['auth'] != 'super') {
+    $today = new DateTime();
+    $shutdown = ChidonTests::getClosingDates();
+    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions))
+        $disabled = true;
+//    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
+//        $disableIyun = true;
+}
+
+if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
+
 if (isset($_POST['scores'])) {
-    // make sure not to save marks from prev yrs
-    if (!isset($_POST['yr']) || (isset($_POST['yr']) && $_POST['yr'] == $year)) {
+    // echo "<pre>"; print_r($_POST['scores']); echo "</pre>"; exit;
+    // make sure not to save marks if we have set disabled to true
+    if (!$disabled) {
         $ct->insertScores($_POST['scores'], $_POST['levels']);
         header("Location: marks.php?test_num=" . $testNumber);
         exit;
@@ -62,24 +79,6 @@ if ($admin_user['auth'] == 'super' || isset($_POST['submit'])) {
         $levels[$id] = $ct->getLevels();
     }
 }
-
-//echo "<pre>"; print_r($info); echo "</pre>"; exit;
-
-// initialize all tests to not be disabled
-$disabled = false;
-$disableIyun = false;
-$exceptions = [54];
-// disable marking after certain dates for bc's
-if ($admin_user['auth'] != 'super') {
-    $today = new DateTime();
-    $shutdown = ChidonTests::getClosingDates();
-    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions))
-        $disabled = true;
-//    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
-//        $disableIyun = true;
-}
-
-if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
 
 // find out which schools to disable
 $locked = [];
@@ -206,13 +205,13 @@ $stmtReportCards = $MASHPIA_DB->prepare("
                 Choose Class: <select name="grade">
                     <option value="0">All Classes</option>
                     <?php
-                    $sql = "select class_id, class_grade, class_sub from classes where school_id = " . $admin_user['auths']['school'][0];
-                    $result = mysql_query($sql);
-                    while ($row = mysql_fetch_assoc($result)) {
-                        if (intval($row['class_grade']) >= 4) {
-                            $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-                            echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
-                        }
+                    $sql = "select class_id, class_grade, class_sub from classes where school_id = :id";
+                    $stmt = $MASHPIA_DB->prepare($sql);
+                    $stmt->execute(['id' => $admin_user['auths']['school'][0]]);
+                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                    if (intval($row['class_grade']) >= 4) {
+                        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                        echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
                     }
                     ?>
                 </select><br /><br />

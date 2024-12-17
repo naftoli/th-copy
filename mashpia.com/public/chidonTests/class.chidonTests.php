@@ -266,7 +266,15 @@ class ChidonTests
         foreach ($info as $id => $more) {
             foreach ($more as $testNum => $details) {
                 foreach ($this->testQuestions as $type => $questions) {
-                    if (isset($details[$type]) && intval($details[$type]) > 0) {
+                    // if (isset($details[$type]) && intval($details[$type]) > 0) {
+                    // if we have a mark, then set it / update it
+                    // if not, do nothing
+                    // TODO: how do we deal with setting genius to 0 when the genius mark has been disabled and therefore won't come up in the array?
+                    // TODO: and if we set it to 0 (when there's no mark being sent in marks array), it can overwrite it even if it's accidentally disabled?
+                    if (isset($details[$type])) {
+                        if ($type == 'genius' && $details[$type] > 0 && $levels[$id][$testNum] == 1) {
+                            $details[$type] = 0; // set mark to 0 if it's genius track but level 1
+                        }
                         if (! $stmtInsert->execute([
                                 ':id' => $id,
                                 ':type' => $type,
@@ -277,45 +285,46 @@ class ChidonTests
                             ])) {
                             $success = false;
                         }
-                    } else {
-                        // check if we need to set mark to 0
-                        $stmtCheck = $this->db->prepare("
-                            SELECT 
-                                * 
-                            FROM
-                                th_chidon_marks 
-                            WHERE 
-                                th_chidon_id = :id 
-                                AND test_type = :type 
-                                AND test_number = :number
-                        ");
-                        $stmtCheck->execute([
-                            ':id' => $id,
-                            ':type' => $type,
-                            ':number' => $testNum
-                        ]);
-                        $row = $stmtCheck->fetch();
-                        if ($row['answered_correctly'] > 0) {
-                            $stmtUpdate = $this->db->prepare("
-                                UPDATE th_chidon_marks 
-                                SET 
-                                    answered_correctly = 0, 
-                                    level = :level  
-                                WHERE 
-                                    th_chidon_id = :id 
-                                    AND test_type = :type 
-                                    AND test_number = :number
-                            ");
-                            if (! $stmtUpdate->execute([
-                                    ':id' => $id,
-                                    ':type' => $type,
-                                    ':number' => $testNum,
-                                    ':level' => $levels[$id][$testNum][$type] ?? 1
-                                ])) {
-                                $success = false;
-                            }
-                        }
-                    }
+                    } 
+                    // else {
+                    //     // check if we need to set mark to 0
+                    //     $stmtCheck = $this->db->prepare("
+                    //         SELECT 
+                    //             * 
+                    //         FROM
+                    //             th_chidon_marks 
+                    //         WHERE 
+                    //             th_chidon_id = :id 
+                    //             AND test_type = :type 
+                    //             AND test_number = :number
+                    //     ");
+                    //     $stmtCheck->execute([
+                    //         ':id' => $id,
+                    //         ':type' => $type,
+                    //         ':number' => $testNum
+                    //     ]);
+                    //     $row = $stmtCheck->fetch();
+                    //     if ($row['answered_correctly'] > 0) {
+                    //         $stmtUpdate = $this->db->prepare("
+                    //             UPDATE th_chidon_marks 
+                    //             SET 
+                    //                 answered_correctly = 0, 
+                    //                 level = :level  
+                    //             WHERE 
+                    //                 th_chidon_id = :id 
+                    //                 AND test_type = :type 
+                    //                 AND test_number = :number
+                    //         ");
+                    //         if (! $stmtUpdate->execute([
+                    //                 ':id' => $id,
+                    //                 ':type' => $type,
+                    //                 ':number' => $testNum,
+                    //                 ':level' => $levels[$id][$testNum][$type] ?? 1
+                    //             ])) {
+                    //             $success = false;
+                    //         }
+                    //     }
+                    // }
                 }
             }
         }
