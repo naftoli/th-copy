@@ -55,6 +55,7 @@ cgi-bin
 /mobile/reg/img_android/
 /mobile/reg/parents/
 /mobile/chidon/img/
+/mobile/mivtzoim/images/
 
 # raffles - ignore the logs and images
 /raffles/tasks/logs/
