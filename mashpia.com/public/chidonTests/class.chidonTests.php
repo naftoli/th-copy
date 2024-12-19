@@ -284,13 +284,12 @@ class ChidonTests
                             $success = false;
                         }
                     } else if ($type == 'genius' && $levels[$id][$testNum] == 1) {
-                        $details[$type] = 0;
                         if (! $stmtInsert->execute([
                             ':id' => $id,
                             ':type' => $type,
                             ':number' => $testNum,
                             ':questions' => $questions,
-                            ':answered' => $details[$type],
+                            ':answered' => 0,
                             ':level'    => 1
                         ])) {
                             $success = false;
