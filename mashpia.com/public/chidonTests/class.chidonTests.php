@@ -284,42 +284,17 @@ class ChidonTests
                             $success = false;
                         }
                     } else if ($type == 'genius' && $levels[$id][$testNum] == 1) {
-                         // check if we need to set mark to 0
-                         $stmtCheck = $this->db->prepare("
-                             SELECT 
-                                 * 
-                             FROM
-                                 th_chidon_marks 
-                             WHERE 
-                                 th_chidon_id = :id 
-                                 AND test_type = :type 
-                                 AND test_number = :number
-                         ");
-                         $stmtCheck->execute([
-                             ':id' => $id,
-                             ':type' => $type,
-                             ':number' => $testNum
-                         ]);
-                         $row = $stmtCheck->fetch();
-                         if (isset($row['answered_correctly']) && intval($row['answered_correctly']) > 0) {
-                             $stmtUpdate = $this->db->prepare("
-                                 UPDATE th_chidon_marks 
-                                 SET 
-                                     answered_correctly = 0, 
-                                     level = 1 
-                                 WHERE 
-                                     th_chidon_id = :id 
-                                     AND test_type = :type 
-                                     AND test_number = :number
-                             ");
-                             if (! $stmtUpdate->execute([
-                                     ':id' => $id,
-                                     ':type' => $type,
-                                     ':number' => $testNum
-                                 ])) {
-                                 $success = false;
-                             }
-                         }
+                        $details[$type] = 0;
+                        if (! $stmtInsert->execute([
+                            ':id' => $id,
+                            ':type' => $type,
+                            ':number' => $testNum,
+                            ':questions' => $questions,
+                            ':answered' => $details[$type],
+                            ':level'    => 1
+                        ])) {
+                            $success = false;
+                        }
                      }
                 }
             }
