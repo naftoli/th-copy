@@ -941,12 +941,12 @@
                     let registred_children = {};
                     let unregistered_children = {};
 
-                    const exceptions = [3, 61, 55, 66, 110, 112, 180, 265, 690];
+                    const exceptions = [3, 61, 55, 66, 110, 112, 180, 265, 432, 690];
                     for (let c in children) {
                         let child = children[c];
                         if (
                             child.school_id != 612 &&
-                            (child.user_registered || child.chidon5783) &&
+                            child.user_registered &&
                             !exceptions.includes(parseInt(child.school_id))
                         ){
                             registred_children[c] = child;
