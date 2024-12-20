@@ -285,7 +285,11 @@ class MivtzoimPurchases {
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         // Additional headers
-        $headers[] = 'From: chidon@tzivoshashem.org';
+        if ($yom_tov == 'Yahadus Book Sale') {
+            $headers[] = 'From: chidon@tzivoshashem.org';
+        } else {
+            $headers[] = 'From: cth@tzivoshashem.org';
+        }
         // Mail it
         $success = mail($to, $subject, $message, implode("\r\n", $headers));
         return $success;
@@ -358,7 +362,7 @@ class MivtzoimPurchases {
             $message = '
                 <b>Thank you for your order!</b>
                 <br /><br />
-                We will start shipping all books to your school <b>after</b> the sale is over, please be patient.
+                We will start shipping all items to your school <b>after</b> the sale is over, please be patient.
                 <br /><br />
                 <b>Items</b><br />
                 <ul>
@@ -381,7 +385,7 @@ class MivtzoimPurchases {
 
             $message .= "
                 <br />
-                If you have any questions about your order, please contact your school's Chidon Coordinator. 
+                If you have any questions about your order, please contact your school's Base Commander. 
                 All transactions are non refundable!
                 <br /><br />
                 <span style='font-size: small'>
