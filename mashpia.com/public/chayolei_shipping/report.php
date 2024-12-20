@@ -283,18 +283,30 @@ ksort($grand_summary);
 </head>
 <body>
   <?php
-  $idx = 0;
-  $ordering = [];
-  foreach ($fields_chosen as $field) {
-    if (strpos($field, 'shipping') === false) $ordering[] = $field;
-  }
-  echo "Order by: <select name='orderBy' id='orderBy'>";
+  $i = 0;
+  $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
+  echo "Order Summary by: <select name='order' id='order'>";
   echo "<option value='-1'>Choose ordering</option>";
-  foreach ($ordering as $col) {
-    echo "<option value='" . $idx++ . "'>" . $fields[$col] . "</option>";
+  foreach ($s_items as $s_item) {
+      echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
+      echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
   }
+  echo "</select><br /><br />";
+
+  $idx = 0;
+  echo "Order Details by: <select name='orderBy' id='orderBy'>";
+  echo "<option value='-1'>Choose ordering</option>";
+  foreach ($fields_chosen as $field) {
+      if (strpos($field, 'shipping') === false) {
+          echo "<option value='" . $idx . ":asc'>" . $fields[$field] . " - Asc</option>";
+          echo "<option value='" . $idx++ . ":desc'>" . $fields[$field] . " - Desc</option>";
+      }
+  }
+  echo "<option value='" . $idx . ":asc'>Item - Asc</option>";
+  echo "<option value='" . $idx++ . ":desc'>Item - Desc</option>";
   foreach ($item_details_chosen as $field) {
-    echo "<option value='" . $idx++ . "'>" . ucwords($field) . "</option>";
+    echo "<option value='" . $idx . ":asc'>" . ucwords($field) . " - Asc</option>";
+      echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
   }
   echo "</select><br /><br />";
   if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
@@ -342,13 +354,9 @@ ksort($grand_summary);
         <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
           <thead>
             <tr>
-              <th>Item ID</th>
-              <th>Quantity</th>
-              <th>Item Name</th>
-              <th>Size</th>
-              <th>Gender/Color</th>
-              <th>Category</th>
-  <!--            <th>Status</th>-->
+              <?php foreach ($s_items as $s_item) : ?>
+                <th><?= $s_item ?></th>
+              <?php endforeach; ?>
             </tr>
           </thead>
           <tbody>
@@ -451,7 +459,7 @@ ksort($grand_summary);
 <script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script> -->
 <script>
   // summary tables don't need to be ordered
-  $(".table.summary").DataTable({
+  const summary = $(".table.summary").DataTable({
     paging: false
   })
 
@@ -459,10 +467,20 @@ ksort($grand_summary);
     paging: false
   })
 
+  const sortBy = (table, value) => {
+      const info = value.split(':')
+      const orderby = info[0]
+      const dir = info[1]
+      if (orderby >= 0)
+          table.order([orderby, dir]).draw();
+  }
+
+  document.getElementById('order').addEventListener('change', function() {
+      sortBy(summary, this.value)
+  })
+
   document.getElementById('orderBy').addEventListener('change', function() {
-    const orderby = this.value
-    if (orderby >= 0)
-      table.order([orderby, 'asc']).draw();
+    sortBy(table, this.value)
   })
 
   let info = []
