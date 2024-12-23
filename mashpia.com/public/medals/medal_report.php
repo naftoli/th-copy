@@ -34,7 +34,7 @@ $sql = "
         u.user_registered > 0 AND ur.year = :yee
     GROUP BY user_id , subject_id
     ORDER BY user_serial , subject_id , medal_ord";
-$stmt = $pdo->prepare($sql);
+$stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute(['year' => $year]);
 $medals = $stmt->fetchAll();
 ?>
