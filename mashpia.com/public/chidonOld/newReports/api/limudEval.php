@@ -19,6 +19,7 @@ foreach ($schools as $id => $name) {
     ];
 }
 $schools = $tmp;
+echo "<pre>"; print_r($tmp); echo "</pre>"; exit;
 
 if (count($schools) == 1) {
     $school_id = key($schools);
