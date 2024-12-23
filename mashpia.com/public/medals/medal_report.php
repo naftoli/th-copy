@@ -70,7 +70,7 @@ $medals = $stmt->fetchAll();
             $total += $num_medals;
             echo "<tr><td>" . $serial . "</td><td>" . $subject . "</td><td>" . $num_medals . "</td></tr>";
         }
-        echo "<tr><th colspan='2'>Total</th><th>" . $total . "</th></tr>";
+        echo "<tr><th colspan='2'>Total</th><th>" . number_format($total, 0) . "</th></tr>";
         ?>
     </table>
 </body>
