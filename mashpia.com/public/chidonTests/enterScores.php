@@ -54,7 +54,8 @@ if ($admin_user['auth'] != 'super') {
 //    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
 //        $disableIyun = true;
 } else {
-    $disabled = true;
+    if (! in_array($admin_user['admin_id'], [200719, 200721]))
+        $disabled = true;
 }
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
