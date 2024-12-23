@@ -211,10 +211,13 @@ $stmtReportCards = $MASHPIA_DB->prepare("
                     $sql = "select class_id, class_grade, class_sub from classes where school_id = :id";
                     $stmt = $MASHPIA_DB->prepare($sql);
                     $stmt->execute(['id' => $admin_user['auths']['school'][0]]);
-                    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-                    if (intval($row['class_grade']) >= 4) {
-                        $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-                        echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
+                    if (isset($_COOKIE['naftoli'])) echo "School ID: " . $admin_user['auths']['school'][0];
+                    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($rows as $row) {
+                        if (intval($row['class_grade']) >= 4) {
+                            $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                            echo "<option value='" . $row['class_id'] . "'>" . $grade . "</option>";
+                        }
                     }
                     ?>
                 </select><br /><br />
