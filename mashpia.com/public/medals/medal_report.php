@@ -31,7 +31,7 @@ $sql = "
             JOIN
         user_registration ur USING (user_id)
     WHERE
-        u.user_registered > 0 AND ur.year = :yee
+        u.user_registered > 0 AND ur.year = :year
     GROUP BY user_id , subject_id
     ORDER BY user_serial , subject_id , medal_ord";
 $stmt = $MASHPIA_DB->prepare($sql);
@@ -45,17 +45,10 @@ $medals = $stmt->fetchAll();
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Medals Report</title>
     <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black;
-            padding: 5px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
+        th, tr, td {
+            padding: 10px;
+            font-size: 14px;
+            border-bottom: 1px solid #cccccc;
         }
     </style>
 </head>
