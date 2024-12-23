@@ -10,8 +10,7 @@ vendor/
 composer.lock
 package-lock.json
 yarn.lock
-package.json
 base-commander/package-lock.json
 .idea/tzivos-hashem.iml
 package-lock.json
-.gitignore
+/mashpia.com/composer.lock
