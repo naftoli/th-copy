@@ -11,6 +11,15 @@ $school_id = intval($input['school']);
 $class_id = intval($input['grade']);
 $test_num = intval($input['test_num']);
 
+// make sure that a non super admin cannot see all schools/children
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
+$schools = $as->getSchools();
+if ($school_id == 0 && $admin_user['auth'] != 'super') {
+    // get admin's school id
+    echo "<pre>"; print_r($schools); print_r($admin_user); echo "</pre>";
+}
+
 // find out if school info was confirmed and should be locked
 $locked = 0;
 if ($admin_user['auth'] != 'super') {
