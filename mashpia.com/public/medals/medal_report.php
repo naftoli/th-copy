@@ -41,7 +41,7 @@ $medals = $stmt->fetchAll();
 <DOCTYPE html>
 <html>
 <head>
-    <link href="admin_styles.css" rel="stylesheet" type="text/css">
+    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Medals Report</title>
     <style>
@@ -53,7 +53,7 @@ $medals = $stmt->fetchAll();
     </style>
 </head>
 <body>
-    <?php include('admin_header.php'); ?>
+    <?php include('../admin_header.php'); ?>
     <h1>Medals Report</h1>
     <table>
         <tr>
