@@ -242,17 +242,21 @@ if (!empty($users)) {
             }
         }
 
-        // selling game sets
-//        $item_id = 4;
-//        $sqlPurchased = "select * from mashpia_purchases.purchase_details
-//                        join mashpia_purchases.purchases using (purchase_id)
-//                        where item_id = " . $item_id . " and user_id = " . $row['user_id'] . " and year = " . $reg_year;
-//        $resPurchased = mysql_query( $sqlPurchased );
-//        if ( mysql_num_rows( $resPurchased ) ) {
-//            $children[$row['user_id']]['gamePurchased'] = 1;
-//        } else {
-//            $children[$row['user_id']]['gamePurchased'] = 0;
-//        }
+        // find out if child already purchased items 
+        $neshek_id = 132;
+        $item_id = 4; // game set
+        
+        $ids = [$neshek_id]; // add or remove depending on what we are looking for
+        $sqlPurchased = "select item_id from mashpia_purchases.purchase_details
+                        join mashpia_purchases.purchases using (purchase_id)
+                        where item_id in (" . implode(',', $ids) . ") 
+                        and user_id = " . $row['user_id'] . " and year = " . $reg_year;
+        $resPurchased = mysql_query( $sqlPurchased );
+        while ($rowPurchased = mysql_fetch_assoc($resPurchased)) {
+            $item = $rowPurchased['item_id'];
+            if ($item == $neshek_id) $children[$row['user_id']]['neshek_purchased'] = 1;
+            else if ($item == $item_id) $children[$row['user_id']]['gamePurchased'] = 1;
+        }
 
         // REGISTRATION
         $children[$row['user_id']]['needsReg'] = 0;
