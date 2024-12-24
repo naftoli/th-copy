@@ -260,7 +260,7 @@
                 $("#purchases").hide();
             }
 
-            $.post('ajax/purchases.php', { item : 132 }, function( sold ) {  // Using updated item ID for neshek
+            $.post('../ajax/purchases.php', { item : 132 }, function( sold ) {  // Using updated item ID for neshek
                 var neshekStart = 2000;
                 var neshekSold = parseInt( sold );
                 var neshekLeft = neshekStart - neshekSold;
@@ -442,7 +442,7 @@
                     });
 
                     try {
-                        const response = await $.post('ajax/payment.php', {info});
+                        const response = await $.post('../ajax/purchaseNeshek.php', {info});
                         const result = JSON.parse(response);
                         console.log(result)
 
@@ -470,7 +470,7 @@
 
             // Add this new function to get saved cards
             function getSavedCards() {
-                $.post('../../chidonOld/chidon_drive/ajax/getAdminInfo.php', {admin}, function (result) {
+                $.post('../../../chidonOld/chidon_drive/ajax/getAdminInfo.php', {admin}, function (result) {
                     const adminInfo = JSON.parse(result);
                     let cards = [];
                     if (adminInfo['cards'] && adminInfo['cards'].length) {
