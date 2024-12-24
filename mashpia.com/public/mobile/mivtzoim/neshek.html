@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+        <title>Neshek Purchases</title>
+<!-- Keep all the existing styles from the original file -->
+<style>
+    /* ... (keep all existing styles) ... */
+</style>
+		<!-- Keep all the existing resource links -->
+		<style>
+            /* ... (keep all existing custom styles) ... */
+		</style>
+	</head>
+	<body class="page-goals">
+        <header class="navbar" id="top" role="banner">
+			<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+				<span id="page-title">Neshek Purchases</span>
+			</div>
+        </header>
+		
+		<div class="personalImg"></div>
+		<div class="bug-report">
+			<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Store" alt="bug-report" />
+        </div>
+        
+        <section style="width: 300px; margin: 10px auto;">
+            <div class="container page5">   
+                <div class="row" id="purchase_info" style="display: none;">
+                    <div class="col-12" style="font-size: 16px;">                   
+                        Candlesticks cost ONLY $<span class="neshekCost"></span>.<br />
+                        We will only ship the sets to your child's school. Shipping charges vary by School 
+                        depending on how many sets are being purchased (by school).
+                        <hr />
+                        <h2>Number of Candlesticks: 2000</h2>
+                        <h2>Already Sold: <span class="neshekSold"></span></h2>
+                        <h2>Currently Available: <span class="neshekLeft"></span></h2>
+                    </div>
+                    <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
+                        <hr />
+                        Wow! <span class="sold"></span> Thousands of Chayolim bought their own Candlesticks. <br />
+                        Let's see who will do mivtzoim for the most amount of time!<br />
+                        Let's see who will get the most Candlesticks given out!<br />
+                    </div>
+                    <hr />
+                </div>  
+
+                <!-- Keep the no-children div -->
+                <div style="width: 250px; margin: auto; display: none;" id='no-children'>
+                    <!-- ... (keep existing content) ... -->
+                </div>
+                
+                <div style="width: 250px; margin: auto; display: none;" id="purchases">
+                    <div class="row">
+                        <h2>Purchase For:</h2>
+                        <div class="col-12">
+                            <div class="chilrens" id="children">
+                                <script id="childrenTpl" type="text/x-handlebars-template">
+                                    {{#each children}}
+                                    <div class="child">
+                                        <div style="padding: 10px; font-size: 14px;">
+                                            <span>
+                                                <b>{{rank}}</b> {{first}} {{last}}<br />
+                                            </span>
+                                            
+                                            {{#if neshek_purchased}}
+                                                <div style='color:red'><strong><i>Child has already purchased Candlesticks.</i></strong></div>
+                                            {{else}}
+                                                <div>
+                                                    <table>
+                                                        <tr>
+                                                            <td><input type="text" class="neshek" style="width: 30px;" id="{{@key}}" /></td>
+                                                            <td>Candlesticks: <strong>$<span>{{neshekCost}}</span> </strong>/ea</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>
+                                                                {{#if myshliach}}
+                                                                    <br /><b>Please Note: These items will NOT BE SHIPPED. They must be PICKED UP. NO REFUNDS.</b>
+                                                                {{else}}
+                                                                    Shipping Charge: <strong>$<span class="shipping-charge">{{neshek_shipping}}</span></strong>/ea
+                                                                {{/if}}
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            {{/if}}
+                                        </div>
+                                    </div>
+                                    {{/each}}
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Keep the rest of the HTML structure (Total, Checkout form, etc.) -->
+                    <!-- ... -->
+                </div>
+            </div>
+        </section>
+    </body>
+
+    <!-- Keep all the script tags -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+            // ... (keep initial setup code) ...
+
+            var neshekCost = 2.0  // Set the cost for candlesticks
+            $(".neshekCost").text(neshekCost)
+            var neshekSoldOut = false;
+            var soldOut = false;
+
+            // ... (keep timing check code) ...
+
+            $.post('ajax/purchases.php', { item : 4 }, function( sold ) {  // Change item number for neshek
+                var neshekStart = 2000;
+                var neshekSold = parseInt( sold );
+                var neshekLeft = neshekStart - neshekSold;
+                $(".neshekSold").text( neshekSold );
+                $(".neshekLeft").text( neshekLeft );
+                if ( neshekLeft <= 0 ) {
+                    neshekSoldOut = true;
+                }
+                if (soldOut || neshekSoldOut) {
+                    $("#sold-out").show();
+                    $("#purchases").hide();
+                }
+            });
+            
+            // ... (keep year fetching code) ...
+            
+            // Modify the children loading code to handle neshek instead of menorah/brochure
+            $.post('/mobile/reg/ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+                // ... (keep existing logic, but modify for neshek) ...
+                child.neshekCost = neshekCost;
+                // ... 
+            });
+            
+            $(document).on('keyup', '.neshek', calcAmount);
+
+            function calcAmount() {
+                var total = 0;
+                $(".neshek").each(function() {
+                    var id = $(this).attr('id');
+                    var qty = parseInt($(this).val());
+                    if (qty) {
+                        var shipping = parseFloat($(this).parent().parent().next().find('.shipping-charge').text());
+                        if (!isNaN(shipping) && shipping) total += (neshekCost + shipping) * qty;
+                        else total += neshekCost * qty;
+                    }
+                });
+
+                var amount = parseFloat(total).toFixed(2); 
+                $("#amount").text(amount);
+                $("#total").val(amount);
+            }
+
+            async function purchaseSets(e) {
+                // ... (keep most of the purchase logic, but modify for neshek) ...
+                info.neshek = [];
+                
+                // Collect neshek purchases
+                $("input.neshek").each(function() {
+                    const id = parseInt($(this).attr('id'));
+                    const qty = parseInt($(this).val());
+                    if (qty > 0) {
+                        info.neshek.push({user: id, qty});
+                    }
+                });
+
+                // ... (keep rest of purchase logic) ...
+            }
+
+            // ... (keep card handling code) ...
+        });
+    </script>
+</html> 
