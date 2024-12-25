@@ -55,6 +55,12 @@ foreach ($poster_types as $type => $name) {
         display: none;
       }
     }
+
+    th, tr, td {
+      padding: 10px;
+      font-size: 14px;
+      border-bottom: 1px solid #cccccc;
+    }
   </style>
 </head>
 
