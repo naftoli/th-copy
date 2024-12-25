@@ -275,7 +275,7 @@ ksort($grand_summary);
       padding: 8px;
       font-size: 14px;
     }
-    button#saveAll {
+    button.saveAll {
       padding: 10px;
       font-size: 16px;
     }
@@ -455,8 +455,6 @@ ksort($grand_summary);
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
-<!-- <style src="//cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css"></style>
-<script src="//cdn.datatables.net/2.1.8/js/dataTables.min.js"></script> -->
 <script>
   // summary tables don't need to be ordered
   const summary = $(".table.summary").DataTable({

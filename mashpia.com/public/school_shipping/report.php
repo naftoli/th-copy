@@ -112,22 +112,47 @@ ksort($summary);
       }
     }
 
-    button {
-      padding: 8px;
-      font-size: 14px;
+    button, select {
+        padding: 8px;
+        font-size: 14px;
     }
 
-    button#saveAll {
-      padding: 10px;
-      font-size: 16px;
+    button.saveAll {
+        padding: 10px;
+        font-size: 16px;
     }
   </style>
 </head>
 <body>
-<?php if ($superAdmin) : ?>
-  <button id="saveAll" class="no-print">Save All Schools as Shipped</button>
-<?php endif; ?>
-<?php foreach ($resultsBySchool as $school => $row) : ?>
+<?php
+$i = 0;
+  $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
+  echo "Order Summary by: <select name='order' id='order'>";
+  echo "<option value='-1'>Choose ordering</option>";
+  foreach ($s_items as $s_item) {
+      echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
+      echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
+  }
+  echo "</select><br /><br />";
+
+  $idx = 0;
+  echo "Order Details by: <select name='orderBy' id='orderBy'>";
+  echo "<option value='-1'>Choose ordering</option>";
+  foreach ($fields_chosen as $field) {
+      if (strpos($field, 'shipping') === false) {
+          echo "<option value='" . $idx . ":asc'>" . $fields[$field] . " - Asc</option>";
+          echo "<option value='" . $idx++ . ":desc'>" . $fields[$field] . " - Desc</option>";
+      }
+  }
+  echo "<option value='" . $idx . ":asc'>Item - Asc</option>";
+  echo "<option value='" . $idx++ . ":desc'>Item - Desc</option>";
+  foreach ($item_details_chosen as $field) {
+    echo "<option value='" . $idx . ":asc'>" . ucwords($field) . " - Asc</option>";
+      echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
+  }
+  echo "</select><br /><br />";
+  if ($superAdmin) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+  foreach ($resultsBySchool as $school => $row) : ?>
   <div class="header" id="<?= $school ?>">
       <?php
       if (!isset($schools[$school])) continue;
@@ -276,9 +301,30 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script>
-  $('.table').DataTable({
-    paging: false
-  });
+    // summary tables don't need to be ordered
+    const summary = $(".table.summary").DataTable({
+        paging: false
+    })
+
+    const table = $(".table").not(".summary").DataTable({
+        paging: false
+    })
+
+    const sortBy = (table, value) => {
+        const info = value.split(':')
+        const orderby = info[0]
+        const dir = info[1]
+        if (orderby >= 0)
+            table.order([orderby, dir]).draw();
+    }
+
+    document.getElementById('order').addEventListener('change', function() {
+        sortBy(summary, this.value)
+    })
+
+    document.getElementById('orderBy').addEventListener('change', function() {
+        sortBy(table, this.value)
+    })
 
   let info = []
   let bc = <?= $superAdmin ? 0 : 1 ?>;
