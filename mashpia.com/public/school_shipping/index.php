@@ -78,11 +78,16 @@ $year = GlobalSettings::getChidonRegYear();
         }
         ?>
       </select>
-      <h4>School</h4>
-      <select name="school">
-          <?php if ($super) echo '<option value="0">All Schools</option>'; ?>
-          <?php foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>"; ?>
-      </select><br />
+        <h4>School(s)</h4>
+        <?php
+        if ($super) echo '<select name="school[]" id="school" multiple style="height: 300px;">';
+        else echo '<select name="school[]" id="school">';
+        foreach ($schools as $id => $school) {
+            if (str_len($school) < 3) continue;
+            echo "<option value=" . $id . ">" . $school . "</option>";
+        }
+        ?>
+        </select><br />
       <h4>Status</h4>
       <p>
         <input type="checkbox" name="status[]" value="0" /> Not Yet Shipped<br />

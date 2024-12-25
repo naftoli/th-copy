@@ -74,9 +74,6 @@ if ($report_type == 'file') {
     exit;
 }
 
-// get list of schools to iterate over
-$list_of_schools = $_POST['school'];
-
 // get results for chosen items
 $info = [];
 foreach ($list_of_schools as $schoolID) {

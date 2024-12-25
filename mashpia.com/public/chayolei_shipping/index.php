@@ -90,7 +90,10 @@ $items = $cs->getItems();
       <?php
         if ($super) echo '<select name="school[]" multiple style="height: 300px;">';
         else echo '<select name="school[]">';
-        foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>";
+        foreach ($schools as $id => $school) {
+            if (str_len($school) < 3) continue;
+            echo "<option value=" . $id . ">" . $school . "</option>";
+        }
       ?>
       </select><br />
       <h4>Status</h4>

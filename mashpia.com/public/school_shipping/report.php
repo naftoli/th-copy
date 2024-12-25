@@ -21,8 +21,7 @@ $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 $report_type = $_POST['report_type'];
-
-$school_list = $_POST['school'] == 0 ? array_keys($schools) : [$_POST['school']];
+$list_of_schools = $_POST['school'];
 
 $cs = new SchoolShipping($year);
 // get results for chosen items
@@ -30,7 +29,7 @@ $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
     $listOfItems = array_keys($itemsPerCat);
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-    $info[$cat] = $cs->$nameOfFunc($school_list, $listOfItems);
+    $info[$cat] = $cs->$nameOfFunc($list_of_schools, $listOfItems);
 }
 $info['status'] = $cs->getStatus();
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
@@ -42,7 +41,7 @@ $sql .= " FROM schools s ";
 
 //********* WHERE *********//
 $sql .= " WHERE 1";
-if ($_POST['school'] > 0) $sql .= " AND s.school_id = " . $_POST['school'];
+$sql .= " AND u.school_id in (" . implode(",", $list_of_schools) . ")";
 
 //******* ORDER BY *********//
 $sql .= " ORDER BY s.school_id";
