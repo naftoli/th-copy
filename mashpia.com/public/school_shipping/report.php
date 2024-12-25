@@ -193,7 +193,7 @@ $i = 0;
     <!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
-        <table class="table table-striped table-condensed cell-border hover row-order order-column">
+        <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
           <thead>
           <tr>
             <th>Item ID</th>
