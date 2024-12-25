@@ -6,7 +6,7 @@ yarn.lock
 .idea/
 .idea/dataSources.xml
 /.prettierrc.json
-vendor/
+/vendor/
 composer.lock
 package-lock.json
 yarn.lock
