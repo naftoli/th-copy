@@ -21,8 +21,7 @@ $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 $report_type = $_POST['report_type'];
-
-$school_list = $_POST['school'] == 0 ? array_keys($schools) : [$_POST['school']];
+$list_of_schools = $_POST['school'];
 
 $cs = new SchoolShipping($year);
 // get results for chosen items
@@ -30,7 +29,7 @@ $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
     $listOfItems = array_keys($itemsPerCat);
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-    $info[$cat] = $cs->$nameOfFunc($school_list, $listOfItems);
+    $info[$cat] = $cs->$nameOfFunc($list_of_schools, $listOfItems);
 }
 $info['status'] = $cs->getStatus();
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
@@ -42,7 +41,7 @@ $sql .= " FROM schools s ";
 
 //********* WHERE *********//
 $sql .= " WHERE 1";
-if ($_POST['school'] > 0) $sql .= " AND s.school_id = " . $_POST['school'];
+$sql .= " AND s.school_id in (" . implode(",", $list_of_schools) . ")";
 
 //******* ORDER BY *********//
 $sql .= " ORDER BY s.school_id";
@@ -113,46 +112,47 @@ ksort($summary);
     }
 
     button, select {
-        padding: 8px;
-        font-size: 14px;
+      padding: 8px;
+      font-size: 14px;
     }
 
     button.saveAll {
-        padding: 10px;
-        font-size: 16px;
+      padding: 10px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 <?php
-$i = 0;
-  $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
-  echo "Order Summary by: <select name='order' id='order'>";
-  echo "<option value='-1'>Choose ordering</option>";
-  foreach ($s_items as $s_item) {
-      echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
-      echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
-  }
-  echo "</select><br /><br />";
-
-  $idx = 0;
-  echo "Order Details by: <select name='orderBy' id='orderBy'>";
-  echo "<option value='-1'>Choose ordering</option>";
-  foreach ($fields_chosen as $field) {
-      if (strpos($field, 'shipping') === false) {
-          echo "<option value='" . $idx . ":asc'>" . $fields[$field] . " - Asc</option>";
-          echo "<option value='" . $idx++ . ":desc'>" . $fields[$field] . " - Desc</option>";
-      }
-  }
-  echo "<option value='" . $idx . ":asc'>Item - Asc</option>";
-  echo "<option value='" . $idx++ . ":desc'>Item - Desc</option>";
-  foreach ($item_details_chosen as $field) {
+if (in_array($_POST['report_type'], ['all', 'summary'])) {
+    $i = 0;
+    $s_items = ['Item ID', 'Quantity', 'Item Name', 'Category'];
+    echo "Order Summary by: <select name='order' id='order'>";
+    echo "<option value='-1'>Choose ordering</option>";
+    foreach ($s_items as $s_item) {
+        echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
+        echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
+    }
+    echo "</select><br /><br />";
+}
+$idx = 0;
+echo "Order Details by: <select name='orderBy' id='orderBy'>";
+echo "<option value='-1'>Choose ordering</option>";
+foreach ($fields_chosen as $field) {
+    if (strpos($field, 'shipping') === false) {
+        echo "<option value='" . $idx . ":asc'>" . $fields[$field] . " - Asc</option>";
+        echo "<option value='" . $idx++ . ":desc'>" . $fields[$field] . " - Desc</option>";
+    }
+}
+echo "<option value='" . $idx . ":asc'>Item - Asc</option>";
+echo "<option value='" . $idx++ . ":desc'>Item - Desc</option>";
+foreach ($item_details_chosen as $field) {
     echo "<option value='" . $idx . ":asc'>" . ucwords($field) . " - Asc</option>";
-      echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
-  }
-  echo "</select><br /><br />";
-  if ($superAdmin) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
-  foreach ($resultsBySchool as $school => $row) : ?>
+    echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
+}
+echo "</select><br /><br />";
+if ($superAdmin) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+foreach ($resultsBySchool as $school => $row) : ?>
   <div class="header" id="<?= $school ?>">
       <?php
       if (!isset($schools[$school])) continue;
@@ -301,30 +301,30 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script>
-    // summary tables don't need to be ordered
-    const summary = $(".table.summary").DataTable({
-        paging: false
-    })
+  // summary tables don't need to be ordered
+  const summary = $(".table.summary").DataTable({
+    paging: false
+  })
 
-    const table = $(".table").not(".summary").DataTable({
-        paging: false
-    })
+  const table = $(".table").not(".summary").DataTable({
+    paging: false
+  })
 
-    const sortBy = (table, value) => {
-        const info = value.split(':')
-        const orderby = info[0]
-        const dir = info[1]
-        if (orderby >= 0)
-            table.order([orderby, dir]).draw();
-    }
+  const sortBy = (table, value) => {
+    const info = value.split(':')
+    const orderby = info[0]
+    const dir = info[1]
+    if (orderby >= 0)
+      table.order([orderby, dir]).draw();
+  }
 
-    document.getElementById('order').addEventListener('change', function() {
-        sortBy(summary, this.value)
-    })
+  document.getElementById('order').addEventListener('change', function () {
+    sortBy(summary, this.value)
+  })
 
-    document.getElementById('orderBy').addEventListener('change', function() {
-        sortBy(table, this.value)
-    })
+  document.getElementById('orderBy').addEventListener('change', function () {
+    sortBy(table, this.value)
+  })
 
   let info = []
   let bc = <?= $superAdmin ? 0 : 1 ?>;
@@ -354,14 +354,14 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
           break
         }
       }
-      if (!found) info.push({ action, item, school, qty, desc })
+      if (!found) info.push({action, item, school, qty, desc})
     } else {
       alert('Could not update item ' + item + ' for school ' + school)
     }
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', { info, year }, function (result) {
+    $.post('ajax/saveShipping.php', {info, year}, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
       else if (!res.success && res.error) {

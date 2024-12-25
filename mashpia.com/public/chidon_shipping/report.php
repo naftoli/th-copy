@@ -51,8 +51,8 @@ if ($report_type == 'file') {
                     else $item_num = 0;
                     $item_status = isset($status[$user][$item['id']][$item_num]['status']) ? $status[$user][$item['id']][$item_num]['status'] : 0;
                     if ($limit_to_status && !in_array($item_status, $limit_to_status)) unset($info[$cat][$user][$idx]);
-               }
-           }
+                }
+            }
         }
 
         $shipping_paid = getShippingPaid($ship_to);
@@ -108,7 +108,7 @@ if ($ship_to != 'all') {
     // remove all users that are not in the user_ids array
     foreach ($info as $cat => $more) {
         foreach ($more as $user => $items) {
-            if (! in_array($user, $user_ids)) unset($info[$cat][$user]);
+            if (!in_array($user, $user_ids)) unset($info[$cat][$user]);
         }
     }
 }
@@ -222,27 +222,29 @@ ksort($grand_summary);
     }
 
     button, select {
-        padding: 8px;
-        font-size: 14px;
+      padding: 8px;
+      font-size: 14px;
     }
+
     button.saveAll {
-        padding: 10px;
-        font-size: 16px;
+      padding: 10px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
 <?php
-$i = 0;
-$s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
-echo "Order Summary by: <select name='order' id='order'>";
-echo "<option value='-1'>Choose ordering</option>";
-foreach ($s_items as $s_item) {
-    echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
-    echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
+if (in_array($_POST['report_type'], ['all', 'summary'])) {
+    $i = 0;
+    $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
+    echo "Order Summary by: <select name='order' id='order'>";
+    echo "<option value='-1'>Choose ordering</option>";
+    foreach ($s_items as $s_item) {
+        echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
+        echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
+    }
+    echo "</select><br /><br />";
 }
-echo "</select><br /><br />";
-
 $idx = 0;
 echo "Order Details by: <select name='orderBy' id='orderBy'>";
 echo "<option value='-1'>Choose ordering</option>";
@@ -417,32 +419,32 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script>
-    // summary tables don't need to be ordered
-    const summary = $(".table.summary").DataTable({
-        paging: false
-    })
+  // summary tables don't need to be ordered
+  const summary = $(".table.summary").DataTable({
+    paging: false
+  })
 
-    const table = $(".table").not(".summary").DataTable({
-        paging: false
-    })
+  const table = $(".table").not(".summary").DataTable({
+    paging: false
+  })
 
-    const sortBy = (table, value) => {
-        const info = value.split(':')
-        const orderby = info[0]
-        const dir = info[1]
-        if (orderby >= 0)
-            table.order([orderby, dir]).draw();
-    }
+  const sortBy = (table, value) => {
+    const info = value.split(':')
+    const orderby = info[0]
+    const dir = info[1]
+    if (orderby >= 0)
+      table.order([orderby, dir]).draw();
+  }
 
-    document.getElementById('order').addEventListener('change', function() {
-        sortBy(summary, this.value)
-    })
+  document.getElementById('order').addEventListener('change', function () {
+    sortBy(summary, this.value)
+  })
 
-    document.getElementById('orderBy').addEventListener('change', function() {
-        sortBy(table, this.value)
-    })
+  document.getElementById('orderBy').addEventListener('change', function () {
+    sortBy(table, this.value)
+  })
 
-    let info = []
+  let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
   const year = <?= $year; ?>;
 
@@ -461,30 +463,30 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', { info, year }, function (result) {
+    $.post('ajax/saveShipping.php', {info, year}, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
       else if (!res.success && res.error) alert(res.error)
     })
   }
 
-  $(".saveAll").click( function () {
-    $(".shipping").each( function () {
+  $(".saveAll").click(function () {
+    $(".shipping").each(function () {
       let action = super_admin ? 1 : 2
       update(this, action)
     })
     save()
   })
 
-  $(".saveSchool").click( function() {
-    $(this).parent().find('.shipping').each( function () {
+  $(".saveSchool").click(function () {
+    $(this).parent().find('.shipping').each(function () {
       let action = super_admin ? 1 : 2
       update(this, action)
     })
     save()
   })
 
-  $(".shipping").change( function () {
+  $(".shipping").change(function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
     if (!super_admin && action == 0) {
@@ -499,7 +501,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     save(false)
   })
 
-  $(".description").blur( function() {
+  $(".description").blur(function () {
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())

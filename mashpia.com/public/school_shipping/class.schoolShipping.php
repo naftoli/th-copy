@@ -6,6 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/raffles/shared/classes/Constants.php';
+
 use raffles\shared\Constants as Constants;
 
 class SchoolShipping
@@ -20,16 +21,16 @@ class SchoolShipping
 
     public function getCategories() {
         $categories = [
-            'raffles'   => 'Raffles',
-            'chidon'    => 'Chidon'
+            'raffles' => 'Raffles',
+            'chidon' => 'Chidon'
         ];
         return $categories;
     }
 
     public function getItems() {
         $items = [
-            'Raffles'   => ['5M Raffle', '60M Raffle', 'Auction'],
-            'Chidon'    => ['Celeb Box Items', 'Sweaters']
+            'Raffles' => ['5M Raffle', '60M Raffle', 'Auction'],
+            'Chidon' => ['Celeb Box Items', 'Sweaters']
         ];
         return $items;
     }
@@ -72,16 +73,17 @@ class SchoolShipping
                         }
                         if (!$found) {
                             $info[$school_id][] = [
-                                'id'    => $prize_info['code'],
-                                'item'  => $prize_name,
-                                'cat'   => $raffle_name,
-                                'qty'   => 1
+                                'id' => $prize_info['code'],
+                                'item' => $prize_name,
+                                'cat' => $raffle_name,
+                                'qty' => 1
                             ];
                         }
                     }
                 }
             }
         }
+
         return $info;
     }
 
@@ -116,8 +118,8 @@ class SchoolShipping
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $prizes[$row['prize_id']] = [
-                'name'  =>  $row['prize_name'],
-                'code'  =>  $row['shipping_code']
+                'name' => $row['prize_name'],
+                'code' => $row['shipping_code']
             ];
         }
         $this->prizes = $prizes;
@@ -144,7 +146,7 @@ class SchoolShipping
         $sql = "select * from raffles where type = 'weekly' and year = :year and end_date >= :start";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'year'  => intval($this->year) - 1,
+            'year' => intval($this->year) - 1,
             'start' => $start_yr
         ]);
         $row = $stmt->fetch();
@@ -153,7 +155,7 @@ class SchoolShipping
         $sql = "select * from raffles where type = 'weekly' and year = :year";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'year'  => $this->year,
+            'year' => $this->year,
         ]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
@@ -258,8 +260,8 @@ class SchoolShipping
     public function getChidon(array $schools, array $items) {
         $info = [];
         $desc = [
-            'celeb box items'  => $this->getDescForCelebBoxItems(),
-            'sweaters'         => $this->getDescForSweaters()
+            'celeb box items' => $this->getDescForCelebBoxItems(),
+            'sweaters' => $this->getDescForSweaters()
         ];
 
         $school_items = $this->getItemsForSchools($schools);
@@ -271,10 +273,10 @@ class SchoolShipping
                 else $cat = 'sweaters';
                 if (in_array($cat, $items)) {
                     $info[$school_id][] = [
-                        'id'    => $itemID,
-                        'item'  => $desc[$cat][$itemID],
-                        'cat'   => $cat,
-                        'qty'   => $qty
+                        'id' => $itemID,
+                        'item' => $desc[$cat][$itemID],
+                        'cat' => $cat,
+                        'qty' => $qty
                     ];
                 }
             }

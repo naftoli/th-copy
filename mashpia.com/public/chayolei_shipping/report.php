@@ -92,55 +92,55 @@ if ($report_type == 'file') {
      * 2. for parents that didn't pay for shipping and include extra purchases that are to be pickud up
      * 3. (for parents that paid for shipping but have) extra purchases that go to different address
      */
-    /*
-    // first
-    // reset the array of kids to remove
-    $cs->setToExclude([]);
-    foreach ([61, 269] as $school_id) {
-        $info = [];
-        $ids = $cs->getChildrenToRemove(true);
-        $cs->setOnly($ids);
+/*
+// first
+// reset the array of kids to remove
+$cs->setToExclude([]);
+foreach ([61, 269] as $school_id) {
+    $info = [];
+    $ids = $cs->getChildrenToRemove(true);
+    $cs->setOnly($ids);
 
-        foreach ($items_chosen as $cat => $itemsPerCat) {
-            $listOfItems = array_keys($itemsPerCat);
-            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK();
-            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-        }
-        $csv = createCSV($info, $school_id);
-        $file = $school_id . 'withEPtoShip.csv';
-        createFile($file, $csv);
-        $files[] = $file;
+    foreach ($items_chosen as $cat => $itemsPerCat) {
+        $listOfItems = array_keys($itemsPerCat);
+        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+        if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK();
+        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
     }
-
-    //second
-    foreach ([61, 269] as $school_id) {
-        $info = [];
-        $ids = $cs->getChildrenToRemove(false, true);
-        $cs->setOnly($ids);
-
-        foreach ($items_chosen as $cat => $itemsPerCat) {
-            $listOfItems = array_keys($itemsPerCat);
-            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK(false);
-            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-        }
-        $csv = createCSV($info, $school_id);
-        $file = $school_id . 'withEPtoPickup.csv';
-        createFile($file, $csv);
-        $files[] = $file;
-    }
-
-    //third
-    $extra = $cs->getExtraPurchasesToShip(true);
-    $csv = $cs->createCSVFromExtraPurchases($extra);
-    $file = 'extra_purchases_myshliach_ak.csv';
+    $csv = createCSV($info, $school_id);
+    $file = $school_id . 'withEPtoShip.csv';
     createFile($file, $csv);
     $files[] = $file;
+}
 
-    createZip($files, 'shipping.zip');
-    downloadFile('shipping.zip');
-    exit;
+//second
+foreach ([61, 269] as $school_id) {
+    $info = [];
+    $ids = $cs->getChildrenToRemove(false, true);
+    $cs->setOnly($ids);
+
+    foreach ($items_chosen as $cat => $itemsPerCat) {
+        $listOfItems = array_keys($itemsPerCat);
+        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+        if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK(false);
+        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
+    }
+    $csv = createCSV($info, $school_id);
+    $file = $school_id . 'withEPtoPickup.csv';
+    createFile($file, $csv);
+    $files[] = $file;
+}
+
+//third
+$extra = $cs->getExtraPurchasesToShip(true);
+$csv = $cs->createCSVFromExtraPurchases($extra);
+$file = 'extra_purchases_myshliach_ak.csv';
+createFile($file, $csv);
+$files[] = $file;
+
+createZip($files, 'shipping.zip');
+downloadFile('shipping.zip');
+exit;
 */
 //else if ($report_type == 'fileGear') {
 //    $files = [];
@@ -161,7 +161,7 @@ $list_of_schools = $_POST['school'];
 $info = [];
 foreach ($list_of_schools as $schoolID) {
     foreach ($items_chosen as $cat => $itemsPerCat) {
-        if (! isset($info[$cat])) $info[$cat] = [];
+        if (!isset($info[$cat])) $info[$cat] = [];
         $listOfItems = array_keys($itemsPerCat);
         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
         if ($cat == 'gear') $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
@@ -175,16 +175,16 @@ $tables = [];
 foreach ($fields_chosen as $field) {
     $pos = strpos($field, '.');
     $table = substr($field, 0, $pos);
-    if (! in_array($table, $tables)) $tables[] = $table;
+    if (!in_array($table, $tables)) $tables[] = $table;
 }
 
 // build sql statement
 $tableAliases = [
-    'tc'    => 'join th_chidon tc using (user_id)',
-    's'     => 'join schools s on u.school_id = s.school_id',
-    'c'     => 'join classes c on c.class_id = u.class_id',
-    'cup'   => 'join chidon_user_prizes cup using (user_id) ',
-    'cp'    => 'join chidon_prizes cp using (chidon_prize_id) '
+    'tc' => 'join th_chidon tc using (user_id)',
+    's' => 'join schools s on u.school_id = s.school_id',
+    'c' => 'join classes c on c.class_id = u.class_id',
+    'cup' => 'join chidon_user_prizes cup using (user_id) ',
+    'cp' => 'join chidon_prizes cp using (chidon_prize_id) '
 ];
 
 //********* SELECT **********//
@@ -192,8 +192,8 @@ $sql = "SELECT u.user_id, u.school_id ";
 foreach ($fields_chosen as $field) $sql .= ", " . $field;
 $sql .= " FROM users u ";
 foreach ($tables as $table) {
-  if ($table == 'u') continue;
-  $sql .= $tableAliases[$table] . " ";
+    if ($table == 'u') continue;
+    $sql .= $tableAliases[$table] . " ";
 }
 
 //********* WHERE *********//
@@ -225,7 +225,7 @@ $summary_items = []; // mapping of item ID to item info
 
 // go through it once so that we can have totals
 foreach ($resultsBySchool as $school => $more) {
-    if (! isset($schools[$school])) continue;
+    if (!isset($schools[$school])) continue;
     foreach ($more as $row) {
 //        if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
         createHtmlForItem($school, $row, false);
@@ -241,11 +241,11 @@ ksort($grand_summary);
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shipping Reports</title>
-  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
   <style>
     body {
       font-family: sans-serif;
@@ -253,28 +253,34 @@ ksort($grand_summary);
       padding-left: 3%;
       padding-right: 3%;
     }
+
     th, th, td {
       font-size: 14px;
       padding: 5px;
       border-bottom: 1px solid grey;
     }
+
     .header {
       font-size: 14px;
       line-height: 1.4;
       margin-bottom: 20px;
     }
+
     .dataTables_filter {
       display: none;
     }
+
     @media print {
       .no-print {
         display: none;
       }
     }
+
     button, select {
       padding: 8px;
       font-size: 14px;
     }
+
     button.saveAll {
       padding: 10px;
       font-size: 16px;
@@ -282,82 +288,83 @@ ksort($grand_summary);
   </style>
 </head>
 <body>
-  <?php
-  $i = 0;
-  $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
-  echo "Order Summary by: <select name='order' id='order'>";
-  echo "<option value='-1'>Choose ordering</option>";
-  foreach ($s_items as $s_item) {
-      echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
-      echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
-  }
-  echo "</select><br /><br />";
-
-  $idx = 0;
-  echo "Order Details by: <select name='orderBy' id='orderBy'>";
-  echo "<option value='-1'>Choose ordering</option>";
-  foreach ($fields_chosen as $field) {
-      if (strpos($field, 'shipping') === false) {
-          echo "<option value='" . $idx . ":asc'>" . $fields[$field] . " - Asc</option>";
-          echo "<option value='" . $idx++ . ":desc'>" . $fields[$field] . " - Desc</option>";
-      }
-  }
-  echo "<option value='" . $idx . ":asc'>Item - Asc</option>";
-  echo "<option value='" . $idx++ . ":desc'>Item - Desc</option>";
-  foreach ($item_details_chosen as $field) {
+<?php
+if (in_array($_POST['report_type'], ['all', 'summary'])) {
+    $i = 0;
+    $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
+    echo "Order Summary by: <select name='order' id='order'>";
+    echo "<option value='-1'>Choose ordering</option>";
+    foreach ($s_items as $s_item) {
+        echo "<option value='" . $i . ":asc'>" . $s_item . " - Asc</option>";
+        echo "<option value='" . $i++ . ":desc'>" . $s_item . " - Desc</option>";
+    }
+    echo "</select><br /><br />";
+}
+$idx = 0;
+echo "Order Details by: <select name='orderBy' id='orderBy'>";
+echo "<option value='-1'>Choose ordering</option>";
+foreach ($fields_chosen as $field) {
+    if (strpos($field, 'shipping') === false) {
+        echo "<option value='" . $idx . ":asc'>" . $fields[$field] . " - Asc</option>";
+        echo "<option value='" . $idx++ . ":desc'>" . $fields[$field] . " - Desc</option>";
+    }
+}
+echo "<option value='" . $idx . ":asc'>Item - Asc</option>";
+echo "<option value='" . $idx++ . ":desc'>Item - Desc</option>";
+foreach ($item_details_chosen as $field) {
     echo "<option value='" . $idx . ":asc'>" . ucwords($field) . " - Asc</option>";
-      echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
-  }
-  echo "</select><br /><br />";
-  if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
-  foreach ($resultsBySchool as $school => $more) : ?>
-    <div class="header" id="<?=$school?>">
+    echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
+}
+echo "</select><br /><br />";
+if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+foreach ($resultsBySchool as $school => $more) : ?>
+  <div class="header" id="<?= $school ?>">
       <?php
-      if (! isset($schools[$school])) continue;
-      if (! isset($summary[$school])) continue;
+      if (!isset($schools[$school])) continue;
+      if (!isset($summary[$school])) continue;
       echo "<h3>" . $schools[$school] . "</h3>";
       if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
       $address = '';
       foreach ($fields_chosen as $field) {
-        $pos = strpos($field, '.');
-        $desc = substr($field, $pos + 1);
-        switch ($field) {
-          case 's.shipping_first':
-          case 's.shipping_last':
-            $address .= $more[0][$desc] . ' ';
-            break;
-          case 's.shipping_phone':
-            $address = "Contact Phone Number: " . $more[0][$desc] . "<br />";
-            break;
-          case 's.shipping_address1':
-          case 's.shipping_address2':
-          case 's.shipping_city':
-          case 's.shipping_state':
-          case 's.shipping_postal':
-          case 's.shipping_country':
-            $address .= $more[0][$desc] . ' ';
-            break;
-          case 's.shipping_requests':
-            $address .= "<br />Shipping Requests: " . $more[0][$desc];
-            break;
-        }
+          $pos = strpos($field, '.');
+          $desc = substr($field, $pos + 1);
+          switch ($field) {
+              case 's.shipping_first':
+              case 's.shipping_last':
+                  $address .= $more[0][$desc] . ' ';
+                  break;
+              case 's.shipping_phone':
+                  $address = "Contact Phone Number: " . $more[0][$desc] . "<br />";
+                  break;
+              case 's.shipping_address1':
+              case 's.shipping_address2':
+              case 's.shipping_city':
+              case 's.shipping_state':
+              case 's.shipping_postal':
+              case 's.shipping_country':
+                  $address .= $more[0][$desc] . ' ';
+                  break;
+              case 's.shipping_requests':
+                  $address .= "<br />Shipping Requests: " . $more[0][$desc];
+                  break;
+          }
       }
-      if (! empty($address)) echo "<br />" . $address . "<br />";
+      if (!empty($address)) echo "<br />" . $address . "<br />";
       ?>
-<!--      <p>-->
-<!--        <input type='checkbox' class='updated' value='--><?php //= $updated[$school] ?><!--'-->
-<!--        --><?php //if (intval($updated[$school]) == 1) echo "checked"; ?>
-<!--        /> I have reviewed and updated the shipping status for the entire school.-->
-<!--      </p>-->
+    <!--      <p>-->
+    <!--        <input type='checkbox' class='updated' value='--><?php //= $updated[$school] ?><!--'-->
+    <!--        --><?php //if (intval($updated[$school]) == 1) echo "checked"; ?>
+    <!--        /> I have reviewed and updated the shipping status for the entire school.-->
+    <!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <h3>Summary</h3>
         <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
           <thead>
-            <tr>
+          <tr>
               <?php foreach ($s_items as $s_item) : ?>
                 <th><?= $s_item ?></th>
               <?php endforeach; ?>
-            </tr>
+          </tr>
           </thead>
           <tbody>
           <?php
@@ -366,9 +373,9 @@ ksort($grand_summary);
                   echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
                   $item = $summary_items[$id];
                   foreach (['item', 'size', 'color', 'cat'] as $attr) {
-                     echo "<td>";
-                     if (isset($item[$attr])) echo $item[$attr];
-                     echo "</td>";
+                      echo "<td>";
+                      if (isset($item[$attr])) echo $item[$attr];
+                      echo "</td>";
                   }
                   echo "</tr>";
               }
@@ -380,78 +387,81 @@ ksort($grand_summary);
         <div style="page-break-after: always"></div>
       <?php endif; ?>
       <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
-      <?= "<h3>" . $schools[$school] . ' - ' . $year . "</h3>"; ?>
-      <table class="table table-striped table-condensed cell-border hover row-order order-column">
-        <thead>
+          <?= "<h3>" . $schools[$school] . ' - ' . $year . "</h3>"; ?>
+        <table class="table table-striped table-condensed cell-border hover row-order order-column">
+          <thead>
           <tr>
-            <?php
-            foreach ($fields_chosen as $field) {
-              if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
-            }
-            echo "<th>Item</th>";
-            if ($item_details_chosen && count($item_details_chosen)) {
-                foreach ($item_details_chosen as $field) {
-                    if ($field == 'cat') $field = 'category';
-                    else if ($field == 'name') $field = 'name preference';
-                    else if ($field == 'id') $field = 'Item ID';
-                    echo "<th>" . ucwords($field) . "</th>";
-                }
-            }
-            echo "<th class='no-print'>Status</th>";
-            echo "<th class='no-print'>Explain the damage</th>"
-            ?>
+              <?php
+              foreach ($fields_chosen as $field) {
+                  if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
+              }
+              echo "<th>Item</th>";
+              if ($item_details_chosen && count($item_details_chosen)) {
+                  foreach ($item_details_chosen as $field) {
+                      if ($field == 'cat') $field = 'category';
+                      else if ($field == 'name') $field = 'name preference';
+                      else if ($field == 'id') $field = 'Item ID';
+                      echo "<th>" . ucwords($field) . "</th>";
+                  }
+              }
+              echo "<th class='no-print'>Status</th>";
+              echo "<th class='no-print'>Explain the damage</th>"
+              ?>
           </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
           <?php
           foreach ($more as $row) {
 //            if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
-            createHtmlForItem($school, $row);
+              createHtmlForItem($school, $row);
           }
           ?>
-        </tbody>
-      </table>
-      <p class="no-print"></p>
-      <div style="page-break-after: always"></div>
+          </tbody>
+        </table>
+        <p class="no-print"></p>
+        <div style="page-break-after: always"></div>
       <?php endif; ?>
-    </div>
-  <?php endforeach; ?>
-    <?php
-    if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['grand_summary'] == 1) {
-      foreach ($grand_summary as $item => $more) {
+  </div>
+<?php endforeach; ?>
+<?php
+if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['grand_summary'] == 1) {
+    foreach ($grand_summary as $item => $more) {
         $grand_total = 0;
         $item_details = $summary_items[$item];
         $desc = "($item)";
         foreach (['item', 'size', 'color'] as $attr) {
-          if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
+            if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
         }
         echo "<br />";
         echo "<h2>" . ucwords($desc) . " Totals</h2>";
         ?>
-        <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
-          <thead>
-            <tr>
-              <th>School</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-          <?php
-          foreach ($more as $school_id => $total) {
+      <table class="table table-striped table-condensed cell-border hover row-order order-column grandTotal">
+        <thead>
+        <tr>
+          <th>School</th>
+          <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        foreach ($more as $school_id => $total) {
             echo "<tr><td>" . $schools[$school_id] . "</td><td>" . $total . "</td></tr>";
             $grand_total += intval($total);
-          }
-          ?>
-          </tbody>
-          <tfoot>
-            <tr><th>Grand Total:</th><th><?= $grand_total; ?></th></tr>
-          </tfoot>
-        </table>
-        <div style="page-break-after: always;"></div>
-    <?php
-      }
+        }
+        ?>
+        </tbody>
+        <tfoot>
+        <tr>
+          <th>Grand Total:</th>
+          <th><?= $grand_total; ?></th>
+        </tr>
+        </tfoot>
+      </table>
+      <div style="page-break-after: always;"></div>
+        <?php
     }
-    ?>
+}
+?>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -466,18 +476,18 @@ ksort($grand_summary);
   })
 
   const sortBy = (table, value) => {
-      const info = value.split(':')
-      const orderby = info[0]
-      const dir = info[1]
-      if (orderby >= 0)
-          table.order([orderby, dir]).draw();
+    const info = value.split(':')
+    const orderby = info[0]
+    const dir = info[1]
+    if (orderby >= 0)
+      table.order([orderby, dir]).draw();
   }
 
-  document.getElementById('order').addEventListener('change', function() {
-      sortBy(summary, this.value)
+  document.getElementById('order').addEventListener('change', function () {
+    sortBy(summary, this.value)
   })
 
-  document.getElementById('orderBy').addEventListener('change', function() {
+  document.getElementById('orderBy').addEventListener('change', function () {
     sortBy(table, this.value)
   })
 
@@ -500,30 +510,30 @@ ksort($grand_summary);
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', { info, year }, function (result) {
+    $.post('ajax/saveShipping.php', {info, year}, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
       else if (!res.success && res.error) alert(res.error)
     })
   }
 
-  $(".saveAll").click( function () {
-    $(".shipping").each( function () {
+  $(".saveAll").click(function () {
+    $(".shipping").each(function () {
       let action = super_admin ? 1 : 2
       update(this, action)
     })
     save()
   })
 
-  $(".saveSchool").click( function() {
-    $(this).parent().find('.shipping').each( function () {
+  $(".saveSchool").click(function () {
+    $(this).parent().find('.shipping').each(function () {
       let action = super_admin ? 1 : 2
       update(this, action)
     })
     save()
   })
 
-  $(".shipping").change( function () {
+  $(".shipping").change(function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
     if (!super_admin && action == 0) {
@@ -538,7 +548,7 @@ ksort($grand_summary);
     save(false)
   })
 
-  $(".description").blur( function() {
+  $(".description").blur(function () {
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
