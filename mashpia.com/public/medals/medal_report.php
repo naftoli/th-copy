@@ -28,14 +28,18 @@ $sql = "
         users u USING (user_id)
             JOIN
         subjects s USING (subject_id)
-            JOIN
+            LEFT JOIN
         user_registration ur USING (user_id)
     WHERE
-        u.user_registered > 0 AND ur.year = :year
+        u.user_registered > 0 AND (
+           ur.year = :year OR (ur.year IS NULL AND u.school_id = :school) )
     GROUP BY user_id , subject_id
     ORDER BY user_serial , subject_id , medal_ord";
 $stmt = $MASHPIA_DB->prepare($sql);
-$stmt->execute(['year' => $year]);
+$stmt->execute([
+    'year'   => $year,
+    'school' => 690
+]);
 $medals = $stmt->fetchAll();
 ?>
 <DOCTYPE html>
