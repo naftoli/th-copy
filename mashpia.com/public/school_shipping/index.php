@@ -83,7 +83,7 @@ $year = GlobalSettings::getChidonRegYear();
         if ($super) echo '<select name="school[]" id="school" multiple style="height: 300px;">';
         else echo '<select name="school[]" id="school">';
         foreach ($schools as $id => $school) {
-            if (str_len($school) < 3) continue;
+            if (strlen($school) < 3) continue;
             echo "<option value=" . $id . ">" . $school . "</option>";
         }
         ?>
