@@ -548,7 +548,7 @@
                 <img src="seforim2.jpeg" style="max-width: 100%"/>
             </div>
             <div class="col-12" id="sold-out" style="font-size: 16px; display:none;">
-
+                This year's hei teves sale has ended. Thank you for coming back!
             </div>
             <hr/>
         </div>
@@ -649,14 +649,13 @@
 <script src="/mobile/js/js.cookie.js"></script>
 <script src="/mobile/reg/js/all.js" defer></script>
 <script>
-    if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
-        $(".bug-report").hide()
-    }
-</script>
-<script>
     // force https
     if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
     let sweaters_stock = {}, children = {}
+
+    if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+        $(".bug-report").hide()
+    }
 
     // Add this new function to get saved cards
     function getSavedCards() {
@@ -919,6 +918,15 @@
         }
 
         getSavedCards();
+
+        // when to shutdown this page
+        const now = Math.floor( new Date().getTime() / 1000);
+        console.log( now );
+        if ( now >= 1736398800 ) {
+            soldOut = true;
+            $("#sold-out").show();
+            $("#purchases").hide();
+        }
 
         $(document).on('click', '.payment', function () {
             if (parseInt($(this).val()) === 1) {
