@@ -324,9 +324,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     })
   }
 
-  document.getElementById('orderBy').addEventListener('change', function () {
-    sortBy(table, this.value)
-  })
+  if (document.getElementById('orderBy')) {
+    document.getElementById('orderBy').addEventListener('change', function () {
+      sortBy(table, this.value)
+    })
+  }
 
   let info = []
   let bc = <?= $superAdmin ? 0 : 1 ?>;

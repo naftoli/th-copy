@@ -483,13 +483,17 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       table.order([orderby, dir]).draw();
   }
 
-  document.getElementById('order').addEventListener('change', function () {
-    sortBy(summary, this.value)
-  })
+  if (document.getElementById('order')) {
+    document.getElementById('order').addEventListener('change', function () {
+      sortBy(summary, this.value)
+    })
+  }
 
-  document.getElementById('orderBy').addEventListener('change', function () {
-    sortBy(table, this.value)
-  })
+  if (document.getElementById('orderBy')) {
+    document.getElementById('orderBy').addEventListener('change', function () {
+      sortBy(table, this.value)
+    })
+  }
 
   let info = []
   const super_admin = <?= $super ? 1 : 0; ?>;
