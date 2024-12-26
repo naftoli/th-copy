@@ -318,9 +318,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       table.order([orderby, dir]).draw();
   }
 
-  document.getElementById('order').addEventListener('change', function () {
-    sortBy(summary, this.value)
-  })
+  if (document.getElementById('order')) {
+    document.getElementById('order').addEventListener('change', function () {
+      sortBy(summary, this.value)
+    })
+  }
 
   document.getElementById('orderBy').addEventListener('change', function () {
     sortBy(table, this.value)
