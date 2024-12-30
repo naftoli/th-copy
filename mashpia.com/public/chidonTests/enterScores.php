@@ -44,12 +44,17 @@ if ($admin_user['auth'] != 'super') {
 // initialize all tests to not be disabled
 $disabled = false;
 $disableIyun = false;
-$exceptions = [];
+// school exceptions
+$exceptions = [
+    1 => [54],
+    2 => [],
+    3 => []
+];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = ChidonTests::getClosingDates();
-    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions))
+    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber] && !in_array($admin_user['auths']['school'][0], $exceptions[$testNumber]))
         $disabled = true;
 //    if ($today >= new DateTime('2024-11-28 22:00:00', new DateTimeZone('America/New_York')) && !in_array($admin_user['auths']['school'][0], $exceptions))
 //        $disableIyun = true;
