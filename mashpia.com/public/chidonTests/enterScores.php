@@ -57,6 +57,7 @@ if ($admin_user['auth'] != 'super') {
     if (! in_array($admin_user['admin_id'], [200719, 200721]))
         $disabled = true;
 }
+if ($admin_user['admin_id'] == 200719) $disabled = false; // zalmen can override all
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
 
