@@ -63,6 +63,10 @@ class UsersRouter {
                     join users u on aa.id = u.user_id 
                     where aa.auth = 'user' 
                     and u.school_id > 0";
+//            if (isset($_COOKIE['naftoli'])) {
+//                echo $sql;
+//                exit;
+//            }
             $stmtAdmins = $MASHPIA_DB->query( $sql );
             while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
                 $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
@@ -71,7 +75,6 @@ class UsersRouter {
 
         $users = [];
         // fetch all results and parse them as models
-        $stmt = $MASHPIA_DB->prepare("SELECT admin_id FROM admin_auths WHERE id = :id AND auth = 'user'");
         foreach ($info as $row) {
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();

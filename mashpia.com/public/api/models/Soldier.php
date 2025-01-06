@@ -123,7 +123,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $legacy_missions = $legacy_missions->getMissions()[0];
         $this->missions[ $parsha->id ] = [];
 
-        // needless iteration due to not wanting to have duplicate code. When Missions is replced plase keep this code in mind
+        // needless iteration due to not wanting to have duplicate code. When Missions is replaced please keep this code in mind
         if ( in_array( 'daily', $limit_to ) )
             foreach( $legacy_missions->sorted_daily_labels as $label ) {
                 $label = explode( ':', $label )[0];
