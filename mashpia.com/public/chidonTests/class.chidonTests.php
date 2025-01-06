@@ -248,6 +248,14 @@ class ChidonTests
         return $this->levels;
     }
 
+    /**
+     * @param $info
+     * @param $levels
+     * @return bool
+     *
+     * Inserts / updates scores and test levels into db based on the child's chidon ID
+     * For iyun marks, if child is on level 1, it automatically changes mark to 0 before inserting / updating
+     */
     public function insertScores($info, $levels) {
         $success = true;
         $stmtInsert = $this->db->prepare("
