@@ -342,8 +342,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         global $MASHPIA_DB;
 
         $info = [];
+        /*
         $query = $MASHPIA_DB->prepare("
-            SELECT 
+            SELECT
                 *
             FROM
                 th_chidon tc
@@ -352,8 +353,19 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                     LEFT JOIN
                 yahadus_book_purchases ybp USING (year , user_id)
             WHERE
-                tc.year = :year AND tc.user_id = :user 
+                tc.year = :year AND tc.user_id = :user
                     AND rc.type like '%LDE%'
+        ");
+        */
+        $query = $MASHPIA_DB->prepare("
+            SELECT 
+                *
+            FROM
+                th_chidon tc
+                    LEFT JOIN
+                yahadus_book_purchases ybp USING (year , user_id)
+            WHERE
+                tc.year = :year AND tc.user_id = :user 
         ");
         $year = GlobalSettings::getChidonRegYear();
         $res = $query->execute([
