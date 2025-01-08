@@ -22,7 +22,7 @@ if (isset($_POST['submit'])) {
     $qrys = [];
     foreach ($_POST['marks'] as $id => $marks) {
         foreach ($marks as $num => $mark) {
-            if (is_numeric($mark)){
+            if (is_numeric($mark)) {
                 $qrys[] = "insert into th_khk_marks 
                             set th_chidon_id = " . $id . ", 
                             test_number = " . $num . ", 
@@ -67,7 +67,7 @@ if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown1 = new DateTime('2024-11-12 00:00:00', new DateTimeZone('America/New_York'));
     $shutdown2 = new DateTime('2024-12-03 00:00:00', new DateTimeZone('America/New_York'));
-    $shutdown3 = new DateTime('2025-01-15 00:00:00', new DateTimeZone('America/New_York'));
+    $shutdown3 = new DateTime('2025-01-16 00:00:00', new DateTimeZone('America/New_York'));
     $shutdown4 = new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'));
 
     if ($today >= $shutdown1) {
