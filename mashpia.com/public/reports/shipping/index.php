@@ -40,7 +40,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/chayolei_shipping">
                 <div class="button">
                   <img src="/images/icon_report.png" height="32" alt="report"/>
-                  <span class="link-text">Chanukah Sale</span>
+                  <span class="link-text">Chanukah / Hei Teves Sale</span>
                 </div>
             </a>
             <a href="/chidon_shipping">
