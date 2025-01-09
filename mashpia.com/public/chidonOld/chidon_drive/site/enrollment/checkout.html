@@ -357,7 +357,7 @@
         var cart = []
         var cart_total = 0
         var addresses = {} // all addresses entered
-        var admin, admin_email, shipping, coupons, raised, trips, ultimate_trip, ultimate_info
+        var admin, admin_email, coupons, raised, trips, ultimate_trip, ultimate_info
         var cc = {}
         var card_id = 0
         var shipping = 0
@@ -484,7 +484,7 @@
                 reg_fee += info.fee
             }
         }
-        if (shipping) {
+        if (shipping > 0) {
             html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
         }
         if (reg.length) {

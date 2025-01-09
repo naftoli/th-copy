@@ -482,11 +482,11 @@ function updateFamilyBalance() {
         if ($already_used_credit) {
             $stmt = $MASHPIA_DB->prepare("
                 UPDATE family_prepaid_balances 
-                SET used_2 = :amount, 
+                SET used = (used + :amount), 
                     refund_amount = :refund,
                     refund_type = :type, 
                     paypal = :paypal, 
-                    accounting_code = :code 
+                    accounting_code = CONCAT(accounting_code, ' ', :code)  
                 WHERE admin_id = :admin AND year = :year
             ");
         }
@@ -560,11 +560,11 @@ function updateShipping() {
                         year = :year, 
                         amount_paid = :amount, 
                         date_paid = now()
-                  ON DUPLICATE KEY UPDATE amount_paid = :amount, date_paid = now()";
+                  ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
     $updated = true;
-    if ($shipping_charge) {
+    if ($shipping_charge > 0) {
         $updated = $stmtInsert->execute([
             'admin'     => $admin_id,
             'year'      => $year,

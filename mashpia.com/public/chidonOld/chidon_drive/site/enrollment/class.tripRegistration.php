@@ -25,7 +25,7 @@ class TripRegistration
         $bal = 0;
         $stmt = $this->db->prepare("
             SELECT 
-                prepaid, used, refund_amount  
+                prepaid, IFNULL(used, 0), refund_amount  
             FROM
                 family_prepaid_balances
             WHERE

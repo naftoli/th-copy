@@ -1444,9 +1444,7 @@
 		})
 
 		$(document).on('click', '.shipping', function () {
-			const val = parseInt($(this).val())
-			if (!val) shipping = 0 // only reduce shipping if clearly doesn't want it
-			else shipping = val
+			shipping = parseInt($(this).val())
 		})
 
 		function checkForm() {
