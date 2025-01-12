@@ -730,7 +730,7 @@
         utilityFn(e, this)
         // add to addresses object
         let field = $(this).attr('id')
-        let key = field.substr(0, field.lastIndexOf('_'))
+        let key = field.substring(0, field.lastIndexOf('_'))
         addresses[key] = {}
       }
     })
