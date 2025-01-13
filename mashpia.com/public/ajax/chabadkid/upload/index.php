@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
-
 // authenticate
 if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['school'])) {
     require $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
@@ -39,7 +36,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
                 JOIN
             schools s USING (school_id)
                 JOIN
-            classes c ON c.class_id = u.class_id";
+            classes c ON c.class_id = u.class_id ";
     if ($school_number > 0 && $user_id > 0) {
         $sql .= "WHERE s.school_number = $school_number AND u.user_id = $user_id";
     } else if ($school_number > 0) {
@@ -47,7 +44,6 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
     } else if ($user_id > 0) {
         $sql .= "WHERE u.user_id = $user_id";
     }
-    echo $sql;
     $stmt = $MASHPIA_DB->query($sql);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
