@@ -47,6 +47,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
     } else if ($user_id > 0) {
         $sql .= "WHERE u.user_id = $user_id";
     }
+    echo $sql;
     $stmt = $MASHPIA_DB->query($sql);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
