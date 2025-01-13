@@ -5,6 +5,19 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
     $year = GlobalSettings::getChidonYear(); // GlobalSettings class already loaded in header
     $school_number = isset($_POST['school']) ? mysql_real_escape_string($_POST['school']) : 0;
     $user_id = isset($_POST['user']) ? mysql_real_escape_string($_POST['user']) : 0;
+    $rankStmt = $MASHPIA_DB->prepare("
+        SELECT 
+            rank_ord, date_promoted, rank_name
+        FROM
+            rank_marks
+                JOIN
+            ranks USING (rank_ord)
+        WHERE
+            user_id = :user
+        ORDER BY rank_ord DESC
+        LIMIT 1
+    ");
+
     $info = [];
     $sql = "
         SELECT 
@@ -23,7 +36,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
                 JOIN
             schools s USING (school_id)
                 JOIN
-            classes c ON c.class_id = u.class_id ";
+            classes c ON c.class_id = u.class_id";
     if ($school_number > 0 && $user_id > 0) {
         $sql .= "WHERE s.school_number = $school_number AND u.user_id = $user_id";
     } else if ($school_number > 0) {
@@ -45,6 +58,16 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
             $row['th_chidon_id'] = $chidon['th_chidon_id'];
         }
         $row['chidon_enrolled'] = $enrolled ? 1 : 0;
+        // get rank and date promoted
+        $rankStmt->execute(['user' => $row['user_id']]);
+        $rankRow = $rankStmt->fetch(PDO::FETCH_ASSOC);
+        if ($rankRow) {
+            $row['rank'] = $rankRow['rank_name'];
+            $row['date_promoted'] = jdtogregorian($rankRow['date_promoted']);
+        } else {
+            $row['rank'] = '';
+            $row['date_promoted'] = '';
+        }
         $info[] = $row;
     }
     echo json_encode($info);
