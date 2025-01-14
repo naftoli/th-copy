@@ -39,23 +39,25 @@ $stmt = $MASHPIA_DB->prepare("
 
 // load csv file 
 $info = [];
-if (isset($_FILES['file'])) {
-    $file = $_FILES['file'];
-    if ($file['error'] === UPLOAD_ERR_OK) {
-        $handle = fopen($file['tmp_name'], 'r');
-        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-            $prize_id = $data[0];
-            $school_id = $data[1];
-            $info[$school_id][] = $prize_id;
+if (isset($_POST['submit'])) {
+    if (isset($_FILES['file'])) {
+        $file = $_FILES['file'];
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            $handle = fopen($file['tmp_name'], 'r');
+            while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+                $prize_id = $data[0];
+                $school_id = $data[1];
+                $info[$school_id][] = $prize_id;
+            }
+            fclose($handle);
+        } else {
+            echo "Error uploading file.";
+            exit;
         }
-        fclose($handle);
     } else {
-        echo "Error uploading file.";
+        echo "No file uploaded.";
         exit;
     }
-} else {
-    echo "No file uploaded.";
-    exit;
 }
 
 echo "<pre>"; print_r($info); echo "</pre>"; exit;
