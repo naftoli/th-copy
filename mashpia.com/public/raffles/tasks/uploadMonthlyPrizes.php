@@ -22,10 +22,10 @@ foreach ($rows as $raffle) {
     $raffles[$raffle['raffle_id']] = $raffle['name'];
 }
 
-// load csv file 
-$info = [];
+// load csv file
 if (isset($_POST['submit'])) {
     if (isset($_FILES['file'])) {
+        $info = [];
         $file = $_FILES['file'];
         if ($file['error'] === UPLOAD_ERR_OK) {
             $handle = fopen($file['tmp_name'], 'r');
