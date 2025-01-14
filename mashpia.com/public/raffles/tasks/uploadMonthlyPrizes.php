@@ -24,9 +24,9 @@ foreach ($rows as $raffle) {
 
 // load csv file
 if (isset($_POST['submit'])) {
-    if (isset($_FILES['file'])) {
+    if (isset($_FILES['monthly_prizes'])) {
         $info = [];
-        $file = $_FILES['file'];
+        $file = $_FILES['monthly_prizes'];
         if ($file['error'] === UPLOAD_ERR_OK) {
             $handle = fopen($file['tmp_name'], 'r');
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
@@ -43,7 +43,6 @@ if (isset($_POST['submit'])) {
         echo "No file uploaded.";
         exit;
     }
-    echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
     $stmt = $MASHPIA_DB->prepare("
         INSERT INTO raffles_monthly SET 
@@ -97,7 +96,7 @@ if (isset($_POST['submit'])) {
             ?>
         </select><br /><br />
         <input type="file" name="monthly_prizes" />
-        <input type="submit" value="Submit" />
+        <input type="submit" name="submit" value="Submit" />
     </form>
 </body>
 </html>
