@@ -5,37 +5,22 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getRegistrationYear();
 
 if ( $admin_user['auth'] != 'super' ) {
     echo "No Permission.";
     exit;
 }
 
-if (isset($_GET['id'])) {
-    $i = '_' . $_GET['id'];
-    switch (intval($_GET['id'])) {
-        case 2:
-            $raffle_id = 445;
-            break;
-        case 3:
-            $raffle_id = 446;
-            break;
-        case 4:
-//            $raffle_id = 215;
-            break;
-    }
-} else {
-    // stop here
-    echo "You need to provide a 60m number ID (?id=) as a GET parameter.";
-    exit;
+// get 60m raffles
+$raffles = [];
+$stmtRaffles = $MASHPIA_DB->prepare("SELECT * FROM `raffles` WHERE `type` = 'monthly' and `year` = ? ORDER BY `raffle_id` DESC");
+$stmtRaffles->execute([$year]);
+$rows = $stmtRaffles->fetchAll(PDO::FETCH_ASSOC);
+foreach ($rows as $raffle) {
+    $raffles[$raffle['raffle_id']] = $raffle['name'];
 }
-
-$stmt = $MASHPIA_DB->prepare("
-    INSERT INTO raffles_monthly SET 
-    raffle_id = :raffle, 
-    prize_id = :prize, 
-    school_id = :school
-");
 
 // load csv file 
 $info = [];
@@ -60,6 +45,14 @@ if (isset($_POST['submit'])) {
     }
     echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
+    $stmt = $MASHPIA_DB->prepare("
+        INSERT INTO raffles_monthly SET 
+        raffle_id = :raffle, 
+        prize_id = :prize, 
+        school_id = :school
+    ");
+
+    $raffle_id = $_POST['raffle_id'];
     $success = true;
     $MASHPIA_DB->beginTransaction();
     foreach ($info as $school_id => $prizes) {
@@ -77,6 +70,7 @@ if (isset($_POST['submit'])) {
             }
         }
     }
+
     if ( $success ) {
         $MASHPIA_DB->commit();
         echo "done.";
@@ -95,6 +89,13 @@ if (isset($_POST['submit'])) {
 </head>
 <body>
     <form method="POST" enctype="multipart/form-data" action="">
+        <select name="raffle_id">
+            <?php
+            foreach ($raffles as $raffle_id => $raffle) {
+                echo "<option value='{$raffle_id}'>{$raffle}</option>";
+            }
+            ?>
+        </select><br /><br />
         <input type="file" name="monthly_prizes" />
         <input type="submit" value="Submit" />
     </form>
