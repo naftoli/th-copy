@@ -58,33 +58,32 @@ if (isset($_POST['submit'])) {
         echo "No file uploaded.";
         exit;
     }
-}
+    echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
-
-$success = true;
-$MASHPIA_DB->beginTransaction();
-foreach ($info as $school_id => $prizes) {
-    foreach ($prizes as $prize) {
-        if ($prize > 0) {
-            $res = $stmt->execute([
-                ':raffle' => $raffle_id,
-                ':prize'  => $prize,
-                ':school' => $school_id
-            ]);
-            if (!$res) {
-                $success = false;
-                break 2;
+    $success = true;
+    $MASHPIA_DB->beginTransaction();
+    foreach ($info as $school_id => $prizes) {
+        foreach ($prizes as $prize) {
+            if ($prize > 0) {
+                $res = $stmt->execute([
+                    ':raffle' => $raffle_id,
+                    ':prize'  => $prize,
+                    ':school' => $school_id
+                ]);
+                if (!$res) {
+                    $success = false;
+                    break 2;
+                }
             }
         }
     }
-}
-if ( $success ) {
-    $MASHPIA_DB->commit();
-    echo "done.";
-} else {
-    $MASHPIA_DB->rollBack();
-    echo "errors.";
+    if ( $success ) {
+        $MASHPIA_DB->commit();
+        echo "done.";
+    } else {
+        $MASHPIA_DB->rollBack();
+        echo "errors.";
+    }
 }
 ?>
 <!DOCTYPE html>
