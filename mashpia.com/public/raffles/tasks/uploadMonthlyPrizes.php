@@ -5,18 +5,10 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/PHPExcel/IOFactory.php';
 
 if ( $admin_user['auth'] != 'super' ) {
     echo "No Permission.";
     exit;
-}
-
-$schools = [];
-$result = $MASHPIA_DB->query("select school_number, school_id from schools");
-$rows = $result->fetchAll();
-foreach ($rows as $row) {
-    $schools[$row['school_number']] = $row['school_id'];
 }
 
 if (isset($_GET['id'])) {
@@ -38,10 +30,6 @@ if (isset($_GET['id'])) {
     exit;
 }
 
-//load spreadsheet
-$objPHPExcel = PHPExcel_IOFactory::load("GrandRafflePrizes5781{$i}.xlsx");
-$objWorksheet = $objPHPExcel->getActiveSheet();
-
 $stmt = $MASHPIA_DB->prepare("
     INSERT INTO raffles_monthly SET 
     raffle_id = :raffle, 
@@ -49,29 +37,36 @@ $stmt = $MASHPIA_DB->prepare("
     school_id = :school
 ");
 
+// load csv file 
+$info = [];
+if (isset($_FILES['file'])) {
+    $file = $_FILES['file'];
+    if ($file['error'] === UPLOAD_ERR_OK) {
+        $handle = fopen($file['tmp_name'], 'r');
+        while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+            $prize_id = $data[0];
+            $school_id = $data[1];
+            $info[$school_id][] = $prize_id;
+        }
+        fclose($handle);
+    } else {
+        echo "Error uploading file.";
+        exit;
+    }
+} else {
+    echo "No file uploaded.";
+    exit;
+}
+
 $success = true;
 $MASHPIA_DB->beginTransaction();
-foreach ( $objWorksheet->getRowIterator() as $row ) {
-    $cellIterator = $row->getCellIterator();
-    $cellIterator->setIterateOnlyExistingCells(false);
-    $prizes = [];
-    foreach ( $cellIterator as $i => $cell ) {
-        $value = trim( $cell->getValue() );
-        if ( $i == 0 ) {
-            $school_number = intval( $value );
-        } else {
-            $prizes[] = intval( $value );
-        }
-    }
-//     echo "School: " . $school_number . "<br />";
-//     echo "<pre>"; print_r( $prizes ); echo "</pre>";
-//     echo "<br /><br />";
+foreach ($info as $school_id => $prizes) {
     foreach ($prizes as $prize) {
         if ($prize > 0) {
             $res = $stmt->execute([
                 ':raffle' => $raffle_id,
                 ':prize'  => $prize,
-                ':school' => $schools[$school_number]
+                ':school' => $school_id
             ]);
             if (!$res) {
                 $success = false;
@@ -87,3 +82,18 @@ if ( $success ) {
     $MASHPIA_DB->rollBack();
     echo "errors.";
 }
+?>
+<!DOCTYPE html>
+<!-- create form for uploading csv file -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Upload Monthly Prizes</title>
+</head>
+<body>
+    <form method="POST" enctype="multipart/form-data" action="">
+        <input type="file" name="monthly_prizes" />
+        <input type="submit" value="Submit" />
+    </form>
+</body>
+</html>
