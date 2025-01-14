@@ -19,8 +19,6 @@ foreach ($rows as $row) {
     $schools[$row['school_number']] = $row['school_id'];
 }
 
-$i = '';
-$raffle_id = 213;
 if (isset($_GET['id'])) {
     $i = '_' . $_GET['id'];
     switch (intval($_GET['id'])) {
@@ -34,6 +32,10 @@ if (isset($_GET['id'])) {
 //            $raffle_id = 215;
             break;
     }
+} else {
+    // stop here
+    echo "You need to provide an ID as a GET parameter.";
+    exit;
 }
 
 //load spreadsheet
