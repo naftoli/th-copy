@@ -58,6 +58,8 @@ if (isset($_FILES['file'])) {
     exit;
 }
 
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
+
 $success = true;
 $MASHPIA_DB->beginTransaction();
 foreach ($info as $school_id => $prizes) {
