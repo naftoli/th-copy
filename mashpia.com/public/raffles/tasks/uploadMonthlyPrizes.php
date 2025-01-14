@@ -78,7 +78,7 @@ if (isset($_POST['submit'])) {
         $MASHPIA_DB->rollBack();
         echo "errors.";
     }
-}
+} else {
 ?>
 <!DOCTYPE html>
 <!-- create form for uploading csv file -->
@@ -101,3 +101,4 @@ if (isset($_POST['submit'])) {
     </form>
 </body>
 </html>
+<?php } ?>
