@@ -36,7 +36,7 @@ if (isset($_POST['auth']) && $_POST['auth'] === 'JTaMd105nT' && isset($_POST['sc
                 JOIN
             schools s USING (school_id)
                 JOIN
-            classes c ON c.class_id = u.class_id";
+            classes c ON c.class_id = u.class_id ";
     if ($school_number > 0 && $user_id > 0) {
         $sql .= "WHERE s.school_number = $school_number AND u.user_id = $user_id";
     } else if ($school_number > 0) {
