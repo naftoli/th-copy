@@ -25,13 +25,13 @@ if (isset($_GET['id'])) {
     $i = '_' . $_GET['id'];
     switch (intval($_GET['id'])) {
         case 2:
-            $raffle_id = 213;
+            $raffle_id = 445;
             break;
         case 3:
-            $raffle_id = 214;
+            $raffle_id = 446;
             break;
         case 4:
-            $raffle_id = 215;
+//            $raffle_id = 215;
             break;
     }
 }
