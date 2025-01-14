@@ -34,7 +34,7 @@ if (isset($_GET['id'])) {
     }
 } else {
     // stop here
-    echo "You need to provide an ID as a GET parameter.";
+    echo "You need to provide a raffle ID as a GET parameter.";
     exit;
 }
 
