@@ -111,7 +111,8 @@ function updateChayolei() {
             SELECT user_id 
             FROM users 
             WHERE user_serial = :serial
-        )
+        ) 
+        AND type = 'THE' 
     ");
     $res2 = $stmt->execute([
         ':year' => $year,
