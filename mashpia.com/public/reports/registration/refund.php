@@ -107,12 +107,11 @@ function updateChayolei() {
     $stmt = $MASHPIA_DB->prepare("
         DELETE FROM user_registration 
         WHERE year = :year 
-        AND type = 'THE' 
         AND user_id = (
             SELECT user_id 
             FROM users 
             WHERE user_serial = :serial
-        ) 
+        )
     ");
     $res2 = $stmt->execute([
         ':year' => $year,
