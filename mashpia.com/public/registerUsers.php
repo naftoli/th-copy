@@ -1,5 +1,12 @@
 <?php
-require_once 'db.php';
+$admin_auth = ['school'];
+require_once 'header.php';
+
+if ($admin_user['auth'] != 'super') {
+    echo "No Permission";
+    exit;
+}
+
 require_once 'class.campaignEnrollment.php';
 require 'class.birthdayEn.php';
 require 'class.birthdayYi.php';
