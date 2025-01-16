@@ -32,7 +32,6 @@ $stmt = $MASHPIA_DB->query("
         transactions
     WHERE
         trans_id > 51840 
-    ORDER BY trans_id DESC 
 ");
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $fields = ['trans_id', 'school_id', 'trans_date', 'description', 'amount', 'admin_id', 'users_registered'];
