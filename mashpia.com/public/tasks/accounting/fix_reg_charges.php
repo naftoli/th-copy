@@ -39,7 +39,7 @@ $fields = ['trans_id', 'school_id', 'trans_date', 'description', 'amount', 'admi
 $qrys = [];
 
 $stmtInsert = $MASHPIA_DB->prepare("
-    INSERT INTO registration_charges 
+    INSERT INTO registration_charges_new  
     SET trans_id = :trans_id, 
         user_id = :user_id, 
         school_id = :school_id, 
@@ -318,6 +318,7 @@ $stmtInsert = $MASHPIA_DB->prepare("
     } else {
       $MASHPIA_DB->rollBack();
       echo "error";
+      echo $stmtInsert->errorInfo();
     }
     ?>
 </body>
