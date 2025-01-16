@@ -1843,8 +1843,11 @@ class ChidonShipping
             'MYSLDS-10' => 'MyShliach Limmud Enrollment Shipping Fee',
             'AKLDS-10'  => 'Anash Kinder Limmud Enrollment Shipping Fee',
             'AKLDBC-20' => 'Anash Kinder Limmud Enrollment BC Fee',
-            'LDE:MYSLDS-10'             => 'MyShliach Limmud Enrollment Plus Shipping Fee',
-            'LDE:AKLDS-10:AKLDBC-20'    => 'Anash Kinder Limmud Enrollment Plus Shipping & BC Fee',
+            'LDE:MYSLDS-10' => 'MyShliach Limmud Enrollment Plus Shipping Fee',
+            'LDE:AKLDS-10:AKLDBC-20' => 'Anash Kinder Limmud Enrollment Plus Shipping & BC Fee',
+            'MYSLDS'    => 'MyShliach Limmud Shipping Fee',
+            'AKLDS'     => 'Anash Kinder Limmud Shipping Fee',
+            'AKLDBC'    => 'Anash Kinder Limmud BC Fee',
 
             'RRYSD' => 'Chidon Reg Yesod',
             'RRYDA' => 'Chidon Reg Yediah',
@@ -1862,6 +1865,6 @@ class ChidonShipping
             'YB4' => 'Yahadus Book 4',
             'YB5' => 'Yahadus Book 5',
         ];
-        return $descriptions[$code];
+        return $descriptions[$code] ?? '';
     }
 }
