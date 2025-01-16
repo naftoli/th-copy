@@ -268,7 +268,7 @@ $stmtInsert = $MASHPIA_DB->prepare("
             }
         }
     }
-    echo "<pre>"; print_r($all_info); echo "</pre>";
+//    echo "<pre>"; print_r($all_info); echo "</pre>";
 
     $success = true;
     $MASHPIA_DB->beginTransaction();
