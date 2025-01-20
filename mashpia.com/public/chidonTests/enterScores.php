@@ -47,12 +47,13 @@ $disableIyun = false;
 // school exceptions
 $exceptions = [
     1 => [54],
-    2 => [54],
+    2 => [54, 108],
     3 => []
 ];
 $exceptionsDates = [
     2 => [
-        54 => new DateTime('2025-01-09 00:00:00', new DateTimeZone('America/New_York'))
+        54 => new DateTime('2025-01-09 00:00:00', new DateTimeZone('America/New_York')),
+        108 => new DateTime('2025-01-22 00:00:00', new DateTimeZone('America/New_York'))
     ]
 ];
 // disable marking after certain dates for bc's
