@@ -397,7 +397,7 @@
             addresses = JSON.parse(window.localStorage.getItem('addresses'))
             coupons = window.localStorage.getItem('coupons')
             raised = window.localStorage.getItem('raised')
-            if (window.localStorage.getItem('shipping')) shipping = parseInt(window.localStorage.getItem('shipping'))
+            shipping = window.localStorage.getItem('shipping') ? window.localStorage.getItem('shipping') : []
             trips = window.localStorage.getItem('trips')
             ultimate_trip = window.localStorage.getItem('ultimate_trip')
             ultimate_info = window.localStorage.getItem('ultimate_info')
@@ -408,7 +408,7 @@
             addresses = JSON.parse(Cookies.get('addresses'))
             coupons = Cookies.get('coupons')
             raised = Cookies.get('raised')
-            if (Cookies.get('shipping')) shipping = parseInt(Cookies.get('shipping'))
+            shipping = Cookies.get('shipping') ? Cookies.get('shipping') : []
             trips = Cookies.get('trips')
             ultimate_trip = Cookies.get('ultimate_trip')
             ultimate_info = Cookies.get('ultimate_info')
@@ -484,12 +484,23 @@
                 reg_fee += info.fee
             }
         }
-        if (shipping > 0) {
-            html += `<h5 class="formDetails">Shipping Fee: $${shipping}</h5>`
+        if (shipping.length) {
+            html += `<h5 class="formDetails"><span class="title">Shipping Fees</span></h5>`
+            for (let info of reg) {
+                if (shipping[info.id]) {
+                    let child = children[info.id]
+                    html += `<h5 class="formDetails">Shipping Fee for ${child.first}: $${shipping[info.id]}</h5>`
+                }
+            }
+        }
+        // figure out total amount of shipping fees
+        let total_shipping = 0
+        for (let id of shipping) {
+            total_shipping += parseInt(shipping[id])
         }
         if (reg.length) {
-            html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + shipping}</h5>`
-            cart_total += parseInt(reg_fee + shipping)
+            html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + total_shipping}</h5>`
+            cart_total += parseInt(reg_fee + total_shipping)
         }
         if (celeb_boxes) {
             html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
@@ -610,7 +621,7 @@
             else buttonVal = 'Register Child(ren)'
         } else {
             if (totalAfterCredit > 0) buttonVal = 'Pay for Extra Purchases'
-            else if (cart_total || shipping) buttonVal = 'Get Extra Purchases'
+            else if (cart_total || total_shipping) buttonVal = 'Get Extra Purchases'
             else {
                 buttonVal = 'Refund Credit'
                 $("#terms1").attr('checked', true)

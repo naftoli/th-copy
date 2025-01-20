@@ -251,10 +251,10 @@
           <!--                            <button class="btn btn-info chidondrive">ChidonDrive Setup</button>-->
           <!--                                            <button class="btn btn-info story">Submit your Rebbe Story</button>-->
           <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
-          <!--          <button class="btn btn-info chidon_reg" style="display: none;">Chidon Registration</button>-->
+                    <button class="btn btn-primary chidon_reg" style="display: none;">Chidon Registration</button>
           <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
           <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
-          <button class="btn btn-primary heyTeves">Hei Teves Sale</button>
+<!--          <button class="btn btn-primary heyTeves">Hei Teves Sale</button>-->
           <button class="btn btn-primary neshek" style="display: none;">Neshek Sale</button>
           <!--                    <button class="btn btn-info power">Power of Children Quiz</button>-->
         </div>
@@ -404,11 +404,11 @@
                             </div>
                             {{/if}}
 
-                            <!--                                                    {{#if this.ultimate_trip}}-->
-                            <!--                                                    <div class="button-spacing">-->
-                            <!--                                                        <button class="btn btn-primary ultimate_trip">Edit Ultimate Trip Info</button>-->
-                            <!--                                                    </div>-->
-                            <!--                                                    {{/if}}-->
+                            {{#if this.ultimate_trip}}
+                            <div class="button-spacing">
+                                <button class="btn btn-primary ultimate_trip">Edit Ultimate Trip Info</button>
+                            </div>
+                            {{/if}}
 
                             {{#if this.chayoleiRegistered}}
                             <div class="button-spacing">
@@ -450,9 +450,9 @@
                               <br/>
                               <!--                                                        {{/if}}-->
                               {{#if this.editUltimateTrip}}
-                              <!--                              <button class="btn btn-primary ultimate_trip">-->
-                              <!--                                <span>Edit Ultimate Trip Info</span>-->
-                              <!--                              </button>-->
+                                <button class="btn btn-primary ultimate_trip">
+                                  <span>Edit Ultimate Trip Info</span>
+                                </button>
                               {{/if}}
                               {{#if this.show_report_cards}}
                               <button class="btn btn-primary report-card"><span>View Report Card</span></button>
@@ -605,11 +605,27 @@
 
     if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
+    const params = new URL(location.href).searchParams
+    if (params.has("override") && params.get("override") === '1') {
+      Cookies.set('override', 1)
+    }
+
+    // unix timestamp for now
+    const now = Math.floor(Date.now()/1000);
+
     // when to remove hei teves button
-    const now = Math.floor( new Date().getTime() / 1000);
-    console.log( now );
-    if ( now >= 1736398800 ) {
+    console.log(now);
+    if (now >= 1736398800) {
       $(".heyTeves").hide();
+    }
+
+    // when to show link for chidon registration
+    if (
+      Cookies.get('naftoli') ||
+      (now > 1739163600 && now < 1739422800) ||
+      (Cookies.get('override') && now < 1739854800)
+    ) {
+      $(".chidon_reg").show()
     }
 
     // allow parents to swipe to open a child's account.
@@ -639,7 +655,6 @@
       $(".neshek").show()
     }
 
-    // find out if we should show link for chidon registration
     $(".chidon_reg").click(function () {
       Cookies.set('chidon_admin', admin)
       location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'

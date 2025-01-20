@@ -1,19 +1,24 @@
-function getShippingFee(schoolID, country='', numChildren=0) {
-  const notByCountry = [45, 106, 110]
-  const fees = {
+function calcShipping(school_id, numChildren, country) {
+  const fixed_fee_by_school = [45, 106, 110]
+  const fixed_fees = {
     45: 10,
     106: 10,
-    110: 15,
+    110: 15
   }
 
-  const byCountry = [61, 269]
+  if (fixed_fee_by_school.includes(school_id)) {
+    if (numChildren[school_id] == 1)
+      return fixed_fees[school_id]
+    else
+      return 0
+  }
 
-  const countryIndex = ['USA', 'Canada', 'Brazil', 'Denmark', 'Israel', 'South Africa', 'United Kingdom',
+  const fee_by_school = [61, 269]
+  const country_list = ['USA', 'Canada', 'Brazil', 'Denmark', 'Israel', 'South Africa', 'United Kingdom',
     'Vietnam', 'Argentina', 'Australia', 'Austria', 'Azerbaijan', 'Belguim', 'Chile', 'China', 'France', 'Germany',
     'Italy', 'Korea', 'Latvia', 'Lithuania', 'Luxemberg', 'Mauritius', 'Netherlands', 'Portugal', 'S. Barthelemy',
     'Slovakia', 'Spain', 'Sweden', 'Switzerland', 'Taiwan', 'Uruguay']
-
-  const feesByCountry = [
+  const fee_by_country = [
     [20,19,6,11,11,17],
     [39,21,4,3,17,6],
     [123,37,20,25,25,25],
@@ -49,16 +54,13 @@ function getShippingFee(schoolID, country='', numChildren=0) {
     [97,9,21,23,24,26] // last one is if country is not in list
   ]
 
-  if (notByCountry.includes(schoolID)) {
-    return fees[schoolID]
-  } else if (byCountry.includes(schoolID) && countryIndex.includes(country)) {
-    const index = countryIndex.indexOf(country)
-    // calculate fee by number of children
-    let total = 0
-    for (let i = 0; i < numChildren; i++) {
-      total += feesByCountry[index][i]
+  if (fee_by_school.includes(school_id)) {
+    let index = country_list.indexOf(country)
+    if (index > -1) {
+      return fee_by_country[index][numChildren[school_id] - 1]
+    } else {
+      return fee_by_country[fee_by_country.length - 1][numChildren[school_id] - 1]
     }
-    return total
   } else {
     return 0
   }

@@ -23,7 +23,7 @@ $coupon = new CouponCode($MASHPIA_DB, $year);
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
 $payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
-$shipping_charge = isset($_POST['shipping']) ? intval($_POST['shipping']) : 0;
+$shipping_charges = isset($_POST['shipping']) ? json_decode($_POST['shipping']) : [];
 $credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
 $already_used_credit = isset($_POST['already_used_credit']) ? intval($_POST['already_used_credit']) : 0;
 $to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) - $credit) : 0;
@@ -39,6 +39,7 @@ $celebBoxes = 0;
 $celebBoxShipping = 0;
 $sweater_info = [];
 $emailMsg = '';
+$credits = [];
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $admin_id);
@@ -136,7 +137,7 @@ function arrayByField($array, $key, $value) {
 }
 
 function processCart() {
-    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info;
+    global $cart, $users, $celebBoxes, $celebBoxShipping, $user_info, $credits;
 
     if ($cart && count($cart)) {
         foreach ($cart as $item) {
@@ -150,6 +151,11 @@ function processCart() {
                 $celebBoxShipping = intval($item['value']);
             } else if ($item['desc'] == 'names' && $item['value']) {
                 $user_info = $item['value'];
+            } else if (strpos($item['desc'], '_credit_') !== false) {
+                $credit_info = explode('_', $item['desc']);
+                $desc = $credit_info[0];
+                $user_id = $credit_info[2];
+                $credits[$user_id][$desc] = floatval($item['value']);
             }
         }
     }
@@ -234,7 +240,7 @@ function getAuthDesc() {
 }
 
 function insertIntoRegCharges($trans_id = 0) {
-    global $MASHPIA_DB, $users, $year;
+    global $MASHPIA_DB, $users, $year, $trip_credit;
 
     $user_ids = array_keys($users);
     $school_ids = [];
@@ -259,7 +265,10 @@ function insertIntoRegCharges($trans_id = 0) {
             admin_id = :admin,
             type = :type, 
             amount = :amount, 
-            year = :year
+            year = :year, 
+            voucher_credit = :voucher, 
+            chidon_drive_credit = :chidon_drive, 
+            trip_credit = :trip
     ");
 
     $success = true;
@@ -268,6 +277,9 @@ function insertIntoRegCharges($trans_id = 0) {
     $MASHPIA_DB->beginTransaction();
     foreach ($descriptions as $item) {
         if ($item['prefix'] == 'C') {
+            $drive_credit = isset($credits[$item['user_id']]['drive']) ? $credits[$item['user_id']]['drive'] : 0;
+            $voucher_credit = isset($credits[$item['user_id']]['voucher']) ? $credits[$item['user_id']]['voucher'] : 0;
+            $trip_credit = isset($credits[$item['user_id']]['trip']) ? $credits[$item['user_id']]['trip'] : 0;
             if (!$stmt->execute([
                 'trans_id' => $trans_id,
                 'user' => $item['id'],
@@ -275,7 +287,10 @@ function insertIntoRegCharges($trans_id = 0) {
                 'admin' => 0,
                 'type' => $item['code'],
                 'amount' => $item['amount'],
-                'year' => $year
+                'year' => $year,
+                'chidon_drive' => $drive_credit,
+                'voucher' => $voucher_credit,
+                'trip' => $trip_credit
             ])) {
                 $success = false;
                 break;
@@ -288,7 +303,10 @@ function insertIntoRegCharges($trans_id = 0) {
                 'admin' => $item['id'],
                 'type' => $item['code'],
                 'amount' => $item['amount'],
-                'year' => $year
+                'year' => $year,
+                'chidon_drive' => 0,
+                'voucher' => 0,
+                'trip' => 0
             ])) {
                 $success = false;
                 break;
@@ -307,7 +325,7 @@ function insertIntoRegCharges($trans_id = 0) {
 
 function getDescriptions() {
     global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip,
-           $shipping_charge, $country, $credit, $already_used_credit;
+           $shipping_charges, $country, $credit, $already_used_credit;
 
     $desc = [];
 
@@ -356,7 +374,7 @@ function getDescriptions() {
         }
     }
 
-    if ($shipping_charge) {
+    if (!empty($shipping_charges)) {
         // figure out code for shipping charge
         // check country of family
         switch ($country) {
@@ -370,12 +388,14 @@ function getDescriptions() {
                 $code = 'RRSINT';
                 break;
         }
-        $desc[] = [
-            'prefix'    => 'F',
-            'id'        => $admin_id,
-            'code'      => $code,
-            'amount'    => $shipping_charge
-        ];
+        foreach ($shipping_charges as $user_id => $amount) {
+            $desc[] = [
+                'prefix'    => 'C',
+                'id'        => $user_id,
+                'code'      => $code,
+                'amount'    => $amount
+            ];
+        }
     }
 
     if ($celebBoxes) {
@@ -552,7 +572,7 @@ function processReg() {
 }
 
 function updateShipping() {
-    global $MASHPIA_DB, $year, $admin_id, $shipping_charge;
+    global $MASHPIA_DB, $year, $admin_id, $shipping_charges;
 
     $sqlInsert = "INSERT IGNORE INTO chidon_parent_shipping 
                   SET 
@@ -563,15 +583,19 @@ function updateShipping() {
                   ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
-    $updated = true;
-    if ($shipping_charge > 0) {
+    $success = true;
+    foreach ($shipping_charges as $shipping_charge) {
         $updated = $stmtInsert->execute([
             'admin'     => $admin_id,
             'year'      => $year,
             'amount'    => $shipping_charge
         ]);
+        if (!$updated) {
+            $success = false;
+            break;
+        }
     }
-    return $updated;
+    return $success;
 }
 
 function processCelebBoxes() {

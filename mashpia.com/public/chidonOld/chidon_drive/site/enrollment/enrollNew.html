@@ -833,7 +833,8 @@
 		var addresses = {} // all addresses entered
 		var ultimate_trip = [] // array of users going on ultimate trip
 		var trips = [] // array of trips for myshliach / anash kinder
-		var shipping = 0 // cost of shipping chidon stuff to parents where applicable
+		var shipping = [] // cost of shipping chidon stuff to parents where applicable
+		var num_child_for_shipping = []
 		var errors = []
 		var needsShipping = false
 		var editing_mode = false // only in editing mode for ultimate trip info
@@ -1027,7 +1028,10 @@
 			else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
 
 			$("#ch_info select").niceSelect('update')
-			$("#ch_info").modal('show')
+
+			const now =  Math.floor(new Date().getTime() / 1000)
+			if (now < 2460731) // Feb. 25, 2025
+				$("#ch_info").modal('show')
 		}
 
 		async function processPage(admin) {
@@ -1183,18 +1187,24 @@
 			}
 
 			// find out if we need to charge for shipping
-			// only get shipping fee if we do not have any kids that have registered
-			if (!registered.length) {
-				// check if we need to charge for shipping
-				shipping = getShippingFee(parseInt(eligible[0]['school_id']), eligible[0]['admin_country'].trim(), eligible.length)
-				if (shipping > 0) {
+			let shipping_fee = 0
+			const shipping_schools = [45, 106, 110, 61, 269]
+			if (shipping_schools.includes(child.school_id)) {
+				if (num_child_for_shipping[child.school_id])
+					num_child_for_shipping[child.school_id]++
+				else
+					num_child_for_shipping[child.school_id] = 1
+				// check if we need to pay anything for this child
+				shipping_fee = calcShipping(child.school_id, num_child_for_shipping, child.country)
+				if (shipping_fee) {
 					needsShipping = true
-					if (window.localStorage) localStorage.setItem('country', eligible[0]['admin_country'])
-					else Cookies.set('country', eligible[0]['admin_country'])
+					shipping[child.user_id] = shipping_fee
+					if (window.localStorage) localStorage.setItem('country', child.admin_country)
+					else Cookies.set('country', child.admin_country)
 				}
 			}
 
-			const parentAddress = eligible[0]['admin_address1'] + ' ' + eligible[0]['admin_address2'] + ', ' + eligible[0]['admin_city'] + ', ' + eligible[0]['admin_state'] + ' ' + eligible[0]['admin_postal']
+			const parentAddress = child.admin_address1 + ' ' + child.admin_address2 + ', ' + child.admin_city + ', ' + child.admin_state + ' ' + child.admin_postal
 			const pickupText = {
 				61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
 						Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
@@ -1203,16 +1213,17 @@
 			if (needsShipping) {
 				html += `<div id="shipping_charges">
 							<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+							<input type="hidden" id="user_id" value="${child.user_id}" />
 							<div class="flex">
 								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
 								<label>
-									(FREE) ${pickupText[eligible[0]['school_id']]}
+									(FREE) ${pickupText[child.school_id]}
 								</label>
 							</div>
 							<div class="flex">
-								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping}" />
+								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_fee}" />
 								<label>
-									($${shipping}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+									($${shipping_fee}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
 									please update the address on your mashpia.com parent account.
 								</label>
 							</div></div>`
@@ -1279,16 +1290,28 @@
 			// find out if we need to add a smaller amount to the amounts array
 			const raised = parseInt(child.raised)
 			let lowest = amounts[amounts.length - 1]
-			lowest -= raised
+			if (raised) {
+				lowest -= raised
+				const drive_credit = 'drive_credit_' + child.user_id
+				addToCart(drive_credit, raised)
+			}
 
 			// check coupon codes
-			lowest -= child.coupon
+			if (child.coupon) {
+				lowest -= child.coupon
+				const voucher_credit = 'voucher_credit_' + child.user_id
+				addToCart(voucher_credit, child.coupon)
+			}
 
 			// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce by another $100
 			if (idx && [61, 269].includes(parseInt(child.school_id))) {
 				let elem = '#' + user_id
 				let trip = $(elem).find('#regional_trip').val()
-				if (trip === 'no_trip') lowest -= 100
+				if (trip === 'no_trip') {
+					lowest -= 100
+					const trip_credit = 'trip_credit_' + child.user_id
+					addToCart(trip_credit, 100)
+				}
 			}
 
 			if (lowest < 0) lowest = 0
@@ -1444,7 +1467,9 @@
 		})
 
 		$(document).on('click', '.shipping', function () {
-			shipping = parseInt($(this).val())
+			const user_id = $(this).parent().parent().find('#user_id').val()
+			fee = parseInt($(this).val())
+			shipping[user_id] = fee
 		})
 
 		function checkForm() {
@@ -1501,7 +1526,6 @@
 		}
 
 		function checkShipping() {
-			// only check shipping if at least one child from myshliach or anash kinder is being registered
 			if (needsShipping && cart.length) {
 				if (!$(".shipping:checked").length) {
 					errors.push("You must indicate how you would like to have your chidon stuff shipped!")
@@ -1576,7 +1600,7 @@
 					window.localStorage.setItem('coupons', json_coupons)
 					window.localStorage.setItem('raised', json_raised)
 					window.localStorage.setItem('tracks', json_tracks)
-					window.localStorage.setItem('shipping', shipping)
+					window.localStorage.setItem('shipping', JSON.stringify(shipping))
 					window.localStorage.setItem('trips', JSON.stringify(trips))
 					window.localStorage.setItem('ultimate_trip', JSON.stringify(ultimate_trip))
 					window.localStorage.setItem('ultimate_info', JSON.stringify(ultimate_info))
@@ -1586,7 +1610,7 @@
 					Cookies.set('coupons', json_coupons)
 					Cookies.set('raised', json_raised)
 					Cookies.set('tracks', json_tracks)
-					Cookies.set('shipping', shipping)
+					Cookies.set('shipping', JSON.stringify(shipping))
 					Cookies.set('trips', JSON.stringify(trips))
 					Cookies.set('ultimate_trip', JSON.stringify(ultimate_trip))
 					Cookies.set('ultimate_info', JSON.stringify(ultimate_info))

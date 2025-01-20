@@ -47,11 +47,23 @@ class TripRegistration
 
     private function subtractForPrizes() {
         $toSubtract = 0;
-        $subtract = [
-            75 => [284, 285, 286, 287, 288, 289, 290, 291, 295, 302, 303],
-            35 => [395],
-            30 => [380, 381]
-        ];
+
+        // get id's and prices
+        $stmtPrizes = $this->db->prepare("
+            SELECT 
+                *
+            FROM
+                chidon_prizes
+            WHERE
+                year = :year
+        ");
+        $stmtPrizes->execute(['year' => $this->year]);
+        $rowsPrizes = $stmtPrizes->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rowsPrizes as $row) {
+            if (!empty($row['personalization'])) {
+                $subtract[intval($row['our_price'])][] = $row['prize_id'];
+            }
+        }
 
         $stmt = $this->db->prepare("
             SELECT 
@@ -83,6 +95,7 @@ class TripRegistration
                 }
             }
         }
+
         return $toSubtract;
     }
 }
