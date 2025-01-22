@@ -620,11 +620,14 @@
     }
 
     // when to show link for chidon registration
-    if (
-      Cookies.get('naftoli') ||
-      (now > 1739163600 && now < 1739422800) ||
-      (Cookies.get('override') && now < 1739854800)
-    ) {
+    // if (
+    //   Cookies.get('naftoli') ||
+    //   (now > 1739163600 && now < 1739422800) ||
+    //   (Cookies.get('override') && now < 1739854800)
+    // ) {
+    //   $(".chidon_reg").show()
+    // }
+    if (Cookies.get('naftoli')) {
       $(".chidon_reg").show()
     }
 
