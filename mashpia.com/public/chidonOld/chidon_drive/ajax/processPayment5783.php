@@ -592,6 +592,11 @@ function processReg() {
 function updateShipping() {
     global $MASHPIA_DB, $year, $admin_id, $shipping_charges;
 
+    $total_charge = 0;
+    foreach ($shipping_charges as $shipping_charge) {
+        $total_charge += intval($shipping_charge);
+    }
+
     $sqlInsert = "
         INSERT IGNORE INTO chidon_parent_shipping 
         SET 
@@ -601,20 +606,14 @@ function updateShipping() {
             date_paid = now()
         ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
-
-    $success = true;
-    foreach ($shipping_charges as $shipping_charge) {
-        $updated = $stmtInsert->execute([
-            'admin'     => $admin_id,
-            'year'      => $year,
-            'amount'    => $shipping_charge
-        ]);
-        if (!$updated) {
-            $success = false;
-            break;
-        }
-    }
-    return $success;
+    
+    $updated = $stmtInsert->execute([
+        'admin'     => $admin_id,
+        'year'      => $year,
+        'amount'    => $total_charge
+    ]);
+    
+    return $updated;
 }
 
 function processCelebBoxes() {

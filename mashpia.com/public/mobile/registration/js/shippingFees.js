@@ -1,18 +1,28 @@
 async function calcShipping(school_id, numChildren, country, admin_id) {
   // find out how many children already paid for shipping for current school_id
-  const res = await fetch('checkShippingPaid.php', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      admin: admin_id,
-      school: school_id,
+  try {
+    const res = await fetch('checkShippingPaid.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        admin: admin_id,
+        school: school_id,
+      })
     })
-  })
-  const data = await res.json()
-  if (data[school_id] && data[school_id].length > 0) {
-    numChildren[school_id] += data[school_id].length
+
+    if (!res.ok) {
+      throw new Error(`Network response was not ok: ${res.statusText}`)
+    }
+
+    const data = await res.json()
+    if (data[school_id] && data[school_id].length > 0) {
+      numChildren[school_id] += data[school_id].length
+    }
+  } catch (error) {
+    console.error('Error calculating shipping:', error)
+    return 0
   }
 
   const fixed_fee_by_school = [45, 106, 110]
