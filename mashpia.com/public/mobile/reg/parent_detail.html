@@ -620,17 +620,12 @@
     }
 
     // when to show link for chidon registration
-    // if (
-    //   Cookies.get('naftoli') ||
-    //   (now > 1739163600 && now < 1739422800) ||
-    //   (Cookies.get('override') && now < 1739854800)
-    // ) {
-    //   $(".chidon_reg").show()
-    // }
-    if (Cookies.get('naftoli')) {
+    if (
+      Cookies.get('naftoli') ||
+      (now > 1739163600 && now < 1739422800) ||
+      (Cookies.get('override') && now < 1739854800)
+    ) {
       $(".chidon_reg").show()
-    } else {
-      $(".chidon_reg").hide();
     }
 
     // allow parents to swipe to open a child's account.
