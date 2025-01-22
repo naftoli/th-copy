@@ -19,14 +19,17 @@ use classes\authorize\CustomerProfile as Customer;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 $coupon = new CouponCode($MASHPIA_DB, $year);
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+$ct = new ChidonTests($year);
+
 //******************* GLOBAL VARIABLES ***********************/
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
 $payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
 $shipping_charges = isset($_POST['shipping']) ? json_decode($_POST['shipping']) : [];
 $credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
-$already_used_credit = isset($_POST['already_used_credit']) ? intval($_POST['already_used_credit']) : 0;
-$to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) - $credit) : 0;
+//$already_used_credit = isset($_POST['already_used_credit']) ? intval($_POST['already_used_credit']) : 0;
+$to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) - $credit) : 0; // we want it to be negative if there's a refund needed
 $total_without_credit = isset($_POST['cart_total']) ? intval($_POST['cart_total']) : 0;
 $ccInfo = isset($_POST['cc']) ? $_POST['cc'] : [];
 $cart = isset($_POST['cart']) ? $_POST['cart'] : [];
@@ -61,18 +64,6 @@ if ($row[0] > 0) {
 $sql = "INSERT INTO purchase_processing (admin_id) VALUES ($admin_id)";
 mysql_query($sql);
 
-if (isset($_POST['coupons'])) {
-    $couponsArr = json_decode($_POST['coupons']);
-    $coupons = arrayByField($couponsArr, 'user_id', 'coupon');
-}
-else $coupons = [];
-
-if (isset($_POST['raised'])) {
-    $raisedArr = json_decode($_POST['raised']);
-    $raised = arrayByField($raisedArr, 'user_id', 'raised');
-}
-else $raised = [];
-
 if (isset($_POST['tracks'])) {
     $tracksArr = json_decode($_POST['tracks']);
     $tracks = arrayByField($tracksArr, 'user_id', 'track');
@@ -83,7 +74,7 @@ $trips = isset($_POST['trips']) ? json_decode($_POST['trips']) : [];
 $ultimate_trip = isset($_POST['ultimate_trip']) ? json_decode($_POST['ultimate_trip']) : [];
 $ultimate_info = isset($_POST['ultimate_info']) ? json_decode($_POST['ultimate_info']) : [];
 $country = isset($_POST['country']) ? $_POST['country'] : '';
-$creditVal = isset($_POST['creditVal']) ? $_POST['creditVal'] : 0;
+$creditVal = isset($_POST['creditVal']) ? $_POST['creditVal'] : 0; // refund amount
 $paypal_email = isset($_POST['paypal_email']) ? $_POST['paypal_email'] : '';
 
 define('CELEB_BOX_COST', 20);
@@ -240,7 +231,7 @@ function getAuthDesc() {
 }
 
 function insertIntoRegCharges($trans_id = 0) {
-    global $MASHPIA_DB, $users, $year, $trip_credit;
+    global $MASHPIA_DB, $users, $year;
 
     $user_ids = array_keys($users);
     $school_ids = [];
@@ -265,10 +256,7 @@ function insertIntoRegCharges($trans_id = 0) {
             admin_id = :admin,
             type = :type, 
             amount = :amount, 
-            year = :year, 
-            voucher_credit = :voucher, 
-            chidon_drive_credit = :chidon_drive, 
-            trip_credit = :trip
+            year = :year
     ");
 
     $success = true;
@@ -276,37 +264,24 @@ function insertIntoRegCharges($trans_id = 0) {
 
     $MASHPIA_DB->beginTransaction();
     foreach ($descriptions as $item) {
-        if ($item['prefix'] == 'C') {
-            $drive_credit = isset($credits[$item['user_id']]['drive']) ? $credits[$item['user_id']]['drive'] : 0;
-            $voucher_credit = isset($credits[$item['user_id']]['voucher']) ? $credits[$item['user_id']]['voucher'] : 0;
-            $trip_credit = isset($credits[$item['user_id']]['trip']) ? $credits[$item['user_id']]['trip'] : 0;
-            if (!$stmt->execute([
-                'trans_id' => $trans_id,
-                'user' => $item['id'],
-                'school' => isset($item['school_id']) ? $item['school_id'] : $school_ids[$item['id']],
-                'admin' => 0,
-                'type' => $item['code'],
-                'amount' => $item['amount'],
-                'year' => $year,
-                'chidon_drive' => $drive_credit,
-                'voucher' => $voucher_credit,
-                'trip' => $trip_credit
-            ])) {
-                $success = false;
-                break;
+        if (!isset($item['authorize_only'])) {
+            if ($item['prefix'] == 'C') {
+                $user_id = $item['id'];
+                $school_id = $school_ids[$user_id];
+                $admin_id = 0;
+            } else if ($item['prefix'] == 'F') {
+                $user_id = 0;
+                $school_id = 0;
+                $admin_id = $item['id'];
             }
-        } else if ($item['prefix'] == 'F') {
             if (!$stmt->execute([
                 'trans_id' => $trans_id,
-                'user' => 0,
-                'school' => 0,
-                'admin' => $item['id'],
+                'user' => $user_id,
+                'school' => $school_id,
+                'admin' => $admin_id,
                 'type' => $item['code'],
                 'amount' => $item['amount'],
-                'year' => $year,
-                'chidon_drive' => 0,
-                'voucher' => 0,
-                'trip' => 0
+                'year' => $year
             ])) {
                 $success = false;
                 break;
@@ -325,24 +300,28 @@ function insertIntoRegCharges($trans_id = 0) {
 
 function getDescriptions() {
     global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip,
-           $shipping_charges, $country, $credit, $already_used_credit;
+           $shipping_charges, $country, $credits, $credit, $to_charge, $creditVal;
 
     $desc = [];
 
-    if ($already_used_credit == 0) {
-        $existing_codes = getExistingCodes();
-        if (count($existing_codes)) {
-            // if there's credit first zero out the amounts in the registration_charges table
-            if ($credit > 0) {
-                foreach ($existing_codes as $code) {
-                    $desc[] = [
-                        'prefix' => 'C',
-                        'id' => $code['user_id'],
-                        'code' => $code['type'],
-                        'amount' => '-' . $code['amount'],
-                        'school_id' => $code['school_id']
-                    ];
-                }
+    // if there's credit first zero out the amounts in the registration_charges table
+    if ($credit > 0) {
+        $desc[] = [
+            'prefix' => 'F',
+            'id' => $admin_id,
+            'code' => 'RRFAM',
+            'amount' => -abs($credit),
+        ];
+        // check if we are refunding anything and add to desc
+        if ($to_charge < 0) {
+            $refund = abs($to_charge);
+            if ($creditVal > 1) {
+                $desc[] = [
+                    'prefix' => 'F',
+                    'id' => $admin_id,
+                    'code' => 'R',
+                    'amount' => $refund,
+                ];
             }
         }
     }
@@ -398,6 +377,53 @@ function getDescriptions() {
         }
     }
 
+    if (!empty($credits)) {
+        $credit_codes = [
+            'drive'     => 'CD',
+            'voucher'   => 'CV',
+            'trip'      => 'CT'
+        ];
+        foreach ($credits as $user_id => $details) {
+            foreach ($details as $type_of_credit => $amount) {
+                if ($type_of_credit == 'personal') {
+                    // check if we need to change the code in accounting from original track to new track
+                    $codes = checkPersonalCredit($user_id, $amount);
+                    if (isset($codes['new'])) {
+                        // debit from original code
+                        $desc[] = [
+                            'prefix'    => 'C',
+                            'id'        => $user_id,
+                            'code'      => $codes['original'],
+                            'amount'    => -abs($amount)
+                        ];
+                        // add new code
+                        $desc[] = [
+                            'prefix'    => 'C',
+                            'id'        => $user_id,
+                            'code'      => $codes['new'],
+                            'amount'    => $amount
+                        ];
+                    } else {
+                        $desc[] = [
+                            'prefix'    => 'C',
+                            'id'        => $user_id,
+                            'code'      => $codes['original'],
+                            'amount'    => $amount,
+                            'authorize_only' => 1 // this is only for authorize, not to be entered into registration_charges b/c it already exists there
+                        ];
+                    }
+                } else {
+                    $desc[] = [
+                        'prefix' => 'C',
+                        'id' => $user_id,
+                        'code' => $credit_codes[$type_of_credit],
+                        'amount' => $amount,
+                    ];
+                }
+            }
+        }
+    }
+
     if ($celebBoxes) {
         $desc[] = [
             'prefix'    => 'F',
@@ -445,108 +471,100 @@ function getDescriptions() {
     return $desc;
 }
 
-function getExistingCodes() {
-    global $admin_id, $year, $MASHPIA_DB;
+function checkPersonalCredit($user_id, $amount) {
+    global $MASHPIA_DB, $year, $ct;
 
-    // get children for admin
-    $stmt = $MASHPIA_DB->prepare("
-        SELECT id 
-        FROM admin_auths 
-        WHERE admin_id = :admin AND auth = 'user'
+    // get child's school_id, class_id and th_chidon_id
+    $stmtUser = $MASHPIA_DB->prepare("
+        SELECT school_id, class_id, th_chidon_id 
+        FROM users u 
+        JOIN th_chidon tc using (user_id) 
+        WHERE user_id = :user AND tc.year = :year
     ");
-    $stmt->execute([':admin' => $admin_id]);
-    $children = $stmt->fetchAll();
-    $user_ids = array_map(function($child) {
-        return $child['id'];
-    }, $children);
+    $stmtUser->execute([
+        ':user' => $user_id,
+        ':year' => $year
+    ]);
+    $rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
+    $school_id = $rowUser['school_id'];
+    $class_id = $rowUser['class_id'];
+    $th_chidon_id = $rowUser['th_chidon_id'];
+    $child = [
+        'user_id' => $user_id,
+        'school_id' => $school_id,
+        'class_id' => $class_id,
+        'th_chidon_id' => $th_chidon_id
+    ];
+    // find out what track child achieved
+    $track = $ct->getHighestTrackPassed($child)['highest_track'];
 
-    // get codes
-    $stmt2 = $MASHPIA_DB->prepare("
-        SELECT user_id, type, amount, school_id 
-        FROM registration_charges
-        WHERE user_id in (" . implode(',', $user_ids) . ") AND year = :year 
-        AND type in ('RRYSD', 'RRYDA', 'RRHVN', 'RRSUSA', 'RRSCAN', 'RRSINT', 'PRRSUSA', 'PRRSCAN', 'PRRSINT') 
-        AND amount > 0 
-    ");
-    $stmt2->execute([':year' => $year]);
-    $codes = $stmt2->fetchAll();
-
-    return $codes;
-}
-
-function updateFamilyBalance() {
-    global $MASHPIA_DB, $admin_id, $year, $to_charge, $credit, $creditVal, $paypal_email, $total_without_credit, $already_used_credit;
-
-    if ($credit > 0) {
-        $desc = getDescriptions();
-
-        // create string for accounting_code
-        // format is <prefix><id>:<code>-<amount>,<prefix><id>:<code>-<amount>,...
-        $code = '';
-        foreach ($desc as $item) {
-            $code .= $item['prefix'] . $item['id'] . ':' . $item['code'] . '-' . $item['amount'] . ',';
-        }
-        // remove trailing comma
-        $code = rtrim($code, ',');
-
+    // if there's a track then compare with what was entered in registration_charges and update if needed
+    if ($track != '') {
         $stmt = $MASHPIA_DB->prepare("
-                UPDATE family_prepaid_balances 
-                SET used = :amount, 
-                    refund_amount = :refund,
-                    refund_type = :type, 
-                    paypal = :paypal, 
-                    accounting_code = :code 
-                WHERE admin_id = :admin AND year = :year
+            SELECT type FROM registration_charges 
+            WHERE year = :year AND user_id = :user 
+                AND type in ('RRYSD', 'RRYDA', 'RRHVN') 
+                AND amount = :amount
         ");
-
-        if ($already_used_credit) {
-            $stmt = $MASHPIA_DB->prepare("
-                UPDATE family_prepaid_balances 
-                SET used = (used + :amount), 
-                    refund_amount = :refund,
-                    refund_type = :type, 
-                    paypal = :paypal, 
-                    accounting_code = CONCAT(accounting_code, ' ', :code)  
-                WHERE admin_id = :admin AND year = :year
-            ");
-        }
-
-        // find out if we are using up all prepaid amount
-        if ($to_charge > 0) {
-            $amount = $credit;
-            $refund = 0;
-            $type = '';
-            $code = '';
-        } else {
-            $amount = $total_without_credit;
-            $refund = $credit - $total_without_credit;
-            switch (intval($creditVal)) {
-                case 1:
-                    $type = 'donation';
-                    break;
-                case 2:
-                    $type = 'refund';
-                    break;
-                case 3:
-                    $type = 'paypal';
-                    break;
+        $stmt->execute([
+            'year' => $year,
+            'user' => $user_id,
+            'amount' => $amount
+        ]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $type = $row['type'];
+            $types = [
+                'maven' => 'RRYSD',
+                'pro' => 'RRYDA',
+                'expert' => 'RRHVN',
+                'genius' => 'RRHVN'
+            ];
+            $key = array_search($type, $types);
+            if ($key != $track) {
+                $codes = [
+                    'original' => $type,
+                    'new' => $types[$track]
+                ];
+            } else {
+                $codes = [
+                    'original' => $type
+                ];
             }
-        }
-
-        if (! $stmt->execute([
-            ':amount'   => $amount,
-            ':refund'   => $refund,
-            ':type'     => $type,
-            ':paypal'   => $paypal_email,
-            ':admin'    => $admin_id,
-            ':year'     => $year,
-            ':code'     => $code
-        ])) {
-//            $stmt->debugDumpParams();
-            return false;
+            return $codes;
         }
     }
-    return true;
+    return false;
+}
+
+function processRefund($amount, $desc) {
+    global $MASHPIA_DB, $admin_id, $year, $creditVal, $paypal_email;
+    
+    $refund_type = '';
+    switch ($creditVal) {
+        case 1:
+            $refund_type = 'donation';
+            break;
+        case 2:
+            $refund_type = 'refund';
+            break;
+        case 3:
+            $refund_type = 'paypal';
+            break;
+    }
+
+    $stmt = $MASHPIA_DB->prepare("
+        INSERT INTO family_prepaid_balances (admin_id, year, refund_amount, refund_type, paypal, accounting_code) 
+        VALUES (:admin_id, :year, :refund, :type, :paypal, :code)");
+    $res = $stmt->execute([
+        'admin_id'  => $admin_id,
+        'year'      => $year,
+        'refund'    => $amount,
+        'type'      => $refund_type,
+        'paypal'    => $paypal_email,
+        'code'      => $desc
+    ]);
+    return $res;
 }
 
 function processReg() {
@@ -574,13 +592,14 @@ function processReg() {
 function updateShipping() {
     global $MASHPIA_DB, $year, $admin_id, $shipping_charges;
 
-    $sqlInsert = "INSERT IGNORE INTO chidon_parent_shipping 
-                  SET 
-                        parent_id = :admin,
-                        year = :year, 
-                        amount_paid = :amount, 
-                        date_paid = now()
-                  ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
+    $sqlInsert = "
+        INSERT IGNORE INTO chidon_parent_shipping 
+        SET 
+            parent_id = :admin,
+            year = :year, 
+            amount_paid = :amount, 
+            date_paid = now()
+        ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
     $success = true;
@@ -789,8 +808,8 @@ function extractAddress($info) {
 }
 
 function getEmailMsg($trans_id, $last_four) {
-    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge, $coupons,
-           $raised, $tracks, $credit, $creditVal, $paypal_email;
+    global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge,
+           $tracks, $credit, $creditVal, $paypal_email, $credits, $shipping_charges;
 
     $msg = "Below is a summary of your Chidon registration and extra purchase(s) where applicable.<br /><br />";
 
@@ -799,10 +818,15 @@ function getEmailMsg($trans_id, $last_four) {
         foreach ($users as $user_id => $amount) {
             $msg .= "Registered " . $user_info[$user_id]['first'] . " for: $" . $amount . "<br />";
             $msg .= "Track: " . $tracks[$user_id] . "<br />";
-            if (isset($coupons[$user_id]) || isset($raised[$user_id])) {
+            // check if there's a shipping charge
+            if (isset($shipping_charges[$user_id])) {
+                $msg .= "Shipping Charge: $" . $shipping_charges[$user_id] . "<br />";
+            }
+            if (!empty($credits[$user_id])) {
                 $msg .= "Discounts applied:<br /><ul>";
-                if (isset($coupons[$user_id])) $msg .= "<li>Voucher: $" . $coupons[$user_id] . "</li>";
-                if (isset($raised[$user_id])) $msg .= "<li>Chidon Drive: " . $raised[$user_id] . "</li>";
+                foreach ($credits[$user_id] as $credit_type => $credit_value) {
+                    $msg .= "<li>$credit_type: $$credit_value</li>";
+                }
                 $msg .= "</ul>";
             }
         }
@@ -838,7 +862,7 @@ function getEmailMsg($trans_id, $last_four) {
     }
 
     $msg . "SUMMARY<br /><br /><blockquote>";
-    if ($credit > 0) $msg .= "Amount Credited From Your Pre Registration: $" . $credit . ".<br />";
+    if ($credit > 0) $msg .= "Amount Credited From Your Pre Registration Credit: $" . $credit . ".<br />";
     if ($to_charge > 0) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
         if ($trans_id) $msg .= "Transaction ID: " . $trans_id . ".<br />";
@@ -935,20 +959,16 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
                 $last_four = $payment['transactionResponse']['accountNumber'];
                 // Commit the transaction since payment was successful
                 $MASHPIA_DB->commit();
-                
+                // Redeem coupons
+                redeemCoupons();
                 // Update registration_charges table
                 $inserted = insertIntoRegCharges($trans_id);
-                // Redeem coupons and update family balance
-                $updated = updateFamilyBalance();
-                redeemCoupons();
-                if (!$inserted || !$updated) {
-                    // Handle errors in inserting or updating
-                    $error = 'There was an error inserting into the registration_charges table or updating the family balance. Please check the database.';
+                if (!$inserted) {
+                    // Handle errors in inserting
+                    $error = 'There was an error inserting into the registration_charges table. Please check the database.';
                     $desc = getDescriptions();
-                    $desc[] = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
                     sendMyselfEmail($error, $desc);
                 }
-
                 $info['success'] = true;
                 $msg = 'Congratulations! You have successfully registered your child(ren) and / or ordered your additional purchase(s).' . "\r\n" .
                     'Your card has been charged $' . $to_charge . '. Your transaction ID for your record is: ' . $trans_id . '.' . "\r\n" .
@@ -965,11 +985,19 @@ if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcesse
     } else {
         // If no charge, just commit the transaction
         $MASHPIA_DB->commit();
-        // Update family balance
-        if (!updateFamilyBalance()) {
-            $error = 'There was an error updating the family balance. Please check the database.';
-            $desc = 'Admin ID: ' . $admin_id . ' Credit Used: ' . $credit;
+        // Redeem coupons 
+        redeemCoupons();
+        // Update registration_charges table
+        $inserted = insertIntoRegCharges($trans_id);
+        if (!$inserted) {
+            // Handle errors in inserting
+            $error = 'There was an error inserting into the registration_charges table. Please check the database.';
+            $desc = getDescriptions();
             sendMyselfEmail($error, $desc);
+        }
+        if ($to_charge < 0) {
+            // process refund
+            processRefund(abs($to_charge), getDescriptions());
         }
         $info['success'] = true;
         $msg = 'Congratulations! ';

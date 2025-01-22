@@ -1859,6 +1859,11 @@ class ChidonShipping
             'RRSCAN' => 'Chidon Reg Shipping CAN',
             'RRSINT' => 'Chidon Reg Shipping INT',
 
+            'R' => 'Chidon Early Reg Refund',
+            'CD' => 'Chidon Drive Used',
+            'CV' => 'Chidon Voucher Used',
+            'CT' => 'Chidon No Trip Credit',
+
             'YB1' => 'Yahadus Book 1',
             'YB2' => 'Yahadus Book 2',
             'YB3' => 'Yahadus Book 3',

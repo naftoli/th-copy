@@ -1,4 +1,20 @@
-function calcShipping(school_id, numChildren, country) {
+async function calcShipping(school_id, numChildren, country, admin_id) {
+  // find out how many children already paid for shipping for current school_id
+  const res = await fetch('checkShippingPaid.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      admin: admin_id,
+      school: school_id,
+    })
+  })
+  const data = await res.json()
+  if (data[school_id] && data[school_id].length > 0) {
+    numChildren[school_id] += data[school_id].length
+  }
+
   const fixed_fee_by_school = [45, 106, 110]
   const fixed_fees = {
     45: 10,
@@ -54,6 +70,8 @@ function calcShipping(school_id, numChildren, country) {
     [97,9,21,23,24,26] // last one is if country is not in list
   ]
 
+  // use number of kids as index into fee_by_country. even though it's not by school id, however all kids would be in
+  // either myshliach or anash kinder, not both
   if (fee_by_school.includes(school_id)) {
     let index = country_list.indexOf(country)
     if (index > -1) {
@@ -61,7 +79,7 @@ function calcShipping(school_id, numChildren, country) {
     } else {
       return fee_by_country[fee_by_country.length - 1][numChildren[school_id] - 1]
     }
-  } else {
-    return 0
   }
+
+  return 0
 }

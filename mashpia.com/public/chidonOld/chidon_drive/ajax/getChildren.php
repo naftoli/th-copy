@@ -60,6 +60,13 @@ function getChildren() {
             WHERE chidon_year = :year AND user_id = :user
         ");
 
+        $stmtPersonalCredit = $MASHPIA_DB->prepare("
+            SELECT IFNULL(SUM(amount), 0) as personal_credit 
+            FROM registration_charges 
+            WHERE year = :year AND user_id = :user 
+                AND type in ('RRYSD', 'RRYDA', 'RRHVN')
+        ");
+
         $c = new CouponCode($MASHPIA_DB, $year);
 
         for ($i = 0; $i < count($children); $i++) {
@@ -72,6 +79,13 @@ function getChildren() {
             ]);
             $result = $stmt->fetch();
             if ($result['raised']) $children[$i]['raised'] = $result['raised'];
+
+            $stmtPersonalCredit->execute([
+                ':year'     => $year,
+                ':user'     => $child['user_id']
+            ]);
+            $res = $stmtPersonalCredit->fetch();
+            if ($res['personal_credit']) $children[$i]['personal_credit'] = $res['personal_credit'];
 
             $children[$i]['coupon'] = $c->checkForUserCode($child['user_serial']);
         }

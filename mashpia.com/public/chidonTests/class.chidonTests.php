@@ -638,7 +638,7 @@ class ChidonTests
         }
 
         // make sure we pass each track on each test
-        if (count($marks) > 0) {
+        if ($marks && count($marks) > 0) {
             foreach ($marks as $details) {
                 foreach ($details as $track => $mark) {
                     $marksByTrack[$track] += intval($mark);

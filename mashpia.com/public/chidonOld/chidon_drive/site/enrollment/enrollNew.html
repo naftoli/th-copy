@@ -767,9 +767,6 @@
 				else $("#ch_info").modal('hide')
 			}
 		})
-		// $(".close").click( function () {
-		// 	location.href = '/mobile'
-		// })
 	</script>
 
 	<script src="../js/circletype.min.js"></script>
@@ -806,15 +803,15 @@
 			$(".login").show()
 		}
 
-		$("#loginForm").submit(function (evt) {
+		$("#loginForm").submit(async function (evt) {
 			evt.preventDefault();
 			let user = $("#username").val();
 			let pass = $("#password").val();
-			$.post('../../ajax/login.php', { username: user, password: pass }, function (result) {
+			$.post('../../ajax/login.php', { username: user, password: pass }, async function (result) {
 				let info = JSON.parse(result);
 				if (info.success) {
 					Cookies.set('chidon_admin', info.admin);
-					processChildren(info.admin);
+					await processChildren(info.admin);
 				} else {
 					alert(info.error);
 				}
@@ -838,6 +835,7 @@
 		var errors = []
 		var needsShipping = false
 		var editing_mode = false // only in editing mode for ultimate trip info
+		var shipping_schools = [45, 106, 110, 61, 269]
 
 		async function getChildren(admin) {
 			let result = await $.post('../../ajax/getChildren.php', { admin })
@@ -881,20 +879,6 @@
 			'Iyun': [200, 225, 250, 300].reverse(),
 			'Ultimate': [500, 450, 400, 350]
 		} // need it for a few functions so it needs to be global
-
-		// list of children serial numbers that should have the option of choosing europe as their trip
-		// const europe = [
-		// 	7753570, 7753546, 7761795, 7763181, 7776765, 7776764, 7756652, 7758688, 7782458, 7763859, 7758418, 7737412, 7780905,
-		// 	7758272, 7763863, 7775382, 7750675, 7759857, 7759217, 7776086, 7771187, 7753437, 7763867, 7781649, 7763926, 7753613,
-		// 	7753614, 7759727, 7763101, 7780903, 7772725, 7772723, 7772724, 7757180, 7761789, 7760644, 7748757, 7754201, 7750723,
-		// 	7758464, 7753478, 7758685, 7758100, 7755754, 7758720, 7769927, 7772528, 7772704, 7782182, 7762209, 7777553, 7777554,
-		// 	7758301, 7779510, 7760728, 7763903, 7758410, 7776662, 7763363, 7779423, 7773936, 7758082, 7782413, 7764759, 7750646,
-		// 	7764449, 7775002, 7758500, 7770578, 7763906, 7758686, 7748637, 7754164, 7762008, 7750697, 7757841, 7761936, 7753118,
-		// 	7758286, 7758285, 7772670, 7761884, 7752952, 7760626, 7763929, 7758777, 7756294, 7782388, 7782387, 7760554, 7774758,
-		// 	7758189, 7763980, 7754572, 7754573, 7754575, 7772608, 7763079, 7763080, 7751046, 7782326, 7782434, 7777474, 7770919,
-		// 	7754418, 7781281, 7781404, 7781403, 7762082, 7758771, 7752009, 7774443, 7779561, 7782181, 7780827, 7758295, 7758747,
-		// 	7770031, 7770034, 7771369, 7764290, 7764289, 7772988
-		// ]
 
 		async function processChildren(admin) {
 			let result = await getChildren(admin)
@@ -1165,17 +1149,25 @@
 				html += `<h5 class="formDetails"><span class="title">Registration Fee</span><br />`
 				html += `Full cost: $<span class="full_cost">${amounts[0]}</span></h5>`
 
-				// coupons
-				const coupon = child.coupon
-				if (coupon) {
-					html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
-							 You have $${coupon} in coupon code(s) which will be applied to your registration cost.</h5>`
+				const personal = parseInt(child.personal_credit)
+				// personal credit from personalized prize payment if track is above Yesod
+				if (personal && track != 'Yesod' && track != '') {
+					html += `<h5 class="formDetails"><span class="title">Personal Credit</span><br />
+								You have $${personal} in personal credit(s) from payment for the personalized prize, which will be applied to your registration cost.</h5>`
 				}
 
 				// chidon drive
-				if (parseFloat(child.raised) > 0) {
+				const raised = parseFloat(child.raised)
+				if (raised > 0) {
 					html += `<h5 class="formDetails"><span class="title">Chidon Drive</span><br />
 							 You raised $${child.raised} which will be applied to your registration cost.</h5>`
+				}
+
+				// coupons
+				const coupon = parseFloat(child.coupon)
+				if (coupon > 0) {
+					html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
+							 You have $${coupon} in coupon code(s) which will be applied to your registration cost.</h5>`
 				}
 
 				html += `<div class='reg-details'></div>
@@ -1184,49 +1176,50 @@
 						</div>
 						<div style="clear: both"></div>
 						<br />`
-			}
 
-			// find out if we need to charge for shipping
-			let shipping_fee = 0
-			const shipping_schools = [45, 106, 110, 61, 269]
-			if (shipping_schools.includes(child.school_id)) {
-				if (num_child_for_shipping[child.school_id])
-					num_child_for_shipping[child.school_id]++
-				else
-					num_child_for_shipping[child.school_id] = 1
-				// check if we need to pay anything for this child
-				shipping_fee = calcShipping(child.school_id, num_child_for_shipping, child.country)
-				if (shipping_fee) {
-					needsShipping = true
-					shipping[child.user_id] = shipping_fee
-					if (window.localStorage) localStorage.setItem('country', child.admin_country)
-					else Cookies.set('country', child.admin_country)
+				// find out if we need to charge for shipping
+				needsShipping = false
+				let shipping_fee = 0
+				if (shipping_schools.includes(parseInt(child.school_id))) {
+					if (num_child_for_shipping[child.school_id])
+						num_child_for_shipping[child.school_id]++
+					else
+						num_child_for_shipping[child.school_id] = 1
+					// check if we need to pay anything for this child
+					shipping_fee = await calcShipping(child.school_id, num_child_for_shipping, child.country, child.admin_id)
+					console.log(shipping_fee)
+					if (shipping_fee > 0) {
+						needsShipping = true
+						shipping[child.user_id] = shipping_fee
+						if (window.localStorage) localStorage.setItem('country', child.admin_country)
+						else Cookies.set('country', child.admin_country)
+					}
 				}
-			}
 
-			const parentAddress = child.admin_address1 + ' ' + child.admin_address2 + ', ' + child.admin_city + ', ' + child.admin_state + ' ' + child.admin_postal
-			const pickupText = {
-				61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
-						Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
-				269: `I would like to pick up my items in Crown Heights during the NY trip.`
-			}
-			if (needsShipping) {
-				html += `<div id="shipping_charges">
-							<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-							<input type="hidden" id="user_id" value="${child.user_id}" />
-							<div class="flex">
-								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
-								<label>
-									(FREE) ${pickupText[child.school_id]}
-								</label>
-							</div>
-							<div class="flex">
-								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_fee}" />
-								<label>
-									($${shipping_fee}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
-									please update the address on your mashpia.com parent account.
-								</label>
-							</div></div>`
+				const parentAddress = child.admin_address1 + ' ' + child.admin_address2 + ', ' + child.admin_city + ', ' + child.admin_state + ' ' + child.admin_postal
+				const pickupText = {
+					61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+							Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
+					269: `I would like to pick up my items in Crown Heights during the NY trip.`
+				}
+				if (needsShipping) {
+					html += `<div id="shipping_charges">
+								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+								<input type="hidden" id="user_id" value="${child.user_id}" />
+								<div class="flex">
+									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+									<label>
+										(FREE) ${pickupText[child.school_id]}
+									</label>
+								</div>
+								<div class="flex">
+									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_fee}" />
+									<label>
+										($${shipping_fee}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+										please update the address on your mashpia.com parent account.
+									</label>
+								</div></div>`
+				}
 			}
 
 			$(".login").hide();
@@ -1287,30 +1280,55 @@
 			const track = child.track === 'Ultimate' ? child.originalTrack : child.track
 			let amounts = idx ? [...trackInfo[track]] : [...trackInfo['Ultimate']]
 
-			// find out if we need to add a smaller amount to the amounts array
-			const raised = parseInt(child.raised)
+			// check for credit from personalized prize payment
 			let lowest = amounts[amounts.length - 1]
-			if (raised) {
-				lowest -= raised
-				const drive_credit = 'drive_credit_' + child.user_id
-				addToCart(drive_credit, raised)
+			const personal = parseInt(child.personal_credit)
+			if (personal > 0 && track != 'Yesod' && track != '') {
+				lowest -= personal
+				const personal_credit = 'personal_credit_' + child.user_id
+				addToCart(personal_credit, personal)
 			}
 
-			// check coupon codes
-			if (child.coupon) {
-				lowest -= child.coupon
-				const voucher_credit = 'voucher_credit_' + child.user_id
-				addToCart(voucher_credit, child.coupon)
+			if (lowest > 0) {
+				// check chidon drive amounts
+				let raised = parseFloat(child.raised)
+				if (raised > 0) {
+					if (raised > lowest) {
+						raised = lowest
+					}
+					lowest -= raised
+					const drive_credit = 'drive_credit_' + child.user_id
+					addToCart(drive_credit, raised)
+				}
 			}
 
-			// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce by another $100
-			if (idx && [61, 269].includes(parseInt(child.school_id))) {
-				let elem = '#' + user_id
-				let trip = $(elem).find('#regional_trip').val()
-				if (trip === 'no_trip') {
-					lowest -= 100
-					const trip_credit = 'trip_credit_' + child.user_id
-					addToCart(trip_credit, 100)
+			if (lowest > 0) {
+				// check coupon codes
+				let coupon = parseInt(child.coupon)
+				if (coupon > 0) {
+					if (coupon > lowest) {
+						coupon = lowest
+					}
+					lowest -= coupon
+					const voucher_credit = 'voucher_credit_' + child.user_id
+					addToCart(voucher_credit, coupon)
+				}
+			}
+
+			if (lowest > 0) {
+				// if myshliach/anash kinder and chooses regional trip "no trip" option, reduce by another $100
+				if (idx && [61, 269].includes(parseInt(child.school_id))) {
+					let elem = '#' + user_id
+					let trip = $(elem).find('#regional_trip').val()
+					if (trip === 'no_trip') {
+						let credit = 100
+						if (credit > lowest) {
+							credit = lowest
+						}
+						lowest -= credit
+						const trip_credit = 'trip_credit_' + child.user_id
+						addToCart(trip_credit, credit)
+					}
 				}
 			}
 
@@ -1437,8 +1455,8 @@
 				id = class_names[1] // get celeb_box_ship for celebration boxes shipping
 			}
 			const value = $(this).val()
-			if (parseInt(value) >= 0) { // allow children to register even if it's $0
-				addToCart(id, value)
+			// if (parseInt(value) >= 0) {
+				addToCart(id, value) // allow children to register even if it's $0
 				// find this child's user id
 				let user_id = $(this).attr('id').split('_')[1]
 				// check if we should show the modal for ultimate trip for this specific child
@@ -1455,7 +1473,7 @@
 						$("#ch_info").modal('show')
 					}
 				}
-			}
+			// }
 
 			// keep dropdown open
 			if (e.type === 'change') {
@@ -1589,9 +1607,6 @@
 			checkShipping() // checks to make sure shipping info is filled out when needed
 			if (!errors.length && checkExtraInfo() && checkRegAddUserInfo()) {
 				json_cart = JSON.stringify(cart)
-				// add coupons and chidon drive raised
-				json_coupons = JSON.stringify(children.filter(child => child.coupon > 0))
-				json_raised = JSON.stringify(children.filter(child => parseFloat(child.raised) > 0))
 				// add track info
 				json_tracks = JSON.stringify(children.filter(child => child.track != ''))
 
@@ -1607,8 +1622,6 @@
 				} else {
 					// put in cookie
 					Cookies.set('cart', json_cart)
-					Cookies.set('coupons', json_coupons)
-					Cookies.set('raised', json_raised)
 					Cookies.set('tracks', json_tracks)
 					Cookies.set('shipping', JSON.stringify(shipping))
 					Cookies.set('trips', JSON.stringify(trips))
