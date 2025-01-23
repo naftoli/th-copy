@@ -368,12 +368,15 @@ function getDescriptions() {
                 break;
         }
         foreach ($shipping_charges as $user_id => $amount) {
-            $desc[] = [
-                'prefix'    => 'C',
-                'id'        => $user_id,
-                'code'      => $code,
-                'amount'    => $amount
-            ];
+            // only save for users actually registering
+            if (isset($users[$user_id])) {
+                $desc[] = [
+                    'prefix'    => 'C',
+                    'id'        => $user_id,
+                    'code'      => $code,
+                    'amount'    => $amount
+                ];
+            }
         }
     }
 

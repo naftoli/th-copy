@@ -830,8 +830,8 @@
 		var addresses = {} // all addresses entered
 		var ultimate_trip = [] // array of users going on ultimate trip
 		var trips = [] // array of trips for myshliach / anash kinder
-		var shipping = [] // cost of shipping chidon stuff to parents where applicable
-		var num_child_for_shipping = []
+		var shipping = {} // cost of shipping chidon stuff to parents per child
+		var shipping_num_children = {}
 		var errors = []
 		var needsShipping = false
 		var shipping_school_id = 0
@@ -1183,17 +1183,16 @@
 				// find out if we need to charge for shipping
 				let shipping_fee = 0
 				if (shipping_schools.includes(parseInt(child.school_id))) {
-					if (num_child_for_shipping[child.school_id])
-						num_child_for_shipping[child.school_id]++
+					if (shipping_num_children[child.school_id])
+						shipping_num_children[child.school_id]++
 					else
-						num_child_for_shipping[child.school_id] = 1
+						shipping_num_children[child.school_id] = 1
 					// check if we need to pay anything for this child
-					shipping_fee = await calcShipping(child.school_id, num_child_for_shipping, child.country, child.admin_id)
+					shipping_fee = await calcShipping(child.school_id, shipping_num_children, child.admin_country, child.admin_id)
 					if (shipping_fee > 0) {
 						needsShipping = true
 						shipping_school_id = child.school_id
 						shipping[child.user_id] = shipping_fee
-						shipping_total += shipping_fee
 						if (window.localStorage) localStorage.setItem('country', child.admin_country)
 						else Cookies.set('country', child.admin_country)
 					}
@@ -1207,7 +1206,7 @@
 				269: `I would like to pick up my items in Crown Heights during the NY trip.`
 			}
 			if (needsShipping) {
-				html += `<div id="shipping_charges">
+				html += `<div id="shipping_charges" style="display: none;">
 								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
 								<div class="flex">
 									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
@@ -1216,9 +1215,9 @@
 									</label>
 								</div>
 								<div class="flex">
-									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_total}" />
+									<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" />
 									<label>
-										($${shipping_total}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+										<span class="ship_total_span" style="display: inline-block;"></span> I would like to have my items shipped to ${parentAddress}. If you would like a different address,
 										please update the address on your mashpia.com parent account.
 									</label>
 								</div></div>`
@@ -1365,7 +1364,7 @@
 			$(elem).append(html)
 			$(elem).find("select.reg").niceSelect()
 			// show shipping charges if relevant
-			if (needsShipping) $("#shipping_charges").show()
+			// if (needsShipping) $("#shipping_charges").show()
 
 			// figure out what else to show / hide
 			if (selection !== undefined && selection == 0) {
@@ -1396,8 +1395,7 @@
 			}
 			if (add) {
 				let item = {
-					desc: desc,
-					value: value
+					desc, value
 				}
 				cart.push(item)
 			}
@@ -1457,10 +1455,10 @@
 				id = class_names[1] // get celeb_box_ship for celebration boxes shipping
 			}
 			const value = $(this).val()
-			// if (parseInt(value) >= 0) {
+			if (parseInt(value) >= 0) {
 				addToCart(id, value) // allow children to register even if it's $0
 				// find this child's user id
-				let user_id = $(this).attr('id').split('_')[1]
+				let user_id = id.split('_')[1]
 				// check if we should show the modal for ultimate trip for this specific child
 				let elem = '#' + user_id
 				if ($(elem).find('.ultimate_trip').length) {
@@ -1475,7 +1473,10 @@
 						$("#ch_info").modal('show')
 					}
 				}
-			// }
+			}
+
+			// calculate shipping
+			calcTotalShipping()
 
 			// keep dropdown open
 			if (e.type === 'change') {
@@ -1491,6 +1492,29 @@
 			if (fee > 0) cancel_shipping = false
 			else cancel_shipping = true
 		})
+
+		function calcTotalShipping() {
+			// calculate based on children registering
+			shipping_total = 0
+			for (let item of cart) {
+				if (item.desc.includes('reg_')) {
+					// it's a child getting registered
+					// get user id
+					const item_info = item.desc.split('_')
+					const user_id = item_info[1]
+					if (shipping[user_id]) {
+						shipping_total += parseInt(shipping[user_id])
+					}
+				}
+			}
+			$(".ship_total_val").val(shipping_total)
+			$(".ship_total_span").html("($" + shipping_total + ")")
+			if (shipping_total) {
+				$("#shipping_charges").show()
+			} else {
+				$("#shipping_charges").hide()
+			}
+		}
 
 		function checkForm() {
 			// make sure that if any trip choices are selected, that the required other selections are done
@@ -1546,7 +1570,7 @@
 		}
 
 		function checkShipping() {
-			if (needsShipping && cart.length) {
+			if (shipping_total) {
 				if (!$(".shipping:checked").length) {
 					errors.push("You must indicate how you would like to have your chidon stuff shipped!")
 					$(".shipping").eq(0).focus()
@@ -1621,8 +1645,6 @@
 
 				if (window.localStorage) {
 					window.localStorage.setItem('cart', json_cart)
-					window.localStorage.setItem('coupons', json_coupons)
-					window.localStorage.setItem('raised', json_raised)
 					window.localStorage.setItem('tracks', json_tracks)
 					window.localStorage.setItem('shipping', JSON.stringify(shipping))
 					window.localStorage.setItem('trips', JSON.stringify(trips))

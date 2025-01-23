@@ -394,7 +394,7 @@
         if (window.localStorage) {
             cart = JSON.parse(window.localStorage.getItem('cart'))
             addresses = JSON.parse(window.localStorage.getItem('addresses'))
-            shipping = window.localStorage.getItem('shipping') ? window.localStorage.getItem('shipping') : []
+            shipping = window.localStorage.getItem('shipping') ? JSON.parse(window.localStorage.getItem('shipping')) : []
             trips = window.localStorage.getItem('trips')
             ultimate_trip = window.localStorage.getItem('ultimate_trip')
             ultimate_info = window.localStorage.getItem('ultimate_info')
@@ -403,7 +403,7 @@
         } else {
             cart = JSON.parse(Cookies.get('cart'))
             addresses = JSON.parse(Cookies.get('addresses'))
-            shipping = Cookies.get('shipping') ? Cookies.get('shipping') : []
+            shipping = Cookies.get('shipping') ? JSON.parse(Cookies.get('shipping')) : []
             trips = Cookies.get('trips')
             ultimate_trip = Cookies.get('ultimate_trip')
             ultimate_info = Cookies.get('ultimate_info')
@@ -479,7 +479,15 @@
                 reg_fee += info.fee
             }
         }
-        if (shipping.length) {
+
+        let total_shipping = 0 // total amount of shipping fees
+        for (let info of reg) {
+            if (shipping[info.id]) {
+                total_shipping += parseInt(shipping[info.id])
+            }
+        }
+
+        if (total_shipping) {
             html += `<h5 class="formDetails"><span class="title">Shipping Fees</span></h5>`
             for (let info of reg) {
                 if (shipping[info.id]) {
@@ -488,15 +496,12 @@
                 }
             }
         }
-        // figure out total amount of shipping fees
-        let total_shipping = 0
-        for (let id of shipping) {
-            total_shipping += parseInt(shipping[id])
-        }
-        if (reg_fee || total_shipping) {
+
+        if (reg_fee || total_shipping) { // could be registering for free
             html += `<h5 class="formDetails">Total Registration Fee: $${reg_fee + total_shipping}</h5>`
             cart_total += parseInt(reg_fee + total_shipping)
         }
+
         if (celeb_boxes) {
             html += `<h5 class="formDetails"><span class="title">Celebration Boxes</span></h5>`
             html += `<h5 class="formDetails">Number of Celebration Boxes: ${celeb_boxes}</h5>`
@@ -505,6 +510,7 @@
             html += `<h5 class="formDetails">Total Cost: $${celeb_boxes * celeb_box_price + celeb_box_shipping}`
             cart_total += parseInt(celeb_boxes * celeb_box_price + celeb_box_shipping)
         }
+
         if (sweaters.length) {
             let sweater_cost = 0
             html += `<h5 class="formDetails"><span class="title">Sweaters</span></h5>`
@@ -530,7 +536,7 @@
             location.href = 'enrollNew.html'
         }
 
-        if (cart_total) html += `<h5 class="formDetails"><span class="title">Grand Total</span> - $${cart_total}</h5>`
+        if (cart_total) html += `<h5 class="formDetails"><span class="title">Grand Total:</span> $${cart_total}</h5>`
         const totalAfterCredit = cart_total - parseInt(credit)
         if (credit > 0) {
             if (totalAfterCredit < 0) {
