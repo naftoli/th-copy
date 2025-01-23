@@ -268,7 +268,7 @@ function insertIntoRegCharges($trans_id = 0) {
             if ($item['prefix'] == 'C') {
                 $user_id = $item['id'];
                 $school_id = $school_ids[$user_id];
-                $admin_id = 0;
+                $admin_id = isset($item['admin_id']) ? $item['admin_id'] : 0;
             } else if ($item['prefix'] == 'F') {
                 $user_id = 0;
                 $school_id = 0;
@@ -374,7 +374,8 @@ function getDescriptions() {
                     'prefix'    => 'C',
                     'id'        => $user_id,
                     'code'      => $code,
-                    'amount'    => $amount
+                    'amount'    => $amount,
+                    'admin_id'  => $admin_id
                 ];
             }
         }
