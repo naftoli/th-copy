@@ -84,7 +84,7 @@ async function calcShipping(school_id, numChildren, country, admin_id) {
   // either myshliach or anash kinder, not both
   if (fee_by_school.includes(school_id)) {
     let index = country_list.indexOf(country)
-    if (index > -1) {
+    if (index >= 0) {
       return fee_by_country[index][numChildren[school_id] - 1]
     } else {
       return fee_by_country[fee_by_country.length - 1][numChildren[school_id] - 1]

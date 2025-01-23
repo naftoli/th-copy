@@ -834,6 +834,9 @@
 		var num_child_for_shipping = []
 		var errors = []
 		var needsShipping = false
+		var shipping_school_id = 0
+		var shipping_total = 0
+		var cancel_shipping = false
 		var editing_mode = false // only in editing mode for ultimate trip info
 		var shipping_schools = [45, 106, 110, 61, 269]
 
@@ -1178,7 +1181,6 @@
 						<br />`
 
 				// find out if we need to charge for shipping
-				needsShipping = false
 				let shipping_fee = 0
 				if (shipping_schools.includes(parseInt(child.school_id))) {
 					if (num_child_for_shipping[child.school_id])
@@ -1187,39 +1189,39 @@
 						num_child_for_shipping[child.school_id] = 1
 					// check if we need to pay anything for this child
 					shipping_fee = await calcShipping(child.school_id, num_child_for_shipping, child.country, child.admin_id)
-					console.log(shipping_fee)
 					if (shipping_fee > 0) {
 						needsShipping = true
+						shipping_school_id = child.school_id
 						shipping[child.user_id] = shipping_fee
+						shipping_total += shipping_fee
 						if (window.localStorage) localStorage.setItem('country', child.admin_country)
 						else Cookies.set('country', child.admin_country)
 					}
 				}
+			}
 
-				const parentAddress = child.admin_address1 + ' ' + child.admin_address2 + ', ' + child.admin_city + ', ' + child.admin_state + ' ' + child.admin_postal
-				const pickupText = {
-					61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+			const parentAddress = eligible[0].admin_address1 + ' ' + eligible[0].admin_address2 + ', ' + eligible[0].admin_city + ', ' + eligible[0].admin_state + ' ' + eligible[0].admin_postal
+			const pickupText = {
+				61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
 							Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
-					269: `I would like to pick up my items in Crown Heights during the NY trip.`
-				}
-				if (needsShipping) {
-					html += `<div id="shipping_charges">
+				269: `I would like to pick up my items in Crown Heights during the NY trip.`
+			}
+			if (needsShipping) {
+				html += `<div id="shipping_charges">
 								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-								<input type="hidden" id="user_id" value="${child.user_id}" />
 								<div class="flex">
 									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
 									<label>
-										(FREE) ${pickupText[child.school_id]}
+										(FREE) ${pickupText[shipping_school_id]}
 									</label>
 								</div>
 								<div class="flex">
-									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_fee}" />
+									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="${shipping_total}" />
 									<label>
-										($${shipping_fee}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+										($${shipping_total}) I would like to have my items shipped to ${parentAddress}. If you would like a different address,
 										please update the address on your mashpia.com parent account.
 									</label>
 								</div></div>`
-				}
 			}
 
 			$(".login").hide();
@@ -1485,9 +1487,9 @@
 		})
 
 		$(document).on('click', '.shipping', function () {
-			const user_id = $(this).parent().parent().find('#user_id').val()
 			fee = parseInt($(this).val())
-			shipping[user_id] = fee
+			if (fee > 0) cancel_shipping = false
+			else cancel_shipping = true
 		})
 
 		function checkForm() {
@@ -1609,6 +1611,13 @@
 				json_cart = JSON.stringify(cart)
 				// add track info
 				json_tracks = JSON.stringify(children.filter(child => child.track != ''))
+
+				// update shipping to 0 if cancel_shipping is true
+				if (cancel_shipping) {
+					for (let id in shipping) {
+						shipping[id] = 0
+					}
+				}
 
 				if (window.localStorage) {
 					window.localStorage.setItem('cart', json_cart)
