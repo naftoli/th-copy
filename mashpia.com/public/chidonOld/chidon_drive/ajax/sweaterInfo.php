@@ -48,7 +48,7 @@ foreach ($sweaters as $type => $more) {
         $sizeInfo = explode(' ', $size);
         $sweater_size = strtolower($sizeInfo[1]);
         // check how many of this type and size were purchased
-        $purchased = $purchases[$type][$sweater_size];
+        $purchased = isset($purchases[$type][$sweater_size]) ? $purchases[$type][$sweater_size] : 0;
         $available = intval($details['qty']) - $purchased;
         $info[$type][$sweater_size]['qty'] = $available;
         $info[$type][$sweater_size]['img'] = $details['img'];
