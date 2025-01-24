@@ -1,4 +1,5 @@
 <?php
+exit;
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
 // To send HTML mail, the Content-type header must be set
