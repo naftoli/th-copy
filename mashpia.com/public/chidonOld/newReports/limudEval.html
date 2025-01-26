@@ -445,7 +445,7 @@
               <td>
                 {!row.khk_eligible && <span style={{color: 'red'}}>Not Eligible</span>}
                 {row.khk_eligible &&
-                  <select name="khk_experience" className="form-select khk_experience" defaultValue={row.khk_experience} disabled={locked}
+                  <select name="khk_experience" className="form-select khk_experience" defaultValue={row.khk_experience} disabled
                           onChange={(e) => updateKhk(e, row.serial)}>
                     {khk_options.map((option, i) => {
                       return <option key={i} value={option.toLowerCase()}>{option}</option>
