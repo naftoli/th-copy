@@ -639,9 +639,11 @@ class ChidonTests
 
         // make sure we pass each track on each test
         if ($marks && count($marks) > 0) {
-            foreach ($marks as $details) {
-                foreach ($details as $track => $mark) {
-                    $marksByTrack[$track] += intval($mark);
+            foreach ($marks as $test_num => $details) {
+                if ($test_num <= $numTests) { // only calculate marks based on test number that's passed in
+                    foreach ($details as $track => $mark) {
+                        $marksByTrack[$track] += intval($mark);
+                    }
                 }
             }
         }

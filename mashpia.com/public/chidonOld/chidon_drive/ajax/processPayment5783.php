@@ -594,6 +594,7 @@ function processReg() {
 }
 
 function updateShipping() {
+    // was used in 5784 to update how much was paid for shipping amounts that were PREDETERMINED IN THIS TABLE
     global $MASHPIA_DB, $year, $admin_id, $shipping_charges;
 
     $total_charge = 0;
@@ -933,7 +934,7 @@ $MASHPIA_DB->beginTransaction();
 
 // Perform all database operations first
 $registered = processReg();
-$shippingUpdated = updateShipping();
+//$shippingUpdated = updateShipping(); // not needed anymore as the amounts paid for shipping are part of the cart and go straight into the registration_charges table
 $celebBoxesProcessed = processCelebBoxes();
 $sweatersProcessed = processSweaters();
 $tripsSaved = saveTripInfo();
@@ -944,7 +945,7 @@ $trans_id = 0;
 $last_four = 0;
 
 // Check if all database operations were successful
-if ($registered && $shippingUpdated && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
+if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
     // Now process the credit card
     if ($to_charge > 0) {
         $payment = processFee(); // Process the credit card payment

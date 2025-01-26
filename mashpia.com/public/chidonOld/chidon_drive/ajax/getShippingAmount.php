@@ -10,6 +10,7 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 $amount = 0;
 $paid = false;
 
+// find out how much parents should be paying for shipping
 $stmt = $MASHPIA_DB->prepare("
         SELECT * FROM chidon_parent_shipping WHERE year = :year AND parent_id = :id 
     ");

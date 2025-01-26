@@ -165,16 +165,21 @@ function checkShippingStatus($admin_id) {
     global $MASHPIA_DB, $year;
 
     $status = 'pickup';
-    $sql = "select * from chidon_parent_shipping 
-            where year = :year 
-            and parent_id = :id";
+//    $sql = "select * from chidon_parent_shipping
+//            where year = :year
+//            and parent_id = :id";
+    // we need to check the registration_charges table to see if shipping was paid for
+    $sql = "SELECT IFNULL(COUNT(*), 0) as total FROM registration_charges 
+            WHERE admin_id = :admin 
+            AND year = :year 
+            AND type in ('RRSUSA', 'RRSCAN', 'RRSINT')";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute([
-        'year'  => $year,
-        'id'    => $admin_id
+        'year'      => $year,
+        'admin'     => $admin_id
     ]);
     $row = $stmt->fetch();
-    if ($row && $row['amount_paid'] > 0) $status = 'shipping';
+    if ($row && $row['total'] > 0) $status = 'shipping';
     return $status;
 }
 
