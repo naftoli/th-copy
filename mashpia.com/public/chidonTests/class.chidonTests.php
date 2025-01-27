@@ -629,6 +629,20 @@ class ChidonTests
     }
 
     public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3, $needAvg = false, $forIyun = false) {
+        // check if we already determined the track
+        $stmt = $this->db->prepare("
+            SELECT highest_track FROM th_chidon_info 
+            WHERE th_chidon_id = (
+                SELECT th_chidon_id FROM th_chidon WHERE user_id = :user AND year = :year
+            )
+        ");
+        $stmt->execute([
+            'user'  => $user_id,
+            'year'  => $this->year
+        ]);
+        $rowTrack = $stmt->fetch();
+        if ($rowTrack && !$needAvg) return ucwords($rowTrack['highest_track']);
+
         $highest = $forEligibility ? 'maven' : '';
         $avgs = $this->getPassingAvgs($user_id);
 
