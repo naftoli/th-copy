@@ -70,7 +70,7 @@ if ($admin_user['auth'] != 'super') {
         }
     }
 } else {
-    if (!in_array($admin_user['admin_id'], [200719, 200721]))
+    if (!in_array($admin_user['admin_id'], [200719, 200721, 200811]))
         $disabled = true;
 }
 
