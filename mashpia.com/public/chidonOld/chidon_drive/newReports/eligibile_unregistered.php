@@ -87,7 +87,7 @@ getAdminInfo();
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Chidon Report</title>
+    <title>Unegistered Report</title>
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -98,9 +98,8 @@ getAdminInfo();
     </style>
 </head>
 <body>
-<h1>Chidon Report</h1>
+<h1>Unegistered Report</h1>
 <table>
-    <caption>Unegistered Report</caption>
     <tr>
         <th></th>
         <th>School</th>

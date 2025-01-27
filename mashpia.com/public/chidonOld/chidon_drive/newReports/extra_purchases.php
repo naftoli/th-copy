@@ -44,7 +44,7 @@ getAddresses();
 <html>
 <head>
     <meta charset="utf8" />
-    <title>Chidon Report</title>
+    <title>Extra Purchases</title>
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -55,9 +55,8 @@ getAddresses();
     </style>
 </head>
 <body>
-<h1>Chidon Report</h1>
+<h1>Extra Purchases</h1>
 <table>
-    <caption>Extra Purchases</caption>
     <tr>
         <th>Parent ID</th>
         <th>First Name</th>
