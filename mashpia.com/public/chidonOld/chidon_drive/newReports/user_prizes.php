@@ -33,7 +33,7 @@ while ($row = mysql_fetch_assoc($result)) {
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-            font-size: 12;
+            font-size: 12px;
             padding: 8px;
             border-bottom: 1px solid grey;
         }
