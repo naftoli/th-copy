@@ -11,7 +11,7 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "SELECT tc.user_id, th_chidon_id, prize, school_name, last, first, he_name, class_grade, class_sub, prize_price 
+$sql = "SELECT user_id, th_chidon_id, prize, school_name, last, first, he_name, class_grade, class_sub, prize_price 
     from (
         SELECT user_id, th_chidon_id, CONCAT(prize_name, ' - ', color) as prize, s.school_name, u.last, u.first, cup.he_name, class_grade, class_sub, price as prize_price 
         from chidon_user_prizes cup 
@@ -27,14 +27,13 @@ $sql = "SELECT tc.user_id, th_chidon_id, prize, school_name, last, first, he_nam
             select prize_id from chidon_prizes where year = $year and personalization != '')
         and tc.year = $year
     UNION
-        SELECT tc.user_id, th_chidon_id, CONCAT('Yarmulka - ', yarmulka), s.school_name, u.last, u.first, null as he_name, class_grade, class_sub, price as prize_price 
+        SELECT user_id, th_chidon_id, CONCAT('Yarmulka - ', yarmulka), s.school_name, u.last, u.first, null as he_name, class_grade, class_sub, 0
         FROM users u
         join th_chidon tc using (user_id) 
         join schools s on (u.school_id = s.school_id)  
         join classes c using (class_id) 
         join admin_auths aa ON (u.user_id = aa.id AND aa.auth = 'user')
         join admins a using (admin_id) 
-        join chidon_prizes cp using (prize_id)
         where s.school_id in (" . implode(',', array_keys($schools)) . ") 
         and tc.year = $year
         and yarmulka > 0
