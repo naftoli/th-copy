@@ -847,7 +847,19 @@
 		}
 
 		async function getTracks(children) {
-			let result = await $.post('../../ajax/getTracks.php', { children })
+			// extract user_id, th_chidon_id, school_id class_id from children array
+			let modified = [];
+			for (let i = 0; i < children.length; i++) {
+				let item = children[i]
+				modified.push({
+					user_id: item.user_id, 
+					school_id: item.school_id, 
+					class_id: item.class_id, 
+					th_chidon_id: item.th_chidon_id, 
+					reward_type: item.reward_type
+				})
+			}
+			let result = await $.post('../../ajax/getTracks.php', { 'children': modified })
 			let tracks = JSON.parse(result)
 			return tracks
 		}
@@ -1029,6 +1041,8 @@
 				eligible = children
 			}
 			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
+			console.log(children)
+			console.log(eligible)
 
 			// check if there's any family balance that can be applied to registration
 			const bal = children[0].familyBalance || 0
@@ -1042,10 +1056,10 @@
 
 			if (!eligible.length && registered.length) {
 				alert('All of your eligible children have already registered.')
-				location.href = 'enroll_extra.html'
+				// location.href = 'enroll_extra.html'
 			} else if (!eligible.length && !registered.length) {
 				alert("You don't have any eligible children to register, however, you can purchase some items for the chidon.")
-				location.href = 'enroll_extra.html'
+				// location.href = 'enroll_extra.html'
 			} else if (schoolNotConfirmed.length) {
 				alert('Only children that have had their school confirm their eligibility will show up for registration.')
 			}

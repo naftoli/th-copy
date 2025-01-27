@@ -11,17 +11,19 @@ $children = $_POST['children'];
 
 $tracks = [];
 foreach ($children as $child) {
-    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
-    $ct->setScores();
-    $ct->calculateMarks();
-    $marks = $ct->getMarks();
-    if (isset($marks[$child['th_chidon_id']])) {
-        $track = $child['reward_type'] === 'highest track passed' || empty($child['reward_type']) ?
-            $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']) : $child['reward_type'];
-        $tracks[$child['user_id']] = $track ? $types[$track] : '';
+    // only need to calculate track if there's no reward type set for this child
+    if (empty($child['reward_type']) || $child['reward_type'] === 'highest track passed') {
+        $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+        $ct->setScores();
+        $ct->calculateMarks();
+        $marks = $ct->getMarks();
+        if (isset($marks[$child['th_chidon_id']])) {
+            $track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
+        }
     } else {
-        $tracks[$child['user_id']] = '';
+        $track = $child['reward_type'];
     }
+    $tracks[$child['user_id']] = $track ? $types[$track] : '';
 }
 
 echo json_encode([

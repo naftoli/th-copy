@@ -177,6 +177,9 @@ class ChidonTests
         }
         if ($res) {
             $this->children = $stmt->fetchAll();
+            // reset scores; marks
+            $this->scores = [];
+            $this->marks = [];
         }
     }
 
@@ -217,23 +220,20 @@ class ChidonTests
             FROM
                 th_chidon_marks
             WHERE
-                th_chidon_id = :id AND test_type = :type
+                th_chidon_id = :id 
         ");
         foreach ($this->children as $child) {
             $id = $child['th_chidon_id'];
-            foreach ($this->types as $type => $desc) {
-                $res = $stmt->execute([
-                    ':id'   => $id,
-                    ':type' => $type
-                ]);
-                if ($res) {
-                    $rows = $stmt->fetchAll();
-                    if (! empty($rows)) {
-                        foreach ($rows as $row) {
-                            $this->scores[$id][$row['test_number']][$type] = $row['answered_correctly'];
-                            if (! isset($this->levels[$id][$row['test_number']]))
-                                $this->levels[$id][$row['test_number']] = $row['level'];
-                        }
+            $res = $stmt->execute([
+                ':id' => $id,
+            ]);
+            if ($res) {
+                $rows = $stmt->fetchAll();
+                if (! empty($rows)) {
+                    foreach ($rows as $row) {
+                        $this->scores[$id][$row['test_number']][$row['test_type']] = $row['answered_correctly'];
+                        if (! isset($this->levels[$id][$row['test_number']]))
+                            $this->levels[$id][$row['test_number']] = $row['level'];
                     }
                 }
             }
