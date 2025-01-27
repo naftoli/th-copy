@@ -91,8 +91,8 @@ getAdminInfo();
     <style>
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-            font-size: 12px;
-            padding: 5px;
+            font-size: 14px;
+            padding: 10px;
             border-bottom: 1px solid grey;
         }
     </style>
