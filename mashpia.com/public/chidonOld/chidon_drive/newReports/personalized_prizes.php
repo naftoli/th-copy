@@ -44,6 +44,13 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_name']][] = $row;
 }
 //echo "<pre>"; print_r($info); echo "</pre>";
+// get all cases where personalized prizes were paid for
+$rowsPaid = [];
+$sqlPaid = "SELECT user_id, date, amount FROM registration_charges WHERE year = $year and type in ('RRYSD', 'RRYDA', 'RRHVN')";
+$resPaid = mysql_query($sqlPaid);
+while ($rowPaid = mysql_fetch_assoc($resPaid)) {
+    $rowsPaid[$rowPaid['user_id']] = $rowPaid;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,6 +82,8 @@ foreach ($info as $school_name => $user_prizes) {
             <th>Grade</th>
             <th>Name</th>
             <th>Personalized name</th>
+            <th>Date Paid</th>
+            <th>Amount Paid</th>
         </tr>
     <?php
     foreach ($user_prizes as $prize) {
@@ -89,6 +98,8 @@ foreach ($info as $school_name => $user_prizes) {
                 <td> <?= $grade ?> </td>
                 <td> <?= $prize['first'] ?> <?= $prize['last'] ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
+                <td> <?= $rowsPaid[$prize['user_id']] ? $rowsPaid[$prize['user_id']]['date'] : ''?> </td>
+                <td> <?= $rowsPaid[$prize['user_id']] ? $rowsPaid[$prize['user_id']]['amount'] : ''?> </td>
             </tr>
         <?
     }
