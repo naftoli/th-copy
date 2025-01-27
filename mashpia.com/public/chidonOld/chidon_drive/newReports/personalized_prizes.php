@@ -11,9 +11,9 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "SELECT th_chidon_id, prize, school_name, last, first, he_name, confirmed_chidon_5781, class_grade, class_sub
+$sql = "SELECT th_chidon_id, prize, school_name, last, first, he_name, class_grade, class_sub
     from (
-        SELECT th_chidon_id, CONCAT(prize_name, ' - ', color) as prize, s.school_name, u.last, u.first, cup.he_name, confirmed_chidon_5781, class_grade, class_sub
+        SELECT th_chidon_id, CONCAT(prize_name, ' - ', color) as prize, s.school_name, u.last, u.first, cup.he_name, class_grade, class_sub
         from chidon_user_prizes cup 
         join users u using (user_id) 
         join th_chidon tc using (user_id) 
@@ -27,7 +27,7 @@ $sql = "SELECT th_chidon_id, prize, school_name, last, first, he_name, confirmed
             select prize_id from chidon_prizes where year = $year and personalization != '')
         and tc.year = $year
     UNION
-        SELECT th_chidon_id, CONCAT('Yarmulka - ', yarmulka), s.school_name, u.last, u.first, null as he_name, confirmed_chidon_5781, class_grade, class_sub
+        SELECT th_chidon_id, CONCAT('Yarmulka - ', yarmulka), s.school_name, u.last, u.first, null as he_name, class_grade, class_sub
         FROM users u
         join th_chidon tc using (user_id) 
         join schools s on (u.school_id = s.school_id)  
@@ -42,7 +42,6 @@ $sql = "SELECT th_chidon_id, prize, school_name, last, first, he_name, confirmed
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_name']][] = $row;
-//    $logger->debug("{$row['th_chidon_id']}, {$row['prize']}");
 }
 //echo "<pre>"; print_r($info); echo "</pre>";
 ?>
@@ -76,7 +75,6 @@ foreach ($info as $school_name => $user_prizes) {
             <th>Grade</th>
             <th>Name</th>
             <th>Personalized name</th>
-<!--            <th>Confirmed</th>-->
         </tr>
     <?php
     foreach ($user_prizes as $prize) {
@@ -91,7 +89,6 @@ foreach ($info as $school_name => $user_prizes) {
                 <td> <?= $grade ?> </td>
                 <td> <?= $prize['first'] ?> <?= $prize['last'] ?> </td>
                 <td> <?= $prize['he_name'] ?> </td>
-<!--                <td> --><?//= $prize['confirmed_chidon_5781'] ? "✅" : "❌" ?><!-- </td>-->
             </tr>
         <?
     }
