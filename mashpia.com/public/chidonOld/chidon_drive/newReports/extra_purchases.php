@@ -49,7 +49,7 @@ getAddresses();
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             font-size: 12px;
-            padding: 5px;
+            padding: 8px;
             border-bottom: 1px solid grey;
         }
     </style>
