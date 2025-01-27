@@ -53,7 +53,7 @@ while ($row = mysql_fetch_assoc($result)) {
             <th>Size</th>
             <th>Color</th>
             <th>Quantity</th>
-            <th>Purchased</th>
+            <th>Ordered</th>
             <th>Amount Left</th>
         </tr>
         <?php
