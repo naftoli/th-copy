@@ -11,9 +11,9 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 
 $info = [];
-$sql = "SELECT user_id, th_chidon_id, prize, school_name, last, first, he_name, class_grade, class_sub
+$sql = "SELECT user_id, th_chidon_id, prize, school_name, last, first, he_name, class_grade, class_sub, prize_price 
     from (
-        SELECT user_id, th_chidon_id, CONCAT(prize_name, ' - ', color) as prize, s.school_name, u.last, u.first, cup.he_name, class_grade, class_sub
+        SELECT user_id, th_chidon_id, CONCAT(prize_name, ' - ', color) as prize, s.school_name, u.last, u.first, cup.he_name, class_grade, class_sub, price as prize_price 
         from chidon_user_prizes cup 
         join users u using (user_id) 
         join th_chidon tc using (user_id) 
@@ -27,13 +27,14 @@ $sql = "SELECT user_id, th_chidon_id, prize, school_name, last, first, he_name, 
             select prize_id from chidon_prizes where year = $year and personalization != '')
         and tc.year = $year
     UNION
-        SELECT user_id, th_chidon_id, CONCAT('Yarmulka - ', yarmulka), s.school_name, u.last, u.first, null as he_name, class_grade, class_sub
+        SELECT user_id, th_chidon_id, CONCAT('Yarmulka - ', yarmulka), s.school_name, u.last, u.first, null as he_name, class_grade, class_sub, price as prize_price 
         FROM users u
         join th_chidon tc using (user_id) 
         join schools s on (u.school_id = s.school_id)  
         join classes c using (class_id) 
         join admin_auths aa ON (u.user_id = aa.id AND aa.auth = 'user')
-        join admins a using (admin_id)
+        join admins a using (admin_id) 
+        join chidon_prizes cp using (prize_id)
         where s.school_id in (" . implode(',', array_keys($schools)) . ") 
         and tc.year = $year
         and yarmulka > 0
@@ -49,7 +50,7 @@ $rowsPaid = [];
 $sqlPaid = "SELECT user_id, date, amount FROM registration_charges WHERE year = $year and type in ('RRYSD', 'RRYDA', 'RRHVN')";
 $resPaid = mysql_query($sqlPaid);
 while ($rowPaid = mysql_fetch_assoc($resPaid)) {
-    $rowsPaid[$rowPaid['user_id']][] = $rowPaid;
+    $rowsPaid[$rowPaid['user_id']][$rowPaid['amount']][] = $rowPaid['date'];
 }
 ?>
 <!DOCTYPE html>
@@ -98,17 +99,22 @@ foreach ($info as $school_name => $user_prizes) {
         else $prize_totals[$prize['prize_name']] = 1;
         $grade = $prize['class_grade'] . (empty($prize['class_sub']) ? '' : '-' . $prize['class_sub']);
         ?>
-            <tr>
-                <td> <?= $prize['th_chidon_id'] ?> </td>
-                <td> <?= $prize['prize'] ?> </td>
-                <td> <?= $prize['school_name'] ?> </td>
-                <td> <?= $grade ?> </td>
-                <td> <?= $prize['first'] ?> <?= $prize['last'] ?> </td>
-                <td> <?= $prize['he_name'] ?> </td>
-                <td> <?= isset($rowsPaid[$prize['user_id']]) ? $rowsPaid[$prize['user_id']][$j]['date'] : ''?> </td>
-                <td> <?= isset($rowsPaid[$prize['user_id']]) ? $rowsPaid[$prize['user_id']][$j++]['amount'] : ''?> </td>
-            </tr>
-        <?
+        <tr>
+            <td> <?= $prize['th_chidon_id'] ?> </td>
+            <td> <?= $prize['prize'] ?> </td>
+            <td> <?= $prize['school_name'] ?> </td>
+            <td> <?= $grade ?> </td>
+            <td> <?= $prize['first'] ?> <?= $prize['last'] ?> </td>
+            <td> <?= $prize['he_name'] ?> </td>
+            <?php
+            if (isset($rowsPaid[$prize['user_id']][$prize['prize_price']][$j])) {
+                echo "<td>" . $rowsPaid[$prize['user_id']][$prize['prize_price']][$j] . "</td>";
+                echo "<td>" . $prize['row_price'] . "</td>";
+                $j++;
+            } else {
+                echo "<td></td><td></td>";
+            }
+        echo "</tr>";
     }
     echo "</table>";
 }
