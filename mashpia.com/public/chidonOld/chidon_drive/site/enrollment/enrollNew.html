@@ -1061,9 +1061,8 @@
 				alert("You don't have any eligible children to register, however, you can purchase some items for the chidon.")
 				// location.href = 'enroll_extra.html'
 			} else if (schoolNotConfirmed.length) {
-				alert('Only children that have had their school confirm their eligibility will show up for registration.')
+				alert('Some children will not show up because their school has not yet confirmed their eligibility.')
 			}
-
 			let html = ''
 			for (let child of eligible) {
 				console.log(child)
