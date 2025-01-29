@@ -17,14 +17,13 @@
   ],
 
   "configurations": [
-
     {
       "name": "PHP - XDebug",
       "type": "php",
       "request": "launch",
-      "port": 9001, // Do not confilct with PHP FPM
+      "port": 9003, // Do not confilct with PHP FPM
       "pathMappings": {
-        "/media/sf_tzivos-hashem/": "${workspaceRoot}"
+        "/var/www/html/": "${workspaceRoot}"
       }
     },
 
