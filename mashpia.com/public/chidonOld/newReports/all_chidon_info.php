@@ -242,7 +242,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Chidon Info</title>
     <style>
-        table {
+        table:not(.selection) {
             float: left;
         }
         tr, th, td {
@@ -262,7 +262,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
     <!-- show form for entering a list of chidon IDs or a list of user IDs or a list of user serial numbers -->
     <h1>All Chidon Info</h1>
     <form action="all_chidon_info.php" method="post">
-        <table>
+        <table class="selection">
             <tr>
                 <th>Year</th>
                 <td>
@@ -303,8 +303,6 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
         <button>GO</button>
     </form>
     <br />
-    <br />
-    <div style="clear: both"></div>
     <div>
         <?php
         if (! empty($info)) {      
