@@ -5,9 +5,11 @@ ini_set('error_reporting', E_ALL);
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$year = GlobalSettings::getChidonYear();
+require $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 
-require '../coupons/class.couponCode.php';
+$year = GlobalSettings::getChidonYear();
+$ct = new ChidonTests($year);
+$c = new CouponCodes($MASHPIA_DB, $year);
 
 function getRegInfo() {
     global $reg, $year, $users;
@@ -17,9 +19,8 @@ function getRegInfo() {
             from users u 
             join th_chidon tc using (user_id)  
             join classes c on c.class_id = u.class_id 
-            where tc.date_paid > 0 
-            and tc.year = " . $year . "
-            order by date_paid, last, first";
+            where tc.year = " . $year . "
+            order by last, first";
     $resReg = mysql_query($sqlReg);
     while ($rowReg = mysql_fetch_assoc($resReg)) {
         $reg[] = $rowReg;
@@ -35,16 +36,14 @@ function getRegInfo() {
 }
 
 function getTracks() {
-    global $tracks, $users;
+    global $tracks, $users, $ct;
 
-    $ct = new ChidonTests();
     $types = $ct->getTypes();
-
     foreach ($users as $user) {
         $info = $ct->getHighestTrackPassed($user);
         $highest = $info['highest_track'];
         $reward_type = $user['reward_type'];
-        if ($reward_type !== 'highest track passed') {
+        if ($reward_type && $reward_type !== 'highest track passed') {
             if ($highest == '') $highest = $reward_type;
             else {
                 $key1 = array_search($highest, array_keys($types));
@@ -114,19 +113,18 @@ function get50Percent($user_id) {
     $track = $tracks[$user_id];
     if ($track == 'none') return 0;
     $amounts = [
-        'Yesod'     => [70, 50, 35],
-        'Yediah'    => [180, 125, 100, 90],
-        'Havonah'   => [370, 250, 200, 185],
-        'Iyun'      => [370, 250, 200, 185],
+        'Yesod'     => [136, 100, 75, 50, 36],
+        'Yediah'    => [200, 180, 150, 120, 100],
+        'Havonah'   => [300, 250, 225, 200],
+        'Iyun'      => [300, 250, 225, 200],
+        'Ultimate'  => [500, 450, 400, 350]
     ];
     $values = $amounts[$track];
     return $values[count($values)-1];
 }
 
 function getCoupons($user_serial) {
-    global $MASHPIA_DB, $year;
-
-    $c = new CouponCode($MASHPIA_DB, $year);
+    global $c;
     $coupon = $c->checkForUsedUserCode($user_serial);
     return $coupon;
 }
@@ -155,7 +153,7 @@ getRaised();
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             font-size: 12px;
-            padding: 5px;
+            padding: 10px;
             border-bottom: 1px solid grey;
         }
     </style>

@@ -64,7 +64,7 @@ $stmtPrizes = $MASHPIA_DB->prepare("
       }
 
       tr, th, td {
-        border-bottom: #f0f0f0 1px solid;
+        border-bottom: 1px solid #f0f0f0;
         padding: 10px;
       }
     </style>
