@@ -432,14 +432,14 @@ function getDescriptions() {
         $desc[] = [
             'prefix'    => 'F',
             'id'        => $admin_id,
-            'code'      => 'RRCB',
+            'code'      => 'CB',
             'amount'    => $celebBoxes * CELEB_BOX_COST
         ];
         if ($celebBoxShipping) {
             $desc[] = [
                 'prefix'    => 'F',
                 'id'        => $admin_id,
-                'code'      => 'RRCBS',
+                'code'      => 'CBS',
                 'amount'    => $celebBoxShipping
             ];
         }
@@ -458,14 +458,14 @@ function getDescriptions() {
             $desc[] = [
                 'prefix'    => 'F',
                 'id'        => $admin_id,
-                'code'      => 'RRSW',
+                'code'      => 'SW',
                 'amount'    => $num_sweaters * SWEATER_COST
             ];
             if ($shipping_cost) {
                 $desc[] = [
                     'prefix'    => 'F',
                     'id'        => $admin_id,
-                    'code'      => 'RRSWS',
+                    'code'      => 'SWS',
                     'amount'    => $shipping_cost
                 ];
             }

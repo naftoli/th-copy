@@ -1859,6 +1859,11 @@ class ChidonShipping
             'RRSCAN' => 'Chidon Reg Shipping CAN',
             'RRSINT' => 'Chidon Reg Shipping INT',
 
+            'CB'    => 'Celebration Box',
+            'CBS'   => 'Celebration Box Shipping',
+            'SW'    => 'Sweater',
+            'SWS'   => 'Sweater Shipping',
+
             'R' => 'Chidon Early Reg Refund',
             'CD' => 'Chidon Drive Used',
             'CV' => 'Chidon Voucher Used',
