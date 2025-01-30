@@ -1,5 +1,6 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once '../../../../api/header/db.php'; // can't use document root b/c this needs to be accessed from chidondrive
+// which is a different domain
 
 class TripRegistration
 {
