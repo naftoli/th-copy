@@ -1,6 +1,7 @@
 <?php
-//require_once '../../../../api/header/db.php'; // can't use document root b/c this needs to be accessed from chidondrive
-// which is a different domain
+if (! isset($MASHPIA_DB)) {
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+}
 
 class TripRegistration
 {
