@@ -637,6 +637,7 @@
 
             // Call the validation function
             if (!validatePayment()) {
+                isProcessing = false; // Reset processing flag
                 $(".processPayment").attr('disabled', false); // Re-enable the button if validation fails
                 return false; // Stop further processing
             }
@@ -663,26 +664,33 @@
                 country,
                 creditVal,
                 paypal_email
-            }, function (result) {
-                const res = JSON.parse(result);
-                if (res.success) {
-                    alert(res.msg);
-                    let items = ['cart', 'addresses', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks', 'needs_shipping', 'credit'];
-                    for (let item of items) {
-                        if (window.localStorage) window.localStorage.removeItem(item);
-                        else Cookies.remove(item);
-                    }
-                    Cookies.remove('myshliach');
-                    location.href = 'http://mashpia.com/mobile';
-                } else {
-                    alert(res.error || "An unknown error occurred.");
-                    $(".processPayment").attr('disabled', false);
-                }
-                console.log(res);
-            }).fail(function() {
-                alert("Failed to connect to the server. Please try again later.");
-                $(".processPayment").attr('disabled', false);
-            });
+            })
+              .done(function(result) {
+                  try {
+                      const res = JSON.parse(result);
+                      if (res.success) {
+                          alert(res.msg);
+                          let items = ['cart', 'addresses', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks', 'needs_shipping', 'credit'];
+                          for (let item of items) {
+                              if (window.localStorage) window.localStorage.removeItem(item);
+                              else Cookies.remove(item);
+                          }
+                          Cookies.remove('myshliach');
+                          location.href = 'http://mashpia.com/mobile';
+                      } else {
+                          throw new Error(res.error || "An unknown error occurred.");
+                      }
+                  } catch (error) {
+                      alert(error.message);
+                      isProcessing = false; // Reset processing flag
+                      $(".processPayment").attr('disabled', false);
+                  }
+              })
+              .fail(function(jqXHR, textStatus, errorThrown) {
+                  alert("Failed to connect to the server. Please try again later.");
+                  isProcessing = false; // Reset processing flag
+                  $(".processPayment").attr('disabled', false);
+              });
         });
 
         // Validation function
