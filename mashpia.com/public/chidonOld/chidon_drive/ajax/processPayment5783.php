@@ -3,23 +3,23 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ini_set('max_execution_time', 300);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once '../../../api/models/Admin.php';
+require_once __DIR__ . '/../../../api/header/db.php';
+require_once __DIR__ . '/../../../api/models/Admin.php';
 
 //***************** LOAD CURRENT YEAR **********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
 use classes\authorize\CustomerProfile as Customer;
 
 //******************* Coupon Codes ************************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
+require_once __DIR__ . '/../../../chidonOld/coupons/class.couponCode.php';
 $coupon = new CouponCode($MASHPIA_DB, $year);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+require_once __DIR__ . '/../../../chidonTests/class.chidonTests.php';
 $ct = new ChidonTests($year);
 
 //******************* GLOBAL VARIABLES ***********************/
@@ -44,7 +44,7 @@ $sweater_info = [];
 $emailMsg = '';
 $credits = [];
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
+require_once __DIR__ . '/../../../mobile/reg/ajax/encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $admin_id);
 
 // Check if there's already a purchase in progress
