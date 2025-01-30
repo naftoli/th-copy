@@ -629,6 +629,8 @@
 
         let isProcessing = false;
         $(document).on('click', '.processPayment', function (evt) {
+            evt.preventDefault();
+
             if (isProcessing) return; // Prevent further clicks
             isProcessing = true;
             $(".processPayment").attr('disabled', true);
