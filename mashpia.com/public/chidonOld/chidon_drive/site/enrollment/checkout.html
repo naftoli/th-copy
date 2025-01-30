@@ -363,6 +363,8 @@
         var shipping = 0
         var credit = 0
         var eligible = []
+        var creditVal = 0;
+        var paypal_email = '';
 
         $.post('../../ajax/getAdminInfo.php', { admin: Cookies.get('chidon_admin') }, function (result) {
             admin = JSON.parse(result)
@@ -683,15 +685,11 @@
 
         // Validation function
         function validatePayment() {
-            let creditVal = 0;
-            let paypal_email = '';
-
             if (totalAfterCredit > 0) {
                 if (!$(".payment:checked").length) {
                     alert('You must indicate how you are going to pay!');
                     return false;
                 }
-
                 if (parseInt($(".payment:checked").val()) === 0) {
                     card_id = parseInt($(".payment-card").val());
                     // Additional checks for CVC can be added here
