@@ -93,7 +93,7 @@ function setTracks(array &$info) {
                 $track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
             }
         }
-        $row['track'] = array_key_exists($track, $types) ? $types[ $track ] : $track;
+        $row['track_passed'] = array_key_exists($track, $types) ? $types[ $track ] : $track;
     }
 }
 
@@ -242,7 +242,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Chidon Info</title>
     <style>
-        table:not(.selection) {
+        .tableInfo {
             float: left;
         }
         tr, th, td {
@@ -251,10 +251,18 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
             padding: 10px;
             border-bottom: 1px solid #f0f0f0;
         }
+        td {
+            height: 40px;
+        }
         button {
             padding: 10px;
             border: 1px solid #ccc;
             cursor: pointer;
+        }
+        input, select {
+            padding: 8px;
+            border: 1px solid #bbb;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -305,9 +313,13 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
     <br />
     <div>
         <?php
-        if (! empty($info)) {      
+        if (! empty($info)) {
+            // get the track types
+            $tracks = $ct->getTypes();
+
             $fields_to_use = [
-                "track",
+                "highest_track",
+                "test_type",
                 "khk_eligible",
                 "personal_credit",
                 "coupon_code",
@@ -355,38 +367,109 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                 "confirmed_info"
             ];
 
-            $fields_to_edit = [];
+            $not_to_edit = [
+                'personal_credit',
+                'class_grade',
+                'extra_purchases',
+                'year',
+                'school_id',
+                'class_sub',
+                'class_id',
+                'last',
+                'admin_id',
+                'user_id',
+                'coupon_code',
+                'family_balance',
+                'th_chidon_id',
+                'first',
+                'raised',
+                'user_serial'
+            ];
             
             $fields = ['first', 'last', 'admin_id', 'user_id', 'user_serial', 'school_id', 'class_id', 'class_grade', 'class_sub', 
-                'track', 'khk_eligible', 'personal_credit', 'coupon_code', 'raised', 'family_balance'];
+                'personal_credit', 'coupon_code', 'raised', 'family_balance', 'track_passed', 'khk_eligible'];
             $stmt = $MASHPIA_DB->query("show columns from th_chidon");
             foreach ( $stmt->fetchAll() as $row ) {
                 if (in_array($row['Field'], $fields_to_use)) $fields[] = $row['Field'];
             }
             $fields[] = 'extra_purchases';
 
+            $boolSelection = [
+                0   => 'No',
+                1   => 'Yes'
+            ];
+
+            $links = [
+                'coupon_code' => 'https://mashpia.com/chidonOld/coupons/coupons.php',
+                'raised' => 'https://chidondrive.com/site/family-single.html?id='
+            ];
+
             foreach ($info as $row) {
-                echo "<table>";
+                $links['raised'] .= $row['admin_id'];
+                echo "<div class='tableInfo'><table>";
                 foreach ($fields as $field) {
-                    echo "<tr><td><b>" . $field . "</b></td>";
+                    echo "<tr><td><b>";
+                    if (in_array($field, ['coupon_code', 'raised'])) {
+                        echo "<a href='" . $links[$field] . "' target='_blank'>" . $field . "</a>";
+                    } else {
+                        echo $field;
+                    }
+                    echo "</b></td>";
                     echo "<td>";
                     if (is_array($row[$field])) {
                         echo "<ul>";
                         foreach ($row[$field] as $val) echo "<li>" . $val . "</li>";
                         echo "</ul>";
                     } else {
-                        if (in_array($field, $fields_to_edit)) {
-                            echo "<input type='text' value='" . $row[$field] . "' id='" . $field . "' name='" . $field . "' />";
-                        } else {
+                        if (in_array($field, $not_to_edit)) {
                             echo $row[$field];
+                        } else {
+                            if (in_array($field, ['test_type', 'track_passed', 'reward_type', 'award_type'])) {
+                                echo "<select id='" . $field . "' name='" . $field . "'>";
+                                echo "<option value=''></option>";
+                                foreach ($tracks as $old_track => $new_track) {
+                                    echo "<option value='" . $old_track . "'";
+                                    if (
+                                        $old_track == $row[$field] || 
+                                        strtolower($new_track) == strtolower($row[$field])
+                                    ) echo " selected ";
+                                    echo ">" . $new_track . "</option>";
+                                }
+                                echo "</select>";
+                            } else if (in_array($field, ['khk_eligible', 'deleted', 'walking', 'khk', 'ultimate_trip', 'dropped_out', 'confirmed_info'])) {
+                                echo "<select id='" . $field . "' name='" . $field . "'>";
+                                foreach ($boolSelection as $key => $val) {
+                                    echo "<option value='" . $key . "'";
+                                    if ($key == $row[$field]) echo " selected ";
+                                    echo ">" . $val . "</option>";
+                                }
+                                echo "</select>";
+                            } else {
+                                echo "<input type='text' value='" . $row[$field] . "' id='" . $field . "' name='" . $field . "' class='edit' />";
+                            }
                         }
                     }
                     echo "</td></tr>";
                 }
-                echo "</table>";
+                echo "</table><br />";
+                echo "<button id='save'>Save</button></div>";
             }
         }
         ?>
     </div>
 </body>
+<script 
+    src="https://code.jquery.com/jquery-1.12.4.min.js" 
+    integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" 
+    crossorigin="anonymous"></script>
+<script>
+    $("#save").on("click", function() {
+        $('.edit').each(function() {
+            const val = $(this).val()
+            const field = $(this).attr('name')
+            const id = $(this).attr('id')
+            
+        })
+    })
+</script>
 </html>
