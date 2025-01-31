@@ -3,23 +3,23 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 ini_set('max_execution_time', 300);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once '../../../api/models/Admin.php';
+require_once __DIR__ . '/../../../api/header/db.php';
+require_once __DIR__ . '/../../../api/models/Admin.php';
 
 //***************** LOAD CURRENT YEAR **********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/PaymentProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
 use classes\authorize\CustomerProfile as Customer;
 
 //******************* Coupon Codes ************************/
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
+require_once __DIR__ . '/../../../chidonOld/coupons/class.couponCode.php';
 $coupon = new CouponCode($MASHPIA_DB, $year);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+require_once __DIR__ . '/../../../chidonTests/class.chidonTests.php';
 $ct = new ChidonTests($year);
 
 //******************* GLOBAL VARIABLES ***********************/
@@ -44,15 +44,15 @@ $sweater_info = [];
 $emailMsg = '';
 $credits = [];
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
+require_once __DIR__ . '/../../../mobile/reg/ajax/encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $admin_id);
 
 // Check if there's already a purchase in progress
-$sql = "SELECT COUNT(*) FROM purchase_processing WHERE admin_id = $admin_id";
-$result = mysql_query($sql);
-$row = mysql_fetch_row($result);
+$stmtP = $MASHPIA_DB->prepare("SELECT COUNT(*) as total FROM purchase_processing WHERE admin_id = :admin_id");
+$stmtP->execute(['admin_id' => $admin_id]);
+$rowP = $stmtP->fetch(PDO::FETCH_ASSOC);
 
-if ($row[0] > 0) {
+if ($rowP['total'] > 0) {
     echo json_encode([
         'success' => false,
         'error' => 'Your purchase is already being processed. Please wait for it to complete.'
@@ -61,8 +61,8 @@ if ($row[0] > 0) {
 }
 
 // Insert a record to indicate a purchase is in progress
-$sql = "INSERT INTO purchase_processing (admin_id) VALUES ($admin_id)";
-mysql_query($sql);
+$stmtPP = $MASHPIA_DB->prepare("INSERT INTO purchase_processing (admin_id) VALUES (:admin_id)");
+$stmtPP->execute(['admin_id' => $admin_id]);
 
 if (isset($_POST['tracks'])) {
     $tracksArr = json_decode($_POST['tracks']);
@@ -432,14 +432,14 @@ function getDescriptions() {
         $desc[] = [
             'prefix'    => 'F',
             'id'        => $admin_id,
-            'code'      => 'RRCB',
+            'code'      => 'CB',
             'amount'    => $celebBoxes * CELEB_BOX_COST
         ];
         if ($celebBoxShipping) {
             $desc[] = [
                 'prefix'    => 'F',
                 'id'        => $admin_id,
-                'code'      => 'RRCBS',
+                'code'      => 'CBS',
                 'amount'    => $celebBoxShipping
             ];
         }
@@ -458,14 +458,14 @@ function getDescriptions() {
             $desc[] = [
                 'prefix'    => 'F',
                 'id'        => $admin_id,
-                'code'      => 'RRSW',
+                'code'      => 'SW',
                 'amount'    => $num_sweaters * SWEATER_COST
             ];
             if ($shipping_cost) {
                 $desc[] = [
                     'prefix'    => 'F',
                     'id'        => $admin_id,
-                    'code'      => 'RRSWS',
+                    'code'      => 'SWS',
                     'amount'    => $shipping_cost
                 ];
             }
@@ -568,6 +568,7 @@ function processRefund($amount, $desc) {
         'paypal'    => $paypal_email,
         'code'      => $desc
     ]);
+
     return $res;
 }
 
@@ -611,13 +612,13 @@ function updateShipping() {
             date_paid = now()
         ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
-    
+
     $updated = $stmtInsert->execute([
         'admin'     => $admin_id,
         'year'      => $year,
         'amount'    => $total_charge
     ]);
-    
+
     return $updated;
 }
 
@@ -644,8 +645,9 @@ function processCelebBoxes() {
                 ':country'      => 'USA'
             ]);
             if ($res2) return true;
+        } else {
+            if ($res) return true;
         }
-        else if ($res) return true;
     }
     return false;
 }
@@ -797,7 +799,6 @@ function saveUltimateTripInfo() {
                     'year' => $year
                 ]);
                 if (!$res) {
-//                    $stmt->debugDumpParams();
                     $success = false;
                     break;
                 }
@@ -1017,8 +1018,8 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
 }
 
 // After processing, remove the record
-$sql = "DELETE FROM purchase_processing WHERE admin_id = $admin_id";
-mysql_query($sql);
+$stmtD = $MASHPIA_DB->prepare("DELETE FROM purchase_processing WHERE admin_id = :admin_id");
+$stmtD->execute(['admin_id' => $admin_id]);
 
 // Return the response
 echo json_encode($info);

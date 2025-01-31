@@ -1,5 +1,7 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+if (! isset($MASHPIA_DB)) {
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+}
 
 class TripRegistration
 {
