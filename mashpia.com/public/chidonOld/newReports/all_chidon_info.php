@@ -457,6 +457,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
         }
         ?>
     </div>
+    <br />
 </body>
 <script 
     src="https://code.jquery.com/jquery-1.12.4.min.js" 
