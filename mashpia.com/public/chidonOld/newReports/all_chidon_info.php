@@ -345,7 +345,6 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                 "shoe_size",
                 "deleted",
                 "parent_id",
-                "walking",
                 "notes",
                 "answers",
                 "host_street",
@@ -363,6 +362,8 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                 "award_type",
                 "dropped_out",
                 "reason",
+                "thurs_walking",
+                "ms_walking",
                 "khk_experience",
                 "confirmed_info"
             ];
@@ -423,21 +424,27 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                     } else {
                         if (in_array($field, $not_to_edit)) {
                             echo $row[$field];
+                        } else if ($field == 'track_passed') {
+                            echo "<select id='" . $field . "' name='" . $field . "' class='edit' data-old='" . strtolower($row[$field]) . "'>";
+                                echo "<option value=''></option>";
+                                foreach ($tracks as $track) {
+                                    echo "<option value='" . strtolower($track) . "'";
+                                    if (strtolower($track) == strtolower($row[$field])) echo " selected ";
+                                    echo ">" . $track . "</option>";
+                                }
+                                echo "</select>";
                         } else {
-                            if (in_array($field, ['test_type', 'track_passed', 'reward_type', 'award_type'])) {
-                                echo "<select id='" . $field . "' name='" . $field . "'>";
+                            if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
+                                echo "<select id='" . $field . "' name='" . $field . "' class='edit' data-old='" . $row[$field] . "'>";
                                 echo "<option value=''></option>";
                                 foreach ($tracks as $old_track => $new_track) {
                                     echo "<option value='" . $old_track . "'";
-                                    if (
-                                        $old_track == $row[$field] || 
-                                        strtolower($new_track) == strtolower($row[$field])
-                                    ) echo " selected ";
+                                    if ($old_track == $row[$field]) echo " selected ";
                                     echo ">" . $new_track . "</option>";
                                 }
                                 echo "</select>";
                             } else if (in_array($field, ['khk_eligible', 'deleted', 'walking', 'khk', 'ultimate_trip', 'dropped_out', 'confirmed_info'])) {
-                                echo "<select id='" . $field . "' name='" . $field . "'>";
+                                echo "<select id='" . $field . "' name='" . $field . "' class='edit' data-old='" . $row[$field] . "'>";
                                 foreach ($boolSelection as $key => $val) {
                                     echo "<option value='" . $key . "'";
                                     if ($key == $row[$field]) echo " selected ";
@@ -445,14 +452,15 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                                 }
                                 echo "</select>";
                             } else {
-                                echo "<input type='text' value='" . $row[$field] . "' id='" . $field . "' name='" . $field . "' class='edit' />";
+                                echo "<input type='text' value='" . $row[$field] . "' id='" . $field . "' name='" . $field . "' class='edit' 
+                                    data-old='" . $row[$field] . "' />";
                             }
                         }
                     }
                     echo "</td></tr>";
                 }
                 echo "</table><br />";
-                echo "<button id='save'>Save</button></div>";
+                echo "<button class='save' id='" . $row['user_id'] . "'>Save</button></div>";
             }
         }
         ?>
@@ -464,12 +472,35 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
     integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" 
     crossorigin="anonymous"></script>
 <script>
-    $("#save").on("click", function() {
+    $(".save").on("click", function() {
+        const user_id = $(this).attr('id')
+        const changes = {}
+        changes[user_id] = {}
         $('.edit').each(function() {
             const val = $(this).val()
-            const field = $(this).attr('name')
-            const id = $(this).attr('id')
-            
+            const field = $(this).attr('id')
+            const old_val = $(this).data('old')
+            if (val != old_val) {
+                if (['track_passed', 'test_type', 'reward_type', 'award_type'].includes(field)) {
+                    // make sure the value is not empty
+                    if (val != '') changes[user_id][field] = val
+                    else alert('Please select a value for ' + field)
+                } else {
+                    changes[user_id][field] = val
+                }
+            }
+        })
+        const res = fetch('api/update_chidon_info.php', {
+            method: 'POST',
+            body: JSON.stringify(changes)
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                alert('Saved.')
+            } else {
+                alert('Error saving.')
+            }
         })
     })
 </script>
