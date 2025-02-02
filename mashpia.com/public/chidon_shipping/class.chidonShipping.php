@@ -1082,7 +1082,7 @@ class ChidonShipping
      */
     public function getPrizes($gender, $school, $limitTo = []) {
         // get list of prizes in system with prize ids
-        $prizes = $this->getChidonPrizes();
+        // $prizes = $this->getChidonPrizes();
 
         $info = [];
         $sql = "SELECT 
