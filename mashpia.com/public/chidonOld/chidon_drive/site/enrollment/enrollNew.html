@@ -1049,8 +1049,7 @@
 			if (bal > 0) {
 				if (window.localStorage) localStorage.setItem('credit', bal)
 				else Cookies.set('credit', bal)
-				const text = `You have $${bal} credit from pre registration which will be reflected on the payment page.
-						If for any reason you are not planning on registering, please continue to the payment page to see your options.`
+				const text = `You have $${bal} credit from pre registration which will be reflected on the payment page. If for any reason you are not planning on registering, please continue to the payment page to see your options.`
 				alert(text)
 			}
 
