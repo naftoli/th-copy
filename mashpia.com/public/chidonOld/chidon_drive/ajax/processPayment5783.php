@@ -752,7 +752,7 @@ function saveAuthDesc() {
     $stmt = $MASHPIA_DB->prepare("
         INSERT INTO authorize_transactions 
         SET 
-            desc = :desc, 
+            description = :desc, 
             long_desc = :desc, 
             year = :year
     ");
