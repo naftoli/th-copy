@@ -23,7 +23,7 @@ class TripRegistration
         $bal = 0;
         $stmt = $this->db->prepare("
             SELECT 
-                admin_id, SUM(amount)
+                admin_id, IFNULL(SUM(amount), 0) as bal 
             FROM
                 registration_charges
             WHERE
@@ -34,6 +34,9 @@ class TripRegistration
             'year' => $this->year,
             'admin_id' => $this->admin_id
         ]);
+        $row = $stmt->fetch();
+        $bal = $row['bal'];
+        
         return $bal;
     }
 }
