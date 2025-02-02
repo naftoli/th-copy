@@ -746,6 +746,24 @@ function saveTripInfo() {
     return $success;
 }
 
+function saveAuthDesc() {
+    global $MASHPIA_DB, $year;
+
+    $stmt = $MASHPIA_DB->prepare("
+        INSERT INTO authorize_transactions 
+        SET 
+            desc = :desc, 
+            long_desc = :desc, 
+            year = :year
+    ");
+    $desc = getAuthDesc();
+    $stmt->execute([
+        ':desc' => $desc,
+        ':long_desc' => $desc,
+        ':year' => $year
+    ]);
+}
+
 function saveUltimateTripInfo() {
     global $MASHPIA_DB, $year, $ultimate_trip, $ultimate_info;
 
@@ -964,6 +982,7 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
                 $last_four = $payment['transactionResponse']['accountNumber'];
                 // Commit the transaction since payment was successful
                 $MASHPIA_DB->commit();
+                saveAuthDesc();
                 // Redeem coupons
                 redeemCoupons();
                 // Update registration_charges table
@@ -990,6 +1009,7 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
     } else {
         // If no charge, just commit the transaction
         $MASHPIA_DB->commit();
+        saveAuthDesc();
         // Redeem coupons 
         redeemCoupons();
         // Update registration_charges table
