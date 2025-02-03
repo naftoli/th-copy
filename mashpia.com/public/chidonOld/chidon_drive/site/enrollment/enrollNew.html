@@ -401,13 +401,24 @@
 
 								<div class="flex">
 									<label>Crown Heights Phone Number:</label>
-									<input type="text" id="acc_phone" name="acc_phone" required />
+									<input type="tel" 
+										id="acc_phone" 
+										name="acc_phone" 
+										required 
+										pattern="[0-9 -]+" 
+										title="Please enter a valid phone number (only digits, spaces, and hyphens allowed)" 
+										placeholder="(123) 456-7890" />
 								</div>
 
 								<div class="flex wrap">
 									<label>House Number ONLY:</label>
-									<input type="text" id="acc_street_num" name="acc_street_num" maxlength="5"
-										style="width: 60px;" />
+									<input type="number" 
+										id="acc_street_num" 
+										name="acc_street_num" 
+										max="99999"
+										min="1"
+										style="width: 60px;" 
+										title="Please enter only digits for the house number" />
 									<label>House Number Suffix:</label>
 									<select id="acc_street_num_suffix">
 										<option></option>
