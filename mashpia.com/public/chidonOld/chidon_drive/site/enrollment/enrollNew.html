@@ -955,7 +955,9 @@
 
 			// figure out what to do
 			if (!registered.length && !eligible.length) {
-				alert("No children are currently eligible for registration. This is likely due to the fact that your school has not yet confirmed your child(ren)'s information. Please speak to your Base Commander.")
+				alert("No children are currently eligible for registration. This is likely due to the fact that your school has not yet confirmed your child(ren)'s information. \
+					Please speak to your Base Commander. You can still purchase some things for the Chidon Experience.")
+				location.href = 'extra_purchases.html'
 			} else if (registered.length && !eligible.length) {
 				// check if we can edit ultimate trip info
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
@@ -966,8 +968,9 @@
 					updateModal(to_edit[0])
 				} else {
 					alert("All of your eligible children have already registered. If you still have some children that need to be registered \
-					please speak to your Base Commander to ensure that he/she confirms your child(ren)'s information.")
-					location.href = '/mobile'
+						please speak to your Base Commander to ensure that he/she confirms your child(ren)'s information. You can still purchase \
+						some things for the Chidon Experience.")
+					location.href = 'extra_purchases.html'
 				}
 			} else {
 				// save eligible children to local storage
@@ -980,7 +983,7 @@
 		async function updateModal(user) {
 			console.log(user)
 			await getStreets()
-			
+
 			// find out if user is in the zone or not
 			if (user.host_street_num && user.host_street) {
 				const zone = await getCrossStreets(user.host_street_num, user.host_street, true)
@@ -1038,7 +1041,7 @@
 			$("#ch_info select").niceSelect('update')
 
 			const now =  Math.floor(new Date().getTime() / 1000)
-			if (now < 2460731) // Feb. 25, 2025
+			if (now < 1740459600) // Feb. 25, 2025
 				$("#ch_info").modal('show')
 		}
 
