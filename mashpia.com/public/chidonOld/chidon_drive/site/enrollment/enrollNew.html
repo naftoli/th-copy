@@ -783,23 +783,23 @@
 			// find out how many children already paid for shipping for current school_id
 			try {
 				const res = await fetch('checkShippingPaid.php', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					admin: admin_id,
-					school: school_id,
-				})
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({
+						admin: admin_id,
+						school: school_id,
+					})
 				})
 
 				if (!res.ok) {
-				throw new Error(`Network response was not ok: ${res.statusText}`)
+					throw new Error(`Network response was not ok: ${res.statusText}`)
 				}
 
 				const data = await res.json()
 				if (data[school_id] && data[school_id].length > 0) {
-				numChildren[school_id] += data[school_id].length
+					numChildren[school_id] += data[school_id].length
 				}
 			} catch (error) {
 				console.error('Error calculating shipping:', error)
