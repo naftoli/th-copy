@@ -797,13 +797,13 @@
       const keys = Object.keys(addresses)
       for (let i = 0; i < keys.length; i++) {
         let address = addresses[keys[i]]
-        if (Object.keys(address).length === 0) {
-          alert('Not all addresses have been fully entered. Please review and fix.')
-          return false;
-        }
         // make sure the ship to address is checked off
         let ship = '#' + keys[i] + '_ship:checked'
         if (parseInt($(ship).val())) {
+          if (Object.keys(address).length !== fields.length) {
+            alert('Not all addresses have been fully entered. Please review and fix.')
+            return false;
+          }
           for (let j = 0; j < fields.length; j++) {
             let field = fields[j]
             if (address[field] === undefined || address[field] === '') {
