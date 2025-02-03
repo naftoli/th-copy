@@ -380,7 +380,7 @@
         getAdminInfo().then(admin => {
             admin_info = admin
             let cards = []
-            if (admin['cards']) {
+            if (admin['cards'].length) {
                 for (let i in admin['cards']) {
                     let cardInfo = admin['cards'][i]
                     let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
@@ -714,7 +714,11 @@
                 }
                 if (parseInt($(".payment:checked").val()) === 0) {
                     card_id = parseInt($(".payment-card").val());
-                    // Additional checks for CVC can be added here
+                    // make sure we have an id
+                    if (!card_id) {
+                        alert('You must select a credit card to use.');
+                        return false;
+                    }
                 } else {
                     let num = $("#cc_num").val();
                     cc.num = num.replaceAll(' ', '');
