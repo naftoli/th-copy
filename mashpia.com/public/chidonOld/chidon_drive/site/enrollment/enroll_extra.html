@@ -196,7 +196,7 @@
             Parents or Grandparents sweaters for Tatty / Mommy / Bubby / Zaidy.
             <br /><br />
             Please Note: <br />
-            1. Extra Purchases Shipping is ONLY TO THE USA!
+            1. Extra Purchases Shipping is ONLY TO THE USA!<br />
             2. If you have more than one child your extra purchases will be given to your oldest child.
           </h5>
           <h5 class="title" style="font-weight: bold">Celebration Boxes</h5>
@@ -230,29 +230,6 @@
               </h5>
               <select class="numCelebBoxes" id="num_celeb_boxes"></select>
             </div>
-            <!--                    <div id="celeb_box_shipping" style="display: none;">-->
-            <!--                        <h5 class="formDetails" style="margin-top: 1rem;">Select where you would like it to be shipped.</h5>-->
-            <!--                        <div class="flex">-->
-            <!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="0" />-->
-            <!--                            <label style="display: inline">-->
-            <!--                                Please ship to our school free of charge.<br />-->
-            <!--                            </label>-->
-            <!--                        </div>-->
-            <!--                        <div class="flex">-->
-            <!--                            <input type="radio" class="inputCheckbox celeb_box_ship" name="celeb_box_ship" class="celeb_box_ship" value="10" />-->
-            <!--                            <label style="display: inline">-->
-            <!--                                Please ship to an address in the USA for $10.-->
-            <!--                            </label>-->
-            <!--                        </div>-->
-            <!--                        <div class="flex" style="margin-bottom: 10px;">-->
-            <!--                            <input type="text" placeholder="Address" name="celeb_box_address" class="address" id="celeb_box_address" />-->
-            <!--                        </div>-->
-            <!--                        <div class="flex">-->
-            <!--                            <input type="text" placeholder="City" name="celeb_box_city" class="address" id="celeb_box_city" />-->
-            <!--                            <div id="celeb_state_span"></div>-->
-            <!--                            <input type="text" placeholder="Zip" name="celeb_box_zip" class="address" id="celeb_box_zip" />-->
-            <!--                        </div>-->
-            <!--                    </div>-->
             <br />
             <div id="celeb_box_shipping"
               style="background-color: #394190; padding: 20px; border-radius: 15px; display: none;">
@@ -574,7 +551,7 @@
     function createStateDropdown(type) {
       let html = `
                 <select name="${type + '_state'}" id="${type + '_state'}" class="state address" value="">
-                  <option value="" selected="selected">Select a State</option>
+                  <option value="''" selected="selected">Select a State</option>
                   <option value="AL">Alabama</option>
                   <option value="AK">Alaska</option>
                   <option value="AZ">Arizona</option>
@@ -709,6 +686,8 @@
 
     $(document).on('click', '.celeb_box_ship', function (e) {
       utilityFn(e, this)
+      // add to addresses object
+      addresses['celeb_box'] = {}
     })
 
     $(document).on('change', '.sweater_size', function (e) {
