@@ -815,9 +815,9 @@
 
 			if (fixed_fee_by_school.includes(school_id)) {
 				if (numChildren[school_id] == 1)
-				return fixed_fees[school_id]
+					return fixed_fees[school_id]
 				else
-				return 0
+					return 0
 			}
 
 			const fee_by_school = [61, 269]
@@ -866,9 +866,9 @@
 			if (fee_by_school.includes(school_id)) {
 				let index = country_list.indexOf(country)
 				if (index >= 0) {
-				return fee_by_country[index][numChildren[school_id] - 1]
+					return fee_by_country[index][numChildren[school_id] - 1]
 				} else {
-				return fee_by_country[fee_by_country.length - 1][numChildren[school_id] - 1]
+					return fee_by_country[fee_by_country.length - 1][numChildren[school_id] - 1]
 				}
 			}
 
