@@ -593,7 +593,7 @@
 				html += "<option>" + data.streets[s].street + "</option>";
 			}
 			$("#acc_street").append(html);
-			$('select#acc_street').niceSelect();
+			$('select#acc_street').niceSelect('update');
 		}
 
 		$("#acc_street_num").blur(function () {
