@@ -619,7 +619,7 @@
 			}
 		})
 
-		$(".save").click(function (e) {
+		$(".save").click(async function (e) {
 			e.preventDefault()
 			let errors = []
 			const needed = [
@@ -748,20 +748,25 @@
 							show = true
 							alert("We will now show your other child's ultimate trip info.")
 							let next_user = children.filter(child => parseInt(child.user_id) == parseInt(user))
-							updateModal(next_user)
+							await updateModal(next_user)
 						}
 					}
 					if (! show) {
-						$.post('save.php', {
-							ultimate_trip: JSON.stringify(ultimate_trip),
-							ultimate_info: JSON.stringify(ultimate_info)
-						}, function (result) {
-							if (parseInt(result)) alert("Error saving info.")
-							else {
-								alert('Saved.')
-								location.href = '/mobile'
+						(async function() {  
+							try {
+								const result = await $.post('save.php', {
+									ultimate_trip: JSON.stringify(ultimate_trip),
+									ultimate_info: JSON.stringify(ultimate_info)
+								});
+								
+								if (parseInt(result)) alert("Error saving info.");
+								else {
+									alert('Saved.');
+								}
+							} catch (error) {
+								alert("Error saving info: " + error.message);
 							}
-						})
+						})();
 					}
 				}
 				else $("#ch_info").modal('hide')
@@ -947,29 +952,35 @@
 				registered = children
 				eligible = children
 			}
-			if (registered.length && !eligible.length) {
-				editing_mode = true
+
+			// figure out what to do
+			if (!registered.length && !eligible.length) {
+				alert("No children are currently eligible for registration. This is likely due to the fact that your school has not yet confirmed your child(ren)'s information. Please speak to your Base Commander.")
+			} else if (registered.length && !eligible.length) {
+				// check if we can edit ultimate trip info
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
 				if (to_edit.length) {
+					alert("All eligible children have already registered, however you can still update your child(ren)'s information for the Ultimate Trip Experience.")
+					editing_mode = true
 					for (let c of to_edit) ultimate_trip.push(c.user_id)
-					await getStreets()
 					updateModal(to_edit[0])
 				} else {
-					alert('No children are eligible for registration or for editing their ultimate trip info.')
+					alert("All of your eligible children have already registered. If you still have some children that need to be registered \
+					please speak to your Base Commander to ensure that he/she confirms your child(ren)'s information.")
 					location.href = '/mobile'
 				}
 			} else {
-				if (eligible.length) {
-					// save eligible children to local storage
-					if (window.localStorage) window.localStorage.setItem('eligible', JSON.stringify(eligible))
-					else Cookies.set('eligible', JSON.stringify(eligible))
-				}
+				// save eligible children to local storage
+				if (window.localStorage) window.localStorage.setItem('eligible', JSON.stringify(eligible))
+				else Cookies.set('eligible', JSON.stringify(eligible))
 				processPage(admin)
 			}
 		}
 
 		async function updateModal(user) {
 			console.log(user)
+			await getStreets()
+			
 			// find out if user is in the zone or not
 			if (user.host_street_num && user.host_street) {
 				const zone = await getCrossStreets(user.host_street_num, user.host_street, true)
@@ -1019,8 +1030,6 @@
 			$("#ch_info #terms2").attr('checked', true)
 			$("#ch_info #initials").val(user.first.substr(0, 1) + user.last.substr(0, 1))
 
-			// walking
-
 			$("#ch_info #chidonAnswer").val(user.poll)
 
 			if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
@@ -1052,15 +1061,9 @@
 				const text = `You have $${bal} credit from pre registration which will be reflected on the payment page. If for any reason you are not planning on registering, please continue to the payment page to see your options.`
 				alert(text)
 			}
-
-			if (!eligible.length && registered.length) {
-				alert('All of your eligible children have already registered.')
-				// location.href = 'enroll_extra.html'
-			} else if (!eligible.length && !registered.length) {
-				alert("You don't have any eligible children to register, however, you can purchase some items for the chidon.")
-				// location.href = 'enroll_extra.html'
-			} else if (schoolNotConfirmed.length) {
-				alert('Some children will not show up because their school has not yet confirmed their eligibility.')
+			
+			if (schoolNotConfirmed.length) {
+				alert('Some of your children will not show up because their school has not yet confirmed their eligibility.')
 			}
 			let html = ''
 			for (let child of eligible) {
