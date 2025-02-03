@@ -173,7 +173,7 @@ for ($i = 0; $i < 50; $i++) {
         // enroll into campaigns
         try {
             $c = new CampaignEnrollment($user_id);
-            $c->enroll();
+            $c->enroll($school_type_id, 14);
         } catch (Exception $e) {
             $success = false;
             echo $e->getMessage() . "<br />";

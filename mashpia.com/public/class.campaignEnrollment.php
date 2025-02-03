@@ -76,16 +76,18 @@ class CampaignEnrollment {
         return $campaigns;
     }
     
-    private function setYear() {
-        // figure out age / year
-         $d1 = new DateTime();
-         $d2 = new DateTime($this->userInfo['dob']);
-         $age = $d2->diff($d1);
-         $level = $age->format('%y');
-         if ($level < 6) $level = 6;
-         if ($level > 14) $level = 14;
-         $this->year = $level;
-
+    private function setYear($year) {
+        if ($year) $this->year = $year;
+        else {
+            // figure out age / year
+            $d1 = new DateTime();
+            $d2 = new DateTime($this->userInfo['dob']);
+            $age = $d2->diff($d1);
+            $level = $age->format('%y');
+            if ($level < 6) $level = 6;
+            if ($level > 14) $level = 14;
+            $this->year = $level;
+        }
         // changed to deciding year by grade
 //        $sql = "select class_grade from users u join classes c on u.class_id = c.class_id where u.user_id = " . $this->user_id;
 //        $result = mysql_query( $sql );
@@ -162,9 +164,9 @@ class CampaignEnrollment {
         return $success;
     }
     
-    public function enroll() {
-        $this->setType();
-        $this->setYear();
+    public function enroll($type = false, $year = false) {
+        $this->setType($type);
+        $this->setYear($year);
         if (!$this->resetTracks()) {
             throw new EnrollmentException("Error resetting user campaigns.");
         }
