@@ -920,7 +920,7 @@
 				return false
 			}
 			let khk = result.khk
-
+			debugger
 			// update children with track info
 			for (let child of children) {
 				child.track = tracks[child.user_id]
@@ -1460,7 +1460,7 @@
 			}
 		})
 
-		$(document).on('change', '.reg', function (e) {
+		$(document).on('change', '.reg', async function (e) {
 			let id = $(this).attr('id')
 			if (!id) {
 				let class_names = $(this).attr('class').split(' ')
@@ -1482,6 +1482,7 @@
 						if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
 						else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
 
+						await getStreets()
 						$("#ch_info").modal('show')
 					}
 				}

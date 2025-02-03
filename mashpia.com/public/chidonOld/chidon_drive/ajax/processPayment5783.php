@@ -785,7 +785,8 @@ function saveUltimateTripInfo() {
             sandwich = :sandwich, 
             walking_zone = :zone, 
             shoe_size = :shoe, 
-            walking = :walk_alone, 
+            thurs_walking = :thurs,
+            ms_walking = :ms,
             poll = :chidon_answer
         WHERE
             user_id = :user AND year = :year
@@ -811,7 +812,8 @@ function saveUltimateTripInfo() {
                     'sandwich' => $info->sandwich,
                     'zone' => $acc->zone,
                     'shoe' => $info->shoe,
-                    'walk_alone' => $info->walk_alone,
+                    'thurs_walking' => $info->thurs_walking,
+                    'ms_walking' => $info->ms_walking,
                     'chidon_answer' => $info->chidon_answer,
                     'user' => $user_id,
                     'year' => $year
