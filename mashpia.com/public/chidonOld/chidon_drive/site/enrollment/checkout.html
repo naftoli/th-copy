@@ -659,8 +659,8 @@
             const country = shipping ? window.localStorage ? window.localStorage.getItem('country') : Cookies.get('country') : '';
 
             $.post('../../ajax/processPayment5783.php', {
-                admin_id: Cookies.get('chidon_admin'),
-                admin_email,
+                admin_id: admin.admin_id,
+                admin_email: admin.admin_email,
                 cart_total,
                 shipping,
                 card_id,
