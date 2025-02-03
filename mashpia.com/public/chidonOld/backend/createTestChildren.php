@@ -1,13 +1,16 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
+echo "<pre>"; // Add pre-formatting for better readability
+echo "Script started\n";
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.CampaignEnrollment.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.campaignEnrollment.php';
 $year = GlobalSettings::getChidonYear();
+echo "Dependencies loaded\n";
 
 if ($admin_user['auth'] != 'super') {
     echo "No Permission";
@@ -46,6 +49,15 @@ function generateBarcode(){
 
 $stmtRank = $MASHPIA_DB->prepare(
     "INSERT INTO rank_marks (rank_ord, user_id, date_promoted) VALUES (1, ?, ?) 
+");
+
+$stmtCampaign = $MASHPIA_DB->prepare("
+    insert into user_tracks
+    set subject_id = :subject,
+    level = :level,
+    user_id = :user,
+    track_id = :track,
+    enrolled = 1
 ");
 
 $stmtChild = $MASHPIA_DB->prepare("
@@ -130,6 +142,8 @@ $classes = [
     ]
 ];
 
+$subjects = [1, 4, 12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90, 100];
+
 $success = true;
 $MASHPIA_DB->beginTransaction();
 for ($i = 0; $i < 50; $i++) {
@@ -168,18 +182,29 @@ for ($i = 0; $i < 50; $i++) {
     } else {
         // get generated user id
         $user_id = $MASHPIA_DB->lastInsertId();
+        echo "Created user with ID: " . $user_id . "\n";
+        
         // create rank
         $stmtRank->execute([ $user_id, unixtojd() ]);
+        echo "Created rank for user: " . $user_id . "\n";
+        
         // enroll into campaigns
-        try {
-            $c = new CampaignEnrollment($user_id);
-            $c->enroll($school_type_id, 14);
-        } catch (Exception $e) {
-            $success = false;
-            echo $e->getMessage() . "<br />";
-            break;
+        foreach ($subjects as $subject) {
+            if ($subject == 1) $track = 3;
+            else $track = 1;
+            echo "Enrolling user {$user_id} in subject {$subject} track {$track}\n";
+            $resC = $stmtCampaign->execute([
+                'subject'   => $subject,
+                'level'     => 14,
+                'user'      => $user_id,
+                'track'     => $track
+            ]);
+            if ( !$resC ) {
+                $success = false;
+                $stmtCampaign->debugDumpParams();
+                break;
+            }
         }
-
         // prepare for chidon
         $size = 'adult m';
         $reg_date = '2025-01-01';
@@ -215,8 +240,9 @@ for ($i = 0; $i < 50; $i++) {
 
 if (!$success) {
     $MASHPIA_DB->rollBack();
-    echo "Error creating children";
+    echo "Error creating children\n";
 } else {
     $MASHPIA_DB->commit();
-    echo "Success";
+    echo "Success\n";
 }
+echo "</pre>"; // Close the pre-formatting
