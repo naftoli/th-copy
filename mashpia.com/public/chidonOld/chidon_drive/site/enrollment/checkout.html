@@ -380,7 +380,7 @@
         getAdminInfo().then(admin => {
             admin_info = admin
             let cards = []
-            if (admin.cards & admin.cards.length) {
+            if (admin.cards && admin.cards.length) {
                 for (let i in admin.cards) {
                     let cardInfo = admin['cards'][i]
                     let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4)
