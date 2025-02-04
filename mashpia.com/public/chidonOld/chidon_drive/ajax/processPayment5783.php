@@ -559,7 +559,7 @@ function checkPersonalCredit($user_id, $amount) {
     return false;
 }
 
-function processRefund($amount, $desc) {
+function processRefund($amount) {
     global $MASHPIA_DB, $admin_id, $year, $creditVal, $paypal_email;
     
     $refund_type = '';
@@ -1044,7 +1044,7 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
         }
         if ($to_charge < 0) {
             // process refund
-            processRefund(abs($to_charge), getDescriptions());
+            processRefund(abs($to_charge));
         }
         $info['success'] = true;
         $msg = 'Congratulations! ';
