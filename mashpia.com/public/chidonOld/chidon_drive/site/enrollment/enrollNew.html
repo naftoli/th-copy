@@ -318,7 +318,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Ultimate Chidon Experience</h5>
+					<h5 class="modal-title">Ultimate Chidon Experience <span id='user_name'></span></h5>
 					<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
 						X
 					</button>
@@ -1104,6 +1104,9 @@ some things for the Chidon Experience.")
 		async function updateModal(user) {
 			console.log(user)
 			await getStreets()
+
+			// update name
+			$("#ch_info #user_name").text(' - ' + user.first + ' ' + user.last)
 
 			// find out if user is in the zone or not
 			if (user.host_street_num && user.host_street) {
