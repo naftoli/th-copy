@@ -945,7 +945,7 @@ function sendEmail($msg) {
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'From: Chidon Headquarters <chidon@tzivoshashem.org>';
         $headers[] = 'Reply-to: Chidon Headquarters <chidon@tzivoshashem.org>';
-        $headers[] = 'Bcc: chidonreg@gmail.com';
+        $headers[] = 'Bcc: dedications@tzivoshashem.org';
         if (isset($_COOKIE['myshliach']) && intval($_COOKIE['myshliach'])) $headers[] = 'Cc: chidon@myshliach.com';
         return @mail($admin_email, 'Chidon Confirmation', $msg, implode("\r\n", $headers));
     }
@@ -956,6 +956,7 @@ function sendMyselfEmail($error, $desc) {
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
     $headers[] = 'From: chidon@tzivoshashem.org';
+    $headers[] = 'CC: zalman@campsgi.com';
     $description = '';
     if (is_array($desc)) {
         foreach ($desc as $item) {
