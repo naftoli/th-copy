@@ -560,13 +560,19 @@ function processRefund($amount, $desc) {
     $stmt = $MASHPIA_DB->prepare("
         INSERT INTO family_prepaid_balances (admin_id, year, refund_amount, refund_type, paypal, accounting_code) 
         VALUES (:admin_id, :year, :refund, :type, :paypal, :code)");
+    
+    // Extract just the code values from the description array
+    $codes = array_map(function($item) {
+        return $item['code'];
+    }, $desc);
+    
     $res = $stmt->execute([
         'admin_id'  => $admin_id,
         'year'      => $year,
         'refund'    => $amount,
         'type'      => $refund_type,
         'paypal'    => $paypal_email,
-        'code'      => implode(',', $desc)
+        'code'      => implode(',', $codes)
     ]);
 
     return $res;
