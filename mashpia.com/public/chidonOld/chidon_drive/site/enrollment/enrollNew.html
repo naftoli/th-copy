@@ -352,6 +352,17 @@
 										<option value='adult 11'>Adult 11</option>
 									</select>
 								</div>
+								<div class="flex flex-between">
+									<label>Sandwich Preference:</label>
+									<select id="sandwich" name="sandwich">
+										<option value="0">Please Select</option>
+										<option value="tuna">Tuna</option>
+										<option value="egg">Egg</option>
+										<option value="cc">Cream Cheese</option>
+										<option value="plain">Plain</option>
+										<option value="cheese">Hard Cheese</option>
+									</select>
+								</div>
 							</div>
 							<div class="modal-section flex2">
 								<h5>Allergies</h5>
@@ -623,6 +634,7 @@
 			let errors = []
 			const needed = [
 				{ elem: '#shoe', type: 'select', error: 'You need to enter what shoe size your child needs.' },
+				{ elem: '#sandwich', type: 'select', error: 'You need to enter which sandwhich your child would like to have.' },
 				{
 					elem: '.allergy', type: 'radio', error: 'You must indicate whether your child has any allergies or not.',
 					yes: [
@@ -703,6 +715,7 @@
 			else {
 				const user_id = $("#user_id").val()
 				const shoe = $("#shoe").val()
+				const sandwich = $("#sandwich").val()
 				const allergy = $(".allegy:checked").val() === '1'
 				const allergies = $("#allergies").val()
 				const in_zone = parseInt($(".in_zone").val())
@@ -734,7 +747,7 @@
 					acc.zone = 0
 				}
 				acc.phone = $("#acc_phone").val()
-				let info = { shoe, allergy, allergies, in_zone, walking, chidon_answer }
+				let info = { shoe, sandwich, allergy, allergies, in_zone, walking, chidon_answer }
 				info.accomodation = acc
 				ultimate_info[user_id] = info
 				if (editing_mode) {
@@ -1103,6 +1116,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 
 			$("#ch_info #user_id").val(user.user_id)
 			$("#ch_info #shoe").val(user.shoe_size)
+			$("#ch_info #sandwich").val(user.sandwich)
 
 			// allergies
 			if (user.allergies) {
@@ -1592,11 +1606,11 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 					if ($(elem).find('.ultimate_trip').eq(0).is(":checked")) {
 						$("#ch_info #user_id").val(user_id)
 						$("#ch_info input[type='radio']").checked = false
-						
+
 						const user = children.filter(child => child.user_id == user_id)[0]
 						if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
 						else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
-						
+
 						await getStreets()
 						$("#ch_info #user_name").text(' - ' + user.first + ' ' + user.last)
 						$("#ch_info").modal('show')
