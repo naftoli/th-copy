@@ -43,6 +43,7 @@ $celebBoxShipping = 0;
 $sweater_info = [];
 $emailMsg = '';
 $credits = [];
+$user_tracks = [];
 
 require_once __DIR__ . '/../../../mobile/reg/ajax/encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $admin_id);
@@ -300,7 +301,7 @@ function insertIntoRegCharges($trans_id = 0) {
 
 function getDescriptions() {
     global $users, $admin_id, $celebBoxes, $sweaters, $celebBoxShipping, $sweater_info, $tracks, $ultimate_trip,
-           $shipping_charges, $country, $credits, $credit, $to_charge, $creditVal;
+           $shipping_charges, $country, $credits, $credit, $to_charge, $creditVal, $user_tracks;
 
     $desc = [];
 
@@ -344,6 +345,7 @@ function getDescriptions() {
                 default:
                     continue;
             }
+            $user_tracks[$user_id] = $user_track;
             $desc[] = [
                 'prefix'    => 'C',
                 'id'        => $user_id,
@@ -400,12 +402,20 @@ function getDescriptions() {
                             'code'      => $codes['original'],
                             'amount'    => -abs($amount)
                         ];
-                        // add new code
+                        // add to new code
                         $desc[] = [
                             'prefix'    => 'C',
                             'id'        => $user_id,
                             'code'      => $codes['new'],
                             'amount'    => $amount
+                        ];
+                        // add to new code another time just for authorize
+                        $desc[] = [
+                            'prefix'    => 'C',
+                            'id'        => $user_id,
+                            'code'      => $codes['new'],
+                            'amount'    => $amount,
+                            'authorize_only' => 1 
                         ];
                     } else {
                         $desc[] = [
@@ -417,11 +427,19 @@ function getDescriptions() {
                         ];
                     }
                 } else {
+                    // add to registration charge
+                    $desc[] = [
+                        'prefix' => 'C',
+                        'id' => $user_id,
+                        'code' => $user_tracks[$user_id],
+                        'amount' => $amount,
+                    ];
+                    // debit credit charge
                     $desc[] = [
                         'prefix' => 'C',
                         'id' => $user_id,
                         'code' => $credit_codes[$type_of_credit],
-                        'amount' => $amount,
+                        'amount' => -abs($amount),
                     ];
                 }
             }
