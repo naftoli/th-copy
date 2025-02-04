@@ -910,8 +910,8 @@ function getEmailMsg($trans_id, $last_four) {
     if ($credit > 0) $msg .= "Amount Credited From Your Pre Registration Credit: $" . $credit . ".<br />";
     if ($to_charge > 0) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
-        if ($trans_id) $msg .= "Transaction ID: " . $trans_id . ".<br />";
-        if ($last_four) $msg .= "Last 4 digits of card: <" . $last_four . ">.<br />";
+        if ($trans_id) $msg .= "Transaction ID: $trans_id.<br />";
+        if ($last_four) $msg .= "Last 4 digits of card: <$last_four>.<br />";
     } else if ($to_charge < 0) {
         $refund = abs($to_charge);
         switch (parseInt($creditVal)) {
@@ -1001,6 +1001,7 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
         } else {
             // Payment was successful
             if (is_array($payment)) {
+                // echo "<pre>"; print_r($payment); echo "</pre>";
                 $trans_id = $payment['transactionResponse']['transId'];
                 $last_four = $payment['transactionResponse']['accountNumber'];
                 // Commit the transaction since payment was successful
