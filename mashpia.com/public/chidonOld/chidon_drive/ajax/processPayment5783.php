@@ -566,7 +566,7 @@ function processRefund($amount, $desc) {
         'refund'    => $amount,
         'type'      => $refund_type,
         'paypal'    => $paypal_email,
-        'code'      => $desc
+        'code'      => implode(',', $desc)
     ]);
 
     return $res;
