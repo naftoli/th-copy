@@ -59,7 +59,7 @@ if ($res) {
         $scores = $ct->getScores();
         // check if child passed Iyun through cumulative marks
         $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
-        if ($cumulative == 'Iyun') $highest_track = 'Iyun';
+        if ($cumulative == 'iyun') $highest_track = 'Iyun';
         // setup row with needed info
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
