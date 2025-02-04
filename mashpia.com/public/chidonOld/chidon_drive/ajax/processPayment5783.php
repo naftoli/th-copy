@@ -562,18 +562,13 @@ function processRefund($amount, $desc) {
         VALUES (:admin_id, :year, :refund, :type, :paypal, :code) 
         ON DUPLICATE KEY UPDATE refund_amount = (refund_amount + :refund), accounting_code = CONCAT(accounting_code, ',', :code)");
     
-    // Extract just the code values from the description array
-    $codes = array_map(function($item) {
-        return $item['code'];
-    }, $desc);
-    
     $res = $stmt->execute([
         'admin_id'  => $admin_id,
         'year'      => $year,
         'refund'    => $amount,
         'type'      => $refund_type,
         'paypal'    => $paypal_email,
-        'code'      => implode(',', $codes)
+        'code'      => getAuthDesc()
     ]);
 
     return $res;
