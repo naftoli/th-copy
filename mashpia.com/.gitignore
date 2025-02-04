@@ -56,8 +56,6 @@ public/chidonOld/chidon_drive/ajax/phplog
 public/chidon/
 
 # uplodeded media
-public/chidonOld/sweaters/img/*
 public/chidonOld/prizes/img/*
 public/storage/*
 public/chidonOld/invitations/*.jpg
-
