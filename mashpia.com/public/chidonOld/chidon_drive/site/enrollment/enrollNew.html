@@ -1248,7 +1248,7 @@ some things for the Chidon Experience.")
 												${text}
 											</h5>
 									</div>
-									<br />yes`
+									<br />`
 				} else if (child.track === 'Havonah' || child.track === 'Iyun') {
 					let text = 'You will be joining your school\'s Regional Trip. Speak to your schools coordinator with regards to any questions you have about your region\'s trip.'
 					if (myshliach) {
@@ -1306,7 +1306,7 @@ some things for the Chidon Experience.")
 				}
 
 				// coupons
-				const coupon = parseFloat(child.coupon)
+				const coupon = parseInt(child.coupon)
 				if (coupon > 0) {
 					html += `<h5 class="formDetails"><span class="title">Coupon Code</span><br />
 							 You have $${coupon} in coupon code(s) which will be applied to your registration cost.</h5>`
