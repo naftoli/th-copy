@@ -1200,10 +1200,11 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				let ultimate = child.khk_eligible
 				let trackText = getTrackText(child.track, ultimate)
 
-				const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : "file_view.php?id=" + child.user_photo_id;
+				const childPic = child.mobile_pic ? "/mobile/reg/" + child.mobile_pic : 
+					child.user_photo_id ? "file_view.php?id=" + child.user_photo_id : "/mobile/img_new/boy-color-orange-svg.svg";
 				html += `<div class="kid flex-kids" id="${child.user_id}">
 							<div>
-								<img class="childImg" src="//mashpia.com/${childPic}" />
+								<img class="childImg" src="//mashpia.com/${childPic}" style="max-height: 100px;" />
 							</div>
 							 <div style="margin-left: 20px;">
 								<h5 class="formDetails">Dear ${child.first},<br /><br />
