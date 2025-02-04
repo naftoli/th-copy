@@ -683,22 +683,26 @@
               .done(function(result) {
                   try {
                       const res = JSON.parse(result);
+                      // if res is not object
+                      if (typeof res !== 'object') throw new Error("Invalid response format.");
                       if (res.success) {
                           alert(res.msg);
-                          let items = ['cart', 'addresses', 'trips', 'ultimate_trip', 'ultimate_info', 'shipping', 'tracks', 'needs_shipping', 'credit'];
-                          for (let item of items) {
-                              if (window.localStorage) window.localStorage.removeItem(item);
-                              else Cookies.remove(item);
-                          }
-                          Cookies.remove('myshliach');
+                          // remove all cookies and local storage items
+                          clearStorage()
+                          isProcessing = false; // Reset processing flag
+                          $(".processPayment").attr('disabled', false);
                           location.href = 'http://mashpia.com/mobile';
+                      } else if (res.error) {
+                        alert(res.error);
+                        isProcessing = false; // Reset processing flag
+                        $(".processPayment").attr('disabled', false);
                       } else {
-                          throw new Error(res.error || "An unknown error occurred.");
+                          throw new Error("Invalid response format.");
                       }
                   } catch (error) {
                       alert(error.message);
-                      isProcessing = false; // Reset processing flag
-                      $(".processPayment").attr('disabled', false);
+                    //   isProcessing = false; // Reset processing flag
+                    //   $(".processPayment").attr('disabled', false);
                   }
               })
               .fail(function(jqXHR, textStatus, errorThrown) {
@@ -707,6 +711,19 @@
                   $(".processPayment").attr('disabled', false);
               });
         });
+
+        function clearStorage() {
+			// get all cookies
+			const cookies = Cookies.get()
+			for (let cookie in cookies) {
+				// do no remove 'chidon_admin' or 'naftoli' cookie
+				if (cookie === 'chidon_admin' || cookie === 'naftoli') continue
+				Cookies.remove(cookie)
+			}
+			if (window.localStorage) {
+				localStorage.clear();
+			}
+		}
 
         // Validation function
         function validatePayment() {
