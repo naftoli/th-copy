@@ -318,7 +318,7 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title">Ultimate Chidon Experience <span id='user_name'></span></h5>
+					<h5 class="modal-title">Ultimate Chidon Experience <span id="user_name"></span></h5>
 					<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
 						X
 					</button>
@@ -1613,6 +1613,7 @@ some things for the Chidon Experience.")
 						else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
 
 						await getStreets()
+						$("#ch_info #user_name").text(' - ' + user.first + ' ' + user.last)
 						$("#ch_info").modal('show')
 					}
 				}
