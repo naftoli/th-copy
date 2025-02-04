@@ -558,8 +558,9 @@ function processRefund($amount, $desc) {
     }
 
     $stmt = $MASHPIA_DB->prepare("
-        INSERT INTO family_prepaid_balances (admin_id, year, refund_amount, refund_type, paypal, accounting_code) 
-        VALUES (:admin_id, :year, :refund, :type, :paypal, :code)");
+        INSERT IGNORE INTO family_prepaid_balances (admin_id, year, refund_amount, refund_type, paypal, accounting_code) 
+        VALUES (:admin_id, :year, :refund, :type, :paypal, :code) 
+        ON DUPLICATE KEY UPDATE refund_amount = (refund_amount + :refund), accounting_code = CONCAT(accounting_code, ',', :code)");
     
     // Extract just the code values from the description array
     $codes = array_map(function($item) {
