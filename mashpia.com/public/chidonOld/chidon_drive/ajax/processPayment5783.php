@@ -392,6 +392,22 @@ function getDescriptions() {
         foreach ($credits as $user_id => $details) {
             foreach ($details as $type_of_credit => $amount) {
                 if ($type_of_credit == 'personal') {
+                    // add and subtract credit only in authorize desc to understand the registration charge amount
+                    $desc[] = [
+                        'prefix' => 'C',
+                        'id' => $user_id,
+                        'code' => $user_tracks[$user_id],
+                        'amount' => $amount,
+                        'authorize_only' => 1
+                    ];
+                    // subtract amount for authorize only
+                    $desc[] = [
+                        'prefix' => 'C',
+                        'id' => $user_id,
+                        'code' => $user_tracks[$user_id],
+                        'amount' => -abs($amount),
+                        'authorize_only' => 1
+                    ];
                     // check if we need to change the code in accounting from original track to new track
                     $codes = checkPersonalCredit($user_id, $amount);
                     if (isset($codes['new'])) {
@@ -409,32 +425,16 @@ function getDescriptions() {
                             'code'      => $codes['new'],
                             'amount'    => $amount
                         ];
-                        // add to new code another time just for authorize
-                        $desc[] = [
-                            'prefix'    => 'C',
-                            'id'        => $user_id,
-                            'code'      => $codes['new'],
-                            'amount'    => $amount,
-                            'authorize_only' => 1 
-                        ];
-                    } else {
-                        $desc[] = [
-                            'prefix'    => 'C',
-                            'id'        => $user_id,
-                            'code'      => $codes['original'],
-                            'amount'    => $amount,
-                            'authorize_only' => 1 // this is only for authorize, not to be entered into registration_charges b/c it already exists there
-                        ];
-                    }
+                    } 
                 } else {
-                    // add to registration charge
+                    // add to credit amount to registration charge
                     $desc[] = [
                         'prefix' => 'C',
                         'id' => $user_id,
                         'code' => $user_tracks[$user_id],
                         'amount' => $amount,
                     ];
-                    // debit credit charge
+                    // debit credit amount
                     $desc[] = [
                         'prefix' => 'C',
                         'id' => $user_id,
