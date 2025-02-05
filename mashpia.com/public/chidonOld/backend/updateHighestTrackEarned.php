@@ -66,11 +66,13 @@ $success = true;
 foreach ($qrys as $qry) {
     if (! mysql_query($qry)) {
         $success = false;
-        echo mysql_error() . "<br />" . $qry;
+        echo "Error: " . mysql_error() . "<br />" . $qry;
         break;
     }
 }
-if ($success) mysql_query("commit");
+if ($success) {
+    mysql_query("commit");
+    echo "success";
+} 
 else mysql_query("rollback");
 mysql_query('set autocommit=1');
-echo "done";
