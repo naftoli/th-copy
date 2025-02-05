@@ -746,7 +746,7 @@
 					acc.zone = 0
 				}
 				acc.phone = $("#acc_phone").val()
-				let info = { shoe, sandwich, allergy, allergies, in_zone, walking, chidon_answer, thurs_walking, ms_walking }
+				let info = { shoe, sandwich, allergy, allergies, in_zone, chidon_answer, thurs_walking, ms_walking }
 				info.accomodation = acc
 				ultimate_info[user_id] = info
 				if (editing_mode) {
@@ -1067,8 +1067,10 @@
 			}
 
 			// only let ultimate trip kids to update their trip info
+			const only_schools = []
 			let registered = children.filter(child => child.date_paid)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(child.school_id))
 			if (Cookies.get('naftoli')) {
 				registered = children
 				eligible = children
