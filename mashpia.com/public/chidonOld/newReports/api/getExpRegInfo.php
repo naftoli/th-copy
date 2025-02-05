@@ -151,10 +151,11 @@ function getFee($row) {
         'maven'     => 36,
         'pro'       => 100,
         'expert'    => 200,
-        'genius'    => 200,
-        ''          => 0
+        'genius'    => 200
     ];
-    $fee = $fees[$row['reward']];
+    $reward = $row['reward'];
+    if ($reward == 'Iyun' || $reward == 'iyun') $reward = 'genius';
+    $fee = array_key_exists($reward, $fees) ? $fees[$reward] : 0;
     // check if already paid for registration
     if (intval($row['paid']) > 0) $fee -= intval($row['paid']);
     // check how much was raised
