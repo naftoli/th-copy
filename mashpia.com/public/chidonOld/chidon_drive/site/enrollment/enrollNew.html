@@ -1854,6 +1854,17 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 						if (amount == -1) errors.push(`${users[user_id]} has chosen to go on the trip, but you have not selected how much you are paying!`)
 					}
 				})
+				// check if an amount was selected but not the trip choice
+				if (! $(".ultimate_trip:checked").length) {
+					// get first ultimate trip radio button element
+					let elem = $(".ultimate_trip").eq(0)
+					let val = $(elem).val()
+					let info = val.split(':')
+					let user_id = info[1]
+					let reg_elem = '#' + user_id
+					let amount = parseInt($(reg_elem).find(".reg").val())
+					if (amount >= 0) errors.push(`${users[user_id]} has chosen how much to pay, but you have not chosen which trip to go on!`)
+				}
 			}
 
 			if ($(".trip_terms").length) {
