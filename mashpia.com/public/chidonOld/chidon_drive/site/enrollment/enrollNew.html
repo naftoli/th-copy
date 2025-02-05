@@ -538,7 +538,7 @@
 					</form>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button>
+					<!-- <button type="button" class="btn btn-secondary close" data-dismiss="modal">Close</button> -->
 					<button type="button" class="btn btn-primary save">Save changes</button>
 				</div>
 			</div>
@@ -1168,6 +1168,18 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				$("#ch_info").modal('show')
 		}
 
+		function resetModal() {
+			$("#ch_info input[type='text']").val('')
+			$("#ch_info input[type='tel']").val('')
+			$("#ch_info input[type='number']").val('')
+			$("#ch_info textarea").val('')
+			$("#ch_info input[type='radio']").prop('checked', false)
+			$("#ch_info input[type='checkbox']").prop('checked', false)
+			$("#ch_info select").val('').niceSelect('update')
+			$("#ch_info .in_zone").val(1)
+			$("#ch_info .in_the_zone").val(1)
+		}
+
 		async function processPage(admin) {
 			let registered = children.filter(child => child.date_paid)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
@@ -1612,9 +1624,14 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 						if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
 						else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
 
-						await getStreets()
-						$("#ch_info #user_name").text(' - ' + user.first + ' ' + user.last)
-						$("#ch_info").modal('show')
+						// reset modal
+						if (! ultimate_info[user_id]) {
+							resetModal()
+							await getStreets()
+							$("#ch_info #user_name").text(' - ' + user.first + ' ' + user.last)
+							$("#ch_info").modal('show')
+						}
+						else updateModal(user)
 					}
 				}
 			}
@@ -1767,9 +1784,12 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			return true
 		}
 
-		$(".close").click(function () {
-			$("#ch_info").modal('hide')
-		})
+		// on modal close check if we need to show
+		$("#ch_info").on('hidden.bs.modal', checkExtraInfo)
+
+		// $(".close").click(function () {
+		// 	$("#ch_info").modal('hide')
+		// })
 
 		$("#extra").click(function (e) {
 			e.preventDefault()
