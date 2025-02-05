@@ -59,7 +59,7 @@ if ($res) {
         $scores = $ct->getScores();
         // check if child passed Iyun through cumulative marks
         $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
-        if ($cumulative == 'iyun') $highest_track = 'Iyun';
+        if ($cumulative == 'iyun') $highest_track = 'genius';
         // setup row with needed info
         $row['highest_track'] = $highest_track;
         $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
@@ -154,7 +154,6 @@ function getFee($row) {
         'genius'    => 200
     ];
     $reward = $row['reward'];
-    if ($reward == 'Iyun' || $reward == 'iyun') $reward = 'genius';
     $fee = array_key_exists($reward, $fees) ? $fees[$reward] : 0;
     // check if already paid for registration
     if (intval($row['paid']) > 0) $fee -= intval($row['paid']);
