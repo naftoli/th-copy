@@ -749,8 +749,8 @@
 			e.preventDefault()
 			let errors = []
 			const needed = [
-				{ elem: '#shoe', type: 'select', error: 'You need to enter what shoe size your child needs.', gender: 'M' },
-				{ elem: '#sandwich', type: 'select', error: 'You need to enter which sandwhich your child would like to have.', gender: 'M' },
+				{ elem: '#shoe', type: 'select', error: 'You must enter what shoe size your child needs.', gender: 'M' },
+				{ elem: '#sandwich', type: 'select', error: 'You must enter which sandwhich your child would like to have.', gender: 'M' },
 				{ elem: '#height', type: 'select', error: 'You must enter your child height.', gender: 'M' },
 				{ elem: '#weight', type: 'select', error: 'You must enter your child weight.', gender: 'M' },
 				{ elem: '#ski', type: 'select', error: 'You must enter your child ski size.', gender: 'M' },
@@ -787,7 +787,8 @@
 				switch (obj.type) {
 					case 'select':
 						if (obj.gender == $("#ch_info #gender").val()) {
-							if (parseInt($(obj.elem).val()) === 0) errors.push(obj.error)
+							let val = $(obj.elem).val()
+							if (!val || val === '' || val === '0' || parseInt(val) === 0) errors.push(obj.error)
 							break;
 						}
 					case 'val':
@@ -1240,7 +1241,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 
 			// update name
 			$("#ch_info #user_name").text(' - ' + user.first + ' ' + user.last)
-
+			
 			// find out if user is in the zone or not
 			if (user.host_street_num && user.host_street) {
 				const zone = await getCrossStreets(user.host_street_num, user.host_street, true)
@@ -1288,19 +1289,10 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 
 			$("#ch_info #chidonAnswer").val(user.poll)
 			$("#ch_info #gender").val(user.gender)
+			$("#ch_info #user_id").val(user.user_id)
 
 			if (user.gender == 'M') {
 				$("#ch_info #whatsapp_link").attr('href', 'https://chat.whatsapp.com/DEDzFbY1PTmFHlPfLiy5iu')
-				$("#ch_info #general_info_girls").hide()
-				$("#ch_info #general_info_boys").show()
-			} else if (user.gender == 'F') {
-				$("#ch_info #whatsapp_link").attr('href', 'https://chat.whatsapp.com/Hl8BLpuq6kh5cid2th89pV')
-				$("#ch_info #general_info_boys").hide()
-				$("#ch_info #general_info_girls").show()
-			}
-
-			$("#ch_info #user_id").val(user.user_id)
-			if (user.gender == 'M') {
 				$("#ch_info #shoe").val(user.shoe_size)
 				$("#ch_info #sandwich").val(user.sandwich)
 				$("#ch_info #height").val(user.height)
@@ -1308,6 +1300,12 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				$("#ch_info #ski").val(user.ski)
 				$("#ch_info #skill").val(user.skill)
 				$("#ch_info #outerwear").val(user.outerwear)
+				$("#ch_info #general_info_girls").hide()
+				$("#ch_info #general_info_boys").show()
+			} else if (user.gender == 'F') {
+				$("#ch_info #whatsapp_link").attr('href', 'https://chat.whatsapp.com/Hl8BLpuq6kh5cid2th89pV')
+				$("#ch_info #general_info_boys").hide()
+				$("#ch_info #general_info_girls").show()
 			}
 
 			$("#ch_info select").niceSelect('update')
