@@ -833,8 +833,8 @@ function saveUltimateTripInfo() {
                     'sandwich' => $info->sandwich,
                     'zone' => $acc->zone,
                     'shoe' => $info->shoe,
-                    'thurs_walking' => $info->thurs_walking,
-                    'ms_walking' => $info->ms_walking,
+                    'thurs' => $info->thurs_walking,
+                    'ms' => $info->ms_walking,
                     'chidon_answer' => $info->chidon_answer,
                     'user' => $user_id,
                     'year' => $year
