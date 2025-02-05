@@ -82,6 +82,8 @@ foreach ($students as $student) {
         $avgs = calculateAvgs($student['th_chidon_id']);
         $passing_avg = getPassingAvg($student['user_id']);
         $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id'], false, $test_num) : '';
+        $cumulative_track_passed = strtolower(calculateCumulative($student));
+        if ($cumulative_track_passed == 'iyun' || $cumulative_track_passed == 'genius') $track_passed = 'genius';
     }
 
     // summary
