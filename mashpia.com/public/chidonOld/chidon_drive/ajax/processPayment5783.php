@@ -26,6 +26,7 @@ $ct = new ChidonTests($year);
 $admin_id = $_POST['admin_id'];
 $admin_email = $_POST['admin_email'];
 $payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
+$last_four = isset($_POST['last_four']) ? intval($_POST['last_four']) : 0;
 $shipping_charges = isset($_POST['shipping']) ? json_decode($_POST['shipping']) : [];
 $credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
 //$already_used_credit = isset($_POST['already_used_credit']) ? intval($_POST['already_used_credit']) : 0;
@@ -852,9 +853,9 @@ function extractAddress($info) {
     return $info['address'] . " " . $info['city'] . ", " . $info['state'] . " " . $info['zip'];
 }
 
-function getEmailMsg($trans_id, $last_four) {
+function getEmailMsg($trans_id) {
     global $users, $user_info, $celebBoxes, $sweaters, $celebBoxShipping, $addresses, $sweater_info, $to_charge,
-           $tracks, $credit, $creditVal, $paypal_email, $credits, $shipping_charges;
+           $tracks, $credit, $creditVal, $paypal_email, $credits, $shipping_charges, $last_four;
 
     $msg = "Below is a summary of your Chidon registration and extra purchase(s) where applicable.<br /><br />";
 
@@ -911,10 +912,10 @@ function getEmailMsg($trans_id, $last_four) {
     if ($to_charge > 0) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
         if ($trans_id) $msg .= "Transaction ID: $trans_id.<br />";
-        if ($last_four) $msg .= "Last 4 digits of card: <$last_four>.<br />";
+        if ($last_four != 0) $msg .= "Last 4 digits of card: <$last_four>.<br />";
     } else if ($to_charge < 0) {
         $refund = abs($to_charge);
-        switch (parseInt($creditVal)) {
+        switch (intval($creditVal)) {
             case 1:
                 $msg .= "Thank you for choosing to donate the remaining $" . $refund . " from your pre registration to our scholarship fund!<br />";
                 break;
@@ -984,7 +985,6 @@ $ultimate = saveUltimateTripInfo();
 
 $info = [];
 $trans_id = 0;
-$last_four = 0;
 
 // Check if all database operations were successful
 if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
@@ -1003,7 +1003,6 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
             if (is_array($payment)) {
                 // echo "<pre>"; print_r($payment); echo "</pre>";
                 $trans_id = $payment['transactionResponse']['transId'];
-                $last_four = $payment['transactionResponse']['accountNumber'];
                 // Commit the transaction since payment was successful
                 $MASHPIA_DB->commit();
                 saveAuthDesc();
@@ -1070,7 +1069,7 @@ echo json_encode($info);
 
 // Send email confirmation if successful
 if ($info['success']) {
-    $msg = getEmailMsg($trans_id, $last_four);
+    $msg = getEmailMsg($trans_id);
     if (!sendEmail($msg)) {
         sendMyselfEmail('There was an error sending the confirmation email.', $msg);
     }
