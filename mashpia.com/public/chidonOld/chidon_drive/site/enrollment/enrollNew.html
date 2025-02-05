@@ -329,39 +329,47 @@
 					</p>
 					<form>
 						<input type="hidden" name="user_id" id="user_id" />
+						<input type="hidden" name="gender" id="gender" value="" />
 						<div class="modal-flex">
 							<div class="modal-section flex1 small">
 								<h5>General Information</h5>
-								<div class="flex select-container flex-between">
-									<label>Shoe Size:</label>
-									<select id="shoe" name="shoe">
-										<option value="0">Please Select</option>
-										<option value='children 11'>Children 11</option>
-										<option value='children 12'>Children 12</option>
-										<option value='children 13'>Children 13</option>
-										<option value='adult 1'>Adult 1</option>
-										<option value='adult 2'>Adult 2</option>
-										<option value='adult 3'>Adult 3</option>
-										<option value='adult 4 '>Adult 4 </option>
-										<option value='adult 5 '>Adult 5 </option>
-										<option value='adult 6'>Adult 6</option>
-										<option value='adult 7'>Adult 7</option>
-										<option value='adult 8'>Adult 8</option>
-										<option value='adult 9'>Adult 9</option>
-										<option value='adult 10'>Adult 10</option>
-										<option value='adult 11'>Adult 11</option>
-									</select>
+								<div id="general_info_boys" style="display: none;">
+									<div class="flex select-container flex-between">
+										<label>Shoe Size:</label>
+										<select id="shoe" name="shoe">
+											<option value="0">Please Select</option>
+											<option value='children 11'>Children 11</option>
+											<option value='children 12'>Children 12</option>
+											<option value='children 13'>Children 13</option>
+											<option value='adult 1'>Adult 1</option>
+											<option value='adult 2'>Adult 2</option>
+											<option value='adult 3'>Adult 3</option>
+											<option value='adult 4 '>Adult 4 </option>
+											<option value='adult 5 '>Adult 5 </option>
+											<option value='adult 6'>Adult 6</option>
+											<option value='adult 7'>Adult 7</option>
+											<option value='adult 8'>Adult 8</option>
+											<option value='adult 9'>Adult 9</option>
+											<option value='adult 10'>Adult 10</option>
+											<option value='adult 11'>Adult 11</option>
+										</select>
+									</div>
+									<div class="flex flex-between">
+										<label>Sandwich Preference:</label>
+										<select id="sandwich" name="sandwich">
+											<option value="0">Please Select</option>
+											<option value="tuna">Tuna</option>
+											<option value="egg">Egg</option>
+											<option value="cc">Cream Cheese</option>
+											<option value="plain">Plain</option>
+											<option value="cheese">Hard Cheese</option>
+										</select>
+									</div>
 								</div>
-								<div class="flex flex-between">
-									<label>Sandwich Preference:</label>
-									<select id="sandwich" name="sandwich">
-										<option value="0">Please Select</option>
-										<option value="tuna">Tuna</option>
-										<option value="egg">Egg</option>
-										<option value="cc">Cream Cheese</option>
-										<option value="plain">Plain</option>
-										<option value="cheese">Hard Cheese</option>
-									</select>
+								<div id="general_info_girls" style="display: none;">
+									Please mark your calendars. The trip dates will be: Wednesday, 19 Adar/March 19 6:30pm - Sunday, 23 Adar/March 23 1:00pm
+									<input type="hidden" name="shoe" id="shoe" value="" />
+									<input type="hidden" name="sandwich" id="sandwich" value="" />
 								</div>
 							</div>
 							<div class="modal-section flex2">
@@ -633,8 +641,8 @@
 			e.preventDefault()
 			let errors = []
 			const needed = [
-				{ elem: '#shoe', type: 'select', error: 'You need to enter what shoe size your child needs.' },
-				{ elem: '#sandwich', type: 'select', error: 'You need to enter which sandwhich your child would like to have.' },
+				{ elem: '#shoe', type: 'select', error: 'You need to enter what shoe size your child needs.', gender: 'M' },
+				{ elem: '#sandwich', type: 'select', error: 'You need to enter which sandwhich your child would like to have.', gender: 'M' },
 				{
 					elem: '.allergy', type: 'radio', error: 'You must indicate whether your child has any allergies or not.',
 					yes: [
@@ -665,8 +673,10 @@
 			for (let obj of needed) {
 				switch (obj.type) {
 					case 'select':
-						if (parseInt($(obj.elem).val()) === 0) errors.push(obj.error)
-						break;
+						if (obj.gender == $("#ch_info #gender").val()) {
+							if (parseInt($(obj.elem).val()) === 0) errors.push(obj.error)
+							break;
+						}
 					case 'val':
 						if (!$(obj.elem).val().trim().length) errors.push(obj.error)
 						break
@@ -1157,10 +1167,17 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			$("#ch_info #initials").val(user.first.substr(0, 1) + user.last.substr(0, 1))
 
 			$("#ch_info #chidonAnswer").val(user.poll)
+			$("#ch_info #gender").val(user.gender)
 
-			if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
-			else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
-
+			if (user.gender == 'M') {
+				$("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
+				$("#ch_info #general_info_girls").hide()
+				$("#ch_info #general_info_boys").show()
+			} else if (user.gender == 'F') {
+				$("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
+				$("#ch_info #general_info_boys").hide()
+				$("#ch_info #general_info_girls").show()
+			}
 			$("#ch_info select").niceSelect('update')
 
 			const now =  Math.floor(new Date().getTime() / 1000)
@@ -1621,8 +1638,16 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 						$("#ch_info input[type='radio']").checked = false
 
 						const user = children.filter(child => child.user_id == user_id)[0]
-						if (user.gender == 'M') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
-						else if (user.gender == 'F') $("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
+						$("#ch_info #gender").val(user.gender)
+						if (user.gender == 'M') {
+							$("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
+							$("#ch_info #general_info_girls").hide()
+							$("#ch_info #general_info_boys").show()
+						} else if (user.gender == 'F') {
+							$("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
+							$("#ch_info #general_info_boys").hide()
+							$("#ch_info #general_info_girls").show()
+						}
 
 						// reset modal
 						if (! ultimate_info[user_id]) {
@@ -1772,10 +1797,22 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 
 		function checkExtraInfo() {
 			if (ultimate_trip.length && $(".ultimate_trip").eq(0).is(":checked")) {
-				for (let user of ultimate_trip) {
-					if (!ultimate_info[user]) {
-						$("#ch_info #user_id").val(user)
+				for (let user_id of ultimate_trip) {
+					if (!ultimate_info[user_id]) {
+						$("#ch_info #user_id").val(user_id)
 						$("#ch_info input[type='radio']").checked = false
+						// get user info based off user_id
+						const user = children.filter(child => child.user_id == user_id)[0]
+						$("#ch_info #gender").val(user.gender)
+						if (user.gender == 'M') {
+							$("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/ELVwV09M8UcLXTKDcU11jm&sa=D&source=docs&ust=1707497076465499&usg=AOvVaw3ncVYXYQpGw9lfFfwbwh_8')
+							$("#ch_info #general_info_girls").hide()
+							$("#ch_info #general_info_boys").show()
+						} else if (user.gender == 'F') {
+							$("#ch_info #whatsapp_link").attr('href', 'https://www.google.com/url?q=https://chat.whatsapp.com/L1yBnmDuIjz9n97GFowCDo&sa=D&source=docs&ust=1707497076465575&usg=AOvVaw2YGuGtyKFejzBOvuMgK4sU')
+							$("#ch_info #general_info_boys").hide()
+							$("#ch_info #general_info_girls").show()
+						}
 						$("#ch_info").modal('show')
 						return false
 					}
