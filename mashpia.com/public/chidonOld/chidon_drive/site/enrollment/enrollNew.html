@@ -720,9 +720,8 @@
 				const allergies = $("#allergies").val()
 				const in_zone = parseInt($(".in_zone").val())
 
-				const walking = {}
-				walking.thurs = parseInt($(".thurs_walking:checked").val())
-				walking.ms = parseInt($(".ms_walking:checked").val())
+				thurs_walking = parseInt($(".thurs_walking:checked").val())
+				ms_walking = parseInt($(".ms_walking:checked").val())
 
 				const chidon_answer = $("#chidonAnswer").val()
 				let acc = {}
@@ -747,7 +746,7 @@
 					acc.zone = 0
 				}
 				acc.phone = $("#acc_phone").val()
-				let info = { shoe, sandwich, allergy, allergies, in_zone, walking, chidon_answer }
+				let info = { shoe, sandwich, allergy, allergies, in_zone, walking, chidon_answer, thurs_walking, ms_walking }
 				info.accomodation = acc
 				ultimate_info[user_id] = info
 				if (editing_mode) {
