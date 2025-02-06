@@ -1365,6 +1365,11 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 		}
 
 		async function processPage(admin) {
+			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
+			if (schoolNotConfirmed.length) {
+				alert('Some of your children will not show up because their school has not yet confirmed their eligibility.')
+			}
+
 			// check if there's any family balance that can be applied to registration
 			const bal = children[0].familyBalance || 0
 			if (bal > 0) {
@@ -1374,9 +1379,6 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				alert(text)
 			}
 			
-			if (schoolNotConfirmed.length) {
-				alert('Some of your children will not show up because their school has not yet confirmed their eligibility.')
-			}
 			let html = ''
 			for (let child of eligible) {
 				console.log(child)
