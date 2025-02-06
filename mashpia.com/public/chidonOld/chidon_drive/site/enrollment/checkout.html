@@ -771,13 +771,10 @@
                         return false;
                     }
                     // find out if cc num is mastercard, visa or amex
-                    const firstNum = cc.num.charAt(0);
-                    const firstTwo = cc.num.substring(0, 2);
-                    if (firstTwo === '34' || firstTwo === '37') {
-                        last_four = cc.num.substring(11);  // Get last 4 of 15 digits
-                    }else {
-                        last_four = cc.num.substring(12);  // Get last 4 of 16 digits
-                    }
+                    let card_num = String(cc.num)
+                    let card_length = card_num.length
+                    if (card_length == 16) last_four = card_num.substring(12)
+                    else if (card_length == 15) last_four = card_num.substring(11)
                 }
             } else if (totalAfterCredit < 0) {
                 creditVal = parseInt($(".credit:checked").val());
