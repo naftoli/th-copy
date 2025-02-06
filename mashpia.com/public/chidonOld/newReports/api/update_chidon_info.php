@@ -54,6 +54,10 @@ try {
             ) {
                 $val = empty($val) ? 0 : (int) $val;
             }
+            // make sure to have null for date_paid
+            if ($field == 'date_paid') {
+                $val = NULL;
+            }
             
             $sql = "UPDATE " . $table . " SET " . $field . " = :val WHERE user_id = :user AND year = :year";
             $stmt = $MASHPIA_DB->prepare($sql);

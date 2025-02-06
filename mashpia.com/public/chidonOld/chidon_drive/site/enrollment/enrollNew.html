@@ -1240,9 +1240,9 @@
 			const only_schools = [817]
 			let registered = children.filter(child => child.date_paid > 0)
 			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
-			let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
+			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
 			if (Cookies.get('naftoli')) {
-				eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
+				eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
 			}
 			children.forEach(child => {
 				console.log(child.track, child.date_paid, child.schoolConfirmed, only_schools.includes(parseInt(child.school_id)))
