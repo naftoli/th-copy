@@ -161,7 +161,7 @@
                 <td>{parseInt(row.khk_eligible) ? 'Yes' : 'No'}</td>
                 <td>
                   <b>{types[row.award]}</b><br/>
-                  <span className="smaller">{row.award ? row.khk_passed_tests ? khkAwardDescs[row.award] : awardDescs[types[row.award]] : ''}</span>
+                  <span className="smaller">{row.award ? row.khk_passed_tests ? khkAwardDescs[types[row.award]] : awardDescs[types[row.award]] : ''}</span>
                 </td>
                 <td>${row.raised}</td>
                 <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
