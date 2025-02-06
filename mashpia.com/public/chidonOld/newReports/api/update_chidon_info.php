@@ -17,7 +17,6 @@ $mapping = [
     'khk_eligible'  => 'users',
 ];
 
-$stmt = $MASHPIA_DB->prepare("update :table set :field = :val where user_id = :user and year = :year");
 $success = true;
 $MASHPIA_DB->beginTransaction();
 foreach ($input as $user_id => $more) {
@@ -28,14 +27,37 @@ foreach ($input as $user_id => $more) {
         if (array_key_exists($field, $mapping)) {
             $table = $mapping[$field];
         }
+        
+        $sql = "UPDATE " . $table . " SET " . $field . " = :val WHERE user_id = :user AND year = :year";
+        
+        if (!$stmt = $MASHPIA_DB->prepare($sql) || !$stmt->execute([
+            ':val' => $val,
+            ':user' => $user_id,
+            ':year' => $year
+        ])) {
+            $success = false;
+            // $stmt->debugDumpParams();
+            break;
+        }
+    }
+}$success = true;
+$MASHPIA_DB->beginTransaction();
+foreach ($input as $user_id => $more) {
+    foreach ($more as $field => $val) {
+        if ($field == 'school_id_chidon') {
+            $field = 'school_id';
+        }
+        if (array_key_exists($field, $mapping)) {
+            $table = $mapping[$field];
+        }
         if (! $stmt->execute([
-            ':table' => $table,
             ':field' => $field,
             ':val' => $val,
             ':user' => $user_id,
             ':year' => $year
         ])) {
             $success = false;
+            $stmt->debugDumpParams();
             break;
         }
     }
