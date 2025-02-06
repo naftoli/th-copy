@@ -435,7 +435,8 @@
     getSweaterInfo()
 
     function resetCart() {
-      if (cart.length) cart = cart.filter(item => item.desc.includes('reg') || item.desc === 'names')
+      // only remove celeb stuff and sweater stuff. look for 'celeb' and 'sweater' in cart desc
+      if (cart.length) cart = cart.filter(item => !item.desc.includes('celeb') && !item.desc.includes('sweater'))
     }
 
     function getSweaterInfo() {

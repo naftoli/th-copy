@@ -1780,10 +1780,6 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 
 		$(document).on('change', '.reg', async function (e) {
 			let id = $(this).attr('id')
-			if (!id) {
-				let class_names = $(this).attr('class').split(' ')
-				id = class_names[1] // get celeb_box_ship for celebration boxes shipping
-			}
 			const value = $(this).val()
 			if (parseInt(value) >= 0) {
 				addToCart(id, value) // allow children to register even if it's $0
