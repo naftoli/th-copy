@@ -1268,7 +1268,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				// save eligible children to local storage
 				if (window.localStorage) window.localStorage.setItem('eligible', JSON.stringify(eligible))
 				else Cookies.set('eligible', JSON.stringify(eligible))
-				processPage(admin)
+				processPage(admin, eligible)
 			}
 		}
 
@@ -1364,7 +1364,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			$("#ch_info .in_the_zone").val(1)
 		}
 
-		async function processPage(admin) {
+		async function processPage(admin, eligible) {
 			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
 			if (schoolNotConfirmed.length) {
 				alert('Some of your children will not show up because their school has not yet confirmed their eligibility.')
