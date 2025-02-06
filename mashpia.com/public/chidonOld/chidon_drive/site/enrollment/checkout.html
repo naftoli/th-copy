@@ -740,16 +740,10 @@
                         // find the last four digits
                         for (let card of cards) {
                             if (card.profile === card_id) {
-                                // get last four digits differenciate between mastercard, visa and amex
-                                switch (card.type) {
-                                    case 'MasterCard':
-                                    case 'Visa':
-                                        last_four = card.number.substring(12);
-                                        break;
-                                    case 'American Express':
-                                        last_four = card.number.substring(11);
-                                        break;
-                                }
+                                let card_num = String(card.number)
+                                // remove spaces
+                                card_num = card_num.replaceAll(' ', '')
+                                last_four = card_num.slice(-4)
                             }
                         }
                     } else {
@@ -772,9 +766,7 @@
                     }
                     // find out if cc num is mastercard, visa or amex
                     let card_num = String(cc.num)
-                    let card_length = card_num.length
-                    if (card_length == 16) last_four = card_num.substring(12)
-                    else if (card_length == 15) last_four = card_num.substring(11)
+                    last_four = card_num.slice(-4)
                 }
             } else if (totalAfterCredit < 0) {
                 creditVal = parseInt($(".credit:checked").val());
