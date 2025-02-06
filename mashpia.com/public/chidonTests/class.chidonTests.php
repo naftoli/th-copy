@@ -124,9 +124,6 @@ class ChidonTests
         $qry .= " ORDER BY s.school_name, class_grade, class_sub, last, first";
 //        echo $qry; exit;
         $stmt = $this->db->prepare($qry);
-        if (isset($_COOKIE['naftoli'])) {
-            echo "Year: $this->year, School: $school_id, Class: $class_id, User: $user_id, Gender: $this->genderOnly";
-        }
         if ($this->genderOnly) {
             if ($school_id > 0 && $class_id > 0 && $user_id > 0) {
                 $res = $stmt->execute([
