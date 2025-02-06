@@ -1209,7 +1209,7 @@
 			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
 			if (Cookies.get('naftoli')) {
-				eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
+				eligible = children.filter(child => child.track && (!child.date_paid > 0))
 			}
 
 			// figure out what to do

@@ -929,13 +929,13 @@ class KHK {
             $sql = "select khk_eligible from users where user_id = " . $id;
             $result = mysql_query($sql);
             $row = mysql_fetch_assoc($result);
-            if (intval($row['khk_eligible'])) $info[$id] = true;
-            else {
-                // check if child participated in chidon in past 4 yrs
-                $sql = "select * from th_chidon where user_id = " . $id . " and date_paid > 0 and year >= " . ($year - 4);
-                $result = mysql_query($sql);
-                $info[$id] = mysql_num_rows($result) >= 4;
-            }
+            $info[$id] = intval($row['khk_eligible']) ? true : false;
+            // else {
+            //     // check if child participated in chidon in past 4 yrs
+            //     $sql = "select * from th_chidon where user_id = " . $id . " and date_paid > 0 and year >= " . ($year - 4);
+            //     $result = mysql_query($sql);
+            //     $info[$id] = mysql_num_rows($result) >= 4;
+            // }
         }
         return $info;
     }
