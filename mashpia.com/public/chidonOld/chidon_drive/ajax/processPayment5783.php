@@ -1001,10 +1001,6 @@ $trans_id = 0;
 
 // Check if all database operations were successful
 if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && $ultimate) {
-    if (isset($_COOKIE['naftoli'])) {
-        $MASHPIA_DB->rollBack();
-        exit;
-    }
     // Now process the credit card
     if ($to_charge > 0) {
         $payment = processFee(); // Process the credit card payment
@@ -1047,8 +1043,12 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
             }
         }
     } else {
-        // If no charge, just commit the transaction
-        $MASHPIA_DB->commit();
+        if (isset($_COOKIE['naftoli'])) {
+            $MASHPIA_DB->rollBack();
+        } else {
+            // If no charge, just commit the transaction
+            $MASHPIA_DB->commit();
+        }
         saveAuthDesc();
         // Redeem coupons 
         redeemCoupons();
