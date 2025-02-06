@@ -25,7 +25,8 @@ $ct = new ChidonTests($year);
 require_once __DIR__ . '/../../../mobile/reg/ajax/encrypt.php';
 
 //******************* GLOBAL VARIABLES ***********************/
-$admin_id = encrypt_decrypt('decrypt', $_POST['admin_id']);
+$admin = $_POST['admin_id'];
+$admin_id = encrypt_decrypt('decrypt', $admin);
 $admin_email = $_POST['admin_email'];
 $payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
 $last_four = isset($_POST['last_four']) ? intval($_POST['last_four']) : 0;
