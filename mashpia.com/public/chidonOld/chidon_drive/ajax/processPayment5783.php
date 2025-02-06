@@ -344,9 +344,10 @@ function getDescriptions() {
                     else $code = 'RRHVN';
                     break;
                 default:
+                    $code = '';
                     continue;
             }
-            $user_tracks[$user_id] = $user_track;
+            $user_tracks[$user_id] = $code;
             $desc[] = [
                 'prefix'    => 'C',
                 'id'        => $user_id,
