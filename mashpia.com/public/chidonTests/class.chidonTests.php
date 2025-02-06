@@ -177,10 +177,12 @@ class ChidonTests
         }
         if ($res) {
             $this->children = $stmt->fetchAll();
-            // reset scores; marks
-            $this->scores = [];
-            $this->marks = [];
+        } else {
+            $this->children = [];
         }
+        // reset scores; marks
+        $this->scores = [];
+        $this->marks = [];
     }
 
     public function getStudents() {
