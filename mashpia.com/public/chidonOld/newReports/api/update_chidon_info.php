@@ -9,6 +9,20 @@ if ($admin_user['auth'] != 'super') {
     die('Access denied');
 }
 
+function getColumnTypes($table) {
+    global $MASHPIA_DB;
+    $columns = [];
+    $stmt = $MASHPIA_DB->query("SHOW COLUMNS FROM " . $table);
+    while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $columns[$row['Field']] = [
+            'type' => $row['Type'],
+            'null' => $row['Null'],
+            'default' => $row['Default']
+        ];
+    }
+    return $columns;
+}
+
 $input = json_decode(file_get_contents('php://input'), true);
 $table = "th_chidon";
 
@@ -16,6 +30,8 @@ $mapping = [
     'track_passed'  => 'th_chidon_info',
     'khk_eligible'  => 'users',
 ];
+
+$columns = getColumnTypes($table);
 
 $success = true;
 $MASHPIA_DB->beginTransaction();
@@ -29,14 +45,25 @@ try {
             if (array_key_exists($field, $mapping)) {
                 $table = $mapping[$field];
             }
+            // figure out if val needs to be a string or an int
+            if (
+                strpos($columns[$field]['type'], 'int') !== false || 
+                strpos($columns[$field]['type'], 'float') !== false || 
+                strpos($columns[$field]['type'], 'decimal') !== false || 
+                strpos($columns[$field]['type'], 'tinyint') !== false 
+            ) {
+                $val = empty($val) ? 0 : (int) $val;
+            }
             
             $sql = "UPDATE " . $table . " SET " . $field . " = :val WHERE user_id = :user AND year = :year";
-            
-            if (!$stmt = $MASHPIA_DB->prepare($sql) || !$stmt->execute([
+            $stmt = $MASHPIA_DB->prepare($sql);
+            $res = $stmt->execute([
                 ':val' => $val,
                 ':user' => $user_id,
                 ':year' => $year
-            ])) {
+            ]);
+            $stmt->debugDumpParams();
+            if (! $res) {
                 $success = false;
                 $error = $stmt->errorInfo();
                 break;
