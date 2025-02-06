@@ -768,20 +768,22 @@ function saveTripInfo() {
 }
 
 function saveAuthDesc() {
-    global $MASHPIA_DB, $year;
+    global $MASHPIA_DB, $year, $admin_id;
 
     $stmt = $MASHPIA_DB->prepare("
         INSERT INTO authorize_transactions 
         SET 
             description = :desc, 
             long_desc = :desc, 
-            year = :year
+            year = :year, 
+            admin_id = :admin
     ");
     $desc = getAuthDesc();
     $stmt->execute([
         ':desc' => $desc,
         ':long_desc' => $desc,
-        ':year' => $year
+        ':year' => $year, 
+        ':admin' => $admin_id
     ]);
 }
 
