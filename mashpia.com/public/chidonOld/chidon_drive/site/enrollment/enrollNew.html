@@ -1242,8 +1242,11 @@
 			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
 			if (Cookies.get('naftoli')) {
-				eligible = children.filter(child => child.track && (!child.date_paid > 0))
+				eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			}
+			children.forEach(child => {
+				console.log(child.track, child.date_paid, child.schoolConfirmed, only_schools.includes(parseInt(child.school_id)))
+			})
 
 			// figure out what to do
 			if (!registered.length && !eligible.length) {
