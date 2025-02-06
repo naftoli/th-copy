@@ -1043,12 +1043,8 @@ if ($registered && $celebBoxesProcessed && $sweatersProcessed && $tripsSaved && 
             }
         }
     } else {
-        if (isset($_COOKIE['naftoli'])) {
-            $MASHPIA_DB->rollBack();
-        } else {
-            // If no charge, just commit the transaction
-            $MASHPIA_DB->commit();
-        }
+        // If no charge, just commit the transaction
+        $MASHPIA_DB->commit();
         saveAuthDesc();
         // Redeem coupons 
         redeemCoupons();
