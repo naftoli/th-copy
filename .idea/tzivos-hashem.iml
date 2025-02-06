@@ -8,6 +8,8 @@
       <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/camps/includes" isTestSource="false" packagePrefix="camps" />
       <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/mobile/reg/plugins/bootstrap-fileinput/" isTestSource="false" packagePrefix="kartik\plugins\fileinput\" />
       <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/reports/shipping/classes" isTestSource="false" packagePrefix="shipping" />
+      <sourceFolder url="file://$MODULE_DIR$/mashpia.com/public/classes/authorize/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/mashpia.com/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/authorizenet/authorizenet" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/composer" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/doctrine/instantiator" />
