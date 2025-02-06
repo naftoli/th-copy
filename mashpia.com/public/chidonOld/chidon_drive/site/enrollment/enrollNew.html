@@ -1365,16 +1365,6 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 		}
 
 		async function processPage(admin) {
-			let registered = children.filter(child => child.date_paid > 0)
-			let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
-			if (Cookies.get('naftoli')) {
-				registered = children
-				eligible = children
-			}
-			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
-			console.log(children)
-			console.log(eligible)
-
 			// check if there's any family balance that can be applied to registration
 			const bal = children[0].familyBalance || 0
 			if (bal > 0) {
