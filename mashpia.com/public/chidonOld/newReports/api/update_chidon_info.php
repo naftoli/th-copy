@@ -62,7 +62,6 @@ try {
                 ':user' => $user_id,
                 ':year' => $year
             ]);
-            $stmt->debugDumpParams();
             if (! $res) {
                 $success = false;
                 $error = $stmt->errorInfo();
