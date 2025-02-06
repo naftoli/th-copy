@@ -19,53 +19,46 @@ $mapping = [
 
 $success = true;
 $MASHPIA_DB->beginTransaction();
-foreach ($input as $user_id => $more) {
-    foreach ($more as $field => $val) {
-        if ($field == 'school_id_chidon') {
-            $field = 'school_id';
-        }
-        if (array_key_exists($field, $mapping)) {
-            $table = $mapping[$field];
-        }
-        
-        $sql = "UPDATE " . $table . " SET " . $field . " = :val WHERE user_id = :user AND year = :year";
-        
-        if (!$stmt = $MASHPIA_DB->prepare($sql) || !$stmt->execute([
-            ':val' => $val,
-            ':user' => $user_id,
-            ':year' => $year
-        ])) {
-            $success = false;
-            // $stmt->debugDumpParams();
-            break;
-        }
-    }
-}$success = true;
-$MASHPIA_DB->beginTransaction();
-foreach ($input as $user_id => $more) {
-    foreach ($more as $field => $val) {
-        if ($field == 'school_id_chidon') {
-            $field = 'school_id';
-        }
-        if (array_key_exists($field, $mapping)) {
-            $table = $mapping[$field];
-        }
-        if (! $stmt->execute([
-            ':field' => $field,
-            ':val' => $val,
-            ':user' => $user_id,
-            ':year' => $year
-        ])) {
-            $success = false;
-            $stmt->debugDumpParams();
-            break;
+
+try {
+    foreach ($input as $user_id => $more) {
+        foreach ($more as $field => $val) {
+            if ($field == 'school_id_chidon') {
+                $field = 'school_id';
+            }
+            if (array_key_exists($field, $mapping)) {
+                $table = $mapping[$field];
+            }
+            
+            $sql = "UPDATE " . $table . " SET " . $field . " = :val WHERE user_id = :user AND year = :year";
+            
+            if (!$stmt = $MASHPIA_DB->prepare($sql) || !$stmt->execute([
+                ':val' => $val,
+                ':user' => $user_id,
+                ':year' => $year
+            ])) {
+                $success = false;
+                $error = $stmt->errorInfo();
+                break;
+            }
         }
     }
-}
-if ($success) {
-    $MASHPIA_DB->commit();
-} else {
+} catch (PDOException $e) {
+    $success = false;
     $MASHPIA_DB->rollBack();
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }
 
-echo json_encode(['success' => $success]);
+if ($success) {
+    $MASHPIA_DB->commit();
+    echo json_encode(['success' => $success]);
+} else {
+    $MASHPIA_DB->rollBack();
+    echo json_encode([
+        'success' => $success,
+        'error' => $error
+    ]);
+}
