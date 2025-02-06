@@ -1223,16 +1223,6 @@
 				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
 				if (Cookies.get('naftoli')) {
 					child.schoolConfirmed = 1
-					if (!child.track) {
-						const url = new URL(location.href);
-						const params = new URLSearchParams(url.search);
-						const track = params.get('track')
-						if (!track) {
-							alert('You have not indicated which track to use!')
-							return false
-						}
-						child.track = track
-					}
 				}
 			}
 
