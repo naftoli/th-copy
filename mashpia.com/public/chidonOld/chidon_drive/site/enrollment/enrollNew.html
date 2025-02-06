@@ -1204,10 +1204,10 @@
 			}
 
 			// only let ultimate trip kids to update their trip info
-			const only_schools = []
+			const only_schools = [817]
 			let registered = children.filter(child => child.date_paid)
-			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
-			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(child.school_id))
+			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
 			if (Cookies.get('naftoli')) {
 				registered = children
 				eligible = children

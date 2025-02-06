@@ -620,12 +620,13 @@
     }
 
     // when to show link for chidon registration
+    let show_reg = false;
     if (
       Cookies.get('naftoli') ||
       (now > 1739163600 && now < 1739422800) ||
       (Cookies.get('override') && now < 1739854800)
     ) {
-      $(".chidon_reg").show()
+      show_reg = true;
     }
 
     // allow parents to swipe to open a child's account.
@@ -675,7 +676,6 @@
     var parent_id;
     var allChildren = []
     var childrenToRegister = [];
-    var show_reg = false;
     $.post('ajax/getChildren.php', {
       admin: admin
     }, function (success) {
@@ -729,7 +729,7 @@
 
         for (var c in children) {
           var child = children[c]
-          if ([45, 805, 255, 726, 614, 60, 54, 598].includes(parseInt(child.school_id))) {
+          if ([817].includes(parseInt(child.school_id))) {
             show_reg = true
           }
 
@@ -776,6 +776,7 @@
           $(".chilrens").append(html);
           setSwiper();
           $(".year").text(year);
+          if (show_reg) $(".chidon_reg").show()
         }
       }
     });
