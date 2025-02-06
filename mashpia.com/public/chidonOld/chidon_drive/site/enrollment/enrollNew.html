@@ -66,6 +66,8 @@
 		.flex-kids {
 			display: flex;
 			align-items: flex-start;
+			flex-wrap: nowrap;
+			gap: 15px;
 		}
 
 		/*.form input[type='checkbox'], .form input[type='radio'] {*/
@@ -109,6 +111,8 @@
 			border-radius: 15px;
 			width: 90px;
 			margin-top: 15px;
+			flex-shrink: 0;
+			order: -1; /* Ensures image always comes first */
 		}
 
 		h5 .title {
@@ -1410,7 +1414,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 						// add few options for myshliach only
 						else if (parseInt(child.school_id) === 61) {
 							text += `<option value="east">MyShliach NY Retreat</option>
-											<option value="europe">MyShliach EU Retreat</option>`
+									 <option value="europe">MyShliach EU Retreat</option>`
 						}
 						text += `<option value="west">West Coast</option>
 											<option value="no_trip">No Trip</option></select>`
