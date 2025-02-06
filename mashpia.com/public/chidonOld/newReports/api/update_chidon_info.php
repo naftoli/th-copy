@@ -22,6 +22,9 @@ $success = true;
 $MASHPIA_DB->beginTransaction();
 foreach ($input as $user_id => $more) {
     foreach ($more as $field => $val) {
+        if ($field == 'school_id_chidon') {
+            $field = 'school_id';
+        }
         if (array_key_exists($field, $mapping)) {
             $table = $mapping[$field];
         }

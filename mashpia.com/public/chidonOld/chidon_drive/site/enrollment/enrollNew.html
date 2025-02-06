@@ -1205,11 +1205,11 @@
 
 			// only let ultimate trip kids to update their trip info
 			const only_schools = [817]
-			let registered = children.filter(child => child.date_paid)
-			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
-			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
+			let registered = children.filter(child => child.date_paid > 0)
+			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
+			let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
 			if (Cookies.get('naftoli')) {
-				eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+				eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			}
 
 			// figure out what to do
@@ -1330,8 +1330,8 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 		}
 
 		async function processPage(admin) {
-			let registered = children.filter(child => child.date_paid)
-			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			let registered = children.filter(child => child.date_paid > 0)
+			let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			if (Cookies.get('naftoli')) {
 				registered = children
 				eligible = children

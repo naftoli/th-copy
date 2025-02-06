@@ -29,8 +29,9 @@ function getChidonInfo($chidon_ids, $user_ids, $user_serials) {
         // make sure that there's no characters other than numbers or commas
         $chidon_ids = preg_replace('/[^0-9,]+/', '', $chidon_ids);
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * FROM th_chidon 
-            JOIN users USING (user_id) 
+            SELECT *, u.school_id as school_id, tc.school_id as school_id_chidon 
+            FROM th_chidon tc 
+            JOIN users u USING (user_id) 
             JOIN classes USING (class_id) 
             WHERE year = :year AND th_chidon_id in ($chidon_ids)
         ");
@@ -45,8 +46,9 @@ function getChidonInfo($chidon_ids, $user_ids, $user_serials) {
         // make sure that there's no characters other than numbers and or commas
         $user_ids = preg_replace('/[^0-9,]+/', '', $user_ids);
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * FROM th_chidon 
-            JOIN users USING (user_id) 
+            SELECT *, u.school_id as school_id, tc.school_id as school_id_chidon 
+            FROM th_chidon tc 
+            JOIN users u USING (user_id) 
             JOIN classes USING (class_id) 
             WHERE year = :year AND user_id in ($user_ids)
         ");
@@ -61,8 +63,9 @@ function getChidonInfo($chidon_ids, $user_ids, $user_serials) {
         // make sure that there's no characters other than numbers and or commas
         $user_serials = preg_replace('/[^0-9,]+/', '', $user_serials);
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * FROM th_chidon 
-            JOIN users USING (user_id) 
+            SELECT *, u.school_id as school_id, tc.school_id as school_id_chidon 
+            FROM th_chidon tc 
+            JOIN users u USING (user_id) 
             JOIN classes USING (class_id) 
             WHERE year = :year AND user_id in (
                 SELECT user_id FROM users WHERE user_serial in ($user_serials)
@@ -328,25 +331,29 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                 "extra_purchases",
                 "th_chidon_id",
                 "year",
-                "size",
                 "reg_date",
+                "size",
                 "paid",
                 "date_paid",
                 "paid_by",
                 "book",
+                "parent_id",
+                "notes",
+                "answers",
+                "sandwich",
+                "height",
+                "weight",
+                "ski",
+                "outerwear",
+                "shoe_size",
                 "host",
                 "between_streets1",
                 "between_streets2",
                 "host_number",
                 "allergies",
-                "sandwich",
                 "walking_zone",
                 "approval",
-                "shoe_size",
                 "deleted",
-                "parent_id",
-                "notes",
-                "answers",
                 "host_street",
                 "host_street_num",
                 "host_street_num_suffix",
@@ -364,11 +371,11 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                 "reason",
                 "thurs_walking",
                 "ms_walking",
-                "khk_experience",
                 "confirmed_info"
             ];
 
             $not_to_edit = [
+                'reg_date',
                 'personal_credit',
                 'class_grade',
                 'extra_purchases',
@@ -387,7 +394,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                 'user_serial'
             ];
             
-            $fields = ['first', 'last', 'admin_id', 'user_id', 'user_serial', 'school_id', 'class_id', 'class_grade', 'class_sub', 
+            $fields = ['first', 'last', 'admin_id', 'user_id', 'user_serial', 'school_id', 'class_id', 'class_grade', 'class_sub', 'school_id_chidon', 
                 'personal_credit', 'coupon_code', 'raised', 'family_balance', 'track_passed', 'khk_eligible'];
             $stmt = $MASHPIA_DB->query("show columns from th_chidon");
             foreach ( $stmt->fetchAll() as $row ) {
