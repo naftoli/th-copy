@@ -22,8 +22,10 @@ $coupon = new CouponCode($MASHPIA_DB, $year);
 require_once __DIR__ . '/../../../chidonTests/class.chidonTests.php';
 $ct = new ChidonTests($year);
 
+require_once __DIR__ . '/../../../mobile/reg/ajax/encrypt.php';
+
 //******************* GLOBAL VARIABLES ***********************/
-$admin_id = $_POST['admin_id'];
+$admin_id = encrypt_decrypt('decrypt', $_POST['admin_id']);
 $admin_email = $_POST['admin_email'];
 $payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
 $last_four = isset($_POST['last_four']) ? intval($_POST['last_four']) : 0;
@@ -45,9 +47,6 @@ $sweater_info = [];
 $emailMsg = '';
 $credits = [];
 $user_tracks = [];
-
-require_once __DIR__ . '/../../../mobile/reg/ajax/encrypt.php';
-$admin_id = encrypt_decrypt('decrypt', $admin_id);
 
 // Check if there's already a purchase in progress
 $stmtP = $MASHPIA_DB->prepare("SELECT COUNT(*) as total FROM purchase_processing WHERE admin_id = :admin_id");
