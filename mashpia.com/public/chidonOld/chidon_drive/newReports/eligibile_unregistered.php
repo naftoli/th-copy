@@ -178,9 +178,9 @@ getAdminInfo();
         $(".save").click( function () {
             // find out if checkbox is checked
             const id = $(this).attr('id')
-            const checked = $(this).prev().find('input').is(':checked') ? 1 : 0; 
+            const checked = $(this).parent().parent().find('.contacted').is(':checked') ? 1 : 0
             // get notes
-            const notes = $(this).prev().find('textarea').val();
+            const notes = $(this).parent().parent().find('.notes').val()
             // send to server
             $.ajax({
                 url: 'saveNotes.php',
