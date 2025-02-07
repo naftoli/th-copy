@@ -510,14 +510,11 @@ function checkPersonalCredit($user_id, $amount) {
         ':year' => $year
     ]);
     $rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
-    $school_id = $rowUser['school_id'];
-    $class_id = $rowUser['class_id'];
-    $th_chidon_id = $rowUser['th_chidon_id'];
     $child = [
         'user_id' => $user_id,
-        'school_id' => $school_id,
-        'class_id' => $class_id,
-        'th_chidon_id' => $th_chidon_id
+        'school_id' => $rowUser['school_id'],
+        'class_id' => $rowUser['class_id'],
+        'th_chidon_id' => $rowUser['th_chidon_id']
     ];
     // find out what track child achieved
     $track = $ct->getHighestTrackPassed($child)['highest_track'];
