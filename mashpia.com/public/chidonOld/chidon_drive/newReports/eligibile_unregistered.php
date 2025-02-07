@@ -16,7 +16,7 @@ function getRegInfo() {
     global $reg, $year, $users, $schools, $admin_user;
 
     $sqlReg = "select u.user_id, u.user_serial, u.first, u.last, u.school_id, u.class_id, c.class_grade, tc.th_chidon_id, 
-                tc.paid, tc.parent_id, tc.test_type, tc.reward_type, s.school_name, c.class_grade, c.class_sub
+                tc.paid, tc.parent_id, tc.test_type, tc.reward_type, s.school_name, c.class_grade, c.class_sub, tc.contacted_parent, tc.parent_notes 
             from users u 
             join th_chidon tc using (user_id)  
             join schools s on s.school_id = u.school_id 
@@ -46,18 +46,12 @@ function getTracks() {
     $types = $ct->getTypes();
 
     foreach ($users as $user) {
+        // highest track includes comparing with reward type
         $info = $ct->getHighestTrackPassed($user);
         $highest = $info['highest_track'];
-        $reward_type = $user['reward_type'];
-        if ($reward_type !== 'highest track passed') {
-            if ($highest == '') $highest = $reward_type;
-            else {
-                $key1 = array_search($highest, array_keys($types));
-                $key2 = array_search($reward_type, array_keys($types));
-                if ($key2 > $key1) $highest = $reward_type;
-            }
-        }
-        $tracks[$user['user_id']] = isset($types[$highest]) ? $types[$highest] : 'none';
+        // get cumulative
+        $cumulative = $ct->calculateCumulative($user, $ct->getScores());
+        $tracks[$user['user_id']] = $cumulative == 'iyun' ? 'Iyun' : isset($types[$highest]) ? $types[$highest] : 'none';
     }
 }
 
@@ -89,11 +83,49 @@ getAdminInfo();
     <meta charset="utf8" />
     <title>Unegistered Report</title>
     <style>
-        tr, th, td {
-            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-            font-size: 12px;
-            padding: 8px;
-            border-bottom: 1px solid grey;
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            font-family: Arial, sans-serif;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            color: #333;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        input[type="checkbox"] {
+            transform: scale(1.2);
+            margin: 0 5px;
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -114,6 +146,9 @@ getAdminInfo();
         <th>Parent Name</th>
         <th>Parent Email</th>
         <th>Parent Phone</th>
+        <th>Contacted Parent</th>
+        <th>Notes</th>
+        <th>Save</th>
     </tr>
     <?php
     $i = 1;
@@ -129,9 +164,48 @@ getAdminInfo();
         $phone .= $adminInfo['admin_phone_work'] ? $phone == '' ? $adminInfo['admin_phone_work'] : ("<br />" . $adminInfo['admin_phone_work']) : '';
         $phone .= $adminInfo['admin_phone_home'] ? $phone == '' ? $adminInfo['admin_phone_home'] : ("<br />" . $adminInfo['admin_phone_home']) : '';
         echo "<td>" . ($adminInfo['first'] . ' ' . $adminInfo['last']) . "</td><td>" . $adminInfo['admin_email'] . "</td><td>" .
-            $phone . "</td></tr>";
+            $phone . "</td><td><input type='checkbox' name='contacted_parent' class='contacted_parent' ";
+        if (intval($row['contacted_parent'])) echo "checked ";    
+        echo "</td><td><textarea name='notes' class='notes'>" . $row['parent_notes'] . "</textarea></td><td>
+            <button class='save' id='" . $row['th_chidon_id'] . "'>Save</button></td></tr>";
     }
     ?>
 </table>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function() {
+        $(".save").click( function () {
+            // find out if checkbox is checked
+            const id = $(this).attr('id')
+            const checked = $(this).prev().find('input').is(':checked') ? 1 : 0; 
+            // get notes
+            const notes = $(this).prev().find('textarea').val();
+            // send to server
+            $.ajax({
+                url: 'saveNotes.php',
+                type: 'POST',
+                data: {
+                    id, checked, notes
+                },
+                success: function(response) {
+                    const res = JSON.parse(response)
+                    alert(res.message)
+                    if (! res.success) {
+                        console.log(res.error)
+                    }
+                }
+            })
+        })
+        $(".contacted_parent").click( function() {
+            const checked = $(this).is(':checked') ? 1 : 0;
+            if (!checked) {
+                // grey out the notes section
+                $(this).prev().find('textarea').attr('disabled', true)
+            } else {
+                $(this).prev().find('textarea').attr('disabled', false)
+            }
+        })
+    })
+</script>
 </html>
