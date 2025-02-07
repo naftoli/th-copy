@@ -96,6 +96,7 @@ class ChidonTests
     }
 
     public function setStudents($school_id = 0, $class_id = 0, $user_id = 0) {
+        echo "School ID: $school_id, Class ID: $class_id, User ID: $user_id<br />";
         $qry = "
             SELECT 
                 tc.*,
