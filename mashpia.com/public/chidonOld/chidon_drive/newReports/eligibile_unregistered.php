@@ -164,7 +164,7 @@ getAdminInfo();
         $phone .= $adminInfo['admin_phone_work'] ? $phone == '' ? $adminInfo['admin_phone_work'] : ("<br />" . $adminInfo['admin_phone_work']) : '';
         $phone .= $adminInfo['admin_phone_home'] ? $phone == '' ? $adminInfo['admin_phone_home'] : ("<br />" . $adminInfo['admin_phone_home']) : '';
         echo "<td>" . ($adminInfo['first'] . ' ' . $adminInfo['last']) . "</td><td>" . $adminInfo['admin_email'] . "</td><td>" .
-            $phone . "</td><td><input type='checkbox' name='contacted_parent' class='contacted_parent' ";
+            $phone . "</td><td><input type='checkbox' name='contacted' class='contacted' ";
         if (intval($row['contacted_parent'])) echo "checked ";    
         echo "</td><td><textarea name='notes' class='notes'>" . $row['parent_notes'] . "</textarea></td><td>
             <button class='save' id='" . $row['th_chidon_id'] . "'>Save</button></td></tr>";
