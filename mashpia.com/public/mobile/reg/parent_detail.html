@@ -444,9 +444,9 @@
                               <br/>
                               <!--                                                        {{/if}}-->
                               {{#if this.editUltimateTrip}}
-                                <button class="btn btn-primary ultimate_trip">
+                                <!-- <button class="btn btn-primary ultimate_trip">
                                   <span>Edit Ultimate Trip Info</span>
-                                </button>
+                                </button> -->
                               {{/if}}
                               {{#if this.show_report_cards}}
                               <button class="btn btn-primary report-card"><span>View Report Card</span></button>
@@ -723,7 +723,7 @@
 
         for (var c in children) {
           var child = children[c]
-          if (!show_reg && [817].includes(parseInt(child.school_id))) {
+          if (!show_reg && [185, 470, 472, 726, 817].includes(parseInt(child.school_id))) {
             show_reg = true
           }
 

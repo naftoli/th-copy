@@ -330,9 +330,9 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">Ultimate Chidon Experience <span id="user_name"></span></h5>
-					<button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
+					<!-- <button type="button" class="close modal-close" data-dismiss="modal" aria-label="Close">
 						X
-					</button>
+					</button> -->
 				</div>
 				<div class="modal-body">
 					<p class="modal-notice">In order to reserve for the ultimate chidon experience, we need some more
@@ -402,6 +402,8 @@
 								Please fill out where your child will be staying in Crown Heights. 
 								<br /><br />
 								If you currently are not aware of where your child will be staying, please fill out 770 Estern Parkway and come back to edit as soon as you know.
+								<br /><br />
+								Editing will become available on Thurs. Feb. 13.
 								<br /><br />
 								Please understand that for your child to be part of the program the address must be filled out no later than the 12 Adar.
 							</p>
@@ -1179,16 +1181,16 @@
 
 		function getTrackText(track, ultimate) {
 			let trackText = {
-				'Yesod': "A Sweater, Gift & Yesod Final",
-				'Yediah': "A Sweater, Gift, Prizes & Yediah Final",
-				'Havonah': "A Sweater, Gift, Prizes, Trip & Havonah Final",
-				'Iyun': "A Sweater, Gift, Prizes, Trip & Iyun Final",
+				'Yesod': "Sweater, Gift & Yesod Final",
+				'Yediah': "Sweater, Gift, Prizes & Yediah Final",
+				'Havonah': "Sweater, Gift, Prizes, Trip & Havonah Final",
+				'Iyun': "Sweater, Gift, Prizes, Trip & Iyun Final",
 			}
 			let ultimateText = {
-				'Yesod': "A Sweater, Gift, Yesod & KHK Final",
-				'Yediah': "A Sweater, Gift, Yediah & KHK Final",
-				'Havonah': "A Sweater, Gift, Prizes, Trip, Havonah & KHK Final",
-				'Iyun': "A Sweater, Gift, Prizes, Trip, Iyun & KHK Final",
+				'Yesod': "Sweater, Gift, Yesod & KHK Final",
+				'Yediah': "Sweater, Gift, Yediah & KHK Final",
+				'Havonah': "Sweater, Gift, Prizes, Trip, Havonah & KHK Final",
+				'Iyun': "Sweater, Gift, Prizes, Trip, Iyun & KHK Final",
 			}
 
 			return ultimate ? ultimateText[track] : trackText[track]
@@ -1244,7 +1246,7 @@
 			}
 
 			// only let ultimate trip kids to update their trip info
-			const only_schools = [817]
+			const only_schools = [185, 470, 472, 726, 817]
 			let registered = children.filter(child => child.date_paid > 0)
 			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
@@ -1405,7 +1407,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 							 <div style="margin-left: 20px;">
 								<h5 class="formDetails">Dear ${child.first},<br /><br />
 								Mazal Tov! You passed the <span class="track"><b>${child.track}</b></span>
-								Track. You are eligible for ${trackText}.<h5>`
+								Track. You are eligible for a ${trackText}.<h5>`
 
 				const tripDates = {
 					M: 'Wednesday, 26 Adar/March 26 6:30pm - Sunday, 1 Nissan/March 30 1:00pm',
