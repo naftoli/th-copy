@@ -51,9 +51,16 @@ $exceptions = [
     3 => []
 ];
 $exceptionsDates = [
+    1 => [
+      61 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'))
+    ],
     2 => [
-        54 => new DateTime('2025-01-09 00:00:00', new DateTimeZone('America/New_York')),
-        108 => new DateTime('2025-01-22 00:00:00', new DateTimeZone('America/New_York'))
+      54 => new DateTime('2025-01-09 00:00:00', new DateTimeZone('America/New_York')),
+      108 => new DateTime('2025-01-22 00:00:00', new DateTimeZone('America/New_York')),
+      61 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'))
+    ],
+    3 => [
+      61 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'))
     ]
 ];
 // disable marking after certain dates for bc's
