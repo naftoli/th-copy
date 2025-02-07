@@ -1232,6 +1232,12 @@
 			for (let child of children) {
 				child.track = tracks[child.user_id]
 				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
+				if (child.khk_eligible) {
+					// check track 
+					if (['Yesod', 'Yediah'].includes(child.track)) {
+						child.track = 'Havonah'
+					}
+				}
 				if (Cookies.get('naftoli')) {
 					child.schoolConfirmed = 1
 				}
