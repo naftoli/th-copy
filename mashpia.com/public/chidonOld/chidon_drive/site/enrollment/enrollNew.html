@@ -2009,7 +2009,12 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			if (!errors.length && checkExtraInfo() && checkRegAddUserInfo()) {
 				json_cart = JSON.stringify(cart)
 				// add track info
-				json_tracks = JSON.stringify(children.filter(child => child.track != ''))
+				// extract tracks from children array
+				const tracks = children.map(child => ({
+					user_id: child.user_id,
+					track: child.track
+				}))
+				json_tracks = JSON.stringify(tracks)
 
 				// update shipping to 0 if cancel_shipping is true
 				if (cancel_shipping) {
