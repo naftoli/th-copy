@@ -520,6 +520,7 @@ function checkPersonalCredit($user_id, $amount) {
         'th_chidon_id' => $th_chidon_id
     ];
     // find out what track child achieved
+    echo "Calling getHighestTrackPassed($child)<br />";
     $track = $ct->getHighestTrackPassed($child)['highest_track'];
 
     // if there's a track then compare with what was entered in registration_charges and update if needed
