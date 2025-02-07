@@ -388,7 +388,7 @@
                     let card = {
                         profile: cardInfo.customerPaymentProfileId,
                         type: info,
-                        number: cardInfo.payment.creditCard.cardNumber
+                        number: cardInfo.payment.creditCard.cardNumber.substr(4)
                     }
                     cards.push(card)
                 }
@@ -735,15 +735,12 @@
                     return false;
                 }
                 if (parseInt($(".payment:checked").val()) === 0) {
-                    card_id = parseInt($(".payment-card").val());
+                    card_id = $(".payment-card").val();
                     if (card_id) {
                         // find the last four digits
                         for (let card of cards) {
                             if (card.profile === card_id) {
-                                let card_num = String(card.number)
-                                // remove spaces
-                                card_num = card_num.replaceAll(' ', '')
-                                last_four = card_num.slice(-4)
+                                last_four = card.number
                             }
                         }
                     } else {
@@ -764,9 +761,7 @@
                         alert('You are missing credit card info or it is inaccurate.');
                         return false;
                     }
-                    // find out if cc num is mastercard, visa or amex
-                    let card_num = String(cc.num)
-                    last_four = card_num.slice(-4)
+                    last_four = cc.num.slice(-4)
                 }
             } else if (totalAfterCredit < 0) {
                 creditVal = parseInt($(".credit:checked").val());

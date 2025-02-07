@@ -1665,6 +1665,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			}
 
 			if (lowest < 0) lowest = 0
+			else lowest = parseFloat(lowest).toFixed(2) // make sure that lowest has max 2 decimal places
 			if (lowest < amounts[amounts.length - 1]) amounts.push(lowest)
 			amounts.sort(function (a, b) {
 				return b - a
