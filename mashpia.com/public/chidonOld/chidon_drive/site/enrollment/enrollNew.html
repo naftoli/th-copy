@@ -1951,8 +1951,8 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				}
 			}
 			if (!reg.length) {
-				const next = confirm("Are you sure that you want to continue without registering any children?")
-				return next
+				alert('You must register at least one child to continue!')
+				return false
 			}
 
 			for (let child of children) {
