@@ -500,7 +500,7 @@ function checkPersonalCredit($user_id, $amount) {
 
     // get child's school_id, class_id and th_chidon_id
     $stmtUser = $MASHPIA_DB->prepare("
-        SELECT school_id, class_id, th_chidon_id 
+        SELECT u.school_id, u.class_id, th_chidon_id 
         FROM users u 
         JOIN th_chidon tc using (user_id) 
         WHERE user_id = :user AND tc.year = :year
