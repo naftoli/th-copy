@@ -247,7 +247,25 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
     <style>
         .tableInfo {
             float: left;
+            margin: 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
+        
+        /* Clear the float after the tables */
+        div:has(> .tableInfo) {
+            overflow: hidden;
+        }
+        
+        .tableInfo table {
+            margin-bottom: 10px;
+        }
+        
+        .tableInfo td {
+            padding: 5px;
+        }
+        
         tr, th, td {
             font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
             font-size: 12px;
@@ -400,7 +418,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
             foreach ( $stmt->fetchAll() as $row ) {
                 if (in_array($row['Field'], $fields_to_use)) $fields[] = $row['Field'];
             }
-            $fields[] = 'extra_purchases';
+            // $fields[] = 'extra_purchases';
 
             $boolSelection = [
                 0   => 'No',
