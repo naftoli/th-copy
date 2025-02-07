@@ -949,9 +949,10 @@ class KHK {
      * one is whether that child is eligible for khk
      * the other is the details of which yr the child was or wasn't eligible
      */
-    public static function getKHKEligibility( array $ids, $year = 0, $numYrs = 4, array $marks = [], $nextYr = false ) {
-        // yr that we don't check registration but rather check highest track passed
-        $rollover = 5782;
+    public static function getKHKEligibility( array $ids, $year = 0, $numYrs = 3, array $marks = [], $nextYr = false ) {
+        // // yr that we don't check registration but rather check highest track passed
+        // $rollover = 5782;
+        if ($numYrs > 3) $numYrs = 3; // make sure it's not more than 3
 
         $years = [];
         if ($nextYr) {
@@ -979,7 +980,7 @@ class KHK {
                 // exceptions
                 $exceptions = [];
                 $details[$id][$yr] = false;
-                if ($yr >= $rollover) {
+                // if ($yr >= $rollover) {
                     // for current yr, check if passed
                     if (!$nextYr && $yr == $curYr) $details[$id][$yr] = $passed[$id];
                     else {
@@ -994,16 +995,16 @@ class KHK {
                             $details[$id][$yr] = false;
                         }
                     }
-                } else {
-                    // make sure child was enrolled in that yr
-                    $sql = "select * from th_chidon where user_id = " . $id . " and year = " . $yr;
-                    $result = mysql_query($sql);
-                    if (mysql_num_rows($result) > 0) {
-                        $details[$id][$yr] = true;
-                    } else {
-                        $details[$id][$yr] = false;
-                    }
-                }
+                // } else {
+                //     // make sure child was enrolled in that yr
+                //     $sql = "select * from th_chidon where user_id = " . $id . " and year = " . $yr;
+                //     $result = mysql_query($sql);
+                //     if (mysql_num_rows($result) > 0) {
+                //         $details[$id][$yr] = true;
+                //     } else {
+                //         $details[$id][$yr] = false;
+                //     }
+                // }
             }
         }
 
