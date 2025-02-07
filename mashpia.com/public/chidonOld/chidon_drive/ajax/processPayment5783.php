@@ -509,7 +509,6 @@ function checkPersonalCredit($user_id, $amount) {
         ':user' => $user_id,
         ':year' => $year
     ]);
-    $stmtUser->debugDumpParams();
     $rowUser = $stmtUser->fetch(PDO::FETCH_ASSOC);
     $school_id = $rowUser['school_id'];
     $class_id = $rowUser['class_id'];
