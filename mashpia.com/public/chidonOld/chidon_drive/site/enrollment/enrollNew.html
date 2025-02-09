@@ -1839,8 +1839,13 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			updateShippingHtml(address) // update shipping html
 
 			if (total > 0) {
-				if (window.localStorage) window.localStorage.setItem('shipping_total', total)
-				else Cookies.set('shipping_total', total)
+				if (window.localStorage) {
+					window.localStorage.setItem('shipping_total', total)
+					window.localStorage.setItem('country', country)
+				} else {
+					Cookies.set('shipping_total', total)
+					Cookies.set('country', country)
+				}
 				$("#shipping_charges").show()
 			} else {
 				$("#shipping_charges").hide()
