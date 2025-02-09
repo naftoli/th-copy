@@ -12,7 +12,7 @@ $notes = $_POST['notes'];
 
 $stmt = $MASHPIA_DB->prepare("
     UPDATE th_chidon 
-    SET contacted_parent = :checked, notes = :notes 
+    SET contacted_parent = :checked, parent_notes = :notes 
     WHERE th_chidon_id = :id
 ");
 
