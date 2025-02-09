@@ -1859,7 +1859,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			}
 			html = `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>`
 			shipping_school_id = Object.keys(shipping)[0]
-			if (shipping_school_id == 269 || (shipping_school_id == 61 && eligible[0].admin_country == 'USA')) {
+			if (shipping_school_id == 269 || (shipping_school_id == 61 && eligible[0].admin_country != 'USA')) {
 				html += `<div id="shipping_charges" style="display: none;">
 						<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
 						<div class="flex">
