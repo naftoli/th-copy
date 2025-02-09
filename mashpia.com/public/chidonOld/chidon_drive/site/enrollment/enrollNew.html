@@ -1246,7 +1246,7 @@
 			}
 
 			// only let ultimate trip kids to update their trip info
-			const only_schools = [185, 470, 472, 517, 726, 739, 817]
+			const only_schools = [89, 185, 470, 472, 517, 726, 739, 817]
 			let registered = children.filter(child => child.date_paid > 0)
 			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
@@ -1527,7 +1527,8 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 					else
 						shipping_num_children[child.school_id] = 1
 					// check if we need to pay anything for this child
-					shipping_fee = await calcShipping(child.school_id, shipping_num_children, child.admin_country, child.admin_id)
+					shipping_fee = await calcShipping(parseInt(child.school_id), shipping_num_children, child.admin_country, child.admin_id)
+					console.log('shipping_fee: ' + shipping_fee)
 					if (shipping_fee > 0) {
 						needsShipping = true
 						shipping_school_id = child.school_id
@@ -1546,20 +1547,36 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			}
 			if (needsShipping) {
 				html += `<div id="shipping_charges" style="display: none;">
-								<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-								<div class="flex">
-									<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
-									<label>
-										(FREE) ${pickupText[shipping_school_id]}
-									</label>
-								</div>
-								<div class="flex">
-									<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" />
-									<label>
-										<span class="ship_total_span" style="display: inline-block;"></span> I would like to have my items shipped to ${parentAddress}. If you would like a different address,
-										please update the address on your mashpia.com parent account.
-									</label>
-								</div></div>`
+							<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>`
+				if (shipping_school_id == 61 && eligible[0].admin_country == 'USA') {
+					html += `<div class="flex">
+								<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" checked />
+								<label>
+									<span class="ship_total_span" style="display: inline-block;">
+										</span> My items will be shipped to ${parentAddress}. If you would like a different address,
+									please update the address on your mashpia.com parent account.
+								</label>
+							</div>`
+					html += `</div>`
+				} else {
+					html += `<div id="shipping_charges" style="display: none;">
+							<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+							<div class="flex">
+								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+								<label>
+									(FREE) ${pickupText[shipping_school_id]}
+								</label>
+							</div>
+							<div class="flex">
+								<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" />
+								<label>
+									<span class="ship_total_span" style="display: inline-block;">
+										</span> I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+									please update the address on your mashpia.com parent account.
+								</label>
+							</div>`
+				}
+				html += `</div>`
 			}
 
 			$(".login").hide();
