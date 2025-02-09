@@ -1243,7 +1243,7 @@
 			}
 
 			// only let ultimate trip kids to update their trip info
-			const only_schools = [11, 40, 89, 185, 470, 472, 517, 726, 739, 817]
+			const only_schools = [11, 40, 66, 89, 112, 185, 470, 472, 517, 726, 739, 817]
 			let registered = children.filter(child => child.date_paid > 0)
 			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
