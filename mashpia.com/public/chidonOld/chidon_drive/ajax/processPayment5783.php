@@ -982,9 +982,6 @@ function sendMyselfEmail($error, $desc) {
 processCart();
 setSweaterInfo();
 
-insertIntoRegCharges();
-exit;
-
 // Start the transaction
 $MASHPIA_DB->beginTransaction();
 
