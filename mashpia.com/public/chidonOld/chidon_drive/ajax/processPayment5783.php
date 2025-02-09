@@ -412,7 +412,7 @@ function getDescriptions() {
                     ];
                     // check if we need to change the code in accounting from original track to new track
                     $codes = checkPersonalCredit($user_id, $amount);
-                    if (isset($codes['new'])) {
+                    if ($codes && isset($codes['new'])) {
                         // debit from original code
                         $desc[] = [
                             'prefix'    => 'C',
@@ -518,6 +518,7 @@ function checkPersonalCredit($user_id, $amount) {
     ];
     // find out what track child achieved
     $track = $ct->getHighestTrackPassed($child)['highest_track'];
+    if ($track == 'iyun') $track = 'genius';
 
     // if there's a track then compare with what was entered in registration_charges and update if needed
     if ($track != '') {
@@ -547,12 +548,8 @@ function checkPersonalCredit($user_id, $amount) {
                     'original' => $type,
                     'new' => $types[$track]
                 ];
-            } else {
-                $codes = [
-                    'original' => $type
-                ];
+                return $codes;
             }
-            return $codes;
         }
     }
     return false;
