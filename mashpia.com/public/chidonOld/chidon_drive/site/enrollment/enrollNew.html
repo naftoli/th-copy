@@ -970,116 +970,6 @@
 	<script src="../js/jquery.nice-select.min.js"></script>
 	<script src='../js/circles.min.js'></script>
 	<script src="../js/js.cookie.js"></script>
-	<script>
-		async function calcShipping(school_id, numChildren, country, admin_id) {
-			// find out how many children already paid for shipping for current school_id
-			try {
-				const res = await fetch('checkShippingPaid.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify({
-						admin: admin_id,
-						school: school_id,
-					})
-				})
-
-				if (!res.ok) {
-					throw new Error(`Network response was not ok: ${res.statusText}`)
-				}
-
-				const data = await res.json()
-				if (data[school_id] && data[school_id].length > 0) {
-					numChildren[school_id] += data[school_id].length
-				}
-			} catch (error) {
-				console.error('Error calculating shipping:', error)
-				return 0
-			}
-
-			const fixed_fee_by_school = [45, 106, 110]
-			const fixed_fees = {
-				45: 10,
-				106: 10,
-				110: 15
-			}
-
-			if (fixed_fee_by_school.includes(school_id)) {
-				if (numChildren[school_id] == 1)
-					return fixed_fees[school_id]
-				else
-					return 0
-			}
-
-			const fee_by_school = [61, 269]
-			const country_list = ['USA', 'Canada', 'Brazil', 'Denmark', 'Israel', 'South Africa', 'United Kingdom',
-				'Vietnam', 'Argentina', 'Australia', 'Austria', 'Azerbaijan', 'Belguim', 'Chile', 'China', 'France', 'Germany',
-				'Italy', 'Korea', 'Latvia', 'Lithuania', 'Luxemberg', 'Mauritius', 'Netherlands', 'Portugal', 'S. Barthelemy',
-				'Slovakia', 'Spain', 'Sweden', 'Switzerland', 'Taiwan', 'Uruguay']
-			const fee_by_country = [
-				[20,19,6,11,11,17],
-				[39,21,4,3,17,6],
-				[123,37,20,25,25,25],
-				[95,0,55,25,25,25],
-				[125,25,25,25,25,25],
-				[125,25,25,25,25,25],
-				[50,50,50,50,50,50],
-				[125,25,25,25,25,25],
-				[50,25,25,25,25,25],
-				[80,25,20,25,25,25],
-				[80,0,25,20,25,25],
-				[150,25,25,25,25,25],
-				[97,28,25,25,25,25],
-				[115,0,0,25,25,25],
-				[85,0,25,20,5,25],
-				[80,0,25,25,25,25],
-				[97,17,8,25,25,25],
-				[80,0,15,25,25,25],
-				[54,0,26,25,25,25],
-				[120,25,25,25,25,25],
-				[120,25,25,25,25,25],
-				[80,0,25,25,25,25],
-				[125,0,25,25,25,25],
-				[71,24,25,25,25,25],
-				[115,0,0,0,25,25],
-				[115,25,25,25,25,25],
-				[117,37,25,25,25,25],
-				[80,0,25,25,25,25],
-				[85,0,25,25,25,25],
-				[85,0,25,25,25,25],
-				[69,0,0,25,25,25],
-				[125,0,25,25,25,25],
-				[97,9,21,23,24,26] // last one is if country is not in list
-			]
-
-			// use number of kids as index into fee_by_country. even though it's not by school id, however all kids would be in
-			// either myshliach or anash kinder, not both
-			if (fee_by_school.includes(school_id)) {
-				let index = country_list.indexOf(country)
-				if (index >= 0) {
-					return fee_by_country[index][numChildren[school_id] - 1]
-				} else {
-					return fee_by_country[fee_by_country.length - 1][numChildren[school_id] - 1]
-				}
-			}
-
-			return 0
-		}
-
-		function clearStorage() {
-			// get all cookies
-			const cookies = Cookies.get()
-			for (let cookie in cookies) {
-				// do no remove 'chidon_admin' or 'naftoli' cookie
-				if (cookie === 'chidon_admin' || cookie === 'naftoli') continue
-				Cookies.remove(cookie)
-			}
-			if (window.localStorage) {
-				localStorage.clear();
-			}
-		}
-	</script>
 	<script type="text/javascript">
 		// let closed = "Due to technical difficulties with our payment processor, registration is temporarily suspended.  As soon as it is resolved, registration will re-open.  Thanks for your patience."
 		// alert(closed)
@@ -1139,15 +1029,125 @@
 		var addresses = {} // all addresses entered
 		var ultimate_trip = [] // array of users going on ultimate trip
 		var trips = [] // array of trips for myshliach / anash kinder
-		var shipping = {} // cost of shipping chidon stuff to parents per child
-		var shipping_num_children = {}
 		var errors = []
-		var needsShipping = false
-		var shipping_school_id = 0
 		var shipping_total = 0
 		var cancel_shipping = false
 		var editing_mode = false // only in editing mode for ultimate trip info
+		var shipping = {} // cost of shipping chidon stuff to parents per child
+		var numChildren = {}
 		var shipping_schools = [45, 106, 110, 61, 269]
+
+		function calcShippingFee(school_id, numChild, country) {
+			const fixed_fee_by_school = [45, 106, 110]
+			const fixed_fees = {
+				45: 10,
+				106: 10,
+				110: 15
+			}
+
+			if (fixed_fee_by_school.includes(school_id)) {
+				// only first child pays
+				if (numChild == 1)
+					return fixed_fees[school_id]
+				else
+					return 0 
+			}
+
+			const fee_by_school = [61, 269]
+			const country_list = ['USA', 'Canada', 'Brazil', 'Denmark', 'Israel', 'South Africa', 'United Kingdom',
+				'Vietnam', 'Argentina', 'Australia', 'Austria', 'Azerbaijan', 'Belguim', 'Chile', 'China', 'France', 'Germany',
+				'Italy', 'Korea', 'Latvia', 'Lithuania', 'Luxemberg', 'Mauritius', 'Netherlands', 'Portugal', 'S. Barthelemy',
+				'Slovakia', 'Spain', 'Sweden', 'Switzerland', 'Taiwan', 'Uruguay']
+			const fee_by_country = [
+				[20,19,6,11,11,17],
+				[39,21,4,3,17,6],
+				[123,37,20,25,25,25],
+				[95,0,55,25,25,25],
+				[125,25,25,25,25,25],
+				[125,25,25,25,25,25],
+				[50,50,50,50,50,50],
+				[125,25,25,25,25,25],
+				[50,25,25,25,25,25],
+				[80,25,20,25,25,25],
+				[80,0,25,20,25,25],
+				[150,25,25,25,25,25],
+				[97,28,25,25,25,25],
+				[115,0,0,25,25,25],
+				[85,0,25,20,5,25],
+				[80,0,25,25,25,25],
+				[97,17,8,25,25,25],
+				[80,0,15,25,25,25],
+				[54,0,26,25,25,25],
+				[120,25,25,25,25,25],
+				[120,25,25,25,25,25],
+				[80,0,25,25,25,25],
+				[125,0,25,25,25,25],
+				[71,24,25,25,25,25],
+				[115,0,0,0,25,25],
+				[115,25,25,25,25,25],
+				[117,37,25,25,25,25],
+				[80,0,25,25,25,25],
+				[85,0,25,25,25,25],
+				[85,0,25,25,25,25],
+				[69,0,0,25,25,25],
+				[125,0,25,25,25,25],
+				[97,9,21,23,24,26] // last one is if country is not in list
+			]
+
+			// use number of kids as index into fee_by_country. even though it's not by school id, however all kids would be in
+			// either myshliach or anash kinder, not both
+			if (fee_by_school.includes(school_id)) {
+				let index = country_list.indexOf(country)
+				if (index >= 0) {
+					if (numChild < fee_by_country[index].length)
+						return fee_by_country[index][numChild - 1]
+				} else {
+					if (numChild < fee_by_country[fee_by_country.length - 1].length)
+						return fee_by_country[fee_by_country.length - 1][numChild - 1]
+				}
+			}
+
+			return 0
+		}
+
+		function clearStorage() {
+			// get all cookies
+			const cookies = Cookies.get()
+			for (let cookie in cookies) {
+				// do no remove 'chidon_admin' or 'naftoli' cookie
+				if (cookie === 'chidon_admin' || cookie === 'naftoli') continue
+				Cookies.remove(cookie)
+			}
+			if (window.localStorage) {
+				localStorage.clear();
+			}
+		}
+
+		async function checkShippingPaid(admin) {
+			try {
+				const res = await fetch('checkShippingPaid.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ admin })
+				})
+
+				if (!res.ok) {
+					throw new Error(`Network response was not ok: ${res.statusText}`)
+				}
+
+				const data = await res.json()
+				if (data) {
+					for (let school_id in data) {
+						numChildren[school_id] = parseInt(data[school_id])
+					}
+				}
+			} catch (error) {
+				console.error('Error calculating shipping:', error)
+				return 0
+			}
+		}
 
 		async function getChildren(admin) {
 			let result = await $.post('../../ajax/getChildren.php', { admin })
@@ -1240,9 +1240,6 @@
 						child.track = 'Havonah'
 					}
 				}
-				if (Cookies.get('naftoli')) {
-					child.schoolConfirmed = 1
-				}
 			}
 
 			// only let ultimate trip kids to update their trip info
@@ -1251,11 +1248,11 @@
 			// let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
 			if (Cookies.get('naftoli')) {
-				eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+				eligible = children.filter(child => child.track && !child.date_paid)
 			}
-			children.forEach(child => {
-				console.log(child.track, child.date_paid, child.schoolConfirmed, only_schools.includes(parseInt(child.school_id)))
-			})
+			// children.forEach(child => {
+			// 	console.log(child.track, child.date_paid, child.schoolConfirmed, only_schools.includes(parseInt(child.school_id)))
+			// })
 
 			// figure out what to do
 			if (!registered.length && !eligible.length) {
@@ -1518,66 +1515,11 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 						</div>
 						<div style="clear: both"></div>
 						<br />`
-
-				// find out if we need to charge for shipping
-				let shipping_fee = 0
-				if (shipping_schools.includes(parseInt(child.school_id))) {
-					if (shipping_num_children[child.school_id])
-						shipping_num_children[child.school_id]++
-					else
-						shipping_num_children[child.school_id] = 1
-					// check if we need to pay anything for this child
-					shipping_fee = await calcShipping(parseInt(child.school_id), shipping_num_children, child.admin_country, child.admin_id)
-					console.log('shipping_fee: ' + shipping_fee)
-					if (shipping_fee > 0) {
-						needsShipping = true
-						shipping_school_id = child.school_id
-						shipping[child.user_id] = shipping_fee
-						if (window.localStorage) localStorage.setItem('country', child.admin_country)
-						else Cookies.set('country', child.admin_country)
-					}
-				}
 			}
 
-			const parentAddress = eligible[0].admin_address1 + ' ' + eligible[0].admin_address2 + ', ' + eligible[0].admin_city + ', ' + eligible[0].admin_state + ' ' + eligible[0].admin_postal
-			const pickupText = {
-				61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
-							Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
-				269: `I would like to pick up my items in Crown Heights during the NY trip.`
-			}
-			if (needsShipping) {
-				html += `<div id="shipping_charges" style="display: none;">
-							<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>`
-				if (shipping_school_id == 61 && eligible[0].admin_country == 'USA') {
-					html += `<div class="flex">
-								<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" checked />
-								<label>
-									<span class="ship_total_span" style="display: inline-block;">
-										</span> My items will be shipped to ${parentAddress}. If you would like a different address,
-									please update the address on your mashpia.com parent account.
-								</label>
-							</div>`
-					html += `</div>`
-				} else {
-					html += `<div id="shipping_charges" style="display: none;">
-							<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-							<div class="flex">
-								<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
-								<label>
-									(FREE) ${pickupText[shipping_school_id]}
-								</label>
-							</div>
-							<div class="flex">
-								<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" />
-								<label>
-									<span class="ship_total_span" style="display: inline-block;">
-										</span> I would like to have my items shipped to ${parentAddress}. If you would like a different address,
-									please update the address on your mashpia.com parent account.
-								</label>
-							</div>`
-				}
-				html += `</div>`
-			}
+			// set shipping already paid
+			await checkShippingPaid(eligible[0].admin_id)
+			html += `<div id="shipping_charges" style="display: none;"></div>`
 
 			$(".login").hide();
 			if (eligible.length) $("#regForm").show();
@@ -1862,26 +1804,90 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 		})
 
 		function calcTotalShipping() {
-			// calculate based on children registering
-			shipping_total = 0
+			let country = ''
+			let admin_id = 0
+			let total = 0
+			let address = ''
+			let school_children = []
+			// reset shipping object
+			shipping = {}
 			for (let item of cart) {
+				// check which children are getting registered
 				if (item.desc.includes('reg_')) {
 					// it's a child getting registered
 					// get user id
 					const item_info = item.desc.split('_')
 					const user_id = item_info[1]
-					if (shipping[user_id]) {
-						shipping_total += parseInt(shipping[user_id])
-					}
+					// find out school id from children array
+					const child = children.find(child => parseInt(child.user_id) == parseInt(user_id))
+					const school_id = parseInt(child.school_id)
+					if (! shipping_schools.includes(school_id)) continue
+					if (! country.length) country = child.admin_country
+					if (! admin_id) admin_id = child.admin_id
+					if (! address.length) address = child.admin_address1 + ' ' + child.admin_address2 + ', ' + child.admin_city + ', ' + child.admin_state + ' ' + child.admin_postal
+					if (! school_children[school_id]) school_children[school_id] = 1
+					else school_children[school_id]++
+					let numChild = school_children[school_id]
+					if (numChildren[school_id]) numChild += numChildren[school_id]
+					let fee = calcShippingFee(school_id, numChild, country, admin_id)
+					if (fee) total += fee
+					// add to shipping object
+					shipping[user_id] = fee
 				}
 			}
-			$(".ship_total_val").val(shipping_total)
-			$(".ship_total_span").html("($" + shipping_total + ")")
-			if (shipping_total) {
+
+			updateShippingHtml(address) // update shipping html
+
+			if (total > 0) {
+				if (window.localStorage) window.localStorage.setItem('shipping_total', total)
+				else Cookies.set('shipping_total', total)
 				$("#shipping_charges").show()
 			} else {
 				$("#shipping_charges").hide()
 			}
+
+			shipping_total = total
+			$(".ship_total_val").val(shipping_total)
+			$(".ship_total_span").html("($" + shipping_total + ")")
+		}
+
+		function updateShippingHtml(parent_address) {
+			const pickupText = {
+				61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
+							Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
+				269: `I would like to pick up my items in Crown Heights during the NY trip.`
+			}
+			html = `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>`
+			shipping_school_id = Object.keys(shipping)[0]
+			if (shipping_school_id == 269 || (shipping_school_id == 61 && eligible[0].admin_country == 'USA')) {
+				html += `<div id="shipping_charges" style="display: none;">
+						<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
+						<div class="flex">
+							<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
+							<label>
+								(FREE) ${pickupText[shipping_school_id]}
+							</label>
+						</div>
+						<div class="flex">
+							<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" />
+							<label>
+								<span class="ship_total_span" style="display: inline-block;">
+									</span> I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+								please update the address on your mashpia.com parent account.
+							</label>
+						</div>`
+			} else {
+				html += `<div class="flex">
+							<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" checked />
+							<label>
+								<span class="ship_total_span" style="display: inline-block;">
+									</span> My items will be shipped to ${parent_address}. If you would like a different address,
+								please update the address on your mashpia.com parent account.
+							</label>
+						</div>`
+				html += `</div>`
+			}
+			$("#shipping_charges").empty().append(html)
 		}
 
 		function checkForm() {

@@ -660,7 +660,7 @@
 
             // Proceed with the AJAX request if validation passes
             const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks');
-            const country = shipping ? window.localStorage ? window.localStorage.getItem('country') : Cookies.get('country') : '';
+            const country = shipping.length ? window.localStorage ? window.localStorage.getItem('country') : Cookies.get('country') : '';
 
             $.post('../../ajax/processPayment5783.php', {
                 admin_id: Cookies.get('chidon_admin'),

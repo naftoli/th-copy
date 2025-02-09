@@ -30,7 +30,7 @@ $admin_id = encrypt_decrypt('decrypt', $admin);
 $admin_email = $_POST['admin_email'];
 $payment_id = isset($_POST['card_id']) ? intval($_POST['card_id']) : 0;
 $last_four = isset($_POST['last_four']) ? $_POST['last_four'] : 0;
-$shipping_charges = isset($_POST['shipping']) ? json_decode($_POST['shipping']) : [];
+$shipping_charges = isset($_POST['shipping']) ? $_POST['shipping'] : [];
 $credit = isset($_POST['credit']) ? intval($_POST['credit']) : 0;
 //$already_used_credit = isset($_POST['already_used_credit']) ? intval($_POST['already_used_credit']) : 0;
 $to_charge = isset($_POST['cart_total']) ? (intval($_POST['cart_total']) - $credit) : 0; // we want it to be negative if there's a refund needed
@@ -613,33 +613,33 @@ function processReg() {
     return $success;
 }
 
-function updateShipping() {
-    // was used in 5784 to update how much was paid for shipping amounts that were PREDETERMINED IN THIS TABLE
-    global $MASHPIA_DB, $year, $admin_id, $shipping_charges;
+// function updateShipping() {
+//     // was used in 5784 to update how much was paid for shipping amounts that were PREDETERMINED IN THIS TABLE
+//     global $MASHPIA_DB, $year, $admin_id, $shipping_charges;
 
-    $total_charge = 0;
-    foreach ($shipping_charges as $shipping_charge) {
-        $total_charge += intval($shipping_charge);
-    }
+//     $total_charge = 0;
+//     foreach ($shipping_charges as $shipping_charge) {
+//         $total_charge += intval($shipping_charge);
+//     }
 
-    $sqlInsert = "
-        INSERT IGNORE INTO chidon_parent_shipping 
-        SET 
-            parent_id = :admin,
-            year = :year, 
-            amount_paid = :amount, 
-            date_paid = now()
-        ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
-    $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
+//     $sqlInsert = "
+//         INSERT IGNORE INTO chidon_parent_shipping 
+//         SET 
+//             parent_id = :admin,
+//             year = :year, 
+//             amount_paid = :amount, 
+//             date_paid = now()
+//         ON DUPLICATE KEY UPDATE amount_paid = (amount_paid + :amount), date_paid = now()";
+//     $stmtInsert = $MASHPIA_DB->prepare($sqlInsert);
 
-    $updated = $stmtInsert->execute([
-        'admin'     => $admin_id,
-        'year'      => $year,
-        'amount'    => $total_charge
-    ]);
+//     $updated = $stmtInsert->execute([
+//         'admin'     => $admin_id,
+//         'year'      => $year,
+//         'amount'    => $total_charge
+//     ]);
 
-    return $updated;
-}
+//     return $updated;
+// }
 
 function processCelebBoxes() {
     global $MASHPIA_DB, $year, $admin_id, $addresses, $sqlCelebBox, $sqlAddress, $celebBoxes, $celebBoxShipping;
@@ -981,6 +981,9 @@ function sendMyselfEmail($error, $desc) {
 //******************* PROGRAM STARTS HERE ***********************/
 processCart();
 setSweaterInfo();
+
+insertIntoRegCharges();
+exit;
 
 // Start the transaction
 $MASHPIA_DB->beginTransaction();
