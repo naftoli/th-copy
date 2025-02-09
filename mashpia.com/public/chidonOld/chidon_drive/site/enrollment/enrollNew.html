@@ -977,7 +977,7 @@
 
 		// alert("Enrollment is now closed.");
 		// location.href = "/";
-		if (location.protocol != 'https:') {
+		if (window.location.protocol != 'https:') {
 			let url = window.location.href;
 			let pos = url.indexOf(':');
 			let newUrl = 'https' + url.substring(pos);

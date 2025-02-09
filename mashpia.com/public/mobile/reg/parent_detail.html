@@ -652,7 +652,13 @@
 
     $(".chidon_reg").click(function () {
       Cookies.set('chidon_admin', admin)
-      location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
+      const domain = window.location.hostname;
+      if (domain && (domain == 'tzivos.local' || domain == 'localhost')) {
+        location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
+        return
+      } else {
+        location.href = 'https://chidondrive.com/site/enrollment/enrollNew.html?a=' + admin
+      }
     })
 
     // get the current year
