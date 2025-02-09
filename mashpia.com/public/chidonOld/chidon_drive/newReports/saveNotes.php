@@ -22,7 +22,7 @@ $res = $stmt->execute([
     ':notes'    => $checked ? $notes : ''
 ]);
 
-return json_encode([
+echo json_encode([
     'success'   => $res,
     'message'   => $res ? 'Saved' : 'Error saving',
     'error'     => $stmt->errorInfo()
