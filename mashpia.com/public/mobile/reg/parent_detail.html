@@ -657,7 +657,7 @@
         location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
         return
       } else {
-        location.href = 'https://chidondrive.com/site/enrollment/enrollNew.html?a=' + admin
+        location.href = 'https://chidondrive.com/site/enrollment/enrollNew.html?a=' + encodeURI(admin)
       }
     })
 
@@ -948,8 +948,13 @@
 
     $(document).on('click', '.chidondrive', function () {
       Cookies.set('chidon_admin', admin)
-      if (location.href.includes('mashpia.com')) location.href = "https://chidondrive.com/setup/?a=" + encodeURI(admin);
-      else location.href = "/chidonOld/chidon_drive/setup/";
+      const domain = window.location.hostname;
+      if (domain && (domain == 'tzivos.local' || domain == 'localhost')) {
+        location.href = 'location.href = "/chidonOld/chidon_drive/setup/'
+        return
+      } else {
+        location.href = "https://chidondrive.com/setup/?a=" + encodeURI(admin);
+      }
     });
 
     $(document).on('click', '.noSchoolShabbaton', function () {

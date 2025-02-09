@@ -992,8 +992,9 @@
 		let pos = url.indexOf('?a=');
 		if (pos > 0) {
 			let admin = url.substring(pos + 3);
+			admin = decodeURI(admin)
 			if (! Cookies.get('chidon_admin'))
-				Cookies.set('chidon_admin', admin);
+				Cookies.set('chidon_admin', admin)
 		}
 
 		if (Cookies.get('chidon_admin')) {
