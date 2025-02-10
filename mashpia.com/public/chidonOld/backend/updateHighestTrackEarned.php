@@ -40,13 +40,17 @@ $tracks = $test->getTypes();
 
 foreach ($info as $row) {
     $highestTrack = $test->getHighestTrackPassed($row)['highest_track'];
-    $rewardType = $row['reward_type'];
-    if ($rewardType != 'highest track passed' && $rewardType != '') {
-        // figure out which one is higher, the highest track passed or the reward type
-        $indexes = array_keys($tracks);
-        $key1 = array_search($highestTrack, $indexes);
-        $key2 = array_search($rewardType, $indexes);
-        if ($key2 > $key1) $highestTrack = $rewardType;
+    $cumulative = $test->calculateCumulative($row, $test->getScores()[$row['th_chidon_id']]);
+    if ($cumulative == 'iyun') $highestTrack = 'genius';
+    else {
+        $rewardType = $row['reward_type'];
+        if ($rewardType != 'highest track passed' && $rewardType != '') {
+            // figure out which one is higher, the highest track passed or the reward type
+            $indexes = array_keys($tracks);
+            $key1 = array_search($highestTrack, $indexes);
+            $key2 = array_search($rewardType, $indexes);
+            if ($key2 > $key1) $highestTrack = $rewardType;
+        }
     }
 
     $track = $highestTrack ? $tracks[$highestTrack] : 'none';
