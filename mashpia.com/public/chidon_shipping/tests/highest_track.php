@@ -19,7 +19,7 @@ function showIyun($child) {
     $ct->setScores();
     echo "<pre>"; print_r($ct->getScores()); echo "</pre>";
     $scores = $ct->getScores();
-    $cumulative_track = $ct->calculateCumulative($child, $scores);
+    $cumulative_track = $ct->calculateCumulative($child, $scores[$child['th_chidon_id']]);
     return $cumulative_track;
 //    return $child['highest_track'] == 'iyun' || $cumulative_track == 'iyun';
 }

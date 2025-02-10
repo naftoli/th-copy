@@ -395,7 +395,7 @@ class ChidonTests
                 if (isset($scores[$i][$type]) && $scores[$i][$type] > 0) $cumulative_scores[$type] += intval($scores[$i][$type]);
             }
         }
-
+        
         $cumulative_scores['genius'] += $cumulative_scores['expert'] + $cumulative_scores['pro'] + $cumulative_scores['maven'];
         $cumulative_scores['expert'] += $cumulative_scores['pro'] + $cumulative_scores['maven'];
         $cumulative_scores['pro'] += $cumulative_scores['maven'];

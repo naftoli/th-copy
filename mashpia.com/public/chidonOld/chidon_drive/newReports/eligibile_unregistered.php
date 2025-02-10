@@ -50,7 +50,7 @@ function getTracks() {
         $info = $ct->getHighestTrackPassed($user);
         $highest = $info['highest_track'];
         // get cumulative
-        $cumulative = $ct->calculateCumulative($user, $ct->getScores());
+        $cumulative = $ct->calculateCumulative($user, $ct->getScores()[$user['th_chidon_id']]);
         $tracks[$user['user_id']] = $cumulative == 'iyun' ? 'Iyun' : isset($types[$highest]) ? $types[$highest] : 'none';
     }
 }

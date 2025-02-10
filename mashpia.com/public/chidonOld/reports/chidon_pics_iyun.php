@@ -121,7 +121,7 @@ function showIyun($child) {
     global $ct;
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
-    $scores = $ct->getScores();
+    $scores = $ct->getScores()[$child['th_chidon_id']];
     $cumulative_track = $ct->calculateCumulative($child, $scores);
     return $cumulative_track == 'iyun';
 }

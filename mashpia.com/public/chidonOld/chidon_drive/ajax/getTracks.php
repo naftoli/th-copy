@@ -17,9 +17,13 @@ foreach ($children as $child) {
         $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
         $ct->setScores();
         $ct->calculateMarks();
-        $marks = $ct->getMarks();
-        if (isset($marks[$child['th_chidon_id']])) {
-            $track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
+        $cumulative = $ct->calculateCumulative($child, $ct->getScores()[$child['th_chidon_id']]);
+        if ($cumulative == 'iyun') $track = 'Iyun';
+        else {
+            $marks = $ct->getMarks();
+            if (isset($marks[$child['th_chidon_id']])) {
+                $track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
+            }
         }
     } else {
         $track = $child['reward_type'];
