@@ -688,12 +688,15 @@
                       // if res is not object
                       if (typeof res !== 'object') throw new Error("Invalid response format.");
                       if (res.success) {
-                          alert(res.msg);
                           // remove all cookies and local storage items
                           clearStorage()
                           isProcessing = false; // Reset processing flag
                           $(".processPayment").attr('disabled', false);
-                          location.href = 'http://mashpia.com/mobile';
+                          if (isRunningInIOSApp()) alert(res.msg, true);
+                          else {
+                            alert(res.msg)
+                            location.href = 'http://mashpia.com/mobile';
+                          }
                       } else if (res.error) {
                         alert(res.error);
                         isProcessing = false; // Reset processing flag
@@ -719,7 +722,7 @@
 			const cookies = Cookies.get()
 			for (let cookie in cookies) {
 				// do no remove 'chidon_admin' or 'naftoli' cookie
-				if (cookie === 'chidon_admin' || cookie === 'naftoli') continue
+				if (['admin', 'naftoli', 'chidon_admin'].includes(cookie)) continue
 				Cookies.remove(cookie)
 			}
 			if (window.localStorage) {
@@ -876,7 +879,7 @@
 		
 		if (isRunningInIOSApp()) {
 			// Override the default alert function
-			window.alert = function(message) {
+			window.alert = function(message, redirect=false) {
 				const modal = document.getElementById('customAlert');
 				const messageDiv = modal.querySelector('.custom-alert-message');
 				const okButton = modal.querySelector('.custom-alert-button');
@@ -887,12 +890,14 @@
 				// Close modal when OK button is clicked
 				okButton.onclick = function() {
 					modal.style.display = 'none';
+                    if (redirect) location.href = 'http://mashpia.com/mobile'
 				}
 				
 				// Close modal when clicking outside
 				modal.onclick = function(e) {
 					if (e.target === modal) {
 						modal.style.display = 'none';
+                        if (redirect) location.href = 'http://mashpia.com/mobile'
 					}
 				}
 				
@@ -900,6 +905,7 @@
 				document.addEventListener('keydown', function(e) {
 					if (e.key === 'Escape' && modal.style.display === 'flex') {
 						modal.style.display = 'none';
+                        if (redirect) location.href = 'http://mashpia.com/mobile'
 					}
 				});
 			}
