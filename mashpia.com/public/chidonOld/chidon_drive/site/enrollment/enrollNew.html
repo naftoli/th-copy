@@ -1037,6 +1037,7 @@
 		var shipping = {} // cost of shipping chidon stuff to parents per child
 		var numChildren = {}
 		var shipping_schools = [45, 106, 110, 61, 269]
+		var shipping_school_id = 0
 
 		function calcShippingFee(school_id, numChild, country) {
 			const fixed_fee_by_school = [45, 106, 110]
@@ -1834,6 +1835,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 					if (fee) total += fee
 					// add to shipping object
 					shipping[user_id] = fee
+					shipping_school_id = school_id
 				}
 			}
 
@@ -1864,11 +1866,8 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				269: `I would like to pick up my items in Crown Heights during the NY trip.`
 			}
 			html = `<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>`
-			shipping_school_id = Object.keys(shipping)[0]
 			if (shipping_school_id == 269 || (shipping_school_id == 61 && eligible[0].admin_country != 'USA')) {
-				html += `<div id="shipping_charges" style="display: none;">
-						<h5 class="formDetails"><span class="title">Shipping Charges</span></h5>
-						<div class="flex">
+				html += `<div class="flex">
 							<input type="radio" name="shipping_charge" class="inputCheckbox shipping" value="0" />
 							<label>
 								(FREE) ${pickupText[shipping_school_id]}
@@ -1878,11 +1877,11 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 							<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" />
 							<label>
 								<span class="ship_total_span" style="display: inline-block;">
-									</span> I would like to have my items shipped to ${parentAddress}. If you would like a different address,
+									</span> I would like to have my items shipped to ${parent_address}. If you would like a different address,
 								please update the address on your mashpia.com parent account.
 							</label>
 						</div>`
-			} else if (shipping_school_id == 61) {
+			} else if (shipping_school_id == 61 && eligible[0].admin_country == 'USA') {
 				html += `<div class="flex">
 							<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" checked />
 							<label>
@@ -1891,7 +1890,6 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 								please update the address on your mashpia.com parent account.
 							</label>
 						</div>`
-				html += `</div>`
 			} else {
 				html += `<div class="flex">
 							<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" checked />
@@ -1900,7 +1898,6 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 									</span> Your items will be shipped to your child's school.
 							</label>
 						</div>`
-				html += `</div>`
 			}
 			$("#shipping_charges").empty().append(html)
 		}
