@@ -69,7 +69,8 @@ $codes = CouponCode::getlistOfCodes( $MASHPIA_DB, $year );
 </div>
 
 <form action="user_coupons.php" method="post">
-    <p> Please fill in the following fields to generate a one-time-use coupon code:</p>
+    <p>Please fill in the following fields to generate a one-time-use coupon code:<br />
+    (Please note that if you reload the page, duplicate coupon codes will be created)</p>
     <table>
         <tr>
             <td>User Serial:</td>
