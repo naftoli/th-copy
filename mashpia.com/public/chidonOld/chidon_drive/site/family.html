@@ -122,13 +122,18 @@
 		<script src="js/fullpage.js"></script>
 		<script type="text/javascript">
 		    $('#fullpage').fullpage({
-		     		licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
+		     	licenseKey: '1A33397E-DD2A498D-A23E76EB-6E563849',
 		        verticalCentered: false,
 		        controlArrows: false,
 		        responsiveWidth: 860,
 		        recordHistory: true,
 		        anchors: ['support-a-family', '']
 		    });
+
+			document.addEventListener('DOMContentLoaded', function() {
+				alert('ChidonDrive is closed for this year, please come back next year.')
+				location.href = 'https://chidondrive.com'
+			})
 
 		    $('#menu-opener').click(function(e){
 		    	e.preventDefault();
