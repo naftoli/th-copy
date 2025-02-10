@@ -414,9 +414,10 @@
                             {{/if}}
 
                             {{#if this.chidonRegistered}}
-                            <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{
-                              this.next_year_chidon }}
-                            </div>
+                              {{#if this.shabbatonPaid}}{{/if}}
+                              <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{
+                                this.next_year_chidon }}
+                              </div>
                             {{/if}}
 
                             {{#if this.bookPurchased}}
