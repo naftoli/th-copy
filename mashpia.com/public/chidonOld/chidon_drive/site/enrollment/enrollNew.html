@@ -1882,13 +1882,22 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 								please update the address on your mashpia.com parent account.
 							</label>
 						</div>`
+			} else if (shipping_school_id == 61) {
+				html += `<div class="flex">
+							<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" checked />
+							<label>
+								<span class="ship_total_span" style="display: inline-block;">
+									</span> Your items will be shipped to ${parent_address}. If you would like a different address,
+								please update the address on your mashpia.com parent account.
+							</label>
+						</div>`
+				html += `</div>`
 			} else {
 				html += `<div class="flex">
 							<input type="radio" name="shipping_charge" class="inputCheckbox shipping ship_total_val" value="" checked />
 							<label>
 								<span class="ship_total_span" style="display: inline-block;">
-									</span> My items will be shipped to ${parent_address}. If you would like a different address,
-								please update the address on your mashpia.com parent account.
+									</span> Your items will be shipped to your child's school.
 							</label>
 						</div>`
 				html += `</div>`
@@ -2164,7 +2173,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			
 			return isIOS && (isNotSafari || isWKWebView);
 		}
-		
+
 		if (isRunningInIOSApp()) {
 			// Override the default alert function
 			window.alert = function(message) {
