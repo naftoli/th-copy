@@ -12,12 +12,16 @@ $children = $_POST['children'];
 $tracks = [];
 foreach ($children as $child) {
     $track = '';
+    $cumulative = '';
     // only need to calculate track if there's no reward type set for this child
     if (empty($child['reward_type']) || $child['reward_type'] === 'highest track passed') {
         $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
         $ct->setScores();
         $ct->calculateMarks();
-        $cumulative = $ct->calculateCumulative($child, $ct->getScores()[$child['th_chidon_id']]);
+        $scores = $ct->getScores();
+        if (isset($scores[$child['th_chidon_id']])) {
+            $cumulative = $ct->calculateCumulative($child, $scores[$child['th_chidon_id']]);
+        };
         if ($cumulative == 'iyun') $track = 'Iyun';
         else {
             $marks = $ct->getMarks();
