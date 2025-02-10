@@ -196,7 +196,6 @@ getAdminInfo();
                 },
                 success: function(response) {
                     const res = JSON.parse(response)
-                    alert(res.message)
                     if (! res.success) {
                         console.log(res.error)
                     }
@@ -218,7 +217,6 @@ getAdminInfo();
                 },
                 success: function(response) {
                     const res = JSON.parse(response)
-                    alert(res.message)
                     if (! res.success) {
                         console.log(res.error)
                     }
