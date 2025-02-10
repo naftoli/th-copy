@@ -1860,6 +1860,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 		}
 
 		function updateShippingHtml(parent_address) {
+			const eligible = window.localStorage ? JSON.parse(window.localStorage.getItem('eligible')) : JSON.parse(Cookies.get('eligible'))
 			const pickupText = {
 				61: `I would like to pick up my items in Crown Heights during the NY trip. They can be picked up during these times.
 							Tuesday, 16 Adar 2: 5-9PM & Tuesday, 23 Adar 2: 5-9PM.`,
