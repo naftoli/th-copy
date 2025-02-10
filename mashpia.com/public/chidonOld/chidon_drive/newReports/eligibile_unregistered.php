@@ -68,6 +68,11 @@ function getAdminInfo() {
     }
 }
 
+function cleanPhoneNumber($number) {
+    // clean phone number from any non-numeric characters including spaces
+    return preg_replace('/[^0-9]/', '', $number);
+}
+
 $reg = [];
 $users = [];
 $tracks = [];
@@ -160,9 +165,13 @@ getAdminInfo();
             "</td><td>" . $row['user_id'] . "</td><td>" . $row['user_serial'] .  "</td><td>" . $row['first'] . "</td><td>" .
             $row['last'] . "</td><td>" . $row['class_grade'] . "</td><td>" . $track . "</td>";
         $adminInfo = $admins[$row['parent_id']];
-        $phone = $adminInfo['admin_phone_mobile'] ?? '';
-        $phone .= $adminInfo['admin_phone_work'] ? $phone == '' ? $adminInfo['admin_phone_work'] : ("<br />" . $adminInfo['admin_phone_work']) : '';
-        $phone .= $adminInfo['admin_phone_home'] ? $phone == '' ? $adminInfo['admin_phone_home'] : ("<br />" . $adminInfo['admin_phone_home']) : '';
+        $mobile = cleanPhoneNumber($adminInfo['admin_phone_mobile']);
+        $work = cleanPhoneNumber($adminInfo['admin_phone_work']);
+        $home = cleanPhoneNumber($adminInfo['admin_phone_home']);
+        $phone = '';
+        if (strlen($mobile) == 7) $phone .= '<a href="https://api.whatsapp.com/send/?phone=1' . $mobile . '">' . $mobile . '</a>';
+        if (strlen($work) == 7) $phone .= '<br /><a href="https://api.whatsapp.com/send/?phone=1' . $work . '">' . $work . '</a>';
+        if (strlen($home) == 7) $phone .= '<br /><a href="https://api.whatsapp.com/send/?phone=1' . $home . '">' . $home . '</a>';
         echo "<td>" . ($adminInfo['first'] . ' ' . $adminInfo['last']) . "</td><td>" . $adminInfo['admin_email'] . "</td><td>" .
             $phone . "</td><td><input type='checkbox' name='contacted' class='contacted' ";
         if (intval($row['contacted_parent'])) echo "checked ";    
