@@ -169,9 +169,9 @@ getAdminInfo();
         $work = cleanPhoneNumber($adminInfo['admin_phone_work']);
         $home = cleanPhoneNumber($adminInfo['admin_phone_home']);
         $phone = '';
-        if (strlen($mobile) == 7) $phone .= '<a href="https://api.whatsapp.com/send/?phone=1' . $mobile . '">' . $mobile . '</a>';
-        if (strlen($work) == 7) $phone .= '<br /><a href="https://api.whatsapp.com/send/?phone=1' . $work . '">' . $work . '</a>';
-        if (strlen($home) == 7) $phone .= '<br /><a href="https://api.whatsapp.com/send/?phone=1' . $home . '">' . $home . '</a>';
+        if (strlen($mobile) == 10) $phone .= '<a href="https://api.whatsapp.com/send/?phone=1' . $mobile . '">' . $mobile . '</a>';
+        if (strlen($work) == 10) $phone .= '<br /><a href="https://api.whatsapp.com/send/?phone=1' . $work . '">' . $work . '</a>';
+        if (strlen($home) == 10) $phone .= '<br /><a href="https://api.whatsapp.com/send/?phone=1' . $home . '">' . $home . '</a>';
         echo "<td>" . ($adminInfo['first'] . ' ' . $adminInfo['last']) . "</td><td>" . $adminInfo['admin_email'] . "</td><td>" .
             $phone . "</td><td><input type='checkbox' name='contacted' class='contacted' ";
         if (intval($row['contacted_parent'])) echo "checked ";    
