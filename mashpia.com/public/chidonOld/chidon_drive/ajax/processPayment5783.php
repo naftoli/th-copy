@@ -199,6 +199,11 @@ function processFee() {
     // create description for authorize
     $desc = getAuthDesc();
 
+    // find out if authorize description is too long
+    if (strlen($desc) > 255) {
+        $desc = getShortDesc();
+    }
+
     if ($payment_id) {
         $admin = \Admin::find('first', ['admin_id' => $admin_id]);
         $cp = new Customer($admin->authorize_customer_profile_id);
@@ -228,8 +233,21 @@ function getAuthDesc() {
     foreach ($descriptions as $item) {
         $desc[] = $item['prefix'] . $item['id'] . ':' . $item['code'] . '-' . $item['amount'];
     }
-
     return implode(',', $desc);
+}
+
+function getShortDesc() {
+    $desc = [];
+    $descriptions = getDescriptions();
+    foreach ($descriptions as $item) {
+        $desc[] = $item['prefix'] . $item['id'];
+    }
+    $new_desc = 'desc too long, check mashpia database - ' . implode(',', $desc);
+    if (strlen($new_desc) > 250) {
+        // cut off new desc after 250 chars
+        $new_desc = array_slice($desc, 0, 250);
+    }
+    return $new_desc;
 }
 
 function insertIntoRegCharges($trans_id = 0) {
@@ -774,8 +792,10 @@ function saveAuthDesc() {
             admin_id = :admin
     ");
     $desc = getAuthDesc();
+    if (strlen($desc) > 255) $new_desc = getShortDesc();
+    else $new_desc = $desc;
     $stmt->execute([
-        ':desc' => $desc,
+        ':desc' => $new_desc,
         ':long_desc' => $desc,
         ':year' => $year, 
         ':admin' => $admin_id
