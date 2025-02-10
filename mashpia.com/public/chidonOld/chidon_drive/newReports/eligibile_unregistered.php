@@ -153,7 +153,6 @@ getAdminInfo();
         <th>Parent Phone</th>
         <th>Contacted Parent</th>
         <th>Notes</th>
-        <th>Save</th>
     </tr>
     <?php
     $i = 1;
@@ -173,10 +172,9 @@ getAdminInfo();
         $phone .= '<br /><a target="_blank" href="https://api.whatsapp.com/send/?phone=' . (strlen($work) == 10 ? '1' . $work : $work) . '">' . $work . '</a>';
         $phone .= '<br /><a target="_blank" href="https://api.whatsapp.com/send/?phone=' . (strlen($home) == 10 ? '1' . $home : $home) . '">' . $home . '</a>';
         echo "<td>" . ($adminInfo['first'] . ' ' . $adminInfo['last']) . "</td><td>" . $adminInfo['admin_email'] . "</td><td>" .
-            $phone . "</td><td><input type='checkbox' name='contacted' class='contacted' ";
+            $phone . "</td><td><input type='checkbox' name='contacted' class='contacted' id='" . $row['th_chidon_id'] . "' ";
         if (intval($row['contacted_parent'])) echo "checked ";    
-        echo "</td><td><textarea name='notes' class='notes'>" . $row['parent_notes'] . "</textarea></td><td>
-            <button class='save' id='" . $row['th_chidon_id'] . "'>Save</button></td></tr>";
+        echo "</td><td><textarea name='notes' class='notes'>" . $row['parent_notes'] . "</textarea></td></tr>";
     }
     ?>
 </table>
@@ -184,18 +182,17 @@ getAdminInfo();
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <script>
     $(document).ready(function() {
-        $(".save").click( function () {
+        $('.contacted').on('click', function() {
             // find out if checkbox is checked
             const id = $(this).attr('id')
-            const checked = $(this).parent().parent().find('.contacted').is(':checked') ? 1 : 0
-            // get notes
-            const notes = $(this).parent().parent().find('.notes').val()
+            const checked = $(this).is(':checked') ? 1 : 0
+            const fields = ['id', 'checked']
             // send to server
             $.ajax({
                 url: 'saveNotes.php',
                 type: 'POST',
                 data: {
-                    id, checked, notes
+                    id, checked, fields
                 },
                 success: function(response) {
                     const res = JSON.parse(response)
@@ -206,14 +203,27 @@ getAdminInfo();
                 }
             })
         })
-        $(".contacted_parent").click( function() {
-            const checked = $(this).is(':checked') ? 1 : 0;
-            if (!checked) {
-                // grey out the notes section
-                $(this).prev().find('textarea').attr('disabled', true)
-            } else {
-                $(this).prev().find('textarea').attr('disabled', false)
-            }
+        $('.notes').on('blur', function() {
+            // get notes
+            const id = $(this).parent().parent().find('.contacted').attr('id')
+            // get notes
+            const notes = $(this).val()
+            const fields = ['id', 'notes']
+            // send to server
+            $.ajax({
+                url: 'saveNotes.php',
+                type: 'POST',
+                data: {
+                    id, notes, fields
+                },
+                success: function(response) {
+                    const res = JSON.parse(response)
+                    alert(res.message)
+                    if (! res.success) {
+                        console.log(res.error)
+                    }
+                }
+            })
         })
     })
 </script>
