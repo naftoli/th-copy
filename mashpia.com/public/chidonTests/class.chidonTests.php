@@ -634,9 +634,7 @@ class ChidonTests
         // check if we already determined the track
         $stmt = $this->db->prepare("
             SELECT highest_track FROM th_chidon_info 
-            WHERE th_chidon_id = (
-                SELECT th_chidon_id FROM th_chidon WHERE user_id = :user AND year = :year
-            )
+            WHERE year = :year AND user_id = :user
         ");
         $stmt->execute([
             'user'  => $user_id,
