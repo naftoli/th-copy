@@ -14,6 +14,7 @@ foreach ($children as $child) {
     $track = '';
     $cumulative = '';
     // only need to calculate track if there's no reward type set for this child
+    echo "Reward Type: " . $child['reward_type'] . "\n";
     if (empty($child['reward_type']) || $child['reward_type'] === 'highest track passed') {
         $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
         $ct->setScores();

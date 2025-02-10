@@ -641,7 +641,12 @@ class ChidonTests
             'year'  => $this->year
         ]);
         $rowTrack = $stmt->fetch();
-        if ($rowTrack && !$needAvg) return ucwords($rowTrack['highest_track']);
+        if ($rowTrack && !$needAvg) {
+            $highest_track = ucwords($rowTrack['highest_track']);
+            $types = $this->types;
+            $key = array_search($highest_track, $types);
+            if ($key !== false) return $key;
+        }
 
         $highest = $forEligibility ? 'maven' : '';
         $avgs = $this->getPassingAvgs($user_id);
