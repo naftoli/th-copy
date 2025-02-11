@@ -58,15 +58,15 @@ while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row['id'];
 }
 
-$showMsg = false;
-$sqlChidon = "select user_id from th_chidon where (date_paid is null or date_paid = 0) and parent_id = " . $admin . " 
-    and year = " . $chidon_year;
-$resultChidon = mysql_query($sqlChidon);
-$numRows = mysql_num_rows($resultChidon);
-if ($numRows > 0) {
-    $showMsg = true;
-    $msg = "You have children that have not yet been registered for Chidon. Please register them now before registration ends.";
-}
+// $showMsg = false;
+// $sqlChidon = "select user_id from th_chidon where (date_paid is null or date_paid = 0) and parent_id = " . $admin . " 
+//     and year = " . $chidon_year;
+// $resultChidon = mysql_query($sqlChidon);
+// $numRows = mysql_num_rows($resultChidon);
+// if ($numRows > 0) {
+//     $showMsg = true;
+//     $msg = "You have children that have not yet been registered for Chidon. Please register them now before registration ends.";
+// }
 
 if (!empty($users)) {
     $children = [];
@@ -462,8 +462,8 @@ if (!empty($users)) {
     $children = [];
 }
 $info['children'] = $children;
-$info['showMsg'] = $showMsg;
-$info['msg'] = $msg;
+// $info['showMsg'] = $showMsg;
+// $info['msg'] = $msg;
 
 echo json_encode($info);
 ?>
