@@ -644,10 +644,9 @@ class ChidonTests
         ]);
         $rowTrack = $stmt->fetch();
         if ($rowTrack && !$needAvg) {
-            $highest_track = ucwords($rowTrack['highest_track']);
+            $highest_track = $rowTrack['highest_track'];
             $types = $this->types;
             $key = array_search($highest_track, $types);
-            if ($key !== false) return $key;
         }
 
         $highest = $forEligibility ? 'maven' : '';
@@ -680,6 +679,14 @@ class ChidonTests
                 $actualAvg = $avg;
             }
             else break; // can't go higher if lower one was not passed
+        }
+
+        // compare with key
+        if (isset($key)) {
+            $keys = array_keys($this->types);
+            $idx = array_search($key, $keys);
+            $idx2 = array_search($highest, $keys);
+            if ($idx > $idx2) $highest = $key;
         }
 
         if ($needAvg) {
