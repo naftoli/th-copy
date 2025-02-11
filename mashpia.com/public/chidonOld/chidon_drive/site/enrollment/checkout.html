@@ -753,7 +753,7 @@
                 } else {
                     let num = $("#cc_num").val();
                     cc.num = num.replaceAll(' ', '');
-                    const cardNumberPattern = /^(3\d{14}|4\d{15}|5\d{15})$/;
+                    const cardNumberPattern = /^(3\d{14}|4\d{15}|5\d{15}|6\d{15})$/;
                     if (!cardNumberPattern.test(cc.num)) {
                         alert('Invalid credit card number.');
                         return false;
