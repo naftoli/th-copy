@@ -245,7 +245,7 @@ function getShortDesc() {
     $new_desc = 'desc too long, check mashpia database - ' . implode(',', $desc);
     if (strlen($new_desc) > 250) {
         // cut off new desc after 250 chars
-        $new_desc = array_slice($desc, 0, 250);
+        $new_desc = substr($new_desc, 0, 250);
     }
     return $new_desc;
 }
