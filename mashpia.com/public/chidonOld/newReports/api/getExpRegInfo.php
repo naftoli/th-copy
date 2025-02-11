@@ -117,7 +117,7 @@ function getReward($row) {
 
 function getAward($row) {
     $award = trim($row['award_type']);
-    if (empty($award) || $award == 'highest final passed') return $row['reward'];
+    if (empty($award) || $award == 'highest final passed') return $row['highest_track'];
     else if ($award == 'no award') return '';
     else return $award;
 }
