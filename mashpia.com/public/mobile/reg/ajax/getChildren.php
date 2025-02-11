@@ -58,15 +58,16 @@ while ($row = mysql_fetch_assoc($result)) {
     $users[] = $row['id'];
 }
 
-// $showMsg = false;
-// $sqlChidon = "select user_id from th_chidon where (date_paid is null or date_paid = 0) and parent_id = " . $admin . " 
-//     and year = " . $chidon_year;
-// $resultChidon = mysql_query($sqlChidon);
-// $numRows = mysql_num_rows($resultChidon);
-// if ($numRows > 0) {
-//     $showMsg = true;
-//     $msg = "You have children that have not yet been registered for Chidon. Please register them now before registration ends.";
-// }
+$showMsg = false;
+$chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
+$sqlChidon = "select user_id from th_chidon where (date_paid is null or date_paid = 0) and parent_id = " . $admin . " 
+    and year = " . $chidon_year;
+$resultChidon = mysql_query($sqlChidon);
+$numRows = mysql_num_rows($resultChidon);
+if ($numRows > 0) {
+    $showMsg = true;
+    $msg = "You have children that have not yet been registered for Chidon. Please register them now before registration ends.";
+}
 
 if (!empty($users)) {
     $children = [];
@@ -83,7 +84,6 @@ if (!empty($users)) {
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $reg_year = GlobalSettings::getRegistrationYear($row['school_id']);
-        $chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
         $children[$row['user_id']]['user_id'] = $row['user_id'];
         $children[$row['user_id']]['first'] = $row['lang_id'] == 1 ? $row['first'] : $row['first_he'];
         $children[$row['user_id']]['last'] = $row['lang_id'] == 1 ? $row['last'] : $row['last_he'];
@@ -462,8 +462,7 @@ if (!empty($users)) {
     $children = [];
 }
 $info['children'] = $children;
-// $info['showMsg'] = $showMsg;
-// $info['msg'] = $msg;
+$info['msg'] = $showMsg ? $msg : '';
 
 echo json_encode($info);
 ?>

@@ -176,6 +176,65 @@
     .genius {
       display: none;
     }
+
+    #message .modal-dialog {
+      max-width: 600px;
+    }
+
+    #message .modal-content {
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    #message .modal-header {
+      background-color: #85abda;
+      color: white;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      padding: 20px 30px;
+    }
+
+    #message .modal-title {
+      font-size: 24px;
+      font-weight: 600;
+    }
+
+    #message .modal-body {
+      font-size: 18px;
+      line-height: 1.6;
+      padding: 30px;
+      color: #333;
+    }
+
+    #message .modal-footer {
+      border-top: none;
+      padding: 20px 30px;
+    }
+
+    #message .btn-secondary {
+      background-color: #85abda;
+      border: none;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 6px;
+      transition: background-color 0.3s;
+    }
+
+    #message .btn-secondary:hover {
+      background-color: #6b8cb3;
+    }
+
+    #message .close {
+      color: white;
+      opacity: 0.8;
+      font-size: 28px;
+      padding: 10px;
+      margin: -10px;
+    }
+
+    #message .close:hover {
+      opacity: 1;
+    }
   </style>
 </head>
 
@@ -658,7 +717,6 @@
       const domain = window.location.hostname;
       if (domain && (domain == 'tzivos.local' || domain == 'localhost')) {
         location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
-        return
       } else {
         location.href = 'https://chidondrive.com/site/enrollment/enrollNew.html?a=' + encodeURI(admin)
       }
@@ -679,6 +737,8 @@
     var parent_id;
     var allChildren = []
     var childrenToRegister = [];
+    var showMsg = false
+    var msg = ''
     $.post('ajax/getChildren.php', {
       admin: admin
     }, function (success) {
@@ -689,6 +749,11 @@
         var parent = data.parent;
         var children = data.children;
         allChildren = children
+
+        showMsg = data.showMsg
+        msg = data.msg
+        $("#messageBody").text(msg)
+        $("#message").modal('show')
 
         parent_id = parent.id;
         $("#family_id").text(parent_id)
@@ -1220,7 +1285,7 @@
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="messageTitle"></h5>
+        <h5 class="modal-title" id="messageTitle">Chidon Reward Registration</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -1232,9 +1297,6 @@
     </div>
   </div>
 </div>
-<script>
-  
-</script>
 </body>
 
 </html>
