@@ -750,10 +750,11 @@
         var children = data.children;
         allChildren = children
 
-        showMsg = data.showMsg
         msg = data.msg
-        $("#messageBody").text(msg)
-        $("#message").modal('show')
+        if (msg) {
+          $("#messageBody").text(msg)
+          $("#message").modal('show')
+        }
 
         parent_id = parent.id;
         $("#family_id").text(parent_id)
