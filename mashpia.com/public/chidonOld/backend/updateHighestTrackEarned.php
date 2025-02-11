@@ -44,7 +44,7 @@ foreach ($info as $row) {
     if ($cumulative == 'iyun') $highestTrack = 'genius';
     else {
         $rewardType = $row['reward_type'];
-        if ($rewardType != 'highest track passed' && $rewardType != '') {
+        if (empty($rewardType) && $rewardType != 'highest track passed') {
             // figure out which one is higher, the highest track passed or the reward type
             $indexes = array_keys($tracks);
             $key1 = array_search($highestTrack, $indexes);
