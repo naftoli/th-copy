@@ -66,7 +66,7 @@ $resultChidon = mysql_query($sqlChidon);
 $numRows = mysql_num_rows($resultChidon);
 if ($numRows > 0) {
     $showMsg = true;
-    $msg = "You have children that have not yet been registered for Chidon. Please register them now before registration ends.";
+    $msg = "You have children that have not yet been registered for Chidon. Please register them now before registration ends TONIGHT.";
 }
 
 if (!empty($users)) {
