@@ -618,6 +618,8 @@ class ChidonTests
             $key1 = array_search($highest_type, $indexes);
             $key2 = array_search($rewardType, $indexes);
             if ($key2 > $key1) $highest_type = $rewardType;
+        } else if (empty($highest_type) && !empty($rewardType) && $rewardType != 'highest track passed') {
+            $highest_type = $rewardType;
         }
 
         $markInfo = [];
