@@ -1258,8 +1258,9 @@
 
 			// figure out what to do
 			if (!registered.length && !eligible.length) {
-				alert("No children are currently eligible for registration. This is likely due to the fact that your school has not yet confirmed your child(ren)'s information. \
-Please speak to your Base Commander.")
+				alert('There are no children currently eligible for registration. To see who has already registered please check the home page on your parent account.')
+				// alert("No children are currently eligible for registration. This is likely due to the fact that your school has not yet confirmed your child(ren)'s information. \
+// Please speak to your Base Commander.")
 			} else if (registered.length && !eligible.length) {
 				// check if we can edit ultimate trip info
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
