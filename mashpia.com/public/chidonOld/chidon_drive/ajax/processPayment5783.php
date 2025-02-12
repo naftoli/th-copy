@@ -13,7 +13,9 @@ $year = GlobalSettings::getChidonYear();
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
 require_once __DIR__ . '/../../../classes/authorize/PaymentProfile.php';
+require_once __DIR__ . '/../../../classes/authorize/Card.php';
 use classes\authorize\CustomerProfile as Customer;
+use classes\authorize\Card as Card;
 
 //******************* Coupon Codes ************************/
 require_once __DIR__ . '/../../../chidonOld/coupons/class.couponCode.php';
@@ -194,21 +196,23 @@ function addNewCard() {
 }
 
 function processFee() {
-    global $admin_id, $to_charge, $payment_id;
+    global $admin_id, $to_charge, $payment_id, $cc_info;
 
     // create description for authorize
     $desc = getAuthDesc();
 
     // find out if authorize description is too long
     if (strlen($desc) > 255) {
-        $desc = getShortDesc();
+        $desc = getShortDesc(); 
     }
 
+    $error = '';
     if ($payment_id) {
         $admin = \Admin::find('first', ['admin_id' => $admin_id]);
         $cp = new Customer($admin->authorize_customer_profile_id);
         $response = $cp->chargeCard($to_charge, $payment_id, null, null, $desc);
-        return $response;
+        if (is_array($response)) return $response;
+        else $error = $response;
     } else {
         $payment = addNewCard();
         if (is_object($payment)) {
@@ -217,10 +221,22 @@ function processFee() {
             if ($payment_id && $customer_profile_id) {
                 $cp = new Customer($customer_profile_id);
                 $response = $cp->chargeCard($to_charge, $payment_id, null, null, $desc);
-                return $response;
+                if (is_array($response)) return $response;
+                else $error = $response;
             }
         } 
-        return false;
+        // if we get here we had errors so try to charge card without the user ID
+        if (isset($_COOKIE['test_card']) && intval($_COOKIE['test_card']) == 1) {
+            try {
+                $c = new Card();
+                $result = $c->charge($cc_info, $to_charge, $desc);
+                return $result;
+            } catch (Exception $e) {
+                return $e->getMessage();
+            }
+        }
+        
+        return $error ? $error : false;
     }
 }
 
