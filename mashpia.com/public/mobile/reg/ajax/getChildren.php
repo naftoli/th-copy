@@ -464,5 +464,14 @@ if (!empty($users)) {
 $info['children'] = $children;
 $info['msg'] = $showMsg ? $msg : '';
 
+// get shools and users to keep chidon reg open for
+$keepOpen = [];
+$sql = "select * from keep_reg_open where year = " . $chidon_year;
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $keepOpen[$row['type']][] = $row['id'];
+}
+$info['keepOpen'] = $keepOpen;
+
 echo json_encode($info);
 ?>

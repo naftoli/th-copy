@@ -310,7 +310,7 @@
                                       <!-- <button class="btn btn-primary chidondrive">ChidonDrive Setup</button> -->
           <!--                                            <button class="btn btn-info story">Submit your Rebbe Story</button>-->
           <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
-                    <button class="btn btn-primary chidon_reg">Chidon Reward Registration</button>
+                    <button class="btn btn-primary chidon_reg" style="display: none;">Chidon Reward Registration</button>
           <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
           <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
 <!--          <button class="btn btn-primary heyTeves">Hei Teves Sale</button>-->
@@ -676,14 +676,13 @@
     }
 
     // when to show link for chidon registration
-    // let show_reg = false;
-    // if (
-    //   Cookies.get('naftoli') ||
-    //   (now > 1739163600 && now < 1739422800) ||
-    //   (Cookies.get('override') && now < 1739854800)
-    // ) {
-    //   show_reg = true;
-    // }
+    let show_reg = false;
+    if (
+      Cookies.get('naftoli') ||
+      (now > 1739163600 && now < 1739336400)
+    ) {
+      show_reg = true;
+    }
 
     // allow parents to swipe to open a child's account.
     function setSwiper() {
@@ -748,10 +747,11 @@
         var data = $.parseJSON(success);
         var parent = data.parent;
         var children = data.children;
+        var keepOpen = data.keepOpen;
         allChildren = children
 
         msg = data.msg
-        if (msg) {
+        if (msg && now < 1739336400) {
           $("#messageBody").text(msg)
           $("#message").modal('show')
         }
@@ -798,9 +798,14 @@
 
         for (var c in children) {
           var child = children[c]
-          // if (!show_reg && [11, 40, 58, 66, 89, 105, 112, 185, 470, 472, 517, 621, 726, 739, 817].includes(parseInt(child.school_id))) {
-          //   show_reg = true
-          // }
+          if (!show_reg && 
+            (keepOpen['school'] && keepOpen['school'].includes(child.school_id)) || 
+            (keepOpen['class'] && keepOpen['class'].includes(child.class_id)) ||
+            (keepOpen['user'] && keepOpen['user'].includes(child.user_id)) ||
+            (keepOpen['admin'] && keepOpen['admin'].includes(parent.id))
+          ) {
+            show_reg = true
+          }
 
           if (child.chidonRegistered && parseInt(child.chidonSchoolConfirmed)) {
             $(".subsidy").show()
@@ -845,7 +850,7 @@
           $(".chilrens").append(html);
           setSwiper();
           $(".year").text(year);
-          // if (show_reg) $(".chidon_reg").show()
+          if (show_reg) $(".chidon_reg").show()
         }
       }
     });
