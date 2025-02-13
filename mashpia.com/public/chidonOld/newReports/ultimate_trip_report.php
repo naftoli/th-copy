@@ -39,127 +39,187 @@ $info = $stmt->fetchAll();
     <meta charset="UTF-8">
     <title>Ultimate Trip Info</title>
     <style>
-        tr, th, td {
-          font-size: 14px;
-          padding: 10px;
-          border-bottom: 1px solid grey;
-          font-family: Arial, Helvetica, sans-serif;
-        }
-    </style>
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 25px 0;
+        font-size: 14px;
+        font-family: Arial, sans-serif;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .data-table thead tr {
+        background-color: #009879;
+        color: #ffffff;
+        text-align: left;
+        position: sticky;
+        top: 0;
+    }
+
+    .data-table th,
+    .data-table td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #dddddd;
+        white-space: nowrap;
+    }
+
+    .data-table tbody tr {
+        border-bottom: 1px solid #dddddd;
+    }
+
+    .data-table tbody tr:nth-of-type(even) {
+        background-color: #f3f3f3;
+    }
+
+    .data-table tbody tr:last-of-type {
+        border-bottom: 2px solid #009879;
+    }
+
+    .data-table tbody tr:hover {
+        background-color: #f5f5f5;
+        cursor: default;
+    }
+
+    /* Container for table with horizontal scroll */
+    .table-container {
+        max-width: 100%;
+        overflow-x: auto;
+        margin: 20px 0;
+        padding: 0 10px;
+    }
+
+    /* Additional styles for better readability */
+    body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        color: #009879;
+        margin-bottom: 20px;
+    }
+</style>
 </head>
 <body>
     <h1>Ultimate Trip Info</h1>
-    <table>
-        <tr>
-            <th>School</th>
-            <th>Grade/Class</th>
-            <th>Student</th>
-            <th>Serial Number</th>
-            <th>Gender</th>
-            <th>Sandwich</th>
-            <th>Height</th>
-            <th>Weight</th>
-            <th>Ski/Snowboard</th>
-            <th>Skill Level</th>
-            <th>Outerwear</th>
-            <th>Shoe Size</th>
-            <th>Allergies</th>
-            <th>In Walking Zone</th>
-            <th>Host</th>
-            <th>Host Phone Number</th>
-            <th>Street Number</th>
-            <th>Street Number Suffix</th>
-            <th>Street Name</th>
-            <th>Apt. #</th>
-            <th>Host Cross Street 1</th>
-            <th>Host Cross Street 2</th>
-            <th>Thursday Walking</th>
-            <th>Motzei Shabbos Walking</th>
-            <th>Zone ID</th>
-            <th>Comments</th>
-            <th></th>
-        </tr>
-        <?php
-        foreach ($info as $row) {
-            $chidon_id = $row['th_chidon_id'];
-            $school = $row['school_name'];
-            $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
-            $student = $row['first'] . ' ' . $row['last'];
-            $serial = $row['user_serial'];
-            $gender = strtolower($row['gender']) == 'm' ? 'boys' : 'girls';
-            $shoe = $row['shoe_size'];
-            $sandwich = $row['sandwich'];
-            $allergies = $row['allergies'];
-            $in_zone = $row['in_zone'];
-            $host = $row['host'];
-            $host_phone = $row['host_number'];
-            $street_num = $row['host_street_num'];
-            $suffix = $row['host_street_num_suffix'];
-            $street = $row['host_street'];
-            $apt = $row['host_street_apt'];
-            $zone = $row['walking_zone'];
-            $cross1 = $row['between_streets1'];
-            $cross2 = $row['between_streets2'];
-            $poll = $row['poll'];
-            $thurs_walking = $row['thurs_walking'];
-            $ms_walking = $row['ms_walking'];
-            $height = $row['height'];
-            $weight = $row['weight'];
-            $ski = $row['ski'];
-            $skill = $row['skill'];
-            $outerwear = $row['outerwear'];
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>School</th>
+                    <th>Grade/Class</th>
+                    <th>Student</th>
+                    <th>Serial Number</th>
+                    <th>Gender</th>
+                    <th>Sandwich</th>
+                    <th>Height</th>
+                    <th>Weight</th>
+                    <th>Ski/Snowboard</th>
+                    <th>Skill Level</th>
+                    <th>Outerwear</th>
+                    <th>Shoe Size</th>
+                    <th>Allergies</th>
+                    <th>In Walking Zone</th>
+                    <th>Host</th>
+                    <th>Host Phone Number</th>
+                    <th>Street Number</th>
+                    <th>Street Number Suffix</th>
+                    <th>Street Name</th>
+                    <th>Apt. #</th>
+                    <th>Host Cross Street 1</th>
+                    <th>Host Cross Street 2</th>
+                    <th>Thursday Walking</th>
+                    <th>Motzei Shabbos Walking</th>
+                    <th>Zone ID</th>
+                    <th>Comments</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                foreach ($info as $row) {
+                    $chidon_id = $row['th_chidon_id'];
+                    $school = $row['school_name'];
+                    $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
+                    $student = $row['first'] . ' ' . $row['last'];
+                    $serial = $row['user_serial'];
+                    $gender = strtolower($row['gender']) == 'm' ? 'boys' : 'girls';
+                    $shoe = $row['shoe_size'];
+                    $sandwich = $row['sandwich'];
+                    $allergies = $row['allergies'];
+                    $in_zone = $row['in_zone'];
+                    $host = $row['host'];
+                    $host_phone = $row['host_number'];
+                    $street_num = $row['host_street_num'];
+                    $suffix = $row['host_street_num_suffix'];
+                    $street = $row['host_street'];
+                    $apt = $row['host_street_apt'];
+                    $zone = $row['walking_zone'];
+                    $cross1 = $row['between_streets1'];
+                    $cross2 = $row['between_streets2'];
+                    $poll = $row['poll'];
+                    $thurs_walking = $row['thurs_walking'];
+                    $ms_walking = $row['ms_walking'];
+                    $height = $row['height'];
+                    $weight = $row['weight'];
+                    $ski = $row['ski'];
+                    $skill = $row['skill'];
+                    $outerwear = $row['outerwear'];
 
-            switch ($thurs_walking) {
-                case 0:
-                    $thurs = 'child walking alone';
-                    break;
-                case 1:
-                    $thurs = 'parent picking up';
-                    break;
-                case 2:
-                    $thurs = 'NEEDS TO BE DROPPED OFF';
-                    break;
-            }
+                    switch ($thurs_walking) {
+                        case 0:
+                            $thurs = 'child walking alone';
+                            break;
+                        case 1:
+                            $thurs = 'parent picking up';
+                            break;
+                        case 2:
+                            $thurs = 'NEEDS TO BE DROPPED OFF';
+                            break;
+                    }
 
-            switch ($ms_walking) {
-                case 0:
-                    $ms = 'child walking alone';
-                    break;
-                case 1:
-                    $ms = 'parent picking up';
-                    break;
-                case 2:
-                    $ms = 'NEEDS TO BE DROPPED OFF';
-                    break;
-            }
+                    switch ($ms_walking) {
+                        case 0:
+                            $ms = 'child walking alone';
+                            break;
+                        case 1:
+                            $ms = 'parent picking up';
+                            break;
+                        case 2:
+                            $ms = 'NEEDS TO BE DROPPED OFF';
+                            break;
+                    }
 
-            echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "
-                </td><td>" . $serial . "</td><td> . $gender . </td>
-                <td><input type='text' class='sandwhich' value='" . $sandwich . "' /></td>
-                <td><input type='text' class='height' value='" . $height . "' /></td>
-                <td><input type='text' class='weight' value='" . $weight . "' /></td>
-                <td><input type='text' class='ski' value='" . $ski . "' /></td>
-                <td><input type='text' class='skill' value='" . $skill . "' /></td>
-                <td><input type='text' class='outerwear' value='" . $outerwear . "' /></td>
-                <td><input type='text' class='shoe' value='" . $shoe . "' /></td>
-                <td><input type='text' class='alergies' value='" . $allergies . "' /></td>
-                <td><select name='in_zone' class='in_zone'><option value='yes'" . ($in_zone ? ' selected' : '') . "
-                >yes</option><option value='no'" . (!$in_zone ? ' selected' : '') . ">no</option></select></td> 
-                <td><input type='text' class='host' value='" . $host . "' /></td>
-                <td><input type='text' class='host_phone' value='" . $host_phone . "' /></td>
-                <td><input type='text' class='street_num' value='" . $street_num . "' size='3'  /></td>
-                <td><input type='text' class='suffix' value='" . $suffix . "' size='2' /></td>
-                <td><input type='text' class='street' value='" . $street . "' /></td>
-                <td><input type='text' class='apt' value='" . $apt . "' size='3' /></td> 
-                <td><input type='text' class='cross1' value='" . $cross1 . "' /></td>
-                <td><input type='text' class='cross2' value='" . $cross2 . "' /></td>
-                <td>" . $thurs . "</td><td>" . $ms . "</td>
-                <td>" . $zone . "</td><td>" . $poll . "</td><td>";
-            if ($superAdmin) echo "<button class='save'>Save</button>";
-            echo "</td></tr>";
-        }
-        ?>
-    </table>
+                    echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "
+                        </td><td>" . $serial . "</td><td> . $gender . </td>
+                        <td><input type='text' class='sandwhich' value='" . $sandwich . "' /></td>
+                        <td><input type='text' class='height' value='" . $height . "' /></td>
+                        <td><input type='text' class='weight' value='" . $weight . "' /></td>
+                        <td><input type='text' class='ski' value='" . $ski . "' /></td>
+                        <td><input type='text' class='skill' value='" . $skill . "' /></td>
+                        <td><input type='text' class='outerwear' value='" . $outerwear . "' /></td>
+                        <td><input type='text' class='shoe' value='" . $shoe . "' /></td>
+                        <td><input type='text' class='alergies' value='" . $allergies . "' /></td>
+                        <td><select name='in_zone' class='in_zone'><option value='yes'" . ($in_zone ? ' selected' : '') . "
+                        >yes</option><option value='no'" . (!$in_zone ? ' selected' : '') . ">no</option></select></td> 
+                        <td><input type='text' class='host' value='" . $host . "' /></td>
+                        <td><input type='text' class='host_phone' value='" . $host_phone . "' /></td>
+                        <td><input type='text' class='street_num' value='" . $street_num . "' size='3'  /></td>
+                        <td><input type='text' class='suffix' value='" . $suffix . "' size='2' /></td>
+                        <td><input type='text' class='street' value='" . $street . "' /></td>
+                        <td><input type='text' class='apt' value='" . $apt . "' size='3' /></td> 
+                        <td><input type='text' class='cross1' value='" . $cross1 . "' /></td>
+                        <td><input type='text' class='cross2' value='" . $cross2 . "' /></td>
+                        <td>" . $thurs . "</td><td>" . $ms . "</td>
+                        <td>" . $zone . "</td><td>" . $poll . "</td><td>";
+                    if ($superAdmin) echo "<button class='save'>Save</button>";
+                    echo "</td></tr>";
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"
         integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU="
