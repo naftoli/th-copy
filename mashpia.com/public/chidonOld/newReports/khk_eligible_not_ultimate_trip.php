@@ -91,7 +91,7 @@ $no_trip = array_filter($info, function($user) use ($eligible) {
 </head>
 <body>
     <h1>KHK Eligible but not going on Ultimate Trip</h1>
-    <table>
+    <table class="data-table">
         <tr>
             <th>School</th>
             <th>Grade</th>
