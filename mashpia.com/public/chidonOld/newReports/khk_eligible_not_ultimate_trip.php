@@ -39,13 +39,14 @@ $user_ids = array_map(function($user) {
 }, $info);
 // get khk eligibility
 $eligible = KHK::getKHKEligibility($user_ids)[0];
+echo "<pre>"; print_r($eligible); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta charset="UTF-8">
-    <title>KHK Eligible</title>
+    <title>Ultimate Trip Eligible</title>
     <style>
         .data-table {
             width: 100%;
@@ -87,7 +88,7 @@ $eligible = KHK::getKHKEligibility($user_ids)[0];
     </style>
 </head>
 <body>
-    <h1>KHK Eligible but not going on Ultimate Trip</h1>
+    <h1>Eligible for Ultimate Trip but not going</h1>
     <table class="data-table">
         <tr>
             <th>School</th>
