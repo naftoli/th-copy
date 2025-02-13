@@ -1246,24 +1246,23 @@
 
 			// only let ultimate trip kids to update their trip info
 			// const only_schools = [11, 40, 58, 66, 89, 105, 112, 185, 470, 472, 517, 621, 726, 739, 817]
-			let registered = children.filter(child => child.date_paid > 0)
-			let eligible = children.filter(child => child.track && (!child.date_paid > 0) && child.schoolConfirmed)
 			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
+			let registered = children.filter(child => child.date_paid)
+			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
 			if (Cookies.get('naftoli')) {
 				eligible = children.filter(child => child.track && !child.date_paid)
 			}
-			// children.forEach(child => {
-			// 	console.log(child.track, child.date_paid, child.schoolConfirmed, only_schools.includes(parseInt(child.school_id)))
-			// })
+			console.log(children)
+			console.log(eligible)
+			console.log(registered)
 
 			// figure out what to do
 			if (!registered.length && !eligible.length) {
 				alert('There are no children currently eligible for registration. To see who has already registered please check the home page on your parent account.')
-				// alert("No children are currently eligible for registration. This is likely due to the fact that your school has not yet confirmed your child(ren)'s information. \
-// Please speak to your Base Commander.")
 			} else if (registered.length && !eligible.length) {
 				// check if we can edit ultimate trip info
 				let to_edit = children.filter(child => parseInt(child.ultimate_trip) == 1)
+				console.log(to_edit)
 				if (to_edit.length) {
 					alert("All eligible children have already registered, however you can still update your child(ren)'s information for the Ultimate Trip Experience.")
 					editing_mode = true
