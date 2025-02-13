@@ -39,7 +39,9 @@ $user_ids = array_map(function($user) {
 }, $info);
 // get khk eligibility
 $eligible = KHK::getKHKEligibility($user_ids)[0];
-echo "<pre>"; print_r($eligible); echo "</pre>";
+$no_trip = array_filter($info, function($user) use ($eligible) {
+    return $eligible[$user['user_id']] == true ? $user : null; 
+});
 ?>
 <!DOCTYPE html>
 <html>
