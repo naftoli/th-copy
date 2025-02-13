@@ -230,9 +230,10 @@ function processFee() {
             try {
                 $c = new Card();
                 $result = $c->charge($cc_info, $to_charge, $desc);
-                return $result;
+                if (is_array($result)) return $result;
+                else $error = $result;
             } catch (Exception $e) {
-                return $e->getMessage();
+                $error = $e->getMessage();
             }
         }
         
