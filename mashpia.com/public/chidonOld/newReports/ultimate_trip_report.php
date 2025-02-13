@@ -56,8 +56,13 @@ $info = $stmt->fetchAll();
             <th>Student</th>
             <th>Serial Number</th>
             <th>Gender</th>
-            <th>Shoe Size</th>
             <th>Sandwich</th>
+            <th>Height</th>
+            <th>Weight</th>
+            <th>Ski/Snowboard</th>
+            <th>Skill Level</th>
+            <th>Outerwear</th>
+            <th>Shoe Size</th>
             <th>Allergies</th>
             <th>In Walking Zone</th>
             <th>Host</th>
@@ -98,6 +103,11 @@ $info = $stmt->fetchAll();
             $poll = $row['poll'];
             $thurs_walking = $row['thurs_walking'];
             $ms_walking = $row['ms_walking'];
+            $height = $row['height'];
+            $weight = $row['weight'];
+            $ski = $row['ski'];
+            $skill = $row['skill'];
+            $outerwear = $row['outerwear'];
 
             switch ($thurs_walking) {
                 case 0:
@@ -125,8 +135,13 @@ $info = $stmt->fetchAll();
 
             echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "
                 </td><td>" . $serial . "</td><td> . $gender . </td>
-                <td><input type='text' class='shoe' value='" . $shoe . "' /></td>
                 <td><input type='text' class='sandwhich' value='" . $sandwich . "' /></td>
+                <td><input type='text' class='height' value='" . $height . "' /></td>
+                <td><input type='text' class='weight' value='" . $weight . "' /></td>
+                <td><input type='text' class='ski' value='" . $ski . "' /></td>
+                <td><input type='text' class='skill' value='" . $skill . "' /></td>
+                <td><input type='text' class='outerwear' value='" . $outerwear . "' /></td>
+                <td><input type='text' class='shoe' value='" . $shoe . "' /></td>
                 <td><input type='text' class='alergies' value='" . $allergies . "' /></td>
                 <td><select name='in_zone' class='in_zone'><option value='yes'" . ($in_zone ? ' selected' : '') . "
                 >yes</option><option value='no'" . (!$in_zone ? ' selected' : '') . ">no</option></select></td> 
@@ -157,7 +172,8 @@ $info = $stmt->fetchAll();
       $(".save").click( async function () {
         let row = $(this).parent().parent()
         let chidon_id = $(row).attr('id')
-        let fields = ['shoe', 'sandwhich', 'allergies', 'in_zone', 'host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2']
+        let fields = ['sandwhich', 'height', 'weight', 'ski', 'skill', 'outerwear', 'shoe', 'allergies', 'in_zone', 
+            'host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2']
         let info = {
           chidon_id: chidon_id
         }
