@@ -39,9 +39,6 @@ $user_ids = array_map(function($user) {
 }, $info);
 // get khk eligibility
 $eligible = KHK::getKHKEligibility($user_ids)[0];
-$no_trip = array_filter($info, function($user) use ($eligible) {
-    return $eligible[$user['user_id']] == true ? $user : null; 
-});
 ?>
 <!DOCTYPE html>
 <html>
@@ -102,7 +99,7 @@ $no_trip = array_filter($info, function($user) use ($eligible) {
         </tr>
         <?php
         foreach ($info as $row) {
-            if (! isset($eligible[$row['user_id']])) continue;
+            if (! $eligible[$row['user_id']]) continue;
             echo '<tr>';
             echo '<td>' . $schools[$row['school_id']] . '</td>';
             echo '<td>' . $row['class_grade'] . '</td>';
