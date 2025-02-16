@@ -1212,7 +1212,7 @@
 				alert(result.error)
 				return false
 			}
-			children = result.children
+			children = result.info.children
 
 			for (let child of children) {
 				users[child.user_id] = child.first + ' ' + child.last
@@ -1252,9 +1252,24 @@
 			if (Cookies.get('naftoli')) {
 				eligible = children.filter(child => child.track && !child.date_paid)
 			}
-			console.log(children)
-			console.log(eligible)
-			console.log(registered)
+
+			let close = true // change to false to open registration
+			if (close) {
+				// check if we are keeping open for any child
+				const keepOpen = result.info.keepOpen
+				let temp = eligible
+				let eligible = []
+				for (let child of temp) {
+					if (
+						(keepOpen['school'] && keepOpen['school'].includes(child.school_id)) || 
+						(keepOpen['class'] && keepOpen['class'].includes(child.class_id)) ||
+						(keepOpen['user'] && keepOpen['user'].includes(child.user_id)) ||
+						(keepOpen['admin'] && keepOpen['admin'].includes(parent.id))
+					) {
+						eligible.push(child)
+					}
+				}
+			}
 
 			// figure out what to do
 			if (!registered.length && !eligible.length) {
@@ -1269,10 +1284,15 @@
 					for (let c of to_edit) ultimate_trip.push(c.user_id)
 					updateModal(to_edit[0])
 				} else {
-					alert("All of your eligible children have already registered. If you still have some children that need to be registered \
+					if (close) {
+						alert('Registration is now closed. If you have any questions please contact your base commander.')
+						return false
+					} else {
+						alert("All of your eligible children have already registered. If you still have some children that need to be registered \
 please speak to your Base Commander to ensure that he/she confirms your child(ren)'s information.")
+					}
 				}
-			} else {
+			} else {				
 				// save eligible children to local storage
 				if (window.localStorage) window.localStorage.setItem('eligible', JSON.stringify(eligible))
 				else Cookies.set('eligible', JSON.stringify(eligible))
