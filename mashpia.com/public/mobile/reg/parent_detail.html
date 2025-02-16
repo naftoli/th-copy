@@ -491,10 +491,9 @@
                             <div class="button-spacing">
                               <!--                            <button class="btn btn-danger invitation" id="{{this.user_serial}}">Share your Invitation-->
                               <!--                            </button>-->
-                              <!--                                                                {{#if
-                              this.chidon_registered}}-->
-                              <!--                                                                    <button class="btn btn-primary chidonPhoto">Update your Chidon Photo</button>-->
-                              <!--                                                                {{/if}}-->
+                              {{#if this.chidon_registered}}
+                                  <button class="btn btn-primary chidonPhoto" style="display: none;">Update your Chidon Photo</button>
+                              {{/if}}
                               {{#if this.shabbatonPaid}}
                                                            <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon
                                                               Experience {{ this.next_year_chidon }}</div>
@@ -677,11 +676,9 @@
 
     // when to show link for chidon registration
     let show_reg = false;
-    if (
-      Cookies.get('naftoli') ||
-      (now > 1739163600 && now < 1739336400)
-    ) {
+    if (Cookies.get('naftoli')) {
       show_reg = true;
+      $(".chidonPhoto").show();
     }
 
     // allow parents to swipe to open a child's account.
