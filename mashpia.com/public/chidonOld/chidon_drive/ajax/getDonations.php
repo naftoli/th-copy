@@ -4,31 +4,44 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 try {
-    // Get all donations
+    // Get all donations that have subsidies
     $stmt = $MASHPIA_DB->prepare("
         SELECT 
-            chidon_donation_id,
-            for_family_id, 
-            donation_amount
-        FROM chidon_donations 
-        WHERE chidon_year = :year
+            cd.chidon_donation_id,
+            donation_amount,
+            donation_date,
+            chidon_user_subsidy_id,
+            user_id,
+            subsidy_amount
+        FROM
+            chidon_donations cd
+                JOIN
+            chidon_user_subsidies cus ON cd.chidon_donation_id = cus.chidon_donation_id
+        WHERE
+            cd.chidon_year = :year
     ");
     $stmt->execute([':year' => $year]);
-    $donations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Get subsidies for each donation
-    foreach ($donations as &$donation) {
-        $stmt = $MASHPIA_DB->prepare("
-            SELECT 
-                user_id,
-                subsidy_amount
-            FROM chidon_user_subsidies
-            WHERE chidon_donation_id = ?
-        ");
-        $stmt->execute([$donation['chidon_donation_id']]);
-        $donation['subsidies'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $donations = [];
+    $subsidies = [];
+    foreach ($rows as $row) {
+        $donation = [
+            'chidon_donation_id' => $row['chidon_donation_id'],
+            'donation_amount' => $row['donation_amount'],
+            'donation_date' => $row['donation_date']
+        ];
+        if (!isset($donations[$row['chidon_donation_id']])) {
+            $donations[$row['chidon_donation_id']] = $donation;
+        }
+        $subsidy = [
+            'chidon_user_subsidy_id' => $row['chidon_user_subsidy_id'],
+            'user_id' => $row['user_id'],
+            'subsidy_amount' => $row['subsidy_amount'],
+        ];
+        $subsidies[$row['chidon_donation_id']][] = $subsidy;
     }
-    echo json_encode($donations);
+    echo json_encode([$donations, $subsidies]);
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['error' => 'Database error']);
