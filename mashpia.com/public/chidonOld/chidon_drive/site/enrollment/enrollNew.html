@@ -1213,6 +1213,7 @@
 				return false
 			}
 			children = result.info.children
+			const keepOpen = result.info.keepOpen
 
 			for (let child of children) {
 				users[child.user_id] = child.first + ' ' + child.last
@@ -1256,7 +1257,6 @@
 			let close = true // change to false to open registration
 			if (close) {
 				// check if we are keeping open for any child
-				const keepOpen = result.info.keepOpen
 				let temp = eligible
 				let eligible = []
 				for (let child of temp) {
