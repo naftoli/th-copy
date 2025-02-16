@@ -21,7 +21,7 @@ function getRegInfo() {
             join th_chidon tc using (user_id)  
             join schools s on s.school_id = u.school_id 
             join classes c on c.class_id = u.class_id 
-            where paid is null  
+            where (tc.paid is null or tc.paid = '' || tc.paid = 0) 
             and tc.year = " . $year;
     if ($admin_user['auth'] != 'super') $sqlReg .= " and u.school_id in (" . implode(',', array_keys($schools)) . ")";
     $sqlReg .= " order by s.school_name, c.class_grade, c.class_sub, last, first";
