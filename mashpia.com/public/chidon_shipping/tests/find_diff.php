@@ -62,5 +62,5 @@ while ($row2 = mysql_fetch_assoc($result2)) {
 }
 
 // find user ids that are in info1 but not info2
-$diff = array_diff(array_keys($info1), array_keys($info2));
+$diff = array_values(array_diff(array_keys($info1), array_keys($info2)));
 echo "<pre>"; print_r($diff); echo "</pre>";
