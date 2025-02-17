@@ -26,7 +26,7 @@ $sql1 = "SELECT
         WHERE
             cup.year = 5785 AND tc.date_paid > 0 
                 AND tc.ultimate_trip = 0 AND (tci.highest_track is null OR tci.highest_track != 'yesod') 
-                group by cup.user_id";
+                GROUP BY cup.user_id";
 
 $sql2 = "SELECT 
             cup.user_id, tci.highest_track 
@@ -47,7 +47,7 @@ $sql2 = "SELECT
                 AND tc.ultimate_trip = 0 AND tc.user_id not in (
                     SELECT user_id FROM registration_charges WHERE year = 5785 AND type = 'RRYSD'
                 )
-                group by cup.user_id";
+                GROUP BY cup.user_id";
 
 $result1 = mysql_query($sql1);
 $result2 = mysql_query($sql2);
@@ -55,10 +55,10 @@ $result2 = mysql_query($sql2);
 $info1 = [];
 $info2 = [];
 while ($row1 = mysql_fetch_assoc($result1)) {
-    $info1[$row1['user_id']] = $row1;
+    $info1[$row1['user_id']] = $row1['highest_track'];
 }
 while ($row2 = mysql_fetch_assoc($result2)) {
-    $info2[$row2['user_id']] = $row2;
+    $info2[$row2['user_id']] = $row2['highest_track'];  
 }
 
 // find user ids that are in info1 but not info2
