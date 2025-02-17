@@ -3,7 +3,7 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
-reuire_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
 if ($admin_user['auth'] != 'super') {
     die('Access denied');
