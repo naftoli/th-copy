@@ -42,7 +42,7 @@ $sql2 = "SELECT
         WHERE
             cup.year = 5785 AND tc.date_paid > 0 
                 AND tc.ultimate_trip = 0 AND tc.user_id not in (
-                    SELECT user_id FROM registration_charges WHERE year = :year AND type = 'RRYSD'
+                    SELECT user_id FROM registration_charges WHERE year = 5785 AND type = 'RRYSD'
                 )
                 group by cup.user_id";
 
