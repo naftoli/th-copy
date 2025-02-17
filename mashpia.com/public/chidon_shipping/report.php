@@ -348,16 +348,22 @@ foreach ($resultsBySchool as $school => $more) : ?>
                   if (strpos($field, 'shipping') === false) echo "<th>" . $fields[$field] . "</th>";
               }
               echo "<th>Item</th>";
+              $show_date = false;
               if ($item_details_chosen && count($item_details_chosen)) {
                   foreach ($item_details_chosen as $field) {
+                      if ($field == 'date') {
+                        $show_date = true;
+                        continue;
+                      }
                       if ($field == 'cat') $field = 'category';
                       else if ($field == 'name') $field = 'name preference';
                       else if ($field == 'id') $field = 'Item ID';
-                      else if ($field == 'date') $field = 'Date Shipped';
                       echo "<th>" . ucwords($field) . "</th>";
                   }
               }
               echo "<th class='no-print'>Status</th>";
+              echo "<th class='no-print'>Shipment Number</th>";
+              if ($show_date) echo "<th class='no-print'>Date Shipped</th>";
               echo "<th class='no-print'>Explain the damage</th>"
               ?>
           </tr>
@@ -452,7 +458,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   const super_admin = <?= $super ? 1 : 0; ?>;
   const year = <?= $year; ?>;
 
-  function update(elem, action, desc = '') {
+  function update(elem, action, desc = '', ship_num = 0) {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
@@ -460,7 +466,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const num = ids[2]
     action = parseInt(action)
     if (action != 4 || (action == 4 && desc)) {
-      info.push({action, item, user, desc, num})
+      info.push({ action, item, user, desc, num, ship_num })
     } else {
       alert('You must explain the damage before it can be saved.')
     }
@@ -493,6 +499,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   $(".shipping").change(function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
+    let ship_num = 0
     if (!super_admin && action == 0) {
       $(this).val(originalVal)
       alert('You cannot change to Not Yet Shipped!')
@@ -500,8 +507,19 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     } else if (!super_admin && action == 4) {
       alert('You must explain the damage before it can be saved.')
       return false
+    } else if (action == 1) {
+      // get shipment number
+      ship_num = $(this).parent().parent().find('.shipment_number').val()
     }
-    update(this, action)
+    update(this, action, '', ship_num)
+    save(false)
+  })
+
+  $(".shipment_number").blur(function () {
+    const ship_num = $(this).val()
+    const elem = $(this).parent().parent().find('.shipping')
+    const action = parseInt($(elem).val())
+    update(elem, action, '', ship_num)
     save(false)
   })
 
