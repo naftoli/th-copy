@@ -1087,7 +1087,7 @@ class ChidonShipping
         $info = [];
         $sql = "SELECT 
                     cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, 
-                    tc.ultimate_trip, u.first, u.last, u.user_serial, tci.highest_track, c.class_grade, c.class_sub  
+                    tc.ultimate_trip, u.first, u.last, u.user_serial, c.class_grade, c.class_sub  
                 FROM
                     chidon_user_prizes cup
                         JOIN
@@ -1102,7 +1102,9 @@ class ChidonShipping
                     classes c ON u.class_id = c.class_id 
                 WHERE
                     cup.year = :year AND tc.date_paid > 0 
-                        AND tc.ultimate_trip = 0 AND (tci.highest_track is null OR tci.highest_track != 'yesod')";
+                        AND tc.ultimate_trip = 0 AND tc.user_id not in (
+                            SELECT user_id FROM registration_charges WHERE year = :year AND type = 'RRYSD'
+                        )";
 //        if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
         if ($gender == 'm') $sql .= " AND u.gender = 'M'";
         if ($gender == 'f') $sql .= " AND u.gender = 'F'";
