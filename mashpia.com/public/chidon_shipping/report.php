@@ -466,7 +466,15 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const num = ids[2]
     action = parseInt(action)
     if (action != 4 || (action == 4 && desc)) {
-      info.push({ action, item, user, desc, num, ship_num })
+      // find out if item already exists
+      const found = info.find(e => e.item == item && e.user == user && e.num == num)
+      if (found) {
+        found.action = action
+        found.desc = desc
+        found.ship_num = ship_num
+      } else {
+        info.push({ action, item, user, desc, num, ship_num })
+      }
     } else {
       alert('You must explain the damage before it can be saved.')
     }
