@@ -698,7 +698,6 @@
 
     if (Cookies.get('naftoli')) {
       $(".neshek").show()
-      $(".invitation").show()
     }
 
     $(".chidon_reg").click(function () {
@@ -841,7 +840,9 @@
           setSwiper();
           $(".year").text(year);
           if (show_reg) $(".chidon_reg").show()
-          if (Cookies.get('naftoli')) $(".chidonPhoto").show();
+          if (Cookies.get('naftoli')) {
+            $(".chidonPhoto").show();
+            $(".invitation").show()
         }
       }
     });

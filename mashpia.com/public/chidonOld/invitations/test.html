@@ -33,14 +33,85 @@
             height: 100%;
             object-fit: cover;
         }
+        .download-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="7774977.jpg" alt="Responsive Image" class="responsive-image">
+        <img src="7774977.jpg" alt="Responsive Image" class="responsive-image" id="mainImage">
         <div class="overlay-container">
-            <img src="inside_pic.png" alt="Overlay Image" class="overlay-image">
+            <img src="inside_pic.png" alt="Overlay Image" class="overlay-image" id="overlayImage">
         </div>
     </div>
+    <button class="download-btn" onclick="downloadCombinedImage()">Download Combined Image</button>
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <script>
+        function downloadCombinedImage() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const mainImage = document.getElementById('mainImage');
+            const overlayImage = document.getElementById('overlayImage');
+            const container = document.querySelector('.container');
+            const overlayContainer = document.querySelector('.overlay-container');
+
+            // Set canvas size to match main image's natural dimensions
+            canvas.width = mainImage.naturalWidth;
+            canvas.height = mainImage.naturalHeight;
+
+            // Draw main image
+            ctx.drawImage(mainImage, 0, 0, canvas.width, canvas.height);
+
+            // Calculate overlay position and size
+            const overlaySize = canvas.width * 0.25; // 25% of main image width
+            const overlayX = (canvas.width - overlaySize) / 2;
+            const overlayY = canvas.height * 0.22 - overlaySize/2; // 22% from top
+
+            // Create circular clipping path
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(overlayX + overlaySize/2, overlayY + overlaySize/2, overlaySize/2, 0, Math.PI * 2);
+            ctx.clip();
+
+            // Draw overlay image
+            ctx.drawImage(overlayImage, overlayX, overlayY, overlaySize, overlaySize);
+            ctx.restore();
+
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'combined-image.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Wait for images to load before allowing download
+        window.onload = function() {
+            const mainImage = document.getElementById('mainImage');
+            const overlayImage = document.getElementById('overlayImage');
+            const downloadBtn = document.querySelector('.download-btn');
+            
+            if (!mainImage.complete || !overlayImage.complete) {
+                downloadBtn.disabled = true;
+                Promise.all([
+                    new Promise(resolve => mainImage.onload = resolve),
+                    new Promise(resolve => overlayImage.onload = resolve)
+                ]).then(() => {
+                    downloadBtn.disabled = false;
+                });
+            }
+        };
+    </script>
 </body>
 </html>
