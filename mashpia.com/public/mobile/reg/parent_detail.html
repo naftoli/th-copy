@@ -489,8 +489,7 @@
 
                             <!--                                                    {{#if this.chidon5783}}-->
                             <div class="button-spacing">
-                              <!--                            <button class="btn btn-danger invitation" id="{{this.user_serial}}">Share your Invitation-->
-                              <!--                            </button>-->
+                              <button class="btn btn-danger invitation" id="{{this.user_serial}}" style="display: none;">Share your Invitation</button>
                               {{#if this.shabbatonPaid}}
                                 <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon
                                   Experience {{ this.next_year_chidon }}</div>
@@ -703,6 +702,7 @@
 
     if (Cookies.get('naftoli')) {
       $(".neshek").show()
+      $(".invitation").show()
     }
 
     $(".chidon_reg").click(function () {
