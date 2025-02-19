@@ -61,15 +61,17 @@
 
     <script>
         async function getUpdatedImg(id) {
-            const res = fetch('getUpdatedImage.php', {
+            fetch('getUpdatedImage.php', {
                 method: 'POST',
                 body: JSON.stringify({ id }),
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            });
-            const overlay = await res.json();
-            return overlay;
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('overlayImage').src = '/mobile/reg/' + data.img;
+            })
         }
 
         function downloadCombinedImage() {
@@ -109,18 +111,19 @@
             link.click();
         }
 
-        // Wait for images to load before allowing download
-        window.onload = async function() {
-            // get invite id from url
-            const url = window.location.search
-            const urlParams = new URLSearchParams(url)
-            const id = urlParams.get('id')
-            document.getElementById('mainImage').src = '../certs/Jpegs/' + id + '.jpg'
-            const img = await getUpdatedImg(id)
-            if (img) {
-                document.getElementById('overlayImage').src = '/mobile/reg/' + img;
-            }
+        // get invite id from url
+        const url = window.location.search
+        const urlParams = new URLSearchParams(url)
+        const id = urlParams.get('id')
+        document.getElementById('mainImage').src = '/chidonOld/certs/Jpegs/' + id + '.jpg'
 
+        // get updated image if exists
+        document.getElementById('mainImage').onload = async function() {
+            await getUpdatedImg(id)
+        }
+
+        // Wait for images to load before allowing download
+        window.onload = function() {
             const mainImage = document.getElementById('mainImage');
             const overlayImage = document.getElementById('overlayImage');
             const downloadBtn = document.querySelector('.download-btn');
