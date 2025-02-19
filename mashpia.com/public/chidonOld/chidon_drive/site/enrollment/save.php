@@ -36,7 +36,7 @@ function saveUltimateTripInfo() {
             thurs_walking = :thurs_walking,
             ms_walking = :ms_walking, 
             height = :height,
-            weight = :weight
+            weight = :weight,
             ski = :ski,
             skill = :skill,
             outerwear = :outerwear

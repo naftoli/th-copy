@@ -951,7 +951,7 @@
 									ultimate_info: JSON.stringify(ultimate_info)
 								});
 								
-								if (parseInt(result)) alert("Error saving info.");
+								if (parseInt(result) || result.length > 1) alert("Error saving info.");
 								else {
 									alert('Saved.');
 								}
