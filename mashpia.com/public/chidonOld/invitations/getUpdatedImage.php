@@ -1,5 +1,11 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonRegYear();
+
+$info = file_get_contents('php://input');
+$info = json_decode($info, true);
+$id = $info['id'];
 
 $stmt = $MASHPIA_DB->prepare('SELECT IFNULL(chidon_photo, 0) as img FROM th_chidon WHERE year = :year AND user_id = :id');
 $stmt->execute([
