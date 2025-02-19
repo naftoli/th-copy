@@ -34,7 +34,12 @@ function saveUltimateTripInfo() {
             shoe_size = :shoe, 
             poll = :chidon_answer, 
             thurs_walking = :thurs_walking,
-            ms_walking = :ms_walking
+            ms_walking = :ms_walking, 
+            height = :height,
+            weight = :weight
+            ski = :ski,
+            skill = :skill,
+            outerwear = :outerwear
         WHERE
             user_id = :user AND year = :year
     ");
@@ -63,7 +68,12 @@ function saveUltimateTripInfo() {
                     'thurs_walking' => $info->thurs_walking,
                     'ms_walking' => $info->ms_walking,
                     'user' => $user_id,
-                    'year' => $year
+                    'year' => $year, 
+                    'ski' => $info->ski,
+                    'skill' => $info->skill,
+                    'outerwear' => $info->outerwear, 
+                    'height' => $info->height,
+                    'weight' => $info->weight
                 ]);
                 if (!$res) {
                     $stmt->debugDumpParams();
