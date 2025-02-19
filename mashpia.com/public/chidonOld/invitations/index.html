@@ -1,23 +1,140 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script>
-            window.onload = event => {
-                const url = window.location.search
-                const urlParams = new URLSearchParams(url)
-                const id = urlParams.get('id')
-                document.getElementById('invite').src = '../certs/Jpegs/' + id + '.jpg'
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chidon Invitation</title>
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+        .responsive-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            max-width: 100%;
+        }
+        .overlay-container {
+            position: absolute;
+            width: 25%;  
+            padding-bottom: 25%;  
+            top: 22%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            overflow: hidden;
+            border-radius: 50%;
+        }
+        .overlay-image {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .download-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="" alt="Responsive Image" class="responsive-image" id="mainImage">
+        <div class="overlay-container">
+            <img src="" alt="Overlay Image" class="overlay-image" id="overlayImage">
+        </div>
+    </div>
+    <button class="download-btn" onclick="downloadCombinedImage()">Download Combined Image</button>
+    <canvas id="canvas" style="display: none;"></canvas>
+
+    <script>
+        async function getUpdatedImg(id) {
+            const res = fetch('getUpdatedImage.php', {
+                method: 'POST',
+                body: JSON.stringify({ id }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const overlay = await res.json();
+            return overlay;
+        }
+
+        function downloadCombinedImage() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const mainImage = document.getElementById('mainImage');
+            const overlayImage = document.getElementById('overlayImage');
+            const container = document.querySelector('.container');
+            const overlayContainer = document.querySelector('.overlay-container');
+
+            // Set canvas size to match main image's natural dimensions
+            canvas.width = mainImage.naturalWidth;
+            canvas.height = mainImage.naturalHeight;
+
+            // Draw main image
+            ctx.drawImage(mainImage, 0, 0, canvas.width, canvas.height);
+
+            // Calculate overlay position and size
+            const overlaySize = canvas.width * 0.25; // 25% of main image width
+            const overlayX = (canvas.width - overlaySize) / 2;
+            const overlayY = canvas.height * 0.22 - overlaySize/2; // 22% from top
+
+            // Create circular clipping path
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(overlayX + overlaySize/2, overlayY + overlaySize/2, overlaySize/2, 0, Math.PI * 2);
+            ctx.clip();
+
+            // Draw overlay image
+            ctx.drawImage(overlayImage, overlayX, overlayY, overlaySize, overlaySize);
+            ctx.restore();
+
+            // Create download link
+            const link = document.createElement('a');
+            link.download = 'combined-image.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+
+        // Wait for images to load before allowing download
+        window.onload = async function() {
+            // get invite id from url
+            const url = window.location.search
+            const urlParams = new URLSearchParams(url)
+            const id = urlParams.get('id')
+            document.getElementById('mainImage').src = '../certs/Jpegs/' + id + '.jpg'
+            const img = await getUpdatedImg(id)
+            if (img) {
+                document.getElementById('overlayImage').src = '/mobile/reg/' + img;
             }
-        </script>
-        <style>
-            #invite {
-                max-width: 100%;
+
+            const mainImage = document.getElementById('mainImage');
+            const overlayImage = document.getElementById('overlayImage');
+            const downloadBtn = document.querySelector('.download-btn');
+            
+            if (!mainImage.complete || !overlayImage.complete) {
+                downloadBtn.disabled = true;
+                Promise.all([
+                    new Promise(resolve => mainImage.onload = resolve),
+                    new Promise(resolve => overlayImage.onload = resolve)
+                ]).then(() => {
+                    downloadBtn.disabled = false;
+                });
             }
-        </style>
-    </head>
-    <body>
-        <img id="invite" src="" />
-    </body>
+        };
+    </script>
+</body>
 </html>
