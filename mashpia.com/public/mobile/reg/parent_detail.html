@@ -235,6 +235,10 @@
     #message .close:hover {
       opacity: 1;
     }
+
+    .btn {
+      margin: 5px;
+    }
   </style>
 </head>
 
@@ -490,12 +494,11 @@
                             <div class="button-spacing">
                               {{#if this.shabbatonPaid}}
                                 <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon Experience {{ this.next_year_chidon }}</div>
-                                <button class="btn btn-primary chidonPhoto" style="display: none; margin-bottom: 8px;">Update your Chidon Photo</button><br />
+                                <button class="btn btn-primary chidonPhoto" style="display: none;">Update your Chidon Photo</button><br />
                               {{/if}}
                               <!-- <button class="btn btn-primary chidon_info" style="margin-bottom: 8px;">
                                 <span>Confirm Chidon Enrollment Info</span>
                               </button> -->
-                              <br/>
                               <button class="btn btn-danger invitation" id="{{this.user_serial}}" style="display: none;">Share your Invitation</button><br />
                               {{#if this.editUltimateTrip}}
                                 <button class="btn btn-primary ultimate_trip" style="display: none;">
@@ -503,8 +506,8 @@
                                 </button><br />
                               {{/if}}
                               {{#if this.show_report_cards}}
-                              <button class="btn btn-primary report-card"><span>View Report Card</span></button>
-                              <br/>
+                              <!-- <button class="btn btn-primary report-card"><span>View Report Card</span></button>
+                              <br/> -->
                               {{/if}}
                               <!--                                                                <button class="btn btn-primary re_register"><span>Purchase-->
                               <!--
