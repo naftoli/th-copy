@@ -20,8 +20,8 @@
         }
         .overlay-container {
             position: absolute;
-            width: 25%;  
-            padding-bottom: 25%;  
+            width: 22%;  
+            padding-bottom: 22%;  
             top: 22%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -70,7 +70,12 @@
             })
             .then(res => res.json())
             .then(data => {
-                document.getElementById('overlayImage').src = '/mobile/reg/' + data.img;
+                let url = '/mobile/reg/' + data.img;
+                // if we are coming from tzivos.local or localhost, we need to prepend the domain
+                if (window.location.hostname == 'tzivos.local' || window.location.hostname == 'localhost') {
+                    url = 'https://mashpia.com/mobile/reg/' + data.img;
+                }
+                document.getElementById('overlayImage').src = url
             })
         }
 
@@ -90,9 +95,9 @@
             ctx.drawImage(mainImage, 0, 0, canvas.width, canvas.height);
 
             // Calculate overlay position and size
-            const overlaySize = canvas.width * 0.20; // 20% of main image width
+            const overlaySize = canvas.width * 0.22; // 22% of main image width
             const overlayX = (canvas.width - overlaySize) / 2;
-            const overlayY = canvas.height * 0.23 - overlaySize/2; // 23% from top
+            const overlayY = canvas.height * 0.22 - overlaySize/2; // 22% from top
 
             // Create circular clipping path
             ctx.save();
@@ -115,7 +120,11 @@
         const url = window.location.search
         const urlParams = new URLSearchParams(url)
         const id = urlParams.get('id')
-        document.getElementById('mainImage').src = '/chidonOld/certs/Jpegs/' + id + '.jpg'
+        let src = '/chidonOld/certs/Jpegs/' + id + '.jpg'
+        if (window.location.hostname == 'tzivos.local' || window.location.hostname == 'localhost') {
+            src = 'https://mashpia.com/chidonOld/certs/Jpegs/' + id + '.jpg'
+        }
+        document.getElementById('mainImage').src = src
 
         // get updated image if exists
         document.getElementById('mainImage').onload = async function() {
