@@ -12,100 +12,7 @@
         <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 
         <!--Icon Fonts-->
-        <link rel="stylesheet" media="screen" href="assets/fonts/font-awesome/font-awesome.min.css">
-        
-        <style>
-          #outer {
-            width: 1280px;
-            height: 800px;
-            margin-left: 20px;
-            overflow: hidden;
-          }
-
-          #innerRight {
-            float: right;
-            width: 700px;
-            margin-right: 10px;
-            overflow: hidden;
-          }
-
-          #innerLeft {
-            float: left;
-            width: 570px;
-            overflow: hidden;
-          }
-
-          #update {
-            margin-top: 10px;
-          }
-
-        	.table h2 {
-        		margin: 0;
-        	}
-        	.table td {
-        		text-align: center;
-        	}
-          .table {
-            width: 300px;
-            margin-bottom: 0;
-          }
-        	#saveTeams button {
-        		padding: 10px;
-        		margin: 10px;
-        	}
-
-        	#teams {
-        		width: 500px;
-            margin-bottom: 10px;
-            margin-left: 15%;
-        	}
-        	#teamNames td:last-child {
-        		text-align: center;
-        	}
-        	.givePoints {
-        		text-align: center;
-        	}
-        	.givePoints label {
-        		margin-top: 10px;
-        		font-size: 16px;
-        	}
-        	.pricing-header p {
-        		margin: 0;
-        	}
-
-          .team_name {
-            text-align: center;
-            font-size: x-large;
-          }
-
-          .action {
-            text-align: center;
-            padding: 10px;
-            float: right;
-            margin-top: 180px;
-            margin-left: -30px;
-          }
-          #main select {
-            padding: 5px;
-            border: 1px solid grey;
-          }
-          #main button {
-            padding: 5px;
-            font-size: 12px;
-            margin-left: 5px;
-          }
-
-          .bolts {
-            width: 370px;
-            padding: 10px;
-            background-color: #ffff00;
-          }
-          .bolts img {
-            width: 50px;
-          }
-
-
-        </style>            
+        <link rel="stylesheet" media="screen" href="assets/fonts/font-awesome/font-awesome.min.css">            
       </head>
 
     <body data-pinterest-extension-installed="cr1.39.1">
@@ -118,56 +25,57 @@
       </div>
 
       <div id="innerRight">
-
         <br>
-        <div id="teams">
+        <div id="teams" style="display: flex; flex-direction: row; justify-content: space-between;">
           <table id="teamNames">
             <tbody>
             <tr>
-              <td class="teamName">ספר המצוות</td>
-              <td><input type="radio" name="t1" value="1" class="one"> Team 1</td>
-              <td><input type="radio" name="t1" value="2" class="two"> Team 2</td>
-              <!--        <td><input type="radio" name="t1" value="3" class="three"> Team 3</td>-->
-              <!--        <td><input type="radio" name="t1" value="4" class="four"> Team 4</td>-->
-              <td><input type="radio" name="t1" value="0" checked=""> None</td>
+              <td>
+                Team 1:
+              </td>
+              <td>
+                <select name="tName1" id="tName1" class="teamNames"></select>
+              </td>
             </tr>
             <tr>
-              <td class="teamName">משנה תורה</td>
-              <td><input type="radio" name="t2" value="1" class="one"> Team 1</td>
-              <td><input type="radio" name="t2" value="2" class="two"> Team 2</td>
-              <!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
-              <!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
-              <td><input type="radio" name="t2" value="0" checked=""> None</td>
+              <td>
+                Team 2:
+              </td>
+              <td>
+                <select name="tName2" id="tName2" class="teamNames"></select>
+              </td>
             </tr>
-            <!-- 			<tr>-->
-            <!-- 				<td class="teamName">אגרת הרמב"ם</td>-->
-            <!-- 				<td><input type="radio" name="t2" value="1" class="one"> Team 1</td>-->
-            <!-- 				<td><input type="radio" name="t2" value="2" class="two"> Team 2</td>-->
-            <!--        <td><input type="radio" name="t2" value="3" class="three"> Team 3</td>-->
-            <!--        <td><input type="radio" name="t2" value="4" class="four"> Team 4</td>-->
-            <!-- 				<td><input type="radio" name="t2" value="0" checked=""> None</td>-->
-            <!-- 			</tr>-->
-            <!-- 			-->
-            <!-- 			<tr>-->
-            <!-- 				<td class="teamName">פירוש המשניות</td>-->
-            <!-- 				<td><input type="radio" name="t4" value="1" class="one"> Team 1</td>-->
-            <!-- 				<td><input type="radio" name="t4" value="2" class="two"> Team 2</td>-->
-            <!--        <td><input type="radio" name="t4" value="3" class="three"> Team 3</td>-->
-            <!--        <td><input type="radio" name="t4" value="4" class="four"> Team 4</td>-->
-            <!-- 				<td><input type="radio" name="t4" value="0" checked=""> None</td>-->
-            <!-- 			</tr>-->
             <tr>
               <td colspan="5">
                 <button id="update">Update</button>
               </td>
             </tr>
-            <!--             &lt;!&ndash; <tr>-->
-            <!-- 				<td colspan="5">-->
-            <!--					<br />-->
-            <!--					<button id="round3">Change Boxes for Round 3</button>-->
-            <!--				</td>-->
-            <!-- 			</tr> &ndash;&gt;-->
-            </tbody></table>
+            </tbody>
+          </table>
+          <table>
+            <tr>
+              <td>
+                Change team/score color:
+              </td>
+              <td>
+                <input type="text" id="scoreColor" value="#" />
+              </td>
+              <td>
+                <button id="scoreColorBtn">Update</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                Change Backgrounds:
+              </td>
+              <td>
+                <input type="text" id="boltColor" value="#" />
+              </td>
+              <td>
+                <button id="boltColorBtn">Update</button>
+              </td>
+            </tr>
+          </table>
         </div>
         <br />
 
@@ -326,42 +234,13 @@
             <div class="container">
                 <div class="row scoreboard">
                     <div class="pricing">
-    <!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-    <!--                        <div class="pricing-table table1">-->
-    <!--                        	<div class="pricing-list t1">-->
-    <!--                                <ul>-->
-    <!--                                    <li><span>אגרת הרמב"ם</span></li>-->
-    <!--                                </ul>-->
-    <!--                            </div>-->
-    <!--                            -->
-    <!--                            <div class="pricing-header">-->
-    <!--                                <p class="pricing-rate team1" style="display: block;">0</p>-->
-    <!--                            </div>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-    <!--                    -->
-    <!--                    <div class="col-md-3 col-sm-12 col-xs-12">-->
-    <!--                        <div class="pricing-table table2">-->
-    <!--                        	<div class="pricing-list t2">-->
-    <!--                                <ul>-->
-    <!--                                    <li><span>פירוש המשניות</span></li>-->
-    <!--                                </ul>-->
-    <!--                            </div>-->
-    <!--                            -->
-    <!--                            <div class="pricing-header">-->
-    <!--                                <p class="pricing-rate team2" style="display: block;">0</p>-->
-    <!--                            </div>-->
-    <!--                        </div>-->
-    <!--                    </div>-->
-
                         <div class="col-md-3 col-sm-12 col-xs-12">
                             <div class="pricing-table table1">
                               <div class="pricing-list t1">
                                     <ul>
-                                        <li><span>ספר המצוות</span></li>
+                                        <li><span></span></li>
                                     </ul>
                                 </div>
-
                                 <div class="pricing-header">
                                     <p class="pricing-rate team1" style="display: block;">0</p>
                                 </div>
@@ -372,10 +251,9 @@
                             <div class="pricing-table table2">
                               <div class="pricing-list t2">
                                     <ul>
-                                        <li><span>משנה תורה</span></li>
+                                        <li><span></span></li>
                                     </ul>
                                 </div>
-
                                 <div class="pricing-header">
                                     <p class="pricing-rate team2" style="display: block;">0</p>
                                 </div>
@@ -390,357 +268,126 @@
     </div>
 
     </div>  <!-- end outer -->
-    <!-- <div style="margin-top: 100px;">
-        <section id="pricing-table" style="padding-top: 20px; padding-bottom: 20px;">
-        <div class="container">
-            <div class="row">
-                <div class="pricing">
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table1">
-                        	<div class="pricing-list t1">
-                                <ul>
-                                    <li><span>Team 1</span></li>
-                                </ul>
-                            </div>
-
-                            <div class="pricing-header">
-                                <p class="pricing-rate team1" style="display: block;">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table2">
-                        	<div class="pricing-list t2">
-                                <ul>
-                                    <li><span>Team 2</span></li>
-                                </ul>
-                            </div>
-
-                            <div class="pricing-header">
-                                <p class="pricing-rate team2" style="display: block;">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table3">
-                        	<div class="pricing-list t3">
-                                <ul>
-                                    <li><span>Team 3</span></li>
-                                </ul>
-                            </div>
-
-                            <div class="pricing-header">
-                                <p class="pricing-rate team3">0</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-3 col-sm-12 col-xs-12">
-                        <div class="pricing-table table4">
-                        	<div class="pricing-list t4">
-                                <ul>
-                                    <li><span>Team 4</span></li>
-                                </ul>
-                            </div>
-
-                            <div class="pricing-header">
-                                <p class="pricing-rate team4">0</p>
-                            </div>
-                        </div>
-                    </div>
-            	</div>
-            </div>
-        </div>
-    </section> -->
-        <!-- Pricing Table Section -->
-        <!-- <section id="pricing-table">
-            <div class="container" style="width: 3250px;">
-                <div class="row">
-                    <div class="pricing">
-                        <div class="col-md-3 col-sm-12 col-xs-12">
-                            <div class="pricing-table table1">
-                            	<div class="pricing-list t1">
-                                    <ul>
-                                        <li><span>Team 1</span></li>
-                                    </ul>
-                                </div>
-
-                                <div class="pricing-header">
-                                    <p class="pricing-rate team1" style="display: block;">0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 col-sm-12 col-xs-12">
-                            <div class="pricing-table table2">
-                            	<div class="pricing-list t2">
-                                    <ul>
-                                        <li><span>Team 2</span></li>
-                                    </ul>
-                                </div>
-
-                                <div class="pricing-header">
-                                    <p class="pricing-rate team2" style="display: block;">0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 col-sm-12 col-xs-12">
-                            <div class="pricing-table table3">
-                            	<div class="pricing-list t3">
-                                    <ul>
-                                        <li><span>Team 3</span></li>
-                                    </ul>
-                                </div>
-
-                                <div class="pricing-header">
-                                    <p class="pricing-rate team3">0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-3 col-sm-12 col-xs-12">
-                            <div class="pricing-table table4">
-                            	<div class="pricing-list t3">
-                                    <ul>
-                                        <li><span>Team 4</span></li>
-                                    </ul>
-                                </div>
-
-                                <div class="pricing-header">
-                                    <p class="pricing-rate team4">0</p>
-                                </div>
-                            </div>
-                        </div>
-
-                	</div>
-                </div>
-            </div>
-        </section> -->
-		<!-- Pricing Table Section End -->
-	<!-- </div> -->
     
     <script src="../jquery-1.8.1.min.js"></script>
     <script>
-    	$(function() {
-    		$(".one").click( function(e) {
-    			var checked = 0;
-    			$(".one").each( function() {
-    				if ($(this).is(":checked")) checked++;
-    			});
-    			if (checked > 1) {
-    				e.preventDefault();
-    			}
-    		});
-    		
-    		$(".two").click( function(e) {
-    			var checked = 0;
-    			$(".two").each( function() {
-    				if ($(this).is(":checked")) checked++;
-    			});
-    			if (checked > 1) {
-    				e.preventDefault();
-    			}
-    		});
-    		
-    		// $(".three").click( function(e) {
-    		// 	var checked = 0;
-    		// 	$(".three").each( function() {
-    		// 		if ($(this).is(":checked")) checked++;
-    		// 	});
-    		// 	if (checked > 1) {
-    		// 		e.preventDefault();
-    		// 	}
-    		// });
-        //
-        // $(".four").click( function(e) {
-    		// 	var checked = 0;
-    		// 	$(".four").each( function() {
-    		// 		if ($(this).is(":checked")) checked++;
-    		// 	});
-    		// 	if (checked > 1) {
-    		// 		e.preventDefault();
-    		// 	}
-    		// });
+      const NUM_TEAMS = 2
+      const teams = ['ספר המצוות', 'משנה תורה', 'פירוש המשניות', 'אגרת הרמב"ם']
+      let t1 = ''
+      let t2 = ''
+
+      $(function () {
+        let htmlNames = ''
+        for (let i = 0; i < teams.length; i++) {
+          htmlNames += '<option>' + teams[i] + '</option>'
+        }
+        $(".teamNames").append(htmlNames)
     		
     		$("#update").click( function() {
-    			var t1, t2, tTotal = 0;
-    			$(".one").each( function() {
-    				if ($(this).is(":checked")) {
-    					t1 = $(this).parent().parent().find('.teamName').text();
-						  tTotal++;
-    					return;
-    				}
-    			});
-    			$(".two").each( function() {
-    				if ($(this).is(":checked")) {
-    					t2 = $(this).parent().parent().find('.teamName').text();
-						  tTotal++;
-    					return;
-    				}
-    			});
-    			// $(".three").each( function() {
-    			// 	if ($(this).is(":checked")) {
-    			// 		t3 = $(this).parent().parent().find('.teamName').text();
-					// 	tTotal++;
-    			// 		return;
-    			// 	}
-    			// });
-          // $(".four").each( function() {
-    			// 	if ($(this).is(":checked")) {
-    			// 		t4 = $(this).parent().parent().find('.teamName').text();
-					// 	tTotal++;
-    			// 		return;
-    			// 	}
-    			// });
-
-    			if (t1 == undefined || t2 == undefined) {
-    				alert('You have not chosen both teams.');
-    				return;
-    			}
+    			let tTotal = 0;
+          t1 = $("#tName1").val()
+          t2 = $("#tName2").val()
 
     			$(".t1 span").text(t1);
     			$(".t2 span").text(t2);
 
           $(".team_name").eq(0).text(t1);
           $(".team_name").eq(1).text(t2);
-          // $(".t3 span").text(t3);
-          // $(".t4 span").text(t4);
-
-          if (tTotal == 2) {
-            for (var n = 1; n < 3; n++) {
-              $("#" + n).show();
-              $(".table" + n).show();
-            }
-            //   $(".plus").text('100');
-            //   $(".minus").text('-100');
-          // } else {
-          //   // figure out which table to hide
-          //   if (t1 !== undefined && t2 !== undefined) {
-          //     $("#3").hide();
-          //     $(".table3").hide();
-          //     for (var n = 1; n < 3; n++) {
-          //       $("#" + n).show();
-          //       $(".table" + n).show();
-          //     }
-          //   }
-          //   else if (t1 !== undefined && t3 !== undefined) {
-          //     $("#2").hide();
-          //     $(".table2").hide();
-          //     for (var n = 1; n < 4; n++) {
-          //       if (n == 2) continue;
-          //       $("#" + n).show();
-          //       $(".table" + n).show();
-          //     }
-          //   }
-          //   else if (t2 !== undefined && t3 !== undefined) {
-          //     $("#1").hide();
-          //     $(".table1").hide();
-          //     for (var n = 2; n < 4; n++) {
-          //       $("#" + n).show();
-          //       $(".table" + n).show();
-          //     }
-          //   }
-            // $(".plus").text('1');
-            // $(".minus").text('-1');
+        })
+          
+        $(".setPoints").click( function() {
+          let points = parseInt($(this).prev('input').val());
+          if (!isNaN(points)) {
+            let team = '.team' + $(this).parent().attr('id');
+            $(team).text(points);
+            // $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
+            //   delay().fadeIn().fadeOut(300).delay().fadeIn().text(points);
           }
-        });
+        })
           
-          $(".setPoints").click( function() {
-            var points = parseInt($(this).prev('input').val());
-            if (!isNaN(points)) {
-              var team = '.team' + $(this).parent().attr('id');
-              $(team).text(points);
-              // $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
-              //   delay().fadeIn().fadeOut(300).delay().fadeIn().text(points);
-            }
-          });
+        $(".givePoints button").click( function() {
+          let val = $(this).text();
+          if (val == 'Go') {
+            val = $(this).prev('input').val();
+          } else if (val == 'Set') {
+            return;
+          }
           
-          $(".givePoints button").click( function() {
-            var val = $(this).text();
-            if (val == 'Go') {
-              val = $(this).prev('input').val();
-            } else if (val == 'Set') {
-              return;
-            }
-            
-            if (val != '') {
-              var points = parseInt(val);
-              var id = $(this).parent().attr('id');
-              var team = '.team' + id;
-              var curPoints = parseInt($(team).text());
-              curPoints += points;
-              if (!isNaN(curPoints)) {
-                  $(team).text(curPoints);
-                  // $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
-                  //   delay().fadeIn().fadeOut(300).delay().fadeIn().text(curPoints);
-                  //updateTable(id);
-                }
-            }
-          });
+          if (val != '') {
+            let points = parseInt(val);
+            let id = $(this).parent().attr('id');
+            let team = '.team' + id;
+            let curPoints = parseInt($(team).text());
+            curPoints += points;
+            if (!isNaN(curPoints)) {
+                $(team).text(curPoints);
+                // $(team).fadeOut(300).delay().fadeIn().fadeOut(300).
+                //   delay().fadeIn().fadeOut(300).delay().fadeIn().text(curPoints);
+                //updateTable(id);
+              }
+          }
+        })
     		
     		$("#save1").click( function() {
-				var conf = confirm("Are you sure you want to save round 1?");
-				if (conf) {
-					var t1 = $(".t1").eq(0).text().trim();
-					var t2 = $(".t2").eq(0).text().trim();
-					// var t3 = $(".t3").eq(0).text().trim();
-          // var t4 = $(".t4").eq(0).text().trim();
-					
-					var team1 = $(".team1").eq(0).text();
-					var team2 = $(".team2").eq(0).text();
-					// var team3 = $(".team3").eq(0).text();
-          // var team4 = $(".team4").eq(0).text();
-					
-					$("#round1 .t1n").text(t1);       			
-					$("#round1 .t2n").text(t2);
-					// $("#round1 .t3n").text(t3);
-          // $("#round1 .t4n").text(t4);
-					
-					$("#round1 .t1p").text(team1);
-					$("#round1 .t2p").text(team2);
-					// $("#round1 .t3p").text(team3);
-          // $("#round1 .t4p").text(team4);
-				}
-    		});
+          let conf = confirm("Are you sure you want to save round 1?");
+          if (conf) {
+            let t1 = $(".t1").eq(0).text().trim();
+            let t2 = $(".t2").eq(0).text().trim();
+            // let t3 = $(".t3").eq(0).text().trim();
+            // let t4 = $(".t4").eq(0).text().trim();
+            
+            let team1 = $(".team1").eq(0).text();
+            let team2 = $(".team2").eq(0).text();
+            // let team3 = $(".team3").eq(0).text();
+            // let team4 = $(".team4").eq(0).text();
+            
+            $("#round1 .t1n").text(t1);       			
+            $("#round1 .t2n").text(t2);
+            // $("#round1 .t3n").text(t3);
+            // $("#round1 .t4n").text(t4);
+            
+            $("#round1 .t1p").text(team1);
+            $("#round1 .t2p").text(team2);
+            // $("#round1 .t3p").text(team3);
+            // $("#round1 .t4p").text(team4);
+          }
+    		})
     		
     		$("#save2").click( function() {
-				var conf = confirm("Are you sure you want to save round 2?");
-				if (conf) {
-					var t1 = $(".t1").eq(0).text().trim();
-					var t2 = $(".t2").eq(0).text().trim();
-					// var t3 = $(".t3").eq(0).text().trim();
-          // var t4 = $(".t4").eq(0).text().trim();
-					
-					var team1 = $(".team1").eq(0).text();
-					var team2 = $(".team2").eq(0).text();
-					// var team3 = $(".team3").eq(0).text();
-          // var team4 = $(".team4").eq(0).text();
-					
-					$("#round2 .t1n").text(t1);       			
-					$("#round2 .t2n").text(t2);
-					// $("#round2 .t3n").text(t3);
-          // $("#round2 .t4n").text(t4);
-					
-					$("#round2 .t1p").text(team1);
-					$("#round2 .t2p").text(team2);
-					// $("#round2 .t3p").text(team3);
-          // $("#round2 .t4p").text(team4);
-				}
-    		});
+          let conf = confirm("Are you sure you want to save round 2?");
+          if (conf) {
+            let t1 = $(".t1").eq(0).text().trim();
+            let t2 = $(".t2").eq(0).text().trim();
+            // let t3 = $(".t3").eq(0).text().trim();
+            // let t4 = $(".t4").eq(0).text().trim();
+            
+            let team1 = $(".team1").eq(0).text();
+            let team2 = $(".team2").eq(0).text();
+            // let team3 = $(".team3").eq(0).text();
+            // let team4 = $(".team4").eq(0).text();
+            
+            $("#round2 .t1n").text(t1);       			
+            $("#round2 .t2n").text(t2);
+            // $("#round2 .t3n").text(t3);
+            // $("#round2 .t4n").text(t4);
+            
+            $("#round2 .t1p").text(team1);
+            $("#round2 .t2p").text(team2);
+            // $("#round2 .t3p").text(team3);
+            // $("#round2 .t4p").text(team4);
+          }
+    		})
 			
 			$("#save3").click( function() {
-				var conf = confirm("Are you sure you want to save round 3?");
+				let conf = confirm("Are you sure you want to save round 3?");
 				if (conf) {
-					var t1 = $(".t1").eq(0).text().trim();
-					var t2 = $(".t2").eq(0).text().trim();
-					// var t3 = $(".t3").eq(0).text().trim();
+					let t1 = $(".t1").eq(0).text().trim();
+					let t2 = $(".t2").eq(0).text().trim();
+					// let t3 = $(".t3").eq(0).text().trim();
 					
-					var team1 = $(".team1").eq(0).text();
-					var team2 = $(".team2").eq(0).text();
-					// var team3 = $(".team3").eq(0).text();
+					let team1 = $(".team1").eq(0).text();
+					let team2 = $(".team2").eq(0).text();
+					// let team3 = $(".team3").eq(0).text();
 					
 					$("#round3 .t1n").text(t1);       			
 					$("#round3 .t2n").text(t2);
@@ -750,50 +397,31 @@
 					$("#round3 .t2p").text(team2);
 					// $("#round3 .t3p").text(team3);
 				}
-    		});
-    		
-    		// $(".pricing-table").click( function() {
-    		// 	var info = $(this).attr('class').split(' ');
-    		// 	$(".pricing-list").css("background-color", "#F8E0F7");
-    		// 	$(".pricing-header").css("background-color", "#C80000");
-    			
-    		// 	if (info.length > 2) {
-    		// 		$(this).removeClass('changed');
-    		// 	} else {
-    		// 		$(this).addClass('changed');
-	    	// 		var table = info[1];
-			// 		$(".pricing-table").not("." + table).removeClass('changed');
-	    	// 		$("." + table + " .pricing-list").css("background-color", "#99e6ff");
-	    	// 		$("." + table + " .pricing-header").css("background-color", "#0033cc");
-	    	// 	}
-    		// });
+    		})
     		
     		$(".resetPoints").click( function() {
-    			var verify = confirm('Are you sure you want to reset the points to 0?');
+    			let verify = confirm('Are you sure you want to reset the points to 0?');
     			if (verify) {
-    				var num = $(this).parent().attr('id');
+    				let num = $(this).parent().attr('id');
     				$(".team" + num).text('0');
     			}
-    		});
-    	});
+    		})
+    	})
     	
     	function updateTable(id) {
     		setTimeout(function() {
     			$(".table" + id).parent().find('.pricing-table').trigger('click')
     		}, 3000);
     	}
-    </script>
-    <script>
-      let total = 42
-      let teams = ['משנה תורה', 'ספר המצוות']
 
+      let total = 40
       function generateHtml(num_container) {
         // let html
         // if (num_container == 2) html = `<div id="bolts_container_${num_container}" style="float: right; padding-left: 30px;"><div class="bolts">`
         // else html = `<div id="bolts_container_${num_container}" style="float: left"><div class="bolts">`
         let html = `<div id="bolts_container_${num_container}"><div class="bolts" style="float: left; margin-bottom: 20px;">`
-        let rows = 6
-        let columns = 7
+        let rows = 5
+        let columns = 8
 
         outer:
           for (let i = 0; i < rows; i++) {
@@ -802,12 +430,14 @@
               if (number > total) break outer
               html += `<img id="bolt_image_${num_container}_${number}" src="bolts/Lightning_Yellow.png" />`;
             }
+            html += '<br />'
+            if (i % 2 == 0) html += "<span class='spacer'></span>"
           }
         html += "</div>"
         html += `<div class="action">`
         html += `<select class="team">`
-        for (let i = 0; i < teams.length; i++) {
-          html += `<option value='${teams[i]}'>${teams[i]}</option>`
+        for (let i = 0; i <= teams.length; i++) {
+          html += `<option>${teams[i]}</option>`
         }
         html += '</select>&nbsp;&nbsp;&nbsp;'
         html += `<select id="bolt_${num_container}">`
@@ -890,6 +520,21 @@
           }
           document.getElementById(id).value = 1
         }
+      })
+
+      $("#scoreColorBtn").click(function() {
+        let color = $("#scoreColor").val()
+        $(".t1 span").css("color", color)
+        $(".t2 span").css("color", color)
+        $(".team1").css("color", color)
+        $(".team2").css("color", color)
+      })
+
+      $("#boltColorBtn").click(function() {
+        let color = $("#boltColor").val()
+        $(".bolts").css("background-color", color)
+        $(".team1").css("background-color", color)
+        $(".team2").css("background-color", color)
       })
     </script>
     </body>

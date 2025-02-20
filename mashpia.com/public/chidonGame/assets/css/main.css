@@ -38,7 +38,7 @@ body{
   border: 1px solid #ffffff;
 }
 #pricing-table {
-  /*padding-top: 50px;*/
+  padding-top: 30px;
   /*padding-bottom: 20px;*/
 }
 #pricing-table .container {
@@ -92,7 +92,7 @@ body{
 }
 #pricing-table .pricing .pricing-table .pricing-header .pricing-rate {
   font-size: 62pt;
-  color: #201a57;
+  color: #381040;
   position: relative;
   text-align: center;
   font-family: ruso;
@@ -161,7 +161,7 @@ body{
   /* color: #bdc3c7; */
 }
 #pricing-table .pricing .pricing-list ul li span {
-  color: #34495e;
+  color: #381040;
   font-weight: bold;
   font-size: 42pt;
   padding-right: 25px;
@@ -203,3 +203,105 @@ body{
 	padding: 10px;
 	right: 20px;
 } */
+#outer {
+  width: 1280px;
+  height: 800px;
+  margin-left: 20px;
+  overflow: hidden;
+}
+
+#innerRight {
+  float: right;
+  width: 700px;
+  margin-right: 10px;
+  overflow: hidden;
+}
+
+#innerLeft {
+  float: left;
+  width: 570px;
+  overflow: hidden;
+}
+
+#update {
+  margin-top: 10px;
+}
+
+.table h2 {
+  margin: 0;
+}
+.table td {
+  text-align: center;
+}
+.table {
+  width: 300px;
+  margin-bottom: 0;
+}
+#saveTeams button {
+  padding: 10px;
+  margin: 10px;
+}
+
+#teams {
+  width: 500px;
+  margin-bottom: 10px;
+  margin-left: 15%;
+}
+#teamNames td:last-child {
+  text-align: center;
+}
+.givePoints {
+  text-align: center;
+}
+.givePoints label {
+  margin-top: 10px;
+  font-size: 16px;
+}
+.pricing-header p {
+  margin: 0;
+}
+
+.team_name {
+  text-align: center;
+  font-size: x-large;
+}
+
+.action {
+  text-align: center;
+  padding: 10px;
+  float: right;
+  margin-top: 32px;
+  margin-left: -30px;
+}
+#main select {
+  padding: 5px;
+  border: 1px solid grey;
+}
+#main button {
+  padding: 5px;
+  font-size: 12px;
+  margin-left: 5px;
+}
+
+.bolts {
+  height: 205px;
+  width: 370px;
+  padding: 10px;
+  background-color: #ffff00;
+}
+.bolts img {
+  width: 38px;
+}
+
+.bolts .spacer {
+  width: 38px;
+  display: inline-block;
+}
+
+#scoreColor, #boltColor {
+  width: 80px;
+}
+
+select {
+  padding: 5px;
+}
