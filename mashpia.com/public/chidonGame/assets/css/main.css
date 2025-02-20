@@ -291,6 +291,7 @@ body{
 }
 .bolts img {
   width: 38px;
+  margin-left: 5px;
 }
 
 .bolts .spacer {
