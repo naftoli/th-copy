@@ -494,8 +494,8 @@
                             <div class="button-spacing">
                               {{#if this.shabbatonPaid}}
                                 <div class="chidonRegInfo" style="color: #17771c">Registered for Chidon Experience {{ this.next_year_chidon }}</div>
-                                <button class="btn btn-info invitation" id="{{this.user_serial}}" style="display: none;">Share your Invitation</button><br />
-                                <button class="btn btn-primary chidonPhoto" style="display: none;">Update your Chidon Photo</button><br />
+                                <button class="btn btn-info invitation" id="{{this.user_serial}}">Share your Invitation</button><br />
+                                <button class="btn btn-primary chidonPhoto">Update your Chidon Photo</button><br />
                               {{/if}}
                               <!-- <button class="btn btn-primary chidon_info" style="margin-bottom: 8px;">
                                 <span>Confirm Chidon Enrollment Info</span>
@@ -845,8 +845,6 @@
           if (show_reg) $(".chidon_reg").show()
           if (Cookies.get('naftoli')) {
             $(".ultimate_trip").show();
-            $(".chidonPhoto").show();
-            $(".invitation").show()
           }
         }
       }
