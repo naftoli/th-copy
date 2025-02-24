@@ -1804,7 +1804,7 @@ var registrationApp = function () {
 
     const school_id = state.users[index].school.school_id
     const country = state.users[index].parentAccount.admin_country
-    const shippingFee = getShippingFee(school_id, country, registering.length)
+    const shippingFee = calcShippingFee(school_id, country, registering.length)
 
     if (shippingFee) {
       // show modal

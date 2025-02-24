@@ -21,6 +21,8 @@ while ($row = mysql_fetch_assoc($result)) {
     $exceptions[$row['prize_id']][] = $row['school_id'];
 }
 
+if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5786;
+
 // get selected prizes
 $selected = [];
 $sql = "select * from chidon_user_prizes where user_id = " . $user_id . " and year = " . $year;

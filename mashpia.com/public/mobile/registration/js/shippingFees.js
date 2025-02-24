@@ -1,42 +1,17 @@
-async function calcShipping(school_id, numChildren, country, admin_id) {
-  // find out how many children already paid for shipping for current school_id
-  try {
-    const res = await fetch('checkShippingPaid.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        admin: admin_id,
-        school: school_id,
-      })
-    })
-
-    if (!res.ok) {
-      throw new Error(`Network response was not ok: ${res.statusText}`)
-    }
-
-    const data = await res.json()
-    if (data[school_id] && data[school_id].length > 0) {
-      numChildren[school_id] += data[school_id].length
-    }
-  } catch (error) {
-    console.error('Error calculating shipping:', error)
-    return 0
-  }
-
+function calcShippingFee(school_id, numChild, country) {
   const fixed_fee_by_school = [45, 106, 110]
   const fixed_fees = {
-    45: 10,
-    106: 10,
+    45: 12,
+    106: 12,
     110: 15
   }
 
   if (fixed_fee_by_school.includes(school_id)) {
-    if (numChildren[school_id] == 1)
+    // only first child pays
+    if (numChild == 1)
       return fixed_fees[school_id]
     else
-      return 0
+      return 0 
   }
 
   const fee_by_school = [61, 269]
@@ -45,39 +20,39 @@ async function calcShipping(school_id, numChildren, country, admin_id) {
     'Italy', 'Korea', 'Latvia', 'Lithuania', 'Luxemberg', 'Mauritius', 'Netherlands', 'Portugal', 'S. Barthelemy',
     'Slovakia', 'Spain', 'Sweden', 'Switzerland', 'Taiwan', 'Uruguay']
   const fee_by_country = [
-    [20,19,6,11,11,17],
-    [39,21,4,3,17,6],
-    [123,37,20,25,25,25],
-    [95,0,55,25,25,25],
-    [125,25,25,25,25,25],
-    [125,25,25,25,25,25],
-    [50,50,50,50,50,50],
-    [125,25,25,25,25,25],
-    [50,25,25,25,25,25],
-    [80,25,20,25,25,25],
-    [80,0,25,20,25,25],
-    [150,25,25,25,25,25],
-    [97,28,25,25,25,25],
-    [115,0,0,25,25,25],
-    [85,0,25,20,5,25],
-    [80,0,25,25,25,25],
-    [97,17,8,25,25,25],
-    [80,0,15,25,25,25],
-    [54,0,26,25,25,25],
-    [120,25,25,25,25,25],
-    [120,25,25,25,25,25],
-    [80,0,25,25,25,25],
-    [125,0,25,25,25,25],
-    [71,24,25,25,25,25],
-    [115,0,0,0,25,25],
-    [115,25,25,25,25,25],
-    [117,37,25,25,25,25],
-    [80,0,25,25,25,25],
-    [85,0,25,25,25,25],
-    [85,0,25,25,25,25],
-    [69,0,0,25,25,25],
-    [125,0,25,25,25,25],
-    [97,9,21,23,24,26] // last one is if country is not in list
+    [21,22,7,12,12,18],
+    [43,23,4,3,18,7],
+    [135,40,22,27,27,27],
+    [105,0,60,27,27,27],
+    [137,27,27,27,27,27],
+    [137,27,27,27,27,27],
+    [55,55,55,55,55,55],
+    [137,27,27,27,27,27],
+    [50,27,27,27,27,27],
+    [90,27,22,27,27,27],
+    [88,0,27,22,27,27],
+    [165,27,27,27,27,27],
+    [105,29,27,27,27,27],
+    [126,0,0,27,27,27],
+    [93,0,27,22,5,27],
+    [90,0,27,27,27,27],
+    [105,18,9,27,27,27],
+    [88,0,16,27,27,27],
+    [60,0,28,27,27,27],
+    [135,27,27,27,27,27],
+    [135,27,27,27,27,27],
+    [88,0,27,27,27,27],
+    [137,0,27,27,27,27],
+    [78,26,27,27,27,27],
+    [126,0,0,0,27,27],
+    [126,27,27,27,27,27],
+    [128,37,27,27,27,27],
+    [88,0,27,27,27,27],
+    [93,0,27,27,27,27],
+    [93,0,27,27,27,27],
+    [77,0,0,27,27,27],
+    [135,0,27,27,27,27],
+    [108,10,24,25,28,30] // last one is if country is not in list
   ]
 
   // use number of kids as index into fee_by_country. even though it's not by school id, however all kids would be in
@@ -85,9 +60,11 @@ async function calcShipping(school_id, numChildren, country, admin_id) {
   if (fee_by_school.includes(school_id)) {
     let index = country_list.indexOf(country)
     if (index >= 0) {
-      return fee_by_country[index][numChildren[school_id] - 1]
+      if (numChild < fee_by_country[index].length)
+        return fee_by_country[index][numChild - 1]
     } else {
-      return fee_by_country[fee_by_country.length - 1][numChildren[school_id] - 1]
+      if (numChild < fee_by_country[fee_by_country.length - 1].length)
+        return fee_by_country[fee_by_country.length - 1][numChild - 1]
     }
   }
 

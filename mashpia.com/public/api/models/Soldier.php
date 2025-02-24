@@ -368,6 +368,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 tc.year = :year AND tc.user_id = :user 
         ");
         $year = GlobalSettings::getChidonRegYear();
+        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5786;
         $res = $query->execute([
             ':user' => $this->user_id,
             ':year' => $year
@@ -476,6 +477,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if (!$year) $year = GlobalSettings::getRegistrationYear( $this->school_id );
         if (!$chidon_year) $chidon_year = GlobalSettings::getChidonRegYear();
+        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $chidon_year = 5786;
 
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
@@ -603,6 +605,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function regYears() {
         $chayolei_year = GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = GlobalSettings::getChidonRegYear();
+        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $chidon_year = 5786;
         return [
             'chayolei'  => $chayolei_year,
             'chidon'    => $chidon_year
