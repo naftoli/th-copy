@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link class="jsbin" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"
+        rel="stylesheet" type="text/css"/>
+  <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+  <meta charset="UTF-8">
+  <title>Manage Cards</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <style type="text/css">
+    html,
+    body,
+    span,
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    div,
+    button,
+    i,
+    input {
+      color: #1b2b51;
+    }
+
+    html {
+      font-family: sans-serif
+    }
+
+    body {
+      margin: 0
+    }
+
+    img {
+      border: 0
+    }
+
+    button, input, select {
+      margin: 0;
+      font-family: inherit;
+      font-size: inherit;
+      font-style: inherit;
+      font-variant: inherit;
+      font-weight: inherit;
+      line-height: inherit;
+      color: inherit
+    }
+
+    button {
+      overflow: visible
+    }
+
+    button, select {
+      text-transform: none
+    }
+
+    button {
+      -webkit-appearance: button
+    }
+
+    input {
+      line-height: normal
+    }
+
+    input[type=checkbox], input[type=radio] {
+      box-sizing: border-box;
+      padding: 0
+    }
+
+    table {
+      border-spacing: 0;
+      border-collapse: collapse
+    }
+
+    td {
+      padding: 0
+    }
+
+    .glyphicon {
+      position: relative;
+      top: 1px;
+      display: inline-block;
+      font-family: 'Glyphicons Halflings';
+      font-style: normal;
+      font-weight: 400;
+      line-height: 1;
+      -webkit-font-smoothing: antialiased
+    }
+
+    .glyphicon-user::before {
+      content: '\e008'
+    }
+
+    .glyphicon-calendar::before {
+      content: '\e109'
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    ::after, ::before {
+      box-sizing: border-box
+    }
+
+    html {
+      font-size: 10px
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #333;
+      background-color: #fff
+    }
+
+    button, input, select {
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit
+    }
+
+    img {
+      vertical-align: middle
+    }
+
+    h4 {
+      font-family: inherit;
+      font-weight: 500;
+      line-height: 1.1;
+      color: inherit
+    }
+
+    h4 {
+      margin-top: 10px;
+      margin-bottom: 10px
+    }
+
+    h4 {
+      font-size: 18px
+    }
+
+    .container {
+      padding-right: 15px;
+      padding-left: 15px;
+      margin-right: auto;
+      margin-left: auto
+    }
+
+    .row {
+      margin-right: -15px;
+      margin-left: -15px
+    }
+
+    .col-md-3, .col-md-9, .col-xs-12 {
+      position: relative;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px
+    }
+
+    .col-xs-12 {
+      float: left
+    }
+
+    .col-xs-12 {
+      width: 100%
+    }
+
+    table {
+      background-color: transparent
+    }
+
+    label {
+      display: inline-block;
+      max-width: 100%;
+      margin-bottom: 5px;
+      font-weight: 700
+    }
+
+    input[type=checkbox], input[type=radio] {
+      margin: 4px 0 0;
+      line-height: normal
+    }
+
+    input[type=file] {
+      display: block
+    }
+
+    .form-control {
+      display: block;
+      width: 100%;
+      height: 34px;
+      padding: 6px 12px;
+      font-size: 14px;
+      line-height: 1.42857143;
+      color: #555;
+      background-color: #fff;
+      background-image: none;
+      border: 1px solid #ccc;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px;
+      -webkit-box-shadow: rgba(0, 0, 0, .0745098) 0 1px 1px inset;
+      box-shadow: rgba(0, 0, 0, .0745098) 0 1px 1px inset
+    }
+
+    .form-control::-webkit-input-placeholder {
+      color: #999
+    }
+
+    .form-group {
+      margin-bottom: 5px
+    }
+
+    .has-feedback {
+      position: relative
+    }
+
+    .has-feedback .form-control {
+      padding-right: 42.5px
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 6px 12px;
+      margin-bottom: 0;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.42857143;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      background-image: none;
+      border: 1px solid transparent;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px
+    }
+
+    .btn-primary {
+      color: #fff;
+      background-color: rgba(2, 6, 56, 0);
+      border-color: #fff
+    }
+
+    .btn-block {
+      display: block;
+      width: 100%
+    }
+
+    .fade {
+      opacity: 0
+    }
+
+    .btn-group {
+      position: relative;
+      display: inline-block;
+      vertical-align: middle
+    }
+
+    .btn-group > .btn {
+      position: relative;
+      float: left
+    }
+
+    .btn-group .btn + .btn {
+      margin-left: -1px
+    }
+
+    .btn-group > .btn:first-child {
+      margin-left: 0
+    }
+
+    .btn-group > .btn:first-child:not(:last-child):not(.dropdown-toggle) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0
+    }
+
+    .btn-group > .btn:last-child:not(:first-child) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0
+    }
+
+    .input-group {
+      position: relative;
+      display: table;
+      border-collapse: separate
+    }
+
+    .input-group .form-control {
+      position: relative;
+      z-index: 2;
+      float: left;
+      width: 100%;
+      margin-bottom: 0
+    }
+
+    .input-group .form-control, .input-group-addon {
+      display: table-cell
+    }
+
+    .input-group-addon {
+      width: 1%;
+      white-space: nowrap;
+      vertical-align: middle
+    }
+
+    .input-group-addon {
+      padding: 6px 12px;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1;
+      color: #555;
+      text-align: center;
+      background-color: #eee;
+      border: 1px solid #ccc;
+      border-top-left-radius: 4px;
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+      border-bottom-left-radius: 4px
+    }
+
+    .input-group-addon:first-child {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0
+    }
+
+    .input-group-addon:first-child {
+      border-right-width: 0
+    }
+
+    .input-group .form-control:last-child {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0
+    }
+
+    .close {
+      float: right;
+      font-size: 21px;
+      font-weight: 700;
+      line-height: 1;
+      color: #000;
+      text-shadow: #fff 0 1px 0;
+      opacity: .2
+    }
+
+    button.close {
+      -webkit-appearance: none;
+      padding: 0;
+      border: 0;
+      background-position: 0 0;
+      background-repeat: initial initial
+    }
+
+    .container::after, .container::before, .row::after, .row::before {
+      display: table;
+      content: ' '
+    }
+
+    .container::after, .row::after {
+      clear: both
+    }
+
+    .fa {
+      display: inline-block;
+      font-style: normal;
+      font-variant: normal;
+      font-weight: 400;
+      line-height: 1;
+      font-family: FontAwesome;
+      font-size: inherit;
+      text-rendering: auto;
+      -webkit-font-smoothing: antialiased
+    }
+
+    .fa-search-plus::before {
+      content: '\f00e'
+    }
+
+    .fa-search-minus::before {
+      content: '\f010'
+    }
+
+    .fa-rotate-right::before {
+      content: '\f01e'
+    }
+
+    .fa-refresh::before {
+      content: '\f021'
+    }
+
+    .fa-rotate-left::before {
+      content: '\f0e2'
+    }
+
+    .fa-angle-double-down::before {
+      content: '\f103'
+    }
+
+    .fa-university::before {
+      content: '\f19c'
+    }
+
+    h4 {
+      font-family: 'Source Sans Pro', sans-serif
+    }
+
+    .form-control {
+      box-shadow: none;
+      border-color: #d2d6de;
+      border-top-left-radius: 0 !important;
+      border-top-right-radius: 0 !important;
+      border-bottom-right-radius: 0 !important;
+      border-bottom-left-radius: 0 !important
+    }
+
+    .form-control::-webkit-input-placeholder {
+      color: #bbb
+    }
+
+    .form-control:not(select) {
+      -webkit-appearance: none
+    }
+
+    .input-group .input-group-addon {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      border-color: #d2d6de;
+      background-color: #fff
+    }
+
+    .btn {
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-bottom-left-radius: 3px;
+      -webkit-box-shadow: none;
+      box-shadow: none;
+      border: 1px solid transparent
+    }
+
+    .btn-primary {
+      background-color: #2b529e;
+      border-color: #2b529e
+    }
+
+    .register-box {
+      width: 360px;
+      margin: 3% auto
+    }
+
+    @media (max-width: 768px) {
+      .register-box {
+        width: 90%;
+        margin-top: 20px
+      }
+    }
+
+    .register-box-body {
+      background-color: #fff;
+      border-top-width: 0;
+      color: #666;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      border-bottom-left-radius: 10px;
+      background-position: initial initial;
+      background-repeat: initial initial
+    }
+
+    .no-border {
+      border: 0 !important
+    }
+
+    .img-people {
+      z-index: 5;
+      height: 90px;
+      width: 90px;
+      border-top-left-radius: 50%;
+      border-top-right-radius: 50%;
+      border-bottom-right-radius: 50%;
+      border-bottom-left-radius: 50%;
+      border: 1px solid #000;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      margin-bottom: 10px
+    }
+
+    .image-upload {
+      margin-left: auto;
+      margin-right: auto
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-size: 12px
+    }
+
+    .container {
+      width: 100%;
+      margin: 0 auto;
+      display: table;
+      padding: 0
+    }
+
+    .span12 {
+      width: 100%;
+      float: left
+    }
+
+    .login-header {
+      background-color: #2c539e;
+      height: 80px
+    }
+
+    .login-header span {
+      font-size: 48px;
+      color: #fff;
+      font-family: font1;
+      font-weight: 700;
+      text-align: center;
+      line-height: 80px
+    }
+
+    .input-group .input-group-addon {
+      width: 100px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      border-color: transparent
+    }
+
+    input.form-control:not(:focus) {
+      border: 0 solid transparent
+    }
+
+    .register-box {
+      width: 500px;
+      margin: 30px auto
+    }
+
+    .img-people {
+      z-index: 5;
+      width: 160px;
+      height: 160px;
+      border-top-left-radius: 50%;
+      border-top-right-radius: 50%;
+      border-bottom-right-radius: 50%;
+      border-bottom-left-radius: 50%;
+      border-color: #aaa;
+      margin-left: auto;
+      margin-right: auto;
+      display: block
+    }
+
+    .register-box .form-group {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      border: 2px solid #b1b1b1;
+      height: 80px
+    }
+
+    .register-box .fa, .register-box .glyphicon {
+      font-size: 30px
+    }
+
+    .register-box .form-control {
+      height: 76px;
+      border-color: transparent;
+      font-size: 30px;
+      font-family: font1
+    }
+
+    .register-box .input-group-addon {
+      color: #4d4e4e
+    }
+
+    .register-box .form-group {
+      margin-bottom: 5px
+    }
+
+    .register-box .input-group {
+      width: 100%
+    }
+
+    .register-box .input-group .input-group-addon {
+      width: 60px;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+      border-color: transparent
+    }
+
+    .register-box .remember {
+      height: 40px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      font-weight: 400;
+      padding-left: 40px;
+      font-size: 20px;
+      font-family: font3
+    }
+
+    .register-box .agree-terms {
+      font-size: 26px
+    }
+
+    .register-page .register-box .remember {
+      margin-top: 0;
+      padding-left: 20px
+    }
+
+    .register-page .agree-terms {
+      margin-left: 10px;
+      text-align: left;
+      font-size: 22px;
+      line-height: 1.2
+    }
+
+    @media screen and (max-width: 1024px) {
+      .container {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        border: 0 solid #9f9f9f;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0
+      }
+
+      .login-header {
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0
+      }
+    }
+
+    @media screen and (max-width: 639px) {
+      .login-header {
+        height: 50px
+      }
+
+      .login-header span {
+        height: 50px;
+        font-size: 30px;
+        line-height: 50px
+      }
+
+      .input-group .input-group-addon {
+        width: 60px
+      }
+
+      .register-box {
+        width: 270px;
+        margin: 30px auto
+      }
+
+      .img-people {
+        width: 110px;
+        height: 110px;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+        border-bottom-left-radius: 50%
+      }
+
+      .register-box .form-group {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border: 2px solid #b1b1b1;
+        height: 50px
+      }
+
+      .register-box .fa, .register-box .glyphicon {
+        font-size: 22px
+      }
+
+      .register-box .form-control {
+        height: 46px;
+        font-size: 22px
+      }
+
+      .register-box .remember {
+        height: 40px;
+        margin-top: 20px;
+        padding-left: 40px;
+        font-size: 20px
+      }
+
+      .register-box .form-group {
+        margin-bottom: 5px
+      }
+
+      .register-box .has-feedback .form-control {
+        padding-right: 32px
+      }
+
+      .register-box .form-control {
+        padding: 0
+      }
+
+      .register-box .input-group-addon {
+        padding: 6px 8px
+      }
+
+      .register-box .input-group {
+        width: 100%
+      }
+
+      .register-box .input-group .input-group-addon {
+        width: 40px;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-bottom-left-radius: 0;
+        border-color: transparent
+      }
+
+      .register-box .remember {
+        height: 40px;
+        margin-top: 0;
+        padding-left: 10px;
+        font-size: 20px
+      }
+
+      .register-box .agree-terms {
+        font-size: 16px;
+        line-height: 1.2
+      }
+
+      .register-page .register-box .remember {
+        padding-left: 12px
+      }
+
+      .register-page .agree-terms {
+        font-size: 16px;
+        line-height: 1.2
+      }
+    }
+
+    @media screen and (max-width: 479px) {
+      .login-header {
+        height: 50px
+      }
+
+      .login-header span {
+        height: 50px;
+        font-size: 30px;
+        line-height: 50px
+      }
+
+      .input-group .input-group-addon {
+        width: 40px;
+        padding: 0
+      }
+
+      .register-box {
+        margin: 10px auto
+      }
+
+      .img-people {
+        width: 90px;
+        height: 90px;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        border-bottom-right-radius: 50%;
+        border-bottom-left-radius: 50%
+      }
+
+      .register-box .form-group {
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+        border-bottom-left-radius: 5px;
+        border: 2px solid #b1b1b1;
+        height: 40px
+      }
+
+      .register-box .fa, .register-box .glyphicon {
+        font-size: 17px
+      }
+
+      .register-box .form-control {
+        height: 36px;
+        font-size: 12px
+      }
+
+      .register-box .remember {
+        height: 30px;
+        margin-top: 10px;
+        padding-left: 10px;
+        font-size: 17px
+      }
+
+      .register-box .form-group {
+        margin-bottom: 5px
+      }
+
+      .register-box .has-feedback .form-control {
+        padding-right: 32px
+      }
+
+      .register-box .input-group .input-group-addon {
+        width: 40px
+      }
+
+      .register-box .remember {
+        height: 30px;
+        padding-left: 10px;
+        font-size: 17px
+      }
+
+      .register-box .agree-terms {
+        font-size: 12px;
+        line-height: 1.2;
+        text-align: left
+      }
+    }
+
+    select.selectpicker {
+      display: none !important
+    }
+
+    body {
+      background-color: #fcfcfc
+    }
+
+    .avatar-view {
+      display: block;
+      height: 100%;
+      width: 100%;
+      border: 3px solid #fff;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+      border-bottom-left-radius: 5px;
+      overflow: hidden;
+      margin-right: auto;
+      margin-left: auto
+    }
+
+    .avatar-body {
+      padding-right: 15px;
+      padding-left: 15px
+    }
+
+    .avatar-upload {
+      overflow: hidden
+    }
+
+    .avatar-upload label {
+      display: block;
+      float: left;
+      clear: left;
+      width: 100px
+    }
+
+    .avatar-upload input {
+      display: block;
+      margin-left: 110px
+    }
+
+    .avatar-wrapper {
+      height: 100%;
+      width: 100%;
+      margin-top: 15px;
+      box-shadow: rgba(0, 0, 0, .247059) 0 0 5px inset;
+      background-color: #fff;
+      overflow: hidden
+    }
+
+    .avatar-btns {
+      margin-top: 30px;
+      margin-bottom: 15px
+    }
+
+    .avatar-btns .btn-group {
+      margin-right: 5px
+    }
+  </style>
+  <link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+  <style>
+    .icheckbox_square-red {
+      border-radius: 50%;
+      background: none;
+      border: 1px solid grey;
+    }
+
+    .iradio_square-red.checked:before, .icheckbox_square-red.checked:before {
+      content: "✔\fe0e";
+      color: #fff;
+      top: 3px;
+      position: absolute;
+      left: 6px;
+    }
+
+    .iradio_square-red.checked, .icheckbox_square-red.checked {
+      background: #2b529e;
+      border-radius: 50%;
+    }
+
+    .iradio_square-red.hover:not(.checked), .icheckbox_square-red.hover:not(.checked) {
+      background: none;
+      border: 1px solid #2b529e;
+      border-radius: 50%;
+    }
+
+    .bootstrap-select {
+      max-width: 436px;
+    }
+
+    .register-box .input-group .input-group-addon {
+      border-top-left-radius: 4px;
+      border-bottom-left-radius: 4px;
+    }
+
+    .input-group-btn:last-child > .btn,
+    .input-group-btn:last-child > .dropdown-toggle,
+    .input-group .form-control:last-child {
+      border-top-right-radius: 4px !important;
+      border-bottom-right-radius: 4px !important;
+    }
+
+    @media (min-width: 479px) and (max-width: 638px) {
+      .bootstrap-select.form-control:not([class*=col-]) {
+        width: 224px;
+      }
+    }
+
+    /*	.register-box .has-feedback .form-control{width: 97%;}*/
+  </style>
+  <noscript>
+    <link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+  </noscript>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload"
+        as="style" onload="this.rel='stylesheet'">
+  <noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
+          rel="stylesheet">
+  </noscript>
+  <script>!function (e) {
+    "use strict";
+    var t = function (t, n, r) {
+      function o(e) {
+        if (i.body) return e();
+        setTimeout(function () {
+          o(e)
+        })
+      }
+
+      function a() {
+        d.addEventListener && d.removeEventListener("load", a), d.media = r || "all"
+      }
+
+      var l, i = e.document, d = i.createElement("link");
+      if (n) l = n; else {
+        var s = (i.body || i.getElementsByTagName("head")[0]).childNodes;
+        l = s[s.length - 1]
+      }
+      var u = i.styleSheets;
+      d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () {
+        l.parentNode.insertBefore(d, n ? l : l.nextSibling)
+      });
+      var f = function (e) {
+        for (var t = d.href, n = u.length; n--;) if (u[n].href === t) return e();
+        setTimeout(function () {
+          f(e)
+        })
+      };
+      return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d
+    };
+    "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
+  }("undefined" != typeof global ? global : this), function (e) {
+    if (e.loadCSS) {
+      var t = loadCSS.relpreload = {};
+      if (t.support = function () {
+        try {
+          return e.document.createElement("link").relList.supports("preload")
+        } catch (e) {
+          return !1
+        }
+      }, t.poly = function () {
+        for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) {
+          var r = t[n];
+          "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null)
+        }
+      }, !t.support()) {
+        t.poly();
+        var n = e.setInterval(t.poly, 300);
+        e.addEventListener && e.addEventListener("load", function () {
+          t.poly(), e.clearInterval(n)
+        }), e.attachEvent && e.attachEvent("onload", function () {
+          e.clearInterval(n)
+        })
+      }
+    }
+  }(this);</script>
+  <script src="js/all.js" defer></script>
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+  <style>
+    body {
+      background-color: #fff;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    /* Credit Card Styles */
+    .card {
+      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      border-radius: 15px;
+      padding: 25px;
+      width: 340px;
+      height: 200px;
+      position: relative;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+      transition: all 0.3s ease;
+      flex: 0 0 auto;  /* Don't allow the card to grow or shrink */
+    margin-bottom: 0; /* Remove the existing margin-bottom since we're using gap */
+    }
+
+    /* .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    } */
+
+    .card-header {
+      margin-bottom: 40px;
+    }
+
+    .card-title {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      opacity: 0.7;
+    }
+
+    .card-body {
+      position: relative;
+    }
+
+    .card-number {
+      font-size: 22px;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+      font-family: "Courier New", monospace;
+    }
+
+    .card-expiry {
+      font-size: 14px;
+      position: absolute;
+      bottom: -25px;
+      right: 0;
+    }
+
+    .card-expiry::before {
+      content: "Valid Thru: ";
+      opacity: 0.7;
+      font-size: 12px;
+    }
+
+    .card-chip {
+      width: 45px;
+      height: 34px;
+      background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+      border-radius: 6px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
+    .card-chip::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 75%;
+      height: 75%;
+      border: 1px solid rgba(0,0,0,0.3);
+      border-radius: 4px;
+    }
+
+    #cardsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: flex-start;
+      width: 100%;
+    }
+
+    .card-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 38px;
+    }
+
+    .card-actions .btn {
+      flex: 1;  /* Make buttons take equal width */
+    }
+
+    /* Make it responsive */
+    @media (max-width: 768px) {
+      #cardsContainer {
+        justify-content: center; /* Center cards on smaller screens */
+      }
+      .card {
+        width: 100%; /* Full width on mobile */
+        max-width: 340px; /* But don't exceed original card width */
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body class="skin-blue sidebar-mini">
+<div class="container register-page parent-page">
+  <div class="login-header">
+    <span class="span12 titler">Manage Cards</span>
+  </div>
+  <div class="row" style="margin: 20px 15px;">
+    <div class="col-xs-12" id="newCard">
+      <form id="addCardForm" style="border: 1px solid #666; padding: 10px; border-radius: 15px; width: 340px; height: 200px;">
+        <input type="text" name="cardNumber" class="form-control new-number" placeholder="Card Number">
+        <input type="month" name="expiryDate" class="form-control new-expiry" placeholder="Expiry Date">
+        <input type="text" name="cvv" class="form-control new-cvv" placeholder="CVV">
+        <input type="submit" class="btn btn-primary add" value="Add Card" style="margin-top: 20px; margin-left: 10px;">
+      </form>
+      <hr />
+    </div>
+    <div class="col-xs-12" id="cardsContainer">
+      
+    </div>
+  </div>
+</div>
+
+<script src="/cards/card.js"></script>
+<script>
+    function getCards() {
+        $.ajax({
+            url: 'ajax/card_management.php',
+            type: 'POST',
+            data: {
+                action: 'get_cards'
+            },
+            success: function (data) {
+              const result = JSON.parse(data)
+              if (result.success) { 
+                // build html
+                let html = ''
+                let i = 0
+                for (let profile of result.profiles) {
+                  html += `
+                    <div class='card'>
+                      <div class="card-header">
+                        <div class="card-title">Credit Card ${i + 1}</div>
+                        <div class="card-chip"></div>
+                      </div>
+                      <div class="card-body">
+                        <div class="card-number">${profile.payment.creditCard.cardNumber}</div>
+                        <div class="card-expiry">
+                          <input type="month" class="form-control expiryDate" name="expiryDate" value="${profile.payment.creditCard.expirationDate}" />
+                        </div>
+                      </div>
+                      <div class="card-actions" id='${profile.customerPaymentProfileId}'>
+                        <button class="btn btn-primary update">Update Expiry</button><br />
+                        <button class="btn btn-danger delete">Delete</button>
+                      </div>
+                    </div>
+                  `
+                  i++
+                }
+                $('#cardsContainer').empty();
+                $('#cardsContainer').html(html);
+              } else {
+                alert(result.error)
+              }
+            }
+        });
+    }
+
+    function deleteCard(id) {
+        $.ajax({
+            url: 'ajax/card_management.php',
+            type: 'POST',
+            data: {
+                profile_id: id,
+                action: 'delete_card'
+            },
+            success: function (data) {
+              const result = JSON.parse(data)
+              if (result.success) { 
+                getCards();
+              } else {
+                alert(result.error)
+              }
+            }
+        });
+    }
+
+    function updateCard(id, expiryDate) {
+        $.ajax({
+            url: 'ajax/card_management.php',
+            type: 'POST',
+            data: {
+                profile_id: id,
+                expiry_date: expiryDate,
+                action: 'update_card'
+            },
+            success: function (data) {
+              const result = JSON.parse(data)
+              if (result.success) { 
+                getCards();
+              } else {
+                alert(result.error)
+                console.log(result.response)
+              }
+            }
+        });
+    }
+
+    function addCard() {
+        $.ajax({
+            url: 'ajax/card_management.php',
+            type: 'POST',
+            data: {
+                action: 'add_card', 
+                data: $('#addCardForm').serialize()
+            },
+            success: function (data) {
+              const result = JSON.parse(data)
+              if (result.success) { 
+                getCards();
+              } else {
+                alert(result.error)
+              }
+            }
+        });
+    }
+
+    window.onload = function () {
+        getCards();
+
+        $(document).on('click', '.delete', function () {
+          const conf = confirm('Are you sure you want to delete this card?')
+          if (! conf) return
+          deleteCard($(this).parent().attr('id'));
+        });
+
+        $(document).on('click', '.update', function () {
+          const expiryDate = $(this).parent().parent().find('.expiryDate').val()
+          const cardNumber = $(this).parent().parent().find('.card-number').text()
+          const card = { cardNumber, expiryDate }
+          updateCard($(this).parent().attr('id'), card)
+        });
+
+        $(document).on('click', '.add', function (e) {
+          e.preventDefault()
+          const expiryDate = $(this).parent().find('.new-expiry').val()
+          const cardNumber = $(this).parent().find('.new-number').val()
+          const cvv = $(this).parent().find('.new-cvv').val()
+          const card = { cardNumber, expiryDate, cvv }
+          addCard(card)
+        });
+    }
+  </script>
+
+  <script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+  ga('create', 'UA-71974937-1', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

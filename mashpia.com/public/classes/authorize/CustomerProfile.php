@@ -152,7 +152,8 @@ class CustomerProfile {
         $api_array = $this->auth->createApiCall(
             "getCustomerProfileRequest",
             [
-                "customerProfileId" => $this->customerProfileId
+                "customerProfileId" => $this->customerProfileId,
+                "unmaskExpirationDate" => true
             ]
         );
         // return it for now (eventually make the api call and get the data)
