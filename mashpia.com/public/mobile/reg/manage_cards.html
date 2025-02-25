@@ -1170,32 +1170,38 @@
             success: function (data) {
               const result = JSON.parse(data)
               if (result.success) { 
-                // build html
-                let html = ''
-                let i = 0
-                for (let profile of result.profiles) {
-                  html += `
-                    <div class='card'>
-                      <div class="card-header">
-                        <div class="card-title">Credit Card ${i + 1}</div>
-                        <div class="card-chip"></div>
-                      </div>
-                      <div class="card-body">
-                        <div class="card-number">${profile.payment.creditCard.cardNumber}</div>
-                        <div class="card-expiry">
-                          <input type="month" class="form-control expiryDate" name="expiryDate" value="${profile.payment.creditCard.expirationDate}" />
+                if (result.profiles.length) {
+                  // build html
+                  let html = ''
+                  let i = 0
+                  for (let profile of result.profiles) {
+                    html += `
+                      <div class='card'>
+                        <div class="card-header">
+                          <div class="card-title">Credit Card ${i + 1}</div>
+                          <div class="card-chip"></div>
+                        </div>
+                        <div class="card-body">
+                          <div class="card-number">${profile.payment.creditCard.cardNumber}</div>
+                          <div class="card-expiry">
+                            <input type="month" class="form-control expiryDate" name="expiryDate" value="${profile.payment.creditCard.expirationDate}" />
+                          </div>
+                        </div>
+                        <div class="card-actions" id='${profile.customerPaymentProfileId}'>
+                          <button class="btn btn-primary update">Update Expiry</button><br />
+                          <button class="btn btn-danger delete">Delete</button>
                         </div>
                       </div>
-                      <div class="card-actions" id='${profile.customerPaymentProfileId}'>
-                        <button class="btn btn-primary update">Update Expiry</button><br />
-                        <button class="btn btn-danger delete">Delete</button>
-                      </div>
-                    </div>
-                  `
-                  i++
+                    `
+                    i++
+                  }
+                  $('#cardsContainer').empty();
+                  $('#cardsContainer').html(html);
+                } else {
+                  let html = 'You have no cards in your account. Please add one.'
+                  $('#cardsContainer').empty();
+                  $('#cardsContainer').html(html);
                 }
-                $('#cardsContainer').empty();
-                $('#cardsContainer').html(html);
               } else {
                 alert(result.error)
               }
@@ -1243,13 +1249,13 @@
         });
     }
 
-    function addCard() {
+    function addCard(cardInfo) {
         $.ajax({
             url: 'ajax/card_management.php',
             type: 'POST',
             data: {
                 action: 'add_card', 
-                data: $('#addCardForm').serialize()
+                data: cardInfo
             },
             success: function (data) {
               const result = JSON.parse(data)
@@ -1257,6 +1263,7 @@
                 getCards();
               } else {
                 alert(result.error)
+                console.log(result.response)
               }
             }
         });

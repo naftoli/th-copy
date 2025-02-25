@@ -40,6 +40,9 @@ switch ($action) {
     case 'update_card':
         updateCard($_POST['profile_id'], $_POST['expiry_date']);
         break;
+    case 'add_card':
+        addCard($_POST['data']);
+        break;
     default:
         break;
 }
@@ -100,7 +103,8 @@ function addCard($card) {
 
     $result = Payment::create($card['cardNumber'], $card['expiryDate'], $card['cvv'], $admin['authorize_customer_profile_id']);
     echo json_encode([
-        'success'   => $result instanceof Payment && $result['messages']['resultCode'] == 'OK',
-        'error'     => $result['messages']['message'][0]['text']
+        'success'   => $result['messages']['resultCode'] == 'OK',
+        'error'     => $result['messages']['message'][0]['text'], 
+        'response'  => $result
     ]);
 }
