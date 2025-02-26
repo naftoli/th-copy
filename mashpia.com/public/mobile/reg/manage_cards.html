@@ -1391,11 +1391,25 @@
 
         // Format expiry date as user types
         $(document).on('input', '.new-expiry', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            let value = e.target.value.replace(/[^\d/]/g, ''); // Keep numbers and forward slash
+            let parts = value.split('/');
+            
+            // Handle backspace when slash is at the end
+            if (value.endsWith('/')) {
+                e.target.value = value.slice(0, -1);
+                return;
             }
-            e.target.value = value.substring(0, 5);
+
+            // If we have more than 2 digits before slash, add the slash
+            if (parts[0] && parts[0].length > 2) {
+                value = parts[0].substring(0, 2) + '/' + parts[0].substring(2);
+            }
+            // If we have exactly 2 digits and no slash, add the slash
+            else if (parts[0] && parts[0].length === 2 && !value.includes('/')) {
+                value = parts[0] + '/';
+            }
+            
+            e.target.value = value;
         });
 
         $(document).on('click', '.delete', function () {
