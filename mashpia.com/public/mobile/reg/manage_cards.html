@@ -1030,19 +1030,31 @@
 
     /* Credit Card Styles */
     .card {
-      background: linear-gradient(45deg, #2193b0, #6dd5ed);
+      background: linear-gradient(45deg, #4a4a4a, #6d6d6d);
+      padding: 20px;
       border-radius: 15px;
-      padding: 25px;
-      width: 340px;
-      height: 200px;
+      margin: 10px;
       position: relative;
-      margin-bottom: 20px;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
-      transition: all 0.3s ease;
-      flex: 0 0 auto;  /* Don't allow the card to grow or shrink */
-    margin-bottom: 0; /* Remove the existing margin-bottom since we're using gap */
+      width: 340px;
     }
-
+    
+    /* Card type specific styles */
+    .card[data-type="visa"] {
+      background: linear-gradient(45deg, #4B9DFF, #73B5FF);
+    }
+    
+    .card[data-type="mastercard"] {
+      background: linear-gradient(45deg, #FF5F5F, #FF8080);
+    }
+    
+    .card[data-type="amex"] {
+      background: linear-gradient(45deg, #50C878, #77E69C);
+    }
+    
+    .card[data-type="discover"] {
+      background: linear-gradient(45deg, #FFA040, #FFB366);
+    }
+    
     /* .card:hover {
       transform: translateY(-5px);
       box-shadow: 0 15px 30px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
@@ -1064,23 +1076,23 @@
     }
 
     .card-number {
-      font-size: 22px;
+      font-size: 24px;
       letter-spacing: 2px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       font-family: "Courier New", monospace;
     }
 
-    .card-expiry {
-      font-size: 14px;
-      position: absolute;
-      bottom: -25px;
-      right: 0;
+    .card-type {
+      font-size: 24px;
     }
 
-    .card-expiry::before {
-      content: "Valid Thru: ";
-      opacity: 0.7;
-      font-size: 12px;
+    .card-expiry {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+
+    .card-ccv {
+      font-size: 20px;
     }
 
     .card-chip {
@@ -1103,6 +1115,16 @@
       height: 75%;
       border: 1px solid rgba(0,0,0,0.3);
       border-radius: 4px;
+    }
+
+    .card-type {
+      font-size: 24px;
+      text-align: left;
+      position: absolute;
+      left: 0px;
+      top: -10px;
+      transform: translateY(-50%);
+      font-weight: bold;
     }
 
     #cardsContainer {
@@ -1136,6 +1158,35 @@
     }
   </style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    .input-label {
+      display: block;
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #1b2b51;
+    }
+
+    input[type="month"] {
+      display: block !important;
+      visibility: visible !important;
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      font-size: 18px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: white;
+    }
+
+    @media screen and (max-width: 639px) {
+      input[type="month"] {
+        display: block !important;
+        visibility: visible !important;
+      }
+    }
+  </style>
 </head>
 <body class="skin-blue sidebar-mini">
 <div class="container register-page parent-page">
@@ -1145,9 +1196,9 @@
   <div class="row" style="margin: 20px 15px;">
     <div class="col-xs-12" id="newCard">
       <form id="addCardForm" style="border: 1px solid #666; padding: 10px; border-radius: 15px; width: 340px; height: 200px;">
-        <input type="text" name="cardNumber" class="form-control new-number" placeholder="Card Number">
-        <input type="month" name="expiryDate" class="form-control new-expiry" placeholder="Expiry Date">
-        <input type="text" name="ccv" class="form-control new-ccv" placeholder="ccv">
+        <input type="text" name="cardNumber" class="form-control new-number" placeholder="Card Number" style="font-size: 18px; padding: 12px;" required>
+        <input type="month" name="expiryDate" class="form-control new-expiry" placeholder="Expiry Date" style="font-size: 18px; padding: 12px;" required>
+        <input type="text" name="ccv" class="form-control new-ccv" placeholder="CVV" style="font-size: 18px; padding: 12px;" required>
         <input type="submit" class="btn btn-primary add" value="Add Card" style="margin-top: 20px; margin-left: 10px;">
       </form>
       <hr />
@@ -1176,13 +1227,14 @@
                   let i = 0
                   for (let profile of result.profiles) {
                     html += `
-                      <div class='card'>
+                      <div class='card' data-type='${profile.payment.creditCard.cardType.toLowerCase()}'>
                         <div class="card-header">
                           <div class="card-title">Credit Card ${i + 1}</div>
                           <div class="card-chip"></div>
                         </div>
                         <div class="card-body">
                           <div class="card-number">${profile.payment.creditCard.cardNumber}</div>
+                          <div class="card-type">${profile.payment.creditCard.cardType}</div>
                           <div class="card-expiry">
                             <input type="month" class="form-control expiryDate" name="expiryDate" value="${profile.payment.creditCard.expirationDate}" />
                           </div>
