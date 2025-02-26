@@ -1147,7 +1147,7 @@
       <form id="addCardForm" style="border: 1px solid #666; padding: 10px; border-radius: 15px; width: 340px; height: 200px;">
         <input type="text" name="cardNumber" class="form-control new-number" placeholder="Card Number">
         <input type="month" name="expiryDate" class="form-control new-expiry" placeholder="Expiry Date">
-        <input type="text" name="cvv" class="form-control new-cvv" placeholder="CVV">
+        <input type="text" name="ccv" class="form-control new-ccv" placeholder="ccv">
         <input type="submit" class="btn btn-primary add" value="Add Card" style="margin-top: 20px; margin-left: 10px;">
       </form>
       <hr />
@@ -1228,13 +1228,13 @@
         });
     }
 
-    function updateCard(id, expiryDate) {
+    function updateCard(id, cardInfo) {
         $.ajax({
             url: 'ajax/card_management.php',
             type: 'POST',
             data: {
                 profile_id: id,
-                expiry_date: expiryDate,
+                cardInfo: cardInfo,
                 action: 'update_card'
             },
             success: function (data) {
@@ -1289,8 +1289,8 @@
           e.preventDefault()
           const expiryDate = $(this).parent().find('.new-expiry').val()
           const cardNumber = $(this).parent().find('.new-number').val()
-          const cvv = $(this).parent().find('.new-cvv').val()
-          const card = { cardNumber, expiryDate, cvv }
+          const ccv = $(this).parent().find('.new-ccv').val()
+          const card = { cardNumber, expiryDate, ccv }
           addCard(card)
         });
     }

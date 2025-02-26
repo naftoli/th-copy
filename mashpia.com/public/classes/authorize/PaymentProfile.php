@@ -212,6 +212,8 @@ class PaymentProfile {
         // create authenticated api call
         
         $api_array = $this->auth->createApiCall("updateCustomerPaymentProfileRequest", $api_array);
+
+        // echo "<pre>"; print_r($api_array); echo "</pre>"; exit;
         
         $this->api->setPostData($api_array);
         $api_data = $this->api->execute();

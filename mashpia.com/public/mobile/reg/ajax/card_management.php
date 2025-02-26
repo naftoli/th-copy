@@ -38,7 +38,7 @@ switch ($action) {
         deleteCard($_POST['profile_id']);
         break;
     case 'update_card':
-        updateCard($_POST['profile_id'], $_POST['expiry_date']);
+        updateCard($_POST['profile_id'], $_POST['cardInfo']);
         break;
     case 'add_card':
         addCard($_POST['data']);
@@ -83,6 +83,17 @@ function updateCard($profileID, $card) {
     $payment_profile = new Payment($profileID, $admin['authorize_customer_profile_id']);
     $payment_profile->cardNumber = $card['cardNumber'];
     $payment_profile->expirationDate = $card['expiryDate'];
+
+    // add bill to
+    $payment_profile->billTo = [
+        'firstName' => $admin['first'],
+        'lastName'  => $admin['last'],
+        'address'   => $admin['admin_address1'], 
+        'city'      => $admin['admin_city'],
+        'state'     => $admin['admin_state'],
+        'zip'       => $admin['admin_postal']
+    ];
+
     $response = $payment_profile->update(); // returns api object if there's an error
     if ($response) {
         echo json_encode([
@@ -101,7 +112,7 @@ function updateCard($profileID, $card) {
 function addCard($card) {
     global $admin;
 
-    $result = Payment::create($card['cardNumber'], $card['expiryDate'], $card['cvv'], $admin['authorize_customer_profile_id']);
+    $result = Payment::create($card['cardNumber'], $card['expiryDate'], $card['ccv'], $admin['authorize_customer_profile_id']);
     echo json_encode([
         'success'   => $result['messages']['resultCode'] == 'OK',
         'error'     => $result['messages']['message'][0]['text'], 
