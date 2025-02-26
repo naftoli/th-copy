@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/CustomerProfile.php';
@@ -60,6 +60,7 @@ function getCards() {
     } else {
         echo json_encode([
             'success'   => false, 
+            'profileID' => 0,
             'error'     => 'No profile found.'
         ]);
     }
@@ -110,19 +111,54 @@ function updateCard($profileID, $card) {
 }
 
 function addCard($card) {
-    global $admin;
+    global $admin, $MASHPIA_DB;
 
-    $result = Payment::create($card['cardNumber'], $card['expiryDate'], $card['ccv'], $admin['authorize_customer_profile_id']);
-    // if result is object, then the request succeeded, if it's an array, then there was an error
-    if (is_array($result)) {
-        echo json_encode([
-            'success'   => false,
-            'error'     => $result['messages']['message'][0]['text'], 
-            'response'  => $result
-        ]);
+    if ($admin['authorize_customer_profile_id']) {
+        $result = Payment::create($card['cardNumber'], $card['expiryDate'], $card['ccv'], $admin['authorize_customer_profile_id']);
+        // if result is object, then the request succeeded, if it's an array, then there was an error
+        if (is_array($result)) {
+            echo json_encode([
+                'success'   => false,
+                'error'     => $result['messages']['message'][0]['text'], 
+                'response'  => $result
+            ]);
+        } else {
+            echo json_encode([
+                'success'   => true,
+            ]);
+        }
     } else {
-        echo json_encode([
-            'success'   => true,
-        ]);
+        $billTo = [
+            'firstName' => $admin['first'],
+            'lastName'  => $admin['last'],
+            'address'   => $admin['admin_address1'], 
+            'city'      => $admin['admin_city'],
+            'state'     => $admin['admin_state'],
+            'zip'       => $admin['admin_postal']
+        ];
+
+        // create profile with card info
+        $customerID = 'cth_admin_' . $admin['admin_id'];
+        $desc = ($admin['title'] ? $admin['title'] . ' ' : '') . $admin['first'] . ' ' . $admin['last'];
+        $payment = Payment::createBasicArray($card['cardNumber'], $card['expiryDate'], $card['ccv'], $billTo, true);
+        $customer = Customer::create($customerID, $admin['admin_email'], $desc, $payment, true);
+        // if customer is an object then we are good, otherwise there was an error
+        if (is_object($customer)) {
+            // save customerID to db
+            $customerID = $customer->customerProfileId;
+            $stmt = $MASHPIA_DB->prepare("
+                UPDATE admins SET authorize_customer_profile_id = ? WHERE admin_id = ?
+            ");
+            $stmt->execute([$customerID, $admin['admin_id']]);
+            echo json_encode([
+                'success'   => true
+            ]);
+        } else {
+            echo json_encode([
+                'success'   => false,
+                'error'     => $customer['message'], 
+                'response'  => $customer
+            ]);
+        }
     }
 }

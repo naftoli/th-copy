@@ -1311,6 +1311,10 @@
                 }
               } else {
                 alert(result.error)
+                if (result.profileID == 0) {
+                  // update add card button to say Add Card & Create Profile
+                  $('.add').val('Add Card & Create Profile')
+                }
               }
             }
         });
