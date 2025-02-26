@@ -113,9 +113,16 @@ function addCard($card) {
     global $admin;
 
     $result = Payment::create($card['cardNumber'], $card['expiryDate'], $card['ccv'], $admin['authorize_customer_profile_id']);
-    echo json_encode([
-        'success'   => $result['messages']['resultCode'] == 'OK',
-        'error'     => $result['messages']['message'][0]['text'], 
-        'response'  => $result
-    ]);
+    // if result is object, then the request succeeded, if it's an array, then there was an error
+    if (is_array($result)) {
+        echo json_encode([
+            'success'   => false,
+            'error'     => $result['messages']['message'][0]['text'], 
+            'response'  => $result
+        ]);
+    } else {
+        echo json_encode([
+            'success'   => true,
+        ]);
+    }
 }
