@@ -501,7 +501,7 @@
                                 <span>Confirm Chidon Enrollment Info</span>
                               </button> -->
                               {{#if this.editUltimateTrip}}
-                                <button class="btn btn-primary ultimate_trip" style="display: none;">
+                                <button class="btn btn-primary ultimate_trip">
                                   <span>Edit Ultimate Trip Info</span>
                                 </button><br />
                               {{/if}}
@@ -843,9 +843,6 @@
           setSwiper();
           $(".year").text(year);
           if (show_reg) $(".chidon_reg").show()
-          if (Cookies.get('naftoli')) {
-            $(".ultimate_trip").show();
-          }
         }
       }
     });
