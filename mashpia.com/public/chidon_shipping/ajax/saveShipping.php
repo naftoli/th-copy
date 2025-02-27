@@ -40,6 +40,7 @@ $stmtUpdate = $MASHPIA_DB->prepare($update);
 
 $updateWithDate = "UPDATE $table 
                     SET 
+                        status = 1, 
                         description = :desc,
                         date_shipped = NOW(), 
                         shipment_number = :ship_num 
@@ -47,8 +48,7 @@ $updateWithDate = "UPDATE $table
                         year = :year 
                             AND user_id = :user 
                             AND item_id = :item 
-                            AND item_num = :num 
-                            AND status = 1";
+                            AND item_num = :num";
 $stmtUpdateWithDate = $MASHPIA_DB->prepare($updateWithDate);
 
 $updateRemoveDate = "UPDATE $table 
@@ -131,5 +131,6 @@ else $MASHPIA_DB->rollBack();
 
 echo json_encode([
     'success'   => $success,
-    'error'     => 'There was an error updating the status.'
+    'error'     => 'There was an error updating the status.',
+    'info'      => $MASHPIA_DB->errorInfo()
 ]);
