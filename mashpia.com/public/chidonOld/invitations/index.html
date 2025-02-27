@@ -47,6 +47,43 @@
         .download-btn:hover {
             background-color: #0056b3;
         }
+
+        /* Adjust overlay position for mobile screens */
+        @media screen and (max-width: 860px) {
+            .overlay-container {
+                top: 22.5%;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            .overlay-container {
+                top: 23%;
+            }
+        }
+        @media screen and (max-width: 625px) {
+            .overlay-container {
+                top: 23.5%;
+            }
+        }
+        @media screen and (max-width: 500px) {
+            .overlay-container {
+                top: 24%;
+            }
+        }
+        @media screen and (max-width: 400px) {
+            .overlay-container {
+                top: 24.5%;
+            }
+        }
+        @media screen and (max-width: 350px) {
+            .overlay-container {
+                top: 25%;
+            }
+        }
+        @media screen and (max-width: 320px) {
+            .overlay-container {
+                top: 25.5%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -95,9 +132,9 @@
             ctx.drawImage(mainImage, 0, 0, canvas.width, canvas.height);
 
             // Calculate overlay position and size
-            const overlaySize = canvas.width * 0.22; // 22% of main image width
+            const overlaySize = canvas.width * 0.20; // 20% of main image width
             const overlayX = (canvas.width - overlaySize) / 2;
-            const overlayY = canvas.height * 0.22 - overlaySize/2; // 22% from top
+            const overlayY = canvas.height * 0.20 - overlaySize/2; // 20% from top
 
             // Create circular clipping path
             ctx.save();
