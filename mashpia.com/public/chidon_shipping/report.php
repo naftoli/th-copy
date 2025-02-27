@@ -538,5 +538,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     update(elem, action, val)
     save(false)
   })
+
+  window.onload = function() {
+    if (!super_admin) {
+      $(".shipment_number").attr('disabled', true)
+    }
+  }
 </script>
 </html>
