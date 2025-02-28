@@ -13,7 +13,7 @@ class TehillimBackup {
         $this->dates = [
             2460590, 2460619, 2460650, 2460685, 2460712, 2460737, 2460769, 2460797, 2460825, 2460853
         ];
-        $this->errors = array();
+        $this->errors = [];
     }
     
     public function testBackup() {
@@ -120,7 +120,7 @@ class TehillimBackup {
     
     private function fixDuplicates() {
         $mark_date = $this->date;
-        $info = array();
+        $info = [];
         $sql = "select * from date_tasks_marks dtm
                 join date_tasks dt using (date_task_id) 
                 where dt.grid_id in (8001,8002) 
@@ -135,7 +135,7 @@ class TehillimBackup {
         }
         //echo "<pre>"; print_r($info); echo "</pre>";
         
-        $qrys = array();
+        $qrys = [];
         foreach ($info as $user_id => $other) {
             foreach ($other as $task_id => $more) {
                 foreach ($more as $grid_id => $marks) {
