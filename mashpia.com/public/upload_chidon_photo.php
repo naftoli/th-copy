@@ -28,8 +28,8 @@ function addPhoto($file) {
     }
 
     $file_name = $file['name'];
-    $target_file = $_SERVER['DOCUMENT_ROOT'] . "/mobile/reg/img/" . basename($file_name);
-    $file_name = "img/" . basename($file_name);
+    $new_file_name = "img/" . basename($file_name);
+    $target_file = $_SERVER['DOCUMENT_ROOT'] . "/mobile/reg/" . $new_file_name;
 
     if (move_uploaded_file($file["tmp_name"], $target_file)) {
         // Resize the image
@@ -56,7 +56,7 @@ function addPhoto($file) {
         imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         if (imagepng($resized_image, $target_file)) {
-            return $file_name;
+            return $new_file_name;
         }
     }
 
@@ -75,7 +75,6 @@ if (isset($_POST['action'])) {
             if (mysql_query($sql)) {
                 $str = "Location: http://mashpia.com/upload_chidon_photos.php?school_id=" . $school_id;
                 if ($_POST['class_id'] > 0) $str .= "&class_id=" . $_POST['class_id'];
-                if ($_POST['user_id'] > 0) $str .= "&user_id=" . $_POST['user_id'];
                 header($str);
                 exit;
             }
@@ -97,14 +96,10 @@ $sql = "SELECT u.*, tc.chidon_photo
 $query = mysql_query($sql);
 $user = mysql_fetch_assoc($query);
 
-$chidon_photo = $user['chidon_photo'];
-if (! empty($chidon_photo)) {
-    if ($chidon_photo && $_SERVER['SERVER_NAME'] != 'mashpia.com') {
-        $chidon_photo = "http://mashpia.com/mobile/reg/" . $chidon_photo;
-    } else {
-        $chidon_photo = "/mobile/reg/" . $chidon_photo;
-    }
-}
+if ($user['chidon_photo'])
+    $chidon_photo = "http://mashpia.com/mobile/reg/" . $user['chidon_photo'];
+else
+    $chidon_photo = "";
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -162,7 +157,7 @@ if (! empty($chidon_photo)) {
 
                     <TD>
                         <? if (! empty($chidon_photo)) : ?>
-                            <img src="<?= $chidon_photo ?>" height="80" />
+                            <img src="<?= $chidon_photo; ?>" height="80" />
                         <? endif; ?>
                     </TD>
                 </TR>
