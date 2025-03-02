@@ -28,14 +28,8 @@ function addPhoto($file) {
     }
 
     $file_name = $file['name'];
-    $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/mobile/reg/img/";
-    $target_file = $target_dir . basename($file_name);
-
-    // For display purposes, we'll use a different path
-    $display_path = "/mobile/reg/img/" . basename($file_name);
-    if ($_SERVER['SERVER_NAME'] != 'mashpia.com') {
-        $display_path = "img/" . basename($file_name);
-    }
+    $target_file = $_SERVER['DOCUMENT_ROOT'] . "/mobile/reg/img/" . basename($file_name);
+    $file_name = "img/" . basename($file_name);
 
     if (move_uploaded_file($file["tmp_name"], $target_file)) {
         // Resize the image
@@ -46,6 +40,9 @@ function addPhoto($file) {
                 break;
             case 'image/png':
                 $image = imagecreatefrompng($target_file);
+                break;
+            case 'image/gif':
+                $image = imagecreatefromgif($target_file);
                 break;
             default:
                 return false;
@@ -59,10 +56,8 @@ function addPhoto($file) {
         imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
         if (imagepng($resized_image, $target_file)) {
-            return $display_path;
+            return $file_name;
         }
-    } else {
-        $message = "Could not upload file.";
     }
 
     return false;
