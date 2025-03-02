@@ -28,32 +28,41 @@ function addPhoto($file) {
     }
 
     $file_name = $file['name'];
-    $target_dir = "/mobile/reg/img/";
+    $target_dir = $_SERVER['DOCUMENT_ROOT'] . "/mobile/reg/img/";
     $target_file = $target_dir . basename($file_name);
+
+    // For display purposes, we'll use a different path
+    $display_path = "/mobile/reg/img/" . basename($file_name);
+    if ($_SERVER['SERVER_NAME'] != 'mashpia.com') {
+        $display_path = "img/" . basename($file_name);
+    }
 
     if (move_uploaded_file($file["tmp_name"], $target_file)) {
         // Resize the image
         switch ($file['type']) {
             case 'image/jpeg':
+            case 'image/jpg':
                 $image = imagecreatefromjpeg($target_file);
                 break;
             case 'image/png':
                 $image = imagecreatefrompng($target_file);
                 break;
-            case 'image/gif':
-                $image = imagecreatefromgif($target_file);
-                break;
+            default:
+                return false;
         }
-        $resized_image = imagescale($image, 1080, 1080);
 
-        // Set DPI metadata (e.g., 300 DPI)
-        $dpi = 300;
-        imagesetresolution($resized_image, $dpi, $dpi);
+        $width = imagesx($image);
+        $height = imagesy($image);
+        $new_width = 300;
+        $new_height = floor($height * ($new_width / $width));
+        $resized_image = imagecreatetruecolor($new_width, $new_height);
+        imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
-        // overwrite the original file
         if (imagepng($resized_image, $target_file)) {
-            return $target_file;
+            return $display_path;
         }
+    } else {
+        $message = "Could not upload file.";
     }
 
     return false;
@@ -71,6 +80,7 @@ if (isset($_POST['action'])) {
             if (mysql_query($sql)) {
                 $str = "Location: http://mashpia.com/upload_chidon_photos.php?school_id=" . $school_id;
                 if ($_POST['class_id'] > 0) $str .= "&class_id=" . $_POST['class_id'];
+                if ($_POST['user_id'] > 0) $str .= "&user_id=" . $_POST['user_id'];
                 header($str);
                 exit;
             }
@@ -80,13 +90,26 @@ if (isset($_POST['action'])) {
     }
 }
 
-$school_id = $_GET['school_id'];
+$school_id = $_REQUEST['school_id'];
 $class_id = 0;
-if (isset($_GET['class_id'])) $class_id = $_GET['class_id'];
-$user_id = $_GET['user_id'];
-$sql = "SELECT * FROM users WHERE user_id=" . $user_id;
+$user_id = $_REQUEST['user_id'];
+if (isset($_REQUEST['class_id'])) $class_id = $_REQUEST['class_id'];
+$sql = "SELECT u.*, tc.chidon_photo 
+        FROM users u 
+        JOIN th_chidon tc USING (user_id)
+        WHERE user_id = " . $user_id . " 
+        AND year = " . $year;
 $query = mysql_query($sql);
 $user = mysql_fetch_assoc($query);
+
+$chidon_photo = $user['chidon_photo'];
+if (! empty($chidon_photo)) {
+    if ($chidon_photo && $_SERVER['SERVER_NAME'] != 'mashpia.com') {
+        $chidon_photo = "http://mashpia.com/mobile/reg/" . $chidon_photo;
+    } else {
+        $chidon_photo = "/mobile/reg/" . $chidon_photo;
+    }
+}
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">
@@ -143,8 +166,8 @@ $user = mysql_fetch_assoc($query);
                     </TD>
 
                     <TD>
-                        <? if (! is_null($user['chidon_photo'])) : ?>
-                            <img src="/mobile/reg/<?= $user['chidon_photo'] ?>" height="80" />
+                        <? if (! empty($chidon_photo)) : ?>
+                            <img src="<?= $chidon_photo ?>" height="80" />
                         <? endif; ?>
                     </TD>
                 </TR>
