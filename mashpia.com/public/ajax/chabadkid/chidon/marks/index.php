@@ -27,7 +27,7 @@ function checkTrackAndSchool($user_id, $level) {
     $row = mysql_fetch_assoc($result);
     // check school - only Lubavitcher Yeshiva (school id: 9)
     $school_id = $row['school'];
-    if ($school_id != 9) return false;
+    // if ($school_id != 9) return false;
     // check track
     $ht = $ct->getHighestTrackPassed($row)['highest_track'];
     $key = array_search($ht, $tracks);
