@@ -20,7 +20,7 @@ function checkTrackAndSchool($user_id, $level) {
     global $year, $ct;
     $tracks = ['maven', 'pro', 'expert', 'genius'];
 
-    $sql = "select tc.*, u.school_id as school from th_chidon tc 
+    $sql = "select tc.*, u.school_id as school, u.class_id from th_chidon tc 
             join users u using (user_id) 
             where tc.year = $year and u.user_id = $user_id";
     $result = mysql_query($sql);
