@@ -36,14 +36,16 @@ function checkTrackAndSchool($user_id, $level) {
 }
 
 $test_num = intval($_POST['test_num']);
-$closing_dates = ChidonTests::getClosingDates();
-$today = new DateTime();
-if ($today > $closing_dates[$test_num]) { // closing date of tests
-    echo json_encode([
-        'success' => false,
-        'message' => 'The deadline has passed.'
-    ]);
-    exit;
+if ($test_num < 4) {
+    $closing_dates = ChidonTests::getClosingDates();
+    $today = new DateTime();
+    if ($today > $closing_dates[$test_num]) { // closing date of tests
+        echo json_encode([
+            'success' => false,
+            'message' => 'The deadline has passed.'
+        ]);
+        exit;
+    }
 }
 
 if ($test_num == 4) {
