@@ -29,15 +29,17 @@ if (isset($_POST['submit']) && isset($_POST['track_1'])) {
     $qrys = [];
     for ($i = 1; $i <= 4; $i++) {
         $track = 'track_' . $i;
-        foreach ($_POST[$track] as $id => $mark) {
-            if ($mark != '') {
-                $mark = intval($mark);
-                $qrys[] = "insert ignore into th_chidon_finals 
-                            set year = $year, 
-                            user_id = $id, 
-                            $track = $mark 
-                            on duplicate key update $track = $mark";
-            }
+        if (isset($_POST[$track])) {
+          foreach ($_POST[$track] as $id => $mark) {
+              if ($mark != '') {
+                  $mark = intval($mark);
+                  $qrys[] = "insert ignore into th_chidon_finals 
+                              set year = $year, 
+                              user_id = $id, 
+                              $track = $mark 
+                              on duplicate key update $track = $mark";
+              }
+          }
         }
     }
     if (isset($_POST['khk'])) {
