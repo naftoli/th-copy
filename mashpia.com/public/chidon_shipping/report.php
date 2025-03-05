@@ -45,12 +45,11 @@ if ($report_type == 'file') {
 
         // remove items as needed
         foreach ($info as $cat => $details) {
-            // if ($admin_user['auth'] == 'super') {
-            //   echo "Cat: " . $cat . " Details: " . count($details) . "<br />";
-            //   echo "<pre>"; print_r($details); echo "</pre>";
-            // }
+            if ($admin_user['auth'] == 'super') {
+              echo "Cat: " . $cat . " Details: " . count($details) . "<br />";
+              echo "<pre>"; print_r($details); echo "</pre>";
+            }
             if (in_array($details, ['gender', 'credits', 'credit_start'])) continue;
-            // if (empty($details)) continue; // if we have details
             foreach ($details as $user => $items) {
                 foreach ($items as $idx => $item) {
                     // find out how many of the same item we have
