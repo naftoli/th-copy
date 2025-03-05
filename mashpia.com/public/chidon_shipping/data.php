@@ -249,7 +249,6 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
     $info = [];
     foreach ($items as $cat => $more) {
         foreach ($more as $user_id => $list) {
-            if (in_array($user_id, ['gender', 'credits', 'credit_start'])) continue;
             foreach ($list as $item) {
                 $info[$cat][$user_id][] = $item;
             }

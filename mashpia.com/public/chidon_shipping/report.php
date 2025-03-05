@@ -45,12 +45,7 @@ if ($report_type == 'file') {
 
         // remove items as needed
         foreach ($info as $cat => $details) {
-            // if ($admin_user['auth'] == 'super') {
-            //   echo "Cat: " . $cat . " Details: " . count($details) . "<br />";
-            //   echo "<pre>"; print_r($details); echo "</pre>";
-            // }
             foreach ($details as $user => $items) {
-                // if (in_array($user, ['gender', 'credits', 'credit_start'])) continue;
                 foreach ($items as $idx => $item) {
                     // find out how many of the same item we have
                     if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
