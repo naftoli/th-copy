@@ -214,14 +214,14 @@ class ChidonShipping
         // credits accumulate from year to year
         $num_credits = [];
         foreach ($children as $year => &$more) {
-            foreach ($more as $user_id => &$info) {
+            foreach ($more as $user_id => &$other) {
                 if ($year == $this->year) {
                     // remove children that have at least 5 credits from previous years
                     if (isset($num_credits[$user_id]) && $num_credits[$user_id] >= 5) unset($children[$year][$user_id]);
-                    $info['credit_start'] = isset($num_credits[$user_id]) ? $num_credits[$user_id]  + 1 : 1;
+                    $other['credit_start'] = isset($num_credits[$user_id]) ? $num_credits[$user_id]  + 1 : 1;
                 }
-                if (isset($num_credits[$user_id])) $num_credits[$user_id] += $info['credits'];
-                else $num_credits[$user_id] = $info['credits'];
+                if (isset($num_credits[$user_id])) $num_credits[$user_id] += $other['credits'];
+                else $num_credits[$user_id] = $other['credits'];
             }
         }
 
