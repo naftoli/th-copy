@@ -45,7 +45,8 @@ if ($report_type == 'file') {
 
         // remove items as needed
         foreach ($info as $cat => $details) {
-            if (empty($details)) continue; // if we have details
+            if ($admin_user['auth'] == 'super') echo "Cat: " . $cat . " Details: " . count($details) . "<br />";
+            // if (empty($details)) continue; // if we have details
             foreach ($details as $user => $items) {
                 foreach ($items as $idx => $item) {
                     // find out how many of the same item we have
