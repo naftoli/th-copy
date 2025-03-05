@@ -41,16 +41,19 @@ if ($report_type == 'file') {
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
             $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
         }
+        // echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
         // remove items as needed
         foreach ($info as $cat => $details) {
-            foreach ($details as $user => $items) {
-                foreach ($items as $idx => $item) {
-                    // find out how many of the same item we have
-                    if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
-                    else $item_num = 0;
-                    $item_status = isset($status[$user][$item['id']][$item_num]['status']) ? $status[$user][$item['id']][$item_num]['status'] : 0;
-                    if ($limit_to_status && !in_array($item_status, $limit_to_status)) unset($info[$cat][$user][$idx]);
+            if (count($details)) { // if we have details
+                foreach ($details as $user => $items) {
+                    foreach ($items as $idx => $item) {
+                        // find out how many of the same item we have
+                        if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
+                        else $item_num = 0;
+                        $item_status = isset($status[$user][$item['id']][$item_num]['status']) ? $status[$user][$item['id']][$item_num]['status'] : 0;
+                        if ($limit_to_status && !in_array($item_status, $limit_to_status)) unset($info[$cat][$user][$idx]);
+                    }
                 }
             }
         }
