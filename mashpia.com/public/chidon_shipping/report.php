@@ -41,11 +41,11 @@ if ($report_type == 'file') {
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
             $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
         }
-        echo "<pre>"; print_r($info); echo "</pre>"; 
+        // echo "<pre>"; print_r($info); echo "</pre>"; 
 
         // remove items as needed
         foreach ($info as $cat => $details) {
-            if (count($details) == 0) continue; // if we have details
+            if (empty($details)) continue; // if we have details
             foreach ($details as $user => $items) {
                 foreach ($items as $idx => $item) {
                     // find out how many of the same item we have
