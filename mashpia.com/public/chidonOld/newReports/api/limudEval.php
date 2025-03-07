@@ -6,10 +6,12 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 $year = intval(GlobalSettings::getChidonYear());
+$ct = new ChidonTests($year);
 
 $tmp = [];
 foreach ($schools as $id => $name) {
@@ -37,4 +39,5 @@ echo json_encode([
     'success'   => true,
     'schools'   => $schools,
     'years'     => [$year],
+    'test_num'  => $ct->figureOutTestNum()
 ]);

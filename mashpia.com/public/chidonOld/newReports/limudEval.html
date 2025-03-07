@@ -35,7 +35,7 @@
     const [grade, setGrade] = useState(0)
     const [info, setInfo] = useState([])
     const [summary, setSummary] = useState([])
-    const [test_num, setTestNum] = useState(1)
+    const [test_num, setTestNum] = useState(0)
     const [locked, setLocked] = useState(false)
 
     const handleSchoolChange = (e) => {
@@ -101,6 +101,7 @@
     const [schools, setSchools] = useState([])
     const [years, setYears] = useState([])
     const [grades, setGrades] = useState([])
+    const [test_num, setTestNum] = useState(0)
 
     useEffect(() => {
       fetch('api/limudEval.php')
@@ -108,6 +109,7 @@
         .then((data) => {
           setSchools(data.schools)
           setYears(data.years)
+          setTestNum(data.test_num)
           handleYearChange({target: {value: data.years[0]}}) // set year to first year
         })
     }, [])
@@ -160,7 +162,7 @@
           </div>
           <div className="col">
             <label htmlFor="grade">Test</label>
-            <select className="form-select" id="grade" onChange={handleTestNumChange}>
+            <select className="form-select" id="grade" value={test_num} onChange={handleTestNumChange}>
               <option value="1">1</option>
               <option value="2">1 & 2</option>
               <option value="3">1, 2 & 3</option>
