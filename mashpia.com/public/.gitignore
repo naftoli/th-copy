@@ -122,3 +122,12 @@ hakhel/*.png
 # ignore the beta folder
 /beta/*
 /new/*
+
+# Symlinks and specific files
+/public_html
+/www
+/includes/menu.json
+
+# Ensure awstats folders are ignored (already covered by awstats* but being explicit)
+/v2/awstats-icon/
+/v2/awstatsicons/
