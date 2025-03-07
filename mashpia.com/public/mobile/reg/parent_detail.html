@@ -980,7 +980,12 @@
 
     $(document).on('click', '.ultimate_trip', function () {
       Cookies.set('chidon_admin', admin)
-      location.href = '/chidonOld/chidon_drive/site/enrollment/enrollNew.html'
+      const domain = window.location.hostname;
+      if (domain && (domain == 'tzivos.local' || domain == 'localhost')) {
+        location.href = "/chidonOld/chidon_drive/site/enrollment/enrollNew.html?a=" + encodeURI(admin)
+      } else {
+        location.href = "https://chidondrive.com/site/enrollment/enrollNew.html?a=" + encodeURI(admin);
+      }
     })
 
     $(document).on('click', '.reviewCert', function () {
@@ -1000,7 +1005,12 @@
 
     $(document).on('click', '.shabbaton', function () {
       Cookies.set('chidon_admin', admin)
-      location.href = 'https://chidondrive.com/site/enrollNew.html';
+      const domain = window.location.hostname;
+      if (domain && (domain == 'tzivos.local' || domain == 'localhost')) {
+        location.href = "/chidonOld/chidon_drive/site/enrollment/enrollNew.html?a=" + encodeURI(admin)
+      } else {
+        location.href = "https://chidondrive.com/site/enrollment/enrollNew.html?a=" + encodeURI(admin);
+      }
     });
 
     $(document).on('click', '.shabbatonConfirm', function () {
@@ -1016,8 +1026,7 @@
       Cookies.set('chidon_admin', admin)
       const domain = window.location.hostname;
       if (domain && (domain == 'tzivos.local' || domain == 'localhost')) {
-        location.href = 'location.href = "/chidonOld/chidon_drive/setup/'
-        return
+        location.href = "/chidonOld/chidon_drive/setup/a=" + encodeURI(admin)
       } else {
         location.href = "https://chidondrive.com/setup/?a=" + encodeURI(admin);
       }

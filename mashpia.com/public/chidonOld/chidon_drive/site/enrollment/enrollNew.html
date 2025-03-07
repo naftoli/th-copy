@@ -990,11 +990,11 @@
 
 		$("select").not('#num_celeb_boxes').niceSelect()
 
-		let url = window.location.href;
-		let pos = url.indexOf('?a=');
-		if (pos > 0) {
-			let admin = url.substring(pos + 3);
-			admin = decodeURI(admin)
+		// Get URL parameters
+		const urlParams = new URLSearchParams(window.location.search);
+		const admin = urlParams.get('a');
+		if (admin) {
+			// Use the admin parameter value
 			if (! Cookies.get('chidon_admin'))
 				Cookies.set('chidon_admin', admin)
 		}
@@ -1265,8 +1265,7 @@
 					if (
 						(keepOpen['school'] && keepOpen['school'].includes(child.school_id)) || 
 						(keepOpen['class'] && keepOpen['class'].includes(child.class_id)) ||
-						(keepOpen['user'] && keepOpen['user'].includes(child.user_id)) ||
-						(keepOpen['admin'] && keepOpen['admin'].includes(parent.id))
+						(keepOpen['user'] && keepOpen['user'].includes(parent.id))
 					) {
 						eligible.push(child)
 					}
