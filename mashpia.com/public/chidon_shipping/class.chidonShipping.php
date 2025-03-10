@@ -991,7 +991,12 @@ class ChidonShipping
                 }
             }
         }
-        
+
+        if ($award != 'iyun') {
+            // check cumulative
+            if ($this->passedIyunFinalCumulative($child)) $award = 'iyun';
+        }
+
         return $award;
     }
 
