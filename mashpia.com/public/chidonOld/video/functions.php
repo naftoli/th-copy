@@ -29,8 +29,8 @@ function getChildren($school_id, $gender) {
                 u.mobile_pic,   
                 u.non_th_school_id, 
                 u.non_th_school, 
-                u.non_th_city, 
-                u.non_th_state,
+                nts.city as school_city, 
+                nts.state as school_state,
                 c.class_grade, 
                 c.class_sub, 
                 s.school_id,
@@ -55,12 +55,15 @@ function getChildren($school_id, $gender) {
                 th_chidon tc ON tc.user_id = u.user_id 
                     JOIN
                 th_chidon_info tci ON tci.user_id = u.user_id AND tci.year = tc.year 
+                    JOIN 
+                non_th_schools nts ON nts.non_th_school_id = u.non_th_school_id 
             WHERE
                 tc.year = $year AND tc.date_paid > 0 
                     AND u.gender = '$gender'";
     if ($school_id) $sql .= " AND u.school_id = " . $school_id;
     $sql .= " GROUP BY u.user_id";
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
+    // echo $sql; exit;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $award = getAward($row);
