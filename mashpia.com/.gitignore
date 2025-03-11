@@ -59,3 +59,11 @@ public/chidon/
 public/chidonOld/prizes/img/*
 public/storage/*
 public/chidonOld/invitations/*.jpg
+
+public/blog/
+public/certs/
+public/chidonOld/certs/
+public/chidonOld/reports/images/
+public/helpdesk/logs/
+public/mobile/chidon/ajax/phplog
+public/raffles/posters/templates/
