@@ -189,6 +189,7 @@ function getShippingPaid($ship_to) {
         WHERE
             year = :year 
                 AND type IN ('" . implode("','", $type) . "') 
+                AND amount > 0 
         ORDER BY admin_id";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute([
