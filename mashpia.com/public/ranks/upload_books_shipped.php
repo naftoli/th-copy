@@ -1,0 +1,149 @@
+<?php
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+
+// make sure it's hq
+if ($admin_user['auth'] != 'super') {
+    echo 'You are not authorized to view this page.';
+    exit;
+}
+
+if (isset($_FILES['file'])) {
+    $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO rank_books_shipped (user_id, book) VALUES (?, ?)");
+
+    $file = $_FILES['file'];
+
+    // Validate file upload
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        echo "Error uploading file: " . getUploadErrorMessage($file['error']);
+        exit;
+    }
+
+    $file_path = $file['tmp_name'];
+    if (!file_exists($file_path)) {
+        echo "Error: Uploaded file not found.";
+        exit;
+    }
+
+    $fileHandle = fopen($file_path, 'r');
+    if ($fileHandle === false) {
+        echo "Error: Unable to open uploaded file.";
+        exit;
+    }
+
+    $total = 0;
+    $info = [];
+    while (($line = fgetcsv($fileHandle)) !== FALSE) {
+        if (count($line) < 2) {
+            echo "Error: Invalid CSV format. Each row must have at least 2 columns.";
+            fclose($fileHandle);
+            exit;
+        }
+        $info[$line[0]] = $line[1];
+        $total++;
+    }
+    fclose($fileHandle);
+
+    // make sure our total is same as info total
+    $bookTotal = count($info);
+    if ($bookTotal != $total || $bookTotal === 0) {
+        echo "Error: corrupted file or empty file. Total books count does not match.";
+        exit;
+    }
+
+    // get user_ids
+    $serials = array_keys($info);
+    try {
+        $resUsers = $MASHPIA_DB->query("SELECT user_id, user_serial FROM users WHERE user_serial IN ('" . implode("','", $serials) . "')");
+        if (!$resUsers) {
+            throw new Exception('Failed to get user_ids');
+        }
+
+        $rows = $resUsers->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($rows)) {
+            throw new Exception('No matching users found for the provided serials');
+        }
+
+        $user_ids = [];
+        foreach ($rows as $row) {
+            $user_ids[$row['user_serial']] = $row['user_id'];
+        }
+
+        $MASHPIA_DB->beginTransaction();
+        $updated = 0;
+
+        $missing = array_diff($serials, array_keys($user_ids));
+        foreach ($info as $serial => $book) {
+            if (in_array($serial, $missing)) {
+                echo "Error: No user found for serial " . htmlspecialchars($serial);
+                continue;
+            }
+            $user_id = $user_ids[$serial];
+            if (!$stmt->execute([$user_id, $book])) {
+                throw new Exception('Failed to update book #' . htmlspecialchars($book) . ' for user ' . $user_id);
+            }
+            $updated++;
+        }
+
+        $MASHPIA_DB->commit();
+        echo $updated . ' books were set as shipped.';
+
+    } catch (Exception $e) {
+        $MASHPIA_DB->rollBack();
+        echo "Error setting books as shipped: " . htmlspecialchars($e->getMessage());
+    }
+}
+
+function getUploadErrorMessage($error_code) {
+    switch ($error_code) {
+        case UPLOAD_ERR_INI_SIZE:
+            return "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+        case UPLOAD_ERR_FORM_SIZE:
+            return "The uploaded file exceeds the MAX_FILE_SIZE directive in the HTML form";
+        case UPLOAD_ERR_PARTIAL:
+            return "The uploaded file was only partially uploaded";
+        case UPLOAD_ERR_NO_FILE:
+            return "No file was uploaded";
+        case UPLOAD_ERR_NO_TMP_DIR:
+            return "Missing a temporary folder";
+        case UPLOAD_ERR_CANT_WRITE:
+            return "Failed to write file to disk";
+        case UPLOAD_ERR_EXTENSION:
+            return "File upload stopped by extension";
+        default:
+            return "Unknown upload error";
+    }
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Books Shipped</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      form {
+        margin: 20px 0;
+      }
+      tr, th, td {
+        padding: 10px;
+        font-size: 14px;
+        border: 1px solid #f0f0f0;
+      }
+      .error {
+        color: red;
+        margin: 10px 0;
+      }
+    </style>
+</head>
+<body>
+<h1>Upload Books Shipped</h1>
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" id="file" accept=".csv" required>
+    <input type="submit" value="Upload">
+</form>
+</body>
+</html>
