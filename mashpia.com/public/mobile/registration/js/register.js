@@ -2906,8 +2906,8 @@ var templates = function () {
           (index === 0 ? "checked" : "") + '/>' +
           '<span class="radio"></span>' +
           '</label>&nbsp;<span style="vertical-align: super; margin-left: 60px;">' + msg + '</span>' + 
-          ' <span><input type="month" value="' + cc.expirationDate + '" data-card_num="' + cc.cardNumber + '" onchange="templates.updatePaymentProfile(' + payment.customerPaymentProfileId + ', this)" /></span>' +
-          ' <span style="font-size: smaller; float: right;"><a href="javascript:void(0)" onclick="templates.removePaymentProfile(' + payment.customerPaymentProfileId + '); return false;">delete</a></span>' +
+          ' <span><input style="vertical-align: bottom" type="month" value="' + cc.expirationDate + '" data-card_num="' + cc.cardNumber + '" onchange="templates.updatePaymentProfile(' + payment.customerPaymentProfileId + ', this)" /></span>' +
+          ' <span style="font-size: smaller; float: right;"><a style="vertical-align: sub;" href="javascript:void(0)" onclick="templates.removePaymentProfile(' + payment.customerPaymentProfileId + '); return false;">delete</a></span>' +
           '</div>';
       });
       var msg2 = '<span style="vertical-align: super;">New Card</span>';
