@@ -2894,6 +2894,7 @@ var templates = function () {
       var html = '';
       payment_profiles.forEach(function (payment, index) {
         var cc = payment.payment.creditCard;
+        console.log(cc)
         cc.cardType = cc.cardType || "Unknown";
         var msg = '<span>' + cc.cardType + ' ending in ' + cc.cardNumber.slice(4) + '</span>';
         if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') msg = '<span dir="rtl">כרטיס ' + cc.cardType + ' המסתיים בספרות ' + cc.cardNumber.slice(4) + '</span>'
@@ -2904,10 +2905,12 @@ var templates = function () {
           payment.customerPaymentProfileId + '"' +
           (index === 0 ? "checked" : "") + '/>' +
           '<span class="radio"></span>' +
-          '</label>&nbsp;' + msg +
+          '</label>&nbsp;<span style="vertical-align: super; margin-left: 60px;">' + msg + '</span>' + 
+          ' <span><input type="month" value="' + cc.expirationDate + '" data-card_num="' + cc.cardNumber + '" onchange="templates.updatePaymentProfile(' + payment.customerPaymentProfileId + ', this)" /></span>' +
+          ' <span style="font-size: smaller; float: right;"><a href="javascript:void(0)" onclick="templates.removePaymentProfile(' + payment.customerPaymentProfileId + '); return false;">delete</a></span>' +
           '</div>';
       });
-      var msg2 = '<span>New Card</span>';
+      var msg2 = '<span style="vertical-align: super;">New Card</span>';
       if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') msg2 = "<span>כרטיס (אשראי) חדש</span>"
       html +=
         '<div class="payment-option">' +
@@ -2921,6 +2924,40 @@ var templates = function () {
       $("input#payment_profile").change(function (event) {
         templates.toggleNewCard(!event.target.value);
       });
+    },
+    removePaymentProfile: function (id) {
+      const del = confirm('Are you sure you want to delete this card?')  
+      if (!del) return
+      $.post('/mobile/reg/ajax/card_management.php', {
+        action: 'delete_card',
+        profile_id: id
+      }, function (response) {
+        const res = JSON.parse(response)
+        if (res.success) {
+          // remove this card from list of cards
+          $(elem).parent().parent().remove()
+        } else {
+          alert('Failed to remove card.')
+        }
+      })
+    },
+    updatePaymentProfile: function (id, input) {
+      // build card info
+      const cardInfo = {}
+      cardInfo.expiryDate = input.value
+      cardInfo.cardNumber = input.getAttribute('data-card_num')
+
+      // update card
+      $.post('/mobile/reg/ajax/card_management.php', {
+        action: 'update_card',
+        profile_id: id, 
+        cardInfo: cardInfo
+      }, function (response) {
+        const res = JSON.parse(response)
+        if (! res.success) {
+          alert('Failed to update card: ' + res.error)
+        }
+      })
     }
   }
 }();
