@@ -2935,7 +2935,7 @@ var templates = function () {
         const res = JSON.parse(response)
         if (res.success) {
           // remove this card from list of cards
-          $(elem).parent().parent().remove()
+          $(this).parent().parent().remove()
         } else {
           alert('Failed to remove card.')
         }
