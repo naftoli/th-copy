@@ -319,7 +319,7 @@
           <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
 <!--          <button class="btn btn-primary heyTeves">Hei Teves Sale</button>-->
           <button class="btn btn-primary neshek" style="display: none;">Neshek Sale</button>
-          <button class="btn btn-primary tickets">Buy Chidon Tickets</button>
+          <button class="btn btn-primary tickets" style="display: none;">Buy Chidon Tickets</button>
           <!--                    <button class="btn btn-info power">Power of Children Quiz</button>-->
         </div>
       </div>
@@ -702,7 +702,7 @@
 
     if (Cookies.get('naftoli')) {
       $(".neshek").show()
-      // $(".tickets").show()
+      $(".tickets").show()
     }
 
     $(".tickets").click( function() {
