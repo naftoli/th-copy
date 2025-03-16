@@ -320,9 +320,9 @@ function addToSheet($child, $khk = false, $trophy = false) {
         else if ($child['gender'] == 'F') $school_logo .= '_g';
     }
 
-    $show_track = $child['highest_track'];
+    $show_track = ucwords($child['highest_track']);
     if ($khk || $trophy) {
-        if ($khk) $show_track = 'khk';
+        if ($khk) $show_track = 'KHK';
         return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip, '', '', '', '', '', '', ''];
     } else {
         // prizes
