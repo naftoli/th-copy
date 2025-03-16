@@ -332,7 +332,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip, '', '', '', '', '', '', ''];
     } else {
         // prizes
-        $prize_amount = 0;
+        // $prize_amount = 0;
         // initialize prize vars
         $prize_1 = '';
         $prize_2 = '';
@@ -341,7 +341,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         $prize_5 = '';
         $prize_6 = '';
         if ($child['highest_track'] != 'yesod' && isset($prizes[$child['user_id']]) && !intval($child['ultimate_trip'])) {
-            $prize_amount = count($prizes[$child['user_id']]);
+            // $prize_amount = count($prizes[$child['user_id']]);
             foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
                 $key = $idx + 1;
                 ${'prize_' . $key} = "Prize_" . $prize_id . ".png";
@@ -349,7 +349,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         }
 
         return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
-            $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6, $prize_amount];
+            $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
     }
 }
 
