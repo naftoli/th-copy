@@ -171,6 +171,13 @@ function createFile($name, $info, $csv = false) {
         fputs($fp, $info);
     }
     fclose($fp);
+
+    if (! $csv) {
+        // remove all quotes from all cells in file
+        $content = file_get_contents($name);
+        $content = str_replace('"', '', $content);
+        file_put_contents($name, $content);
+    }
 }
 
 function createSpreadSheet($children, $type = 'ht', $east_only = false) {
@@ -193,7 +200,7 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
     $i = 0;
     $sheet = [];
 
-    $sheet[$i++] = ['Comp', 'Chayol Name', 'Chayol Picture', 'Grade', 'School Name', 'School Location', 'School Logo', 'Award', 'Trip',
+    $sheet[$i++] = ['comp', 'Chayol Name', 'Chayol Picture', 'Grade', 'School Name', 'School Location', 'School Logo', 'Award', 'Trip',
         'Prize 1', 'Prize 2', 'Prize 3', 'Prize 4', 'Prize 5', 'Prize 6'];
     $sheet[$i++] = ['Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
