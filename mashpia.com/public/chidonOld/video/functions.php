@@ -165,8 +165,7 @@ function createFile($name, $info, $csv = false) {
     if (is_array($info)) {
         foreach ($info as $fields) {
             if ($csv) fputcsv($fp, $fields);
-            else fputcsv($fp, $fields, "\t", ' ');
-//            else fputcsv($fp, $fields, "\t", ' ');
+            else fputcsv($fp, $fields, "\t", '');
         }
     } else {
         fputs($fp, $info);
@@ -217,12 +216,12 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
             }
         }
     }
-    $sheet[$i++] = ['School Intro', '', '', '', $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['School Intro', '', '', '', $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', ''];
 
     // tracks
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
-            $sheet[$i++] = [ucfirst($track) . ' Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = [ucfirst($track) . ' Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
                 $sheet[$i++] = addToSheet($child, false, false);
                 if (intval($child['khk_reg']) && passedKhk($child)) $khk[] = $child;
@@ -242,7 +241,7 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
         }
         array_multisort($last, SORT_ASC, $first, SORT_ASC, $khk);
 
-        $sheet[$i++] = ['Khk Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+        $sheet[$i++] = ['Khk Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as  $child) {
             $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
             $sheet[$i++] = addToSheet($child, true, false);
@@ -265,7 +264,7 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
 //        }
 //    }
 
-    $sheet[$i++] = ['Outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['Outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', ''];
     return $sheet;
 }
 
