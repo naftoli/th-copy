@@ -194,9 +194,9 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
     $i = 0;
     $sheet = [];
 
-    $sheet[$i++] = ['comp', 'chayol_name', 'chayol_picture', 'grade', 'school_name', 'school_location', 'school_logo', 'award', 'trip',
-        'prize_1', 'prize_2', 'prize_3', 'prize_4', 'prize_5', 'prize_6', 'prize_amount'];
-    $sheet[$i++] = ['intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['Comp', 'Chayol Name', 'Chayol Picture', 'Grade', 'School Name', 'School Location', 'School Logo', 'Award', 'Trip',
+        'Prize 1', 'Prize 2', 'Prize 3', 'Prize 4', 'Prize 5', 'Prize 6'];
+    $sheet[$i++] = ['Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
 
     // get school name, school location
     $school_name = '';
@@ -217,12 +217,12 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
             }
         }
     }
-    $sheet[$i++] = ['school_intro', '', '', '', $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['School Intro', '', '', '', $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', '', ''];
 
     // tracks
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
-            $sheet[$i++] = [$track . '_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            $sheet[$i++] = [ucfirst($track) . ' Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
                 $sheet[$i++] = addToSheet($child, false, false);
                 if (intval($child['khk_reg']) && passedKhk($child)) $khk[] = $child;
@@ -242,7 +242,7 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
         }
         array_multisort($last, SORT_ASC, $first, SORT_ASC, $khk);
 
-        $sheet[$i++] = ['khk_intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+        $sheet[$i++] = ['Khk Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as  $child) {
             $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
             $sheet[$i++] = addToSheet($child, true, false);
@@ -265,7 +265,7 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
 //        }
 //    }
 
-    $sheet[$i++] = ['outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    $sheet[$i++] = ['Outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', '', ''];
     return $sheet;
 }
 
@@ -298,7 +298,7 @@ function addToSheet($child, $khk = false, $trophy = false) {
         4 => 'iyun'
     ];
 
-    $name = trim($child['first']) . ' ' . trim($child['last']);
+    $name = ucwords(trim($child['first']) . ' ' . trim($child['last']));
     $img_url = $child['user_serial'] . '.png';
     $award_num = array_search($child['award_track'], $tracks);
     if (in_array($child['highest_track'], ['yesod', 'yediah'])) $trip = 0;
