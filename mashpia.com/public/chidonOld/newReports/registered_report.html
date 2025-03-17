@@ -63,7 +63,7 @@
               Object.keys(result.info).forEach(school => {
                 Object.keys(result.info[school]).forEach(child => {
                   let serial = child['user_serial']
-                  setIsChecked({ ...isChecked, [serial]: child['eligibility_confirmed'] })
+                  setIsChecked({ ...isChecked, [serial]: child['confirmed_info'] })
                 })
               })
             }

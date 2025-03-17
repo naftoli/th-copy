@@ -22,6 +22,7 @@ $sql = "
         tc.award_type,
         tc.trip, 
         tc.ultimate_trip, 
+        tc.confirmed_info, 
         u.user_id,
         u.user_serial,
         u.first,
@@ -29,7 +30,7 @@ $sql = "
         u.school_id, 
         u.class_id,
         c.class_grade,
-        c.class_sub
+        c.class_sub 
     FROM
         th_chidon tc
             JOIN
