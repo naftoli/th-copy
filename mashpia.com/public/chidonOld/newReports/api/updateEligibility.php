@@ -23,7 +23,7 @@ if (mysql_num_rows($result) == 0) {
     $user_id = $user['user_id'];
 }
 
-$sql = "UPDATE th_chidon SET user_eligibility = :checked WHERE user_id = :user_id and year = :year";
+$sql = "UPDATE th_chidon SET confirmed_info = :checked WHERE user_id = :user_id and year = :year";
 $stmt = $MASHPIA_DB->prepare($sql);
 if ($stmt->execute([
     ':checked'   => $checked,
