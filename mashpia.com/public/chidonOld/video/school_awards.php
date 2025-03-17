@@ -80,7 +80,6 @@ $awards = [
                     <th>Prize 4</th>
                     <th>Prize 5</th>
                     <th>Prize 6</th>
-                    <th>Total Prizes</th>
                 </tr>
                 <?php
                 foreach ($sheet as $idx => $row) {
@@ -92,7 +91,6 @@ $awards = [
                     $grade = $row[3];
                     $award = $row[7] ? $awards[$award_tracks[$row[7]]] : '';
                     $prizes = [$row[9], $row[10], $row[11], $row[12], $row[13], $row[14]];
-                    // $total_prizes = $row[15];
                     echo "<tr><td>" . $track . "</td><td>" . $name . "</td><td>" . $serial . "</td><td>" . $grade .
                         "</td><td>" . $award . "</td>";
                     if ($track == 'yesod') {
@@ -110,7 +108,7 @@ $awards = [
                             }
                             echo "<td>" . $desc . "</td>";
                         }
-                        echo "<td>" . $total_prizes . "</td></tr>";
+                        echo "</tr>";
                     }
                 }
                 ?>
