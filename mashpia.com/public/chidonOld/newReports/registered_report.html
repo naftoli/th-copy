@@ -44,6 +44,7 @@
     const [superAdmin, setSuperAdmin] = useState(false)
     const [types, setTypes] = useState([])
     const [schools, setSchools] = useState([])
+    const [isChecked, setIsChecked] = useState({})
 
     useEffect(() => {
       fetch('api/getExpRegInfo.php')
@@ -57,7 +58,12 @@
               setTypes(result.types)
             }
             if (result.schools) setSchools(result.schools)
-            if (result.info) setData(result.info)
+            if (result.info) {
+              setData(result.info)
+              result.info.forEach(row => {
+                setIsChecked({ ...isChecked, [row.user_serial]: row.eligibility_confirmed })
+              })
+            }
             else if (result.error) setError(result.error)
             setLoading(false)
           },
@@ -74,6 +80,24 @@
 
     if (error) {
       return <div>Error: {error.message}</div>
+    }
+
+    const updateEligibility = async (e, serial) => {
+      const checked = e.target.checked ? 1 : 0
+      const res = await fetch('api/updateEligibility.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ serial, checked })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setIsChecked({ ...isChecked, [serial]: checked })
+        alert('Eligibility updated for ' + serial)
+      } else {
+        alert(data.error)
+      }
     }
 
     const confEligibility = async (e) => {
@@ -102,7 +126,10 @@
 
     const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'KHK Trip Eligible', 'Award',
       'Raised on Drive', 'Minimum Fee', 'Registered', 'Trip Registered', 'Shipping']
-    if (superAdmin) headers.push('Registration Paid')
+    if (superAdmin) {
+      headers.push('Registration Paid')
+      headers.push('Confirmed Eligibility')
+    }
 
     const rewardDescs = {
       'Yesod': 'Sweater, Gift & Yesod Final',
@@ -169,6 +196,7 @@
                 <td>{row.trip ? row.trip : parseInt(row.ultimate_trip) == 1 ? 'Ultimate Trip' : ''}</td>
                 <td>{([61, 269].includes(parseInt(row.school_id)) || superAdmin) ? row.shipping : ''}</td>
                 {superAdmin && <td>{row.paid ? ('$' + row.paid) : ''}</td>}
+                {superAdmin && <td><input type="checkbox" checked={isChecked[row.user_serial]} onChange={(e) => updateEligibility(e, row.user_serial)} /></td>}
               </tr>
             ))}
             </tbody>
