@@ -30,13 +30,16 @@ $sql = "
         u.school_id, 
         u.class_id,
         c.class_grade,
-        c.class_sub 
+        c.class_sub, 
+        aa.admin_id  
     FROM
         th_chidon tc
             JOIN
         users u USING (user_id)
             JOIN
         classes c ON c.class_id = u.class_id
+            JOIN
+        admin_auths aa ON aa.id = u.user_id
     WHERE
         tc.year = :year AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
     ORDER BY u.school_id, c.class_grade, c.class_sub, u.last, u.first
@@ -72,6 +75,7 @@ if ($res) {
         $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
         $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
+        $row['credit'] = getPersonalCredit($row);
         $info[$row['school_id']][] = $row;
     }
 }
@@ -194,15 +198,31 @@ function getShippingInfo($row) {
     global $db, $year;
 
     $stmt = $db->prepare("
-        SELECT * FROM registration_charges where year = :year and admin_id = (
-            SELECT admin_id FROM admin_auths WHERE id = :id
-        ) AND type IN ('RRSUSA', 'RRSCAN', 'RRSINT') 
+        SELECT * FROM registration_charges where year = :year and admin_id = :admin AND type IN ('RRSUSA', 'RRSCAN', 'RRSINT') 
     ");
    $stmt->execute([
         ':year' => $year,
-        ':id'   => $row['user_id']
+        ':admin'   => $row['admin_id']
     ]);
     // find out if there's any rows
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     return count($rows) > 0 ? 'shipping' : 'pickup';
+}
+
+function getPersonalCredit($row) {
+    global $db, $year;
+    
+    $stmt = $db->prepare("
+        SELECT IFNULL(SUM(amount), 0) as total FROM registration_charges WHERE year = :year AND admin_id = :admin AND type = 'RRFAM'
+    ");
+    $res = $stmt->execute([
+        ':year' => $year,
+        ':admin' => $row['admin_id']
+    ]);
+    if ($res) {
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total'];
+    } else {
+        return 0;
+    }
 }
