@@ -71,14 +71,13 @@ foreach ($schools as $school_id => $school) {
         <th>Prize 4</th>
         <th>Prize 5</th>
         <th>Prize 6</th>
-        <th>Number of Prizes</th>
     </tr>
     <?php
     foreach ($sheets as $sheet) {
         foreach ($sheet as $idx => $row) {
             if ($idx == 0) continue;
             echo "<tr>";
-            for ($i = 1; $i <= 15; $i++) {
+            for ($i = 1; $i <= 14; $i++) {
                 echo "<td>";
                 if ($i == 7) {
                     if ($row[$i]) echo $tracks[$row[$i]];
