@@ -60,8 +60,11 @@
             if (result.schools) setSchools(result.schools)
             if (result.info) {
               setData(result.info)
-              result.info.forEach(row => {
-                setIsChecked({ ...isChecked, [row.user_serial]: row.eligibility_confirmed })
+              Object.keys(result.info).forEach(school => {
+                Object.keys(result.info[school]).forEach(child => {
+                  let serial = child['user_serial']
+                  setIsChecked({ ...isChecked, [serial]: child['eligibility_confirmed'] })
+                })
               })
             }
             else if (result.error) setError(result.error)
