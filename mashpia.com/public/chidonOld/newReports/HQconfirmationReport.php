@@ -62,7 +62,8 @@ $stmtUserInfo = $MASHPIA_DB->prepare("
         a.admin_email,
         a.admin_phone_mobile,
         a.admin_phone_work,
-        a.admin_phone_home
+        a.admin_phone_home, 
+        tc.confirmed_info 
     FROM
         users u
             JOIN
