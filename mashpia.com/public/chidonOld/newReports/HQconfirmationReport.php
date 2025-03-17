@@ -29,9 +29,7 @@ foreach ($prizes as $prize) {
 }
 
 // list of kids that ordered more than 75 worth of personalized prizes and didn't pay so we deleted their prizes
-$deleted = [7754689, 7758082, 7758438, 7760528, 7763104, 7763344, 7763352, 7763585, 7764789, 7765193, 7770020, 7770948,
-    7771049, 7771259, 7771422, 7772403, 7772617, 7773774, 7774117, 7774204, 7774528, 7774550, 7774695, 7775756, 7777592,
-    7778891, 7779021, 7779959, 7781249, 7782388, 7785394];
+$deleted = [];
 
 // load csv file with payments that need to be done
 $payments = [];
@@ -226,11 +224,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
           <td><?= $user['admin_phone_work'] ?></td>
           <td><?= $user['admin_phone_home'] ?></td>
         <?php } else { ?>
-          <td>no parent account found</td>
-          <td>no parent account found</td>
-          <td>no parent account found</td>
-          <td>no parent account found</td>
-          <td>no parent account found</td>
+          <td colspan='5'>no parent account found</td>
         <?php } ?>
       </tr>
         <?php
