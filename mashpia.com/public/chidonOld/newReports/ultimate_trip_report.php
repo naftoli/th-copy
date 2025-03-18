@@ -301,7 +301,7 @@ $info = $stmt->fetchAll();
 
     function getRows() {
       const rows = []
-      $('#chidonTable tbody tr').map(function () {
+      $('.data-table tbody tr').map(function () {
         const row = []
         const cells = $(this).find('td')
         cells.each(function () {
@@ -309,8 +309,8 @@ $info = $stmt->fetchAll();
           const text = cell.text().trim()
           row.push(text)
         })
-        return row
-      }).get()
+        rows.push(row)
+      })
       return rows
     }
 </script>
