@@ -99,10 +99,34 @@ $info = $stmt->fetchAll();
         color: #009879;
         margin-bottom: 20px;
     }
-</style>
+
+    .download-csv {
+        background-color: #009879;
+        color: #ffffff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .download-csv:hover {
+        background-color: #007259;
+    }
+
+    .download-csv:active {
+        background-color: #005e46;
+    }
+
+    .download-csv:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+    }
+    </style>
 </head>
 <body>
     <h1>Ultimate Trip Info</h1>
+    <button class="download-csv" onclick="downloadAsCsv()">Download CSV</button>
     <div class="table-container">
         <table class="data-table">
             <thead>
@@ -192,7 +216,7 @@ $info = $stmt->fetchAll();
                     }
 
                     echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "
-                        </td><td>" . $serial . "</td><td> . $gender . </td>
+                        </td><td>" . $serial . "</td><td>" . $gender . "</td>
                         <td><input type='text' class='sandwhich' value='" . $sandwich . "' /></td>
                         <td><input type='text' class='height' value='" . $height . "' /></td>
                         <td><input type='text' class='weight' value='" . $weight . "' /></td>
@@ -256,5 +280,37 @@ $info = $stmt->fetchAll();
         console.log(data)
         if (! data.success) alert('Error saving data')
     })
+
+    // function to download as csv
+    function downloadAsCsv() {
+      const headers = ['School', 'Grade/Class', 'Student', 'Serial Number', 'Gender', 'Sandwich', 'Height', 'Weight', 'Ski/Snowboard', 'Skill Level', 'Outerwear', 'Shoe Size', 'Allergies', 'In Walking Zone', 'Host', 'Host Phone Number', 'Street Number', 'Street Number Suffix', 'Street Name', 'Apt. #', 'Host Cross Street 1', 'Host Cross Street 2', 'Thursday Walking', 'Motzei Shabbos Walking', 'Zone ID', 'Comments']
+      const rows = getRows()
+      const universalBOM = "\uFEFF";
+      let csvContent = `${ headers.join(',') }\n`;
+      // Add each row to the CSV content and encode it for unicode in excel
+      rows.forEach( row => { csvContent += `${row.join(',')}\n` } );
+      csvContent = encodeURIComponent( universalBOM + csvContent );
+      // create and click the download link
+      let link = document.createElement('a');
+      link.href = `data:text/csv;charset=utf-8,${csvContent}`;
+      // link.target = '_blank';
+      link.download = 'ultimate_trip_report.csv';
+      link.click();
+    }
+
+    function getRows() {
+      const rows = []
+      $('#chidonTable tbody tr').map(function () {
+        const row = []
+        const cells = $(this).find('td')
+        cells.each(function () {
+          const cell = $(this)
+          const text = cell.text().trim()
+          row.push(text)
+        })
+        return row
+      }).get()
+      return rows
+    }
 </script>
 </html>
