@@ -157,7 +157,7 @@
                 <div class="row">
                     <div class="pricing">
                         <div class="col-md-3 col-sm-12 col-xs-12">
-                          <div class="givePoints" id="1">
+                          <div class="givePoints" id="2">
                               <button class="plus">+10</button>
                               <button class="plus">+20</button>
                               <button class="minus">-10</button>
@@ -175,7 +175,7 @@
                         </div>
 
                         <div class="col-md-3 col-sm-12 col-xs-12">
-                            <div class="givePoints" id="2">
+                            <div class="givePoints" id="1">
                                 <button class="plus">+10</button>
                                 <button class="plus">+20</button>
                                 <button class="minus">-10</button>
@@ -449,7 +449,7 @@
           }
         html += "</div>"
         html += `<div class="action">`
-        html += `<select class="team">`
+        html += `<select class="team" disabled>`
         for (let i = 0; i < teams.length; i++) {
           html += `<option>${teams[i]}</option>`
         }
