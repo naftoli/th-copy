@@ -68,16 +68,16 @@ body{
   border-bottom-left-radius: 14px; */
 }
 .pricing-table .team1 {
-  background: #ffff00;
+  background: #0000ff;
 }
 .pricing-table .team2 {
-  background: #ffff00;
+  background: #0000ff;
 }
 .pricing-table .team3 {
-  background: #ffff00;
+  background: #0000ff;
 }
 .pricing-table .team4 {
-  background: #ffff00;
+  background: #0000ff;
 }
 #bottom-table #pricing-table .pricing .pricing-table .pricing-header {
 	padding: 0px;	
@@ -92,7 +92,7 @@ body{
 }
 #pricing-table .pricing .pricing-table .pricing-header .pricing-rate {
   font-size: 62pt;
-  color: #0000ff;
+  color: #381040;
   position: relative;
   text-align: center;
   font-family: ruso;
@@ -161,7 +161,7 @@ body{
   /* color: #bdc3c7; */
 }
 #pricing-table .pricing .pricing-list ul li span {
-  color: #0000ff;
+  color: #381040;
   font-weight: bold;
   font-size: 42pt;
   padding-right: 25px;
@@ -288,7 +288,7 @@ body{
   height: 205px;
   width: 370px;
   padding: 10px;
-  background-color: #ffff00;
+  background-color: #0000ff;
 }
 .bolts img {
   width: 38px;
