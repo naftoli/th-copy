@@ -272,7 +272,7 @@
     <script src="../jquery-1.8.1.min.js"></script>
     <script>
       const NUM_TEAMS = 2
-      const teams = ['ספר המצוות', 'משנה תורה', 'פירוש המשניות', 'אגרת הרמב"ם']
+      const teams = ['משנה תורה', 'ספר המצוות', 'פירוש המשניות', 'אגרת הרמב"ם']
       let t1 = ''
       let t2 = ''
 
@@ -300,6 +300,14 @@
           $(".team").eq(0).val(t1)
           $(".team").eq(1).val(t2)
         })
+
+        // set team 2 to second option
+        $(".teamNames").eq(1).val(teams[1])
+        // wait a few ms
+        setTimeout(() => {
+          // and update
+          $("#update").trigger('click')
+        }, 100)
           
         $(".setPoints").click( function() {
           let points = parseInt($(this).prev('input').val());
