@@ -295,8 +295,9 @@
           $(".t1n").text(t1)
           $(".t2n").text(t2)
 
-          $(".team_name").eq(0).text(t1);
-          $(".team_name").eq(1).text(t2);
+          // since the teams are right to left it's the opposite of how they are displayed
+          $(".team_name").eq(1).text(t1);
+          $(".team_name").eq(0).text(t2);
 
           $(".team").eq(0).val(t1)
           $(".team").eq(1).val(t2)
