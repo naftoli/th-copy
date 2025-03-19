@@ -310,7 +310,7 @@ $info = $stmt->fetchAll();
           row.push(text)
         })
         rows.push(row)
-      })
+      }).get()
       return rows
     }
 </script>
