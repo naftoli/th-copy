@@ -92,7 +92,7 @@ body{
 }
 #pricing-table .pricing .pricing-table .pricing-header .pricing-rate {
   font-size: 62pt;
-  color: #381040;
+  color: #0000ff;
   position: relative;
   text-align: center;
   font-family: ruso;
@@ -161,7 +161,7 @@ body{
   /* color: #bdc3c7; */
 }
 #pricing-table .pricing .pricing-list ul li span {
-  color: #381040;
+  color: #0000ff;
   font-weight: bold;
   font-size: 42pt;
   padding-right: 25px;
@@ -234,12 +234,13 @@ body{
   text-align: center;
 }
 .table {
-  width: 300px;
+  width: 350px;
   margin-bottom: 0;
 }
 #saveTeams button {
   padding: 10px;
-  margin: 10px;
+  margin: 7px;
+  margin-left: 20px;
 }
 
 #teams {
