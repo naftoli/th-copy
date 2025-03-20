@@ -213,28 +213,28 @@ if (!empty($users)) {
 //         }
 
         // mivtza chanuka
-        $children[$row['user_id']]['menorah'] = 0;
-        $children[$row['user_id']]['brochure'] = 0;
-        $chanukaSchools = MivtzoimSetting::getEnabledSchools($chidon_year, [2, 3]);
-        foreach ($chanukaSchools as $school) {
-            $school_id = $school['school_id'];
-            if (
-                $row['school_id'] == $school_id &&
-                $children[$row['user_id']]['schoolRegistered'] &&
-                $children[$row['user_id']]['schoolTypeRegistered'] &&
-                $children[$row['user_id']]['user_registered'] > 0
-            ) {
-                if ($school['item_id'] == 2) {
-                    $children[$row['user_id']]['menorah'] = 1;
-                    $children[$row['user_id']]['menorah_purchased'] = 0;
-                    $children[$row['user_id']]['menorah_shipping'] = $school['shipping_charge'];
-                } else if ($school['item_id'] == 3) {
-                    $children[$row['user_id']]['brochure'] = 1;
-                    $children[$row['user_id']]['brochure_purchased'] = 0;
-                    $children[$row['user_id']]['brochure_shipping'] = $school['shipping_charge'];
-                }
-            }
-        }
+        // $children[$row['user_id']]['menorah'] = 0;
+        // $children[$row['user_id']]['brochure'] = 0;
+        // $chanukaSchools = MivtzoimSetting::getEnabledSchools($chidon_year, [2, 3]);
+        // foreach ($chanukaSchools as $school) {
+        //     $school_id = $school['school_id'];
+        //     if (
+        //         $row['school_id'] == $school_id &&
+        //         $children[$row['user_id']]['schoolRegistered'] &&
+        //         $children[$row['user_id']]['schoolTypeRegistered'] &&
+        //         $children[$row['user_id']]['user_registered'] > 0
+        //     ) {
+        //         if ($school['item_id'] == 2) {
+        //             $children[$row['user_id']]['menorah'] = 1;
+        //             $children[$row['user_id']]['menorah_purchased'] = 0;
+        //             $children[$row['user_id']]['menorah_shipping'] = $school['shipping_charge'];
+        //         } else if ($school['item_id'] == 3) {
+        //             $children[$row['user_id']]['brochure'] = 1;
+        //             $children[$row['user_id']]['brochure_purchased'] = 0;
+        //             $children[$row['user_id']]['brochure_shipping'] = $school['shipping_charge'];
+        //         }
+        //     }
+        // }
 
         // mivtza neshek
         $children[$row['user_id']]['neshek'] = 0;
@@ -330,8 +330,8 @@ if (!empty($users)) {
             $children[$row['user_id']]['chidon5783'] = false;
         }
         if (!$row['reg_chidon'] // if not in chidon
-            && intval($row['class_grade']) >= 4 // and in grade 4+
-            && intval($row['class_grade']) <= 8 // not in grade 8
+            && intval($row['class_grade']) >= 3 // and in grade 3+
+            && intval($row['class_grade']) < 8 // not in grade 8
             && intval($row['chidon']) // make sure the kid is in chidon
             && intval($row['school_chidon']) // make sure school has chidon
             && !in_array(intval($children[$row['user_id']]['school_id']), $exceptions) // make sure not one of these schools

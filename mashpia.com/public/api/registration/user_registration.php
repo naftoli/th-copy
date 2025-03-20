@@ -604,7 +604,7 @@ class UserRegistrationRouter {
                         $chidonReg = true;
                         $message .= "<br />This includes:<br /><ul><li>3 tests</li><li>Study Guide</li><li>Chidon Kop Card Game</li></ul></p>";
                         $message .= "<p><b>Limmud Shipping</b><br />";
-                        if (in_array($detail['school'], [61, 269]))
+                        if (isset($detail['school']) && in_array($detail['school'], [61, 269]))
                             $message .= "The Study Guide & Chidon Kop will be shipped to your house during Cheshvan.</p>";
                         else
                             $message .= "The Study Guide & Chidon Kop will be shipped to your school.</p>";
@@ -617,7 +617,7 @@ class UserRegistrationRouter {
                     case 'YB3':
                     case 'YB4':
                     case 'YB5':
-                        if (in_array($detail['school'], [61, 269]))
+                        if (isset($detail['school']) && in_array($detail['school'], [61, 269]))
                             $message .= "<br />The book will be shipped to your home.</p>";
                         else
                             $message .= "<br />The book will be shipped to your school.</p>";
@@ -755,7 +755,7 @@ Tzivos Hashem HQ</body></html>";
             if ($chidon) {
                 foreach ($items as $details) {
                     foreach ($details as $detail) {
-                        if ($detail['school'] == 61) {
+                        if (isset($detail['school']) && $detail['school'] == 61) {
                             $cc = 'chidon@myshliach.com';
                             break;
                         }
