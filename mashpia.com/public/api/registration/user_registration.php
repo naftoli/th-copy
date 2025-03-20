@@ -814,7 +814,7 @@ Tzivos Hashem HQ</body></html>";
                 }
             }
         } else {
-            $error = 'Your information has been saved but there was an error sending the confirmation email.\nNo email address found for this account.';
+            $error = 'You have successfully enrolled or updated your child(ren) but there was an error sending the confirmation email.\nNo email address found for this account.';
             return $error;
         }
         return 0; // no error

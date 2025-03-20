@@ -330,7 +330,7 @@ if (!empty($users)) {
             $children[$row['user_id']]['chidon5783'] = false;
         }
         if (!$row['reg_chidon'] // if not in chidon
-            && intval($row['class_grade']) >= 3 // and in grade 3+
+            && intval($row['class_grade']) >= 3 // and in grade 4+
             && intval($row['class_grade']) < 8 // not in grade 8
             && intval($row['chidon']) // make sure the kid is in chidon
             && intval($row['school_chidon']) // make sure school has chidon

@@ -2906,7 +2906,8 @@ var templates = function () {
           (index === 0 ? "checked" : "") + '/>' +
           '<span class="radio"></span>' +
           '</label>&nbsp;<span style="vertical-align: super; margin-left: 60px;">' + msg + '</span>' + 
-          ' <span><input style="vertical-align: bottom" type="month" value="' + cc.expirationDate + '" data-card_num="' + cc.cardNumber + '" onchange="templates.updatePaymentProfile(' + payment.customerPaymentProfileId + ', this)" /></span>' +
+          ' <span><input style="vertical-align: bottom" type="month" value="' + cc.expirationDate + '" data-card_exp="' + cc.expirationDate + '"' +
+          ' data-card_num="' + cc.cardNumber + '" onchange="templates.updatePaymentProfile(' + payment.customerPaymentProfileId + ', this)" /></span>' +
           ' <span style="font-size: smaller; float: right;"><a style="vertical-align: sub;" href="javascript:void(0)" onclick="templates.removePaymentProfile(' + payment.customerPaymentProfileId + '); return false;">delete</a></span>' +
           '</div>';
       });
@@ -2928,6 +2929,7 @@ var templates = function () {
     removePaymentProfile: function (id) {
       const del = confirm('Are you sure you want to delete this card?')  
       if (!del) return
+      const $this = $(this)
       $.post('/mobile/reg/ajax/card_management.php', {
         action: 'delete_card',
         profile_id: id
@@ -2935,7 +2937,7 @@ var templates = function () {
         const res = JSON.parse(response)
         if (res.success) {
           // remove this card from list of cards
-          $(this).parent().parent().remove()
+          $this.parent().parent().remove()
         } else {
           alert('Failed to remove card.')
         }
@@ -2956,6 +2958,8 @@ var templates = function () {
         const res = JSON.parse(response)
         if (! res.success) {
           alert('Failed to update card: ' + res.error)
+          // reset the input
+          input.value = input.getAttribute('data-card_exp')
         }
       })
     }
