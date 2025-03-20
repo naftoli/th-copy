@@ -2926,10 +2926,9 @@ var templates = function () {
         templates.toggleNewCard(!event.target.value);
       });
     },
-    removePaymentProfile: function (id) {
+    removePaymentProfile: function (id, elem) {
       const del = confirm('Are you sure you want to delete this card?')  
       if (!del) return
-      const $this = $(this)
       $.post('/mobile/reg/ajax/card_management.php', {
         action: 'delete_card',
         profile_id: id
@@ -2937,7 +2936,7 @@ var templates = function () {
         const res = JSON.parse(response)
         if (res.success) {
           // remove this card from list of cards
-          $this.parent().parent().remove()
+          $(elem).parent().parent().remove()
         } else {
           alert('Failed to remove card.')
         }
