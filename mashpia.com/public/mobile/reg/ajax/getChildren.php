@@ -354,10 +354,10 @@ if (!empty($users)) {
         }
 
         // turn off chidon past certain date
-        if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon()) {
-            $children[$row['user_id']]['reg_types']['chidon'] = false;
-            $children[$row['user_id']]['editChidon'] = false;
-        }
+        // if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon()) {
+        //     $children[$row['user_id']]['reg_types']['chidon'] = false;
+        //     $children[$row['user_id']]['editChidon'] = false;
+        // }
         // turn off chayolei
 //        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
