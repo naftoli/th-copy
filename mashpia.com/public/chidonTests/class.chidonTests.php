@@ -937,13 +937,13 @@ class KHK {
     // find out if child participated in chidon in past 4 yrs or was marked as eligible
     public static function eligibility(array $user_ids) {
         $info = [];
-        $year = GlobalSettings::getChidonRegYear();
+        $year = GlobalSettings::getChidonYear();
         foreach ($user_ids as $id) {
-            // check if eligibility was turned on
-            $sql = "select khk_eligible from users where user_id = " . $id;
+            // check if override was turned on
+            $sql = "select khk_override from th_chidon where year = " . $year . " and user_id = " . $id;
             $result = mysql_query($sql);
             $row = mysql_fetch_assoc($result);
-            $info[$id] = intval($row['khk_eligible']) ? true : false;
+            $info[$id] = intval($row['khk_override']) ? true : false;
             // else {
             //     // check if child participated in chidon in past 4 yrs
             //     $sql = "select * from th_chidon where user_id = " . $id . " and date_paid > 0 and year >= " . ($year - 4);

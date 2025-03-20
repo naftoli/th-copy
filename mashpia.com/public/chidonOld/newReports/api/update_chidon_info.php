@@ -27,8 +27,7 @@ $input = json_decode(file_get_contents('php://input'), true);
 $table = "th_chidon";
 
 $mapping = [
-    'track_passed'  => 'th_chidon_info',
-    'khk_eligible'  => 'users',
+    'track_passed'  => 'th_chidon_info'
 ];
 
 $columns = getColumnTypes($table);

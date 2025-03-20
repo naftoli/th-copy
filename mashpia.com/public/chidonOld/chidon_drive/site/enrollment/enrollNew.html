@@ -1250,14 +1250,17 @@
 			// only let ultimate trip kids to update their trip info
 			// const only_schools = [11, 40, 58, 66, 89, 105, 112, 185, 470, 472, 517, 621, 726, 739, 817]
 			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
+			
+			let close = true // change to false to open registration
 			let registered = children.filter(child => child.date_paid)
 			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
 			if (Cookies.get('naftoli')) {
-				eligible = children.filter(child => child.track && !child.date_paid)
+				close = false
+				eligible = children.filter(child => !child.date_paid)
+				for (let child of eligible) {
+					if (! child.track) child.track = 'Havonah'
+				}
 			}
-
-			let close = true // change to false to open registration
-			if (Cookies.get('naftoli')) close = false
 			if (eligible.length && close) {
 				// check if we are keeping open for any child
 				let temp = eligible

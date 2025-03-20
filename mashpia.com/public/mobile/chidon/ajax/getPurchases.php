@@ -37,14 +37,17 @@ foreach ($children as $user_id => $child) {
 $khk = [];
 $newToChidon = [];
 foreach ($children as $user_id => $child) {
-    $sql = "select * from users where user_id = " . $user_id;
+    $first_time = true;
+    $sql = "select * from th_chidon where user_id = " . $user_id;
     $result = mysql_query($sql);
-    $row = mysql_fetch_assoc($result);
-    if ($row['khk_eligible']) $khk[] = $user_id;
-
-    $sql = "select * from th_chidon where year != $year and user_id = " . $user_id;
-    $result = mysql_query($sql);
-    if (mysql_num_rows($result) == 0) $newToChidon[] = $user_id;
+    while ($row = mysql_fetch_assoc($result)) {
+        if ($row['year'] == $year) {
+            if (intval($row['khk_override'])) $khk[] = $user_id;
+        } else {
+            $first_time = false;
+        }
+    }
+    if ($first_time) $newToChidon[] = $user_id;
 }
 
 echo json_encode([

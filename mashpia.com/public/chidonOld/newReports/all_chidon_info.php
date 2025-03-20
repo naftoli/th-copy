@@ -108,11 +108,11 @@ function setKHK(array &$info) {
     if ($ids) {
         $khk = KHK::getKHKEligibility($ids)[0];
         foreach ($info as &$row) {
-            $row['khk_eligible'] = $khk[$row['user_id']] ?? 0;
+            $row['khk_override'] = $khk[$row['user_id']] ?? 0;
         }
     } else {
         foreach ($info as &$row) {
-            $row['khk_eligible'] = 0;
+            $row['khk_override'] = 0;
         }
     }
 }
@@ -341,7 +341,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
             $fields_to_use = [
                 "highest_track",
                 "test_type",
-                "khk_eligible",
+                "khk_override",
                 "personal_credit",
                 "coupon_code",
                 "raised",
@@ -413,7 +413,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
             ];
             
             $fields = ['first', 'last', 'admin_id', 'user_id', 'user_serial', 'school_id', 'class_id', 'class_grade', 'class_sub', 'school_id_chidon', 
-                'personal_credit', 'coupon_code', 'raised', 'family_balance', 'track_passed', 'khk_eligible'];
+                'personal_credit', 'coupon_code', 'raised', 'family_balance', 'track_passed', 'khk_override'];
             $stmt = $MASHPIA_DB->query("show columns from th_chidon");
             foreach ( $stmt->fetchAll() as $row ) {
                 if (in_array($row['Field'], $fields_to_use)) $fields[] = $row['Field'];
@@ -468,7 +468,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                                     echo ">" . $new_track . "</option>";
                                 }
                                 echo "</select>";
-                            } else if (in_array($field, ['khk_eligible', 'deleted', 'walking', 'khk', 'ultimate_trip', 'dropped_out', 'confirmed_info'])) {
+                            } else if (in_array($field, ['khk_override', 'deleted', 'walking', 'khk', 'ultimate_trip', 'dropped_out', 'confirmed_info'])) {
                                 echo "<select id='" . $field . "' name='" . $field . "' class='edit' data-old='" . $row[$field] . "'>";
                                 foreach ($boolSelection as $key => $val) {
                                     echo "<option value='" . $key . "'";
