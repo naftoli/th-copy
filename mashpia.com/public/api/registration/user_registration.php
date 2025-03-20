@@ -694,7 +694,7 @@ class UserRegistrationRouter {
             $message .= ", depending on the track passed on the tests.</p>";
 
             if ($pre_reg_prize_amount) {
-                $first_name = $detail['first'];
+                $first_name = $details[0]['first'];
                 $message .= "<p><b>Pre Registration Prize Payment</b>";
                 $message .= "<br />You paid $" . $pre_reg_prize_amount . " for " . $first_name . "'s prize. It will be applied towards " .
                     $first_name . "'s registration charges.</p>";
