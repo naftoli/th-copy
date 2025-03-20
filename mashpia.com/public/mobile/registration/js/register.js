@@ -2935,10 +2935,18 @@ var templates = function () {
       }, function (response) {
         const res = JSON.parse(response)
         if (res.success) {
+          // find which number card this was
+          const index = $(".payment-option").index(elem)
           // remove this card from list of cards
-          $(elem).parent().parent().remove()
+          $(".payment-option").eq(index).remove()
+          // find next card and select it
+          $(".payment-option").eq(index + 1).find('input').trigger('click')
+          // toggle new card if no more cards
+          if ($(".payment-option").length === 1) {
+            templates.toggleNewCard(true)
+          }
         } else {
-          alert('Failed to remove card.')
+          alert('Failed to delete card.')
         }
       })
     },
@@ -2957,8 +2965,8 @@ var templates = function () {
         const res = JSON.parse(response)
         if (! res.success) {
           alert('Failed to update card: ' + res.error)
-          // reset the input
-          input.value = input.getAttribute('data-card_exp')
+        } else {
+          alert('Card updated successfully')
         }
       })
     }
