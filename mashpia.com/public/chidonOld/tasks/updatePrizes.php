@@ -15,7 +15,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 foreach ($prizes as $prize) {
-    $sql = "update prizes set prize_picture = '" . $prize['prize_picture'] . "' where year = 5786 and prize_name = '" . $prize['prize_name'] . "'";
+    $sql = "update chidon_prizes set prize_picture = '" . $prize['prize_picture'] . "' where year = 5786 and prize_name = '" . $prize['prize_name'] . "'";
     if (! mysql_query($sql)) {
         echo "Error: " . mysql_error() . "<br />" . $sql . "<br /><br />";
     }
