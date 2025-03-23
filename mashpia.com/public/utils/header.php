@@ -22,7 +22,7 @@ function getDbHandle() {
 
 function getChidonYear() {
     require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-    return GlobalSettings::getChidonRegYear();
+    return GlobalSettings::getChidonYear();
 }
 
 function getChayoleiYear() {
