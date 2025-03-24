@@ -202,8 +202,8 @@ function processFee() {
     $desc = getAuthDesc();
 
     // find out if authorize description is too long
-    if (strlen($desc) > 255) {
-        $desc = getShortDesc(); 
+    if (strlen($desc) > 250) {
+        $desc = getShortDesc($desc); 
     }
 
     $error = '';
@@ -253,18 +253,9 @@ function getAuthDesc() {
     return implode(',', $desc);
 }
 
-function getShortDesc() {
-    $desc = [];
-    $descriptions = getDescriptions();
-    foreach ($descriptions as $item) {
-        $desc[] = $item['prefix'] . $item['id'];
-    }
-    $new_desc = 'desc too long, check mashpia database - ' . implode(',', $desc);
-    if (strlen($new_desc) > 250) {
-        // cut off new desc after 250 chars
-        $new_desc = substr($new_desc, 0, 250);
-    }
-    return $new_desc;
+function getShortDesc($desc) {
+    $new_desc = 'desc too long - ' . $desc;
+    return substr($new_desc, 0, 250);
 }
 
 function insertIntoRegCharges($trans_id = 0) {
@@ -804,15 +795,15 @@ function saveAuthDesc() {
         INSERT INTO authorize_transactions 
         SET 
             description = :desc, 
-            long_desc = :desc, 
+            long_desc = :long_desc, 
             year = :year, 
             admin_id = :admin
     ");
+    $new_desc = '';
     $desc = getAuthDesc();
-    if (strlen($desc) > 255) $new_desc = getShortDesc();
-    else $new_desc = $desc;
+    if (strlen($desc) > 250) $new_desc = getShortDesc($desc);
     $stmt->execute([
-        ':desc' => $new_desc,
+        ':desc' => empty($new_desc) ? $desc : $new_desc,
         ':long_desc' => $desc,
         ':year' => $year, 
         ':admin' => $admin_id
