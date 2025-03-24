@@ -179,7 +179,9 @@ class Installments
         $request->setSubscriptionId($this->subscription_id);
 
         $controller = new AnetController\ARBCancelSubscriptionController($request);
-        $controller->executeWithApiResponse($this->endpoint);
+        $response = $controller->executeWithApiResponse($this->endpoint);
+
+        return $this->parseResponse($response);
     }
 
     public function getName() {
@@ -191,5 +193,33 @@ class Installments
             return [$row['first'], $row['last']];
         }
         else return ['first name', 'last name'];
+    }
+
+    public function getSubscriptionInfo($id) {
+        $merchantAuthentication = $this->setAuth();
+        // Set the transaction's refId
+        $refId = 'ref' . time();
+
+        $request = new AnetAPI\ARBGetSubscriptionRequest();
+        $request->setMerchantAuthentication($merchantAuthentication);
+        $request->setRefId($refId);
+        $request->setSubscriptionId($id);
+
+        $controller = new AnetController\ARBGetSubscriptionController($request);
+        $response = $controller->executeWithApiResponse($this->endpoint);
+
+        return $this->parseResponse($response);
+    }
+
+    public static function getSubscriptions($year = 0) {
+        if (!$year) $year = GlobalSettings::getChidonYear();
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+        $sql = "select * from th_chidon_installments where year = " . $year;
+        $result = mysql_query($sql);
+        $rows = [];
+        while ($row = mysql_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+        return $rows;
     }
 }
