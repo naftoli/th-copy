@@ -1127,7 +1127,7 @@ class ChidonShipping
                 'th_chidon_id' => $row['th_chidon_id']
             ];
             $track = $ct->getHighestTrackPassed($child)['highest_track'];
-            if (in_array($track, ['Yesod', 'yesod'])) continue;
+            if (in_array($track, ['', 'Yesod', 'yesod'])) continue;
 
             // make sure it's one of the prizes selected to show
             $found = true;
