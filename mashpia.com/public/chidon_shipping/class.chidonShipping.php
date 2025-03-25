@@ -1090,7 +1090,7 @@ class ChidonShipping
         $sql = "SELECT 
                     cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, 
                     tc.ultimate_trip, u.first, u.last, u.user_serial, c.class_grade, c.class_sub, 
-                    u.school_id, u.class_id tc.th_chidon_id 
+                    u.school_id, u.class_id, tc.th_chidon_id 
                 FROM
                     chidon_user_prizes cup
                         JOIN
@@ -1119,15 +1119,15 @@ class ChidonShipping
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
 
             // check that child's track is higher than yesod
-//            $ct = new ChidonTests();
-//            $child = [
-//                'user_id' => $row['user_id'],
-//                'school_id' => $row['school_id'],
-//                'class_id' => $row['class_id'],
-//                'th_chidon_id' => $row['th_chidon_id']
-//            ];
-//            $track = $ct->getHighestTrackPassed($child)['highest_track'];
-//            if (in_array($track, ['', 'Yesod', 'yesod'])) continue;
+            $ct = new ChidonTests();
+            $child = [
+                'user_id' => $row['user_id'],
+                'school_id' => $row['school_id'],
+                'class_id' => $row['class_id'],
+                'th_chidon_id' => $row['th_chidon_id']
+            ];
+            $track = $ct->getHighestTrackPassed($child)['highest_track'];
+            if (in_array($track, ['', 'Yesod', 'yesod'])) continue;
 
             // make sure it's one of the prizes selected to show
             $found = true;
