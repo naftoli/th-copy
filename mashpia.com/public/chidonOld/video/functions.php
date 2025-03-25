@@ -55,7 +55,7 @@ function getChildren($school_id, $gender) {
                 th_chidon tc ON tc.user_id = u.user_id 
                     JOIN
                 th_chidon_info tci ON tci.user_id = u.user_id AND tci.year = tc.year 
-                    JOIN 
+                    LEFT JOIN 
                 non_th_schools nts ON nts.non_th_school_id = u.non_th_school_id 
             WHERE
                 tc.year = $year AND tc.date_paid > 0 
