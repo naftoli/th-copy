@@ -1089,7 +1089,8 @@ class ChidonShipping
         $info = [];
         $sql = "SELECT 
                     cup.user_id, cup.he_name, cp.prize_id, cp.prize_name, cp.size, cp.color, 
-                    tc.ultimate_trip, u.first, u.last, u.user_serial, c.class_grade, c.class_sub  
+                    tc.ultimate_trip, u.first, u.last, u.user_serial, c.class_grade, c.class_sub, 
+                    u.school_id, u.class_id tc.th_chidon_id 
                 FROM
                     chidon_user_prizes cup
                         JOIN
@@ -1104,9 +1105,7 @@ class ChidonShipping
                     classes c ON u.class_id = c.class_id 
                 WHERE
                     cup.year = :year AND tc.date_paid > 0 
-                        AND tc.ultimate_trip = 0 AND tc.user_id not in (
-                            SELECT user_id FROM registration_charges WHERE year = :year AND type = 'RRYSD'
-                        )";
+                        AND tc.ultimate_trip = 0";
 //        if (count($limitTo)) $sql .= " and cup.prize_id in (" . implode(',', $ids) . ")";
         if ($gender == 'm') $sql .= " AND u.gender = 'M'";
         if ($gender == 'f') $sql .= " AND u.gender = 'F'";
@@ -1118,6 +1117,17 @@ class ChidonShipping
         foreach ($rows as $row) {
             if (in_array($row['user_id'], $this->toExclude)) continue;
             if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
+
+            // check that child's track is higher than yesod
+            $ct = new ChidonTests();
+            $child = [
+                'user_id' => $row['user_id'],
+                'school_id' => $row['school_id'],
+                'class_id' => $row['class_id'],
+                'th_chidon_id' => $row['th_chidon_id']
+            ];
+            $track = $ct->getHighestTrackPassed($child)['highest_track'];
+            if (in_array($track, ['Yesod', 'yesod'])) continue;
 
             // make sure it's one of the prizes selected to show
             $found = true;
