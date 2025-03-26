@@ -971,6 +971,9 @@ class KHK {
     public static function getUltimateTripEligibility( array $ids, $year = 0, $numYrs = 4, array $marks = [], $nextYr = false ) {
         // yr that we don't check registration but rather check highest track passed
         // $rollover = 5782;
+        // first make sure child was enrolled into chidon for last 4 years
+        $enrollmentEligibility = KHK::enrollmentEligibility($ids);
+
         if ($numYrs > 4) $numYrs = 4; // make sure it's not more than 3
 
         $years = [];
@@ -998,21 +1001,19 @@ class KHK {
                 // exceptions
                 $exceptions = [];
                 $details[$id][$yr] = false;
-                // if ($yr >= $rollover) {
-                    // for current yr, check if passed
-                    if (!$nextYr && $yr == $curYr) $details[$id][$yr] = $passed[$id];
-                    else {
-                        // check highest track passed
-                        $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
-                        $result = mysql_query($sql);
-                        if (mysql_num_rows($result) > 0) {
-                            $highest_track = mysql_fetch_assoc($result)['highest_track'];
-                            // make sure child is at least on the yediah track (not on 'yesod')
-                            if (! in_array($highest_track, ['', 'yesod'])) $details[$id][$yr] = true;
-                        } else {
-                            $details[$id][$yr] = false;
-                        }
+                // for current yr, check if passed
+                if (!$nextYr && $yr == $curYr) $details[$id][$yr] = $passed[$id];
+                else {
+                    if (! $enrollmentEligibility[$id]) continue;
+                    // check highest track passed
+                    $sql = "select highest_track from th_chidon_info where user_id = " . $id . " and year = " . $yr;
+                    $result = mysql_query($sql);
+                    if (mysql_num_rows($result) > 0) {
+                        $highest_track = mysql_fetch_assoc($result)['highest_track'];
+                        // make sure child is at least on the yediah track (not on 'yesod')
+                        if ($highest_track != 'yesod') $details[$id][$yr] = true;
                     }
+                }
             }
         }
 
