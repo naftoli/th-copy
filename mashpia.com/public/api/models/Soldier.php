@@ -540,8 +540,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
 
-        // check if child is eligible for khk tests when registering for chidon
-        $eligible = KHK::eligibility([$this->user_id]);
+        // check if child is eligible for khk track when registering for chidon
+        $eligible = KHK::enrollmentEligibility([$this->user_id]);
         $result['khk'] = !$eligible[$this->user_id]; // true means not eligible for khk
 
         // check if child is new to chidon

@@ -38,7 +38,7 @@ $user_ids = array_map(function($user) {
     return $user['user_id'];
 }, $info);
 // get khk eligibility
-$eligible = KHK::getKHKEligibility($user_ids)[0];
+$eligible = KHK::getUltimateTripEligibility($user_ids)[0];
 ?>
 <!DOCTYPE html>
 <html>

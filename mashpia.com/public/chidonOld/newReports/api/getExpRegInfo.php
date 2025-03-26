@@ -53,7 +53,7 @@ $info = [];
 if ($res) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $ids = array_map(function($row) { return $row['user_id']; }, $rows);
-    $khk_eligibility = KHK::getKHKEligibility($ids)[0];
+    $khk_eligibility = KHK::getUltimateTripEligibility($ids)[0];
     foreach ($rows as $row) {
         $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
         $ct->setScores();

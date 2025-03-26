@@ -94,7 +94,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $chidonInfo[$row['user_id']][$row['year']] = $row;
 }
 
-$eligibility = KHK::eligibility($userIds);
+$eligibility = KHK::enrollmentEligibility($userIds);
 //echo "<pre>"; print_r($eligibility); print_r($chidonInfo); echo "</pre>"; exit;
 $trackYr = 5782;
 ?>
@@ -160,8 +160,8 @@ $trackYr = 5782;
                         echo "<th>" . ($year - $i) . "</th>";
                     }
                     ?>
-                    <th>KHK Eligible</th>
-                    <th>KHK Enrolled</th>
+                    <th>KHK Track Eligible</th>
+                    <th>KHK Track Enrolled</th>
                     <th>Parent Email</th>
                     <th>Parent Phone Number</th>
                 </tr>

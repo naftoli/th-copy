@@ -12,7 +12,7 @@ require_once 'class.chidonTests.php';
 //}
 $ids = [18451, 17117, 18319, 62881];
 
-$results = KHK::getKHKEligibility($ids);
+$results = KHK::getUltimateTripEligibility($ids);
 $eligibility = $results[0];
 $details = $results[1];
 echo "<pre>"; print_r($eligibility); print_r($details); echo "</pre>";

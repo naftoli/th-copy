@@ -15,5 +15,5 @@ if (isset($_GET['serial'])) {
     $user_id = $row['user_id'];
 }
 
-$eligibility = KHK::getKHKEligibility([ $user_id ]);
+$eligibility = KHK::getUltimateTripEligibility([ $user_id ]);
 echo "<pre>"; print_r($eligibility); echo "</pre>";

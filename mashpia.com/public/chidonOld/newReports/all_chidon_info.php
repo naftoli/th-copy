@@ -106,7 +106,7 @@ function setKHK(array &$info) {
         if (intval($row['class_grade']) == 8) $ids[] = $row['user_id'];
     }
     if ($ids) {
-        $khk = KHK::getKHKEligibility($ids)[0];
+        $khk = KHK::getUltimateTripEligibility($ids)[0];
         foreach ($info as &$row) {
             $row['khk_override'] = $khk[$row['user_id']] ?? 0;
         }

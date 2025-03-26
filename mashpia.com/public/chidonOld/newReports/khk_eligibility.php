@@ -101,12 +101,12 @@ for (; $i > 0; $i--) {
 //                        return $child['user_id'];
 //                    });
 //                    echo "<pre>"; print_r($user_ids); echo "</pre>"; exit;
-//                    $khkInfo = KHK::getKHKEligibility($user_ids);
+//                    $khkInfo = KHK::getUltimateTripEligibility($user_ids);
 //                    $eligibility = $khkInfo[0];
 //                    $yrsDetails = $khkInfo[1];
             foreach ($children[$id] as $child) {
                 $user_id = $child['user_id'];
-                $khkInfo = KHK::getKHKEligibility([$user_id], $chosen);
+                $khkInfo = KHK::getUltimateTripEligibility([$user_id], $chosen);
                 $eligibility = $khkInfo[0];
                 $yrsDetails = $khkInfo[1];
                 $eligible = $eligibility[$user_id];

@@ -15,7 +15,7 @@ foreach ($children as $child) {
     }
 }
 //echo "<pre>"; print_r($ids); echo "</pre>";
-if (count($ids)) $khk = KHK::getKHKEligibility($ids)[0];
+if (count($ids)) $khk = KHK::getUltimateTripEligibility($ids)[0];
 
 echo json_encode([
     'success'   => true,

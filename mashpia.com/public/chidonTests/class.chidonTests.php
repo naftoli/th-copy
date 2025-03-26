@@ -934,7 +934,20 @@ class ChidonTests
 class KHK {
     public static $khkFee = 18;
 
-    // find out if child participated in chidon in past 4 yrs or was marked as eligible
+    // find out if child is eligible to enroll into khk track
+    public static function enrollmentEligibility(array $user_ids) {
+        $info = [];
+        $year = GlobalSettings::getChidonRegYear();
+        foreach ($user_ids as $user_id) {
+            // check if child enrolled into chidon in last 4 years
+            $sql = 'select * from th_chidon where user_id = ' . $user_id . ' and year >= ' . ($year - 4);
+            $result = mysql_query($sql);
+            $info[$user_id] = mysql_num_rows($result) >= 4;
+        }
+        return $info;
+    }
+
+    // find out if child is eligible for ultimate trip
     public static function eligibility(array $user_ids) {
         $info = [];
         $year = GlobalSettings::getChidonYear();
@@ -944,27 +957,21 @@ class KHK {
             $result = mysql_query($sql);
             $row = mysql_fetch_assoc($result);
             $info[$id] = intval($row['khk_override']) ? true : false;
-            // else {
-            //     // check if child participated in chidon in past 4 yrs
-            //     $sql = "select * from th_chidon where user_id = " . $id . " and date_paid > 0 and year >= " . ($year - 4);
-            //     $result = mysql_query($sql);
-            //     $info[$id] = mysql_num_rows($result) >= 4;
-            // }
         }
         return $info;
     }
 
     /**
-     * Algorithm to determine if child is eligible for khk registration / tests
+     * Algorithm to determine if child is eligible for ultimate trip
      * takes array of user ids
      * and returns two arrays
-     * one is whether that child is eligible for khk
+     * one is whether that child is eligible for ultimate trip
      * the other is the details of which yr the child was or wasn't eligible
      */
-    public static function getKHKEligibility( array $ids, $year = 0, $numYrs = 3, array $marks = [], $nextYr = false ) {
-        // // yr that we don't check registration but rather check highest track passed
+    public static function getUltimateTripEligibility( array $ids, $year = 0, $numYrs = 4, array $marks = [], $nextYr = false ) {
+        // yr that we don't check registration but rather check highest track passed
         // $rollover = 5782;
-        if ($numYrs > 3) $numYrs = 3; // make sure it's not more than 3
+        if ($numYrs > 4) $numYrs = 4; // make sure it's not more than 3
 
         $years = [];
         if ($nextYr) {
@@ -974,7 +981,7 @@ class KHK {
             }
         } else {
             // figure out which years we need to check
-            $curYr = $year > 0 ? $year : GlobalSettings::getChidonRegYear();
+            $curYr = $year > 0 ? $year : GlobalSettings::getChidonYear();
             $yr = $curYr - $numYrs;
             for (; $numYrs >= 0; $numYrs--) { // includes the year that is passed in or current yr
                 $years[] = $yr++;
@@ -984,8 +991,7 @@ class KHK {
             $passed = KHK::getCurrentYrPassing($curYr, $ids, $marks);
         }
 
-        $eligibility_status = KHK::eligibility($ids);
-
+        $overriden = KHK::eligibility($ids);
         foreach ($ids as $id) {
             $details[$id] = [];
             foreach ($years as $yr) {
@@ -1002,21 +1008,11 @@ class KHK {
                         if (mysql_num_rows($result) > 0) {
                             $highest_track = mysql_fetch_assoc($result)['highest_track'];
                             // make sure child is at least on the yediah track (not on 'yesod')
-                            if ($highest_track != 'yesod') $details[$id][$yr] = true;
+                            if (! in_array($highest_track, ['', 'yesod'])) $details[$id][$yr] = true;
                         } else {
                             $details[$id][$yr] = false;
                         }
                     }
-                // } else {
-                //     // make sure child was enrolled in that yr
-                //     $sql = "select * from th_chidon where user_id = " . $id . " and year = " . $yr;
-                //     $result = mysql_query($sql);
-                //     if (mysql_num_rows($result) > 0) {
-                //         $details[$id][$yr] = true;
-                //     } else {
-                //         $details[$id][$yr] = false;
-                //     }
-                // }
             }
         }
 
@@ -1024,7 +1020,7 @@ class KHK {
         foreach ($details as $id => $yrs) {
             $khk[$id] = true;
             foreach ($yrs as $eligible) {
-                if (!$eligible && !$eligibility_status[$id]) {
+                if (!$eligible && !$overriden[$id]) {
                     $khk[$id] = false;
                     break;
                 }
