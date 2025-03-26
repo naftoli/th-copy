@@ -55,7 +55,7 @@ $stmt = $MASHPIA_DB->prepare("
             FROM
                 registration_charges
             WHERE
-                year = 5785 AND type = 'RRYSD')
+                year = :year AND type = 'RRYSD')
 ");
 $stmt->execute(['year' => $year]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -69,6 +69,7 @@ foreach ($rows as $row) {
     $row['track'] = $track;
     $info[] = $row;
 }
+echo "<pre>"; print_r($info); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
