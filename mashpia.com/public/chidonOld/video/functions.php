@@ -59,14 +59,14 @@ function getChildren($school_id, $gender, $serials = []) {
                 non_th_schools nts ON nts.non_th_school_id = u.non_th_school_id 
             WHERE
                 tc.year = $year AND tc.date_paid > 0";
-    if ($gender != 'all') $sql .= " AND u.user_gender = '$gender'";
+    if ($gender != 'all') $sql .= " AND u.gender = '$gender'";
     if ($school_id) $sql .= " AND u.school_id = " . $school_id;
     if ($serials) {
         $sql .= " AND u.user_serial in (" . implode(',', $serials) . ")";
     }
     $sql .= " GROUP BY u.user_id";
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
-    // echo $sql; exit;
+//    echo $sql; exit;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
         $award = getAward($row);

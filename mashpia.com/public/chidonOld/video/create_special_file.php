@@ -30,13 +30,11 @@ $users = [7758285, 7758286, 7777839, 7757841, 7763853, 7763907, 7774646, 7774762
     7774227, 7774443, 7774536, 7775239, 7775522, 7775598, 7775749, 7776626, 7776716, 7777314, 7777427, 7777840,
     7778217];
 
-foreach (['boys', 'girls'] as $gender) {
-    $children = getChildren($school_id, $gender, $users);
-    if (!empty($children)) {
-        $sheet = createSpreadSheet($children);
-        $file_name = 'special.tsv';
-        createFile($file_name, $sheet);
-    }
+$children = getChildren($school_id, 'all', $users);
+if (!empty($children)) {
+    $sheet = createSpreadSheet($children);
+    $file_name = 'special.tsv';
+    createFile($file_name, $sheet);
 }
 
 downloadFile();
