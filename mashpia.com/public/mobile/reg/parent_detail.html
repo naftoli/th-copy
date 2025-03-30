@@ -321,6 +321,7 @@
           <button class="btn btn-primary neshek" style="display: none;">Neshek Sale</button>
 <!--          <button class="btn btn-primary tickets" style="display: none;">Buy Chidon Tickets</button>-->
           <!--                    <button class="btn btn-info power">Power of Children Quiz</button>-->
+          <button class="btn btn-primary art">Submit Art Contest</button>
         </div>
       </div>
     </div>
@@ -670,6 +671,11 @@
     if (now >= 1736398800) {
       $(".heyTeves").hide();
     }
+
+    $('.art').click(function () {
+      // open in new tab
+      window.open('https://forms.gle/jSayc5DXfwKU1gd87', '_blank');
+    })
 
     // when to show link for chidon registration
     let show_reg = false;
