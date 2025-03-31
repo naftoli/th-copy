@@ -312,9 +312,18 @@
 			// location.href = newUrl;
 		}
 
+		// get children info
+		let url = location.href;
+		let pos = url.indexOf('=');
+		let admin_id = 0;
+		let children = []; // need to know user_id of children when creating the subsidies
+		if (pos > 0) admin_id = url.substr(pos + 1);
+
 		document.addEventListener('DOMContentLoaded', function() {
-			alert('ChidonDrive for families is closed for this year, but you can still donate to us.')
-			location.href = 'https://chidondrive.com/site/donate.html'
+			if (admin_id != 129555) {
+				alert('ChidonDrive for families is closed for this year, but you can still donate to us.')
+				location.href = 'https://chidondrive.com/site/donate.html'
+			}
 		})
 
 		$('#menu-opener').click(function (e) {
@@ -405,13 +414,6 @@
 					location.href = "setup.html";
 				});
 			}
-
-			// get children info 
-			let url = location.href;
-			let pos = url.indexOf('=');
-			let admin_id = 0;
-			let children = []; // need to know user_id of children when creating the subsidies
-			if (pos > 0) admin_id = url.substr(pos + 1);
 
 			if (admin_id) {
 				paypal.Buttons({
