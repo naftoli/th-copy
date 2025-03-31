@@ -74,7 +74,7 @@ $totals_query = mysql_query(
         }
 
         $prev_rank = $promotion['rank_name'];
-        $prev_school = $promotion['school_name'];
+        $prev_school = $promotion['shorthand'];
         
         $first = ucwords(strtolower($promotion['first']));
         if ( $promotion['rank_ord'] < $cutoff && strpos( $first, ' ' )) {
