@@ -45,9 +45,39 @@
             .then(response => response.json())
             .then(data => {
                 setInfo(data)
-                console.log(data)
             })
         }, [])
+
+        return (
+            <div>
+                <table>
+                    <tr>
+                        <th>Subscription ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Amount to charge</th>
+                        <th>Number of charges to make</th>
+                        <th>Number of charges successfully completed</th>
+                        <th>Number of charges failed</th>
+                        <th>Total Paid to date</th>
+                    </tr>
+                    {info.length > 0 && info.map((item, index) => {
+                        <tr>
+                            <td>{item.subscription_id}</td>
+                            <td>{item.name}</td>
+                            <td>{item.description}</td>
+                            <td>{item.status}</td>
+                            <td>{item.subscription_amount}</td>
+                            <td>{item.total_num_installments}</td>
+                            <td>{item.completed}</td>
+                            <td>{item.failed}</td>
+                            <td>{item.paid}</td>
+                        </tr>
+                    })}
+                </table>
+            </div>
+        )
     }
 
     const container = document.getElementById('main')

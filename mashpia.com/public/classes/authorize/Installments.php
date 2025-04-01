@@ -1,12 +1,11 @@
 <?php
 namespace classes\authorize;
 
+require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+
 // load the constants
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/authorize_constants.php';
 use includes\authorize\AuthorizeConstants as Constants;
-
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 use net\authorize\api\contract\v1 as AnetAPI;
 use net\authorize\api\controller as AnetController;
@@ -214,9 +213,7 @@ class Installments
         return $response;
     }
 
-    public static function getSubscriptions($year = 0) {
-        if (!$year) $year = GlobalSettings::getChidonYear();
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+    public static function getSubscriptions($year) {
         $sql = "select * from th_chidon_installments where year = " . $year;
         $result = mysql_query($sql);
         $rows = [];
