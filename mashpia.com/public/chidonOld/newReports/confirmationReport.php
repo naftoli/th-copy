@@ -61,6 +61,7 @@ $superAdmin = $admin_user['auth'] == 'super';
 <h1>Ultimate Trip Confirmation Report</h1>
 <?php
 foreach ($info as $school_name => $users) {
+    if (empty($users)) continue;
     echo "<h2>$school_name</h2>";
     echo "<table>";
     echo "<tr><th>Grade/Class</th><th>Serial</th><th>Name</th><th>Confirmed Info</th>";
