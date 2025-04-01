@@ -57,7 +57,7 @@ $superAdmin = $admin_user['auth'] == 'super';
   </style>
 </head>
 <body>
-<h1>Confirmation Report</h1>
+<h1>Ultimate Trip Confirmation Report</h1>
 <?php
 foreach ($info as $school_name => $users) {
     echo "<h2>$school_name</h2>";
@@ -74,10 +74,9 @@ foreach ($info as $school_name => $users) {
         <td><?= $grade ?></td>
         <td><?= $user['user_serial'] ?></td>
         <td><?= $user['first'] . " " . $user['last'] ?></td>
-        <td><?= $user['confirmed_info'] ? 'Yes' : 'No' ?></td>
           <?php if ($superAdmin) : ?>
-            <td id="<?= $user['user_id'] ?>"><input type="checkbox"
-                                                    class="confirmed" <?= $user['confirmed_info'] ? 'checked' : '' ?> />
+            <td id="<?= $user['user_id'] ?>">
+                <input type="checkbox" class="confirmed" <?= $user['confirmed_info'] ? 'checked' : '' ?> />
             </td>
           <?php endif; ?>
       </tr>
@@ -103,9 +102,7 @@ foreach ($info as $school_name => $users) {
           body: JSON.stringify({user_id, confirmed})
         });
         const data = await response.json()
-        if (data.success) {
-          alert('Updated.')
-        } else {
+        if (! data.success) {
           alert('Error updating.')
         }
       })
