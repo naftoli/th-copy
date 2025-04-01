@@ -26,7 +26,7 @@ foreach ($info as $row) {
     $installment_info['subscription_amount'] = $subscription_amount;
     $installment_info['total_num_installments'] = $total_num_installments;
 
-    $installment = Installments();
+    $installment = new Installments();
     $response = $installment->getSubscriptionInfo($id);
     if ($response != null && $response->getMessages()->getResultCode() == 'Ok') {
         $installment_info['name'] = $response->getSubscription()->getName();
