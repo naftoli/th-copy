@@ -101,7 +101,6 @@
     const [schools, setSchools] = useState([])
     const [years, setYears] = useState([])
     const [grades, setGrades] = useState([])
-    const [test_num, setTestNum] = useState(0)
 
     useEffect(() => {
       fetch('api/limudEval.php')
@@ -109,7 +108,7 @@
         .then((data) => {
           setSchools(data.schools)
           setYears(data.years)
-          setTestNum(data.test_num)
+          handleTestNumChange({target: {value: data.test_num}})
           handleYearChange({target: {value: data.years[0]}}) // set year to first year
         })
     }, [])
