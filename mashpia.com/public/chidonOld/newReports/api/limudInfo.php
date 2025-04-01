@@ -161,6 +161,7 @@ function calculateAvgs($id) {
     $avgs = [];
     foreach ($types as $type => $desc) {
         if ($total[$type] > 0) $avgs[$type] = round(($total[$type] / ($num_questions[$type] * $test_num)) * 100);
+        else $avgs[$type] = 0;
     }
 
     return $avgs;
