@@ -59,4 +59,7 @@ foreach ($info as $row) {
         $installment_info['paid'] = 0;
         $installment_info['error'] = 'No subscription found';
     }
+    $installments[] = $installment_info;
 }
+
+echo json_encode($installments);
