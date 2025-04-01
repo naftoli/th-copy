@@ -29,6 +29,7 @@ $stmt = $MASHPIA_DB->prepare("
         classes c ON c.class_id = u.class_id
     WHERE
         tc.year = :year AND u.school_id = :school 
+        AND tc.ultimate_trip = 1 
     ORDER BY c.class_grade, c.class_sub, u.last, u.first
 ");
 
