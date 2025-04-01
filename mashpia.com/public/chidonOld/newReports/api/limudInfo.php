@@ -160,7 +160,7 @@ function calculateAvgs($id) {
     // calculate average
     $avgs = [];
     foreach ($types as $type => $desc) {
-        $avgs[$type] = round(($total[$type] / ($num_questions[$type] * $test_num)) * 100);
+        if ($total[$type] > 0) $avgs[$type] = round(($total[$type] / ($num_questions[$type] * $test_num)) * 100);
     }
 
     return $avgs;
