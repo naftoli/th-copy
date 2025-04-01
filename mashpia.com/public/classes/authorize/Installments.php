@@ -22,16 +22,18 @@ class Installments
     private $number_of_installments;
     private $start_date;
 
-    public function __construct($customerProfile, $payment_profile_id, $live = true, $updateBilling = true) {
+    public function __construct($customerProfile = 0, $payment_profile_id = 0, $live = true, $updateBilling = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         // for testing use \net\authorize\api\constants\ANetEnvironment::SANDBOX;
         if ($live) $this->endpoint = \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         else $this->endpoint = \net\authorize\api\constants\ANetEnvironment::SANDBOX;
 
-        $this->cp = $customerProfile;
-        $this->payment_profile_id = $payment_profile_id;
-        if ($updateBilling && !$this->updateBillingInfo()) {
-            throw new \Exception("Error updating billing info");
+        if ($customerProfile > 0) {
+            $this->cp = $customerProfile;
+            $this->payment_profile_id = $payment_profile_id;
+            if ($updateBilling && !$this->updateBillingInfo()) {
+                throw new \Exception('Error updating billing info');
+            }
         }
     }
 
@@ -204,11 +206,12 @@ class Installments
         $request->setMerchantAuthentication($merchantAuthentication);
         $request->setRefId($refId);
         $request->setSubscriptionId($id);
+        $request->setIncludeTransactions(true);
 
         $controller = new AnetController\ARBGetSubscriptionController($request);
         $response = $controller->executeWithApiResponse($this->endpoint);
 
-        return $this->parseResponse($response);
+        return $response;
     }
 
     public static function getSubscriptions($year = 0) {
