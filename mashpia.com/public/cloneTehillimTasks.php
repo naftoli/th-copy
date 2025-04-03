@@ -1,6 +1,6 @@
 <?php
 ini_set('display_errors', true);
-
+header('Location: /tehillim/cloneTehillimTasks.php');
 $tehillim = array(
 	3	=>	array(  
 		6	=>	array(

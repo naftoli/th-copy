@@ -1,5 +1,5 @@
 <?php
-
+header('Location: /tehillim/cloneTehillimTasks.php');
 $tehillim = array(
 	3	=>	array(  
 		6	=>	array(

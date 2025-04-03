@@ -8,7 +8,7 @@ class TehillimTasks {
     private $schoolTypes;
     private $ages;
     private $tracks;
-    private $heMonths;
+    private $months;
     private $db;
 
     public function __construct($year, $dbHandler) {
@@ -24,20 +24,25 @@ class TehillimTasks {
         ];
         $this->ages = [6, 7, 8, 9, 10, 11, 12, 13, 14];
         $this->tracks = [3, 4, 5, 6, 7];
-        $this->heMonths = [
-            'שבת מברכים תשרי',
-            'שבת מברכים  חשון',
-            'שבת מברכים כסלו',
-            'שבת מברכים טבת',
-            'שבת מברכים שבט',
-            'שבת מברכים אדר',
-            'שבת מברכים אדר ב',
-            'שבת מברכים ניסן',
-            'שבת מברכים אייר',
-            'שבת מברכים סיון',
-            'שבת מברכים תמוז',
-            'שבת מברכים מנחם-אב',
-            'שבת מברכים אלול'
+        $this->months = [
+            'en'    => [
+                'Elul', 'Tishrei', 'Cheshvan', 'Kislev', 'Teves', 'Shvat', 'Adar', 'Adar 2', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av'
+            ],
+            'he'    => [
+                'שבת מברכים אלול',
+                'שבת מברכים תשרי',
+                'שבת מברכים  חשון',
+                'שבת מברכים כסלו',
+                'שבת מברכים טבת',
+                'שבת מברכים שבט',
+                'שבת מברכים אדר',
+                'שבת מברכים אדר ב',
+                'שבת מברכים ניסן',
+                'שבת מברכים אייר',
+                'שבת מברכים סיון',
+                'שבת מברכים תמוז',
+                'שבת מברכים מנחם-אב'
+            ]
         ];
         $this->setQuotas();
         $this->setDates();
@@ -253,13 +258,18 @@ class TehillimTasks {
             else if ($lang == 'he') $lang_id = 4;
             foreach ($more as $missionType => $details) {
                 foreach ($this->dates as $month => $date) {
+                    if ($month == 7 && ($date == $this->dates[$month - 1])) continue; // non leap yr
+                    else if ($month == 6 && ($date != $this->dates[$month + 1])) { // leap yr
+                        $this->months['he'][$month] = 'שבת מברכים אדר א';
+                        $this->months['en'][$month] = 'Adar 1';
+                    }
                     foreach ($this->schoolTypes[$missionType] as $schoolType) {
                         foreach ($this->ages as $level) {
                             foreach ($this->tracks as $track) {
                                 if ($missionType == 'chabad') {
-                                    $missionDescription = $this->heMonths[$month];
+                                    $missionDescription = $this->months['he'][$month];
                                 } else {
-                                    $missionDescription = 'Shabbos Mevarchim Tehillim';
+                                    $missionDescription = 'Shabbos Mevarchim ' . $this->months['en'][$month];
                                 }
                                 $actualMonth = $month + 1;
                                 $sql = "insert into date_tasks_missions 
