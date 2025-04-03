@@ -116,6 +116,15 @@ require_once 'class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
+ob_start();
+$sm->generateArmyTable( $key, $date );
+$army_table = ob_get_clean();
+
+ob_start();
+$sm->setASR( $date );
+$sm->generateArmyAccomplishedReport();
+$army_accomplishment  = ob_get_clean();
+
 foreach ( $schools as $school_id => $name ) {
     if (in_array($school_id, [82, 612])) continue;
     $sm->setSchool( $school_id );
@@ -124,7 +133,7 @@ foreach ( $schools as $school_id => $name ) {
     echo "<div>" . $sm->getSchoolName() . " - שבת מברכים " . $sm->getHebrewMonth($key) . "<br /><br /></div>";
 
     echo "<div style='float: left; width: 50%'>";
-    $sm->generateArmyTable( $key, $date );
+    echo $army_table;
     echo "</div>";
 
     echo "<div style='float: right; width: 50%'>";
@@ -135,8 +144,7 @@ foreach ( $schools as $school_id => $name ) {
     <br />
     <div class="main" id="main">
     <?php
-    $sm->setASR( $date );
-    $sm->generateArmyAccomplishedReport();
+    echo $army_accomplishment;
     ?>
     </div>
     <div class="page-break"></div>
