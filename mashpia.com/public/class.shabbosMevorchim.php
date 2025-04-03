@@ -291,7 +291,8 @@ class ShabbosMevorchim
                       AND dt.grid_id = ?
                       AND s.school_era is null
                       AND c.class_era = 0
-                      AND u.user_registered > 0
+                      AND u.user_registered > 0 
+                      AND u.school_id != 612 
                   AND u.user_id = ut.user_id
                   AND u.lang_id = dtm.lang_id";
         $stmt1 = $this->db->prepare($sql1);
@@ -401,7 +402,7 @@ class ShabbosMevorchim
                 AND dtm.end_date = ? 
                 AND dt.grid_id = ?  
                 AND dtm.school_type_id = u.school_type_id
-                AND u.user_registered >0 
+                AND u.user_registered > 0 
                 and c.class_era = 0 
                 AND ut.enrolled = 1
 				AND u.user_id = ut.user_id
