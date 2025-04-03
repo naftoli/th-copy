@@ -1133,10 +1133,10 @@ var registrationApp = function () {
     if (selected_charges.yahadus) {
       var shipping_included = selected_user.school.shipping_method !== 'pickup';
       var shipping_charge = 0;
-      var cost = 45
-      const currentDateTime = new Date();
-      const otherDateTime = new Date("2024-09-19T00:00:00");
-      if (currentDateTime < otherDateTime) cost = 40
+      var cost = 40
+      // const currentDateTime = new Date();
+      // const otherDateTime = new Date("2024-09-19T00:00:00");
+      // if (currentDateTime < otherDateTime) cost = 40
       if (selected_user.school.school_id == anash_kinder) {
         shipping_included = true; // override for anash kinder to make sure shipping is being charged
         if (usa.includes(selected_user.parentAccount.admin_country)) shipping_charge = 15;
