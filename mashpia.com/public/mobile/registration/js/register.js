@@ -2859,13 +2859,22 @@ var templates = function () {
           + "</div>");
         // update amounts to be charged in installments
         $("#earlyRegTotal").text(futurePayment.toFixed(2))
-        $("#earlyRegOne").text(futurePayment.toFixed(2))
-        const two = (futurePayment / 2).toFixed(2)
-        const three = (futurePayment / 3).toFixed(2)
-        const four = (futurePayment / 4).toFixed(2)
-        $("#earlyRegTwo").text(two)
-        $("#earlyRegThree").text(three)
-        $("#earlyRegFour").text(four)
+        const installmentsInfo = {
+          1: 'One',
+          2: 'Two',
+          3: 'Three',
+          4: 'Four',
+          5: 'Five',
+          6: 'Six',
+          7: 'Seven',
+          8: 'Eight',
+          9: 'Nine',
+          10: 'Ten'
+        }
+        for (let i of Object.keys(installmentsInfo)) {
+          let elem = '#earlyReg' + installmentsInfo[i]
+          $(elem).text((futurePayment / parseInt(i)).toFixed(2))
+        }
       } else {
         // just show total
         $("#charges").append('<div class="row total-row">' +
