@@ -81,7 +81,7 @@ foreach ($school_types as $type) {
                     }
                     $res3 = $stmt3->execute([
                         'new_task_id' => $new['date_task_id'],
-                        'old_task_id' => $old['old_task_id'],
+                        'old_task_id' => $old['date_task_id'],
                     ]);
                     if (!$res3) {
                         $success = false;
