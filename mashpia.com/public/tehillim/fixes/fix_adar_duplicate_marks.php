@@ -63,6 +63,7 @@ foreach ($school_types as $type) {
                     ]);
                     if (!$res) {
                         $success = false;
+                        echo $stmt->debugDumpParams();
                         break 5;
                     }
                     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -75,6 +76,7 @@ foreach ($school_types as $type) {
                     ]);
                     if (!$res2) {
                         $success = false;
+                        echo $stmt2->debugDumpParams();
                         break 5;
                     }
                     $res3 = $stmt3->execute([
@@ -83,6 +85,7 @@ foreach ($school_types as $type) {
                     ]);
                     if (!$res3) {
                         $success = false;
+                        echo $stmt3->debugDumpParams();
                         break 5;
                     }
                 }
@@ -96,5 +99,6 @@ if ($success) {
     echo "Done.";
 } else {
     $MASHPIA_DB->rollBack();
+    echo "<pre>"; print_r($MASHPIA_DB->errorInfo()); echo "</pre>";
     echo "Errors.";
 }
