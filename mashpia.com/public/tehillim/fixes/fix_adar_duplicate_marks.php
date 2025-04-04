@@ -48,8 +48,8 @@ $stmt3 = $MASHPIA_DB->prepare("
         date_task_id = :old_task_id
 ");
 
-$success = true;
-$MASHPIA_DB->beginTransaction();
+//$success = true;
+//$MASHPIA_DB->beginTransaction();
 foreach ($school_types as $type) {
     foreach ($ages as $age) {
         foreach ($tracks as $track) {
@@ -78,13 +78,13 @@ foreach ($school_types as $type) {
                             'new_mission_id' => $new['date_tasks_mission_id'],
                             'old_mission_id' => $old['date_tasks_mission_id'],
                         ]);
-                        if (!$res2) {
-                            $success = false;
-//                            $stmt->debugDumpParams();
-                            $stmt2->debugDumpParams();
-                            print_r($stmt2->errorInfo());
-                            break 5;
-                        }
+//                        if (!$res2) {
+//                            $success = false;
+////                            $stmt->debugDumpParams();
+//                            $stmt2->debugDumpParams();
+//                            print_r($stmt2->errorInfo());
+//                            break 5;
+//                        }
                     }
 
                     if ($old['date_task_id'] != $new['date_task_id']) {
@@ -92,13 +92,13 @@ foreach ($school_types as $type) {
                             'new_task_id' => $new['date_task_id'],
                             'old_task_id' => $old['date_task_id'],
                         ]);
-                        if (!$res3) {
-                            $success = false;
-//                            $stmt->debugDumpParams();
-//                            $stmt2->debugDumpParams();
-                            $stmt3->debugDumpParams();
-                            break 5;
-                        }
+//                        if (!$res3) {
+//                            $success = false;
+////                            $stmt->debugDumpParams();
+////                            $stmt2->debugDumpParams();
+//                            $stmt3->debugDumpParams();
+//                            break 5;
+//                        }
                     }
                 }
             }
@@ -106,10 +106,10 @@ foreach ($school_types as $type) {
     }
 }
 
-if ($success) {
-    $MASHPIA_DB->commit();
-    echo "Done.";
-} else {
-    $MASHPIA_DB->rollBack();
-    echo "There were errors.";
-}
+//if ($success) {
+//    $MASHPIA_DB->commit();
+//    echo "Done.";
+//} else {
+//    $MASHPIA_DB->rollBack();
+//    echo "There were errors.";
+//}
