@@ -105,7 +105,7 @@ foreach ($school_types as $type) {
         }
     }
 }
-
+echo "Done.";
 //if ($success) {
 //    $MASHPIA_DB->commit();
 //    echo "Done.";
