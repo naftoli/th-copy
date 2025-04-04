@@ -29,7 +29,7 @@ $stmt = $MASHPIA_DB->prepare("
     and track_id = :track  
     and lang_id = :lang  
     and grid_id in (:grid, :new_grid) 
-    order by new_grid, old_grid");
+    order by grid_id desc");
 
 $stmt2 = $MASHPIA_DB->prepare("
     UPDATE date_tasks_mission_marks 
