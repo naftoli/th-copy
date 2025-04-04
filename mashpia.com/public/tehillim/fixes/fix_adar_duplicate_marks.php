@@ -80,13 +80,9 @@ foreach ($school_types as $type) {
                         ]);
                         if (!$res2) {
                             $success = false;
-                            $stmt->debugDumpParams();
+//                            $stmt->debugDumpParams();
                             $stmt2->debugDumpParams();
-                            echo '<pre>';
-                            print_r($old);
-                            print_r($new);
-                            echo '</pre>';
-                            exit;
+                            print_r($stmt2->errorInfo());
                             break 5;
                         }
                     }
@@ -98,8 +94,8 @@ foreach ($school_types as $type) {
                         ]);
                         if (!$res3) {
                             $success = false;
-                            $stmt->debugDumpParams();
-                            $stmt2->debugDumpParams();
+//                            $stmt->debugDumpParams();
+//                            $stmt2->debugDumpParams();
                             $stmt3->debugDumpParams();
                             break 5;
                         }
@@ -115,6 +111,5 @@ if ($success) {
     echo "Done.";
 } else {
     $MASHPIA_DB->rollBack();
-    echo "<pre>"; print_r($MASHPIA_DB->errorInfo()); echo "</pre>";
-    echo "Errors.";
+    echo "There were errors.";
 }
