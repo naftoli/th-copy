@@ -17,7 +17,7 @@ use \classes\authorize\Installments as Installments;
 
 $installments = [];
 $info = Installments::getSubscriptions($year);
-foreach ($info as $row) {
+foreach ($info as $key => $row) {
     $installment_info = [];
     $id = $row['subscription_id'];
     $subscription_amount = $row['total_amount'];
@@ -28,11 +28,18 @@ foreach ($info as $row) {
 
     $installment = new Installments();
     $response = $installment->getSubscriptionInfo($id);
-    if ($response != null && $response->getMessages()->getResultCode() == 'Ok') {
-        $installment_info['name'] = $response->getSubscription()->getName();
-        $installment_info['description'] = $response->getSubscription()->getDescription();
-        $installment_info['status'] = $response->getSubscription()->getStatus();
-        $transactions = $response->getSubscription()->getArbTransactions();
+    if (is_object($response) && $response->getMessages()->getResultCode() == 'Ok') {
+        $subscription = $response->getSubscription();
+        $installment_info['name'] = $subscription->getName();
+        $installment_info['description'] = $subscription->getDescription();
+        $installment_info['status'] = $subscription->getStatus();
+        $transactions = $subscription->getArbTransactions();
+        echo "Name: " . $installment_info['name'] . "<br />";
+        echo "Description: " . $installment_info['description'] . "<br />";
+        echo "Status: " . $installment_info['status'] . "<br />";
+        echo "Transactions: <br />";
+        echo "<pre>"; print_r($transactions); echo "</pre>"; continue;
+
         if ($transactions != null) {
             $installment_info['num_transactions'] = count($transactions);
             $paid = 0;
@@ -55,6 +62,9 @@ foreach ($info as $row) {
             $installment_info['paid'] = 0;
             $installment_info['error'] = 'No transactions found';
         }
+    } else if (is_string($response)) {
+        $installment_info['paid'] = 0;
+        $installment_info['error'] = $response;
     } else {
         $installment_info['paid'] = 0;
         $installment_info['error'] = 'No subscription found';

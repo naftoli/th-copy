@@ -196,9 +196,9 @@ class Installments
         else return ['first name', 'last name'];
     }
 
+    // get info about subscription from authorize
     public function getSubscriptionInfo($id) {
         $merchantAuthentication = $this->setAuth();
-        // Set the transaction's refId
         $refId = 'ref' . time();
 
         $request = new AnetAPI\ARBGetSubscriptionRequest();
@@ -208,9 +208,16 @@ class Installments
         $request->setIncludeTransactions(true);
 
         $controller = new AnetController\ARBGetSubscriptionController($request);
-        $response = $controller->executeWithApiResponse($this->endpoint);
 
-        return $response;
+        // Add timeout configuration (if supported by the SDK)
+        try {
+            // Set a timeout of 10 seconds (adjust as needed)
+            $response = $controller->executeWithApiResponse($this->endpoint, 10);
+            return $response;
+        } catch (\Exception $e) {
+            // error
+            return "API Call failed for subscription ID $id: " . $e->getMessage();
+        }
     }
 
     public static function getSubscriptions($year) {
