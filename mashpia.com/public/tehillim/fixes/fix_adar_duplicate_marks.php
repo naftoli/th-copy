@@ -74,7 +74,6 @@ foreach ($school_types as $type) {
                     $new = $rows[1];
 
                     if ($old['date_tasks_mission_id'] != $new['date_tasks_mission_id']) {
-                        echo "<pre>"; print_r($old); print_r($new); echo "</pre>"; exit;
                         $res2 = $stmt2->execute([
                             'new_mission_id' => $new['date_tasks_mission_id'],
                             'old_mission_id' => $old['date_tasks_mission_id'],
@@ -83,6 +82,11 @@ foreach ($school_types as $type) {
                             $success = false;
                             $stmt->debugDumpParams();
                             $stmt2->debugDumpParams();
+                            echo '<pre>';
+                            print_r($old);
+                            print_r($new);
+                            echo '</pre>';
+                            exit;
                             break 5;
                         }
                     }
