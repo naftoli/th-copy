@@ -80,6 +80,7 @@ foreach ($school_types as $type) {
                     ]);
                     if (!$res2) {
                         $success = false;
+                        echo $stmt->debugDumpParams();
                         echo $stmt2->debugDumpParams();
                         break 5;
                     }
