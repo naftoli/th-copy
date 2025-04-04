@@ -28,7 +28,8 @@ $stmt = $MASHPIA_DB->prepare("
     and level = :age 
     and track_id = :track  
     and lang_id = :lang  
-    and grid_id in (:grid, :new_grid)");
+    and grid_id in (:grid, :new_grid) 
+    order by new_grid, old_grid");
 
 $stmt2 = $MASHPIA_DB->prepare("
     UPDATE date_tasks_mission_marks 
@@ -70,6 +71,9 @@ foreach ($school_types as $type) {
                     if (empty($rows) || count($rows) != 2) continue;
                     $old = $rows[0];
                     $new = $rows[1];
+                    if ($old['date_tasks_mission_id'] == $new['date_tasks_mission_id']) {
+                        continue;
+                    }
                     $res2 = $stmt2->execute([
                         'new_mission_id' => $new['date_tasks_mission_id'],
                         'old_mission_id' => $old['date_tasks_mission_id'],
