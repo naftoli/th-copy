@@ -20,12 +20,14 @@ $stmt = $MASHPIA_DB->prepare("
     and level = :level 
     and track_id = :track 
     and grid_id = :grid 
+    and dt.lang_id = :lang
     limit 1
 ");
 
 $school_types = [12, 13];
 $ages = [6, 7, 8, 9, 10, 11, 12, 13, 14];
 $tracks = [3, 4, 5, 6, 7];
+$langs = [1, 2, 3, 4];
 $grids = [
     8001 => 80010,
     8002 => 80020,
@@ -36,13 +38,16 @@ foreach ($school_types as $school_type) {
     foreach ($ages as $age) {
         foreach ($tracks as $track) {
             foreach ($grids as $grid => $new_grid) {
-                $stmt->execute([
-                    'new_grid' => $new_grid,
-                    'school_type' => $school_type,
-                    'level' => $age,
-                    'track' => $track,
-                    'grid' => $grid
-                ]);
+                foreach ($langs as $lang) {
+                    $stmt->execute([
+                        'new_grid' => $new_grid,
+                        'school_type' => $school_type,
+                        'level' => $age,
+                        'track' => $track,
+                        'grid' => $grid,
+                        'lang' => $lang
+                    ]);
+                }
             }
         }
     }
