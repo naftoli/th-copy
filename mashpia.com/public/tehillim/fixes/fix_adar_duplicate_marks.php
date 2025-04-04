@@ -72,27 +72,32 @@ foreach ($school_types as $type) {
                     if (empty($rows) || count($rows) != 2) continue;
                     $old = $rows[0];
                     $new = $rows[1];
-                    if ($old['date_tasks_mission_id'] == $new['date_tasks_mission_id']) {
-                        continue;
+
+                    if ($old['date_tasks_mission_id'] != $new['date_task_id']) {
+                        $res2 = $stmt2->execute([
+                            'new_mission_id' => $new['date_tasks_mission_id'],
+                            'old_mission_id' => $old['date_tasks_mission_id'],
+                        ]);
+                        if (!$res2) {
+                            $success = false;
+                            $stmt->debugDumpParams();
+                            $stmt2->debugDumpParams();
+                            break 5;
+                        }
                     }
-                    $res2 = $stmt2->execute([
-                        'new_mission_id' => $new['date_tasks_mission_id'],
-                        'old_mission_id' => $old['date_tasks_mission_id'],
-                    ]);
-                    if (!$res2) {
-                        $success = false;
-                        echo $stmt->debugDumpParams();
-                        echo $stmt2->debugDumpParams();
-                        break 5;
-                    }
-                    $res3 = $stmt3->execute([
-                        'new_task_id' => $new['date_task_id'],
-                        'old_task_id' => $old['date_task_id'],
-                    ]);
-                    if (!$res3) {
-                        $success = false;
-                        echo $stmt3->debugDumpParams();
-                        break 5;
+
+                    if ($old['date_task_id'] != $new['date_task_id']) {
+                        $res3 = $stmt3->execute([
+                            'new_task_id' => $new['date_task_id'],
+                            'old_task_id' => $old['date_task_id'],
+                        ]);
+                        if (!$res3) {
+                            $success = false;
+                            $stmt->debugDumpParams();
+                            $stmt2->debugDumpParams();
+                            $stmt3->debugDumpParams();
+                            break 5;
+                        }
                     }
                 }
             }
