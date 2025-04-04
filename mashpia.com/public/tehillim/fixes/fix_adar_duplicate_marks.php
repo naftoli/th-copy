@@ -69,6 +69,7 @@ foreach ($school_types as $type) {
                         break 5;
                     }
                     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                    echo "<pre>"; print_r($rows); echo "</pre>"; exit;
                     if (empty($rows) || count($rows) != 2) continue;
                     $old = $rows[0];
                     $new = $rows[1];
