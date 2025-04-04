@@ -69,12 +69,11 @@ foreach ($school_types as $type) {
                         break 5;
                     }
                     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                    echo "<pre>"; print_r($rows); echo "</pre>"; exit;
                     if (empty($rows) || count($rows) != 2) continue;
                     $old = $rows[0];
                     $new = $rows[1];
 
-                    if ($old['date_tasks_mission_id'] != $new['date_task_id']) {
+                    if ($old['date_tasks_mission_id'] != $new['date_tasks_mission_id']) {
                         $res2 = $stmt2->execute([
                             'new_mission_id' => $new['date_tasks_mission_id'],
                             'old_mission_id' => $old['date_tasks_mission_id'],
