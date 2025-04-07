@@ -1,7 +1,12 @@
 <?php
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    die('No Permission');
+}
+
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-
-
 $insertStmt = $MASHPIA_DB->prepare("
     insert into admin_auths 
     set admin_id = :admin, 

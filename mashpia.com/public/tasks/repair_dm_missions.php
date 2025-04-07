@@ -1,6 +1,11 @@
 <?php
 $admin_auth = ['school'];
-require '../header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    die('No Permission');
+}
+
 require '../classes/medal_updater.php';
 require '../classes/rank_updater.php';
 

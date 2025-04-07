@@ -1,6 +1,12 @@
 <?php
 //error_reporting(E_ALL);
 ini_set('display_errors', 1);
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    die('No Permission');
+}
 
 if(isset($_POST['action'])){
     // get the post data

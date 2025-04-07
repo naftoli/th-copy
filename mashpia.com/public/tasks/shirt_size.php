@@ -1,4 +1,10 @@
-<? 
+<?php
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    die('No Permission');
+}
 include("../db.php");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN""http://www.w3.org/TR/html4/strict.dtd">

@@ -1,5 +1,13 @@
 <?php
 ini_set('display_errors',1);
+
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    die('No Permission');
+}
+
 require '../db.php';
 
 $tasks = [];
