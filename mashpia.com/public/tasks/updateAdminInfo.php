@@ -1,7 +1,63 @@
 <?php
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 if ($admin_user['auth'] != 'super') {
     die('No Permission');
 }
+
+$stmt = $MASHPIA_DB->prepare("
+    UPDATE admins 
+    SET first = :first, 
+        last = :last,
+        admin_address1 = :address1,
+        admin_address2 = :address2,
+        admin_city = :city,
+        admin_state = :state,
+        admin_postal = :zip, 
+        admin_country = :country
+    WHERE admin_id = :id
+");
+
+if (isset($_POST['submit'])) {
+    $file = $_FILES['file']['tmp_name'];
+    $handle = fopen($file, 'r');
+    $data = fgetcsv($handle, 1000, ',');
+    $updated = 0;
+    $i = 0;
+    $fields = ['admin_id', 'first', 'last', 'address1', 'address2', 'city', 'state', 'zip', 'country'];
+    while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+        for ($i = 0; $i < count($fields); $i++) {
+            $val = $data[$i];
+            if ($val == 'nan') $val = '';
+            $$field = $val;
+        }
+        $stmt->execute([
+            ':first' => $first,
+            ':last' => $last,
+            ':address1' => $address1,
+            ':address2' => $address2,
+            ':city' => $city,
+            ':state' => $state,
+            ':zip' => $zip,
+            ':country' => $country,
+            ':id' => $admin_id
+        ]);
+    }
+}
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>Fix Admin Addresses</title>
+</head>
+<!-- add ability to upload file -->
+<body>
+<h1>Fix Admin Addresses</h1>
+<form action='updateAdminInfo.php' method='post' enctype='multipart/form-data'>
+    <input type='file' name='file' id='file'>
+    <input type='submit' name="submit" value='Upload'>
+</form>
+</body>
