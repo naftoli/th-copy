@@ -19,6 +19,8 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 
 if (isset($_POST['submit'])) {
+    $success = true;
+    $MASHPIA_DB->beginTransaction();
     $file = $_FILES['file']['tmp_name'];
     $handle = fopen($file, 'r');
     $data = fgetcsv($handle, 1000, ',');
@@ -31,7 +33,7 @@ if (isset($_POST['submit'])) {
             if ($val == 'nan') $val = '';
             $$field = $val;
         }
-        $stmt->execute([
+        if (!$stmt->execute([
             ':address1' => $address1,
             ':address2' => $address2,
             ':city' => $city,
@@ -39,7 +41,18 @@ if (isset($_POST['submit'])) {
             ':zip' => $zip,
             ':country' => $country,
             ':id' => $admin_id
-        ]);
+        ])) {
+            $success = false;
+            break;
+        }
+    }
+    fclose($handle);
+    if ($success) {
+        $MASHPIA_DB->commit();
+        echo "<h1>Updated $updated addresses</h1>";
+    } else {
+        $MASHPIA_DB->rollBack();
+        echo "<h1>Error updating addresses</h1>";
     }
 }
 ?>
