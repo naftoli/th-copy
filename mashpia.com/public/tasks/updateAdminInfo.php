@@ -43,8 +43,9 @@ if (isset($_POST['submit'])) {
             ':id' => $admin_id
         ])) {
             $success = false;
-            $stmt->debugDumpParams();
             break;
+        } else {
+            $updated++;
         }
     }
     fclose($handle);
