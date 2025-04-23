@@ -9,9 +9,7 @@ if ($admin_user['auth'] != 'super') {
 
 $stmt = $MASHPIA_DB->prepare("
     UPDATE admins 
-    SET first = :first, 
-        last = :last,
-        admin_address1 = :address1,
+    SET admin_address1 = :address1,
         admin_address2 = :address2,
         admin_city = :city,
         admin_state = :state,
@@ -26,7 +24,7 @@ if (isset($_POST['submit'])) {
     $data = fgetcsv($handle, 1000, ',');
     $updated = 0;
     $i = 0;
-    $fields = ['admin_id', 'first', 'last', 'address1', 'address2', 'city', 'state', 'zip', 'country'];
+    $fields = ['admin_id', 'address1', 'address2', 'city', 'state', 'zip', 'country'];
     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
         for ($i = 0; $i < count($fields); $i++) {
             $val = $data[$i];
@@ -34,8 +32,6 @@ if (isset($_POST['submit'])) {
             $$field = $val;
         }
         $stmt->execute([
-            ':first' => $first,
-            ':last' => $last,
             ':address1' => $address1,
             ':address2' => $address2,
             ':city' => $city,
