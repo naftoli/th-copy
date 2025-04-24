@@ -17,9 +17,9 @@ class TehillimRouter {
         
         $sm_query = $MASHPIA_DB->prepare(
              ' SELECT start_date as date, REPLACE(mission_description, \'שבת מברכים \', \'\') as month '
-            .' FROM date_tasks JOIN date_tasks_missions USING (date_tasks_mission_id) '
+            .' FROM date_tasks JOIN date_tasks_missions dtm USING (date_tasks_mission_id) '
             .' WHERE subject_id = 1 AND start_date >= :start_date AND end_date <= :end_date '
-            .' AND personal = 0 AND default_on = 1 GROUP BY start_date;'
+            .' AND personal = 0 AND dtm.default_on = 1 GROUP BY start_date;'
         );
         
         $sm_query->execute([
