@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
         for ($i = 0; $i < count($fields); $i++) {
             $val = $data[$i];
             if ($val == 'nan') $val = '';
+            $field = $fields[$i];
             $$field = $val;
         }
         if (!$stmt->execute([
@@ -48,6 +49,7 @@ if (isset($_POST['submit'])) {
             $updated++;
         }
         $stmt->debugDumpParams();
+        echo "<br /><br />";
     }
     fclose($handle);
     if ($success) {
