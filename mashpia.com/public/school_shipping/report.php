@@ -206,16 +206,14 @@ foreach ($resultsBySchool as $school => $row) : ?>
           <tbody>
           <?php
           if (isset($summary[$school])) {
-              foreach ($summary[$school] as $id => $more) {
-                  foreach ($more as $cat => $qty) {
-                      echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
-                      $item = $summary_items[$id][$cat]['item'] ?? '';
-                      echo "<td>" . $item . "</td>";
-                      echo "<td>" . $cat . "</td></tr>";
-                      // add to grand total
-                      if (isset($grand_summary[$id][$school])) $grand_summary[$id][$school] += $qty;
-                      else $grand_summary[$id][$school] = $qty;
-                  }
+              foreach ($summary[$school] as $id => $qty) {
+                  echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
+                  $item = $summary_items[$id];
+                  echo "<td>" . $item['item'] . "</td>";
+                  echo "<td>" . $item['cat'] . "</td></tr>";
+                  // add to grand total
+                  if (isset($grand_summary[$id][$school])) $grand_summary[$id][$school] += $qty;
+                  else $grand_summary[$id][$school] = $qty;
               }
           }
           ?>

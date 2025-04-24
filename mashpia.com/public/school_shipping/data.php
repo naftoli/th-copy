@@ -150,16 +150,15 @@ function createHtmlForItem($school, $row, $output = true) {
 function addToSummary($item, $school) {
     global $summary, $summary_items;
 
-    $key1 = $item['id'];
-    $key2 = $item['cat'];
+    $id = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
     // if item doesn't exist in summary_items, add it
-    if (isset($summary_items[$key1][$key2])) $summary_items[$key1][$key2]['qty'] += $qty;
+    if (isset($summary_items[$id])) $summary_items[$id]['qty'] += $qty;
     // else update qty
-    else $summary_items[$key1][$key2] = $item;
+    else $summary_items[$id] = $item;
     // update summary
-    if (isset($summary[$school][$key1][$key2])) $summary[$school][$key1][$key2] += $qty;
-    else $summary[$school][$key1][$key2] = $qty;
+    if (isset($summary[$school][$id])) $summary[$school][$id] += $qty;
+    else $summary[$school][$id] = $qty;
 }
 
 
