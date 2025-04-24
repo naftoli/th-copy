@@ -47,6 +47,7 @@ if (isset($_POST['submit'])) {
         } else {
             $updated++;
         }
+        $stmt->debugDumpParams();
     }
     fclose($handle);
     if ($success) {
