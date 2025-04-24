@@ -65,10 +65,7 @@ foreach ($resultsBySchool as $school => $row) {
 }
 
 // sort summary
-foreach ($summary as $school => $more) {
-    foreach ($more as $key => $qty) {
-        ksort($summary[$school][$key]);
-    }
+foreach ($summary as $school => $qty) {
     ksort($summary[$school]);
 }
 ksort($summary);
