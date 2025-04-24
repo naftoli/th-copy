@@ -1336,19 +1336,20 @@ var registrationApp = function () {
         // check if prize is not suppose to show for this school
         if (prize.exceptions && prize.exceptions.length && checkForException(prize.exceptions)) continue
 
+        let personalization = prize.personalization ? 1 : 0
+
         const id = prize.prize_id
         let height = 100
-        if (prize.personalization) height = 135
+        if (personalization) height = 135
         if (width < 500) {
           if (width < 400) {
             height = 130
           }
-          if (prize.personalization) {
+          if (personalization) {
             if (width > 354) height = 185
             else height = 210
           }
         }
-        let personalization = prize.personalization ? 1 : 0
         // disable prizes that were already selected and paid for (all personalized prizes that have names need to be paid for)
         if (personalization && prize.selected && prize.he_name.trim().length > 1) disable = true
         html += `<div style="height: ${height}px; border-bottom: 1px solid #D3D3D3; margin-top: 10px;">

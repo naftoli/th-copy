@@ -947,7 +947,7 @@ class KHK {
         return $info;
     }
 
-    // find out if child is eligible for ultimate trip
+    // find out if child is eligible for ultimate trip from override
     public static function eligibility(array $user_ids) {
         $info = [];
         $year = GlobalSettings::getChidonYear();
@@ -955,8 +955,12 @@ class KHK {
             // check if override was turned on
             $sql = "select khk_override from th_chidon where year = " . $year . " and user_id = " . $id;
             $result = mysql_query($sql);
-            $row = mysql_fetch_assoc($result);
-            $info[$id] = intval($row['khk_override']) ? true : false;
+            if (mysql_num_rows($result) > 0) {
+                $row = mysql_fetch_assoc($result);
+                $info[$id] = intval($row['khk_override']) ? true : false;
+            } else {
+                $info[$id] = false;
+            }
         }
         return $info;
     }
@@ -974,7 +978,7 @@ class KHK {
         // first make sure child was enrolled into chidon for last 4 years
         $enrollmentEligibility = KHK::enrollmentEligibility($ids);
 
-        if ($numYrs > 4) $numYrs = 4; // make sure it's not more than 3
+        if ($numYrs > 4) $numYrs = 4; // make sure it's not more than 4
 
         $years = [];
         if ($nextYr) {

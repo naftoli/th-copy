@@ -3,6 +3,13 @@ require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+
+function disablePersonalization($user_id) {
+    global $year;
+    return KHK::getUltimateTripEligibility([$user_id], $year, 4, [], true)[0][$user_id];
+}
+
 $user_id = mysql_real_escape_string($_POST['user_id']);
 
 $prizes = [];
@@ -21,7 +28,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $exceptions[$row['prize_id']][] = $row['school_id'];
 }
 
-if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5786;
+// if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5786;
 
 // get selected prizes
 $selected = [];
@@ -39,6 +46,12 @@ foreach ($prizes as $idx => $prize) {
 
     if (in_array($prize['prize_id'], array_keys($exceptions))) {
         $prizes[$idx]['exceptions'] = $exceptions[$prize['prize_id']];
+    }
+
+    if (! empty($prize['personalization'])) {
+        if (disablePersonalization($user_id)) {
+            $prizes[$idx]['personalization'] = '';
+        }
     }
 
     $sql = "select count(*) as total 
