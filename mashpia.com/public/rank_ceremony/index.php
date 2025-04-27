@@ -71,6 +71,7 @@ if (isset($_POST['submit'])) {
             let p = [];
             const schools = <?= json_encode($schools) ?>;
             for (let school in schools) {
+                if (school != '269') continue;
                 p[i++] = createFile(school)
             }
             Promise.all([...p])
