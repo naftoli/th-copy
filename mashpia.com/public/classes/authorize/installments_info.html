@@ -21,6 +21,65 @@
             margin: 20px;
         }
     </style>
+    <style>
+    body {
+        margin: 20px;
+        background-color: #f8f9fa;
+    }
+    
+    .table {
+        background-color: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        margin-top: 2rem;
+    }
+
+    .table thead th {
+        border-bottom: 2px solid #dee2e6;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td, .table th {
+        border: 1px solid #dee2e6;
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, 0.015);
+    }
+
+    .badge {
+        padding: 0.5em 1em;
+        font-weight: 500;
+        text-transform: capitalize;
+    }
+
+    /* Make the table responsive with horizontal scroll on small screens */
+    .table-responsive {
+        border-radius: 8px;
+    }
+
+    /* Custom scrollbar for webkit browsers */
+    .table-responsive::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-responsive::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb {
+        background: #888;
+        border-radius: 4px;
+    }
+
+    .table-responsive::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+</style>
 </head>
 <body>
 <h1>Limud Evaluation Report</h1>
@@ -56,7 +115,7 @@
 
         if (isLoading) {
             return (
-                <div className="d-flex justify-content-center align-items-center">
+                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
                     <div className="spinner-border text-primary" role="status">
                         <span className="visually-hidden">Loading...</span>
                     </div>
@@ -66,33 +125,37 @@
         }
 
         return (
-            <div>
-                <table>
-                    <thead>
+            <div className="table-responsive">
+                <table className="table table-hover table-striped table-bordered">
+                    <thead className="table-light">
                         <tr>
-                            <th>Subscription ID</th>
-                            <th>Name / Description</th>
-                            <th>Status</th>
-                            <th>Amount to charge</th>
-                            <th>Number of charges to make</th>
-                            <th>Number of transactions done</th>
-                            <th>Number of charges successfully completed</th>
-                            <th>Number of charges failed</th>
-                            <th>Total Paid to date</th>
+                            <th className="px-4 py-3">Subscription ID</th>
+                            <th className="px-4 py-3">Name / Description</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">Amount to charge</th>
+                            <th className="px-4 py-3">Number of charges to make</th>
+                            <th className="px-4 py-3">Number of transactions done</th>
+                            <th className="px-4 py-3">Number of charges successfully completed</th>
+                            <th className="px-4 py-3">Number of charges failed</th>
+                            <th className="px-4 py-3">Total Paid to date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {info.map((item, index) => (
                             <tr key={index}>
-                                <td>{item.subscription_id}</td>
-                                <td>{item.name}</td>
-                                <td>{item.status}</td>
-                                <td>{item.subscription_amount}</td>
-                                <td>{item.total_num_installments}</td>
-                                <td>{item.num_transactions}</td>
-                                <td>{item.completed}</td>
-                                <td>{item.failed}</td>
-                                <td>{item.paid}</td>
+                                <td className="px-4 py-3">{item.subscription_id}</td>
+                                <td className="px-4 py-3">{item.name}</td>
+                                <td className="px-4 py-3">
+                                    <span className={`badge ${item.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
+                                        {item.status}
+                                    </span>
+                                </td>
+                                <td className="px-4 py-3">${item.subscription_amount}</td>
+                                <td className="px-4 py-3">{item.total_num_installments}</td>
+                                <td className="px-4 py-3">{item.num_transactions}</td>
+                                <td className="px-4 py-3">{item.completed}</td>
+                                <td className="px-4 py-3">{item.failed}</td>
+                                <td className="px-4 py-3">${item.paid}</td>
                             </tr>
                         ))}
                     </tbody>
