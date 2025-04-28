@@ -115,14 +115,8 @@
         });
     };
 
-    // Generate array of last 3 years in hebrew
-    const currentYearHebrew = new Intl.DateTimeFormat('he-IL', { year: 'numeric' }).format(new Date());
-    const currentYear = parseInt(currentYearHebrew);
-    const yearsHebrew = [];
-    for (let i = 0; i < 3; i++) {
-        const year = currentYear - i;
-        yearsHebrew.push(year);
-    }
+    // Generate array of last 3 years for the dropdown
+    const years = Array.from({length: 3}, (_, i) => new Date().getFullYear() - i);
 
     return (
         <div>
@@ -130,13 +124,13 @@
                 <select 
                     className="form-select" 
                     style={{ width: 'auto' }}
-                    value={currentYear}
+                    value={selectedYear}
                     onChange={(e) => {
                         setSelectedYear(parseInt(e.target.value));
                         fetchData(e.target.value);
                     }}
                 >
-                    {yearsHebrew.map(year => (
+                    {years.map(year => (
                         <option key={year} value={year}>{year}</option>
                     ))}
                 </select>
