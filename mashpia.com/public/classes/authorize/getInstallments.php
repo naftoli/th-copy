@@ -17,9 +17,8 @@ use \classes\authorize\Installments as Installments;
 
 $installments = [];
 $info = Installments::getSubscriptions($year);
-echo "<pre>"; print_r($info); echo "</pre>"; exit;
 foreach ($info as $key => $row) {
-    $installment_info = [];
+    $installment_info[] = $row;
     $id = $row['subscription_id'];
     $subscription_amount = $row['total_amount'];
     $total_num_installments = $row['number_of_installments'];
