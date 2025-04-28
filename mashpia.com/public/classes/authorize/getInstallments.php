@@ -35,11 +35,11 @@ foreach ($info as $key => $row) {
         $installment_info['status'] = $subscription->getStatus();
         $transactions = $subscription->getArbTransactions();
 
-        $paid = 0;
-        $installment_info['num_transactions'] = count($transactions);
         $installment_info['completed'] = 0;
         $installment_info['failed'] = 0;
         if (! is_null($transactions)) {
+            $paid = 0;
+            $installment_info['num_transactions'] = count($transactions);
             foreach ($transactions as $transaction) {
                 // get last word of response
                 $resArr = explode(' ', $transaction->getResponse());
@@ -54,6 +54,7 @@ foreach ($info as $key => $row) {
             $installment_info['paid'] = $paid;
             $installment_info['error'] = false;
         } else {
+            $installment_info['num_transactions'] = 0;
             $installment_info['paid'] = 0;
             $installment_info['error'] = 'No transactions found';
         }
