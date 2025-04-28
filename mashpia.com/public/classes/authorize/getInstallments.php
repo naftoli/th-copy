@@ -17,6 +17,7 @@ use \classes\authorize\Installments as Installments;
 
 $installments = [];
 $info = Installments::getSubscriptions($year);
+echo "<pre>"; print_r($info); echo "</pre>"; exit;
 foreach ($info as $key => $row) {
     $installment_info = [];
     $id = $row['subscription_id'];
