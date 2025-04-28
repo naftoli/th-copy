@@ -32,8 +32,6 @@
 
     const Report = () => {
         const [info, setInfo] = useState([])
-        const [error, setError] = useState(false)
-        const [success, setSuccess] = useState(true)
 
         useEffect(() => {
             fetch('getInstallments.php', {
@@ -54,7 +52,7 @@
                     <thead>
                         <tr>
                             <th>Subscription ID</th>
-                            <th>Name</th>
+                            <th>Name / Description</th>
                             <th>Status</th>
                             <th>Amount to charge</th>
                             <th>Number of charges to make</th>
