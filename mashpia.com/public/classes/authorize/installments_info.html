@@ -90,18 +90,21 @@
 
     const {createRoot} = ReactDOM
 
-    const hebrewDate = require("hebrew-date");
-
-const Report = () => {
+    const Report = () => {
     const [info, setInfo] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [selectedYear, setSelectedYear] = useState(parseInt(
+        new Intl.DateTimeFormat('he-IL', { year: 'numeric' }).format(new Date()))
+    );
+    
+    const fetchData = (year) => {
+        setIsLoading(true);
         fetch('getInstallments.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-            }
+            },
+            body: JSON.stringify({ year: selectedYear })
         })
         .then(response => response.json())
         .then(data => {
@@ -112,55 +115,84 @@ const Report = () => {
             console.error('Error fetching data:', error);
             setIsLoading(false);
         });
-    }, []);
+    };
 
-    if (isLoading) {
-        return (
-            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
-                <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Loading...</span>
-                </div>
-                <span className="ms-2">Loading...</span>
-            </div>
-        );
+    // Generate array of last 3 years in hebrew
+    const yearsHebrew = [];
+    for (let i = 0; i < 3; i++) {
+        const year = selectedYear - i;
+        yearsHebrew.push(year);
     }
 
     return (
-        <div className="table-responsive">
-            <table className="table table-hover table-striped table-bordered">
-                <thead className="table-light">
-                    <tr>
-                        <th className="px-4 py-3">Subscription ID</th>
-                        <th className="px-4 py-3">Name / Description</th>
-                        <th className="px-4 py-3">Status</th>
-                        <th className="px-4 py-3">Amount to charge</th>
-                        <th className="px-4 py-3">Number of charges to make</th>
-                        <th className="px-4 py-3">Number of transactions done</th>
-                        <th className="px-4 py-3">Number of charges successfully completed</th>
-                        <th className="px-4 py-3">Number of charges failed</th>
-                        <th className="px-4 py-3">Total Paid to date</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {info.map((item, index) => (
-                        <tr key={index}>
-                            <td className="px-4 py-3">{item.subscription_id}</td>
-                            <td className="px-4 py-3">{item.name}</td>
-                            <td className="px-4 py-3">
-                                <span className={`badge ${item.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
-                                    {item.status}
-                                </span>
-                            </td>
-                            <td className="px-4 py-3">${item.subscription_amount}</td>
-                            <td className="px-4 py-3">{item.total_num_installments}</td>
-                            <td className="px-4 py-3">{item.num_transactions}</td>
-                            <td className="px-4 py-3">{item.completed}</td>
-                            <td className="px-4 py-3">{item.failed}</td>
-                            <td className="px-4 py-3">${item.paid}</td>
-                        </tr>
+        <div>
+            <div className="mb-4 d-flex align-items-center gap-3">
+                <select 
+                    className="form-select" 
+                    style={{ width: 'auto' }}
+                    value={selectedYear}
+                    onChange={(e) => {
+                        setSelectedYear(parseInt(e.target.value));
+                        fetchData(e.target.value);
+                    }}
+                >
+                    {yearsHebrew.map(year => (
+                        <option key={year} value={year}>{year}</option>
                     ))}
-                </tbody>
-            </table>
+                </select>
+                <button 
+                    className="btn btn-primary"
+                    onClick={() => fetchData(selectedYear)}
+                >
+                    Get Data
+                </button>
+            </div>
+
+            {isLoading ? (
+                <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <span className="ms-2">Loading...</span>
+                </div>
+            ) : (
+                <div className="table-responsive">
+                    <table className="table table-hover table-striped table-bordered">
+                        <thead className="table-light">
+                            <tr>
+                                <th className="px-4 py-3">Subscription ID</th>
+                                <th className="px-4 py-3">Name / Description</th>
+                                <th className="px-4 py-3">Status</th>
+                                <th className="px-4 py-3">Amount to charge</th>
+                                <th className="px-4 py-3">Number of charges to make</th>
+                                <th className="px-4 py-3">Number of transactions done</th>
+                                <th className="px-4 py-3">Number of charges successfully completed</th>
+                                <th className="px-4 py-3">Number of charges failed</th>
+                                <th className="px-4 py-3">Total Paid to date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {info.map((item, index) => (
+                                <tr key={index}>
+                                    <td className="px-4 py-3">{item.subscription_id}</td>
+                                    <td className="px-4 py-3">{item.name}</td>
+                                    <td className="px-4 py-3">
+                                        <span className={`badge ${item.status === 'active' ? 'bg-success' : 'bg-secondary'}`}>
+                                            {item.status}
+                                        </span>
+                                    </td>
+                                    <td className="px-4 py-3">${item.subscription_amount}</td>
+                                    <td className="px-4 py-3">{item.total_num_installments}</td>
+                                    <td className="px-4 py-3">{item.num_transactions}</td>
+                                    <td className="px-4 py-3">{item.completed}</td>
+                                    <td className="px-4 py-3">{item.failed}</td>
+                                    <td className="px-4 py-3">${item.paid}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 };

@@ -10,12 +10,12 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+// ... existing headers and auth checks ...
 
 // Get the POST data
-//$postData = json_decode(file_get_contents('php://input'), true);
-//$year = isset($postData['year']) ? intval($postData['year']) : GlobalSettings::getChidonYear();
-
+$postData = json_decode(file_get_contents('php://input'), true);
+$year = isset($postData['year']) ? intval($postData['year']) : GlobalSettings::getChidonYear();
+echo $year; exit;
 // ... rest of your existing code using $year ...
 require_once 'Installments.php';
 use \classes\authorize\Installments as Installments;
