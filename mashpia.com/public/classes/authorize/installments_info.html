@@ -51,19 +51,22 @@
         return (
             <div>
                 <table>
-                    <tr>
-                        <th>Subscription ID</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                        <th>Amount to charge</th>
-                        <th>Number of charges to make</th>
-                        <th>Number of transactions done</th>
-                        <th>Number of charges successfully completed</th>
-                        <th>Number of charges failed</th>
-                        <th>Total Paid to date</th>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Subscription ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Amount to charge</th>
+                            <th>Number of charges to make</th>
+                            <th>Number of transactions done</th>
+                            <th>Number of charges successfully completed</th>
+                            <th>Number of charges failed</th>
+                            <th>Total Paid to date</th>
+                        </tr>
+                    </thead>
                     {info.length > 0 && info.map((item, index) => {
+                    <tbody>
                         <tr>
                             <td>{item.subscription_id}</td>
                             <td>{item.name}</td>
@@ -76,6 +79,7 @@
                             <td>{item.failed}</td>
                             <td>{item.paid}</td>
                         </tr>
+                    </tbody>
                     })}
                 </table>
             </div>
