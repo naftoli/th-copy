@@ -93,7 +93,9 @@
     const Report = () => {
     const [info, setInfo] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [selectedYear, setSelectedYear] = useState(new Intl.DateTimeFormat('he-IL', { year: 'numeric' }).format(new Date()));
+    const [selectedYear, setSelectedYear] = useState(parseInt(
+        new Intl.DateTimeFormat('he-IL', { year: 'numeric' }).format(new Date()))
+    );
     
     const fetchData = (year) => {
         setIsLoading(true);
@@ -102,7 +104,7 @@
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ year: year })
+            body: JSON.stringify({ year: selectedYear })
         })
         .then(response => response.json())
         .then(data => {
@@ -116,11 +118,9 @@
     };
 
     // Generate array of last 3 years in hebrew
-    const currentYearHebrew = new Intl.DateTimeFormat('he-IL', { year: 'numeric' }).format(new Date());
-    const currentYear = parseInt(currentYearHebrew);
     const yearsHebrew = [];
     for (let i = 0; i < 3; i++) {
-        const year = currentYear - i;
+        const year = selectedYear - i;
         yearsHebrew.push(year);
     }
 
@@ -144,7 +144,7 @@
                     className="btn btn-primary"
                     onClick={() => fetchData(selectedYear)}
                 >
-                    Refresh Data
+                    Get Data
                 </button>
             </div>
 
