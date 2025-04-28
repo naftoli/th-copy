@@ -18,7 +18,7 @@ use \classes\authorize\Installments as Installments;
 $installments = [];
 $info = Installments::getSubscriptions($year);
 foreach ($info as $key => $row) {
-    $installment_info[] = $row;
+    $installment_info = [];
     $id = $row['subscription_id'];
     $subscription_amount = $row['total_amount'];
     $total_num_installments = $row['number_of_installments'];
@@ -31,18 +31,13 @@ foreach ($info as $key => $row) {
     if (is_object($response) && $response->getMessages()->getResultCode() == 'Ok') {
         $subscription = $response->getSubscription();
         $installment_info['name'] = $subscription->getName();
-        $installment_info['description'] = $subscription->getDescription();
+        $amount = $subscription->getAmount();
         $installment_info['status'] = $subscription->getStatus();
         $transactions = $subscription->getArbTransactions();
-        echo "Name: " . $installment_info['name'] . "<br />";
-        echo "Description: " . $installment_info['description'] . "<br />";
-        echo "Status: " . $installment_info['status'] . "<br />";
-        echo "Transactions: <br />";
-        echo "<pre>"; print_r($transactions); echo "</pre>"; continue;
 
-        if ($transactions != null) {
-            $installment_info['num_transactions'] = count($transactions);
+        if (! is_null($transactions)) {
             $paid = 0;
+            $installment_info['num_transactions'] = count($transactions);
             $installment_info['completed'] = 0;
             $installment_info['failed'] = 0;
             foreach ($transactions as $transaction) {
@@ -50,7 +45,7 @@ foreach ($info as $key => $row) {
                 $resArr = explode(' ', $transaction->getResponse());
                 $approved = $resArr[count($resArr) - 1];
                 if ($approved == 'approved.') {
-                    $paid += floatval($response->getSubscription()->getAmount());
+                    $paid += floatval($amount);
                     $installment_info['completed']++;
                 } else {
                     $installment_info['failed']++;
@@ -69,7 +64,9 @@ foreach ($info as $key => $row) {
         $installment_info['paid'] = 0;
         $installment_info['error'] = 'No subscription found';
     }
+//    echo '<pre>';
+//    print_r($installment_info);
+//    echo '</pre>';
     $installments[] = $installment_info;
 }
-
 echo json_encode($installments);

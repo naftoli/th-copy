@@ -206,7 +206,6 @@ class Installments
         $request->setRefId($refId);
         $request->setSubscriptionId($id);
         $request->setIncludeTransactions(true);
-
         $controller = new AnetController\ARBGetSubscriptionController($request);
 
         // Add timeout configuration (if supported by the SDK)
