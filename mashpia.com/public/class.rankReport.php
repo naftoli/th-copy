@@ -34,6 +34,10 @@ class RankReport extends Report {
         $this->year = GlobalSettings::getRegistrationYear();
     }
 
+    public function removeException($school_id) {
+        $this->schoolExceptions = array_diff($this->schoolExceptions, [$school_id]);
+    }
+
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
         // if there's a school ID, update year
         if ($this->school_id) {
@@ -84,7 +88,7 @@ class RankReport extends Report {
         } else {
             $sql .= "ORDER BY s.school_name, r.rank_ord, c.class_grade, c.class_sub, u.last, u.first";
         }
-//        echo $sql; exit;
+        echo $sql; exit;
 //        echo "<input type='hidden' name='SQL' value='" . $sql . "' />";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
