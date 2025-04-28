@@ -28,12 +28,15 @@
 </body>
 <script type='text/babel'>
     const {useState, useEffect} = React
+
     const {createRoot} = ReactDOM
 
     const Report = () => {
-        const [info, setInfo] = useState([])
+        const [info, setInfo] = useState([]);
+        const [isLoading, setIsLoading] = useState(true);
 
         useEffect(() => {
+            setIsLoading(true);
             fetch('getInstallments.php', {
                 method: 'POST',
                 headers: {
@@ -42,9 +45,25 @@
             })
             .then(response => response.json())
             .then(data => {
-                setInfo(data)
+                setInfo(data);
+                setIsLoading(false);
             })
-        }, [])
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                setIsLoading(false);
+            });
+        }, []);
+
+        if (isLoading) {
+            return (
+                <div className="d-flex justify-content-center align-items-center">
+                    <div className="spinner-border text-primary" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                    <span className="ms-2">Loading...</span>
+                </div>
+            );
+        }
 
         return (
             <div>
@@ -62,7 +81,6 @@
                             <th>Total Paid to date</th>
                         </tr>
                     </thead>
-                    {info.length > 0 && (
                     <tbody>
                         {info.map((item, index) => (
                             <tr key={index}>
@@ -78,11 +96,10 @@
                             </tr>
                         ))}
                     </tbody>
-                    )}
                 </table>
             </div>
-        )
-    }
+        );
+    };
 
     const container = document.getElementById('main')
     const root = createRoot(container)
