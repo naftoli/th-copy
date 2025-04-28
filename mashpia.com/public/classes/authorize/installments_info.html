@@ -121,9 +121,10 @@
             fetchData(selectedYear);
         }, [selectedYear]);
 
-        // Generate array of years from current hebrew year for 3 years prior
+        // Generate array of years for the dropdown selector
+        // show years from current year back to 5784
         const years = [];
-        for (let i = heYear; i >= heYear - 3; i--) {
+        for (let i = heYear; i >= 5784; i--) {
             years.push(i);
         }
 
