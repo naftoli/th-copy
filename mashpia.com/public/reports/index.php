@@ -175,8 +175,22 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 <span class="link-text">Non TH Schools Report</span>
               </div>
             </a>
+          </div>
+          <h2>Lag Baomer</h2>
+            <div id='action-links'>
+                <a href='/lagBaomer/rank_report.php'>
+                    <div class='button'>
+                        <img src='/images/icon_report.png' height='32' alt='reports'/>
+                        <span class='link-text'>Ranks Summary</span>
+                    </div>
+                </a>
+                <a href='/lagBaomer/rank_report_all.php'>
+                    <div class='button'>
+                        <img src='/images/icon_report.png' height='32' alt='reports'/>
+                        <span class='link-text'>Ranks Details</span>
+                    </div>
+                </a>
+            </div>
         <?} // end admin only links ?>
-        </div>
-        
     </body>
 </html>
