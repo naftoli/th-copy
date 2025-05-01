@@ -4,7 +4,7 @@
 
 // are all these needed?
 // use __DIR__ so that the import is relative to this file and not the one that is importing it
-require_once __DIR__ . '../../class.globalSettings.php';
+require_once __DIR__ . '/../../class.globalSettings.php';
 
 class TotalWeeklyTasks {
     // public variables
