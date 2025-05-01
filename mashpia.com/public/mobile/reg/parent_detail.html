@@ -484,8 +484,8 @@
                                 this.next_year_chidon }}
                               </div>
                               <div class="button-spacing">
-                                <button class="btn btn-primary re_register">
-                                  <span>Edit Chidon Limmud Enrollment</span>
+                                <button class="btn btn-primary view_enrollment_info">
+                                  <span>View Chidon Limmud Enrollment</span>
                                 </button>
                               </div>
                               {{/if}}
@@ -598,7 +598,7 @@
   </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal to Confirm Enrollment Info -->
 <div aria-hidden="true" aria-labelledby="exampleModalCenterTitle" class="modal fade" id="exampleModalCenter"
      role="dialog"
      tabindex="-1">
@@ -614,6 +614,29 @@
 
       </div>
       <span id="conf_user_id"></span>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal to View Enrollment Info -->
+<div aria-hidden="true" aria-labelledby="viewEnrollmentInfoModalTitle" class="modal fade" id="viewEnrollmentInfoModal"
+     role="dialog"
+     tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="viewEnrollmentInfoModalTitle"></h4>
+        <button aria-label="Close" class="close" data-dismiss="modal" type="button">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+
+      </div>
+      <span id="view_user_id"></span>
       <div class="modal-footer">
         <button class="btn btn-secondary" data-dismiss="modal" type="button">Close</button>
       </div>
@@ -889,6 +912,42 @@
       expert: 'Havonah',
       genius: 'Iyun'
     }
+
+    $(document).on('click', '.view_enrollment_info', function () {
+      let id = $(this).parent().parent().parent().attr('id')
+      $("#viewEnrollmentInfoModal #view_user_id").val(id)
+      let child = allChildren[id]
+      let title = "Enrollment Information for <b>" + child.first + " " + child.last + "</b>"
+      $("#viewEnrollmentInfoModalTitle").html(title)
+      let html = ''
+      if (parseInt(child.chidon_info.khk_reg)) html += "<h5>Enrolled for Kol Hatorah Kulah</h5>"
+      html += `
+                    <h5>Chosen Track: ${testTypes[child.chidon_info.test_type]}</h5>
+                    <h5>Sweater Size: ${child.chidon_info.size}</h5>
+                    <h5>Book Number: ${child.chidon_info.book}</h5>
+                `
+      if (child.gender == 'M') html += `<h5>Yarmulka Size: ${child.chidon_info.yarmulka}</h5>`
+      html += `<h5>Hebrew Name as shown on Certificate: ${child.first_he} ${child.last_he}</h5>`
+      html += `<h5>Chidon Prizes:</h5><ul>`
+      // get prizes and total points used to know if we need to disable the checkbox or not
+      let total = 0
+      let paid = true // flag to know if all prizes have been paid for
+      for (let i = 0; i < child.chidon_prizes.length; i++) {
+        let prize = child.chidon_prizes[i]
+        total += parseInt(prize.price)
+        if (!prize.paid) paid = false
+        let desc = prize.prize_name + (prize.color ? ' (' + prize.color + ') ' : '') + (prize.size ? ' - ' + prize.size : '')
+        html += `<li><h5>${desc}`
+        if (prize.he_name) html += `<br />Personalized name on prize: ${prize.he_name}`
+        html += `</h5></li>`
+      }
+      html += `</ul>`
+      html += `<h5>Total Points: ${total}</h5>`
+      html += `<h5>Chidon Prizes Paid: ${paid ? 'Yes' : 'No'}</h5>`
+      html += `<h5>To change your prize selection please click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a></h5>`
+      $("#viewEnrollmentInfoModal .modal-body").html(html)
+      $("#viewEnrollmentInfoModal").modal('show')
+    })
 
     let conf_disabled = false // flag to know if input checkbox should be disabled
     $(document).on('click', '.chidon_info', function () {
