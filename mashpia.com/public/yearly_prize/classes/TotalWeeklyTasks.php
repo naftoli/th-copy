@@ -4,7 +4,7 @@
 
 // are all these needed?
 // use dirname(__FILE__) so that the import is relative to this file and not the one that is importing it
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once '/class.globalSettings.php';
 
 class TotalWeeklyTasks {
     // public variables
