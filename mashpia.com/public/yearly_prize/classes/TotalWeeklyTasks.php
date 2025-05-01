@@ -3,8 +3,8 @@
 //ini_set('display_errors', 1);
 
 // are all these needed?
-// use dirname(__FILE__) so that the import is relative to this file and not the one that is importing it
-require_once '/class.globalSettings.php';
+// use __DIR__ so that the import is relative to this file and not the one that is importing it
+require_once __DIR__ . '../../class.globalSettings.php';
 
 class TotalWeeklyTasks {
     // public variables
