@@ -30,9 +30,6 @@
       <path value="$PROJECT_DIR$/mashpia.com/vendor/swiftmailer/swiftmailer" />
       <path value="$PROJECT_DIR$/../../../../etc/php/7.2/cli" />
       <path value="$PROJECT_DIR$/../../../../etc/php/7.2" />
-      <path value="$PROJECT_DIR$/vendor/landrok/language-detector" />
-      <path value="$PROJECT_DIR$/vendor/composer" />
-      <path value="$PROJECT_DIR$/vendor/webmozart/assert" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/symfony/polyfill-intl-normalizer" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/paragonie/constant_time_encoding" />
       <path value="$PROJECT_DIR$/mashpia.com/vendor/paragonie/random_compat" />

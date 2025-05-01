@@ -62,9 +62,6 @@
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/paragonie/random_compat" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/phpmailer/phpmailer" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/symfony/polyfill-intl-normalizer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/landrok/language-detector" />
-      <excludeFolder url="file://$MODULE_DIR$/vendor/webmozart/assert" />
       <excludeFolder url="file://$MODULE_DIR$/mashpia.com/vendor/sebastian/type" />
     </content>
     <orderEntry type="inheritedJdk" />
