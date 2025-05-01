@@ -246,7 +246,7 @@ class Raffle
      *
      * TODO: check even if the user is not in the table based off of doc
      */
-    public function get_eligable_user_ids($user_id = false, $log = false, $group_by_school = false, $report = false, $school_id = 0)
+    public function get_eligable_user_ids($user_id = false, $log = false, $group_by_school = false, $report = false, $school_id = 0, $debug = false)
     {
         $year = $this->year;
         $this->eligable_user_ids = [];
@@ -257,12 +257,14 @@ class Raffle
             " LEFT JOIN admin_auths aa ON u.user_id = aa.id and aa.auth='user' " .
             " WHERE re.raffle_id = " . $this->raffle_id . " " .
             " AND re.eligible = 1 ";
+        if ($school_id) $sql .= " AND u.school_id = $school_id ";
         // on non-reports we need to hide the people who already won
 //        if (!$report)
 //            $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
         // add the sorting by the user_id
         if ($user_id) $sql .= "AND u.user_id=$user_id ";
         $sql .= "GROUP BY u.user_id;";
+        if ($debug) echo $sql . "<br />";
         // print out some logs
         if ($log) echo "Getting users manually marked as eligible\n";
         // run the query
@@ -289,7 +291,7 @@ class Raffle
         if ($user_id) $sql .= " AND u.user_id=$user_id";
         // sort by the user_id
         $sql .= " GROUP BY u.user_id ORDER BY u.user_id;"; // LIMIT 250 only for testing
-//        echo $sql; exit;
+        if ($debug) echo $sql . "<br />";
         $query = mysql_query($sql); // run the query
         // log the total users that we have to manually check
         if ($log) echo "Checking " . mysql_num_rows($query) . " remaining users";
