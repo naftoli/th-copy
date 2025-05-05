@@ -17,10 +17,10 @@ $raffles = [435];
 foreach ($raffles as $raffle_id) {
     echo "<h3>Loading raffle $raffle_id</h3>";
     $raffle = Raffle::load($raffle_id);
-    $users = $raffle->get_eligable_user_ids(false, false, true, false, $school_id);
+    $users = $raffle->get_eligable_user_ids(false, false, true); // no specific user but do show the log
+    echo "<p>Choosing random users from school $school</p>";
     foreach ($users as $school => $user_ids) {
         for ($i = 0; $i < 5; $i++) {
-            echo "<p>Choosing random user from school $school</p>";
             echo "<pre>"; print_r($user_ids); echo "</pre>";
             $user = $user_ids[array_rand($user_ids)];
             if (alreadyWon($user['user_id'], $raffle->type)) {
