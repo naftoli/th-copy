@@ -34,6 +34,7 @@ foreach ($raffles as $raffle_id) {
             $user_id = $user_ids[$key];
             if (alreadyWon($user_id, $raffle->type)) {
                 echo "<p>" . $user_id . " already won</p>";
+                $i--;
                 continue;
             }
             echo "<p>" . $user_id . "</p>";
