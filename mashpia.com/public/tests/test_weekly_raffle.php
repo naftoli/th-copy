@@ -22,16 +22,19 @@ foreach ($raffles as $raffle_id) {
     $raffle = Raffle::load($raffle_id);
     $users = $raffle->get_eligable_user_ids(false, false, true, false, $school_id, true); // no specific user but do show the log
     echo "<pre>"; print_r($users); echo "</pre>";
-    foreach ($users as $school => $user_ids) {
+    foreach ($users as $school => $info) {
         echo "<p>Choosing random users from school $school</p>";
+        $user_ids = array_keys($info);
+        echo '<pre>';
+        print_r($user_ids);
+        echo '</pre>';
         for ($i = 0; $i < 5; $i++) {
-            echo "<pre>"; print_r($user_ids); echo "</pre>";
-            $user = $user_ids[array_rand($user_ids)];
-            if (alreadyWon($user['user_id'], $raffle->type)) {
-                echo "<p>User " . $user['user_id'] . " already won</p>";
+            $user_id = array_rand($user_ids);
+            if (alreadyWon($user_id, $raffle->type)) {
+                echo "<p>" . $user_id . " already won</p>";
                 continue;
             }
-            echo "<p>" . $user['user_id'] . "</p>";
+            echo "<p>" . $user_id . "</p>";
         }
     }
 }
