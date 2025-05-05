@@ -12,7 +12,7 @@ function alreadyWon($user, $type) {
     return mysql_num_rows($result) > 0;
 }
 
-$school_id = 40;
+$school_id = 0;
 $raffles = [435];
 foreach ($raffles as $raffle_id) {
     echo "<h3>Loading raffle $raffle_id</h3>";
