@@ -283,6 +283,7 @@ class Raffle
         $sql = "SELECT u.user_id, u.school_id, aa.admin_id FROM users u LEFT JOIN admin_auths aa ON aa.auth = 'user' AND u.user_id = aa.id " .
             " LEFT JOIN admins a USING ( admin_id ) " .
             " WHERE u.user_registered IS NOT NULL AND u.school_id " . ($school_id ? "= " . $school_id : " IS NOT NULL ");
+        $sql .= " AND u.school_id != 612 "; // exclude the school_id 612 from the list
         // on reports we need to hide the soldiers who already won
 //        if (!$report)
 //            // $sql .= " AND u.user_id NOT IN (SELECT user_id FROM raffle_winners JOIN raffles USING (raffle_id) WHERE year = $year )";
