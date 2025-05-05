@@ -18,8 +18,8 @@ foreach ($raffles as $raffle_id) {
     echo "<h3>Loading raffle $raffle_id</h3>";
     $raffle = Raffle::load($raffle_id);
     $users = $raffle->get_eligable_user_ids(false, false, true); // no specific user but do show the log
-    echo "<p>Choosing random users from school $school</p>";
     foreach ($users as $school => $user_ids) {
+        echo "<p>Choosing random users from school $school</p>";
         for ($i = 0; $i < 5; $i++) {
             echo "<pre>"; print_r($user_ids); echo "</pre>";
             $user = $user_ids[array_rand($user_ids)];
