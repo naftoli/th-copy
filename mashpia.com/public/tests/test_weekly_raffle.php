@@ -29,7 +29,8 @@ foreach ($raffles as $raffle_id) {
         print_r($user_ids);
         echo '</pre>';
         for ($i = 0; $i < 5; $i++) {
-            $user_id = array_rand($user_ids);
+            $key = array_rand($user_ids);
+            $user_id = $user_ids[$key];
             if (alreadyWon($user_id, $raffle->type)) {
                 echo "<p>" . $user_id . " already won</p>";
                 continue;
