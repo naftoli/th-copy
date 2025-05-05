@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 require_once "../db.php";
+require_once '../class.globalSettings.php';
 require_once "../raffles/shared/classes/Raffle.php";
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
