@@ -123,6 +123,7 @@
       { "label": "Parents Report", "legacy": true, "path": "/parent_report.php" },
       { "label": "Not Yet Registered Report", "legacy": true, "path": "/non_registered_report.php" },
       { "label": "Barcodes Report", "legacy": true, "path": "/barcodes_report.php" },
+      { "label":  "Rank Books Report", "legacy":  true, "path":  "isserRanks.php" },
       { "label": "Miles Report", "legacy": true, "path": "/miles.php" },
       { "label": "Auction Miles Report", "legacy": true, "path": "/auctionMiles.php" },
       { "label": "Missions Done Report", "legacy": true, "path": "/missions_report.php" },
