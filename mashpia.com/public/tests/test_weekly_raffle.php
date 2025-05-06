@@ -34,11 +34,15 @@ foreach ($raffles as $raffle_id) {
             echo "<p>Random user $i</p>";
             $key = array_rand($user_ids);
             $user_id = $user_ids[$key];
-            if (alreadyWon($user_id, $raffle->type) && count($user_ids) > 1) {
+            if (alreadyWon($user_id, $raffle->type)) {
                 echo "<p>" . $user_id . " already won</p>";
-                unset($user_ids[$key]); // remove the user from the pool
-                $i--;
-                continue;
+                if (count($user_ids) > 1) {
+                    echo "<p>Removing user $user_id from the pool</p>";
+                    unset($user_ids[$key]); // remove the user from the pool
+                    $i--;
+                    continue;
+                }
+                echo "$user_id is last user in the pool, breaking loop</p>";
             }
             echo "<p>" . $user_id . "</p>";
         }
