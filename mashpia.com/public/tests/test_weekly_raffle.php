@@ -42,7 +42,7 @@ foreach ($raffles as $raffle_id) {
                     $i--;
                     continue;
                 }
-                echo "$user_id is last user in the pool, breaking loop</p>";
+                echo "$user_id is the last user in the pool, breaking loop</p>";
             }
             echo "<p>" . $user_id . "</p>";
         }
