@@ -30,6 +30,7 @@ foreach ($raffles as $raffle_id) {
         print_r($user_ids);
         echo '</pre>';
         for ($i = 0; $i < 5; $i++) {
+            echo "<p>Random user $i</p>";
             $key = array_rand($user_ids);
             $user_id = $user_ids[$key];
             if (alreadyWon($user_id, $raffle->type)) {
