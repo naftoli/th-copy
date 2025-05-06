@@ -26,9 +26,11 @@ foreach ($raffles as $raffle_id) {
     foreach ($users as $school => $info) {
         echo "<p>Choosing random users from school $school</p>";
         $user_ids = array_keys($info);
+        echo "<p>Pool of user IDs:</p>";
         echo '<pre>';
         print_r($user_ids);
         echo '</pre>';
+        $alreadyWon = 0;
         for ($i = 0; $i < 3; $i++) {
             echo "<p>Random user $i</p>";
             $key = array_rand($user_ids);
@@ -36,6 +38,11 @@ foreach ($raffles as $raffle_id) {
             if (alreadyWon($user_id, $raffle->type)) {
                 echo "<p>" . $user_id . " already won</p>";
                 $i--;
+                $alreadyWon++;
+                if ($alreadyWon > 10) {
+                    echo "<p>Too many already won, stopping</p>";
+                    break;
+                }
                 continue;
             }
             echo "<p>" . $user_id . "</p>";
