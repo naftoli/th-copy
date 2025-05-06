@@ -29,7 +29,7 @@ foreach ($raffles as $raffle_id) {
         echo '<pre>';
         print_r($user_ids);
         echo '</pre>';
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 0; $i < 3; $i++) {
             echo "<p>Random user $i</p>";
             $key = array_rand($user_ids);
             $user_id = $user_ids[$key];
