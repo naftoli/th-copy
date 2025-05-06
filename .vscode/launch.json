@@ -23,7 +23,7 @@
       "request": "launch",
       "port": 9003, // Do not confilct with PHP FPM
       "pathMappings": {
-        "/var/www/html/": "${workspaceRoot}"
+        "/Users/naftolir/Sites/tzivos-hashem": "${workspaceRoot}"
       }
     },
 
