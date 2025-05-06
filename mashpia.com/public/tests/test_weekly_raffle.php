@@ -30,19 +30,14 @@ foreach ($raffles as $raffle_id) {
         echo '<pre>';
         print_r($user_ids);
         echo '</pre>';
-        $alreadyWon = 0;
         for ($i = 0; $i < 3; $i++) {
             echo "<p>Random user $i</p>";
             $key = array_rand($user_ids);
             $user_id = $user_ids[$key];
-            if (alreadyWon($user_id, $raffle->type)) {
+            if (alreadyWon($user_id, $raffle->type) && count($user_ids) > 1) {
                 echo "<p>" . $user_id . " already won</p>";
+                unset($user_ids[$key]); // remove the user from the pool
                 $i--;
-                $alreadyWon++;
-                if ($alreadyWon > 10) {
-                    echo "<p>Too many already won, stopping</p>";
-                    break;
-                }
                 continue;
             }
             echo "<p>" . $user_id . "</p>";
