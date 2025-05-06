@@ -24,7 +24,7 @@ foreach ($raffles as $raffle_id) {
     $users = $raffle->get_eligable_user_ids(false, false, true); // no specific user but do show the log
 //    echo "<pre>"; print_r($users); echo "</pre>";
     foreach ($users as $school => $info) {
-        echo "<p>Choosing random users from school $school</p>";
+        echo "<p><b>Choosing random users from school $school</b></p>";
         $user_ids = array_keys($info);
         echo "<p>Pool of user IDs:</p>";
         echo '<pre>';
