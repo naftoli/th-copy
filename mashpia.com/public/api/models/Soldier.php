@@ -377,20 +377,21 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if ($res) $info = $query->fetch();
 
-        // get amount paid 
-        $stmtAmount = $MASHPIA_DB->prepare("
-            SELECT amount FROM registration_charges 
-            WHERE user_id = :user and year = :year and type = 'LDE'
-        ");
-        $resAmount = $stmtAmount->execute([
-            ':user' => $this->user_id, 
-            ':year' => $year
-        ]);
-        if ($resAmount) {
-            $amount = $stmtAmount->fetch()['amount'];
+        if ($info) {
+            // get amount paid 
+            $stmtAmount = $MASHPIA_DB->prepare("
+                SELECT amount FROM registration_charges 
+                WHERE user_id = :user and year = :year and type = 'LDE'
+            ");
+            $resAmount = $stmtAmount->execute([
+                ':user' => $this->user_id, 
+                ':year' => $year
+            ]);
+            if ($resAmount) {
+                $amount = $stmtAmount->fetch()['amount'];
+            }
+            $info['amount'] = $amount ?? 0;
         }
-        $info['amount'] = $amount ?? 0;
-
         // turn off getting chidon info
 //        $info = false;
 
