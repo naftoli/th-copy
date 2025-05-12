@@ -331,7 +331,7 @@ if (!empty($users)) {
         }
         if (!$row['reg_chidon'] // if not in chidon
             && intval($row['class_grade']) >= 3 // and in grade 3+
-            && intval($row['class_grade']) < 8 // not in grade 8
+            && (intval($row['class_grade']) < 8 || GlobalSettings::isAustralian($row['school_id']) && intval($row['class_grade']) <= 8) // not in grade 8
             && intval($row['chidon']) // make sure the kid is in chidon
             && intval($row['school_chidon']) // make sure school has chidon
             && !in_array(intval($children[$row['user_id']]['school_id']), $exceptions) // make sure not one of these schools

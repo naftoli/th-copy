@@ -377,6 +377,20 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if ($res) $info = $query->fetch();
 
+        // get amount paid 
+        $stmtAmount = $MASHPIA_DB->prepare("
+            SELECT amount FROM registration_charges 
+            WHERE user_id = :user and year = :year and type = 'LDE'
+        ");
+        $resAmount = $stmtAmount->execute([
+            ':user' => $this->user_id, 
+            ':year' => $year
+        ]);
+        if ($resAmount) {
+            $amount = $stmtAmount->fetch()['amount'];
+        }
+        $info['amount'] = $amount ?? 0;
+
         // turn off getting chidon info
 //        $info = false;
 
@@ -505,8 +519,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // only add th_chidon_id if the user is in grade 3-7 and school is set as chidon school
         // chidonEdit key indicates true/false the way it's meant to mean
         $exceptions = [482,544,583];
-        if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && intval($this->platoon->class_grade) < 8 &&
+        if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && (intval($this->platoon->class_grade) < 8 || GlobalSettings::isAustralian($this->school_id) && intval($this->platoon->class_grade) <= 8) &&
             (intval($row['school_chidon']) || in_array($this->school_id, [49, 192])) && intval($row['chidon']) && !in_array( $this->school_id, $exceptions )
+        
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
