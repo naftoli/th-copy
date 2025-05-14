@@ -1536,16 +1536,25 @@ var registrationApp = function () {
       // create text for modal
       let options = []
       const track = $(".limmud:checked").val()
+      let add5 = false
+      const now = new Date()
+      const target = new Date('2025-05-17T00:00:00Z')
+      if (now > target) {
+        add5 = true
+      }
       switch (track) {
         case 'maven':
           options = [36, 50, 75, 100, 136]
+          if (add5) options = [50, 75, 100, 136]
           break
         case 'pro':
           options = [100, 120, 150, 180, 200]
+          if (add5) options = [105, 120, 150, 180, 200]
           break
         case 'expert':
         case 'genius':
           options = [200, 225, 250, 300]
+          if (add5) options = [205, 225, 250, 300]
           break
       }
 
