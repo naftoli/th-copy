@@ -1545,7 +1545,7 @@ var registrationApp = function () {
       switch (track) {
         case 'maven':
           options = [36, 50, 75, 100, 136]
-          if (add5) options = [50, 75, 100, 136]
+          if (add5) options = [50, 75, 100, 136, 150]
           break
         case 'pro':
           options = [100, 120, 150, 180, 200]
