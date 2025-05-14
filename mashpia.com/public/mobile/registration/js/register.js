@@ -2271,6 +2271,13 @@ var templates = function () {
             **/
       let html = '<option value="0">Select Amount to Pay</option>'
       let fees = [20, 25, 30, 40]
+      // find out current date
+      const now = new Date();
+      // compare with target date of May 17, 2025
+      const targetDate = new Date('2025-05-17T03:00:00');
+      if (now > targetDate) {
+        fees = [25, 30, 40, 50]
+      }
       if (user.school.school_id == 61) fees = [30, 35, 40, 50]
       else if (user.school.school_id == 269) fees = [50, 60, 70]
       // if (this.changeFee()) {
