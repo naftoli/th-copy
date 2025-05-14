@@ -21,13 +21,13 @@ class Installments
     private $number_of_installments;
     private $start_date;
 
-    public function __construct($customerProfile = 0, $payment_profile_id = 0, $live = true, $updateBilling = true) {
+    public function __construct($customerProfile = null, $payment_profile_id = 0, $live = true, $updateBilling = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         // for testing use \net\authorize\api\constants\ANetEnvironment::SANDBOX;
         if ($live) $this->endpoint = \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         else $this->endpoint = \net\authorize\api\constants\ANetEnvironment::SANDBOX;
 
-        if ($customerProfile > 0) {
+        if ($customerProfile instanceof CustomerProfile) {
             $this->cp = $customerProfile;
             $this->payment_profile_id = $payment_profile_id;
             if ($updateBilling && !$this->updateBillingInfo()) {
