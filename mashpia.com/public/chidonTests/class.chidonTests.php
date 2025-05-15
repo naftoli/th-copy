@@ -937,8 +937,13 @@ class KHK {
     // find out if child is eligible to enroll into khk track
     public static function enrollmentEligibility(array $user_ids) {
         $info = [];
+        $exceptions = [55248];
         $year = GlobalSettings::getChidonRegYear();
         foreach ($user_ids as $user_id) {
+            if (in_array($user_id, $exceptions)) {
+                $info[$user_id] = true;
+                continue;
+            }
             // check if child enrolled into chidon in last 4 years
             $sql = 'select * from th_chidon where user_id = ' . $user_id . ' and year >= ' . ($year - 4);
             $result = mysql_query($sql);
