@@ -23,6 +23,8 @@ if ( isset($_GET['id']) ) {
 }
 
 $submit = false;
+$start = 0;
+$end = 0;
 if (isset($_POST['submit'])) {
     $submit = true;
     $from = explode('-', $_POST['fromDate']);
@@ -45,27 +47,28 @@ if (isset($_POST['submit'])) {
         //     date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
         // const prev = date === 'previous' ? 1 : 0
         const submit = <?= $submit ? 1 : 0 ?>;
-        if (submit) {
-            function createFile(school) {
-                const start = <?= $start ?>;
-                const end = <?= $end ?>;
-                return new Promise((resolve, reject) => {
-                    $.ajax({
-                        url: `createFile.php?start=${start}&end=${end}`,
-                        type: 'POST',
-                        data: {
-                            school: school,
-                        },
-                        success: function (data) {
-                            resolve(data)
-                        },
-                        error: function (error) {
-                            reject(error)
-                        },
-                    })
-                })
-            }
 
+        function createFile(school) {
+            const start = <?= $start ?>;
+            const end = <?= $end ?>;
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: `createFile.php?start=${start}&end=${end}`,
+                    type: 'POST',
+                    data: {
+                        school: school,
+                    },
+                    success: function (data) {
+                        resolve(data)
+                    },
+                    error: function (error) {
+                        reject(error)
+                    },
+                })
+            })
+        }
+
+        if (submit) {
             let i = 1;
             let p = [];
             const schools = <?= json_encode($schools) ?>;
