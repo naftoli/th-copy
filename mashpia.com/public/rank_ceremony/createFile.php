@@ -100,9 +100,11 @@ function generateFile( $logoType = '', $limitTo = '' ) {
         if ($logoType == 'boys') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_boys']));
         else if ($logoType == 'girls') $logoContent = file_get_contents("http://mashpia.com/schoolLogos/" . rawurlencode($logos[$schools[$school]]['logo_girls']));
         $logo_img = @imagecreatefromstring($logoContent);
-        imageinterlace($logo_img, true);
-        $logo_url = 'images/' . $school . '.png';
-        if ($logo_img) @imagepng($logo_img, $logo_url);
+        if ($logo_img) {
+            $logo_url = 'images/' . $school . '.png';
+            @imageinterlace($logo_img, true);
+            @imagepng($logo_img, $logo_url);
+        }
         else $logo_url = '';
 //        if ($logoType == 'boys') $logo_url = "/logos/" . $logos[$schools[$school]]['logo_boys'];
 //        else if ($logoType == 'girls') $logo_url = "/logos/" . $logos[$schools[$school]]['logo_girls'];
@@ -125,7 +127,7 @@ function generateFile( $logoType = '', $limitTo = '' ) {
                                 // modify url to work with file_get_contents by enocding only the part that needs to be encoded
                                 if (isset($picOnly[$user_id])) $url = "http://mashpia.com/mobile/reg/img/" . rawurlencode($picOnly[$user_id]);
                                 else $url = "http://mashpia.com" . $pics[$user_id];
-                                $contents = file_get_contents($url);
+                                $contents = @file_get_contents($url);
                                 if ($contents) {
                                     $new_img = @imagecreatefromstring($contents);
                                     $img_url = 'images/' . $user_id . '.png';

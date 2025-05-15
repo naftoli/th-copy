@@ -70,6 +70,7 @@ if (isset($_POST['submit'])) {
             let i = 1;
             let p = [];
             const schools = <?= json_encode($schools) ?>;
+            console.log(schools)
             for (let school in schools) {
                 // if (school != '269') continue;
                 p[i++] = createFile(school)
