@@ -44,29 +44,28 @@ if (isset($_POST['submit'])) {
         // while (date != 'current' && date != 'previous')
         //     date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
         // const prev = date === 'previous' ? 1 : 0
-        const submit = <?= $submit ?>;
-
-        function createFile(school) {
-            const start = <?= $start ?>;
-            const end = <?= $end ?>;
-            return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: `createFile.php?start=${start}&end=${end}`,
-                    type: 'POST',
-                    data: {
-                        school: school,
-                    },
-                    success: function (data) {
-                        resolve(data)
-                    },
-                    error: function (error) {
-                        reject(error)
-                    },
-                })
-            })
-        }
-
+        const submit = <?= $submit ? 1 : 0 ?>;
         if (submit) {
+            function createFile(school) {
+                const start = <?= $start ?>;
+                const end = <?= $end ?>;
+                return new Promise((resolve, reject) => {
+                    $.ajax({
+                        url: `createFile.php?start=${start}&end=${end}`,
+                        type: 'POST',
+                        data: {
+                            school: school,
+                        },
+                        success: function (data) {
+                            resolve(data)
+                        },
+                        error: function (error) {
+                            reject(error)
+                        },
+                    })
+                })
+            }
+
             let i = 1;
             let p = [];
             const schools = <?= json_encode($schools) ?>;
