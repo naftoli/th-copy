@@ -2894,6 +2894,20 @@ var templates = function () {
           + "</div>");
         // update amounts to be charged in installments
         $("#earlyRegTotal").text(futurePayment.toFixed(2))
+        // update installments options
+        const monthsLeft = monthsBetween(new Date(), new Date("2026-02-02"));
+        const installmentsInfo = {
+          1: 'One',
+          2: 'Two',
+          3: 'Three',
+          4: 'Four',
+          5: 'Five',
+          6: 'Six',
+          7: 'Seven',
+          8: 'Eight',
+          9: 'Nine',
+          10: 'Ten'
+        }
         for (let i of Object.keys(installmentsInfo)) {
           if (parseInt(i) > monthsLeft) continue;
           let elem = '#earlyReg' + installmentsInfo[i]
