@@ -1528,13 +1528,15 @@
                       <i>
                         Since you are pre-paying for the chidon experience registration fee, you have the option of choosing whether you would like to be
                         charged the full amount for this now, or in installments. If you choose to be charged in installments,
-                        the first payment will start in one month from today and continue every month until the full amount is paid.
+                        the first payment will start today and continue every month until the full amount is paid.
                       </i>
                     </p>
                     <input type="radio" name="installments" class="installments" value="0" checked /> I would like to pay the complete amount now.
                     ($<span id="earlyRegTotal"></span>)<br />
                     <script>
-                      const installments = {
+                      // figure out how many months are left until Feb 2, 2026
+                      const monthsLeft = monthsBetween(new Date(), new Date("2026-02-02"));
+                      const installmentsInfo = {
                         1: 'One',
                         2: 'Two',
                         3: 'Three',
@@ -1546,10 +1548,11 @@
                         9: 'Nine',
                         10: 'Ten'
                       }
-                      for (let i of Object.keys(installments)) {
+                      for (let i of Object.keys(installmentsInfo)) {
+                        if (parseInt(i) > (monthsLeft + 1)) continue;
                         document.write(`
-                          <input type="radio" name="installments" class="installments" value="${i}" /> I would like to pay in ${i} installment(s).
-                            ($<span id="earlyReg${installments[i]}"></span>)<br />
+                          <input type="radio" name="installments" class="installments" value="${i}" /> I would like to pay in ${installmentsInfo[i]} installment(s).
+                            ($<span id="earlyReg${installmentsInfo[i]}"></span>)<br />
                         `)
                       }
                     </script>

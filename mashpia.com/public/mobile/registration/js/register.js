@@ -1,4 +1,4 @@
-﻿/**
+/**
  * JS file for /mobile/registration/
  */
 // page setup
@@ -2089,6 +2089,24 @@ var registrationApp = function () {
   }
 
   /*********************** HELPER FUNCTIONS ***********************/
+  // Calculate months between two dates
+  function monthsBetween(date1, date2) {
+    // Ensure date1 is earlier than date2
+    let d1 = new Date(date1);
+    let d2 = new Date(date2);
+    if (d1 > d2) [d1, d2] = [d2, d1];
+
+    const years = d2.getFullYear() - d1.getFullYear();
+    const months = d2.getMonth() - d1.getMonth();
+    let totalMonths = years * 12 + months;
+
+    // Adjust if the day of the month in d2 is less than in d1
+    if (d2.getDate() < d1.getDate()) {
+      totalMonths -= 1;
+    }
+    return totalMonths;
+  }
+
   // navigate to a specific section
   function showSection(id) {
     $("#pages section").hide();
@@ -2876,19 +2894,8 @@ var templates = function () {
           + "</div>");
         // update amounts to be charged in installments
         $("#earlyRegTotal").text(futurePayment.toFixed(2))
-        const installmentsInfo = {
-          1: 'One',
-          2: 'Two',
-          3: 'Three',
-          4: 'Four',
-          5: 'Five',
-          6: 'Six',
-          7: 'Seven',
-          8: 'Eight',
-          9: 'Nine',
-          10: 'Ten'
-        }
         for (let i of Object.keys(installmentsInfo)) {
+          if (parseInt(i) > monthsLeft) continue;
           let elem = '#earlyReg' + installmentsInfo[i]
           $(elem).text((futurePayment / parseInt(i)).toFixed(2))
         }
