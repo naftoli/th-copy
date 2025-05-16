@@ -1534,6 +1534,22 @@
                     <input type="radio" name="installments" class="installments" value="0" checked /> I would like to pay the complete amount now.
                     ($<span id="earlyRegTotal"></span>)<br />
                     <script>
+                      function monthsBetween(date1, date2) {
+                        // Ensure date1 is earlier than date2
+                        let d1 = new Date(date1);
+                        let d2 = new Date(date2);
+                        if (d1 > d2) [d1, d2] = [d2, d1];
+
+                        const years = d2.getFullYear() - d1.getFullYear();
+                        const months = d2.getMonth() - d1.getMonth();
+                        let totalMonths = years * 12 + months;
+
+                        // Adjust if the day of the month in d2 is less than in d1
+                        if (d2.getDate() < d1.getDate()) {
+                          totalMonths -= 1;
+                        }
+                        return totalMonths;
+                      }
                       // figure out how many months are left until Feb 2, 2026
                       const monthsLeft = monthsBetween(new Date(), new Date("2026-02-02"));
                       const installmentsInfo = {
