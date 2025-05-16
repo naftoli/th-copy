@@ -2909,7 +2909,7 @@ var templates = function () {
           10: 'Ten'
         }
         for (let i of Object.keys(installmentsInfo)) {
-          if (parseInt(i) > monthsLeft) continue;
+          if (parseInt(i) > (monthsLeft + 1)) continue;
           let elem = '#earlyReg' + installmentsInfo[i]
           $(elem).text((futurePayment / parseInt(i)).toFixed(2))
         }
