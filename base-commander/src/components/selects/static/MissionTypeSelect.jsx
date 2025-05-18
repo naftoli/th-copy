@@ -36,7 +36,7 @@ export class MissionTypeSelect extends Component {
       { value:  0 + offset, label: 'Chabad' },
       { value: 10 + offset, label: 'Frum' },
       { value: 2 + offset, label: 'Day School' },
-      { value: 4 + offset, label: 'Hebrew School' },
+      { value: 4 + offset, label: 'Yeshiva School' },
       { value: 12 + offset, label: 'Friendship Circle' }
     ];
   }
