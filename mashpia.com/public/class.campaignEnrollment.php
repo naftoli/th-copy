@@ -31,7 +31,7 @@ class CampaignEnrollment {
         
         switch ($school_type_id) {
             // ckids
-            case 4: case 5:
+            case 4: case 5: case 6: case 7:
                 return $this->campaigns['day_school'];
             case 12: case 13: // 12 and 13 are just frum
                 return $this->campaigns['frum'];
@@ -56,6 +56,8 @@ class CampaignEnrollment {
                 break;
             case 4:
             case 5:
+            case 6:
+            case 7:
                 $this->type = 'day_school';
                 break;
             case 2:
