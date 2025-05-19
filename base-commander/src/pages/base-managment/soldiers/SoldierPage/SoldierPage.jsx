@@ -8,7 +8,7 @@ import { LoadingScreen, FontAwesome } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
 import {
   PersonalTab,  RankTab,  MedalsTab,
-  SettingsTab,  RegistrationTab,
+  SettingsTab,  RegistrationTab, TransactionsTab
 } from './tabs';
 // functions
 import { toast } from 'react-toastify';
@@ -22,7 +22,7 @@ import {
 } from 'store/base/soldiers/operations';
 // styles
 import './SoldierPage.scss';
-import { isBC } from 'functions/login';
+import { isBC, isHQ } from 'functions/login';
 
 class SoldierPage extends Component {
   // initial state
@@ -212,6 +212,10 @@ class SoldierPage extends Component {
             Registration
           </NavigationTab>
 
+          <NavigationTab tab={6} icon='info-circle' { ...navProps }>
+            Transactions
+          </NavigationTab>
+
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
           
@@ -256,6 +260,12 @@ class SoldierPage extends Component {
           <RegistrationTab 
             tabId={ 5 } 
             soldier={ soldier } />
+
+          { isHQ ( login.code ) && 
+            <TransactionsTab 
+              tabId={ 6 }
+              soldier={ soldier } />
+          }
 
         </TabContent>
       </div>

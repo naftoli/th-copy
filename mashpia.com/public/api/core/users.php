@@ -459,6 +459,17 @@ class UsersRouter {
         json_response("Updated.");
     }
 
+    public function getTransactions() {
+        global $current_user;
+
+        $user = \Soldier::find([ $_POST['user_id'] ]);
+        if ( !$user->validateAccess( $current_user->login ) )
+            json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
+
+        $history = $user->getTransactions($_POST['from'], $_POST['to']);
+        json_response($history);
+    }
+
 }
 
 rest_router( new UsersRouter );
