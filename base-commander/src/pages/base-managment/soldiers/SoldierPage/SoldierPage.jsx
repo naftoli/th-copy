@@ -211,10 +211,12 @@ class SoldierPage extends Component {
           <NavigationTab tab={5} icon='registered' { ...navProps }>
             Registration
           </NavigationTab>
-
-          <NavigationTab tab={6} icon='info-circle' { ...navProps }>
-            Transactions
-          </NavigationTab>
+          
+          { isHQ ( login.code ) && 
+            <NavigationTab tab={6} icon='info-circle' { ...navProps }>
+              Transactions
+            </NavigationTab>
+          }
 
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
