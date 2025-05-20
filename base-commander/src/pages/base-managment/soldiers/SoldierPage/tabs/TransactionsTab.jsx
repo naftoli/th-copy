@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { TabPane } from 'reactstrap';
-import { Form, Row, Col, Input, Button } from 'reactstrap';
+import { TabPane, Form, Row, Col, Input, Button } from 'reactstrap';
+import { Checkbox } from 'components/inputs';
 import { toast } from 'react-toastify';
 import API from 'api/api';
 import ReactTable from 'react-table';
@@ -11,6 +11,7 @@ class TransactionsTab extends Component {
     pointsHistory: [],  // Changed to object since it seems to be keyed by date
     loaded: false,
     loading: false,  // Added loading state
+    types: ['achievements', 'store', 'tasks']
   }
 
   convertDate = (date) => {
@@ -35,6 +36,17 @@ class TransactionsTab extends Component {
     return date.split(' ')[0];
   }
 
+  // handle type change
+  updateType = (e) => {
+    const val = e.target.value;
+    const checked = e.target.checked; 
+    if (checked) {
+      this.setState({ types: [...this.state.types, val] });
+    } else {
+      this.setState({ types: this.state.types.filter(t => t !== val) });
+    }
+  }
+
   // handle form submission
   handleSubmit = e => {
     e.preventDefault();
@@ -52,7 +64,8 @@ class TransactionsTab extends Component {
     API.post(api, {
         user_id: this.props.soldier.user_id,
         from: from.value || defaultFrom,
-        to: to.value || defaultTo
+        to: to.value || defaultTo,
+        types: this.state.types
     })
     .then(response => {
       // response is an object with keys as dates and values as arrays of transactions
@@ -104,6 +117,31 @@ class TransactionsTab extends Component {
             </Col>
             <Col sm={6}>
               <p>To: <Input type='date' name='to' /></p>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12}>
+              <p>
+                Type of Transaction: 
+                <Checkbox 
+                  name='type' 
+                  value='achievements' 
+                  checked={ this.state.types.includes('achievements') } 
+                  onChange={ this.updateType } 
+                /> Achievement Cards
+                <Checkbox 
+                  name='type' 
+                  value='store' 
+                  checked={ this.state.types.includes('store') } 
+                  onChange={ this.updateType } 
+                /> Store
+                <Checkbox 
+                  name='type' 
+                  value='tasks' 
+                  checked={ this.state.types.includes('tasks') } 
+                  onChange={ this.updateType } 
+                /> Tasks
+              </p>
             </Col>
           </Row>
           <Row>

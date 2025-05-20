@@ -466,7 +466,7 @@ class UsersRouter {
         if ( !$user->validateAccess( $current_user->login ) )
             json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
 
-        $history = $user->getTransactions($_POST['from'], $_POST['to']);
+        $history = $user->getTransactions($_POST['from'], $_POST['to'], $_POST['types']);
         json_response($history);
     }
 
