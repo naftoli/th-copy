@@ -182,6 +182,8 @@ class SoldierPage extends Component {
 
     const navProps = { onClick: this.toggleTab, activeTab };
 
+    console.log(login);
+
     // render the page and it's sub-pages ( tabs )
     return (
       <div id='SoldierPage'>
@@ -212,7 +214,7 @@ class SoldierPage extends Component {
             Registration
           </NavigationTab>
           
-          { isHQ ( login.code ) && 
+          { (isHQ ( login.code ) || login.id === 255)  && 
             <NavigationTab tab={6} icon='info-circle' { ...navProps }>
               Transactions
             </NavigationTab>
@@ -263,7 +265,7 @@ class SoldierPage extends Component {
             tabId={ 5 } 
             soldier={ soldier } />
 
-          { isHQ ( login.code ) && 
+          { (isHQ ( login.code ) || login.id === 255) && 
             <TransactionsTab 
               tabId={ 6 }
               soldier={ soldier } />
