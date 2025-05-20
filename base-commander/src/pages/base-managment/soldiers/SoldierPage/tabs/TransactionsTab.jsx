@@ -70,7 +70,7 @@ class TransactionsTab extends Component {
         'direct_transfer': 'Direct Transfer',
         'specific achievement card': 'Achievement Card',
         'store': 'Store Purchase',
-        'transaction_manager_store': 'Store Refund'
+        'transaction_manager_store': 'Store Adjustment'
     }
     
     return (
