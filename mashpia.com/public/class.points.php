@@ -427,7 +427,7 @@ class Points
         $startJD = gregoriantojd($startDetails[1], $startDetails[2], $startDetails[0]);
         if ($end) $endJD = gregoriantojd($endDetails[1], $endDetails[2], $endDetails[0]);
         else $endJD = unixtojd();
-        $sql = "select dt.short_name, dtm.mark_date from date_tasks dt 
+        $sql = "select dt.short_name, dt.points, dtm.mark_date from date_tasks dt 
                 join date_tasks_marks dtm using (date_task_id) 
                 where dtm.mark_date >= $startJD 
                 and dtm.mark_date <= $endJD 
@@ -438,6 +438,29 @@ class Points
             $dateDetails = explode('/', $gregorian);
             $date = $dateDetails[2] . '-' . $dateDetails[0] . '-' . $dateDetails[1];
             $history[$date][] = $row;
+        }
+        ksort($history);
+        return $history;
+    }
+
+    public function getHistory($start, $end) {
+        $history = [];
+        $points = $this->getPointsHistory($start, $end);
+        $missions = $this->getMissionHistory($start, $end);
+        // echo "<pre>"; print_r($points); print_r($missions); echo "</pre>";
+        foreach ($points as $date => &$info) {
+            // remove everything from date from space and on
+            $date = explode(' ', $date)[0];
+            // convert date from gregorian to jd
+            $dateDetails = explode('-', $date);
+            $jd = gregoriantojd($dateDetails[1], $dateDetails[2], $dateDetails[0]);
+            $history[$jd] = $info;
+        }
+        foreach ($missions as $date => $info) {
+            $dateDetails = explode('-', $date);
+            $jd = gregoriantojd($dateDetails[1], $dateDetails[2], $dateDetails[0]);
+            if (isset($history[$jd])) $history[$jd] += $info;
+            else $history[$jd] = $info;
         }
         ksort($history);
         return $history;

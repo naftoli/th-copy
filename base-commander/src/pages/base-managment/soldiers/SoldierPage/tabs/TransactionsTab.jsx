@@ -20,6 +20,21 @@ class TransactionsTab extends Component {
     return `${year}-${month}-${day}`
   }
 
+  julianDayToJSDate(jd) {
+    const jsEpochJD = 2440587.5;
+    const milliseconds = (jd - jsEpochJD) * 24 * 60 * 60 * 1000;
+    return new Date(milliseconds);
+  }
+
+  jdToGregorian = (jd) => {
+    return this.convertDate(this.julianDayToJSDate(jd));
+  }
+
+  dateOnly = (date) => {
+    if (!date) return '';
+    return date.split(' ')[0];
+  }
+
   // handle form submission
   handleSubmit = e => {
     e.preventDefault();
@@ -43,8 +58,8 @@ class TransactionsTab extends Component {
       // response is an object with keys as dates and values as arrays of transactions
       // convert into array of transactions without the date and flatten the array
       let keys = Object.keys(response)
-      let history = keys.map(date => {
-        return response[date]
+      let history = keys.map(key => {
+        return response[key]
       })
       history = history.flat()
       console.log(history);
@@ -70,7 +85,8 @@ class TransactionsTab extends Component {
         'direct_transfer': 'Direct Transfer',
         'specific achievement card': 'Achievement Card',
         'store': 'Store Purchase',
-        'transaction_manager_store': 'Store Adjustment'
+        'transaction_manager_store': 'Store Adjustment',
+        'short_name': 'Task'
     }
     
     return (
@@ -110,17 +126,19 @@ class TransactionsTab extends Component {
             data={pointsHistory}
             columns={[
               {
+                id: 'date',
                 Header: 'Date',
-                accessor: 'created'
+                accessor: row => this.dateOnly(row.created) || this.jdToGregorian(row.mark_date),
               },
               {
                 Header: 'Points',
                 accessor: 'points'
               },
               {
-                Header: 'Resource',
-                accessor: 'resource_name',
-                Cell: ({ value }) => transactionTypes[value]
+                id: 'description',
+                Header: 'Description',
+                accessor: row => row.resource_name || ('Task - ' + row.short_name), // Use function instead of array
+                Cell: ({ value }) => transactionTypes[value] || value
               }
             ]}
           />
