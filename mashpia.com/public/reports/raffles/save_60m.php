@@ -32,21 +32,21 @@ $stmt = $MASHPIA_DB->prepare("
     ON DUPLICATE KEY UPDATE eligible = 1
 ");
 
+$raffle_id = $_GET['raffle_id'] ?? 444;
+
 $MASHPIA_DB->beginTransaction();
 foreach ($schoolUsers as $school_id => $users) {
-    foreach ([444, 445, 446] as $raffle_id) {
-        $raffle = Raffle::load($raffle_id);
-        $marked_eligible = $raffle->get_raffle_eligable_user_ids();
-        foreach ($users as $user) {
-            // check user eligiblity
-            $total = $raffle->checkMonthly($user['user_id']);
-            if ($total >= 60) { 
-                $res = $stmt->execute([$raffle_id, $user['user_id']]);
-                if ($res === false) {
-                        $MASHPIA_DB->rollBack();
-                        $stmt->debugDumpParams();
-                        die('Failed to mark user as eligible');
-                    }
+    $raffle = Raffle::load($raffle_id);
+    $marked_eligible = $raffle->get_raffle_eligable_user_ids();
+    foreach ($users as $user) {
+        // check user eligiblity
+        $total = $raffle->checkMonthly($user['user_id']);
+        if ($total >= 60) { 
+            $res = $stmt->execute([$raffle_id, $user['user_id']]);
+            if ($res === false) {
+                $MASHPIA_DB->rollBack();
+                $stmt->debugDumpParams();
+                die('Failed to mark user as eligible');
             }
         }
     }
