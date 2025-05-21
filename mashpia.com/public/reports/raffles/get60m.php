@@ -37,10 +37,10 @@ if (!isset($_GET['raffle_id'])) {
 $eligibleUsers = [];
 $raffle = Raffle::load($raffle_id);
 $required = $raffle->required_days_of_tasks();
-$daysLeft = $raffle->end_date - unixtojd();
 $overriden = $raffle->get_raffle_eligable_user_ids();
 foreach ($schoolUsers as $school_id => $users) {
     foreach ($users as $user_id => $user) {
+        $total = 0;
         if (!isset($overriden[$user['user_id']])) {
             $total = $raffle->checkMonthly( $user['user_id'] );
         }

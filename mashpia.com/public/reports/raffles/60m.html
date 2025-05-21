@@ -49,7 +49,12 @@
             setLoading(true)
             // get a few raffles asynchronously
             const raffles = [444, 445, 446]
-            const promises = raffles.map(raffle_id => fetch(`get60m.php?raffle_id=${raffle_id}`))
+            const promises = raffles.map(raffle_id => fetch(`get60m.php?raffle_id=${raffle_id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }))
             Promise.all(promises)
                 .then(responses => Promise.all(responses.map(response => response.json())))
                 .then(results => {
