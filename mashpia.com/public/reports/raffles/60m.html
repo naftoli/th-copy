@@ -55,8 +55,8 @@
                     'Content-Type': 'application/json',
                 },
             }))
-            Promise.all(promises)
-                .then(responses => Promise.all(responses.map(response => response.json())))
+            Promise.all(...promises)
+                .then(responses => responses.map(response => response.json()))
                 .then(results => {
                     setData(results)
                     setLoading(false)
