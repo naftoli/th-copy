@@ -37,17 +37,21 @@ foreach ($schoolUsers as $school_id => $users) {
     }
 }
 
-$eligableUsers = [];
-// get raffles that are monthly
-$raffles = Raffle::loadAll("where year = $year and type = 'monthly' and name like '%60M%'");
-foreach ($raffles as $raffle) {
-    $required = $raffle->required_days_of_tasks();
-    $daysLeft = $raffle->end_date - unixtojd();
-    $overriden = $raffle->get_raffle_eligable_user_ids();
-    $eligibleUsers[$raffle->raffle_id] = $raffle->get_eligable_user_ids(false, true, false, false, 0, true);
-    foreach ($eligibleUsers[$raffle->raffle_id] as $user_id => $user) {
-        $eligibleUsers[$raffle->raffle_id][$user_id] = $userInfo[$user_id];
-    }
+if (!isset($_GET['raffle_id'])) {
+    $raffle_id = 444;
+} else {
+    $raffle_id = $_GET['raffle_id'];
 }
 
-echo json_encode($eligableUsers);
+$eligibleUsers = [];
+$raffle = Raffle::load($raffle_id);
+$required = $raffle->required_days_of_tasks();
+$daysLeft = $raffle->end_date - unixtojd();
+$overriden = $raffle->get_raffle_eligable_user_ids();
+$eligibleUsers = $raffle->get_eligable_user_ids(false, true, false, false, 0, true);
+foreach ($eligibleUsers as $user_id => $user) {
+    $userInfo[$user_id]['raffle'] = $raffle->name;
+    $eligibleUsers[$user_id] = $userInfo[$user_id];
+}
+
+echo json_encode($eligibleUsers);

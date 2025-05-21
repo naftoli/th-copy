@@ -47,23 +47,24 @@
 
         useEffect(() => {
             setLoading(true)
-            fetch('get60m.php', {
-                method: 'GET',
+            // get date for a few raffles asynchronously
+            const raffle_ids = [444, 445, 446]
+            const promises = raffle_ids.map(id => fetch('get60m.php', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
-            })
-                .then(res => res.json())
-                .then(
-                    (result) => {
-                        setData(result)
-                        setLoading(false)
-                    },
-                    (error) => {
-                        setError(error)
-                        setLoading(false)
-                    }
-                )
+                },
+                body: JSON.stringify({ raffle_id: id })
+            }))
+            Promise.all(promises)
+                .then(results => {
+                    setData(results)
+                    setLoading(false)
+                })
+                .catch(error => {
+                    setError(error)
+                    setLoading(false)
+                })
         }, [])
 
         if (loading) {
@@ -90,18 +91,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.entries(data).map(([raffle_id, raffle]) => (
-                            Object.entries(raffle).map(([user_id, user]) => (
-                                <tr key={user_id}>
-                                    <td>{raffle.name}</td>
-                                    <td>{user.school_name}</td>
-                                    <td>{user.class_grade + (user.class_sub ? '-' + user.class_sub : '')}</td>
-                                    <td>{user.user_serial}</td>
-                                    <td>{user.first}</td>
-                                    <td>{user.last}</td>
-                                </tr>
-                            ))
-                        ))}
+                        {data.flatMap(user => Object.entries(user).map(([user_id, user]) => (
+                            <tr key={user_id}>
+                                <td>{user.raffle}</td>
+                                <td>{user.school_name}</td>
+                                <td>{user.class_grade + (user.class_sub ? '-' + user.class_sub : '')}</td>
+                                <td>{user.user_serial}</td>
+                                <td>{user.first}</td>
+                                <td>{user.last}</td>
+                            </tr>
+                        )))}
                     </tbody>
                 </table>
             </div>
