@@ -37,18 +37,16 @@ foreach ($schoolUsers as $school_id => $users) {
     foreach ([444, 445, 446] as $raffle_id) {
         $raffle = Raffle::load($raffle_id);
         $marked_eligible = $raffle->get_raffle_eligable_user_ids();
-        foreach ($users as $user_id => $user) {
-            if (! isset($marked_eligible[$user_id])) {
-                // check user eligiblity
-                $total = $raffle->checkMonthly($user_id);
-                if ($total >= 60) { 
-                    $res = $stmt->execute([$raffle_id, $user_id]);
-                    if ($res === false) {
+        foreach ($users as $user) {
+            // check user eligiblity
+            $total = $raffle->checkMonthly($user['user_id']);
+            if ($total >= 60) { 
+                $res = $stmt->execute([$raffle_id, $user['user_id']]);
+                if ($res === false) {
                         $MASHPIA_DB->rollBack();
                         $stmt->debugDumpParams();
                         die('Failed to mark user as eligible');
                     }
-                }
             }
         }
     }
