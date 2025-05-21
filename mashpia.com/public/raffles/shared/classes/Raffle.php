@@ -591,7 +591,7 @@ class Raffle
 
     public function checkMonthly($user_id)
     {
-        $required = ($this->days_of_tasks ?? Constants::get_monthly_task_requirment());
+        // $required = ($this->days_of_tasks ?? Constants::get_monthly_task_requirment());
 //        $rollover = 2459171;
 //        if ($this->start_date < $rollover) {
 //            $total = $this->checkDaily($user_id);
@@ -634,7 +634,7 @@ class Raffle
 
     public function checkWeekly($user_id)
     {
-        $required = $this->required_days_of_tasks();
+        // $required = $this->required_days_of_tasks();
 //        $rollover = 2459167;
 //        if ($this->start_date < $rollover) {
 //            $total = $this->checkDaily($user_id);
