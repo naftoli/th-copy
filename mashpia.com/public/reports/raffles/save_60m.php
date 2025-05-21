@@ -34,7 +34,6 @@ $stmt = $MASHPIA_DB->prepare("
 
 $raffle_id = $_GET['raffle_id'] ?? 444;
 
-$MASHPIA_DB->beginTransaction();
 foreach ($schoolUsers as $school_id => $users) {
     $raffle = Raffle::load($raffle_id);
     $marked_eligible = $raffle->get_raffle_eligable_user_ids();
@@ -47,12 +46,10 @@ foreach ($schoolUsers as $school_id => $users) {
         if ($total >= 60) { 
             $res = $stmt->execute([$raffle_id, $user['user_id']]);
             if ($res === false) {
-                $MASHPIA_DB->rollBack();
                 $stmt->debugDumpParams();
                 die('Failed to mark user as eligible');
             }
         }
     }
 }
-$MASHPIA_DB->commit();
 echo 'Done';
