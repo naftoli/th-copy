@@ -39,6 +39,9 @@ foreach ($schoolUsers as $school_id => $users) {
     $raffle = Raffle::load($raffle_id);
     $marked_eligible = $raffle->get_raffle_eligable_user_ids();
     foreach ($users as $user) {
+        if (isset($marked_eligible[$user['user_id']])) {
+            continue;
+        }
         // check user eligiblity
         $total = $raffle->checkMonthly($user['user_id']);
         if ($total >= 60) { 
