@@ -25,7 +25,7 @@ $schools = $as->getSchools();
 $schoolUsers = [];
 foreach ($schools as $school_id => $school) {
     $su = new SchoolsUsers($school_id);
-    $schoolUsers[$school_id] = $su->getUsers();
+    $schoolUsers[$school_id] = $su->getUsers(false, false);
 }
 
 $userInfo = [];
