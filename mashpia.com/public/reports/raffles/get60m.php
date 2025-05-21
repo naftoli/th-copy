@@ -30,17 +30,19 @@ foreach ($schools as $school_id => $school) {
 
 $userInfo = [];
 foreach ($schoolUsers as $school_id => $users) {
-    foreach ($users as $user_id => $user) {
-        $userInfo[$user_id] = $user;
+    foreach ($users as $user) {
+        $userInfo[$user['user_id']] = $user;
     }
 }
 
 $eligibleUsers = [];
 $raffle = Raffle::load($_GET['raffle_id'] ?? 444);
-$eligible = $raffle->get_eligable_user_ids();
+$eligible = $raffle->get_raffle_eligable_user_ids();
 foreach ($eligible as $user_id => $user) {
     $eligibleUsers[$raffle->raffle_id][$user_id] = [
+        'raffle_id' => $raffle->raffle_id,
         'raffle_name' => $raffle->name,
+        'school_id' => $user['school_id'],
         'school_name' => $schools[$user['school_id']],
         'class_grade' => $userInfo[$user_id]['class_grade'],
         'class_sub' => $userInfo[$user_id]['class_sub'],

@@ -37,34 +37,80 @@
     <div id="root"></div>
 </body>
 <script type="text/babel">
-    const { useState, useEffect } = React
+    const { useState, useEffect, useMemo } = React
     const { createRoot } = ReactDOM
 
     const Report = () => {
         const [data, setData] = useState([])
         const [loading, setLoading] = useState(false)
         const [error, setError] = useState(null)
+            
+        // Compute totals using useMemo to prevent unnecessary recalculations
+        const schoolTotals = useMemo(() => {
+            const computedTotals = {}
+            Object.entries(data).forEach(([user_id, user]) => {
+                const schoolId = user.school_id
+                if (!computedTotals[schoolId]) computedTotals[schoolId] = 0
+                computedTotals[schoolId]++
+            })
+            console.log(computedTotals)
+            return computedTotals
+        }, [data])
+
+        const schools = useMemo(() => {
+            const computedSchools = {}
+            Object.entries(data).forEach(([user_id, user]) => {
+                const schoolId = user.school_id
+                if (!computedSchools[schoolId]) computedSchools[schoolId] = user.school_name
+            })
+            return computedSchools
+        }, [data])
+
+        const raffles = useMemo(() => {
+            const computedRaffles = {}
+            Object.entries(data).forEach(([user_id, user]) => {
+                const raffleId = user.raffle_id
+                if (!computedRaffles[raffleId]) computedRaffles[raffleId] = user.raffle_name
+            })
+            return computedRaffles
+        }, [data])
 
         useEffect(() => {
-            setLoading(true)
-            // get a few raffles asynchronously
-            const raffles = [444, 445, 446]
-            const promises = raffles.map(raffle_id => fetch(`get60m.php?raffle_id=${raffle_id}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }))
-            Promise.all(promises)
-                .then(responses => responses.map(response => response.json()))
-                .then(results => {
-                    setData(results)
+            const fetchRaffles = async () => {
+                try {
+                    // get a few raffles asynchronously
+                    const raffle_ids = [444, 445, 446]
+                    const promises = raffle_ids.map(raffle_id => 
+                        fetch(`get60m.php?raffle_id=${raffle_id}`, {
+                            method: 'GET',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        })
+                    )
+
+                    const responses = await Promise.all(promises)
+                    const results = await Promise.all(responses.map(r => r.json()))
+                    const info = {}
+                    results.forEach(result => {
+                        Object.entries(result).forEach(([raffle_id, users]) => {
+                            Object.entries(users).forEach(([user_id, user]) => {
+                                if (!info[user_id]) info[user_id] = user
+                                if (!info[user_id]['raffles']) info[user_id]['raffles'] = [raffle_id]
+                                else info[user_id]['raffles'].push(raffle_id)
+                            })
+                        })
+                    })
+                    console.log(info)
+                    setData(info)
                     setLoading(false)
-                })
-                .catch(error => {
+                } catch (error) {
                     setError(error)
                     setLoading(false)
-                })
+                }
+            }
+
+            fetchRaffles()
         }, [])
 
         if (loading) {
@@ -78,7 +124,24 @@
         return (
             <div>
                 <h1>60M Report</h1>
-                {/* show school name, grade, serial, first, last for students that passed any 60M flag in the past year */}
+                <h2>Schools</h2>
+                <table className="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>School</th>
+                            <th>Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {Object.entries(schoolTotals).map(([school_id, count]) => (
+                            <tr key={school_id}>
+                                <td>{schools[school_id]}</td>
+                                <td>{count}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <h2>Users</h2>
                 <table className="table table-striped">
                     <thead>
                         <tr>
@@ -91,22 +154,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {data.flatMap((raffle) => (
-                            Object.entries(raffle).map(([user_id, user]) => (
-                                <tr key={user_id}>
-                                    <td>{user.raffle_name}</td>
-                                    <td>{user.school_name}</td>
-                                    <td>{user.class_grade + (user.class_sub ? '-' + user.class_sub : '')}</td>
-                                    <td>{user.user_serial}</td>
-                                    <td>{user.first}</td>
-                                    <td>{user.last}</td>
-                                </tr>
-                            ))
+                        {Object.entries(data).map(([user_id, user]) => (
+                            <tr key={user_id}>
+                                <td>{user.raffles.map(r => raffles[r]).join(', ')}</td>
+                                <td>{schools[user.school_id]}</td>
+                                <td>{user.class_grade + (user.class_sub ? '-' + user.class_sub : '')}</td>
+                                <td>{user.user_serial}</td>
+                                <td>{user.first}</td>
+                                <td>{user.last}</td>
+                            </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
         )
     }
+
+    // Render the app
+    const container = document.getElementById('root');
+    const root = createRoot(container);
+    root.render(<Report />);
 </script>
 </html>
