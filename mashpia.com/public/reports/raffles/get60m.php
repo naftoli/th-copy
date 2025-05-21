@@ -56,4 +56,4 @@ foreach ($schoolUsers as $school_id => $users) {
     }
 }
 
-print_r($eligibleUsers);
+echo json_encode($eligibleUsers);
