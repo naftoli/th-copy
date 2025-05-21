@@ -10,8 +10,11 @@ if ($admin_user['auth'] != 'super') {
     die('Unauthorized');
 }
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/raffles/shared/classes/Raffle.php';
+use raffles\weekly\Raffle as Raffle;
 
 // get all users
 $schools = [];
