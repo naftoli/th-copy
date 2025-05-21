@@ -35,16 +35,8 @@ foreach ($schoolUsers as $school_id => $users) {
     }
 }
 
-if (!isset($_GET['raffle_id'])) {
-    $raffle_id = 444;
-} else {
-    $raffle_id = $_GET['raffle_id'];
-}
-
 $eligibleUsers = [];
-$raffle = Raffle::load($raffle_id);
-$required = $raffle->required_days_of_tasks();
-$overriden = $raffle->get_raffle_eligable_user_ids();
+$raffle = Raffle::load($_GET['raffle_id'] ?? 444);
 $eligible = $raffle->get_eligable_user_ids();
 foreach ($eligible as $user_id => $user) {
     $eligibleUsers[$raffle->raffle_id][$user_id] = [

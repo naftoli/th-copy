@@ -91,7 +91,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((raffle) => (
+                        {data.flatMap((raffle) => (
                             Object.entries(raffle).map(([user_id, user]) => (
                                 <tr key={user_id}>
                                     <td>{user.raffle_name}</td>
