@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
-ini_set('max_execution_time', 600);
+ini_set('max_execution_time', 780);
 
 $admin_auth = ['school'];
 require_once '../../header.php';
