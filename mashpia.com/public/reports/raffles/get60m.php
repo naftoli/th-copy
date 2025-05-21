@@ -32,6 +32,7 @@ foreach ($schools as $school_id => $school) {
 $userInfo = [];
 foreach ($schoolUsers as $school_id => $users) {
     foreach ($users as $user) {
+        $user['school_name'] = $schools[$school_id];
         $userInfo[$user['user_id']] = $user;
     }
 }
