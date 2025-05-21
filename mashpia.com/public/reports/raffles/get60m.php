@@ -28,15 +28,6 @@ foreach ($schools as $school_id => $school) {
     $schoolUsers[$school_id] = $su->getUsers();
 }
 
-// create array with user_id as key and user info as value
-$userInfo = [];
-foreach ($schoolUsers as $school_id => $users) {
-    foreach ($users as $user) {
-        $user['school_name'] = $schools[$school_id];
-        $userInfo[$user['user_id']] = $user;
-    }
-}
-
 if (!isset($_GET['raffle_id'])) {
     $raffle_id = 444;
 } else {
@@ -48,10 +39,22 @@ $raffle = Raffle::load($raffle_id);
 $required = $raffle->required_days_of_tasks();
 $daysLeft = $raffle->end_date - unixtojd();
 $overriden = $raffle->get_raffle_eligable_user_ids();
-$eligibleUsers = $raffle->get_eligable_user_ids(false, true, false, false, 0, true);
-foreach ($eligibleUsers as $user_id => $user) {
-    $userInfo[$user_id]['raffle'] = $raffle->name;
-    $eligibleUsers[$user_id] = $userInfo[$user_id];
+foreach ($schoolUsers as $school_id => $users) {
+    foreach ($users as $user_id => $user) {
+        $overriden = $raffle->get_raffle_eligable_user_ids($user['user_id']);
+        $total = $raffle->checkMonthly( $user['user_id'] );
+        if ( isset($overriden[$user['user_id']]) || $total >= $required ) {
+            $eligibleUsers[$raffle->raffle_id][$user['user_id']] = [
+                'raffle_name' => $raffle->name,
+                'school_name' => $user['school_name'],
+                'class_grade' => $user['class_grade'],
+                'class_sub' => $user['class_sub'],
+                'user_serial' => $user['user_serial'],
+                'first' => $user['first'],
+                'last' => $user['last'],
+            ];
+        } 
+    }
 }
 
-echo json_encode($eligibleUsers);
+print_r($eligibleUsers);

@@ -47,16 +47,11 @@
 
         useEffect(() => {
             setLoading(true)
-            // get date for a few raffles asynchronously
-            const raffle_ids = [444, 445, 446]
-            const promises = raffle_ids.map(id => fetch('get60m.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ raffle_id: id })
-            }))
+            // get a few raffles asynchronously
+            const raffles = [444, 445, 446]
+            const promises = raffles.map(raffle_id => fetch(`get60m.php?raffle_id=${raffle_id}`))
             Promise.all(promises)
+                .then(responses => Promise.all(responses.map(response => response.json())))
                 .then(results => {
                     setData(results)
                     setLoading(false)
@@ -91,22 +86,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {data.flatMap(user => Object.entries(user).map(([user_id, user]) => (
-                            <tr key={user_id}>
-                                <td>{user.raffle}</td>
-                                <td>{user.school_name}</td>
-                                <td>{user.class_grade + (user.class_sub ? '-' + user.class_sub : '')}</td>
-                                <td>{user.user_serial}</td>
-                                <td>{user.first}</td>
-                                <td>{user.last}</td>
-                            </tr>
-                        )))}
+                        {data.map((raffle) => (
+                            Object.entries(raffle).map(([user_id, user]) => (
+                                <tr key={user_id}>
+                                    <td>{user.raffle_name}</td>
+                                    <td>{user.school_name}</td>
+                                    <td>{user.class_grade + (user.class_sub ? '-' + user.class_sub : '')}</td>
+                                    <td>{user.user_serial}</td>
+                                    <td>{user.first}</td>
+                                    <td>{user.last}</td>
+                                </tr>
+                            ))
+                        ))}
                     </tbody>
                 </table>
             </div>
         )
     }
-
-    createRoot(document.getElementById('root')).render(<Report />)
 </script>
 </html>
