@@ -8,7 +8,7 @@ import { LoadingScreen, FontAwesome } from 'components/ui';
 import { NavigationTab } from 'components/navigation';
 import {
   PersonalTab,  RankTab,  MedalsTab,
-  SettingsTab,  RegistrationTab,
+  SettingsTab,  RegistrationTab, TransactionsTab
 } from './tabs';
 // functions
 import { toast } from 'react-toastify';
@@ -22,7 +22,7 @@ import {
 } from 'store/base/soldiers/operations';
 // styles
 import './SoldierPage.scss';
-import { isBC } from 'functions/login';
+import { isBC, isHQ } from 'functions/login';
 
 class SoldierPage extends Component {
   // initial state
@@ -182,6 +182,8 @@ class SoldierPage extends Component {
 
     const navProps = { onClick: this.toggleTab, activeTab };
 
+    console.log(login);
+
     // render the page and it's sub-pages ( tabs )
     return (
       <div id='SoldierPage'>
@@ -211,6 +213,12 @@ class SoldierPage extends Component {
           <NavigationTab tab={5} icon='registered' { ...navProps }>
             Registration
           </NavigationTab>
+          
+          { (isHQ ( login.code ) || [9, 255].includes(login.id))  && 
+            <NavigationTab tab={6} icon='info-circle' { ...navProps }>
+              Transactions
+            </NavigationTab>
+          }
 
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
@@ -256,6 +264,12 @@ class SoldierPage extends Component {
           <RegistrationTab 
             tabId={ 5 } 
             soldier={ soldier } />
+
+          { (isHQ ( login.code ) || [9, 255].includes(login.id)) && 
+            <TransactionsTab 
+              tabId={ 6 }
+              soldier={ soldier } />
+          }
 
         </TabContent>
       </div>

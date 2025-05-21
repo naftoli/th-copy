@@ -1168,4 +1168,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         return $result;
     }
+
+    public function getTransactions($from, $to, $types) {
+        $p = new Points($this->user_id);
+        return $p->getHistory($from, $to, $types);
+    }
 }

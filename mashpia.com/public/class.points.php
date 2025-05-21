@@ -408,10 +408,26 @@ class Points
 //        }
     }
 
-    public function getPointsHistory($start, $end = 0) {
+    public function getPointsHistory($start, $end = 0, $types = []) {
         $history = [];
         $sql = "select * from pointsDB.user_points where user_id = {$this->user_id} and created >= '$start'";
         if ($end) $sql .= " and created <= '$end'";
+        if ($types) {
+            $resources = [];
+            foreach ($types as $type) {
+                switch ($type) {
+                    case 'achievements':
+                        $resources[] = "'specific achievement card'";
+                        break;
+                    case 'store':
+                        $resources[] = "'store'";
+                        $resources[] = "'transaction_manager_store'";
+                        break;
+                }
+            }
+            $sql .= " and resource_name in (" . implode(', ', $resources) . ")";
+        }
+
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $history[$row['created']][] = $row;
@@ -427,7 +443,7 @@ class Points
         $startJD = gregoriantojd($startDetails[1], $startDetails[2], $startDetails[0]);
         if ($end) $endJD = gregoriantojd($endDetails[1], $endDetails[2], $endDetails[0]);
         else $endJD = unixtojd();
-        $sql = "select dt.short_name, dtm.mark_date from date_tasks dt 
+        $sql = "select dt.short_name, dt.points, dtm.mark_date from date_tasks dt 
                 join date_tasks_marks dtm using (date_task_id) 
                 where dtm.mark_date >= $startJD 
                 and dtm.mark_date <= $endJD 
@@ -438,6 +454,32 @@ class Points
             $dateDetails = explode('/', $gregorian);
             $date = $dateDetails[2] . '-' . $dateDetails[0] . '-' . $dateDetails[1];
             $history[$date][] = $row;
+        }
+        ksort($history);
+        return $history;
+    }
+
+    public function getHistory($start, $end, $types) {
+        $history = [];
+        if (in_array('achievements', $types) || in_array('store', $types)) {
+            $points = $this->getPointsHistory($start, $end, $types);
+            foreach ($points as $date => $info) {
+                // remove everything from date from space and on
+                $date = explode(' ', $date)[0];
+                // convert date from gregorian to jd
+                $dateDetails = explode('-', $date);
+                $jd = gregoriantojd($dateDetails[1], $dateDetails[2], $dateDetails[0]);
+                $history[$jd] = $info;
+            }
+        }
+        if (in_array('tasks', $types)) {
+            $missions = $this->getMissionHistory($start, $end);
+            foreach ($missions as $date => $info) {
+                $dateDetails = explode('-', $date);
+                $jd = gregoriantojd($dateDetails[1], $dateDetails[2], $dateDetails[0]);
+                if (isset($history[$jd])) $history[$jd] += $info;
+                else $history[$jd] = $info;
+            }
         }
         ksort($history);
         return $history;
