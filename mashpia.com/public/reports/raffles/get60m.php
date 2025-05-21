@@ -41,7 +41,6 @@ $daysLeft = $raffle->end_date - unixtojd();
 $overriden = $raffle->get_raffle_eligable_user_ids();
 foreach ($schoolUsers as $school_id => $users) {
     foreach ($users as $user_id => $user) {
-        $overriden = $raffle->get_raffle_eligable_user_ids($user['user_id']);
         $total = $raffle->checkMonthly( $user['user_id'] );
         if ( isset($overriden[$user['user_id']]) || $total >= $required ) {
             $eligibleUsers[$raffle->raffle_id][$user['user_id']] = [
