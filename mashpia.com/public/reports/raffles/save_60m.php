@@ -10,6 +10,9 @@ if ($admin_user['auth'] != 'super') {
     die('Unauthorized');
 }
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
+
 // get all users
 $schools = [];
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
