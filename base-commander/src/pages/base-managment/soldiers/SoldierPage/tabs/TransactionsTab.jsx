@@ -52,7 +52,7 @@ class TransactionsTab extends Component {
     e.preventDefault();
     const { from, to } = e.target;
     
-    const dateFrom = new Date("2020-01-01")
+    const dateFrom = new Date("2010-01-01")
     const defaultFrom = this.convertDate(dateFrom)
 
     const dateTo = new Date()
