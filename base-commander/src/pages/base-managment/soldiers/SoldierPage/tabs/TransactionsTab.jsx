@@ -11,7 +11,7 @@ class TransactionsTab extends Component {
     pointsHistory: [],  // Changed to object since it seems to be keyed by date
     loaded: false,
     loading: false,  // Added loading state
-    types: ['achievements', 'store', 'tasks']
+    types: ['achievements', 'store', 'tasks', 'manual']
   }
 
   convertDate = (date) => {
