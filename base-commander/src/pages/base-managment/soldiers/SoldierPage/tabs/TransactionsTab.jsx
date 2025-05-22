@@ -141,6 +141,12 @@ class TransactionsTab extends Component {
                   checked={ this.state.types.includes('tasks') } 
                   onChange={ this.updateType } 
                 /> Tasks
+                <Checkbox 
+                  name='type' 
+                  value='manual' 
+                  checked={ this.state.types.includes('manual') } 
+                  onChange={ this.updateType } 
+                /> Manual Adjustments
               </p>
             </Col>
           </Row>

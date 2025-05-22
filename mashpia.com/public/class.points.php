@@ -423,6 +423,10 @@ class Points
                         $resources[] = "'store'";
                         $resources[] = "'transaction_manager_store'";
                         break;
+                    case 'manual':
+                        $resources[] = "'admin'";
+                        $resources[] = "'admin_users_manual'";
+                        break;
                 }
             }
             $sql .= " and resource_name in (" . implode(', ', $resources) . ")";
