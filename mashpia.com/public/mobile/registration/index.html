@@ -1522,19 +1522,8 @@
                     </div>
                   </div>
                   <br />
-                  <div class="form-group" id="recurring" style="display: none">
-                    <label class="control-label">Early Experience Payment</label><hr />
-                    <p>
-                      <i>
-                        Since you are pre-paying for the chidon experience registration fee, you have the option of choosing whether you would like to be
-                        charged the full amount for this now, or in installments. If you choose to be charged in installments,
-                        the first payment will start in one month from today and continue every month until the full amount is paid.
-                      </i>
-                    </p>
-                    <input type="radio" name="installments" class="installments" value="0" checked /> I would like to pay the complete amount now.
-                    ($<span id="earlyRegTotal"></span>)<br />
-                    <script>
-                      function monthsBetween(date1, date2) {
+                  <script>
+                    function monthsBetween(date1, date2) {
                         // Ensure date1 is earlier than date2
                         let d1 = new Date(date1);
                         let d2 = new Date(date2);
@@ -1552,6 +1541,26 @@
                       }
                       // figure out how many months are left until Feb 2, 2026
                       const monthsLeft = monthsBetween(new Date(), new Date("2026-02-02"));
+                  </script>
+                  <div class="form-group" id="recurring" style="display: none">
+                    <label class="control-label">Early Experience Payment</label><hr />
+                    <script>
+                      let text = `
+                        Since you are pre-paying for the chidon experience registration fee, you have the option of choosing whether you would like to be
+                        charged the full amount for this now, or in installments. If you choose to be charged in installments,
+                        the first payment will start in one month from today and continue every month until the full amount is paid.`
+                      if (monthsLeft == 0) {
+                        text = `Since there is less than one month left to the actual chidon experience registration, you must pay the full amount today.`
+                      }
+                    </script>
+                    <p>
+                      <i>
+                        ${text}
+                      </i>
+                    </p>
+                    <input type="radio" name="installments" class="installments" value="0" checked /> I would like to pay the complete amount now.
+                    ($<span id="earlyRegTotal"></span>)<br />
+                    <script>
                       const installmentsInfo = {
                         1: 'One',
                         2: 'Two',
