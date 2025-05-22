@@ -146,7 +146,7 @@ class TransactionsTab extends Component {
                   value='manual' 
                   checked={ this.state.types.includes('manual') } 
                   onChange={ this.updateType } 
-                /> Admin Adjustments
+                /> Admin/BC Adjustments
               </p>
             </Col>
           </Row>
