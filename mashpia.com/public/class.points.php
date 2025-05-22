@@ -426,6 +426,7 @@ class Points
                     case 'manual':
                         $resources[] = "'admin'";
                         $resources[] = "'admin_users_manual'";
+                        $resources[] = "'direct_transfer'";
                         break;
                 }
             }
