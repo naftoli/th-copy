@@ -128,19 +128,19 @@ class TransactionsTab extends Component {
                   value='achievements' 
                   checked={ this.state.types.includes('achievements') } 
                   onChange={ this.updateType } 
-                />Achievement Cards &nbsp; &nbsp;
+                />Achievement Cards &nbsp;&nbsp;&nbsp;
                 <Checkbox 
                   name='type' 
                   value='store' 
                   checked={ this.state.types.includes('store') } 
                   onChange={ this.updateType } 
-                />Store &nbsp; &nbsp;
+                />Store &nbsp;&nbsp;&nbsp;
                 <Checkbox 
                   name='type' 
                   value='tasks' 
                   checked={ this.state.types.includes('tasks') } 
                   onChange={ this.updateType } 
-                />Tasks &nbsp; &nbsp;
+                />Tasks &nbsp;&nbsp;&nbsp;
                 <Checkbox 
                   name='type' 
                   value='manual' 
