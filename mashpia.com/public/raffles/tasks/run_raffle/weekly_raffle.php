@@ -62,18 +62,18 @@ function weekly_raffle($raffle){
     /************************** ROUND ONE: GIVE ALL THE SCHOOLS THEIR QUOTA **************************/
     foreach($schools as $school_id => $user_ids) { // for each school
         for($i = 0; $i < $school_limits[$school_id]; $i++){
-            echo "i: " . $i . "\n";
+            // echo "i: " . $i . "\n";
             if(count($user_ids) == 0) continue; // skip the loop if the school is out of eligible winners... (e.g. if one is a sibling...)
             $user = $user_ids[array_rand($user_ids)];   // get a random id from the array of user arrays (keys)
             $draw_num++; // count up the drawing
             
             /************************** ONLY ONE CHILD PER FAMILY **************************/
             // if the user is not the first in the family and the school has more children
-            if (alreadyWon($user['user_id'], 'weekly') && count($user_ids) > 1) {
+            if (alreadyWon($user['user_id'], 'weekly') && count($user_ids) > $school_limits[$school_id]) {
                 echo $user['school_id']."\t#".$draw_num."\t".$user['user_id'] . " has already won this yr. Removing from raffle\n";
                 unset($user_ids[$user['user_id']]); // remove the user from the array
                 $i--; 
-                echo "i: " . $i . "\n";
+                // echo "i: " . $i . "\n";
                 continue; // redo the draw
             }
             // now that we have an eligible winner
