@@ -20,8 +20,15 @@ class AuthorizeConstants
 	private static $MERCHANT_TRANSACTION_KEY = "933Q86GEy6u8PcQP";
 	
 	private static $SANDBOX_API_URL = "https://apitest.authorize.net/xml/v1/request.api";
-	//private static $API_URL = "https://apitest.authorize.net/xml/v1/request.api";
 	private static $API_URL = "https://api.authorize.net/xml/v1/request.api";
+
+	static function getSandboxLoginID() {
+		return self::$MERCHANT_SANDBOX_LOGIN_ID;
+	}
+
+	static function getSandboxTransactionKey() {
+		return self::$MERCHANT_SANDBOX_TRANSACTION_KEY;
+	}
 	
 	// get the login id (sandbox or production)
 	static function GetMerchantLoginID() {

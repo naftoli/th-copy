@@ -20,12 +20,14 @@ class Installments
     private $installment_amount;
     private $number_of_installments;
     private $start_date;
+    private $live;
 
     public function __construct($customerProfile = null, $payment_profile_id = 0, $live = true, $updateBilling = true) {
         // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         // for testing use \net\authorize\api\constants\ANetEnvironment::SANDBOX;
         if ($live) $this->endpoint = \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
         else $this->endpoint = \net\authorize\api\constants\ANetEnvironment::SANDBOX;
+        $this->live = $live;
 
         if ($customerProfile instanceof CustomerProfile) {
             $this->cp = $customerProfile;
@@ -38,8 +40,13 @@ class Installments
 
     public function setAuth() {
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        $merchantAuthentication->setName(Constants::GetMerchantLoginID());
-        $merchantAuthentication->setTransactionKey(Constants::GetMerchantTransactionKey());
+        if ($this->live) {
+            $merchantAuthentication->setName(Constants::GetMerchantLoginID());
+            $merchantAuthentication->setTransactionKey(Constants::GetMerchantTransactionKey());
+        } else {
+            $merchantAuthentication->setName(Constants::GetSandboxLoginID());
+            $merchantAuthentication->setTransactionKey(Constants::GetSandboxTransactionKey());
+        }
         return $merchantAuthentication;
     }
 
