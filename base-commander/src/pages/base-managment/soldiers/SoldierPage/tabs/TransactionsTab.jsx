@@ -4,6 +4,8 @@ import { Checkbox } from 'components/inputs';
 import { toast } from 'react-toastify';
 import API from 'api/api';
 import ReactTable from 'react-table';
+import JewishDatepicker from 'heDatePicker/dist/js/he-datepicker.js';
+import 'heDatePicker/dist/css/he-datepicker.css';
 
 class TransactionsTab extends Component {
   // initial state
@@ -60,11 +62,15 @@ class TransactionsTab extends Component {
 
     this.setState({ loading: true, loaded: false });
     
+    // Get the Gregorian date values from the data attributes
+    const fromDate = from.getAttribute('data-gregorian-date') || defaultFrom;
+    const toDate = to.getAttribute('data-gregorian-date') || defaultTo;
+    
     const api = '/core/users?action=getTransactions';
     API.post(api, {
         user_id: this.props.soldier.user_id,
-        from: from.value || defaultFrom,
-        to: to.value || defaultTo,
+        from: fromDate || defaultFrom,
+        to: toDate || defaultTo,
         types: this.state.types
     })
     .then(response => {
@@ -75,7 +81,7 @@ class TransactionsTab extends Component {
         return response[key]
       })
       history = history.flat()
-      console.log(history);
+      // console.log(history);
       this.setState({ 
         pointsHistory: history,
         loaded: true,
@@ -87,6 +93,55 @@ class TransactionsTab extends Component {
       toast.error(error.message || 'Failed to load points history');
       console.error('Points history error:', error);
     });
+  }
+
+  componentDidMount() {
+    // Initialize datepickers
+    this.fromDatepicker = new JewishDatepicker('#from', {
+      hideHeader: true,
+      color: '#5e72e4' // Match your theme color
+    });
+    
+    this.toDatepicker = new JewishDatepicker('#to', {
+      hideHeader: true,
+      color: '#5e72e4' // Match your theme color
+    });
+    
+    // Position the datepickers correctly
+    setTimeout(() => {
+      // get datepickers with class jewish_datepicker_wrapper
+      const datepickers = document.getElementsByClassName('jewish_datepicker_wrapper');
+      // get the input fields
+      const from = document.getElementById('from');
+      const to = document.getElementById('to');
+      
+      if (from && to && datepickers.length >= 2) {
+        // Move datepickers to be children of their input containers
+        from.parentNode.insertBefore(datepickers[0], from.nextSibling);
+        to.parentNode.insertBefore(datepickers[1], to.nextSibling);
+        
+        // Position the datepickers
+        datepickers[0].style.position = 'absolute';
+        datepickers[0].style.zIndex = '9';
+        datepickers[0].style.top = '70px';
+        datepickers[0].style.left = '20px';
+        
+        datepickers[1].style.position = 'absolute';
+        datepickers[1].style.zIndex = '9';
+        datepickers[1].style.top = '70px';
+        datepickers[1].style.left = '20px';
+      }
+    }, 100); // Small delay to ensure datepickers are created
+  }
+  
+  componentWillUnmount() {
+    // Clean up datepickers when component unmounts
+    if (this.fromDatepicker && typeof this.fromDatepicker.cleanupClickOutside === 'function') {
+      this.fromDatepicker.cleanupClickOutside();
+    }
+    if (this.toDatepicker && typeof this.toDatepicker.cleanupClickOutside === 'function') {
+      this.toDatepicker.cleanupClickOutside();
+    }
   }
 
   render() {
@@ -113,10 +168,10 @@ class TransactionsTab extends Component {
         <Form id='points-form' onSubmit={this.handleSubmit}>
           <Row>
             <Col sm={6}>
-              <p>From: <Input type='date' name='from' id='from' /></p>
+              <p>From: <Input type='text' name='from' id='from' /></p>
             </Col>
             <Col sm={6}>
-              <p>To: <Input type='date' name='to' id='to' /></p>
+              <p>To: <Input type='text' name='to' id='to' /></p>
             </Col>
           </Row>
           <Row>
