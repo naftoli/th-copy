@@ -214,7 +214,7 @@ class SoldierPage extends Component {
             Registration
           </NavigationTab>
           
-          { (isHQ ( login.code ) || [9, 255].includes(login.id))  && 
+          {/* { (isHQ ( login.code ) || [9, 255].includes(login.id))  &&  */
             <NavigationTab tab={6} icon='info-circle' { ...navProps }>
               Transactions
             </NavigationTab>
@@ -265,7 +265,7 @@ class SoldierPage extends Component {
             tabId={ 5 } 
             soldier={ soldier } />
 
-          { (isHQ ( login.code ) || [9, 255].includes(login.id)) && 
+          {/* { (isHQ ( login.code ) || [9, 255].includes(login.id)) &&  */
             <TransactionsTab 
               tabId={ 6 }
               soldier={ soldier } />
