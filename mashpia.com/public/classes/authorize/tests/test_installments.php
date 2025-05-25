@@ -21,7 +21,7 @@ $admin_id = 1264;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
 // Get customer profile ID for admin
-$sql = "SELECT authorize_customer_profile_id, authorize_payment_profile_id FROM admins WHERE id = $admin_id";
+$sql = "SELECT authorize_customer_profile_id FROM admins WHERE id = $admin_id";
 $result = mysql_query($sql);
 
 if (!$result) {
@@ -30,7 +30,6 @@ if (!$result) {
 
 $row = mysql_fetch_assoc($result);
 $customer_profile_id = $row['authorize_customer_profile_id'];
-$payment_profile_id = $row['authorize_payment_profile_id'];
 
 if (empty($customer_profile_id)) {
     die("No customer profile ID found for admin ID $admin_id");
@@ -38,7 +37,6 @@ if (empty($customer_profile_id)) {
 
 echo "<h2>Testing Installments for Admin ID: $admin_id</h2>";
 echo "Customer Profile ID: $customer_profile_id<br>";
-echo "Payment Profile ID: $payment_profile_id<br><br>";
 
 // Create CustomerProfile object
 try {
@@ -55,7 +53,7 @@ try {
     echo "Successfully loaded customer profile for: " . $customer_profile->description . "<br><br>";
     
     // Create Installments object
-    $installments = new Installments($customer_profile, $payment_profile_id, $use_production);
+    $installments = new Installments($customer_profile, 0, $use_production);
     
     // Test parameters
     $amount = 100.00; // Total amount
