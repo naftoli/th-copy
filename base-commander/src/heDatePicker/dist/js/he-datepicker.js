@@ -17,8 +17,7 @@ class JewishDatepicker {
     constructor(selector, settings) {
 
         // args
-        this.element = document.querySelector(selector),
-
+        this.element = document.querySelector(selector);
         this.settings = settings;
 
         if (settings && typeof settings === 'object' ) {
@@ -179,7 +178,6 @@ class JewishDatepicker {
         let $this = this;
         let element = this.element;
         let wrapper = this.wrapper;
-        let today = this.today;
         let select_month = wrapper.querySelector('select.j_month');
         let select_year = wrapper.querySelector('select.j_year');
         let month_wrapper = wrapper.querySelector('.jewish_datepicker_section_month');
@@ -214,15 +212,17 @@ class JewishDatepicker {
         select_month.addEventListener('change', selectChange);
         select_year.addEventListener('change', selectChange);
 
-        // wrapper.querySelector('button.jewish_datepicker_footer_today').addEventListener('click',this.getIniData.bind(this))
-        // wrapper.querySelector('button.jewish_datepicker_footer_cancel').addEventListener('click', cancel)
-        // wrapper.querySelector('button.jewish_datepicker_footer_apply').addEventListener('click', apply)
+        // Footer buttons are commented out in the HTML, so we don't need these event listeners
+        // If you uncomment the footer HTML, you'll need to uncomment these too
+        // wrapper.querySelector('button.jewish_datepicker_footer_today').addEventListener('click',this.getIniData.bind(this));
+        // wrapper.querySelector('button.jewish_datepicker_footer_cancel').addEventListener('click', cancel);
+        // wrapper.querySelector('button.jewish_datepicker_footer_apply').addEventListener('click', apply);
 
     
         function selectChange(event){
 
             function addZero(number) {
-                number = parseInt(number);
+                number = parseInt(number, 10);
                 return number < 10 ? '0' + number.toString() : number.toString();
             }
 
@@ -323,14 +323,14 @@ class JewishDatepicker {
             }
         }
 
-        function apply(){
+        const apply = () => {
             wrapper.classList.add("off");
-        }
+        };
 
-        function cancel(){
+        const cancel = () => {
             element.value = '';
             wrapper.classList.add("off");
-        }
+        };
 
         month_wrapper.addEventListener('click', click_on_day);
 
@@ -599,7 +599,7 @@ class JewishDatepicker {
 
                 // he Year
                 let GrDatePartsInts = dateobj.title_orig.split(' ');
-                obj_to_push.heYear = parseInt(GrDatePartsInts[GrDatePartsInts.length - 1]);
+                obj_to_push.heYear = parseInt(GrDatePartsInts[GrDatePartsInts.length - 1], 10);
                 
 
                 // is today
@@ -681,9 +681,9 @@ class JewishDatepicker {
 
     isJewishLeapYear( year ) {
 
-        if (year % 19 == 0 || year % 19 == 3 || year % 19 == 6 ||
-            year % 19 == 8 || year % 19 == 11 || year % 19 == 14 ||
-            year % 19 == 17)
+        if (year % 19 === 0 || year % 19 === 3 || year % 19 === 6 ||
+            year % 19 === 8 || year % 19 === 11 || year % 19 === 14 ||
+            year % 19 === 17)
 
             return true;
         else
