@@ -4,6 +4,8 @@ import { Checkbox } from 'components/inputs';
 import { toast } from 'react-toastify';
 import API from 'api/api';
 import ReactTable from 'react-table';
+import { JewishCalendar, LanguageName, CalendarType } from '../imports/bundle.esm.js';
+import '../imports/bundle.esm.css'
 
 class TransactionsTab extends Component {
   // initial state
@@ -101,6 +103,10 @@ class TransactionsTab extends Component {
         'transaction_manager_store': 'Store Adjustment',
         'short_name': 'Task'
     }
+
+    const calendarInstance = document.getElementById('from').calendar;
+    calendarInstance.setCalendarType(CalendarType.Jewish);
+    calendarInstance.updateProps();
     
     return (
       <TabPane id='PointsTab' tabId={this.props.tabId}>
@@ -113,10 +119,10 @@ class TransactionsTab extends Component {
         <Form id='points-form' onSubmit={this.handleSubmit}>
           <Row>
             <Col sm={6}>
-              <p>From: <Input type='date' name='from' /></p>
+              <p>From: <Input type='date' name='from' id='from' /></p>
             </Col>
             <Col sm={6}>
-              <p>To: <Input type='date' name='to' /></p>
+              <p>To: <Input type='date' name='to' id='to' /></p>
             </Col>
           </Row>
           <Row>
