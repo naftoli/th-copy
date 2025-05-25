@@ -22,7 +22,7 @@ import {
 } from 'store/base/soldiers/operations';
 // styles
 import './SoldierPage.scss';
-import { isBC, isHQ } from 'functions/login';
+import { isBC } from 'functions/login';
 
 class SoldierPage extends Component {
   // initial state
