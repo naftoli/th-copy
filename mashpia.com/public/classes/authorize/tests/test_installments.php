@@ -58,15 +58,13 @@ try {
     // Test parameters
     $amount = 100.00; // Total amount
     $num_installments = 2; // Number of installments
-    $start_date = date('Y-m-d', strtotime("+1 day")); // Start tomorrow
     
     echo "Creating subscription with the following parameters:<br>";
     echo "Amount: $" . $amount . "<br>";
     echo "Number of installments: " . $num_installments . "<br>";
-    echo "Start date: " . $start_date . "<br><br>";
     
     // Create subscription
-    $response = $installments->createSubscription($amount, $num_installments, $start_date);
+    $response = $installments->createSubscription($amount, $num_installments);
     
     echo "Response from creating subscription: " . $response . "<br>";
     
