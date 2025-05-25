@@ -19,6 +19,7 @@ $admin_id = 1264;
 
 // Connect to database to get customer profile ID
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 // Get customer profile ID for admin
 $sql = "SELECT authorize_customer_profile_id FROM admins WHERE admin_id = $admin_id";
@@ -62,6 +63,7 @@ try {
     echo "Creating subscription with the following parameters:<br>";
     echo "Amount: $" . $amount . "<br>";
     echo "Number of installments: " . $num_installments . "<br>";
+    echo "<br />";
     
     // Create subscription
     $response = $installments->createSubscription($amount, $num_installments);
@@ -73,8 +75,8 @@ try {
         echo "Subscription ID: " . $subscription_id . "<br><br>";
         
         // Save to database - using current year
-        $current_year = date('Y');
-        $db_result = $installments->saveToDb($dbHandle, $admin_id, $current_year);
+        $current_year = 5785;
+        $db_result = $installments->saveToDb($MASHPIA_DB, $admin_id, $current_year);
         
         if ($db_result) {
             echo "Successfully saved subscription to database.<br>";
@@ -113,7 +115,7 @@ try {
         
         if (strpos($cancel_response, "Success") !== false) {
             // Remove from database
-            $remove_result = $installments->removeFromDb($dbHandle);
+            $remove_result = $installments->removeFromDb($MASHPIA_DB);
             
             if ($remove_result) {
                 echo "Successfully removed subscription from database.<br>";
