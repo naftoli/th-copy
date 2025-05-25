@@ -4,8 +4,6 @@ import { Checkbox } from 'components/inputs';
 import { toast } from 'react-toastify';
 import API from 'api/api';
 import ReactTable from 'react-table';
-// import { JewishCalendar, LanguageName, CalendarType } from '../imports/bundle.esm.js';
-// import '../imports/bundle.esm.css'
 
 class TransactionsTab extends Component {
   // initial state
@@ -103,10 +101,6 @@ class TransactionsTab extends Component {
         'transaction_manager_store': 'Store Adjustment',
         'short_name': 'Task'
     }
-
-    // const calendarInstance = document.getElementById('from').calendar;
-    // calendarInstance.setCalendarType(CalendarType.Jewish);
-    // calendarInstance.updateProps();
     
     return (
       <TabPane id='PointsTab' tabId={this.props.tabId}>
