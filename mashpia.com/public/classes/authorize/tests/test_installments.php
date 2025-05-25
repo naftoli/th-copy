@@ -21,7 +21,7 @@ $admin_id = 1264;
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 
 // Get customer profile ID for admin
-$sql = "SELECT authorize_customer_profile_id FROM admins WHERE id = $admin_id";
+$sql = "SELECT authorize_customer_profile_id FROM admins WHERE admin_id = $admin_id";
 $result = mysql_query($sql);
 
 if (!$result) {
