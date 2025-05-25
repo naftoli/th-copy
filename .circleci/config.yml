@@ -226,22 +226,22 @@ jobs:
           name: Add Mashpia.com to known_hosts
           command: |
             mkdir -p ~/.ssh;
-            ssh-keyscan -p 522 -H mashpia.com >> ~/.ssh/known_hosts;
+            ssh-keyscan -p 522 -H ssh.mashpia.com >> ~/.ssh/known_hosts;
 
       - run:
           name: 'Create deploy/build folder'
           command: | 
-            ssh -p 522 mashpia@50.28.66.228 "mkdir -p tzivos-hashem/deploy/build"
+            ssh -p 522 mashpia@ssh.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
           name: Send the react build Over SSH to deploy/build
           command: |
-            scp -P 522 -r base-commander/build mashpia@50.28.66.228:tzivos-hashem/deploy
+            scp -P 522 -r base-commander/build mashpia@ssh.mashpia.com:tzivos-hashem/deploy
 
       - run:
           name: Run the Deployment script
           command: |
-            ssh -p 522 mashpia@50.28.66.228 "./tzivos-hashem/deploy/deploy.sh"
+            ssh -p 522 mashpia@ssh.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
       
 
 workflows:
