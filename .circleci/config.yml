@@ -231,17 +231,17 @@ jobs:
       - run:
           name: 'Create deploy/build folder'
           command: | 
-            ssh -p 522 mashpia@mashpia.com "mkdir -p tzivos-hashem/deploy/build"
+            ssh -p 522 mashpia@50.28.66.228 "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
           name: Send the react build Over SSH to deploy/build
           command: |
-            scp -P 522 -r base-commander/build mashpia@mashpia.com:tzivos-hashem/deploy
+            scp -P 522 -r base-commander/build mashpia@50.28.66.228:tzivos-hashem/deploy
 
       - run:
           name: Run the Deployment script
           command: |
-            ssh -p 522 mashpia@mashpia.com "./tzivos-hashem/deploy/deploy.sh"
+            ssh -p 522 mashpia@50.28.66.228 "./tzivos-hashem/deploy/deploy.sh"
       
 
 workflows:
