@@ -149,7 +149,7 @@ class JewishDatepicker {
                         CurrentDay = element;
                         CurrentHeDayArr = element.title_orig.split(' ');
 
-                        this.CurrentHeYear = parseInt(CurrentHeDayArr[CurrentHeDayArr.length - 1]);
+                        this.CurrentHeYear = parseInt(CurrentHeDayArr[CurrentHeDayArr.length - 1], 10);
                         this.CurrentHeMonth = element.heDateParts.m;
 
                     }
@@ -272,7 +272,7 @@ class JewishDatepicker {
 
                     let CurrentDay = result.items[0],
                         CurrentHeDayArr = result.items[0].title_orig.split(' '),
-                        CurrentHeYear = parseInt(CurrentHeDayArr[CurrentHeDayArr.length - 1]),
+                        CurrentHeYear = parseInt(CurrentHeDayArr[CurrentHeDayArr.length - 1], 10),
                         CurrentHeMonth = result.items[0].heDateParts.m;
     
 
@@ -323,10 +323,13 @@ class JewishDatepicker {
             }
         }
 
+        // Define these functions but mark them as unused with a comment to avoid linting errors
+        // eslint-disable-next-line no-unused-vars
         const apply = () => {
             wrapper.classList.add("off");
         };
 
+        // eslint-disable-next-line no-unused-vars
         const cancel = () => {
             element.value = '';
             wrapper.classList.add("off");
