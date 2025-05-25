@@ -53,7 +53,7 @@ try {
     echo "Successfully loaded customer profile for: " . $customer_profile->description . "<br><br>";
     
     // Create Installments object
-    $installments = new Installments($customer_profile, 0, $use_production);
+    $installments = new Installments($customer_profile, 0, $use_production, false);
     
     // Test parameters
     $amount = 100.00; // Total amount
