@@ -34,8 +34,8 @@ while ($row = mysql_fetch_assoc($result)) {
         <style>
             tr, th, td { 
                 border-bottom: 1px solid #000;
-                padding: 5px;
-                font-size: 12px;
+                padding: 10px;
+                font-size: 14px;
                 font-family: Arial, sans-serif;
             }
             table { border-collapse: collapse; }
@@ -59,7 +59,7 @@ while ($row = mysql_fetch_assoc($result)) {
                     <td><?php echo $user['class_grade'] . ' ' . $user['class_sub']; ?></td>
                     <td><?php echo $user['first'] . ' ' . $user['last']; ?></td>
                     <td><?php echo $user['rank_name']; ?></td>
-                    <td><?php echo $user['date_promoted']; ?></td>
+                    <td><?php echo jdtogregorian($user['date_promoted']); ?></td>
                 </tr>
                 <?php } ?>
             </table>
