@@ -33,12 +33,19 @@ class PaymentProfile {
      * $customerProfileId => the profile id for the related customer from the api
      * 
      */
-    function __construct($customerPaymentProfileId=false, $customerProfileId=false, $loadFromAPI=true, $api=null){
+    function __construct($customerPaymentProfileId=false, $customerProfileId=false, $loadFromAPI=true, $api=null, $sandbox=false){
+        // Store the sandbox setting
+        $this->sandbox = $sandbox;
+        
         // Create an instance of the auth object for the user to authenticate api requests
-        $this->auth = new Auth();
+        $this->auth = new Auth($sandbox);
+        
         // set the internal api instance to equal the one that was passed in.
-        if (!$api){$api = new AuthorizeAPIRequest();}
+        if (!$api){
+            $api = new AuthorizeAPIRequest("POST", null, null, $sandbox);
+        }
         $this->api = $api;
+        
         // if we pass in a profile id on intialization load the data from the API        
         if(!!$customerPaymentProfileId && !!$customerProfileId) {
             $this->customerProfileId = $customerProfileId;
@@ -58,10 +65,10 @@ class PaymentProfile {
      * default (optional) => should this card be set as the default card on the account.
      *
      */
-    public static function create($cardNumber, $exparation, $code, $customerProfileId, $billToArray = null, $default=false, $live = false, $api = null) {
-        $auth = new Auth(); // create a new auth for the staic context
+    public static function create($cardNumber, $exparation, $code, $customerProfileId, $billToArray = null, $default=false, $live = false, $api = null, $sandbox = false) {
+        $auth = new Auth($sandbox); // create a new auth for the static context with sandbox parameter
         if (!$api) {
-            $api = new AuthorizeAPIRequest(); // create a new $api object if not passed in
+            $api = new AuthorizeAPIRequest("POST", null, null, $sandbox); // create a new $api object with sandbox parameter
         }
         // create the basic array
         $api_array = [
@@ -94,7 +101,7 @@ class PaymentProfile {
         
         // if it returns data that can be used to make an object. create an object and return it.
         if (array_key_exists("customerProfileId", $api_data) && array_key_exists("customerPaymentProfileId", $api_data)) {
-            return new self($api_data["customerPaymentProfileId"], $api_data["customerProfileId"], true, $api); // pass the api in for performance
+            return new self($api_data["customerPaymentProfileId"], $api_data["customerProfileId"], true, $api, $sandbox); // pass the api and sandbox parameter
         } else { //otherwise return the json for now.
             return $api_data;
         }

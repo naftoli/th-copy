@@ -1,10 +1,21 @@
 <?php
 namespace classes\authorize;
 
-require $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
+// We'll skip autoloading here since our test scripts will handle it
+// This prevents duplicate autoloading and path issues
 
-// load the constants
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/authorize_constants.php';
+// If this file is included directly (not through a test script), we'll need to load constants
+if (!class_exists('includes\\authorize\\AuthorizeConstants')) {
+    // Check if running from command line or web server
+    if (isset($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['DOCUMENT_ROOT'])) {
+        // Web server execution
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/authorize_constants.php';
+    } else {
+        // Command line execution
+        $mashpia_root = dirname(dirname(dirname(dirname(__DIR__))));
+        require_once $mashpia_root . '/includes/authorize_constants.php';
+    }
+}
 use includes\authorize\AuthorizeConstants as Constants;
 
 use net\authorize\api\contract\v1 as AnetAPI;
@@ -20,14 +31,16 @@ class Installments
     private $installment_amount;
     private $number_of_installments;
     private $start_date;
-    private $live;
+    private $sandbox;
 
-    public function __construct($customerProfile = null, $payment_profile_id = 0, $live = true, $updateBilling = true) {
-        // for live use \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
-        // for testing use \net\authorize\api\constants\ANetEnvironment::SANDBOX;
-        if ($live) $this->endpoint = \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
-        else $this->endpoint = \net\authorize\api\constants\ANetEnvironment::SANDBOX;
-        $this->live = $live;
+    public function __construct($customerProfile = null, $payment_profile_id = 0, $updateBilling = true, $sandbox = false) {
+        $this->sandbox = $sandbox;
+        // Store the environment constant directly
+        if ($sandbox) {
+            $this->endpoint = \net\authorize\api\constants\ANetEnvironment::SANDBOX;
+        } else {
+            $this->endpoint = \net\authorize\api\constants\ANetEnvironment::PRODUCTION;
+        }
 
         if ($customerProfile instanceof CustomerProfile) {
             $this->cp = $customerProfile;
@@ -40,24 +53,35 @@ class Installments
 
     public function setAuth() {
         $merchantAuthentication = new AnetAPI\MerchantAuthenticationType();
-        if ($this->live) {
-            $merchantAuthentication->setName(Constants::GetMerchantLoginID());
-            $merchantAuthentication->setTransactionKey(Constants::GetMerchantTransactionKey());
-        } else {
-            $merchantAuthentication->setName(Constants::GetSandboxLoginID());
-            $merchantAuthentication->setTransactionKey(Constants::GetSandboxTransactionKey());
-        }
+        $merchantAuthentication->setName(Constants::GetMerchantLoginID($this->sandbox));
+        $merchantAuthentication->setTransactionKey(Constants::GetMerchantTransactionKey($this->sandbox));
         return $merchantAuthentication;
+    }
+
+    public function getEndpoint() {
+        return $this->endpoint;
     }
 
     private function updateBillingInfo() {
         $merchantAuthentication = $this->setAuth();
         $refId = 'ref' . time();
 
-        if (! empty($this->cp->description)) $name = explode(" ", $this->cp->description);
-        else $name = $this->getName();
-        $last_name = array_pop($name);
-        $first_name = implode(" ", $name);
+        // Extract first and last name from description or use defaults
+        if (!empty($this->cp->description)) {
+            $name = explode(" ", $this->cp->description);
+            if (count($name) > 1) {
+                $last_name = array_pop($name);
+                $first_name = implode(" ", $name);
+            } else {
+                // If only one word, use it as first name and 'Customer' as last name
+                $first_name = $this->cp->description;
+                $last_name = 'Customer';
+            }
+        } else {
+            // Default names if description is empty
+            $first_name = 'Default';
+            $last_name = 'Customer';
+        }
 
         $billto = new AnetAPI\CustomerAddressType();
         $billto->setFirstName($first_name);
@@ -92,7 +116,13 @@ class Installments
         $request->setRefId($refId);
 
         $controller = new AnetController\UpdateCustomerPaymentProfileController($request);
-        $response = $controller->executeWithApiResponse($this->endpoint);
+        
+        // Use the SDK constants directly instead of the stored endpoint
+        if ($this->sandbox) {
+            $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        } else {
+            $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+        }
 
         $res = $this->parseResponse($response);
         if (strpos($res, "Success") !== false) return true;
@@ -125,6 +155,8 @@ class Installments
         $subscription->setPaymentSchedule($paymentSchedule);
         $subscription->setAmount($this->installment_amount);
 
+        // When using a customer profile, we don't need to include billing information
+        // Set up customer profile - this contains the billing information already
         $profile = new AnetAPI\CustomerProfileIdType();
         $profile->setCustomerProfileId($this->cp->customerProfileId);
         $profile->setCustomerPaymentProfileId($this->payment_profile_id);
@@ -135,7 +167,13 @@ class Installments
         $request->setRefId($refId);
         $request->setSubscription($subscription);
         $controller = new AnetController\ARBCreateSubscriptionController($request);
-        $response = $controller->executeWithApiResponse($this->endpoint);
+        
+        // Use the SDK constants directly instead of the stored endpoint
+        if ($this->sandbox) {
+            $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        } else {
+            $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+        }
 
         $res = $this->parseResponse($response);
         if (strpos($res, "Success") !== false) $this->subscription_id = $response->getSubscriptionId();
@@ -186,20 +224,31 @@ class Installments
         $request->setSubscriptionId($this->subscription_id);
 
         $controller = new AnetController\ARBCancelSubscriptionController($request);
-        $response = $controller->executeWithApiResponse($this->endpoint);
+        
+        // Use the SDK constants directly instead of the stored endpoint
+        if ($this->sandbox) {
+            $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX);
+        } else {
+            $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION);
+        }
 
         return $this->parseResponse($response);
     }
 
     public function getName() {
-        require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-        if ($this->cp->customerProfileId) {
-            $sql = "select first, last from admins where authorize_customer_profile_id = " . $this->cp->customerProfileId;
-            $result = mysql_query($sql);
-            $row = mysql_fetch_assoc($result);
-            return [$row['first'], $row['last']];
+        // Use safer defaults instead of trying to query the database
+        // This avoids potential issues with database connections
+        if (!empty($this->cp->description)) {
+            $name = explode(" ", $this->cp->description);
+            if (count($name) > 1) {
+                $last_name = array_pop($name);
+                $first_name = implode(" ", $name);
+                return [$first_name, $last_name];
+            } else {
+                return [$this->cp->description, 'Customer'];
+            }
         }
-        else return ['first name', 'last name'];
+        return ['Default', 'Customer'];
     }
 
     // get info about subscription from authorize
@@ -216,8 +265,12 @@ class Installments
 
         // Add timeout configuration (if supported by the SDK)
         try {
-            // Set a timeout of 10 seconds (adjust as needed)
-            $response = $controller->executeWithApiResponse($this->endpoint, 10);
+            // Use the SDK constants directly instead of the stored endpoint
+            if ($this->sandbox) {
+                $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::SANDBOX, 10);
+            } else {
+                $response = $controller->executeWithApiResponse(\net\authorize\api\constants\ANetEnvironment::PRODUCTION, 10);
+            }
             return $response;
         } catch (\Exception $e) {
             // error

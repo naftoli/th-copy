@@ -48,9 +48,15 @@ class AuthorizeAPIRequest implements HttpRequest{
     public $responseData = null; // The latest response recived (json decoded)
     
     // create the API request object
-    public function __construct($method="POST", $postDataArray=null, $url=null) {
+    public function __construct($method="POST", $postDataArray=null, $url=null, $sandbox = false) {
         // default to the correct url for the api endpoint
-        if (!$url) {$url = Constants::GetApiEndpoint();}
+        if (!$url) {
+            $url = Constants::GetApiEndpoint($sandbox);
+        }
+        // Debug output to check the URL being used
+        if (defined('DEBUG_MODE') && DEBUG_MODE) {
+            echo "<p>Using API endpoint: {$url}</p>";
+        }
         // set the handle to a new curl instance
         $this->handle = curl_init($url);
         // Set the default options for the API call

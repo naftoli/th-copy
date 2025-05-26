@@ -7,22 +7,38 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-// Include necessary files
-require_once '../CustomerProfile.php';
-require_once '../Installments.php';
+// Include the autoloader directly
+$root_path = dirname(dirname(dirname(dirname(__DIR__))));
+require_once $root_path . '/vendor/autoload.php';
+require_once $root_path . '/includes/authorize_constants.php';
+
+// Include necessary files with absolute paths
+$class_dir = dirname(__DIR__); // Get the parent directory (classes/authorize)
+require_once $class_dir . '/CustomerProfile.php';
+require_once $class_dir . '/Installments.php';
+require_once $class_dir . '/PaymentProfile.php';
 
 use \classes\authorize\CustomerProfile;
 use \classes\authorize\Installments;
+use \classes\authorize\PaymentProfile;
 
 // Set admin ID
 $admin_id = 1264;
 
 // Connect to database to get customer profile ID
-require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+// Check if running from command line or web server
+if (isset($_SERVER['DOCUMENT_ROOT']) && !empty($_SERVER['DOCUMENT_ROOT'])) {
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+    require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+} else {
+    // For command line execution
+    $root_path = dirname(dirname(dirname(__DIR__)));
+    require_once $root_path . '/db.php';
+    require_once $root_path . '/api/header/db.php';
+}
 
 // Get customer profile ID for admin
-$sql = "SELECT authorize_customer_profile_id FROM admins WHERE admin_id = $admin_id";
+$sql = "SELECT authorize_customer_profile_id, first, last, admin_email FROM admins WHERE admin_id = $admin_id";
 $result = mysql_query($sql);
 
 if (!$result) {
@@ -30,44 +46,67 @@ if (!$result) {
 }
 
 $row = mysql_fetch_assoc($result);
-$customer_profile_id = $row['authorize_customer_profile_id'];
+// $customer_profile_id = $row['authorize_customer_profile_id'];
 $customer_profile_id = 931063847;
+$first_name = $row['first'];
+$last_name = $row['last'];
+$email = $row['admin_email'];
 
-if (empty($customer_profile_id)) {
-    die("No customer profile ID found for admin ID $admin_id");
-}
+// For testing, we'll check if the profile exists in sandbox and create it if needed
+$use_production = false; // Always use sandbox for testing
 
 echo "<h2>Testing Installments for Admin ID: $admin_id</h2>";
-echo "Customer Profile ID: $customer_profile_id<br>";
+echo "Original Customer Profile ID from DB: $customer_profile_id<br>";
 
-// Create CustomerProfile object
+// Try to load the customer profile in sandbox
 try {
-    // Set to false for sandbox/testing environment
-    $use_production = false;
-    
-    // Load the customer profile
-    $customer_profile = new CustomerProfile($customer_profile_id, true, null, $use_production);
+    $customer_profile = new CustomerProfile($customer_profile_id, true, null, true); // true for sandbox
     
     if ($customer_profile->invalid) {
-        die("Error loading customer profile: " . print_r($customer_profile->error_return, true));
+        echo "<p>Error: Customer profile not found in sandbox environment.</p>";
+        echo "<p>Error details: " . print_r($customer_profile->error_return, true) . "</p>";
+        
+        die("Cannot proceed without a valid customer profile");
+    } else {
+        echo "<p>Successfully loaded existing customer profile from sandbox.</p>";
+    }
+} catch (Exception $e) {
+    echo "<p>Exception when loading/creating customer profile: " . $e->getMessage() . "</p>";
+    die("Cannot proceed due to exception");
+}
+
+echo "Customer Profile ID for testing: $customer_profile_id<br>";
+
+// We already have the customer profile object from above
+try {
+    echo "Successfully loaded customer profile for: " . $customer_profile->description . "<br>";
+    
+    // Get payment profile ID - we need to make sure we're using a valid payment profile
+    if (empty($customer_profile->paymentProfiles)) {
+        echo "<p>Error: No payment profiles found for this customer. Cannot proceed.</p>";
+        die("Please add a payment method to this customer profile first.");
     }
     
-    echo "Successfully loaded customer profile for: " . $customer_profile->description . "<br><br>";
+    // Use the first payment profile
+    $payment_profile_id = $customer_profile->paymentProfiles[0]['customerPaymentProfileId'];
+    echo "Using payment profile ID: $payment_profile_id<br><br>";
     
-    // Create Installments object
-    $installments = new Installments($customer_profile, 0, $use_production, $use_production);
+    // Create Installments object with the correct payment profile ID
+    $installments = new Installments($customer_profile, $payment_profile_id, false, true);
     
     // Test parameters
     $amount = 100.00; // Total amount
     $num_installments = 2; // Number of installments
+    $start_date = date('Y-m-d'); // Start today for testing
     
     echo "Creating subscription with the following parameters:<br>";
     echo "Amount: $" . $amount . "<br>";
     echo "Number of installments: " . $num_installments . "<br>";
+    echo "Start date: " . $start_date . "<br>";
     echo "<br />";
     
-    // Create subscription
-    $response = $installments->createSubscription($amount, $num_installments);
+    // Create subscription with specific start date
+    $response = $installments->createSubscription($amount, $num_installments, $start_date);
     
     echo "Response from creating subscription: " . $response . "<br>";
     

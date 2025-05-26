@@ -206,7 +206,7 @@ class UserRegistrationRouter {
                     $this->installmentsAmount = $amount;
                     // create installments (called subscriptions in authorize)
                     try {
-                        $subscription = new Installments($customer_profile, $payment_profile_id, true, isset($payment_info['payment_profile']));
+                        $subscription = new Installments($customer_profile, $payment_profile_id, isset($payment_info['payment_profile']));
                         $result = $subscription->createSubscription($amount, $this->installments);
                         if (strpos($result, "Error") !== false) {
                             $MASHPIA_DB->rollBack();

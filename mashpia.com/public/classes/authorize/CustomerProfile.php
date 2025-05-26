@@ -41,15 +41,19 @@ class CustomerProfile {
      *
      */
     
-    function __construct($profileId=false, $loadFromAPI = true, $api=null, $test = false){
+    function __construct($profileId=false, $loadFromAPI = true, $api=null, $sandbox = false){
+        // Store the sandbox setting
+        $this->sandbox = $sandbox;
+        
         // Create an instance of the auth object for the user to authenticate api requests
-        $this->auth = new Auth($test);
+        $this->auth = new Auth($sandbox);
         
         // set the api handler to the AuthorizeAPIRequest object passed in.
         if ($api){
             $this->api = $api;
         } else {
-            $this->api = new AuthorizeAPIRequest();
+            // Make sure to pass the sandbox parameter to the AuthorizeAPIRequest constructor
+            $this->api = new \classes\authorize\AuthorizeAPIRequest("POST", null, null, $sandbox);
         }
         
         // if we pass in a profile id on intialization load the data from the API
@@ -75,13 +79,14 @@ class CustomerProfile {
     
     // Create a new CustomerProfile with data
     // (Idealy return a new instance as well)
-    public static function create($customerId, $email, $description, $paymentProfile, $live = false, $api=null) {
+    public static function create($customerId, $email, $description, $paymentProfile, $live = true, $api=null, $sandbox = false) {
 
-        $auth = new Auth(); // create a new instance of auth in the static context
+        $auth = new Auth($sandbox); // create a new instance of auth in the static context
         
         // create an instance of the api if it was not passed in.
         if (!$api){
-            $api = new AuthorizeAPIRequest();
+            // Make sure to pass the sandbox parameter correctly to the AuthorizeAPIRequest constructor
+            $api = new AuthorizeAPIRequest("POST", null, null, $sandbox);
         }
 
         // create an authorized api call with the required data
@@ -116,7 +121,7 @@ class CustomerProfile {
             // If we recive the correct code in the first message
             if ($api_data["messages"]["message"][0]["code"] === "I00001") {
                 // return a new instance of the object
-                return new self($api_data["customerProfileId"], true, $api); // create the base object
+                return new self($api_data["customerProfileId"], true, $api, $sandbox); // create the base object with sandbox parameter
             } else { // not the code we expected
                 return $api_data; // what on earth should we return if it is ok but the status is incorrect and there is no id given?
             }
@@ -128,9 +133,10 @@ class CustomerProfile {
             $paymentProfile = $paymentProfile["payment"]["creditCard"];
             PaymentProfile::create(
                 $paymentProfile["cardNumber"],  $paymentProfile["expirationDate"], 
-                $paymentProfile["cardCode"],    $customerProfileId 
+                $paymentProfile["cardCode"],    $customerProfileId,
+                $sandbox // Pass sandbox parameter to PaymentProfile::create
             );
-            return new self($customerProfileId, true, $api);
+            return new self($customerProfileId, true, $api, $sandbox); // Pass sandbox parameter
         } else { // return an error message
             $error_msg = $api_data['messages']['resultCode'] .
                     "(" .  $api_data['messages']['message'][0]['code'] . "): " .

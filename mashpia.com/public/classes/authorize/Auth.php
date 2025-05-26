@@ -15,13 +15,13 @@ use includes\authorize\AuthorizeConstants as Constants;
 class Auth {
     public $merchantAuthentication;
     
-    function __construct($test = false) {
+    function __construct($sandbox = false) {
         $this->merchantAuthentication = [
             "merchantAuthentication" => [
-               "name"=>$test ? Constants::GetSandboxLoginID() : Constants::GetMerchantLoginID(),
-               "transactionKey"=>$test ? Constants::GetSandboxTransactionKey() : Constants::GetMerchantTransactionKey()
-               ]
-            ];
+               "name"=>Constants::GetMerchantLoginID($sandbox),
+               "transactionKey"=>Constants::GetMerchantTransactionKey($sandbox)
+            ]
+        ];
     }
     
     /*

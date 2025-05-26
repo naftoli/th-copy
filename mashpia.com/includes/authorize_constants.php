@@ -23,44 +23,20 @@ class AuthorizeConstants
 	private static $MERCHANT_LOGIN_ID = "4FW7gsD8Tr";
 	private static $MERCHANT_TRANSACTION_KEY = "933Q86GEy6u8PcQP";
 	private static $API_URL = "https://api.authorize.net/xml/v1/request.api";
-
-	static function getSandboxLoginID() {
-		return self::$MERCHANT_SANDBOX_LOGIN_ID;
-	}
-
-	static function getSandboxTransactionKey() {
-		return self::$MERCHANT_SANDBOX_TRANSACTION_KEY;
-	}
 	
 	// get the login id (sandbox or production)
-	static function GetMerchantLoginID() {
-		// if (defined("AUTHORIZE_NET_SANDBOX")){
-		// 	return self::$MERCHANT_SANDBOX_LOGIN_ID;
-		// } else {
-			return self::$MERCHANT_LOGIN_ID;
-		//}
+	static function GetMerchantLoginID($sandbox = false) {
+		return $sandbox ? self::$MERCHANT_SANDBOX_LOGIN_ID : self::$MERCHANT_LOGIN_ID;
 	}
 	
 	// get the transaction key (sandbox or production)
-	static function GetMerchantTransactionKey() {
-		// if (defined("AUTHORIZE_NET_SANDBOX")){
-		// 	return self::$MERCHANT_SANDBOX_TRANSACTION_KEY;
-		// } else {
-			return self::$MERCHANT_TRANSACTION_KEY;
-		//}
+	static function GetMerchantTransactionKey($sandbox = false) {
+		return $sandbox ? self::$MERCHANT_SANDBOX_TRANSACTION_KEY : self::$MERCHANT_TRANSACTION_KEY;
 	}
 	
-	// Set to the test endpoint, Please change before deployment
-	static function GetApiEndpoint() {
-		// if (defined("AUTHORIZE_NET_SANDBOX")){
-		// 	return self::$SANDBOX_API_URL;
-		// } else {
-			return self::$API_URL;
-		// }
-	}
-
-	static function GetSandboxApiEndpoint() {
-		return self::$SANDBOX_API_URL;
+	// get the environment (sandbox or production)
+	static function GetApiEndpoint($sandbox = false) {
+		return $sandbox ? self::$SANDBOX_API_URL : self::$API_URL;
 	}
 	
 	const RESPONSE_OK = "Ok";
