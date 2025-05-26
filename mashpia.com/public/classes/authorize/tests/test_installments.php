@@ -31,6 +31,7 @@ if (!$result) {
 
 $row = mysql_fetch_assoc($result);
 $customer_profile_id = $row['authorize_customer_profile_id'];
+$customer_profile_id = 931063847;
 
 if (empty($customer_profile_id)) {
     die("No customer profile ID found for admin ID $admin_id");
