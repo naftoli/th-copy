@@ -16,7 +16,7 @@ class AuthorizeConstants
 	// private static $MERCHANT_SANDBOX_LOGIN_ID = "6ZvKUVx425pQ";
 	// private static $MERCHANT_SANDBOX_TRANSACTION_KEY = "7kfzP7LuQA358N5y";
 	private static $MERCHANT_SANDBOX_LOGIN_ID = "3YFKr8d8SMhs";
-	private static $MERCHANT_SANDBOX_TRANSACTION_KEY = "4kJd237rZu59qAZd";
+	private static $MERCHANT_SANDBOX_TRANSACTION_KEY = "3QrA8qAcc47T8p7D";
 	// merchant account credentials production (move to ENV variables for security)
 	private static $MERCHANT_LOGIN_ID = "4FW7gsD8Tr";
 	private static $MERCHANT_TRANSACTION_KEY = "933Q86GEy6u8PcQP";
