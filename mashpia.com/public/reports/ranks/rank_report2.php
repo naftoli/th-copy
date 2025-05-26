@@ -32,36 +32,18 @@ while ($row = mysql_fetch_assoc($result)) {
         <link href="/styles/admin/grey_select.css" rel="stylesheet" type="text/css"/>
         <link href="/styles/admin/loader.css" rel="stylesheet" type="text/css"/>
         <style>
-            input[type="date"] {
-                border: none; background: none;
-                border-bottom: 1px solid #000; font-size: 18px;
+            tr, th, td { 
+                border-bottom: 1px solid #000;
+                padding: 5px;
+                font-size: 12px;
+                font-family: Arial, sans-serif;
             }
-            hr {display: block;}
-            .name.general { font-weight: bold; }
-            span.school.general { text-decoration: underline }
-            span.rank { color: red; margin-bottom: 4px; display: inline-block;}
-            span.school {font-style: italic; margin-bottom: 4px; display: inline-block;}
-            span.school.top { margin-top: 4px; margin-bottom: 0px;}
-            a.btn.button { display: inline-block; margin-bottom: 15px; }
-            img.profile { height: 35px; width: 35px; float: left; margin-right: 10px; }
-            .clearfix { clear: both; margin-bottom: 3px; }
-            div#totals, div#breakdown { background: #fff; padding: 15px; }
-            a.name {color: #000;font-weight: normal;}
+            table { border-collapse: collapse; }
         </style>
     </head>
     <body>
         <?php include($_SERVER["DOCUMENT_ROOT"].'/admin_header.php'); ?>
         <h1>Rank Promotion Report</h1>
-        <form id="options">
-            <label for="from">From</label>
-            <input type="date" placehoder="YYYY-MM-DD" id="from" name="from" required />
-
-            <label for="from">To</label>
-            <input type="date" placehoder="YYYY-MM-DD" id="to" name="to" required />
-
-            <input type="submit" />
-        </form>
-        <hr>
         <div id="report">
             <table>
                 <tr>
