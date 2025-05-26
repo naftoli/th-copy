@@ -13,7 +13,7 @@ if ( $admin_user['auth'] != 'super' ) {
 }
 
 // get the list of admins
-$sql = "select * from admins where hashed_pass = '' and admin_id in (
+$sql = "select * from admins where hashed_pass = '' and admin_id not in (
         select admin_id from admin_auths where id in (
         select user_id from users where user_registered > 0))";
 $result = mysql_query($sql);
