@@ -16,8 +16,8 @@ use mashpia\api\auth\Login as Login;
 class Admin extends ActiveRecord\Model implements JsonSerializable {
     use \traits\BuildModel;
     
-    static $before_create = ['createHelpdeskAccount'];
-    static $before_update = ['handleChanges'];
+    static $before_create = ['hashPassword', 'createHelpdeskAccount'];
+    static $before_update = ['handleChanges', 'hashPasswordIfChanged'];
     // relationships 
     static $has_many = [ [ 'admin_auths' ] ];
     // validations
@@ -66,9 +66,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     public function handleChanges() {
         // if email was changed
         if ( $this->attribute_is_dirty('admin_email') ){}
-        // if password was changed
-        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('hashed_pass') ) {}
-        // all's good, return false to prevent update
+        // if username or password was changed
+        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') || $this->attribute_is_dirty('hashed_pass') ) {}
+        // all's good, return true to allow update
         return true;
     }
 
@@ -92,6 +92,43 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     //*******************************************************************************/
     //*********************************** SECURITY **********************************/
     //*******************************************************************************/
+
+    /**
+     * Hash the password before creating a new admin
+     * @return boolean
+     */
+    public function hashPassword() {
+        // If password is set but hashed_pass is not, hash the password
+        if (isset($this->password) && !empty($this->password) && (!isset($this->hashed_pass) || empty($this->hashed_pass))) {
+            $this->hashed_pass = password_hash($this->password, PASSWORD_DEFAULT);
+        }
+        return true;
+    }
+    
+    /**
+     * Setter method for password attribute
+     * This will automatically set the hashed_pass attribute when password is set
+     * @param string $password The plain text password
+     * @return void
+     */
+    public function set_password($password) {
+        $this->assign_attribute('password', $password);
+        if (!empty($password)) {
+            $this->assign_attribute('hashed_pass', password_hash($password, PASSWORD_DEFAULT));
+        }
+    }
+
+    /**
+     * Hash the password if it has been changed during an update
+     * @return boolean
+     */
+    public function hashPasswordIfChanged() {
+        // If password is being updated, hash it
+        if ($this->attribute_is_dirty('password') && isset($this->password) && !empty($this->password)) {
+            $this->hashed_pass = password_hash($this->password, PASSWORD_DEFAULT);
+        }
+        return true;
+    }
 
     public function authenticate( $password ){
         return password_verify($password, $this->hashed_pass);
@@ -124,7 +161,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     }
 
     public function sendParentEmail() {
-        return MashpiaEmails::sendParentEmail( $this->email, $this->username, $this->password );
+        // Use the unhashed password if available, otherwise we can't send the password
+        $password = isset($this->password) && !empty($this->password) ? $this->password : null;
+        return MashpiaEmails::sendParentEmail( $this->email, $this->username, $password );
     }
 
     //*********************************************************************/

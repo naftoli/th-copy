@@ -12,6 +12,9 @@ class NewAdminRouter {
         if ( !isset( $_POST['password'] ) || !isset( $_POST['confirm'] ) || $_POST['password'] !== $_POST['confirm'] )
             return json_error( 'Could not create TH Account', [ 'Passwords do not match' ] );
 
+        if ( !isset( $_POST['admin_email'] ) || !filter_var( $_POST['admin_email'], FILTER_VALIDATE_EMAIL ) )
+            return json_error( 'Could not create TH Account', [ 'Invalid email address' ] );
+
         $admin = Admin::build( $_POST );
         $admin->username = $admin->admin_email;
         $admin->beta = 1;
