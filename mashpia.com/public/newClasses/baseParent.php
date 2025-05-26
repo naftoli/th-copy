@@ -17,7 +17,7 @@ abstract class BaseParent {
 			'admin_phone_mobile',
 			'admin_email', 
 			'username', 
-			'password', 
+			'hashed_pass', 
 			'photo', 
 			'father', 
 			'mother', 

@@ -19,7 +19,6 @@ class NewParent extends BaseParent {
 		$sql = "INSERT INTO admins set ";
 		foreach ($this->fields as $k) {
 			if (isset($data[$k])) {
-				if ($k == 'password') continue;
 				if (is_numeric(($data[$k] ))) $sql .= $k . " = " . mysql_real_escape_string( $data[$k] ) . ", ";
 				else $sql .= $k . " = \"" . mysql_real_escape_string( $data[$k] ) . "\", ";
 			}
@@ -27,6 +26,7 @@ class NewParent extends BaseParent {
 		$sql .= "is_parent = 1";
 		if ($this->isShliach) 
 			$sql .= ", is_shliach = 1";
+		// echo $sql; exit;
 		if (@mysql_query($sql)) {
 			$this->data['admin_id'] = mysql_insert_id();
 			// create the helpdesk account
