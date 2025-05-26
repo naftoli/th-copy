@@ -78,7 +78,7 @@ class ParentsRouter {
 
         $admin = new Admin([
             'username' => $_POST['email'],
-            'password' => 'p1234',
+            'hashed_pass' => password_hash('p1234', PASSWORD_DEFAULT),
             'first' => formatParentName( $_POST['father'], $_POST['mother'] ),
             'father' => $_POST['father'],
             'mother' => $_POST['mother'],

@@ -67,7 +67,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         // if email was changed
         if ( $this->attribute_is_dirty('admin_email') ){}
         // if password was changed
-        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') ) {}
+        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('hashed_pass') ) {}
         // all's good, return false to prevent update
         return true;
     }
@@ -85,7 +85,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         require_once($_SERVER["DOCUMENT_ROOT"].'/tasks/forms/functions/helpdesk_account_migration.php');
         // create the admin
         return create_admin( $this->to_array([
-            'only' => ['first', 'last', 'admin_email', 'password' ]
+            'only' => ['first', 'last', 'admin_email', 'hashed_pass' ]
         ]) );
     }
 
@@ -94,7 +94,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     //*******************************************************************************/
 
     public function authenticate( $password ){
-        return $password === $this->password;
+        return password_verify($password, $this->hashed_pass);
     }
 
     public function resetPassword() {

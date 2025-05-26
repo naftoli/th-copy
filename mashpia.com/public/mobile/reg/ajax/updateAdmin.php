@@ -56,7 +56,7 @@ $sql = "UPDATE admins SET "
 	."mother_pic = '" . $motherPic . "'";
 
 if (!empty( $password )) {
-	$sql .= ", password = '" . $password . "'";
+	$sql .= ", hashed_pass = '" . password_hash($password, PASSWORD_DEFAULT) . "'";
 }
 $sql .= " where admin_id = " . $admin_id;
 

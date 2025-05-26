@@ -9,17 +9,18 @@ $admin_id = mysql_real_escape_string( $_COOKIE['admin'] );
 $admin_id = encrypt_decrypt('decrypt', $admin_id);
 
 $sql = "SELECT 
-            *  
+            u.*
         FROM
-            th_chidon tc 
-                JOIN
-            users u ON u.user_id = tc.user_id 
+            users u 
+                LEFT JOIN
+            th_chidon tc ON tc.user_id = u.user_id
                 LEFT JOIN
             thumbs t ON t.file_id = u.user_photo_id 
                 LEFT JOIN 
             admin_auths aa ON aa.id = u.user_id 
         WHERE
             u.user_id = " . $user . " AND aa.admin_id = " . $admin_id;
+// echo $sql;
 $result = mysql_query( $sql );
 if ( mysql_num_rows($result) > 0 ) {
 	$row = mysql_fetch_assoc($result);

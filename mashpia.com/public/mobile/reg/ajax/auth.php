@@ -8,12 +8,16 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 $username = mysql_real_escape_string($_POST['username']);
 $password = mysql_real_escape_string($_POST['password']);
 
-$sql = "SELECT admin_id, admin_email FROM admins WHERE username = '" . $username . "' AND password = '" . $password . "'";
+$sql = "SELECT admin_id, admin_email, hashed_pass FROM admins WHERE username = '" . $username . "'";
 $result = mysql_query($sql);
 
 if (mysql_num_rows($result) > 0) {
 	$row = mysql_fetch_assoc($result);
 	$admin = $row['admin_id'];
+	if ( !password_verify($password, $row['hashed_pass']) ) {
+		echo 0;
+		exit;
+	}
 	
 	// log the user into the helpdesk system as well
 	if ( $_SERVER['SERVER_NAME'] != 'tzivos.local' ) {
