@@ -4,7 +4,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 	header("Location: https://mashpia.com/donate");
 	exit;
 }
-//$ip = $_SERVER['SERVER_ADDR'];
+$ip = $_SERVER['REMOTE_ADDR'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -156,7 +156,7 @@ if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SE
 		<br />
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 		<script>
-			//var ip = "<?php //=$ip?>";
+			var ip = <?= $ip ?>;
 			$( function() {
 				checkFraud();
 				//$(".alert").hide();
