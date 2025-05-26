@@ -176,6 +176,15 @@ class ParentsRouter {
         $admin = Admin::find_by_admin_id($_POST['admin_id']);
         if (!$admin) json_error('Parent account not found');
         
+        // Check if username is being changed
+        if ($admin->username !== $_POST['username']) {
+            // Check if the new username already exists
+            $existing_admin = Admin::find('first', array('conditions' => array('username = ?', $_POST['username'])));
+            if ($existing_admin) {
+                json_error('Username already exists. Please choose a different username.');
+            }
+        }
+        
         // Update username
         $admin->username = $_POST['username'];
         
@@ -186,12 +195,8 @@ class ParentsRouter {
         
         // Save changes
         if (!$admin->save()) {
-            // Handle validation errors
-            if (method_exists($admin, 'errors') && method_exists($admin->errors, 'is_invalid') && $admin->errors->is_invalid('username')) {
-                json_error('Username already exists. Please choose a different username.');
-            } else {
-                json_error('Failed to update credentials');
-            }
+            // show error message
+            json_error('Failed to update credentials');
         }
         
         json_response(['success' => true, 'message' => 'Credentials updated successfully']);
