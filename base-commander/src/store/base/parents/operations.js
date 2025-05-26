@@ -31,3 +31,17 @@ export const addChild = ( username, user_serial ) => dispatch => {
   return API.post(`/core/parents?action=addChild`, { username, user_serial } )
     .then( response => dispatch( actions.addChild( response.admin_id, user_serial ) ) );
 }
+
+/**
+ * Update parent account credentials (username and/or password)
+ * @param {Object} data - Object containing admin_id, username, and optional password
+ * @returns {Promise}
+ */
+export const updateParentCredentials = (data) => dispatch => {
+  return API.post(`/core/parents?action=updateCredentials`, data)
+    .then(response => {
+      // Refresh parent data after successful update
+      dispatch(getParents());
+      return response;
+    });
+}

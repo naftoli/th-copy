@@ -150,7 +150,7 @@ class ParentsRouter {
 
         if ( !$admin )
             json_error( 'Cannot add Soldier to parent account. Username does not exist.' );
-
+            
         $query = $MASHPIA_DB->prepare(
             'INSERT INTO admin_auths ( admin_id, auth, id, role_id, position ) '.
             'VALUES( ?, "user", ?, 1, "parent");'
@@ -159,6 +159,42 @@ class ParentsRouter {
         $success = $query->execute([ $admin->admin_id, $user->user_id ]);
 
         json_response( ['admin_id' => $admin->admin_id ], $success );
+    }
+    
+    /**
+     * Update parent account credentials (username and/or password)
+     * @return void
+     */
+    function updateCredentials() {
+        global $MASHPIA_DB;
+        
+        // Validate required fields
+        if (!isset($_POST['admin_id'])) json_error('Missing admin_id');
+        if (!isset($_POST['username'])) json_error('Missing username');
+        
+        // Get the admin record
+        $admin = Admin::find_by_admin_id($_POST['admin_id']);
+        if (!$admin) json_error('Parent account not found');
+        
+        // Update username
+        $admin->username = $_POST['username'];
+        
+        // Update password if provided
+        if (isset($_POST['password']) && !empty($_POST['password'])) {
+            $admin->password = $_POST['password']; // This will trigger the password hashing
+        }
+        
+        // Save changes
+        if (!$admin->save()) {
+            // Handle validation errors
+            if (method_exists($admin, 'errors') && method_exists($admin->errors, 'is_invalid') && $admin->errors->is_invalid('username')) {
+                json_error('Username already exists. Please choose a different username.');
+            } else {
+                json_error('Failed to update credentials');
+            }
+        }
+        
+        json_response(['success' => true, 'message' => 'Credentials updated successfully']);
     }
 }
 

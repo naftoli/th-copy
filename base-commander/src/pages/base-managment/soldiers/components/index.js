@@ -1,5 +1,6 @@
 export * from './Dob';
 export * from './NameRow';
-export * from './ParentRow';
+export { ParentRow } from './ParentRow';
+export { default as ParentRowConnected } from './ParentRow';
 export * from './ProfileRow';
 export * from './BasePlatoonRow';

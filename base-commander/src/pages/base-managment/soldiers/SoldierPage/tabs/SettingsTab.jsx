@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
-import { ParentRow } from '../../components';
+import ParentRow from '../../components/ParentRow';
 import { Form } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
 import { Select, Label, Radio, Checkbox, MissionTypeSelect } from 'components/inputs';
