@@ -172,17 +172,17 @@ class ParentRow extends Component {
             <Input disabled value={ email } />
           </Col>
           
-          <Col xs='12' sm='4' style={styles.buttonColumn}>
+          <Col xs='12' sm='6' md='4' style={styles.buttonColumn}>
             <Button color='primary' onClick={ this.changeLogin }>
               Login to Parent Account
             </Button>
           </Col>
-          <Col xs='12' sm='4' style={styles.buttonColumn}>
+          <Col xs='12' sm='6' md='4' style={styles.buttonColumn}>
             <Button color='info' onClick={ this.toggleCredentialModal }>
               Change Credentials
             </Button>
           </Col>
-          <Col xs='12' sm='4' style={styles.buttonColumn}>
+          <Col xs='12' sm='6' md='4' style={styles.buttonColumn}>
             <Button color='danger' onClick={ this.remove }>
               Remove From Parent Account
             </Button>
