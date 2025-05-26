@@ -16,8 +16,10 @@ if ( $admin_user['auth'] != 'super' ) {
 $sql = "select * from admins";
 $result = mysql_query($sql);
 while ( $row = mysql_fetch_assoc($result) ) {
-    // update the password
-    $sql = "update admins set hashed_pass = '" . password_hash($row['password'], PASSWORD_DEFAULT) . "' where admin_id = " . $row['admin_id'];
-    mysql_query($sql);
+    // update the password if it is not hashed
+    if ( !password_verify($row['password'], $row['hashed_pass']) ) {
+        $sql = "update admins set hashed_pass = '" . password_hash($row['password'], PASSWORD_DEFAULT) . "' where admin_id = " . $row['admin_id'];
+        mysql_query($sql);
+    }
 }
 echo "Done.";
