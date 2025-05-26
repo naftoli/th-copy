@@ -57,6 +57,21 @@ class NewParentModal extends Component {
   // handle when they select children
   onSelectChange = onMultiSelectChange( this.onUpdate );
 
+  onChangeHQ = (e) => {
+    // Get the input value
+    const inputValue = e.target.value;
+    
+    // Filter out empty strings and validate serial number format
+    const serialNumbers = inputValue.split(',')
+      .map(serial => serial.trim())
+      .filter(serial => serial !== '' && /^7\d{6}$/.test(serial));
+    
+    console.log('Valid serial numbers:', serialNumbers); // Debug log
+    
+    // Update the state with valid serial numbers
+    this.setState({ children: serialNumbers });
+  };
+
   render(){
     const { isOpen, toggle, login } = this.props;
     const {
@@ -146,7 +161,8 @@ class NewParentModal extends Component {
                 <Col xs={12}>
                   <Label>Children: Serial numbers comma seperated.</Label>
                   <Input required name='children'
-                    pattern='^(7[0-9]{6},[ ]?)*(7[0-9]{6})$'/>
+                    value={children.join(', ')}
+                    onChange={ this.onChangeHQ } />
                   <div className='invalid-message'>
                     1 or more valid serial numbers
                   </div>
