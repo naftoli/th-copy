@@ -49,6 +49,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 <tr>
                     <th>School</th>
                     <th>Class</th>
+                    <th>Serial</th>
                     <th>Student</th>
                     <th>Rank</th>
                     <th>Date Promoted</th>
@@ -57,6 +58,7 @@ while ($row = mysql_fetch_assoc($result)) {
                 <tr>
                     <td><?php echo $user['school_name']; ?></td>
                     <td><?php echo $user['class_grade'] . ' ' . $user['class_sub']; ?></td>
+                    <td><?php echo $user['user_serial']; ?></td>
                     <td><?php echo $user['first'] . ' ' . $user['last']; ?></td>
                     <td><?php echo $user['rank_name']; ?></td>
                     <td><?php echo jdtogregorian($user['date_promoted']); ?></td>
