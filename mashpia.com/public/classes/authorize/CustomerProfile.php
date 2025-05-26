@@ -41,9 +41,9 @@ class CustomerProfile {
      *
      */
     
-    function __construct($profileId=false, $loadFromAPI = true, $api=null){
+    function __construct($profileId=false, $loadFromAPI = true, $api=null, $test = false){
         // Create an instance of the auth object for the user to authenticate api requests
-        $this->auth = new Auth();
+        $this->auth = new Auth($test);
         
         // set the api handler to the AuthorizeAPIRequest object passed in.
         if ($api){

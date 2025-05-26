@@ -46,7 +46,7 @@ try {
     $use_production = false;
     
     // Load the customer profile
-    $customer_profile = new CustomerProfile($customer_profile_id);
+    $customer_profile = new CustomerProfile($customer_profile_id, true, null, $use_production);
     
     if ($customer_profile->invalid) {
         die("Error loading customer profile: " . print_r($customer_profile->error_return, true));
@@ -55,7 +55,7 @@ try {
     echo "Successfully loaded customer profile for: " . $customer_profile->description . "<br><br>";
     
     // Create Installments object
-    $installments = new Installments($customer_profile, 0, $use_production, false);
+    $installments = new Installments($customer_profile, 0, $use_production, $use_production);
     
     // Test parameters
     $amount = 100.00; // Total amount

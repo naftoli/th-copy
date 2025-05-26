@@ -17,11 +17,11 @@ class AuthorizeConstants
 	// private static $MERCHANT_SANDBOX_TRANSACTION_KEY = "7kfzP7LuQA358N5y";
 	private static $MERCHANT_SANDBOX_LOGIN_ID = "3YFKr8d8SMhs";
 	private static $MERCHANT_SANDBOX_TRANSACTION_KEY = "3QrA8qAcc47T8p7D";
+	private static $SANDBOX_API_URL = "https://apitest.authorize.net/xml/v1/request.api";
+
 	// merchant account credentials production (move to ENV variables for security)
 	private static $MERCHANT_LOGIN_ID = "4FW7gsD8Tr";
 	private static $MERCHANT_TRANSACTION_KEY = "933Q86GEy6u8PcQP";
-	
-	private static $SANDBOX_API_URL = "https://apitest.authorize.net/xml/v1/request.api";
 	private static $API_URL = "https://api.authorize.net/xml/v1/request.api";
 
 	static function getSandboxLoginID() {
@@ -58,7 +58,10 @@ class AuthorizeConstants
 			return self::$API_URL;
 		// }
 	}
-	
+
+	static function GetSandboxApiEndpoint() {
+		return self::$SANDBOX_API_URL;
+	}
 	
 	const RESPONSE_OK = "Ok";
     
