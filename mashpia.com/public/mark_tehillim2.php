@@ -41,6 +41,7 @@ if (isset($_POST['submit'])) {
     if($debug) echo "<pre>";
     if($debug) print_r($_POST);
     if($debug) echo "</pre>";
+    // if ($debug && $_POST['marks']) exit;
     
     $date = $_POST['date'];
     $school = $_POST['school'];
@@ -128,23 +129,26 @@ if (isset($_POST['submit'])) {
         //echo "<br />" . count($_POST['minutes']);
 //        echo "<pre>"; print_r($_POST); echo "</pre>"; exit;
         $qrys = array();
-        $types = array('kapitelach', 'minutes');
+        $types = array('kapitelach', 'minutes', 'shul');
         $grids = array(
-            'kapitelach'    => 8001,
-            'minutes'       => 8002
+            'kapitelach'    => 80010,
+            'minutes'       => 80020,
+            'shul'          => 80030
         );
 
         foreach ($types as $key => $type) {
             foreach ($_POST[$type] as $user => $task) {
                 foreach ($task as $id => $val) {
                     if ($val == '') $val = 0;
-                    if (is_numeric($val)) {
+                    if ($val == 'on') $val = 1;
+                    if (is_numeric($val)) { // filter out junk values
                         //find out if mark exists and get task id of mark
                         $sql = "SELECT * from date_tasks_marks dtm
                                 JOIN date_tasks dt USING (date_task_id) 
                                 WHERE user_id = " . $user 
                             . " AND mark_date = " . $date 
                             . " AND grid_id = " . $grids[$type];
+                        // echo $sql . "<br />";
                         $result = mysql_query($sql);
                         if (mysql_num_rows($result) > 0) {
                             // get task id
@@ -154,25 +158,28 @@ if (isset($_POST['submit'])) {
                                 // delete mark and mission if value is 0
                                 $sql = "DELETE FROM date_tasks_marks WHERE date_task_id = " . $task_id . " AND user_id = " . $user . " AND mark_date = " . $date;
                                 $qrys[] = $sql;
-                                // get the date tasks mission id
-                                $sql = "SELECT date_tasks_mission_id FROM date_tasks WHERE date_task_id = " . $task_id;
-                                $result = mysql_query($sql);
-                                $row = mysql_fetch_assoc($result);
-                                // and delete the mission mark if earned as well
-                                $missionID = $row['date_tasks_mission_id'];
-                                $sql = "DELETE FROM date_tasks_mission_marks WHERE user_id = " . $user . " AND date_tasks_mission_id = " . $missionID;
+                                if ($type != 'shul') {
+                                    // get the date tasks mission id
+                                    $sql = "SELECT date_tasks_mission_id FROM date_tasks WHERE date_task_id = " . $task_id;
+                                    $result = mysql_query($sql);
+                                    $row = mysql_fetch_assoc($result);
+                                    // and delete the mission mark if earned as well
+                                    $missionID = $row['date_tasks_mission_id'];
+                                    $sql = "DELETE FROM date_tasks_mission_marks WHERE user_id = " . $user . " AND date_tasks_mission_id = " . $missionID;
+                                    $qrys[] = $sql;
+                                }
                             } else {
                                 $sql = "UPDATE date_tasks_marks 
                                         SET done_qty = " . (int) mysql_real_escape_string($val) 
                                     . " WHERE date_task_id = " . $task_id
                                     . " AND user_id = " . $user
                                     . " AND mark_date = " . $date;
+                                $qrys[] = $sql;
                             }
-                            $qrys[] = $sql;
                         } else {
                             if ($val > 0) {
                                 // limit the max minutes to 770 as requested via EMAIL
-                                if ( $grids[$type] == 8002 && $val > 770) $val = 770;
+                                if ( $grids[$type] == 80020 && $val > 770) $val = 770;
 
                                 $sql = "INSERT INTO date_tasks_marks 
                                         SET date_task_id = " . $id . ",  
@@ -182,39 +189,41 @@ if (isset($_POST['submit'])) {
                                         mark_description = \"" . $tehillim[$user][$key]['description'] . "\", 
                                         mark_points = " . $tehillim[$user][$key]['points'];
                                 $qrys[] = $sql;
-                                
-                                // find out quota
-                                $sql = "SELECT dtm.*, dt.quantity FROM date_tasks_missions dtm
-                                        JOIN date_tasks dt USING (date_tasks_mission_id)
-                                        WHERE dt.date_task_id = " . $id;
-                                $result = mysql_query( $sql );
-                                $row = mysql_fetch_assoc( $result );
-                                $quota = $row['quantity'];
-                                $missionID = $row['date_tasks_mission_id'];
-                                
-                                // check if mission was marked
-                                $sql = "SELECT * FROM date_tasks_mission_marks
-                                        WHERE user_id = " . $user . "
-                                        AND date_tasks_mission_id = " . $missionID;
-                                $result = mysql_query( $sql );
-                                
-                                // check if quota was reached 
-                                if (intval($val) >= $quota && mysql_num_rows( $result ) == 0) {
-                                    $sql = "INSERT IGNORE INTO date_tasks_mission_marks
-                                            SET user_id = " . $user . ",
-                                            date_tasks_mission_id = " . $missionID . ",
-                                            mission_value = 1.0, 
-                                            subject_id = 1,
-                                            mission_name = \"" . mysql_real_escape_string( $row['mission_name'] ) . "\",
-                                            mark_date = " . $date . " 
-                                            ON DUPLICATE KEY UPDATE 
-                                            mark_date = " . $date;
-                                    $qrys[] = $sql;
-                                } else if (intval($val) < $quota && mysql_num_rows( $result ) == 1) {
-                                    $sql = "DELETE FROM date_tasks_mission_marks
-                                            WHERE user_id = " . $user . " 
+
+                                if ($type != 'shul') {
+                                    // find out quota
+                                    $sql = "SELECT dtm.*, dt.quantity FROM date_tasks_missions dtm
+                                            JOIN date_tasks dt USING (date_tasks_mission_id)
+                                            WHERE dt.date_task_id = " . $id;
+                                    $result = mysql_query( $sql );
+                                    $row = mysql_fetch_assoc( $result );
+                                    $quota = $row['quantity'];
+                                    $missionID = $row['date_tasks_mission_id'];
+                                    
+                                    // check if mission was marked
+                                    $sql = "SELECT * FROM date_tasks_mission_marks
+                                            WHERE user_id = " . $user . "
                                             AND date_tasks_mission_id = " . $missionID;
-                                    $qrys[] = $sql;    
+                                    $result = mysql_query( $sql );
+                                    
+                                    // check if quota was reached 
+                                    if (intval($val) >= $quota && mysql_num_rows( $result ) == 0) {
+                                        $sql = "INSERT IGNORE INTO date_tasks_mission_marks
+                                                SET user_id = " . $user . ",
+                                                date_tasks_mission_id = " . $missionID . ",
+                                                mission_value = 1.0, 
+                                                subject_id = 1,
+                                                mission_name = \"" . mysql_real_escape_string( $row['mission_name'] ) . "\",
+                                                mark_date = " . $date . " 
+                                                ON DUPLICATE KEY UPDATE 
+                                                mark_date = " . $date;
+                                        $qrys[] = $sql;
+                                    } else if (intval($val) < $quota && mysql_num_rows( $result ) == 1) {
+                                        $sql = "DELETE FROM date_tasks_mission_marks
+                                                WHERE user_id = " . $user . " 
+                                                AND date_tasks_mission_id = " . $missionID;
+                                        $qrys[] = $sql;    
+                                    }
                                 }
                             }
                         }
@@ -223,7 +232,7 @@ if (isset($_POST['submit'])) {
                 }
             }
         }
-        //echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
+        // echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
         foreach ($qrys as $qry) {
             // echo $qry . "<br />";
             if (! mysql_query($qry)) {
@@ -236,8 +245,32 @@ if (isset($_POST['submit'])) {
     
     //get marked info
     $marked = array();
+    $keys = array('kap', 'min', 'shul');
     foreach ($users as $user) {
         if (isset($tehillim[$user])) {
+            foreach ($tehillim[$user] as $key => $value) {
+                $sql = "select done_qty from date_tasks_marks where user_id = " . $user . " and date_task_id = " . 
+                    $value['date_task_id'];
+                $result = mysql_query($sql);
+                if (mysql_num_rows($result) > 0) {
+                    $row = mysql_fetch_assoc($result);
+                    $marked[$user][$keys[$key]] = $row['done_qty'];
+                } else {
+                    // check if any marks were put in for a different ladder
+                    $sql = "select done_qty from date_tasks_marks dtm 
+                            join date_tasks dt using (date_task_id)
+                            join date_tasks_missions dtmm using (date_tasks_mission_id) 
+                            where dtm.user_id = " . $user . "
+                            and dtmm.start_date = " . $date . " 
+                            and dt.grid_id = " . $tehillim[$user][$key]['grid_id'];
+                    $result = mysql_query($sql);
+                    if (mysql_num_rows($result) > 0) {
+                        $row = mysql_fetch_assoc($result);
+                        $marked[$user][$keys[$key]] = $row['done_qty'];
+                    }
+                }
+            }
+            /*
             $sql = "select done_qty from date_tasks_marks where user_id = " . $user . " and date_task_id = " . 
                 $tehillim[$user][0]['date_task_id'];
             $result = mysql_query($sql);
@@ -279,9 +312,10 @@ if (isset($_POST['submit'])) {
                     $marked[$user]['min'] = $row['done_qty'];
                 }
             }
+            */
         } 
     }
-    //echo "<pre>"; print_r( $tehillim ); echo "</pre>"; exit;
+    // echo "<pre>"; print_r( $marked ); echo "</pre>";
 }
 ?>
 <!DOCTYPE html>
@@ -295,8 +329,8 @@ if (isset($_POST['submit'])) {
                 border-bottom: 1px solid grey;
                 margin-bottom: 10px;
             }
-            tr, td {
-                padding: 3px;
+            tr, th, td {
+                padding: 5px;
                 font-size: 12px;
             }
         </style>
@@ -360,20 +394,25 @@ if (isset($_POST['submit'])) {
                     <th>Student</th>
                     <th>Kapitelach</th>
                     <th>Minutes</th>
+                    <th>In Shul</th>
                 </tr>
                 <?php
                 foreach ($users as $user) {
                     if (isset($tehillim[$user])) {
                         $kap = $tehillim[$user][0]['date_task_id'];
                         $min = $tehillim[$user][1]['date_task_id'];
+                        $shul = $tehillim[$user][2]['date_task_id'];
                         $kapVal = isset($marked[$user]['kap']) ? $marked[$user]['kap'] : 0;
                         $minVal = isset($marked[$user]['min']) ? $marked[$user]['min'] : 0;
+                        $shulVal = isset($marked[$user]['shul']) ? $marked[$user]['shul'] : 0;
                         $gradeName = $userInfo[$user]['class_grade'] . (empty($userInfo[$user]['class_sub']) ? '' : '-' . $userInfo[$user]['class_sub']);
                         echo "<tr><td>" . $gradeName . "</td><td>" . $userInfo[$user]['first'] . ' ' . $userInfo[$user]['last'] . "</td><td>" . 
                             "<input type='text' size='5' name='kapitelach[" . $user . "][" . $kap . "]' " . 
                             ($kapVal ? 'value=' . $kapVal : '') . " /></td><td>" . 
                             "<input type='text' size='5' name='minutes[" . $user . "][" . $min . "]' " . 
-                            ($minVal ? 'value=' . $minVal : '') . " /></td></tr>";
+                            ($minVal ? 'value=' . $minVal : '') . " /></td><td><input type='hidden' name='shul[" . $user . "][" . $shul . "]' value='0' />" . 
+                            "<input type='checkbox' name='shul[" . $user . "][" . $shul . "]' " . 
+                            ($shulVal ? 'checked' : '') . " /></td></tr>";
                     }
                 }
                 ?>
