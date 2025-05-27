@@ -131,9 +131,9 @@ if (isset($_POST['submit'])) {
         $qrys = array();
         $types = array('kapitelach', 'minutes', 'shul');
         $grids = array(
-            'kapitelach'    => 8001,
-            'minutes'       => 8002,
-            'shul'          => 8003
+            'kapitelach'    => 80010,
+            'minutes'       => 80020,
+            'shul'          => 80030
         );
 
         foreach ($types as $key => $type) {
@@ -179,7 +179,7 @@ if (isset($_POST['submit'])) {
                         } else {
                             if ($val > 0) {
                                 // limit the max minutes to 770 as requested via EMAIL
-                                if ( $grids[$type] == 8002 && $val > 770) $val = 770;
+                                if ( $grids[$type] == 80020 && $val > 770) $val = 770;
 
                                 $sql = "INSERT INTO date_tasks_marks 
                                         SET date_task_id = " . $id . ",  
