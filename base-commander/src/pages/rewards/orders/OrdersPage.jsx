@@ -74,12 +74,12 @@ class OrdersPage extends Component {
   toCSV = () => {
     const headers = [
       'Date', 'First Name', 'Last Name', 'Serial Number', 'Prize',
-      'Miles', 'Qty', 'Total', 'Platoon'
+      'Miles', 'Qty', 'Total', 'Grade', 'Sub'
     ];
     const rows = this.props.orders.map( order => [
       order.created, order.first, order.last, order.user_serial,
       order.prize_name, order.points, order.quantity, order.total * -1,
-      order.platoon
+      order.class_grade, order.class_sub
     ]);
     //arrayToCSV( headers, rows, 'store_orders' );
     return dataToCSV( headers, rows );

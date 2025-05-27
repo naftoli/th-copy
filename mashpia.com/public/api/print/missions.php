@@ -182,6 +182,71 @@ if ( $dates == 'english' ) $dates_id = 2;
                 window.print();
             }
         }, false);
+        /*
+            (function () {
+            let currentIndex = 0;
+
+            // Collect all sections based on the break divs
+            const allNodes = Array.from(document.body.children);
+            const sections = [];
+            let temp = [];
+
+            allNodes.forEach(node => {
+                temp.push(node);
+                if (
+                node.tagName === 'DIV' &&
+                node.style &&
+                node.style.pageBreakAfter === 'always'
+                ) {
+                sections.push([...temp]); // save this section
+                temp = []; // reset for next
+                }
+            });
+
+            // Add CSS to hide everything initially
+            allNodes.forEach(node => {
+                if (node.style) node.style.display = 'none';
+            });
+
+            // Define the print function globally so you can also call it from AHK
+            window.printNextSection = function () {
+                if (currentIndex < sections.length) {
+                // Hide all
+                allNodes.forEach(node => {
+                    if (node.style) node.style.display = 'none';
+                });
+
+                // Show current section
+                sections[currentIndex].forEach(node => {
+                    if (node.style) node.style.display = '';
+                });
+
+                // Print and go to next
+                window.print();
+                currentIndex++;
+                } else {
+                sendCtrlBacktick();
+                alert('All sections printed!'); 
+                }
+            };
+                
+            function sendCtrlBacktick() {
+            document.title = 'PRINT_COMPLETE_SIGNAL';
+            }
+
+            // Initially hide everything
+            allNodes.forEach(node => {
+                if (node.style) node.style.display = 'none';
+            });
+            // Add keyboard shortcut: press "n" to trigger
+            window.addEventListener('keydown', function (e) {
+                if (e.key === 'n' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                e.preventDefault();
+                printNextSection();
+                }
+            });
+            })();
+        */
     </script>
     <?php // ! *************************** Debug *************************** ?>
     <!-- <details id='debug'>

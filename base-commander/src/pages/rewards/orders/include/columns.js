@@ -14,7 +14,9 @@ export function getColumns( bc ) {
 
   if ( bc ) {
     columns.push(
-      { Header: 'Platoon', accessor: 'platoon' },
+      // { Header: 'Platoon', accessor: 'platoon' },
+      { Header: 'Grade', accessor: 'class_grade' },
+      { Header: 'Sub', accessor: 'class_sub' },
     )
   }
 

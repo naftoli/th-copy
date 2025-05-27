@@ -36,7 +36,7 @@ class OrdersRouter {
         $orders = [];
         while( $order = $query->fetch() ) {
             $order['platoon'] = Platoon::generateName( $order['class_grade'], $order['class_sub'] );
-            unset( $order['class_grade'] ); unset( $order['class_sub'] ); 
+            // unset( $order['class_grade'] ); unset( $order['class_sub'] ); 
             $orders[] = $order;
         }
 
