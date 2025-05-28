@@ -5,7 +5,7 @@ error_reporting(E_ALL);
 $admin_auth = ['school'];
 require_once '../header.php';
 require_once '../api/header/db.php';
-require_once '../class.AdminSchools.php';
+require_once '../class.adminSchools.php';
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true, false); // add test schools
 $schools = $as->getSchools();
