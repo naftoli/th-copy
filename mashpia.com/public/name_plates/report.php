@@ -13,10 +13,13 @@ $schools = $as->getSchools();
 $super = $admin_user['auth'] == 'super';
 
 $info = [];
-$sql = "SELECT * FROM name_plates p JOIN users u ON p.user_id = u.user_id";
+$sql = "SELECT * FROM name_plates p 
+        JOIN users u ON p.user_id = u.user_id
+        JOIN classes c ON u.class_id = c.class_id";
 if (!$super) {
     $sql .= " WHERE p.school_id IN (" . implode(',', array_keys($schools)) . ")";
 }
+$sql .= " ORDER BY p.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $stmt = $MASHPIA_DB->query($sql);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $info[$row['school_id']][] = $row;
@@ -49,6 +52,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <thead>
             <tr>
                 <th>School</th>
+                <th>Class</th>
                 <th>Serial</th>
                 <th>Child</th>
                 <th>Qty</th>
@@ -62,6 +66,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <?php foreach ($rows as $row) { ?>
                     <tr>
                         <td><?php echo $schools[$school_id]; ?></td>
+                        <td><?php echo $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : ''); ?></td>
                         <td><?php echo $row['user_serial']; ?></td>
                         <td><?php echo $row['first'] . ' ' . $row['last']; ?></td>
                         <td><?php echo $row['qty']; ?></td>
