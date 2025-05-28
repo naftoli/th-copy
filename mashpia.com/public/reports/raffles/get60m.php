@@ -35,19 +35,21 @@ $eligibleUsers = [];
 $raffle = Raffle::load($_GET['raffle_id'] ?? 444);
 $eligible = $raffle->get_raffle_eligable_user_ids();
 foreach ($eligible as $user_id => $user) {
-    $raffle_name_info = explode(' ', $raffle->name);
-    $raffle_name = $raffle_name_info[2];
-    $eligibleUsers[$raffle->raffle_id][$user_id] = [
-        'raffle_id' => $raffle->raffle_id,
-        'raffle_name' => $raffle_name,
-        'school_id' => $user['school_id'],
-        'school_name' => $schools[$user['school_id']],
-        'class_grade' => $userInfo[$user_id]['class_grade'],
-        'class_sub' => $userInfo[$user_id]['class_sub'],
-        'user_serial' => $userInfo[$user_id]['user_serial'],
-        'first' => $userInfo[$user_id]['first'],
-        'last' => $userInfo[$user_id]['last'],
-    ];
+    if (isset($userInfo[$user_id])) {
+        $raffle_name_info = explode(' ', $raffle->name);
+        $raffle_name = $raffle_name_info[2];
+        $eligibleUsers[$raffle->raffle_id][$user_id] = [
+            'raffle_id' => $raffle->raffle_id,
+            'raffle_name' => $raffle_name,
+            'school_id' => $user['school_id'],
+            'school_name' => $schools[$user['school_id']],
+            'class_grade' => $userInfo[$user_id]['class_grade'],
+            'class_sub' => $userInfo[$user_id]['class_sub'],
+            'user_serial' => $userInfo[$user_id]['user_serial'],
+            'first' => $userInfo[$user_id]['first'],
+            'last' => $userInfo[$user_id]['last'],
+        ];
+    }
 }
 
 echo json_encode($eligibleUsers);
