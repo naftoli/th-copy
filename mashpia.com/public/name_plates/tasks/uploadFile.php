@@ -29,7 +29,8 @@ if (isset($_FILES['file'])) {
     if ($error == 0) {
         $stmt = $MASHPIA_DB->prepare("
             INSERT INTO name_plates 
-            SET user_id = (
+            SET name_plate_id = '',
+            user_id = (
                 SELECT user_id FROM users WHERE user_serial = :serial
             ), 
             school_id = :school_id, 
