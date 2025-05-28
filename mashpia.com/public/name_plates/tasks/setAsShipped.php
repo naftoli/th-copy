@@ -2,6 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
+$admin_auth = ['school'];
 require_once '../../header.php';
 require_once '../../api/header/db.php';
 require_once '../../class.globalSettings.php';
