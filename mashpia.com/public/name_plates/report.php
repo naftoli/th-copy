@@ -37,6 +37,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             font-size: 12px;
             border-bottom: 1px solid #ccc;
         }
+        .reason {
+            font-size: 10px;
+        }
     </style>
 </head>
 <body>
@@ -74,7 +77,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 <?php if (!intval($row['missing_he_name'])) echo 'disabled'; ?>
                             />
                         </td>
-                        <td><?php echo $row['reason']; ?></td>
+                        <td class="reason"><?php echo $row['reason']; ?></td>
                         <td>
                             <?php if (intval($row['missing_he_name'])) { ?>
                                 <button onclick="saveHeName(<?= $row['user_id'] ?>)">Save</button>
