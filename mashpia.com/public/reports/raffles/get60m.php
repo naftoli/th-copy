@@ -5,10 +5,6 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once '../../header.php';
 
-if ($admin_user['auth'] != 'super') {
-    die('Unauthorized');
-}
-
 // load the required classes
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.adminSchools.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.schoolsUsers.php';
