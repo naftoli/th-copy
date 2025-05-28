@@ -194,7 +194,7 @@ class ChayoleiShipping
                 'item'  => 'Name Plate',
                 'size'  => '',
                 'name'  => $row['first_he'] . ' ' . $row['last_he'],
-                'id'    => $row['shipping_code'],
+                'id'    => 'NP101',
                 'cat'   => 'name plates',
                 'size'  => '',
                 'qty'   => $row['qty']
