@@ -79,7 +79,11 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             />
                         </td>
                         <td><?php echo $row['reason']; ?></td>
-                        <td><button onclick="saveHeName(<?= $row['user_id'] ?>)">Save</button></td>
+                        <td>
+                            <?php if (intval($row['missing_he_name'])) { ?>
+                                <button onclick="saveHeName(<?= $row['user_id'] ?>)">Save</button>
+                            <?php } ?>
+                        </td>
                     </tr>
                 <?php } ?>
             <?php } ?>
