@@ -42,10 +42,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 <body>
     <?php include '../admin_header.php'; ?>
     <h1>Name Plates Report</h1>
-    <div class="infobox">
-        You can edit the hebrew name of the child by clicking on the input field and typing the new name. 
-        The changes will be saved automatically ONCE YOU CLICK OUTSIDE OF THE INPUT FIELD.
-    </div>
     <table>
         <thead>
             <tr>
