@@ -183,11 +183,12 @@ class ChayoleiShipping
                 name_plates np 
                 JOIN users u ON np.user_id = u.user_id 
             WHERE
-                1 = 1";
+                np.year = :year ";
         if ($gender == 'M') $sql .= " AND u.gender = 'M'";
         else if ($gender == 'F') $sql .= " AND u.gender = 'F'";
         if ($school > 0) $sql .= " AND u.school_id = " . $school;
-        $stmt = $this->db->query($sql);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $purchases[$row['user_id']][] = [
