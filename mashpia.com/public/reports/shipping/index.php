@@ -50,12 +50,25 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-<!--        <h2>5778 Shipping System</h2>-->
-        <?// include(dirname(__FILE__)."/parts/action_links.php");?>
+        <h2>Name Plates</h2>
+        <div id="action-links">
+            <a href="/name_plates/report.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Name Plates Report</span>
+                </div>
+            </a>
+            <a href="/chidon_shipping/">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">Name Plates Shipping Report</span>
+                </div>
+            </a>
+        </div>
         
-        <? if ($admin_user['auth'] == 'super') { ?>
+        <?php if ($admin_user['auth'] == 'super') : ?>
         <h2>Chidon Shipping</h2>
-          <div id="action_links">
+          <div id="action-links">
             <a href="/parent_shipping">
               <div class="button">
                 <img src="/images/icon_report.png" height="32" alt="report"/>
@@ -105,6 +118,6 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <? } ?>
+        <?php endif; ?>
     </body>
 </html>
