@@ -163,7 +163,7 @@ if (isset($_POST['submit'])) {
                                 // delete mark and mission if value is 0
                                 $sql = "DELETE FROM date_tasks_marks WHERE date_task_id = " . $task_id . " AND user_id = " . $user . " AND mark_date = " . $date;
                                 $qrys[] = $sql;
-                                if ($type != 'shul') {
+                                if ($type == 'kapitelach') {
                                     // get the date tasks mission id
                                     $sql = "SELECT date_tasks_mission_id FROM date_tasks WHERE date_task_id = " . $task_id;
                                     $result = mysql_query($sql);
@@ -192,7 +192,7 @@ if (isset($_POST['submit'])) {
                                         mark_points = " . $tehillim[$user][$key]['points'];
                                 $qrys[] = $sql;
                                 
-                                if ($type != 'shul') {
+                                if ($type == 'kapitelach') {
                                     // find out quota
                                     $sql = "SELECT dtm.*, dt.quantity FROM date_tasks_missions dtm
                                             JOIN date_tasks dt USING (date_tasks_mission_id)
