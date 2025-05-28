@@ -35,6 +35,7 @@ if (isset($_FILES['file'])) {
             ), 
             school_id = :school_id, 
             qty = :qty, 
+            shipped = :shipped, 
             missing_he_name = :missing_he_name, 
             reason = :reason
         ");
@@ -56,14 +57,16 @@ if (isset($_FILES['file'])) {
             $serial = intval($data[1]);
             $qty = intval($data[2]);
             $missing_he_name = intval($data[3]);
-            $reason = $data[4];
+            $reason = trim($data[4]);
+            $shipped = empty($reason) ? 1 : 0;
             
             $res = $stmt->execute([
                 ':school_id' => $school_id,
                 ':serial' => $serial,
                 ':qty' => $qty,
                 ':missing_he_name' => $missing_he_name,
-                ':reason' => $reason
+                ':reason' => $reason,
+                ':shipped' => $shipped
             ]);
             if (!$res) {
                 $success = false;
