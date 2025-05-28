@@ -54,7 +54,6 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <th>Child</th>
                 <th>Qty</th>
                 <th>Shipped</th>
-                <th>Missing He Name</th>
                 <th>Enter Hebrew Name</th>
                 <th>Reason</th>
             </tr>
@@ -67,8 +66,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         <td><?php echo $row['user_serial']; ?></td>
                         <td><?php echo $row['first'] . ' ' . $row['last']; ?></td>
                         <td><?php echo $row['qty']; ?></td>
-                        <td><?php echo empty($row['reason']) ? 'Yes' : 'No'; ?></td>
-                        <td><?php echo intval($row['missing_he_name']) ? 'Yes' : 'No'; ?></td>
+                        <td><?php echo intval($row['shipped']) ? 'Yes' : 'No'; ?></td>
                         <td>
                             <input 
                                 type='text' 
