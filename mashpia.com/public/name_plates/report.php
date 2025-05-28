@@ -79,6 +79,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             />
                         </td>
                         <td><?php echo $row['reason']; ?></td>
+                        <td><button onclick="saveHeName(<?= $row['user_id'] ?>)">Save</button></td>
                     </tr>
                 <?php } ?>
             <?php } ?>
@@ -108,46 +109,26 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         }
         return true;
     }
-    
-    $(document).ready(function() {
-        let processingField = false;
-        $('.he_name').on('blur', function(e) {
-            // Prevent duplicate processing
-            if (processingField) return;
-            
-            const id = $(this).attr('id');
-            const value = $(this).val().trim();
-            const old = $(this).data('old').trim();
-            
-            // only update if there's a value and if it's different from the old value 
-            // or if it's empty and the old value is not empty
-            let valid = validate(this, value);
-            if (!valid) {
-                processingField = true;
-                // Use setTimeout to allow the alert to be dismissed before re-enabling processing
-                setTimeout(function() {
-                    processingField = false;
-                }, 100);
-                return;
-            }
-            
-            if (value != old || (value == '' && old != '')) {
-                $.ajax({
-                    url: 'api/update_he_name.php',
-                    type: 'POST',
-                    data: {
-                        user_id: id,
-                        he_name: value
-                    },
-                    success: function(response) {
-                        console.log(response);
-                        if (response.error) {
-                            alert(response.error);
-                        }
+
+    function saveHeName(id) {
+        const value = $('#'+id).val().trim();
+        const old = $('#'+id).data('old').trim();
+        if (value != old || (value == '' && old != '')) {
+            $.ajax({
+                url: 'api/update_he_name.php',
+                type: 'POST',
+                data: {
+                    user_id: id,
+                    he_name: value
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response.error) {
+                        alert(response.error);
                     }
-                });
-            }
-        });
-    });
+                }
+            });
+        }
+    }
 </script>
 </html>
