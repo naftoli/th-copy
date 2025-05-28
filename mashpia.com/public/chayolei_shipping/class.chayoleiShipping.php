@@ -53,11 +53,12 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['chanuka', 'hei teves'];
+        $categories = ['name plates','chanuka', 'hei teves'];
         return $categories;
     }
 
     public function getItems() {
+        $items['name plates'] = ['Name Plates'];
         $items['chanuka'] = $this->getYomTovItems('Chanuka');
         $items['hei teves'] = $this->getYomTovItems('Hei Teves');
         return $items;
@@ -166,7 +167,39 @@ class ChayoleiShipping
     public function getHeiTeves($gender, $school, $items) {
         return $this->getPurchases($gender, $school, $items, 'Hei Teves');
     }
+
     public function getChanuka($gender, $school, $items) {
         return $this->getPurchases($gender, $school, $items, 'Chanuka');
+    }
+
+    public function getNamePlates($gender, $school, $items) {
+        $purchases = [];
+        $sql = "
+            SELECT 
+                np.*,
+                u.first_he,
+                u.last_he
+            FROM
+                name_plates np 
+                JOIN users u ON np.user_id = u.user_id 
+            WHERE
+                np.shipped = 1";
+        if ($gender == 'M') $sql .= " AND u.gender = 'M'";
+        else if ($gender == 'F') $sql .= " AND u.gender = 'F'";
+        if ($school > 0) $sql .= " AND u.school_id = " . $school;
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $purchases[$row['user_id']][] = [
+                'item'  => 'Name Plate',
+                'size'  => '',
+                'name'  => $row['first_he'] . ' ' . $row['last_he'],
+                'id'    => $row['shipping_code'],
+                'cat'   => 'name plates',
+                'size'  => '',
+                'qty'   => $row['qty']
+            ];
+        }
+        return $purchases;
     }
 }
