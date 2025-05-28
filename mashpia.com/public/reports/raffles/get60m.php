@@ -31,25 +31,48 @@ foreach ($schoolUsers as $school_id => $users) {
     }
 }
 
-$eligibleUsers = [];
-$raffle = Raffle::load($_GET['raffle_id'] ?? 444);
-$eligible = $raffle->get_raffle_eligable_user_ids();
-foreach ($eligible as $user_id => $user) {
-    if (isset($userInfo[$user_id])) {
-        $raffle_name_info = explode(' ', $raffle->name);
-        $raffle_name = $raffle_name_info[2];
-        $eligibleUsers[$raffle->raffle_id][$user_id] = [
-            'raffle_id' => $raffle->raffle_id,
-            'raffle_name' => $raffle_name,
-            'school_id' => $user['school_id'],
-            'school_name' => $schools[$user['school_id']],
-            'class_grade' => $userInfo[$user_id]['class_grade'],
-            'class_sub' => $userInfo[$user_id]['class_sub'],
-            'user_serial' => $userInfo[$user_id]['user_serial'],
-            'first' => $userInfo[$user_id]['first'],
-            'last' => $userInfo[$user_id]['last'],
-        ];
+$raffle_ids = [444, 445, 446];
+
+$userRaffles = [];
+foreach ($raffle_ids as $raffle_id) {
+    $raffle = Raffle::load($raffle_id);
+    $eligible = $raffle->get_raffle_eligable_user_ids();
+    foreach ($eligible as $user_id => $user) {
+        if (isset($userInfo[$user_id])) {
+            $userRaffles[$user_id][] = $raffle_id;
+        }
     }
 }
 
-echo json_encode($eligibleUsers);
+// create info array
+$info = [];
+foreach ($schoolUsers as $school_id => $users) {
+    foreach ($users as $user) {
+        $user_id = $user['user_id'];
+        if (isset($userRaffles[$user_id])) {
+            $user = $userInfo[$user_id];
+            $school_id = $user['school_id'];
+            $school_name = $schools[$school_id];
+            $grade = $user['class_grade'];
+            $sub = $user['class_sub'];
+            $serial = $user['user_serial'];
+            $first = $user['first'];
+            $last = $user['last'];
+            $info[$school_name][$grade][$sub][$last][$first][$user_id] = [
+                'raffles' => $userRaffles[$user_id],
+                'school_id' => $school_id,
+                'school_name' => $school_name,
+                'grade' => $grade,
+                'sub' => $sub,
+                'serial' => $serial,
+                'first' => $first,
+                'last' => $last,
+            ];
+        }
+    }
+}
+
+// return the info and schools
+$data['info'] = $info;
+$data['schools'] = $schools;
+echo json_encode($data);

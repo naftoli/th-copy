@@ -42,75 +42,56 @@
 
     const Report = () => {
         const [data, setData] = useState([])
+        const [schools, setSchools] = useState([])
         const [loading, setLoading] = useState(false)
         const [error, setError] = useState(null)
-            
+
+        const raffles = {
+            444: '#1',
+            445: '#2',
+            446: '#3',
+        }
+
         // Compute totals using useMemo to prevent unnecessary recalculations
         const schoolTotals = useMemo(() => {
             const computedTotals = {}
-            Object.entries(data).forEach(([user_id, user]) => {
-                const schoolId = user.school_id
-                if (!computedTotals[schoolId]) computedTotals[schoolId] = 0
-                computedTotals[schoolId]++
-            })
-            console.log(computedTotals)
-            return computedTotals
-        }, [data])
-
-        const schools = useMemo(() => {
-            const computedSchools = {}
-            Object.entries(data).forEach(([user_id, user]) => {
-                const schoolId = user.school_id
-                if (!computedSchools[schoolId]) computedSchools[schoolId] = user.school_name
-            })
-            return computedSchools
-        }, [data])
-
-        const raffles = useMemo(() => {
-            const computedRaffles = {}
-            Object.entries(data).forEach(([user_id, user]) => {
-                const raffleId = user.raffle_id
-                if (!computedRaffles[raffleId]) computedRaffles[raffleId] = user.raffle_name
-            })
-            return computedRaffles
-        }, [data])
-
-        useEffect(() => {
-            const fetchRaffles = async () => {
-                try {
-                    // get a few raffles asynchronously
-                    const raffle_ids = [444, 445, 446]
-                    const promises = raffle_ids.map(raffle_id => 
-                        fetch(`get60m.php?raffle_id=${raffle_id}`, {
-                            method: 'GET',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                        })
-                    )
-
-                    const responses = await Promise.all(promises)
-                    const results = await Promise.all(responses.map(r => r.json()))
-                    const info = {}
-                    results.forEach(result => {
-                        Object.entries(result).forEach(([raffle_id, users]) => {
-                            Object.entries(users).forEach(([user_id, user]) => {
-                                if (!info[user_id]) info[user_id] = user
-                                if (!info[user_id]['raffles']) info[user_id]['raffles'] = [raffle_id]
-                                else info[user_id]['raffles'].push(raffle_id)
+            Object.entries(data).forEach(([school, grades]) => {
+                Object.entries(grades).forEach(([grade, subs]) => {
+                    Object.entries(subs).forEach(([sub, more]) => {
+                        Object.entries(more).forEach(([last, users]) => {
+                            Object.entries(users).forEach(([first, other]) => {
+                                Object.entries(other).forEach(([user_id, user]) => {
+                                    if (!computedTotals[school]) computedTotals[school] = 0
+                                    computedTotals[school]++
+                                })
                             })
                         })
                     })
-                    console.log(info)
-                    setData(info)
+                })
+            })
+            return computedTotals
+        }, [data, schools])
+
+        useEffect(() => {
+            async function fetchData() {
+                try {
+                    // changed to return all raffles in one fetch call
+                    const result = await fetch('get60m.php', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    const data = await result.json()
+                    setData(data.info)
+                    setSchools(data.schools)
                     setLoading(false)
                 } catch (error) {
                     setError(error)
                     setLoading(false)
                 }
             }
-
-            fetchRaffles()
+            fetchData();
         }, [])
 
         if (loading) {
@@ -133,9 +114,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.entries(schoolTotals).map(([school_id, count]) => (
-                            <tr key={school_id}>
-                                <td>{schools[school_id]}</td>
+                        {Object.entries(schoolTotals).map(([school, count]) => (
+                            <tr key={school}>
+                                <td>{school}</td>
                                 <td>{count}</td>
                             </tr>
                         ))}
@@ -154,15 +135,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.entries(data).map(([user_id, user]) => (
-                            <tr key={user_id}>
-                                <td>{user.raffles.map(r => raffles[r]).join(', ')}</td>
-                                <td>{schools[user.school_id]}</td>
-                                <td>{user.class_grade + (user.class_sub ? '-' + user.class_sub : '')}</td>
-                                <td>{user.user_serial}</td>
-                                <td>{user.first}</td>
-                                <td>{user.last}</td>
-                            </tr>
+                        {Object.entries(data).map(([school, grades]) => (
+                            Object.entries(grades).map(([grade, subs]) => (
+                                Object.entries(subs).map(([sub, more]) => (
+                                    Object.entries(more).map(([last, users]) => (
+                                        Object.entries(users).map(([first, other]) => (
+                                            Object.entries(other).map(([user_id, user]) => (
+                                                <tr key={user_id}>
+                                                    <td>{user.raffles.map(r => raffles[r]).join(', ')}</td>
+                                                    <td>{schools[user.school_id]}</td>
+                                                    <td>{grade + (sub ? '-' + sub : '')}</td>
+                                                    <td>{user.user_serial}</td>
+                                                    <td>{first}</td>
+                                                    <td>{last}</td>
+                                                </tr>
+                                            ))
+                                        ))
+                                    ))
+                                ))
+                            ))
                         ))}
                     </tbody>
                 </table>
