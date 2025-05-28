@@ -77,7 +77,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 class='he_name' 
                                 data-old='<?= $row['first_he'] . ' ' . $row['last_he'] ?>' 
                                 value='<?= $row['first_he'] . ' ' . $row['last_he'] ?>' 
-                                <?php if (empty($row['reason'])) echo 'disabled'; ?>
+                                <?php if (!intval($row['missing_he_name'])) echo 'disabled'; ?>
                             />
                         </td>
                         <td><?php echo $row['reason']; ?></td>
