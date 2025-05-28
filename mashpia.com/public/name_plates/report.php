@@ -117,6 +117,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     function saveHeName(id) {
         const value = $('#'+id).val().trim();
         const old = $('#'+id).data('old').trim();
+        if (!validate($('#'+id), value)) return;
         if (value != old || (value == '' && old != '')) {
             $.ajax({
                 url: 'api/update_he_name.php',
