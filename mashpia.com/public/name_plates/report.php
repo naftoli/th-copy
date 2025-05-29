@@ -64,6 +64,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         <tbody>
             <?php foreach ($info as $school_id => $rows) { ?>
                 <?php foreach ($rows as $row) { ?>
+                    <?php
+                    $he_name = $row['first_he'] . ' ' . $row['last_he'];
+                    // check if there's dbl quote in string
+                    if (strpos($he_name, '"') !== false) {
+                        $he_name = str_replace('"', '&quot;', $he_name);
+                    }
+                    ?>
                     <tr>
                         <td><?php echo $schools[$school_id]; ?></td>
                         <td><?php echo $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : ''); ?></td>
@@ -77,8 +84,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 id='<?= $row['user_id'] ?>'
                                 name='he_name[<?= $row['user_id'] ?>]' 
                                 class='he_name' 
-                                data-old='<?= $row['first_he'] . ' ' . $row['last_he'] ?>' 
-                                value="<?= $row['first_he'] . ' ' . $row['last_he'] ?>" 
+                                data-old="<?= $he_name ?>" 
+                                value="<?= $he_name ?>" 
                                 <?php if (!intval($row['missing_he_name'])) echo 'disabled'; ?>
                             />
                         </td>
