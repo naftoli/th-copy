@@ -141,6 +141,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     console.log(response);
                     if (response.error) {
                         alert(response.error);
+                    } else {
+                        alert('Saved.');
                     }
                 }
             });
