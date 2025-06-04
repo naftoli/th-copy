@@ -58,29 +58,55 @@ if ($res) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $ids = array_map(function($row) { return $row['user_id']; }, $rows);
     $khk_eligibility = KHK::getUltimateTripEligibility($ids)[0];
-    foreach ($rows as $row) {
-        $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
+    if ($admin_user['auth'] != 'super') {
+        foreach ($rows as $row) {
+            $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
+            $ct->setScores();
+            $ct->calculateMarks();
+            $marks = $ct->getMarks();
+            $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
+            $scores = $ct->getScores();
+            // check if child passed Iyun through cumulative marks
+            $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
+            if ($cumulative == 'iyun') $highest_track = 'genius';
+            // setup row with needed info
+            $row['highest_track'] = $highest_track;
+            $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
+            $row['khk_eligible'] = $row['class_grade'] == '8' ? $khk_eligibility[$row['user_id']] ? 1 : 0 : 0;
+            $row['khk_passed_tests'] = getKhkPassed($row);
+            $row['reward'] = getReward($row);
+            $row['award'] = getAward($row);
+            $row['raised'] = getRaised($row);
+            $row['fee'] = getFee($row);
+            $row['trip'] = getTrip($row);
+            $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
+            $row['credit'] = getPersonalCredit($row);
+            $info[$row['school_id']][] = $row;
+        }
+    } else {
+        $ct->setStudents();
         $ct->setScores();
         $ct->calculateMarks();
         $marks = $ct->getMarks();
-        $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
         $scores = $ct->getScores();
-        // check if child passed Iyun through cumulative marks
-        $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
-        if ($cumulative == 'iyun') $highest_track = 'genius';
-        // setup row with needed info
-        $row['highest_track'] = $highest_track;
-        $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-        $row['khk_eligible'] = $row['class_grade'] == '8' ? $khk_eligibility[$row['user_id']] ? 1 : 0 : 0;
-        $row['khk_passed_tests'] = getKhkPassed($row);
-        $row['reward'] = getReward($row);
-        $row['award'] = getAward($row);
-        $row['raised'] = getRaised($row);
-        $row['fee'] = getFee($row);
-        $row['trip'] = getTrip($row);
-        $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
-        $row['credit'] = getPersonalCredit($row);
-        $info[$row['school_id']][] = $row;
+        foreach ($rows as $row) {
+            $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
+            // check if child passed Iyun through cumulative marks
+            $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
+            if ($cumulative == 'iyun') $highest_track = 'genius';
+            $row['highest_track'] = $highest_track;
+            $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
+            $row['khk_eligible'] = $row['class_grade'] == '8' ? $khk_eligibility[$row['user_id']] ? 1 : 0 : 0;
+            $row['khk_passed_tests'] = getKhkPassed($row);
+            $row['reward'] = getReward($row);
+            $row['award'] = getAward($row);
+            $row['raised'] = getRaised($row);
+            $row['fee'] = getFee($row);
+            $row['trip'] = getTrip($row);
+            $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
+            $row['credit'] = getPersonalCredit($row);
+            $info[$row['school_id']][] = $row;
+        }
     }
 }
 
