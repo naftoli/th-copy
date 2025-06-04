@@ -20,10 +20,6 @@
     Require not ip 103.180.236.166
 </RequireAll>
 
-# In .htaccess or httpd.conf
-TimeOut 300
-KeepAliveTimeout 300
-
 # php -- BEGIN cPanel-generated handler, do not edit
 # Set the “ea-php72” package as the default “PHP” programming language.
 <IfModule mime_module>
