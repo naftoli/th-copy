@@ -53,6 +53,7 @@ $res = $stmt->execute([
     'year' => $year
 ]);
 //$stmt->debugDumpParams();
+$actual_schools = [];
 $info = [];
 if ($res) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -82,6 +83,7 @@ if ($res) {
             $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
             $row['credit'] = getPersonalCredit($row);
             $info[$row['school_id']][] = $row;
+            $actual_schools[$row['school_id']] = $schools[$row['school_id']];
         }
     } else {
         $ct->setStudents();
@@ -116,7 +118,7 @@ echo json_encode([
     'error'     => $db->errorInfo()[2] ?? '',
     'super'     => getAuth() == 'super' ? 1 : 0,
     'types'     => $types,
-    'schools'   => $schools
+    'schools'   => $actual_schools
 ]);
 
 function getKhkPassed($row) {
