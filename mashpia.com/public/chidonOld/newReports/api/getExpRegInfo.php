@@ -119,7 +119,7 @@ echo json_encode([
     'error'     => $db->errorInfo()[2] ?? '',
     'super'     => getAuth() == 'super' ? 1 : 0,
     'types'     => $types,
-    'schools'   => $schools
+    'schools'   => $actual_schools
 ]);
 
 function getKhkPassed($row) {
