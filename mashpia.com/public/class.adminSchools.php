@@ -1,4 +1,4 @@
-<?
+<?php
 class AdminSchools {
     private $admin_id;
     private $auth;

@@ -8,8 +8,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/utils/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $db = getDbHandle();
-$schools = getSchools();
-$year = $_GET['year'] && $_GET['year'] > 0 ? $_GET['year'] : getChidonYear();
+$chidon_yr = getChidonYear();
+$year = $_GET['year'] && $_GET['year'] > 0 ? $_GET['year'] : $chidon_yr;
+$schools = getSchools(intval($chidon_yr) != intval($year));
 $ct = new ChidonTests($year);
 $types = $ct->getTypes();
 

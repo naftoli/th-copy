@@ -30,10 +30,10 @@ function getChayoleiYear() {
     return GlobalSettings::getRegistrationYear();
 }
 
-function getSchools() {
+function getSchools($prev = false) {
     global $admin_user;
     require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-    $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
+    $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], !$prev, true);
     $schools = $as->getSchools();
 
     // find out which schools should be locked
