@@ -43,9 +43,11 @@ $sql = "
             JOIN
         admin_auths aa ON aa.id = u.user_id
     WHERE
-        tc.year = :year AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
-    ORDER BY u.school_id, c.class_grade, c.class_sub, u.last, u.first
-";
+        tc.year = :year ";
+if ($admin_user['auth'] != 'super') {
+    $sql .= " AND u.school_id in (" . implode(',', array_keys($schools)) . ")";
+}
+$sql .= " ORDER BY u.school_id, c.class_grade, c.class_sub, u.last, u.first";
 $stmt = $db->prepare($sql);
 $res = $stmt->execute([
     'year' => $year
