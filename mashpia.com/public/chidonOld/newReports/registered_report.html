@@ -47,7 +47,10 @@
     const [isChecked, setIsChecked] = useState({})
 
     useEffect(() => {
-      fetch('api/getExpRegInfo.php')
+      // get the year param from the url
+      const urlParams = new URLSearchParams(window.location.search)
+      let year = urlParams.get('year') ? urlParams.get('year') : 0
+      fetch('api/getExpRegInfo.php?year=' + year)
         .then(res => res.json())
         .then(
           (result) => {

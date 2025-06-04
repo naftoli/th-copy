@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $db = getDbHandle();
 $schools = getSchools();
-$year = getChidonYear();
+$year = $_GET['year'] && $_GET['year'] > 0 ? $_GET['year'] : getChidonYear();
 $ct = new ChidonTests($year);
 $types = $ct->getTypes();
 
