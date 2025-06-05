@@ -20,6 +20,8 @@ if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
     $visitorIp = $_SERVER['REMOTE_ADDR'];
 }
 
+$visitorIp = $_GET['ip'];
+
 // first get rules
 $apiUrl = "https://api.cloudflare.com/client/v4/accounts/{$accountID}/firewall/access_rules/rules";
 $ch = curl_init($apiUrl);
@@ -32,14 +34,13 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 $response = curl_exec($ch);
 curl_close($ch);
 $res = json_decode($response);
-echo "<pre>"; print_r($res); echo "</pre>";
 $rules = [];
 foreach ($res->result as $rule) {
     if ($rule->configuration->value == $visitorIp) {
         $rules[] = $rule->id;
     }
 }
-echo "<pre>"; print_r($rules); echo "</pre>"; exit;
+
 // Cloudflare Firewall API endpoint
 $apiUrl = "https://api.cloudflare.com/client/v4/accounts/{$accountID}/firewall/access_rules/rules/";
 
