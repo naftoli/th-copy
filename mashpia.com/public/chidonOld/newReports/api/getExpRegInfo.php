@@ -64,6 +64,8 @@ if ($res) {
     $ids = array_map(function($row) { return $row['user_id']; }, $rows);
     $khk_eligibility = KHK::getUltimateTripEligibility($ids)[0];
     $khk_marks = getKhKMarks($year);
+    $raised = getAllRaised($year);
+    $personal_credit = getAllPersonalCredit();
     $ct->overrideStudents($rows);
     $ct->setScores();
     $ct->calculateMarks();
@@ -101,6 +103,7 @@ echo json_encode([
 
 function getKhKMarks($year) {
     global $db;
+    $info = [];
     $sql = "select * from th_khk_marks tkm 
             join th_chidon tc on tkm.th_chidon_id = tc.th_chidon_id         
             where tc.year = :year";
@@ -108,7 +111,11 @@ function getKhKMarks($year) {
     $stmt->execute([
         ':year' => $year
     ]);
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $marks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($marks as $mark) {
+        $info[$mark['th_chidon_id']][] = $mark;
+    }
+    return $info;
 }
 
 function getKhkPassed($row) {
@@ -116,9 +123,7 @@ function getKhkPassed($row) {
     if (! $row['th_chidon_id']) return false;
     else {
         global $khk_marks;
-        $marks = array_filter($khk_marks, function($mark) use ($row) {
-            return $mark['th_chidon_id'] == $row['th_chidon_id'];
-        });
+        $marks = $khk_marks[$row['th_chidon_id']];
 
         $total = 0;
         $num_tests = 0;
@@ -146,28 +151,34 @@ function getAward($row) {
     else return $award;
 }
 
-function getRaised($row) {
-    global $db, $year;
+function getAllRaised($year) {
+    global $db;
+
+    $raised = [];
     $sql = "
         SELECT 
-            IFNULL( SUM(subsidy_amount), 0 ) AS total 
+            user_id, IFNULL( SUM(subsidy_amount), 0 ) AS total 
         FROM
             chidon_user_subsidies
         WHERE
             chidon_year = :year 
-                AND user_id = :user
+        GROUP BY 
+            user_id
     ";
     $stmt = $db->prepare($sql);
-    $res = $stmt->execute([
-        ':year' => $year,
-        ':user' => $row['user_id']
+    $stmt->execute([
+        ':year' => $year
     ]);
-    if ($res) {
-        $row = $stmt->fetch();
-        return $row['total'];
-    } else {
-        return 0;
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $raised[$row['user_id']] = $row['total'];
     }
+    return $raised;
+}
+
+function getRaised($row) {
+    global $raised;
+    return $raised[$row['user_id']] ?? 0;
 }
 
 function getFee($row) {
@@ -212,36 +223,52 @@ function getExtraPurchases($row) {
     return '';
 }
 
-function getShippingInfo($row) {
-    // check if there's a shipping code in the db for any children in this admin
+function getAllShippingInfo() {
     global $db, $year;
 
+    $shipping = [];
     $stmt = $db->prepare("
-        SELECT * FROM registration_charges where year = :year and admin_id = :admin AND type IN ('RRSUSA', 'RRSCAN', 'RRSINT') 
+        SELECT * FROM registration_charges where year = :year 
+        AND type IN ('RRSUSA', 'RRSCAN', 'RRSINT') 
+        GROUP BY admin_id
     ");
-   $stmt->execute([
-        ':year' => $year,
-        ':admin'   => $row['admin_id']
+    $stmt->execute([
+        ':year' => $year
     ]);
-    // find out if there's any rows
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    return count($rows) > 0 ? 'shipping' : 'pickup';
+    foreach ($rows as $row) {
+        $shipping[$row['admin_id']] = $row;
+    }
+    return $shipping;
+}
+
+function getShippingInfo($row) {
+    // check if there's a shipping code in the db for any children in this admin
+    global $shipping;
+    return isset($shipping[$row['admin_id']]) ? 'shipping' : 'pickup';
+}
+
+function getAllPersonalCredit() {
+    global $db, $year;
+    
+    $credit = [];
+    $stmt = $db->prepare("
+        SELECT IFNULL(SUM(amount), 0) as total, admin_id 
+        FROM registration_charges 
+        WHERE year = :year AND type = 'RRFAM'
+        GROUP BY admin_id
+    ");
+    $stmt->execute([
+        ':year' => $year
+    ]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $credit[$row['admin_id']] = $row['total'];
+    }
+    return $credit;
 }
 
 function getPersonalCredit($row) {
-    global $db, $year;
-    
-    $stmt = $db->prepare("
-        SELECT IFNULL(SUM(amount), 0) as total FROM registration_charges WHERE year = :year AND admin_id = :admin AND type = 'RRFAM'
-    ");
-    $res = $stmt->execute([
-        ':year' => $year,
-        ':admin' => $row['admin_id']
-    ]);
-    if ($res) {
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['total'];
-    } else {
-        return 0;
-    }
+    global $personal_credit;
+    return $personal_credit[$row['admin_id']] ?? 0;
 }
