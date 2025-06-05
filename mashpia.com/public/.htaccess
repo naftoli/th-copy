@@ -4,6 +4,21 @@
 # RewriteCond %{SERVER_PORT} 80 
 # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+# Enable RewriteEngine
+RewriteEngine On
+RewriteBase /
+
+# HONEYPOT RULE: Catch all non-existent PHP files
+RewriteCond %{REQUEST_URI} \.php$ [NC]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+RewriteRule ^.*$ /honeypot.php [L]
+
+# HONEYPOT RULE: Catch requests for suspicious file/folder patterns (efficient regex)
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-d
+RewriteCond %{REQUEST_URI} ^/(wp-login|upload|admin|config|db|shell|\\.git|\\.env|phpinfo|pma|sql|backup|logs|dump|webdav|cpanel|installer|test).* [NC]
+RewriteRule ^.*$ /honeypot.php [L]
+
 # prevent caching on the server side
 <FilesMatch "\.(html|htm|js|css|php)>
   FileETag None
