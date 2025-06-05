@@ -57,7 +57,6 @@ foreach ($rules as $ruleID) {
     $response = curl_exec($ch);
     curl_close($ch);
     $res = json_decode($response);
-    echo "<pre>"; print_r($res); echo "</pre>";
 }
 
 // Log the blocked IP with the requested page
