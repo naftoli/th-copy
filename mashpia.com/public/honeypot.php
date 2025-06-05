@@ -44,7 +44,6 @@ curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
 $response = curl_exec($ch);
 curl_close($ch);
-echo "<pre>"; print_r($response); echo "</pre>";
 
 // Log the blocked IP with the requested page
 $requestedPage = $_SERVER['REQUEST_URI'];
