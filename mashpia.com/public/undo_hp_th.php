@@ -20,40 +20,51 @@ if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
     $visitorIp = $_SERVER['REMOTE_ADDR'];
 }
 
-// Cloudflare Firewall API endpoint
+// first get rules
 $apiUrl = "https://api.cloudflare.com/client/v4/accounts/{$accountID}/firewall/access_rules/rules";
-
-$data = [
-    "mode"          => "block",
-    "configuration" => [
-        "target" => "ip",
-        "value"  => $visitorIp
-    ],
-    "notes"         => "Blocked by honeypot script",
-];
-
-// Send request to Cloudflare API
 $ch = curl_init($apiUrl);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
     "Content-Type: application/json",
     "Authorization: Bearer {$apiToken}"
 ]);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_POST, false);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
 $response = curl_exec($ch);
 curl_close($ch);
 $res = json_decode($response);
+echo "<pre>"; print_r($res); echo "</pre>";
+$rules = [];
+foreach ($res->result as $rule) {
+    if ($rule->configuration->value == $visitorIp) {
+        $rules[] = $rule->id;
+    }
+}
+echo "<pre>"; print_r($rules); echo "</pre>"; exit;
+// Cloudflare Firewall API endpoint
+$apiUrl = "https://api.cloudflare.com/client/v4/accounts/{$accountID}/firewall/access_rules/rules/";
+
+foreach ($rules as $ruleID) {
+    // Send request to Cloudflare API
+    $ch = curl_init($apiUrl . $ruleID);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Content-Type: application/json",
+        "Authorization: Bearer {$apiToken}"
+    ]);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+    curl_close($ch);
+    $res = json_decode($response);
+    echo "<pre>"; print_r($res); echo "</pre>";
+}
 
 // Log the blocked IP with the requested page
 $requestedPage = $_SERVER['REQUEST_URI'];
-error_log("Blocked IP: {$visitorIp} - Requested Page: {$requestedPage}");
+error_log("Removed honeypot rule for IP: {$visitorIp} - Requested Page: {$requestedPage}");
 
 // Respond with a 404 error to mimic the original behavior
 header("HTTP/1.1 404 Not Found");
 if ($res->success) {
-    exit("Bye bye, hacker. You have now been banned from this site. 
-        If this was a mistake, please reach out to dev@tzivoshashem.org 
-        or whatsapp 714-661-0630");
+    exit("You have now been allowed back to this site.");
 }
