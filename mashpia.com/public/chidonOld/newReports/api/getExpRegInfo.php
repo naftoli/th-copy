@@ -34,7 +34,8 @@ $sql = "
         u.class_id,
         c.class_grade,
         c.class_sub, 
-        aa.admin_id  
+        aa.admin_id, 
+        tci.highest_track 
     FROM
         th_chidon tc
             JOIN
@@ -42,7 +43,9 @@ $sql = "
             JOIN
         classes c ON c.class_id = u.class_id
             JOIN
-        admin_auths aa ON aa.id = u.user_id
+        admin_auths aa ON aa.id = u.user_id 
+            LEFT JOIN 
+        th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id 
     WHERE
         tc.year = :year ";
 if ($admin_user['auth'] != 'super') {
@@ -60,57 +63,30 @@ if ($res) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $ids = array_map(function($row) { return $row['user_id']; }, $rows);
     $khk_eligibility = KHK::getUltimateTripEligibility($ids)[0];
-    if ($admin_user['auth'] != 'super') {
-        foreach ($rows as $row) {
-            $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
-            $ct->setScores();
-            $ct->calculateMarks();
-            $marks = $ct->getMarks();
-            $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
-            $scores = $ct->getScores();
-            // check if child passed Iyun through cumulative marks
-            $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
-            if ($cumulative == 'iyun') $highest_track = 'genius';
-            // setup row with needed info
-            $row['highest_track'] = $highest_track;
-            $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-            $row['khk_eligible'] = $row['class_grade'] == '8' ? $khk_eligibility[$row['user_id']] ? 1 : 0 : 0;
-            $row['khk_passed_tests'] = getKhkPassed($row);
-            $row['reward'] = getReward($row);
-            $row['award'] = getAward($row);
-            $row['raised'] = getRaised($row);
-            $row['fee'] = getFee($row);
-            $row['trip'] = getTrip($row);
-            $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
-            $row['credit'] = getPersonalCredit($row);
-            $info[$row['school_id']][] = $row;
-            $actual_schools[$row['school_id']] = $schools['school_id'];
-        }
-    } else {
-        $ct->setStudents();
-        $ct->setScores();
-        $ct->calculateMarks();
-        $marks = $ct->getMarks();
-        $scores = $ct->getScores();
-        foreach ($rows as $row) {
-            $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
-            // check if child passed Iyun through cumulative marks
-            $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
-            if ($cumulative == 'iyun') $highest_track = 'genius';
-            $row['highest_track'] = $highest_track;
-            $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
-            $row['khk_eligible'] = $row['class_grade'] == '8' ? $khk_eligibility[$row['user_id']] ? 1 : 0 : 0;
-            $row['khk_passed_tests'] = getKhkPassed($row);
-            $row['reward'] = getReward($row);
-            $row['award'] = getAward($row);
-            $row['raised'] = getRaised($row);
-            $row['fee'] = getFee($row);
-            $row['trip'] = getTrip($row);
-            $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
-            $row['credit'] = getPersonalCredit($row);
-            $info[$row['school_id']][] = $row;
-            $actual_schools[$row['school_id']] = $schools[$row['school_id']];
-        }
+    $khk_marks = getKhKMarks($year);
+    $ct->overrideStudents($rows);
+    $ct->setScores();
+    $ct->calculateMarks();
+    $marks = $ct->getMarks();
+    $scores = $ct->getScores();
+    foreach ($rows as $row) {
+        $highest_track = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id'], false, 3, false, false, $row['highest_track']);
+        // check if child passed Iyun through cumulative marks
+        $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
+        if ($cumulative == 'iyun') $highest_track = 'genius';
+        $row['highest_track'] = $highest_track;
+        $row['grade'] = $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : '');
+        $row['khk_eligible'] = $row['class_grade'] == '8' ? $khk_eligibility[$row['user_id']] ? 1 : 0 : 0;
+        $row['khk_passed_tests'] = getKhkPassed($row);
+        $row['reward'] = getReward($row);
+        $row['award'] = getAward($row);
+        $row['raised'] = getRaised($row);
+        $row['fee'] = getFee($row);
+        $row['trip'] = getTrip($row);
+        $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
+        $row['credit'] = getPersonalCredit($row);
+        $info[$row['school_id']][] = $row;
+        $actual_schools[$row['school_id']] = $schools[$row['school_id']];
     }
 }
 
@@ -123,23 +99,32 @@ echo json_encode([
     'schools'   => $actual_schools
 ]);
 
+function getKhKMarks($year) {
+    global $db;
+    $sql = "select * from th_khk_marks tkm 
+            join th_chidon tc on tkm.th_chidon_id = tc.th_chidon_id         
+            where tc.year = :year";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([
+        ':year' => $year
+    ]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getKhkPassed($row) {
     if (! $row['khk_reg']) return false;
+    if (! $row['th_chidon_id']) return false;
     else {
-        global $db;
-        $marks = [];
-        $sql = "select * from th_khk_marks where th_chidon_id = " . $row['th_chidon_id'];
-        $stmt = $db->query($sql);
-        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($rows as $row) {
-            $marks[$row['test_number']] = $row['mark'];
-        }
+        global $khk_marks;
+        $marks = array_filter($khk_marks, function($mark) use ($row) {
+            return $mark['th_chidon_id'] == $row['th_chidon_id'];
+        });
 
         $total = 0;
         $num_tests = 0;
         $passing_mark = 70;
         foreach ($marks as $mark) {
-            $total += $mark;
+            $total += $mark['mark'];
             $num_tests++;
         }
         $avg = intval($total / $num_tests);
