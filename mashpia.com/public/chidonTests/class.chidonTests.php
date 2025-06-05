@@ -640,6 +640,7 @@ class ChidonTests
 
     public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3, $needAvg = false, $forIyun = false, $ht = false) {
         // check if we already determined the track
+        $highest_track = $ht ?? '';
         if (!$ht) {
             $stmt = $this->db->prepare("
                 SELECT highest_track FROM th_chidon_info 
@@ -653,9 +654,7 @@ class ChidonTests
             if ($rowTrack && !$needAvg) {
                 $highest_track = $rowTrack['highest_track'];
             }
-        } else {
-            $highest_track = $ht;
-        }
+        } 
         $types = $this->types;
         $key = array_search($highest_track, $types);
 
