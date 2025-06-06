@@ -20,8 +20,6 @@ if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
     $visitorIp = $_SERVER['REMOTE_ADDR'];
 }
 
-$visitorIp = $_GET['ip'];
-
 // first get rules
 $apiUrl = "https://api.cloudflare.com/client/v4/accounts/{$accountID}/firewall/access_rules/rules";
 $ch = curl_init($apiUrl);
