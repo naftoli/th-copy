@@ -64,5 +64,5 @@ error_log("Removed honeypot rule for IP: {$visitorIp} - Requested Page: {$reques
 // Respond with a 404 error to mimic the original behavior
 header("HTTP/1.1 404 Not Found");
 if ($res->success) {
-    exit("You have now been allowed back to this site.");
+    exit("You have now been allowed back to mashpia.com");
 }
