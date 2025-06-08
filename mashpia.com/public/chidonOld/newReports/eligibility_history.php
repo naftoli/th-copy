@@ -50,9 +50,9 @@ $history = KHK::getEligibilityFromHistory($ids, $from_yr);
         }
         tr, th, td {
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size: 14px;
             border-bottom: 1px solid #ddd;
-            padding: 5px;
+            padding: 10px;
         }
         th {
             background-color: #f2f2f2;
