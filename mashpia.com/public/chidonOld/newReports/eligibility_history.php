@@ -37,7 +37,6 @@ $ids = array_map(function ($child) {
     return $child['user_id'];
 }, $children);
 $history = KHK::getEligibilityFromHistory($ids, $from_yr);
-echo "<pre>"; print_r($history); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
