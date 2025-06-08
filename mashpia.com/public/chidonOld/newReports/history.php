@@ -172,13 +172,15 @@ $mark_fields = [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($marks as $track => $details) { ?>
-                                                <tr>
-                                                    <td><?= $types[$track] ?></td>
-                                                    <?php foreach ($mark_fields as $field => $label) { ?>
-                                                        <td><?= isset($details[$field]) ? $details[$field] : 'N/A' ?></td>
-                                                    <?php } ?>
-                                                </tr>
+                                            <?php foreach ($marks as $track => $tests) { ?>
+                                                <?php foreach ($tests as $test) { ?>
+                                                    <tr>
+                                                        <td><?= $types[$track] ?></td>
+                                                        <?php foreach ($mark_fields as $field => $label) { ?>
+                                                            <td><?= isset($test[$field]) ? $test[$field] : 'N/A' ?></td>
+                                                        <?php } ?>
+                                                    </tr>
+                                                <?php } ?>
                                             <?php } ?>
                                         </tbody>
                                     </table>
