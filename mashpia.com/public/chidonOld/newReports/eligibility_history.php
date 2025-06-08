@@ -31,6 +31,7 @@ $stmt = $MASHPIA_DB->prepare("
 $stmt->execute([
     ':yr' => $from_yr
 ]);
+$stmt->debugDumpParams();
 $children = $stmt->fetchAll();
 
 $ids = array_map(function ($child) {
