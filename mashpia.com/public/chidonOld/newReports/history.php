@@ -99,6 +99,13 @@ $fields = [
     'award_type' => 'Award Override', 
     'marks' => 'Marks'
 ];
+
+$mark_fields = [
+    'test_number' => 'Test Number',
+    'answered_correctly' => 'Answered Correctly',
+    'total_questions'   => 'Total Questions', 
+    'level' => 'Level'
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -140,7 +147,22 @@ $fields = [
                             <td>
                                 <?php 
                                 if ($field == 'marks') {
-                                    print_r($user[$field]);
+                                    // create table for marks
+                                    ?>
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Track</th>
+                                                <?php foreach ($mark_fields as $field => $label) { ?>
+                                                    <th><?= $label ?></th>
+                                                <?php } ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
+                                    <?php
                                 } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
                                     echo isset($types[$user[$field]]) ? $types[$user[$field]] : 'N/A';
                                 } else {
