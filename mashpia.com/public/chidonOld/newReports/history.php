@@ -21,6 +21,7 @@ $info = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
         tcm.*,
+        tc.user_id, 
         tc.year, 
         tc.reg_date, 
         tc.date_paid, 
