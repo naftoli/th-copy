@@ -20,6 +20,7 @@ $from_yr = GlobalSettings::getChidonRegYear() - 4;
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
+        tc.th_chidon_id,
         tc.user_id, 
         tc.year, 
         tc.reg_date, 
