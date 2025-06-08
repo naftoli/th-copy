@@ -137,9 +137,7 @@ $fields = [
                     <td>
                         <?php 
                         if ($field == 'marks') {
-                            echo "<pre>";
                             print_r($data[$year][$user_id][$field]);
-                            echo "</pre>";
                         } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
                             echo $types[$data[$year][$user_id][$field]];
                         } else {
