@@ -62,6 +62,8 @@ foreach ($children as $child) {
     if ($four) $grand_totals_4++;
     if ($three) $grand_totals_3++;
 }
+$totals['four'] = 0;
+$totals['three'] = 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -85,8 +87,8 @@ foreach ($children as $child) {
     </style>
 </head>
 <body>
-    <p>4 Yr Eligible: <?= $grand_totals_4 ?></p>
-    <p>3 Yr Eligible: <?= $grand_totals_3 ?></p>
+    <p>4 Yr Eligible: <?= number_format($grand_totals_4) ?></p>
+    <p>3 Yr Eligible: <?= number_format($grand_totals_3) ?></p>
     <table>
         <thead>
             <tr>
@@ -109,10 +111,17 @@ foreach ($children as $child) {
                 <td><?= $child['first'] ?></td>
                 <td><?= $child['last'] ?></td>
                 <td><?= $four_yr_eligibility[$child['user_id']] ? 'Yes' : 'No' ?></td>
+                <?php if ($four_yr_eligibility[$child['user_id']]) $totals['four']++; ?>
                 <td><?= $three_yr_eligibility[$child['user_id']] ? 'Yes' : 'No' ?></td>
+                <?php if ($three_yr_eligibility[$child['user_id']]) $totals['three']++; ?>
                 <?php for ($i = GlobalSettings::getChidonRegYear() - 1; $i >= $from_yr; $i--) { ?>
                     <td><?= isset($history[$child['user_id']][$i]) ? $history[$child['user_id']][$i]['highest_track'] : '' ?></td>
                 <?php } ?>
+            </tr>
+            <tr>
+                <td colspan="5">Totals:</td>
+                <td><?= $totals['four'] ?></td>
+                <td><?= $totals['three'] ?></td>
             </tr>
             <?php } ?>
         </tbody>
