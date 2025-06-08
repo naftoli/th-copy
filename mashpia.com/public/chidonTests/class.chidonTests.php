@@ -946,7 +946,7 @@ class KHK {
     // find out if child is eligible to enroll into khk track
     public static function enrollmentEligibility(array $user_ids) {
         $info = [];
-        $exceptions = [55248];
+        $exceptions = [];
         $year = GlobalSettings::getChidonRegYear();
         foreach ($user_ids as $user_id) {
             if (in_array($user_id, $exceptions)) {
@@ -957,6 +957,19 @@ class KHK {
             $sql = 'select * from th_chidon where user_id = ' . $user_id . ' and year >= ' . ($year - 4);
             $result = mysql_query($sql);
             $info[$user_id] = mysql_num_rows($result) >= 4;
+        }
+        return $info;
+    }
+
+    public static function getEligibilityFromHistory(array $user_ids, $num_yrs = 4) {
+        $year = GlobalSettings::getChidonRegYear();
+        
+        $info = [];
+        $sql = "SELECT * FROM th_chidon_info where year >= " . ($year - $num_yrs);
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            if (! in_array($row['user_id'], $user_ids)) continue;
+            $info[$row['user_id']][$row['year']] = $row;
         }
         return $info;
     }
