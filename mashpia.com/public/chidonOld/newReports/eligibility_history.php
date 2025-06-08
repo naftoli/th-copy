@@ -17,7 +17,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $from_yr = GlobalSettings::getChidonRegYear() - 4;
 
 // get all children from th_chidon from past years
-$stmt = $MASHPA_DB->prepare("
+$stmt = $MASHPIA_DB->prepare("
    SELECT 
         user_id 
     FROM
