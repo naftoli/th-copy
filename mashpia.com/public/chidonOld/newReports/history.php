@@ -49,7 +49,7 @@ $stmt->execute([
 ]);
 $children = $stmt->fetchAll();
 foreach ($children as $child) {
-    $info[$child['user_id']][$child['year']] = $child;
+    $info[$child['year']][$child['user_id']] = $child;
 }
 
 $marks = [];
@@ -63,10 +63,10 @@ foreach ($rows as $row) {
 }
 
 $data = [];
-foreach ($info as $user_id => $years) {
-    foreach ($years as $year => $details) {
-        $data[$user_id][$year] = $details;
-        $data[$user_id][$year]['marks'] = isset($marks[$details['th_chidon_id']]) ? $marks[$details['th_chidon_id']] : [];
+foreach ($info as $year => $user_ids) {
+    foreach ($user_ids as $user_id => $details) {
+        $data[$year][$user_id] = $details;
+        $data[$year][$user_id]['marks'] = isset($marks[$details['th_chidon_id']]) ? $marks[$details['th_chidon_id']] : [];
     }
 }
 echo "<pre>"; print_r($data); echo "</pre>";
