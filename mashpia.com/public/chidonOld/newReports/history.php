@@ -16,6 +16,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $cur_yr = GlobalSettings::getChidonRegYear();
 $from_yr = $cur_yr - 4;
 
+if (isset($_POST['year'])) $chosen_yr = $_POST['year'];
+else $chosen_yr = $cur_yr;
+
 // get all children from th_chidon from past years
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
@@ -40,22 +43,16 @@ $stmt = $MASHPIA_DB->prepare("
         JOIN classes c ON c.class_id = u.class_id 
         JOIN schools s ON s.school_id = u.school_id
     WHERE
-        tc.year >= :yr AND tc.year < :cur_yr
+        tc.year = :yr
     ORDER BY
         s.school_name, c.class_grade, c.class_sub, u.last, u.first, tc.year 
 ");
 $stmt->execute([
-    ':yr' => $from_yr,
-    ':cur_yr' => $cur_yr
+    ':yr' => $chosen_yr,
 ]);
 $children = $stmt->fetchAll();
 foreach ($children as $child) {
-    $info[$child['user_id']][$child['year']] = $child;
-}
-
-$years = [];
-for ($i = $from_yr; $i < $cur_yr; $i++) {
-    $years[] = $i;
+    $info[$child['user_id']] = $child;
 }
 
 $types = [
@@ -110,6 +107,24 @@ $mark_fields = [
     </style>
 </head>
 <body>
+    <?php
+    if (isset($_POST['year'])) $chosen_yr = $_POST['year'];
+    ?>
+    <!-- first choose year -->
+    <form action="" method="post">
+        <label for="year">Year:</label>
+        <select id="year" name="year">
+            <?php for ($i = $cur_yr; $i >= $from_yr; $i--) { ?>
+                <option value="<?= $i ?>"
+                <?php if ($chosen_yr == $i) echo 'selected'; ?>
+                ><?= $i ?></option>
+            <?php } ?>
+        </select><br /><br />
+        <button type="submit">Submit</button>
+    </form>
+    <?php
+    if ($chosen_yr) {
+    ?>
     <table>
         <thead>
             <tr>
@@ -120,9 +135,8 @@ $mark_fields = [
         </thead>
         <tbody> 
             <?php 
-            foreach ($info as $user_id => $years) { 
-                foreach ($years as $year => $user) { 
-                    ?>
+            foreach ($info as $user_id => $user) { 
+                ?>
                     <tr>
                         <?php foreach ($fields as $field => $label) { ?>
                             <td>
@@ -156,10 +170,10 @@ $mark_fields = [
                     </tr>
                     <?php
                 }
-            }
             ?>
         </tbody>
     </table>
+    <?php } ?>
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <!-- <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script> -->
