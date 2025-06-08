@@ -54,13 +54,22 @@ foreach ($children as $child) {
 }
 
 $marks = [];
-$stmt = $MASHPIA_DB->prepare("SELECT * FROM th_chidon_marks WHERE th_chidon_id IN (SELECT th_chidon_id FROM th_chidon WHERE year >= :yr)");
+$stmt = $MASHPIA_DB->prepare("
+    SELECT 
+        * 
+    FROM
+        th_chidon_marks 
+    WHERE
+        th_chidon_id IN (SELECT th_chidon_id FROM th_chidon WHERE year >= :yr) 
+    ORDER BY
+        th_chidon_id, test_type, test_number
+");
 $stmt->execute([
     ':yr' => $from_yr
 ]);
 $rows = $stmt->fetchAll();
 foreach ($rows as $row) {
-    $marks[$row['th_chidon_id']][$row['test_type']][$row['test_number']] = $row;
+    $marks[$row['th_chidon_id']][$row['test_type']][] = $row;
 }
 
 $data = [];
@@ -159,7 +168,14 @@ $mark_fields = [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            
+                                            <?php foreach ($user['marks'] as $track => $marks) { ?>
+                                                <tr>
+                                                    <td><?= $types[$track] ?></td>
+                                                    <?php foreach ($mark_fields as $field => $label) { ?>
+                                                        <td><?= isset($marks[$field]) ? $marks[$field] : 'N/A' ?></td>
+                                                    <?php } ?>
+                                                </tr>
+                                            <?php } ?>
                                         </tbody>
                                     </table>
                                     <?php
