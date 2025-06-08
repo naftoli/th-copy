@@ -20,7 +20,6 @@ $from_yr = GlobalSettings::getChidonRegYear() - 4;
 $info = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        tcm.*,
         tc.user_id, 
         tc.year, 
         tc.reg_date, 
@@ -35,7 +34,6 @@ $stmt = $MASHPIA_DB->prepare("
         s.school_name
     FROM
         th_chidon tc 
-        JOIN th_chidon_marks tcm USING (th_chidon_id) 
         JOIN users u ON u.user_id = tc.user_id 
         JOIN classes c ON c.class_id = u.class_id 
         JOIN schools s ON s.school_id = u.school_id
@@ -50,6 +48,16 @@ $stmt->execute([
 $children = $stmt->fetchAll();
 foreach ($children as $child) {
     $info[$child['user_id']][$child['year']] = $child;
+}
+
+$marks = [];
+$stmt = $MASHPIA_DB->prepare("SELECT * FROM th_chidon_marks WHERE th_chidon_id IN (SELECT th_chidon_id FROM th_chidon WHERE year >= :yr)");
+$stmt->execute([
+    ':yr' => $from_yr
+]);
+$marks = $stmt->fetchAll();
+foreach ($marks as $mark) {
+    $info[$mark['th_chidon_id']][] = $mark;
 }
 echo "<pre>"; print_r($info); echo "</pre>";
 ?>
