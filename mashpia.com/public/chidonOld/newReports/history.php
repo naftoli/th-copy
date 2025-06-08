@@ -174,6 +174,7 @@ $mark_fields = [
     };
     
     $(document).ready(function() {
+        alert('Loaded');
         $('.marks').click(function(e) {
             e.preventDefault();
             const th_chidon_id = $(this).attr('id');
