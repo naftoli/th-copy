@@ -156,6 +156,10 @@ $mark_fields = [
                             <td>
                                 <?php 
                                 if ($field == 'marks') {
+                                    $marks = $user['marks'];
+                                    if (empty($marks)) {
+                                        echo 'N/A';
+                                    } else {
                                     // create table for marks
                                     ?>
                                     <table>
@@ -168,7 +172,7 @@ $mark_fields = [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($user['marks'] as $track => $details) { ?>
+                                            <?php foreach ($marks as $track => $details) { ?>
                                                 <tr>
                                                     <td><?= $types[$track] ?></td>
                                                     <?php foreach ($mark_fields as $field => $label) { ?>
@@ -179,6 +183,7 @@ $mark_fields = [
                                         </tbody>
                                     </table>
                                     <?php
+                                    }
                                 } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
                                     echo isset($types[$user[$field]]) ? $types[$user[$field]] : 'N/A';
                                 } else {
