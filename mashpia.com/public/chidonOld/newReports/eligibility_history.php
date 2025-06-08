@@ -37,6 +37,28 @@ $ids = array_map(function ($child) {
     return $child['user_id'];
 }, $children);
 $history = KHK::getEligibilityFromHistory($ids, $from_yr);
+
+$four_yr_eligibility = [];
+$three_yr_eligibility = [];
+foreach ($children as $child) {
+    $four = true;
+    $three = true;
+    for ($i = GlobalSettings::getChidonRegYear() - 1; $i >= $from_yr; $i--) {
+        if ($i != $from_yr) {
+            if (!isset($history[$child['user_id']][$i])) {
+                $four = false;
+                $three = false;
+            }
+        } else {
+            if (!isset($history[$child['user_id']][$i])) {
+                $four = false;
+            }
+        }
+    }
+    $four_yr_eligibility[$child['user_id']] = $four;
+    $three_yr_eligibility[$child['user_id']] = $three;
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -67,6 +89,8 @@ $history = KHK::getEligibilityFromHistory($ids, $from_yr);
                 <th>Grade</th>
                 <th>First Name</th>
                 <th>Last Name</th>
+                <th>4 Yr Eligibility</th>
+                <th>3 Yr Eligibility</th>
                 <?php for ($i = $from_yr; $i < GlobalSettings::getChidonRegYear(); $i++) { ?>
                     <th><?= $i ?></th>
                 <?php } ?>
@@ -76,10 +100,12 @@ $history = KHK::getEligibilityFromHistory($ids, $from_yr);
             <?php foreach ($children as $child) { ?>
             <tr>
                 <td><?= $child['school_name'] ?></td>
-                <td><?= ($child['class_grade'] . (empty($child['class_sub']) ? '' : ' ' . $child['class_sub'])) ?></td>
+                <td><?= ($child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub'])) ?></td>
                 <td><?= $child['first'] ?></td>
                 <td><?= $child['last'] ?></td>
-                <?php for ($i = $from_yr; $i <= GlobalSettings::getChidonRegYear(); $i++) { ?>
+                <td><?= $four_yr_eligibility[$child['user_id']] ? 'Yes' : 'No' ?></td>
+                <td><?= $three_yr_eligibility[$child['user_id']] ? 'Yes' : 'No' ?></td>
+                <?php for ($i = $from_yr; $i < GlobalSettings::getChidonRegYear(); $i++) { ?>
                     <td><?= isset($history[$child['user_id']][$i]) ? $history[$child['user_id']][$i]['highest_track'] : '' ?></td>
                 <?php } ?>
             </tr>
