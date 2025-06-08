@@ -76,7 +76,7 @@ $history = KHK::getEligibilityFromHistory($ids, $from_yr);
             <?php foreach ($children as $child) { ?>
             <tr>
                 <td><?= $child['school_name'] ?></td>
-                <td><?= ($child['class_grade'] . empty($child['class_sub']) ? '' : ' ' . $child['class_sub']) ?></td>
+                <td><?= ($child['class_grade'] . (empty($child['class_sub']) ? '' : ' ' . $child['class_sub'])) ?></td>
                 <td><?= $child['first'] ?></td>
                 <td><?= $child['last'] ?></td>
                 <?php for ($i = $from_yr; $i <= GlobalSettings::getChidonRegYear(); $i++) { ?>
