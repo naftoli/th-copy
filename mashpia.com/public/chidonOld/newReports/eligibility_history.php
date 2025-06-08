@@ -91,7 +91,7 @@ foreach ($children as $child) {
                 <th>Last Name</th>
                 <th>4 Yr Eligibility</th>
                 <th>3 Yr Eligibility</th>
-                <?php for ($i = $from_yr; $i < GlobalSettings::getChidonRegYear(); $i++) { ?>
+                <?php for ($i = GlobalSettings::getChidonRegYear() - 1; $i >= $from_yr; $i--) { ?>
                     <th><?= $i ?></th>
                 <?php } ?>
             </tr>
@@ -105,7 +105,7 @@ foreach ($children as $child) {
                 <td><?= $child['last'] ?></td>
                 <td><?= $four_yr_eligibility[$child['user_id']] ? 'Yes' : 'No' ?></td>
                 <td><?= $three_yr_eligibility[$child['user_id']] ? 'Yes' : 'No' ?></td>
-                <?php for ($i = $from_yr; $i < GlobalSettings::getChidonRegYear(); $i++) { ?>
+                <?php for ($i = GlobalSettings::getChidonRegYear() - 1; $i >= $from_yr; $i--) { ?>
                     <td><?= isset($history[$child['user_id']][$i]) ? $history[$child['user_id']][$i]['highest_track'] : '' ?></td>
                 <?php } ?>
             </tr>
