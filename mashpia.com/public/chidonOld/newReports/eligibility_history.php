@@ -89,8 +89,8 @@ $totals['three'] = 0;
     </style>
 </head>
 <body>
-    <p>4 Yr Eligible: <?= number_format($grand_totals_4) ?></p>
-    <p>3 Yr Eligible: <?= number_format($grand_totals_3) ?></p>
+    <p>Total 4 Yr Eligible: <?= number_format($grand_totals_4) ?></p>
+    <p>Total 3 Yr Eligible: <?= number_format($grand_totals_3) ?></p>
     <table>
         <thead>
             <tr>
