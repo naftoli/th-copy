@@ -89,8 +89,8 @@ foreach ($children as $child) {
                 <th>Grade</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>4 Yr Eligibility</th>
-                <th>3 Yr Eligibility</th>
+                <th>4 Yr Eligible</th>
+                <th>3 Yr Eligible</th>
                 <?php for ($i = GlobalSettings::getChidonRegYear() - 1; $i >= $from_yr; $i--) { ?>
                     <th><?= $i ?></th>
                 <?php } ?>
