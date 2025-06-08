@@ -104,6 +104,9 @@ $mark_fields = [
         th {
             background-color: #f2f2f2;
         }
+        .top {
+            vertical-align: top;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +125,7 @@ $mark_fields = [
         </select>
         <button type="submit">Submit</button>
     </form>
+    <br />
     <?php
     if ($chosen_yr) {
     ?>
@@ -139,12 +143,12 @@ $mark_fields = [
                 ?>
                     <tr>
                         <?php foreach ($fields as $field => $label) { ?>
-                            <td>
+                            <td class="top">
                                 <?php 
                                 if ($field == 'marks') {
                                     // create table for marks
                                     ?>
-                                    <button id="<?= $user['th_chidon_id'] ?>" class="marks" data-yr="<?= $chosen_yr ?>">Get Marks</button>
+                                    <button id="<?= $user['th_chidon_id'] ?>" class="marks">Get Marks</button>
                                     <table style="display: none;">
                                         <thead>
                                             <tr>
@@ -189,36 +193,36 @@ $mark_fields = [
         $('.marks').click(function(e) {
             e.preventDefault();
             const th_chidon_id = $(this).attr('id');
-            const yr = $(this).data('yr');
-            // check if we have already loaded the marks
-            if ($(this).find('table tbody').html() != '') {
-                return;
-            }
             $.ajax({
                 url: 'api/getMarks.php',
                 type: 'GET',
                 data: {
-                    chidon_id: th_chidon_id,
-                    yr: yr
+                    chidon_id: th_chidon_id
                 },
                 success: function(response) {
-                    if (response.success) {
+                    const res = JSON.parse(response);
+                    if (res.success) {
                         let html = '';
-                        const marks = response.marks;
+                        const marks = res.marks;
                         if (Object.keys(marks).length == 0) {
                             html += `<tr><td colspan="5">No marks found</td></tr>`;
                         } else {
                             for (const track in marks) {
-                                html += `<tr><td>${track}</td>`;
-                                for (const field in mark_fields) {
-                                    html += `<td>${marks[track][field]}</td>`;
+                                html += `<tr>`;
+                                for (const test in marks[track]) {
+                                    html += `<td>${track}</td>`;
+                                    for (const field in mark_fields) {
+                                        html += `<td>${marks[track][test][field]}</td>`;
+                                    }
+                                    html += '</tr>';
                                 }
                                 html += '</tr>';
                             }
-                            $(this).find('table tbody').html(html);
-                            $(this).find('table').show();
-                            $(this).hide();
                         }
+                        const elem = '#' + th_chidon_id;
+                        $(elem).parent().find('table tbody').html(html);
+                        $(elem).parent().find('table').show();
+                        $(elem).hide();
                     }
                 }
             });

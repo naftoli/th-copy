@@ -14,12 +14,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 $chidon_id = $_GET['chidon_id'];
-$yr = $_GET['yr'];
-
-if (!$chidon_id || !$yr) {
+if (!$chidon_id) {
     echo json_encode([
         'success' => false,
-        'error' => 'No Chidon ID and Year provided.'
+        'error' => 'No Chidon ID provided.'
     ]);
     exit;
 }
@@ -31,13 +29,12 @@ $stmt = $MASHPIA_DB->prepare("
     FROM
         th_chidon_marks 
     WHERE
-        th_chidon_id = :chidon_id AND year = :yr
+        th_chidon_id = :chidon_id 
     ORDER BY
         th_chidon_id, test_type, test_number
 ");
 $stmt->execute([
     ':chidon_id' => $chidon_id,
-    ':yr' => $yr
 ]);
 $rows = $stmt->fetchAll();
 foreach ($rows as $row) {
