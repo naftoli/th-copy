@@ -130,8 +130,8 @@ $mark_fields = [
                                 if ($field == 'marks') {
                                     // create table for marks
                                     ?>
-                                    <h3 id="<?= $user['th_chidon_id'] ?>" class="marks">Marks</h3>
-                                    <div>
+                                    <button id="<?= $user['th_chidon_id'] ?>" class="marks">Get Marks</button>
+                                    <div style="display: none;">
                                         <table>
                                             <thead>
                                                 <tr>
@@ -174,11 +174,8 @@ $mark_fields = [
     };
     
     $(document).ready(function() {
-        // $('.marks').accordion({
-        //     collapsible: true,
-        //     active: false
-        // });
-        $('.marks').click(function() {
+        $('.marks').click(function(e) {
+            e.preventDefault();
             const th_chidon_id = $(this).attr('id');
             // check if we have already loaded the marks
             if ($(this).find('table tbody').html() != '') {
@@ -205,6 +202,8 @@ $mark_fields = [
                                 html += '</tr>';
                             }
                             $(this).find('table tbody').html(html);
+                            $(this).find('table').show();
+                            $(this).hide();
                         }
                     }
                 }
