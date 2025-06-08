@@ -133,7 +133,7 @@ $fields = [
             <?php foreach ($data as $year => $user_ids) { ?>
             <tr>
                 <?php foreach ($fields as $field => $label) { ?>
-                    <td><?= $data[$year][$user_id][$field] ?></td>
+                    <td><?= isset($data[$year][$user_id][$field]) ? $data[$year][$user_id][$field] : '' ?></td>
                 <?php } ?>
             </tr>
             <?php } ?>
