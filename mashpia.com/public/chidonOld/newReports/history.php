@@ -30,6 +30,7 @@ $stmt = $MASHPIA_DB->prepare("
         tc.award_type, 
         u.first,
         u.last,
+        u.user_serial,
         c.class_grade,
         c.class_sub,
         s.school_name
@@ -70,6 +71,33 @@ foreach ($info as $year => $user_ids) {
     }
 }
 echo "<pre>"; print_r($data); echo "</pre>";
+
+$years = [];
+foreach ($data as $year => $user_ids) {
+    $years[] = $year;
+}
+
+$types = [
+    'maven' => 'Yesod',
+    'pro'   => 'Yediah',
+    'expert'=> 'Havonah',
+    'genius'=> 'Iyun'
+];
+
+$fields = [
+    'school_name' => 'School', 
+    'class_grade' => 'Grade', 
+    'class_sub' => 'Sub', 
+    'user_serial' => 'Serial', 
+    'first' => 'First', 
+    'last' => 'Last', 
+    'reg_date' => 'Enrollment Date', 
+    'date_paid' => 'Registration Date', 
+    'test_type' => 'Track Signed Up For', 
+    'reward_type' => 'Reward Override', 
+    'award_type' => 'Award Override', 
+    'marks' => 'Marks'
+];
 ?>
 <!DOCTYPE html>
 <html>
@@ -96,11 +124,19 @@ echo "<pre>"; print_r($data); echo "</pre>";
     <table>
         <thead>
             <tr>
-                
+                <?php foreach ($fields as $field => $label) { ?>
+                    <th><?= $label ?></th>
+                <?php } ?>
             </tr>
         </thead>
         <tbody>
-            
+            <?php foreach ($data as $year => $user_ids) { ?>
+            <tr>
+                <?php foreach ($fields as $field => $label) { ?>
+                    <td><?= $data[$year][$user_id][$field] ?></td>
+                <?php } ?>
+            </tr>
+            <?php } ?>
         </tbody>
     </table>
 </body>
