@@ -13,8 +13,8 @@ if ($admin_user['auth'] != 'super') {
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-
-$from_yr = GlobalSettings::getChidonRegYear() - 4;
+$cur_yr = GlobalSettings::getChidonRegYear();
+$from_yr = $cur_yr - 4;
 
 // get all children from th_chidon from past years
 $info = [];
@@ -42,48 +42,20 @@ $stmt = $MASHPIA_DB->prepare("
     WHERE
         tc.year >= :yr AND tc.year < :cur_yr
     ORDER BY
-        tc.year, s.school_name, c.class_grade, c.class_sub, u.last, u.first
+        s.school_name, c.class_grade, c.class_sub, u.last, u.first, tc.year 
 ");
 $stmt->execute([
     ':yr' => $from_yr,
-    ':cur_yr' => GlobalSettings::getChidonYear()
+    ':cur_yr' => $cur_yr
 ]);
 $children = $stmt->fetchAll();
 foreach ($children as $child) {
-    $info[$child['year']][$child['user_id']] = $child;
+    $info[$child['user_id']][$child['year']] = $child;
 }
-
-$marks = [];
-$stmt = $MASHPIA_DB->prepare("
-    SELECT 
-        * 
-    FROM
-        th_chidon_marks 
-    WHERE
-        th_chidon_id IN (SELECT th_chidon_id FROM th_chidon WHERE year >= :yr) 
-    ORDER BY
-        th_chidon_id, test_type, test_number
-");
-$stmt->execute([
-    ':yr' => $from_yr
-]);
-$rows = $stmt->fetchAll();
-foreach ($rows as $row) {
-    $marks[$row['th_chidon_id']][$row['test_type']][] = $row;
-}
-
-$data = [];
-foreach ($info as $year => $users) {
-    foreach ($users as $user_id => $user) {
-        $data[$year][$user_id] = $user;
-        $data[$year][$user_id]['marks'] = isset($marks[$user['th_chidon_id']]) ? $marks[$user['th_chidon_id']] : [];
-    }
-}
-// echo "<pre>"; print_r($data); echo "</pre>";
 
 $years = [];
-foreach ($data as $year => $users) {
-    $years[] = $year;
+for ($i = $from_yr; $i < $cur_yr; $i++) {
+    $years[] = $i;
 }
 
 $types = [
@@ -112,7 +84,7 @@ $fields = [
 $mark_fields = [
     'test_number' => 'Test Number',
     'answered_correctly' => 'Answered Correctly',
-    'total_questions'   => 'Total Questions', 
+    'total_questions' => 'Total Questions',
     'level' => 'Level'
 ];
 ?>
@@ -146,25 +118,21 @@ $mark_fields = [
                 <?php } ?>
             </tr>
         </thead>
-        <tbody>
+        <tbody> 
             <?php 
-            foreach ($data as $year => $users) { 
-                foreach ($users as $user_id => $user) { 
+            foreach ($info as $user_id => $years) { 
+                foreach ($years as $year => $user) { 
                     ?>
                     <tr>
                         <?php foreach ($fields as $field => $label) { ?>
                             <td>
                                 <?php 
                                 if ($field == 'marks') {
-                                    $marks = $user['marks'];
-                                    if (empty($marks)) {
-                                        echo 'No Marks found.';
-                                    } else {
                                     // create table for marks
                                     ?>
                                     <table>
                                         <thead>
-                                            <tr>
+                                            <tr id="<?= $user['th_chidon_id'] ?>" class="marks">
                                                 <th>Track</th>
                                                 <?php foreach ($mark_fields as $field => $label) { ?>
                                                     <th><?= $label ?></th>
@@ -172,20 +140,10 @@ $mark_fields = [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($marks as $track => $tests) { ?>
-                                                <?php foreach ($tests as $test) { ?>
-                                                    <tr>
-                                                        <td><?= $types[$track] ?></td>
-                                                        <?php foreach ($mark_fields as $field => $label) { ?>
-                                                            <td><?= isset($test[$field]) ? $test[$field] : 'N/A' ?></td>
-                                                        <?php } ?>
-                                                    </tr>
-                                                <?php } ?>
-                                            <?php } ?>
+                                            
                                         </tbody>
                                     </table>
                                     <?php
-                                    }
                                 } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
                                     echo isset($types[$user[$field]]) ? $types[$user[$field]] : 'N/A';
                                 } else {
@@ -202,4 +160,50 @@ $mark_fields = [
         </tbody>
     </table>
 </body>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script>
+<script>
+    const mark_fields = {
+        'test_number': 'Test Number',
+        'answered_correctly': 'Answered Correctly',
+        'total_questions': 'Total Questions', 
+        'level': 'Level'
+    };
+    
+    $(document).ready(function() {
+        $('.marks').accordion({
+            collapsible: true,
+            active: false
+        });
+        $('.marks').click(function() {
+            const th_chidon_id = $(this).attr('id');
+            $.ajax({
+                url: 'api/getMarks.php',
+                type: 'GET',
+                data: {
+                    chidon_id: th_chidon_id
+                },
+                success: function(response) {
+                    if (response.success) {
+                        let html = '';
+                        const marks = response.marks;
+                        if (Object.keys(marks).length == 0) {
+                            html += `<tr><td colspan="5">No marks found</td></tr>`;
+                        } else {
+                            for (const track in marks) {
+                                html += `<tr><td>${track}</td>`;
+                                for (const field in mark_fields) {
+                                    html += `<td>${marks[track][field]}</td>`;
+                                }
+                                html += '</tr>';
+                            }
+                            const elem = '#' + th_chidon_id;
+                            $(elem).html(html);
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>
 </html>
