@@ -182,6 +182,13 @@ $mark_fields = [
 <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 <!-- <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.min.js" integrity="sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=" crossorigin="anonymous"></script> -->
 <script>
+    const tracks = {
+        'maven': 'Yesod',
+        'pro': 'Yediah',
+        'expert': 'Havonah',
+        'genius': 'Iyun'
+    }
+
     const mark_fields = {
         'test_number': 'Test Number',
         'answered_correctly': 'Answered Correctly',
@@ -210,7 +217,7 @@ $mark_fields = [
                             for (const track in marks) {
                                 html += `<tr>`;
                                 for (const test in marks[track]) {
-                                    html += `<td>${track}</td>`;
+                                    html += `<td>${tracks[track]}</td>`;
                                     for (const field in mark_fields) {
                                         html += `<td>${marks[track][test][field]}</td>`;
                                     }
