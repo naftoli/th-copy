@@ -85,6 +85,7 @@ $types = [
 ];
 
 $fields = [
+    'year' => 'Year',
     'school_name' => 'School', 
     'class_grade' => 'Grade', 
     'class_sub' => 'Sub', 
@@ -133,7 +134,7 @@ $fields = [
             <?php foreach ($data as $year => $user_ids) { ?>
             <tr>
                 <?php foreach ($fields as $field => $label) { ?>
-                    <td><?= isset($data[$year][$user_id][$field]) ? $data[$year][$user_id][$field] : '' ?></td>
+                    <td><?= isset($data[$year][$user_id][$field]) ? $data[$year][$user_id][$field] : 'N/A' ?></td>
                 <?php } ?>
             </tr>
             <?php } ?>
