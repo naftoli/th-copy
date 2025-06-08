@@ -39,12 +39,13 @@ $stmt = $MASHPIA_DB->prepare("
         JOIN classes c ON c.class_id = u.class_id 
         JOIN schools s ON s.school_id = u.school_id
     WHERE
-        tc.year >= :yr
+        tc.year >= :yr AND tc.year != :cur_yr
     ORDER BY
         s.school_name, c.class_grade, c.class_sub, u.last, u.first
 ");
 $stmt->execute([
-    ':yr' => $from_yr
+    ':yr' => $from_yr,
+    ':cur_yr' => GlobalSettings::getChidonYear()
 ]);
 $children = $stmt->fetchAll();
 foreach ($children as $child) {
