@@ -119,7 +119,7 @@ $mark_fields = [
                 <?php if ($chosen_yr == $i) echo 'selected'; ?>
                 ><?= $i ?></option>
             <?php } ?>
-        </select><br /><br />
+        </select>
         <button type="submit">Submit</button>
     </form>
     <?php
