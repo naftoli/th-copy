@@ -64,16 +64,16 @@ foreach ($rows as $row) {
 }
 
 $data = [];
-foreach ($info as $year => $user_ids) {
-    foreach ($user_ids as $user_id => $details) {
-        $data[$year][$user_id] = $details;
-        $data[$year][$user_id]['marks'] = isset($marks[$details['th_chidon_id']]) ? $marks[$details['th_chidon_id']] : [];
+foreach ($info as $year => $users) {
+    foreach ($users as $user_id => $user) {
+        $data[$year][$user_id] = $user;
+        $data[$year][$user_id]['marks'] = isset($marks[$user['th_chidon_id']]) ? $marks[$user['th_chidon_id']] : [];
     }
 }
 // echo "<pre>"; print_r($data); echo "</pre>";
 
 $years = [];
-foreach ($data as $year => $user_ids) {
+foreach ($data as $year => $users) {
     $years[] = $year;
 }
 
@@ -131,22 +131,24 @@ $fields = [
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data as $year => $user_ids) { ?>
-            <tr>
-                <?php foreach ($fields as $field => $label) { ?>
-                    <td>
-                        <?php 
-                        if ($field == 'marks') {
-                            print_r($data[$year][$user_id][$field]);
-                        } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
-                            echo isset($types[$data[$year][$user_id][$field]]) ? $types[$data[$year][$user_id][$field]] : 'N/A';
-                        } else {
-                            echo isset($data[$year][$user_id][$field]) ? $data[$year][$user_id][$field] : 'N/A';
-                        }
-                        ?>
-                    </td>
+            <?php foreach ($data as $year => $users) { ?>
+                <?php foreach ($users as $user_id => $user) { ?>
+                    <tr>
+                        <?php foreach ($fields as $field => $label) { ?>
+                            <td>
+                                <?php 
+                                if ($field == 'marks') {
+                                    print_r($user[$field]);
+                                } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
+                                    echo isset($types[$user[$field]]) ? $types[$user[$field]] : 'N/A';
+                                } else {
+                                    echo isset($user[$field]) ? $user[$field] : 'N/A';
+                                }
+                                ?>
+                            </td>
+                        <?php } ?>
+                    </tr>
                 <?php } ?>
-            </tr>
             <?php } ?>
         </tbody>
     </table>
