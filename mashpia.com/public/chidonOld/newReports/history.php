@@ -131,8 +131,10 @@ $fields = [
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data as $year => $users) { ?>
-                <?php foreach ($users as $user_id => $user) { ?>
+            <?php 
+            foreach ($data as $year => $users) { 
+                foreach ($users as $user_id => $user) { 
+                    ?>
                     <tr>
                         <?php foreach ($fields as $field => $label) { ?>
                             <td>
@@ -148,8 +150,10 @@ $fields = [
                             </td>
                         <?php } ?>
                     </tr>
-                <?php } ?>
-            <?php } ?>
+                    <?php
+                }
+            }
+            ?>
         </tbody>
     </table>
 </body>
