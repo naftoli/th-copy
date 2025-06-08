@@ -59,7 +59,7 @@ $stmt->execute([
 ]);
 $rows = $stmt->fetchAll();
 foreach ($rows as $row) {
-    $marks[$row['th_chidon_id']][] = $row;
+    $marks[$row['th_chidon_id']][$row['test_type']][] = $row;
 }
 
 $data = [];
