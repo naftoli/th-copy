@@ -120,7 +120,7 @@ $totals['three'] = 0;
             </tr>
             <?php } ?>
             <tr>
-                <td colspan="5">Totals:</td>
+                <td colspan="4">Totals:</td>
                 <td><?= $totals['four'] ?></td>
                 <td><?= $totals['three'] ?></td>
             </tr>
