@@ -58,8 +58,11 @@ foreach ($children as $child) {
     $four_yr_eligibility[$child['user_id']] = $four;
     $three_yr_eligibility[$child['user_id']] = $three;
 }
-$grand_totals[4] = array_count_values($four_yr_eligibility);
-$grand_totals[3] = array_count_values($three_yr_eligibility);
+
+$grand_totals_4 = array_count_values($four_yr_eligibility);
+$grand_totals_3 = array_count_values($three_yr_eligibility);
+echo "<pre>"; print_r($grand_totals_4); echo "</pre>";
+echo "<pre>"; print_r($grand_totals_3); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
@@ -83,8 +86,8 @@ $grand_totals[3] = array_count_values($three_yr_eligibility);
     </style>
 </head>
 <body>
-    <p>4 Yr Eligible: <?= $grand_totals[4][true] ?></p>
-    <p>3 Yr Eligible: <?= $grand_totals[3][true] ?></p>
+    <p>4 Yr Eligible: <?= $grand_totals_4 ?></p>
+    <p>3 Yr Eligible: <?= $grand_totals_3 ?></p>
     <table>
         <thead>
             <tr>
