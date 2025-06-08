@@ -178,6 +178,7 @@ $mark_fields = [
         $('.marks').click(function(e) {
             e.preventDefault();
             const th_chidon_id = $(this).attr('id');
+            const yr = $(this).data('yr');
             // check if we have already loaded the marks
             if ($(this).find('table tbody').html() != '') {
                 return;
@@ -187,7 +188,7 @@ $mark_fields = [
                 type: 'GET',
                 data: {
                     chidon_id: th_chidon_id,
-                    yr: $(this).data('yr')
+                    yr: yr
                 },
                 success: function(response) {
                     if (response.success) {
