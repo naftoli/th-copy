@@ -13,7 +13,7 @@ if ($admin_user['auth'] != 'super') {
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$cur_yr = GlobalSettings::getChidonRegYear();
+$cur_yr = GlobalSettings::getChidonRegYear() - 1;
 $from_yr = $cur_yr - 4;
 
 if (isset($_POST['year'])) $chosen_yr = $_POST['year'];
