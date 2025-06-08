@@ -67,9 +67,9 @@ $types = [
 
 $fields = [
     'year' => 'Year',
-    'school_name' => 'School', 
-    'class_grade' => 'Grade', 
-    'class_sub' => 'Sub', 
+    'school_name' => 'Current School', 
+    'class_grade' => 'Current Grade', 
+    'class_sub' => 'Current Sub', 
     'user_serial' => 'Serial', 
     'first' => 'First', 
     'last' => 'Last', 
@@ -130,7 +130,7 @@ $mark_fields = [
                                 if ($field == 'marks') {
                                     // create table for marks
                                     ?>
-                                    <button id="<?= $user['th_chidon_id'] ?>" class="marks">Get Marks</button>
+                                    <button id="<?= $user['th_chidon_id'] ?>" class="marks" data-yr="<?= $year ?>">Get Marks</button>
                                     <div style="display: none;">
                                         <table>
                                             <thead>
@@ -185,7 +185,8 @@ $mark_fields = [
                 url: 'api/getMarks.php',
                 type: 'GET',
                 data: {
-                    chidon_id: th_chidon_id
+                    chidon_id: th_chidon_id,
+                    yr: $(this).data('yr')
                 },
                 success: function(response) {
                     if (response.success) {

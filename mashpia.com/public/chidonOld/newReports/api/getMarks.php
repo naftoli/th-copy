@@ -12,14 +12,14 @@ if ($admin_user['auth'] != 'super') {
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$cur_yr = GlobalSettings::getChidonYear();
-$from_yr = $cur_yr - 4;
 
 $chidon_id = $_GET['chidon_id'];
-if (!$chidon_id) {
+$yr = $_GET['yr'];
+
+if (!$chidon_id || !$yr) {
     echo json_encode([
         'success' => false,
-        'error' => 'No Chidon ID provided.'
+        'error' => 'No Chidon ID and Year provided.'
     ]);
     exit;
 }
@@ -31,14 +31,13 @@ $stmt = $MASHPIA_DB->prepare("
     FROM
         th_chidon_marks 
     WHERE
-        th_chidon_id = :chidon_id AND year >= :from_yr AND year < :cur_yr
+        th_chidon_id = :chidon_id AND year = :yr
     ORDER BY
         th_chidon_id, test_type, test_number
 ");
 $stmt->execute([
     ':chidon_id' => $chidon_id,
-    ':from_yr' => $from_yr,
-    ':cur_yr' => $cur_yr
+    ':yr' => $yr
 ]);
 $rows = $stmt->fetchAll();
 foreach ($rows as $row) {
