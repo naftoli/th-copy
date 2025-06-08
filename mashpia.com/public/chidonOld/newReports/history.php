@@ -168,11 +168,11 @@ $mark_fields = [
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php foreach ($user['marks'] as $track => $marks) { ?>
+                                            <?php foreach ($user['marks'] as $track => $details) { ?>
                                                 <tr>
                                                     <td><?= $types[$track] ?></td>
                                                     <?php foreach ($mark_fields as $field => $label) { ?>
-                                                        <td><?= isset($marks[$field]) ? $marks[$field] : 'N/A' ?></td>
+                                                        <td><?= isset($details[$field]) ? $details[$field] : 'N/A' ?></td>
                                                     <?php } ?>
                                                 </tr>
                                             <?php } ?>
