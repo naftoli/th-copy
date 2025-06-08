@@ -64,7 +64,7 @@ $data = [];
 foreach ($info as $user_id => $years) {
     foreach ($years as $year => $details) {
         $data[$user_id][$year] = $details;
-        $data[$user_id][$year]['marks'] = $marks[$details['th_chidon_id']];
+        $data[$user_id][$year]['marks'] = $marks[$details['th_chidon_id']] ?? [];
     }
 }
 echo "<pre>"; print_r($data); echo "</pre>";
