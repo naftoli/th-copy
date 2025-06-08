@@ -40,6 +40,8 @@ $history = KHK::getEligibilityFromHistory($ids, $from_yr);
 
 $four_yr_eligibility = [];
 $three_yr_eligibility = [];
+$grand_totals_4 = 0;
+$grand_totals_3 = 0;
 foreach ($children as $child) {
     $four = true;
     $three = true;
@@ -57,12 +59,9 @@ foreach ($children as $child) {
     }
     $four_yr_eligibility[$child['user_id']] = $four;
     $three_yr_eligibility[$child['user_id']] = $three;
+    if ($four) $grand_totals_4++;
+    if ($three) $grand_totals_3++;
 }
-
-$grand_totals_4 = array_count_values($four_yr_eligibility);
-$grand_totals_3 = array_count_values($three_yr_eligibility);
-echo "<pre>"; print_r($grand_totals_4); echo "</pre>";
-echo "<pre>"; print_r($grand_totals_3); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
