@@ -118,12 +118,12 @@ $totals['three'] = 0;
                     <td><?= isset($history[$child['user_id']][$i]) ? $history[$child['user_id']][$i]['highest_track'] : '' ?></td>
                 <?php } ?>
             </tr>
+            <?php } ?>
             <tr>
                 <td colspan="5">Totals:</td>
                 <td><?= $totals['four'] ?></td>
                 <td><?= $totals['three'] ?></td>
             </tr>
-            <?php } ?>
         </tbody>
     </table>
 </body>
