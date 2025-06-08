@@ -130,9 +130,9 @@ $mark_fields = [
                                 if ($field == 'marks') {
                                     // create table for marks
                                     ?>
-                                    <table>
+                                    <table id="<?= $user['th_chidon_id'] ?>" class="marks">
                                         <thead>
-                                            <tr id="<?= $user['th_chidon_id'] ?>" class="marks">
+                                            <tr>
                                                 <th>Track</th>
                                                 <?php foreach ($mark_fields as $field => $label) { ?>
                                                     <th><?= $label ?></th>
@@ -177,6 +177,10 @@ $mark_fields = [
         });
         $('.marks').click(function() {
             const th_chidon_id = $(this).attr('id');
+            // check if we have already loaded the marks
+            if ($(th_chidon_id + ' tbody').html() != '') {
+                return;
+            }
             $.ajax({
                 url: 'api/getMarks.php',
                 type: 'GET',
@@ -198,7 +202,7 @@ $mark_fields = [
                                 html += '</tr>';
                             }
                             const elem = '#' + th_chidon_id;
-                            $(elem).html(html);
+                            $(elem + ' tbody').html(html);
                         }
                     }
                 }
