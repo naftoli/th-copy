@@ -55,11 +55,19 @@ $stmt = $MASHPIA_DB->prepare("SELECT * FROM th_chidon_marks WHERE th_chidon_id I
 $stmt->execute([
     ':yr' => $from_yr
 ]);
-$marks = $stmt->fetchAll();
-foreach ($marks as $mark) {
-    $info[$mark['th_chidon_id']][] = $mark;
+$rows = $stmt->fetchAll();
+foreach ($rows as $row) {
+    $marks[$row['th_chidon_id']][] = $row;
 }
-echo "<pre>"; print_r($info); echo "</pre>";
+
+$data = [];
+foreach ($info as $user_id => $years) {
+    foreach ($years as $year => $details) {
+        $data[$user_id][$year] = $details;
+        $data[$user_id][$year]['marks'] = $marks[$details['th_chidon_id']];
+    }
+}
+echo "<pre>"; print_r($data); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html>
