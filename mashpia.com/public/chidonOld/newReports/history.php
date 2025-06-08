@@ -158,7 +158,7 @@ $mark_fields = [
                                 if ($field == 'marks') {
                                     $marks = $user['marks'];
                                     if (empty($marks)) {
-                                        echo 'N/A';
+                                        echo 'No Marks found.';
                                     } else {
                                     // create table for marks
                                     ?>
