@@ -130,19 +130,22 @@ $mark_fields = [
                                 if ($field == 'marks') {
                                     // create table for marks
                                     ?>
-                                    <table id="<?= $user['th_chidon_id'] ?>" class="marks">
-                                        <thead>
-                                            <tr>
-                                                <th>Track</th>
-                                                <?php foreach ($mark_fields as $field => $label) { ?>
-                                                    <th><?= $label ?></th>
-                                                <?php } ?>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            
-                                        </tbody>
-                                    </table>
+                                    <h3 id="<?= $user['th_chidon_id'] ?>" class="marks">Marks</h3>
+                                    <div>
+                                        <table>
+                                            <thead>
+                                                <tr>
+                                                    <th>Track</th>
+                                                    <?php foreach ($mark_fields as $field => $label) { ?>
+                                                        <th><?= $label ?></th>
+                                                    <?php } ?>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
                                     <?php
                                 } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
                                     echo isset($types[$user[$field]]) ? $types[$user[$field]] : 'N/A';
@@ -178,7 +181,7 @@ $mark_fields = [
         $('.marks').click(function() {
             const th_chidon_id = $(this).attr('id');
             // check if we have already loaded the marks
-            if ($(th_chidon_id + ' tbody').html() != '') {
+            if ($(this).find('table tbody').html() != '') {
                 return;
             }
             $.ajax({
@@ -201,8 +204,7 @@ $mark_fields = [
                                 }
                                 html += '</tr>';
                             }
-                            const elem = '#' + th_chidon_id;
-                            $(elem + ' tbody').html(html);
+                            $(this).find('table tbody').html(html);
                         }
                     }
                 }
