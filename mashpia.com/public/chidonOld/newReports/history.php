@@ -131,21 +131,19 @@ $mark_fields = [
                                     // create table for marks
                                     ?>
                                     <button id="<?= $user['th_chidon_id'] ?>" class="marks" data-yr="<?= $year ?>">Get Marks</button>
-                                    <div style="display: none;">
-                                        <table>
-                                            <thead>
-                                                <tr>
-                                                    <th>Track</th>
-                                                    <?php foreach ($mark_fields as $field => $label) { ?>
-                                                        <th><?= $label ?></th>
-                                                    <?php } ?>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                    <table style="display: none;">
+                                        <thead>
+                                            <tr>
+                                                <th>Track</th>
+                                                <?php foreach ($mark_fields as $field => $label) { ?>
+                                                    <th><?= $label ?></th>
+                                                <?php } ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            
+                                        </tbody>
+                                    </table>
                                     <?php
                                 } else if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
                                     echo isset($types[$user[$field]]) ? $types[$user[$field]] : 'N/A';
@@ -174,7 +172,6 @@ $mark_fields = [
     };
     
     $(document).ready(function() {
-        alert('Loaded');
         $('.marks').click(function(e) {
             e.preventDefault();
             const th_chidon_id = $(this).attr('id');
