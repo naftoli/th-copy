@@ -70,7 +70,7 @@ foreach ($info as $year => $user_ids) {
         $data[$year][$user_id]['marks'] = isset($marks[$details['th_chidon_id']]) ? $marks[$details['th_chidon_id']] : [];
     }
 }
-echo "<pre>"; print_r($data); echo "</pre>";
+// echo "<pre>"; print_r($data); echo "</pre>";
 
 $years = [];
 foreach ($data as $year => $user_ids) {
