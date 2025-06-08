@@ -144,7 +144,7 @@ $mark_fields = [
                                 if ($field == 'marks') {
                                     // create table for marks
                                     ?>
-                                    <button id="<?= $user['th_chidon_id'] ?>" class="marks" data-yr="<?= $year ?>">Get Marks</button>
+                                    <button id="<?= $user['th_chidon_id'] ?>" class="marks" data-yr="<?= $chosen_yr ?>">Get Marks</button>
                                     <table style="display: none;">
                                         <thead>
                                             <tr>
