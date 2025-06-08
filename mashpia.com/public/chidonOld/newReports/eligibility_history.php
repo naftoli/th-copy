@@ -38,4 +38,54 @@ $ids = array_map(function ($child) {
 }, $children);
 $history = KHK::getEligibilityFromHistory($ids, $from_yr);
 echo "<pre>"; print_r($history); echo "</pre>";
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Eligibility History</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        tr, th, td {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            border-bottom: 1px solid #ddd;
+            padding: 5px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <thead>
+            <tr>
+                <th>School</th>
+                <th>Grade</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <?php for ($i = $from_yr; $i <= GlobalSettings::getChidonRegYear(); $i++) { ?>
+                    <th><?= $i ?></th>
+                <?php } ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($children as $child) { ?>
+            <tr>
+                <td><?= $child['school_name'] ?></td>
+                <td><?= ($child['class_grade'] . empty($child['class_sub']) ? '' : ' ' . $child['class_sub']) ?></td>
+                <td><?= $child['first'] ?></td>
+                <td><?= $child['last'] ?></td>
+                <?php for ($i = $from_yr; $i <= GlobalSettings::getChidonRegYear(); $i++) { ?>
+                    <td><?= isset($history[$child['user_id']][$i]) ? $history[$child['user_id']][$i] : '' ?></td>
+                <?php } ?>
+            </tr>
+            <?php } ?>
+        </tbody>
+    </table>
+</body>
     
