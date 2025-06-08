@@ -174,10 +174,10 @@ $mark_fields = [
     };
     
     $(document).ready(function() {
-        $('.marks').accordion({
-            collapsible: true,
-            active: false
-        });
+        // $('.marks').accordion({
+        //     collapsible: true,
+        //     active: false
+        // });
         $('.marks').click(function() {
             const th_chidon_id = $(this).attr('id');
             // check if we have already loaded the marks
