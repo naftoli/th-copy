@@ -49,7 +49,7 @@ $stmt->execute([
 ]);
 $children = $stmt->fetchAll();
 foreach ($children as $child) {
-    $info[$child['user_id']][$child['year']][] = $child;
+    $info[$child['user_id']][$child['year']] = $child;
 }
 echo "<pre>"; print_r($info); echo "</pre>";
 ?>
