@@ -19,7 +19,7 @@ $from_yr = GlobalSettings::getChidonRegYear() - 4;
 // get all children from th_chidon from past years
 $stmt = $MASHPIA_DB->prepare("
    SELECT 
-        user_id 
+        *  
     FROM
         th_chidon tc 
         JOIN users u ON u.user_id = tc.user_id 
@@ -31,7 +31,6 @@ $stmt = $MASHPIA_DB->prepare("
 $stmt->execute([
     ':yr' => $from_yr
 ]);
-$stmt->debugDumpParams();
 $children = $stmt->fetchAll();
 
 $ids = array_map(function ($child) {
