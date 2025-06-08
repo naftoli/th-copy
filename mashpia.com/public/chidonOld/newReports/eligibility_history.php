@@ -67,7 +67,7 @@ $history = KHK::getEligibilityFromHistory($ids, $from_yr);
                 <th>Grade</th>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <?php for ($i = $from_yr; $i <= GlobalSettings::getChidonRegYear(); $i++) { ?>
+                <?php for ($i = $from_yr; $i < GlobalSettings::getChidonRegYear(); $i++) { ?>
                     <th><?= $i ?></th>
                 <?php } ?>
             </tr>
@@ -80,7 +80,7 @@ $history = KHK::getEligibilityFromHistory($ids, $from_yr);
                 <td><?= $child['first'] ?></td>
                 <td><?= $child['last'] ?></td>
                 <?php for ($i = $from_yr; $i <= GlobalSettings::getChidonRegYear(); $i++) { ?>
-                    <td><?= isset($history[$child['user_id']][$i]) ? $history[$child['user_id']][$i] : '' ?></td>
+                    <td><?= isset($history[$child['user_id']][$i]) ? $history[$child['user_id']][$i]['highest_track'] : '' ?></td>
                 <?php } ?>
             </tr>
             <?php } ?>
