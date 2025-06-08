@@ -117,7 +117,7 @@ $mark_fields = [
     <form action="" method="post">
         <label for="year">Year:</label>
         <select id="year" name="year">
-            <?php for ($i = $cur_yr; $i >= $from_yr; $i--) { ?>
+            <?php for ($i = $cur_yr; $i > $from_yr; $i--) { ?>
                 <option value="<?= $i ?>"
                 <?php if ($chosen_yr == $i) echo 'selected'; ?>
                 ><?= $i ?></option>
