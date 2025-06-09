@@ -22,7 +22,8 @@ if (isset($_POST['user_serial']) && isset($_POST['notes'])) {
     
     echo json_encode([
         'success' => $res,
-        'error' => $res ? null : 'Notes not updated.'
+        'error' => $res ? null : 'Notes not updated.',
+        'log'   => $stmt->debugDumpParams()
     ]);
 } else {
     echo json_encode([
