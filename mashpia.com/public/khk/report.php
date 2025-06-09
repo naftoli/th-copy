@@ -37,20 +37,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>KHK Report</title>
-    <link href="../admin_styles.css" rel="stylesheet" type="text/css">
     <style>
-        .infobox {
-            line-height: 1.5;
-        }
         tr, th, td {
-            padding: 5px;
-            font-size: 12px;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+            font-size: 14px;
             border-bottom: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
-    <?php include '../admin_header.php'; ?>
     <h1>KHK Report</h1>
     <?php foreach ([$passed, $not_passed] as $info) { ?>
     <table>
