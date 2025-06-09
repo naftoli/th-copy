@@ -78,6 +78,7 @@ if (isset($_FILES['file'])) {
             echo "File uploaded successfully.";
         } else {
             $MASHPIA_DB->rollBack();
+            $stmt->debugDumpParams();
             echo "File upload failed.";
         }
     }
