@@ -109,6 +109,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             <?php } ?>
         </tbody>
     </table>
+    <br /><br />
     <?php } ?>
 </body>
 <script 
