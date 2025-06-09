@@ -47,6 +47,12 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         textarea {
             padding: 5px;
         }
+        caption {
+            font-size: 36px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
