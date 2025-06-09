@@ -47,6 +47,9 @@ if (isset($_POST['submit'])) {
         //     date = prompt("Do you want to generate ranks base on current dates or previous dates? (enter 'current' or 'previous')")
         // const prev = date === 'previous' ? 1 : 0
         const submit = <?= $submit ? 1 : 0 ?>;
+        // get params from url
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
 
         function createFile(school) {
             const start = <?= $start ?>;
@@ -74,7 +77,7 @@ if (isset($_POST['submit'])) {
             const schools = <?= json_encode($schools) ?>;
             console.log(schools)
             for (let school in schools) {
-                if (school != '2') continue;
+                if (id && parseInt(school) != parseInt(id)) continue;
                 p[i++] = createFile(school)
             }
             Promise.all([...p])
