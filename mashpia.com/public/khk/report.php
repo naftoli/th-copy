@@ -51,8 +51,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 </head>
 <body>
     <h1>KHK Report</h1>
-    <?php foreach ([$passed, $not_passed] as $info) { ?>
+    <?php foreach ([$passed, $not_passed] as $idx => $info) { ?>
     <table>
+        <caption><?= $idx == 0 ? 'Passed' : 'Not Passed' ?></caption>
         <thead>
             <tr>
                 <th>Full Hebrew Name</th>
