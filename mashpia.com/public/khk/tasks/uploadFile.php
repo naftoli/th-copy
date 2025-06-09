@@ -32,10 +32,10 @@ if (isset($_FILES['file'])) {
             SET 
                 user_serial = :serial,
                 amount_passed = :amount_passed, 
-                5782 = :5782,
-                5783 = :5783,
-                5784 = :5784,
-                5785 = :5785
+                `5782` = :5782,
+                `5783` = :5783,
+                `5784` = :5784,
+                `5785` = :5785
         ");
 
         $MASHPIA_DB->beginTransaction();
