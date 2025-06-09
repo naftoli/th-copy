@@ -9,9 +9,9 @@ RewriteEngine On
 RewriteBase /
 
 # HONEYPOT RULE: Catch all non-existent PHP files
-RewriteCond %{REQUEST_URI} \.php$ [NC]
-RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
-RewriteRule ^.*$ /honeypot.php [L]
+# RewriteCond %{REQUEST_URI} \.php$ [NC]
+# RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+# RewriteRule ^.*$ /honeypot.php [L]
 
 # HONEYPOT RULE: Catch requests for suspicious file/folder patterns (efficient regex)
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
