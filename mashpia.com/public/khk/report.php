@@ -65,6 +65,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 <th>5784</th>
                 <th>5785</th>
                 <th>Notes</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -92,13 +93,17 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         <td><?php echo $row['5785']; ?></td>
                         <td>
                             <textarea
-                                id='<?= $row['user_id'] ?>'
-                                name='notes[<?= $row['user_id'] ?>]'
+                                id='<?= $row['user_serial'] ?>'
+                                name='notes[<?= $row['user_serial'] ?>]'
+                                class='notes'
                                 rows='2'
                                 cols='10'
                             >
                                 <?php echo $row['notes']; ?>
                             </textarea>
+                        </td>
+                        <td>
+                            <button onclick="saveNotes(<?= $row['user_serial'] ?>)">Save</button>
                         </td>
                     </tr>
                 <?php } ?>
@@ -114,7 +119,25 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     crossorigin="anonymous">
 </script>
 <script>
-    // function to check hebrew characters
-    
+    function saveNotes(id) {
+        const value = $('#'+id).val().trim();
+        $.ajax({
+            url: 'api/updateNotes.php',
+            type: 'POST',
+            data: {
+                user_serial: id,
+                notes: value
+            },
+            success: function(response) {
+                console.log(response);
+                const res = JSON.parse(response);
+                if (res.success) {
+                    alert('Saved.');
+                } else {
+                    alert(res.error);
+                }
+            }
+        });
+    }
 </script>
 </html>
