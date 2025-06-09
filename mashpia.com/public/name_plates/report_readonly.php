@@ -20,6 +20,40 @@ if (!$super) {
     $sql .= " WHERE p.school_id IN (" . implode(',', array_keys($schools)) . ")";
 }
 $sql .= " ORDER BY p.school_id, c.class_grade, c.class_sub, u.last, u.first";
+
+// Handle CSV download
+if (isset($_GET['download']) && $_GET['download'] === 'csv') {
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="name_plates_report.csv"');
+    
+    $output = fopen('php://output', 'w');
+    
+    // Add UTF-8 BOM for proper Hebrew character display in Excel
+    fprintf($output, chr(0xEF).chr(0xBB).chr(0xBF));
+    
+    // Write headers
+    fputcsv($output, ['School', 'Class', 'Serial', 'Child', 'Qty', 'Shipped', 'Hebrew Name', 'Reason']);
+    
+    // Write data
+    $stmt = $MASHPIA_DB->query($sql);
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $he_name = $row['first_he'] . ' ' . $row['last_he'];
+        fputcsv($output, [
+            $schools[$row['school_id']],
+            $row['class_grade'] . ($row['class_sub'] ? '-' . $row['class_sub'] : ''),
+            $row['user_serial'],
+            $row['first'] . ' ' . $row['last'],
+            $row['qty'],
+            intval($row['shipped']) ? 'Yes' : 'No',
+            $he_name,
+            $row['reason']
+        ]);
+    }
+    
+    fclose($output);
+    exit;
+}
+
 $stmt = $MASHPIA_DB->query($sql);
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $info[$row['school_id']][] = $row;
@@ -48,6 +82,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 <body>
     <?php include '../admin_header.php'; ?>
     <h1>Name Plates Report (Read Only)</h1>
+    <div style="margin-bottom: 20px;">
+        <a href="?download=csv" class="button">Download as CSV</a>
+    </div>
     <table>
         <thead>
             <tr>
