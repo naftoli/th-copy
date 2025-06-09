@@ -99,8 +99,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 id='<?= $row['user_serial'] ?>'
                                 name='notes[<?= $row['user_serial'] ?>]'
                                 class='notes'
-                                rows='1'
+                                rows='2'
                                 cols='20'
+                                dir='ltr'
                             >
                                 <?php echo $row['notes']; ?>
                             </textarea>
