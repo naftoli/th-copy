@@ -11,7 +11,7 @@ if (isset($_POST['user_serial']) && isset($_POST['notes'])) {
     $user_serial = $_POST['user_serial'];
     $notes = $_POST['notes'];
     $stmt = $MASHPIA_DB->prepare("
-        UPDATE khk_info_5758 
+        UPDATE khk_info_5785  
         SET notes = :notes 
         WHERE user_serial = :user_serial
     ");
