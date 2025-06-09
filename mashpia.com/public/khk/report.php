@@ -44,6 +44,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             font-size: 14px;
             border-bottom: 1px solid #ccc;
         }
+        textarea {
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -96,8 +99,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 id='<?= $row['user_serial'] ?>'
                                 name='notes[<?= $row['user_serial'] ?>]'
                                 class='notes'
-                                rows='2'
-                                cols='10'
+                                rows='1'
+                                cols='20'
                             >
                                 <?php echo $row['notes']; ?>
                             </textarea>
