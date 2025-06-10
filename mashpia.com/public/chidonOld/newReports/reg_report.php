@@ -117,6 +117,100 @@ $poll = [
     'thechidon' => 'Online at thechidon.com'
 ];
 $pollKeys = array_keys($poll);
+
+// Add CSV download handling
+if (isset($_GET['download']) && $_GET['download'] === 'csv') {
+    header('Content-Type: text/csv');
+    header('Content-Disposition: attachment; filename="chidon_registration_' . $req_yr . '.csv"');
+    
+    $output = fopen('php://output', 'w');
+    
+    // Add CSV headers
+    fputcsv($output, [
+        'Registration Date',
+        'User ID',
+        'Serial Number',
+        'School',
+        'First Name',
+        'Last Name',
+        'Full Hebrew Name',
+        'Gender',
+        'Yarmulka',
+        'Sweater Size',
+        'Language',
+        'Track',
+        'Custom Item Name',
+        'Book Number',
+        'Registered for KHK',
+        'Chidon Learning Method',
+        'Invited by (Serial Number)',
+        'Comments',
+        'Prizes',
+        'Personalized Prize Name',
+        'Total Credits Used',
+        'Non TH School',
+        'Parent Name',
+        'Parent Email',
+        'Bought Book',
+        'Book Version'
+    ]);
+    
+    // Add data rows
+    foreach ($info as $row) {
+        $prizeInfo = '';
+        $prizeHeName = '';
+        $totalCredits = 0;
+        if (isset($prizes[$row['user_id']])) {
+            foreach ($prizes[$row['user_id']] as $i => $prize) {
+                $prizeInfo .= $prize['prize_name'];
+                if ($prize['size']) $prizeInfo .= " Size: " . $prize['size'];
+                if ($prize['color']) $prizeInfo .= " Color: " . $prize['color'];
+                if ($i < count($prizes[$row['user_id']]) - 1) $prizeInfo .= ", ";
+                
+                $prizeHeName .= $prize['he_name'];
+                if ($i < count($prizes[$row['user_id']]) - 1) $prizeHeName .= "; ";
+                
+                $totalCredits += floatval($prize['price']);
+            }
+        }
+        
+        $parentName = (isset($row['first']) || isset($row['last'])) ? $row['first'] . " " . $row['last'] : '';
+        $boughtBook = in_array($row['user_id'], $book_purchased_during_reg) ? 'Yes' : 'No';
+        $bookVersion = isset($book_purchases[$row['user_id']]) ? $book_purchases[$row['user_id']]['version'] : '';
+        
+        fputcsv($output, [
+            $row['reg_date'],
+            $row['user_id'],
+            $row['user_serial'],
+            $row['school_name'],
+            $row['first_name'],
+            $row['last_name'],
+            $row['first_he'] . ' ' . $row['last_he'],
+            $row['gender'],
+            $row['yarmulka'],
+            $row['size'],
+            $langs[$row['lang_id']],
+            $types[strtolower($row['test_type'])],
+            in_array($row['name_pref'], array_keys($customNames)) ? $customNames[$row['name_pref']] : $row['name_pref'],
+            $row['book'],
+            $row['khk_reg'] ? 'yes' : 'no',
+            in_array($row['poll'], $pollKeys) ? $poll[$row['poll']] : $row['poll'],
+            $row['recruited_by'],
+            $row['comments'],
+            $prizeInfo,
+            $prizeHeName,
+            $totalCredits,
+            $row['non_th_school'],
+            $parentName,
+            $row['admin_email'] ?? '',
+            $boughtBook,
+            $bookVersion
+        ]);
+    }
+    
+    fclose($output);
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -130,11 +224,28 @@ $pollKeys = array_keys($poll);
       padding: 5px;
       border-bottom: 1px solid grey;
     }
+    .controls {
+      margin: 20px 0;
+    }
+    .download-btn {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      margin-left: 10px;
+    }
+    .download-btn:hover {
+      background-color: #45a049;
+    }
   </style>
 </head>
 <body>
 <h1>Chidon Registration Report <?= $req_yr ?></h1>
-<div>
+<div class="controls">
   Choose Year:
   <select name="year" id="year">
       <?php
@@ -147,6 +258,7 @@ $pollKeys = array_keys($poll);
       }
       ?>
   </select>
+  <a href="?year=<?= $req_yr ?>&download=csv" class="download-btn">Download CSV</a>
 </div>
 <br/>
 <table>
