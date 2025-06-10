@@ -59,7 +59,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <h1>KHK Report</h1>
     <?php foreach ([$passed, $not_passed] as $idx => $info) { ?>
     <table>
-        <caption><?= $idx == 0 ? 'Passed' : 'Not Passed' ?></caption>
+        <caption><?= $idx == 0 ? 'Eligible for KHK 5786' : 'Not Eligible for KHK 5786' ?></caption>
         <thead>
             <tr>
                 <th>Full Hebrew Name</th>
