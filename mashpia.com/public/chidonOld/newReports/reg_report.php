@@ -168,7 +168,7 @@ if (isset($_GET['download']) && $_GET['download'] === 'csv') {
                 if ($i < count($prizes[$row['user_id']]) - 1) $prizeInfo .= ", ";
                 
                 $prizeHeName .= $prize['he_name'];
-                if ($i < count($prizes[$row['user_id']]) - 1) $prizeHeName .= " | ";
+                if ($i < count($prizes[$row['user_id']]) - 1) $prizeHeName .= "; ";
                 
                 $totalCredits += floatval($prize['price']);
             }
