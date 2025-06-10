@@ -31,6 +31,10 @@ elseif (gr('school_era')) {
 				add_on_two  = 0, 
 				store_reset = null 				
 				WHERE school_era IS NULL AND school_id IN ($schools)");
+
+	mq("UPDATE classes SET 
+				updated = 0 
+				WHERE class_era = 0 AND school_id IN ($schools)");
 				
 	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $year);
 } 
