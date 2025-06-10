@@ -560,14 +560,14 @@
 					Coming Soon ...
 				</div> -->
 
-			<div class="alert" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
+			<!-- <div class="alert" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
 				<b class="i18n" data-key="PrizeAuctionCart">
 					After adding a prize in your Auction cart, be sure to click
 					"SAVE" at the very bottom of your cart (in the cart page).
 				</b>
-			</div>
+			</div> -->
 
-			<div class="alert alert-warning" role="alert" dir="ltr">
+			<!-- <div class="alert alert-warning" role="alert" dir="ltr">
 				<div class="media">
 					<div id="img-cart" class="pull-right">
 						(<span id="cartQty">0</span>) <img id="cart-img" src="../img_new/cart-color-white.svg"
@@ -577,13 +577,14 @@
 						<span class="balance"></span>
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 			<div id="main">
-<!--				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n"-->
-<!--					data-key="AuctionEnded">-->
-<!--					The auction for 5784 begins in Iyar. See you then!-->
-<!--				</div>-->
+				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n2"
+					data-key="AuctionEnded">
+					<br /><br />
+					The auction for 5785 has ended.
+				</div>
 			</div>
 
 		</div>
@@ -687,7 +688,7 @@
 			var cartQty = 0;
 			var totalPrice = 0;
 			var originalBal = 0;
-			var auction_id = 84;
+			var auction_id = 0;
 			var separator = '|';
 
 			var float_element = "";
@@ -721,11 +722,12 @@
 				initCart();
 			});
 
-			$.post('ajax/getPrizes.php', {
-				admin: Cookies.get('admin'),
-				user: user,
-				auction: auction_id
-			}, function (success) {
+			if (auction_id > 0) {
+				$.post('ajax/getPrizes.php', {
+					admin: Cookies.get('admin'),
+					user: user,
+					auction: auction_id
+				}, function (success) {
 				var prizes = $.parseJSON(success);
 
 				var html = '';
@@ -784,124 +786,124 @@
 					$(this).parent().siblings().find('.collapse').removeClass('in');
 				}
 			});
-
-			function initCart() {
-				if (!window.localStorage) {
-					// need to update browser so that sessionStorage will work
-					alert(i18next.ht('UpdateBrowser1'));
+		}
+		
+		function initCart() {
+			if (!window.localStorage) {
+				// need to update browser so that sessionStorage will work
+				alert(i18next.ht('UpdateBrowser1'));
+			} else {
+				if (localStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
+					cart = JSON.parse(localStorage.getItem('auctionCart' + user));
+					for (var c in cart) {
+						var item = cart[c];
+						cartQty += item.qty;
+						totalPrice += item.qty * item.price;
+						$("#" + item.prize).find('.cartNum').text(item.qty);
+					}
+					$("#cartQty").text(cartQty);
+					calcBalance();
 				} else {
-					if (localStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
-						cart = JSON.parse(localStorage.getItem('auctionCart' + user));
-						for (var c in cart) {
-							var item = cart[c];
-							cartQty += item.qty;
-							totalPrice += item.qty * item.price;
-							$("#" + item.prize).find('.cartNum').text(item.qty);
+					$.post('ajax/getTickets.php', {
+						user: user,
+						auction: auction_id
+					}, function (data) {
+						var info = $.parseJSON(data);
+						for (var i in info) {
+							var item = info[i];
+							var id = parseInt(item.prize_id);
+							var name = item.prize_name;
+							var price = parseInt(item.prize_points);
+							var qty = parseInt(item.quantity);
+							var img = item.prize_image_id;
+							cart.push({
+								prize: id,
+								name: name,
+								price: price,
+								image: img,
+								qty: qty
+							});
+							//alert(qty);
+							cartQty += qty;
+							totalPrice += qty * price;
+							$("#" + id).find('.cartNum').text(qty);
 						}
+						//alert(cartQty);
+						localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
+						localStorage.setItem('cartLoaded', 1);
 						$("#cartQty").text(cartQty);
 						calcBalance();
-					} else {
-						$.post('ajax/getTickets.php', {
-							user: user,
-							auction: auction_id
-						}, function (data) {
-							var info = $.parseJSON(data);
-							for (var i in info) {
-								var item = info[i];
-								var id = parseInt(item.prize_id);
-								var name = item.prize_name;
-								var price = parseInt(item.prize_points);
-								var qty = parseInt(item.quantity);
-								var img = item.prize_image_id;
-								cart.push({
-									prize: id,
-									name: name,
-									price: price,
-									image: img,
-									qty: qty
-								});
-								//alert(qty);
-								cartQty += qty;
-								totalPrice += qty * price;
-								$("#" + id).find('.cartNum').text(qty);
-							}
-							//alert(cartQty);
-							localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
-							localStorage.setItem('cartLoaded', 1);
-							$("#cartQty").text(cartQty);
-							calcBalance();
-						});
-					}
-				}
-			}
-
-			function calcBalance() {
-				bal = originalBal - totalPrice;
-				$("#balance").text(bal);
-			}
-
-			$(document).on('click', '.product-cart', function () {
-				// after deadline alert and return
-				//alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
-				//return false;
-
-				// get prize id and add to cart
-				var prizeInfo = $(this).attr('id');
-				var info = prizeInfo.split(separator);
-				var id = parseInt(info[0]);
-				var price = parseInt(info[1]);
-				var image = info[2];
-				var prizeName = info[3];
-				var found = false;
-
-				// see if user has enough points for this
-				var curBal = parseInt($("#balance").text());
-				if (curBal - price < 0) {
-					alert(i18next.t('NotEnoughMiles'));
-					return false;
-				}
-
-				for (var c in cart) {
-					var item = cart[c];
-					// see if item exists
-					if (item.prize == id) {
-						found = true;
-						item.qty++;
-						totalPrice += item.price;
-						$("#" + id).find('.cartNum').text(item.qty);
-						break;
-					}
-				}
-
-				if (!found) {
-					cart.push({
-						prize: id,
-						name: prizeName,
-						price: price,
-						image: image,
-						qty: 1
 					});
-					totalPrice += price;
-					$("#" + id).find('.cartNum').text('1');
 				}
+			}
+		}
 
-				cartQty++;
-				if (!window.localStorage) {
-					// need to update browser so that sessionStorage will work
-					alert(i18next.t('UpdateBrowser'));
-				} else {
-					localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
+		function calcBalance() {
+			bal = originalBal - totalPrice;
+			$("#balance").text(bal);
+		}
+
+		$(document).on('click', '.product-cart', function () {
+			// after deadline alert and return
+			//alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
+			//return false;
+
+			// get prize id and add to cart
+			var prizeInfo = $(this).attr('id');
+			var info = prizeInfo.split(separator);
+			var id = parseInt(info[0]);
+			var price = parseInt(info[1]);
+			var image = info[2];
+			var prizeName = info[3];
+			var found = false;
+
+			// see if user has enough points for this
+			var curBal = parseInt($("#balance").text());
+			if (curBal - price < 0) {
+				alert(i18next.t('NotEnoughMiles'));
+				return false;
+			}
+
+			for (var c in cart) {
+				var item = cart[c];
+				// see if item exists
+				if (item.prize == id) {
+					found = true;
+					item.qty++;
+					totalPrice += item.price;
+					$("#" + id).find('.cartNum').text(item.qty);
+					break;
 				}
-				$("#cartQty").text(cartQty);
+			}
 
-				calcBalance();
-			});
+			if (!found) {
+				cart.push({
+					prize: id,
+					name: prizeName,
+					price: price,
+					image: image,
+					qty: 1
+				});
+				totalPrice += price;
+				$("#" + id).find('.cartNum').text('1');
+			}
 
-			$("#cart-img").click(function () {
-				location.href = "cart.html?id=" + user;
-			});
+			cartQty++;
+			if (!window.localStorage) {
+				// need to update browser so that sessionStorage will work
+				alert(i18next.t('UpdateBrowser'));
+			} else {
+				localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
+			}
+			$("#cartQty").text(cartQty);
 
-		})
+			calcBalance();
+		});
+
+		$("#cart-img").click(function () {
+			location.href = "cart.html?id=" + user;
+		});
+	})
 	</script>
 </body>
 
