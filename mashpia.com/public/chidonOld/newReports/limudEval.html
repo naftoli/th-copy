@@ -292,6 +292,14 @@
       const headers = ['Serial', 'Name', 'Class', 'Track Chosen', 'Non Cumulative Track Passed', 'Cumulative Track Passed',
         'Passing Avg', 'Yesod Mark/Avg', 'Yediah Mark/Avg', 'Havonah Mark/Avg', 'Iyun Mark/Avg', 'Reward', 'Award', 'KHK Experience', 'Dropped Out', 'Reason'];
       
+      // Track name mapping
+      const trackMapping = {
+        'maven': 'Yesod',
+        'pro': 'Yediah',
+        'expert': 'Havonah',
+        'genius': 'Iyun'
+      };
+      
       // Convert data to CSV rows
       const csvRows = [headers];
       info.forEach(row => {
@@ -299,16 +307,16 @@
           row.serial,
           row.name,
           row.grade,
-          row.track,
-          row.non_cumulative_track_passed,
-          row.cumulative_track_passed,
+          trackMapping[row.track] || row.track,
+          trackMapping[row.non_cumulative_track_passed] || row.non_cumulative_track_passed,
+          trackMapping[row.cumulative_track_passed] || row.cumulative_track_passed,
           row.passing_avg,
           row.yesod,
           row.yediah,
           row.havonah,
           row.iyun,
-          row.reward,
-          row.award,
+          trackMapping[row.reward] || row.reward,
+          trackMapping[row.award] || row.award,
           row.khk_experience,
           row.dropped_out ? 'Yes' : 'No',
           row.reason
