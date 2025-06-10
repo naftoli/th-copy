@@ -1,6 +1,16 @@
-<? 
-$admin_auth = array('school','user'); 
-require('header.php'); 
+<?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+$admin_auth = ['school'];
+require_once 'header.php';
+
+if ($admin_user['auth'] != 'super') {
+    die('Unauthorized');
+}
+
+require_once '../../includes/globals.php';
+$key = ENCRYPTION_KEY;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -18,7 +28,6 @@ tr, th, td {
 
 <body>
 <? include('admin_header.php');?>
-<? if ($admin->auth == 'super') : ?>
 <h1>School List</h1>
 <table border="1" cellspacing="3" style="font-size:12px">
 <tr>
@@ -32,7 +41,6 @@ tr, th, td {
 </tr>
 <?
 //get list of schools
-include_once('db.php');
 $sql = "select school_id, school_name, school_phone, school_number from schools order by school_name";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
@@ -46,15 +54,12 @@ while ($row = mysql_fetch_assoc($result)) {
 		$flag = true;
 		while ($row3 = mysql_fetch_assoc($result3)) {
 			if ($flag) echo "</tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>";
-			echo "<td>" . $row3['title'] . " " . $row3['first'] . " " . $row3['last'] . "</td><td>" . $row3['username'] . "</td><td>" . $row3['password'] . "</td></tr>";
+			echo "<td>" . $row3['title'] . " " . $row3['first'] . " " . $row3['last'] . "</td><td>" . $row3['username'] . "</td><td>" . decryptPassword($row3['password'], $key) . "</td></tr>";
 			$flag = false;
 		}
 	}
 }
 ?>
 </table>
-<? else : ?>
-no permission to view this page
-<? endif; ?>
 </body>
 </html>

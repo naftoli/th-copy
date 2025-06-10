@@ -9,11 +9,6 @@ if ($admin_user['auth'] != 'super') {
     die('Unauthorized');
 }
 
-function decryptPassword($encryptedPassword, $key) {
-    list($encrypted_data, $iv) = explode('::', base64_decode($encryptedPassword), 2);
-    return openssl_decrypt($encrypted_data, 'aes-256-cbc', $key, 0, $iv);
-}
-
 require_once '../../includes/globals.php';
 require_once '../api/header/db.php';
 require_once '../class.adminSchools.php';
