@@ -32,7 +32,7 @@ if ( $development )
 if ( !defined( 'ENCRYPTION_KEY' ) )
     define( 'ENCRYPTION_KEY', 'tzivos-hashem-5786' );
 
-    // Encryption functions
+// Encryption functions
 function encryptPassword($password, $key) {
     $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
     $encrypted = openssl_encrypt($password, 'aes-256-cbc', $key, 0, $iv);

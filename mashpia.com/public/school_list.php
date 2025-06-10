@@ -9,7 +9,7 @@ if ($admin_user['auth'] != 'super') {
     die('Unauthorized');
 }
 
-require_once '../../includes/globals.php';
+require_once '../includes/globals.php';
 $key = ENCRYPTION_KEY;
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
