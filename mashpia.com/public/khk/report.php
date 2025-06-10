@@ -7,7 +7,7 @@ require_once '../header.php';
 require_once '../api/header/db.php';
 require_once '../class.adminSchools.php';
 
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], false, true);
 $schools = $as->getSchools();
 
 $super = $admin_user['auth'] == 'super';
