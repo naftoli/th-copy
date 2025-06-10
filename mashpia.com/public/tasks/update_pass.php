@@ -3,13 +3,13 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 $admin_auth = ['school'];
-require_once '../../header.php';
+require_once '../header.php';
 
 if ($admin_user['auth'] != 'super') {
     die('Unauthorized');
 }
 
-require_once '../../api/header/db.php';
+require_once '../api/header/db.php';
 require_once '../../includes/globals.php';
 
 // Encryption functions
