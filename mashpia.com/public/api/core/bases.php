@@ -68,6 +68,14 @@ class BaseRouter {
 
     public function register() {
         global $current_user;
+        
+        // turn on modules in schools table based on cart
+        foreach( $_POST['cart'] as $item ) {
+            if ( $item['name'] == 'chayolei' ) $_POST['base']['chayolei'] = 1;
+            if ( $item['name'] == 'chidon' ) $_POST['base']['chidon'] = 1;
+            if ( $item['name'] == 'tanya' ) $_POST['base']['tanya'] = 1;
+            if ( $item['name'] == 'rewards' ) $_POST['base']['rewards'] = 1;
+        }
 
         if ( $_POST['base']['tanya'] == 1 ) $_POST['base']['tehillim'] = 1; // make sure to turn on tehillim if tanya is checked
 
