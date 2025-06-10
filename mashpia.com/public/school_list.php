@@ -54,7 +54,8 @@ while ($row = mysql_fetch_assoc($result)) {
 		$flag = true;
 		while ($row3 = mysql_fetch_assoc($result3)) {
 			if ($flag) echo "</tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>";
-			echo "<td>" . $row3['title'] . " " . $row3['first'] . " " . $row3['last'] . "</td><td>" . $row3['username'] . "</td><td>" . decryptPassword($row3['password'], $key) . "</td></tr>";
+			echo "<td>" . $row3['title'] . " " . $row3['first'] . " " . $row3['last'] . "</td><td>" . 
+				$row3['username'] . "</td><td>" . decryptPassword($row3['password'], $key) . "</td></tr>";
 			$flag = false;
 		}
 	}
