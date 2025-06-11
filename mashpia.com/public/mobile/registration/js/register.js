@@ -52,6 +52,7 @@ var usa = [
 var hachayolChosen = false
 var chidonPayment = []
 var checkForRegShipping = false
+const HACHAYOL_FEE = 20
 
 var state = {
   users: [], // the users we are registering
@@ -1893,16 +1894,16 @@ var registrationApp = function () {
     for (let c in children) {
       let child = children[c]
       html += `<label for="${child.user_id}">
-                          <div style='float: left; margin-right: 10px;'>
-                            <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" 
-                              ${checked.includes(child.user_id) ? 'checked' : ''} /> 
-                            <span class="checkbox"></span>
-                          </div>
-                          <div>
-                              ${child.first} ${child.last}
-                          </div>
-                      </label>
-                      <br />`
+                  <div style='float: left; margin-right: 10px;'>
+                    <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" 
+                      ${checked.includes(child.user_id) ? 'checked' : ''} /> 
+                    <span class="checkbox"></span>
+                  </div>
+                  <div>
+                      ${child.first} ${child.last}
+                  </div>
+              </label>
+              <br />`
     }
     html += "</div>"
 
@@ -1945,7 +1946,6 @@ var registrationApp = function () {
     })
     let num = user_ids.length
     num -= numPaid
-
     let payingFor = []
     if (num > 1) { // first child is free
       for (let i = 0; i < num; i++) {
@@ -1959,12 +1959,12 @@ var registrationApp = function () {
           payingFor.push(id)
           state.cart.push({
             description: `Extra Hachayol Fee (ID: ${id})`,
-            price: 20,
+            price: HACHAYOL_FEE,
             meta: {
               type: 'hachayol',
-              paid: 20,
+              paid: HACHAYOL_FEE,
               user_id: id,
-              code: "C" + selected_user.user_serial + ":HACH-" + 20,
+              code: "C" + selected_user.user_serial + ":HACH-" + HACHAYOL_FEE,
               codeOnly: 'HACH'
             }
           })
@@ -2693,6 +2693,7 @@ var templates = function () {
         for (item of info) {
           if (item.meta.registration_type === 'chayolei') {
             $("#chayolei").trigger('click')
+            $("#he_name").trigger('click')
             $("#media").trigger('click')
           }
           if (item.meta.registration_type === 'chidon') {
@@ -2786,6 +2787,7 @@ var templates = function () {
                       // })
                       break
                     case '#agreements input':
+                    case '#he_name':
                     case '#media':
                       $(elem.field).each(function () {
                         this.checked = true
