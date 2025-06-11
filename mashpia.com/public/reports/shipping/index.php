@@ -58,7 +58,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Name Plates Report</span>
                 </div>
             </a>
-            <a href="/chidon_shipping/">
+            <a href="/chayolei_shipping/">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
                     <span class="link-text">Name Plates Shipping Report</span>
