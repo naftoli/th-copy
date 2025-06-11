@@ -445,11 +445,12 @@ class UserRegistrationRouter {
                     } else {
                         $yr = $chidonYr;
                         if (in_array($code, ['shipping', 'HACH', 'THAKUSA', 'THAKCAN', 'THAKINT', 'THMSUSA', 'THMSCAN', 'THMSINT'])) $yr = $cthYr;
-                        if ($code == 'RRFAM') {
+                        if (in_array($code, ['RRFAM', 'HACH'])) {
                             if ($this->installmentsCreated) $amount = 0;
                             $user->registrationCharge($code, $amount, $trans_id, $yr, 0, $admin->admin_id);
+                        } else {
+                            $user->registrationCharge($code, $amount, $trans_id, $yr);
                         }
-                        else $user->registrationCharge($code, $amount, $trans_id, $yr);
 
                         switch ($code) {
                             case 'KHKE':
@@ -469,10 +470,10 @@ class UserRegistrationRouter {
 //                                if (! $installmentsCreated) $user->earlyReg($chidonYr, $user_id, $amount);
 //                                break;
                             case 'HACH':
-                                $user->addHachayol($user_id);
+                                $user->addHachayol($user_id, $yr);
                                 break;
                         }
-                        if ($code === 'RRFAM') {
+                        if (in_array($code, ['RRFAM', 'HACH'])) {
                             $itemsForEmail[$user_id][] = [
                                 'code'      => $code,
                                 'amount'    => $amount,

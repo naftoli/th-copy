@@ -113,12 +113,20 @@ if (!empty($users)) {
         $children[$row['user_id']]['new_day_school'] = intval($row['school_type_id']) == 50 ? true : false;
         $children[$row['user_id']]['school_country'] = $row['school_country'];
         $children[$row['user_id']]['user_serial'] = $row['user_serial'];
-        $children[$row['user_id']]['hachayol'] = $row['hachayol'];
+        $children[$row['user_id']]['hachayol'] = $row['hachayol'] ?? 0;
         $children[$row['user_id']]['admin_id'] = $admin;
         $children[$row['user_id']]['show_report_cards'] = intval($row['show_report_card_1']) || intval($row['show_report_card_2']) || intval($row['show_report_card_3']) ? 1 : 0;
         $children[$row['user_id']]['show_report_card_1'] = intval($row['show_report_card_1']);
         $children[$row['user_id']]['show_report_card_2'] = intval($row['show_report_card_2']);
         $children[$row['user_id']]['show_report_card_3'] = intval($row['show_report_card_3']);
+
+        // find out hachayol info if year greater than 5785
+        if ($reg_year > 5785) {
+            // get hachayols info
+            $sqlHachayol = "SELECT * FROM hachayols_to_give WHERE user_id = " . $row['user_id'] . " AND year = " . $reg_year;
+            $resultHachayol = mysql_query($sqlHachayol);
+            $children[$row['user_id']]['hachayol'] = mysql_num_rows($resultHachayol) > 0 ? 1 : 0;
+        }
 
         // find out highest rank achieved
         $sqlRank = "select r.rank_ord, r.rank_name, r.rank_image_id 

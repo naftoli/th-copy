@@ -736,10 +736,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         return $errors;
     }
 
-    public function addHachayol($user_id) {
+    public function addHachayol($user_id, $year) {
         global $MASHPIA_DB;
-        $stmt = $MASHPIA_DB->prepare("UPDATE users SET hachayol = 1 WHERE user_id = :user");
-        $res = $stmt->execute([':user' => $user_id]);
+        $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO hachayols_to_give (user_id, year) VALUES (:user, :year)");
+        $res = $stmt->execute([':user' => $user_id, ':year' => $year]);
         return $res;
     }
 

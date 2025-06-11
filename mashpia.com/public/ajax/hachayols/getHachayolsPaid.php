@@ -22,12 +22,7 @@ if (!$admin) {
             registration_charges
         WHERE
             year = :year AND type = 'HACH' 
-                AND user_id IN (SELECT 
-                    id
-                FROM
-                    admin_auths
-                WHERE
-                    admin_id = :admin)
+                AND admin_id = :admin
     ");
     $stmt->execute([
         'year'  => $year,
@@ -36,6 +31,6 @@ if (!$admin) {
     $rows = $stmt->fetchAll();
     echo json_encode([
         'success'   => true,
-        'data'      => $rows
+        'num_paid'  => count($rows)
     ]);
 }

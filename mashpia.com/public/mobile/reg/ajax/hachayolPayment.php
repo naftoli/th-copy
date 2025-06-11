@@ -6,10 +6,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/reg/ajax/encrypt.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
+define("HACHAYOL_FEE", 20);
+
 $info = $_POST['info'];
 $users = $_POST['list'];
 $admin_id = encrypt_decrypt('decrypt', $info['admin']);
-$year = GlobalSettings::getRegistrationYear();
+$year = intval(GlobalSettings::getRegistrationYear());
 
 $amount = (float)$info['amount'];
 $card_num = $info['cc']['num'];
@@ -22,7 +24,7 @@ $address = "";
 $state = "";
 
 // figure out how many children are being charged
-$num_children = intval($amount / 20);
+$num_children = intval($amount / HACHAYOL_FEE);
 
 // figure out which child(ren) is getting charged for hachayol
 $getting_charged = 0;
@@ -37,25 +39,33 @@ foreach ($users as $user) {
     }
 }
 
-$description = "";
-// get serial numbers for description
-$user_info = [];
-$qry = "select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")";
-$stmt = $MASHPIA_DB->query($qry);
-$rows = $stmt->fetchAll();
-if (empty($rows)) {
-    echo json_encode([
-        'success'   => false,
-        'error'     => "No users selected."
-    ]);
-    exit;
+if ($year < 5786) {
+    $description = "";
+    // get serial numbers for description
+    $user_info = [];
+    $qry = "select user_id, user_serial, school_id from users where user_id in (" . implode(',', $user_ids) . ")";
+    $stmt = $MASHPIA_DB->query($qry);
+    $rows = $stmt->fetchAll();
+    if (empty($rows)) {
+        echo json_encode([
+            'success'   => false,
+            'error'     => "No users selected."
+        ]);
+        exit;
+    }
+    foreach ($rows as $row) {
+        $user_info[$row['user_id']] = $row['school_id'];
+        $description .= "C" . $row['user_serial'] . ":HACH-" . HACHAYOL_FEE . ",";
+    }
+    // remove trailing comma
+    $description = substr($description, 0, strlen($description) - 1);
+} else {
+    for ($i = 0; $i < $getting_charged; $i++) {
+        $description .= "F" . $admin_id . ":HACH-" . HACHAYOL_FEE . ",";
+    }
+    // remove trailing comma
+    $description = substr($description, 0, strlen($description) - 1);
 }
-foreach ($rows as $row) {
-    $user_info[$row['user_id']] = $row['school_id'];
-    $description .= "C" . $row['user_serial'] . ":HACH-20,";
-}
-// remove trailing comma
-$description = substr($description, 0, strlen($description) - 1);
 
 if ( $amount > 0 ) {
     require_once $_SERVER['DOCUMENT_ROOT'] . '/authorize.php';
@@ -107,28 +117,50 @@ if ( $amount > 0 ) {
             user_id = :user, 
             school_id = :school, 
             type = :type, 
-            amount = 20, 
+            amount = :amount, 
             year = :year, 
-            discount = 0
+            discount = 0, 
+            admin_id = :admin 
         ");
         // update users table
-        $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
+        if ($year < 5786) {
+            $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
+        } else {
+            $stmt2 = $MASHPIA_DB->prepare("insert ignore into hachayols_to_give set year = :year, user_id = :user");
+        }
 
         foreach ($users as $user) {
             if (!in_array($user['user_id'], $user_ids)) {
                 continue;
             }
-            $res = $stmt->execute([
-                'trans_id'  => $trans_id,
-                'user'      => $user['user_id'],
-                'school'    => $user_info[$user['user_id']],
-                'type'      => 'HACH',
-                'year'      => $year
-            ]);
-//            $stmt->debugDumpParams();
-            $res2 = $stmt2->execute([
-                'user'  => $user['user_id']
-            ]);
+            if ($year < 5786) {
+                $res = $stmt->execute([
+                    'trans_id'  => $trans_id,
+                    'user'      => $user['user_id'],
+                    'school'    => $user_info[$user['user_id']],
+                    'type'      => 'HACH',
+                    'amount'    => HACHAYOL_FEE,
+                    'year'      => $year,
+                    'admin'     => 0
+                ]);
+                $res2 = $stmt2->execute([
+                    'user'  => $user['user_id']
+                ]);
+            } else {
+                $res = $stmt->execute([
+                    'trans_id'  => $trans_id,
+                    'user'      => 0,
+                    'school'    => 0,
+                    'type'      => 'HACH',
+                    'amount'    => HACHAYOL_FEE,
+                    'year'      => $year,
+                    'admin'     => $admin_id
+                ]);
+                $res2 = $stmt2->execute([
+                    'user'  => $user['user_id'],
+                    'year'  => $year
+                ]);
+            }
             if (!$res || !$res2) {
                 $MASHPIA_DB->rollBack();
 //                if (!$res) $details = $stmt->debugDumpParams();
