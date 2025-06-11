@@ -1877,26 +1877,56 @@ var registrationApp = function () {
     return reg.length
   }
 
-  function chooseHachayols() {
-    const children = state.users // all children
-    const hachayols = state.users.filter(user => parseInt(user.hachayol)) // only hachayol children
-    // figure out which children should get checked
-    let checked = []
-    if (hachayols.length) {
-      for (let h of hachayols) {
-        checked.push(h.user_id)
-      }
-    } else {
-      // if no hachayol children, check the first child
-      checked.push(children[0].user_id)
+  function calculateAge(dob) {
+    let today = new Date()
+    let birthDate = new Date(dob)
+    let age = today.getFullYear() - birthDate.getFullYear()
+    let m = today.getMonth() - birthDate.getMonth()
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+      age--
     }
+    return age
+  }
+
+  function getOldestChild(children) {
+    // find oldest child that is 10 yrs old or under. use child's dob to calculate age
+    let oldest = children[0].user_id
+    let oldestAge = calculateAge(children[0].dob)
+    for (let c in children) {
+      let age = calculateAge(children[c].dob)
+      if (age > 10) continue
+      if (age > oldestAge) {
+        oldest = children[c].user_id
+        oldestAge = age
+      }
+    }
+    return oldest
+  }
+
+  async function chooseHachayols() {
+    // get children from both users and registered without duplicates
+    const allChildren = [...state.users, ...state.registered];
+    const children = allChildren.filter((child, index, arr) => 
+      arr.findIndex(c => c.user_id === child.user_id) === index
+    );
+    // get children that are set to get hachayol
+    let oldest = null
+    const { success, hachayols } = await fetch('/ajax/hachayols/getHachayolsInfo.php')
+      .then(res => res.json())
+    if (!success) {
+      alert('Could not get hachayols information.')
+      return false
+    }
+    // if no hachayols set, get oldest child
+    if (!hachayols.length) oldest = getOldestChild(children)
+
     let html = "<div style='margin-left: 2em; margin-top: -2em;'>"
     for (let c in children) {
       let child = children[c]
       html += `<label for="${child.user_id}">
                   <div style='float: left; margin-right: 10px;'>
                     <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" 
-                      ${checked.includes(child.user_id) ? 'checked' : ''} /> 
+                      ${( !hachayols.length && oldest === child.user_id || hachayols.includes(child.user_id) ? 'checked' : '')} /> 
                     <span class="checkbox"></span>
                   </div>
                   <div>
@@ -1909,104 +1939,82 @@ var registrationApp = function () {
 
     $("#hachayolChildren").empty().append(html)
     $("#hachayol").modal('show')
-    $("#hachayol").on('hidden.bs.modal', processHachayol)
-
-    $(document).on('click', '.hachayol', function (e) {
-      // find out if there are any other checks
-      let numChecked = $(".hachayol:checked").length
-      if (!numChecked && !$(this).is(":checked")) {
-        // if not, keep this child checked
-        alert('You must have at least one child checked.')
-        e.preventDefault()
-      }
+    $("#hachayol").on('hidden.bs.modal', function () {
+      processHachayols(hachayols)
     })
   }
 
-  async function processHachayol() {
-    // remove any existing hachayol info in cart
-    state.cart = state.cart.filter(item => item.meta.type != 'hachayol')
+  $(document).on('click', '.hachayol', function (e) {
+    // find out if there are any other checks
+    let numChecked = $(".hachayol:checked").length
+    if (!numChecked && !$(this).is(":checked")) {
+      // if not, keep this child checked
+      alert('You must have at least one child checked.')
+      e.preventDefault()
+    }
+  })
 
-    // get info on who has already paid
-    const info = await fetch('/ajax/hachayols/getHachayolsPaid.php')
-      .then(res => res.json())
-    if (!info.success) {
-      alert(info.error)
+  async function processHachayols(hachayols) {
+    const numChecked = $(".hachayol:checked").length
+    const allChildren = [...state.users, ...state.registered];
+    const children = allChildren.filter((child, index, arr) => 
+      arr.findIndex(c => c.user_id === child.user_id) === index
+    );
+    if (numChecked < hachayols.length) {
+      alert('You must have at least ' + hachayols.length + ' child(ren) checked.')
       $("#hachayol").modal('show')
       return false
     }
 
-    const usersPaid = info.data.map(user => user.user_id)
-    const numPaid = usersPaid.length
+    // if numChecked is more than hachayols.length, we need to add to cart
+    let addedToCart = []
+    if (numChecked > hachayols.length) {
+      for (let i = hachayols.length; i < numChecked; i++) {
+        const id = $(".hachayol:checked").eq(i).val()
+        const family_id = children.find(user => user.user_id == id).parentAccount.admin_id
+        // check if this child is already in the cart
+        const alreadyInCart = state.cart.find(item => item.meta.user_id == id && item.meta.type == 'hachayol')
+        if (alreadyInCart) continue
+        state.cart.push({
+          description: `Extra Hachayol Fee (ID: ${id})`,
+          price: HACHAYOL_FEE,
+          meta: {
+            type: 'hachayol',
+            paid: HACHAYOL_FEE,
+            user_id: id,
+            code: "F" + family_id + ":HACH-" + HACHAYOL_FEE,
+            codeOnly: 'HACH'
+          }
+        })
+        addedToCart.push(id)
+      }
+    }
 
-    let user_ids = []
+    let toAdd = []
+    let toRemove = []
     $(".hachayol").each(function () {
       let id = parseInt($(this).val())
       let checked = $(this).is(":checked")
-      if (checked) user_ids.push(id)
+      if (checked) {
+        // only add if not already added to cart, the cart hachayols are updated when the user checks out
+        if (!addedToCart.includes(id)) toAdd.push(id) 
+      } else {
+        toRemove.push(id)
+      }
     })
-    let num = user_ids.length
-    num -= numPaid
-    let payingFor = []
-    if (num > 1) { // first child is free
-      for (let i = 0; i < num; i++) {
-        let id = user_ids[i]
-        // find out if child already has hachayol set
-        let child = state.users.find(user => user.user_id == id)
-        if (parseInt(child.hachayol)) continue
-        // make sure this id is not in cart already (for some reason it can be there when going "back")
-        const inCart = state.cart.filter(item => item.meta.type == 'hachayol' && item.meta.user_id == id)
-        if (!inCart.length) {
-          payingFor.push(id)
-          state.cart.push({
-            description: `Extra Hachayol Fee (ID: ${id})`,
-            price: HACHAYOL_FEE,
-            meta: {
-              type: 'hachayol',
-              paid: HACHAYOL_FEE,
-              user_id: id,
-              code: "C" + selected_user.user_serial + ":HACH-" + HACHAYOL_FEE,
-              codeOnly: 'HACH'
-            }
-          })
-        }
-      }
-    }
-
-    // add hachayol to checked children that are not already in cart
-    let toAdd = []
-    for (let i = 0; i < user_ids.length; i++) {
-      let id = user_ids[i]
-      if (!payingFor.includes(id)) {
-        toAdd.push(id)
-      }
-    }
-
-    // remove hachayol from unchecked children
-    let toRemove = []
-    let childrenWithHachayol = state.users.filter(user => parseInt(user.hachayol))
-    for (let i = 0; i < childrenWithHachayol.length; i++) {
-      let child = childrenWithHachayol[i]
-      if (!user_ids.includes(child.user_id)) {
-        toRemove.push(child.user_id)
-      }
-    }
-    console.log('To add:' + toAdd, 'To remove:' + toRemove)
+    console.log(toAdd, toRemove)
 
     if (toAdd.length || toRemove.length) {
-      const result = await $.post('/ajax/hachayols/updateHachayol.php', {toAdd, toRemove})
+      const result = await $.post('/ajax/hachayols/updateHachayols.php', { toAdd, toRemove })
       const res = JSON.parse(result)
-      if (res.success) {
-        hachayolChosen = true
-        await nextStep()
-      } else {
+      if (!res.success) {
         alert(res.error)
         $("#hachayol").modal('show')
         return false
       }
-    } else {
-      hachayolChosen = true
-      await nextStep()
     }
+    hachayolChosen = true
+    await nextStep()
   }
 
   function confirmShipping(event) {
@@ -2159,7 +2167,7 @@ var registrationApp = function () {
         state.users = [];
         response.users.forEach(function (user) {
           user.dob = user.dob ? user.dob.split(" ")[0] : user.dob;
-          if (user.user_registered > 0) state.registered.push(user)
+          if (user.user_registered && user.user_registered !== '0000-00-00') state.registered.push(user)
           if (user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false ||
             user.registrationStatus.chidonEdit === true)
             // if ( user.registrationStatus.chayolei === false || user.registrationStatus.chidon === false )
