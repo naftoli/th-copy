@@ -56,7 +56,6 @@ if ($year < 5786) {
                     and ur.year = :year";
     $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 } else {
-} else {
     // then get all users per admin
     $sqlUsers = "select u.user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
                   IF(htg.user_id IS NOT NULL, 1, 0) as hachayol_to_give
