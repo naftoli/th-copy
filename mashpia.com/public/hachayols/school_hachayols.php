@@ -12,17 +12,34 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 // Business Logic Functions
 function getRegisteredStudents() {
     global $MASHPIA_DB, $year, $schools;
-    $stmt = $MASHPIA_DB->prepare("
-        SELECT u.*, c.*, aa.admin_id 
-        FROM users u 
-        JOIN admin_auths aa ON aa.id = u.user_id 
-        JOIN classes c USING (class_id) 
-        JOIN user_registration ur ON ur.user_id = u.user_id 
-        WHERE u.school_id = :id 
-        AND u.user_registered > 0 
-        AND ur.year = :year 
-        ORDER BY class_grade, class_sub, hachayol DESC, last, first
-    ");
+
+    if ($year < 5786) {
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT u.*, c.*, aa.admin_id 
+            FROM users u 
+            JOIN admin_auths aa ON aa.id = u.user_id 
+            JOIN classes c USING (class_id) 
+            JOIN user_registration ur ON ur.user_id = u.user_id 
+            WHERE u.school_id = :id 
+            AND u.user_registered > 0 
+            AND ur.year = :year 
+            ORDER BY class_grade, class_sub, hachayol DESC, last, first
+        ");
+    } else {
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT u.*, c.*, aa.admin_id, u.hachayol as hachayol_status, 
+                IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
+            FROM users u 
+            JOIN admin_auths aa ON aa.id = u.user_id 
+            JOIN classes c USING (class_id) 
+            JOIN user_registration ur ON ur.user_id = u.user_id 
+            LEFT JOIN hachayols_to_give htg ON htg.user_id = u.user_id 
+            WHERE u.school_id = :id 
+            AND u.user_registered > 0 
+            AND ur.year = :year 
+            ORDER BY class_grade, class_sub, hachayol_status DESC, last, first
+        ");
+    }
 
     $users = [];
     foreach ($schools as $id => $name) {
@@ -37,18 +54,32 @@ function getRegisteredStudents() {
 
 function getHachayolInfo($user) {
     global $MASHPIA_DB, $year;
-    $stmt = $MASHPIA_DB->prepare("
-        SELECT u.*, s.school_name 
-        FROM users u 
-        JOIN schools s USING (school_id) 
-        JOIN admin_auths aa ON aa.id = u.user_id 
-        JOIN user_registration ur ON ur.user_id = u.user_id 
-        WHERE u.hachayol = 1 
-        AND u.user_registered > 0 
-        AND ur.year = :year
-        AND aa.admin_id = :admin_id
-    ");
 
+    if ($year < 5786) {
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT u.*, s.school_name 
+            FROM users u 
+            JOIN schools s USING (school_id) 
+            JOIN admin_auths aa ON aa.id = u.user_id 
+            JOIN user_registration ur ON ur.user_id = u.user_id 
+            WHERE u.hachayol = 1 
+            AND u.user_registered > 0 
+            AND ur.year = :year
+            AND aa.admin_id = :admin_id
+        ");
+    } else {
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT u.*, s.school_name 
+            FROM users u 
+            JOIN schools s USING (school_id) 
+            JOIN admin_auths aa ON aa.id = u.user_id 
+            JOIN user_registration ur ON ur.user_id = u.user_id 
+            JOIN hachayols_to_give htg ON htg.user_id = u.user_id AND htg.year = ur.year 
+            WHERE u.user_registered > 0 
+            AND ur.year = :year
+            AND aa.admin_id = :admin_id 
+        ");
+    }
     $hachayols = [];
     $stmt->execute([
         'admin_id' => $user['admin_id'],
