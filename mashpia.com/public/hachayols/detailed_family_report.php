@@ -22,19 +22,19 @@ foreach ($rows as $row) {
     $all_schools[$row['school_id']] = $row['school_name'];
 }
 
-if ($year < 5786) {
-    // first get all admins for all children in each school
-    $sqlAdmins = "select a.* from admins a 
-                    join admin_auths aa using (admin_id) 
-                    join users u on u.user_id = aa.id 
-                    join user_registration ur on ur.user_id = u.user_id 
-                    where u.user_registered > 0 
-                    and u.school_id = :school 
-                    and ur.year = :year 
-                    group by admin_id 
-                    order by a.last, a.first";
-    $stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
+// first get all admins for all children in each school
+$sqlAdmins = "select a.* from admins a 
+            join admin_auths aa using (admin_id) 
+            join users u on u.user_id = aa.id 
+            join user_registration ur on ur.user_id = u.user_id 
+            where u.user_registered > 0 
+            and u.school_id = :school 
+            and ur.year = :year 
+            group by admin_id 
+            order by a.last, a.first";
+$stmtAdmins = $MASHPIA_DB->prepare($sqlAdmins);
 
+if ($year < 5786) {
     // then get all users per admin
     $sqlUsers = "select u.user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date from users u 
                 join classes c on c.class_id = u.class_id 
