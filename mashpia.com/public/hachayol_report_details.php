@@ -1,4 +1,4 @@
-<?
+<?php
 $admin_auth = array('school', 'user');
 require('header.php');
 ?>
@@ -31,9 +31,9 @@ require('header.php');
 </head>
 
 <body>
-<? include('admin_header.php'); ?>
+<?php include('admin_header.php'); ?>
 <h1 class='hide'>Hachayol Office Report</h1>
-<?
+<?php
 require_once 'class.hachayol.php';
 $h = new Hachayol;
 
