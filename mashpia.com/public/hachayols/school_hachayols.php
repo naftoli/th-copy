@@ -112,15 +112,50 @@ foreach ($users as $school_id => $grades) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <style>
         #main {
-            margin-left: 2%;
-            margin-right: 2%;
+            margin: 2rem;
+            padding: 1rem;
         }
 
-        tr, th, td {
-            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-            font-size: 12px;
-            padding: 5px;
-            border-bottom: 1px solid lightgrey;
+        .school-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+        }
+
+        .school-header {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .table td {
+            vertical-align: middle;
+        }
+
+        .hachayol-yes {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .hachayol-no {
+            color: #e74c3c;
+        }
+
+        .children-list {
+            max-height: 100px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -132,38 +167,53 @@ foreach ($users as $school_id => $grades) {
 
         function Table() {
             return (
-                <div>
+                <div className="container-fluid">
                     {reportData.map((section, index) => (
-                        <div key={index}>
-                            <h3>
+                        <div key={index} className="school-section">
+                            <h3 className="school-header">
                                 {section.school_name} ({section.grade}
                                 {section.sub ? `-${section.sub}` : ''})
                             </h3>
-                            <hr />
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Grade</th>
-                                        <th>Hebrew Name</th>
-                                        <th>Student</th>
-                                        <th>Family ID</th>
-                                        <th>Hachayol</th>
-                                        <th>Children</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {section.data.rows.map((row, rowIndex) => (
-                                        <tr key={rowIndex}>
-                                            <td>{row.grade}</td>
-                                            <td>{row.hebrew_name}</td>
-                                            <td>{row.name}</td>
-                                            <td>{row.family_id}</td>
-                                            <td>{row.hachayol}</td>
-                                            <td>{Object.values(row.children).join('<br />')}</td>
+                            <div className="table-container">
+                                <table className="table table-striped table-hover table-bordered">
+                                    <thead className="table-light">
+                                        <tr>
+                                            <th scope="col">Grade</th>
+                                            <th scope="col">Hebrew Name</th>
+                                            <th scope="col">Student</th>
+                                            <th scope="col">Family ID</th>
+                                            <th scope="col">Hachayol</th>
+                                            <th scope="col">Children</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {section.data.rows.map((row, rowIndex) => (
+                                            <tr key={rowIndex}>
+                                                <td>{row.grade}</td>
+                                                <td>{row.hebrew_name}</td>
+                                                <td>{row.name}</td>
+                                                <td>{row.family_id}</td>
+                                                <td className={row.hachayol === 'yes' ? 'hachayol-yes' : 'hachayol-no'}>
+                                                    {row.hachayol}
+                                                </td>
+                                                <td>
+                                                    <div className="children-list">
+                                                        {Object.values(row.children).map((child, i) => (
+                                                            <div key={i}>{child}</div>
+                                                        ))}
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                    <tfoot>
+                                        <tr className="table-secondary">
+                                            <td colSpan="4" className="text-end fw-bold">Total Hachayols:</td>
+                                            <td colSpan="2" className="fw-bold">{section.data.total}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     ))}
                 </div>
