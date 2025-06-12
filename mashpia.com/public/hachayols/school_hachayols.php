@@ -105,18 +105,11 @@ foreach ($users as $school_id => $grades) {
 <html>
 <head>
     <title>Hachayol Report</title>
-    <!--      <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>-->
-    <!--      <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>-->
-    <!--      <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>-->
-    <!--      <link-->
-    <!--        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"-->
-    <!--        rel="stylesheet"-->
-    <!--        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"-->
-    <!--        crossorigin="anonymous" />-->
-    <!--      <script-->
-    <!--        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"-->
-    <!--        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"-->
-    <!--        crossorigin="anonymous"></script>-->
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
     <style>
         #main {
             margin-left: 2%;
@@ -132,99 +125,54 @@ foreach ($users as $school_id => $grades) {
     </style>
 </head>
 <body>
-    <div id='main'>
-        <?php foreach ($report_data as $section): ?>
-            <h3><?php echo $section['school_name']; ?> (<?php echo $section['grade'] . ($section['sub'] ? '-' . $section['sub'] : ''); ?>)</h3>
-            <hr />
-            <table>
-                <tr>
-                    <th>Grade</th>
-                    <th>Hebrew Name</th>
-                    <th>Student</th>
-                    <th>Family ID</th>
-                    <th>Receives Hachayol</th>
-                    <th>Who gets Hachayol in Family</th>
-                </tr>
-                <?php foreach ($section['data']['rows'] as $row): ?>
-                    <tr>
-                        <td><?php echo $row['grade']; ?></td>
-                        <td><?php echo $row['hebrew_name']; ?></td>
-                        <td><?php echo $row['name']; ?></td>
-                        <td><?php echo $row['family_id']; ?></td>
-                        <td><?php echo $row['hachayol']; ?></td>
-                        <td><?php echo implode("<br />", $row['children']); ?></td>
-                    </tr>
-                <?php endforeach; ?>
-                <tr>
-                    <th>Total:</th>
-                    <th><?php echo $section['data']['total']; ?></th>
-                    <th colspan='4'></th>
-                </tr>
-            </table>
-            <div style='page-break-after: always;'></div>
-        <?php endforeach; ?>
-    </div>
+    <div id='main'></div>
+
+    <script type="text/babel">
+        const reportData = <?php echo json_encode($report_data); ?>;
+
+        function Table() {
+            return (
+                <div>
+                    {reportData.map((section, index) => (
+                        <div key={index}>
+                            <h3>
+                                {section.school_name} ({section.grade}
+                                {section.sub ? `-${section.sub}` : ''})
+                            </h3>
+                            <hr />
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Grade</th>
+                                        <th>Hebrew Name</th>
+                                        <th>Student</th>
+                                        <th>Family ID</th>
+                                        <th>Hachayol</th>
+                                        <th>Children</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {section.data.rows.map((row, rowIndex) => (
+                                        <tr key={rowIndex}>
+                                            <td>{row.grade}</td>
+                                            <td>{row.hebrew_name}</td>
+                                            <td>{row.name}</td>
+                                            <td>{row.family_id}</td>
+                                            <td>{row.hachayol}</td>
+                                            <td>{Object.values(row.children).join('<br />')}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ))}
+                </div>
+            );
+        }
+
+        const container = document.getElementById('main');
+        const root = ReactDOM.createRoot(container);
+        root.render(<Table />);
+    </script>
 </body>
-<!--    <script type="text/babel">-->
-<!--      const { useState, useEffect } = React-->
-<!--      const { createRoot } = ReactDOM-->
-<!---->
-<!--      const Table = () => {-->
-<!--        const schools = --><?php //= json_encode($schools) ?><!--//;-->
-<!--        const users = --><?php ////= json_encode($users) ?><!--//;-->
-<!--        const hachayols = --><?php ////= json_encode($hachayols) ?><!--//;-->
-<!---->
-<!--        return (-->
-<!--          {Object.keys(users).map(school_id => (-->
-<!--            Object.keys(users[school_id]).map(grade => (-->
-<!--              Object.keys(users[school_id][grade]).map(sub => (-->
-<!--                <div style={{ pageBreakAfter: 'always' }}>-->
-<!--                  <h3 className="mt-4">{schools[school_id]}</h3><hr />-->
-<!--                  <table className="table table-striped">-->
-<!--                    <thead>-->
-<!--                      <tr>-->
-<!--                        <th>Grade</th>-->
-<!--                        <th>Hebrew Name</th>-->
-<!--                        <th>Student</th>-->
-<!--                        <th>Family ID</th>-->
-<!--                        <th>Receives Hachayol</th>-->
-<!--                        <th>Who gets Hachayol in Family</th>-->
-<!--                      </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-<!--                    {users[school_id][grade][sub].map(user) (-->
-<!--                      <tr>-->
-<!--                        <td>-->
-<!--                          {grade}{sub ? '-' + sub : ''}-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                          {user.first_he} {user.last_he}-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                          {user.first} {user.last}-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                          {user.admin_id}-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                          {user.hachayol ? 'yes' : 'no'}-->
-<!--                        </td>-->
-<!--                        <td>-->
-<!--                          {user.hachayol ? '' : hachayols[user.user_id].join('<br />')}-->
-<!--                        </td>-->
-<!--                      </tr>-->
-<!--                    )}-->
-<!--                    </tbody>-->
-<!--                  </table>-->
-<!--                </div>-->
-<!--              ))-->
-<!--            ))-->
-<!--          ))}-->
-<!--        )-->
-<!--     }-->
-<!---->
-<!--      const container = document.getElementById('main')-->
-<!--      const root = createRoot(container)-->
-<!--      root.render(<Table/>) // render the app-->
-<!--    </script>-->
 </html>
