@@ -100,10 +100,6 @@ foreach ($users as $school_id => $grades) {
         }
     }
 }
-echo '<pre>';
-print_r($report_data);
-echo '</pre>';
-exit;
 ?>
 <!DOCTYPE html>
 <html>
