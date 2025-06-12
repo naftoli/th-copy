@@ -1,4 +1,4 @@
-<?
+<?php
 $admin_auth = array('school'); 
 require('header.php');
 
