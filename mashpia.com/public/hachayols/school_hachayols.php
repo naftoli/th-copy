@@ -198,7 +198,7 @@ foreach ($users as $school_id => $grades) {
 </head>
 <body>
     <div class="container-fluid" style="margin-top: 2rem;">
-        <button class="btn btn-primary mb-3 d-print-none" style="float: right;" onClick="window.print()">
+        <button class="btn btn-primary mb-3 d-print-none" style="float: right; margin-right: 50px;" onClick="window.print()">
             🖨️ Print Report
         </button>
     </div>
