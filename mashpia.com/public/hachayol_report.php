@@ -169,6 +169,7 @@ Grand Total: <?= $grandTotal ?>
 <h2>Total Details</h2>
 <table>
   <tr>
+    <th>School ID</th>
     <th>School</th>
     <th>Total Children</th>
     <th>Total Teachers</th>
@@ -183,14 +184,14 @@ Grand Total: <?= $grandTotal ?>
         foreach ($more as $type => $other) {
             foreach ($other as $school_id => $school) {
                 $school_total = $children_totals[$school_id] + $teacher_totals[$school_id];
-                echo "<tr><td>" . $school['name'] . "</td><td>" . $children_totals[$school_id] . "</td><td>" . $teacher_totals[$school_id] . "</td><td>" . $school_total . "</td><td>" . ucfirst($type) . "</td></tr>";
+                echo "<tr><td>" . $school_id . "</td><td>" . $school['name'] . "</td><td>" . $children_totals[$school_id] . "</td><td>" . $teacher_totals[$school_id] . "</td><td>" . $school_total . "</td><td>" . ucfirst($type) . "</td></tr>";
                 $total_children += $children_totals[$school_id];
                 $total_teachers += $teacher_totals[$school_id];
                 $grand_total += $school_total;
             }
         }
     }
-    echo "<tr><th>Totals: </th><th>" . $total_children . "</th><th>" . $total_teachers . "</th><th>" . $grand_total . "</th><th></th></tr>";
+    echo "<tr><th></th><th>Totals: </th><th>" . $total_children . "</th><th>" . $total_teachers . "</th><th>" . $grand_total . "</th><th></th></tr>";
     ?>
 </table>
 <hr />
