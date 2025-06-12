@@ -188,6 +188,12 @@ foreach ($users as $school_id => $grades) {
             max-height: 100px;
             overflow-y: auto;
         }
+
+        @media print {
+            .school-section {
+                page-break-after: always;
+            }
+        }
     </style>
 </head>
 <body>
