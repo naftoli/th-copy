@@ -183,7 +183,7 @@ foreach ($users as $school_id => $grades) {
                                             <th scope="col">Student</th>
                                             <th scope="col">Family ID</th>
                                             <th scope="col">Hachayol</th>
-                                            <th scope="col">Children</th>
+                                            <th scope="col">Child(ren) Receiving Hachayol</th>
                                         </tr>
                                     </thead>
                                     <tbody>
