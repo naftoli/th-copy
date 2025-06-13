@@ -213,13 +213,17 @@ foreach ($users as $school_id => $grades) {
             .table {
                 border-collapse: collapse;
             }
+
+            .table thead {
+                display: table-header-group;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container-fluid" style="margin-top: 2rem;">
         <button class="btn btn-primary mb-3 d-print-none" style="float: right; margin-right: 50px;" onClick="window.print()">
-            🖨️ Print Report
+            Print Report
         </button>
     </div>
     <div id='main'></div>
@@ -238,14 +242,16 @@ foreach ($users as $school_id => $grades) {
                             </h3>
                             <div className="table-container">
                                 <table className="table table-striped table-hover table-bordered">
-                                    <tbody>
-                                        <tr className="table-light">
+                                    <thead className="table-light">
+                                        <tr>
                                             <th scope="col">Grade</th>
                                             <th scope="col">Student</th>
                                             <th scope="col">Family ID</th>
                                             <th scope="col">Hachayol</th>
                                             <th scope="col">Child(ren) Receiving Hachayol</th>
                                         </tr>
+                                    </thead>
+                                    <tbody>
                                         {section.data.rows.map((row, rowIndex) => (
                                             <tr key={rowIndex}>
                                                 <td>{row.grade}</td>
