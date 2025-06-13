@@ -202,14 +202,6 @@ foreach ($users as $school_id => $grades) {
             .table {
                 border-collapse: collapse;
             }
-
-            .table thead tr {
-                position: static;
-            }
-
-            .table tfoot tr {
-                position: static;
-            }
         }
     </style>
 </head>
@@ -235,16 +227,14 @@ foreach ($users as $school_id => $grades) {
                             </h3>
                             <div className="table-container">
                                 <table className="table table-striped table-hover table-bordered">
-                                    <thead className="table-light">
-                                        <tr>
+                                    <tbody>
+                                        <tr className="table-light">
                                             <th scope="col">Grade</th>
                                             <th scope="col">Student</th>
                                             <th scope="col">Family ID</th>
                                             <th scope="col">Hachayol</th>
                                             <th scope="col">Child(ren) Receiving Hachayol</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
                                         {section.data.rows.map((row, rowIndex) => (
                                             <tr key={rowIndex}>
                                                 <td>{row.grade}</td>
@@ -262,13 +252,11 @@ foreach ($users as $school_id => $grades) {
                                                 </td>
                                             </tr>
                                         ))}
-                                    </tbody>
-                                    <tfoot>
                                         <tr className="table-secondary">
                                             <td colSpan="4" className="text-end fw-bold">Total Hachayols:</td>
                                             <td colSpan="2" className="fw-bold">{section.data.total}</td>
                                         </tr>
-                                    </tfoot>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
