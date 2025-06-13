@@ -212,6 +212,7 @@ foreach ($users as $school_id => $grades) {
 
             .table {
                 border-collapse: collapse;
+                width: 100%;
             }
 
             .table thead {
