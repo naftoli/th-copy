@@ -199,12 +199,22 @@ foreach ($users as $school_id => $grades) {
                 page-break-inside: avoid;
             }
 
-            thead {
-                display: none;
+            .table {
+                border-collapse: collapse;
             }
 
-            tfoot {
-                display: none;
+            .table thead {
+                display: table-header-group;
+                break-inside: avoid;
+            }
+
+            .table tfoot {
+                display: table-footer-group;
+                break-inside: avoid;
+            }
+
+            .table tbody {
+                display: table-row-group;
             }
         }
     </style>
