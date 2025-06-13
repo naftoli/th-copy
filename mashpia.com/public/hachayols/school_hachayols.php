@@ -238,7 +238,7 @@ foreach ($users as $school_id => $grades) {
                         <div key={index} className="school-section">
                             <h3 className="school-header">
                                 {section.school_name} ({section.grade}
-                                {section.sub ? `-${section.sub}` : ''})
+                                {section.sub ? `-${section.sub}` : ''}) - {section.data.total} Hachayols
                             </h3>
                             <div className="table-container">
                                 <table className="table table-striped table-hover table-bordered">
