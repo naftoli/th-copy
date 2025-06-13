@@ -237,8 +237,8 @@ foreach ($users as $school_id => $grades) {
                     {reportData.map((section, index) => (
                         <div key={index} className="school-section">
                             <h3 className="school-header">
-                                {section.school_name}<br />{section.grade}
-                                {section.sub ? `-${section.sub}` : ''} - {section.data.total} Hachayols
+                                {section.school_name} ({section.grade}
+                                {section.sub ? `-${section.sub}` : ''}) - <strong>{section.data.total}</strong>
                             </h3>
                             <div className="table-container">
                                 <table className="table table-striped table-hover table-bordered">
