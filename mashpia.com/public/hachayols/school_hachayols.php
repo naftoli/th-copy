@@ -191,11 +191,8 @@ foreach ($users as $school_id => $grades) {
 
         @media print {
             .school-section {
-                page-break-after: auto;
-            }
-            
-            .table {
-                page-break-inside: auto;
+                page-break-before: always;
+                page-break-after: always;
             }
             
             .table thead {
@@ -204,6 +201,10 @@ foreach ($users as $school_id => $grades) {
             
             .table tfoot {
                 display: table-footer-group;
+            }
+            
+            .table tbody {
+                display: table-row-group;
             }
             
             .table tr {
