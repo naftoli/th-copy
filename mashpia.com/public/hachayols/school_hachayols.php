@@ -221,7 +221,6 @@ foreach ($users as $school_id => $grades) {
                                     <thead className="table-light">
                                         <tr>
                                             <th scope="col">Grade</th>
-                                            <th scope="col">Hebrew Name</th>
                                             <th scope="col">Student</th>
                                             <th scope="col">Family ID</th>
                                             <th scope="col">Hachayol</th>
@@ -232,7 +231,6 @@ foreach ($users as $school_id => $grades) {
                                         {section.data.rows.map((row, rowIndex) => (
                                             <tr key={rowIndex}>
                                                 <td>{row.grade}</td>
-                                                <td>{row.hebrew_name}</td>
                                                 <td>{row.name}</td>
                                                 <td>{row.family_id}</td>
                                                 <td className={row.hachayol === 'yes' ? 'hachayol-yes' : 'hachayol-no'}>
