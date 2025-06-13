@@ -195,18 +195,6 @@ foreach ($users as $school_id => $grades) {
                 page-break-after: always;
             }
             
-            .table thead {
-                display: table-header-group;
-            }
-            
-            .table tfoot {
-                display: table-footer-group;
-            }
-            
-            .table tbody {
-                display: table-row-group;
-            }
-            
             .table tr {
                 page-break-inside: avoid;
             }
