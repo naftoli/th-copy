@@ -203,18 +203,12 @@ foreach ($users as $school_id => $grades) {
                 border-collapse: collapse;
             }
 
-            .table thead {
-                display: table-header-group;
-                break-inside: avoid;
+            .table thead tr {
+                position: static;
             }
 
-            .table tfoot {
-                display: table-footer-group;
-                break-inside: avoid;
-            }
-
-            .table tbody {
-                display: table-row-group;
+            .table tfoot tr {
+                position: static;
             }
         }
     </style>
