@@ -212,11 +212,28 @@ foreach ($users as $school_id => $grades) {
 
             .table {
                 border-collapse: collapse;
-                width: 100%;
+                width: 100% !important;
             }
 
             .table thead {
                 display: table-header-group;
+            }
+
+            .container-fluid {
+                margin: 0 !important;
+                padding: 0 !important;
+                max-width: none !important;
+                width: 100% !important;
+            }
+            
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            #main {
+                margin: 0 !important;
+                padding: 0 !important;
             }
         }
     </style>
