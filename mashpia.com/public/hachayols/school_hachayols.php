@@ -163,7 +163,7 @@ foreach ($users as $school_id => $grades) {
         }
 
         .table-container {
-            overflow-x: auto;
+            /* overflow-x: auto; */
         }
 
         .table th {
@@ -191,7 +191,23 @@ foreach ($users as $school_id => $grades) {
 
         @media print {
             .school-section {
-                page-break-after: always;
+                page-break-after: auto;
+            }
+            
+            .table {
+                page-break-inside: auto;
+            }
+            
+            .table thead {
+                display: table-header-group;
+            }
+            
+            .table tfoot {
+                display: table-footer-group;
+            }
+            
+            .table tr {
+                page-break-inside: avoid;
             }
         }
     </style>
