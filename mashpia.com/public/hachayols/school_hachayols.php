@@ -198,6 +198,14 @@ foreach ($users as $school_id => $grades) {
             .table tr {
                 page-break-inside: avoid;
             }
+
+            thead {
+                display: none;
+            }
+
+            tfoot {
+                display: none;
+            }
         }
     </style>
 </head>
