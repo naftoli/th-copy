@@ -191,11 +191,19 @@ foreach ($users as $school_id => $grades) {
 
         @media print {
             .school-section {
-                page-break-after: always;
+                background: none;
+                border-radius: 0;
+                box-shadow: none;
+                margin: 0;
+                padding: 0;
             }
-            
+
             .school-section:not(:first-child) {
                 page-break-before: always;
+            }
+            
+            .school-section {
+                page-break-after: always;
             }
             
             .table tr {
