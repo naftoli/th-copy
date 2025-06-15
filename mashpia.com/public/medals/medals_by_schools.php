@@ -10,59 +10,78 @@ if ($admin_user['auth'] != 'super') {
     die('You are not authorized to view this page');
 }
 
-$start_date = 2460448; // May 17, 2024
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
-// Query to get medal data since May 5, 2024
-$stmt = $MASHPIA_DB->prepare("
-    SELECT 
-        school_name, subject_name, medal_name, COUNT(*) AS total,
-        s.subject_id, m.medal_ord
-    FROM
-        medal_marks mm
-            JOIN
-        subjects s USING (subject_id)
-            JOIN
-        medals m USING (medal_ord)
-            JOIN
-        users u USING (user_id)
-            JOIN
-        schools sc ON sc.school_id = u.school_id
-    WHERE
-        mm.date_awarded >= :start_date
-    GROUP BY sc.school_id , subject_id , medal_ord
-");
-$stmt->execute(['start_date' => $start_date]);
+// Get selected dates from form
+// default to last 30 days
+$start = isset($_POST['from_hidden']) ? $_POST['from_hidden'] : null;
+$end = isset($_POST['to_hidden']) ? $_POST['to_hidden'] : null;
+
 $medal_data = [];
 $grand_totals = [];
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $medal_data[$row['school_name']][] = [
-        'medal_name' => $row['medal_name'],
-        'subject_name' => $row['subject_name'],
-        'total' => $row['total'],
-        'subject_id' => $row['subject_id'],
-        'medal_ord' => $row['medal_ord']
-    ];
-    if (!isset($grand_totals[$row['subject_name']][$row['medal_name']])) {
-        $grand_totals[$row['subject_name']][$row['medal_name']] = [
+
+// Only query if dates are provided
+if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
+    // convert to julian days
+    $startArr = explode('-', $start);
+    $endArr = explode('-', $end);
+    $start_date = gregoriantojd($startArr[1], $startArr[2], $startArr[0]);
+    $end_date = gregoriantojd($endArr[1], $endArr[2], $endArr[0]);
+
+    // Query to get medal data based on date range
+    $stmt = $MASHPIA_DB->prepare("
+        SELECT 
+            school_name, subject_name, medal_name, COUNT(*) AS total,
+            s.subject_id, m.medal_ord
+        FROM
+            medal_marks mm
+                JOIN
+            subjects s USING (subject_id)
+                JOIN
+            medals m USING (medal_ord)
+                JOIN
+            users u USING (user_id)
+                JOIN
+            schools sc ON sc.school_id = u.school_id
+        WHERE
+            mm.date_awarded BETWEEN :start_date AND :end_date
+        GROUP BY sc.school_id , subject_id , medal_ord
+    ");
+    $stmt->execute([
+        'start_date' => $start_date,
+        'end_date' => $end_date
+    ]);
+    
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $medal_data[$row['school_name']][] = [
+            'medal_name' => $row['medal_name'],
+            'subject_name' => $row['subject_name'],
             'total' => $row['total'],
             'subject_id' => $row['subject_id'],
             'medal_ord' => $row['medal_ord']
         ];
-    } else {
-        $grand_totals[$row['subject_name']][$row['medal_name']]['total'] += $row['total'];
+        if (!isset($grand_totals[$row['subject_name']][$row['medal_name']])) {
+            $grand_totals[$row['subject_name']][$row['medal_name']] = [
+                'total' => $row['total'],
+                'subject_id' => $row['subject_id'],
+                'medal_ord' => $row['medal_ord']
+            ];
+        } else {
+            $grand_totals[$row['subject_name']][$row['medal_name']]['total'] += $row['total'];
+        }
     }
 }
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Medal Report - Since May 5, 2024</title>
+    <title>Medal Report</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    <link href="/heDatePicker/dist/css/he-datepicker.css" rel="stylesheet">
     <style>
         #main {
             margin: 2rem;
@@ -95,6 +114,14 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
         .table td {
             vertical-align: middle;
+        }
+
+        .date-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            padding: 1.5rem;
         }
 
         @media print {
@@ -148,15 +175,36 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 </head>
 <body>
     <div class="container-fluid" style="margin-top: 2rem;">
-        <button class="btn btn-primary mb-3 d-print-none" style="float: right; margin-right: 50px;" onClick="downloadCSV()">
-            Download CSV
-        </button>
+        <div class="date-form">
+            <form method="POST" class="row g-3 align-items-end" id="dates_form" onsubmit="generateReport()">
+                <div class="col-md-4">
+                    <label for="from" class="form-label">From Date</label>
+                    <input type="text" class="form-control" id="from" name="from" required />
+                </div>
+                <div class="col-md-4">
+                    <label for="to" class="form-label">To Date</label>
+                    <input type="text" class="form-control" id="to" name="to" required />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                    <input type="hidden" id="from_hidden" name="from_hidden">
+                    <input type="hidden" id="to_hidden" name="to_hidden">
+                    <?php if ($start && $end): ?>
+                    <button type="button" class="btn btn-primary ms-2" onClick="downloadCSV()">Download CSV</button>
+                    <?php endif; ?>
+                </div>
+            </form>
+        </div>
     </div>
     <div id='main'></div>
 
     <script type="text/babel">
         const medalData = <?php echo json_encode($medal_data); ?>;
         const grandTotals = <?php echo json_encode($grand_totals); ?>;
+        const dateRange = {
+            start: "<?php echo $start; ?>",
+            end: "<?php echo $end; ?>"
+        };
 
         function downloadCSV() {
             // Get all unique subject/medal combinations for column headers
@@ -236,8 +284,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
+            const filename = `medal_report_${dateRange.start}_to_${dateRange.end}.csv`;
             link.setAttribute("href", url);
-            link.setAttribute("download", "medal_report.csv");
+            link.setAttribute("download", filename);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
@@ -245,6 +294,16 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         }
 
         function Table() {
+            if (!dateRange.start || !dateRange.end) {
+                return (
+                    <div className="container-fluid">
+                        <div className="school-section">
+                            <h3 className="school-header">Please select a date range to generate the report</h3>
+                        </div>
+                    </div>
+                );
+            }
+
             // Get all unique subject/medal combinations for column headers
             const columns = new Set();
             const columnData = new Map();
@@ -273,7 +332,9 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             return (
                 <div className="container-fluid">
                     <div className="school-section">
-                        <h3 className="school-header">Medal Report</h3>
+                        <h3 className="school-header">
+                            Medal Report ({dateRange.start} to {dateRange.end})
+                        </h3>
                         <div className="table-container">
                             <table className="table table-striped table-hover table-bordered">
                                 <thead className="table-light">
@@ -309,10 +370,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     <tr className="table-secondary">
                                         <td className="fw-bold">Grand Total</td>
                                         {columnArray.map((column, index) => {
-                                            const [subject, medal] = column.split(' - ');
+                                            const [subject, medal] = column.split(" - ");
                                             return (
                                                 <td key={index} className="fw-bold">
-                                                    {parseInt(grandTotals[subject]?.[medal]?.total || 0, 10)}
+                                                    {grandTotals[subject]?.[medal]?.total || 0}
                                                 </td>
                                             );
                                         })}
@@ -330,9 +391,31 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             );
         }
 
+        window.addEventListener('load', function () {
+            const fromDatepicker = new JewishDatepicker('#from', {
+                hideHeader: true,
+                color: '#0d6efd' // Match your theme color
+            });
+            const toDatepicker = new JewishDatepicker('#to', {
+                hideHeader: true,
+                color: '#0d6efd' // Match your theme color
+            });
+        });
+
+        function generateReport() {
+            const from = $("#from").data('gregorian-date');
+            const to = $("#to").data('gregorian-date');
+            $("#from_hidden").val(from);
+            $("#to_hidden").val(to);
+            $("#dates_form").submit();
+        }
+
         const container = document.getElementById('main');
         const root = ReactDOM.createRoot(container);
         root.render(<Table />);
     </script>
+
+    <script src="/heDatePicker/dist/js/he-datepicker.js" defer></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 </body>
 </html>
