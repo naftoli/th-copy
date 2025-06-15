@@ -184,8 +184,22 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 return dataA.medal_ord - dataB.medal_ord;
             });
 
+            // Helper function to escape CSV fields
+            const escapeCSV = (field) => {
+                if (field === null || field === undefined) return '""';
+                const stringField = String(field);
+                if (stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
+                    return '"' + stringField.replace(/"/g, '""') + '"';
+                }
+                return stringField;
+            };
+
             // Create CSV content
-            let csvContent = "School," + columnArray.join(",") + ",School Total\n";
+            let csvContent = [
+                "School",
+                ...columnArray,
+                "School Total"
+            ].map(escapeCSV).join(",") + "\n";
 
             // Add school rows
             Object.entries(medalData).forEach(([schoolName, medals]) => {
@@ -197,24 +211,25 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     schoolTotal += parseInt(medal.total, 10);
                 });
 
-                const row = [schoolName];
-                columnArray.forEach(column => {
-                    row.push(schoolMedalMap[column] || 0);
-                });
-                row.push(schoolTotal);
+                const row = [
+                    schoolName,
+                    ...columnArray.map(column => schoolMedalMap[column] || 0),
+                    schoolTotal
+                ].map(escapeCSV);
                 csvContent += row.join(",") + "\n";
             });
 
             // Add grand total row
-            const grandTotalRow = ["Grand Total"];
-            columnArray.forEach(column => {
-                const [subject, medal] = column.split(" - ");
-                grandTotalRow.push(grandTotals[subject]?.[medal]?.total || 0);
-            });
-            const grandTotal = Object.values(grandTotals).reduce((sum, medals) => 
-                sum + Object.values(medals).reduce((a, b) => a + parseInt(b.total, 10), 0), 0
-            );
-            grandTotalRow.push(grandTotal);
+            const grandTotalRow = [
+                "Grand Total",
+                ...columnArray.map(column => {
+                    const [subject, medal] = column.split(" - ");
+                    return grandTotals[subject]?.[medal]?.total || 0;
+                }),
+                Object.values(grandTotals).reduce((sum, medals) => 
+                    sum + Object.values(medals).reduce((a, b) => a + parseInt(b.total, 10), 0), 0
+                )
+            ].map(escapeCSV);
             csvContent += grandTotalRow.join(",");
 
             // Create and trigger download
