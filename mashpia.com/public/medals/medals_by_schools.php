@@ -16,7 +16,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 // Query to get medal data since May 5, 2024
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        school_name, subject_name, medal_name, COUNT(*) AS total
+        school_name, subject_name, medal_name, COUNT(*) AS total,
+        s.subject_id, m.medal_ord
     FROM
         medal_marks mm
             JOIN
@@ -38,12 +39,18 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $medal_data[$row['school_name']][] = [
         'medal_name' => $row['medal_name'],
         'subject_name' => $row['subject_name'],
-        'total' => $row['total']
+        'total' => $row['total'],
+        'subject_id' => $row['subject_id'],
+        'medal_ord' => $row['medal_ord']
     ];
     if (!isset($grand_totals[$row['subject_name']][$row['medal_name']])) {
-        $grand_totals[$row['subject_name']][$row['medal_name']] = $row['total'];
+        $grand_totals[$row['subject_name']][$row['medal_name']] = [
+            'total' => $row['total'],
+            'subject_id' => $row['subject_id'],
+            'medal_ord' => $row['medal_ord']
+        ];
     } else {
-        $grand_totals[$row['subject_name']][$row['medal_name']] += $row['total'];
+        $grand_totals[$row['subject_name']][$row['medal_name']]['total'] += $row['total'];
     }
 }
 ?>
@@ -152,56 +159,83 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         const grandTotals = <?php echo json_encode($grand_totals); ?>;
 
         function Table() {
+            // Get all unique subject/medal combinations for column headers
+            const columns = new Set();
+            const columnData = new Map();
+            
+            Object.values(medalData).forEach(schoolMedals => {
+                schoolMedals.forEach(medal => {
+                    const key = `${medal.subject_name} - ${medal.medal_name}`;
+                    columns.add(key);
+                    columnData.set(key, {
+                        subject_id: medal.subject_id,
+                        medal_ord: medal.medal_ord
+                    });
+                });
+            });
+            
+            // Sort columns based on subject_id and medal_ord
+            const columnArray = Array.from(columns).sort((a, b) => {
+                const dataA = columnData.get(a);
+                const dataB = columnData.get(b);
+                if (dataA.subject_id !== dataB.subject_id) {
+                    return dataA.subject_id - dataB.subject_id;
+                }
+                return dataA.medal_ord - dataB.medal_ord;
+            });
+
             return (
                 <div className="container-fluid">
-                    {Object.entries(medalData).map(([schoolName, medals], index) => (
-                        <div key={index} className="school-section">
-                            <h3 className="school-header">
-                                {schoolName}
-                            </h3>
-                            <div className="table-container">
-                                <table className="table table-striped table-hover table-bordered">
-                                    <thead className="table-light">
-                                        <tr>
-                                            <th scope="col">Subject</th>
-                                            <th scope="col">Medal Name</th>
-                                            <th scope="col">Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {medals.map((medal, medalIndex) => (
-                                            <tr key={medalIndex}>
-                                                <td>{medal.subject_name}</td>
-                                                <td>{medal.medal_name}</td>
-                                                <td>{medal.total}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    ))}
                     <div className="school-section">
-                        <h3 className="school-header">Grand Totals</h3>
+                        <h3 className="school-header">Medal Report</h3>
                         <div className="table-container">
                             <table className="table table-striped table-hover table-bordered">
                                 <thead className="table-light">
                                     <tr>
-                                        <th scope="col">Subject</th>
-                                        <th scope="col">Medal Name</th>
-                                        <th scope="col">Total</th>
+                                        <th scope="col">School</th>
+                                        {columnArray.map((column, index) => (
+                                            <th key={index} scope="col">{column}</th>
+                                        ))}
+                                        <th scope="col">School Total</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {Object.entries(grandTotals).map(([subjectName, medals]) => 
-                                        Object.entries(medals).map(([medalName, total], index) => (
-                                            <tr key={`${subjectName}-${medalName}-${index}`}>
-                                                <td>{subjectName}</td>
-                                                <td>{medalName}</td>
-                                                <td>{total}</td>
+                                    {Object.entries(medalData).map(([schoolName, medals], index) => {
+                                        // Create a map of subject-medal combinations to totals for this school
+                                        const schoolMedalMap = {};
+                                        let schoolTotal = 0;
+                                        medals.forEach(medal => {
+                                            const key = `${medal.subject_name} - ${medal.medal_name}`;
+                                            schoolMedalMap[key] = medal.total;
+                                            schoolTotal += medal.total;
+                                        });
+
+                                        return (
+                                            <tr key={index}>
+                                                <td>{schoolName}</td>
+                                                {columnArray.map((column, colIndex) => (
+                                                    <td key={colIndex}>{schoolMedalMap[column] || 0}</td>
+                                                ))}
+                                                <td className="fw-bold">{schoolTotal}</td>
                                             </tr>
-                                        ))
-                                    )}
+                                        );
+                                    })}
+                                    <tr className="table-secondary">
+                                        <td className="fw-bold">Grand Total</td>
+                                        {columnArray.map((column, index) => {
+                                            const [subject, medal] = column.split(' - ');
+                                            return (
+                                                <td key={index} className="fw-bold">
+                                                    {grandTotals[subject]?.[medal]?.total || 0}
+                                                </td>
+                                            );
+                                        })}
+                                        <td className="fw-bold">
+                                            {Object.values(grandTotals).reduce((sum, medals) => 
+                                                sum + Object.values(medals).reduce((a, b) => a + b.total, 0), 0
+                                            )}
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
