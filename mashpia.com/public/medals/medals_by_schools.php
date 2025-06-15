@@ -147,42 +147,33 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         function Table() {
             return (
                 <div className="container-fluid">
-                    {Object.entries(medalData).map(([schoolName, medals], index) => {
-                        // Calculate total for this school
-                        const schoolTotal = medals.reduce((sum, medal) => sum + medal.total, 0);
-                        
-                        return (
-                            <div key={index} className="school-section">
-                                <h3 className="school-header">
-                                    {schoolName}
-                                </h3>
-                                <div className="table-container">
-                                    <table className="table table-striped table-hover table-bordered">
-                                        <thead className="table-light">
-                                            <tr>
-                                                <th scope="col">Subject</th>
-                                                <th scope="col">Medal Name</th>
-                                                <th scope="col">Total</th>
+                    {Object.entries(medalData).map(([schoolName, medals], index) => (
+                        <div key={index} className="school-section">
+                            <h3 className="school-header">
+                                {schoolName}
+                            </h3>
+                            <div className="table-container">
+                                <table className="table table-striped table-hover table-bordered">
+                                    <thead className="table-light">
+                                        <tr>
+                                            <th scope="col">Subject</th>
+                                            <th scope="col">Medal Name</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {medals.map((medal, medalIndex) => (
+                                            <tr key={medalIndex}>
+                                                <td>{medal.subject_name}</td>
+                                                <td>{medal.medal_name}</td>
+                                                <td>{medal.total}</td>
                                             </tr>
-                                        </thead>
-                                        <tbody>
-                                            {medals.map((medal, medalIndex) => (
-                                                <tr key={medalIndex}>
-                                                    <td>{medal.subject_name}</td>
-                                                    <td>{medal.medal_name}</td>
-                                                    <td>{medal.total}</td>
-                                                </tr>
-                                            ))}
-                                            <tr className="table-secondary">
-                                                <td colSpan="2" className="text-end fw-bold">School Total:</td>
-                                                <td className="fw-bold">{schoolTotal}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
-                        );
-                    })}
+                        </div>
+                    ))}
                 </div>
             );
         }
