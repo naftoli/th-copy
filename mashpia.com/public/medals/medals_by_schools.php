@@ -148,8 +148,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 </head>
 <body>
     <div class="container-fluid" style="margin-top: 2rem;">
-        <button class="btn btn-primary mb-3 d-print-none" style="float: right; margin-right: 50px;" onClick="window.print()">
-            Print Report
+        <button class="btn btn-primary mb-3 d-print-none" style="float: right; margin-right: 50px;" onClick="downloadCSV()">
+            Download CSV
         </button>
     </div>
     <div id='main'></div>
@@ -157,6 +157,77 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     <script type="text/babel">
         const medalData = <?php echo json_encode($medal_data); ?>;
         const grandTotals = <?php echo json_encode($grand_totals); ?>;
+
+        function downloadCSV() {
+            // Get all unique subject/medal combinations for column headers
+            const columns = new Set();
+            const columnData = new Map();
+            
+            Object.values(medalData).forEach(schoolMedals => {
+                schoolMedals.forEach(medal => {
+                    const key = `${medal.subject_name} - ${medal.medal_name}`;
+                    columns.add(key);
+                    columnData.set(key, {
+                        subject_id: medal.subject_id,
+                        medal_ord: medal.medal_ord
+                    });
+                });
+            });
+            
+            // Sort columns based on subject_id and medal_ord
+            const columnArray = Array.from(columns).sort((a, b) => {
+                const dataA = columnData.get(a);
+                const dataB = columnData.get(b);
+                if (dataA.subject_id !== dataB.subject_id) {
+                    return dataA.subject_id - dataB.subject_id;
+                }
+                return dataA.medal_ord - dataB.medal_ord;
+            });
+
+            // Create CSV content
+            let csvContent = "School," + columnArray.join(",") + ",School Total\n";
+
+            // Add school rows
+            Object.entries(medalData).forEach(([schoolName, medals]) => {
+                const schoolMedalMap = {};
+                let schoolTotal = 0;
+                medals.forEach(medal => {
+                    const key = `${medal.subject_name} - ${medal.medal_name}`;
+                    schoolMedalMap[key] = parseInt(medal.total, 10);
+                    schoolTotal += parseInt(medal.total, 10);
+                });
+
+                const row = [schoolName];
+                columnArray.forEach(column => {
+                    row.push(schoolMedalMap[column] || 0);
+                });
+                row.push(schoolTotal);
+                csvContent += row.join(",") + "\n";
+            });
+
+            // Add grand total row
+            const grandTotalRow = ["Grand Total"];
+            columnArray.forEach(column => {
+                const [subject, medal] = column.split(" - ");
+                grandTotalRow.push(grandTotals[subject]?.[medal]?.total || 0);
+            });
+            const grandTotal = Object.values(grandTotals).reduce((sum, medals) => 
+                sum + Object.values(medals).reduce((a, b) => a + parseInt(b.total, 10), 0), 0
+            );
+            grandTotalRow.push(grandTotal);
+            csvContent += grandTotalRow.join(",");
+
+            // Create and trigger download
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", "medal_report.csv");
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
 
         function Table() {
             // Get all unique subject/medal combinations for column headers
