@@ -206,8 +206,8 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                         let schoolTotal = 0;
                                         medals.forEach(medal => {
                                             const key = `${medal.subject_name} - ${medal.medal_name}`;
-                                            schoolMedalMap[key] = medal.total;
-                                            schoolTotal += medal.total;
+                                            schoolMedalMap[key] = parseInt(medal.total, 10);
+                                            schoolTotal += parseInt(medal.total, 10);
                                         });
 
                                         return (
@@ -226,13 +226,13 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                             const [subject, medal] = column.split(' - ');
                                             return (
                                                 <td key={index} className="fw-bold">
-                                                    {grandTotals[subject]?.[medal]?.total || 0}
+                                                    {parseInt(grandTotals[subject]?.[medal]?.total || 0, 10)}
                                                 </td>
                                             );
                                         })}
                                         <td className="fw-bold">
                                             {Object.values(grandTotals).reduce((sum, medals) => 
-                                                sum + Object.values(medals).reduce((a, b) => a + b.total, 0), 0
+                                                sum + Object.values(medals).reduce((a, b) => a + parseInt(b.total, 10), 0), 0
                                             )}
                                         </td>
                                     </tr>
