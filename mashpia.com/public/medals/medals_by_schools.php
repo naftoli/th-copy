@@ -4,17 +4,17 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
-// Get data
-$year = GlobalSettings::getRegistrationYear();
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
-$schools = $as->getSchools();
+// only super users can see all schools
+if ($admin_user['auth'] != 'super') {
+    die('You are not authorized to view this page');
+}
+
+$start_date = 2460448; // June 1, 2024
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 // Query to get medal data since May 5, 2024
-$sql = "
+$stmt = $MASHPIA_DB->prepare("
     SELECT 
         school_name, subject_name, medal_name, COUNT(*) AS total
     FROM
@@ -28,17 +28,16 @@ $sql = "
             JOIN
         schools sc ON sc.school_id = u.school_id
     WHERE
-        mm.date_awarded >= 2460448
+        mm.date_awarded >= :start_date
     GROUP BY sc.school_id , subject_id , medal_ord
-";
-
-$result = mysql_query($sql);
+");
+$stmt->execute(['start_date' => $start_date]);
 $medal_data = [];
-while ($row = mysql_fetch_assoc($result)) {
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $medal_data[$row['school_name']][] = [
         'medal_name' => $row['medal_name'],
-        'medal_type' => $row['medal_type'],
-        'count' => $row['medal_count']
+        'subject_name' => $row['subject_name'],
+        'total' => $row['total']
     ];
 }
 ?>
@@ -157,17 +156,17 @@ while ($row = mysql_fetch_assoc($result)) {
                                 <table className="table table-striped table-hover table-bordered">
                                     <thead className="table-light">
                                         <tr>
-                                            <th scope="col">Medal Type</th>
+                                            <th scope="col">Subject</th>
                                             <th scope="col">Medal Name</th>
-                                            <th scope="col">Medals Earned</th>
+                                            <th scope="col">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {medals.map((medal, medalIndex) => (
                                             <tr key={medalIndex}>
-                                                <td>{medal.medal_type}</td>
+                                                <td>{medal.subject_name}</td>
                                                 <td>{medal.medal_name}</td>
-                                                <td>{medal.count}</td>
+                                                <td>{medal.total}</td>
                                             </tr>
                                         ))}
                                     </tbody>
