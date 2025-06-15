@@ -149,6 +149,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
 
     <script type="text/babel">
         const medalData = <?php echo json_encode($medal_data); ?>;
+        const grandTotals = <?php echo json_encode($grand_totals); ?>;
 
         function Table() {
             return (
@@ -192,14 +193,15 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {Object.entries(grandTotals).map(([subjectName, medals], index) => (
-                                        <tr key={index}>
-                                            <td>{subjectName}</td>
-                                            {Object.entries(medals).map(([medalName, total], medalIndex) => (
-                                                <td key={medalIndex}>{total}</td>
-                                            ))} 
-                                        </tr>
-                                    ))}
+                                    {Object.entries(grandTotals).map(([subjectName, medals]) => 
+                                        Object.entries(medals).map(([medalName, total], index) => (
+                                            <tr key={`${subjectName}-${medalName}-${index}`}>
+                                                <td>{subjectName}</td>
+                                                <td>{medalName}</td>
+                                                <td>{total}</td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </table>
                         </div>
