@@ -185,10 +185,10 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             });
 
             // Helper function to escape CSV fields
-            const escapeCSV = (field) => {
+            const escapeCSV = (field, alwaysQuote = false) => {
                 if (field === null || field === undefined) return '""';
                 const stringField = String(field);
-                if (stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
+                if (alwaysQuote || stringField.includes(',') || stringField.includes('"') || stringField.includes('\n')) {
                     return '"' + stringField.replace(/"/g, '""') + '"';
                 }
                 return stringField;
@@ -199,7 +199,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 "School",
                 ...columnArray,
                 "School Total"
-            ].map(escapeCSV).join(",") + "\n";
+            ].map((field, index) => escapeCSV(field, index === 0)).join(",") + "\n";
 
             // Add school rows
             Object.entries(medalData).forEach(([schoolName, medals]) => {
@@ -215,7 +215,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                     schoolName,
                     ...columnArray.map(column => schoolMedalMap[column] || 0),
                     schoolTotal
-                ].map(escapeCSV);
+                ].map((field, index) => escapeCSV(field, index === 0));
                 csvContent += row.join(",") + "\n";
             });
 
@@ -229,7 +229,7 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 Object.values(grandTotals).reduce((sum, medals) => 
                     sum + Object.values(medals).reduce((a, b) => a + parseInt(b.total, 10), 0), 0
                 )
-            ].map(escapeCSV);
+            ].map((field, index) => escapeCSV(field, index === 0));
             csvContent += grandTotalRow.join(",");
 
             // Create and trigger download
