@@ -14,14 +14,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 // Get selected dates from form
 // default to last 30 days
-$start = isset($_POST['from_hidden']) ? $_POST['from_hidden'] : null;
-$end = isset($_POST['to_hidden']) ? $_POST['to_hidden'] : null;
+$start = isset($_POST['from']) ? $_POST['from'] : null;
+$end = isset($_POST['to']) ? $_POST['to'] : null;
 
 $medal_data = [];
 $grand_totals = [];
 
 // Only query if dates are provided
-if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
+if ($start && $end) {
     // convert to julian days
     $startArr = explode('-', $start);
     $endArr = explode('-', $end);
@@ -81,7 +81,6 @@ if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <link href="/heDatePicker/dist/css/he-datepicker.css" rel="stylesheet">
     <style>
         #main {
             margin: 2rem;
@@ -176,19 +175,17 @@ if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
 <body>
     <div class="container-fluid" style="margin-top: 2rem;">
         <div class="date-form">
-            <form method="POST" class="row g-3 align-items-end" id="dates_form" onsubmit="generateReport()">
+            <form method="POST" class="row g-3 align-items-end" id="dates_form">
                 <div class="col-md-4">
                     <label for="from" class="form-label">From Date</label>
-                    <input type="text" class="form-control" id="from" name="from" required />
+                    <input type="date" class="form-control" id="from" name="from" value="<?php echo $start; ?>" required />
                 </div>
                 <div class="col-md-4">
                     <label for="to" class="form-label">To Date</label>
-                    <input type="text" class="form-control" id="to" name="to" required />
+                    <input type="date" class="form-control" id="to" name="to" value="<?php echo $end; ?>" required />
                 </div>
                 <div class="col-md-4">
                     <button type="submit" class="btn btn-primary">Generate Report</button>
-                    <input type="hidden" id="from_hidden" name="from_hidden">
-                    <input type="hidden" id="to_hidden" name="to_hidden">
                     <?php if ($start && $end): ?>
                     <button type="button" class="btn btn-primary ms-2" onClick="downloadCSV()">Download CSV</button>
                     <?php endif; ?>
@@ -205,6 +202,18 @@ if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
             start: "<?php echo $start; ?>",
             end: "<?php echo $end; ?>"
         };
+
+        // Add form validation
+        document.getElementById('dates_form').addEventListener('submit', function(e) {
+            const startDate = new Date(document.getElementById('from').value);
+            const endDate = new Date(document.getElementById('to').value);
+            
+            if (endDate < startDate) {
+                e.preventDefault();
+                alert('End date must be after or same as start date');
+                return false;
+            }
+        });
 
         function downloadCSV() {
             // Get all unique subject/medal combinations for column headers
@@ -391,31 +400,9 @@ if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
             );
         }
 
-        window.addEventListener('load', function () {
-            const fromDatepicker = new JewishDatepicker('#from', {
-                hideHeader: true,
-                color: '#0d6efd' // Match your theme color
-            });
-            const toDatepicker = new JewishDatepicker('#to', {
-                hideHeader: true,
-                color: '#0d6efd' // Match your theme color
-            });
-        });
-
-        function generateReport() {
-            const from = $("#from").data('gregorian-date');
-            const to = $("#to").data('gregorian-date');
-            $("#from_hidden").val(from);
-            $("#to_hidden").val(to);
-            $("#dates_form").submit();
-        }
-
         const container = document.getElementById('main');
         const root = ReactDOM.createRoot(container);
         root.render(<Table />);
     </script>
-
-    <script src="/heDatePicker/dist/js/he-datepicker.js" defer></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
 </body>
 </html>
