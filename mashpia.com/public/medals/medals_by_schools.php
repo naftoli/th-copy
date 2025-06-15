@@ -10,7 +10,7 @@ if ($admin_user['auth'] != 'super') {
     die('You are not authorized to view this page');
 }
 
-$start_date = 2460448; // June 1, 2024
+$start_date = 2460448; // May 17, 2024
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 // Query to get medal data since May 5, 2024
@@ -33,12 +33,18 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 $stmt->execute(['start_date' => $start_date]);
 $medal_data = [];
+$grand_totals = [];
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $medal_data[$row['school_name']][] = [
         'medal_name' => $row['medal_name'],
         'subject_name' => $row['subject_name'],
         'total' => $row['total']
     ];
+    if (!isset($grand_totals[$row['subject_name']][$row['medal_name']])) {
+        $grand_totals[$row['subject_name']][$row['medal_name']] = $row['total'];
+    } else {
+        $grand_totals[$row['subject_name']][$row['medal_name']] += $row['total'];
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -174,6 +180,30 @@ while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             </div>
                         </div>
                     ))}
+                    <div className="school-section">
+                        <h3 className="school-header">Grand Totals</h3>
+                        <div className="table-container">
+                            <table className="table table-striped table-hover table-bordered">
+                                <thead className="table-light">
+                                    <tr>
+                                        <th scope="col">Subject</th>
+                                        <th scope="col">Medal Name</th>
+                                        <th scope="col">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Object.entries(grandTotals).map(([subjectName, medals], index) => (
+                                        <tr key={index}>
+                                            <td>{subjectName}</td>
+                                            {Object.entries(medals).map(([medalName, total], medalIndex) => (
+                                                <td key={medalIndex}>{total}</td>
+                                            ))} 
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             );
         }
