@@ -14,8 +14,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-require 'class.chayoleiShipping.php';
-require 'data.php';
+require_once 'class.chayoleiShipping.php';
+require_once 'data.php';
 
 $cs = new ChayoleiShipping();
 $categories = $cs->getCategories();

@@ -4,6 +4,8 @@ ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 
 /**
  * Class ChayoleiShipping
@@ -53,12 +55,14 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['name plates','chanuka', 'hei teves'];
+        $categories = ['medals', 'ranks', 'name plates','chanuka', 'hei teves'];
         return $categories;
     }
 
     public function getItems() {
         $items['name plates'] = ['Name Plates'];
+        $items['medals'] = ['Medals'];
+        $items['ranks'] = ['Rank Medals', 'Rank Books'];
         $items['chanuka'] = $this->getYomTovItems('Chanuka');
         $items['hei teves'] = $this->getYomTovItems('Hei Teves');
         return $items;
@@ -111,8 +115,8 @@ class ChayoleiShipping
             WHERE
                 mi.yom_tov = :yom_tov
                     AND p.year = :year";
-        if ($gender == 'M') $sql .= " AND u.gender = 'M'";
-        else if ($gender == 'F') $sql .= " AND u.gender = 'F'";
+        if ($gender == 'm') $sql .= " AND u.gender = 'M'";
+        else if ($gender == 'f') $sql .= " AND u.gender = 'F'";
         if ($school > 0) $sql .= " AND u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
@@ -184,8 +188,8 @@ class ChayoleiShipping
                 JOIN users u ON np.user_id = u.user_id 
             WHERE
                 np.year = :year ";
-        if ($gender == 'M') $sql .= " AND u.gender = 'M'";
-        else if ($gender == 'F') $sql .= " AND u.gender = 'F'";
+        if ($gender == 'm') $sql .= " AND u.gender = 'M'";
+        else if ($gender == 'f') $sql .= " AND u.gender = 'F'";
         if ($school > 0) $sql .= " AND u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['year' => $this->year]);
@@ -202,5 +206,158 @@ class ChayoleiShipping
             ];
         }
         return $purchases;
+    }
+
+    public function getMedals($gender, $school) {
+        $medals = [];
+        $medal_ids = $this->getMedalIDs();
+        $subject_names = $this->getSubjectNames();
+        $medal_names = $this->getMedalNames();
+        $m = new MedalReport;
+        $m->setDateToAll();
+        //set up medals array
+        $m->setSchoolId($school);
+        $m->setMedalDetails(true, true, $gender);
+        $medals_for_shipping = $m->getMedalsForShipping();
+        foreach ($medals_for_shipping as $user_id => $subjects) {
+            foreach ($subjects as $subject_id => $medal_ords) {
+                foreach ($medal_ords as $row) {
+                    $medal_ord = $row['medal_ord'];
+                    $medal_id = $medal_ids[$subject_id][$medal_ord];
+                    $medals[$user_id][] = [
+                        'item'  => $subject_names[$subject_id] . ' ' . $medal_names[$medal_ord] . ' Medal',
+                        'size'  => '',
+                        'name'  => $row['first'] . ' ' . $row['last'],
+                        'id'    => $medal_id,
+                        'cat'   => 'medals',
+                        'size'  => '',
+                        'qty'   => 1
+                    ];
+                }
+            }
+        }
+        return $medals;
+    }
+
+    private function getMedalIDs() {
+        $medal_ids = [];
+        $sql = "select * from medals_subjects";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $medal_ids[$row['subject_id']][$row['medal_ord']] = $row['shipping_code'];
+        }
+        return $medal_ids;
+    }
+
+    private function getSubjectNames() {
+        $subjects = [];
+        $sql = "select * from subjects";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $subjects[$row['subject_id']] = $row['subject_name'];
+        }
+        return $subjects;
+    }
+
+    private function getMedalNames() {
+        $medal_names = [];
+        $sql = "select * from medals";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $medal_names[$row['medal_ord']] = $row['medal_name'];
+        }
+        return $medal_names;
+    }
+
+    public function getRanks($gender, $school, $items) {
+        $medals = [];
+        $books = [];
+        if (in_array('rank medals', $items)) {
+            $medals = $this->getRankMedals($gender, $school);
+        }
+        if (in_array('rank books', $items)) {
+            $books = $this->getRankBooks($gender, $school);
+        }
+        $ranks = $medals + $books;
+        return $ranks;
+    }
+
+    private function getRankMedals($gender, $school) {
+        $ranks = [];
+        $rank_info = $this->getRankInfo();
+        $rr = new RankReport;
+        $rr->setDateToAll();
+        $rr->setSchoolId($school);
+        $rr->setRanks('byUser', 0, ' ', $gender);
+        $rank_medals_for_shipping = $rr->getRankMedalsForShipping();
+        $rank_medals_shipped = $this->getRankMedalsShipped();
+        foreach ($rank_medals_for_shipping as $user_id => $rows) {
+            foreach ($rows as $row) {
+                // check if this user has already received this rank medal
+                if (isset($rank_medals_shipped[$user_id]) && in_array($row['rank_ord'], $rank_medals_shipped[$user_id])) continue;
+                $ranks[$user_id][] = [
+                    'item'  => $rank_info[$row['rank_ord']]['rank_name'] . ' Rank Medal',
+                    'size'  => '',
+                    'name'  => $row['first'] . ' ' . $row['last'],
+                    'id'    => $rank_info[$row['rank_ord']]['shipping_code'],
+                    'cat'   => 'ranks',
+                    'size'  => '',
+                    'qty'   => 1
+                ];
+            }
+        }
+        return $ranks;
+    }
+
+    private function getRankInfo() {
+        $rank_info = [];
+        $sql = "select * from ranks";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $rank_info[$row['rank_ord']] = $row;
+        }
+        return $rank_info;
+    }
+
+    private function getRankMedalsShipped() {
+        $rank_medals_shipped = [];
+        $sql = "select * from rank_medals_shipped";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $rank_medals_shipped[$row['user_id']][] = $row['rank_ord'];
+        }
+        return $rank_medals_shipped;
+    }
+
+    private function getRankBooks($gender, $school) {
+        $ranks = [];
+        $rr = new RankReport;
+        $rr->setDateToAll();
+        $rr->setSchoolId($school);
+        $books = $rr->getBooksToSend($gender, true);
+        $books_shipped = $rr->getRankBooksShipped();
+        $user_info = $rr->getUserInfo();
+        foreach ($books as $user_id => $rows) {
+            $info = $user_info[$user_id];
+            foreach ($rows as $book) {
+                // check if this user has already received this rank book
+                if (isset($books_shipped[$user_id]) && in_array($book, $books_shipped[$user_id])) continue;
+                $ranks[$user_id][] = [
+                    'item'  => 'Rank Book #' . $book,
+                    'size'  => '',
+                    'name'  => $info['first'] . ' ' . $info['last'],
+                    'id'    => 'RB' . $book,
+                    'cat'   => 'ranks',
+                    'size'  => '',
+                    'qty'   => 1
+                ];
+            }
+        }
+        return $ranks;
     }
 }

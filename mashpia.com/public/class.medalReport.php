@@ -15,6 +15,7 @@ class MedalReport extends Report {
     private $totalGrades = 0;
     private $totalStudents = 0;
     private $year;
+    private $medals_for_shipping;
 
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -23,9 +24,10 @@ class MedalReport extends Report {
         $this->medalOrds = array();
         $this->subjects = array();
         $this->year = GlobalSettings::getRegistrationYear();
+        $this->medals_for_shipping = [];
     }
 
-    private function createSql($detailed = false)
+    private function createSql($detailed = false, $forShipping = false, $gender = '')
     {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
@@ -56,12 +58,22 @@ class MedalReport extends Report {
             $sql .= "
                 AND u.school_id not in (" . implode(',', $this->schoolExceptions) . ")
             ";
+            if ( $forShipping ) {
+                $sql .= "
+                    AND mm.date_shipped IS NULL
+                ";
+            }
+            if ( $gender == 'm' || $gender == 'f' ) {
+                $sql .= "
+                    AND u.gender = '" . strtoupper($gender) . "'
+                ";
+            }
             $sql .= "
                 ORDER BY sch.school_name, s.subject_id, mm.medal_ord, u.last, u.first 
             ";
         } else {
             $sql = "
-                SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total 
+                SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total  
                 FROM medal_marks mm
                 JOIN medals m USING ( medal_ord )
                 JOIN users u USING ( user_id )
@@ -117,8 +129,8 @@ class MedalReport extends Report {
         return $this->medalTotals;
     }
     
-    public function setMedalDetails() {
-        $sql = $this->createSql(true);
+    public function setMedalDetails($forShipping = false, $gender = '') {
+        $sql = $this->createSql(true, $forShipping, $gender);
 //        echo $sql . "<br />"; return;
         $prevGrade = "";
         $result = mysql_query($sql);
@@ -147,6 +159,7 @@ class MedalReport extends Report {
                     'date_awarded' => $row['date_awarded']];
 
                 $this->userInfo[$user_id] = $user_name;
+                $this->medals_for_shipping[$row['user_id']][$row['subject_id']][] = $row;
             }
         }
     }
@@ -198,6 +211,10 @@ class MedalReport extends Report {
 
     public function getTotalStudents() {
         return $this->totalStudents;
+    }
+
+    public function getMedalsForShipping() {
+        return $this->medals_for_shipping;
     }
 }
 ?>

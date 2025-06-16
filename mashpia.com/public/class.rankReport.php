@@ -17,6 +17,8 @@ class RankReport extends Report {
     protected $year;
     protected $shipped;
     protected $medalsShipped;
+    protected $rank_medals_for_shipping;
+    protected $rank_books_for_shipping;
 
     public function __construct($previousStart = false) {
         parent::__construct($previousStart);
@@ -76,7 +78,7 @@ class RankReport extends Report {
             $sql .= "AND rm.rank_ord = " . $rankOrd . " ";
         }
         if ( !empty( $specificGender ) ) {
-            $sql .= "AND gender = '" . $specificGender . "' ";
+            $sql .= "AND gender = '" . strtoupper($specificGender) . "' ";
         }
 
         if ($orderType == 'byGrade') {
@@ -127,6 +129,7 @@ class RankReport extends Report {
             } else if ( $orderType == 'byUser' ) {
                 if ($row['rank_ord'] == 1) continue; // skip private
                 $this->ranks[$school][$teacher][$grade][$user_id][] = $row['rank_ord'];
+                $this->rank_medals_for_shipping[$user_id][] = $row;
             }
 
             $this->rankInfo[$user_id]['card_printed'] = $row['date_printed'];
@@ -228,7 +231,7 @@ class RankReport extends Report {
         }
     }
 
-    public function setHighestRanks() {
+    public function setHighestRanks($gender = '') {
         $this->ranks = [];
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
@@ -252,6 +255,9 @@ class RankReport extends Report {
                 AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
             ";
         }
+        if ($gender == 'm' || $gender == 'f') {
+            $sql .= "AND u.gender = '" . strtoupper($gender) . "' ";
+        }
         $sql .= "GROUP BY u.user_id ";
         $sql .= "ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first";
 
@@ -267,9 +273,10 @@ class RankReport extends Report {
         }
     }
 
-    public function getBooksToSend() {
-        $this->setHighestRanks();
+    public function getBooksToSend($gender = '', $forShipping = false) {
+        $this->setHighestRanks($gender);
         $this->books = [];
+        $this->rank_books_for_shipping = [];
         foreach ($this->ranks as $school => $teachers) {
             foreach ($teachers as $teacher => $grades) {
                 foreach ($grades as $grade => $users) {
@@ -282,12 +289,21 @@ class RankReport extends Report {
                         } else if ($rank_ord >= 12) {
                             $book = 3;
                         }
-                        if ($book) $this->books[$school][$book][$teacher][$grade][] = $user_id;
+                        if ($book) {
+                            $this->books[$school][$book][$teacher][$grade][] = $user_id;
+                            if ($forShipping) {
+                                $this->rank_books_for_shipping[$user_id][] = $book;
+                            }
+                        }
                     }
                 }
             }
         }
-        return $this->books;
+        if ($forShipping) {
+            return $this->rank_books_for_shipping;
+        } else {
+            return $this->books;
+        }
     }
 
     public function setRankBooksShipped() {
@@ -371,6 +387,10 @@ class RankReport extends Report {
 
     public function getPicOnly() {
         return $this->picOnly;
+    }
+
+    public function getRankMedalsForShipping() {
+        return $this->rank_medals_for_shipping;
     }
 
     private function reverseHebrew($text)
