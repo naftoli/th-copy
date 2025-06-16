@@ -205,8 +205,8 @@ if ($start && $end) {
         const medalData = <?php echo json_encode($medal_data); ?>;
         const grandTotals = <?php echo json_encode($grand_totals); ?>;
         const dateRange = {
-            start: "<?php echo $start; ?>",
-            end: "<?php echo $end; ?>"
+            start: "<?php echo $start ? date('F j, Y', strtotime($start)) : ''; ?>",
+            end: "<?php echo $end ? date('F j, Y', strtotime($end)) : ''; ?>"
         };
 
         window.addEventListener('load', function () {
@@ -370,7 +370,7 @@ if ($start && $end) {
                 <div className="container-fluid">
                     <div className="school-section">
                         <h3 className="school-header">
-                            Medal Report ({dateRange.start} to {dateRange.end})
+                            Medal Report <small className="text-muted">({dateRange.start} to {dateRange.end})</small>
                         </h3>
                         <div className="table-container">
                             <table className="table table-striped table-hover table-bordered">
