@@ -341,6 +341,7 @@ class ChayoleiShipping
         $rr->setDateToAll();
         $rr->setSchoolId($school);
         $books = $rr->getBooksToSend($gender, true);
+        if (empty($books)) return $ranks;
         $books_shipped = $rr->getRankBooksShipped();
         $user_info = $rr->getUserInfo();
         foreach ($books as $user_id => $rows) {
