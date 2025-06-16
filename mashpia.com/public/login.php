@@ -1,4 +1,4 @@
-<? 
+<?php 
 $url = $_SERVER["REQUEST_URI"];
 
 // redirect to the kiosk from login.php if the cookie is set and the $admin_auth is set in ?
