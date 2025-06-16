@@ -6,7 +6,8 @@ if (isset($_COOKIE['kiosk_machine']) && isset($admin_auth))
 {
 	header('Location: http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . "://{$_SERVER['HTTP_HOST']}" . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/kiosk.php'); 
 }
-
+header("Location: /");
+exit;
 $username = agr($_COOKIE, 'username_default'); 
 
 if (!isset($login_query_string)) 
