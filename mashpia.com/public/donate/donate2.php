@@ -3,10 +3,10 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 if (isset($_POST['g-recaptcha-response'])) {
-	require_once '../db.php';
-	foreach ($_POST as $k => $v) {
-		$_POST[$k] = mysql_real_escape_string(trim($v));
-	}
+	// require_once '../db.php';
+	// foreach ($_POST as $k => $v) {
+	// 	$_POST[$k] = mysql_real_escape_string(trim($v));
+	// }
 
 	// check captcha
 	$privatekey = '6LfOSmMrAAAAAEqoal8ixLIIpPaAStI2i_cV2_Se';
