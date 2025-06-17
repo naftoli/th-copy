@@ -21,7 +21,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		
 		<link rel="stylesheet" href="/mobile/reg/plugins/bootstrap-select/dist/css/bootstrap-select.css">
-		<script src='https://www.google.com/recaptcha/api.js'></script>
+		<script src="https://www.google.com/recaptcha/enterprise.js?render=6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"></script>
 	</head>
 	
 	<body>
@@ -47,7 +47,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				</div>
 			<? endif; ?>
 			
-			<form action="https://mashpia.com/donate/donate.php" method="post">
+			<form action="https://mashpia.com/donate/donate.php" method="post" id="donateForm">
 	  			<div class="col-xs-12">
 	  				<div class="form-group">
                         <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" required />
@@ -138,17 +138,15 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					</div>
 				  </div>
 				  
-				  <div class="col-xs-12">
-					<div align="center" style="padding-top: 20px">
-						<div class="g-recaptcha" data-sitekey="6LcPSR0UAAAAADTTGGdFV71lEqIKFxf52FFN0An8"></div>
-						<!-- <div class="g-recaptcha" data-sitekey="6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"></div> -->
-					</div>
-				  </div>
-	              
 	              <div class="col-xs-12">
 	              	<div align="center">
 	              		<br />
-            			<input type="submit" name="submit" value="Submit" id="submit" class="btn btn-primary" />
+						  <button type="button" class="g-recaptcha"
+                            data-sitekey="6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"
+                            data-callback="onSubmit"
+                            data-action="submit">
+                            Submit
+                          </button>
 	              		<br />
 	              	</div>
 	              </div>
@@ -158,6 +156,17 @@ $ip = $_SERVER['REMOTE_ADDR'];
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 		<script>
 			var ip = '<?= $ip ?>';
+
+			function onSubmit(token) {
+				// Add the token to a hidden input
+				let input = document.createElement('input');
+				input.type = 'hidden';
+				input.name = 'g-recaptcha-response';
+				input.value = token;
+				document.getElementById('donateForm').appendChild(input);
+				document.getElementById('donateForm').submit();
+			}
+			
 			$( function() {
 				checkFraud();
 				//$(".alert").hide();

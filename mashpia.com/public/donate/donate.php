@@ -18,8 +18,7 @@ foreach ($_POST as $k => $v) {
 }
 
 // check captcha
-$privatekey = '6LcPSR0UAAAAAMMBnZpu9a4Ru5sNmrfgeEYVmWPw';
-// $privatekey = '6LfOSmMrAAAAAEqoal8ixLIIpPaAStI2i_cV2_Se';
+$privatekey = '6LfOSmMrAAAAAEqoal8ixLIIpPaAStI2i_cV2_Se';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
 curl_setopt($ch, CURLOPT_HEADER, 0);
@@ -35,7 +34,7 @@ $resp = json_decode(curl_exec($ch));
 curl_close($ch);
 
 if (!$resp->success) {
-    $error = "Please click on the reCAPTCHA box.";
+    $error = "Error: " . $resp->error-codes[0];
 	header("Location: https://mashpia.com/donate/index.php?error=" . urlencode($error));
 	exit;
 }
