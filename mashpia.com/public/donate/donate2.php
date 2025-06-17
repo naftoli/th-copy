@@ -177,11 +177,10 @@ if (isset($_POST['email'])) {
 	              <div class="col-xs-12">
 	              	<div align="center">
 	              		<br />
-                          <button class="g-recaptcha"
-                            data-sitekey="6LcPSR0UAAAAADTTGGdFV71lEqIKFxf52FFN0An8"
-                            data-callback='onSubmit'
-                            data-action='submit'
-							onclick="event.preventDefault()">
+                          <button type="button" class="g-recaptcha"
+                            data-sitekey="6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"
+                            data-callback="onSubmit"
+                            data-action="submit">
                             Submit
                           </button>
 	              		<br />
@@ -193,9 +192,14 @@ if (isset($_POST['email'])) {
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 		<script>
 			function onSubmit(token) {
-				alert(token);
-                document.getElementById("donateForm").submit();
-            }
+				// Add the token to a hidden input
+				let input = document.createElement('input');
+				input.type = 'hidden';
+				input.name = 'g-recaptcha-response';
+				input.value = token;
+				document.getElementById('donateForm').appendChild(input);
+				document.getElementById('donateForm').submit();
+			}
 			$( function() {
 				// checkFraud();
 				// //$(".alert").hide();
