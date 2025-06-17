@@ -454,11 +454,9 @@
 					other: '',
 					desc: ''
 				});
-
 				const [errors, setErrors] = React.useState({});
-				const [showOther, setShowOther] = React.useState(false);
 				const [message, setMessage] = React.useState({ type: '', text: '' });
-				const [cardType, setCardType] = React.useState(null);
+				const [showOther, setShowOther] = React.useState(false);
 				const [isSecure, setIsSecure] = React.useState(window.location.protocol === 'https:');
 				const [recaptchaReady, setRecaptchaReady] = React.useState(false);
 
@@ -706,10 +704,17 @@
 						return;
 					}
 
+					if (!recaptchaReady) {
+						setMessage({ type: 'danger', text: 'Please wait for the security check to load.' });
+						return;
+					}
+
 					try {
 						// Show loading state
 						setMessage({ type: 'info', text: 'Processing your donation...' });
 
+						const token = await window.grecaptcha.execute('6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc', { action: 'submit' });
+						
 						const response = await fetch('/donate/donate.php', {
 							method: 'POST',
 							headers: {
@@ -717,7 +722,7 @@
 							},
 							body: JSON.stringify({
 								...formData,
-								'g-recaptcha-response': await window.grecaptcha.execute('6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc', { action: 'submit' })
+								'g-recaptcha-response': token
 							})
 						});
 
@@ -806,14 +811,11 @@
 				);
 
 				React.useEffect(() => {
-					// Initialize reCAPTCHA when component mounts
-					if (window.grecaptcha && window.grecaptcha.render) {
-						window.grecaptcha.render('recaptcha-container', {
-							sitekey: '6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc',
-							callback: handleRecaptchaSubmit,
-							action: 'submit'
+					// Check if reCAPTCHA is loaded
+					if (window.grecaptcha && window.grecaptcha.ready) {
+						window.grecaptcha.ready(() => {
+							setRecaptchaReady(true);
 						});
-						setRecaptchaReady(true);
 					}
 				}, []);
 
