@@ -13,7 +13,7 @@
 		<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 		<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-		<script src="https://www.google.com/recaptcha/api.js?render=6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"></script>
+		<script src="https://www.google.com/recaptcha/api.js"></script>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 		<style>
 			* {
@@ -698,8 +698,14 @@
 					setErrors(prev => ({ ...prev, [name]: error }));
 				};
 
-				// Define the onSubmit callback as a React function
-				const handleRecaptchaSubmit = async (token) => {
+				const handleSubmit = async (e) => {
+					e.preventDefault();
+					
+					if (!validateForm()) {
+						setMessage({ type: 'danger', text: 'Please correct the errors in the form.' });
+						return;
+					}
+
 					try {
 						// Show loading state
 						setMessage({ type: 'info', text: 'Processing your donation...' });
@@ -711,7 +717,7 @@
 							},
 							body: JSON.stringify({
 								...formData,
-								'g-recaptcha-response': token
+								'g-recaptcha-response': await window.grecaptcha.execute('6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc', { action: 'submit' })
 							})
 						});
 
@@ -756,31 +762,6 @@
 							type: 'danger', 
 							text: 'There was an error processing your donation. Please try again or contact support if the problem persists.' 
 						});
-					}
-				};
-
-				const handleSubmit = async (e) => {
-					e.preventDefault();
-					
-					if (!validateForm()) {
-						setMessage({ type: 'danger', text: 'Please correct the errors in the form.' });
-						return;
-					}
-
-					if (!recaptchaReady) {
-						setMessage({ type: 'danger', text: 'Please wait for the security check to load.' });
-						return;
-					}
-
-					// Execute reCAPTCHA
-					try {
-						const token = await window.grecaptcha.execute();
-						if (token) {
-							handleRecaptchaSubmit(token);
-						}
-					} catch (error) {
-						console.error('reCAPTCHA error:', error);
-						setMessage({ type: 'danger', text: 'Security check failed. Please try again.' });
 					}
 				};
 
@@ -993,6 +974,7 @@
 							</div>
 
 							<div className="form-group text-center">
+								<div id="recaptcha-container"></div>
 								<button type="submit" className="btn btn-primary btn-lg">
 									Submit
 								</button>
