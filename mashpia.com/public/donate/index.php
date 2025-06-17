@@ -140,8 +140,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				  
 				  <div class="col-xs-12">
 					<div align="center" style="padding-top: 20px">
-						<!-- <div class="g-recaptcha" data-sitekey="6LcPSR0UAAAAADTTGGdFV71lEqIKFxf52FFN0An8"></div> -->
-						<div class="g-recaptcha" data-sitekey="6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"></div>
+						<div class="g-recaptcha" data-sitekey="6LcPSR0UAAAAADTTGGdFV71lEqIKFxf52FFN0An8"></div>
+						<!-- <div class="g-recaptcha" data-sitekey="6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"></div> -->
 					</div>
 				  </div>
 	              
