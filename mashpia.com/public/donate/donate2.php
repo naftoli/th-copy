@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-if (isset($_POST['email'])) {
+if (isset($_POST['submit'])) {
 	require_once '../db.php';
 	foreach ($_POST as $k => $v) {
 		$_POST[$k] = mysql_real_escape_string(trim($v));
@@ -10,6 +10,7 @@ if (isset($_POST['email'])) {
 	echo "<pre>";
 	print_r($_POST);
 	echo "</pre>";
+	exit;
 
 	// check captcha
 	$privatekey = '6LfOSmMrAAAAAEqoal8ixLIIpPaAStI2i_cV2_Se';
@@ -75,7 +76,7 @@ if (isset($_POST['email'])) {
 				</div>
 			<? endif; ?>
 			
-			<form action="" method="post">
+			<form action="" method="post" id="donateForm">
 	  			<div class="col-xs-12">
 	  				<div class="form-group">
                         <input type="email" name="email" id="email" class="form-control" placeholder="Email Address" required />
@@ -191,21 +192,22 @@ if (isset($_POST['email'])) {
 		<script src="/mobile/reg/plugins/bootstrap-select/dist/js/bootstrap-select.js"></script>
 		<script>
 			function onSubmit(token) {
-                document.getElementById("demo-form").submit();
+				alert(token);
+                document.getElementById("donateForm").submit();
             }
 			$( function() {
-				checkFraud();
-				//$(".alert").hide();
-				$('.selectpicker').selectpicker();
+				// checkFraud();
+				// //$(".alert").hide();
+				// $('.selectpicker').selectpicker();
 				
-				$("#amount").change( function() {
-					var amount = parseInt($(this).val());
-					if (amount == -1) {
-						$(".otherGroup").show();
-					} else {
-						$(".otherGroup").hide();
-					}
-				});
+				// $("#amount").change( function() {
+				// 	var amount = parseInt($(this).val());
+				// 	if (amount == -1) {
+				// 		$(".otherGroup").show();
+				// 	} else {
+				// 		$(".otherGroup").hide();
+				// 	}
+				// });
                 
 				
 				// $("#submit").click( function(e) {
