@@ -2,7 +2,7 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['email'])) {
 	require_once '../db.php';
 	foreach ($_POST as $k => $v) {
 		$_POST[$k] = mysql_real_escape_string(trim($v));
