@@ -180,7 +180,8 @@ if (isset($_POST['email'])) {
                           <button class="g-recaptcha"
                             data-sitekey="6LcPSR0UAAAAADTTGGdFV71lEqIKFxf52FFN0An8"
                             data-callback='onSubmit'
-                            data-action='submit'>
+                            data-action='submit'
+							onclick="event.preventDefault()">
                             Submit
                           </button>
 	              		<br />
