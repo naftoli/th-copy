@@ -642,6 +642,8 @@
 								return amount > 0 ? '' : 'Please enter a valid amount';
 							}
 							return '';
+						case 'ccaddress2':
+							return ''; // Address line 2 is optional
 						default:
 							return value.trim() ? '' : 'This field is required';
 					}
@@ -651,15 +653,38 @@
 					const newErrors = {};
 					let isValid = true;
 
-					// Validate all required fields
-					Object.keys(formData).forEach(key => {
-						// Skip validation for 'other' field if "Other Amount" is not selected
-						if (key === 'other' && !showOther) return;
-						
-						const error = validateField(key, formData[key]);
-						if (error) {
-							newErrors[key] = error;
-							isValid = false;
+					// List of required fields
+					const requiredFields = [
+						'email',
+						'phone',
+						'ccfname',
+						'cclname',
+						'ccaddress',
+						'cccity',
+						'ccstate',
+						'cczip',
+						'cccountry',
+						'ccnum',
+						'ccexp',
+						'cccvv',
+						'amount'
+					];
+
+					// Only validate required fields
+					requiredFields.forEach(key => {
+						// Skip 'other' amount validation if not showing other amount field
+						if (key === 'amount' && showOther) {
+							const error = validateField('other', formData.other);
+							if (error) {
+								newErrors.other = error;
+								isValid = false;
+							}
+						} else {
+							const error = validateField(key, formData[key]);
+							if (error) {
+								newErrors[key] = error;
+								isValid = false;
+							}
 						}
 					});
 
