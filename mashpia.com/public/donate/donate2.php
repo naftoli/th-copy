@@ -12,7 +12,6 @@ if (isset($_POST['g-recaptcha-response'])) {
 	$privatekey = '6LfOSmMrAAAAAEqoal8ixLIIpPaAStI2i_cV2_Se';
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
-	curl_setopchdir('../');
 	t($ch, CURLOPT_HEADER, 0);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); 
 	curl_setopt($ch, CURLOPT_POST, 1);
