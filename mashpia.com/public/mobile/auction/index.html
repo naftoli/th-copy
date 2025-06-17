@@ -580,11 +580,11 @@
 			</div> -->
 
 			<div id="main">
-				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n2"
-					data-key="AuctionEnded">
-					<br /><br />
-					The auction for 5785 has ended.
-				</div>
+<!--				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n2"-->
+<!--					data-key="AuctionEnded">-->
+<!--					<br /><br />-->
+<!--					The auction for 5785 has ended.-->
+<!--				</div>-->
 			</div>
 
 		</div>
@@ -688,7 +688,7 @@
 			var cartQty = 0;
 			var totalPrice = 0;
 			var originalBal = 0;
-			var auction_id = 0;
+			var auction_id = 84;
 			var separator = '|';
 
 			var float_element = "";
@@ -730,7 +730,7 @@
 				}, function (success) {
 				var prizes = $.parseJSON(success);
 
-				var html = '';
+				var html = '<br />';
 				var itr = 0;
 				for (var amount in prizes) {
 					html += '<div class="panel panel-default">\
