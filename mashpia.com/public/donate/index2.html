@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Tzivos Hashem Donation</title>
+		<script>
+			// Force HTTPS
+			if (window.location.protocol !== 'https:') {
+				window.location.href = 'https://' + window.location.host + window.location.pathname + window.location.search;
+			}
+		</script>
+		<script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+		<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+		<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+		<script src="https://www.google.com/recaptcha/api.js?render=explicit"></script>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+		<style>
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+
+			body {
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+				background-color: #f8f9fa;
+				color: #2d3748;
+				line-height: 1.5;
+			}
+
+			.container {
+				max-width: 800px;
+				margin: 2rem auto;
+				padding: 2rem;
+				background: white;
+				border-radius: 12px;
+				box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			}
+
+			.logo {
+				display: block;
+				margin: 0 auto 2rem;
+				max-width: 200px;
+				height: auto;
+			}
+
+			.form-group {
+				margin-bottom: 1.5rem;
+			}
+
+			.form-control {
+				width: 100%;
+				padding: 0.75rem 1rem;
+				border: 1px solid #e2e8f0;
+				border-radius: 8px;
+				font-size: 1rem;
+				transition: all 0.2s ease;
+				background-color: #fff;
+			}
+
+			.form-control:focus {
+				outline: none;
+				border-color: #4299e1;
+				box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+			}
+
+			.form-control::placeholder {
+				color: #a0aec0;
+			}
+
+			.row {
+				display: flex;
+				margin: 0 -0.75rem;
+				flex-wrap: wrap;
+			}
+
+			.col {
+				padding: 0 0.75rem;
+				flex: 1;
+			}
+
+			.col-4 {
+				width: 33.33%;
+			}
+
+			.col-6 {
+				width: 50%;
+			}
+
+			.col-12 {
+				width: 100%;
+			}
+
+			.text-center {
+				text-align: center;
+			}
+
+			.btn {
+				padding: 0.875rem 2rem;
+				background-color: #4299e1;
+				color: white;
+				border: none;
+				border-radius: 8px;
+				font-size: 1rem;
+				font-weight: 500;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				box-shadow: 0 2px 4px rgba(66, 153, 225, 0.2);
+			}
+
+			.btn:hover {
+				background-color: #3182ce;
+				transform: translateY(-1px);
+				box-shadow: 0 4px 6px rgba(66, 153, 225, 0.3);
+			}
+
+			.btn:active {
+				transform: translateY(0);
+			}
+
+			.alert {
+				padding: 1rem;
+				margin-bottom: 1.5rem;
+				border-radius: 8px;
+				font-weight: 500;
+			}
+
+			.alert-success {
+				background-color: #c6f6d5;
+				color: #2f855a;
+				border: 1px solid #9ae6b4;
+			}
+
+			.alert-danger {
+				background-color: #fed7d7;
+				color: #c53030;
+				border: 1px solid #feb2b2;
+			}
+
+			.select {
+				width: 100%;
+				padding: 0.75rem 1rem;
+				border: 1px solid #e2e8f0;
+				border-radius: 8px;
+				font-size: 1rem;
+				background-color: #fff;
+				cursor: pointer;
+				transition: all 0.2s ease;
+				appearance: none;
+				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%234a5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+				background-repeat: no-repeat;
+				background-position: right 1rem center;
+				background-size: 1.5em;
+			}
+
+			.select:focus {
+				outline: none;
+				border-color: #4299e1;
+				box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+			}
+
+			textarea {
+				width: 100%;
+				padding: 0.75rem 1rem;
+				border: 1px solid #e2e8f0;
+				border-radius: 8px;
+				font-size: 1rem;
+				resize: vertical;
+				min-height: 100px;
+				transition: all 0.2s ease;
+			}
+
+			textarea:focus {
+				outline: none;
+				border-color: #4299e1;
+				box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+			}
+
+			.amount-input {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.5rem;
+				background-color: #f7fafc;
+				padding: 0.5rem;
+				border-radius: 8px;
+				border: 1px solid #e2e8f0;
+			}
+
+			.amount-input span {
+				color: #4a5568;
+				font-weight: 500;
+			}
+
+			.amount-input input {
+				width: 150px;
+				text-align: center;
+			}
+
+            .section-title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #2d3748;
+                margin-bottom: 0.75rem;
+            }
+
+			@media (max-width: 768px) {
+				.container {
+					margin: 0;
+					padding: 1rem;
+					border-radius: 0;
+					min-height: 100vh;
+				}
+
+				.logo {
+					max-width: 150px;
+					margin-bottom: 1.5rem;
+				}
+
+				.form-section {
+					margin-bottom: 1.5rem;
+					padding-bottom: 1.5rem;
+				}
+
+				.section-title {
+					font-size: 1.1rem;
+					margin-bottom: 0.5rem;
+				}
+
+				.form-group {
+					margin-bottom: 1rem;
+				}
+
+				.form-control {
+					padding: 0.875rem 1rem;
+					font-size: 16px; /* Prevents iOS zoom on focus */
+				}
+
+				.row {
+					margin: 0;
+				}
+
+				.col {
+					padding: 0;
+					margin-bottom: 0.5rem;
+				}
+
+				.col-4, .col-6 {
+					width: 100%;
+				}
+
+				.btn {
+					width: 100%;
+					padding: 1rem;
+					font-size: 1.1rem;
+					margin-top: 1rem;
+				}
+
+				.amount-input {
+					padding: 0.75rem;
+				}
+
+				.amount-input input {
+					width: 100%;
+					font-size: 16px;
+				}
+
+				textarea {
+					min-height: 120px;
+					font-size: 16px;
+				}
+
+				.select {
+					padding: 0.875rem 1rem;
+					font-size: 16px;
+				}
+			}
+
+			/* Additional mobile optimizations */
+			@media (max-width: 480px) {
+				.container {
+					padding: 0.75rem;
+				}
+
+				.form-control, .select, textarea {
+					padding: 0.75rem;
+				}
+
+				.alert {
+					padding: 0.75rem;
+					margin-bottom: 1rem;
+				}
+			}
+
+			/* Ensure proper viewport on mobile */
+			@viewport {
+				width: device-width;
+				zoom: 1.0;
+			}
+
+			/* Prevent text size adjustment on orientation change */
+			html {
+				-webkit-text-size-adjust: 100%;
+			}
+
+			/* Improve touch targets */
+			.form-control, .select, .btn, textarea {
+				-webkit-tap-highlight-color: transparent;
+			}
+
+			/* Prevent pull-to-refresh on mobile */
+			body {
+				overscroll-behavior-y: none;
+			}
+
+			.form-control.error {
+				border-color: #e53e3e;
+				background-color: #fff5f5;
+			}
+
+			.error-message {
+				color: #e53e3e;
+				font-size: 0.875rem;
+				margin-top: 0.25rem;
+				display: block;
+			}
+
+			.form-group.has-error {
+				margin-bottom: 1.5rem;
+			}
+
+			/* Add to existing styles */
+			.form-control:focus.error {
+				box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.15);
+			}
+
+			.select.error {
+				border-color: #e53e3e;
+				background-color: #fff5f5;
+			}
+
+			.amount-input.error {
+				border-color: #e53e3e;
+				background-color: #fff5f5;
+			}
+
+			.credit-card-input {
+				position: relative;
+			}
+
+			.card-type-icon {
+				position: absolute;
+				right: 1rem;
+				top: 50%;
+				transform: translateY(-50%);
+				height: 24px;
+				width: auto;
+				opacity: 0.7;
+			}
+
+			.card-type-icon.visible {
+				opacity: 1;
+			}
+
+			/* Add to existing styles */
+			.form-control.error {
+				padding-right: 3rem;
+			}
+
+			/* Add security warning styles */
+			.security-warning {
+				display: none;
+				background-color: #fff5f5;
+				color: #c53030;
+				padding: 1rem;
+				margin-bottom: 1rem;
+				border: 1px solid #feb2b2;
+				border-radius: 8px;
+				text-align: center;
+				font-weight: 500;
+			}
+
+			.security-warning.visible {
+				display: block;
+			}
+
+			.security-warning a {
+				color: #2b6cb0;
+				text-decoration: underline;
+			}
+
+			.invalid-feedback {
+				display: block;
+				color: #dc3545;
+				font-size: 0.875rem;
+				margin-top: 0.25rem;
+			}
+
+			.form-control.is-invalid {
+				border-color: #dc3545;
+				padding-right: calc(1.5em + 0.75rem);
+				background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+				background-repeat: no-repeat;
+				background-position: right calc(0.375em + 0.1875rem) center;
+				background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+			}
+
+			.form-control.is-invalid:focus {
+				border-color: #dc3545;
+				box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+			}
+
+			.amount-input-group {
+				position: relative;
+				display: inline-flex;
+				width: 150px; /* Make the input smaller */
+			}
+
+			.amount-input-group .input-prefix {
+				position: absolute;
+				left: 10px;
+				top: 50%;
+				transform: translateY(-50%);
+				color: #666;
+				z-index: 1;
+			}
+
+			.amount-input-group input {
+				padding-left: 25px; /* Make room for the $ symbol */
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="text/babel">
+			function DonationForm() {
+				const [formData, setFormData] = React.useState({
+					email: '',
+					phone: '',
+					ccfname: '',
+					cclname: '',
+					ccaddress: '',
+					ccaddress2: '',
+					cccity: '',
+					ccstate: '',
+					cczip: '',
+					cccountry: '',
+					ccnum: '',
+					ccexp: '',
+					cccvv: '',
+					amount: '',
+					other: '',
+					desc: ''
+				});
+
+				const [errors, setErrors] = React.useState({});
+				const [showOther, setShowOther] = React.useState(false);
+				const [message, setMessage] = React.useState({ type: '', text: '' });
+				const [cardType, setCardType] = React.useState(null);
+				const [isSecure, setIsSecure] = React.useState(window.location.protocol === 'https:');
+				const [recaptchaReady, setRecaptchaReady] = React.useState(false);
+
+				const cardTypes = {
+					visa: {
+						pattern: /^4/,
+						length: [16],
+						icon: 'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/visa.png'
+					},
+					mastercard: {
+						pattern: /^5[1-5]/,
+						length: [16],
+						icon: 'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/mastercard.png'
+					},
+					amex: {
+						pattern: /^3[47]/,
+						length: [15],
+						icon: 'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/amex.png'
+					},
+					discover: {
+						pattern: /^6(?:011|5)/,
+						length: [16],
+						icon: 'https://raw.githubusercontent.com/muhammederdem/credit-card-form/master/src/assets/images/discover.png'
+					}
+				};
+
+				const detectCardType = (number) => {
+					const num = number.replace(/\D/g, '');
+					for (const [type, data] of Object.entries(cardTypes)) {
+						if (data.pattern.test(num)) {
+							return type;
+						}
+					}
+					return null;
+				};
+
+				const formatCardNumber = (value) => {
+					const num = value.replace(/\D/g, '');
+					const type = detectCardType(num);
+					setCardType(type);
+
+					if (!type) return num;
+
+					const card = cardTypes[type];
+					const maxLength = Math.max(...card.length);
+					const groups = type === 'amex' ? [4, 6, 5] : [4, 4, 4, 4];
+					
+					let formatted = '';
+					let index = 0;
+					
+					for (const group of groups) {
+						if (index + group <= num.length) {
+							formatted += num.slice(index, index + group) + ' ';
+							index += group;
+						} else {
+							formatted += num.slice(index);
+							break;
+						}
+					}
+
+					return formatted.trim();
+				};
+
+				const formatPhoneNumber = (value) => {
+					// Remove all non-digit characters
+					const digits = value.replace(/\D/g, '');
+					
+					// Format based on length
+					if (digits.length <= 3) {
+						return digits;
+					} else if (digits.length <= 6) {
+						return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+					} else {
+						return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+					}
+				};
+
+				const handleChange = (e) => {
+					const { name, value } = e.target;
+					let processedValue = value;
+
+					// Handle phone number formatting
+					if (name === 'phone') {
+						processedValue = formatPhoneNumber(value);
+					}
+					// Handle credit card expiry formatting
+					else if (name === 'ccexp') {
+						processedValue = value.replace(/\D/g, '')
+							.replace(/^(\d{2})/, '$1/')
+							.slice(0, 5);
+					}
+					// Handle CVV formatting
+					else if (name === 'cccvv') {
+						processedValue = value.replace(/\D/g, '').slice(0, 4);
+					}
+					// Handle credit card number formatting
+					else if (name === 'ccnum') {
+						processedValue = formatCardNumber(value);
+						const detectedType = detectCardType(value);
+						setCardType(detectedType);
+					}
+					// Handle other amount formatting
+					else if (name === 'other') {
+						// Only allow numbers and decimal point
+						processedValue = value.replace(/[^\d.]/g, '');
+						// Ensure only one decimal point
+						const parts = processedValue.split('.');
+						if (parts.length > 2) {
+							processedValue = parts[0] + '.' + parts.slice(1).join('');
+						}
+						// Limit to 2 decimal places
+						if (parts.length > 1) {
+							processedValue = parts[0] + '.' + parts[1].slice(0, 2);
+						}
+					}
+
+					setFormData(prev => ({
+						...prev,
+						[name]: processedValue
+					}));
+
+					// Clear error when user starts typing
+					if (errors[name]) {
+						setErrors(prev => ({
+							...prev,
+							[name]: ''
+						}));
+					}
+
+					// Handle "Other Amount" toggle
+					if (name === 'amount') {
+						if (value === 'other') {
+							setShowOther(true);
+							setFormData(prev => ({
+								...prev,
+								other: '' // Clear the other amount when switching to "Other"
+							}));
+						} else {
+							setShowOther(false);
+							setFormData(prev => ({
+								...prev,
+								other: '' // Clear the other amount when switching away from "Other"
+							}));
+						}
+					}
+				};
+
+				const validateField = (name, value) => {
+					switch (name) {
+						case 'email':
+							return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) ? '' : 'Please enter a valid email address';
+						case 'phone':
+							// Remove all non-digit characters for validation
+							const digits = value.replace(/\D/g, '');
+							return digits.length === 10 ? '' : 'Please enter a valid 10-digit phone number';
+						case 'ccnum':
+							return value.replace(/\s/g, '').length >= 13 ? '' : 'Please enter a valid card number';
+						case 'ccexp':
+							const [month, year] = value.split('/');
+							const currentYear = new Date().getFullYear() % 100;
+							const currentMonth = new Date().getMonth() + 1;
+							if (!month || !year) return 'Please enter a valid expiry date';
+							if (parseInt(month) < 1 || parseInt(month) > 12) return 'Please enter a valid month';
+							if (parseInt(year) < currentYear || (parseInt(year) === currentYear && parseInt(month) < currentMonth)) {
+								return 'Card has expired';
+							}
+							return '';
+						case 'cccvv':
+							return value.length >= 3 ? '' : 'Please enter a valid CVV';
+						case 'cczip':
+							return value.length >= 5 ? '' : 'Please enter a valid ZIP code';
+						case 'amount':
+							if (showOther) {
+								// Don't validate amount field when "Other" is selected
+								return '';
+							}
+							return value ? '' : 'Please select or enter an amount';
+						case 'other':
+							if (showOther) {
+								const amount = parseFloat(value);
+								return amount > 0 ? '' : 'Please enter a valid amount';
+							}
+							return '';
+						default:
+							return value.trim() ? '' : 'This field is required';
+					}
+				};
+
+				const validateForm = () => {
+					const newErrors = {};
+					let isValid = true;
+
+					// Validate all required fields
+					Object.keys(formData).forEach(key => {
+						// Skip validation for 'other' field if "Other Amount" is not selected
+						if (key === 'other' && !showOther) return;
+						
+						const error = validateField(key, formData[key]);
+						if (error) {
+							newErrors[key] = error;
+							isValid = false;
+						}
+					});
+
+					setErrors(newErrors);
+					return isValid;
+				};
+
+				const handleBlur = (e) => {
+					const { name, value } = e.target;
+					const error = validateField(name, value);
+					setErrors(prev => ({ ...prev, [name]: error }));
+				};
+
+				// Define the onSubmit callback as a React function
+				const handleRecaptchaSubmit = async (token) => {
+					try {
+						// Show loading state
+						setMessage({ type: 'info', text: 'Processing your donation...' });
+
+						const response = await fetch('/donate/donate.php', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json',
+							},
+							body: JSON.stringify({
+								...formData,
+								'g-recaptcha-response': token
+							})
+						});
+
+						if (!response.ok) {
+							throw new Error(`HTTP error! status: ${response.status}`);
+						}
+
+						const result = await response.json();
+						
+						if (result.success) {
+							setMessage({ type: 'success', text: 'Thank you for your donation!' });
+							// Reset the form
+							setFormData({
+								email: '',
+								phone: '',
+								ccfname: '',
+								cclname: '',
+								ccaddress: '',
+								ccaddress2: '',
+								cccity: '',
+								ccstate: '',
+								cczip: '',
+								cccountry: '',
+								ccnum: '',
+								ccexp: '',
+								cccvv: '',
+								amount: '',
+								other: '',
+								desc: ''
+							});
+							setShowOther(false);
+							setErrors({});
+						} else {
+							setMessage({ 
+								type: 'danger', 
+								text: result.message || 'There was an error processing your donation. Please try again.' 
+							});
+						}
+					} catch (error) {
+						console.error('Donation error:', error);
+						setMessage({ 
+							type: 'danger', 
+							text: 'There was an error processing your donation. Please try again or contact support if the problem persists.' 
+						});
+					}
+				};
+
+				const handleSubmit = async (e) => {
+					e.preventDefault();
+					
+					if (!validateForm()) {
+						setMessage({ type: 'danger', text: 'Please correct the errors in the form.' });
+						return;
+					}
+
+					if (!recaptchaReady) {
+						setMessage({ type: 'danger', text: 'Please wait for the security check to load.' });
+						return;
+					}
+
+					// Execute reCAPTCHA
+					try {
+						const token = await window.grecaptcha.execute();
+						if (token) {
+							handleRecaptchaSubmit(token);
+						}
+					} catch (error) {
+						console.error('reCAPTCHA error:', error);
+						setMessage({ type: 'danger', text: 'Security check failed. Please try again.' });
+					}
+				};
+
+				const renderField = (name, label, type = 'text', required = true) => (
+					<div className={`form-group ${errors[name] ? 'has-error' : ''}`}>
+						<label htmlFor={name}>{label} {required && <span className="required">*</span>}</label>
+						{name === 'ccnum' ? (
+							<div className="credit-card-input">
+								<input
+									type="text"
+									id={name}
+									name={name}
+									value={formData[name]}
+									onChange={handleChange}
+									onBlur={handleBlur}
+									className="form-control"
+									placeholder="1234 5678 9012 3456"
+									maxLength={cardType === 'amex' ? 17 : 19}
+								/>
+								{cardType && (
+									<img
+										src={cardTypes[cardType].icon}
+										alt={cardType}
+										className="card-type-icon"
+									/>
+								)}
+							</div>
+						) : (
+							<input
+								type={type}
+								id={name}
+								name={name}
+								value={formData[name]}
+								onChange={handleChange}
+								onBlur={handleBlur}
+								className="form-control"
+								required={required}
+							/>
+						)}
+						{errors[name] && <div className="error-message">{errors[name]}</div>}
+					</div>
+				);
+
+				React.useEffect(() => {
+					// Initialize reCAPTCHA when component mounts
+					if (window.grecaptcha && window.grecaptcha.render) {
+						window.grecaptcha.render('recaptcha-container', {
+							sitekey: '6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc',
+							callback: handleRecaptchaSubmit,
+							action: 'submit'
+						});
+						setRecaptchaReady(true);
+					}
+				}, []);
+
+				return (
+					<div className="container">
+						<img src="/mobile/img_new/TH Logo-colorful-svg.svg" className="logo" alt="Tzivos Hashem Logo" />
+						
+						{!isSecure && (
+							<div className="security-warning visible">
+								⚠️ This form requires a secure connection. Please use HTTPS to protect your information.
+								<br />
+								<a href={`https://${window.location.host}${window.location.pathname}${window.location.search}`}>
+									Click here to switch to a secure connection
+								</a>
+							</div>
+						)}
+						
+						{message.text && (
+							<div className={`alert alert-${message.type}`}>
+								{message.text}
+							</div>
+						)}
+
+						<form onSubmit={handleSubmit}>
+							<div className="form-section">
+								<h2 className="section-title">Contact Information</h2>
+								<div className="row">
+									<div className="col col-12">
+										{renderField('email', 'Email Address', 'email')}
+									</div>
+								</div>
+
+								<div className="row">
+									<div className="col col-12">
+										{renderField('phone', 'Contact Phone Number', 'tel')}
+									</div>
+								</div>
+							</div>
+
+							<div className="form-section">
+								<h2 className="section-title">Card Information</h2>
+								<div className="row">
+									<div className="col col-6">
+										{renderField('ccfname', 'First Name on Card')}
+									</div>
+									<div className="col col-6">
+										{renderField('cclname', 'Last Name on Card')}
+									</div>
+								</div>
+
+								<div className="row">
+									<div className="col col-12">
+										{renderField('ccnum', 'Credit Card Number')}
+									</div>
+								</div>
+
+								<div className="row">
+									<div className="col col-6">
+										{renderField('ccexp', 'Expiry - MMYY')}
+									</div>
+									<div className="col col-6">
+										{renderField('cccvv', 'CVV')}
+									</div>
+								</div>
+							</div>
+
+							<div className="form-section">
+								<h2 className="section-title">Billing Address</h2>
+								<div className="row">
+									<div className="col col-12">
+										{renderField('ccaddress', 'Billing Address Line 1')}
+									</div>
+								</div>
+
+								<div className="row">
+									<div className="col col-12">
+										{renderField('ccaddress2', 'Billing Address Line 2', 'text', false)}
+									</div>
+								</div>
+
+								<div className="row">
+									<div className="col col-4">
+										{renderField('cccity', 'City')}
+									</div>
+									<div className="col col-4">
+										{renderField('ccstate', 'State')}
+									</div>
+									<div className="col col-4">
+										{renderField('cczip', 'Zip')}
+									</div>
+								</div>
+
+								<div className="row">
+									<div className="col col-12">
+										{renderField('cccountry', 'Country')}
+									</div>
+								</div>
+							</div>
+
+							<div className="form-section">
+								<h2 className="section-title">Donation Amount</h2>
+								<div className="row">
+									<div className="col col-12">
+										<div className="form-group">
+											<label>Donation Amount</label>
+											<select
+												name="amount"
+												className={`form-control ${errors.amount ? 'is-invalid' : ''}`}
+												value={formData.amount}
+												onChange={handleChange}
+												onBlur={handleBlur}
+												required
+											>
+												<option value="">Choose Amount</option>
+												{[18, 36, 50, 54, 72, 90, 100, 250, 500, 1000, 5000].map(amount => (
+													<option key={amount} value={amount}>${amount}</option>
+												))}
+												<option value="other">Other Amount</option>
+											</select>
+											{errors.amount && <div className="invalid-feedback">{errors.amount}</div>}
+											{showOther && (
+												<div className="form-group" style={{ marginTop: '10px' }}>
+													<div className="amount-input-group">
+														<span className="input-prefix">$</span>
+														<input
+															type="text"
+															name="other"
+															value={formData.other}
+															onChange={handleChange}
+															onBlur={handleBlur}
+															placeholder="0.00"
+															className={`form-control ${errors.other ? 'is-invalid' : ''}`}
+														/>
+													</div>
+													{errors.other && <div className="invalid-feedback">{errors.other}</div>}
+												</div>
+											)}
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div className="form-section">
+								<h2 className="section-title">Additional Information</h2>
+								<div className="row">
+									<div className="col col-12">
+										<div className="form-group">
+											<textarea
+												name="desc"
+												rows="4"
+												placeholder="In Honor of... / In memory of... / Description"
+												value={formData.desc}
+												onChange={handleChange}
+											/>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div className="form-group text-center">
+								<div id="recaptcha-container"></div>
+								<button type="submit" className="btn btn-primary btn-lg">
+									Submit
+								</button>
+							</div>
+						</form>
+					</div>
+				);
+			}
+
+			ReactDOM.render(<DonationForm />, document.getElementById('root'));
+		</script>
+	</body>
+</html> 
