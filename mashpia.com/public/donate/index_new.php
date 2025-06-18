@@ -329,7 +329,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									<div class="col-12 col-md-6">
 										<div class="form-floating expiry-cvv-container">
 											<input type="text" class="form-control" name="ccexp" id="ccexp" placeholder="Expiry - MMYY" required maxlength="5" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$">
-											<label for="ccexp"><i class="bi bi-calendar me-2"></i>Expiry - MMYY</label>
+											<label for="ccexp"><i class="bi bi-calendar me-2"></i>Expiry - MM/YY</label>
 											<div class="invalid-feedback">
 												Please enter a valid expiry date (MM/YY).
 											</div>
@@ -491,12 +491,25 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			function formatExpiry(input) {
 				let value = input.value.replace(/\D/g, '');
+				let cursorPos = input.selectionStart;
+				let oldLength = input.value.length;
 				
+				// Format the value
 				if (value.length >= 2) {
 					value = value.slice(0, 2) + '/' + value.slice(2);
 				}
 				
+				// Calculate new cursor position
+				if (oldLength === 2 && value.length === 3) {
+					cursorPos = 3; // Move cursor after the slash when adding it
+				} else if (oldLength === 3 && value.length === 2) {
+					cursorPos = 2; // Move cursor before the slash when removing it
+				} else if (cursorPos > value.length) {
+					cursorPos = value.length;
+				}
+				
 				input.value = value;
+				input.setSelectionRange(cursorPos, cursorPos);
 			}
 
 			function validateExpiry(input) {
