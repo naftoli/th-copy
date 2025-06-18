@@ -351,19 +351,26 @@ abstract class MissionDisplay {
 						text-align: center;
 						border: 1px solid #ced4da; /* A matching border color */
 						vertical-align: middle;
-						line-height: 1.2rem;
-						font-size: 1.2rem;
+						line-height: 1.4em;
+						font-size: 1.1em;
 					}
 					.sponsor img {
 						width: 50px;
 						height: 50px;
 						border-radius: 50%;
-						margin-right: 10px;
+					}
+					.img-right {
 						float: right;
+						margin-right: 10px;
+					}
+					.img-left {
+						float: left;
+						margin-left: 10px;
 					}
 				</style>
 				<div class="sponsor">
-					<img src="/images/avatar_boy.jpg" alt="Avatar of a person" />
+					<img class="img-right" src="/images/avatar_boy.jpg" alt="Avatar of a person" />
+					<img class="img-left" src="/images/avatar_girl.jpg" alt="Avatar of a person" />
 					This weeks missions have been sponsored by: <br />
 					In honor of / In memory of ...
 				</div>
