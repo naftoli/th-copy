@@ -810,7 +810,42 @@ $ip = $_SERVER['REMOTE_ADDR'];
 			document.addEventListener('DOMContentLoaded', function() {
 				const form = document.getElementById('donateForm');
 				const submitButton = form.querySelector('button[type="button"]');
+				const inputs = form.querySelectorAll('input[required], select[required]');
 				
+				// Add real-time validation feedback
+				inputs.forEach(input => {
+					input.addEventListener('input', function() {
+						validateField(this);
+					});
+
+					input.addEventListener('blur', function() {
+						validateField(this);
+					});
+				});
+
+				// Amount select change handler
+				const amountSelect = document.getElementById('amount');
+				amountSelect.addEventListener('change', function() {
+					const otherAmount = document.getElementById('other');
+					if (this.value === '-1') {
+						otherAmount.setAttribute('required', 'required');
+						validateField(otherAmount);
+					} else {
+						otherAmount.removeAttribute('required');
+						otherAmount.classList.remove('is-invalid', 'is-valid');
+					}
+				});
+
+				function validateField(input) {
+					if (input.checkValidity()) {
+						input.classList.remove('is-invalid');
+						input.classList.add('is-valid');
+					} else {
+						input.classList.remove('is-valid');
+						input.classList.add('is-invalid');
+					}
+				}
+
 				submitButton.addEventListener('click', function(e) {
 					e.preventDefault();
 					
@@ -818,28 +853,26 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					let firstInvalid = null;
 					
 					// Check all required fields
-					const inputs = form.querySelectorAll('input[required], select[required]');
 					inputs.forEach(input => {
-						// Trigger validation
+						validateField(input);
 						if (!input.checkValidity()) {
 							isValid = false;
-							input.classList.add('is-invalid');
 							if (!firstInvalid) {
 								firstInvalid = input;
 							}
-						} else {
-							input.classList.remove('is-invalid');
 						}
 					});
 
 					// Special handling for other amount
 					const amountSelect = document.getElementById('amount');
 					const otherAmount = document.getElementById('other');
-					if (amountSelect.value === '-1' && !otherAmount.checkValidity()) {
-						isValid = false;
-						otherAmount.classList.add('is-invalid');
-						if (!firstInvalid) {
-							firstInvalid = otherAmount;
+					if (amountSelect.value === '-1') {
+						validateField(otherAmount);
+						if (!otherAmount.checkValidity()) {
+							isValid = false;
+							if (!firstInvalid) {
+								firstInvalid = otherAmount;
+							}
 						}
 					}
 
@@ -850,6 +883,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 						if (!firstInvalid) {
 							firstInvalid = cardInput;
 						}
+					} else {
+						cardInput.classList.remove('is-invalid');
+						cardInput.classList.add('is-valid');
 					}
 
 					// Validate expiry
@@ -859,6 +895,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 						if (!firstInvalid) {
 							firstInvalid = expiryInput;
 						}
+					} else {
+						expiryInput.classList.remove('is-invalid');
+						expiryInput.classList.add('is-valid');
 					}
 
 					// Validate CVV
@@ -868,6 +907,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 						if (!firstInvalid) {
 							firstInvalid = cvvInput;
 						}
+					} else {
+						cvvInput.classList.remove('is-invalid');
+						cvvInput.classList.add('is-valid');
 					}
 
 					if (!isValid) {
