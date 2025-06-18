@@ -15,12 +15,14 @@ class PicMission extends MissionDisplay {
 		
 		$columnizeFirst = 11;
 		$newPageFirst = 22;
+		$columnizeReg = 13;
+		$newPageReg = 26;
 		if (isset($_COOKIE['naftoli'])) {
 			$columnizeFirst = 9;
 			$newPageFirst = 18;
+			$columnizeReg = 12;
+			$newPageReg = 24;
 		}
-		$columnizeReg = 12;
-		$newPageReg = 24;
 		$columnizeLast = 12;
 		$newPageLast = 24;
 		
