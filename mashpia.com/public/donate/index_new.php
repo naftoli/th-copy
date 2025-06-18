@@ -62,19 +62,32 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			.form-floating > label {
 				padding: 1rem;
-				background-color: transparent;
-			}
-
-			.form-floating > .form-control:focus ~ label,
-			.form-floating > .form-control:not(:placeholder-shown) ~ label,
-			.form-floating > .form-control:-webkit-autofill ~ label {
-				background-color: white;
-				padding: 0 0.5rem;
-				transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
 			}
 
 			.form-floating > .form-control {
 				height: calc(3.5rem + 2px);
+			}
+
+			.form-floating > .form-control:focus ~ label,
+			.form-floating > .form-control:not(:placeholder-shown) ~ label {
+				opacity: 1;
+				transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+			}
+
+			.form-floating > .form-control:focus ~ label {
+				color: var(--bs-primary);
+			}
+
+			.form-floating > .form-control.is-invalid ~ label {
+				color: #dc3545;
+			}
+
+			.form-floating > .form-control.is-valid ~ label {
+				color: #198754;
+			}
+
+			.form-floating > .form-control:not(:placeholder-shown) ~ label {
+				color: #6c757d;
 			}
 			
 			.btn-primary {
