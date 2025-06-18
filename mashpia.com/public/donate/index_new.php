@@ -312,10 +312,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 								<div class="row g-3 g-md-4">
 									<div class="col-12 col-md-6">
 										<div class="form-floating">
-											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required 
-												pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-												oninvalid="this.setCustomValidity('Please enter a valid email with a domain (e.g., name@domain.com)')"
-												oninput="this.setCustomValidity('')">
+											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
 											<label for="email"><i class="bi bi-envelope me-2"></i>Email Address</label>
 											<div class="invalid-feedback">
 												Please enter a valid email.
@@ -922,10 +919,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				const emailInput = document.getElementById('email');
 				emailInput.addEventListener('input', function() {
 					const value = this.value;
-					const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-					
-					if (!emailRegex.test(value)) {
-						this.setCustomValidity('Please enter a valid email.');
+					// Check for @ and at least one period after it
+					if (!value.includes('@') || !value.split('@')[1].includes('.')) {
+						this.setCustomValidity('Please enter a valid email with a domain (e.g., name@domain.com)');
 						this.classList.add('is-invalid');
 						this.classList.remove('is-valid');
 					} else {
