@@ -313,7 +313,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									<div class="col-12 col-md-6">
 										<div class="form-floating">
 											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required 
-												pattern="[a-zA-Z0-9._%\+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
+												pattern="[a-zA-Z0-9._%\\+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$">
 											<label for="email"><i class="bi bi-envelope me-2"></i>Email Address</label>
 											<div class="invalid-feedback">
 												Please enter a valid email.
@@ -438,19 +438,21 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									</div>
 									
 									<div class="col-12">
-										<label for="amount" class="form-label"><i class="bi bi-currency-dollar me-2"></i>Donation Amount</label>
-										<select class="form-select" name="amount" id="amount" required>
-											<option value="0">Choose Amount</option>
-											<?php
-											$amounts = array(18,36,50,54,72,90,100,250,500,1000,5000);
-											foreach ($amounts as $amount) {
-												echo "<option value='" . $amount . "'>$" . $amount . "</option>";
-											}
-											?>
-											<option value="-1">Other Amount</option>
-										</select>
-										<div class="invalid-feedback">
-											Please select a donation amount.
+										<div class="form-floating">
+											<select class="form-select" name="amount" id="amount" required>
+												<option value="0">Choose Amount</option>
+												<?php
+												$amounts = array(18,36,50,54,72,90,100,250,500,1000,5000);
+												foreach ($amounts as $amount) {
+													echo "<option value='" . $amount . "'>$" . $amount . "</option>";
+												}
+												?>
+												<option value="-1">Other Amount</option>
+											</select>
+											<label for="amount"><i class="bi bi-currency-dollar me-2"></i>Donation Amount</label>
+											<div class="invalid-feedback">
+												Please select a donation amount.
+											</div>
 										</div>
 									</div>
 									
@@ -960,12 +962,16 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 				// Amount select change handler
 				const amountSelect = document.getElementById('amount');
+				const otherAmountGroup = document.querySelector('.otherGroup');
+				const otherAmount = document.getElementById('other');
+
 				amountSelect.addEventListener('change', function() {
-					const otherAmount = document.getElementById('other');
 					if (this.value === '-1') {
+						otherAmountGroup.style.display = 'block';
 						otherAmount.setAttribute('required', 'required');
 						validateField(otherAmount);
 					} else {
+						otherAmountGroup.style.display = 'none';
 						otherAmount.removeAttribute('required');
 						otherAmount.classList.remove('is-invalid', 'is-valid');
 					}
