@@ -350,9 +350,18 @@ abstract class MissionDisplay {
 						text-align: center;
 						border: 1px solid #ced4da; /* A matching border color */
 					}
+					.sponsor img {
+						width: 50px;
+						height: 50px;
+						border-radius: 50%;
+						margin-right: 10px;
+						float: right;
+					}
 				</style>
 				<div class="sponsor">
-					This weeks missions have been sponsored by: 
+					<img src="/chidonOld/chidon_drive/site/images/avatar_boy.jpg" alt="Avatar of a person" />
+					This weeks missions have been sponsored by: <br />
+					In honor of / In memory of ...
 				</div>
 			<?php } ?>
 			
