@@ -314,6 +314,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
 											<label for="email"><i class="bi bi-envelope me-2"></i>Email Address</label>
+											<div class="invalid-feedback">
+												Please enter a valid email address.
+											</div>
 										</div>
 									</div>
 									
@@ -321,6 +324,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="tel" class="form-control" name="phone" id="phone" placeholder="Contact Phone Number" required>
 											<label for="phone"><i class="bi bi-telephone me-2"></i>Contact Phone Number</label>
+											<div class="invalid-feedback">
+												Please enter a valid phone number.
+											</div>
 										</div>
 									</div>
 									
@@ -328,6 +334,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="text" class="form-control" name="ccfname" id="ccfname" placeholder="First Name on Card" required>
 											<label for="ccfname"><i class="bi bi-person me-2"></i>First Name on Card</label>
+											<div class="invalid-feedback">
+												Please enter your first name.
+											</div>
 										</div>
 									</div>
 									
@@ -335,6 +344,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="text" class="form-control" name="cclname" id="cclname" placeholder="Last Name on Card" required>
 											<label for="cclname"><i class="bi bi-person me-2"></i>Last Name on Card</label>
+											<div class="invalid-feedback">
+												Please enter your last name.
+											</div>
 										</div>
 									</div>
 									
@@ -342,6 +354,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="text" class="form-control" name="ccaddress" id="ccaddress" placeholder="Billing Address Line 1" required>
 											<label for="ccaddress"><i class="bi bi-geo-alt me-2"></i>Billing Address Line 1</label>
+											<div class="invalid-feedback">
+												Please enter your billing address.
+											</div>
 										</div>
 									</div>
 									
@@ -356,6 +371,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="text" class="form-control" name="cccity" id="cccity" placeholder="City" required>
 											<label for="cccity"><i class="bi bi-building me-2"></i>City</label>
+											<div class="invalid-feedback">
+												Please enter your city.
+											</div>
 										</div>
 									</div>
 									
@@ -363,6 +381,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="text" class="form-control" name="ccstate" id="ccstate" placeholder="State" required>
 											<label for="ccstate"><i class="bi bi-geo me-2"></i>State</label>
+											<div class="invalid-feedback">
+												Please enter your state.
+											</div>
 										</div>
 									</div>
 									
@@ -370,6 +391,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 										<div class="form-floating">
 											<input type="text" class="form-control" name="cczip" id="cczip" placeholder="Zip" required>
 											<label for="cczip"><i class="bi bi-pin-map me-2"></i>Zip</label>
+											<div class="invalid-feedback">
+												Please enter your zip code.
+											</div>
 										</div>
 									</div>
 									
@@ -424,6 +448,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 											?>
 											<option value="-1">Other Amount</option>
 										</select>
+										<div class="invalid-feedback">
+											Please select a donation amount.
+										</div>
 									</div>
 									
 									<div class="otherGroup" style="display: none;">
