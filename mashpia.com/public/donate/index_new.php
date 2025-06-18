@@ -419,7 +419,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									
 									<div class="col-12 col-md-6">
 										<div class="form-floating expiry-cvv-container">
-											<input type="text" class="form-control" name="ccexp" id="ccexp" placeholder="Expiry - MMYY" required maxlength="5" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$">
+											<input type="text" class="form-control" name="ccexp" id="ccexp" placeholder="Expiry - MM/YY" required maxlength="5" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$">
 											<label for="ccexp"><i class="bi bi-calendar me-2"></i>Expiry - MM/YY</label>
 											<div class="invalid-feedback">
 												Please enter a valid expiry date (MM/YY).
@@ -497,8 +497,6 @@ $ip = $_SERVER['REMOTE_ADDR'];
 		<script src="https://www.google.com/recaptcha/enterprise.js?render=6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc"></script>
 		
 		<script>
-			var ip = '<?= $ip ?>';
-
 			// Credit Card Validation and Formatting
 			const cardPatterns = {
 				visa: {
@@ -989,6 +987,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			function checkFraud() {
 				let ips = [];
+				let ip = '<?= $ip ?>';
 				if (typeof(Storage) !== 'undefined') {
 					if (!localStorage.getItem('ips')) {
 						var d = new Date();
