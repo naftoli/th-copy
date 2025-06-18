@@ -246,6 +246,39 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				position: absolute;
 				bottom: -20px;
 			}
+
+			/* Add these styles */
+			.invalid-feedback {
+				display: none;
+				position: absolute;
+				bottom: -20px;
+				left: 0;
+				width: 100%;
+				font-size: 0.875rem;
+				color: #dc3545;
+			}
+
+			.was-validated .form-control:invalid ~ .invalid-feedback,
+			.form-control.is-invalid ~ .invalid-feedback {
+				display: block;
+			}
+
+			.was-validated .form-select:invalid ~ .invalid-feedback,
+			.form-select.is-invalid ~ .invalid-feedback {
+				display: block;
+			}
+
+			.form-floating {
+				margin-bottom: 0.5rem;
+			}
+
+			.row {
+				margin-bottom: 0.5rem;
+			}
+
+			.row:last-child {
+				margin-bottom: 0;
+			}
 		</style>
 	</head>
 	
@@ -349,7 +382,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									
 									<div class="col-12">
 										<div class="form-floating position-relative">
-											<input type="text" class="form-control" name="ccnum" id="ccnum" placeholder="Credit Card Number" required maxlength="19" pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})$">
+											<input type="text" class="form-control" name="ccnum" id="ccnum" placeholder="Credit Card Number" required 
+												title="Please enter a valid credit card number (Visa, Mastercard, Amex, or Discover)">
 											<label for="ccnum"><i class="bi bi-credit-card me-2"></i>Credit Card Number</label>
 											<i class="bi bi-credit-card-2-front credit-card-icon" id="cardIcon"></i>
 											<div class="invalid-feedback">
@@ -479,7 +513,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				
 				// Check if empty
 				if (value.trim() === '') {
-					input.setCustomValidity('This field is required.');
+					input.setCustomValidity('Please enter a credit card number.');
 					input.classList.add('is-invalid');
 					return false;
 				}
