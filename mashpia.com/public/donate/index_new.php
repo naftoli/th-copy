@@ -625,9 +625,11 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 				// Check card type and basic validation
 				for (let type in cardPatterns) {
-					if (cardPatterns[type].pattern.test(value) && value.length === cardPatterns[type].length) {
+					if (cardPatterns[type].pattern.test(value)) {
 						cardType = type;
-						isValid = true;
+						if (value.length === cardPatterns[type].length) {
+							isValid = true;
+						}
 						break;
 					}
 				}
@@ -656,8 +658,16 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				}
 
 				if (!isValid) {
-					input.setCustomValidity('Please enter a valid credit card number.');
-					cardFeedback.textContent = 'Please enter a valid credit card number.';
+					if (!cardType) {
+						input.setCustomValidity('Please enter a valid credit card number.');
+						cardFeedback.textContent = 'Please enter a valid credit card number.';
+					} else if (value.length !== cardPatterns[cardType].length) {
+						input.setCustomValidity(`Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`);
+						cardFeedback.textContent = `Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`;
+					} else {
+						input.setCustomValidity('Please enter a valid credit card number.');
+						cardFeedback.textContent = 'Please enter a valid credit card number.';
+					}
 				} else {
 					input.setCustomValidity('');
 				}
