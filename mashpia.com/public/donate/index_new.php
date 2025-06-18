@@ -492,19 +492,31 @@ $ip = $_SERVER['REMOTE_ADDR'];
 			function formatExpiry(input) {
 				let value = input.value.replace(/\D/g, '');
 				let cursorPos = input.selectionStart;
-				let oldLength = input.value.length;
+				let oldValue = input.value;
 				
 				// Format the value
 				if (value.length >= 2) {
 					value = value.slice(0, 2) + '/' + value.slice(2);
 				}
 				
-				// Calculate new cursor position
-				if (oldLength === 2 && value.length === 3) {
-					cursorPos = 3; // Move cursor after the slash when adding it
-				} else if (oldLength === 3 && value.length === 2) {
-					cursorPos = 2; // Move cursor before the slash when removing it
-				} else if (cursorPos > value.length) {
+				// Handle cursor position for deletion
+				if (oldValue.length > value.length) {
+					// If we're deleting and the cursor is at the slash position
+					if (cursorPos === 3 && oldValue[cursorPos - 1] === '/') {
+						cursorPos = 2; // Move cursor before the slash
+					}
+				}
+				
+				// Handle cursor position for insertion
+				if (oldValue.length < value.length) {
+					// If we're adding and the cursor is at position 2
+					if (cursorPos === 2 && value.length === 3) {
+						cursorPos = 3; // Move cursor after the slash
+					}
+				}
+				
+				// Ensure cursor doesn't go beyond the input length
+				if (cursorPos > value.length) {
 					cursorPos = value.length;
 				}
 				
@@ -615,6 +627,21 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				});
 
 				// Expiry date events
+				expiryInput.addEventListener('keydown', function(e) {
+					// Allow backspace and delete keys to work normally
+					if (e.key === 'Backspace' || e.key === 'Delete') {
+						let cursorPos = this.selectionStart;
+						let value = this.value;
+						
+						// If backspace is pressed at the start of the year portion
+						if (e.key === 'Backspace' && cursorPos === 3 && value[cursorPos - 1] === '/') {
+							e.preventDefault();
+							this.value = value.slice(0, 2);
+							this.setSelectionRange(2, 2);
+						}
+					}
+				});
+
 				expiryInput.addEventListener('input', function() {
 					formatExpiry(this);
 				});
