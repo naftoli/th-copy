@@ -612,11 +612,13 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			function validateCardNumber(input) {
 				const value = input.value.replace(/\s/g, '');
-				const cardFeedback = input.closest('.form-floating').querySelector('.invalid-feedback');
+				const cardFeedback = input.closest('.form-floating')?.querySelector('.invalid-feedback');
 				
 				if (value.trim() === '') {
 					input.setCustomValidity('This field is required.');
-					cardFeedback.textContent = 'This field is required.';
+					if (cardFeedback) {
+						cardFeedback.textContent = 'This field is required.';
+					}
 					input.classList.remove('is-valid');
 					input.classList.add('is-invalid');
 					return false;
@@ -662,13 +664,19 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				if (!isValid) {
 					if (!cardType) {
 						input.setCustomValidity('Please enter a valid credit card number.');
-						cardFeedback.textContent = 'Please enter a valid credit card number.';
+						if (cardFeedback) {
+							cardFeedback.textContent = 'Please enter a valid credit card number.';
+						}
 					} else if (value.length !== cardPatterns[cardType].length) {
 						input.setCustomValidity(`Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`);
-						cardFeedback.textContent = `Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`;
+						if (cardFeedback) {
+							cardFeedback.textContent = `Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`;
+						}
 					} else {
 						input.setCustomValidity('Please enter a valid credit card number.');
-						cardFeedback.textContent = 'Please enter a valid credit card number.';
+						if (cardFeedback) {
+							cardFeedback.textContent = 'Please enter a valid credit card number.';
+						}
 					}
 					input.classList.remove('is-valid');
 					input.classList.add('is-invalid');
