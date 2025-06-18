@@ -20,8 +20,8 @@ abstract class MissionDisplay {
 
 	private $daySchoolSubjects;
 
-  public $user_id;
-  public $lang_id;
+    public $user_id;
+    public $lang_id;
 	public $school_type_id;
 
 	public function __construct( $mission ) {
@@ -340,7 +340,7 @@ abstract class MissionDisplay {
 			  </table>
 			</div>
 
-			<?php if (isset($_COOKIE['naftoli'])) { ?>
+			<?php if (isset($_COOKIE['naftoli']) && !in_array($this->school_type_id, [4, 5])) { ?>
 				<style>
 					.sponsor {
 						height: 50px;
