@@ -312,7 +312,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 								<div class="row g-3 g-md-4">
 									<div class="col-12 col-md-6">
 										<div class="form-floating">
-											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
+											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required 
+												pattern="[a-zA-Z0-9._%\+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$">
 											<label for="email"><i class="bi bi-envelope me-2"></i>Email Address</label>
 											<div class="invalid-feedback">
 												Please enter a valid email.
@@ -904,6 +905,43 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				const submitButton = form.querySelector('button[type="button"]');
 				const inputs = form.querySelectorAll('input[required], select[required]');
 				
+				// Phone number formatting
+				const phoneInput = document.getElementById('phone');
+				phoneInput.addEventListener('input', function(e) {
+					let value = this.value.replace(/\D/g, '');
+					let formattedValue = '';
+					
+					// Handle international numbers (starting with +)
+					if (value.startsWith('1')) {
+						// US/Canada format: (XXX) XXX-XXXX
+						if (value.length > 0) formattedValue += '(';
+						if (value.length > 1) formattedValue += value.slice(1, 4);
+						if (value.length > 4) formattedValue += ') ' + value.slice(4, 7);
+						if (value.length > 7) formattedValue += '-' + value.slice(7, 11);
+					} else {
+						// International format: +XX (XXX) XXX-XXXX
+						if (value.length > 0) formattedValue += '+';
+						if (value.length > 1) formattedValue += value.slice(0, 2) + ' ';
+						if (value.length > 3) formattedValue += '(' + value.slice(2, 5);
+						if (value.length > 5) formattedValue += ') ' + value.slice(5, 8);
+						if (value.length > 8) formattedValue += '-' + value.slice(8, 12);
+					}
+					
+					this.value = formattedValue;
+					
+					// Validate
+					const cleanNumber = value.replace(/\D/g, '');
+					if (cleanNumber.length < 10) {
+						this.setCustomValidity('Please enter a valid phone number');
+						this.classList.add('is-invalid');
+						this.classList.remove('is-valid');
+					} else {
+						this.setCustomValidity('');
+						this.classList.remove('is-invalid');
+						this.classList.add('is-valid');
+					}
+				});
+
 				// Add real-time validation feedback
 				inputs.forEach(input => {
 					input.addEventListener('input', function() {
