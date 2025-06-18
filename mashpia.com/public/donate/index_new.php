@@ -1,9 +1,9 @@
 <?php
 // make sure using secure page
-// if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443)) {
-// 	header("Location: https://mashpia.com/donate");
-// 	exit;
-// }
+if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443)) {
+	header("Location: https://mashpia.com/donate");
+	exit;
+}
 $ip = $_SERVER['REMOTE_ADDR'];
 ?>
 <!DOCTYPE html>
