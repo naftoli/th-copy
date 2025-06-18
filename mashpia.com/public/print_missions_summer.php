@@ -198,7 +198,7 @@ $year = $row['val'];
 	            <div class="noprint">
 
 	            	<div class="infobox noprint">
-		                Summer missions go from Shlach until and including Ki Savo.<br />
+		                Summer missions go from Shlach until and including Ki Teitzei.<br />
 		                You can only print for each child individually.<br />
 		            </div>
 					
