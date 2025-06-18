@@ -469,6 +469,67 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			let currentCardType = null;
 
+			function validateCardNumber(input) {
+				const value = input.value.replace(/\s/g, '');
+				
+				// Clear previous validation states
+				input.setCustomValidity('');
+				input.classList.remove('is-invalid', 'is-valid');
+				
+				// Check if empty
+				if (value.trim() === '') {
+					input.setCustomValidity('This field is required.');
+					input.classList.add('is-invalid');
+					return false;
+				}
+
+				// Find card type
+				let cardType = null;
+				for (let type in cardPatterns) {
+					if (cardPatterns[type].pattern.test(value)) {
+						cardType = type;
+						break;
+					}
+				}
+
+				// Validate card number
+				let isValid = false;
+				if (cardType) {
+					// Check length first
+					if (value.length === cardPatterns[cardType].length) {
+						// Luhn algorithm validation
+						let sum = 0;
+						let isEven = false;
+						for (let i = value.length - 1; i >= 0; i--) {
+							let digit = parseInt(value[i]);
+							if (isEven) {
+								digit *= 2;
+								if (digit > 9) digit -= 9;
+							}
+							sum += digit;
+							isEven = !isEven;
+						}
+						isValid = sum % 10 === 0;
+					}
+				}
+
+				// Set validation state
+				if (!isValid) {
+					let errorMessage = 'Please enter a valid credit card number.';
+					if (cardType && value.length !== cardPatterns[cardType].length) {
+						errorMessage = `Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`;
+					} else if (!cardType) {
+						errorMessage = 'Please enter a valid credit card number (Visa, Mastercard, Amex, or Discover).';
+					}
+					input.setCustomValidity(errorMessage);
+					input.classList.add('is-invalid');
+				} else {
+					input.classList.add('is-valid');
+				}
+
+				return isValid;
+			}
+
 			function formatCardNumber(input) {
 				let value = input.value.replace(/\D/g, '');
 				let cardType = null;
@@ -608,62 +669,6 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 				input.setCustomValidity('');
 				return true;
-			}
-
-			function validateCardNumber(input) {
-				const value = input.value.replace(/\s/g, '');
-				
-				// Clear previous validation states
-				input.setCustomValidity('');
-				input.classList.remove('is-invalid', 'is-valid');
-				
-				// Check if empty
-				if (value.trim() === '') {
-					input.setCustomValidity('This field is required.');
-					input.classList.add('is-invalid');
-					return false;
-				}
-
-				// Find card type
-				let cardType = null;
-				for (let type in cardPatterns) {
-					if (cardPatterns[type].pattern.test(value)) {
-						cardType = type;
-						break;
-					}
-				}
-
-				// Validate card number
-				let isValid = false;
-				if (cardType && value.length === cardPatterns[cardType].length) {
-					// Luhn algorithm validation
-					let sum = 0;
-					let isEven = false;
-					for (let i = value.length - 1; i >= 0; i--) {
-						let digit = parseInt(value[i]);
-						if (isEven) {
-							digit *= 2;
-							if (digit > 9) digit -= 9;
-						}
-						sum += digit;
-						isEven = !isEven;
-					}
-					isValid = sum % 10 === 0;
-				}
-
-				// Set validation state
-				if (!isValid) {
-					let errorMessage = 'Please enter a valid credit card number.';
-					if (cardType && value.length !== cardPatterns[cardType].length) {
-						errorMessage = `Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`;
-					}
-					input.setCustomValidity(errorMessage);
-					input.classList.add('is-invalid');
-				} else {
-					input.classList.add('is-valid');
-				}
-
-				return isValid;
 			}
 
 			// Add event listeners for card inputs
