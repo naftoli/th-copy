@@ -470,7 +470,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 			let currentCardType = null;
 
 			function validateCardNumber(input) {
-				const value = input.value.replace(/\s/g, '');
+				// Remove all spaces and non-digit characters for validation
+				const value = input.value.replace(/\D/g, '');
 				
 				// Clear previous validation states
 				input.setCustomValidity('');
@@ -583,6 +584,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				if (cardType && value.length > cardPatterns[cardType].length) {
 					input.value = input.value.slice(0, cardPatterns[cardType].length + cardPatterns[cardType].spaces.length);
 				}
+
+				// Trigger validation after formatting
+				validateCardNumber(input);
 			}
 
 			function formatExpiry(input) {
