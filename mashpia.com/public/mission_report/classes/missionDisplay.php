@@ -343,12 +343,16 @@ abstract class MissionDisplay {
 			<?php if (isset($_COOKIE['naftoli'])) { ?>
 				<style>
 					.sponsor {
+						height: 50px;
 						border-radius: 10px;
 						background-color: #e9ecef; /* A nice, soft blue color */
 						padding: 10px;
 						margin: 10px;
 						text-align: center;
 						border: 1px solid #ced4da; /* A matching border color */
+						vertical-align: middle;
+						line-height: 1.2rem;
+						font-size: 1.2rem;
 					}
 					.sponsor img {
 						width: 50px;
