@@ -246,31 +246,6 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				position: absolute;
 				bottom: -20px;
 			}
-
-			/* Add these styles */
-			.invalid-feedback {
-				display: none;
-				position: absolute;
-				bottom: -20px;
-				left: 0;
-				width: 100%;
-				font-size: 0.875rem;
-				color: #dc3545;
-			}
-
-			.was-validated .form-control:invalid ~ .invalid-feedback,
-			.form-control.is-invalid ~ .invalid-feedback {
-				display: block;
-			}
-
-			.was-validated .form-select:invalid ~ .invalid-feedback,
-			.form-select.is-invalid ~ .invalid-feedback {
-				display: block;
-			}
-
-			.form-floating {
-				margin-bottom: 1.5rem;
-			}
 		</style>
 	</head>
 	
@@ -374,7 +349,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									
 									<div class="col-12">
 										<div class="form-floating position-relative">
-											<input type="text" class="form-control" name="ccnum" id="ccnum" placeholder="Credit Card Number" required>
+											<input type="text" class="form-control" name="ccnum" id="ccnum" placeholder="Credit Card Number" required maxlength="19" pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})$">
 											<label for="ccnum"><i class="bi bi-credit-card me-2"></i>Credit Card Number</label>
 											<i class="bi bi-credit-card-2-front credit-card-icon" id="cardIcon"></i>
 											<div class="invalid-feedback">
@@ -543,6 +518,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					input.setCustomValidity('');
 					input.classList.remove('is-invalid');
 					input.classList.add('is-valid');
+					// Force validation state update
+					input.reportValidity();
 				}
 
 				return isValid;
