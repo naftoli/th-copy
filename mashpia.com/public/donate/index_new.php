@@ -352,9 +352,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 											<input type="text" class="form-control" name="ccnum" id="ccnum" placeholder="Credit Card Number" required maxlength="19" pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})$">
 											<label for="ccnum"><i class="bi bi-credit-card me-2"></i>Credit Card Number</label>
 											<i class="bi bi-credit-card-2-front credit-card-icon" id="cardIcon"></i>
-										</div>
-										<div class="invalid-feedback">
-											Please enter a valid credit card number.
+											<div class="invalid-feedback">
+												Please enter a valid credit card number.
+											</div>
 										</div>
 									</div>
 									
@@ -612,7 +612,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			function validateCardNumber(input) {
 				const value = input.value.replace(/\s/g, '');
-				const cardFeedback = input.closest('.form-floating')?.querySelector('.invalid-feedback');
+				const cardFeedback = input.nextElementSibling.nextElementSibling; // Get the invalid-feedback div
 				
 				if (value.trim() === '') {
 					input.setCustomValidity('This field is required.');
@@ -631,7 +631,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				for (let type in cardPatterns) {
 					if (cardPatterns[type].pattern.test(value)) {
 						cardType = type;
-						if (value.length === cardPatterns[type].length) {
+						if (value.length === cardPatterns[cardType].length) {
 							isValid = true;
 						}
 						break;
