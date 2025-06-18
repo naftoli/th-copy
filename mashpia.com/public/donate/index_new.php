@@ -617,6 +617,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				if (value.trim() === '') {
 					input.setCustomValidity('This field is required.');
 					cardFeedback.textContent = 'This field is required.';
+					input.classList.remove('is-valid');
+					input.classList.add('is-invalid');
 					return false;
 				}
 
@@ -668,8 +670,12 @@ $ip = $_SERVER['REMOTE_ADDR'];
 						input.setCustomValidity('Please enter a valid credit card number.');
 						cardFeedback.textContent = 'Please enter a valid credit card number.';
 					}
+					input.classList.remove('is-valid');
+					input.classList.add('is-invalid');
 				} else {
 					input.setCustomValidity('');
+					input.classList.remove('is-invalid');
+					input.classList.add('is-valid');
 				}
 				return isValid;
 			}
