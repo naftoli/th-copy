@@ -49,11 +49,30 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				border-color: var(--bs-primary);
 				box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.1);
 			}
-			
+
+			/* Handle autofill styles */
+			.form-control:-webkit-autofill,
+			.form-control:-webkit-autofill:hover,
+			.form-control:-webkit-autofill:focus,
+			.form-control:-webkit-autofill:active {
+				-webkit-box-shadow: 0 0 0 30px white inset !important;
+				-webkit-text-fill-color: #212529 !important;
+				transition: background-color 5000s ease-in-out 0s;
+			}
+
 			.form-floating > label {
 				padding: 1rem;
+				background-color: transparent;
 			}
-			
+
+			.form-floating > .form-control:focus ~ label,
+			.form-floating > .form-control:not(:placeholder-shown) ~ label,
+			.form-floating > .form-control:-webkit-autofill ~ label {
+				background-color: white;
+				padding: 0 0.5rem;
+				transform: scale(.85) translateY(-0.5rem) translateX(0.15rem);
+			}
+
 			.form-floating > .form-control {
 				height: calc(3.5rem + 2px);
 			}
@@ -526,8 +545,11 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			function validateExpiry(input) {
 				const value = input.value.replace(/\D/g, '');
+				const expiryFeedback = input.closest('.form-floating').querySelector('.invalid-feedback');
+				
 				if (value.length !== 4) {
-					input.setCustomValidity('Please enter a valid expiry date (MM/YY)');
+					input.setCustomValidity('Please enter a valid expiry date (MM/YY).');
+					expiryFeedback.textContent = 'Please enter a valid expiry date (MM/YY).';
 					return false;
 				}
 
@@ -537,13 +559,24 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				const currentYear = currentDate.getFullYear() % 100;
 				const currentMonth = currentDate.getMonth() + 1;
 
+				// Validate month
 				if (month < 1 || month > 12) {
-					input.setCustomValidity('Please enter a valid month (01-12)');
+					input.setCustomValidity('Please enter a valid month (01-12).');
+					expiryFeedback.textContent = 'Please enter a valid month (01-12).';
 					return false;
 				}
 
+				// Validate year and expiry
 				if (year < currentYear || (year === currentYear && month < currentMonth)) {
-					input.setCustomValidity('Card has expired');
+					input.setCustomValidity('Card has expired.');
+					expiryFeedback.textContent = 'Card has expired.';
+					return false;
+				}
+
+				// Allow future years up to 10 years from now
+				if (year > currentYear + 10) {
+					input.setCustomValidity('Expiry year cannot be more than 10 years in the future.');
+					expiryFeedback.textContent = 'Expiry year cannot be more than 10 years in the future.';
 					return false;
 				}
 
@@ -566,6 +599,14 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			function validateCardNumber(input) {
 				const value = input.value.replace(/\s/g, '');
+				const cardFeedback = input.closest('.form-floating').querySelector('.invalid-feedback');
+				
+				if (value.trim() === '') {
+					input.setCustomValidity('This field is required.');
+					cardFeedback.textContent = 'This field is required.';
+					return false;
+				}
+
 				let isValid = false;
 				let cardType = null;
 
@@ -601,7 +642,12 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					isValid = sum % 10 === 0;
 				}
 
-				input.setCustomValidity(isValid ? '' : 'Please enter a valid credit card number');
+				if (!isValid) {
+					input.setCustomValidity('Please enter a valid credit card number.');
+					cardFeedback.textContent = 'Please enter a valid credit card number.';
+				} else {
+					input.setCustomValidity('');
+				}
 				return isValid;
 			}
 
@@ -614,6 +660,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				// Card number events
 				cardInput.addEventListener('input', function() {
 					formatCardNumber(this);
+					validateCardNumber(this);
 				});
 
 				cardInput.addEventListener('blur', function() {
@@ -627,23 +674,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				});
 
 				// Expiry date events
-				expiryInput.addEventListener('keydown', function(e) {
-					// Allow backspace and delete keys to work normally
-					if (e.key === 'Backspace' || e.key === 'Delete') {
-						let cursorPos = this.selectionStart;
-						let value = this.value;
-						
-						// If backspace is pressed at the start of the year portion
-						if (e.key === 'Backspace' && cursorPos === 3 && value[cursorPos - 1] === '/') {
-							e.preventDefault();
-							this.value = value.slice(0, 2);
-							this.setSelectionRange(2, 2);
-						}
-					}
-				});
-
 				expiryInput.addEventListener('input', function() {
 					formatExpiry(this);
+					validateExpiry(this);
 				});
 
 				expiryInput.addEventListener('blur', function() {
@@ -711,12 +744,27 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 				// Email validation
 				const emailInput = document.getElementById('email');
+				const emailFeedback = emailInput.closest('.form-floating').querySelector('.invalid-feedback');
+				
 				emailInput.addEventListener('input', function() {
-					const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-					if (!emailRegex.test(this.value)) {
-						this.setCustomValidity('Please enter a valid email address.');
+					if (this.value.trim() === '') {
+						this.setCustomValidity('This field is required.');
+						emailFeedback.textContent = 'This field is required.';
 					} else {
-						this.setCustomValidity('');
+						const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+						if (!emailRegex.test(this.value)) {
+							this.setCustomValidity('Please enter a valid email address.');
+							emailFeedback.textContent = 'Please enter a valid email address.';
+						} else {
+							this.setCustomValidity('');
+						}
+					}
+				});
+
+				emailInput.addEventListener('blur', function() {
+					if (this.value.trim() === '') {
+						this.setCustomValidity('This field is required.');
+						emailFeedback.textContent = 'This field is required.';
 					}
 				});
 
