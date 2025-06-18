@@ -523,8 +523,10 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					}
 					input.setCustomValidity(errorMessage);
 					input.classList.add('is-invalid');
+					input.classList.remove('is-valid');
 				} else {
 					input.setCustomValidity('');
+					input.classList.remove('is-invalid');
 					input.classList.add('is-valid');
 				}
 
@@ -687,9 +689,11 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				// Amount select validation
 				amountSelect.addEventListener('change', function() {
 					if (this.value === '0') {
+						this.setCustomValidity('Please select an amount');
 						this.classList.remove('is-valid');
 						this.classList.add('is-invalid');
 					} else {
+						this.setCustomValidity('');
 						this.classList.remove('is-invalid');
 						this.classList.add('is-valid');
 					}
@@ -865,22 +869,33 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					}
 					// Validate the amount select itself
 					if (this.value === '0') {
+						this.setCustomValidity('Please select an amount');
 						this.classList.remove('is-valid');
 						this.classList.add('is-invalid');
 					} else {
+						this.setCustomValidity('');
 						this.classList.remove('is-invalid');
 						this.classList.add('is-valid');
 					}
 				});
 
 				function validateField(input) {
-					if (input.tagName === 'SELECT' && input.value === '0') {
-						input.classList.remove('is-valid');
-						input.classList.add('is-invalid');
-						return;
+					if (input.tagName === 'SELECT') {
+						if (input.value === '0') {
+							input.setCustomValidity('Please select an amount');
+							input.classList.remove('is-valid');
+							input.classList.add('is-invalid');
+							return;
+						} else {
+							input.setCustomValidity('');
+							input.classList.remove('is-invalid');
+							input.classList.add('is-valid');
+							return;
+						}
 					}
 					
 					if (input.checkValidity()) {
+						input.setCustomValidity('');
 						input.classList.remove('is-invalid');
 						input.classList.add('is-valid');
 					} else {
