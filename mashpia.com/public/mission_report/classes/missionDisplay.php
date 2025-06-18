@@ -337,6 +337,13 @@ abstract class MissionDisplay {
 							<?php } ?>
 						</td>
 		    		</tr>
+					<?php if (isset($_COOKIE['naftoli'])) { ?>
+					<tr>
+						<td colspan="3" class="line">
+							This weeks missions have been sponsored by: 
+						</td>
+					</tr>
+					<?php } ?>
 			  </table>
 			</div>
 			
