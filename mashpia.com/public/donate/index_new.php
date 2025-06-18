@@ -824,6 +824,67 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				});
 			});
 
+			function onSubmit(token) {
+				const form = document.getElementById('donateForm');
+				let isValid = true;
+				let firstInvalid = null;
+				
+				// Check all required fields
+				const inputs = form.querySelectorAll('input[required], select[required]');
+				inputs.forEach(input => {
+					if (!input.checkValidity()) {
+						isValid = false;
+						if (!firstInvalid) firstInvalid = input;
+					}
+				});
+
+				// Special handling for other amount
+				const amountSelect = document.getElementById('amount');
+				const otherAmount = document.getElementById('other');
+				if (amountSelect.value === '-1') {
+					if (!otherAmount.checkValidity()) {
+						isValid = false;
+						if (!firstInvalid) firstInvalid = otherAmount;
+					}
+				}
+
+				// Validate card fields
+				const cardInput = document.getElementById('ccnum');
+				const expiryInput = document.getElementById('ccexp');
+				const cvvInput = document.getElementById('cccvv');
+
+				if (!validateCardNumber(cardInput)) {
+					isValid = false;
+					if (!firstInvalid) firstInvalid = cardInput;
+				}
+				if (!validateExpiry(expiryInput)) {
+					isValid = false;
+					if (!firstInvalid) firstInvalid = expiryInput;
+				}
+				if (!validateCVV(cvvInput)) {
+					isValid = false;
+					if (!firstInvalid) firstInvalid = cvvInput;
+				}
+
+				if (!isValid) {
+					if (firstInvalid) {
+						firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+						firstInvalid.focus();
+					}
+					form.classList.add('was-validated');
+					return false;
+				}
+
+				// If all validations pass, add the token and submit
+				let input = document.createElement('input');
+				input.type = 'hidden';
+				input.name = 'g-recaptcha-response';
+				input.value = token;
+				form.appendChild(input);
+				form.submit();
+			}
+
+			// Form submission handler
 			document.addEventListener('DOMContentLoaded', function() {
 				const form = document.getElementById('donateForm');
 				const submitButton = form.querySelector('button[type="button"]');
@@ -918,71 +979,13 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				submitButton.addEventListener('click', function(e) {
 					e.preventDefault();
 					
-					let isValid = true;
-					let firstInvalid = null;
-					
-					// Check all required fields
-					inputs.forEach(input => {
-						validateField(input);
-						if (!input.checkValidity()) {
-							isValid = false;
-							if (!firstInvalid) firstInvalid = input;
-						}
-					});
-
-					// Special handling for other amount
-					if (amountSelect.value === '-1') {
-						validateField(otherAmount);
-						if (!otherAmount.checkValidity()) {
-							isValid = false;
-							if (!firstInvalid) firstInvalid = otherAmount;
-						}
-					}
-
-					// Validate card fields
-					const cardInput = document.getElementById('ccnum');
-					const expiryInput = document.getElementById('ccexp');
-					const cvvInput = document.getElementById('cccvv');
-
-					if (!validateCardNumber(cardInput)) {
-						isValid = false;
-						if (!firstInvalid) firstInvalid = cardInput;
-					}
-					if (!validateExpiry(expiryInput)) {
-						isValid = false;
-						if (!firstInvalid) firstInvalid = expiryInput;
-					}
-					if (!validateCVV(cvvInput)) {
-						isValid = false;
-						if (!firstInvalid) firstInvalid = cvvInput;
-					}
-
-					if (!isValid) {
-						if (firstInvalid) {
-							firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-							firstInvalid.focus();
-						}
-						form.classList.add('was-validated');
-						return false;
-					}
-
-					// If all validations pass, trigger reCAPTCHA
+					// Trigger reCAPTCHA
 					grecaptcha.enterprise.execute('6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc', {action: 'submit'})
 						.then(function(token) {
 							onSubmit(token);
 						});
 				});
 			});
-
-			function onSubmit(token) {
-				const form = document.getElementById('donateForm');
-				let input = document.createElement('input');
-				input.type = 'hidden';
-				input.name = 'g-recaptcha-response';
-				input.value = token;
-				form.appendChild(input);
-				form.submit();
-			}
 
 			function checkFraud() {
 				let ips = [];
