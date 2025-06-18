@@ -730,181 +730,95 @@ $ip = $_SERVER['REMOTE_ADDR'];
 			});
 
 			function onSubmit(token) {
+				const form = document.getElementById('donateForm');
+				let isValid = true;
+				let firstInvalid = null;
+				
+				// Check all required fields
+				const inputs = form.querySelectorAll('input[required], select[required]');
+				inputs.forEach(input => {
+					// Trigger validation
+					if (!input.checkValidity()) {
+						isValid = false;
+						input.classList.add('is-invalid');
+						if (!firstInvalid) {
+							firstInvalid = input;
+						}
+					} else {
+						input.classList.remove('is-invalid');
+					}
+				});
+
+				// Special handling for other amount
+				const amountSelect = document.getElementById('amount');
+				const otherAmount = document.getElementById('other');
+				if (amountSelect.value === '-1' && !otherAmount.checkValidity()) {
+					isValid = false;
+					otherAmount.classList.add('is-invalid');
+					if (!firstInvalid) {
+						firstInvalid = otherAmount;
+					}
+				}
+
+				// Validate card number
+				const cardInput = document.getElementById('ccnum');
+				if (!validateCardNumber(cardInput)) {
+					isValid = false;
+					if (!firstInvalid) {
+						firstInvalid = cardInput;
+					}
+				}
+
+				// Validate expiry
+				const expiryInput = document.getElementById('ccexp');
+				if (!validateExpiry(expiryInput)) {
+					isValid = false;
+					if (!firstInvalid) {
+						firstInvalid = expiryInput;
+					}
+				}
+
+				// Validate CVV
+				const cvvInput = document.getElementById('cccvv');
+				if (!validateCVV(cvvInput)) {
+					isValid = false;
+					if (!firstInvalid) {
+						firstInvalid = cvvInput;
+					}
+				}
+
+				if (!isValid) {
+					// Scroll to first invalid input
+					if (firstInvalid) {
+						firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+						firstInvalid.focus();
+					}
+					form.classList.add('was-validated');
+					return false;
+				}
+
+				// If all validations pass, add the token and submit
 				let input = document.createElement('input');
 				input.type = 'hidden';
 				input.name = 'g-recaptcha-response';
 				input.value = token;
-				document.getElementById('donateForm').appendChild(input);
-				document.getElementById('donateForm').submit();
+				form.appendChild(input);
+				form.submit();
 			}
-			
-			$(function() {
-				checkFraud();
-				
-				$("#amount").change(function() {
-					var amount = parseInt($(this).val());
-					if (amount == -1) {
-						$(".otherGroup").show();
-					} else {
-						$(".otherGroup").hide();
-					}
-				});
-				
-				// Form validation
+
+			// Form submission validation
+			document.addEventListener('DOMContentLoaded', function() {
 				const form = document.getElementById('donateForm');
-				const inputs = form.querySelectorAll('input[required], select[required]');
+				const submitButton = form.querySelector('button[type="button"]');
 				
-				// Add validation feedback elements to all required inputs
-				inputs.forEach(input => {
-					const container = input.closest('.form-floating') || input.parentElement;
-					if (!container.querySelector('.invalid-feedback')) {
-						const feedback = document.createElement('div');
-						feedback.className = 'invalid-feedback';
-						feedback.textContent = 'This field is required.';
-						container.appendChild(feedback);
-					}
-				});
-
-				// Email validation
-				const emailInput = document.getElementById('email');
-				const emailFeedback = emailInput.closest('.form-floating').querySelector('.invalid-feedback');
-				
-				emailInput.addEventListener('input', function() {
-					if (this.value.trim() === '') {
-						this.setCustomValidity('This field is required.');
-						emailFeedback.textContent = 'This field is required.';
-					} else {
-						const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-						if (!emailRegex.test(this.value)) {
-							this.setCustomValidity('Please enter a valid email address.');
-							emailFeedback.textContent = 'Please enter a valid email address.';
-						} else {
-							this.setCustomValidity('');
-						}
-					}
-				});
-
-				emailInput.addEventListener('blur', function() {
-					if (this.value.trim() === '') {
-						this.setCustomValidity('This field is required.');
-						emailFeedback.textContent = 'This field is required.';
-					}
-				});
-
-				// Phone validation
-				const phoneInput = document.getElementById('phone');
-				phoneInput.addEventListener('input', function() {
-					// Allow international phone numbers with country codes, spaces, dashes, and parentheses
-					const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,4}[-\s\.]?[0-9]{1,9}$/;
-					if (!phoneRegex.test(this.value)) {
-						this.setCustomValidity('Please enter a valid phone number (e.g., +1 (555) 123-4567 or international format).');
-					} else {
-						this.setCustomValidity('');
-					}
-				});
-
-				// Name validation
-				const nameInputs = ['ccfname', 'cclname'];
-				nameInputs.forEach(id => {
-					const input = document.getElementById(id);
-					input.addEventListener('input', function() {
-						if (this.value.trim().length < 2) {
-							this.setCustomValidity('Please enter a valid name (minimum 2 characters).');
-						} else {
-							this.setCustomValidity('');
-						}
-					});
-				});
-
-				// Address validation
-				const addressInput = document.getElementById('ccaddress');
-				addressInput.addEventListener('input', function() {
-					// Allow international addresses with various characters
-					const addressRegex = /^[a-zA-Z0-9\s\-\.,#\/\(\)]+$/;
-					if (this.value.trim().length < 3) {
-						this.setCustomValidity('Please enter a valid address (minimum 3 characters).');
-					} else if (!addressRegex.test(this.value)) {
-						this.setCustomValidity('Please enter a valid address without special characters.');
-					} else {
-						this.setCustomValidity('');
-					}
-				});
-
-				// City validation
-				const cityInput = document.getElementById('cccity');
-				cityInput.addEventListener('input', function() {
-					// Allow international city names with various characters
-					const cityRegex = /^[a-zA-Z\s\-']+$/;
-					if (this.value.trim().length < 2) {
-						this.setCustomValidity('Please enter a valid city name.');
-					} else if (!cityRegex.test(this.value)) {
-						this.setCustomValidity('Please enter a valid city name without numbers or special characters.');
-					} else {
-						this.setCustomValidity('');
-					}
-				});
-
-				// State/Province validation
-				const stateInput = document.getElementById('ccstate');
-				stateInput.addEventListener('input', function() {
-					// Allow international state/province names with various characters
-					const stateRegex = /^[a-zA-Z\s\-']+$/;
-					if (this.value.trim().length < 2) {
-						this.setCustomValidity('Please enter a valid state/province name.');
-					} else if (!stateRegex.test(this.value)) {
-						this.setCustomValidity('Please enter a valid state/province name without numbers or special characters.');
-					} else {
-						this.setCustomValidity('');
-					}
-				});
-
-				// ZIP/Postal Code validation
-				const zipInput = document.getElementById('cczip');
-				zipInput.addEventListener('input', function() {
-					// Allow international postal codes
-					const zipRegex = /^[a-zA-Z0-9\s\-]{3,10}$/;
-					if (!zipRegex.test(this.value)) {
-						this.setCustomValidity('Please enter a valid postal code (3-10 characters, letters and numbers allowed).');
-					} else {
-						this.setCustomValidity('');
-					}
-				});
-
-				// Amount validation
-				const amountSelect = document.getElementById('amount');
-				const otherAmount = document.getElementById('other');
-				
-				amountSelect.addEventListener('change', function() {
-					if (this.value === '0') {
-						this.setCustomValidity('Please select a donation amount.');
-					} else if (this.value === '-1') {
-						otherAmount.setAttribute('required', 'required');
-						validateOtherAmount();
-					} else {
-						otherAmount.removeAttribute('required');
-						this.setCustomValidity('');
-					}
-				});
-
-				function validateOtherAmount() {
-					const value = parseFloat(otherAmount.value);
-					if (isNaN(value) || value <= 0) {
-						otherAmount.setCustomValidity('Please enter a valid amount greater than 0.');
-					} else {
-						otherAmount.setCustomValidity('');
-					}
-				}
-
-				otherAmount.addEventListener('input', validateOtherAmount);
-
-				// Form submission validation
-				form.addEventListener('submit', function(event) {
-					event.preventDefault(); // Always prevent default first
+				submitButton.addEventListener('click', function(e) {
+					e.preventDefault();
 					
 					let isValid = true;
 					let firstInvalid = null;
 					
 					// Check all required fields
+					const inputs = form.querySelectorAll('input[required], select[required]');
 					inputs.forEach(input => {
 						// Trigger validation
 						if (!input.checkValidity()) {
@@ -919,6 +833,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					});
 
 					// Special handling for other amount
+					const amountSelect = document.getElementById('amount');
+					const otherAmount = document.getElementById('other');
 					if (amountSelect.value === '-1' && !otherAmount.checkValidity()) {
 						isValid = false;
 						otherAmount.classList.add('is-invalid');
@@ -928,6 +844,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					}
 
 					// Validate card number
+					const cardInput = document.getElementById('ccnum');
 					if (!validateCardNumber(cardInput)) {
 						isValid = false;
 						if (!firstInvalid) {
@@ -936,6 +853,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					}
 
 					// Validate expiry
+					const expiryInput = document.getElementById('ccexp');
 					if (!validateExpiry(expiryInput)) {
 						isValid = false;
 						if (!firstInvalid) {
@@ -944,6 +862,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					}
 
 					// Validate CVV
+					const cvvInput = document.getElementById('cccvv');
 					if (!validateCVV(cvvInput)) {
 						isValid = false;
 						if (!firstInvalid) {
@@ -957,31 +876,15 @@ $ip = $_SERVER['REMOTE_ADDR'];
 							firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
 							firstInvalid.focus();
 						}
-					} else {
-						// If all validations pass, submit the form
-						form.submit();
+						form.classList.add('was-validated');
+						return false;
 					}
-					
-					form.classList.add('was-validated');
-				});
 
-				// Real-time validation feedback
-				inputs.forEach(input => {
-					input.addEventListener('input', function() {
-						if (this.checkValidity()) {
-							this.classList.remove('is-invalid');
-							this.classList.add('is-valid');
-						} else {
-							this.classList.remove('is-valid');
-							this.classList.add('is-invalid');
-						}
-					});
-
-					input.addEventListener('blur', function() {
-						if (!this.checkValidity()) {
-							this.classList.add('is-invalid');
-						}
-					});
+					// If all validations pass, trigger reCAPTCHA
+					grecaptcha.enterprise.execute('6LfOSmMrAAAAAAgUL5hYf2hb2lM2UA0zdRCgs3Nc', {action: 'submit'})
+						.then(function(token) {
+							onSubmit(token);
+						});
 				});
 			});
 
