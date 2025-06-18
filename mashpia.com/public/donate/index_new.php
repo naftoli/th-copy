@@ -899,13 +899,20 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 				// Form submission validation
 				form.addEventListener('submit', function(event) {
+					event.preventDefault(); // Always prevent default first
+					
 					let isValid = true;
+					let firstInvalid = null;
 					
 					// Check all required fields
 					inputs.forEach(input => {
+						// Trigger validation
 						if (!input.checkValidity()) {
 							isValid = false;
 							input.classList.add('is-invalid');
+							if (!firstInvalid) {
+								firstInvalid = input;
+							}
 						} else {
 							input.classList.remove('is-invalid');
 						}
@@ -915,18 +922,44 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					if (amountSelect.value === '-1' && !otherAmount.checkValidity()) {
 						isValid = false;
 						otherAmount.classList.add('is-invalid');
+						if (!firstInvalid) {
+							firstInvalid = otherAmount;
+						}
+					}
+
+					// Validate card number
+					if (!validateCardNumber(cardInput)) {
+						isValid = false;
+						if (!firstInvalid) {
+							firstInvalid = cardInput;
+						}
+					}
+
+					// Validate expiry
+					if (!validateExpiry(expiryInput)) {
+						isValid = false;
+						if (!firstInvalid) {
+							firstInvalid = expiryInput;
+						}
+					}
+
+					// Validate CVV
+					if (!validateCVV(cvvInput)) {
+						isValid = false;
+						if (!firstInvalid) {
+							firstInvalid = cvvInput;
+						}
 					}
 
 					if (!isValid) {
-						event.preventDefault();
-						event.stopPropagation();
-						
 						// Scroll to first invalid input
-						const firstInvalid = form.querySelector('.is-invalid');
 						if (firstInvalid) {
 							firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
 							firstInvalid.focus();
 						}
+					} else {
+						// If all validations pass, submit the form
+						form.submit();
 					}
 					
 					form.classList.add('was-validated');
