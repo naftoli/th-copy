@@ -19,8 +19,8 @@ class PicMission extends MissionDisplay {
 			$columnizeFirst = 9;
 			$newPageFirst = 18;
 		}
-		$columnizeReg = 13;
-		$newPageReg = 26;
+		$columnizeReg = 12;
+		$newPageReg = 24;
 		$columnizeLast = 12;
 		$newPageLast = 24;
 		
