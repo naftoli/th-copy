@@ -358,19 +358,12 @@ abstract class MissionDisplay {
 						width: 50px;
 						height: 50px;
 						border-radius: 50%;
-					}
-					.img-right {
-						float: right;
 						margin-right: 10px;
-					}
-					.img-left {
-						float: left;
-						margin-left: 10px;
+						float: right;
 					}
 				</style>
 				<div class="sponsor">
-					<img class="img-right" src="/images/avatar_boy.jpg" alt="Avatar of a person" />
-					<img class="img-left" src="/images/avatar_girl.jpg" alt="Avatar of a person" />
+					<img src="/images/avatar_boy.jpg" alt="Avatar of a person" />
 					This weeks missions have been sponsored by: <br />
 					In honor of / In memory of ...
 				</div>
