@@ -598,6 +598,11 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					if (cursorPos === 3 && oldValue[cursorPos - 1] === '/') {
 						cursorPos = 2; // Move cursor before the slash
 					}
+					// If we're deleting the slash itself
+					else if (cursorPos === 3 && oldValue[cursorPos - 1] === '/') {
+						value = value.slice(0, 2) + value.slice(3);
+						cursorPos = 2;
+					}
 				}
 				
 				// Handle cursor position for insertion
@@ -706,6 +711,20 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				expiryInput.addEventListener('keypress', function(e) {
 					if (!/\d/.test(e.key)) {
 						e.preventDefault();
+					}
+				});
+
+				// Add keydown event for expiry to handle backspace
+				expiryInput.addEventListener('keydown', function(e) {
+					if (e.key === 'Backspace') {
+						let cursorPos = this.selectionStart;
+						let value = this.value;
+						
+						// If cursor is after the slash, move it before
+						if (cursorPos === 4 && value[3] === '/') {
+							this.setSelectionRange(2, 2);
+							e.preventDefault();
+						}
 					}
 				});
 
