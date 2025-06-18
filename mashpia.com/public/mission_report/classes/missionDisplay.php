@@ -359,7 +359,7 @@ abstract class MissionDisplay {
 					}
 				</style>
 				<div class="sponsor">
-					<img src="/chidonOld/chidon_drive/site/images/avatar_boy.jpg" alt="Avatar of a person" />
+					<img src="/images/avatar_boy.jpg" alt="Avatar of a person" />
 					This weeks missions have been sponsored by: <br />
 					In honor of / In memory of ...
 				</div>
