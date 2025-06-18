@@ -337,15 +337,24 @@ abstract class MissionDisplay {
 							<?php } ?>
 						</td>
 		    		</tr>
-					<?php if (isset($_COOKIE['naftoli'])) { ?>
-					<tr>
-						<td colspan="3" class="line">
-							This weeks missions have been sponsored by: 
-						</td>
-					</tr>
-					<?php } ?>
 			  </table>
 			</div>
+
+			<?php if (isset($_COOKIE['naftoli'])) { ?>
+				<style>
+					.sponsor {
+						border-radius: 10px;
+						background-color: #e9ecef; /* A nice, soft blue color */
+						padding: 10px;
+						margin: 10px;
+						text-align: center;
+						border: 1px solid #ced4da; /* A matching border color */
+					}
+				</style>
+				<div class="sponsor">
+					This weeks missions have been sponsored by: 
+				</div>
+			<?php } ?>
 			
 			<div class="left">
 			<?php
