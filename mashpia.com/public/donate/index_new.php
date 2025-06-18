@@ -518,6 +518,8 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					input.setCustomValidity('');
 					input.classList.remove('is-invalid');
 					input.classList.add('is-valid');
+					// Force validation state update
+					input.reportValidity();
 				}
 
 				return isValid;
@@ -528,11 +530,14 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				let cardType = null;
 
 				// Determine card type
-				for (let type in cardPatterns) {
-					if (cardPatterns[type].pattern.test(value)) {
-						cardType = type;
-						break;
-					}
+				if (value.startsWith('4')) {
+					cardType = 'visa';
+				} else if (value.startsWith('5')) {
+					cardType = 'mastercard';
+				} else if (value.startsWith('3') && (value.startsWith('34') || value.startsWith('37'))) {
+					cardType = 'amex';
+				} else if (value.startsWith('6')) {
+					cardType = 'discover';
 				}
 
 				// Update icon and current card type
