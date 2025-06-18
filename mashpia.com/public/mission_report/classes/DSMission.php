@@ -16,8 +16,8 @@ class DSMission extends MissionDisplay {
         $columnizeFirst = 12;
         $newPageFirst = 23;
         if (isset($_COOKIE['naftoli'])) {
-            $columnizeFirst = 11;
-            $newPageFirst = 21;
+            $columnizeFirst = 10;
+            $newPageFirst = 19;
         }
         $columnizeReg = 14;
         $newPageReg = 28;
