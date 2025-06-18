@@ -484,34 +484,23 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					return false;
 				}
 
-				// Find card type
-				let cardType = null;
-				for (let type in cardPatterns) {
-					if (cardPatterns[type].pattern.test(value)) {
-						cardType = type;
-						break;
-					}
-				}
-
-				// Validate card number
+				// Find card type and validate
 				let isValid = false;
-				if (cardType) {
-					// Check length first
-					if (value.length === cardPatterns[cardType].length) {
-						// Luhn algorithm validation
-						let sum = 0;
-						let isEven = false;
-						for (let i = value.length - 1; i >= 0; i--) {
-							let digit = parseInt(value[i]);
-							if (isEven) {
-								digit *= 2;
-								if (digit > 9) digit -= 9;
-							}
-							sum += digit;
-							isEven = !isEven;
-						}
-						isValid = sum % 10 === 0;
-					}
+				let cardType = null;
+
+				// Check card type and length
+				if (value.startsWith('4') && value.length === 16) {
+					isValid = true;
+					cardType = 'visa';
+				} else if (value.startsWith('5') && value.length === 16) {
+					isValid = true;
+					cardType = 'mastercard';
+				} else if (value.startsWith('3') && (value.startsWith('34') || value.startsWith('37')) && value.length === 15) {
+					isValid = true;
+					cardType = 'amex';
+				} else if (value.startsWith('6') && value.length === 16) {
+					isValid = true;
+					cardType = 'discover';
 				}
 
 				// Set validation state
