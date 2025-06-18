@@ -312,10 +312,11 @@ $ip = $_SERVER['REMOTE_ADDR'];
 								<div class="row g-3 g-md-4">
 									<div class="col-12 col-md-6">
 										<div class="form-floating">
-											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required>
+											<input type="email" class="form-control" name="email" id="email" placeholder="Email Address" required 
+												pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
 											<label for="email"><i class="bi bi-envelope me-2"></i>Email Address</label>
 											<div class="invalid-feedback">
-												Please enter a valid email address.
+												Please enter a valid email address (e.g., name@domain.com).
 											</div>
 										</div>
 									</div>
