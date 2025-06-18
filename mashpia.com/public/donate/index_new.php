@@ -612,79 +612,57 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 			function validateCardNumber(input) {
 				const value = input.value.replace(/\s/g, '');
-				const cardFeedback = input.nextElementSibling.nextElementSibling; // Get the invalid-feedback div
 				
+				// Clear previous validation states
+				input.setCustomValidity('');
+				input.classList.remove('is-invalid', 'is-valid');
+				
+				// Check if empty
 				if (value.trim() === '') {
 					input.setCustomValidity('This field is required.');
-					if (cardFeedback) {
-						cardFeedback.textContent = 'This field is required.';
-					}
-					input.classList.remove('is-valid');
 					input.classList.add('is-invalid');
 					return false;
 				}
 
-				let isValid = false;
+				// Find card type
 				let cardType = null;
-
-				// Check card type and basic validation
 				for (let type in cardPatterns) {
 					if (cardPatterns[type].pattern.test(value)) {
 						cardType = type;
-						if (value.length === cardPatterns[cardType].length) {
-							isValid = true;
-						}
 						break;
 					}
 				}
 
-				// Luhn algorithm validation
-				if (isValid) {
+				// Validate card number
+				let isValid = false;
+				if (cardType && value.length === cardPatterns[cardType].length) {
+					// Luhn algorithm validation
 					let sum = 0;
 					let isEven = false;
-
-					// Loop through values starting from the rightmost digit
 					for (let i = value.length - 1; i >= 0; i--) {
 						let digit = parseInt(value[i]);
-
 						if (isEven) {
 							digit *= 2;
-							if (digit > 9) {
-								digit -= 9;
-							}
+							if (digit > 9) digit -= 9;
 						}
-
 						sum += digit;
 						isEven = !isEven;
 					}
-
 					isValid = sum % 10 === 0;
 				}
 
+				// Set validation state
 				if (!isValid) {
-					if (!cardType) {
-						input.setCustomValidity('Please enter a valid credit card number.');
-						if (cardFeedback) {
-							cardFeedback.textContent = 'Please enter a valid credit card number.';
-						}
-					} else if (value.length !== cardPatterns[cardType].length) {
-						input.setCustomValidity(`Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`);
-						if (cardFeedback) {
-							cardFeedback.textContent = `Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`;
-						}
-					} else {
-						input.setCustomValidity('Please enter a valid credit card number.');
-						if (cardFeedback) {
-							cardFeedback.textContent = 'Please enter a valid credit card number.';
-						}
+					let errorMessage = 'Please enter a valid credit card number.';
+					if (cardType && value.length !== cardPatterns[cardType].length) {
+						errorMessage = `Please enter a valid ${cardType} card number (${cardPatterns[cardType].length} digits).`;
 					}
-					input.classList.remove('is-valid');
+					input.setCustomValidity(errorMessage);
 					input.classList.add('is-invalid');
 				} else {
-					input.setCustomValidity('');
-					input.classList.remove('is-invalid');
 					input.classList.add('is-valid');
 				}
+
 				return isValid;
 			}
 
