@@ -824,91 +824,58 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				});
 			});
 
-			function onSubmit(token) {
-				const form = document.getElementById('donateForm');
-				let isValid = true;
-				let firstInvalid = null;
-				
-				// Check all required fields
-				const inputs = form.querySelectorAll('input[required], select[required]');
-				inputs.forEach(input => {
-					// Trigger validation
-					if (!input.checkValidity()) {
-						isValid = false;
-						input.classList.add('is-invalid');
-						if (!firstInvalid) {
-							firstInvalid = input;
-						}
-					} else {
-						input.classList.remove('is-invalid');
-					}
-				});
-
-				// Special handling for other amount
-				const amountSelect = document.getElementById('amount');
-				const otherAmount = document.getElementById('other');
-				if (amountSelect.value === '-1' && !otherAmount.checkValidity()) {
-					isValid = false;
-					otherAmount.classList.add('is-invalid');
-					if (!firstInvalid) {
-						firstInvalid = otherAmount;
-					}
-				}
-
-				// Validate card number
-				const cardInput = document.getElementById('ccnum');
-				if (!validateCardNumber(cardInput)) {
-					isValid = false;
-					if (!firstInvalid) {
-						firstInvalid = cardInput;
-					}
-				}
-
-				// Validate expiry
-				const expiryInput = document.getElementById('ccexp');
-				if (!validateExpiry(expiryInput)) {
-					isValid = false;
-					if (!firstInvalid) {
-						firstInvalid = expiryInput;
-					}
-				}
-
-				// Validate CVV
-				const cvvInput = document.getElementById('cccvv');
-				if (!validateCVV(cvvInput)) {
-					isValid = false;
-					if (!firstInvalid) {
-						firstInvalid = cvvInput;
-					}
-				}
-
-				if (!isValid) {
-					// Scroll to first invalid input
-					if (firstInvalid) {
-						firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-						firstInvalid.focus();
-					}
-					form.classList.add('was-validated');
-					return false;
-				}
-
-				// If all validations pass, add the token and submit
-				let input = document.createElement('input');
-				input.type = 'hidden';
-				input.name = 'g-recaptcha-response';
-				input.value = token;
-				form.appendChild(input);
-				form.submit();
-			}
-
-			// Form submission validation
 			document.addEventListener('DOMContentLoaded', function() {
 				const form = document.getElementById('donateForm');
 				const submitButton = form.querySelector('button[type="button"]');
 				const inputs = form.querySelectorAll('input[required], select[required]');
-				
-				// Phone number formatting for US numbers
+				const amountSelect = document.getElementById('amount');
+				const otherAmountGroup = document.querySelector('.otherGroup');
+				const otherAmount = document.getElementById('other');
+				const emailInput = document.getElementById('email');
 				const phoneInput = document.getElementById('phone');
+
+				// Generic field validation function
+				function validateField(input) {
+					if (input.tagName === 'SELECT') {
+						if (input.value === '0') {
+							input.setCustomValidity('Please select an amount');
+							input.classList.remove('is-valid');
+							input.classList.add('is-invalid');
+							return;
+						}
+					}
+					
+					if (input.checkValidity()) {
+						input.setCustomValidity('');
+						input.classList.remove('is-invalid');
+						input.classList.add('is-valid');
+					} else {
+						input.classList.remove('is-valid');
+						input.classList.add('is-invalid');
+					}
+				}
+
+				// Add validation listeners to all required inputs
+				inputs.forEach(input => {
+					input.addEventListener('input', () => validateField(input));
+					input.addEventListener('blur', () => validateField(input));
+				});
+
+				// Email validation
+				emailInput.addEventListener('input', function() {
+					const value = this.value;
+					if (!value.includes('@') || !value.split('@')[1].includes('.') || value.split('.').pop().length < 2) {
+						this.setCustomValidity('Please enter a valid email with a domain (e.g., name@domain.com)');
+						this.classList.add('is-invalid');
+						this.classList.remove('is-valid');
+					} else {
+						this.setCustomValidity('');
+						this.classList.remove('is-invalid');
+						this.classList.add('is-valid');
+					}
+				});
+
+				// Phone number formatting for US numbers
 				phoneInput.addEventListener('input', function(e) {
 					let value = this.value.replace(/\D/g, '');
 					let formattedValue = '';
@@ -933,38 +900,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					}
 				});
 
-				// Add real-time validation feedback
-				inputs.forEach(input => {
-					input.addEventListener('input', function() {
-						validateField(this);
-					});
-
-					input.addEventListener('blur', function() {
-						validateField(this);
-					});
-				});
-
-				// Special email validation
-				const emailInput = document.getElementById('email');
-				emailInput.addEventListener('input', function() {
-					const value = this.value;
-					// Check for @ and at least one period after it with at least 2 chars after the period
-					if (!value.includes('@') || !value.split('@')[1].includes('.') || value.split('.').pop().length < 2) {
-						this.setCustomValidity('Please enter a valid email with a domain (e.g., name@domain.com)');
-						this.classList.add('is-invalid');
-						this.classList.remove('is-valid');
-					} else {
-						this.setCustomValidity('');
-						this.classList.remove('is-invalid');
-						this.classList.add('is-valid');
-					}
-				});
-
 				// Amount select change handler
-				const amountSelect = document.getElementById('amount');
-				const otherAmountGroup = document.querySelector('.otherGroup');
-				const otherAmount = document.getElementById('other');
-
 				amountSelect.addEventListener('change', function() {
 					if (this.value === '-1') {
 						otherAmountGroup.style.display = 'block';
@@ -975,43 +911,10 @@ $ip = $_SERVER['REMOTE_ADDR'];
 						otherAmount.removeAttribute('required');
 						otherAmount.classList.remove('is-invalid', 'is-valid');
 					}
-					// Validate the amount select itself
-					if (this.value === '0') {
-						this.setCustomValidity('Please select an amount');
-						this.classList.remove('is-valid');
-						this.classList.add('is-invalid');
-					} else {
-						this.setCustomValidity('');
-						this.classList.remove('is-invalid');
-						this.classList.add('is-valid');
-					}
+					validateField(this);
 				});
 
-				function validateField(input) {
-					if (input.tagName === 'SELECT') {
-						if (input.value === '0') {
-							input.setCustomValidity('Please select an amount');
-							input.classList.remove('is-valid');
-							input.classList.add('is-invalid');
-							return;
-						} else {
-							input.setCustomValidity('');
-							input.classList.remove('is-invalid');
-							input.classList.add('is-valid');
-							return;
-						}
-					}
-					
-					if (input.checkValidity()) {
-						input.setCustomValidity('');
-						input.classList.remove('is-invalid');
-						input.classList.add('is-valid');
-					} else {
-						input.classList.remove('is-valid');
-						input.classList.add('is-invalid');
-					}
-				}
-
+				// Form submission handler
 				submitButton.addEventListener('click', function(e) {
 					e.preventDefault();
 					
@@ -1023,63 +926,38 @@ $ip = $_SERVER['REMOTE_ADDR'];
 						validateField(input);
 						if (!input.checkValidity()) {
 							isValid = false;
-							if (!firstInvalid) {
-								firstInvalid = input;
-							}
+							if (!firstInvalid) firstInvalid = input;
 						}
 					});
 
 					// Special handling for other amount
-					const amountSelect = document.getElementById('amount');
-					const otherAmount = document.getElementById('other');
 					if (amountSelect.value === '-1') {
 						validateField(otherAmount);
 						if (!otherAmount.checkValidity()) {
 							isValid = false;
-							if (!firstInvalid) {
-								firstInvalid = otherAmount;
-							}
+							if (!firstInvalid) firstInvalid = otherAmount;
 						}
 					}
 
-					// Validate card number
+					// Validate card fields
 					const cardInput = document.getElementById('ccnum');
+					const expiryInput = document.getElementById('ccexp');
+					const cvvInput = document.getElementById('cccvv');
+
 					if (!validateCardNumber(cardInput)) {
 						isValid = false;
-						if (!firstInvalid) {
-							firstInvalid = cardInput;
-						}
-					} else {
-						cardInput.classList.remove('is-invalid');
-						cardInput.classList.add('is-valid');
+						if (!firstInvalid) firstInvalid = cardInput;
 					}
-
-					// Validate expiry
-					const expiryInput = document.getElementById('ccexp');
 					if (!validateExpiry(expiryInput)) {
 						isValid = false;
-						if (!firstInvalid) {
-							firstInvalid = expiryInput;
-						}
-					} else {
-						expiryInput.classList.remove('is-invalid');
-						expiryInput.classList.add('is-valid');
+						if (!firstInvalid) firstInvalid = expiryInput;
 					}
-
-					// Validate CVV
-					const cvvInput = document.getElementById('cccvv');
 					if (!validateCVV(cvvInput)) {
 						isValid = false;
-						if (!firstInvalid) {
-							firstInvalid = cvvInput;
-						}
-					} else {
-						cvvInput.classList.remove('is-invalid');
-						cvvInput.classList.add('is-valid');
+						if (!firstInvalid) firstInvalid = cvvInput;
 					}
 
 					if (!isValid) {
-						// Scroll to first invalid input
 						if (firstInvalid) {
 							firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
 							firstInvalid.focus();
@@ -1095,6 +973,16 @@ $ip = $_SERVER['REMOTE_ADDR'];
 						});
 				});
 			});
+
+			function onSubmit(token) {
+				const form = document.getElementById('donateForm');
+				let input = document.createElement('input');
+				input.type = 'hidden';
+				input.name = 'g-recaptcha-response';
+				input.value = token;
+				form.appendChild(input);
+				form.submit();
+			}
 
 			function checkFraud() {
 				let ips = [];
