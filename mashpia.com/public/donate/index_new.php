@@ -193,7 +193,7 @@ $ip = $_SERVER['REMOTE_ADDR'];
 			}
 
 			.form-floating .credit-card-icon.active {
-				top: 0;
+				top: 20px;
 			}
 
 			/* Expiry and CVV Styling */
