@@ -195,6 +195,25 @@ $ip = $_SERVER['REMOTE_ADDR'];
 			.form-floating .credit-card-icon.active {
 				top: 0;
 			}
+
+			/* Expiry and CVV Styling */
+			.expiry-cvv-container {
+				position: relative;
+			}
+
+			.expiry-cvv-container .form-floating {
+				margin-bottom: 0;
+			}
+
+			.expiry-cvv-container .invalid-feedback {
+				position: absolute;
+				bottom: -20px;
+			}
+
+			.expiry-cvv-container .valid-feedback {
+				position: absolute;
+				bottom: -20px;
+			}
 		</style>
 	</head>
 	
@@ -308,16 +327,22 @@ $ip = $_SERVER['REMOTE_ADDR'];
 									</div>
 									
 									<div class="col-12 col-md-6">
-										<div class="form-floating">
-											<input type="text" class="form-control" name="ccexp" id="ccexp" placeholder="Expiry - MMYY" required>
+										<div class="form-floating expiry-cvv-container">
+											<input type="text" class="form-control" name="ccexp" id="ccexp" placeholder="Expiry - MMYY" required maxlength="5" pattern="^(0[1-9]|1[0-2])\/([0-9]{2})$">
 											<label for="ccexp"><i class="bi bi-calendar me-2"></i>Expiry - MMYY</label>
+											<div class="invalid-feedback">
+												Please enter a valid expiry date (MM/YY).
+											</div>
 										</div>
 									</div>
 									
 									<div class="col-12 col-md-6">
-										<div class="form-floating">
-											<input type="text" class="form-control" name="cccvv" id="cccvv" placeholder="CVV" required>
+										<div class="form-floating expiry-cvv-container">
+											<input type="text" class="form-control" name="cccvv" id="cccvv" placeholder="CVV" required maxlength="4" pattern="^[0-9]{3,4}$">
 											<label for="cccvv"><i class="bi bi-shield-lock me-2"></i>CVV</label>
+											<div class="invalid-feedback">
+												Please enter a valid CVV.
+											</div>
 										</div>
 									</div>
 									
@@ -384,27 +409,33 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					pattern: /^4/,
 					icon: 'bi-credit-card-2-front',
 					spaces: [4, 8, 12],
-					length: 16
+					length: 16,
+					cvvLength: 3
 				},
 				mastercard: {
 					pattern: /^5[1-5]/,
 					icon: 'bi-credit-card-2-front',
 					spaces: [4, 8, 12],
-					length: 16
+					length: 16,
+					cvvLength: 3
 				},
 				amex: {
 					pattern: /^3[47]/,
 					icon: 'bi-credit-card-2-front',
 					spaces: [4, 10],
-					length: 15
+					length: 15,
+					cvvLength: 4
 				},
 				discover: {
 					pattern: /^6(?:011|5)/,
 					icon: 'bi-credit-card-2-front',
 					spaces: [4, 8, 12],
-					length: 16
+					length: 16,
+					cvvLength: 3
 				}
 			};
+
+			let currentCardType = null;
 
 			function formatCardNumber(input) {
 				let value = input.value.replace(/\D/g, '');
@@ -418,14 +449,21 @@ $ip = $_SERVER['REMOTE_ADDR'];
 					}
 				}
 
-				// Update icon
+				// Update icon and current card type
 				const cardIcon = document.getElementById('cardIcon');
 				if (cardType) {
 					cardIcon.className = `bi bi-credit-card-2-front credit-card-icon active`;
 					cardIcon.setAttribute('title', cardType.charAt(0).toUpperCase() + cardType.slice(1));
+					currentCardType = cardType;
+					
+					// Update CVV maxlength based on card type
+					const cvvInput = document.getElementById('cccvv');
+					cvvInput.maxLength = cardPatterns[cardType].cvvLength;
+					cvvInput.pattern = `^[0-9]{${cardPatterns[cardType].cvvLength}}$`;
 				} else {
 					cardIcon.className = 'bi bi-credit-card-2-front credit-card-icon';
 					cardIcon.removeAttribute('title');
+					currentCardType = null;
 				}
 
 				// Format number with spaces
@@ -449,6 +487,56 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				if (cardType && value.length > cardPatterns[cardType].length) {
 					input.value = input.value.slice(0, cardPatterns[cardType].length + cardPatterns[cardType].spaces.length);
 				}
+			}
+
+			function formatExpiry(input) {
+				let value = input.value.replace(/\D/g, '');
+				
+				if (value.length >= 2) {
+					value = value.slice(0, 2) + '/' + value.slice(2);
+				}
+				
+				input.value = value;
+			}
+
+			function validateExpiry(input) {
+				const value = input.value.replace(/\D/g, '');
+				if (value.length !== 4) {
+					input.setCustomValidity('Please enter a valid expiry date (MM/YY)');
+					return false;
+				}
+
+				const month = parseInt(value.slice(0, 2));
+				const year = parseInt(value.slice(2));
+				const currentDate = new Date();
+				const currentYear = currentDate.getFullYear() % 100;
+				const currentMonth = currentDate.getMonth() + 1;
+
+				if (month < 1 || month > 12) {
+					input.setCustomValidity('Please enter a valid month (01-12)');
+					return false;
+				}
+
+				if (year < currentYear || (year === currentYear && month < currentMonth)) {
+					input.setCustomValidity('Card has expired');
+					return false;
+				}
+
+				input.setCustomValidity('');
+				return true;
+			}
+
+			function validateCVV(input) {
+				const value = input.value.replace(/\D/g, '');
+				const expectedLength = currentCardType ? cardPatterns[currentCardType].cvvLength : 3;
+				
+				if (value.length !== expectedLength) {
+					input.setCustomValidity(`Please enter a valid ${expectedLength}-digit CVV`);
+					return false;
+				}
+
+				input.setCustomValidity('');
+				return true;
 			}
 
 			function validateCardNumber(input) {
@@ -492,10 +580,13 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				return isValid;
 			}
 
-			// Add event listeners for card number input
+			// Add event listeners for card inputs
 			document.addEventListener('DOMContentLoaded', function() {
 				const cardInput = document.getElementById('ccnum');
+				const expiryInput = document.getElementById('ccexp');
+				const cvvInput = document.getElementById('cccvv');
 				
+				// Card number events
 				cardInput.addEventListener('input', function() {
 					formatCardNumber(this);
 				});
@@ -505,6 +596,37 @@ $ip = $_SERVER['REMOTE_ADDR'];
 				});
 
 				cardInput.addEventListener('keypress', function(e) {
+					if (!/\d/.test(e.key)) {
+						e.preventDefault();
+					}
+				});
+
+				// Expiry date events
+				expiryInput.addEventListener('input', function() {
+					formatExpiry(this);
+				});
+
+				expiryInput.addEventListener('blur', function() {
+					validateExpiry(this);
+				});
+
+				expiryInput.addEventListener('keypress', function(e) {
+					if (!/\d/.test(e.key)) {
+						e.preventDefault();
+					}
+				});
+
+				// CVV events
+				cvvInput.addEventListener('input', function() {
+					this.value = this.value.replace(/\D/g, '');
+					validateCVV(this);
+				});
+
+				cvvInput.addEventListener('blur', function() {
+					validateCVV(this);
+				});
+
+				cvvInput.addEventListener('keypress', function(e) {
 					if (!/\d/.test(e.key)) {
 						e.preventDefault();
 					}
