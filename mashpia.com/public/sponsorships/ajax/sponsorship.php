@@ -18,7 +18,7 @@ if ($action == 'create') {
     $email = $input['email'];
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];
-    if (isset($input['image_changed']) && $input['image_changed'] === 'true') {
+    if (isset($input['image_changed'])) {
         $image = handleFileUpload();
     }
     else $image = null;
@@ -43,9 +43,9 @@ if ($action == 'update') {
     $email = $input['email'];
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];        
-    if (isset($input['image_changed']) && $input['image_changed'] === 'true') {
+    if (isset($input['image_changed'])) {
         $image = handleFileUpload();
-    } else if (isset($input['image_removed']) && $input['image_removed'] === 'true') {
+    } else if (isset($input['image_removed'])) {
         $image = null;
     } else {
         $image = $input['image'] ?? null;
@@ -93,6 +93,8 @@ function handleFileUpload() {
         $fileName = $file['name'] . '_' . time();
         $filePath = $uploadDir . $fileName;
         if (move_uploaded_file($file['tmp_name'], $filePath)) {
+            echo $fileName;
+            exit;
             return $fileName;
         }
     } 
