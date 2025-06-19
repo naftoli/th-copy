@@ -576,10 +576,8 @@
                         setData([...data, newRecord]);
                         showAlert('Record created successfully', 'success');
                     } else {
-                        const updatedData = data.map(item => 
-                            item.sponsorship_id === currentRecord.sponsorship_id ? currentRecord : item
-                        );
-                        setData(updatedData);
+                        // For updates, refresh the data from server to get updated file information
+                        await loadTableData('sponsorships');
                         showAlert('Record updated successfully', 'success');
                     }
                     

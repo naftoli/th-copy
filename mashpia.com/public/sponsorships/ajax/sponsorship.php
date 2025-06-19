@@ -94,10 +94,7 @@ function handleFileUpload() {
         $filePath = $uploadDir . $fileName;
         if (move_uploaded_file($file['tmp_name'], $filePath)) {
             return $fileName;
-        } else {
-            echo "Error moving file";
-            exit;
-        }
+        } 
     } 
     return null;
 }
