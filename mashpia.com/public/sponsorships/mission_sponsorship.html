@@ -485,6 +485,21 @@
                 if (window.confirm('Are you sure you want to delete this record?')) {
                     setLoading(true);
                     try {
+                        // Find the record to get image filenames
+                        const recordToDelete = data.find(item => item.sponsorship_id === sponsorship_id);
+                        
+                        // Collect image filenames from the record
+                        const imageFiles = [];
+                        if (recordToDelete) {
+                            columns.forEach(column => {
+                                if ((column.includes('image') || column.includes('photo') || column.includes('picture')) && 
+                                    recordToDelete[column] && 
+                                    typeof recordToDelete[column] === 'string') {
+                                    imageFiles.push(recordToDelete[column]);
+                                }
+                            });
+                        }
+                        
                         // API call to delete record
                         const action = 'delete';
                         await fetch('ajax/sponsorship.php', {
@@ -492,7 +507,11 @@
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({ sponsorship_id, action }),
+                            body: JSON.stringify({ 
+                                sponsorship_id, 
+                                action,
+                                image_files: imageFiles
+                            }),
                         })
                         .then(response => response.json())
                         .then(data => {

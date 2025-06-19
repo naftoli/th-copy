@@ -63,24 +63,31 @@ if ($action == 'update') {
 }
 
 if ($action == 'delete') {
-    $id = $input['sponsorship_id'];
-    // first get the image path from the database
-    $result = $MASHPIA_DB->prepare("SELECT image FROM mashpiadb.sponsorships WHERE sponsorship_id = :id");
-    $res = $result->execute([':id' => $id]);
-    $image = $res->fetch(PDO::FETCH_ASSOC)['image'];
-    if ($image) {
-        // delete the image from the disk
-        $link = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/' . $image;
-        if (file_exists($link)) {
-            unlink($link);
+    $sponsorship_id = $_POST['sponsorship_id'];
+    $image_files = $_POST['image_files'] ?? [];
+    
+    try {
+        // Delete image files first
+        foreach ($image_files as $filename) {
+            $filePath = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/' . $filename;
+            if (file_exists($filePath)) {
+                unlink($filePath);
+            }
         }
-    }
-    $result = $MASHPIA_DB->prepare("DELETE FROM mashpiadb.sponsorships WHERE sponsorship_id = :id");
-    $res = $result->execute([':id' => $id]);
-    if ($res) {
-        echo json_encode(['success' => true, 'message' => 'Record deleted successfully']);
-    } else {
-        echo json_encode(['success' => false, 'message' => 'Record deletion failed']);
+        
+        // Delete database record
+        $stmt = $MASHPIA_DB->prepare("DELETE FROM mashpiadb.sponsorships WHERE sponsorship_id = ?");
+        $stmt->execute([$sponsorship_id]);
+        
+        echo json_encode([
+            'success' => true,
+            'message' => 'Record deleted successfully'
+        ]);
+    } catch (Exception $e) {
+        echo json_encode([
+            'success' => false,
+            'message' => 'Error deleting record: ' . $e->getMessage()
+        ]);
     }
     exit;
 }
