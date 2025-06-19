@@ -88,11 +88,7 @@ if ($action == 'delete') {
 // Handle file uploads
 function handleFileUpload() {
     $file = $_FILES['image'];
-    echo "<pre>";
-    print_r($file);
-    echo "</pre>";
-    exit;
-    if ($file['error'] === UPLOAD_ERR_OK) {
+    if (! $file['error']) {
         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/';
         $fileName = $file['name'] . '_' . time();
         $filePath = $uploadDir . $fileName;
