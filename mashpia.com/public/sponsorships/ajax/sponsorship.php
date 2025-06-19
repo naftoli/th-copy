@@ -32,7 +32,7 @@ switch ($input['action']) {
 }
 
 function create() {
-    global $input;
+    global $input, $MASHPIA_DB;
 
     $parsha_id = $input['parsha_id'];
     $sponsor = $input['sponsor'];
@@ -59,7 +59,7 @@ function create() {
 }
 
 function update() {
-    global $input;
+    global $input, $MASHPIA_DB;
 
     $id = $input['sponsorship_id'];
     $parsha_id = $input['parsha_id'];
@@ -90,7 +90,7 @@ function update() {
 }
 
 function delete() {
-    global $input;
+    global $input, $MASHPIA_DB;
 
     $sponsorship_id = $input['sponsorship_id'];
     $image_files = $input['image_files'] ?? [];
