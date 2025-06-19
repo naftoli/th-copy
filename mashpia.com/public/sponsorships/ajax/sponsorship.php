@@ -7,11 +7,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-$input = $_POST;
-echo "<pre>";
-print_r($input);
-echo "</pre>";
-exit;
+$input = $_POST ?? json_decode(file_get_contents('php://input'), true);
 
 switch ($input['action']) {
     case 'create':
