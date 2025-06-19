@@ -7,10 +7,26 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-$action = $_POST['action'];
 $input = $_POST;
 
-if ($action == 'create') {
+switch ($input['action']) {
+    case 'create':
+        create();
+        break;
+    case 'update':
+        update();
+        break;
+    case 'delete':
+        delete();
+        break;
+    default:
+        echo json_encode(['success' => false, 'message' => 'Invalid action']);
+        break;
+}
+
+function create() {
+    global $input;
+
     $parsha_id = $input['parsha_id'];
     $sponsor = $input['sponsor'];
     $reason = $input['reason'];
@@ -22,19 +38,22 @@ if ($action == 'create') {
         $image = handleFileUpload();
     }
     else $image = null;
+
     $result = $MASHPIA_DB->prepare("
         INSERT INTO mashpiadb.sponsorships (parsha_id, sponsor, reason, name, image, email, phone, amount_paid) 
         VALUES (:parsha_id, :sponsor, :reason, :name, :image, :email, :phone, :amount_paid)");
     $res = $result->execute([':parsha_id' => $parsha_id, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
+    
     if ($res) { 
         echo json_encode(['success' => true, 'message' => 'Record created successfully', 'id' => $MASHPIA_DB->lastInsertId()]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Record creation failed']);
     }
-    exit;
 }
 
-if ($action == 'update') {
+function update() {
+    global $input;
+
     $id = $input['sponsorship_id'];
     $parsha_id = $input['parsha_id'];
     $sponsor = $input['sponsor'];
@@ -50,19 +69,22 @@ if ($action == 'update') {
     } else {
         $image = $input['image'] ?? null;
     }
+
     $result = $MASHPIA_DB->prepare("
         UPDATE mashpiadb.sponsorships SET parsha_id = :parsha_id, sponsor = :sponsor, reason = :reason, name = :name, image = :image, email = :email, 
             phone = :phone, amount_paid = :amount_paid WHERE sponsorship_id = :id");
     $res = $result->execute([':id' => $id, ':parsha_id' => $parsha_id, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
+    
     if ($res) { 
         echo json_encode(['success' => true, 'message' => 'Record updated successfully']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Record update failed']);
     }
-    exit;
 }
 
-if ($action == 'delete') {
+function delete() {
+    global $input;
+
     $sponsorship_id = $_POST['sponsorship_id'];
     $image_files = $_POST['image_files'] ?? [];
     
@@ -89,7 +111,6 @@ if ($action == 'delete') {
             'message' => 'Error deleting record: ' . $e->getMessage()
         ]);
     }
-    exit;
 }
 
 // Handle file uploads
@@ -105,6 +126,3 @@ function handleFileUpload() {
     } 
     return null;
 }
-
-echo json_encode(['success' => false, 'message' => 'Invalid action']);
-exit;
