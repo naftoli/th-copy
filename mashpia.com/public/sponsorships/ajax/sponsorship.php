@@ -85,8 +85,8 @@ function update() {
 function delete() {
     global $input;
 
-    $sponsorship_id = $_POST['sponsorship_id'];
-    $image_files = $_POST['image_files'] ?? [];
+    $sponsorship_id = $input['sponsorship_id'];
+    $image_files = $input['image_files'] ?? [];
     
     try {
         // Delete image files first
