@@ -54,8 +54,6 @@ if ($action == 'update') {
         UPDATE mashpiadb.sponsorships SET parsha_id = :parsha_id, sponsor = :sponsor, reason = :reason, name = :name, image = :image, email = :email, 
             phone = :phone, amount_paid = :amount_paid WHERE sponsorship_id = :id");
     $res = $result->execute([':id' => $id, ':parsha_id' => $parsha_id, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
-    $result->debugDumpParams();
-    exit;
     if ($res) { 
         echo json_encode(['success' => true, 'message' => 'Record updated successfully']);
     } else {
@@ -96,6 +94,9 @@ function handleFileUpload() {
         $filePath = $uploadDir . $fileName;
         if (move_uploaded_file($file['tmp_name'], $filePath)) {
             return $fileName;
+        } else {
+            echo "Error moving file";
+            exit;
         }
     } 
     return null;
