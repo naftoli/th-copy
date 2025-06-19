@@ -42,8 +42,8 @@ if ($action == 'update') {
     $name = $input['name'];
     $email = $input['email'];
     $phone = $input['phone'];
-    $amount_paid = $input['amount_paid'];        
-    if (isset($input['image_changed'])) {
+    $amount_paid = $input['amount_paid'];
+    if (isset($_FILES['image'])) {
         $image = handleFileUpload();
     } else if (isset($input['image_removed'])) {
         $image = null;
