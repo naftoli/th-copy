@@ -19,7 +19,7 @@ if ($action == 'create') {
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];
     if (isset($input['image_changed']) && $input['image_changed'] === 'true') {
-        $image = handleFileUpload($_FILES['image']);
+        $image = handleFileUpload();
     }
     else $image = null;
     $result = $MASHPIA_DB->prepare("
@@ -44,7 +44,7 @@ if ($action == 'update') {
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];        
     if (isset($input['image_changed']) && $input['image_changed'] === 'true') {
-        $image = handleFileUpload($_FILES['image']);
+        $image = handleFileUpload();
     } else if (isset($input['image_removed']) && $input['image_removed'] === 'true') {
         $image = null;
     } else {
@@ -86,13 +86,14 @@ if ($action == 'delete') {
 }
 
 // Handle file uploads
-function handleFileUpload($file) {
+function handleFileUpload() {
+    $file = $_FILES['image'];
     if ($file['error'] === UPLOAD_ERR_OK) {
-        $uploadDir = 'sponsorships/images/';
+        $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/';
         $fileName = $file['name'] . '_' . time();
         $filePath = $uploadDir . $fileName;
         if (move_uploaded_file($file['tmp_name'], $filePath)) {
-            return $filePath;
+            return $fileName;
         }
     } 
     return null;

@@ -935,7 +935,7 @@
                                                          column.includes('image') || column.includes('photo') || column.includes('picture') ? 
                                                          (record[column] ? (
                                                              <img 
-                                                                 src={typeof record[column] === 'string' ? record[column] : URL.createObjectURL(record[column])} 
+                                                                 src={`/sponsorships/images/${record[column]}`}
                                                                  alt="Image" 
                                                                  style={{ 
                                                                      width: '50px', 
