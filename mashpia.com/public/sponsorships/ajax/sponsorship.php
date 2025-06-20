@@ -89,15 +89,19 @@ function update() {
     
     if ($res) { 
         if ($change_image) {
-            $result = $MASHPIA_DB->prepare("UPDATE mashpiadb.sponsorships SET image = :image WHERE sponsorship_id = :id");
-            $res = $result->execute([':image' => $image, ':id' => $id]);
             if ($image == null) {
+                // get image from database
+                $result = $MASHPIA_DB->prepare("SELECT image FROM mashpiadb.sponsorships WHERE sponsorship_id = :id");
+                $res = $result->execute([':id' => $id]);
+                $img = $result->fetch(PDO::FETCH_ASSOC)['image'];
                 // delete image file
-                $filePath = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/' . $image;
+                $filePath = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/' . $img;
                 if (file_exists($filePath)) {
                     unlink($filePath);
                 }
             }
+            $result = $MASHPIA_DB->prepare("UPDATE mashpiadb.sponsorships SET image = :image WHERE sponsorship_id = :id");
+            $res = $result->execute([':image' => $image, ':id' => $id]); 
         }
         echo json_encode(['success' => true, 'message' => 'Record updated successfully']);
     } else {
