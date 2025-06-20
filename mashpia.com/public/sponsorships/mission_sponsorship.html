@@ -376,6 +376,38 @@
                 loadTableData('sponsorships');
             }, []);
 
+            // Validate email field when modal opens
+            useEffect(() => {
+                if (showModal && currentRecord.email) {
+                    const emailField = document.getElementById('email');
+                    if (emailField) {
+                        const email = currentRecord.email.trim();
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (email && !emailRegex.test(email)) {
+                            emailField.setCustomValidity('Please enter a valid email address');
+                        } else {
+                            emailField.setCustomValidity('');
+                        }
+                    }
+                }
+                
+                // Validate date fields when modal opens
+                if (showModal && (currentRecord.start_date || currentRecord.end_date)) {
+                    const startDateField = document.getElementById('start_date');
+                    const endDateField = document.getElementById('end_date');
+                    
+                    if (startDateField && endDateField && currentRecord.start_date && currentRecord.end_date) {
+                        if (currentRecord.start_date > currentRecord.end_date) {
+                            startDateField.setCustomValidity('Start date cannot be later than end date');
+                            endDateField.setCustomValidity('End date cannot be earlier than start date');
+                        } else {
+                            startDateField.setCustomValidity('');
+                            endDateField.setCustomValidity('');
+                        }
+                    }
+                }
+            }, [showModal, currentRecord.email, currentRecord.start_date, currentRecord.end_date]);
+
             const loadTableData = async (tableName) => {
                 setLoading(true);
                 try {
@@ -518,6 +550,14 @@
 
             const handleSubmit = async (e) => {
                 e.preventDefault();
+                
+                // Check for validation errors before submitting
+                const form = e.target;
+                if (!form.checkValidity()) {
+                    form.reportValidity();
+                    return;
+                }
+                
                 setLoading(true);
                 
                 try {
@@ -645,7 +685,7 @@
                                         background: '#f9fafb'
                                     }}>
                                         <img 
-                                            src={typeof value === 'string' ? value : URL.createObjectURL(value)} 
+                                            src={typeof value === 'string' ? `/sponsorships/images/${value}` : URL.createObjectURL(value)} 
                                             alt="Current image" 
                                             style={{ 
                                                 width: '60px', 
@@ -759,7 +799,27 @@
                     inputType = 'url';
                 }
                 
+                // First set based on database schema
                 inputProps.required = !isNullable;
+
+                // Then override for specific required fields
+                if (['start_date', 'end_date', 'sponsor', 'email', 'phone'].includes(column)) {
+                    inputProps.required = true;
+                }
+                
+                // Add HTML validation patterns and attributes
+                if (column === 'email') {
+                    inputProps.title = 'Please enter a valid email address (e.g., user@example.com)';
+                } else if (column === 'phone') {
+                    inputProps.pattern = '^[+]?[0-9\\s\\-\\(\\)]{10,}$';
+                    inputProps.title = 'Please enter a valid phone number (minimum 10 digits)';
+                } else if (column === 'start_date' || column === 'end_date') {
+                    inputProps.title = 'Please select a valid date';
+                } else if (column === 'sponsor') {
+                    inputProps.minLength = 2;
+                    inputProps.maxLength = 100;
+                    inputProps.title = 'Sponsor name must be between 2 and 100 characters';
+                }
                 
                 const label = column.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
                 
@@ -809,6 +869,44 @@
                                 id={column}
                                 value={value}
                                 onChange={(e) => handleInputChange(column, e.target.value)}
+                                onBlur={column === 'email' ? (e) => {
+                                    const email = e.target.value.trim();
+                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                    if (email && !emailRegex.test(email)) {
+                                        e.target.setCustomValidity('Please enter a valid email address');
+                                    } else {
+                                        e.target.setCustomValidity('');
+                                    }
+                                } : column === 'start_date' || column === 'end_date' ? (e) => {
+                                    const currentDate = e.target.value;
+                                    const startDate = column === 'start_date' ? currentDate : currentRecord.start_date;
+                                    const endDate = column === 'end_date' ? currentDate : currentRecord.end_date;
+                                    
+                                    if (startDate && endDate && startDate > endDate) {
+                                        e.target.setCustomValidity('Start date cannot be later than end date');
+                                    } else {
+                                        e.target.setCustomValidity('');
+                                    }
+                                } : undefined}
+                                onInput={column === 'email' ? (e) => {
+                                    const email = e.target.value.trim();
+                                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                    if (email && !emailRegex.test(email)) {
+                                        e.target.setCustomValidity('Please enter a valid email address');
+                                    } else {
+                                        e.target.setCustomValidity('');
+                                    }
+                                } : column === 'start_date' || column === 'end_date' ? (e) => {
+                                    const currentDate = e.target.value;
+                                    const startDate = column === 'start_date' ? currentDate : currentRecord.start_date;
+                                    const endDate = column === 'end_date' ? currentDate : currentRecord.end_date;
+                                    
+                                    if (startDate && endDate && startDate > endDate) {
+                                        e.target.setCustomValidity('Start date cannot be later than end date');
+                                    } else {
+                                        e.target.setCustomValidity('');
+                                    }
+                                } : undefined}
                                 {...inputProps}
                             />
                         </div>
@@ -889,7 +987,7 @@
                                     </thead>
                                     <tbody>
                                         {data.map(record => (
-                                            <tr key={record.id}>
+                                            <tr key={record.sponsorship_id || record.id}>
                                                 {columns.map(column => (
                                                     <td key={column}>
                                                         {column.includes('image') || column.includes('photo') || column.includes('picture') ? 
@@ -963,7 +1061,7 @@
                                     </button>
                                 </div>
                                 
-                                <form onSubmit={handleSubmit}>
+                                <form onSubmit={handleSubmit} noValidate>
                                     <div className="form-row">
                                         {columns.map(column => renderFormField(column))}
                                     </div>
@@ -999,7 +1097,8 @@
             );
         };
 
-        ReactDOM.render(<DatabaseCRUD />, document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<DatabaseCRUD />);
     </script>
 </body>
 </html>

@@ -341,8 +341,18 @@ abstract class MissionDisplay {
 			</div>
 
 			<?php if (isset($_COOKIE['naftoli']) && !in_array($this->school_type_id, [4, 5])) { ?>
+				<?php 
+					$start = jdtogregorian($this->start);
+					$end = jdtogregorian($this->end);
+					// convert from mm/dd/yyyy to yyyy-mm-dd
+					$start = date('Y-m-d', strtotime($start));
+					$end = date('Y-m-d', strtotime($end));
+					$sponsorships = $MASHPIA_DB->query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start . "' AND end_date <= '" . $end . "' LIMIT 1");
+					$sponsorships = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
+				?>
+				<?php if ($sponsorships) { ?>
 				<style>
-					.sponsor {
+					.sponsor {	
 						height: 50px;
 						border-radius: 10px;
 						background-color: #e9ecef; /* A nice, soft blue color */
@@ -363,9 +373,9 @@ abstract class MissionDisplay {
 					}
 				</style>
 				<div class="sponsor">
-					<img src="/images/avatar_boy.jpg" alt="Avatar of a person" />
-					This weeks missions have been sponsored by: <br />
-					In honor of / In memory of ...
+					<img src="/sponsorships/images/<?=$sponsorships[0]['image']?>" alt="Avatar of a person" />
+					This weeks missions have been sponsored by: <?=$sponsorships[0]['sponsor']?><br />
+					<?=$sponsorships[0]['reason']?> <?=$sponsorships[0]['name']?>
 				</div>
 			<?php } ?>
 			
