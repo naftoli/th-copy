@@ -83,7 +83,7 @@ function update() {
     }
 
     $result = $MASHPIA_DB->prepare("
-        UPDATE mashpiadb.sponsorships SET start_date = :start_date, end_date = :end_date, sponsor = :sponsor, reason = :reason, name = :name, image = :image, email = :email, 
+        UPDATE mashpiadb.sponsorships SET start_date = :start_date, end_date = :end_date, sponsor = :sponsor, reason = :reason, name = :name, email = :email, 
             phone = :phone, amount_paid = :amount_paid WHERE sponsorship_id = :id");
     $res = $result->execute([':id' => $id, ':start_date' => $start_date, ':end_date' => $end_date, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
     
