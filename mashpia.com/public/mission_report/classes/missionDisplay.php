@@ -351,8 +351,9 @@ abstract class MissionDisplay {
 						text-align: center;
 						border: 1px solid #ced4da; /* A matching border color */
 						vertical-align: middle;
-						line-height: 1.4em;
-						font-size: 1.1em;
+						font-family: cursive;
+						font-size: 17px;
+						line-height: 1.5;
 					}
 					.sponsor img {
 						width: 50px;
