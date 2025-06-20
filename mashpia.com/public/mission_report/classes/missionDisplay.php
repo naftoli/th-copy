@@ -378,15 +378,14 @@ abstract class MissionDisplay {
 					$sponsorships = $MASHPIA_DB->query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start . "' AND end_date <= '" . $end . "' LIMIT 1");
 					$sponsorship = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
 					if ($sponsorship) { 
-						$image = $sponsorship[0]['image'];
-						$sponsor = 'This weeks missions have been sponsored by: ' . $sponsorship[0]['sponsor'] . '<br />';
-						$reason = $sponsorship[0]['reason'];
-						$name = $sponsorship[0]['name'];
+						$image = '/sponsorships/images/' . $sponsorship[0]['image'];
+						$sponsor = 'This weeks missions have been sponsored by: ' . $sponsorship[0]['sponsor'];
+						$reason = $sponsorship[0]['reason'] . ': ' . $sponsorship[0]['name'];
 					}
 					?>
 					<img src="<?=$image?>" alt="Avatar of a person" />
-					<?=$sponsor?>
-					<?=$reason?> <?=$name?>
+					<?=$sponsor?><br />
+					<?=$reason?>
 				</div>
 			<?php } ?>
 			
