@@ -430,6 +430,54 @@ $daySchoolSubjects = setDaySchoolSubjects();
                 <div style="clear:both"></div>
             </div>
 
+			<?php if (isset($_COOKIE['naftoli']) && !in_array($user->school_type_id, [4, 5])) { ?>
+				<style>
+					.sponsor {	
+						height: 50px;
+						border-radius: 10px;
+						background-color: #e9ecef; /* A nice, soft blue color */
+						padding: 10px;
+						margin: 10px;
+						text-align: center;
+						border: 1px solid #ced4da; /* A matching border color */
+						vertical-align: middle;
+						font-family: cursive;
+						font-size: 17px;
+						line-height: 1.5;
+					}
+					.sponsor img {
+						width: 50px;
+						height: 50px;
+						border-radius: 50%;
+						margin-right: 10px;
+						float: right;
+					}
+				</style>
+				<div class="sponsor">
+					<?php
+					// check if there is a sponsorship for this week
+					$start_d = jdtogregorian($start);
+					$end_d = jdtogregorian($end);
+					// convert from mm/dd/yyyy to yyyy-mm-dd
+					$start_d = date('Y-m-d', strtotime($start_d));
+					$end_d = date('Y-m-d', strtotime($end_d));
+					$sponsorships = $MASHPIA_DB->query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start_d . "' AND end_date <= '" . $end_d . "' LIMIT 1");
+					$sponsorship = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
+					if ($sponsorship) { 
+						$image = '/sponsorships/images/' . $sponsorship[0]['image'];
+						$sponsor = 'This weeks missions have been sponsored by: <strong>' . $sponsorship[0]['sponsor'] . '</strong>';
+						$reason = $sponsorship[0]['reason'] . ': <strong>' . $sponsorship[0]['name'] . '</strong>';
+						if ($sponsorship[0]['image']) echo '<img src="' . $image . '" />';
+						echo $sponsor . '<br />';
+						echo $reason;						
+					} else if (!$sponsorship) {
+						echo '<img src="/images/avatar_boy.jpg" />';
+						echo 'This weeks missions are available for sponsorship.';
+					}
+					?>
+				</div>
+			<?php } ?>
+
             <?// for every day of the week
             for ($from = 1; $from < 8; $from++) {
                 if(!$daily){
