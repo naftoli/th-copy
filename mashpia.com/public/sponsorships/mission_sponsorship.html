@@ -912,7 +912,16 @@
                                                          ) : (
                                                              <span style={{ color: '#9ca3af', fontSize: '0.9rem' }}>No image</span>
                                                          )) : 
-                                                         record[column]}
+                                                         (() => {
+                                                             const value = record[column];
+                                                             // Check if this is a datetime/timestamp field
+                                                             const columnInfo = schema.find(col => col.COLUMN_NAME === column);
+                                                             if (columnInfo && (columnInfo.DATA_TYPE === 'datetime' || columnInfo.DATA_TYPE === 'timestamp') && value) {
+                                                                 // Extract just the date part (YYYY-MM-DD)
+                                                                 return value.split(' ')[0];
+                                                             }
+                                                             return value;
+                                                         })()}
                                                     </td>
                                                 ))}
                                                 <td>
