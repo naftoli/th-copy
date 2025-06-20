@@ -374,8 +374,8 @@ abstract class MissionDisplay {
 					$sponsorship = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
 					if ($sponsorship) { 
 						$image = '/sponsorships/images/' . $sponsorship[0]['image'];
-						$sponsor = 'This weeks missions have been sponsored by: ' . $sponsorship[0]['sponsor'];
-						$reason = $sponsorship[0]['reason'] . ': ' . $sponsorship[0]['name'];
+						$sponsor = 'This weeks missions have been sponsored by: <strong>' . $sponsorship[0]['sponsor'] . '</strong>';
+						$reason = $sponsorship[0]['reason'] . ': <strong>' . $sponsorship[0]['name'] . '</strong>';
 						if ($sponsorship[0]['image']) echo '<img src="' . $image . '" />';
 						echo $sponsor . '<br />';
 						echo $reason;						
