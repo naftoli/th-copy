@@ -461,13 +461,13 @@ $daySchoolSubjects = setDaySchoolSubjects();
 					// convert from mm/dd/yyyy to yyyy-mm-dd
 					$start_d = date('Y-m-d', strtotime($start_d));
 					$end_d = date('Y-m-d', strtotime($end_d));
-					$sponsorships = $MASHPIA_DB->query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start_d . "' AND end_date <= '" . $end_d . "' LIMIT 1");
-					$sponsorship = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
+					$sponsorships = mysql_query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start_d . "' AND end_date <= '" . $end_d . "' LIMIT 1");
+					$sponsorship = mysql_fetch_assoc($sponsorships);
 					if ($sponsorship) { 
-						$image = '/sponsorships/images/' . $sponsorship[0]['image'];
-						$sponsor = 'This weeks missions have been sponsored by: <strong>' . $sponsorship[0]['sponsor'] . '</strong>';
-						$reason = $sponsorship[0]['reason'] . ': <strong>' . $sponsorship[0]['name'] . '</strong>';
-						if ($sponsorship[0]['image']) echo '<img src="' . $image . '" />';
+						$image = '/sponsorships/images/' . $sponsorship['image'];
+						$sponsor = 'This weeks missions have been sponsored by: <strong>' . $sponsorship['sponsor'] . '</strong>';
+						$reason = $sponsorship['reason'] . ': <strong>' . $sponsorship['name'] . '</strong>';
+						if ($sponsorship['image']) echo '<img src="' . $image . '" />';
 						echo $sponsor . '<br />';
 						echo $reason;						
 					} else if (!$sponsorship) {
