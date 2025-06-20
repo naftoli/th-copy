@@ -341,16 +341,6 @@ abstract class MissionDisplay {
 			</div>
 
 			<?php if (isset($_COOKIE['naftoli']) && !in_array($this->school_type_id, [4, 5])) { ?>
-				<?php 
-					$start = jdtogregorian($this->start);
-					$end = jdtogregorian($this->end);
-					// convert from mm/dd/yyyy to yyyy-mm-dd
-					$start = date('Y-m-d', strtotime($start));
-					$end = date('Y-m-d', strtotime($end));
-					$sponsorships = $MASHPIA_DB->query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start . "' AND end_date <= '" . $end . "' LIMIT 1");
-					$sponsorship = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
-				?>
-				<?php if ($sponsorship) { ?>
 				<style>
 					.sponsor {	
 						height: 50px;
@@ -373,11 +363,31 @@ abstract class MissionDisplay {
 					}
 				</style>
 				<div class="sponsor">
-					<img src="/sponsorships/images/<?=$sponsorship[0]['image']?>" alt="Avatar of a person" />
-					This weeks missions have been sponsored by: <?=$sponsorship[0]['sponsor']?><br />
-					<?=$sponsorship[0]['reason']?> <?=$sponsorship[0]['name']?>
+					<?php
+					// defaults
+					$image = '/images/avatar_boy.jpg';
+					$sponsor = 'This weeks missions are available for sponsorship.<br />';
+					$reason = '';
+					$name = '';
+					// check if there is a sponsorship for this week
+					$start = jdtogregorian($this->start);
+					$end = jdtogregorian($this->end);
+					// convert from mm/dd/yyyy to yyyy-mm-dd
+					$start = date('Y-m-d', strtotime($start));
+					$end = date('Y-m-d', strtotime($end));
+					$sponsorships = $MASHPIA_DB->query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start . "' AND end_date <= '" . $end . "' LIMIT 1");
+					$sponsorship = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
+					if ($sponsorship) { 
+						$image = $sponsorship[0]['image'];
+						$sponsor = 'This weeks missions have been sponsored by: ' . $sponsorship[0]['sponsor'] . '<br />';
+						$reason = $sponsorship[0]['reason'];
+						$name = $sponsorship[0]['name'];
+					}
+					?>
+					<img src="<?=$image?>" alt="Avatar of a person" />
+					<?=$sponsor?>
+					<?=$reason?> <?=$name?>
 				</div>
-				<?php } ?>
 			<?php } ?>
 			
 			<div class="left">
