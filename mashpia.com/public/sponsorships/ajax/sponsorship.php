@@ -43,7 +43,7 @@ function create() {
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];
     $change_image = false;
-    if (isset($input['image_changed']) && !$input['image_changed']) {
+    if (isset($input['image_changed']) && (!$input['image_changed'] || $input['image_changed'] == 'false')) {
         $change_image = false;
     } else {
         $change_image = true;
