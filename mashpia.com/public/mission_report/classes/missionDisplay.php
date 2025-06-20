@@ -348,9 +348,9 @@ abstract class MissionDisplay {
 					$start = date('Y-m-d', strtotime($start));
 					$end = date('Y-m-d', strtotime($end));
 					$sponsorships = $MASHPIA_DB->query("SELECT * FROM mashpiadb.sponsorships WHERE start_date >= '" . $start . "' AND end_date <= '" . $end . "' LIMIT 1");
-					$sponsorships = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
+					$sponsorship = $sponsorships->fetchAll(PDO::FETCH_ASSOC);
 				?>
-				<?php if ($sponsorships) { ?>
+				<?php if ($sponsorship) { ?>
 				<style>
 					.sponsor {	
 						height: 50px;
@@ -373,10 +373,11 @@ abstract class MissionDisplay {
 					}
 				</style>
 				<div class="sponsor">
-					<img src="/sponsorships/images/<?=$sponsorships[0]['image']?>" alt="Avatar of a person" />
-					This weeks missions have been sponsored by: <?=$sponsorships[0]['sponsor']?><br />
-					<?=$sponsorships[0]['reason']?> <?=$sponsorships[0]['name']?>
+					<img src="/sponsorships/images/<?=$sponsorship[0]['image']?>" alt="Avatar of a person" />
+					This weeks missions have been sponsored by: <?=$sponsorship[0]['sponsor']?><br />
+					<?=$sponsorship[0]['reason']?> <?=$sponsorship[0]['name']?>
 				</div>
+				<?php } ?>
 			<?php } ?>
 			
 			<div class="left">
