@@ -364,11 +364,6 @@ abstract class MissionDisplay {
 				</style>
 				<div class="sponsor">
 					<?php
-					// defaults
-					$image = '/images/avatar_boy.jpg';
-					$sponsor = 'This weeks missions are available for sponsorship.<br />';
-					$reason = '';
-					$name = '';
 					// check if there is a sponsorship for this week
 					$start = jdtogregorian($this->start);
 					$end = jdtogregorian($this->end);
@@ -381,11 +376,14 @@ abstract class MissionDisplay {
 						$image = '/sponsorships/images/' . $sponsorship[0]['image'];
 						$sponsor = 'This weeks missions have been sponsored by: ' . $sponsorship[0]['sponsor'];
 						$reason = $sponsorship[0]['reason'] . ': ' . $sponsorship[0]['name'];
+						if ($sponsorship[0]['image']) echo '<img src="' . $image . '" />';
+						echo $sponsor . '<br />';
+						echo $reason;						
+					} else if (!$sponsorship) {
+						echo '<img src="/images/avatar_boy.jpg" />';
+						echo 'This weeks missions are available for sponsorship.';
 					}
 					?>
-					<img src="<?=$image?>" alt="Avatar of a person" />
-					<?=$sponsor?><br />
-					<?=$reason?>
 				</div>
 			<?php } ?>
 			
