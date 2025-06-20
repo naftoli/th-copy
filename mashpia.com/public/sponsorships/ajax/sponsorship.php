@@ -42,41 +42,18 @@ function create() {
     $email = $input['email'];
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];
-    $change_image = false;
-    if (isset($input['image_changed']) && (!$input['image_changed'] || $input['image_changed'] == 'false')) {
-        $change_image = false;
-    } else {
-        $change_image = true;
-        if (isset($_FILES['image'])) {
-            $image = handleFileUpload();
-        } else {
-            $image = null;
-        }
+    if (isset($input['image_changed'])) {
+        $image = handleFileUpload();
     }
-    
+    else $image = null;
 
     $result = $MASHPIA_DB->prepare("
-        INSERT INTO mashpiadb.sponsorships (start_date, end_date, sponsor, reason, name, email, phone, amount_paid) 
-        VALUES (:start_date, :end_date, :sponsor, :reason, :name, :email, :phone, :amount_paid)");
-    $res = $result->execute([':start_date' => $start_date, ':end_date' => $end_date, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
+        INSERT INTO mashpiadb.sponsorships (start_date, end_date, sponsor, reason, name, image, email, phone, amount_paid) 
+        VALUES (:start_date, :end_date, :sponsor, :reason, :name, :image, :email, :phone, :amount_paid)");
+    $res = $result->execute([':start_date' => $start_date, ':end_date' => $end_date, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
+    
     if ($res) { 
-        $sponsorship_id = $MASHPIA_DB->lastInsertId();
-        // update image if it was changed
-        if ($change_image) {
-            if ($image) {
-                $result = $MASHPIA_DB->prepare("UPDATE mashpiadb.sponsorships SET image = :image WHERE sponsorship_id = :id");
-                $res = $result->execute([':image' => $image, ':id' => $sponsorship_id]);
-            } else if ($image == null) {
-                // delete image file
-                $filePath = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/' . $image;
-                if (file_exists($filePath)) {
-                    unlink($filePath);
-                }
-                // update database
-                $result = $MASHPIA_DB->prepare("UPDATE mashpiadb.sponsorships SET image = NULL WHERE sponsorship_id = :id");
-            }
-        }
-        echo json_encode(['success' => true, 'message' => 'Record created successfully', 'id' => $sponsorship_id]);
+        echo json_encode(['success' => true, 'message' => 'Record created successfully', 'id' => $MASHPIA_DB->lastInsertId()]);
     } else {
         echo json_encode(['success' => false, 'message' => 'Record creation failed']);
     }
@@ -94,12 +71,15 @@ function update() {
     $email = $input['email'];
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];
-    if (isset($_FILES['image'])) {
-        $image = handleFileUpload();
-    } else if (isset($input['image_removed'])) {
-        $image = null;
+    if (isset($input['image_changed']) && (!$input['image_changed'] || $input['image_changed'] == 'false')) {
+        $change_image = false;
     } else {
-        $image = $input['image'] ?? null;
+        $change_image = true;
+        if (isset($_FILES['image'])) {
+            $image = handleFileUpload();
+        } else {
+            $image = null;
+        }
     }
 
     $result = $MASHPIA_DB->prepare("
@@ -108,6 +88,17 @@ function update() {
     $res = $result->execute([':id' => $id, ':start_date' => $start_date, ':end_date' => $end_date, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
     
     if ($res) { 
+        if ($change_image) {
+            $result = $MASHPIA_DB->prepare("UPDATE mashpiadb.sponsorships SET image = :image WHERE sponsorship_id = :id");
+            $res = $result->execute([':image' => $image, ':id' => $id]);
+            if ($image == null) {
+                // delete image file
+                $filePath = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/' . $image;
+                if (file_exists($filePath)) {
+                    unlink($filePath);
+                }
+            }
+        }
         echo json_encode(['success' => true, 'message' => 'Record updated successfully']);
     } else {
         echo json_encode(['success' => false, 'message' => 'Record update failed']);
