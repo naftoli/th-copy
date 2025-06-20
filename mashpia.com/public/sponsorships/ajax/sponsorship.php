@@ -42,12 +42,14 @@ function create() {
     $email = $input['email'];
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];
-    if (isset($input['image_changed'])) {
+    $change_image = false;
+    if (!isset($input['image_changed']) || ($input['image_changed'] == 'true')) {
+        $change_image = true;
         if ($input['image_changed'] == 'true') {
             $image = handleFileUpload();
-        } 
-    } else {
-        $image = null;
+        } else {
+            $image = null;
+        }
     }
 
     $result = $MASHPIA_DB->prepare("
@@ -57,7 +59,7 @@ function create() {
     if ($res) { 
         $sponsorship_id = $MASHPIA_DB->lastInsertId();
         // update image if it was changed
-        if (isset($image)) {
+        if ($change_image) {
             if ($image) {
                 $result = $MASHPIA_DB->prepare("UPDATE mashpiadb.sponsorships SET image = :image WHERE sponsorship_id = :id");
                 $res = $result->execute([':image' => $image, ':id' => $sponsorship_id]);
