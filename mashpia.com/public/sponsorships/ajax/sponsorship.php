@@ -43,14 +43,17 @@ function create() {
     $phone = $input['phone'];
     $amount_paid = $input['amount_paid'];
     $change_image = false;
-    if (!isset($input['image_changed']) || ($input['image_changed'] == 'true')) {
+    if (isset($input['image_changed']) && !$input['image_changed']) {
+        $change_image = false;
+    } else {
         $change_image = true;
-        if ($input['image_changed'] == 'true') {
+        if (isset($_FILES['image'])) {
             $image = handleFileUpload();
         } else {
             $image = null;
         }
     }
+    
 
     $result = $MASHPIA_DB->prepare("
         INSERT INTO mashpiadb.sponsorships (start_date, end_date, sponsor, reason, name, email, phone, amount_paid) 
