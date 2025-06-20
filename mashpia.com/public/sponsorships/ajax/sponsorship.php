@@ -34,7 +34,8 @@ switch ($input['action']) {
 function create() {
     global $input, $MASHPIA_DB;
 
-    $parsha_id = $input['parsha_id'];
+    $start_date = $input['start_date'];
+    $end_date = $input['end_date'];
     $sponsor = $input['sponsor'];
     $reason = $input['reason'];
     $name = $input['name'];
@@ -47,9 +48,9 @@ function create() {
     else $image = null;
 
     $result = $MASHPIA_DB->prepare("
-        INSERT INTO mashpiadb.sponsorships (parsha_id, sponsor, reason, name, image, email, phone, amount_paid) 
-        VALUES (:parsha_id, :sponsor, :reason, :name, :image, :email, :phone, :amount_paid)");
-    $res = $result->execute([':parsha_id' => $parsha_id, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
+        INSERT INTO mashpiadb.sponsorships (start_date, end_date, sponsor, reason, name, image, email, phone, amount_paid) 
+        VALUES (:start_date, :end_date, :sponsor, :reason, :name, :image, :email, :phone, :amount_paid)");
+    $res = $result->execute([':start_date' => $start_date, ':end_date' => $end_date, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
     
     if ($res) { 
         echo json_encode(['success' => true, 'message' => 'Record created successfully', 'id' => $MASHPIA_DB->lastInsertId()]);
@@ -62,7 +63,8 @@ function update() {
     global $input, $MASHPIA_DB;
 
     $id = $input['sponsorship_id'];
-    $parsha_id = $input['parsha_id'];
+    $start_date = $input['start_date'];
+    $end_date = $input['end_date'];
     $sponsor = $input['sponsor'];
     $reason = $input['reason'];
     $name = $input['name'];
@@ -78,9 +80,9 @@ function update() {
     }
 
     $result = $MASHPIA_DB->prepare("
-        UPDATE mashpiadb.sponsorships SET parsha_id = :parsha_id, sponsor = :sponsor, reason = :reason, name = :name, image = :image, email = :email, 
+        UPDATE mashpiadb.sponsorships SET start_date = :start_date, end_date = :end_date, sponsor = :sponsor, reason = :reason, name = :name, image = :image, email = :email, 
             phone = :phone, amount_paid = :amount_paid WHERE sponsorship_id = :id");
-    $res = $result->execute([':id' => $id, ':parsha_id' => $parsha_id, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
+    $res = $result->execute([':id' => $id, ':start_date' => $start_date, ':end_date' => $end_date, ':sponsor' => $sponsor, ':reason' => $reason, ':name' => $name, ':image' => $image, ':email' => $email, ':phone' => $phone, ':amount_paid' => $amount_paid]);
     
     if ($res) { 
         echo json_encode(['success' => true, 'message' => 'Record updated successfully']);

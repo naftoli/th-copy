@@ -370,30 +370,11 @@
             const [alert, setAlert] = useState(null);
             const [columns, setColumns] = useState([]);
             const [schema, setSchema] = useState([]);
-            const [parshos, setParshos] = useState([]);
             const [imageChanges, setImageChanges] = useState({});
 
             useEffect(() => {
                 loadTableData('sponsorships');
-                loadParshos();
             }, []);
-
-            const loadParshos = async () => {
-                try {
-                    const response = await fetch(`ajax/getTableInfo.php`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ table: 'parshos' }),
-                    });
-                    const result = await response.json();
-                    const parshosData = result.parshos || result.data || result || [];
-                    setParshos(parshosData);
-                } catch (error) {
-                    console.error('Error loading parshos:', error);
-                }
-            };
 
             const loadTableData = async (tableName) => {
                 setLoading(true);
@@ -625,11 +606,6 @@
                 }));
             };
 
-            const getParshaName = (parshaId) => {
-                const parsha = parshos.find(p => p.id == parshaId);
-                return parsha ? parsha.name : `Unknown (ID: ${parshaId})`;
-            };
-
             const renderFormField = (column) => {
                 // Find column info from schema
                 const columnInfo = schema.find(col => col.COLUMN_NAME === column);
@@ -649,37 +625,6 @@
                 // Skip auto-increment columns in forms (but they will show in table)
                 if (extra && extra.includes('auto_increment')) {
                     return null;
-                }
-                
-                // Handle foreign key to parshos table
-                if (column === 'parsha_id') {
-                    return (
-                        <div key={column} className="form-group">
-                            <label htmlFor={column}>Parsha</label>
-                            <select
-                                id={column}
-                                value={value}
-                                onChange={(e) => handleInputChange(column, e.target.value)}
-                                required={!isNullable}
-                                style={{
-                                    padding: '12px 16px',
-                                    border: '2px solid #e5e7eb',
-                                    borderRadius: '10px',
-                                    fontSize: '1rem',
-                                    transition: 'all 0.3s ease',
-                                    background: '#f9fafb',
-                                    height: '48px'
-                                }}
-                            >
-                                <option value="">Select a Parsha...</option>
-                                {parshos.map(parsha => (
-                                    <option key={parsha.id} value={parsha.id}>
-                                        {parsha.name}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-                    );
                 }
                 
                 // Handle image upload fields
@@ -935,8 +880,7 @@
                                         <tr>
                                             {columns.map(column => (
                                                 <th key={column}>
-                                                    {column === 'parsha_id' ? 'Parsha' : 
-                                                     column === 'sponsorship_id' ? 'ID' :
+                                                    {column === 'sponsorship_id' ? 'ID' :
                                                      column.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                                                 </th>
                                             ))}
@@ -948,8 +892,7 @@
                                             <tr key={record.id}>
                                                 {columns.map(column => (
                                                     <td key={column}>
-                                                        {column === 'parsha_id' ? getParshaName(record[column]) : 
-                                                         column.includes('image') || column.includes('photo') || column.includes('picture') ? 
+                                                        {column.includes('image') || column.includes('photo') || column.includes('picture') ? 
                                                          (record[column] ? (
                                                              <img 
                                                                  src={`/sponsorships/images/${record[column]}`}
