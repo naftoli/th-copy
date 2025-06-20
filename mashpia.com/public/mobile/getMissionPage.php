@@ -433,7 +433,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			<?php if (isset($_COOKIE['naftoli']) && !in_array($user->school_type_id, [4, 5])) { ?>
 				<style>
 					.sponsor {	
-						height: 50px;
+						height: 70px;
 						border-radius: 10px;
 						background-color: #e9ecef; /* A nice, soft blue color */
 						padding: 10px;
