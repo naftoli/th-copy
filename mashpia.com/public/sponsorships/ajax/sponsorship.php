@@ -127,7 +127,9 @@ function handleFileUpload() {
     $file = $_FILES['image'];
     if (! $file['error']) {
         $uploadDir = $_SERVER['DOCUMENT_ROOT'] . '/sponsorships/images/';
-        $fileName = $file['name'] . '_' . time();
+        // split file name into name and extension
+        $fileInfo = pathinfo($file['name']);
+        $fileName = $fileInfo['filename'] . '_' . time() . $fileInfo['extension'];
         $filePath = $uploadDir . $fileName;
         if (move_uploaded_file($file['tmp_name'], $filePath)) {
             return $fileName;
