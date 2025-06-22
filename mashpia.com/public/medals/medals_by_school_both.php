@@ -15,9 +15,17 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 // Get selected dates from form
 $start = null;
 $end = null;
+$wasHebrewMode = false; // Track if Hebrew mode was used
 if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
     $start = $_POST['from_hidden'];
     $end = $_POST['to_hidden'];
+    
+    // Check if Hebrew dates were used in the previous submission
+    // We can detect this by checking if the Hebrew date fields have values
+    // and if the hidden was_hebrew_mode field is set to '1'
+    if (isset($_POST['was_hebrew_mode']) && $_POST['was_hebrew_mode'] === '1') {
+        $wasHebrewMode = true;
+    }
 }
 // } else {
 //     // default to last 30 days
@@ -222,6 +230,7 @@ if ($start && $end) {
                     <button type="submit" class="btn btn-primary">Generate Report</button>
                     <input type="hidden" id="from_hidden" name="from_hidden">
                     <input type="hidden" id="to_hidden" name="to_hidden">
+                    <input type="hidden" id="was_hebrew_mode" name="was_hebrew_mode" value="<?php echo $wasHebrewMode ? '1' : '0'; ?>">
                     <?php if ($start && $end): ?>
                     <button type="button" class="btn btn-primary ms-2" onClick="downloadCSV()">Download CSV</button>
                     <?php endif; ?>
@@ -236,54 +245,6 @@ if ($start && $end) {
         $(document).ready(function() {
             console.log('Document ready');
             
-            // Handle form submission
-            $('#dates_form').on('submit', function(e) {
-                e.preventDefault();
-                const isHebrew = $('#dateTypeToggle').is(':checked');
-                console.log('Form submitted, isHebrew:', isHebrew);
-                
-                let from, to;
-                if (isHebrew) {
-                    from = $('#from_he').attr('data-gregorian-date');
-                    to = $('#to_he').attr('data-gregorian-date');
-                    console.log('Hebrew dates:', from, to);
-                } else {
-                    from = $('#from').val();
-                    to = $('#to').val();
-                    console.log('English dates:', from, to);
-                }
-                    
-                if (!from || !to) {
-                    alert('Please select both dates');
-                    return false;
-                }
-
-                const fromDate = new Date(from);
-                const toDate = new Date(to);
-                if (toDate < fromDate) {
-                    alert('End date must be after or same as start date');
-                    return false;
-                }
-                
-                $('#from_hidden').val(from);
-                $('#to_hidden').val(to);
-                
-                console.log('Submitting with dates:', from, to);
-                this.submit();
-            });
-
-            // Handle date type toggle
-            $('#dateTypeToggle').on('change', function() {
-                console.log('Toggle changed:', this.checked);
-                if (this.checked) {
-                    $('.english-date').hide().prop('required', false).prop('disabled', true);
-                    $('.hebrew-date').show().prop('required', true).prop('disabled', false);
-                } else {
-                    $('.english-date').show().prop('required', true).prop('disabled', false);
-                    $('.hebrew-date').hide().prop('required', false).prop('disabled', true);
-                }
-            });
-
             // Initialize Hebrew date pickers with proper callbacks
             const fromDatepicker = new JewishDatepicker('#from_he', {
                 hideHeader: true,
@@ -386,12 +347,6 @@ if ($start && $end) {
             fixDatepickerPosition(fromDatepicker);
             fixDatepickerPosition(toDatepicker);
 
-            // If we have existing dates, populate the Hebrew fields and set initial dates
-            <?php if ($start && $end): ?>
-            // Convert existing dates to Hebrew and populate fields
-            const startDate = new Date('<?php echo $start; ?>');
-            const endDate = new Date('<?php echo $end; ?>');
-            
             // Function to set initial date in datepicker
             function setInitialDate(datepicker, targetDate, inputId) {
                 // Wait for the datepicker to be fully initialized
@@ -424,30 +379,116 @@ if ($start && $end) {
                     });
                 }, 1000); // Wait 1 second for initialization
             }
-            
-            // Fetch Hebrew dates for existing values and set initial dates
-            fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $start; ?>&g2h=1`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.hebrew) {
-                        $('#from_he').val(data.hebrew);
-                        $('#from_he').attr('data-gregorian-date', '<?php echo $start; ?>');
-                        // Set the initial date in the datepicker
-                        setInitialDate(fromDatepicker, '<?php echo $start; ?>', 'from_he');
-                    }
-                });
+
+            // Handle date type toggle
+            $('#dateTypeToggle').on('change', function() {
+                console.log('Toggle changed:', this.checked);
+                if (this.checked) {
+                    $('.english-date').hide().prop('required', false).prop('disabled', true);
+                    $('.hebrew-date').show().prop('required', true).prop('disabled', false);
+                } else {
+                    $('.english-date').show().prop('required', true).prop('disabled', false);
+                    $('.hebrew-date').hide().prop('required', false).prop('disabled', true);
+                }
+            });
+
+            // Check if Hebrew mode was used in previous submission and automatically enable it
+            const wasHebrewMode = $('#was_hebrew_mode').val() === '1';
+            if (wasHebrewMode) {
+                console.log('Hebrew mode was used previously, enabling Hebrew date mode');
+                // First populate Hebrew fields if we have existing dates
+                <?php if ($start && $end): ?>
+                // Fetch Hebrew dates for existing values and set initial dates
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $start; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.hebrew) {
+                            $('#from_he').val(data.hebrew);
+                            $('#from_he').attr('data-gregorian-date', '<?php echo $start; ?>');
+                            // Set the initial date in the datepicker
+                            setInitialDate(fromDatepicker, '<?php echo $start; ?>', 'from_he');
+                        }
+                    });
+                    
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $end; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.hebrew) {
+                            $('#to_he').val(data.hebrew);
+                            $('#to_he').attr('data-gregorian-date', '<?php echo $end; ?>');
+                            // Set the initial date in the datepicker
+                            setInitialDate(toDatepicker, '<?php echo $end; ?>', 'to_he');
+                        }
+                    }).then(() => {
+                        // After populating Hebrew fields, enable Hebrew mode
+                        $('#dateTypeToggle').prop('checked', true).trigger('change');
+                    });
+                <?php else: ?>
+                // No existing dates, just enable Hebrew mode
+                $('#dateTypeToggle').prop('checked', true).trigger('change');
+                <?php endif; ?>
+            } else {
+                // Hebrew mode wasn't used previously, but if we have existing dates, populate Hebrew fields for potential use
+                <?php if ($start && $end): ?>
+                // Fetch Hebrew dates for existing values (for potential future Hebrew mode use)
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $start; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.hebrew) {
+                            $('#from_he').val(data.hebrew);
+                            $('#from_he').attr('data-gregorian-date', '<?php echo $start; ?>');
+                        }
+                    });
+                    
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $end; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.hebrew) {
+                            $('#to_he').val(data.hebrew);
+                            $('#to_he').attr('data-gregorian-date', '<?php echo $end; ?>');
+                        }
+                    });
+                <?php endif; ?>
+            }
+
+            // Handle form submission
+            $('#dates_form').on('submit', function(e) {
+                e.preventDefault();
+                const isHebrew = $('#dateTypeToggle').is(':checked');
+                console.log('Form submitted, isHebrew:', isHebrew);
                 
-            fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $end; ?>&g2h=1`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.hebrew) {
-                        $('#to_he').val(data.hebrew);
-                        $('#to_he').attr('data-gregorian-date', '<?php echo $end; ?>');
-                        // Set the initial date in the datepicker
-                        setInitialDate(toDatepicker, '<?php echo $end; ?>', 'to_he');
-                    }
-                });
-            <?php endif; ?>
+                let from, to;
+                if (isHebrew) {
+                    from = $('#from_he').attr('data-gregorian-date');
+                    to = $('#to_he').attr('data-gregorian-date');
+                    console.log('Hebrew dates:', from, to);
+                } else {
+                    from = $('#from').val();
+                    to = $('#to').val();
+                    console.log('English dates:', from, to);
+                }
+                    
+                if (!from || !to) {
+                    alert('Please select both dates');
+                    return false;
+                }
+
+                const fromDate = new Date(from);
+                const toDate = new Date(to);
+                if (toDate < fromDate) {
+                    alert('End date must be after or same as start date');
+                    return false;
+                }
+                
+                $('#from_hidden').val(from);
+                $('#to_hidden').val(to);
+                
+                // Set the Hebrew mode flag based on current selection
+                $('#was_hebrew_mode').val(isHebrew ? '1' : '0');
+                
+                console.log('Submitting with dates:', from, to);
+                this.submit();
+            });
         });
     </script>
 
