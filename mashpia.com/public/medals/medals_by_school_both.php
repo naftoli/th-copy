@@ -402,8 +402,9 @@ if ($start && $end) {
                 fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $start; ?>&g2h=1`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.hebrew) {
-                            $('#from_he').val(data.hebrew);
+                        if (data.heDateParts) {
+                            const he_date = data.heDateParts.d + ' ' + data.heDateParts.m + ' ' + data.heDateParts.y;
+                            $('#from_he').val(he_date);
                             $('#from_he').attr('data-gregorian-date', '<?php echo $start; ?>');
                             // Set the initial date in the datepicker
                             setInitialDate(fromDatepicker, '<?php echo $start; ?>', 'from_he');
@@ -413,8 +414,9 @@ if ($start && $end) {
                 fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $end; ?>&g2h=1`)
                     .then(response => response.json())
                     .then(data => {
-                        if (data.hebrew) {
-                            $('#to_he').val(data.hebrew);
+                        if (data.heDateParts) {
+                            const he_date = data.heDateParts.d + ' ' + data.heDateParts.m + ' ' + data.heDateParts.y;
+                            $('#to_he').val(he_date);
                             $('#to_he').attr('data-gregorian-date', '<?php echo $end; ?>');
                             // Set the initial date in the datepicker
                             setInitialDate(toDatepicker, '<?php echo $end; ?>', 'to_he');
