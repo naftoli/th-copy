@@ -153,8 +153,18 @@ class PrizesRouter {
     }
 
     public function delete( $id ) {
+        global $current_user, $MASHPIA_DB;
+        $admin_id = $current_user->admin_id;
         $prize = \StorePrize::find([ $id ]);
+        if ( !$prize ) {
+            json_error( 'Prize not found.' );
+        }
+        // get all prize info for deleted_prizes table
+        $deleted_prize = $prize;
         if ( $prize->delete() ) {
+            // add to the deleted_prizes table
+            $stmtDeleted = $MASHPIA_DB->prepare( 'INSERT INTO deleted_prizes (admin_id, school_id, prize_id, prize_name, prize_points) VALUES (?, ?, ?, ?, ?)' );
+            $stmtDeleted->execute( [ $admin_id, $prize->institution_id, $id, $prize->prize_name, $prize->points ] );
             json_response( $id );
         }
         json_error( 'Error deleting prize.' );

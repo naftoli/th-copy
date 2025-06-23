@@ -133,7 +133,7 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
     public function jsonSerialize( $options = [] ) {
         $default_options = [
             'only' => [
-                'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 
+                'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 'points',
                 'one_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
             ],
             'include' => [ 'school' => [ 'only' => [ 'school_name', 'school_id', 'school_number' ] ] ],
