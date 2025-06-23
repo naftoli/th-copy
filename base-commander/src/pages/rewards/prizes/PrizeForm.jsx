@@ -144,9 +144,11 @@ export class PrizeForm extends Component {
           <div className='invalid-message'>Please enter between 10 and 500 characters</div>
         </Col>
 
-        <Col xs={ 12 } className='text-right' style={{ order: 3, marginTop: '10px' }}>
-          <Button color='danger' onClick={ onDelete }>Delete</Button>
-        </Col>
+        { prize.prize_id &&
+          <Col xs={ 12 } className='text-right' style={{ order: 3, marginTop: '10px' }}>
+            <Button color='danger' onClick={ onDelete }>Delete</Button>
+          </Col>
+        }
       </Row>
     );
   }
