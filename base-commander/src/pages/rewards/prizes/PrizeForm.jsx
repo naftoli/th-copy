@@ -33,7 +33,7 @@ export class PrizeForm extends Component {
   }
 
   render () {
-    let { login, onImageEdit, editing, templates, prize } = this.props;
+    let { login, onImageEdit, editing, templates, prize, onDelete } = this.props;
     let { 
       platoons = [], prize_name, prize_description, prize_count, points,
       one_per_user, is_active, teacher_edit, school, image
@@ -145,7 +145,7 @@ export class PrizeForm extends Component {
         </Col>
 
         <Col xs={ 12 } className='text-right' style={{ order: 3, marginTop: '10px' }}>
-          <Button color='danger' onClick={ this.props.onDelete }>Delete</Button>
+          <Button color='danger' onClick={ onDelete }>Delete</Button>
         </Col>
       </Row>
     );

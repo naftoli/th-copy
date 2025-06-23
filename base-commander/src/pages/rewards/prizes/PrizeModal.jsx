@@ -83,9 +83,15 @@ class PrizeModal extends Component {
   }
 
   onDelete = () => {
-    this.props.deletePrize( this.props.prize.prize_id );
-    this.props.toggle();
-    this.setState({ saving: false, updates: {} }) 
+    this.props.deletePrize( this.props.prize.prize_id )
+    .then( () => {
+      this.props.toggle();
+      this.setState({ saving: false, updates: {} }) 
+    })
+    .catch( e => {
+      this.setState({ saving: false } );
+      toast.error( e.message )
+    });
   }
 
   render() {
