@@ -157,7 +157,7 @@ class PrizesRouter {
         if ( $prize->delete() ) {
             json_response( $id );
         }
-        json_error( 'Error deleting prize' );
+        json_error( $prize->errors->full_messages() );
     }
 }
 
