@@ -29,6 +29,14 @@ export const updatePrize = ( id, updates ) => dispatch => {
   });
 }
 
+export const deletePrize = ( id ) => dispatch => {
+  return API.post( `/rewards/prizes?action=delete&id=${id}` )
+  .then( deleted_id => { 
+    dispatch( actions.deletePrize( deleted_id ) ); 
+    return deleted_id;
+  });
+}
+
 /********************** PRIZE TEMPLATES **********************/
 
 export const getTemplates = () => dispatch => {

@@ -82,6 +82,12 @@ class PrizeModal extends Component {
     });
   }
 
+  onDelete = () => {
+    this.props.deletePrize( this.props.prize.prize_id );
+    this.props.toggle();
+    this.setState({ saving: false, updates: {} }) 
+  }
+
   render() {
     let { updates, saving } = this.state;
     let { prize, login, toggle, isOpen, templates, isTemplate } = this.props;
@@ -111,6 +117,7 @@ class PrizeModal extends Component {
           editing={ editing }
           templates={ templates }
           onUpdate={ this.onUpdate }
+          onDelete={ this.onDelete }
           onImageEdit={ this.onImageEdit } />;
     }
 

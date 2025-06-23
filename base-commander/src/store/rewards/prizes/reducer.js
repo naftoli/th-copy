@@ -62,6 +62,12 @@ export default ( state = initialState, action ) => {
         }),
       };
 
+    case types.DELETE_PRIZE:
+      return { 
+        ...state, 
+        prizes: state.prizes.filter( prize => prize.prize_id !== action.payload )
+      };
+
     case types.UPDATE_TEMPLATE:
       return { 
         ...state, 

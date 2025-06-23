@@ -28,6 +28,13 @@ export const updatePrize = ( id, prize ) => {
   }
 };
 
+export const deletePrize = id => {
+  return {
+    type: types.DELETE_PRIZE,
+    payload: id
+  }
+};
+
 export const setTemplates = templates => {
   return {
     type: types.SET_TEMPLATES,

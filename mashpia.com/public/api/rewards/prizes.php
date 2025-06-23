@@ -151,6 +151,14 @@ class PrizesRouter {
             'school_store' => $school->school_store
         ]);
     }
+
+    public function delete( $id ) {
+        $prize = \StorePrize::find([ $id ]);
+        if ( $prize->delete() ) {
+            json_response( $id );
+        }
+        json_error( 'Error deleting prize' );
+    }
 }
 
 rest_router( new PrizesRouter );

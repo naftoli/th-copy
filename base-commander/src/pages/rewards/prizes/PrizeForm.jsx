@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // components
 import { StorePrize } from 'components/ui';
-import { Row, Col, Input, UncontrolledTooltip } from 'reactstrap';
+import { Row, Col, Input, UncontrolledTooltip, Button } from 'reactstrap';
 import { PlatoonSelect, Toggle, Creatable } from 'components/inputs';
 // functions
 import { onInputChange } from 'functions/events';
@@ -142,6 +142,10 @@ export class PrizeForm extends Component {
             value={ prize_description || '' }
             pattern='^.{10,500}$' title="10 to 500 characters" maxLength={ 500 } />
           <div className='invalid-message'>Please enter between 10 and 500 characters</div>
+        </Col>
+
+        <Col xs={ 12 }>
+          <Button color='danger' onClick={ this.props.onDelete }>Delete</Button>
         </Col>
       </Row>
     );

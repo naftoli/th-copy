@@ -14,7 +14,7 @@ import { setTitle, canDownload } from 'functions/utils';
 // state
 import { 
   getPrizes, updatePrize, uploadImage,
-  getTemplates, createPrize, setStoreOpen
+  getTemplates, createPrize, setStoreOpen, deletePrize
 } from 'store/rewards/prizes/operations';
 // styles
 import './include/prizes.scss';
@@ -190,7 +190,7 @@ class PrizesPage extends Component {
           loading={ loading.prizes && !prizes.length } 
           pageId='PrizesPage' />
 
-        <PrizeModal
+        <PrizeModal 
           login={ login }
           prize={ prizeModal.prize }
           isOpen={ prizeModal.show }
@@ -198,6 +198,7 @@ class PrizesPage extends Component {
           templates={ templates }
           editPicture={ editPicture }
           updatePrize={ updatePrize }
+          deletePrize={ deletePrize }
           createPrize={ createPrize } />
 
         <CropperModal 
@@ -221,7 +222,7 @@ const mapStateToProps = ({ rewards, login }) => {
 };
 
 const mapDispatchToProps = {
-  getPrizes, updatePrize, createPrize,
+  getPrizes, updatePrize, createPrize, deletePrize,
   getTemplates, uploadImage, setStoreOpen
 };
 
