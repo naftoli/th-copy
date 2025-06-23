@@ -15,9 +15,17 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 // Get selected dates from form
 $start = null;
 $end = null;
+$wasHebrewMode = false; // Track if Hebrew mode was used
 if (isset($_POST['from_hidden']) && isset($_POST['to_hidden'])) {
     $start = $_POST['from_hidden'];
     $end = $_POST['to_hidden'];
+    
+    // Check if Hebrew dates were used in the previous submission
+    // We can detect this by checking if the Hebrew date fields have values
+    // and if the hidden was_hebrew_mode field is set to '1'
+    if (isset($_POST['was_hebrew_mode']) && $_POST['was_hebrew_mode'] === '1') {
+        $wasHebrewMode = true;
+    }
 }
 // } else {
 //     // default to last 30 days
@@ -222,6 +230,7 @@ if ($start && $end) {
                     <button type="submit" class="btn btn-primary">Generate Report</button>
                     <input type="hidden" id="from_hidden" name="from_hidden">
                     <input type="hidden" id="to_hidden" name="to_hidden">
+                    <input type="hidden" id="was_hebrew_mode" name="was_hebrew_mode" value="<?php echo $wasHebrewMode ? '1' : '0'; ?>">
                     <?php if ($start && $end): ?>
                     <button type="button" class="btn btn-primary ms-2" onClick="downloadCSV()">Download CSV</button>
                     <?php endif; ?>
@@ -236,6 +245,214 @@ if ($start && $end) {
         $(document).ready(function() {
             console.log('Document ready');
             
+            // Initialize Hebrew date pickers with proper callbacks
+            const fromDatepicker = new JewishDatepicker('#from_he', {
+                hideHeader: true,
+                color: '#0d6efd',
+                onSelect: function(date, hebrewDate) {
+                    console.log('From date selected:', date, hebrewDate);
+                    $('#from_he').val(hebrewDate);
+                    $('#from_he').attr('data-gregorian-date', date);
+                }
+            });
+            
+            const toDatepicker = new JewishDatepicker('#to_he', {
+                hideHeader: true,
+                color: '#0d6efd',
+                onSelect: function(date, hebrewDate) {
+                    console.log('To date selected:', date, hebrewDate);
+                    $('#to_he').val(hebrewDate);
+                    $('#to_he').attr('data-gregorian-date', date);
+                }
+            });
+
+            // Override the positioning method to fix positioning issues
+            function fixDatepickerPosition(datepicker) {
+                const originalSetPosition = datepicker.setPostion;
+                datepicker.setPostion = function() {
+                    const wrapper = this.wrapper;
+                    const input = this.element;
+                    
+                    // Force the wrapper to be positioned correctly
+                    wrapper.style.position = 'fixed';
+                    wrapper.style.zIndex = '99999';
+                    
+                    // Get the input's position relative to the viewport
+                    const rect = input.getBoundingClientRect();
+                    
+                    // Calculate positions
+                    let left = rect.left;
+                    let top = rect.bottom + 5; // 5px gap below input
+                    
+                    // Get wrapper dimensions (force a reflow to get accurate dimensions)
+                    wrapper.style.visibility = 'hidden';
+                    wrapper.style.display = 'block';
+                    const wrapperWidth = wrapper.offsetWidth;
+                    const wrapperHeight = wrapper.offsetHeight;
+                    wrapper.style.visibility = 'visible';
+                    
+                    // Check if it would go off the right edge
+                    if (left + wrapperWidth > window.innerWidth) {
+                        left = window.innerWidth - wrapperWidth - 10;
+                    }
+                    
+                    // Check if it would go off the bottom edge
+                    if (top + wrapperHeight > window.innerHeight) {
+                        // Position above the input instead
+                        top = rect.top - wrapperHeight - 5;
+                    }
+                    
+                    // Ensure it doesn't go off the left edge
+                    if (left < 10) {
+                        left = 10;
+                    }
+                    
+                    // Ensure it doesn't go off the top edge
+                    if (top < 10) {
+                        top = 10;
+                    }
+                    
+                    // Apply the positioning with !important to override CSS
+                    wrapper.style.setProperty('left', left + 'px', 'important');
+                    wrapper.style.setProperty('top', top + 'px', 'important');
+                    wrapper.style.setProperty('position', 'fixed', 'important');
+                    wrapper.style.setProperty('z-index', '99999', 'important');
+                    
+                    console.log('Datepicker positioned at:', left, top, 'for input:', input.id);
+                };
+                
+                // Override the show/hide methods to ensure proper positioning
+                const originalShow = datepicker.wrapper.classList.remove.bind(datepicker.wrapper.classList, 'off');
+                const originalHide = datepicker.wrapper.classList.add.bind(datepicker.wrapper.classList, 'off');
+                
+                // Override the click handler to ensure positioning is called
+                const input = datepicker.element;
+                input.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    // Remove off class to show
+                    datepicker.wrapper.classList.remove('off');
+                    // Force positioning
+                    setTimeout(() => datepicker.setPostion(), 10);
+                });
+                
+                // Re-bind the resize event
+                window.addEventListener('resize', () => {
+                    if (!datepicker.wrapper.classList.contains('off')) {
+                        datepicker.setPostion();
+                    }
+                });
+            }
+            
+            // Apply the positioning fix to both datepickers
+            fixDatepickerPosition(fromDatepicker);
+            fixDatepickerPosition(toDatepicker);
+
+            // Function to set initial date in datepicker
+            function setInitialDate(datepicker, targetDate, inputId) {
+                // Wait for the datepicker to be fully initialized
+                setTimeout(() => {
+                    const wrapper = datepicker.wrapper;
+                    const dayElements = wrapper.querySelectorAll('.jewish_datepicker_month_day');
+                    
+                    dayElements.forEach(dayElement => {
+                        const fullDate = dayElement.getAttribute('data-full');
+                        if (fullDate) {
+                            // Convert DD-MM-YYYY to YYYY-MM-DD for comparison
+                            const parts = fullDate.split('-');
+                            const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+                            
+                            if (formattedDate === targetDate) {
+                                // Remove any existing selections
+                                dayElements.forEach(el => el.classList.remove('select'));
+                                // Select this day
+                                dayElement.classList.add('select');
+                                
+                                // Update the header display
+                                const jDate = wrapper.querySelector('.j_date');
+                                const gDate = wrapper.querySelector('.g_date');
+                                if (jDate && gDate) {
+                                    jDate.innerHTML = dayElement.getAttribute('data-h-full');
+                                    gDate.innerHTML = dayElement.getAttribute('data-full').replaceAll('-', '.');
+                                }
+                            }
+                        }
+                    });
+                }, 1000); // Wait 1 second for initialization
+            }
+
+            // Handle date type toggle
+            $('#dateTypeToggle').on('change', function() {
+                console.log('Toggle changed:', this.checked);
+                if (this.checked) {
+                    $('.english-date').hide().prop('required', false).prop('disabled', true);
+                    $('.hebrew-date').show().prop('required', true).prop('disabled', false);
+                } else {
+                    $('.english-date').show().prop('required', true).prop('disabled', false);
+                    $('.hebrew-date').hide().prop('required', false).prop('disabled', true);
+                }
+            });
+
+            // Check if Hebrew mode was used in previous submission and automatically enable it
+            const wasHebrewMode = $('#was_hebrew_mode').val() === '1';
+            if (wasHebrewMode) {
+                console.log('Hebrew mode was used previously, enabling Hebrew date mode');
+                // First populate Hebrew fields if we have existing dates
+                <?php if ($start && $end): ?>
+                // Fetch Hebrew dates for existing values and set initial dates
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $start; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.heDateParts) {
+                            const he_date = data.heDateParts.d + ' ' + data.heDateParts.m + ' ' + data.heDateParts.y;
+                            $('#from_he').val(he_date);
+                            $('#from_he').attr('data-gregorian-date', '<?php echo $start; ?>');
+                            // Set the initial date in the datepicker
+                            setInitialDate(fromDatepicker, '<?php echo $start; ?>', 'from_he');
+                        }
+                    });
+                    
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $end; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.heDateParts) {
+                            const he_date = data.heDateParts.d + ' ' + data.heDateParts.m + ' ' + data.heDateParts.y;
+                            $('#to_he').val(he_date);
+                            $('#to_he').attr('data-gregorian-date', '<?php echo $end; ?>');
+                            // Set the initial date in the datepicker
+                            setInitialDate(toDatepicker, '<?php echo $end; ?>', 'to_he');
+                        }
+                    }).then(() => {
+                        // After populating Hebrew fields, enable Hebrew mode
+                        $('#dateTypeToggle').prop('checked', true).trigger('change');
+                    });
+                <?php else: ?>
+                // No existing dates, just enable Hebrew mode
+                $('#dateTypeToggle').prop('checked', true).trigger('change');
+                <?php endif; ?>
+            } else {
+                // Hebrew mode wasn't used previously, but if we have existing dates, populate Hebrew fields for potential use
+                <?php if ($start && $end): ?>
+                // Fetch Hebrew dates for existing values (for potential future Hebrew mode use)
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $start; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.hebrew) {
+                            $('#from_he').val(data.hebrew);
+                            $('#from_he').attr('data-gregorian-date', '<?php echo $start; ?>');
+                        }
+                    });
+                    
+                fetch(`https://www.hebcal.com/converter?cfg=json&date=<?php echo $end; ?>&g2h=1`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.hebrew) {
+                            $('#to_he').val(data.hebrew);
+                            $('#to_he').attr('data-gregorian-date', '<?php echo $end; ?>');
+                        }
+                    });
+                <?php endif; ?>
+            }
+
             // Handle form submission
             $('#dates_form').on('submit', function(e) {
                 e.preventDefault();
@@ -268,30 +485,11 @@ if ($start && $end) {
                 $('#from_hidden').val(from);
                 $('#to_hidden').val(to);
                 
+                // Set the Hebrew mode flag based on current selection
+                $('#was_hebrew_mode').val(isHebrew ? '1' : '0');
+                
                 console.log('Submitting with dates:', from, to);
                 this.submit();
-            });
-
-            // Handle date type toggle
-            $('#dateTypeToggle').on('change', function() {
-                console.log('Toggle changed:', this.checked);
-                if (this.checked) {
-                    $('.english-date').hide().prop('required', false).prop('disabled', true);
-                    $('.hebrew-date').show().prop('required', true).prop('disabled', false);
-                } else {
-                    $('.english-date').show().prop('required', true).prop('disabled', false);
-                    $('.hebrew-date').hide().prop('required', false).prop('disabled', true);
-                }
-            });
-
-            // Initialize Hebrew date pickers
-            const fromDatepicker = new JewishDatepicker('#from_he', {
-                hideHeader: true,
-                color: '#0d6efd'
-            });
-            const toDatepicker = new JewishDatepicker('#to_he', {
-                hideHeader: true,
-                color: '#0d6efd'
             });
         });
     </script>
