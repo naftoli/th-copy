@@ -125,7 +125,7 @@ class PrizesPage extends Component {
     const { editPrize, editPicture, updateToggle } = this;
     const { 
       prizes, loading, login, templates, 
-      school_store, updatePrize, createPrize 
+      school_store, updatePrize, createPrize, deletePrize
     } = this.props;
 
     let columns = getColumns({
