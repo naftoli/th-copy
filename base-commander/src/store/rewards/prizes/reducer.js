@@ -63,9 +63,13 @@ export default ( state = initialState, action ) => {
       };
 
     case types.DELETE_PRIZE:
+      console.log('Reducer: Deleting prize with ID:', action.payload);
+      console.log('Current prizes count:', state.prizes.length);
+      const filteredPrizes = state.prizes.filter( prize => prize.prize_id !== action.payload );
+      console.log('Filtered prizes count:', filteredPrizes.length);
       return { 
         ...state, 
-        prizes: state.prizes.filter( prize => prize.prize_id !== action.payload )
+        prizes: filteredPrizes
       };
 
     case types.UPDATE_TEMPLATE:

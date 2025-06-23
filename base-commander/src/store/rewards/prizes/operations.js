@@ -30,10 +30,16 @@ export const updatePrize = ( id, updates ) => dispatch => {
 }
 
 export const deletePrize = ( id ) => dispatch => {
+  console.log('Deleting prize with ID:', id);
   return API.post( `/rewards/prizes?action=delete&id=${id}` )
   .then( deleted_id => { 
+    console.log('Prize deleted successfully, ID:', deleted_id);
     dispatch( actions.deletePrize( deleted_id ) ); 
     return deleted_id;
+  })
+  .catch( error => {
+    console.error('Error deleting prize:', error);
+    throw error;
   });
 }
 
