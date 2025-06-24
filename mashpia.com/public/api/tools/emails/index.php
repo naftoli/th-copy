@@ -51,7 +51,7 @@ class MashpiaEmails {
             ."Darchei Hachassidus will come alive in your home as managing your kids’ Chayolei Tzivos Hashem accounts becomes easier than ever. Help your young soldier reach the greatest heights in Hashem’s army. "
             ."<br /><br />"
             ."Your Username is: $username <br />"
-            ."Your Default Password is: $password <br />"
+            // ."Your Default Password is: $password <br />"
             ."<br />"
             ."To change your username/password simply log into your account on https://TzivosHashem.com/mobile and click 'edit profile' on the top right hand corner. "
             ."<br /><br />"
