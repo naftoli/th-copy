@@ -1,6 +1,7 @@
 <?
 chdir('../../../');
 require 'db.php';
+require_once '../includes/globals.php';
 
 $father = mysql_real_escape_string( $_POST['father'] );
 $mother = mysql_real_escape_string( $_POST['mother'] );
@@ -60,7 +61,7 @@ $info = array(
 	'admin_phone_mobile2' => $phone2,
 	'admin_email'		=>	$email, 
 	'username'			=>	$username, 
-	'password'			=>	$pwd,
+	'password'			=>	encryptPassword($pwd, ENCRYPTION_KEY),
 	'hashed_pass'		=>	password_hash($pwd, PASSWORD_DEFAULT), 
 	'father'			=>	$father, 
 	'mother'			=>	$mother, 
