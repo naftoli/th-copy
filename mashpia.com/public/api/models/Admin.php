@@ -1,4 +1,5 @@
 <?php
+include_once( __DIR__ . '/../../includes/globals.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/../auth/classes/Login.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
@@ -101,6 +102,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         // If password is set but hashed_pass is not, hash the password
         if (isset($this->password) && !empty($this->password) && (!isset($this->hashed_pass) || empty($this->hashed_pass))) {
             $this->hashed_pass = password_hash($this->password, PASSWORD_DEFAULT);
+            $this->password = encryptPassword($this->password, ENCRYPTION_KEY);
         }
         return true;
     }
@@ -112,7 +114,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * @return void
      */
     public function set_password($password) {
-        $this->assign_attribute('password', $password);
+        $this->assign_attribute('password', encryptPassword($password, ENCRYPTION_KEY));
         if (!empty($password)) {
             $this->assign_attribute('hashed_pass', password_hash($password, PASSWORD_DEFAULT));
         }
@@ -126,6 +128,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         // If password is being updated, hash it
         if ($this->attribute_is_dirty('password') && isset($this->password) && !empty($this->password)) {
             $this->hashed_pass = password_hash($this->password, PASSWORD_DEFAULT);
+            $this->password = encryptPassword($this->password, ENCRYPTION_KEY);
         }
         return true;
     }
