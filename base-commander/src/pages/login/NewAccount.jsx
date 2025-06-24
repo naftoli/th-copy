@@ -113,6 +113,8 @@ class NewAccount extends Component {
         if ( data === 1 ) {
           alert("This email address is already being used. Please choose a different one.");
           this.setState({ account: { ...this.state.account, admin_email: '' } })
+          e.target.focus();
+          e.target.select();
         }
       })
       .catch( error => {
