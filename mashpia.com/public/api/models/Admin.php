@@ -118,6 +118,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         if (!empty($password)) {
             $this->assign_attribute('hashed_pass', password_hash($password, PASSWORD_DEFAULT));
         }
+        echo 'Password: ' . $this->password . ' Hashed: ' . $this->hashed_pass . '<br>';
     }
 
     /**
