@@ -66,9 +66,23 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      */
     public function handleChanges() {
         // if email was changed
-        if ( $this->attribute_is_dirty('admin_email') ){}
+        if ( $this->attribute_is_dirty('admin_email') ){
+            // check if the email is already in use
+            $existing_admin = Admin::find('first', array('conditions' => array('admin_email = ?', $this->admin_email)));
+            if ( $existing_admin ) {
+                $this->errors->add('admin_email', 'This email address is already being used, please choose a different email address');
+                return false;
+            }
+        }
         // if username or password was changed
-        else if ( $this->attribute_is_dirty('username') || $this->attribute_is_dirty('password') || $this->attribute_is_dirty('hashed_pass') ) {}
+        else if ( $this->attribute_is_dirty('username') ) {
+            // check if the username is already in use
+            $existing_admin = Admin::find('first', array('conditions' => array('username = ?', $this->username)));
+            if ( $existing_admin ) {
+                $this->errors->add('username', 'This username is already being used, please choose a different username');
+                return false;
+            }
+        }
         // all's good, return true to allow update
         return true;
     }
@@ -113,12 +127,12 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      * @param string $password The plain text password
      * @return void
      */
-    public function set_password($password) {
-        $this->assign_attribute('password', encryptPassword($password, ENCRYPTION_KEY));
-        if (!empty($password)) {
-            $this->assign_attribute('hashed_pass', password_hash($password, PASSWORD_DEFAULT));
-        }
-    }
+    // public function set_password($password) {
+    //     $this->assign_attribute('password', encryptPassword($password, ENCRYPTION_KEY));
+    //     if (!empty($password)) {
+    //         $this->assign_attribute('hashed_pass', password_hash($password, PASSWORD_DEFAULT));
+    //     }
+    // }
 
     /**
      * Hash the password if it has been changed during an update
