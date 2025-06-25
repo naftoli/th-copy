@@ -18,7 +18,7 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     use \traits\BuildModel;
     
     static $before_create = ['hashPassword', 'createHelpdeskAccount'];
-    static $before_update = ['handleChanges', 'hashPasswordIfChanged'];
+    static $before_update = ['hashPasswordIfChanged'];
     // relationships 
     static $has_many = [ [ 'admin_auths' ] ];
     // validations
@@ -115,8 +115,9 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
     public function hashPassword() {
         // If password is set but hashed_pass is not, hash the password
         if (isset($this->password) && !empty($this->password) && (!isset($this->hashed_pass) || empty($this->hashed_pass))) {
-            $this->hashed_pass = password_hash($this->password, PASSWORD_DEFAULT);
-            $this->password = encryptPassword($this->password, ENCRYPTION_KEY);
+            $pass = $this->password;
+            $this->hashed_pass = password_hash($pass, PASSWORD_DEFAULT);
+            $this->password = encryptPassword($pass, ENCRYPTION_KEY);
         }
         return true;
     }
