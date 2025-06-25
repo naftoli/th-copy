@@ -26,20 +26,20 @@ class MashpiaEmails {
         $message .= '<p>Best Regards,</p>'
         .'<p>Chayolei Tzivos Hashem.</p>';
         $message .= self::$footer;
-
-        return self::sendEmail( 'cth@mashpia.com', $email, $subject, $message );
+        
+        return self::sendEmail( 'cth@mashpia.org', $email, $subject, $message );
     }
 
     public static function passwordChanged( $to, $name ) {
         $subject = 'Your Password has been changed.';
         $email = self::load('templates/passwordChanged.html');
-        return self::sendEmail( 'cth@tzivoshashem.com', $to, $subject, $email );
+        return self::sendEmail( 'cth@tzivoshashem.org', $to, $subject, $email );
     }
 
     public static function newBC( $to, $base, $name, $username, $password ) {
         $subject = 'Your new Base Commander Account.';
         $email = self::load('templates/newBC.html');
-        return self::sendEmail( 'cth@tzivoshashem.com', $to, $subject, $email );
+        return self::sendEmail( 'cth@tzivoshashem.org', $to, $subject, $email );
     }
 
     public static function sendParentEmail( $to, $username, $password ) {
