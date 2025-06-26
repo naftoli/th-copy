@@ -1,4 +1,5 @@
-<?
+<?php
+require_once '../includes/globals.php';
 $admin_auth = array('school'); 
 require('header.php');
 require 'PHPExcel/IOFactory.php';
@@ -155,7 +156,8 @@ if ( isset( $_FILES['file'] ) ) {
                     first = '$first', 
                     last = '$last', 
                     username = '$user', 
-                    password = 'parent', 
+                    hashed_pass = password_hash('parent', PASSWORD_DEFAULT), 
+                    password = encryptPassword('parent', ENCRYPTION_KEY),
                     admin_address1 = '$address', 
                     admin_city = '$city', 
                     admin_state = '$state', 
@@ -181,8 +183,8 @@ if ( isset( $_FILES['file'] ) ) {
 You have a new account that has been setup on mashpia.com.
 
 Your account details are as follows:
-Username: $user
-Password: parent
+Username: '$user'
+Password: 'parent'
 
 To login go to mashpia.com and enter username / password.
 
