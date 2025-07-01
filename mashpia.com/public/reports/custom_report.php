@@ -40,7 +40,7 @@ foreach ($schools as $school_id => $school_name) {
                 align-items: center;
                 justify-content: center;
             }
-            .pic {
+            .pic img {
                 width: 50px;
             }
             .name {
