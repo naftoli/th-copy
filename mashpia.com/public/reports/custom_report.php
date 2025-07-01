@@ -52,7 +52,7 @@ foreach ($schools as $school_id => $school_name) {
             img {
                 width: 100px;
                 border-radius: 5px;
-                margin: 0 auto;
+                margin: 5px;
             }
         </style>
     </head>
