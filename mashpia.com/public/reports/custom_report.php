@@ -31,6 +31,10 @@ foreach ($schools as $school_id => $school_name) {
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <title>Picture Report</title>
+        <style>
+            img {
+                max-width: 50px;
+            }
     </head>
     <body>
         <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
