@@ -85,6 +85,7 @@ foreach ($schools as $school_id => $school_name) {
                 <?php
                 foreach ($info as $school_id => $students) { 
                     echo "<h3>{$schools[$school_id]}</h3>";
+                    echo "<div class='students'>";
                     foreach ($students as $student) {
                         if ($lang == 'en') $name = $student['first'] . ' ' . $student['last'];
                         else if ($lang == 'he') $name = $student['first_he'] . ' ' . $student['last_he'];
@@ -104,8 +105,8 @@ foreach ($schools as $school_id => $school_name) {
                         </div>
                         <?php 
                     }
+                    echo "</div><div style='clear: both;'></div><br /><br />";
                 }
-                echo "<div style='clear: both;'></div><br /><br />";
             }
             ?>
         </div>
