@@ -23,6 +23,8 @@ foreach ($schools as $school_id => $school_name) {
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $info[$school_id] = $students;
 }
+$picture_size = 100;
+if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
 ?>
 <DOCTYPE html>
 <html>
@@ -33,7 +35,7 @@ foreach ($schools as $school_id => $school_name) {
         <title>Picture Report</title>
         <style>
             .student {
-                width: 120px;
+                width: <?php echo $picture_size + 20; ?>px;
                 padding: 5px;
                 float: left;
                 text-align: center;
@@ -51,8 +53,8 @@ foreach ($schools as $school_id => $school_name) {
                 text-align: center;
             }
             img {
-                max-width: 100px;
-                max-height: 100px;
+                max-width: <?php echo $picture_size; ?>px;
+                max-height: <?php echo $picture_size; ?>px;
                 border-radius: 5px;
                 margin: 5px;
             }
@@ -81,6 +83,8 @@ foreach ($schools as $school_id => $school_name) {
             </p>
         </form>
         <div id="report">
+            <button onclick="window.print()">Print</button>
+            <button onclick="downloadAsCSV()">Download as CSV</button>
             <?php
             if (isset($_POST['submit'])) {
                 $lang = $_POST['lang'];
@@ -101,7 +105,7 @@ foreach ($schools as $school_id => $school_name) {
                         ?>
                         <div class='student'>
                             <div class='pic'>
-                            <?php if ($picture) echo "<img src='{$pic}' alt='{$name}' height: {$picture_size}px;'>"; ?>
+                            <?php if ($picture) echo "<img src='{$pic}' alt='{$name}'>"; ?>
                             </div>
                             <div class='name'>
                                 <?php echo $name; ?>
@@ -118,4 +122,23 @@ foreach ($schools as $school_id => $school_name) {
             ?>
         </div>
     </body>
+    <script>
+        function downloadAsCSV() {
+            var csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Name,Grade,Picture\n";
+            var rows = document.querySelectorAll("#report .student");
+            rows.forEach(function(row) {
+                var name = row.querySelector(".name").textContent;
+                var grade = row.querySelector(".grade").textContent;
+                var picture = row.querySelector(".pic img").src;
+                csvContent += `"${name}","${grade}","${picture}"\n`;
+            });
+            var encodedUri = encodeURI(csvContent);
+            var link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "report.csv");
+            document.body.appendChild(link);
+            link.click();
+        }
+    </script>
 </html>
