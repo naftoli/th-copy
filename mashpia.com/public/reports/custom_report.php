@@ -33,7 +33,7 @@ foreach ($schools as $school_id => $school_name) {
         <title>Picture Report</title>
         <style>
             .student {
-                width: 75px;
+                width: 120px;
                 padding: 5px;
                 float: left;
                 text-align: center;
@@ -50,7 +50,7 @@ foreach ($schools as $school_id => $school_name) {
                 text-align: center;
             }
             img {
-                width: 65px;
+                width: 100px;
                 border-radius: 5px;
                 margin: 0 auto;
             }
