@@ -26,7 +26,7 @@ foreach ($schools as $school_id => $school_name) {
 $picture_size = 100;
 if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
 
-$student_height = $picture_size + 55;
+$student_height = $picture_size + 60;
 if (isset($_POST['grade'])) $student_height += 10;
 if (isset($_POST['add_space'])) $student_height += 30; // for adding stuff to the bottom
 ?>
