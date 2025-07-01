@@ -28,6 +28,8 @@ $lang = $_POST['lang'] ?? 'en';
 $grade = $_POST['grade'] ?? false;
 $picture = $_POST['picture'] ?? false;
 $picture_size = $_POST['picture_size'] ?? 100;
+$reg = $_POST['reg'] ?? 'all';
+$add_space = $_POST['add_space'] ?? false;
 
 $student_height = $picture_size + 60;
 if (isset($_POST['grade'])) $student_height += 10;
@@ -86,22 +88,36 @@ if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to th
                 Please choose which fields you would like to include in the report:
             </p>
             <p>
-                <input type="radio" name="reg" value="all" checked> All students (including unregistered)<br />
-                <input type="radio" name="reg" value="reg_only"> Only registered students<br />
-                <input type="radio" name="lang" value="en" checked> English Name<br />
-                <input type="radio" name="lang" value="he"> Hebrew Name<br />
-                <input type="checkbox" name="grade" value="grade" checked> Grade<br />
-                <input type="checkbox" name="picture" value="picture" checked> Picture 
+                <input type="radio" name="reg" value="all"
+                <?php if ($reg == 'all') echo 'checked'; ?>
+                > All students (including unregistered)<br />
+                <input type="radio" name="reg" value="reg_only"
+                <?php if ($reg == 'reg_only') echo 'checked'; ?>
+                > Only registered students<br />
+                <input type="radio" name="lang" value="en"
+                <?php if ($lang == 'en') echo 'checked'; ?>
+                > English Name<br />
+                <input type="radio" name="lang" value="he"
+                <?php if ($lang == 'he') echo 'checked'; ?>
+                > Hebrew Name<br />
+                <input type="checkbox" name="grade" value="grade"
+                <?php if ($grade) echo 'checked'; ?>
+                > Grade<br />
+                <input type="checkbox" name="picture" value="picture"
+                <?php if ($picture) echo 'checked'; ?>
+                > Picture 
                 <select name="picture_size">
                     <option value="100">Small (100px)</option>
                     <option value="150">Medium (150px)</option>
                     <option value="200">Large (200px)</option>
                     <option value="250">Extra Large (250px)</option>
                 </select><br />
-                <input type="checkbox" name="add_space" value="add_space" /> Add extra space under each student
+                <input type="checkbox" name="add_space" value="add_space"
+                <?php if ($add_space) echo 'checked'; ?>
+                /> Add extra space under each student
             </p>
             <p>
-                <input type="submit" name="submit" value="Generate Report">
+                <input type="submit" name="submit" value="Generate Report" style="padding: 10px;" />
             </p>
         </form>
         <div id="report">
