@@ -14,7 +14,7 @@ $info = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT * FROM `users` u  
     JOIN `classes` c ON u.class_id = c.class_id 
-    WHERE `school_id` = :school_id 
+    WHERE u.`school_id` = :school_id 
 ");
 foreach ($schools as $school_id => $school_name) {
     $stmt->execute([
@@ -23,6 +23,10 @@ foreach ($schools as $school_id => $school_name) {
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $info[$school_id] = $students;
 }
+echo "<pre>";
+print_r($info);
+echo "</pre>";
+exit;
 ?>
 <DOCTYPE html>
 <html>
