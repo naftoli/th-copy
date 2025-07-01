@@ -182,7 +182,7 @@ Medal.prototype.render = function () {
         (this.daily ? "daily" : this.weekly ? "weekly" : "monthly") + ' missions earned</p>';
     html += '</div>';
     html += "<p class='cornerLabel' " + style + "> Don't miss a " + (this.daily ? "day" : this.weekly ? "week" : "month") + "<br/> to earn your "
-    html += '<span><img class="medal-img" src="http://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
+    html += '<span><img class="medal-img" src="https://mashpia.com/file_view.php?id=' + this.nextMedalImg + '"/></span>'
     html += " medal by " + this.nextMedalDate + "</p>";
     html += '</div>';
     html += '<div class="medals-list">';

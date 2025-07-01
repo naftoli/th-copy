@@ -52,7 +52,7 @@ function calculateNextDate($subject, $needed) {
 function getImgBack($subject_id, $medal) {
     $medal_name = strtolower($medal);
     if ($medal_name == 'gray') $medal_name = 'grey';
-    $img = "http://mashpia.com/mobile/reg/";
+    $img = "https://mashpia.com/mobile/reg/";
     if ( in_array( $subject_id, [ 1, 12, 15, 93 ] ) )
         $img .= 'images/backs/wwtc/'.$medal_name.'.png';
     // 585 total missions
