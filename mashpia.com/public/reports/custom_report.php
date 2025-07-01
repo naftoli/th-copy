@@ -107,10 +107,10 @@ if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to th
                 <?php if ($picture) echo 'checked'; ?>
                 > Picture 
                 <select name="picture_size">
-                    <option value="100">Small (100px)</option>
-                    <option value="150">Medium (150px)</option>
-                    <option value="200">Large (200px)</option>
-                    <option value="250">Extra Large (250px)</option>
+                    <option value="100" <?php if ($picture_size == 100) echo 'selected'; ?>>Small (100px)</option>
+                    <option value="150" <?php if ($picture_size == 150) echo 'selected'; ?>>Medium (150px)</option>
+                    <option value="200" <?php if ($picture_size == 200) echo 'selected'; ?>>Large (200px)</option>
+                    <option value="250" <?php if ($picture_size == 250) echo 'selected'; ?>>Extra Large (250px)</option>
                 </select><br />
                 <input type="checkbox" name="add_space" value="add_space"
                 <?php if ($add_space) echo 'checked'; ?>
