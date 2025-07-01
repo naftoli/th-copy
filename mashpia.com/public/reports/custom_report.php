@@ -99,7 +99,7 @@ foreach ($schools as $school_id => $school_name) {
                                 <?php echo $name; ?>
                             </div>
                             <div class='grade'>
-                                <?php echo $student['class_grade'] . ($student['class_sub'] ? '-' . $student['class_sub'] : ''); ?>
+                                <?php if ($grade) echo $student['class_grade'] . ($student['class_sub'] ? '-' . $student['class_sub'] : ''); ?>
                             </div>
                         </div>
                         <?php 
