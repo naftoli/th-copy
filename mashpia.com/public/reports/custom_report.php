@@ -33,12 +33,13 @@ foreach ($schools as $school_id => $school_name) {
         <title>Picture Report</title>
         <style>
             .student {
-                width: 50px;
+                width: 75px;
                 padding: 10px;
                 float: left;
-            }
-            img.pic {
-                width: 50px;
+                text-align: center;
+                border: 1px solid #000;
+                border-radius: 5px;
+                margin: 10px;
             }
             .name {
                 font-size: 12px;
@@ -47,6 +48,12 @@ foreach ($schools as $school_id => $school_name) {
             .grade {
                 font-size: 10px;
                 text-align: center;
+            }
+            img {
+                width: 50px;
+                height: 50px;
+                border-radius: 5px;
+                margin: 0 auto;
             }
         </style>
     </head>
