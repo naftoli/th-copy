@@ -59,7 +59,13 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
                 margin: 5px;
             }
             button {
+                padding: 5px;
                 margin: 10px;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 5px;
+                border: 1px solid #000;
+                background-color: #fff;
             }
         </style>
     </head>
@@ -86,8 +92,6 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
             </p>
         </form>
         <div id="report">
-            <button onclick="window.print()">Print</button>
-            <button onclick="downloadAsCSV()">Download as CSV</button>
             <?php
             if (isset($_POST['submit'])) {
                 $lang = $_POST['lang'];
@@ -96,6 +100,8 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
                 $picture_size = $_POST['picture_size'] ?? 100;
                 ?>
                 <h2>Report</h2>
+                <button onclick="window.print()">Print</button>
+                <button onclick="downloadAsCSV()">Download as CSV</button>
                 <?php
                 foreach ($info as $school_id => $students) { 
                     echo "<h3>{$schools[$school_id]}</h3>";
