@@ -32,8 +32,24 @@ foreach ($schools as $school_id => $school_name) {
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <title>Picture Report</title>
         <style>
-            img {
-                max-width: 50px;
+            .student {
+                width: 50px;
+                padding: 10px;
+                flex-direction: column;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .pic {
+                width: 50px;
+            }
+            .name {
+                font-size: 12px;
+                text-align: center;
+            }
+            .grade {
+                font-size: 10px;
+                text-align: center;
             }
     </head>
     <body>
@@ -61,33 +77,28 @@ foreach ($schools as $school_id => $school_name) {
                 $picture = $_POST['picture'] ?? false;
                 ?>
                 <h2>Report</h2>
-                <table>
-                    <tr>
-                        <th>Name</th>
-                        <?php if ($grade) { ?>
-                            <th>Grade</th>
-                        <?php } ?>
-                        <?php if ($picture) { ?>
-                            <th>Picture</th>
-                        <?php } ?>
-                    </tr>
-                    <?php 
-                    foreach ($info as $school_id => $students) { 
-                        foreach ($students as $student) {
-                            if ($lang == 'en') $name = $student['first'] . ' ' . $student['last'];
-                            else if ($lang == 'he') $name = $student['first_he'] . ' ' . $student['last_he'];
-                            $pic = $student['mobile_pic'] ? '/mobile/reg/' . $student['mobile_pic'] : '/file_view.php?id=' . $student['user_photo_id'];
-                            if ( !$pic ) $pic = '/mobile/reg/images/profile-photo-default.jpg';
-                            echo "<tr>";
-                            echo "<td>$name</td>";
-                            if ($grade) echo "<td>{$student['class_grade']}" . ($student['class_sub'] ? '-' . $student['class_sub'] : '') . "</td>";
-                            if ($picture) echo "<td><img src='$pic' alt='$name'></td>";
-                            echo "</tr>";
-                        }
-                    } 
-                    ?>
-                </table>
-                <?php 
+                <?php
+                foreach ($info as $school_id => $students) { 
+                    foreach ($students as $student) {
+                        if ($lang == 'en') $name = $student['first'] . ' ' . $student['last'];
+                        else if ($lang == 'he') $name = $student['first_he'] . ' ' . $student['last_he'];
+                        $pic = $student['mobile_pic'] ? '/mobile/reg/' . $student['mobile_pic'] : '/file_view.php?id=' . $student['user_photo_id'];
+                        if ( !$pic ) $pic = '/mobile/reg/images/profile-photo-default.jpg';
+                        ?>
+                        <div class='student'>
+                            <div class='pic'>
+                            <?php if ($picture) echo "<img src='{$pic}' alt='{$name}'>"; ?>
+                            </div>
+                            <div class='name'>
+                                <?php echo $name; ?>
+                            </div>
+                            <div class='grade'>
+                                <?php echo $student['class_grade'] . ($student['class_sub'] ? '-' . $student['class_sub'] : ''); ?>
+                            </div>
+                        </div>
+                        <?php 
+                    }
+                }
             }
             ?>
         </div>
