@@ -36,6 +36,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
         <style>
             .student {
                 width: <?php echo $picture_size + 20; ?>px;
+                height: <?php echo $picture_size + 50; ?>px;
                 padding: 5px;
                 float: left;
                 text-align: center;
