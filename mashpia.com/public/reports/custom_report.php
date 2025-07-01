@@ -32,11 +32,16 @@ foreach ($schools as $school_id => $school_name) {
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <title>Picture Report</title>
         <style>
+            #report {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
             .student {
                 width: 50px;
                 padding: 10px;
-                flex-direction: column;
                 display: flex;
+                flex-direction: column;
                 align-items: center;
                 justify-content: center;
             }
