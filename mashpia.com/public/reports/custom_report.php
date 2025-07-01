@@ -15,7 +15,7 @@ $sql = "select * from ranks";
 $stmt = $MASHPIA_DB->query($sql);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $row) {
-    $ranks[$row['rank_id']] = $row['rank_name'];
+    $ranks[$row['rank_ord']] = $row['rank_name'];
 }
 
 $info = [];
