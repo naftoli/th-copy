@@ -53,8 +53,9 @@ $reg = $_POST['reg'] ?? 'all';
 $add_space = $_POST['add_space'] ?? false;
 
 $student_height = $picture_size + 60;
-if (isset($_POST['grade'])) $student_height += 10;
-if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to the bottom
+if ($grade) $student_height += 10;
+if ($rank) $student_height += 15;
+if ($add_space) $student_height += 25; // for adding stuff to the bottom
 ?>
 <DOCTYPE html>
 <html>
