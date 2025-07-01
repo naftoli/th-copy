@@ -42,11 +42,12 @@ foreach ($schools as $school_id => $school_name) {
                 margin: 10px;
             }
             .name {
-                font-size: 12px;
+                font-size: 16px;
+                font-weight: bold;
                 text-align: center;
             }
             .grade {
-                font-size: 10px;
+                font-size: 12px;
                 text-align: center;
             }
             img {
