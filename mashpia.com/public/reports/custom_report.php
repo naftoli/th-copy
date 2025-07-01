@@ -64,6 +64,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
                 font-size: 14px;
                 border-radius: 5px;
                 border: 1px solid #000;
+                cursor: pointer;
             }
         </style>
     </head>
@@ -132,17 +133,35 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
     </body>
     <script>
         function downloadAsCSV() {
-            var csvContent = "data:text/csv;charset=utf-8,";
+            const csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Name,Grade,Picture\n";
-            var rows = document.querySelectorAll("#report .student");
+            const rows = document.querySelectorAll("#report .student");
             rows.forEach(function(row) {
-                var name = row.querySelector(".name").textContent;
-                var grade = row.querySelector(".grade").textContent;
-                var picture = row.querySelector(".pic img").src;
+                const name = row.querySelector(".name").textContent;
+                const grade = row.querySelector(".grade").textContent;
+                // get actual picture
+                const img = row.querySelector(".pic img");
+                let picture = '';
+                if (img) {
+                    // Convert image to base64 data URL
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const tempImg = new Image();
+                    tempImg.crossOrigin = 'anonymous';
+                    tempImg.onload = function() {
+                        canvas.width = tempImg.width;
+                        canvas.height = tempImg.height;
+                        ctx.drawImage(tempImg, 0, 0);
+                        picture = canvas.toDataURL('image/jpeg');
+                    };
+                    tempImg.src = img.src;
+                }
+                // add picture to csv
+                picture = picture.replace(/^data:image\/jpeg;base64,/, '');
                 csvContent += `"${name}","${grade}","${picture}"\n`;
             });
-            var encodedUri = encodeURI(csvContent);
-            var link = document.createElement("a");
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
             link.setAttribute("href", encodedUri);
             link.setAttribute("download", "report.csv");
             document.body.appendChild(link);
