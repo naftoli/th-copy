@@ -1,5 +1,5 @@
 <?php
-include_once( __DIR__ . '/../../includes/globals.php' );
+include_once( __DIR__ . '/../../../includes/globals.php' );
 include_once( __DIR__ . '/../auth/classes/Auth.php' );
 include_once( __DIR__ . '/../auth/classes/Login.php' );
 include_once( __DIR__ . '/traits/BuildModel.php' );
