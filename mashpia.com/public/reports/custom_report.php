@@ -21,7 +21,7 @@ foreach ($rows as $row) {
 $info = [];
 $sort_by = $_POST['sort_by'] ?? 'rank';
 if ($sort_by == 'rank') {
-    $sql = "SELECT u.*, MAX(rm.rank_ord) as rank FROM `users` u  
+    $sql = "SELECT *, MAX(rm.rank_ord) as rank FROM `users` u  
     JOIN `classes` c ON u.class_id = c.class_id 
     JOIN rank_marks rm ON u.user_id = rm.user_id 
     WHERE u.`school_id` = :school_id";
