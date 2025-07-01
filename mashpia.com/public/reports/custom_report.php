@@ -23,12 +23,15 @@ foreach ($schools as $school_id => $school_name) {
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $info[$school_id] = $students;
 }
-$picture_size = 100;
-if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
+
+$lang = $_POST['lang'] ?? 'en';
+$grade = $_POST['grade'] ?? false;
+$picture = $_POST['picture'] ?? false;
+$picture_size = $_POST['picture_size'] ?? 100;
 
 $student_height = $picture_size + 60;
 if (isset($_POST['grade'])) $student_height += 10;
-if (isset($_POST['add_space'])) $student_height += 30; // for adding stuff to the bottom
+if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to the bottom
 ?>
 <DOCTYPE html>
 <html>
@@ -103,12 +106,7 @@ if (isset($_POST['add_space'])) $student_height += 30; // for adding stuff to th
         </form>
         <div id="report">
             <?php
-            if (isset($_POST['submit'])) {
-                $lang = $_POST['lang'];
-                $grade = $_POST['grade'] ?? false;
-                $picture = $_POST['picture'] ?? false;
-                $picture_size = $_POST['picture_size'] ?? 100;
-                ?>
+            if (isset($_POST['submit'])) { ?>
                 <h2>Report</h2>
                 <button onclick="window.print()">Print</button>
                 <button onclick="downloadAsCSV()">Download as CSV</button>
