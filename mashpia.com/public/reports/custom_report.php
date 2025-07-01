@@ -153,12 +153,7 @@ if (isset($_POST['grade'])) $student_height += 10;
                 const name = row.querySelector(".name").textContent.trim();
                 const grade = row.querySelector(".grade").textContent.trim();
                 const img = row.querySelector(".pic img");
-                
-                let picture = '';
-                if (img) {
-                    picture = img.src;
-                }
-                
+                let picture = img ? img.src : '';
                 csvContent += `"${name}","${grade}","${picture}"\n`;
             });
             
