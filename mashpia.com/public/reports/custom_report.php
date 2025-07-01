@@ -11,11 +11,11 @@ $adminSchools = new adminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $adminSchools->getSchools();
 
 $info = [];
-$stmt = $MASHPIA_DB->prepare("
-    SELECT * FROM `users` u  
+$sql = "SELECT * FROM `users` u  
     JOIN `classes` c ON u.class_id = c.class_id 
-    WHERE u.`school_id` = :school_id 
-");
+    WHERE u.`school_id` = :school_id ";
+if (isset($_POST['reg']) && $_POST['reg'] == 'reg_only') $sql .= " AND u.user_registered > 0";
+$stmt = $MASHPIA_DB->prepare($sql);
 foreach ($schools as $school_id => $school_name) {
     $stmt->execute([
         'school_id' => $school_id,
@@ -28,7 +28,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
 
 $student_height = $picture_size + 55;
 if (isset($_POST['grade'])) $student_height += 10;
-$student_height += 26; // for adding stuff to the bottom
+if (isset($_POST['add_space'])) $student_height += 30; // for adding stuff to the bottom
 ?>
 <DOCTYPE html>
 <html>
@@ -83,6 +83,8 @@ $student_height += 26; // for adding stuff to the bottom
                 Please choose which fields you would like to include in the report:
             </p>
             <p>
+                <input type="radio" name="reg" value="all" checked> All students (including unregistered)<br />
+                <input type="radio" name="reg" value="reg_only"> Only registered students<br />
                 <input type="radio" name="lang" value="en" checked> English Name<br />
                 <input type="radio" name="lang" value="he"> Hebrew Name<br />
                 <input type="checkbox" name="grade" value="grade" checked> Grade<br />
@@ -93,8 +95,7 @@ $student_height += 26; // for adding stuff to the bottom
                     <option value="200">Large (200px)</option>
                     <option value="250">Extra Large (250px)</option>
                 </select><br />
-                <input type="radio" name="reg_only" value="reg_only"> Only registered students<br />
-                <input type="radio" name="reg_only" value="all"> All students<br />
+                <input type="checkbox" name="add_space" value="add_space" /> Add extra space under each student
             </p>
             <p>
                 <input type="submit" name="submit" value="Generate Report">

@@ -105,6 +105,12 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Mivtzoim</span>
                 </div>
             </a>
+            <a href="custom_report.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Picture Report for Wall</span>
+                </div>
+            </a>
         </div>
         <?if ($admin_user['auth'] == 'super') {?>
         <h2>Mivtzoim School Settings</h2>
