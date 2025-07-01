@@ -133,7 +133,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
     </body>
     <script>
         function downloadAsCSV() {
-            const csvContent = "data:text/csv;charset=utf-8,";
+            let csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Name,Grade,Picture\n";
             const rows = document.querySelectorAll("#report .student");
             rows.forEach(function(row) {
