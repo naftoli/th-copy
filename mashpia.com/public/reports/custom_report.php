@@ -58,6 +58,9 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
                 border-radius: 5px;
                 margin: 5px;
             }
+            button {
+                margin: 10px;
+            }
         </style>
     </head>
     <body>
