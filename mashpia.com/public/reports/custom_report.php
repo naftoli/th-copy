@@ -25,6 +25,9 @@ foreach ($schools as $school_id => $school_name) {
 }
 $picture_size = 100;
 if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
+
+$student_height = $picture_size + 60;
+if (isset($_POST['grade'])) $student_height += 20;
 ?>
 <DOCTYPE html>
 <html>
@@ -36,7 +39,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
         <style>
             .student {
                 width: <?php echo $picture_size + 20; ?>px;
-                height: <?php echo $picture_size + 50; ?>px;
+                height: <?php echo $student_height; ?>px;
                 padding: 5px;
                 float: left;
                 text-align: center;
@@ -48,6 +51,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
                 font-size: 16px;
                 font-weight: bold;
                 text-align: center;
+                margin-top: 5px;
             }
             .grade {
                 font-size: 12px;
