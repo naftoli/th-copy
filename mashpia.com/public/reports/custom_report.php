@@ -93,16 +93,22 @@ if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to th
                 > All students (including unregistered)<br />
                 <input type="radio" name="reg" value="reg_only"
                 <?php if ($reg == 'reg_only') echo 'checked'; ?>
-                > Only registered students<br />
+                > Only registered students
+            </p>
+            <p>
                 <input type="radio" name="lang" value="en"
                 <?php if ($lang == 'en') echo 'checked'; ?>
                 > English Name<br />
                 <input type="radio" name="lang" value="he"
                 <?php if ($lang == 'he') echo 'checked'; ?>
-                > Hebrew Name<br />
+                > Hebrew Name
+            </p>
+            <p>
                 <input type="checkbox" name="grade" value="grade"
                 <?php if ($grade) echo 'checked'; ?>
-                > Grade<br />
+                > Grade
+            </p>
+            <p>
                 <input type="checkbox" name="picture" value="picture"
                 <?php if ($picture) echo 'checked'; ?>
                 > Picture 
@@ -111,7 +117,9 @@ if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to th
                     <option value="150" <?php if ($picture_size == 150) echo 'selected'; ?>>Medium (150px)</option>
                     <option value="200" <?php if ($picture_size == 200) echo 'selected'; ?>>Large (200px)</option>
                     <option value="250" <?php if ($picture_size == 250) echo 'selected'; ?>>Extra Large (250px)</option>
-                </select><br />
+                </select>
+            </p>
+            <p>
                 <input type="checkbox" name="add_space" value="add_space"
                 <?php if ($add_space) echo 'checked'; ?>
                 /> Add extra space under each student
