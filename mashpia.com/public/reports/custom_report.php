@@ -139,6 +139,10 @@ if (isset($_POST['grade'])) $student_height += 10;
     </body>
     <script>
         function downloadAsCSV() {
+            // Note: CSV files cannot display actual images - they only support text data
+            // However, we can include image URLs or base64 encoded images as text
+            // For Excel compatibility, we'll use base64 encoding which Excel can display
+            
             let csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Name,Grade,Picture\n";
             
@@ -151,28 +155,10 @@ if (isset($_POST['grade'])) $student_height += 10;
                 return;
             }
             
-            rows.forEach(function(row, index) {
-                const name = row.querySelector(".name").textContent.trim();
-                const grade = row.querySelector(".grade").textContent.trim();
-                const img = row.querySelector(".pic img");
-                
-                let picture = '';
-                if (img) {
-                    // For CSV, we'll just include the image URL instead of base64
-                    picture = img.src;
-                }
-                
-                // Escape quotes in CSV values
-                const escapedName = name.replace(/"/g, '""');
-                const escapedGrade = grade.replace(/"/g, '""');
-                const escapedPicture = picture.replace(/"/g, '""');
-                
-                csvContent += `"${escapedName}","${escapedGrade}","${escapedPicture}"\n`;
-                
-                processedRows++;
-                
-                // If this is the last row, trigger the download
-                if (processedRows === totalRows) {
+            // Process rows sequentially to handle async image loading
+            async function processRow(index) {
+                if (index >= totalRows) {
+                    // All rows processed, trigger download
                     const encodedUri = encodeURI(csvContent);
                     const link = document.createElement("a");
                     link.setAttribute("href", encodedUri);
@@ -180,8 +166,80 @@ if (isset($_POST['grade'])) $student_height += 10;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                    return;
                 }
-            });
+                
+                const row = rows[index];
+                const name = row.querySelector(".name").textContent.trim();
+                const grade = row.querySelector(".grade").textContent.trim();
+                const img = row.querySelector(".pic img");
+                
+                let picture = '';
+                if (img) {
+                    try {
+                        // Convert image to base64 for Excel compatibility
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        const image = new Image();
+                        image.crossOrigin = 'anonymous';
+                        
+                        image.onload = function() {
+                            canvas.width = image.width;
+                            canvas.height = image.height;
+                            ctx.drawImage(image, 0, 0);
+                            
+                            // Get base64 data
+                            const base64 = canvas.toDataURL('image/jpeg', 0.8);
+                            
+                            // Escape quotes in CSV values
+                            const escapedName = name.replace(/"/g, '""');
+                            const escapedGrade = grade.replace(/"/g, '""');
+                            const escapedPicture = base64.replace(/"/g, '""');
+                            
+                            csvContent += `"${escapedName}","${escapedGrade}","${escapedPicture}"\n`;
+                            
+                            // Process next row
+                            processRow(index + 1);
+                        };
+                        
+                        image.onerror = function() {
+                            // If image fails to load, use URL as fallback
+                            const escapedName = name.replace(/"/g, '""');
+                            const escapedGrade = grade.replace(/"/g, '""');
+                            const escapedPicture = img.src.replace(/"/g, '""');
+                            
+                            csvContent += `"${escapedName}","${escapedGrade}","${escapedPicture}"\n`;
+                            
+                            // Process next row
+                            processRow(index + 1);
+                        };
+                        
+                        image.src = img.src;
+                    } catch (error) {
+                        // Fallback to URL if base64 conversion fails
+                        const escapedName = name.replace(/"/g, '""');
+                        const escapedGrade = grade.replace(/"/g, '""');
+                        const escapedPicture = img.src.replace(/"/g, '""');
+                        
+                        csvContent += `"${escapedName}","${escapedGrade}","${escapedPicture}"\n`;
+                        
+                        // Process next row
+                        processRow(index + 1);
+                    }
+                } else {
+                    // No image, just add name and grade
+                    const escapedName = name.replace(/"/g, '""');
+                    const escapedGrade = grade.replace(/"/g, '""');
+                    
+                    csvContent += `"${escapedName}","${escapedGrade}",""\n`;
+                    
+                    // Process next row
+                    processRow(index + 1);
+                }
+            }
+            
+            // Start processing from first row
+            processRow(0);
         }
     </script>
 </html>
