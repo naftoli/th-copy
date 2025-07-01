@@ -59,13 +59,11 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
                 margin: 5px;
             }
             button {
-                padding: 5px;
+                padding: 10px;
                 margin: 10px;
-                font-size: 16px;
-                font-weight: bold;
+                font-size: 14px;
                 border-radius: 5px;
                 border: 1px solid #000;
-                background-color: #fff;
             }
         </style>
     </head>
@@ -85,6 +83,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
                     <option value="100">Small (100px)</option>
                     <option value="150">Medium (150px)</option>
                     <option value="200">Large (200px)</option>
+                    <option value="250">Extra Large (250px)</option>
                 </select>
             </p>
             <p>
