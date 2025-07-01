@@ -67,8 +67,8 @@ foreach ($schools as $school_id => $school_name) {
             <p>
                 <input type="radio" name="lang" value="en" checked> English Name<br />
                 <input type="radio" name="lang" value="he"> Hebrew Name<br />
-                <input type="checkbox" name="grade" value="grade"> Grade<br />
-                <input type="checkbox" name="picture" value="picture"> Picture<br />
+                <input type="checkbox" name="grade" value="grade" checked> Grade<br />
+                <input type="checkbox" name="picture" value="picture" checked> Picture<br />
             </p>
             <p>
                 <input type="submit" name="submit" value="Generate Report">
