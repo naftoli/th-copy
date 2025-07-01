@@ -26,7 +26,7 @@ foreach ($schools as $school_id => $school_name) {
 
 $lang = $_POST['lang'] ?? 'en';
 $grade = $_POST['grade'] ?? false;
-$picture = $_POST['picture'] ?? false;
+$picture = $_POST['picture'] ?? true;
 $picture_size = $_POST['picture_size'] ?? 100;
 $reg = $_POST['reg'] ?? 'all';
 $add_space = $_POST['add_space'] ?? false;
