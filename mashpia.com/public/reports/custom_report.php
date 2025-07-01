@@ -28,6 +28,7 @@ if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
 
 $student_height = $picture_size + 55;
 if (isset($_POST['grade'])) $student_height += 10;
+$student_height += 20; // for adding stuff to the bottom
 ?>
 <DOCTYPE html>
 <html>
