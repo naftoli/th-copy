@@ -26,8 +26,8 @@ foreach ($schools as $school_id => $school_name) {
 $picture_size = 100;
 if ( isset($_POST['picture_size']) ) $picture_size = $_POST['picture_size'];
 
-$student_height = $picture_size + 60;
-if (isset($_POST['grade'])) $student_height += 20;
+$student_height = $picture_size + 55;
+if (isset($_POST['grade'])) $student_height += 10;
 ?>
 <DOCTYPE html>
 <html>
@@ -56,6 +56,7 @@ if (isset($_POST['grade'])) $student_height += 20;
             .grade {
                 font-size: 12px;
                 text-align: center;
+                margin-top: 5px;
             }
             img {
                 max-width: <?php echo $picture_size; ?>px;
