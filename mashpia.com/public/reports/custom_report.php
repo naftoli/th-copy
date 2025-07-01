@@ -10,6 +10,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $adminSchools = new adminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $adminSchools->getSchools();
 
+$ranks = [];
+$sql = "select * from ranks";
+$stmt = $MASHPIA_DB->query($sql);
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($rows as $row) {
+    $ranks[$row['rank_id']] = $row['rank_name'];
+}
+
 $info = [];
 $sort_by = $_POST['sort_by'] ?? 'rank';
 if ($sort_by == 'rank') {
@@ -38,6 +46,7 @@ foreach ($schools as $school_id => $school_name) {
 
 $lang = $_POST['lang'] ?? 'en';
 $grade = $_POST['grade'] ?? false;
+$rank = $_POST['rank'] ?? false;
 $picture = $_POST['picture'] ?? true;
 $picture_size = $_POST['picture_size'] ?? 100;
 $reg = $_POST['reg'] ?? 'all';
@@ -89,6 +98,9 @@ if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to th
                 border-radius: 5px;
                 border: 1px solid #000;
                 cursor: pointer;
+            }
+            .rank {
+                font-weight: bold;
             }
         </style>
     </head>
@@ -144,6 +156,12 @@ if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to th
                         <?php if ($grade) echo 'checked'; ?>
                         style="margin-right: 8px;">
                         Show Grade
+                    </label>
+                    <label style="display: block; margin: 10px 0; cursor: pointer;">
+                        <input type="checkbox" name="rank" value="rank"
+                        <?php if ($rank) echo 'checked'; ?>
+                        style="margin-right: 8px;">
+                        Show Rank
                     </label>
                     <label style="display: block; margin: 10px 0; cursor: pointer;">
                         <input type="checkbox" name="add_space" value="add_space"
@@ -228,6 +246,7 @@ if (isset($_POST['add_space'])) $student_height += 25; // for adding stuff to th
                             <?php if ($picture) echo "<img src='{$pic}' alt='{$name}'>"; ?>
                             </div>
                             <div class='name'>
+                                <?php if ($rank) echo "<span class='rank'>" . $ranks[$student['rank']] . "</span> "; ?>
                                 <?php echo $name; ?>
                             </div>
                             <div class='grade'>
