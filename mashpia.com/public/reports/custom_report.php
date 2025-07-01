@@ -32,18 +32,10 @@ foreach ($schools as $school_id => $school_name) {
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <title>Picture Report</title>
         <style>
-            #report {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
             .student {
                 width: 50px;
                 padding: 10px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
+                float: left;
             }
             img.pic {
                 width: 50px;
@@ -56,6 +48,7 @@ foreach ($schools as $school_id => $school_name) {
                 font-size: 10px;
                 text-align: center;
             }
+        </style>
     </head>
     <body>
         <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
