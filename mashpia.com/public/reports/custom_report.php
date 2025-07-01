@@ -23,10 +23,6 @@ foreach ($schools as $school_id => $school_name) {
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $info[$school_id] = $students;
 }
-echo "<pre>";
-print_r($info);
-echo "</pre>";
-exit;
 ?>
 <DOCTYPE html>
 <html>
