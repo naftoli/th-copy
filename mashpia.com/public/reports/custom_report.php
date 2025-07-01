@@ -69,7 +69,12 @@ foreach ($schools as $school_id => $school_name) {
                 <input type="radio" name="lang" value="en" checked> English Name<br />
                 <input type="radio" name="lang" value="he"> Hebrew Name<br />
                 <input type="checkbox" name="grade" value="grade" checked> Grade<br />
-                <input type="checkbox" name="picture" value="picture" checked> Picture<br />
+                <input type="checkbox" name="picture" value="picture" checked> Picture 
+                <select name="picture_size">
+                    <option value="100">Small (100px)</option>
+                    <option value="150">Medium (150px)</option>
+                    <option value="200">Large (200px)</option>
+                </select>
             </p>
             <p>
                 <input type="submit" name="submit" value="Generate Report">
@@ -81,6 +86,7 @@ foreach ($schools as $school_id => $school_name) {
                 $lang = $_POST['lang'];
                 $grade = $_POST['grade'] ?? false;
                 $picture = $_POST['picture'] ?? false;
+                $picture_size = $_POST['picture_size'] ?? 100;
                 ?>
                 <h2>Report</h2>
                 <?php
@@ -95,7 +101,7 @@ foreach ($schools as $school_id => $school_name) {
                         ?>
                         <div class='student'>
                             <div class='pic'>
-                            <?php if ($picture) echo "<img src='{$pic}' alt='{$name}'>"; ?>
+                            <?php if ($picture) echo "<img src='{$pic}' alt='{$name}' height: {$picture_size}px;'>"; ?>
                             </div>
                             <div class='name'>
                                 <?php echo $name; ?>
