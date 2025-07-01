@@ -92,7 +92,9 @@ $student_height += 26; // for adding stuff to the bottom
                     <option value="150">Medium (150px)</option>
                     <option value="200">Large (200px)</option>
                     <option value="250">Extra Large (250px)</option>
-                </select>
+                </select><br />
+                <input type="radio" name="reg_only" value="reg_only"> Only registered students<br />
+                <input type="radio" name="reg_only" value="all"> All students<br />
             </p>
             <p>
                 <input type="submit" name="submit" value="Generate Report">
