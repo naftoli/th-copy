@@ -50,7 +50,8 @@ foreach ($schools as $school_id => $school_name) {
                 text-align: center;
             }
             img {
-                width: 100px;
+                max-width: 100px;
+                max-height: 100px;
                 border-radius: 5px;
                 margin: 5px;
             }
