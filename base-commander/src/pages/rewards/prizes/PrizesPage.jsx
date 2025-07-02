@@ -123,9 +123,10 @@ class PrizesPage extends Component {
   }
 
   updateNumPerUser = (id, value) => {
+    const numValue = value === '' ? 0 : (parseInt(value, 10) || 0);
     // Optimistically update the Redux state
-    this.props.updatePrizeLocally(id, { num_per_user: value ? parseInt(value, 10) : 0 });
-    this.props.updatePrize(id, { num_per_user: value ? parseInt(value, 10) : 0 })
+    this.props.updatePrizeLocally(id, { num_per_user: numValue });
+    this.props.updatePrize(id, { num_per_user: numValue })
       .catch(e => {
         toast.error(e.message);
         // Optionally revert the change if backend fails

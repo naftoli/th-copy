@@ -83,4 +83,6 @@ export const uploadImage = ( formData ) => dispatch => {
 }
 
 // Export updatePrizeLocally for optimistic UI
-export const updatePrizeLocally = actions.updatePrizeLocally;
+export const updatePrizeLocally = (id, updates) => dispatch => {
+  dispatch(actions.updatePrizeLocally(id, updates));
+};

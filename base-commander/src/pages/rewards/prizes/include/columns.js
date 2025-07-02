@@ -71,6 +71,12 @@ export function getColumns({
             onChange={e => updateNumPerUser(props.original.prize_id, e.target.value)}
             style={{ width: 60 }}
             disabled={!props.original.editable}
+            placeholder="0"
+            onBlur={e => {
+              if (e.target.value === '') {
+                updateNumPerUser(props.original.prize_id, '0');
+              }
+            }}
           />
         )
       },
@@ -79,7 +85,7 @@ export function getColumns({
   
   if ( isTemplate ) {
     columns.push(
-      { Header: 'Max Per Soldier', id: 'num_per_user', accessor: ({ num_per_user }) => num_per_user ? 'Yes' : 'No' }
+      { Header: 'Max Per Soldier', id: 'num_per_user', accessor: ({ num_per_user }) => num_per_user || 0 }
     )
   }
 

@@ -12,7 +12,7 @@ export class PrizeForm extends Component {
     const { name, value } = e.target;
     let updateValue = value;
     if (name === 'num_per_user') {
-      updateValue = value === '' ? 0 : parseInt(value, 10);
+      updateValue = value === '' ? 0 : (parseInt(value, 10) || 0);
     }
     this.props.onUpdate({ [name]: updateValue });
   };
