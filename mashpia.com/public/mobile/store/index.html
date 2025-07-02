@@ -1246,7 +1246,7 @@
 				if (item.prize == id) {
 					found = true;
 					// make sure it's not only one per child
-					if (item.numPerUser > 0) {
+					if (item.numPerUser > 0 && item.qty >= item.numPerUser) {
 						alert('You can only purchase ' + item.numPerUser + ' of this prize.');
 						return false;
 					}	
