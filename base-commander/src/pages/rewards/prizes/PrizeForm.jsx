@@ -4,13 +4,12 @@ import { StorePrize } from 'components/ui';
 import { Row, Col, Input, UncontrolledTooltip, Button } from 'reactstrap';
 import { PlatoonSelect, Toggle, Creatable } from 'components/inputs';
 // functions
-import { onInputChange } from 'functions/events';
 import { isBC } from 'functions/login';
 
 export class PrizeForm extends Component {
 
   onChange = e => {
-    const { name, value, type } = e.target;
+    const { name, value } = e.target;
     let updateValue = value;
     if (name === 'num_per_user') {
       updateValue = value === '' ? 0 : parseInt(value, 10);
@@ -43,7 +42,7 @@ export class PrizeForm extends Component {
     let { login, onImageEdit, editing, templates, prize, onDelete } = this.props;
     let { 
       platoons = [], prize_name, prize_description, prize_count, points,
-      num_per_user, is_active, teacher_edit, school, image
+      is_active, teacher_edit, school, image
     } = prize;
     // props for all inputs
     const inputProps = { required: true, onChange: this.onChange };
