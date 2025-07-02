@@ -891,6 +891,18 @@
 				</div>
 			</div>
 
+			<!-- Sorting Controls -->
+			<div id="sort-controls" style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
+				<label for="sort-select" style="font-weight: 600;">Sort by:</label>
+				<select id="sort-select" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;">
+					<option value="amount-asc">Amount (Points) ↑</option>
+					<option value="amount-desc">Amount (Points) ↓</option>
+					<option value="alpha-asc">Alphabetical (A-Z)</option>
+					<option value="alpha-desc">Alphabetical (Z-A)</option>
+				</select>
+			</div>
+			<!-- End Sorting Controls -->
+
 			<div id="main"></div>
 
 			<div id='no-prizes' class='alert alert-danger' style='display: none; text-align: center;'>
@@ -1052,31 +1064,43 @@
 			calcBalance();
 		});
 
-		$.post('ajax/getPrizes.php', { user: user }, function (data) {
-			// Flatten and sort prizes
-			var allPrizes = [];
-			for (var amount in data.prizes) {
-				for (var p in data.prizes[amount]) {
-					var prize = data.prizes[amount][p];
-					allPrizes.push(prize);
-				}
-			}
-			// Sort by points ascending, then by name alphabetically
-			allPrizes.sort(function(a, b) {
-				var pointsA = parseInt(a.points, 10);
-				var pointsB = parseInt(b.points, 10);
-				if (pointsA !== pointsB) return pointsA - pointsB;
-				return a.prize_name.localeCompare(b.prize_name);
-			});
+		var allPrizes = [];
+		var currentSort = 'amount-asc';
 
-			if (allPrizes.length == 0) {
+		function renderPrizes() {
+			var sortedPrizes = allPrizes.slice();
+			if (currentSort === 'amount-asc') {
+				sortedPrizes.sort(function(a, b) {
+					var pointsA = parseInt(a.points, 10);
+					var pointsB = parseInt(b.points, 10);
+					if (pointsA !== pointsB) return pointsA - pointsB;
+					return a.prize_name.localeCompare(b.prize_name);
+				});
+			} else if (currentSort === 'amount-desc') {
+				sortedPrizes.sort(function(a, b) {
+					var pointsA = parseInt(a.points, 10);
+					var pointsB = parseInt(b.points, 10);
+					if (pointsA !== pointsB) return pointsB - pointsA;
+					return a.prize_name.localeCompare(b.prize_name);
+				});
+			} else if (currentSort === 'alpha-asc') {
+				sortedPrizes.sort(function(a, b) {
+					return a.prize_name.localeCompare(b.prize_name) || (parseInt(a.points, 10) - parseInt(b.points, 10));
+				});
+			} else if (currentSort === 'alpha-desc') {
+				sortedPrizes.sort(function(a, b) {
+					return b.prize_name.localeCompare(a.prize_name) || (parseInt(a.points, 10) - parseInt(b.points, 10));
+				});
+			}
+
+			if (sortedPrizes.length == 0) {
 				$('#no-prizes-message').text(data.message);
 				$('#no-prizes').show();
 			}
 
 			var html = '';
-			for (var i = 0; i < allPrizes.length; i++) {
-				var prize = allPrizes[i];
+			for (var i = 0; i < sortedPrizes.length; i++) {
+				var prize = sortedPrizes[i];
 				html += '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 text-center product">\
 					<article class="product light">';
 				if (parseInt(prize.one_per_user) == 1) {
@@ -1110,6 +1134,25 @@
 				</div>';
 			}
 			$("#main").html(html);
+		}
+
+		// Fetch prizes and initialize
+		$.post('ajax/getPrizes.php', { user: user }, function (data) {
+			// Flatten and store all prizes
+			allPrizes = [];
+			for (var amount in data.prizes) {
+				for (var p in data.prizes[amount]) {
+					var prize = data.prizes[amount][p];
+					allPrizes.push(prize);
+				}
+			}
+			renderPrizes();
+		});
+
+		// Sorting control event
+		$('#sort-select').on('change', function() {
+			currentSort = $(this).val();
+			renderPrizes();
 		});
 
 		var toggle_dropdown = true;
