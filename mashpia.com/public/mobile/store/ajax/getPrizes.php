@@ -1,5 +1,6 @@
 <?php
 require '../../../db.php';
+require_once '../../../class.globalSettings.php';
 $user = mysql_real_escape_string($_POST['user']);
 
 $sql = "SELECT school_id, class_id, school_name, school_store FROM users LEFT JOIN schools USING ( school_id ) WHERE user_id = " . $user;
@@ -19,7 +20,6 @@ if ( !$row['school_store'] ) {
     }
 }
 else {
-    mysql_select_db('pointsDB');
     $sql = "SELECT prize_id, prize_name, prize_description, prizes.modified, prizes.created, points, image_id, one_per_user, prize_count, class_id 
             FROM pointsDB.prizes 
             LEFT JOIN pointsDB.prize_classes USING (prize_id)
@@ -31,7 +31,7 @@ else {
     while ($row = mysql_fetch_assoc($result)) {
         $row['prize_description'] = urldecode( $row['prize_description'] );
         // make sure user hasn't already purchased this prize if it's a one time prize
-        $oneTime = $row['one_per_user'];
+        $oneTime = intval($row['one_per_user']);
         if ($oneTime) {
             $prizeID = $row['prize_id'];
             // find out when to start checking for the prize
@@ -39,14 +39,17 @@ else {
             $res = mysql_query($qry);
             $reset = mysql_fetch_assoc($res);
             $one_time_reset = $reset['one_time_prize_reset'];
+            if (!$one_time_reset) {
+                $one_time_reset = GlobalSettings::getCurYearDates()['start'];
+            }
             // convert from jd to gregorian
             $greg = jdtogregorian($one_time_reset);
             $date = explode('/', $greg);
             $date = $date[2] . '-' . $date[0] . '-' . $date[1];
             $qry = "SELECT * FROM pointsDB.user_prizes WHERE prize_id = " . $prizeID . " AND user_id = " . $user . " AND is_reversed = 0 AND created >= '" . $date . "'";
             $res = mysql_query($qry);
-            if (mysql_num_rows($res) > 0)
-                continue;
+            // if (mysql_num_rows($res) > 0)
+                // continue;
         }
         // if not, add the prize to the results
         $prizes[$row['points']][] = $row;

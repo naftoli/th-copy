@@ -156,10 +156,14 @@
 
 		.alert-warning {
 			background-color: #4358a2;
+			width: 100%;
+			box-sizing: border-box;
 		}
 
 		.media {
-			margin-top: 15px
+			margin-top: 15px;
+			width: 100%;
+			box-sizing: border-box;
 		}
 
 		.media:first-child {
@@ -172,7 +176,9 @@
 
 		.media-body {
 			display: table-cell;
-			vertical-align: top
+			vertical-align: top;
+			width: 100%;
+			box-sizing: border-box;
 		}
 
 		.container:after,
@@ -380,6 +386,219 @@
 		#data-box {
 			color: white;
 		}
+
+		/* --- Custom Prize Card Styles --- */
+		.product.light {
+			width: 100%;
+			min-width: unset;
+			min-height: 420px;
+			margin: 12px;
+			padding: 14px 8px 8px 8px;
+			box-sizing: border-box;
+			background: #fff;
+			border-radius: 12px;
+			box-shadow: 0 2px 8px rgba(27,43,81,0.10), 0 1.5px 4px rgba(27,43,81,0.08);
+			transition: box-shadow 0.2s;
+			border: 1px solid #e6e6e6;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+		}
+		@media (max-width: 600px) {
+			.product.light {
+				width: 98vw;
+				max-width: 340px;
+				margin: 8px auto;
+			}
+		}
+		.figure-hover-overlay {
+			width: 150px;
+			height: 150px;
+			max-width: 150px;
+			max-height: 150px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #f7f8fa;
+			border-radius: 8px;
+			padding: 8px;
+			margin-bottom: 10px;
+			margin-top: 10px;
+			border: 1px solid #e6e6e6;
+		}
+		.figure-hover-overlay img {
+			max-width: 140px;
+			max-height: 140px;
+			border-radius: 6px;
+		}
+		.block-name {
+			margin-top: 8px;
+			margin-bottom: 6px;
+		}
+		.product-name {
+			font-size: 1.1em;
+			font-weight: 600;
+			color: #1b2b51;
+			text-decoration: none;
+			display: block;
+			margin-bottom: 2px;
+		}
+		.product-price {
+			font-size: 1em;
+			color: #e92d41;
+			font-weight: 700;
+			margin-bottom: 6px;
+		}
+		.product-cart {
+			margin-top: 10px;
+			width: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		.add-to-cart-btn {
+			background: #e92d41;
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 6px 14px 6px 10px;
+			font-size: 0.98em;
+			font-weight: 600;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			transition: none;
+			box-shadow: 0 1px 3px rgba(27,43,81,0.07);
+			width: auto;
+			max-width: 200px;
+			text-align: center;
+			justify-content: center;
+			align-self: center;
+		}
+		.add-to-cart-btn:hover, .add-to-cart-btn:focus {
+			background: #e92d41;
+			color: #fff;
+		}
+		.add-to-cart-btn .fa {
+			margin-right: 7px;
+			font-size: 1.1em;
+			color: #fff;
+		}
+		.product-new {
+			background: #4258a2;
+			color: #fff;
+			font-size: 0.85em;
+			font-weight: 600;
+			border-radius: 4px;
+			padding: 2px 7px;
+			position: absolute;
+			top: 10px;
+			left: 10px;
+			z-index: 2;
+		}
+		.onePerUser {
+			color: #e92d41;
+			font-size: 0.95em;
+			font-weight: 500;
+			margin-top: 6px;
+		}
+		.description {
+			color: #4258a2;
+			font-size: 0.98em;
+			margin-top: 8px;
+			margin-bottom: 0;
+			min-height: 38px;
+		}
+		@media (max-width: 600px) {
+			.product.light {
+				min-height: 180px;
+				padding: 6px 4px 8px 4px;
+				width: 100%;
+				max-width: 100%;
+			}
+			.figure-hover-overlay {
+				width: 70px;
+				height: 70px;
+				padding: 4px;
+			}
+			.figure-hover-overlay img {
+				max-width: 60px;
+				max-height: 60px;
+			}
+		}
+		.content {
+			max-width: 1024px;
+			margin: auto;
+		}
+		@media (max-width: 900px) {
+			.product.light {
+				width: 180px;
+			}
+		}
+		.balance {
+			width: 100%;
+			flex-basis: 100%;
+			margin-bottom: 18px;
+		}
+		.checkout-now-btn {
+			background: #4258a2;
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 6px 14px 6px 10px;
+			font-size: 0.98em;
+			font-weight: 600;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			transition: none;
+			box-shadow: 0 1px 3px rgba(27,43,81,0.07);
+			margin-top: 8px;
+			width: auto;
+			max-width: 200px;
+			text-align: center;
+			justify-content: center;
+			align-self: center;
+		}
+		.checkout-now-btn:hover, .checkout-now-btn:focus {
+			background: #2d3a6a;
+			color: #fff;
+		}
+		.add-to-cart-btn,
+		.checkout-now-btn {
+			width: auto;
+			max-width: 200px;
+			align-self: center;
+		}
+		.price-badge {
+			display: inline-block;
+			background: #e92d41;
+			color: #fff;
+			font-size: 1em;
+			font-weight: 700;
+			border-radius: 16px;
+			padding: 4px 14px;
+			margin-bottom: 8px;
+			margin-top: 2px;
+		}
+		.onePerUser-badge {
+			position: absolute;
+			top: 35px;
+			left: -40px;
+			background: #e92d41;
+			color: #fff;
+			font-size: 0.85em;
+			font-weight: 700;
+			padding: 2px 32px;
+			border-radius: 4px;
+			transform: rotate(-40deg);
+			box-shadow: 0 1px 4px rgba(27, 43, 81, 0.10);
+			z-index: 3;
+			pointer-events: none;
+			letter-spacing: 0.5px;
+		}
 	</style>
 	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
 	<noscript>
@@ -443,12 +662,19 @@
 		}
 
 		.figure-hover-overlay {
-			width: 40%;
+			width: 150px;
+			height: 150px;
 			max-width: 150px;
-			float: left;
-			border: 1px solid;
-			margin: 0px 10px 5px 0px;
 			max-height: 150px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #f7f8fa;
+			border-radius: 8px;
+			padding: 8px;
+			margin-bottom: 10px;
+			margin-top: 10px;
+			border: 1px solid #e6e6e6;
 		}
 
 		.product.light {
@@ -827,75 +1053,63 @@
 		});
 
 		$.post('ajax/getPrizes.php', { user: user }, function (data) {
-			// var data = $.parseJSON(success);
+			// Flatten and sort prizes
+			var allPrizes = [];
+			for (var amount in data.prizes) {
+				for (var p in data.prizes[amount]) {
+					var prize = data.prizes[amount][p];
+					allPrizes.push(prize);
+				}
+			}
+			// Sort by points ascending, then by name alphabetically
+			allPrizes.sort(function(a, b) {
+				var pointsA = parseInt(a.points, 10);
+				var pointsB = parseInt(b.points, 10);
+				if (pointsA !== pointsB) return pointsA - pointsB;
+				return a.prize_name.localeCompare(b.prize_name);
+			});
 
-			var prizes = data.prizes;
-			var message = data.message;
-
-			if (prizes.length == 0) {
-				$('#no-prizes-message').text(message);
+			if (allPrizes.length == 0) {
+				$('#no-prizes-message').text(data.message);
 				$('#no-prizes').show();
 			}
 
 			var html = '';
-			for (var amount in prizes) {
-				html += '<div class="panel panel-default">' +
-					'<div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' + parseInt(amount, 10).toLocaleString(navigator.language) + ' Mile Prizes</div>' +
-					'<div class="collapse" id="collapse_prize_' + amount + '"><div class="panel-body"><div class="row">';
-				for (var p in prizes[amount]) {
-					var prize = prizes[amount][p];
-					html += '<div class="col-xs-6 col-sm-6 col-md-4 text-center product">\
-							<article class="product light">\
-								<div class="product-caption">';
-					html += '<figure class="figure-hover-overlay">';
-					// show the new label if the prize was edited in the last 30 days
-					if (new Date(prize.created).getTime() > new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) {
-						html += '<div class="product-new">new</div> ';
-					}
-					html += '<!--<div class="product-sale">&nbsp;7% <br> off</div>-->';
-					if (prize.image_id != 0) {
-						html += '<img class="img-responsive" onerror="handleImageError( this )" src="/v2/imgs/v/w/150/src/' + prize.image_id + '" alt="" title="">';
-					} else {
-						html += '<img class="img-responsive" src="/v2/images/imgsrepo/default.png" alt="" title="">';
-					};
-					// find out if name of prize has backslash character
-					if (prize.prize_name.indexOf('\\') !== false) {
-						prize.prize_name = prize.prize_name.replace('\\', '');
-						prize.prize_name = prize.prize_name.replace('\"', ' inch');
-					}
-					html += '</figure>\
-								<div class="block-name">\
-									<a href="#" class="product-name">' + prize.prize_name + '</a>\
-									<p class="product-price">' + parseInt(prize.points, 10).toLocaleString(navigator.language) + ' Mile' + (prize.points > 1 ? 's' : '') + '</p>\
-								</div>\
-								<div class="product-cart" id="' +
-						prize.prize_id + separator + prize.points + separator + prize.image_id + separator +
-						prize.prize_name + separator + prize.one_per_user + separator + prize.prize_count + '">\
-									<a href="#"><i class="fa fa-shopping-cart"></i> </a>\
-								</div>';
-					if (parseInt(prize.one_per_user) == 1) {
-						html += '<p class="onePerUser">Only one per Soldier</p>';
-					}
+			for (var i = 0; i < allPrizes.length; i++) {
+				var prize = allPrizes[i];
+				html += '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 text-center product">\
+					<article class="product light">';
+				if (parseInt(prize.one_per_user) == 1) {
+					html += '<div class="onePerUser-badge">Only one per Soldier</div>';
+				}
+				// New label
+				if (new Date(prize.created).getTime() > new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) {
+					html += '<div class="product-new">new</div>';
+				}
+				html += '<div class="price-badge">' + parseInt(prize.points, 10).toLocaleString(navigator.language) + ' Mile' + (prize.points > 1 ? 's' : '') + '</div>';
+				html += '<figure class="figure-hover-overlay">';
+				if (prize.image_id != 0) {
+					html += '<img class="img-responsive" onerror="handleImageError( this )" src="/v2/imgs/v/w/150/src/' + prize.image_id + '" alt="" title="">';
+				} else {
+					html += '<img class="img-responsive" src="/v2/images/imgsrepo/default.png" alt="" title="">';
+				}
+				html += '</figure>';
+				html += '<div class="block-name">\
+					<div class="product-name">' + prize.prize_name + '</div>';
+				if (prize.prize_description && prize.prize_description.trim() !== '') {
 					html += '<p class="description clearfix">' + prize.prize_description + '</p>';
-					html += '</div>\
-								</article>\
-							</div>';
 				}
-
-				html += '</div></div></div></div>';
+				html += '</div>';
+				html += '<div class="product-cart" id="' +
+					prize.prize_id + separator + prize.points + separator + prize.image_id + separator +
+					prize.prize_name + separator + prize.one_per_user + separator + prize.prize_count + '">\
+					<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>\
+					<button class="checkout-now-btn">Checkout Now</button>\
+				</div>';
+				html += '</article>\
+				</div>';
 			}
-			$("#main").append(html);
-
-			$(".product-cart a").hover(
-				function () {
-					$(this).css('background-color', '#eb2c33');
-					$(this).find('.fa').css('color', '#fff');
-				},
-				function () {
-					$(this).css('background-color', '#fff');
-					$(this).find('.fa').css('color', '#eb2c33');
-				}
-			);
+			$("#main").html(html);
 		});
 
 		var toggle_dropdown = true;
@@ -945,9 +1159,9 @@
 					$("#cartQty").text(cartQty);
 				}
 			}
-			/*
-			if (Cookies.getJSON('cart' + user) != undefined) {
-				cart = Cookies.getJSON('cart' + user);
+			var cartCookie = Cookies.get('cart' + user);
+			if (cartCookie !== undefined) {
+				cart = JSON.parse(cartCookie);
 				for (var c in cart) {
 					var item = cart[c];
 					cartQty += item.qty;
@@ -955,7 +1169,6 @@
 				}
 				$("#cartQty").text(cartQty);
 			}
-			*/
 		}
 
 		function calcBalance() {
@@ -1035,6 +1248,12 @@
 			$("#cartQty").text(cartQty);
 
 			calcBalance();
+		});
+
+		$(document).on('click', '.checkout-now-btn', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			window.location.href = 'cart.html?id=' + user;
 		});
 
 		$("#cart-img").click(function () {
