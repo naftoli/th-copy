@@ -5,18 +5,21 @@ if (isset($_POST['action']))
 {
 	include("db.php");
 	
-	$sql = "SELECT * FROM admins WHERE username='" . $_POST['username'] . "' AND password='" . $_POST['password'] . "'";
+	$sql = "SELECT * FROM admins WHERE username='" . $_POST['username'] . "'";
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
 	if ($row)
 	{
-		$auth = hash_hmac('ripemd128', strtolower($row['username']) . $row['password'], '53fdc95857aac68970159dd07e7c3782');
-		
-		session_start();
-		$_SESSION['admin_id'] = $row['admin_id'];
-		$_SESSION['admin_auth'] = $auth;
-		header("Location:http://mashpia.com/admin.php"); 
+		$pass = $_POST['password'];
+		if ( password_verify($pass, $row['hashed_pass']) ) {
+			$auth = hash_hmac('ripemd128', strtolower($row['username']) . $pass, '53fdc95857aac68970159dd07e7c3782');
+			session_start();
+			$_SESSION['admin_id'] = $row['admin_id'];
+			$_SESSION['admin_auth'] = $auth;
+			header("Location:http://mashpia.com/admin.php"); 
+		}
 	}
+	$message = "Invalid username or password";
 }
 ?>
 

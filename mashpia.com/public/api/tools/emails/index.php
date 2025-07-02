@@ -10,6 +10,7 @@ class MashpiaEmails {
     </address>
     <br />
     <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+    To unsubscibe from these emails please click <a href="http://mashpia.com/unsubscribe.html">here</a><br />
     </div>';
 
     /**

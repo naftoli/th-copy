@@ -1,6 +1,10 @@
-<?
+<?php
+require_once '../includes/globals.php';
 $admin_auth = array('school'); 
 require('header.php');
+if ( $admin_user['auth'] != 'super' && $admin_user['admin_id'] != 175069 ) {
+	die('You are not authorized to access this page');
+}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -62,13 +66,14 @@ $number = 1;
 while ($row = mysql_fetch_assoc($result)) {
 	$total++;
 	$address = $row['admin_address1'] . "<br />" . $row['admin_city'] . ", " . $row['admin_state'] . " " . $row['admin_postal'] . "<br />" . $row['admin_country'];
+	$pass = decryptPassword($row['password'], ENCRYPTION_KEY);
 	echo "
 	<tr><td>
 	<strong>Parent Account ID: $row[admin_id]</strong><br />
 	First: <strong>$row[first]</strong><br />
 	Last: <strong>$row[last]</strong><br />
 	Username: $row[username]<br />
-	Password: $row[password]<br />
+	Password: $pass<br />
 	Email: $row[admin_email]<br />
 	Cell: $row[admin_phone_mobile]<br />
 	Cell 2: $row[admin_phone_mobile2]
