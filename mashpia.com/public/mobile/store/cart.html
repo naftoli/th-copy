@@ -141,7 +141,7 @@
                 width: 50px;
                 display: inline-block;
             } */
-            .product-price { font-size: 1.15em; font-weight: bold; font-family: Raleway, sans-serif; }
+            .product-price { font-size: 1em; font-weight: 400; font-family: Raleway, sans-serif; }
             .content { margin-bottom: 25px; }
 
             div#cart { display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 15px; }
@@ -203,10 +203,10 @@
                                         <div class="store-item" style="line-height: 1.6" id="{{@key}}">
                                             <div class="item-title">{{this.name}}</div>
                                             <div class="product-price">{{this.price}} Mile(s) each</div>
-                                            {{#if this.numPerUser}}
+                                            
                                             <div class="product-price">Qty: {{this.qty}}</div>
                                             <div class="onePerUser">Only {{this.numPerUser}} per Soldier</div>
-                                            {{else}}
+                                            
                                                 <div class="content-h2">
                                                     <label for='qty-{{@key}}'>Qty: </label>
                                                     <div class="input-group">
@@ -219,7 +219,7 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            {{/if}}
+                                            
                                             <div style="padding-top: 10px">
                                                 <button class="btn btn-default del" data-key="{{@key}}">
                                                     <span class="glyphicon glyphicon-trash"></span>
