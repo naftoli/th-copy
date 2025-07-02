@@ -203,9 +203,9 @@
                                         <div class="store-item" style="line-height: 1.6" id="{{@key}}">
                                             <div class="item-title">{{this.name}}</div>
                                             <div class="product-price">{{this.price}} Mile(s) each</div>
-                                            {{#if this.onlyOne}}
+                                            {{#if this.numPerUser}}
                                             <div class="product-price">Qty: {{this.qty}}</div>
-                                            <div class="onePerUser">Only one per Soldier</div>
+                                            <div class="onePerUser">Only {{this.numPerUser}} per Soldier</div>
                                             {{else}}
                                                 <div class="content-h2">
                                                     <label for='qty-{{@key}}'>Qty: </label>

@@ -20,7 +20,7 @@ if ( !$row['school_store'] ) {
     }
 }
 else {
-    $sql = "SELECT prize_id, prize_name, prize_description, prizes.modified, prizes.created, points, image_id, one_per_user, prize_count, class_id 
+    $sql = "SELECT prize_id, prize_name, prize_description, prizes.modified, prizes.created, points, image_id, num_per_user, prize_count, class_id 
             FROM pointsDB.prizes 
             LEFT JOIN pointsDB.prize_classes USING (prize_id)
             WHERE is_active = 1
@@ -31,8 +31,9 @@ else {
     while ($row = mysql_fetch_assoc($result)) {
         $row['prize_description'] = urldecode( $row['prize_description'] );
         // make sure user hasn't already purchased this prize if it's a one time prize
-        $oneTime = intval($row['one_per_user']);
-        if ($oneTime) {
+        // $oneTime = intval($row['one_per_user']);
+        $numPerUser = intval($row['num_per_user']);
+        if ($numPerUser > 0) {
             $prizeID = $row['prize_id'];
             // find out when to start checking for the prize
             $qry = "select one_time_prize_reset from schools where school_id = " . $school;
@@ -48,8 +49,9 @@ else {
             $date = $date[2] . '-' . $date[0] . '-' . $date[1];
             $qry = "SELECT * FROM pointsDB.user_prizes WHERE prize_id = " . $prizeID . " AND user_id = " . $user . " AND is_reversed = 0 AND created >= '" . $date . "'";
             $res = mysql_query($qry);
-            // if (mysql_num_rows($res) > 0)
-                // continue;
+            $num = mysql_num_rows($res);
+            if ($num >= $numPerUser)
+                continue;
         }
         // if not, add the prize to the results
         $prizes[$row['points']][] = $row;

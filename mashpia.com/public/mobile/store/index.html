@@ -587,7 +587,7 @@
 			position: absolute;
 			top: 35px;
 			left: -40px;
-			background: #e92d41;
+			background: #4258a2;
 			color: #fff;
 			font-size: 0.85em;
 			font-weight: 700;
@@ -1103,9 +1103,9 @@
 				var prize = sortedPrizes[i];
 				html += '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 text-center product">\
 					<article class="product light">';
-				if (parseInt(prize.one_per_user) == 1) {
-					html += '<div class="onePerUser-badge">Only one per Soldier</div>';
-				}
+				if (parseInt(prize.num_per_user) > 0) {
+					html += '<div class="onePerUser-badge">Only ' + parseInt(prize.num_per_user) + ' per Soldier</div>';
+				}	
 				// New label
 				if (new Date(prize.created).getTime() > new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) {
 					html += '<div class="product-new">new</div>';
@@ -1126,7 +1126,7 @@
 				html += '</div>';
 				html += '<div class="product-cart" id="' +
 					prize.prize_id + separator + prize.points + separator + prize.image_id + separator +
-					prize.prize_name + separator + prize.one_per_user + separator + prize.prize_count + '">\
+					prize.prize_name + separator + prize.num_per_user + separator + prize.prize_count + '">\
 					<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>\
 					<button class="checkout-now-btn">Checkout Now</button>\
 				</div>';
@@ -1228,7 +1228,7 @@
 			var price = parseInt(info[1]);
 			var image = info[2];
 			var prizeName = info[3];
-			var onePerUser = parseInt(info[4]);
+			var numPerUser = parseInt(info[4]);
 			var stock = parseInt(info[5]);
 			var available = stock;
 			var found = false;
@@ -1246,10 +1246,10 @@
 				if (item.prize == id) {
 					found = true;
 					// make sure it's not only one per child
-					if (item.onlyOne == 1) {
-						alert('You can only purchase one of this prize.');
+					if (item.numPerUser > 0) {
+						alert('You can only purchase ' + item.numPerUser + ' of this prize.');
 						return false;
-					}
+					}	
 					if (item.stock == 0) {
 						alert('Sorry there are no more left in stock.');
 						return false;
@@ -1267,10 +1267,10 @@
 						prize: id,
 						name: prizeName,
 						price: price,
-						image: image,
+						image: image, 
 						qty: 1,
 						stock: --stock,
-						onlyOne: onePerUser,
+						numPerUser: numPerUser,
 						available: available
 					});
 					totalPrice += price;
