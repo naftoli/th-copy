@@ -121,32 +121,245 @@
             #balance { display: none; }
             #balance-display { font-size: 2em;}
 
-            .store-image-overlay img { 
-                max-width: 100%; max-height: 150px; border: 1px solid;
-            }
-            .store-image-overlay {
-                width: 40%; max-width: 150px;
-                height: 100%; float: left; margin-right: 10px;
-            }
+            /* Modern Cart Item Styling */
             .cart-item {
-                padding: 8px; margin: 8px; width: 450px;
-                border-bottom: 1px solid #ccc;
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                margin: 16px 8px;
+                padding: 20px;
+                max-width: 500px;
+                width: 100%;
+                border: 1px solid #e8e8e8;
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
             }
-            .store-item .item-title {
-                font-size: 1.1em; font-family: Raleway, sans-serif;
-                display: block;   text-transform: uppercase;
-                color: #0e0e0e; text-decoration: none;
+            
+            .cart-item:hover {
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+                transform: translateY(-2px);
             }
-            /* .store-item input {
-                width: 50px;
+            
+            .cart-item-content {
+                display: flex;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .store-image-overlay {
+                flex-shrink: 0;
+                width: 100px;
+                height: 100px;
+                border-radius: 8px;
+                overflow: hidden;
+                background: #f8f9fa;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid #e9ecef;
+            }
+            
+            .store-image-overlay img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 6px;
+            }
+            
+            .store-item {
+                flex: 1;
+                min-width: 0;
+            }
+            
+            .item-title {
+                font-size: 1.2em;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 8px;
+                line-height: 1.3;
+                font-family: 'Source Sans Pro', sans-serif;
+            }
+            
+            .product-price {
+                font-size: 0.95em;
+                color: #6c757d;
+                margin-bottom: 4px;
+                font-weight: 500;
+            }
+            
+            .product-price.price-highlight {
+                color: #e92d41;
+                font-weight: 600;
+                font-size: 1.1em;
+            }
+            
+            .onePerUser {
+                background: #4258a2;
+                color: white;
+                padding: 4px 8px;
+                border-radius: 4px;
+                font-size: 0.8em;
+                font-weight: 500;
                 display: inline-block;
-            } */
-            .product-price { font-size: 1em; font-weight: 400; font-family: Raleway, sans-serif; }
+                margin-bottom: 12px;
+            }
+            
+            .quantity-section {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 16px;
+                flex-wrap: wrap;
+            }
+            
+            .quantity-input-group {
+                display: flex;
+                align-items: center;
+                background: #f8f9fa;
+                border-radius: 6px;
+                border: 1px solid #dee2e6;
+                overflow: hidden;
+            }
+            
+            .quantity-input-group input {
+                border: none;
+                background: transparent;
+                padding: 8px 12px;
+                width: 60px;
+                text-align: center;
+                font-weight: 500;
+                color: #495057;
+            }
+            
+            .quantity-input-group input:focus {
+                outline: none;
+                background: #ffffff;
+            }
+            
+            .update-btn {
+                background: #4258a2;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 0.9em;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            
+            .update-btn:hover {
+                background: #2d3a6a;
+                transform: translateY(-1px);
+            }
+            
+            .remove-btn {
+                background: #dc3545;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 0.9em;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            
+            .remove-btn:hover {
+                background: #c82333;
+                transform: translateY(-1px);
+            }
+            
+            .btn-icon {
+                font-size: 0.9em;
+            }
+            
             .content { margin-bottom: 25px; }
 
-            div#cart { display: flex; flex-wrap: wrap; justify-content: space-around; margin-top: 15px; }
-            #empty-cart { display: none; margin-top: 15px; }
+            div#cart { 
+                display: flex; 
+                flex-direction: column; 
+                align-items: center; 
+                margin-top: 15px; 
+                gap: 8px;
+            }
+            
+            #empty-cart { 
+                display: none; 
+                margin-top: 15px; 
+                text-align: center;
+                padding: 40px 20px;
+            }
+            
             .alert h1 { margin: 0px; text-align: center; }
+            
+            /* Responsive adjustments */
+            @media (max-width: 480px) {
+                .cart-item {
+                    margin: 12px 4px;
+                    padding: 16px;
+                }
+                
+                .cart-item-content {
+                    gap: 12px;
+                }
+                
+                .store-image-overlay {
+                    width: 80px;
+                    height: 80px;
+                }
+                
+                .item-title {
+                    font-size: 1.1em;
+                }
+                
+                .quantity-section {
+                    flex-direction: column;
+                    align-items: stretch;
+                }
+                
+                .quantity-input-group {
+                    justify-content: center;
+                }
+            }
+            
+            /* Empty cart styling */
+            #empty-cart {
+                background: #f8f9fa;
+                border: 2px dashed #dee2e6;
+                border-radius: 12px;
+                color: #6c757d;
+            }
+            
+            #empty-cart h1 {
+                color: #6c757d;
+                font-size: 1.5em;
+                font-weight: 500;
+            }
+            
+            /* Loading state for cart items */
+            .cart-item.loading {
+                opacity: 0.7;
+                pointer-events: none;
+            }
+            
+            /* Success animation for updates */
+            .cart-item.updated {
+                animation: successPulse 0.6s ease-in-out;
+            }
+            
+            @keyframes successPulse {
+                0% { transform: scale(1); }
+                50% { transform: scale(1.02); }
+                100% { transform: scale(1); }
+            }
         </style>
         <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
@@ -197,33 +410,29 @@
                             <script id="cartTpl" type="text/x-handlebars-template">
                                 {{#each items}}
                                     <div class="cart-item">
-                                        <figure class="store-image-overlay">
-                                            <img class="store-image img-responsive" onerror="handleImageError(this)" src="/v2/images/imgsrepo/{{this.image}}" />
-                                        </figure>
-                                        <div class="store-item" style="line-height: 1.6" id="{{@key}}">
-                                            <div class="item-title">{{this.name}}</div>
-                                            <div class="product-price">{{this.price}} Mile(s) each</div>
-                                            
-                                            <div class="product-price">Qty: {{this.qty}}</div>
-                                            <div class="onePerUser">Only {{this.numPerUser}} per Soldier</div>
-                                            
-                                                <div class="content-h2">
-                                                    <label for='qty-{{@key}}'>Qty: </label>
-                                                    <div class="input-group">
-                                                        <input type="number" class='form-control' id='qty-{{@key}}' size="2" value="{{this.qty}}" />
-                                                        <span class="input-group-btn">
-                                                            <button class="btn btn-default update" data-key="{{@key}}" type="button">
-                                                                <span class="glyphicon glyphicon-refresh"></span>
-                                                                Update
-                                                            </button>
-                                                        </span>
+                                        <div class="cart-item-content">
+                                            <figure class="store-image-overlay">
+                                                <img class="store-image img-responsive" onerror="handleImageError(this)" src="/v2/images/imgsrepo/{{this.image}}" />
+                                            </figure>
+                                            <div class="store-item" id="{{@key}}">
+                                                <div class="item-title">{{this.name}}</div>
+                                                <div class="product-price price-highlight">{{this.price}} Mile(s) each</div>
+                                                <div class="product-price">Qty: {{this.qty}}</div>
+                                                {{#if this.numPerUser}}
+                                                <div class="onePerUser">Max {{this.numPerUser}} per Soldier</div>
+                                                {{/if}}
+                                                <div class="quantity-section">
+                                                    <div class="quantity-input-group">
+                                                        <input type="number" id='qty-{{@key}}' value="{{this.qty}}" min="1" />
                                                     </div>
+                                                    <button class="update-btn update" data-key="{{@key}}" type="button">
+                                                        <i class="fa fa-refresh btn-icon"></i>
+                                                        Update
+                                                    </button>
                                                 </div>
-                                            
-                                            <div style="padding-top: 10px">
-                                                <button class="btn btn-default del" data-key="{{@key}}">
-                                                    <span class="glyphicon glyphicon-trash"></span>
-                                                    <span class="ln-delete"><b>REMOVE</b></span>
+                                                <button class="remove-btn del" data-key="{{@key}}">
+                                                    <i class="fa fa-trash btn-icon"></i>
+                                                    Remove
                                                 </button>
                                             </div>
                                         </div>
@@ -412,11 +621,33 @@
                 if ( checkBal( key, val ) ) {
                     item.qty = val; item.stock -= val;
                     calcBalance();
+                    // Update the displayed quantity text
+                    $(this).closest('.cart-item').find('.product-price').each(function() {
+                        if ($(this).text().indexOf('Qty:') !== -1) {
+                            $(this).text('Qty: ' + val);
+                        }
+                    });
+                    
+                    // Add visual feedback
+                    var cartItem = $(this).closest('.cart-item');
+                    cartItem.addClass('updated');
+                    setTimeout(function() {
+                        cartItem.removeClass('updated');
+                    }, 600);
+                    
                     if (!window.localStorage) {
                         alert("You need to update your browser to the latest version in order for this feature to work.");
                     } else {
                         localStorage.setItem('storeCart' + user, JSON.stringify( cart ));
-                        alert('Updated. Remember to click "PURCHASE" at the top of your cart.');
+                        // Show a more subtle success message
+                        var updateBtn = $(this);
+                        var originalText = updateBtn.html();
+                        updateBtn.html('<i class="fa fa-check btn-icon"></i> Updated');
+                        updateBtn.css('background', '#28a745');
+                        setTimeout(function() {
+                            updateBtn.html(originalText);
+                            updateBtn.css('background', '');
+                        }, 1500);
                     }
                     //Cookies.set('cart' + user, cart);
                 } else {
