@@ -396,20 +396,19 @@
                     input.val( 0 );
                     return false;
                 }
-                // make sure there's enough stock and that it's not one per child
+                // make sure there's enough stock and that it's not more than the max per user
                 var item = cart[key];
                 var curQty = item.qty;
-                if (val > curQty && val > item.available) {
+                if (val > item.available) {
                     alert('There are only ' + item.available + ' of this item in stock.');
                     input.val(curQty);
                     return false;
                 }
-                if (val > 1 && item.onlyOne == 1) {
-                    alert('You can only purchase one of this prize.');
+                if (item.numPerUser > 0 && val > item.numPerUser) {
+                    alert('You can only purchase ' + item.numPerUser + ' of this prize.');
                     input.val(curQty);
                     return false;
                 }
-                
                 if ( checkBal( key, val ) ) {
                     item.qty = val; item.stock -= val;
                     calcBalance();
