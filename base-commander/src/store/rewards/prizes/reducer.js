@@ -82,6 +82,16 @@ export default ( state = initialState, action ) => {
         }),
       };
 
+    case types.UPDATE_PRIZE_LOCALLY:
+      return {
+        ...state,
+        prizes: state.prizes.map(prize => {
+          if (prize.prize_id === action.payload.id)
+            return { ...prize, ...action.payload.updates };
+          return prize;
+        })
+      };
+
     default:
       return state; 
   }

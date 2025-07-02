@@ -81,3 +81,6 @@ export const setStoreOpen = ( school_store ) => dispatch => {
 export const uploadImage = ( formData ) => dispatch => {
   return API.post( '/rewards/prizes?action=uploadImage', formData )
 }
+
+// Export updatePrizeLocally for optimistic UI
+export const updatePrizeLocally = actions.updatePrizeLocally;

@@ -4,11 +4,12 @@ import { DEFAULT_PRIZE } from 'components/constants';
 import { Stock } from './components';
 import { Toggle } from 'components/inputs';
 import { NumberDisplay, StorePrize } from 'components/ui';
+import { Input } from 'reactstrap';
 // functions
 import { yesNoFilter, yesNoFilterRender } from 'functions/tables';
 
 export function getColumns({
-  editPicture, editPrize, updateToggle, isTemplate = false
+  editPicture, editPrize, updateToggle, isTemplate = false, updateNumPerUser
 }) {
 
   const dropdown = yesNoFilterRender('On', 'Off');
@@ -60,20 +61,25 @@ export function getColumns({
             onChange={ updateToggle( 'is_active', original.prize_id ) } />,
       },
       
-      { Header: 'One Per Soldier', accessor: 'one_per_user',
-        Filter: dropdown, filterMethod: yesNoFilter,
-        Cell: ({ value, original }) => 
-          <Toggle
-            disabled={ !original.editable } 
-            checked={ !!value } 
-            onChange={ updateToggle( 'one_per_user', original.prize_id ) } />,
+      { Header: 'Max Per Soldier', accessor: 'num_per_user',
+        Cell: props => (
+          <Input
+            type="number"
+            name="num_per_user"
+            min="0"
+            value={props.value || ''}
+            onChange={e => updateNumPerUser(props.original.prize_id, e.target.value)}
+            style={{ width: 60 }}
+            disabled={!props.original.editable}
+          />
+        )
       },
     );
   }
   
   if ( isTemplate ) {
     columns.push(
-      { Header: 'One Per Soldier', id: 'one_per_user', accessor: ({ one_per_user }) => one_per_user ? 'Yes' : 'No' }
+      { Header: 'Max Per Soldier', id: 'num_per_user', accessor: ({ num_per_user }) => num_per_user ? 'Yes' : 'No' }
     )
   }
 

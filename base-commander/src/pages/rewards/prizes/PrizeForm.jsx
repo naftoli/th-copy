@@ -9,7 +9,14 @@ import { isBC } from 'functions/login';
 
 export class PrizeForm extends Component {
 
-  onChange = onInputChange( this.props.onUpdate );
+  onChange = e => {
+    const { name, value, type } = e.target;
+    let updateValue = value;
+    if (name === 'num_per_user') {
+      updateValue = value === '' ? 0 : parseInt(value, 10);
+    }
+    this.props.onUpdate({ [name]: updateValue });
+  };
 
   onTemplateChange = option => {
     let { value, label, prize_id, ...template } = option;
@@ -36,7 +43,7 @@ export class PrizeForm extends Component {
     let { login, onImageEdit, editing, templates, prize, onDelete } = this.props;
     let { 
       platoons = [], prize_name, prize_description, prize_count, points,
-      one_per_user, is_active, teacher_edit, school, image
+      num_per_user, is_active, teacher_edit, school, image
     } = prize;
     // props for all inputs
     const inputProps = { required: true, onChange: this.onChange };
@@ -90,14 +97,18 @@ export class PrizeForm extends Component {
             </Col>
 
             <Col xs={ 6 } sm={ bc ? 4 : 6 }>
-              <label htmlFor='one_per_user'>1 per Soldier</label><br/>
-              <Toggle 
-                className='large' 
-                on='yes' off='no'
-                id='one_per_user'
-                name='one_per_user'
-                checked={ !!one_per_user }
-                onChange={ this.onToggleChange }/>
+              <label htmlFor='num_per_user'>Max Per Soldier</label>
+              <Input
+                type='number'
+                name='num_per_user'
+                id='num_per_user'
+                value={ prize.num_per_user || '' }
+                min='0'
+                onChange={ this.onChange }
+                required={ false }
+                placeholder='No limit if 0'
+              />
+              <div className='invalid-message'>Enter 0 for unlimited, or a positive number.</div>
             </Col>
             { bc && school && 
               <Col xs={ 6 } sm={ 4 }>

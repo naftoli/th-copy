@@ -14,7 +14,8 @@ import { setTitle, canDownload } from 'functions/utils';
 // state
 import { 
   getPrizes, updatePrize, uploadImage,
-  getTemplates, createPrize, setStoreOpen, deletePrize
+  getTemplates, createPrize, setStoreOpen, deletePrize,
+  updatePrizeLocally
 } from 'store/rewards/prizes/operations';
 // styles
 import './include/prizes.scss';
@@ -109,15 +110,27 @@ class PrizesPage extends Component {
   toCSV = () => {
     const headers = [
       'Prize ID', 'Prize Name', 'Miles', 'In Stock', 'Active',
-      'One Per Soldier', 'Last Updated', 'Base Number', 'Base'
+      'Max Per Soldier', 'Last Updated', 'Base Number', 'Base'
     ];
     const rows = this.props.prizes.map( prize => [
       prize.prize_id, prize.prize_name, prize.points, prize.prize_count,
-      prize.is_active ? 'Yes' : 'No', prize.one_per_user ? 'Yes' : 'No', 
+      prize.is_active ? 'Yes' : 'No',
+      prize.num_per_user || '',
       prize.modified, prize.school.school_number, prize.school.school_name
     ]);
     //arrayToCSV( headers, rows, 'store_prizes' );
     return dataToCSV( headers, rows );
+  }
+
+  updateNumPerUser = (id, value) => {
+    // Optimistically update the Redux state
+    this.props.updatePrizeLocally(id, { num_per_user: value ? parseInt(value, 10) : 0 });
+    this.props.updatePrize(id, { num_per_user: value ? parseInt(value, 10) : 0 })
+      .catch(e => {
+        toast.error(e.message);
+        // Optionally revert the change if backend fails
+        this.props.getPrizes();
+      });
   }
 
   render() {
@@ -130,7 +143,8 @@ class PrizesPage extends Component {
 
     let columns = getColumns({
       editPrize, editPicture, updateToggle,
-      showPlatoons: true
+      showPlatoons: true,
+      updateNumPerUser: this.updateNumPerUser
     });
 
     if ( isAdmin( login.code ) )
@@ -223,7 +237,8 @@ const mapStateToProps = ({ rewards, login }) => {
 
 const mapDispatchToProps = {
   getPrizes, updatePrize, createPrize, deletePrize,
-  getTemplates, uploadImage, setStoreOpen
+  getTemplates, uploadImage, setStoreOpen,
+  updatePrizeLocally
 };
 
 export default connect( mapStateToProps, mapDispatchToProps )( PrizesPage );

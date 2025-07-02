@@ -62,3 +62,10 @@ export const setStoreOpen = status => {
     payload: status
   }
 };
+
+export const updatePrizeLocally = ( id, updates ) => {
+  return {
+    type: types.UPDATE_PRIZE_LOCALLY,
+    payload: { id, updates }
+  };
+};

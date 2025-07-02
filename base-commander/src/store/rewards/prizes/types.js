@@ -9,5 +9,6 @@ export const SET_TEMPLATES = 'rewards/prizes/set_templates';
 export const UPDATE_TEMPLATE = 'rewards/prizes/update_template';
 export const CREATE_TEMPLATE = 'rewards/prizes/create_template';
 
+export const UPDATE_PRIZE_LOCALLY = 'rewards/prizes/update_prize_locally';
 
 export const SET_STORE_OPEN = 'rewards/prizes/set_store_open';

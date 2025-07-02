@@ -16,6 +16,7 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         'name' => 'prize_name',
         'stock' => 'prize_count',
         'description' => 'prize_description',
+        'num_per_user' => 'num_per_user',
     ];
     // cache variables
     private $platoons = false;
@@ -123,7 +124,7 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         $default_options = [
             'only' => [
                 'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 
-                'one_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
+                'num_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
             ],
             'methods' => [ 'image', 'editable' ]
         ];
@@ -134,7 +135,7 @@ class StorePrize extends ActiveRecord\Model implements JsonSerializable {
         $default_options = [
             'only' => [
                 'prize_id','prize_name', 'institution_id', 'points', 'prize_description', 'points',
-                'one_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
+                'num_per_user', 'prize_count', 'is_active', 'teacher_edit', 'modified', 'image_id'
             ],
             'include' => [ 'school' => [ 'only' => [ 'school_name', 'school_id', 'school_number' ] ] ],
             'methods' => [ 'image', 'platoons', 'editable' ]
