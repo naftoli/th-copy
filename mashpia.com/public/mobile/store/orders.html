@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+  <title>Mobile Store | Orders</title>
+  <link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'"></noscript>
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload" as="style" onload="this.rel='stylesheet'">
+  <noscript><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="stylesheet"></noscript>
+  <style>
+    body {
+      font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      background: #fff;
+      margin: 0;
+      padding-bottom: 100px;
+    }
+    .store-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 500px;
+      margin: 16px auto 12px auto;
+      padding: 0 8px;
+      width: 100%;
+      position: relative;
+    }
+    .store-nav-btn {
+      background: #4258a2;
+      color: #fff !important;
+      border-radius: 6px;
+      padding: 7px 18px 7px 14px;
+      font-size: 1em;
+      font-weight: 600;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      transition: background 0.2s;
+      box-shadow: 0 1px 3px rgba(27,43,81,0.07);
+      min-width: 90px;
+      justify-content: center;
+    }
+    .store-nav-btn .fa {
+      margin-right: 7px;
+      font-size: 1.1em;
+      color: #fff !important;
+    }
+    .store-nav-btn:hover, .store-nav-btn:focus {
+      background: #2d3a6a;
+      color: #fff !important;
+      text-decoration: none;
+    }
+    .store-nav-btn.center {
+      margin: 0 auto;
+    }
+    @media (max-width: 480px) {
+      .store-nav {
+        flex-direction: column;
+        gap: 8px;
+        max-width: 100%;
+        padding: 0;
+      }
+      .store-nav-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    .orders-container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 8px;
+    }
+    .orders-section-title {
+      font-size: 1.2em;
+      font-weight: 700;
+      color: #4258a2;
+      margin: 24px 0 12px 0;
+      text-align: left;
+    }
+    .order-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 1px solid #e8e8e8;
+      margin-bottom: 18px;
+      padding: 18px 16px 12px 16px;
+      position: relative;
+      transition: box-shadow 0.2s;
+    }
+    .order-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .order-id {
+      font-size: 1em;
+      font-weight: 600;
+      color: #1b2b51;
+    }
+    .order-date {
+      font-size: 0.95em;
+      color: #6c757d;
+    }
+    .order-status {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 16px;
+      font-size: 0.95em;
+      font-weight: 700;
+      margin-left: 8px;
+      margin-top: 2px;
+    }
+    .status-ordered {
+      background: #4258a2;
+      color: #fff;
+    }
+    .status-redeemed {
+      background: #28a745;
+      color: #fff;
+    }
+    .status-returned {
+      background: #e92d41;
+      color: #fff;
+    }
+    .status-in_cart {
+      background: #ff9800;
+      color: #fff;
+    }
+    .order-items-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .order-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .order-item-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      margin-right: 12px;
+      border: 1px solid #e8e8e8;
+      background: #f8f9fa;
+    }
+    .order-item-details {
+      flex: 1;
+      min-width: 0;
+    }
+    .order-item-name {
+      font-size: 1em;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .order-item-qty {
+      font-size: 0.95em;
+      color: #4258a2;
+      font-weight: 500;
+    }
+    .no-orders {
+      color: #6c757d;
+      text-align: center;
+      margin: 32px 0 24px 0;
+      font-size: 1.1em;
+    }
+    #page-title{
+      font-size: 25px;
+      font-weight: 700;
+      color: #fff;
+      text-align: center;
+      width: auto;
+      display: block;
+      padding: 5px 0px;
+      transition: .25s;
+    }
+    @media (min-width: 525px){
+      #page-title{font-size: 40px;padding: 10px 0px;}
+    }
+    .personalImg{
+      width:50px;
+      height:50px;
+      left:10px;
+      top:10px;
+      border-radius:50%;
+      position:absolute;
+    }
+  </style>
+  <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+  <script src="js/all.js" defer></script>
+</head>
+<body class="page-goals">
+  <header class="navbar" id="top" role="banner" style="background:#e92d41;position:relative;min-height:50px;margin-bottom:20px;border:1px solid transparent;">
+    <div class="personalImg"></div>
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+      <span id="page-title">ORDERS</span>
+    </div>
+  </header>
+  <div class="store-nav">
+    <a href="index.html" class="store-nav-btn" id="nav-prizes"><i class="fa fa-gift"></i> Prizes</a>
+    <a href="cart.html" class="store-nav-btn center" id="nav-cart"><i class="fa fa-shopping-cart"></i> Cart</a>
+    <a href="orders.html" class="store-nav-btn" id="nav-orders"><i class="fa fa-list"></i> Orders</a>
+  </div>
+  <div class="orders-container">
+    <div id="in-cart-section">
+      <div class="orders-section-title">In Cart</div>
+      <div id="in-cart-list"></div>
+    </div>
+    <div id="current-orders-section">
+      <div class="orders-section-title">Current Orders</div>
+      <div id="current-orders-list"></div>
+    </div>
+    <div id="past-orders-section">
+      <div class="orders-section-title">Past Orders</div>
+      <div id="past-orders-list"></div>
+    </div>
+  </div>
+  <script id="ordersTpl" type="text/x-handlebars-template">
+    {{#if orders.length}}
+      {{#each orders}}
+        <div class="order-card">
+          <div class="order-header">
+            <span class="order-item-name">{{name}}</span>
+            <span class="order-status status-{{status}}">{{capitalize status}}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 6px;">
+            <img class="order-item-img" src="/v2/images/imgsrepo/{{image}}" onerror="this.src='/v2/images/imgsrepo/default.png'" />
+            <div class="order-item-details">
+              <div class="order-item-qty">Qty: {{qty}}</div>
+              <div class="order-date">{{date}}</div>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    {{else}}
+      <div class="no-orders">No orders found.</div>
+    {{/if}}
+  </script>
+  <script>
+    let user = null;
+    let cart = [];
+    document.addEventListener("DOMContentLoaded", function(event) {
+      const url = location.href.toString();
+      const pos = url.indexOf('=');
+      user = url.substring(pos+1);
+      if (user.indexOf('#') != -1) user = user.substring(0, user.indexOf('#'));
+      if (user.indexOf('&') != -1) user = user.substring(0, user.indexOf('&'));
+      // Update nav links with user id
+      document.getElementById('nav-prizes').href = 'index.html?id=' + user;
+      document.getElementById('nav-cart').href = 'cart.html?id=' + user;
+      document.getElementById('nav-orders').href = 'orders.html?id=' + user;
+
+      // Handlebars helper
+      Handlebars.registerHelper('capitalize', function(str) {
+        if (!str) return '';
+        if (str === 'in_cart') return 'In Cart';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+      });
+
+      // Load user photo (same as cart page)
+      $.post('../reg/ajax/getPhoto.php', { user_id : user }, function( success ) {
+        const info = $.parseJSON( success );
+        let html = '<a href="../reg/medals/index.html?id=' + user +'">';
+        if (info.mobile_pic) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
+        else if (info.thumb) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
+        else if (info.photo) html += '<img onerror="handlefProfileError(this)" id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+        else html += '<img id="userImg" src="/mobile/reg/images/profile-photo-default.jpg">';
+        html += '</a>';
+        $(".personalImg").append( html );
+      });
+
+      // Load orders
+      $.post('ajax/getOrders.php', { user: user }, function( success ) {
+        const data = $.parseJSON( success );
+        if ( data.success ) {
+          const orders = data.orders;
+          // get prizes in cart
+          let prizesInCart = getPrizesInCart();
+          console.log(prizesInCart)
+          const tpl = Handlebars.compile(document.getElementById('ordersTpl').innerHTML);
+          document.getElementById('in-cart-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'in_cart') });
+          document.getElementById('current-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'ordered') });
+          document.getElementById('past-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'returned') });
+        } else {
+          console.error('Error loading orders:', data.error);
+        }
+      });
+    });
+
+    function getPrizesInCart() {
+        if (window.localStorage) {
+            if (localStorage.getItem('storeCart' + user)) {
+                const cart = JSON.parse( localStorage.getItem('storeCart' + user) );
+                return cart;
+            }
+        } else {
+            // need to update browser so that localStorage will work
+            alert("You need to update your browser to the latest version in order for this site to work properly.");
+        }
+        return [];
+    }
+  </script>
+</body>
+</html>

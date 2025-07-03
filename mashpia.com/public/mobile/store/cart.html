@@ -364,6 +364,57 @@
             #img-cart {
                 cursor: pointer;
             }
+            /* Add store nav styles */
+            .store-nav {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              max-width: 500px;
+              margin: 0 auto 12px auto;
+              padding: 0 8px;
+              width: 100%;
+              position: relative;
+            }
+            .store-nav-btn {
+              background: #4258a2;
+              color: #fff !important;
+              border-radius: 6px;
+              padding: 7px 18px 7px 14px;
+              font-size: 1em;
+              font-weight: 600;
+              text-decoration: none;
+              display: flex;
+              align-items: center;
+              transition: background 0.2s;
+              box-shadow: 0 1px 3px rgba(27,43,81,0.07);
+              min-width: 90px;
+              justify-content: center;
+            }
+            .store-nav-btn .fa {
+              margin-right: 7px;
+              font-size: 1.1em;
+              color: #fff !important;
+            }
+            .store-nav-btn:hover, .store-nav-btn:focus {
+              background: #2d3a6a;
+              color: #fff !important;
+              text-decoration: none;
+            }
+            .store-nav-btn.center {
+              margin: 0 auto;
+            }
+            @media (max-width: 480px) {
+              .store-nav {
+                flex-direction: column;
+                gap: 8px;
+                max-width: 100%;
+                padding: 0;
+              }
+              .store-nav-btn {
+                width: 100%;
+                justify-content: center;
+              }
+            }
         </style>
         <script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
         <script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
@@ -381,6 +432,12 @@
         
                 <div class="personalImg"></div>
                 
+                <div class="store-nav">
+                  <a href="index.html" class="store-nav-btn" id="nav-prizes"><i class="fa fa-gift"></i> Prizes</a>
+                  <a href="cart.html" class="store-nav-btn center" id="nav-cart"><i class="fa fa-shopping-cart"></i> Cart</a>
+                  <a href="orders.html" class="store-nav-btn" id="nav-orders"><i class="fa fa-list"></i> Orders</a>
+                </div>
+        
                 <div class="alert alert-warning" role="alert" dir="ltr" style="min-height: 92px;">
                     <div class="media">
                         <div id="img-cart" class="pull-right">
@@ -467,6 +524,11 @@
                 var pos2 = (user.indexOf('&'));
                 user = user.substring(0,pos2);
             }
+            
+            // Update nav links with user id
+            document.getElementById('nav-prizes').href = 'index.html?id=' + user;
+            document.getElementById('nav-cart').href = 'cart.html?id=' + user;
+            document.getElementById('nav-orders').href = 'orders.html?id=' + user;
             
             authenticate( user );
         

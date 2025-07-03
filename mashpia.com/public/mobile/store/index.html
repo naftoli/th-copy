@@ -608,7 +608,7 @@
 	<noscript>
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
 			rel="stylesheet"></noscript>
-	<script>!function (e) { "use strict"; var t = function (t, n, r) { function o(e) { if (i.body) return e(); setTimeout(function () { o(e) }) } function a() { d.addEventListener && d.removeEventListener("load", a), d.media = r || "all" } var l, i = e.document, d = i.createElement("link"); if (n) l = n; else { var s = (i.body || i.getElementsByTagName("head")[0]).childNodes; l = s[s.length - 1] } var u = i.styleSheets; d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () { l.parentNode.insertBefore(d, n ? l : l.nextSibling) }); var f = function (e) { for (var t = d.href, n = u.length; n--;)if (u[n].href === t) return e(); setTimeout(function () { f(e) }) }; return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d }; "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t }("undefined" != typeof global ? global : this), function (e) { if (e.loadCSS) { var t = loadCSS.relpreload = {}; if (t.support = function () { try { return e.document.createElement("link").relList.supports("preload") } catch (e) { return !1 } }, t.poly = function () { for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) { var r = t[n]; "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null) } }, !t.support()) { t.poly(); var n = e.setInterval(t.poly, 300); e.addEventListener && e.addEventListener("load", function () { t.poly(), e.clearInterval(n) }), e.attachEvent && e.attachEvent("onload", function () { e.clearInterval(n) }) } } }(this);</script>
+	<script>!function (e) { "use strict"; var t = function (t, n, r) { function o(e) { if (i.body) return e(); setTimeout(function () { o(e) }) } function a() { d.addEventListener && d.removeEventListener("load", a), d.media = r || "all" } var l, i = e.document, d = i.createElement("link"); if (n) l = n; else { var s = (i.body || i.getElementsByTagName("head")[0]).childNodes; l = s[s.length - 1] } var u = i.styleSheets; d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () { l.parentNode.insertBefore(d, n ? l : l.nextSibling) }); var f = function (e) { for (var t = d.href, n = u.length; n--;)if (u[n].href === t) return e(); setTimeout(function () { f(e) }) }; return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d }; "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t }("undefined" != typeof global ? global : this), function (e) { if (e.loadCSS) { var t = loadCSS.relpreload = {}; if (t.support = function () { try { return e.document.createElement("link").relList.supports("preload") } catch (e) { return !1 } }, t.poly = function () { for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) { var r = t[n]; "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null) } }, !t.support()) { t.poly(); var n = e.setInterval(t.poly, 300); e.addEventListener && e.addEventListener("load", function () { t.poly(), e.clearInterval(n) }), e.attachEvent && e.attachEvent("onload", function () { e.clearInterval(n) }) } } } }(this);</script>
 	<script src="js/all.js" defer></script>
 	<!--    Bug Report code -->
 	<link rel="stylesheet" href="/mobile/css/bug_report.css" />
@@ -822,6 +822,57 @@
 		#img-cart {
 			cursor: pointer;
 		}
+		/* Add store nav styles */
+		.store-nav {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			max-width: 500px;
+			margin: 16px auto 12px auto;
+			padding: 0 8px;
+			width: 100%;
+			position: relative;
+		}
+		.store-nav-btn {
+			background: #4258a2;
+			color: #fff !important;
+			border-radius: 6px;
+			padding: 7px 18px 7px 14px;
+			font-size: 1em;
+			font-weight: 600;
+			text-decoration: none;
+			display: flex;
+			align-items: center;
+			transition: background 0.2s;
+			box-shadow: 0 1px 3px rgba(27,43,81,0.07);
+			min-width: 90px;
+			justify-content: center;
+		}
+		.store-nav-btn .fa {
+			margin-right: 7px;
+			font-size: 1.1em;
+			color: #fff !important;
+		}
+		.store-nav-btn:hover, .store-nav-btn:focus {
+			background: #2d3a6a;
+			color: #fff !important;
+			text-decoration: none;
+		}
+		.store-nav-btn.center {
+			margin: 0 auto;
+		}
+		@media (max-width: 480px) {
+			.store-nav {
+				flex-direction: column;
+				gap: 8px;
+				max-width: 100%;
+				padding: 0;
+			}
+			.store-nav-btn {
+				width: 100%;
+				justify-content: center;
+			}
+		}
 	</style>
 	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
@@ -877,6 +928,11 @@
 	</div>
 
 	<div class="personalImg"></div>
+	<div class="store-nav">
+		<a href="index.html" class="store-nav-btn" id="nav-prizes"><i class="fa fa-gift"></i> Prizes</a>
+		<a href="cart.html" class="store-nav-btn center" id="nav-cart"><i class="fa fa-shopping-cart"></i> Cart</a>
+		<a href="orders.html" class="store-nav-btn" id="nav-orders"><i class="fa fa-list"></i> Orders</a>
+	</div>
 	<div class="bug-report">
 		<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Store" alt="bug-report" />
 	</div>
@@ -1018,6 +1074,11 @@
 		$("#rankLink").attr('href', '../reg/rank.html?id=' + user);
 		$("#scanMenu").attr('href', '../store/scan.html?id=' + user);
 		$("#auctionMenu").attr('href', '../auction/index.html?id=' + user);
+
+		// Update nav links with user id
+		document.getElementById('nav-prizes').href = 'index.html?id=' + user;
+		document.getElementById('nav-cart').href = 'cart.html?id=' + user;
+		document.getElementById('nav-orders').href = 'orders.html?id=' + user;
 
 		$.post('../reg/ajax/getPhoto.php', { user_id: user }, function (success) {
 			var info = $.parseJSON(success);
