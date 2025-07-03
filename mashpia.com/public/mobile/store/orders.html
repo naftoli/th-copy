@@ -287,7 +287,7 @@
           console.log(prizesInCart)
           const tpl = Handlebars.compile(document.getElementById('ordersTpl').innerHTML);
           document.getElementById('in-cart-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'in_cart') });
-          document.getElementById('current-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'ordered') });
+          document.getElementById('current-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'redeemed') });
           document.getElementById('past-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'returned') });
         } else {
           console.error('Error loading orders:', data.error);
