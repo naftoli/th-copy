@@ -308,7 +308,16 @@
         if (window.localStorage) {
             if (localStorage.getItem('storeCart' + user)) {
                 const cart = JSON.parse( localStorage.getItem('storeCart' + user) );
-                return cart;
+                let prizesInCart = [];
+                for (let prize of cart) {
+                  prizesInCart.push({
+                    qty: prize.qty,
+                    name: prize.name, 
+                    image: prize.image, 
+                    status: 'in_cart'
+                  });
+                }
+                return prizesInCart;
             }
         } else {
             // need to update browser so that localStorage will work
