@@ -1392,12 +1392,14 @@
 			$('.qty-input').each(function() {
 				const prizeId = parseInt($(this).data('prize-id'));
 				let qty = 0;
+				let inCart = false;
 				
 				// Find this prize in cart
 				for (const c in cart) {
 					const item = cart[c];
 					if (item.prize == prizeId) {
 						qty = item.qty;
+						inCart = true;
 						break;
 					}
 				}
@@ -1405,7 +1407,7 @@
 				$(this).val(qty);
 				// Update button HTML (icon + text)
 				const btn = $(this).siblings('.add-to-cart-btn');
-				if (qty > 0) {
+				if (inCart) {
 					btn.html('<i class="fa fa-shopping-cart"></i> Update Cart');
 				} else {
 					btn.html('<i class="fa fa-shopping-cart"></i> Add to Cart');
@@ -1535,7 +1537,19 @@
 			}
 			// Update button HTML (icon + text) live
 			const btn = $(this).siblings('.add-to-cart-btn');
-			if (qty > 0) {
+			const prizeId = parseInt($(this).data('prize-id'));
+			let inCart = false;
+			
+			// Check if this prize is already in cart
+			for (const c in cart) {
+				const item = cart[c];
+				if (item.prize == prizeId) {
+					inCart = true;
+					break;
+				}
+			}
+			
+			if (inCart) {
 				btn.html('<i class="fa fa-shopping-cart"></i> Update Cart');
 			} else {
 				btn.html('<i class="fa fa-shopping-cart"></i> Add to Cart');
