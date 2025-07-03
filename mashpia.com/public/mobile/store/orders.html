@@ -235,9 +235,9 @@
             <img class="order-item-img" src="/v2/images/imgsrepo/{{image}}" onerror="this.src='/v2/images/imgsrepo/default.png'" />
             <div class="order-item-details">
               <div class="order-item-qty">Qty: {{qty}}</div>
-              {{#unless (eq status 'in_cart')}}
+              {{#if date}}
                 <div class="order-date">Ordered: {{formatDate date}}</div>
-              {{/unless}}
+              {{/if}}
             </div>
           </div>
         </div>
