@@ -235,7 +235,9 @@
             <img class="order-item-img" src="/v2/images/imgsrepo/{{image}}" onerror="this.src='/v2/images/imgsrepo/default.png'" />
             <div class="order-item-details">
               <div class="order-item-qty">Qty: {{qty}}</div>
-              <div class="order-date">Ordered: {{formatDate date}}</div>
+              {{#unless (eq status 'in_cart')}}
+                <div class="order-date">Ordered: {{formatDate date}}</div>
+              {{/unless}}
             </div>
           </div>
         </div>
@@ -267,11 +269,7 @@
       // Add formatDate helper
       Handlebars.registerHelper('formatDate', function(dateStr) {
         if (!dateStr) return '';
-        let date
-        // if date is from the cart, split by 'T' and take the first part
-        if (dateStr.includes('T')) date = new Date(dateStr.split('T')[0]);
-        // if date is from the past orders, split by ' ' and take the first part
-        else if (dateStr.includes(' ')) date = new Date(dateStr.split(' ')[0]);
+        const date = new Date(dateStr.replace(/-/g, '/').split(' ')[0]);
         if (isNaN(date)) return dateStr;
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return date.toLocaleDateString(undefined, options);
@@ -318,8 +316,7 @@
                     qty: prize.qty,
                     name: prize.name, 
                     image: prize.image, 
-                    status: 'in_cart', 
-                    date: new Date().toISOString()
+                    status: 'in_cart',                   
                   });
                 }
                 return prizesInCart;
