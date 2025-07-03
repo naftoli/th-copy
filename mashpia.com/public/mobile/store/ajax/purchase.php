@@ -92,6 +92,7 @@ foreach ($cart as $item) {
                 ." quantity = " . $qty . ","
                 ." serial = '" . $strSerial . "',"
                 ." status = 'Checked Out',"
+                ." actual_points = " . $points . ","
                 ." created = now()";
         
         if (mysql_query($sql)) {

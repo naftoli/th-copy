@@ -20,6 +20,7 @@ $sql = "SELECT
     up.status,
     up.is_reversed,
     up.created,
+    up.actual_points,
     p.prize_name AS pname,
     p.points,
     p.image_id,
@@ -54,6 +55,7 @@ foreach ( $orders as $order ) {
     $qty = $order['quantity'];
     $date = $order['created'];
     $points = $order['points'] ? $order['points'] : $order['prize_points'];
+    $actualPoints = $order['actual_points'] ? $order['actual_points'] : $points;
     $image = $order['image_id'] ? $order['image_id'] : '';
     $info[] = [
         'name' => $name,
@@ -61,6 +63,7 @@ foreach ( $orders as $order ) {
         'date' => $date,
         'status' => $status,
         'points' => $points,
+        'actualPoints' => $actualPoints,
         'image' => $image
     ];
 }

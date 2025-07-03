@@ -165,6 +165,12 @@
       color: #4258a2;
       font-weight: 500;
     }
+    .order-points {
+      font-size: 0.95em;
+      color: #e92d41;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
     .no-orders {
       color: #6c757d;
       text-align: center;
@@ -235,6 +241,11 @@
             <img class="order-item-img" src="/v2/images/imgsrepo/{{image}}" onerror="this.src='/v2/images/imgsrepo/default.png'" />
             <div class="order-item-details">
               <div class="order-item-qty">Qty: {{qty}}</div>
+              {{#if actualPoints}}
+                {{#unless returned}}
+                  <div class="order-points">Points Used: {{actualPoints}}</div>
+                {{/unless}}
+              {{/if}}
               {{#if date}}
                 <div class="order-date">Ordered: {{formatDate date}}</div>
               {{/if}}
@@ -243,7 +254,7 @@
         </div>
       {{/each}}
     {{else}}
-      <div class="no-orders">No orders found.</div>
+      <div class="no-orders">{{emptyMessage}}</div>
     {{/if}}
   </script>
   <script>
@@ -274,6 +285,11 @@
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return date.toLocaleDateString(undefined, options);
       });
+      
+      // Add eq helper
+      Handlebars.registerHelper('eq', function(a, b) {
+        return a === b;
+      });
 
       // Load user photo (same as cart page)
       $.post('../reg/ajax/getPhoto.php', { user_id : user }, function( success ) {
@@ -292,14 +308,27 @@
         const data = $.parseJSON( success );
         if ( data.success ) {
           const orders = data.orders;
+          // Add returned property for template logic
+          orders.forEach(order => {
+            order.returned = order.status === 'returned';
+          });
           // get prizes in cart
           let prizesInCart = getPrizesInCart();
           // add prizesInCart to orders
           orders.push(...prizesInCart);
           const tpl = Handlebars.compile(document.getElementById('ordersTpl').innerHTML);
-          document.getElementById('in-cart-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'in_cart') });
-          document.getElementById('current-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'ordered') });
-          document.getElementById('past-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'redeemed' || o.status === 'returned') });
+          document.getElementById('in-cart-list').innerHTML = tpl({ 
+            orders: orders.filter(o => o.status === 'in_cart'),
+            emptyMessage: 'No items in cart.'
+          });
+          document.getElementById('current-orders-list').innerHTML = tpl({ 
+            orders: orders.filter(o => o.status === 'ordered'),
+            emptyMessage: 'No current orders.'
+          });
+          document.getElementById('past-orders-list').innerHTML = tpl({ 
+            orders: orders.filter(o => o.status === 'redeemed' || o.status === 'returned'),
+            emptyMessage: 'No past orders.'
+          });
         } else {
           console.error('Error loading orders:', data.error);
         }
