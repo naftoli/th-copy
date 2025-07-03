@@ -235,7 +235,7 @@
             <img class="order-item-img" src="/v2/images/imgsrepo/{{image}}" onerror="this.src='/v2/images/imgsrepo/default.png'" />
             <div class="order-item-details">
               <div class="order-item-qty">Qty: {{qty}}</div>
-              <div class="order-date">Ordered: {{date}}</div>
+              <div class="order-date">Ordered: {{formatDate date}}</div>
             </div>
           </div>
         </div>
@@ -264,6 +264,15 @@
         if (str === 'in_cart') return 'In Cart';
         return str.charAt(0).toUpperCase() + str.slice(1);
       });
+      // Add formatDate helper
+      Handlebars.registerHelper('formatDate', function(dateStr) {
+        if (!dateStr) return '';
+        // Handles "yyyy-mm-dd" or "yyyy-mm-dd hh:mm:ss"
+        const date = new Date(dateStr.replace(/-/g, '/').split(' ')[0]);
+        if (isNaN(date)) return dateStr;
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString(undefined, options);
+      });
 
       // Load user photo (same as cart page)
       $.post('../reg/ajax/getPhoto.php', { user_id : user }, function( success ) {
@@ -287,8 +296,8 @@
           console.log(prizesInCart)
           const tpl = Handlebars.compile(document.getElementById('ordersTpl').innerHTML);
           document.getElementById('in-cart-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'in_cart') });
-          document.getElementById('current-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'redeemed') });
-          document.getElementById('past-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'returned') });
+          document.getElementById('current-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'ordered') });
+          document.getElementById('past-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'redeemed' || o.status === 'returned') });
         } else {
           console.error('Error loading orders:', data.error);
         }
