@@ -13,6 +13,15 @@ export class PrizeForm extends Component {
     let updateValue = value;
     if (name === 'num_per_user') {
       updateValue = value === '' ? 0 : (parseInt(value, 10) || 0);
+    } else if (name === 'discount_amount') {
+      updateValue = value === '' ? 0 : (parseFloat(value) || 0);
+    } else if (name === 'discount_type' && value === '') {
+      // Clear discount amount when discount type is cleared
+      this.props.onUpdate({ 
+        [name]: value,
+        discount_amount: 0
+      });
+      return;
     }
     this.props.onUpdate({ [name]: updateValue });
   };
@@ -95,20 +104,6 @@ export class PrizeForm extends Component {
                 onChange={ this.onToggleChange } />
             </Col>
 
-            <Col xs={ 6 } sm={ bc ? 4 : 6 }>
-              <label htmlFor='num_per_user'>Max Per Soldier</label>
-              <Input
-                type='number'
-                name='num_per_user'
-                id='num_per_user'
-                value={ prize.num_per_user || '' }
-                min='0'
-                onChange={ this.onChange }
-                required={ false }
-                placeholder='No limit if 0'
-              />
-              <div className='invalid-message'>Enter 0 for unlimited, or a positive number.</div>
-            </Col>
             { bc && school && 
               <Col xs={ 6 } sm={ 4 }>
                 <label id='teacherEdit'>Teacher Editing</label><br/>
@@ -123,7 +118,66 @@ export class PrizeForm extends Component {
                   onChange={ this.onToggleChange } />
               </Col>
             }
-            </Row>
+
+            <Col xs={ 6 } sm={ bc ? 4 : 6 }>
+              <label htmlFor='num_per_user'>Max Per Soldier</label>
+              <small style={{ display: 'block', color: '#6c757d', marginBottom: '5px' }}>
+                Leave blank or enter 0 for no limit
+              </small>
+              <Input
+                type='number'
+                name='num_per_user'
+                id='num_per_user'
+                value={ prize.num_per_user || '' }
+                min='0'
+                onChange={ this.onChange }
+                required={ false }
+                placeholder='0 for No Limit'
+              />
+              <div className='invalid-message'>Enter 0 for unlimited, or a positive number.</div>
+            </Col>
+          </Row>
+
+          <Row>
+            <Col xs={ 6 } sm={ 6 }>
+              <label htmlFor='discount_type'>Discount Type</label>
+              <Input
+                type='select'
+                name='discount_type'
+                id='discount_type'
+                value={ prize.discount_type || '' }
+                onChange={ this.onChange }
+                required={ false }
+              >
+                <option value=''>No Discount</option>
+                <option value='points'>Miles Discount</option>
+                <option value='percent'>Percentage Off</option>
+              </Input>
+            </Col>
+
+            <Col xs={ 6 } sm={ 6 }>
+              <label htmlFor='discount_amount'>
+                {prize.discount_type === 'percent' ? 'Percentage Off' : 'Miles Discount'}
+              </label>
+              <Input
+                type='number'
+                name='discount_amount'
+                id='discount_amount'
+                value={ prize.discount_amount || '' }
+                min='0'
+                step={prize.discount_type === 'percent' ? '0.1' : '1'}
+                onChange={ this.onChange }
+                required={ false }
+                disabled={!prize.discount_type}
+                placeholder={prize.discount_type === 'percent' ? 'e.g., 25' : 'e.g., 50'}
+              />
+              <div className='invalid-message'>
+                {prize.discount_type === 'percent' 
+                  ? 'Enter percentage (e.g., 25 for 25% off)' 
+                  : 'Enter miles to discount'}
+              </div>
+            </Col>
+          </Row>
         </Col>
         <Col xs='12' sm={{ size: 4, order: 1 }} className='prize-picture'>
           <label>Prize Image</label>

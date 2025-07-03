@@ -63,22 +63,65 @@ export function getColumns({
       
       { Header: 'Max Per Soldier', accessor: 'num_per_user',
         Cell: props => (
-          <Input
-            type="number"
-            name="num_per_user"
-            min="0"
-            value={props.value || ''}
-            onChange={e => updateNumPerUser(props.original.prize_id, e.target.value)}
-            style={{ width: 60 }}
-            disabled={!props.original.editable}
-            placeholder="0"
-            onBlur={e => {
-              if (e.target.value === '') {
-                updateNumPerUser(props.original.prize_id, '0');
-              }
-            }}
-          />
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Input
+              type="number"
+              name="num_per_user"
+              min="0"
+              value={props.value || ''}
+              onChange={e => updateNumPerUser(props.original.prize_id, e.target.value)}
+              style={{ width: 60 }}
+              disabled={!props.original.editable}
+              placeholder="0"
+              onBlur={e => {
+                if (e.target.value === '') {
+                  updateNumPerUser(props.original.prize_id, '0');
+                }
+              }}
+            />
+          </div>
         )
+      },
+
+      { Header: 'Discount', accessor: 'discount_amount',
+        Cell: props => {
+          const { discount_amount, discount_type } = props.original;
+          if (!discount_amount || discount_amount <= 0) return '-';
+          
+          if (discount_type === 'percent') {
+            return `${discount_amount}% off`;
+          } else {
+            return `${discount_amount} miles off`;
+          }
+        }
+      },
+
+      { Header: 'Final Price', accessor: 'points',
+        Cell: props => {
+          const { points, discount_amount, discount_type } = props.original;
+          if (!discount_amount || discount_amount <= 0) {
+            return <NumberDisplay value={points}/>;
+          }
+          
+          let finalPrice = points;
+          if (discount_type === 'percent') {
+            finalPrice = points * (1 - discount_amount / 100);
+            // Round up if there's a decimal part
+            finalPrice = Math.ceil(finalPrice);
+          } else {
+            finalPrice = Math.max(0, points - discount_amount);
+          }
+          
+          return (
+            <div>
+              <NumberDisplay value={finalPrice} style={{ color: '#28a745', fontWeight: 'bold' }}/>
+              <br />
+              <small style={{ color: '#6c757d', textDecoration: 'line-through' }}>
+                <NumberDisplay value={points}/>
+              </small>
+            </div>
+          );
+        }
       },
     );
   }

@@ -20,8 +20,9 @@ if ( !$row['school_store'] ) {
     }
 }
 else {
-    $sql = "SELECT prize_id, prize_name, prize_description, prizes.modified, prizes.created, points, image_id, num_per_user, prize_count, class_id 
-            FROM pointsDB.prizes 
+    $sql = "SELECT prize_id, prize_name, prize_description, p.modified, p.created, points, image_id, num_per_user, prize_count, class_id, 
+                discount_amount, discount_type    
+            FROM pointsDB.prizes p 
             LEFT JOIN pointsDB.prize_classes USING (prize_id)
             WHERE is_active = 1
             AND prize_count > 0 

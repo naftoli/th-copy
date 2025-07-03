@@ -391,7 +391,7 @@
 		.product.light {
 			width: 100%;
 			min-width: unset;
-			min-height: 420px;
+			min-height: 385px;
 			margin: 12px;
 			padding: 14px 8px 8px 8px;
 			box-sizing: border-box;
@@ -446,7 +446,7 @@
 		}
 		.product-price {
 			font-size: 1em;
-			color: #e92d41;
+			color: #4258a2;
 			font-weight: 700;
 			margin-bottom: 6px;
 		}
@@ -459,7 +459,7 @@
 			align-items: center;
 		}
 		.add-to-cart-btn {
-			background: #e92d41;
+			background: #4258a2;
 			color: #fff;
 			border: none;
 			border-radius: 6px;
@@ -476,9 +476,36 @@
 			text-align: center;
 			justify-content: center;
 			align-self: center;
+			height: 36px;
+			box-sizing: border-box;
+		}
+		.qty-input {
+			width: 50px;
+			height: 36px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			text-align: center;
+			font-size: 0.98em;
+			font-weight: 600;
+			margin-right: 8px;
+			background: #fff;
+			color: #1b2b51;
+		}
+		.qty-input:focus {
+			outline: none;
+			border-color: #4258a2;
+			box-shadow: 0 0 0 2px rgba(66, 88, 162, 0.2);
+		}
+		.product-cart {
+			margin-top: 10px;
+			width: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
 		}
 		.add-to-cart-btn:hover, .add-to-cart-btn:focus {
-			background: #e92d41;
+			background: #2d3a6a;
 			color: #fff;
 		}
 		.add-to-cart-btn .fa {
@@ -579,7 +606,7 @@
 			font-size: 1em;
 			font-weight: 700;
 			border-radius: 16px;
-			padding: 4px 14px;
+			padding: 8px 18px;
 			margin-bottom: 8px;
 			margin-top: 2px;
 		}
@@ -587,14 +614,30 @@
 			position: absolute;
 			top: 35px;
 			left: -35px;
-			background: #4258a2;
+			background: #6f42c1;
 			color: #fff;
 			font-size: 0.85em;
 			font-weight: 700;
 			padding: 4px 32px;
 			border-radius: 4px;
 			transform: rotate(-45deg);
-			box-shadow: 0 1px 4px rgba(27, 43, 81, 0.10);
+			box-shadow: 0 1px 4px rgba(111, 66, 193, 0.10);
+			z-index: 3;
+			pointer-events: none;
+			letter-spacing: 0.5px;
+		}
+		.discount-badge {
+			position: absolute;
+			top: 30px;
+			right: -30px;
+			background: #6f42c1;
+			color: #fff;
+			font-size: 0.85em;
+			font-weight: 700;
+			padding: 6px 32px;
+			border-radius: 4px;
+			transform: rotate(45deg);
+			box-shadow: 0 1px 4px rgba(111, 66, 193, 0.10);
 			z-index: 3;
 			pointer-events: none;
 			letter-spacing: 0.5px;
@@ -812,7 +855,7 @@
 			font-size: 1.15em;
 			font-weight: bold;
 			font-family: Raleway, sans-serif;
-
+			color: #4258a2;
 		}
 
 		.hebrew {
@@ -952,16 +995,26 @@
 			</div>
 
 			<!-- Sorting Controls -->
-			<div id="sort-controls" style="display: flex; align-items: center; gap: 12px; margin-bottom: 18px;">
-				<label for="sort-select" style="font-weight: 600;">Sort by:</label>
-				<select id="sort-select" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;">
-					<option value="amount-asc">Amount (Points) ↑</option>
-					<option value="amount-desc">Amount (Points) ↓</option>
-					<option value="alpha-asc">Alphabetical (A-Z)</option>
-					<option value="alpha-desc">Alphabetical (Z-A)</option>
-				</select>
+			<div id="sort-controls" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px;">
+				<div style="display: flex; align-items: center; gap: 12px;">
+					<label for="sort-select" style="font-weight: 600;">Sort by:</label>
+					<select id="sort-select" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;">
+						<option value="amount-asc">Amount (Points) ↑</option>
+						<option value="amount-desc">Amount (Points) ↓</option>
+						<option value="alpha-asc">Alphabetical (A-Z)</option>
+						<option value="alpha-desc">Alphabetical (Z-A)</option>
+					</select>
+				</div>
+				<button id="checkout-all-btn" class="checkout-now-btn" style="display: none; padding: 12px 20px; font-size: 1.1em; background: #e92d41; border-color: #e92d41;">
+					<i class="fa fa-shopping-cart" style="color: #fff; margin-right: 8px;"></i> Checkout Now
+				</button>
 			</div>
 			<!-- End Sorting Controls -->
+
+			<!-- Cart Warning -->
+			<div id="cart-warning" style="display: none; background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 6px; margin-bottom: 18px; text-align: center; font-weight: bold;">
+				You must click on checkout in order to purchase what's in your cart.
+			</div>
 
 			<div id="main"></div>
 
@@ -1041,19 +1094,19 @@
 </script>
 <script>
 	document.addEventListener("DOMContentLoaded", function (event) {
-		var url = location.href.toString();
-		var pos = url.indexOf('=');
-		var user = url.substring(pos + 1);
+		const url = location.href.toString();
+		const pos = url.indexOf('=');
+		let user = url.substring(pos + 1);
 
 		if (user.indexOf('#') != -1) {
 			// remove anything trailing after user_id
-			var pos2 = (user.indexOf('#'));
+			const pos2 = (user.indexOf('#'));
 			user = user.substring(0, pos2);
 		}
 
 		if (user.indexOf('&') != -1) {
 			// remove anything trailing after user_id
-			var pos2 = (user.indexOf('&'));
+			const pos2 = (user.indexOf('&'));
 			user = user.substring(0, pos2);
 		}
 
@@ -1081,8 +1134,8 @@
 		document.getElementById('nav-orders').href = 'orders.html?id=' + user;
 
 		$.post('../reg/ajax/getPhoto.php', { user_id: user }, function (success) {
-			var info = $.parseJSON(success);
-			var html = '<a href="../reg/medals/index.html?id=' + user + '">';
+			const info = $.parseJSON(success);
+			let html = '<a href="../reg/medals/index.html?id=' + user + '">';
 			if (info.mobile_pic) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
 			else if (info.thumb) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
 			else if (info.photo) html += '<img onerror="handleProfileError(this)" id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
@@ -1093,31 +1146,32 @@
 			$(".bug-report img").data("user_id", user);
 		});
 
-		var bal = 0;
-		var cart = [];
-		var cartQty = 0;
-		var totalPrice = 0;
-		var originalBal = 0;
-		var separator = '|';
-		var float_element = "";
-		var availibleStoreHTML = "Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>"
-		var totalmilesText = "Total Miles Earned: ";
-		var totalmilesYearText = "Total Miles Earned this Year: ";
+		let bal = 0;
+		let cart = [];
+		let cartQty = 0;
+		let totalPrice = 0;
+		let originalBal = 0;
+		const separator = '|';
+		let float_element = "";
+		let availibleStoreHTML = "Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>"
+		let totalmilesText = "Total Miles Earned: ";
+		let totalmilesYearText = "Total Miles Earned this Year: ";
+		let data_box_css = '';
 
 		if (localStorage.getItem("locallang") == "he") {
 			$("#img-cart").removeClass('pull-right').addClass('pull-left');
 			float_element = 'style="float:right;direction:rtl; margin-right:8px;"';
 			availibleStoreHTML = "נקודות שנשארו <strong>בחנות</strong> : <br /><span id='balance'></span><span id='balance-display'></span>";
 			totalmilesText = "סך הנקודות שנצברו  : ";
-			var totalmilesYearText = "סך הנקודות שנצברו השנה: ";
-			var data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
+			totalmilesYearText = "סך הנקודות שנצברו השנה: ";
+			data_box_css = 'style="float:right;direction:rtl; margin-right:40px; margin-top: 20px;"';
 		}
 		$.post('ajax/getBalance.php', {
 			user: user,
 			points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
 		}, function (success) {
-			var info = $.parseJSON(success);
-			var html = '<div id="balance-box" ' + float_element + '>';
+			const info = $.parseJSON(success);
+			let html = '<div id="balance-box" ' + float_element + '>';
 			html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
 			html += '</div><div id="data-box" ' + data_box_css + '>'
 			html += totalmilesText + info.tpoints.toLocaleString(navigator.language) + "<br />";
@@ -1129,22 +1183,22 @@
 			calcBalance();
 		});
 
-		var allPrizes = [];
-		var currentSort = 'amount-asc';
+		let allPrizes = [];
+		let currentSort = 'amount-asc';
 
 		function renderPrizes() {
-			var sortedPrizes = allPrizes.slice();
+			const sortedPrizes = allPrizes.slice();
 			if (currentSort === 'amount-asc') {
 				sortedPrizes.sort(function(a, b) {
-					var pointsA = parseInt(a.points, 10);
-					var pointsB = parseInt(b.points, 10);
+					const pointsA = parseInt(a.points, 10);
+					const pointsB = parseInt(b.points, 10);
 					if (pointsA !== pointsB) return pointsA - pointsB;
 					return a.prize_name.localeCompare(b.prize_name);
 				});
 			} else if (currentSort === 'amount-desc') {
 				sortedPrizes.sort(function(a, b) {
-					var pointsA = parseInt(a.points, 10);
-					var pointsB = parseInt(b.points, 10);
+					const pointsA = parseInt(a.points, 10);
+					const pointsB = parseInt(b.points, 10);
 					if (pointsA !== pointsB) return pointsB - pointsA;
 					return a.prize_name.localeCompare(b.prize_name);
 				});
@@ -1163,19 +1217,51 @@
 				$('#no-prizes').show();
 			}
 
-			var html = '';
-			for (var i = 0; i < sortedPrizes.length; i++) {
-				var prize = sortedPrizes[i];
+			let html = '';
+			for (let i = 0; i < sortedPrizes.length; i++) {
+				const prize = sortedPrizes[i];
 				html += '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 text-center product">\
 					<article class="product light">';
 				if (parseInt(prize.num_per_user) > 0) {
 					html += '<div class="onePerUser-badge">Only ' + parseInt(prize.num_per_user) + ' per Soldier</div>';
 				}	
+				// Discount badge
+				if (prize.discount_amount && prize.discount_amount > 0) {
+					let discountText = '';
+					let badgeStyle = '';
+					if (prize.discount_type === 'percent') {
+						discountText = Math.round(prize.discount_amount) + '% off';
+						badgeStyle = 'style="top: 15px;"';
+					} else {
+						discountText = Math.round(prize.discount_amount) + ' miles off';
+					}
+					html += '<div class="discount-badge" ' + badgeStyle + '>' + discountText + '!</div>';
+				}
 				// New label
 				if (new Date(prize.created).getTime() > new Date().getTime() - (30 * 24 * 60 * 60 * 1000)) {
 					html += '<div class="product-new">new</div>';
 				}
-				html += '<div class="price-badge">' + parseInt(prize.points, 10).toLocaleString(navigator.language) + ' Mile' + (prize.points > 1 ? 's' : '') + '</div>';
+				// Calculate final price with discount
+				const originalPrice = parseInt(prize.points, 10);
+				let finalPrice = originalPrice;
+				const hasDiscount = prize.discount_amount && prize.discount_amount > 0;
+				
+				if (hasDiscount) {
+					if (prize.discount_type === 'percent') {
+						finalPrice = Math.ceil(originalPrice * (1 - prize.discount_amount / 100));
+					} else {
+						finalPrice = Math.max(0, originalPrice - prize.discount_amount);
+					}
+				}
+				
+				if (hasDiscount) {
+					html += '<div class="price-badge">';
+					html += '<div style="color: #fff; font-weight: bold;">' + finalPrice.toLocaleString(navigator.language) + ' Mile' + (finalPrice > 1 ? 's' : '') + '</div>';
+					html += '<div style="color: #ffd700; text-decoration: line-through; font-size: 0.9em;">' + originalPrice.toLocaleString(navigator.language) + ' Mile' + (originalPrice > 1 ? 's' : '') + '</div>';
+					html += '</div>';
+				} else {
+					html += '<div class="price-badge">' + originalPrice.toLocaleString(navigator.language) + ' Mile' + (originalPrice > 1 ? 's' : '') + '</div>';
+				}
 				html += '<figure class="figure-hover-overlay">';
 				if (prize.image_id != 0) {
 					html += '<img class="img-responsive" onerror="handleImageError( this )" src="/v2/imgs/v/w/150/src/' + prize.image_id + '" alt="" title="">';
@@ -1191,9 +1277,10 @@
 				html += '</div>';
 				html += '<div class="product-cart" id="' +
 					prize.prize_id + separator + prize.points + separator + prize.image_id + separator +
-					prize.prize_name + separator + prize.num_per_user + separator + prize.prize_count + '">\
+					prize.prize_name + separator + prize.num_per_user + separator + prize.prize_count + separator +
+					(prize.discount_amount || 0) + separator + (prize.discount_type || '') + '">\
+					<input type="number" class="qty-input" value="0" min="0" max="' + prize.prize_count + '" data-prize-id="' + prize.prize_id + '">\
 					<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Add to Cart</button>\
-					<button class="checkout-now-btn">Checkout Now</button>\
 				</div>';
 				html += '</article>\
 				</div>';
@@ -1205,13 +1292,17 @@
 		$.post('ajax/getPrizes.php', { user: user }, function (data) {
 			// Flatten and store all prizes
 			allPrizes = [];
-			for (var amount in data.prizes) {
-				for (var p in data.prizes[amount]) {
-					var prize = data.prizes[amount][p];
+			for (const amount in data.prizes) {
+				for (const p in data.prizes[amount]) {
+					const prize = data.prizes[amount][p];
 					allPrizes.push(prize);
 				}
 			}
 			renderPrizes();
+			// Update quantity inputs after rendering
+			setTimeout(function() {
+				updateQuantityInputs();
+			}, 100);
 		});
 
 		// Sorting control event
@@ -1220,11 +1311,11 @@
 			renderPrizes();
 		});
 
-		var toggle_dropdown = true;
+		let toggle_dropdown = true;
 
 		$(document).on('click', ".panel-heading", function () {
-			var c = $(this).parent().attr('class');
-			var parent = $(this).parent();
+			const c = $(this).parent().attr('class');
+			const parent = $(this).parent();
 			if (c.indexOf('open') > 0 && toggle_dropdown) {
 				parent.removeClass('open');
 				parent.find('.collapse').removeClass('in');
@@ -1259,19 +1350,19 @@
 			} else {
 				if (localStorage.getItem('storeCart' + user)) {
 					cart = JSON.parse(localStorage.getItem('storeCart' + user));
-					for (var c in cart) {
-						var item = cart[c];
+					for (const c in cart) {
+						const item = cart[c];
 						cartQty += item.qty;
 						totalPrice += item.qty * item.price;
 					}
 					$("#cartQty").text(cartQty);
 				}
 			}
-			var cartCookie = Cookies.get('cart' + user);
+			const cartCookie = Cookies.get('cart' + user);
 			if (cartCookie !== undefined) {
 				cart = JSON.parse(cartCookie);
-				for (var c in cart) {
-					var item = cart[c];
+				for (const c in cart) {
+					const item = cart[c];
 					cartQty += item.qty;
 					totalPrice += item.qty * item.price;
 				}
@@ -1283,69 +1374,133 @@
 			bal = originalBal - totalPrice;
 			$('#balance').text(bal);
 			$("#balance-display").text(bal.toLocaleString(navigator.language));
+			
+			// Show/hide cart warning and checkout button
+			if (cart.length > 0) {
+				$('#cart-warning').show();
+				$('#checkout-all-btn').show();
+			} else {
+				$('#cart-warning').hide();
+				$('#checkout-all-btn').hide();
+			}
+			
+			// Update quantity inputs
+			updateQuantityInputs();
+		}
+		
+		function updateQuantityInputs() {
+			$('.qty-input').each(function() {
+				const prizeId = parseInt($(this).data('prize-id'));
+				let qty = 0;
+				
+				// Find this prize in cart
+				for (const c in cart) {
+					const item = cart[c];
+					if (item.prize == prizeId) {
+						qty = item.qty;
+						break;
+					}
+				}
+				
+				$(this).val(qty);
+				// Update button HTML (icon + text)
+				const btn = $(this).siblings('.add-to-cart-btn');
+				if (qty > 0) {
+					btn.html('<i class="fa fa-shopping-cart"></i> Update Cart');
+				} else {
+					btn.html('<i class="fa fa-shopping-cart"></i> Add to Cart');
+				}
+			});
 		}
 
-		$(document).on('click', '.product-cart', function () {
+		$(document).on('click', '.add-to-cart-btn', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			const productCart = $(this).closest('.product-cart');
+			const qtyInput = productCart.find('.qty-input');
+			const newQty = parseInt(qtyInput.val()) || 0;
+			
+			if (newQty < 0) {
+				alert('Please enter a quantity 0 or greater.');
+				return false;
+			}
+			
 			// get prize id and add to cart
-			var prizeInfo = $(this).attr('id');
-			var info = prizeInfo.split(separator);
-			var id = parseInt(info[0]);
-			var price = parseInt(info[1]);
-			var image = info[2];
-			var prizeName = info[3];
-			var numPerUser = parseInt(info[4]);
-			var stock = parseInt(info[5]);
-			var available = stock;
-			var found = false;
+			const prizeInfo = productCart.attr('id');
+			const info = prizeInfo.split(separator);
+			const id = parseInt(info[0]);
+			const price = parseInt(info[1]);
+			const image = info[2];
+			const prizeName = info[3];
+			const numPerUser = parseInt(info[4]);
+			const stock = parseInt(info[5]);
+			const discountAmount = parseFloat(info[6]) || 0;
+			const discountType = info[7] || '';
+			const available = stock;
+			let found = false;
 
 			// see if user has enough points for this
-			var curBal = parseInt($("#balance").text());
-			if (curBal - price < 0) {
-				alert('You do not have enough points to add this prize.');
+			const curBal = parseInt($("#balance").text());
+			if (curBal + (getCartQty(id) * price) - (price * newQty) < 0) {
+				alert('You do not have enough points for this quantity.');
 				return false;
 			}
 
-			for (var c in cart) {
-				var item = cart[c];
-				// see if item exists
+			// Check if user already has this item in cart
+			for (const c in cart) {
+				const item = cart[c];
 				if (item.prize == id) {
 					found = true;
-					// make sure it's not only one per child
-					if (item.numPerUser > 0 && item.qty >= item.numPerUser) {
-						alert('You can only purchase ' + item.numPerUser + ' of this prize.');
-						return false;
-					}	
-					if (item.stock == 0) {
-						alert('Sorry there are no more left in stock.');
+					if (numPerUser > 0 && newQty > numPerUser) {
+						alert('You can only purchase ' + numPerUser + ' of this prize.');
 						return false;
 					}
-					item.qty++;
-					item.stock--;
-					totalPrice += item.price;
+					if (available < newQty) {
+						alert('Sorry there are not enough left in stock.');
+						return false;
+					}
+					// Update cart quantity
+					totalPrice -= item.qty * item.price;
+					cartQty -= item.qty;
+					item.qty = newQty;
+					item.stock = available - newQty;
+					totalPrice += item.price * newQty;
+					cartQty += newQty;
+					// If qty is 0, remove from cart
+					if (newQty === 0) {
+						cart.splice(c, 1);
+					}
 					break;
 				}
 			}
 
-			if (!found) {
-				if (stock > 0) {
+			if (!found && newQty > 0) {
+				if (available >= newQty) {
+					if (numPerUser > 0 && newQty > numPerUser) {
+						alert('You can only purchase ' + numPerUser + ' of this prize.');
+						return false;
+					}
 					cart.push({
 						prize: id,
 						name: prizeName,
 						price: price,
 						image: image, 
-						qty: 1,
-						stock: --stock,
+						qty: newQty,
+						stock: available - newQty,
 						numPerUser: numPerUser,
-						available: available
+						available: available,
+						discount_amount: discountAmount,
+						discount_type: discountType
 					});
-					totalPrice += price;
+					totalPrice += price * newQty;
+					cartQty += newQty;
 				} else {
-					alert('Sorry there are no more left in stock.');
+					alert('Sorry there are not enough left in stock.');
 					return false;
 				}
 			}
 
-			cartQty++;
 			if (!window.localStorage) {
 				// need to update browser so that sessionStorage will work
 				alert("You need to update your browser to the latest version in order for this feature to work.");
@@ -1356,9 +1511,28 @@
 			$("#cartQty").text(cartQty);
 
 			calcBalance();
+			updateQuantityInputs();
+		});
+		
+		$(document).on('change', '.qty-input', function() {
+			const qty = parseInt($(this).val()) || 0;
+			const max = parseInt($(this).attr('max')) || 999;
+			
+			if (qty < 0) {
+				$(this).val(0);
+			} else if (qty > max) {
+				$(this).val(max);
+			}
+			// Update button HTML (icon + text) live
+			const btn = $(this).siblings('.add-to-cart-btn');
+			if (qty > 0) {
+				btn.html('<i class="fa fa-shopping-cart"></i> Update Cart');
+			} else {
+				btn.html('<i class="fa fa-shopping-cart"></i> Add to Cart');
+			}
 		});
 
-		$(document).on('click', '.checkout-now-btn', function (e) {
+		$(document).on('click', '#checkout-all-btn', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
 			window.location.href = 'cart.html?id=' + user;
@@ -1380,6 +1554,16 @@
 
 	function handleProfileError(img) {
 		img.src = '/mobile/reg/images/profile-photo-default.jpg';
+	}
+
+	function getCartQty(prizeId) {
+		for (const c in cart) {
+			const item = cart[c];
+			if (item.prize == prizeId) {
+				return item.qty;
+			}
+		}
+		return 0;
 	}
 </script>
 

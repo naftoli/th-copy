@@ -477,7 +477,14 @@
                                             </figure>
                                             <div class="store-item" id="{{@key}}">
                                                 <div class="item-title">{{this.name}}</div>
+                                                {{#if this.discount_amount}}
+                                                <div class="product-price price-highlight">
+                                                    <div style="color: #28a745; font-weight: bold;">{{calculateFinalPrice this.price this.discount_amount this.discount_type}} Mile(s) each</div>
+                                                    <div style="color: #6c757d; text-decoration: line-through; font-size: 0.9em;">{{this.price}} Mile(s) each</div>
+                                                </div>
+                                                {{else}}
                                                 <div class="product-price price-highlight">{{this.price}} Mile(s) each</div>
+                                                {{/if}}
                                                 <div class="product-price">Qty: {{this.qty}}</div>
                                                 {{#if this.numPerUser}}
                                                 <div class="onePerUser">Max {{this.numPerUser}} per Soldier</div>
@@ -613,11 +620,23 @@
                     alert("You need to update your browser to the latest version in order for this site to work properly.");
                 }
                 
-                // Grab the template script
-                var tplScript = $("#cartTpl").html();
-        
-                // Compile the template
-                var tpl = Handlebars.compile( tplScript );
+                            // Handlebars helper for calculating final price
+            Handlebars.registerHelper('calculateFinalPrice', function(originalPrice, discountAmount, discountType) {
+                var price = parseInt(originalPrice);
+                var discount = parseFloat(discountAmount);
+                
+                if (discountType === 'percent') {
+                    return Math.ceil(price * (1 - discount / 100));
+                } else {
+                    return Math.max(0, price - discount);
+                }
+            });
+
+            // Grab the template script
+            var tplScript = $("#cartTpl").html();
+    
+            // Compile the template
+            var tpl = Handlebars.compile( tplScript );
 
                 // Pass our data to the template
                 var html = tpl( { items : cart } );

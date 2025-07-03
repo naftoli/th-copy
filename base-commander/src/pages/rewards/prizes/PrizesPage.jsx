@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 // components
-import { Button } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Form, FormGroup, Label, Input, Row, Col } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import PrizeModal from './PrizeModal';
 import CropperModal from 'components/modals/CropperModal';
-import { ButtonBar, Table, InlineSync, FontAwesome } from 'components/ui';
+import { ButtonBar, SelectTable, InlineSync, FontAwesome } from 'components/ui';
 // functions
 import { toast } from 'react-toastify';
 import { getColumns } from './include/columns';
@@ -27,22 +27,35 @@ class PrizesPage extends Component {
 
   state = { 
     cropperModal: { show: false, id: false, src: false },
-    prizeModal: { show: false, prize: {} }
+    prizeModal: { show: false, prize: {} },
+    selection: [],
+    discountModal: { show: false, discountType: 'points', discountAmount: '' }
   };
 
   componentDidMount() { 
     setTitle( 'Store Prizes' );
     this.loadPrizes();
   }
+
+  // refs
+  checkboxTable = React.createRef();
+  checkAll = null;
+
   // Network
   loadPrizes = () => {
     this.props.getPrizes()
+    .then( this.setState({ selection: [] }))
     .catch( e => toast.error( e.message ) );
     // load all templates if we can create prizes
     if ( !isAdmin( this.props.login.code ) )
       this.props.getTemplates()
       .catch( e => toast.error( e.message ) );
   }
+
+  // table
+  getId = row => row.prize_id;
+  toggleRow = ( selection, row ) => this.setState({ selection });
+  toggleAll = ( selection ) => this.setState({ selection });
 
   // update prizes in a modal ( not much data )
   togglePrize = () => this.setState({
@@ -134,8 +147,98 @@ class PrizesPage extends Component {
       });
   }
 
+  // Discount functionality
+  toggleDiscountModal = () => this.setState({
+    discountModal: { ...this.state.discountModal, show: !this.state.discountModal.show }
+  });
+
+  handleDiscountTypeChange = (e) => {
+    this.setState({
+      discountModal: { ...this.state.discountModal, discountType: e.target.value }
+    });
+  };
+
+  handleDiscountAmountChange = (e) => {
+    this.setState({
+      discountModal: { ...this.state.discountModal, discountAmount: e.target.value }
+    });
+  };
+
+  applyDiscount = async () => {
+    const { selection, discountModal } = this.state;
+    const { discountType, discountAmount } = discountModal;
+    
+    if (selection.length === 0) {
+      toast.error('Please select at least one prize');
+      return;
+    }
+    
+    if (!discountAmount || discountAmount <= 0) {
+      toast.error('Please enter a valid discount amount');
+      return;
+    }
+
+    console.log('Applying discount:', { selection, discountType, discountAmount });
+
+    try {
+      // Apply discount to all selected prizes
+      const promises = selection.map(prizeId => {
+        const updateData = {
+          discount_amount: parseInt(discountAmount, 10),
+          discount_type: discountType
+        };
+        console.log(`Updating prize ${prizeId} with:`, updateData);
+        return this.props.updatePrize(prizeId, updateData);
+      });
+      
+      const results = await Promise.all(promises);
+      console.log('Update results:', results);
+      
+      toast.success(`Discount applied to ${selection.length} prize(s)`);
+      this.setState({
+        selection: [],
+        discountModal: { show: false, discountType: 'points', discountAmount: '' }
+      });
+    } catch (error) {
+      console.error('Error applying discount:', error);
+      toast.error('Failed to apply discount: ' + error.message);
+    }
+  };
+
+  clearDiscount = async () => {
+    const { selection } = this.state;
+    
+    if (selection.length === 0) {
+      toast.error('Please select at least one prize');
+      return;
+    }
+
+    console.log('Clearing discount for prizes:', selection);
+
+    try {
+      // Clear discount for all selected prizes
+      const promises = selection.map(prizeId => {
+        const updateData = {
+          discount_amount: 0,
+          discount_type: null
+        };
+        console.log(`Clearing discount for prize ${prizeId} with:`, updateData);
+        return this.props.updatePrize(prizeId, updateData);
+      });
+      
+      const results = await Promise.all(promises);
+      console.log('Clear results:', results);
+      
+      toast.success(`Discount cleared from ${selection.length} prize(s)`);
+      this.setState({ selection: [] });
+    } catch (error) {
+      console.error('Error clearing discount:', error);
+      toast.error('Failed to clear discount: ' + error.message);
+    }
+  };
+
   render() {
-    const { prizeModal, cropperModal } = this.state;
+    const { prizeModal, cropperModal, selection, discountModal } = this.state;
     const { editPrize, editPicture, updateToggle } = this;
     const { 
       prizes, loading, login, templates, 
@@ -184,6 +287,17 @@ class PrizesPage extends Component {
             <InlineSync loading={ loading.prizes } /> Refresh
           </Button>
           
+          { selection.length > 0 && (
+            <React.Fragment>
+              <Button color='success' onClick={ this.toggleDiscountModal }>
+                <FontAwesome icon='percent' /> Apply Discount ({selection.length})
+              </Button>
+              <Button color='warning' onClick={ this.clearDiscount }>
+                <FontAwesome icon='times' /> Clear Discount
+              </Button>
+            </React.Fragment>
+          )}
+          
           { isBC( login.code, true ) && storeButton }
 
           { canDownload( prizes ) &&
@@ -199,11 +313,16 @@ class PrizesPage extends Component {
           }
         </ButtonBar>
 
-        <Table 
+        <SelectTable 
           data={ prizes } 
-          columns={ columns } 
-          loading={ loading.prizes && !prizes.length } 
-          pageId='PrizesPage' />
+          getId={ this.getId }
+          pageId='PrizesPage'
+          columns={ columns }
+          loading={ loading.prizes && !prizes.length }
+          selection={ selection }
+          toggleRow={ this.toggleRow }
+          toggleAll={ this.toggleAll }
+          maxSelectionSize={ prizes.length } />
 
         <PrizeModal 
           login={ login }
@@ -222,6 +341,57 @@ class PrizesPage extends Component {
           isOpen={ cropperModal.show }
           toggle={ this.toggleCropper }
           uploadImage={ this.upload } />
+
+        {/* Discount Modal */}
+        <Modal isOpen={discountModal.show} toggle={this.toggleDiscountModal}>
+          <ModalHeader toggle={this.toggleDiscountModal}>
+            Apply Discount to {selection.length} Prize(s)
+          </ModalHeader>
+          <ModalBody>
+            <Form>
+              <Row>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label for="discountType">Discount Type</Label>
+                    <Input
+                      type="select"
+                      id="discountType"
+                      value={discountModal.discountType}
+                      onChange={this.handleDiscountTypeChange}
+                    >
+                      <option value="points">Miles Discount</option>
+                      <option value="percent">Percentage Off</option>
+                    </Input>
+                  </FormGroup>
+                </Col>
+                <Col md={6}>
+                  <FormGroup>
+                    <Label for="discountAmount">
+                      {discountModal.discountType === 'points' ? 'Miles Discount' : 'Percentage Off'}
+                    </Label>
+                    <Input
+                      type="number"
+                      id="discountAmount"
+                      value={discountModal.discountAmount}
+                      onChange={this.handleDiscountAmountChange}
+                      min="0"
+                      step={discountModal.discountType === 'percent' ? "0.1" : "1"}
+                      placeholder={discountModal.discountType === 'points' ? "Enter miles" : "Enter percentage"}
+                    />
+                  </FormGroup>
+                </Col>
+              </Row>
+            </Form>
+          </ModalBody>
+          <ModalFooter>
+            <Button color="secondary" onClick={this.toggleDiscountModal}>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={this.applyDiscount}>
+              Apply Discount
+            </Button>
+          </ModalFooter>
+        </Modal>
 
       </div>
     );

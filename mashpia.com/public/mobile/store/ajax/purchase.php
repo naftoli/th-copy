@@ -9,6 +9,14 @@ function rand_num_string($intLength=20)
 	return substr($strBarCode, 0, $intLength);
 }
 
+function calculateFinalPrice($price, $discountAmount, $discountType) {
+    if ($discountType === 'percent') {
+        return ceil($price * (1 - $discountAmount / 100));
+    } else {
+        return max(0, $price - $discountAmount);
+    }
+}
+
 require '../../../db.php';
 require '../../../class.points.php';
 
@@ -37,7 +45,12 @@ $usedPoints = 0;
 foreach ($cart as $item) {
     $qty = (int)mysql_real_escape_string($item->qty);
     $price = (int)mysql_real_escape_string($item->price);
-    $usedPoints += ($price * $qty);
+    if (isset($item->discount_amount) && isset($item->discount_type) && $item->discount_amount > 0) {
+        $finalPrice = calculateFinalPrice($price, $item->discount_amount, $item->discount_type);
+    } else {
+        $finalPrice = $price;
+    }
+    $usedPoints += ($finalPrice * $qty);
 }
 if ($usedPoints > $availableP) {
     echo "You do not have enough points for this purchase.";
@@ -53,7 +66,12 @@ foreach ($cart as $item) {
     $prizeID = (int)mysql_real_escape_string($item->prize);
     $qty = (int)mysql_real_escape_string($item->qty);
     $price = (int)mysql_real_escape_string($item->price);
-    $points = $price * $qty;
+    if (isset($item->discount_amount) && isset($item->discount_type) && $item->discount_amount > 0) {
+        $finalPrice = calculateFinalPrice($price, $item->discount_amount, $item->discount_type);
+    } else {
+        $finalPrice = $price;
+    }
+    $points = $finalPrice * $qty;
     
     if ($qty) {
         // Create a serial
