@@ -274,6 +274,10 @@
         const options = { year: 'numeric', month: 'short', day: 'numeric' };
         return date.toLocaleDateString(undefined, options);
       });
+      // Add eq helper for template equality checks
+      Handlebars.registerHelper('eq', function(a, b) {
+        return a === b;
+      });
 
       // Load user photo (same as cart page)
       $.post('../reg/ajax/getPhoto.php', { user_id : user }, function( success ) {
