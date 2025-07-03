@@ -1413,6 +1413,16 @@
 			});
 		}
 
+		function getCartQty(prizeId) {
+			for (const c in cart) {
+				const item = cart[c];
+				if (item.prize == prizeId) {
+					return item.qty;
+				}
+			}
+			return 0;
+		}
+
 		$(document).on('click', '.add-to-cart-btn', function (e) {
 			e.preventDefault();
 			e.stopPropagation();
@@ -1556,15 +1566,7 @@
 		img.src = '/mobile/reg/images/profile-photo-default.jpg';
 	}
 
-	function getCartQty(prizeId) {
-		for (const c in cart) {
-			const item = cart[c];
-			if (item.prize == prizeId) {
-				return item.qty;
-			}
-		}
-		return 0;
-	}
+
 </script>
 
 </html>
