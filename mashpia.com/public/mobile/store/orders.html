@@ -293,7 +293,8 @@
           const orders = data.orders;
           // get prizes in cart
           let prizesInCart = getPrizesInCart();
-          console.log(prizesInCart)
+          // add prizesInCart to orders
+          orders.push(...prizesInCart);
           const tpl = Handlebars.compile(document.getElementById('ordersTpl').innerHTML);
           document.getElementById('in-cart-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'in_cart') });
           document.getElementById('current-orders-list').innerHTML = tpl({ orders: orders.filter(o => o.status === 'ordered') });
@@ -314,7 +315,8 @@
                     qty: prize.qty,
                     name: prize.name, 
                     image: prize.image, 
-                    status: 'in_cart'
+                    status: 'in_cart', 
+                    date: new Date().toISOString()
                   });
                 }
                 return prizesInCart;
