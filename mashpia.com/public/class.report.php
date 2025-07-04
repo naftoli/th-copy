@@ -9,8 +9,24 @@ class Report extends ReportBasic {
         parent::__construct();
         // each year take last 2 dates from previous yr and add current dates
 //        $this->dates = array( 2459697, 2459718, 2459823, 2459851, 2459879, 2459914, 2459942, 2459970, 2459998, 2460026, 2460061, 2460092 ); // each year take last 2 dates from previous yr and add current dates
-        $this->dates = array( 2460405, 2460447, 2460566, 2460585, 2460614, 2460635, 2460677, 2460698, 2460719, 2460747, 2460789, 2460810 );
+        // $this->dates = array( 2460405, 2460447, 2460566, 2460585, 2460614, 2460635, 2460677, 2460698, 2460719, 2460747, 2460789, 2460810 );
+        $this->setDates();
         $this->setReportDates($previousStart);
+    }
+
+    private function setDates($year = null) {
+        if (! $year) {
+            // check if global settings exists
+            if (! class_exists('GlobalSettings')) {
+                require_once '/class.globalSettings.php';
+            }
+            $year = GlobalSettings::getCurrentYear();
+        }
+        $sql = "SELECT * FROM system_dates WHERE year = $year order by jd_date";
+        $result = mysql_query($sql);
+        while ($row = mysql_fetch_assoc($result)) {
+            $this->dates[] = $row['jd_date'];
+        }
     }
 
     public function setDateSelection() {
@@ -35,7 +51,7 @@ class Report extends ReportBasic {
         return $this->dates;
     }
 
-    public function getHtmlSelect($join = 0) {
+    public function getHtmlSelect($join = 0, $id = 'date_selection') {
         $first = 1;
         if ($join) {
             // change dates
@@ -45,7 +61,7 @@ class Report extends ReportBasic {
 
         $reportDates = $this->getReportDates();
 
-        $str = "<select name='date_selection' id='date_selection'>";
+        $str = "<select name='$id' id='$id'>";
         $num = count($this->dates)-1;
 
         // figure out where to start the loop from

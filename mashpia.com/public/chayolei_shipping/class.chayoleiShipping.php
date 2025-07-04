@@ -214,10 +214,12 @@ class ChayoleiShipping
         $subject_names = $this->getSubjectNames();
         $medal_names = $this->getMedalNames();
         $m = new MedalReport;
-        $m->setDateToAll();
+        // get dates from $_POST['medals_dates']
+        $dates = explode(':', $_POST['medals_dates']);
+        $m->overrideDates($dates[0], $dates[1]);
         //set up medals array
         $m->setSchoolId($school);
-        $m->setMedalDetails(true, true, $gender);
+        $m->setMedalDetails(true, $gender);
         $medals_for_shipping = $m->getMedalsForShipping();
         foreach ($medals_for_shipping as $user_id => $subjects) {
             foreach ($subjects as $subject_id => $medal_ords) {
@@ -275,21 +277,22 @@ class ChayoleiShipping
     public function getRanks($gender, $school, $items) {
         $medals = [];
         $books = [];
+        $dates = explode(':', $_POST['ranks_dates']);
         if (in_array('rank medals', $items)) {
-            $medals = $this->getRankMedals($gender, $school);
+            $medals = $this->getRankMedals($gender, $school, $dates);
         }
         if (in_array('rank books', $items)) {
-            $books = $this->getRankBooks($gender, $school);
+            $books = $this->getRankBooks($gender, $school, $dates);
         }
         $ranks = $medals + $books;
         return $ranks;
     }
 
-    private function getRankMedals($gender, $school) {
+    private function getRankMedals($gender, $school, $dates) {
         $ranks = [];
         $rank_info = $this->getRankInfo();
         $rr = new RankReport;
-        $rr->setDateToAll();
+        $rr->overrideDates($dates[0], $dates[1]);
         $rr->setSchoolId($school);
         $rr->setRanks('byUser', 0, ' ', $gender);
         $rank_medals_for_shipping = $rr->getRankMedalsForShipping();
@@ -335,10 +338,10 @@ class ChayoleiShipping
         return $rank_medals_shipped;
     }
 
-    private function getRankBooks($gender, $school) {
+    private function getRankBooks($gender, $school, $dates) {
         $ranks = [];
         $rr = new RankReport;
-        $rr->setDateToAll();
+        $rr->overrideDates($dates[0], $dates[1]);
         $rr->setSchoolId($school);
         $books = $rr->getBooksToSend($gender, true);
         if (empty($books)) return $ranks;

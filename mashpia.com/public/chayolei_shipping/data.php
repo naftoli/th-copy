@@ -63,9 +63,19 @@ function build_items() {
             $name = strtolower($item);
             $html .= "<input type='checkbox' name='items[" . $cat . "][" . htmlspecialchars($name, ENT_QUOTES) . "]' class='item' /> " . ucwords($item) . "<br />";
         }
+        if (in_array($cat, ['medals', 'ranks'])) {
+            $html .= build_dates($cat . '_dates');
+        }
         $html .= "</div>";
     }
     return $html;
+}
+
+function build_dates($id) {
+    require_once __DIR__ . '/../class.report.php';
+    $r = new Report();
+    $selection = $r->getHtmlSelect(0, $id);
+    return $selection;
 }
 
 function createHtmlForItem($school, $row, $output = true) {

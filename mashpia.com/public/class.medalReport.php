@@ -65,8 +65,7 @@ class MedalReport extends Report {
             }
             if ( $gender == 'm' || $gender == 'f' ) {
                 $sql .= "
-                    AND u.gender = '" . strtoupper($gender) . "'
-                ";
+                    AND u.gender = '" . strtoupper($gender) . "' ";
             }
             $sql .= "
                 ORDER BY sch.school_name, s.subject_id, mm.medal_ord, u.last, u.first 
@@ -131,7 +130,7 @@ class MedalReport extends Report {
     
     public function setMedalDetails($forShipping = false, $gender = '') {
         $sql = $this->createSql(true, $forShipping, $gender);
-//        echo $sql . "<br />"; return;
+    //    echo $sql . "<br />"; return;
         $prevGrade = "";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
