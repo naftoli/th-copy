@@ -107,7 +107,7 @@ function createHtmlForItem($school, $row, $output = true) {
                 if ($show_item) {
                     if ($output) {
                         // create new row
-                        echo "<tr>";
+                        echo "<tr data-cat='$cat'>";
                         foreach ($fields_chosen as $field) {
                             if (strpos($field, 'shipping') === false) {
                                 $desc = substr($field, strpos($field, '.') + 1);
@@ -129,8 +129,9 @@ function createHtmlForItem($school, $row, $output = true) {
                         $originalValue = empty($status) ? 0 : $status['status'];
                         echo "<select id='" . $item['id'] . ':' . $row['user_id'] . ':' . $item_num . "' class='shipping' data-original-value='$originalValue'>";
                         if (!$super && (empty($status) || $status['status'] == 0)) $options = ['Not Yet Shipped'];
-                        else $options = ['Not Yet Shipped', 'Shipped', 'Received', 'Missing', 'Damaged', 'Replaced'];
+                        else $options = ['Not Yet Shipped', 'Shipped', 'Received', 'Missing', 'Damaged', 'Replaced', 'Printed'];
                         foreach ($options as $i => $val) {
+                            if ($i == 6 && !in_array($cat, ['medals', 'ranks'])) continue; // show printed only for medals and ranks
                             echo "<option value='$i'";
                             /*
                              * 0 = not yet shipped
@@ -139,6 +140,7 @@ function createHtmlForItem($school, $row, $output = true) {
                              * 3 = missing
                              * 4 = damaged
                              * 5 = replaced
+                             * 6 = printed
                              */
                             if ($i == 0 && (empty($status) || $status['status'] == 0)) echo " selected";
                             else if (!empty($status) && $i == $status['status']) echo " selected";

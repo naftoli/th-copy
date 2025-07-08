@@ -20,6 +20,7 @@ require 'data.php';
 //$updated = getUpdatedSchools($schools);
 
 $items_chosen = isset($_POST['items']) ? $_POST['items'] : [];
+$cats = array_keys($items_chosen);
 $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
@@ -289,6 +290,18 @@ ksort($grand_summary);
 </head>
 <body>
 <?php
+$empty = true;
+foreach ($info as $cat => $more) {
+    if ($cat == 'status') continue;
+    if (!empty($more)) {
+        $empty = false;
+        break;
+    }
+}
+if ($empty) {
+    echo "<h1>No results found</h1>";
+    exit;
+}
 if (in_array($_POST['report_type'], ['all', 'summary'])) {
     $i = 0;
     $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
@@ -317,13 +330,17 @@ foreach ($item_details_chosen as $field) {
 }
 echo "</select><br /><br />";
 if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
-foreach ($resultsBySchool as $school => $more) : ?>
+foreach ($resultsBySchool as $school => $more) :
+  if (in_array($_POST['report_type'], ['all', 'summary']) && empty($summary[$school])) continue;
+  ?>
   <div class="header" id="<?= $school ?>">
       <?php
       if (!isset($schools[$school])) continue;
-      if (!isset($summary[$school])) continue;
       echo "<h3>" . $schools[$school] . "</h3>";
       if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
+      if ($super && (in_array('medals', $cats) || in_array('ranks', $cats))) {
+          echo "<br /><button class='schoolPrinted no-print' style='margin-top: 10px;' data-school='" . $school . "'>Save " . $schools[$school] . " as Printed</button>";
+      }
       $address = '';
       foreach ($fields_chosen as $field) {
           $pos = strpos($field, '.');
@@ -361,9 +378,9 @@ foreach ($resultsBySchool as $school => $more) : ?>
         <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
           <thead>
           <tr>
-              <?php foreach ($s_items as $s_item) : ?>
-                <th><?= $s_item ?></th>
-              <?php endforeach; ?>
+            <?php foreach ($s_items as $s_item) : ?>
+              <th><?= $s_item ?></th>
+            <?php endforeach; ?>
           </tr>
           </thead>
           <tbody>
@@ -387,7 +404,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
         <div style="page-break-after: always"></div>
       <?php endif; ?>
       <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
-          <?= "<h3>" . $schools[$school] . ' - ' . $year . "</h3>"; ?>
+        <?= "<h3>" . $schools[$school] . ' - ' . $year . "</h3>"; ?>
         <table class="table table-striped table-condensed cell-border hover row-order order-column">
           <thead>
           <tr>
@@ -534,6 +551,16 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       let action = super_admin ? 1 : 2
       update(this, action)
     })
+    save()
+  })
+
+  $(".schoolPrinted").click(function () {
+      $(this).parent().find('.shipping').each(function () {
+        const cat = $(this).parent().parent().data('cat')
+        if (['medals', 'ranks'].includes(cat)) {
+          update(this, 6)
+        }
+      })
     save()
   })
 

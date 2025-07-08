@@ -94,6 +94,7 @@ class MedalReport extends Report {
                 ORDER BY sch.school_name, s.subject_id, mm.medal_ord
             ";
         }
+        // echo $sql; exit;
         return $sql;
     }
 
