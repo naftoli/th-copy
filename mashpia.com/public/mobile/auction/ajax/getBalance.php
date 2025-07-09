@@ -1,10 +1,13 @@
 <?php
-require '../../../db.php';
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
+require_once __DIR__ . '/../../../db.php';
 $user = (int)mysql_real_escape_string($_POST['user']);
 $admin = mysql_real_escape_string($_POST['admin']);
 $auction = (int)mysql_real_escape_string($_POST['auction']);
 
-require '../../reg/ajax/encrypt.php';
+require_once __DIR__ . '/../../reg/ajax/encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
 // make sure user is part of admin account
@@ -17,7 +20,7 @@ if (mysql_num_rows($result) > 0) {
     $row = mysql_fetch_assoc($result);
     $date = $row['auction_points_start_date'];
     
-    require '../../../class.points.php';
+    require_once __DIR__ . '/../../../class.points.php';
     $p = new Points( $user );
     $balance['tpoints'] = $p->getTotalPoints();
     $balance['earned'] = $p->getTotalThisYear();

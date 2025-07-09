@@ -9,6 +9,31 @@
 	<style type="text/css">
 		@charset "UTF-8";
 
+		html,
+		body,
+		span,
+		p,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		div,
+		button,
+		i,
+		input {
+			color: #1b2b51;
+		}
+
+		#cartQty,
+		#img-cart,
+		#data-box,
+		#balance-box,
+		#balance {
+			color: white !important;
+		}
+
 		.fa {
 			display: inline-block;
 			font: normal normal normal 14px/1 FontAwesome;
@@ -139,13 +164,15 @@
 		}
 
 		.alert-warning {
-			color: #8a6d3b;
-			background-color: #fcf8e3;
-			border-color: #faebcc
+			background-color: #4358a2;
+			width: 100%;
+			box-sizing: border-box;
 		}
 
 		.media {
-			margin-top: 15px
+			margin-top: 15px;
+			width: 100%;
+			box-sizing: border-box;
 		}
 
 		.media:first-child {
@@ -158,7 +185,9 @@
 
 		.media-body {
 			display: table-cell;
-			vertical-align: top
+			vertical-align: top;
+			width: 100%;
+			box-sizing: border-box;
 		}
 
 		.container:after,
@@ -357,6 +386,282 @@
 		.hebrew {
 			font-family: Arial !important;
 		}
+
+		/* --- Custom Prize Card Styles --- */
+		.product.light {
+			width: 100%;
+			min-width: unset;
+			min-height: 385px;
+			margin: 12px;
+			padding: 14px 8px 8px 8px;
+			box-sizing: border-box;
+			background: #fff;
+			border-radius: 12px;
+			box-shadow: 0 2px 8px rgba(27,43,81,0.10), 0 1.5px 4px rgba(27,43,81,0.08);
+			transition: box-shadow 0.2s;
+			border: 1px solid #e6e6e6;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			position: relative;
+			min-height: 375px;
+		}
+		@media (max-width: 600px) {
+			.product.light {
+				width: 98vw;
+				max-width: 340px;
+				margin: 8px auto;
+			}
+		}
+		.figure-hover-overlay {
+			width: 150px;
+			height: 150px;
+			max-width: 150px;
+			max-height: 150px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #f7f8fa;
+			border-radius: 8px;
+			padding: 8px;
+			margin-bottom: 10px;
+			margin-top: 10px;
+			border: 1px solid #e6e6e6;
+		}
+		.figure-hover-overlay img {
+			max-width: 140px;
+			max-height: 140px;
+			border-radius: 6px;
+		}
+		.block-name {
+			margin-top: 8px;
+			margin-bottom: 6px;
+		}
+		.product-name {
+			font-size: 1.1em;
+			font-weight: 600;
+			color: #1b2b51;
+			text-decoration: none;
+			display: block;
+			margin-bottom: 2px;
+		}
+		.product-price {
+			font-size: 1em;
+			color: #4258a2;
+			font-weight: 600;
+			margin-bottom: 4px;
+		}
+		.onePerUser {
+			font-size: 1em;
+			color: #666;
+			margin-bottom: 8px;
+		}
+		.product-cart {
+			width: 100%;
+			text-align: center;
+		}
+		.product-cart a {
+			display: inline-block;
+			background: #4258a2;
+			color: #fff;
+			padding: 8px 16px;
+			border-radius: 6px;
+			text-decoration: none;
+			font-weight: 600;
+			transition: background-color 0.2s;
+			margin-bottom: 8px;
+		}
+		.product-cart a:hover {
+			background: #2d3a6a;
+		}
+		.cartNum {
+			font-size: 0.9em;
+			color: #666;
+		}
+		.content {
+			max-width: 1024px;
+			margin: auto;
+		}
+		.panel-heading {
+			cursor: pointer;
+			background: #4358a2;
+			color: white;
+			border: none;
+			border-radius: 8px 8px 0 0;
+			padding: 15px;
+			font-weight: 600;
+			transition: background-color 0.2s;
+		}
+		.panel-heading:hover {
+			background: #343862;
+		}
+		.panel-heading i {
+			float: right;
+			transition: transform 0.2s;
+		}
+		.panel.open .panel-heading i {
+			transform: rotate(90deg);
+		}
+		.panel-body {
+			background: #f8f9fa;
+			border: 1px solid #e6e6e6;
+			border-top: none;
+			border-radius: 0 0 8px 8px;
+			padding: 20px;
+		}
+		.panel {
+			margin-bottom: 20px;
+			border: none;
+			border-radius: 8px;
+			box-shadow: 0 2px 8px rgba(27,43,81,0.10);
+		}
+		#page-title {
+			text-transform: uppercase;
+			font-size: 25px;
+			font-weight: 700;
+			color: #fff;
+			text-align: center;
+			width: auto;
+			display: block;
+			padding: 5px 0px;
+			transition: .25s;
+		}
+		@media (min-width: 525px) {
+			#page-title {
+				font-size: 40px;
+				padding: 10px 0px;
+			}
+		}
+		.subMenu .span3 {
+			background-color: #343862 !important;
+		}
+		.subMenu .span3.active,
+		.subMenu .span3:hover {
+			background-color: #4358a2 !important;
+		}
+		.navbar {
+			margin-bottom: 0 !important;
+		}
+		.personalImg {
+			position: fixed;
+			z-index: 999;
+			background: #e92d41;
+		}
+		img#cart-img {
+			height: 52px;
+		}
+		.balance {
+			width: 100%;
+			flex-basis: 100%;
+			margin-bottom: 18px;
+		}
+		.balance>div {
+			display: inline-block;
+		}
+		.media-body {
+			display: block !important;
+		}
+
+		#balance-box {
+			margin-right: 5%;
+			color: white;
+		}
+		#balance {
+			display: none;
+			color: white;
+		}
+		#balance-display {
+			font-size: 2em;
+			color: white;
+		}
+		.panel.panel-default .panel-heading {
+			margin-bottom: 0px;
+			transition: .25s;
+		}
+		.panel.panel-default.open>.panel-heading {
+			border-bottom-left-radius: 0px;
+			border-bottom-right-radius: 0px;
+		}
+		.panel.panel-default.open>.panel-body {
+			border-top-left-radius: 0px;
+			border-top-right-radius: 0px;
+		}
+		.collapse {
+			display: none;
+		}
+		.collapse.in {
+			display: block;
+		}
+		.row {
+			margin-left: -15px;
+			margin-right: -15px;
+		}
+		.col-xs-12, .col-sm-6, .col-md-4 {
+			position: relative;
+			min-height: 1px;
+			padding-left: 15px;
+			padding-right: 15px;
+		}
+		.col-xs-12 {
+			width: 100%;
+		}
+		@media (min-width: 768px) {
+			.col-sm-6 {
+				width: 50%;
+			}
+		}
+		@media (min-width: 992px) {
+			.col-md-4 {
+				width: 33.33333333%;
+			}
+		}
+		.text-center {
+			text-align: center;
+		}
+		.mb-25 {
+			margin-bottom: 25px;
+		}
+		.block-name {
+			margin: 0 !important;
+		}
+		.price-badge {
+			display: inline-block;
+			background: #e92d41;
+			color: #fff;
+			font-size: 1em;
+			font-weight: 700;
+			border-radius: 16px;
+			padding: 8px 18px;
+			margin-bottom: 8px;
+			margin-top: 2px;
+		}
+		.add-to-cart-btn i {
+			color: white !important;
+		}
+		.checkout-now-btn {
+			background: #e92d41;
+			color: #fff;
+			border: none;
+			border-radius: 6px;
+			padding: 6px 14px 6px 10px;
+			font-size: 0.98em;
+			font-weight: 600;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			transition: none;
+			box-shadow: 0 1px 3px rgba(27,43,81,0.07);
+			margin-top: 8px;
+			width: auto;
+			max-width: 200px;
+			text-align: center;
+			justify-content: center;
+			align-self: center;
+		}
+		.checkout-now-btn:hover, .checkout-now-btn:focus {
+			background: #d02535;
+			color: #fff;
+		}
 	</style>
 	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
 	<noscript>
@@ -433,82 +738,16 @@
 	<script>
 		window.jQuery || document.write('<script src="js/jquery-1.11.1.min.js"><\/script>')
 	</script>
-	<style>
-		.subMenu .span3 {
-			background-color: #343862 !important;
-		}
-
-		.subMenu .span3.active,
-		.subMenu .span3:hover {
-			background-color: #4358a2 !important;
-		}
-
-		.panel-heading {
-			cursor: pointer;
-		}
-
-		#page-title {
-			font-size: 25px;
-			font-weight: 700;
-			color: #fff;
-			text-align: center;
-			width: auto;
-			display: block;
-			padding: 5px 0px;
-			transition: .25s;
-		}
-
-		@media (min-width: 525px) {
-			#page-title {
-				font-size: 40px;
-				padding: 10px 0px;
-			}
-		}
-	</style>
-	<!--<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
 	<script src="../js/translation/auction/index/auction_index.js"></script>
-	<style>
-		html,
-		body,
-		span,
-		p,
-		h1,
-		h2,
-		h3,
-		h4,
-		h5,
-		h6,
-		div,
-		button,
-		i,
-		input {
-			color: #1b2b51;
-		}
-
-		#cartQty,
-		#img-cart,
-		#data-box,
-		#balance-box,
-		#balance {
-			color: white !important;
-		}
-
-		.content {
-			max-width: 1024px;
-			margin: auto;
-		}
-	</style>
 </head>
 
 <body class="page-goals">
 	<header class="navbar" id="top" role="banner" style="margin-bottom: 0;">
 		<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
 			<span id="page-title" class="i18n" data-key="pageTitle">AUCTION</span>
-
 		</div>
 	</header>
-
 
 	<div style="display: flex; background: #343862;">
 		<div class="span12 footer media-group subMenu" style="width: 100%;">
@@ -560,14 +799,7 @@
 					Coming Soon ...
 				</div> -->
 
-			<div class="alert" role="alert" dir="ltr" style="color: red; margin-top: 20px;">
-				<b class="i18n" data-key="PrizeAuctionCart">
-					After adding a prize in your Auction cart, be sure to click
-					"SAVE" at the very bottom of your cart (in the cart page).
-				</b>
-			</div>
-
-			<div class="alert alert-warning" role="alert" dir="ltr">
+			<div class="alert alert-warning" role="alert" dir="ltr" style="min-height: 92px;">
 				<div class="media">
 					<div id="img-cart" class="pull-right">
 						(<span id="cartQty">0</span>) <img id="cart-img" src="../img_new/cart-color-white.svg"
@@ -577,6 +809,27 @@
 						<span class="balance"></span>
 					</div>
 				</div>
+			</div>
+
+			<!-- Sorting Controls -->
+			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 15px;">
+				<div style="display: flex; align-items: center; gap: 10px;">
+					<label for="sort-select" style="font-weight: 600; color: #1b2b51;">Sort by:</label>
+					<select id="sort-select" style="padding: 4px 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1em;">
+						<option value="amount-asc">Amount (Points) ↑</option>
+						<option value="amount-desc">Amount (Points) ↓</option>
+						<option value="alpha-asc">Alphabetical (A-Z)</option>
+						<option value="alpha-desc">Alphabetical (Z-A)</option>
+					</select>
+				</div>
+				<button id="checkout-all-btn" class="checkout-now-btn" style="display: none; padding: 12px 20px; font-size: 1.1em; background: #e92d41; border-color: #e92d41;">
+					<i class="fa fa-shopping-cart" style="color: #fff; margin-right: 8px;"></i> Checkout Now
+				</button>
+			</div>
+
+			<!-- Cart Warning -->
+			<div id="cart-warning" style="display: none; background: #f8d7da; border: 1px solid #f5c6cb; color: #721c24; padding: 12px; border-radius: 6px; margin-bottom: 18px; text-align: center; font-weight: bold;">
+				You must click on checkout in order to purchase what's in your cart.
 			</div>
 
 			<div id="main">
@@ -711,16 +964,114 @@
 				points_beta: new URLSearchParams(window.location.search).get('points_beta') || "0"
 			}, function (success) {
 				var info = $.parseJSON(success);
-				var html = '<div id="balance-box" ' + float_element + '>';
+				let html = '<div id="balance-box" ' + float_element + '>';
 				html += availibleStoreHTML;//"Available <strong>Store</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>";
 				html += '</div><div id="data-box" ' + data_box_css + '>'
-				html += totalmilesText + info.tpoints.toLocaleString(navigator.language) + "<br />";
-				html += totalmilesYearText + info.earned.toLocaleString(navigator.language) + "<br />";
-				html += '</div>'
+				html += totalmilesText + info.tpoints.toLocaleString(navigator.language) + "<br>";
+				html += totalmilesYearText + info.earned.toLocaleString(navigator.language) + "<br>";
+				html += '</div></div>'
 				$(".balance").html(html);
 				originalBal = info.available;
 				initCart();
+				calcBalance();
 			});
+
+			var allPrizes = [];
+			var currentSort = 'amount-asc';
+
+			function renderPrizes() {
+				var sortedPrizes = allPrizes.slice();
+				if (currentSort === 'amount-asc') {
+					sortedPrizes.sort(function(a, b) {
+						var pointsA = parseInt(a.prize_points, 10);
+						var pointsB = parseInt(b.prize_points, 10);
+						if (pointsA !== pointsB) return pointsA - pointsB;
+						return a.prize_name.localeCompare(b.prize_name);
+					});
+				} else if (currentSort === 'amount-desc') {
+					sortedPrizes.sort(function(a, b) {
+						var pointsA = parseInt(a.prize_points, 10);
+						var pointsB = parseInt(b.prize_points, 10);
+						if (pointsA !== pointsB) return pointsB - pointsA;
+						return a.prize_name.localeCompare(b.prize_name);
+					});
+				} else if (currentSort === 'alpha-asc') {
+					sortedPrizes.sort(function(a, b) {
+						return a.prize_name.localeCompare(b.prize_name) || (parseInt(a.prize_points, 10) - parseInt(b.prize_points, 10));
+					});
+				} else if (currentSort === 'alpha-desc') {
+					sortedPrizes.sort(function(a, b) {
+						return b.prize_name.localeCompare(a.prize_name) || (parseInt(a.prize_points, 10) - parseInt(b.prize_points, 10));
+					});
+				}
+
+				var html = '';
+				for (var i = 0; i < sortedPrizes.length; i++) {
+					var prize = sortedPrizes[i];
+					html += '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2 text-center product">\
+						<article class="product light" id=' + prize.prize_id + '>' +
+						'<div class="price-badge">' + prize.prize_points + ' Miles</div>' +
+						'<figure class="figure-hover-overlay">' +
+						'<a href="#" class="figure-href"></a>\
+						<img class="img-responsive" src="https://mashpia.com/file_view.php?id=' + prize.prize_image_id + '" alt="" title="">\
+						</figure>\
+						<div class="product-caption">\
+							<div class="block-name">\
+								<a href="#" class="product-name">' + prize.prize_name + '</a>\
+								<p class="onePerUser">Only ' + prize.available + ' available.</p>\
+							</div>\
+						</div>\
+						<div class="product-cart" id="' +
+						prize.prize_id + separator + prize.prize_points + separator + prize.prize_image_id + separator + prize.prize_name + '">\
+							<div style="display: flex; align-items: center; gap: 8px; justify-content: center;">\
+								<input type="number" class="qty-input" data-prize-id="' + prize.prize_id + '" value="0" min="0" max="99" style="width: 50px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; text-align: center;">\
+								<button class="add-to-cart-btn" style="background: #4258a2; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-weight: 600;"><i class="fa fa-shopping-cart"></i> Add Tickets to Prize</button>\
+							</div>\
+						</div></article></div>';
+				}
+
+				$("#main").html(html);
+
+				// Update quantity inputs
+				updateQuantityInputs();
+			}
+			
+			function updateQuantityInputs() {
+				$('.qty-input').each(function() {
+					var prizeId = parseInt($(this).data('prize-id'));
+					var qty = 0;
+					var inCart = false;
+					
+					// Find this prize in cart
+					for (var c in cart) {
+						var item = cart[c];
+						if (item.prize == prizeId) {
+							qty = item.qty;
+							inCart = true;
+							break;
+						}
+					}
+					
+					$(this).val(qty);
+					// Update button HTML (icon + text)
+					var btn = $(this).siblings('.add-to-cart-btn');
+					if (inCart) {
+						btn.html('<i class="fa fa-shopping-cart"></i> Update Tickets');
+					} else {
+						btn.html('<i class="fa fa-shopping-cart"></i> Add Tickets to Prize');
+					}
+				});
+			}
+
+			function getCartQty(prizeId) {
+				for (var c in cart) {
+					var item = cart[c];
+					if (item.prize == prizeId) {
+						return item.qty;
+					}
+				}
+				return 0;
+			}
 
 			if (auction_id > 0) {
 				$.post('ajax/getPrizes.php', {
@@ -728,128 +1079,106 @@
 					user: user,
 					auction: auction_id
 				}, function (success) {
-				var prizes = $.parseJSON(success);
+					var prizes = $.parseJSON(success);
 
-				var html = '';
-				var itr = 0;
-				for (var amount in prizes) {
-					html += '<div class="panel panel-default">\
-			                    <div class="panel-heading"><i class="glyphicon glyphicon-chevron-right"></i>' + amount + ' Point Prizes</div>' +
-							'<div class="collapse"><div class="panel-body"><div class="row">';
-					for (var p in prizes[amount]) {
-						var prize = prizes[amount][p];
-						html += '<div class="col-xs-12 col-sm-6 col-md-4 text-center mb-25"><article class="product light" id=' + prize.prize_id + '>' +
-								'<figure class="figure-hover-overlay">' +
-								'<a href="#" class="figure-href"></a>\
-			                        <img class="img-responsive" src="https://mashpia.com/file_view.php?id=' + prize.prize_image_id + '" alt="" title="">\
-			                    </figure>\
-			                    <div class="product-caption">\
-			                        <div class="block-name">\
-			                            <a href="#" class="product-name">' + prize.prize_name + '</a>\
-			                            <p class="product-price">' + prize.prize_points + ' Point(s)</p>\
-										<p class="onePerUser">' + prize.available + ' available.</p>\
-			                        </div>\
-			                        <div class="product-cart" id="' +
-								prize.prize_id + separator + prize.prize_points + separator + prize.prize_image_id + separator + prize.prize_name + '">\
-			                            <a href="#"><i class="fa fa-shopping-cart"></i> </a>\
-										<br /><div style="color: #333; margin-top: 5px;"><span class="cartNum">0</span> in cart</div>\
-									</div>\
-								</div></article></div>';
-					}
-					html += '</div></div></div></div>';
-				}
-
-				$("#main").append(html);
-
-				$(".product-cart a").hover(
-						function () {
-							$(this).css('background-color', '#eb2c33');
-							$(this).find('.fa').css('color', '#fff');
-						},
-						function () {
-							$(this).css('background-color', '#fff');
-							$(this).find('.fa').css('color', '#eb2c33');
+					// Flatten the prizes array
+					for (var amount in prizes) {
+						for (var p in prizes[amount]) {
+							allPrizes.push(prizes[amount][p]);
 						}
-				);
-			});
+					}
 
-			$(document).on('click', ".panel-heading", function () {
-				//$(this).parent().find(".collapse").collapse('toggle');
-				var c = $(this).parent().attr('class');
-				if (c.indexOf('open') > 0) {
-					$(this).parent().removeClass('open');
-					$(this).parent().find('.collapse').removeClass('in');
-				} else {
-					$(this).parent().addClass('open');
-					$(this).parent().find('.collapse').addClass('in');
-					$(this).parent().siblings().removeClass('open');
-					$(this).parent().siblings().find('.collapse').removeClass('in');
-				}
+					renderPrizes();
+				});
+			}
+
+			// Sort functionality
+			$(document).on('change', '#sort-select', function() {
+				currentSort = $(this).val();
+				renderPrizes();
 			});
-		}
 		
-		function initCart() {
-			if (!window.localStorage) {
-				// need to update browser so that sessionStorage will work
-				alert(i18next.ht('UpdateBrowser1'));
-			} else {
-				if (localStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
-					cart = JSON.parse(localStorage.getItem('auctionCart' + user));
-					for (var c in cart) {
-						var item = cart[c];
-						cartQty += item.qty;
-						totalPrice += item.qty * item.price;
-						$("#" + item.prize).find('.cartNum').text(item.qty);
-					}
-					$("#cartQty").text(cartQty);
-					calcBalance();
+			function initCart() {
+				if (!window.localStorage) {
+					// need to update browser so that sessionStorage will work
+					alert(i18next.ht('UpdateBrowser1'));
 				} else {
-					$.post('ajax/getTickets.php', {
-						user: user,
-						auction: auction_id
-					}, function (data) {
-						var info = $.parseJSON(data);
-						for (var i in info) {
-							var item = info[i];
-							var id = parseInt(item.prize_id);
-							var name = item.prize_name;
-							var price = parseInt(item.prize_points);
-							var qty = parseInt(item.quantity);
-							var img = item.prize_image_id;
-							cart.push({
-								prize: id,
-								name: name,
-								price: price,
-								image: img,
-								qty: qty
-							});
-							//alert(qty);
-							cartQty += qty;
-							totalPrice += qty * price;
-							$("#" + id).find('.cartNum').text(qty);
+					if (localStorage.getItem('cartLoaded') && localStorage.getItem('auctionCart' + user)) {
+						cart = JSON.parse(localStorage.getItem('auctionCart' + user));
+						for (var c in cart) {
+							var item = cart[c];
+							cartQty += item.qty;
+							totalPrice += item.qty * item.price;
 						}
-						//alert(cartQty);
-						localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
-						localStorage.setItem('cartLoaded', 1);
 						$("#cartQty").text(cartQty);
 						calcBalance();
-					});
+					} else {
+						$.post('ajax/getTickets.php', {
+							user: user,
+							auction: auction_id
+						}, function (data) {
+							var info = $.parseJSON(data);
+							for (var i in info) {
+								var item = info[i];
+								var id = parseInt(item.prize_id);
+								var name = item.prize_name;
+								var price = parseInt(item.prize_points);
+								var qty = parseInt(item.quantity);
+								var img = item.prize_image_id;
+								cart.push({
+									prize: id,
+									name: name,
+									price: price,
+									image: img,
+									qty: qty
+								});
+								cartQty += qty;
+								totalPrice += qty * price;
+							}
+							localStorage.setItem('auctionCart' + user, JSON.stringify(cart));
+							localStorage.setItem('cartLoaded', 1);
+							$("#cartQty").text(cartQty);
+							calcBalance();
+						});
+					}
 				}
 			}
-		}
 
 		function calcBalance() {
 			bal = originalBal - totalPrice;
 			$("#balance").text(bal);
+			$("#balance-display").text(bal.toLocaleString(navigator.language));
+			
+			// Show/hide cart warning and checkout button
+			if (cart.length > 0) {
+				$('#cart-warning').show();
+				$('#checkout-all-btn').show();
+			} else {
+				$('#cart-warning').hide();
+				$('#checkout-all-btn').hide();
+			}
 		}
 
-		$(document).on('click', '.product-cart', function () {
-			// after deadline alert and return
-			//alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
-			//return false;
-
+		$(document).on('click', '.add-to-cart-btn', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			var productCart = $(this).closest('.product-cart');
+			var qtyInput = productCart.find('.qty-input');
+			var newQty = parseInt(qtyInput.val()) || 0;
+			
+			if (newQty === 0) {
+				alert('Please enter a quantity greater than 0 to add to cart.');
+				return false;
+			}
+			
+			if (newQty < 0) {
+				alert('Please enter a quantity 0 or greater.');
+				return false;
+			}
+			
 			// get prize id and add to cart
-			var prizeInfo = $(this).attr('id');
+			var prizeInfo = productCart.attr('id');
 			var info = prizeInfo.split(separator);
 			var id = parseInt(info[0]);
 			var price = parseInt(info[1]);
@@ -859,36 +1188,42 @@
 
 			// see if user has enough points for this
 			var curBal = parseInt($("#balance").text());
-			if (curBal - price < 0) {
-				alert(i18next.t('NotEnoughMiles'));
+			if (curBal + (getCartQty(id) * price) - (price * newQty) < 0) {
+				alert('You do not have enough points for this quantity.');
 				return false;
 			}
 
+			// Check if user already has this item in cart
 			for (var c in cart) {
 				var item = cart[c];
-				// see if item exists
 				if (item.prize == id) {
 					found = true;
-					item.qty++;
-					totalPrice += item.price;
-					$("#" + id).find('.cartNum').text(item.qty);
+					// Update cart quantity
+					totalPrice -= item.qty * item.price;
+					cartQty -= item.qty;
+					item.qty = newQty;
+					totalPrice += item.price * newQty;
+					cartQty += newQty;
+					// If qty is 0, remove from cart
+					if (newQty === 0) {
+						cart.splice(c, 1);
+					}
 					break;
 				}
 			}
 
-			if (!found) {
+			if (!found && newQty > 0) {
 				cart.push({
 					prize: id,
 					name: prizeName,
 					price: price,
 					image: image,
-					qty: 1
+					qty: newQty
 				});
-				totalPrice += price;
-				$("#" + id).find('.cartNum').text('1');
+				totalPrice += price * newQty;
+				cartQty += newQty;
 			}
 
-			cartQty++;
 			if (!window.localStorage) {
 				// need to update browser so that sessionStorage will work
 				alert(i18next.t('UpdateBrowser'));
@@ -898,6 +1233,43 @@
 			$("#cartQty").text(cartQty);
 
 			calcBalance();
+			updateQuantityInputs();
+		});
+		
+		$(document).on('change', '.qty-input', function() {
+			var qty = parseInt($(this).val()) || 0;
+			var max = parseInt($(this).attr('max')) || 99;
+			
+			if (qty < 0) {
+				$(this).val(0);
+			} else if (qty > max) {
+				$(this).val(max);
+			}
+			// Update button HTML (icon + text) live
+			var btn = $(this).siblings('.add-to-cart-btn');
+			var prizeId = parseInt($(this).data('prize-id'));
+			var inCart = false;
+			
+			// Check if this prize is already in cart
+			for (var c in cart) {
+				var item = cart[c];
+				if (item.prize == prizeId) {
+					inCart = true;
+					break;
+				}
+			}
+			
+			if (inCart) {
+				btn.html('<i class="fa fa-shopping-cart"></i> Update Tickets');
+			} else {
+				btn.html('<i class="fa fa-shopping-cart"></i> Add Tickets to Prize');
+			}
+		});
+
+		$(document).on('click', '#checkout-all-btn', function (e) {
+			e.preventDefault();
+			e.stopPropagation();
+			window.location.href = 'cart.html?id=' + user;
 		});
 
 		$("#cart-img").click(function () {

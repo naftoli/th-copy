@@ -1432,6 +1432,11 @@
 			const qtyInput = productCart.find('.qty-input');
 			const newQty = parseInt(qtyInput.val()) || 0;
 			
+			if (newQty === 0) {
+				alert('Please enter a quantity greater than 0 to add to cart.');
+				return false;
+			}
+			
 			if (newQty < 0) {
 				alert('Please enter a quantity 0 or greater.');
 				return false;
