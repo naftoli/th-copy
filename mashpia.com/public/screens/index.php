@@ -529,17 +529,17 @@ $schools = $adminSchools->getSchools();
                                     <td>${screen.screen_name}</td>
                                     <td><span class="badge bg-info">${screen.screen_size || 'Not set'}</span></td>
                                     <td>
-                                        <span class="code-badge">/screens/display.php/${school_id}/${screen.url}</span>
+                                        <span class="code-badge">/screens/${school_id}/${screen.url}</span>
                                     </td>
                                     <td>
                                         <div class="btn-group" role="group">
-                                            <button onclick="copyUrl('/screens/display.php/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
+                                            <button onclick="copyUrl('/screens/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
                                                 <i class="fas fa-copy me-1"></i>Copy
                                             </button>
                                             <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}')" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
                                                 <i class="fas fa-edit me-1"></i>Edit
                                             </button>
-                                            <a href="/screens/display.php/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                            <a href="/screens/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-external-link-alt me-1"></i>View
                                             </a>
                                             <button onclick="deleteScreen('${school_id}', '${screen.url}', '${screen.screen_name}')" class="btn btn-outline-danger btn-sm">
