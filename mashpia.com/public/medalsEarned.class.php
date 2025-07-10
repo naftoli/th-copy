@@ -1,16 +1,15 @@
 <?php
-class MedalsEarned 
+class MedalsEarned extends Earned
 {
 	private $subjects;
 	private $medals;
-	private $dates;
 	private $report;
 	
 	public function __construct() {
+		parent::__construct();
 		$this->subjects = array();
 		$this->medals = array();
 		$this->report = array();
-		$this->dates = array();
 	}
 	
 	public function getReport() {
@@ -23,7 +22,6 @@ class MedalsEarned
 	private function createReport() {
 		$this->setSubjects();
 		$this->setMedals();
-		$this->setDates();
 
 		foreach ($this->dates as $year => $date) {
 			foreach ($this->subjects as $subject => $subject_id) {
@@ -75,36 +73,12 @@ class MedalsEarned
 		}
 	}
 	
-	private function setDates() {
-		$this->dates = array(
-			5769	=>	2454718, // Sep 8, 2008 
-			5770	=>	2455082, // Sep 7, 2009 
-			5771	=>	2455439, // Aug 30, 2010 
-			5772	=>	2455810, // Sep 5, 2011 
-			5773	=>	2456174, // Sep 3, 2012 
-			5774	=>	2456531, // Aug 26, 2013
-			5775	=>	2456908, // Sep 7, 2014
-			5776	=>	2457265, // Aug 30, 2015
-			5777	=>	2457636, // Sep 4, 2016
-			5778	=>	2457885, // May 11, 2017
-			5779	=>	2458236, // April 27, 2018
-			5780	=>	2458628, // May 24, 2019
-            5781    =>  2458983, // May 13, 2020,
-            5782    =>  2459363, // May 28, 2021
-            5783    =>  2459719, // May 19, 2022
-		);
-	}
-	
 	public function getMedals() {
 		return $this->medals;
 	}
 	
 	public function getSubjects() {
 		return $this->subjects;
-	}
-	
-	public function getDates() {
-		return $this->dates;
 	}
 }
 ?>
