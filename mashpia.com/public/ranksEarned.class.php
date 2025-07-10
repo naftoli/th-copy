@@ -1,4 +1,6 @@
 <?php
+require_once 'class.earned.php';
+
 class RanksEarned extends Earned
 {
 	private $subjects;
