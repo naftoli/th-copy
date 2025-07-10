@@ -233,6 +233,11 @@ $schools = $adminSchools->getSchools();
             background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
             color: #721c24;
         }
+        
+        .form-control.is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
 
         @media (max-width: 768px) {
             .main-container {
@@ -298,6 +303,10 @@ $schools = $adminSchools->getSchools();
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
+                    <div id="modalError" class="alert alert-danger" style="display: none;">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span id="modalErrorMessage"></span>
+                    </div>
                     <form id="screenForm">
                         <input type="hidden" id="modalMode" value="create">
                         <input type="hidden" id="editScreenUrl" value="">
@@ -341,8 +350,17 @@ $schools = $adminSchools->getSchools();
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
                                     <label for="modalUrl" class="form-label">URL</label>
-                                    <input type="text" id="modalUrl" class="form-control" readonly>
-                                    <small class="form-text text-muted">Auto-generated from screen name</small>
+                                    <input type="text" id="modalUrl" name="url" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalPassword" class="form-label">Display Password <span class="text-danger">*</span></label>
+                                    <input type="password" id="modalPassword" name="password" class="form-control" placeholder="Enter password" required>
+                                    <small class="form-text text-muted">Password required to protect screen access</small>
                                 </div>
                             </div>
                         </div>
@@ -388,6 +406,22 @@ $schools = $adminSchools->getSchools();
             return text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
         }
 
+        function showModalError(message) {
+            const errorDiv = document.getElementById('modalError');
+            const errorMessage = document.getElementById('modalErrorMessage');
+            errorMessage.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function clearModalError() {
+            document.getElementById('modalError').style.display = 'none';
+        }
+
         function openCreateModal() {
             document.getElementById('modalMode').value = 'create';
             document.getElementById('modalTitle').textContent = 'Add New Screen';
@@ -396,6 +430,9 @@ $schools = $adminSchools->getSchools();
             document.getElementById('modalUrl').value = '';
             document.getElementById('modalSchoolId').disabled = false;
             document.getElementById('modalScreenName').disabled = false;
+            urlManuallyEdited = false;
+            clearModalError();
+            document.getElementById('modalPassword').placeholder = 'Enter password'; // Clear placeholder for new screens
         }
 
         function openEditModal(schoolId, screenUrl, screenName, screenSize) {
@@ -409,26 +446,64 @@ $schools = $adminSchools->getSchools();
             document.getElementById('modalScreenName').value = screenName;
             document.getElementById('modalScreenSize').value = screenSize;
             document.getElementById('modalUrl').value = screenUrl;
+            document.getElementById('modalPassword').value = ''; // Clear password field for security
+            document.getElementById('modalPassword').placeholder = '••••••••'; // Show placeholder asterisks
             
             // Disable school field in edit mode, but allow screen name to be edited
             document.getElementById('modalSchoolId').disabled = true;
             document.getElementById('modalScreenName').disabled = false;
+            urlManuallyEdited = false;
+            clearModalError();
         }
 
         // Auto-generate URL when screen name changes
+        let urlManuallyEdited = false;
+        
         document.getElementById('modalScreenName').addEventListener('input', function() {
             const screenName = this.value;
             const url = generateSlug(screenName);
-            document.getElementById('modalUrl').value = url;
+            const urlField = document.getElementById('modalUrl');
+            
+            // Only auto-update URL if it hasn't been manually edited
+            if (!urlManuallyEdited) {
+                urlField.value = url;
+            }
+        });
+        
+        // Track if URL is manually edited
+        document.getElementById('modalUrl').addEventListener('input', function() {
+            urlManuallyEdited = true;
+        });
+        
+        // Validate password field in real-time
+        document.getElementById('modalPassword').addEventListener('input', function() {
+            const password = this.value.trim();
+            if (!password) {
+                this.classList.add('is-invalid');
+            } else {
+                this.classList.remove('is-invalid');
+            }
         });
 
         function saveScreen() {
             const mode = document.getElementById('modalMode').value;
+            const password = document.getElementById('modalPassword').value.trim();
+            
+            // Validate password is provided
+            if (!password) {
+                // Show error in modal instead of main page
+                showModalError('Password is required');
+                document.getElementById('modalPassword').focus();
+                return;
+            }
+            
             const formData = new FormData();
             
             formData.append('school_id', document.getElementById('modalSchoolId').value);
             formData.append('screen_name', document.getElementById('modalScreenName').value);
             formData.append('screen_size', document.getElementById('modalScreenSize').value);
+            formData.append('url', document.getElementById('modalUrl').value);
+            formData.append('password', password);
             
             if (mode === 'edit') {
                 formData.append('screen_url', document.getElementById('editScreenUrl').value);
@@ -470,7 +545,8 @@ $schools = $adminSchools->getSchools();
                     
                     getScreens();
                 } else {
-                    showAlert(data.message || 'Failed to save screen', 'danger');
+                    // Show error in modal instead of main page
+                    showModalError(data.message || 'Failed to save screen');
                 }
             })
             .catch(error => {

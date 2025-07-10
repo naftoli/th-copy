@@ -15,6 +15,16 @@ $screen_url = $_POST['screen_url'];
 $new_url = $_POST['new_url'];
 $screen_name = $_POST['screen_name'];
 $screen_size = $_POST['screen_size'];
+$password = $_POST['password'] ?? '';
+
+// Validate password is provided
+if (empty($password)) {
+    echo json_encode(['success' => false, 'message' => 'Password is required']);
+    exit;
+}
+
+// Hash the password
+$hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
 // Validate access - ensure the school can only edit their own screens if not super admin
 if ($admin_user['auth'] !== 'super' && !in_array($school_id, array_keys($schools))) {
@@ -35,9 +45,9 @@ try {
     }
     
     // Update screen
-    $update_sql = "UPDATE screens SET screen_name = ?, screen_size = ?, url = ? WHERE url = ? AND school_id = ?";
+    $update_sql = "UPDATE screens SET screen_name = ?, screen_size = ?, url = ?, password = ? WHERE url = ? AND school_id = ?";
     $update_stmt = $MASHPIA_DB->prepare($update_sql);
-    $result = $update_stmt->execute([$screen_name, $screen_size, $new_url, $screen_url, $school_id]);
+    $result = $update_stmt->execute([$screen_name, $screen_size, $new_url, $hashed_password, $screen_url, $school_id]);
     
     if ($result) {
         echo json_encode(['success' => true]);
