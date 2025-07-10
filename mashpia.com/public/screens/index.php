@@ -275,7 +275,9 @@ $schools = $adminSchools->getSchools();
                                 <select name="school_id" id="school_id" class="form-select" required>
                                     <option value="">Select a school...</option>
                                     <?php foreach ($schools as $school_id => $school_name) { ?>
-                                        <option value="<?php echo $school_id; ?>"><?php echo $school_name; ?></option>
+                                        <option value="<?php echo $school_id; ?>
+                                        <?php if (count($schools) == 1) echo 'selected'; ?>
+                                        "><?php echo $school_name; ?></option>
                                     <?php } ?>
                                 </select>
                             </div>
