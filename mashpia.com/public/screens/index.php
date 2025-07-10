@@ -199,6 +199,8 @@ $schools = $adminSchools->getSchools();
             color: var(--primary-color);
         }
 
+
+
         .screens-section {
             margin-top: 3rem;
         }
@@ -322,6 +324,7 @@ $schools = $adminSchools->getSchools();
                                             <option value="<?php echo $school_id; ?>"><?php echo $school_name; ?></option>
                                         <?php } ?>
                                     </select>
+                                    <div class="invalid-feedback">Please select a school.</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -329,6 +332,7 @@ $schools = $adminSchools->getSchools();
                                     <label for="modalScreenName" class="form-label">Screen Name</label>
                                     <input type="text" id="modalScreenName" name="screen_name" class="form-control" required 
                                            placeholder="e.g., Main Lobby, Cafeteria, Library">
+                                    <div class="invalid-feedback">Please enter a screen name.</div>
                                 </div>
                             </div>
                         </div>
@@ -345,12 +349,14 @@ $schools = $adminSchools->getSchools();
                                         <option value="1024x768">1024x768 (XGA)</option>
                                         <option value="800x600">800x600 (SVGA)</option>
                                     </select>
+                                    <div class="invalid-feedback">Please select a screen size.</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="modalUrl" class="form-label">URL</label>
-                                    <input type="text" id="modalUrl" name="url" class="form-control">
+                                    <label for="modalUrl" class="form-label">URL <span class="text-muted">(Optional)</span></label>
+                                    <input type="text" id="modalUrl" name="url" class="form-control" placeholder="Auto-generated from screen name">
+                                    <small class="form-text text-muted">Leave empty to auto-generate from screen name</small>
                                 </div>
                             </div>
                         </div>
@@ -358,8 +364,9 @@ $schools = $adminSchools->getSchools();
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="modalPassword" class="form-label">Display Password <span class="text-danger">*</span></label>
-                                    <input type="password" id="modalPassword" name="password" class="form-control" placeholder="Enter password" required>
+                                    <label for="modalPassword" class="form-label">Display Password</label>
+                                    <input type="text" id="modalPassword" name="password" class="form-control" required>
+                                    <div class="invalid-feedback">Please enter a password.</div>
                                     <small class="form-text text-muted">Password required to protect screen access</small>
                                 </div>
                             </div>
@@ -422,6 +429,8 @@ $schools = $adminSchools->getSchools();
             document.getElementById('modalError').style.display = 'none';
         }
 
+
+
         function openCreateModal() {
             document.getElementById('modalMode').value = 'create';
             document.getElementById('modalTitle').textContent = 'Add New Screen';
@@ -432,10 +441,10 @@ $schools = $adminSchools->getSchools();
             document.getElementById('modalScreenName').disabled = false;
             urlManuallyEdited = false;
             clearModalError();
-            document.getElementById('modalPassword').placeholder = 'Enter password'; // Clear placeholder for new screens
+            document.getElementById('modalPassword').placeholder = ''; // Clear placeholder for new screens
         }
 
-        function openEditModal(schoolId, screenUrl, screenName, screenSize) {
+        function openEditModal(schoolId, screenUrl, screenName, screenSize, screenPassword) {
             document.getElementById('modalMode').value = 'edit';
             document.getElementById('modalTitle').textContent = 'Edit Screen';
             document.getElementById('saveButtonText').textContent = 'Update Screen';
@@ -446,8 +455,8 @@ $schools = $adminSchools->getSchools();
             document.getElementById('modalScreenName').value = screenName;
             document.getElementById('modalScreenSize').value = screenSize;
             document.getElementById('modalUrl').value = screenUrl;
-            document.getElementById('modalPassword').value = ''; // Clear password field for security
-            document.getElementById('modalPassword').placeholder = '••••••••'; // Show placeholder asterisks
+            document.getElementById('modalPassword').value = screenPassword || ''; // Use passed password
+            document.getElementById('modalPassword').placeholder = '';
             
             // Disable school field in edit mode, but allow screen name to be edited
             document.getElementById('modalSchoolId').disabled = true;
@@ -464,38 +473,45 @@ $schools = $adminSchools->getSchools();
             const url = generateSlug(screenName);
             const urlField = document.getElementById('modalUrl');
             
-            // Only auto-update URL if it hasn't been manually edited
-            if (!urlManuallyEdited) {
-                urlField.value = url;
-            }
+            // Always update URL based on screen name (overwrites manual edits)
+            urlField.value = url;
+            urlManuallyEdited = false; // Reset the flag since we're auto-updating
         });
         
-        // Track if URL is manually edited
+        // Track if URL is manually edited and convert characters in real-time
         document.getElementById('modalUrl').addEventListener('input', function() {
             urlManuallyEdited = true;
-        });
-        
-        // Validate password field in real-time
-        document.getElementById('modalPassword').addEventListener('input', function() {
-            const password = this.value.trim();
-            if (!password) {
-                this.classList.add('is-invalid');
-            } else {
-                this.classList.remove('is-invalid');
+            
+            // Convert the input value to proper URL format
+            let value = this.value;
+            value = value.toLowerCase(); // Convert to lowercase
+            value = value.replace(/\s+/g, '-'); // Replace spaces with hyphens
+            value = value.replace(/[^a-z0-9-]/g, ''); // Remove non-alphanumeric characters (except hyphens)
+            value = value.replace(/-+/g, '-'); // Replace multiple hyphens with single hyphen
+            value = value.replace(/^-+/, ''); // Remove leading hyphens only
+            
+            // Only remove trailing hyphens if they're not the result of a trailing space
+            // (i.e., if the original input ended with a space, keep the hyphen)
+            if (!this.value.endsWith(' ')) {
+                value = value.replace(/-+$/, ''); // Remove trailing hyphens
             }
+            
+            // Update the field with the converted value
+            this.value = value;
         });
 
         function saveScreen() {
-            const mode = document.getElementById('modalMode').value;
-            const password = document.getElementById('modalPassword').value.trim();
+            // Check if form is valid using Bootstrap's native validation
+            const form = document.getElementById('screenForm');
             
-            // Validate password is provided
-            if (!password) {
-                // Show error in modal instead of main page
-                showModalError('Password is required');
-                document.getElementById('modalPassword').focus();
+            if (!form.checkValidity()) {
+                // Trigger Bootstrap's validation display
+                form.reportValidity();
                 return;
             }
+            
+            const mode = document.getElementById('modalMode').value;
+            const password = document.getElementById('modalPassword').value.trim();
             
             const formData = new FormData();
             
@@ -612,7 +628,7 @@ $schools = $adminSchools->getSchools();
                                             <button onclick="copyUrl('/screens/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
                                                 <i class="fas fa-copy me-1"></i>Copy
                                             </button>
-                                            <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}')" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
+                                            <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}', '${screen.password || ''}')" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
                                                 <i class="fas fa-edit me-1"></i>Edit
                                             </button>
                                             <a href="/screens/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">

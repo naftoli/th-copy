@@ -30,8 +30,8 @@ if (empty($password)) {
     exit;
 }
 
-// Hash the password
-$hashed_password = password_hash($password, PASSWORD_DEFAULT);
+// Store password as plain text (no hashing)
+$plain_password = $password;
 
 // If URL is empty, generate from screen name
 if (empty($url)) {
@@ -52,10 +52,6 @@ if ($res) {
 
 $sql = "INSERT INTO screens (school_id, screen_name, url, screen_size, password) VALUES (? , ?, ?, ?, ?)";
 $stmt = $MASHPIA_DB->prepare($sql);
-$res = $stmt->execute([$school_id, $screen_name, $url, $screen_size, $hashed_password]);
-if (!$res) {
-    echo $stmt->debugDumpParams();
-    exit;
-}
+$res = $stmt->execute([$school_id, $screen_name, $url, $screen_size, $plain_password]);
 
 echo json_encode(['success' => $res]);

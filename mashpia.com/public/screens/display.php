@@ -50,7 +50,7 @@ if ($school_id && $screen_slug) {
     if (true) {
         // Check if password was submitted
         if (isset($_POST['screen_password'])) {
-            if (password_verify($_POST['screen_password'], $screen['password'])) {
+            if ($_POST['screen_password'] === $screen['password']) {
                 // Password correct, set session
                 $session_key = 'screen_authenticated_' . $school_id . '_' . $screen_slug;
                 $_SESSION[$session_key] = true;
