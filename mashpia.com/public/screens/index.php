@@ -420,18 +420,21 @@ $schools = $adminSchools->getSchools();
                                     <td><strong>${screen.school_name || 'N/A'}</strong></td>
                                     <td>${screen.screen_name}</td>
                                     <td>
-                                        <span class="code-badge">/screens/${school_id}/${screen.url}</span>
+                                        <span class="code-badge">/screens/display.php/${school_id}/${screen.url}</span>
                                     </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <button onclick="copyUrl('/screens/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
-                                                <i class="fas fa-copy me-1"></i>Copy
-                                            </button>
-                                            <a href="/screens/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-external-link-alt me-1"></i>View
-                                            </a>
-                                        </div>
-                                    </td>
+                                                                         <td>
+                                         <div class="btn-group" role="group">
+                                             <button onclick="copyUrl('/screens/display.php/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
+                                                 <i class="fas fa-copy me-1"></i>Copy
+                                             </button>
+                                             <a href="edit.php?school_id=${school_id}&screen=${screen.url}" class="btn btn-outline-primary btn-sm">
+                                                 <i class="fas fa-edit me-1"></i>Edit Content
+                                             </a>
+                                             <a href="/screens/display.php/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
+                                                 <i class="fas fa-external-link-alt me-1"></i>View
+                                             </a>
+                                         </div>
+                                     </td>
                                 </tr>
                             `;
                         });

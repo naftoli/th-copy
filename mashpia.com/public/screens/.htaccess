@@ -1,3 +1,0 @@
-# .htaccess
-RewriteEngine On
-RewriteRule ^screens/([0-9]+)/([a-zA-Z0-9\-]+)/?$ display.php?school_id=$1&screen=$2 [L,QSA]
