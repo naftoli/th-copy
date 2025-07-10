@@ -542,6 +542,9 @@ $schools = $adminSchools->getSchools();
                                             <a href="/screens/display.php/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-external-link-alt me-1"></i>View
                                             </a>
+                                            <button onclick="deleteScreen('${school_id}', '${screen.url}', '${screen.screen_name}')" class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash me-1"></i>Delete
+                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -567,6 +570,32 @@ $schools = $adminSchools->getSchools();
                         </div>
                     `;
                 });
+        }
+
+        function deleteScreen(schoolId, screenUrl, screenName) {
+            if (confirm(`Are you sure you want to delete the screen "${screenName}"? This action cannot be undone.`)) {
+                const formData = new FormData();
+                formData.append('school_id', schoolId);
+                formData.append('screen_url', screenUrl);
+                
+                fetch('ajax/deleteScreen.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        showAlert('Screen deleted successfully!', 'success');
+                        getScreens();
+                    } else {
+                        showAlert(data.message || 'Failed to delete screen', 'danger');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showAlert('An error occurred while deleting the screen', 'danger');
+                });
+            }
         }
 
         // Load screens on page load
