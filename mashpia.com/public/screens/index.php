@@ -265,54 +265,14 @@ $schools = $adminSchools->getSchools();
         </div>
 
         <div class="content-section">
-            <div class="form-card">
-                <h2><i class="fas fa-plus-circle me-2"></i>Create New Screen</h2>
-                <form method="POST" id="create-screen-form">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="school_id" class="form-label">School Name</label>
-                                <select name="school_id" id="school_id" class="form-select" required>
-                                    <option value="">Select a school...</option>
-                                    <?php foreach ($schools as $school_id => $school_name) { ?>
-                                        <option value="<?php echo $school_id; ?>"
-                                        <?php if (count($schools) == 1) echo 'selected'; ?>
-                                        ><?php echo $school_name; ?></option>
-                                    <?php } ?>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="screen_name" class="form-label">Screen Name</label>
-                                <input type="text" id="screen_name" name="screen_name" class="form-control" required 
-                                       placeholder="e.g., Main Lobby, Cafeteria, Library">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="screen_size" class="form-label">Screen Size</label>
-                                <select name="screen_size" id="screen_size" class="form-select" required>
-                                    <option value="">Select screen size...</option>
-                                    <option value="1920x1080">1920x1080 (Full HD)</option>
-                                    <option value="1366x768">1366x768 (HD)</option>
-                                    <option value="1280x720">1280x720 (HD Ready)</option>
-                                    <option value="1024x768">1024x768 (XGA)</option>
-                                    <option value="800x600">800x600 (SVGA)</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="text-center mt-4">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-magic me-2"></i>Create Screen & Get URL
-                        </button>
-                    </div>
-                </form>
+            <div class="text-center mb-4">
+                <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#screenModal" onclick="openCreateModal()">
+                    <i class="fas fa-plus-circle me-2"></i>Add Screen
+                </button>
             </div>
 
             <div class="screens-section">
-                <h2><i class="fas fa-list me-2"></i>Recent Screens</h2>
+                <h2><i class="fas fa-list me-2"></i>My  Screens</h2>
                 <div class="loading-spinner" id="loading-spinner">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>
@@ -326,6 +286,77 @@ $schools = $adminSchools->getSchools();
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Screen Modal -->
+    <div class="modal fade" id="screenModal" tabindex="-1" aria-labelledby="screenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="screenModalLabel">
+                        <i class="fas fa-tv me-2"></i><span id="modalTitle">Add New Screen</span>
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="screenForm">
+                        <input type="hidden" id="modalMode" value="create">
+                        <input type="hidden" id="editScreenUrl" value="">
+                        <input type="hidden" id="editSchoolId" value="">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalSchoolId" class="form-label">School Name</label>
+                                    <select name="school_id" id="modalSchoolId" class="form-select" required>
+                                        <option value="">Select a school...</option>
+                                        <?php foreach ($schools as $school_id => $school_name) { ?>
+                                            <option value="<?php echo $school_id; ?>"><?php echo $school_name; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalScreenName" class="form-label">Screen Name</label>
+                                    <input type="text" id="modalScreenName" name="screen_name" class="form-control" required 
+                                           placeholder="e.g., Main Lobby, Cafeteria, Library">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalScreenSize" class="form-label">Screen Size</label>
+                                    <select name="screen_size" id="modalScreenSize" class="form-select" required>
+                                        <option value="">Select screen size...</option>
+                                        <option value="1920x1080">1920x1080 (Full HD)</option>
+                                        <option value="1366x768">1366x768 (HD)</option>
+                                        <option value="1280x720">1280x720 (HD Ready)</option>
+                                        <option value="1024x768">1024x768 (XGA)</option>
+                                        <option value="800x600">800x600 (SVGA)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalUrl" class="form-label">URL</label>
+                                    <input type="text" id="modalUrl" class="form-control" readonly>
+                                    <small class="form-text text-muted">Auto-generated from screen name</small>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveScreen()">
+                        <i class="fas fa-save me-2"></i><span id="saveButtonText">Create Screen</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script>
         function copyUrl(path) {
@@ -353,41 +384,102 @@ $schools = $adminSchools->getSchools();
             }, 5000);
         }
 
-        document.getElementById('create-screen-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            createScreen();
+        function generateSlug(text) {
+            return text.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+        }
+
+        function openCreateModal() {
+            document.getElementById('modalMode').value = 'create';
+            document.getElementById('modalTitle').textContent = 'Add New Screen';
+            document.getElementById('saveButtonText').textContent = 'Create Screen';
+            document.getElementById('screenForm').reset();
+            document.getElementById('modalUrl').value = '';
+            document.getElementById('modalSchoolId').disabled = false;
+            document.getElementById('modalScreenName').disabled = false;
+        }
+
+        function openEditModal(schoolId, screenUrl, screenName, screenSize) {
+            document.getElementById('modalMode').value = 'edit';
+            document.getElementById('modalTitle').textContent = 'Edit Screen';
+            document.getElementById('saveButtonText').textContent = 'Update Screen';
+            document.getElementById('editScreenUrl').value = screenUrl;
+            document.getElementById('editSchoolId').value = schoolId;
+            
+            document.getElementById('modalSchoolId').value = schoolId;
+            document.getElementById('modalScreenName').value = screenName;
+            document.getElementById('modalScreenSize').value = screenSize;
+            document.getElementById('modalUrl').value = screenUrl;
+            
+            // Disable school field in edit mode, but allow screen name to be edited
+            document.getElementById('modalSchoolId').disabled = true;
+            document.getElementById('modalScreenName').disabled = false;
+        }
+
+        // Auto-generate URL when screen name changes
+        document.getElementById('modalScreenName').addEventListener('input', function() {
+            const screenName = this.value;
+            const url = generateSlug(screenName);
+            document.getElementById('modalUrl').value = url;
         });
 
-        function createScreen() {
-            const form = document.getElementById('create-screen-form');
-            const submitBtn = form.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
+        function saveScreen() {
+            const mode = document.getElementById('modalMode').value;
+            const formData = new FormData();
             
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Creating...';
+            formData.append('school_id', document.getElementById('modalSchoolId').value);
+            formData.append('screen_name', document.getElementById('modalScreenName').value);
+            formData.append('screen_size', document.getElementById('modalScreenSize').value);
             
-            const formData = new FormData(form);
-            fetch('ajax/addScreen.php', {
+            if (mode === 'edit') {
+                formData.append('screen_url', document.getElementById('editScreenUrl').value);
+                formData.append('new_url', document.getElementById('modalUrl').value);
+                formData.append('mode', 'edit');
+            } else {
+                formData.append('mode', 'create');
+            }
+            
+            const saveBtn = document.querySelector('#screenModal .btn-primary');
+            const originalText = saveBtn.innerHTML;
+            
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+            
+            const endpoint = mode === 'edit' ? 'ajax/updateScreen.php' : 'ajax/addScreen.php';
+            
+            fetch(endpoint, {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    showAlert('Screen created successfully!', 'success');
-                    form.reset();
+                    showAlert(mode === 'edit' ? 'Screen updated successfully!' : 'Screen created successfully!', 'success');
+                    
+                    // Close the modal
+                    const modalElement = document.getElementById('screenModal');
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                    } else {
+                        // Fallback: trigger the close button
+                        const closeButton = modalElement.querySelector('[data-bs-dismiss="modal"]');
+                        if (closeButton) {
+                            closeButton.click();
+                        }
+                    }
+                    
                     getScreens();
                 } else {
-                    showAlert(data.error || 'Failed to create screen', 'danger');
+                    showAlert(data.message || 'Failed to save screen', 'danger');
                 }
             })
             .catch(error => {
                 console.error('Error:', error);
-                showAlert('An error occurred while creating the screen', 'danger');
+                showAlert('An error occurred while saving the screen', 'danger');
             })
             .finally(() => {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
             });
         }
 
@@ -431,7 +523,7 @@ $schools = $adminSchools->getSchools();
                     
                     Object.keys(data).forEach((school_id) => {
                         data[school_id].forEach((screen) => {
-                                                        html += `
+                            html += `
                                 <tr>
                                     <td><strong>${screen.school_name || 'N/A'}</strong></td>
                                     <td>${screen.screen_name}</td>
@@ -444,9 +536,9 @@ $schools = $adminSchools->getSchools();
                                             <button onclick="copyUrl('/screens/display.php/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
                                                 <i class="fas fa-copy me-1"></i>Copy
                                             </button>
-                                            <a href="edit.php?school_id=${school_id}&screen=${screen.url}" class="btn btn-outline-primary btn-sm">
-                                                <i class="fas fa-edit me-1"></i>Edit Content
-                                            </a>
+                                            <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}')" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
+                                                <i class="fas fa-edit me-1"></i>Edit
+                                            </button>
                                             <a href="/screens/display.php/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-external-link-alt me-1"></i>View
                                             </a>
