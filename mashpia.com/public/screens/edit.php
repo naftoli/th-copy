@@ -37,6 +37,7 @@ $school_name = $schools[$school_id];
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $screen_name = trim($_POST['screen_name']);
+    $screen_size = $_POST['screen_size'];
     $display_type = $_POST['display_type'];
     $content_data = $_POST['content_data'];
     $refresh_interval = (int)$_POST['refresh_interval'];
@@ -46,25 +47,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($screen_name)) {
         $error = "Screen name is required.";
     } else {
-        // Update screen
-        $update_sql = "UPDATE screens SET 
-                       screen_name = ?, 
-                       display_type = ?, 
-                       content_data = ?, 
-                       refresh_interval = ?, 
-                       is_active = ?,
-                       WHERE url = ? AND school_id = ?";
-        
-        $update_stmt = $MASHPIA_DB->prepare($update_sql);
-        $result = $update_stmt->execute([
-            $screen_name,
-            $display_type,
-            $content_data,
-            $refresh_interval,
-            $is_active,
-            $screen_url,
-            $school_id
-        ]);
+                    // Update screen
+            $update_sql = "UPDATE screens SET 
+                           screen_name = ?, 
+                           screen_size = ?,
+                           display_type = ?, 
+                           content_data = ?, 
+                           refresh_interval = ?, 
+                           is_active = ?
+                           WHERE url = ? AND school_id = ?";
+            
+            $update_stmt = $MASHPIA_DB->prepare($update_sql);
+            $result = $update_stmt->execute([
+                $screen_name,
+                $screen_size,
+                $display_type,
+                $content_data,
+                $refresh_interval,
+                $is_active,
+                $screen_url,
+                $school_id
+            ]);
         
         if ($result) {
             $success = "Screen updated successfully!";
@@ -331,6 +334,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                        value="<?php echo htmlspecialchars($screen['screen_name']); ?>" required>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="screen_size" class="form-label">Screen Size</label>
+                                <select name="screen_size" id="screen_size" class="form-select" required>
+                                    <option value="">Select screen size...</option>
+                                    <option value="1920x1080" <?php echo ($screen['screen_size'] ?? '') === '1920x1080' ? 'selected' : ''; ?>>1920x1080 (Full HD)</option>
+                                    <option value="1366x768" <?php echo ($screen['screen_size'] ?? '') === '1366x768' ? 'selected' : ''; ?>>1366x768 (HD)</option>
+                                    <option value="1280x720" <?php echo ($screen['screen_size'] ?? '') === '1280x720' ? 'selected' : ''; ?>>1280x720 (HD Ready)</option>
+                                    <option value="1024x768" <?php echo ($screen['screen_size'] ?? '') === '1024x768' ? 'selected' : ''; ?>>1024x768 (XGA)</option>
+                                    <option value="800x600" <?php echo ($screen['screen_size'] ?? '') === '800x600' ? 'selected' : ''; ?>>800x600 (SVGA)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="display_type" class="form-label">Display Type</label>

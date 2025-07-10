@@ -16,19 +16,26 @@ $schools = $adminSchools->getSchools();
 
 $school_id = $_POST['school_id'];
 $screen_name = $_POST['screen_name'];
+$screen_size = $_POST['screen_size'];
 
 $url = generateSlug($screen_name);
 $url = str_replace(' ', '-', $url);
 
 // check if url is already in use
-$existing_url = $MASHPIA_DB->query("SELECT url FROM screens WHERE url = '$url' AND school_id = $school_id");
-if ($existing_url->fetch(PDO::FETCH_ASSOC)) {
+$existing_url = $MASHPIA_DB->prepare("SELECT url FROM screens WHERE url = ? AND school_id = ?");
+$existing_url->execute([$url, $school_id]);
+$res = $existing_url->fetch(PDO::FETCH_ASSOC);
+if ($res) {
     echo json_encode(['error' => 'URL already in use']);
     exit;
 }
 
-$sql = "INSERT INTO screens (school_id, screen_name, url) 
-    VALUES ($school_id, '$screen_name', '$url')";
-$res = $MASHPIA_DB->query($sql);
+$sql = "INSERT INTO screens (school_id, screen_name, url, screen_size) VALUES (? , ?, ?, ?)";
+$stmt = $MASHPIA_DB->prepare($sql);
+$res = $stmt->execute([$school_id, $screen_name, $url, $screen_size]);
+if (!$res) {
+    echo $stmt->debugDumpParams();
+    exit;
+}
 
 echo json_encode(['success' => $res]);
