@@ -42,7 +42,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
             <a href="/reports/promotions/index.php">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="tickets"/>
-                    <span class="link-text">Promotions Report</span>
+                    <span class="link-text">Flexible Promotions Report</span>
                 </div>
             </a>
         </div>
