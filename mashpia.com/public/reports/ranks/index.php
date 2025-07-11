@@ -37,6 +37,15 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
         
         <!--<h2>Forms and Reports</h2>-->
         <?if ($admin_user['auth'] == 'super') {?>
+        <h2>Promotions</h2>
+        <div id="action-links">
+            <a href="/reports/promotions/index.php">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="tickets"/>
+                    <span class="link-text">Promotions Report</span>
+                </div>
+            </a>
+        </div>
         <h2>Ranks And Medals</h2>
         <div id="action-links">
             <a href="/admin_received_stats.php<?=$debug ? "?debug=true": "";?>">
