@@ -147,7 +147,23 @@ if ($school_id && $screen_slug) {
             exit;
         }
     }
-    
+    $screen_size = $screen['screen_size'];
+    if ($screen_size == '1920x1080') {
+        $screen_height = 1080;
+        $screen_width = 1920;
+    } else if ($screen_size == '1366x768') {
+        $screen_height = 768;
+        $screen_width = 1366;
+    } else if ($screen_size == '1280x720') {
+        $screen_height = 720;
+        $screen_width = 1280;
+    } else if ($screen_size == '1024x768') {
+        $screen_height = 768;
+        $screen_width = 1024;
+    } else if ($screen_size == '800x600') {
+        $screen_height = 600;
+        $screen_width = 800;
+    }
     // Display the screen content
     ?>
     <!DOCTYPE html>
@@ -168,8 +184,8 @@ if ($school_id && $screen_slug) {
                 overflow: hidden;
             }
             .screen-container {
-                width: 100vw;
-                height: 100vh;
+                width: <?php echo $screen_width; ?>px;
+                height: <?php echo $screen_height; ?>px;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
