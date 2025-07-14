@@ -343,18 +343,18 @@ $schools = $adminSchools->getSchools();
                                     <label for="modalScreenSize" class="form-label">Screen Size</label>
                                     <select name="screen_size" id="modalScreenSize" class="form-select" required>
                                         <option value="">Select screen size...</option>
-                                        <option value="1920x1080">1920x1080 (Full HD)</option>
-                                        <option value="1366x768">1366x768 (HD)</option>
-                                        <option value="1280x720">1280x720 (HD Ready)</option>
-                                        <option value="1024x768">1024x768 (XGA)</option>
-                                        <option value="800x600">800x600 (SVGA)</option>
+                                        <option value="1920x1080">1920x1080</option>
+                                        <option value="1366x768">1366x768</option>
+                                        <option value="1280x720">1280x720</option>
+                                        <option value="1024x768">1024x768</option>
+                                        <option value="800x600">800x600</option>
                                     </select>
                                     <div class="invalid-feedback">Please select a screen size.</div>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="modalUrl" class="form-label">URL <span class="text-muted">(Optional)</span></label>
+                                    <label for="modalUrl" class="form-label">URL</label>
                                     <input type="text" id="modalUrl" name="url" class="form-control" placeholder="Auto-generated from screen name">
                                     <small class="form-text text-muted">Leave empty to auto-generate from screen name</small>
                                 </div>
@@ -364,10 +364,10 @@ $schools = $adminSchools->getSchools();
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group mb-3">
-                                    <label for="modalPassword" class="form-label">Display Password</label>
-                                    <input type="text" id="modalPassword" name="password" class="form-control" required>
-                                    <div class="invalid-feedback">Please enter a password.</div>
-                                    <small class="form-text text-muted">Password required to protect screen access</small>
+                                    <label for="modalPassword" class="form-label">Display PIN</label>
+                                    <input type="number" id="modalPassword" name="password" class="form-control" required>
+                                    <div class="invalid-feedback">Please enter a PIN.</div>
+                                    <small class="form-text text-muted">PIN required to protect screen access</small>
                                 </div>
                             </div>
                         </div>

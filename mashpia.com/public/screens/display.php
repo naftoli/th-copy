@@ -123,7 +123,7 @@ if ($school_id && $screen_slug) {
             <body>
                 <div class="password-card">
                     <h2><i class="fas fa-lock me-2"></i>Screen Access</h2>
-                    <p class="text-center text-muted mb-4">Enter password to view <?php echo htmlspecialchars($screen['screen_name']); ?></p>
+                    <p class="text-center text-muted mb-4">Enter PIN to view <?php echo htmlspecialchars($screen['screen_name']); ?></p>
                     
                     <?php if (isset($error)): ?>
                         <div class="alert alert-danger">
@@ -133,8 +133,8 @@ if ($school_id && $screen_slug) {
                     
                     <form method="POST">
                         <div class="mb-3">
-                            <label for="screen_password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="screen_password" name="screen_password" required>
+                            <label for="screen_password" class="form-label">PIN</label>
+                            <input type="number" class="form-control" id="screen_password" name="screen_password" required>
                         </div>
                         <button type="submit" class="btn btn-primary w-100">
                             <i class="fas fa-unlock me-2"></i>Access Screen
