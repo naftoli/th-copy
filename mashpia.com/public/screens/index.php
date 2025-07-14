@@ -313,6 +313,7 @@ $schools = $adminSchools->getSchools();
                         <input type="hidden" id="modalMode" value="create">
                         <input type="hidden" id="editScreenUrl" value="">
                         <input type="hidden" id="editSchoolId" value="">
+                        <input type="hidden" id="editScreenId" value="">
                         
                         <div class="row">
                             <div class="col-md-6">
@@ -370,6 +371,17 @@ $schools = $adminSchools->getSchools();
                                     <small class="form-text text-muted">PIN required to protect screen access</small>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Screen Settings</label>
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-outline-info" onclick="openSettingsFromEdit()" id="settingsLink" style="display: none;">
+                                            <i class="fas fa-cog me-2"></i>Configure Settings
+                                        </button>
+                                    </div>
+                                    <small class="form-text text-muted">Configure promotions and birthdays display</small>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -377,6 +389,134 @@ $schools = $adminSchools->getSchools();
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" onclick="saveScreen()">
                         <i class="fas fa-save me-2"></i><span id="saveButtonText">Create Screen</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="settingsModalLabel">
+                        <i class="fas fa-cog me-2"></i>Screen Settings
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="settingsError" class="alert alert-danger" style="display: none;">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <span id="settingsErrorMessage"></span>
+                    </div>
+                    <form id="settingsForm">
+                        <input type="hidden" id="settingsScreenId" value="">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Promotions</label>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="showPromotions" name="show_promotions">
+                                        <label class="form-check-label" for="showPromotions">
+                                            Show promotions on this screen
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="promotionsDays" class="form-label">Number of days to show promotions</label>
+                                        <select name="promotions_days" id="promotionsDays" class="form-select">
+                                            <option value="1">1 day</option>
+                                            <option value="2">2 days</option>
+                                            <option value="3">3 days</option>
+                                            <option value="4">4 days</option>
+                                            <option value="5">5 days</option>
+                                            <option value="6">6 days</option>
+                                            <option value="7">7 days</option>
+                                            <option value="8">8 days</option>
+                                            <option value="9">9 days</option>
+                                            <option value="10">10 days</option>
+                                            <option value="11">11 days</option>
+                                            <option value="12">12 days</option>
+                                            <option value="13">13 days</option>
+                                            <option value="14">14 days</option>
+                                            <option value="15">15 days</option>
+                                            <option value="16">16 days</option>
+                                            <option value="17">17 days</option>
+                                            <option value="18">18 days</option>
+                                            <option value="19">19 days</option>
+                                            <option value="20">20 days</option>
+                                            <option value="21">21 days</option>
+                                            <option value="22">22 days</option>
+                                            <option value="23">23 days</option>
+                                            <option value="24">24 days</option>
+                                            <option value="25">25 days</option>
+                                            <option value="26">26 days</option>
+                                            <option value="27">27 days</option>
+                                            <option value="28">28 days</option>
+                                            <option value="29">29 days</option>
+                                            <option value="30">30 days</option>
+                                            <option value="60">2 months</option>
+                                            <option value="90">3 months</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label class="form-label">Birthdays</label>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="showBirthdays" name="show_birthdays">
+                                        <label class="form-check-label" for="showBirthdays">
+                                            Show birthdays on this screen
+                                        </label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="birthdaysDays" class="form-label">Number of days to show birthdays</label>
+                                        <select name="birthdays_days" id="birthdaysDays" class="form-select">
+                                            <option value="1">1 day</option>
+                                            <option value="2">2 days</option>
+                                            <option value="3">3 days</option>
+                                            <option value="4">4 days</option>
+                                            <option value="5">5 days</option>
+                                            <option value="6">6 days</option>
+                                            <option value="7">7 days</option>
+                                            <option value="8">8 days</option>
+                                            <option value="9">9 days</option>
+                                            <option value="10">10 days</option>
+                                            <option value="11">11 days</option>
+                                            <option value="12">12 days</option>
+                                            <option value="13">13 days</option>
+                                            <option value="14">14 days</option>
+                                            <option value="15">15 days</option>
+                                            <option value="16">16 days</option>
+                                            <option value="17">17 days</option>
+                                            <option value="18">18 days</option>
+                                            <option value="19">19 days</option>
+                                            <option value="20">20 days</option>
+                                            <option value="21">21 days</option>
+                                            <option value="22">22 days</option>
+                                            <option value="23">23 days</option>
+                                            <option value="24">24 days</option>
+                                            <option value="25">25 days</option>
+                                            <option value="26">26 days</option>
+                                            <option value="27">27 days</option>
+                                            <option value="28">28 days</option>
+                                            <option value="29">29 days</option>
+                                            <option value="30">30 days</option>
+                                            <option value="60">2 months</option>
+                                            <option value="90">3 months</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSettings()">
+                        <i class="fas fa-save me-2"></i>Save Settings
                     </button>
                 </div>
             </div>
@@ -442,14 +582,29 @@ $schools = $adminSchools->getSchools();
             urlManuallyEdited = false;
             clearModalError();
             document.getElementById('modalPassword').placeholder = ''; // Clear placeholder for new screens
+            
+            // Reset settings for create mode
+            currentEditSettings = null;
+            
+            // Hide settings link in create mode
+            document.getElementById('settingsLink').style.display = 'none';
         }
 
-        function openEditModal(schoolId, screenUrl, screenName, screenSize, screenPassword) {
+        function openEditModal(schoolId, screenUrl, screenName, screenSize, screenPassword, screenId, settings) {
             document.getElementById('modalMode').value = 'edit';
             document.getElementById('modalTitle').textContent = 'Edit Screen';
             document.getElementById('saveButtonText').textContent = 'Update Screen';
             document.getElementById('editScreenUrl').value = screenUrl;
             document.getElementById('editSchoolId').value = schoolId;
+            document.getElementById('editScreenId').value = screenId;
+            
+            // Store settings in global variable
+            currentEditSettings = {
+                show_promotions: parseInt(settings.show_promotions) || 0,
+                promotions_days: parseInt(settings.promotions_days) || 7,
+                show_birthdays: parseInt(settings.show_birthdays) || 0,
+                birthdays_days: parseInt(settings.birthdays_days) || 7
+            };
             
             document.getElementById('modalSchoolId').value = schoolId;
             document.getElementById('modalScreenName').value = screenName;
@@ -463,10 +618,123 @@ $schools = $adminSchools->getSchools();
             document.getElementById('modalScreenName').disabled = false;
             urlManuallyEdited = false;
             clearModalError();
+            
+            // Show settings link in edit mode
+            document.getElementById('settingsLink').style.display = 'inline-block';
+        }
+
+        function openSettingsModal(screenId, screenName, settings) {
+            document.getElementById('settingsScreenId').value = screenId;
+            document.getElementById('settingsModalLabel').innerHTML = '<i class="fas fa-cog me-2"></i>Settings for ' + screenName;
+            
+            // Set form values from the settings data
+            document.getElementById('showPromotions').checked = settings.show_promotions == 1;
+            document.getElementById('promotionsDays').value = settings.promotions_days || 7;
+            document.getElementById('showBirthdays').checked = settings.show_birthdays == 1;
+            document.getElementById('birthdaysDays').value = settings.birthdays_days || 7;
+        }
+
+        function openSettingsFromEdit() {
+            // Get the screen ID and settings from the current edit session
+            const screenId = document.getElementById('editScreenId').value;
+            const screenName = document.getElementById('modalScreenName').value;
+            
+            if (currentEditSettings) {
+                // Close the edit modal
+                const editModal = bootstrap.Modal.getInstance(document.getElementById('screenModal'));
+                editModal.hide();
+                
+                // Open settings modal with the screen_id and settings
+                openSettingsModal(screenId, screenName, currentEditSettings);
+                const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+                settingsModal.show();
+            } else {
+                // Fallback to default settings if global variable is not available
+                const defaultSettings = {
+                    show_promotions: 0,
+                    promotions_days: 7,
+                    show_birthdays: 0,
+                    birthdays_days: 7
+                };
+                
+                // Close the edit modal
+                const editModal = bootstrap.Modal.getInstance(document.getElementById('screenModal'));
+                editModal.hide();
+                
+                // Open settings modal with the screen_id and default settings
+                openSettingsModal(screenId, screenName, defaultSettings);
+                const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+                settingsModal.show();
+            }
+        }
+
+        function saveSettings() {
+            const formData = new FormData();
+            formData.append('screen_id', document.getElementById('settingsScreenId').value);
+            formData.append('show_promotions', document.getElementById('showPromotions').checked ? 1 : 0);
+            formData.append('promotions_days', document.getElementById('promotionsDays').value);
+            formData.append('show_birthdays', document.getElementById('showBirthdays').checked ? 1 : 0);
+            formData.append('birthdays_days', document.getElementById('birthdaysDays').value);
+            
+            const saveBtn = document.querySelector('#settingsModal .btn-primary');
+            const originalText = saveBtn.innerHTML;
+            
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Saving...';
+            
+            fetch('ajax/saveScreenSettings.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('Settings saved successfully!', 'success');
+                    
+                    // Close the modal
+                    const modalElement = document.getElementById('settingsModal');
+                    const modal = bootstrap.Modal.getInstance(modalElement);
+                    if (modal) {
+                        modal.hide();
+                    } else {
+                        // Fallback: trigger the close button
+                        const closeButton = modalElement.querySelector('[data-bs-dismiss="modal"]');
+                        if (closeButton) {
+                            closeButton.click();
+                        }
+                    }
+                    
+                    // Refresh the screen list to show updated settings
+                    getScreens();
+                } else {
+                    showSettingsError(data.message || 'Failed to save settings');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showSettingsError('An error occurred while saving settings');
+            })
+            .finally(() => {
+                saveBtn.disabled = false;
+                saveBtn.innerHTML = originalText;
+            });
+        }
+
+        function showSettingsError(message) {
+            const errorDiv = document.getElementById('settingsError');
+            const errorMessage = document.getElementById('settingsErrorMessage');
+            errorMessage.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
         }
 
         // Auto-generate URL when screen name changes
         let urlManuallyEdited = false;
+        let currentEditSettings = null; // Store settings for current edit session
         
         document.getElementById('modalScreenName').addEventListener('input', function() {
             const screenName = this.value;
@@ -628,8 +896,11 @@ $schools = $adminSchools->getSchools();
                                             <button onclick="copyUrl('/screens/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
                                                 <i class="fas fa-copy me-1"></i>Copy
                                             </button>
-                                            <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}', '${screen.password || ''}')" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
+                                            <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}', '${screen.password || ''}', '${screen.screen_id}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}})" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
                                                 <i class="fas fa-edit me-1"></i>Edit
+                                            </button>
+                                            <button onclick="openSettingsModal('${screen.screen_id}', '${screen.screen_name}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}})" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                                                <i class="fas fa-cog me-1"></i>Settings
                                             </button>
                                             <a href="/screens/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-external-link-alt me-1"></i>View
