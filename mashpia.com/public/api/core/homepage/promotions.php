@@ -12,8 +12,10 @@ class BirthdayRouter {
         $filter = $current_user->login->getFilter( 's.', 'u.' );
         if ( !$filter )
             json_error( 'Access Deinied: HOME-BIRTHDAY-14' );
-        $end_date = unixtojd();
-        $start_date = $end_date - 7; // 7 days of promotions
+
+        $end_date = intval(unixtojd());
+        $start = isset($_GET['start']) ? intval($_GET['start']) : 7;
+        $start_date =  $end_date - $start; // x days of promotions
 
         $query = $MASHPIA_DB->prepare(
              " SELECT user_id, class_id, first, last, mobile_pic, user_photo_id, school_name, "

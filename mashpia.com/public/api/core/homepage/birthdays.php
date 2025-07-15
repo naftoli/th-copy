@@ -13,8 +13,9 @@ class BirthdayRouter {
         if ( !$filter )
             json_error( 'Access Deinied: HOME-BIRTHDAY-26' );
 
-        $start_date = unixtojd();
-        $end_date = $start_date + 7; // 3 days of birthdays
+        $end_date = intval(unixtojd());
+        $start = isset($_GET['start']) ? intval($_GET['start']) : 7;
+        $start_date =  $end_date - $start; // x days of birthdays
 
         $query = $MASHPIA_DB->prepare(
              " SELECT user_id, class_id, first, last, mobile_pic, user_photo_id, school_name, class_grade, class_sub, start_date, end_date "

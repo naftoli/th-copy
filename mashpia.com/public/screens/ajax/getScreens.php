@@ -12,9 +12,15 @@ $schools = $adminSchools->getSchools();
 $school_ids = array_keys($schools);
 
 $screens = $MASHPIA_DB->query("
-    SELECT * FROM screens 
-    WHERE school_id IN (" . implode(',', $school_ids) . ") 
-    ORDER BY school_id DESC
+    SELECT s.*, 
+           COALESCE(ss.show_promotions, 0) as show_promotions,
+           COALESCE(ss.promotions_days, 7) as promotions_days,
+           COALESCE(ss.show_birthdays, 0) as show_birthdays,
+           COALESCE(ss.birthdays_days, 7) as birthdays_days
+    FROM screens s
+    LEFT JOIN screen_settings ss ON s.screen_id = ss.screen_id
+    WHERE s.school_id IN (" . implode(',', $school_ids) . ") 
+    ORDER BY s.school_id DESC
 ");
 
 $screens_array = [];
