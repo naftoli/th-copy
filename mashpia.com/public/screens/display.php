@@ -259,13 +259,13 @@ if ($school_id && $screen_slug) {
             }
             
             .content-row:first-child {
-                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.4);
-                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.4);
+                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.3);
+                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.3);
             }
             
             .content-row:last-child {
-                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.6);
-                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.6);
+                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.7);
+                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.7);
             }
 
             .content-section {
@@ -589,7 +589,7 @@ if ($school_id && $screen_slug) {
                     
                     <div class="content-section tehillim-section">
                         <h2 class="tehillim-title">
-                            <i class="fas fa-pray me-2"></i>Tehillim
+                            <i class="fas fa-pray me-2"></i>Finished Tehillim Quota
                         </h2>
                         <div class="tehillim-container" id="tehillim-list">
                             <div class="loading">
@@ -765,7 +765,6 @@ if ($school_id && $screen_slug) {
                             const duration = Math.max(8, data.data.length * 1.5);
                             tehillimList.innerHTML = `
                                 <div style="height: 100%; max-height: 100%; overflow: hidden; display: flex; flex-direction: column;">
-                                    <div class="date-header">Today's Tehillim</div>
                                     <div style="flex: 1; overflow: hidden; padding: 15px;">
                                         <div class="children-list-inner" style="animation-duration: ${duration}s">
                                             ${html}${html}

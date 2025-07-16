@@ -16,23 +16,23 @@ $response = [
     'data' => [
         [
             'name' => 'Yosef Cohen',
-            'chapter' => 'Chapter 1'
+            'chapter' => '5 Kapitlach'
         ],
         [
             'name' => 'Moshe Levy',
-            'chapter' => 'Chapter 2'
+            'chapter' => '10 Kapitlach'
         ],
         [
             'name' => 'David Green',
-            'chapter' => 'Chapter 3'
+            'chapter' => '15 Kapitlach'
         ],
         [
             'name' => 'Aharon Silver',
-            'chapter' => 'Chapter 4'
+            'chapter' => '20 Kapitlach'
         ],
         [
             'name' => 'Shmuel Gold',
-            'chapter' => 'Chapter 5'
+            'chapter' => '25 Kapitlach'
         ]
     ]
 ];
