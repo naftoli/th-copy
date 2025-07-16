@@ -227,7 +227,8 @@ if ($school_id && $screen_slug) {
                 overflow: hidden;
                 box-sizing: border-box;
             }
-            /* New 5-part layout structure */
+            
+            /* Layout Structure */
             .announcements-section {
                 width: 100%;
                 height: 80px;
@@ -282,89 +283,6 @@ if ($school_id && $screen_slug) {
                 font-size: 1.8rem;
             }
 
-            /* Responsive adjustments */
-            @media (max-width: 1024px) {
-                .content-section {
-                    padding: 16px 8px 0 8px;
-                }
-                .content-section h2 {
-                    font-size: 1.5rem;
-                }
-            }
-
-            @media (max-width: 768px) {
-                .content-grid {
-                    flex-direction: column;
-                }
-                .content-row {
-                    flex-direction: column;
-                }
-                .content-section {
-                    border-right: none;
-                    border-bottom: 1.5px solid rgba(255,255,255,0.13);
-                    padding: 12px 4px 0 4px;
-                }
-                .content-section:last-child {
-                    border-bottom: none;
-                }
-            }
-            .promotions-container, .children-list {
-                width: 100%;
-                max-width: 800px;
-                max-height: 100%;
-                overflow-y: auto;
-                box-sizing: border-box;
-            }
-            .children-list-inner {
-                max-width: 100%;
-                box-sizing: border-box;
-            }
-            .screen-images-section, .promotions-section, .birthdays-section {
-                max-width: 100%;
-                box-sizing: border-box;
-            }
-            .screen-images-section img {
-                max-width: 100%;
-                height: auto;
-            }
-            .screen-title {
-                font-size: 3rem;
-                font-weight: bold;
-                margin-bottom: 1rem;
-                text-align: center;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            }
-            .screen-info {
-                font-size: 1.5rem;
-                text-align: center;
-                opacity: 0.8;
-            }
-            .screen-size {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                background: rgba(255,255,255,0.1);
-                padding: 10px 15px;
-                border-radius: 5px;
-                font-size: 0.9rem;
-            }
-            .timestamp {
-                position: absolute;
-                bottom: 20px;
-                left: 20px;
-                font-size: 1rem;
-                opacity: 0.7;
-            }
-            
-            /* Promotions and Birthdays UI */
-            .section-title {
-                font-size: 2.5rem;
-                font-weight: bold;
-                margin-bottom: 30px;
-                text-align: center;
-                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            }
-            
             .promotions-title {
                 color: #ffd700;
             }
@@ -373,21 +291,27 @@ if ($school_id && $screen_slug) {
                 color: #ff69b4;
             }
             
-                    .content-list {
-            width: 100%;
-            max-width: 600px;
-            text-align: center;
-        }
-        
-                    .promotions-container {
+            .tehillim-title {
+                color: #98fb98;
+            }
+            
+
+            
+
+
+            /* Content containers */
+            .promotions-container, .tehillim-container {
                 width: 100%;
                 max-width: 800px;
                 height: 100%;
                 display: flex;
                 flex-direction: column;
                 gap: 20px;
+                overflow-y: auto;
+                box-sizing: border-box;
             }
-            
+
+            /* Date sections for promotions/birthdays */
             .date-section {
                 background: rgba(255,255,255,0.1);
                 border-radius: 15px;
@@ -419,14 +343,17 @@ if ($school_id && $screen_slug) {
                 height: 100%;
                 min-height: 200px;
             }
+            
             .children-list-inner {
                 display: flex;
                 flex-direction: column;
                 animation: scrollChildren 15s linear infinite;
             }
+            
             .children-list:hover .children-list-inner {
                 animation-play-state: paused;
             }
+            
             @keyframes scrollChildren {
                 0% { transform: translateY(0); }
                 100% { transform: translateY(-50%); }
@@ -480,67 +407,11 @@ if ($school_id && $screen_slug) {
                 font-style: italic;
             }
             
-            /* Birthday specific styling */
-            .birthdays-section .date-header {
-                background: linear-gradient(135deg, #ff69b4 0%, #ff8da1 100%);
-            }
+
             
-            .birthdays-section .child-item {
-                border-left: 4px solid #ff69b4;
-            }
+
             
-            .content-item {
-                background: rgba(255,255,255,0.1);
-                border-radius: 15px;
-                padding: 20px;
-                margin-bottom: 20px;
-                backdrop-filter: blur(10px);
-                border: 1px solid rgba(255,255,255,0.2);
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-            
-            .content-item:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            }
-            
-            .promotion-item {
-                border-left: 5px solid #ffd700;
-            }
-            
-            .birthday-item {
-                border-left: 5px solid #ff69b4;
-            }
-            
-            .item-title {
-                font-size: 1.3rem;
-                font-weight: bold;
-                margin-bottom: 10px;
-                color: #fff;
-            }
-            
-            .item-description {
-                font-size: 1rem;
-                opacity: 0.9;
-                line-height: 1.4;
-            }
-            
-                    .item-date {
-            font-size: 0.9rem;
-            opacity: 0.7;
-            margin-top: 10px;
-            font-style: italic;
-        }
-        
-        .item-image {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-top: 10px;
-            border: 2px solid rgba(255,255,255,0.3);
-        }
-            
+            /* Loading and status */
             .no-content {
                 font-size: 1.5rem;
                 opacity: 0.6;
@@ -569,45 +440,54 @@ if ($school_id && $screen_slug) {
                 100% { transform: rotate(360deg); }
             }
             
-            /* Responsive adjustments for different screen sizes */
-            @media (max-width: 1920px) {
-                .section-title { font-size: 2rem; }
-                .item-title { font-size: 1.1rem; }
-                .item-description { font-size: 0.9rem; }
-                .date-header { font-size: 1.3rem; padding: 12px 18px; }
-                .child-name { font-size: 1rem; }
-                .child-rank { font-size: 0.85rem; }
+            /* Screen info */
+            .screen-size {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: rgba(255,255,255,0.1);
+                padding: 10px 15px;
+                border-radius: 5px;
+                font-size: 0.9rem;
             }
             
-            @media (max-width: 1366px) {
-                .section-title { font-size: 1.8rem; }
-                .item-title { font-size: 1rem; }
-                .item-description { font-size: 0.85rem; }
-                .date-header { font-size: 1.2rem; padding: 10px 15px; }
-                .child-name { font-size: 0.95rem; }
-                .child-rank { font-size: 0.8rem; }
-                .child-item { padding: 10px 12px; }
+            .timestamp {
+                position: absolute;
+                bottom: 20px;
+                left: 20px;
+                font-size: 1rem;
+                opacity: 0.7;
             }
             
+            /* Responsive adjustments */
             @media (max-width: 1024px) {
-                .section-title { font-size: 1.5rem; }
-                .item-title { font-size: 0.9rem; }
-                .item-description { font-size: 0.8rem; }
+                .content-section {
+                    padding: 16px 8px 0 8px;
+                }
+                .content-section h2 {
+                    font-size: 1.5rem;
+                }
                 .date-header { font-size: 1.1rem; padding: 8px 12px; }
                 .child-name { font-size: 0.9rem; }
                 .child-rank { font-size: 0.75rem; }
                 .child-item { padding: 8px 10px; margin-bottom: 8px; }
                 .children-list { padding: 12px; }
             }
-            
+
             @media (max-width: 768px) {
-                .content-sections {
+                .content-grid {
                     flex-direction: column;
                 }
-                .promotions-section, .birthdays-section {
-                    flex: none;
-                    height: 50vh;
-                    padding: 20px;
+                .content-row {
+                    flex-direction: column;
+                }
+                .content-section {
+                    border-right: none;
+                    border-bottom: 1.5px solid rgba(255,255,255,0.13);
+                    padding: 12px 4px 0 4px;
+                }
+                .content-section:last-child {
+                    border-bottom: none;
                 }
                 .date-header { font-size: 1rem; padding: 6px 10px; }
                 .child-name { font-size: 0.85rem; }
@@ -615,6 +495,7 @@ if ($school_id && $screen_slug) {
                 .child-item { padding: 6px 8px; margin-bottom: 6px; }
                 .children-list { padding: 10px; }
             }
+            
             @media (max-width: <?php echo $screen_width; ?>px), (max-height: <?php echo $screen_height; ?>px) {
                 .screen-container {
                     width: 100vw !important;
@@ -622,13 +503,6 @@ if ($school_id && $screen_slug) {
                     min-height: 100vh;
                     border-radius: 0;
                     overflow-x: auto;
-                }
-                .content-sections, .screen-images-section {
-                    max-width: 100vw;
-                    box-sizing: border-box;
-                }
-                .promotions-section, .birthdays-section {
-                    max-width: 100vw;
                 }
             }
         </style>
@@ -661,9 +535,10 @@ if ($school_id && $screen_slug) {
                             </div>
                         </div>
                     <?php endif; ?>
+                    
                     <div class="content-section">
                         <h2 class="tehillim-title">
-                            <i class="fas fa-book-open me-2"></i>Tehillim
+                            <i class="fas fa-pray me-2"></i>Tehillim
                         </h2>
                         <div class="tehillim-container" id="tehillim-list">
                             <div class="loading">
@@ -814,6 +689,51 @@ if ($school_id && $screen_slug) {
                     });
             }
             
+            function getTehillim() {
+                const tehillimList = document.getElementById('tehillim-list');
+                console.log('Fetching tehillim');
+                
+                fetch('/api/core/homepage/tehillim')
+                    .then(response => {
+                        console.log('Tehillim response status:', response.status);
+                        if (!response.ok) {
+                            throw new Error('Failed to fetch tehillim: ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Tehillim data:', data);
+                        if (data && data.success && data.data && data.data.length > 0) {
+                            let html = '';
+                            data.data.forEach(tehillim => {
+                                html += `<div class="child-item">
+                                    <div class="child-name">${tehillim.name}</div>
+                                    <div class="child-rank">${tehillim.chapter}</div>
+                                </div>`;
+                            });
+                            const duration = Math.max(8, data.data.length * 1.5);
+                            tehillimList.innerHTML = `
+                                <div class="date-section">
+                                    <div class="date-header">Today's Tehillim</div>
+                                    <div class="children-list">
+                                        <div class="children-list-inner" style="animation-duration: ${duration}s">
+                                            ${html}${html}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        } else {
+                            tehillimList.innerHTML = '<div class="no-content">No tehillim available</div>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching tehillim:', error);
+                        tehillimList.innerHTML = '<div class="no-content">Unable to load tehillim</div>';
+                    });
+            }
+            
+
+            
             // Auto-refresh content every 5 minutes
             function refreshContent() {
                 <?php if ($screen['show_promotions']): ?>
@@ -822,6 +742,7 @@ if ($school_id && $screen_slug) {
                 <?php if ($screen['show_birthdays']): ?>
                     getBirthdays(<?php echo $screen['birthdays_days']; ?>);
                 <?php endif; ?>
+                getTehillim();
             }
             
             // Initial load
