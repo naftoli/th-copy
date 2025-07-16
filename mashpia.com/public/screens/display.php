@@ -174,6 +174,29 @@ if ($school_id && $screen_slug) {
         $screen_width = 800;
     }
     // Display the screen content
+    $images_dir = __DIR__ . '/images/';
+    $school_id = $screen['school_id'] ?? null;
+    $meta_file = $school_id ? $images_dir . 'metadata_' . $school_id . '.json' : null;
+    $screen_id = $screen['screen_id'] ?? null;
+    $images_to_show = [];
+    if ($screen_id && $meta_file && file_exists($meta_file)) {
+        $meta = json_decode(file_get_contents($meta_file), true);
+        if (is_array($meta)) {
+            foreach ($meta as $fname => $props) {
+                if (
+                    isset($props['screen_id']) && $props['screen_id'] == $screen_id &&
+                    !empty($props['visible']) &&
+                    file_exists($images_dir . $fname)
+                ) {
+                    $images_to_show[] = [
+                        'url' => '/screens/images/' . $fname,
+                        'size' => isset($props['size']) ? intval($props['size']) : 0,
+                        'filename' => $fname
+                    ];
+                }
+            }
+        }
+    }
     ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -201,6 +224,108 @@ if ($school_id && $screen_slug) {
                 align-items: center;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 position: relative;
+                overflow: hidden;
+                box-sizing: border-box;
+            }
+            /* New 5-part layout structure */
+            .announcements-section {
+                width: 100%;
+                height: 80px;
+                background: rgba(255,255,255,0.08);
+                border-bottom: 1.5px solid rgba(255,255,255,0.13);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0 24px;
+                box-sizing: border-box;
+            }
+
+            .content-grid {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                height: calc(100% - 80px);
+                box-sizing: border-box;
+            }
+
+            .content-row {
+                display: flex;
+                flex: 1;
+                width: 100%;
+            }
+
+            .content-section {
+                flex: 1;
+                padding: 24px 16px 0 16px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+                background: rgba(255,255,255,0.05);
+                box-sizing: border-box;
+                border-right: 1.5px solid rgba(255,255,255,0.13);
+                border-bottom: 1.5px solid rgba(255,255,255,0.13);
+            }
+
+            .content-section:last-child {
+                border-right: none;
+            }
+
+            .content-row:last-child .content-section {
+                border-bottom: none;
+            }
+
+            /* Section titles */
+            .content-section h2 {
+                margin-top: 0;
+                margin-bottom: 1.2rem;
+                font-size: 1.8rem;
+            }
+
+            /* Responsive adjustments */
+            @media (max-width: 1024px) {
+                .content-section {
+                    padding: 16px 8px 0 8px;
+                }
+                .content-section h2 {
+                    font-size: 1.5rem;
+                }
+            }
+
+            @media (max-width: 768px) {
+                .content-grid {
+                    flex-direction: column;
+                }
+                .content-row {
+                    flex-direction: column;
+                }
+                .content-section {
+                    border-right: none;
+                    border-bottom: 1.5px solid rgba(255,255,255,0.13);
+                    padding: 12px 4px 0 4px;
+                }
+                .content-section:last-child {
+                    border-bottom: none;
+                }
+            }
+            .promotions-container, .children-list {
+                width: 100%;
+                max-width: 800px;
+                max-height: 100%;
+                overflow-y: auto;
+                box-sizing: border-box;
+            }
+            .children-list-inner {
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            .screen-images-section, .promotions-section, .birthdays-section {
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+            .screen-images-section img {
+                max-width: 100%;
+                height: auto;
             }
             .screen-title {
                 font-size: 3rem;
@@ -232,36 +357,6 @@ if ($school_id && $screen_slug) {
             }
             
             /* Promotions and Birthdays UI */
-            .content-sections {
-                display: flex;
-                width: 100%;
-                height: 100%;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            
-            .promotions-section {
-                flex: 1;
-                padding: 40px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                background: rgba(255,255,255,0.05);
-                border-right: 1px solid rgba(255,255,255,0.1);
-            }
-            
-            .birthdays-section {
-                flex: 1;
-                padding: 40px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                background: rgba(255,255,255,0.05);
-            }
-            
             .section-title {
                 font-size: 2.5rem;
                 font-weight: bold;
@@ -520,6 +615,22 @@ if ($school_id && $screen_slug) {
                 .child-item { padding: 6px 8px; margin-bottom: 6px; }
                 .children-list { padding: 10px; }
             }
+            @media (max-width: <?php echo $screen_width; ?>px), (max-height: <?php echo $screen_height; ?>px) {
+                .screen-container {
+                    width: 100vw !important;
+                    height: auto !important;
+                    min-height: 100vh;
+                    border-radius: 0;
+                    overflow-x: auto;
+                }
+                .content-sections, .screen-images-section {
+                    max-width: 100vw;
+                    box-sizing: border-box;
+                }
+                .promotions-section, .birthdays-section {
+                    max-width: 100vw;
+                }
+            }
         </style>
     </head>
     <body>
@@ -527,11 +638,47 @@ if ($school_id && $screen_slug) {
             <div class="screen-size"><?php echo $screen_size; ?></div>
             <div class="timestamp" id="timestamp"></div>
             
-            <?php if ($screen['show_promotions'] || $screen['show_birthdays']): ?>
-                <div class="content-sections">
+            <!-- Announcements Section -->
+            <div class="announcements-section">
+                <h2 style="font-size:1.5rem;margin:0;"><i class="fas fa-bullhorn me-2"></i>Announcements</h2>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Top Row: Images and Tehillim -->
+                <div class="content-row">
+                    <?php if (isset($images_to_show) && count($images_to_show)): ?>
+                        <div class="content-section">
+                            <h2><i class="fas fa-images me-2"></i>Screen Images</h2>
+                            <div style="max-width:100%;overflow-x:auto;">
+                                <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;align-items:center;">
+                                    <?php foreach ($images_to_show as $img): ?>
+                                        <div style="background:#fff;padding:0.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:center;">
+                                            <img src="<?= htmlspecialchars($img['url']) ?>" style="<?= $img['size'] > 0 ? "width:{$img['size']}px;height:{$img['size']}px;object-fit:contain;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-width:100%;max-height:100%;" : "max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);" ?>" alt="Screen Image">
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <div class="content-section">
+                        <h2 class="tehillim-title">
+                            <i class="fas fa-book-open me-2"></i>Tehillim
+                        </h2>
+                        <div class="tehillim-container" id="tehillim-list">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                Loading tehillim...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bottom Row: Promotions and Birthdays -->
+                <div class="content-row">
                     <?php if ($screen['show_promotions']): ?>
-                        <div class="promotions-section">
-                            <h2 class="section-title promotions-title">
+                        <div class="content-section">
+                            <h2 class="promotions-title">
                                 <i class="fas fa-star me-2"></i>Promotions
                             </h2>
                             <div class="promotions-container" id="promotions-list">
@@ -542,10 +689,9 @@ if ($school_id && $screen_slug) {
                             </div>
                         </div>
                     <?php endif; ?>
-                    
                     <?php if ($screen['show_birthdays']): ?>
-                        <div class="birthdays-section">
-                            <h2 class="section-title birthdays-title">
+                        <div class="content-section">
+                            <h2 class="birthdays-title">
                                 <i class="fas fa-birthday-cake me-2"></i>Birthdays
                             </h2>
                             <div class="promotions-container" id="birthdays-list">
@@ -557,10 +703,7 @@ if ($school_id && $screen_slug) {
                         </div>
                     <?php endif; ?>
                 </div>
-            <?php else: ?>
-                <div class="screen-title"><?php echo htmlspecialchars($screen['screen_name']); ?></div>
-                <div class="screen-info">Digital Screen Display</div>
-            <?php endif; ?>
+            </div>
         </div>
         
         <script>
@@ -579,7 +722,7 @@ if ($school_id && $screen_slug) {
                 const promotionsList = document.getElementById('promotions-list');
                 console.log('Fetching promotions for days:', days);
                 
-                fetch('/api/core/homepage/promotions?start=' + days)
+                fetch('/api/core/homepage/promotions?start=' + (days - 1)) // -1 b/c the end date is the current day
                     .then(response => {
                         console.log('Promotions response status:', response.status);
                         if (!response.ok) {
@@ -593,10 +736,6 @@ if ($school_id && $screen_slug) {
                             let html = '';
                             // Create a section for each date with fixed header and scrolling children list
                             Object.entries(data.data).forEach(([heDate, promotions]) => {
-                                html += `<div class="date-section">
-                                    <div class="date-header">${heDate}</div>
-                                    <div class="children-list">`;
-                                
                                 let childItems = ''; // Initialize for child items
                                 // Add each child promotion to the list
                                 promotions.forEach(promotion => {
@@ -609,7 +748,16 @@ if ($school_id && $screen_slug) {
                                     </div>`;
                                 });
                                 const duration = Math.max(8, promotions.length * 1.5); // 1.5s per item, min 8s
-                                html += `<div class="children-list"><div class="children-list-inner" style="animation-duration: ${duration}s">${childItems}${childItems}</div></div>`;
+                                html += `
+                                    <div class="date-section">
+                                        <div class="date-header">${heDate}</div>
+                                        <div class="children-list">
+                                            <div class="children-list-inner" style="animation-duration: ${duration}s">
+                                                ${childItems}${childItems}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
                             });
                             promotionsList.innerHTML = html;
                         } else {
@@ -626,7 +774,7 @@ if ($school_id && $screen_slug) {
                 const birthdaysList = document.getElementById('birthdays-list');
                 console.log('Fetching birthdays for days:', days);
                 
-                fetch('/api/core/homepage/birthdays?start=' + days)
+                fetch('/api/core/homepage/birthdays?start=' + (days - 1)) // -1 b/c the end date is the current day
                     .then(response => {
                         console.log('Birthdays response status:', response.status);
                         if (!response.ok) {
@@ -639,10 +787,6 @@ if ($school_id && $screen_slug) {
                         if (data && data.success && data.data && Object.keys(data.data).length > 0) {
                             let html = '';
                             Object.entries(data.data).forEach(([heDate, birthdays]) => {
-                                html += `<div class="date-section">
-                                    <div class="date-header">${heDate}</div>
-                                    <div class="children-list">`;
-                                
                                 let childItems = ''; // Initialize for child items
                                 birthdays.forEach(birthday => {
                                     childItems += `<div class="child-item">
@@ -651,7 +795,16 @@ if ($school_id && $screen_slug) {
                                     </div>`;
                                 });
                                 const duration = Math.max(8, birthdays.length * 1.5); // 1.5s per item, min 8s
-                                html += `<div class="children-list"><div class="children-list-inner" style="animation-duration: ${duration}s">${childItems}${childItems}</div></div>`;
+                                html += `
+                                    <div class="date-section">
+                                        <div class="date-header">${heDate}</div>
+                                        <div class="children-list">
+                                            <div class="children-list-inner" style="animation-duration: ${duration}s">
+                                                ${childItems}${childItems}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
                             });
                             birthdaysList.innerHTML = html;
                         } else {

@@ -1,0 +1,221 @@
+<div class="modal fade" id="imagesModal" tabindex="-1" aria-labelledby="imagesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="imagesModalLabel"><i class="fas fa-images me-2"></i>Manage Images</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm" enctype="multipart/form-data" class="mb-4">
+            <input type="hidden" id="imagesScreenId" name="screen_id" value="">
+            <input type="hidden" id="imagesSchoolId" name="school_id" value="">
+            <div class="mb-3">
+                <label for="imageFiles" class="form-label fw-bold">Upload Images</label>
+                <input class="form-control" type="file" id="imageFiles" name="images[]" accept="image/*" multiple>
+            </div>
+            <button type="submit" class="btn btn-success"><i class="fas fa-upload me-1"></i>Upload</button>
+        </form>
+        <hr>
+        <div id="imagesGrid" class="row g-3" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveAllBtn"><i class="fas fa-save me-1"></i>Save All Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+let currentScreenId = null;
+let currentSchoolId = null;
+
+function openImagesModal(screenId, schoolId) {
+    currentScreenId = screenId;
+    currentSchoolId = schoolId;
+    document.getElementById('imagesScreenId').value = screenId;
+    document.getElementById('imagesSchoolId').value = schoolId;
+    $('#imagesModal').modal('show');
+    loadImages();
+}
+
+const sizeOptions = [100, 150, 200, 250, 300, 'original', 'custom'];
+
+function renderImageCard(img) {
+    // Always show thumbnail at 150x150px in the grid
+    const thumbSize = 150;
+    let sizeVal = (img.size === undefined || img.size === null || img.size === '' || img.size === 0) ? 150 : img.size;
+    // If size is 0, treat as original
+    if (img.size === 0) sizeVal = 0;
+    let isCustom = !sizeOptions.includes(Number(sizeVal)) && sizeVal !== 0;
+    let isOriginal = sizeVal === 0;
+    return `
+    <div data-img-id="${img.id}">
+        <div class="image-thumb shadow-sm border bg-white p-2 d-flex flex-column align-items-center" style="border-radius: 12px; min-width: 320px; max-width: 370px; margin: 0 auto;">
+            <div class="mb-2 position-relative" style="width:${thumbSize}px;height:${thumbSize}px;overflow:hidden;border-radius:8px;background:#f8f9fa;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+                <img src="${img.url}" style="width:${thumbSize}px;height:${thumbSize}px;object-fit:cover;display:block;" alt="Image">
+            </div>
+            <div class="form-check form-switch mb-2">
+                <input class="form-check-input visible-toggle" type="checkbox" id="visible_${img.id}" ${img.visible ? 'checked' : ''} data-img-id="${img.id}">
+                <label class="form-check-label visible-label" for="visible_${img.id}">Show on Screen</label>
+            </div>
+            <div class="image-actions d-flex align-items-center gap-2 w-100 justify-content-center flex-nowrap" style="min-height:38px;">
+                <label class="size-label mb-0">Size:</label>
+                <div style="flex:1;min-width:110px;max-width:130px;">
+                    <select class="form-select size-select d-inline-block w-100" data-img-id="${img.id}">
+                        ${sizeOptions.map(opt => {
+                            if(opt === 'original') return `<option value="0" ${isOriginal ? 'selected' : ''}>Original</option>`;
+                            if(opt === 'custom') return `<option value="custom" ${isCustom ? 'selected' : ''}>Custom</option>`;
+                            return `<option value="${opt}" ${opt==sizeVal ? 'selected' : ''}>${opt}x${opt}</option>`;
+                        }).join('')}
+                    </select>
+                </div>
+                <div class="custom-size-group" style="${isCustom ? 'display:flex;' : 'display:none;'}">
+                    <input type="number" min="50" max="1000" class="form-control custom-size-input ms-1" value="${isCustom ? sizeVal : ''}" placeholder="px" style="width:100px;">
+                </div>
+                <span class="delete-btn ms-2" title="Delete" style="font-size:1.2em;"><i class="fas fa-trash"></i></span>
+            </div>
+        </div>
+    </div>
+    `;
+}
+
+function loadImages() {
+    if (!currentScreenId || !currentSchoolId) return;
+    resetPendingImageUpdates();
+    $('#imagesGrid').html('<div class="text-center py-5 w-100"><div class="spinner-border text-primary"></div></div>');
+    $.get('images_list.php', {screen_id: currentScreenId, school_id: currentSchoolId}, function(images) {
+        if (!images.length) {
+            $('#imagesGrid').html('<div class="text-center text-muted py-5 w-100">No images found.</div>');
+            return;
+        }
+        $('#imagesGrid').html(images.map(renderImageCard).join(''));
+    }, 'json').fail(function(xhr, status, error) {
+        $('#imagesGrid').html('<div class="alert alert-danger">Failed to load images. Please try again.<br>' + (xhr.responseText || error) + '</div>');
+    });
+}
+
+function resetPendingImageUpdates() {
+    pendingImageUpdates = {};
+}
+
+// Prevent duplicate event handlers
+if (!window.imagesModalHandlersSet) {
+    window.imagesModalHandlersSet = true;
+
+    $(document).on('submit', '#uploadForm', function(e) {
+        e.preventDefault();
+        if (!currentScreenId || !currentSchoolId) return;
+        const formData = new FormData(this);
+        formData.append('screen_id', currentScreenId);
+        formData.append('school_id', currentSchoolId);
+        $.ajax({
+            url: 'images_upload.php',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function() {
+                // Do NOT close the modal, just refresh the grid
+                loadImages();
+                $('#imageFiles').val('');
+            },
+            error: function(xhr, status, error) {
+                alert('Failed to upload images. Please try again.\n' + (xhr.responseText || error));
+            }
+        });
+    });
+
+    let pendingImageUpdates = {}; // New object to hold pending updates
+
+    $(document).on('change', '.visible-toggle', function() {
+        const id = $(this).data('img-id');
+        if (!pendingImageUpdates[id]) pendingImageUpdates[id] = {};
+        pendingImageUpdates[id].visible = $(this).is(':checked') ? 1 : 0;
+    });
+
+    // Update dropdown change handler to properly show/hide custom input and handle 'original' as a string
+    $(document).on('change', '.size-select', function() {
+        const id = $(this).data('img-id');
+        const val = $(this).val();
+        const thumb = $(this).closest('.image-thumb');
+        if (!pendingImageUpdates[id]) pendingImageUpdates[id] = {};
+        // If 'Original', set size to 0
+        if (val === '0') {
+            pendingImageUpdates[id].size = 0;
+            thumb.find('.custom-size-group').css('display', 'none');
+        } else if (val === 'custom') {
+            thumb.find('.custom-size-group').css('display', 'flex');
+        } else {
+            pendingImageUpdates[id].size = val;
+            thumb.find('.custom-size-group').css('display', 'none');
+        }
+    });
+
+    // Custom size input: only update local state on blur or Enter
+    $(document).off('input', '.custom-size-input');
+    $(document).on('blur', '.custom-size-input', function() {
+        const id = $(this).data('img-id');
+        const val = $(this).val();
+        if (!pendingImageUpdates[id]) pendingImageUpdates[id] = {};
+        if (val && val >= 50 && val <= 1000) {
+            pendingImageUpdates[id].size = val;
+        }
+    });
+    $(document).on('keydown', '.custom-size-input', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            $(this).blur();
+        }
+    });
+
+    $(document).on('click', '.delete-btn', function() {
+        if (!confirm('Delete this image?')) return;
+        const id = $(this).closest('.image-thumb').data('id');
+        $.post('images_delete.php', {id, screen_id: currentScreenId, school_id: currentSchoolId}, loadImages)
+            .fail(function(xhr, status, error) {
+                alert('Failed to delete image. Please try again.\n' + (xhr.responseText || error));
+            });
+    });
+
+    // Save all changes in a batch
+    $('#saveAllBtn').off('click').on('click', function() {
+        // Before saving, for each image with 'custom' selected, get the value from the input
+        $('#imagesGrid .image-thumb').each(function() {
+            const id = $(this).parent().data('img-id');
+            const sizeSelect = $(this).find('.size-select');
+            if (sizeSelect.val() === 'custom') {
+                const customInput = $(this).find('.custom-size-input');
+                const val = customInput.val();
+                if (!pendingImageUpdates[id]) pendingImageUpdates[id] = {};
+                if (val && val >= 50 && val <= 1000) {
+                    pendingImageUpdates[id].size = val;
+                }
+            }
+        });
+        const updates = [];
+        for (const id in pendingImageUpdates) {
+            if (Object.prototype.hasOwnProperty.call(pendingImageUpdates, id)) {
+                updates.push({id, ...pendingImageUpdates[id], screen_id: currentScreenId});
+            }
+        }
+        if (updates.length === 0) {
+            alert('No changes to save.');
+            return;
+        }
+        $.ajax({
+            url: 'images_batch_update.php',
+            type: 'POST',
+            data: JSON.stringify({updates, school_id: currentSchoolId}),
+            contentType: 'application/json',
+            success: function() {
+                resetPendingImageUpdates();
+                loadImages();
+                alert('All changes saved!');
+            },
+            error: function(xhr, status, error) {
+                alert('Failed to save changes. Please try again.\n' + (xhr.responseText || error));
+            }
+        });
+    });
+}
+</script> 

@@ -902,6 +902,9 @@ $schools = $adminSchools->getSchools();
                                             <button onclick="openSettingsModal('${screen.screen_id}', '${screen.screen_name}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}})" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                                 <i class="fas fa-cog me-1"></i>Settings
                                             </button>
+                                            <button onclick="openImagesModal('${screen.screen_id}', '${school_id}')" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#imagesModal">
+                                                <i class="fas fa-images me-1"></i>Images
+                                            </button>
                                             <a href="/screens/${school_id}/${screen.url}" target="_blank" class="btn btn-outline-primary btn-sm">
                                                 <i class="fas fa-external-link-alt me-1"></i>View
                                             </a>
@@ -966,5 +969,8 @@ $schools = $adminSchools->getSchools();
             getScreens();
         });
     </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <?php include 'images_modal.html'; ?>
+    <?php include 'settings_modal.html'; ?>
 </body>
 </html>
