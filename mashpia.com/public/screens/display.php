@@ -739,12 +739,9 @@ if ($school_id && $screen_slug) {
                                 let childItems = ''; // Initialize for child items
                                 // Add each child promotion to the list
                                 promotions.forEach(promotion => {
-                                    // promotion.name is "rank_name first last"
-                                    const [rank, ...nameParts] = promotion.name.split(' ');
-                                    const name = nameParts.join(' ');
                                     childItems += `<div class="child-item">
-                                        <div class="child-name">${name}</div>
-                                        <div class="child-rank">${rank}</div>
+                                        <div class="child-name">${promotion.full_name}</div>
+                                        <div class="child-rank">${promotion.rank_name}</div>
                                     </div>`;
                                 });
                                 const duration = Math.max(8, promotions.length * 1.5); // 1.5s per item, min 8s

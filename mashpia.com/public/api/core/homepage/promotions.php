@@ -33,7 +33,9 @@ class BirthdayRouter {
         while( $row = $query->fetch() ) {
             $soldier = [
                 'user_id' => $row['user_id'], 'class_id' => $row['class_id'], 'rank_ord' => $row['rank_ord'],
-                'name' => $row['rank_name']. ' ' .$row['first'] . ' ' . $row['last'],
+                'name' => $row['rank_name']. ' ' .$row['first'] . ' ' . $row['last'], 
+                'full_name' => $row['first'] . ' ' . $row['last'], 
+                'rank_name' => $row['rank_name'], 
                 'platoon' => ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name(),
                 'profilePicture' => ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture()
             ];
