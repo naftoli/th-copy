@@ -231,13 +231,13 @@ if ($school_id && $screen_slug) {
             /* Layout Structure */
             .announcements-section {
                 width: 100%;
-                height: 80px;
+                height: 50px;
                 background: rgba(255,255,255,0.08);
                 border-bottom: 1.5px solid rgba(255,255,255,0.13);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 0 24px;
+                padding: 0 16px;
                 box-sizing: border-box;
             }
 
@@ -245,19 +245,32 @@ if ($school_id && $screen_slug) {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-                height: calc(100% - 80px);
+                height: calc(<?php echo $screen_height; ?>px - 50px);
+                max-height: calc(<?php echo $screen_height; ?>px - 50px);
                 box-sizing: border-box;
+                overflow: hidden;
             }
 
             .content-row {
                 display: flex;
                 flex: 1;
                 width: 100%;
+                overflow: hidden;
+            }
+            
+            .content-row:first-child {
+                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.4);
+                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.4);
+            }
+            
+            .content-row:last-child {
+                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.6);
+                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.6);
             }
 
             .content-section {
                 flex: 1;
-                padding: 24px 16px 0 16px;
+                padding: 12px 8px 0 8px;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -266,6 +279,9 @@ if ($school_id && $screen_slug) {
                 box-sizing: border-box;
                 border-right: 1.5px solid rgba(255,255,255,0.13);
                 border-bottom: 1.5px solid rgba(255,255,255,0.13);
+                overflow: hidden;
+                height: 100%;
+                max-height: 100%;
             }
 
             .content-section:last-child {
@@ -279,8 +295,8 @@ if ($school_id && $screen_slug) {
             /* Section titles */
             .content-section h2 {
                 margin-top: 0;
-                margin-bottom: 1.2rem;
-                font-size: 1.8rem;
+                margin-bottom: 0.8rem;
+                font-size: 1.2rem;
             }
 
             .promotions-title {
@@ -300,15 +316,54 @@ if ($school_id && $screen_slug) {
 
 
             /* Content containers */
-            .promotions-container, .tehillim-container {
+            .images-container {
+                width: 100%;
+                height: calc(100% - 40px);
+                max-height: calc(100% - 40px);
+                overflow: auto;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            
+            .promotions-container {
                 width: 100%;
                 max-width: 800px;
-                height: 100%;
+                height: calc(100% - 40px);
+                max-height: calc(100% - 40px);
                 display: flex;
                 flex-direction: column;
-                gap: 20px;
-                overflow-y: auto;
+                gap: 12px;
+                overflow: hidden;
                 box-sizing: border-box;
+            }
+            
+            .tehillim-container {
+                width: 100%;
+                height: calc(100% - 40px);
+                max-height: calc(100% - 40px);
+                overflow: hidden;
+                position: relative;
+                box-sizing: border-box;
+            }
+            
+            .tehillim-section {
+                overflow: hidden;
+                height: 100%;
+                max-height: 100%;
+            }
+            
+            .tehillim-container .date-section {
+                height: 100%;
+                max-height: 100%;
+                overflow: hidden;
+            }
+            
+            .tehillim-container .children-list {
+                height: calc(100% - 60px);
+                max-height: calc(100% - 60px);
+                overflow: hidden;
             }
 
             /* Date sections for promotions/birthdays */
@@ -322,13 +377,14 @@ if ($school_id && $screen_slug) {
                 display: flex;
                 flex-direction: column;
                 min-height: 0;
+                max-height: 100%;
             }
             
             .date-header {
                 background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
                 color: #333;
-                padding: 15px 20px;
-                font-size: 1.4rem;
+                padding: 8px 12px;
+                font-size: 1rem;
                 font-weight: bold;
                 text-align: center;
                 text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
@@ -338,10 +394,10 @@ if ($school_id && $screen_slug) {
             .children-list {
                 flex: 1;
                 overflow: hidden;
-                padding: 15px;
+                padding: 10px;
                 position: relative;
                 height: 100%;
-                min-height: 200px;
+                min-height: 150px;
             }
             
             .children-list-inner {
@@ -378,10 +434,10 @@ if ($school_id && $screen_slug) {
             
             .child-item {
                 background: rgba(255,255,255,0.1);
-                border-radius: 10px;
-                padding: 12px 15px;
-                margin-bottom: 10px;
-                border-left: 4px solid #ffd700;
+                border-radius: 8px;
+                padding: 8px 12px;
+                margin-bottom: 8px;
+                border-left: 3px solid #ffd700;
                 transition: transform 0.2s ease, box-shadow 0.2s ease;
             }
             
@@ -395,14 +451,14 @@ if ($school_id && $screen_slug) {
             }
             
             .child-name {
-                font-size: 1.1rem;
+                font-size: 0.9rem;
                 font-weight: bold;
                 color: #fff;
-                margin-bottom: 5px;
+                margin-bottom: 3px;
             }
             
             .child-rank {
-                font-size: 0.9rem;
+                font-size: 0.75rem;
                 color: rgba(255,255,255,0.8);
                 font-style: italic;
             }
@@ -413,26 +469,26 @@ if ($school_id && $screen_slug) {
             
             /* Loading and status */
             .no-content {
-                font-size: 1.5rem;
+                font-size: 1rem;
                 opacity: 0.6;
                 text-align: center;
                 font-style: italic;
             }
             
             .loading {
-                font-size: 1.2rem;
+                font-size: 0.9rem;
                 opacity: 0.8;
                 text-align: center;
             }
             
             .spinner {
-                border: 3px solid rgba(255,255,255,0.3);
-                border-top: 3px solid #fff;
+                border: 2px solid rgba(255,255,255,0.3);
+                border-top: 2px solid #fff;
                 border-radius: 50%;
-                width: 30px;
-                height: 30px;
+                width: 20px;
+                height: 20px;
                 animation: spin 1s linear infinite;
-                margin: 0 auto 15px;
+                margin: 0 auto 10px;
             }
             
             @keyframes spin {
@@ -443,19 +499,19 @@ if ($school_id && $screen_slug) {
             /* Screen info */
             .screen-size {
                 position: absolute;
-                top: 20px;
-                right: 20px;
+                top: 10px;
+                right: 10px;
                 background: rgba(255,255,255,0.1);
-                padding: 10px 15px;
-                border-radius: 5px;
-                font-size: 0.9rem;
+                padding: 6px 10px;
+                border-radius: 3px;
+                font-size: 0.7rem;
             }
             
             .timestamp {
                 position: absolute;
-                bottom: 20px;
-                left: 20px;
-                font-size: 1rem;
+                bottom: 10px;
+                left: 10px;
+                font-size: 0.8rem;
                 opacity: 0.7;
             }
             
@@ -514,17 +570,17 @@ if ($school_id && $screen_slug) {
             
             <!-- Announcements Section -->
             <div class="announcements-section">
-                <h2 style="font-size:1.5rem;margin:0;"><i class="fas fa-bullhorn me-2"></i>Announcements</h2>
+                <h2 style="font-size:1rem;margin:0;"><i class="fas fa-bullhorn me-2"></i>Announcements</h2>
             </div>
 
             <!-- Content Grid -->
             <div class="content-grid">
                 <!-- Top Row: Images and Tehillim -->
                 <div class="content-row">
-                    <?php if (isset($images_to_show) && count($images_to_show)): ?>
-                        <div class="content-section">
-                            <h2><i class="fas fa-images me-2"></i>Screen Images</h2>
-                            <div style="max-width:100%;overflow-x:auto;">
+                    <div class="content-section">
+                        <h2><i class="fas fa-images me-2"></i>Screen Images</h2>
+                        <div class="images-container">
+                            <?php if (isset($images_to_show) && count($images_to_show)): ?>
                                 <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;align-items:center;">
                                     <?php foreach ($images_to_show as $img): ?>
                                         <div style="background:#fff;padding:0.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:center;">
@@ -532,11 +588,13 @@ if ($school_id && $screen_slug) {
                                         </div>
                                     <?php endforeach; ?>
                                 </div>
-                            </div>
+                            <?php else: ?>
+                                <div class="no-content">No images available</div>
+                            <?php endif; ?>
                         </div>
-                    <?php endif; ?>
+                    </div>
                     
-                    <div class="content-section">
+                    <div class="content-section tehillim-section">
                         <h2 class="tehillim-title">
                             <i class="fas fa-pray me-2"></i>Tehillim
                         </h2>
@@ -551,32 +609,29 @@ if ($school_id && $screen_slug) {
                 
                 <!-- Bottom Row: Promotions and Birthdays -->
                 <div class="content-row">
-                    <?php if ($screen['show_promotions']): ?>
-                        <div class="content-section">
-                            <h2 class="promotions-title">
-                                <i class="fas fa-star me-2"></i>Promotions
-                            </h2>
-                            <div class="promotions-container" id="promotions-list">
-                                <div class="loading">
-                                    <div class="spinner"></div>
-                                    Loading promotions...
-                                </div>
+                    <div class="content-section">
+                        <h2 class="promotions-title">
+                            <i class="fas fa-star me-2"></i>Promotions
+                        </h2>
+                        <div class="promotions-container" id="promotions-list">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                Loading promotions...
                             </div>
                         </div>
-                    <?php endif; ?>
-                    <?php if ($screen['show_birthdays']): ?>
-                        <div class="content-section">
-                            <h2 class="birthdays-title">
-                                <i class="fas fa-birthday-cake me-2"></i>Birthdays
-                            </h2>
-                            <div class="promotions-container" id="birthdays-list">
-                                <div class="loading">
-                                    <div class="spinner"></div>
-                                    Loading birthdays...
-                                </div>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h2 class="birthdays-title">
+                            <i class="fas fa-birthday-cake me-2"></i>Birthdays
+                        </h2>
+                        <div class="promotions-container" id="birthdays-list">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                Loading birthdays...
                             </div>
                         </div>
-                    <?php endif; ?>
+                    </div>
                 </div>
             </div>
         </div>
@@ -693,7 +748,7 @@ if ($school_id && $screen_slug) {
                 const tehillimList = document.getElementById('tehillim-list');
                 console.log('Fetching tehillim');
                 
-                fetch('/api/core/homepage/tehillim')
+                fetch('/screens/ajax/getTehillim.php')
                     .then(response => {
                         console.log('Tehillim response status:', response.status);
                         if (!response.ok) {
@@ -713,9 +768,9 @@ if ($school_id && $screen_slug) {
                             });
                             const duration = Math.max(8, data.data.length * 1.5);
                             tehillimList.innerHTML = `
-                                <div class="date-section">
+                                <div style="height: 100%; max-height: 100%; overflow: hidden; display: flex; flex-direction: column;">
                                     <div class="date-header">Today's Tehillim</div>
-                                    <div class="children-list">
+                                    <div style="flex: 1; overflow: hidden; padding: 15px;">
                                         <div class="children-list-inner" style="animation-duration: ${duration}s">
                                             ${html}${html}
                                         </div>
@@ -732,15 +787,17 @@ if ($school_id && $screen_slug) {
                     });
             }
             
-
-            
             // Auto-refresh content every 5 minutes
             function refreshContent() {
                 <?php if ($screen['show_promotions']): ?>
                     getPromotions(<?php echo $screen['promotions_days']; ?>);
+                <?php else: ?>
+                    document.getElementById('promotions-list').innerHTML = '<div class="no-content">Promotions disabled</div>';
                 <?php endif; ?>
                 <?php if ($screen['show_birthdays']): ?>
                     getBirthdays(<?php echo $screen['birthdays_days']; ?>);
+                <?php else: ?>
+                    document.getElementById('birthdays-list').innerHTML = '<div class="no-content">Birthdays disabled</div>';
                 <?php endif; ?>
                 getTehillim();
             }
