@@ -433,17 +433,11 @@ if ($school_id && $screen_slug) {
             }
             
             .child-item {
-                background: rgba(255,255,255,0.1);
-                border-radius: 8px;
-                padding: 8px 12px;
-                margin-bottom: 8px;
-                border-left: 3px solid #ffd700;
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-            }
-            
-            .child-item:hover {
-                transform: translateX(5px);
-                box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+                padding: 4px 8px;
+                margin-bottom: 2px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
             }
             
             .child-item:last-child {
@@ -451,14 +445,13 @@ if ($school_id && $screen_slug) {
             }
             
             .child-name {
-                font-size: 0.9rem;
+                font-size: 0.85rem;
                 font-weight: bold;
                 color: #fff;
-                margin-bottom: 3px;
             }
             
             .child-rank {
-                font-size: 0.75rem;
+                font-size: 0.7rem;
                 color: rgba(255,255,255,0.8);
                 font-style: italic;
             }
@@ -669,9 +662,10 @@ if ($school_id && $screen_slug) {
                                 let childItems = ''; // Initialize for child items
                                 // Add each child promotion to the list
                                 promotions.forEach(promotion => {
+                                    const formattedName = promotion.full_name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                                     childItems += `<div class="child-item">
-                                        <div class="child-name">${promotion.full_name}</div>
-                                        <div class="child-rank">${promotion.rank_name}</div>
+                                        <span class="child-name">${formattedName}</span>
+                                        <span class="child-rank">${promotion.rank_name}</span>
                                     </div>`;
                                 });
                                 const duration = Math.max(8, promotions.length * 1.5); // 1.5s per item, min 8s
@@ -716,9 +710,10 @@ if ($school_id && $screen_slug) {
                             Object.entries(data.data).forEach(([heDate, birthdays]) => {
                                 let childItems = ''; // Initialize for child items
                                 birthdays.forEach(birthday => {
+                                    const formattedName = birthday.name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                                     childItems += `<div class="child-item">
-                                        <div class="child-name">${birthday.name}</div>
-                                        <div class="child-rank">${birthday.platoon}</div>
+                                        <span class="child-name">${formattedName}</span>
+                                        <span class="child-rank">${birthday.platoon}</span>
                                     </div>`;
                                 });
                                 const duration = Math.max(8, birthdays.length * 1.5); // 1.5s per item, min 8s
@@ -761,9 +756,10 @@ if ($school_id && $screen_slug) {
                         if (data && data.success && data.data && data.data.length > 0) {
                             let html = '';
                             data.data.forEach(tehillim => {
+                                const formattedName = tehillim.name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                                 html += `<div class="child-item">
-                                    <div class="child-name">${tehillim.name}</div>
-                                    <div class="child-rank">${tehillim.chapter}</div>
+                                    <span class="child-name">${formattedName}</span>
+                                    <span class="child-rank">${tehillim.chapter}</span>
                                 </div>`;
                             });
                             const duration = Math.max(8, data.data.length * 1.5);
