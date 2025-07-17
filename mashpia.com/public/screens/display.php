@@ -403,7 +403,8 @@ if ($school_id && $screen_slug) {
             .children-list-inner {
                 display: flex;
                 flex-direction: column;
-                animation: scrollChildren 15s linear infinite;
+                animation: scrollChildren 20s linear infinite;
+                will-change: transform;
             }
             
             .children-list:hover .children-list-inner {
@@ -413,6 +414,16 @@ if ($school_id && $screen_slug) {
             @keyframes scrollChildren {
                 0% { transform: translateY(0); }
                 100% { transform: translateY(-50%); }
+            }
+            
+            /* Ensure content is always visible */
+            .children-list {
+                position: relative;
+            }
+            
+            .children-list-inner {
+                position: relative;
+                z-index: 1;
             }
             
             .children-list::-webkit-scrollbar {
@@ -438,6 +449,10 @@ if ($school_id && $screen_slug) {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
+                min-height: 20px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             
             .child-item:last-child {
@@ -448,12 +463,20 @@ if ($school_id && $screen_slug) {
                 font-size: 0.85rem;
                 font-weight: bold;
                 color: #fff;
+                flex: 1;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-right: 8px;
             }
             
             .child-rank {
                 font-size: 0.7rem;
                 color: rgba(255,255,255,0.8);
                 font-style: italic;
+                flex-shrink: 0;
+                max-width: 40%;
+                overflow: hidden;
+                text-overflow: ellipsis;
             }
             
 
@@ -668,13 +691,18 @@ if ($school_id && $screen_slug) {
                                         <span class="child-rank">${promotion.rank_name}</span>
                                     </div>`;
                                 });
-                                const duration = Math.max(8, promotions.length * 1.5); // 1.5s per item, min 8s
+                                // Only duplicate content if there are more items than can fit
+                                const shouldScroll = promotions.length > 8; // Adjust threshold as needed
+                                const duration = shouldScroll ? Math.max(10, promotions.length * 2) : 0;
+                                const animationStyle = shouldScroll ? `animation-duration: ${duration}s` : '';
+                                const contentToShow = shouldScroll ? `${childItems}${childItems}` : childItems;
+                                
                                 html += `
                                     <div class="date-section">
                                         <div class="date-header">${heDate}</div>
                                         <div class="children-list">
-                                            <div class="children-list-inner" style="animation-duration: ${duration}s">
-                                                ${childItems}${childItems}
+                                            <div class="children-list-inner" style="${animationStyle}">
+                                                ${contentToShow}
                                             </div>
                                         </div>
                                     </div>
@@ -716,13 +744,18 @@ if ($school_id && $screen_slug) {
                                         <span class="child-rank">${birthday.platoon}</span>
                                     </div>`;
                                 });
-                                const duration = Math.max(8, birthdays.length * 1.5); // 1.5s per item, min 8s
+                                // Only duplicate content if there are more items than can fit
+                                const shouldScroll = birthdays.length > 8; // Adjust threshold as needed
+                                const duration = shouldScroll ? Math.max(10, birthdays.length * 2) : 0;
+                                const animationStyle = shouldScroll ? `animation-duration: ${duration}s` : '';
+                                const contentToShow = shouldScroll ? `${childItems}${childItems}` : childItems;
+                                
                                 html += `
                                     <div class="date-section">
                                         <div class="date-header">${heDate}</div>
                                         <div class="children-list">
-                                            <div class="children-list-inner" style="animation-duration: ${duration}s">
-                                                ${childItems}${childItems}
+                                            <div class="children-list-inner" style="${animationStyle}">
+                                                ${contentToShow}
                                             </div>
                                         </div>
                                     </div>
@@ -762,12 +795,17 @@ if ($school_id && $screen_slug) {
                                     <span class="child-rank">${tehillim.chapter}</span>
                                 </div>`;
                             });
-                            const duration = Math.max(8, data.data.length * 1.5);
+                            // Only duplicate content if there are more items than can fit
+                            const shouldScroll = data.data.length > 8; // Adjust threshold as needed
+                            const duration = shouldScroll ? Math.max(10, data.data.length * 2) : 0;
+                            const animationStyle = shouldScroll ? `animation-duration: ${duration}s` : '';
+                            const contentToShow = shouldScroll ? `${html}${html}` : html;
+                            
                             tehillimList.innerHTML = `
                                 <div style="height: 100%; max-height: 100%; overflow: hidden; display: flex; flex-direction: column;">
                                     <div style="flex: 1; overflow: hidden; padding: 15px;">
-                                        <div class="children-list-inner" style="animation-duration: ${duration}s">
-                                            ${html}${html}
+                                        <div class="children-list-inner" style="${animationStyle}">
+                                            ${contentToShow}
                                         </div>
                                     </div>
                                 </div>
