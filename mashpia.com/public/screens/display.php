@@ -332,8 +332,6 @@ if ($school_id && $screen_slug) {
                 max-width: 800px;
                 height: calc(100% - 40px);
                 max-height: calc(100% - 40px);
-                display: flex;
-                flex-direction: column;
                 gap: 12px;
                 overflow: hidden;
                 box-sizing: border-box;
@@ -373,47 +371,55 @@ if ($school_id && $screen_slug) {
                 overflow: hidden;
                 backdrop-filter: blur(10px);
                 border: 1px solid rgba(255,255,255,0.2);
-                flex: 1;
                 display: flex;
                 flex-direction: column;
-                min-height: 0;
-                max-height: 100%;
+                height: auto;
+                max-height: 300px;
+                margin-bottom: 8px;
             }
             
             .date-header {
-                background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
-                color: #333;
+                color: #fff;
                 padding: 8px 12px;
                 font-size: 1rem;
                 font-weight: bold;
                 text-align: center;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-                border-bottom: 2px solid rgba(255,255,255,0.3);
+                margin-bottom: 0;
+            }
+            
+            .date-header hr {
+                border: none;
+                height: 1px;
+                background: rgba(255,255,255,0.3);
+                margin: 8px 0 0 0;
             }
             
             .children-list {
-                flex: 1;
                 overflow-y: auto;
                 padding: 10px;
                 position: relative;
-                height: 100%;
-                min-height: 150px;
+                height: auto;
+                min-height: 50px;
+                max-height: 250px;
             }
             
             .children-list-inner {
                 display: flex;
                 flex-direction: column;
-                animation: scrollChildren 20s linear infinite;
                 will-change: transform;
             }
             
-            .children-list:hover .children-list-inner {
+            .children-list-inner.scrolling {
+                animation: scrollChildren 6s linear infinite;
+            }
+            
+            .children-list:hover .children-list-inner.scrolling {
                 animation-play-state: paused;
             }
             
             @keyframes scrollChildren {
                 0% { transform: translateY(0); }
-                100% { transform: translateY(-50%); }
+                100% { transform: translateY(-100%); }
             }
             
             /* Ensure content is always visible */
@@ -714,13 +720,18 @@ if ($school_id && $screen_slug) {
                                         <span class="child-rank">${rank}</span>
                                     </div>`;
                                 });
-                                // For now, disable scrolling to ensure content is visible
+                                // Only scroll if there are more items than can fit (estimate 5 items fit in the card)
+                                const shouldScroll = promotions.length > 5;
+                                const duration = shouldScroll ? Math.max(4, promotions.length * 1) : 0;
+                                const scrollClass = shouldScroll ? 'scrolling' : '';
+                                const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
+                                const contentToShow = childItems;
                                 html += `
                                     <div class="date-section">
-                                        <div class="date-header">${heDate}</div>
+                                        <div class="date-header">${heDate}<hr></div>
                                         <div class="children-list">
-                                            <div class="children-list-inner" style="animation: none;">
-                                                ${childItems}
+                                            <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
+                                                ${contentToShow}
                                             </div>
                                         </div>
                                     </div>
@@ -783,13 +794,18 @@ if ($school_id && $screen_slug) {
                                         <span class="child-rank">${platoon}</span>
                                     </div>`;
                                 });
-                                // For now, disable scrolling to ensure content is visible
+                                // Only scroll if there are more items than can fit (estimate 5 items fit in the card)
+                                const shouldScroll = birthdays.length > 5;
+                                const duration = shouldScroll ? Math.max(4, birthdays.length * 1) : 0;
+                                const scrollClass = shouldScroll ? 'scrolling' : '';
+                                const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
+                                const contentToShow = childItems;
                                 html += `
                                     <div class="date-section">
-                                        <div class="date-header">${heDate}</div>
+                                        <div class="date-header">${heDate}<hr></div>
                                         <div class="children-list">
-                                            <div class="children-list-inner" style="animation: none;">
-                                                ${childItems}
+                                            <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
+                                                ${contentToShow}
                                             </div>
                                         </div>
                                     </div>
@@ -829,12 +845,18 @@ if ($school_id && $screen_slug) {
                                     <span class="child-rank">${tehillim.chapter}</span>
                                 </div>`;
                             });
-                            // For now, disable scrolling to ensure content is visible
+                            // Only scroll if there are more items than can fit (estimate 8 items fit in the card)
+                            const shouldScroll = data.data.length > 8;
+                            const duration = shouldScroll ? Math.max(4, data.data.length * 1) : 0;
+                            const scrollClass = shouldScroll ? 'scrolling' : '';
+                            const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
+                            const contentToShow = html;
+                            
                             tehillimList.innerHTML = `
                                 <div style="height: 100%; max-height: 100%; overflow: hidden; display: flex; flex-direction: column;">
                                     <div style="flex: 1; overflow: hidden; padding: 15px;">
-                                        <div class="children-list-inner" style="animation: none;">
-                                            ${html}
+                                        <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
+                                            ${contentToShow}
                                         </div>
                                     </div>
                                 </div>
