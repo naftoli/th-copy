@@ -480,6 +480,17 @@ if ($school_id && $screen_slug) {
                 text-overflow: ellipsis;
             }
             
+            .date-subheader {
+                color: #fff;
+                padding: 6px 8px;
+                font-size: 0.9rem;
+                font-weight: bold;
+                background: rgba(255,255,255,0.1);
+                margin: 4px 0 2px 0;
+                border-radius: 4px;
+                text-align: center;
+            }
+            
 
             
 
@@ -675,10 +686,14 @@ if ($school_id && $screen_slug) {
                     .then(data => {
                         console.log('Promotions data:', data); // Debug log
                         if (data && data.success && data.data && Object.keys(data.data).length > 0) {
-                            let html = '';
-                            // Create a section for each date with fixed header and scrolling children list
+                            let allChildItems = '';
+                            let totalItems = 0;
+                            
+                            // Collect all promotions from all dates
                             Object.entries(data.data).forEach(([heDate, promotions]) => {
-                                let childItems = ''; // Initialize for child items
+                                // Add date sub-header
+                                allChildItems += `<div class="date-subheader">${heDate}</div>`;
+                                
                                 // Add each child promotion to the list
                                 promotions.forEach(promotion => {
                                     console.log('Individual promotion:', promotion); // Debug individual promotion
@@ -705,28 +720,30 @@ if ($school_id && $screen_slug) {
                                     }
                                     
                                     const formattedName = name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
-                                    childItems += `<div class="child-item">
+                                    allChildItems += `<div class="child-item">
                                         <span class="child-name">${formattedName}</span>
                                         <span class="child-rank">${rank}</span>
                                     </div>`;
+                                    totalItems++;
                                 });
-                                // Only scroll if there are more items than can fit
-                                const shouldScroll = promotions.length > SCROLLING_THRESHOLD;
-                                const duration = shouldScroll ? Math.max(4, promotions.length * 1) : 0;
-                                const scrollClass = shouldScroll ? 'scrolling' : '';
-                                const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
-                                const contentToShow = childItems;
-                                html += `
-                                    <div class="date-section">
-                                        <div class="date-header">${heDate}<hr></div>
-                                        <div class="children-list">
-                                            <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
-                                                ${contentToShow}
-                                            </div>
+                            });
+                            
+                            // Only scroll if there are more items than can fit
+                            const shouldScroll = totalItems > SCROLLING_THRESHOLD;
+                            const duration = shouldScroll ? Math.max(4, totalItems * 1) : 0;
+                            const scrollClass = shouldScroll ? 'scrolling' : '';
+                            const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
+                            
+                            const html = `
+                                <div class="date-section">
+                                    <div class="date-header">Promotions<hr></div>
+                                    <div class="children-list">
+                                        <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
+                                            ${allChildItems}
                                         </div>
                                     </div>
-                                `;
-                            });
+                                </div>
+                            `;
                             promotionsList.innerHTML = html;
                         } else {
                             promotionsList.innerHTML = '<div class="no-content">No promotions available</div>';
@@ -753,9 +770,14 @@ if ($school_id && $screen_slug) {
                     .then(data => {
                         console.log('Birthdays data:', data); // Debug log
                         if (data && data.success && data.data && Object.keys(data.data).length > 0) {
-                            let html = '';
+                            let allChildItems = '';
+                            let totalItems = 0;
+                            
+                            // Collect all birthdays from all dates
                             Object.entries(data.data).forEach(([heDate, birthdays]) => {
-                                let childItems = ''; // Initialize for child items
+                                // Add date sub-header
+                                allChildItems += `<div class="date-subheader">${heDate}</div>`;
+                                
                                 birthdays.forEach(birthday => {
                                     console.log('Individual birthday:', birthday); // Debug individual birthday
                                     // Handle different possible property names
@@ -779,28 +801,30 @@ if ($school_id && $screen_slug) {
                                     }
                                     
                                     const formattedName = name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
-                                    childItems += `<div class="child-item">
+                                    allChildItems += `<div class="child-item">
                                         <span class="child-name">${formattedName}</span>
                                         <span class="child-rank">${platoon}</span>
                                     </div>`;
+                                    totalItems++;
                                 });
-                                // Only scroll if there are more items than can fit
-                                const shouldScroll = birthdays.length > SCROLLING_THRESHOLD;
-                                const duration = shouldScroll ? Math.max(4, birthdays.length * 1) : 0;
-                                const scrollClass = shouldScroll ? 'scrolling' : '';
-                                const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
-                                const contentToShow = childItems;
-                                html += `
-                                    <div class="date-section">
-                                        <div class="date-header">${heDate}<hr></div>
-                                        <div class="children-list">
-                                            <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
-                                                ${contentToShow}
-                                            </div>
+                            });
+                            
+                            // Only scroll if there are more items than can fit
+                            const shouldScroll = totalItems > SCROLLING_THRESHOLD;
+                            const duration = shouldScroll ? Math.max(4, totalItems * 1) : 0;
+                            const scrollClass = shouldScroll ? 'scrolling' : '';
+                            const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
+                            
+                            const html = `
+                                <div class="date-section">
+                                    <div class="date-header">Birthdays<hr></div>
+                                    <div class="children-list">
+                                        <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
+                                            ${allChildItems}
                                         </div>
                                     </div>
-                                `;
-                            });
+                                </div>
+                            `;
                             birthdaysList.innerHTML = html;
                         } else {
                             birthdaysList.innerHTML = '<div class="no-content">No birthdays this week</div>';
