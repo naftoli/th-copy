@@ -423,7 +423,7 @@ $schools = $adminSchools->getSchools();
                                             Show promotions on this screen
                                         </label>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group mb-2">
                                         <label for="promotionsDays" class="form-label">Number of days to show promotions</label>
                                         <select name="promotions_days" id="promotionsDays" class="form-select">
                                             <option value="1">1 day</option>
@@ -460,6 +460,14 @@ $schools = $adminSchools->getSchools();
                                             <option value="90">3 months</option>
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="promotionsGender" class="form-label">Gender filter</label>
+                                        <select name="promotions_gender" id="promotionsGender" class="form-select">
+                                            <option value="0">All</option>
+                                            <option value="M">Boys</option>
+                                            <option value="F">Girls</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -471,7 +479,7 @@ $schools = $adminSchools->getSchools();
                                             Show birthdays on this screen
                                         </label>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group mb-2">
                                         <label for="birthdaysDays" class="form-label">Number of days to show birthdays</label>
                                         <select name="birthdays_days" id="birthdaysDays" class="form-select">
                                             <option value="1">1 day</option>
@@ -506,6 +514,14 @@ $schools = $adminSchools->getSchools();
                                             <option value="30">30 days</option>
                                             <option value="60">2 months</option>
                                             <option value="90">3 months</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="birthdaysGender" class="form-label">Gender filter</label>
+                                        <select name="birthdays_gender" id="birthdaysGender" class="form-select">
+                                            <option value="0">All</option>
+                                            <option value="M">Boys</option>
+                                            <option value="F">Girls</option>
                                         </select>
                                     </div>
                                 </div>
@@ -630,8 +646,10 @@ $schools = $adminSchools->getSchools();
             // Set form values from the settings data
             document.getElementById('showPromotions').checked = settings.show_promotions == 1;
             document.getElementById('promotionsDays').value = settings.promotions_days || 7;
+            document.getElementById('promotionsGender').value = settings.promotions_gender || '0';
             document.getElementById('showBirthdays').checked = settings.show_birthdays == 1;
             document.getElementById('birthdaysDays').value = settings.birthdays_days || 7;
+            document.getElementById('birthdaysGender').value = settings.birthdays_gender || '0';
         }
 
         function openSettingsFromEdit() {
@@ -653,8 +671,10 @@ $schools = $adminSchools->getSchools();
                 const defaultSettings = {
                     show_promotions: 0,
                     promotions_days: 7,
+                    promotions_gender: '0',
                     show_birthdays: 0,
-                    birthdays_days: 7
+                    birthdays_days: 7,
+                    birthdays_gender: '0'
                 };
                 
                 // Close the edit modal
@@ -667,14 +687,37 @@ $schools = $adminSchools->getSchools();
                 settingsModal.show();
             }
         }
+        
+        // Add event listener to clean up backdrop when settings modal is closed
+        document.addEventListener('DOMContentLoaded', function() {
+            const settingsModal = document.getElementById('settingsModal');
+            if (settingsModal) {
+                settingsModal.addEventListener('hidden.bs.modal', function() {
+                    // Clean up any remaining backdrop elements
+                    const backdrops = document.querySelectorAll('.modal-backdrop');
+                    backdrops.forEach(backdrop => {
+                        backdrop.remove();
+                    });
+                    
+                    // Remove modal-open class from body if no other modals are open
+                    const openModals = document.querySelectorAll('.modal.show');
+                    if (openModals.length === 0) {
+                        document.body.classList.remove('modal-open');
+                        document.body.style.paddingRight = '';
+                    }
+                });
+            }
+        });
 
         function saveSettings() {
             const formData = new FormData();
             formData.append('screen_id', document.getElementById('settingsScreenId').value);
             formData.append('show_promotions', document.getElementById('showPromotions').checked ? 1 : 0);
             formData.append('promotions_days', document.getElementById('promotionsDays').value);
+            formData.append('promotions_gender', document.getElementById('promotionsGender').value);
             formData.append('show_birthdays', document.getElementById('showBirthdays').checked ? 1 : 0);
             formData.append('birthdays_days', document.getElementById('birthdaysDays').value);
+            formData.append('birthdays_gender', document.getElementById('birthdaysGender').value);
             
             const saveBtn = document.querySelector('#settingsModal .btn-primary');
             const originalText = saveBtn.innerHTML;
@@ -896,10 +939,10 @@ $schools = $adminSchools->getSchools();
                                             <button onclick="copyUrl('/screens/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
                                                 <i class="fas fa-copy me-1"></i>Copy
                                             </button>
-                                            <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}', '${screen.password || ''}', '${screen.screen_id}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}})" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
+                                            <button onclick="openEditModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}', '${screen.password || ''}', '${screen.screen_id}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, promotions_gender: '${screen.promotions_gender || '0'}', show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}, birthdays_gender: '${screen.birthdays_gender || '0'}'})" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
                                                 <i class="fas fa-edit me-1"></i>Edit
                                             </button>
-                                            <button onclick="openSettingsModal('${screen.screen_id}', '${screen.screen_name}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}})" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#settingsModal">
+                                            <button onclick="openSettingsModal('${screen.screen_id}', '${screen.screen_name}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, promotions_gender: '${screen.promotions_gender || '0'}', show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}, birthdays_gender: '${screen.birthdays_gender || '0'}'})" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#settingsModal">
                                                 <i class="fas fa-cog me-1"></i>Settings
                                             </button>
                                             <button onclick="openImagesModal('${screen.screen_id}', '${school_id}')" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#imagesModal">
@@ -971,6 +1014,5 @@ $schools = $adminSchools->getSchools();
     </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <?php include 'images_modal.html'; ?>
-    <?php include 'settings_modal.html'; ?>
 </body>
 </html>

@@ -38,8 +38,10 @@ if ($school_id && $screen_slug) {
         SELECT s.*, 
                COALESCE(ss.show_promotions, 0) as show_promotions,
                COALESCE(ss.promotions_days, 7) as promotions_days,
+               COALESCE(ss.promotions_gender, '0') as promotions_gender,
                COALESCE(ss.show_birthdays, 0) as show_birthdays,
-               COALESCE(ss.birthdays_days, 7) as birthdays_days
+               COALESCE(ss.birthdays_days, 7) as birthdays_days,
+               COALESCE(ss.birthdays_gender, '0') as birthdays_gender
         FROM screens s
         LEFT JOIN screen_settings ss ON s.screen_id = ss.screen_id
         WHERE s.school_id = ? AND s.url = ?
@@ -620,7 +622,10 @@ if ($school_id && $screen_slug) {
                 const promotionsList = document.getElementById('promotions-list');
                 console.log('Fetching promotions for days:', days);
                 
-                fetch('/api/core/homepage/promotions?start=' + (days - 1) + '&school=' + <?php echo $school_id; ?>) // -1 b/c the end date is the current day
+                const gender = '<?php echo $screen['promotions_gender'] ?? '0'; ?>';
+                const genderParam = gender !== '0' ? '&gender=' + gender : '';
+                
+                fetch('/api/core/homepage/promotions?start=' + (days - 1) + '&school=' + <?php echo $school_id; ?> + genderParam) // -1 b/c the end date is the current day
                     .then(response => {
                         console.log('Promotions response status:', response.status);
                         if (!response.ok) {
@@ -703,7 +708,10 @@ if ($school_id && $screen_slug) {
                 const birthdaysList = document.getElementById('birthdays-list');
                 console.log('Fetching birthdays for days:', days);
                 
-                fetch('/api/core/homepage/birthdays?start=' + (days - 1) + '&school=' + <?php echo $school_id; ?>) // -1 b/c the end date is the current day
+                const gender = '<?php echo $screen['birthdays_gender'] ?? '0'; ?>';
+                const genderParam = gender !== '0' ? '&gender=' + gender : '';
+                
+                fetch('/api/core/homepage/birthdays?start=' + (days - 1) + '&school=' + <?php echo $school_id; ?> + genderParam) // -1 b/c the end date is the current day
                     .then(response => {
                         console.log('Birthdays response status:', response.status);
                         if (!response.ok) {

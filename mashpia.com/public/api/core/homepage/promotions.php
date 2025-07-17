@@ -19,10 +19,10 @@ class BirthdayRouter {
 
         $extra = '';
         if (isset($_GET['gender'])) {
-            $extra = "AND u.gender = '" . $_GET['gender'] . "'";
+            $extra .= "AND u.gender = '" . $_GET['gender'] . "'";
         }
         if (isset($_GET['school'])) {
-            $extra = "AND s.school_id = '" . $_GET['school'] . "'";
+            $extra .= "AND u.school_id = '" . $_GET['school'] . "'";
         }
 
         $query = $MASHPIA_DB->prepare(

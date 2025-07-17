@@ -15,8 +15,10 @@ $screens = $MASHPIA_DB->query("
     SELECT s.*, 
            COALESCE(ss.show_promotions, 0) as show_promotions,
            COALESCE(ss.promotions_days, 7) as promotions_days,
+           COALESCE(ss.promotions_gender, '0') as promotions_gender,
            COALESCE(ss.show_birthdays, 0) as show_birthdays,
-           COALESCE(ss.birthdays_days, 7) as birthdays_days
+           COALESCE(ss.birthdays_days, 7) as birthdays_days,
+           COALESCE(ss.birthdays_gender, '0') as birthdays_gender
     FROM screens s
     LEFT JOIN screen_settings ss ON s.screen_id = ss.screen_id
     WHERE s.school_id IN (" . implode(',', $school_ids) . ") 
