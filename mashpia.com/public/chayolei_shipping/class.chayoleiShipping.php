@@ -225,14 +225,14 @@ class ChayoleiShipping
             foreach ($subjects as $subject_id => $medal_ords) {
                 foreach ($medal_ords as $row) {
                     $medal_ord = $row['medal_ord'];
-                    $medal_id = $medal_ids[$subject_id][$medal_ord];
+                    $medal_id = $medal_ids[$subject_id][$medal_ord];                    
                     $medals[$user_id][] = [
-                        'item'  => $subject_names[$subject_id] . ' ' . $medal_names[$medal_ord] . ' Medal',
+                        'item'  => $subject_names[$subject_id] . ' Medal',
                         'size'  => '',
                         'name'  => $row['first'] . ' ' . $row['last'],
                         'id'    => $medal_id,
                         'cat'   => 'medals',
-                        'size'  => '',
+                        'color' => $medal_names[$medal_ord],
                         'qty'   => 1
                     ];
                 }
