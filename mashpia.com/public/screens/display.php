@@ -256,9 +256,6 @@ if ($school_id && $screen_slug) {
                 flex: 1;
                 width: 100%;
                 overflow: hidden;
-            }
-            
-            .content-row {
                 height: calc((<?php echo $screen_height; ?>px - 120px) / 2);
                 max-height: calc((<?php echo $screen_height; ?>px - 120px) / 2);
             }
@@ -266,10 +263,6 @@ if ($school_id && $screen_slug) {
             .content-section {
                 flex: 1;
                 padding: 12px 8px 0 8px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: flex-start;
                 background: rgba(255,255,255,0.05);
                 box-sizing: border-box;
                 border-right: 1.5px solid rgba(255,255,255,0.13);
@@ -331,32 +324,7 @@ if ($school_id && $screen_slug) {
                 box-sizing: border-box;
             }
             
-            .tehillim-container {
-                width: 100%;
-                height: calc(100% - 40px);
-                max-height: calc(100% - 40px);
-                overflow: hidden;
-                position: relative;
-                box-sizing: border-box;
-            }
-            
-            .tehillim-section {
-                overflow: hidden;
-                height: 100%;
-                max-height: 100%;
-            }
-            
-            .tehillim-container .date-section {
-                height: 100%;
-                max-height: 100%;
-                overflow: hidden;
-            }
-            
-            .tehillim-container .children-list {
-                height: calc(100% - 60px);
-                max-height: calc(100% - 60px);
-                overflow: hidden;
-            }
+
 
             /* Date sections for promotions/birthdays */
             .date-section {
@@ -365,27 +333,11 @@ if ($school_id && $screen_slug) {
                 overflow: hidden;
                 backdrop-filter: blur(10px);
                 border: 1px solid rgba(255,255,255,0.2);
-                display: flex;
-                flex-direction: column;
                 height: calc(100% - 12px);
                 max-height: calc(100% - 12px);
             }
             
-            .date-header {
-                color: #fff;
-                padding: 8px 12px;
-                font-size: 1rem;
-                font-weight: bold;
-                text-align: center;
-                margin-bottom: 0;
-            }
-            
-            .date-header hr {
-                border: none;
-                height: 1px;
-                background: rgba(255,255,255,0.3);
-                margin: 8px 0 0 0;
-            }
+
             
             .children-list {
                 overflow-y: auto;
@@ -400,6 +352,8 @@ if ($school_id && $screen_slug) {
                 display: flex;
                 flex-direction: column;
                 will-change: transform;
+                position: relative;
+                z-index: 1;
             }
             
             .children-list-inner.scrolling {
@@ -415,15 +369,7 @@ if ($school_id && $screen_slug) {
                 100% { transform: translateY(-100%); }
             }
             
-            /* Ensure content is always visible */
-            .children-list {
-                position: relative;
-            }
-            
-            .children-list-inner {
-                position: relative;
-                z-index: 1;
-            }
+
             
             .children-list::-webkit-scrollbar {
                 width: 6px;
@@ -543,7 +489,7 @@ if ($school_id && $screen_slug) {
                 .content-section h2 {
                     font-size: 1.5rem;
                 }
-                .date-header { font-size: 1.1rem; padding: 8px 12px; }
+
                 .child-name { font-size: 0.9rem; }
                 .child-rank { font-size: 0.75rem; }
                 .child-item { padding: 8px 10px; margin-bottom: 8px; }
@@ -565,7 +511,7 @@ if ($school_id && $screen_slug) {
                 .content-section:last-child {
                     border-bottom: none;
                 }
-                .date-header { font-size: 1rem; padding: 6px 10px; }
+
                 .child-name { font-size: 0.85rem; }
                 .child-rank { font-size: 0.7rem; }
                 .child-item { padding: 6px 8px; margin-bottom: 6px; }
