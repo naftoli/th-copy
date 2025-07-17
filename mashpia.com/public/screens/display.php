@@ -231,7 +231,7 @@ if ($school_id && $screen_slug) {
             /* Layout Structure */
             .announcements-section {
                 width: 100%;
-                height: 60px;
+                height: 120px;
                 background: rgba(255,255,255,0.08);
                 border-bottom: 1.5px solid rgba(255,255,255,0.13);
                 display: flex;
@@ -245,8 +245,8 @@ if ($school_id && $screen_slug) {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-                height: calc(<?php echo $screen_height; ?>px - 60px);
-                max-height: calc(<?php echo $screen_height; ?>px - 60px);
+                height: calc(<?php echo $screen_height; ?>px - 120px);
+                max-height: calc(<?php echo $screen_height; ?>px - 120px);
                 box-sizing: border-box;
                 overflow: hidden;
             }
@@ -258,14 +258,9 @@ if ($school_id && $screen_slug) {
                 overflow: hidden;
             }
             
-            .content-row:first-child {
-                height: calc((<?php echo $screen_height; ?>px - 60px) * 0.3);
-                max-height: calc((<?php echo $screen_height; ?>px - 60px) * 0.3);
-            }
-            
-            .content-row:last-child {
-                height: calc((<?php echo $screen_height; ?>px - 60px) * 0.7);
-                max-height: calc((<?php echo $screen_height; ?>px - 60px) * 0.7);
+            .content-row {
+                height: calc((<?php echo $screen_height; ?>px - 120px) / 2);
+                max-height: calc((<?php echo $screen_height; ?>px - 120px) / 2);
             }
 
             .content-section {
@@ -590,39 +585,7 @@ if ($school_id && $screen_slug) {
 
             <!-- Content Grid -->
             <div class="content-grid">
-                <!-- Top Row: Images and Tehillim -->
-                <div class="content-row">
-                    <div class="content-section">
-                        <h2><i class="fas fa-images me-2"></i>Screen Images</h2>
-                        <div class="images-container">
-                            <?php if (isset($images_to_show) && count($images_to_show)): ?>
-                                <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;align-items:center;">
-                                    <?php foreach ($images_to_show as $img): ?>
-                                        <div style="background:#fff;padding:0.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:center;">
-                                            <img src="<?= htmlspecialchars($img['url']) ?>" style="<?= $img['size'] > 0 ? "width:{$img['size']}px;height:{$img['size']}px;object-fit:contain;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-width:100%;max-height:100%;" : "max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);" ?>" alt="Screen Image">
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
-                            <?php else: ?>
-                                <div class="no-content">No images available</div>
-                            <?php endif; ?>
-                        </div>
-                    </div>
-                    
-                    <div class="content-section tehillim-section">
-                        <h2 class="tehillim-title">
-                            <i class="fas fa-pray me-2"></i>Finished Tehillim Quota
-                        </h2>
-                        <div class="tehillim-container" id="tehillim-list">
-                            <div class="loading">
-                                <div class="spinner"></div>
-                                Loading tehillim...
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Bottom Row: Promotions and Birthdays -->
+                <!-- Row 1: Promotions, Birthdays, Tehillim -->
                 <div class="content-row">
                     <div class="content-section">
                         <h2 class="promotions-title">
@@ -647,11 +610,55 @@ if ($school_id && $screen_slug) {
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="content-section">
+                        <h2 class="tehillim-title">
+                            <i class="fas fa-pray me-2"></i>Finished Tehillim Quota
+                        </h2>
+                        <div class="promotions-container" id="tehillim-list">
+                            <div class="loading">
+                                <div class="spinner"></div>
+                                Loading tehillim...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Row 2: Images, Future Content 1, Future Content 2 -->
+                <div class="content-row">
+                    <div class="content-section">
+                        <h2><i class="fas fa-images me-2"></i>Screen Images</h2>
+                        <div class="images-container">
+                            <?php if (isset($images_to_show) && count($images_to_show)): ?>
+                                <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;align-items:center;">
+                                    <?php foreach ($images_to_show as $img): ?>
+                                        <div style="background:#fff;padding:0.5rem;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.04);display:flex;align-items:center;justify-content:center;">
+                                            <img src="<?= htmlspecialchars($img['url']) ?>" style="<?= $img['size'] > 0 ? "width:{$img['size']}px;height:{$img['size']}px;object-fit:contain;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);max-width:100%;max-height:100%;" : "max-width:100%;height:auto;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);" ?>" alt="Screen Image">
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php else: ?>
+                                <div class="no-content">No images available</div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h2><i class="fas fa-plus me-2"></i>Future Content</h2>
+                        <div class="no-content">Coming soon...</div>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h2><i class="fas fa-plus me-2"></i>Future Content</h2>
+                        <div class="no-content">Coming soon...</div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <script>
+            // Configuration for scrolling thresholds
+            const SCROLLING_THRESHOLD = 8; // Number of items that can fit before scrolling starts
             
             async function getPromotions(days) {
                 const promotionsList = document.getElementById('promotions-list');
@@ -703,8 +710,8 @@ if ($school_id && $screen_slug) {
                                         <span class="child-rank">${rank}</span>
                                     </div>`;
                                 });
-                                // Only scroll if there are more items than can fit (estimate 5 items fit in the card)
-                                const shouldScroll = promotions.length > 5;
+                                // Only scroll if there are more items than can fit
+                                const shouldScroll = promotions.length > SCROLLING_THRESHOLD;
                                 const duration = shouldScroll ? Math.max(4, promotions.length * 1) : 0;
                                 const scrollClass = shouldScroll ? 'scrolling' : '';
                                 const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
@@ -777,8 +784,8 @@ if ($school_id && $screen_slug) {
                                         <span class="child-rank">${platoon}</span>
                                     </div>`;
                                 });
-                                // Only scroll if there are more items than can fit (estimate 5 items fit in the card)
-                                const shouldScroll = birthdays.length > 5;
+                                // Only scroll if there are more items than can fit
+                                const shouldScroll = birthdays.length > SCROLLING_THRESHOLD;
                                 const duration = shouldScroll ? Math.max(4, birthdays.length * 1) : 0;
                                 const scrollClass = shouldScroll ? 'scrolling' : '';
                                 const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
@@ -820,30 +827,32 @@ if ($school_id && $screen_slug) {
                     .then(data => {
                         console.log('Tehillim data:', data);
                         if (data && data.success && data.data && data.data.length > 0) {
-                            let html = '';
+                            let childItems = '';
                             data.data.forEach(tehillim => {
                                 const formattedName = tehillim.name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
-                                html += `<div class="child-item">
+                                childItems += `<div class="child-item">
                                     <span class="child-name">${formattedName}</span>
                                     <span class="child-rank">${tehillim.chapter}</span>
                                 </div>`;
                             });
-                            // Only scroll if there are more items than can fit (estimate 8 items fit in the card)
-                            const shouldScroll = data.data.length > 8;
+                            // Only scroll if there are more items than can fit
+                            const shouldScroll = data.data.length > SCROLLING_THRESHOLD;
                             const duration = shouldScroll ? Math.max(4, data.data.length * 1) : 0;
                             const scrollClass = shouldScroll ? 'scrolling' : '';
                             const animationStyle = shouldScroll ? `animation: scrollChildren ${duration}s linear infinite;` : '';
-                            const contentToShow = html;
+                            const contentToShow = childItems;
                             
-                            tehillimList.innerHTML = `
-                                <div style="height: 100%; max-height: 100%; overflow: hidden; display: flex; flex-direction: column;">
-                                    <div style="flex: 1; overflow: hidden; padding: 15px;">
+                            const html = `
+                                <div class="date-section">
+                                    <div class="date-header">Latest Shabbos Mevorchim<hr></div>
+                                    <div class="children-list">
                                         <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
                                             ${contentToShow}
                                         </div>
                                     </div>
                                 </div>
                             `;
+                            tehillimList.innerHTML = html;
                         } else {
                             tehillimList.innerHTML = '<div class="no-content">No tehillim available</div>';
                         }
