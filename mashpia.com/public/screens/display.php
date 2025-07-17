@@ -285,6 +285,7 @@ if ($school_id && $screen_slug) {
                 margin-top: 0;
                 margin-bottom: 0.8rem;
                 font-size: 1.2rem;
+                text-align: center;
             }
 
             .promotions-title {
@@ -333,8 +334,8 @@ if ($school_id && $screen_slug) {
                 overflow: hidden;
                 backdrop-filter: blur(10px);
                 border: 1px solid rgba(255,255,255,0.2);
-                height: calc(100% - 12px);
-                max-height: calc(100% - 12px);
+                height: calc(100% - 45px);
+                max-height: calc(100% - 45px);
             }
             
 
@@ -782,7 +783,7 @@ if ($school_id && $screen_slug) {
                 const tehillimList = document.getElementById('tehillim-list');
                 console.log('Fetching tehillim');
                 
-                fetch('/screens/ajax/getTehillim.php')
+                fetch('/screens/ajax/getTehillim.php?school=<?php echo $school_id; ?>')
                     .then(response => {
                         console.log('Tehillim response status:', response.status);
                         if (!response.ok) {
@@ -798,7 +799,7 @@ if ($school_id && $screen_slug) {
                                 const formattedName = tehillim.name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                                 childItems += `<div class="child-item">
                                     <span class="child-name">${formattedName}</span>
-                                    <span class="child-rank">${tehillim.chapter}</span>
+                                    <span class="child-rank">${tehillim.chapter} kapitlach</span>
                                 </div>`;
                             });
                             // Only scroll if there are more items than can fit

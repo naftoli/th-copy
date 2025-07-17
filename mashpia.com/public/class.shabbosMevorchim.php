@@ -1073,7 +1073,7 @@ class ShabbosMevorchim
         }
     }
 
-    public function setStudentResults($sid = 0, $date = 0)
+    public function setStudentResults($sid = 0, $date = 0, $forScreen = false)
     {
         $dates = [];
         if ($date) $dates[] = $date;
@@ -1194,7 +1194,7 @@ class ShabbosMevorchim
             // for each task
             foreach ($this->tasks as $key => $task) {
                 // skip task #2
-                // if ($key == 'Minutes') continue;
+                if ($forScreen && $key == 'Minutes') continue;
                 $this->doneQuotas[$key][$sid] = 0;
                 $this->participated[$key][$sid] = 0;
                 // for each class
@@ -1245,6 +1245,11 @@ class ShabbosMevorchim
                 }
             }
         }
+    }
+
+    public function getUsers() 
+    {
+        return $this->users;
     }
 
     public function getStudentResults()
