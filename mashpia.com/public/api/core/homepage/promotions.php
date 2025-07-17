@@ -17,13 +17,21 @@ class BirthdayRouter {
         $start = isset($_GET['start']) ? intval($_GET['start']) : 7;
         $start_date =  $end_date - $start; // x days of promotions
 
+        $extra = '';
+        if (isset($_GET['gender'])) {
+            $extra = "AND u.gender = '" . $_GET['gender'] . "'";
+        }
+        if (isset($_GET['school'])) {
+            $extra = "AND s.school_id = '" . $_GET['school'] . "'";
+        }
+
         $query = $MASHPIA_DB->prepare(
              " SELECT user_id, class_id, first, last, mobile_pic, user_photo_id, school_name, "
             ." class_grade, class_sub, date_promoted, rank_ord, rank_name "
             ." FROM rank_marks JOIN ranks USING (rank_ord) JOIN users u USING (user_id) "
             ." JOIN schools s USING (school_id) JOIN classes c USING (class_id) "
             ." WHERE rank_ord > 1 AND date_promoted >= $start_date AND date_promoted <= $end_date "
-            ." AND ($filter) AND u.user_registered IS NOT NULL "
+            ." AND ($filter) AND u.user_registered IS NOT NULL $extra"
             ." GROUP BY user_id ORDER BY date_promoted DESC, rank_ord DESC, last, first;"
         );
 //        $query->debugDumpParams();

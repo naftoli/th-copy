@@ -645,7 +645,7 @@ if ($school_id && $screen_slug) {
                 const promotionsList = document.getElementById('promotions-list');
                 console.log('Fetching promotions for days:', days);
                 
-                fetch('/api/core/homepage/promotions?start=' + (days - 1)) // -1 b/c the end date is the current day
+                fetch('/api/core/homepage/promotions?start=' + (days - 1) + '&school=' + <?php echo $school_id; ?>) // -1 b/c the end date is the current day
                     .then(response => {
                         console.log('Promotions response status:', response.status);
                         if (!response.ok) {
@@ -695,7 +695,7 @@ if ($school_id && $screen_slug) {
                 const birthdaysList = document.getElementById('birthdays-list');
                 console.log('Fetching birthdays for days:', days);
                 
-                fetch('/api/core/homepage/birthdays?start=' + (days - 1)) // -1 b/c the end date is the current day
+                fetch('/api/core/homepage/birthdays?start=' + (days - 1) + '&school=' + <?php echo $school_id; ?>) // -1 b/c the end date is the current day
                     .then(response => {
                         console.log('Birthdays response status:', response.status);
                         if (!response.ok) {
