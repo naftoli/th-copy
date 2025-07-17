@@ -393,7 +393,7 @@ if ($school_id && $screen_slug) {
             
             .children-list {
                 flex: 1;
-                overflow: hidden;
+                overflow-y: auto;
                 padding: 10px;
                 position: relative;
                 height: 100%;
@@ -685,24 +685,42 @@ if ($school_id && $screen_slug) {
                                 let childItems = ''; // Initialize for child items
                                 // Add each child promotion to the list
                                 promotions.forEach(promotion => {
-                                    const formattedName = promotion.full_name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+                                    console.log('Individual promotion:', promotion); // Debug individual promotion
+                                    // Handle different possible property names
+                                    let name = '';
+                                    let rank = '';
+                                    
+                                    if (promotion.full_name) {
+                                        name = promotion.full_name;
+                                    } else if (promotion.name) {
+                                        name = promotion.name;
+                                    } else if (promotion.first && promotion.last) {
+                                        name = promotion.first + ' ' + promotion.last;
+                                    } else {
+                                        name = 'Unknown Name';
+                                    }
+                                    
+                                    if (promotion.rank_name) {
+                                        rank = promotion.rank_name;
+                                    } else if (promotion.platoon) {
+                                        rank = promotion.platoon;
+                                    } else {
+                                        rank = 'Unknown Rank';
+                                    }
+                                    
+                                    const formattedName = name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                                     childItems += `<div class="child-item">
                                         <span class="child-name">${formattedName}</span>
-                                        <span class="child-rank">${promotion.rank_name}</span>
+                                        <span class="child-rank">${rank}</span>
                                     </div>`;
                                 });
-                                // Only duplicate content if there are more items than can fit
-                                const shouldScroll = promotions.length > 8; // Adjust threshold as needed
-                                const duration = shouldScroll ? Math.max(10, promotions.length * 2) : 0;
-                                const animationStyle = shouldScroll ? `animation-duration: ${duration}s` : '';
-                                const contentToShow = shouldScroll ? `${childItems}${childItems}` : childItems;
-                                
+                                // For now, disable scrolling to ensure content is visible
                                 html += `
                                     <div class="date-section">
                                         <div class="date-header">${heDate}</div>
                                         <div class="children-list">
-                                            <div class="children-list-inner" style="${animationStyle}">
-                                                ${contentToShow}
+                                            <div class="children-list-inner" style="animation: none;">
+                                                ${childItems}
                                             </div>
                                         </div>
                                     </div>
@@ -738,24 +756,40 @@ if ($school_id && $screen_slug) {
                             Object.entries(data.data).forEach(([heDate, birthdays]) => {
                                 let childItems = ''; // Initialize for child items
                                 birthdays.forEach(birthday => {
-                                    const formattedName = birthday.name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
+                                    console.log('Individual birthday:', birthday); // Debug individual birthday
+                                    // Handle different possible property names
+                                    let name = '';
+                                    let platoon = '';
+                                    
+                                    if (birthday.name) {
+                                        name = birthday.name;
+                                    } else if (birthday.first && birthday.last) {
+                                        name = birthday.first + ' ' + birthday.last;
+                                    } else {
+                                        name = 'Unknown Name';
+                                    }
+                                    
+                                    if (birthday.platoon) {
+                                        platoon = birthday.platoon;
+                                    } else if (birthday.rank_name) {
+                                        platoon = birthday.rank_name;
+                                    } else {
+                                        platoon = 'Unknown Platoon';
+                                    }
+                                    
+                                    const formattedName = name.toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
                                     childItems += `<div class="child-item">
                                         <span class="child-name">${formattedName}</span>
-                                        <span class="child-rank">${birthday.platoon}</span>
+                                        <span class="child-rank">${platoon}</span>
                                     </div>`;
                                 });
-                                // Only duplicate content if there are more items than can fit
-                                const shouldScroll = birthdays.length > 8; // Adjust threshold as needed
-                                const duration = shouldScroll ? Math.max(10, birthdays.length * 2) : 0;
-                                const animationStyle = shouldScroll ? `animation-duration: ${duration}s` : '';
-                                const contentToShow = shouldScroll ? `${childItems}${childItems}` : childItems;
-                                
+                                // For now, disable scrolling to ensure content is visible
                                 html += `
                                     <div class="date-section">
                                         <div class="date-header">${heDate}</div>
                                         <div class="children-list">
-                                            <div class="children-list-inner" style="${animationStyle}">
-                                                ${contentToShow}
+                                            <div class="children-list-inner" style="animation: none;">
+                                                ${childItems}
                                             </div>
                                         </div>
                                     </div>
@@ -795,17 +829,12 @@ if ($school_id && $screen_slug) {
                                     <span class="child-rank">${tehillim.chapter}</span>
                                 </div>`;
                             });
-                            // Only duplicate content if there are more items than can fit
-                            const shouldScroll = data.data.length > 8; // Adjust threshold as needed
-                            const duration = shouldScroll ? Math.max(10, data.data.length * 2) : 0;
-                            const animationStyle = shouldScroll ? `animation-duration: ${duration}s` : '';
-                            const contentToShow = shouldScroll ? `${html}${html}` : html;
-                            
+                            // For now, disable scrolling to ensure content is visible
                             tehillimList.innerHTML = `
                                 <div style="height: 100%; max-height: 100%; overflow: hidden; display: flex; flex-direction: column;">
                                     <div style="flex: 1; overflow: hidden; padding: 15px;">
-                                        <div class="children-list-inner" style="${animationStyle}">
-                                            ${contentToShow}
+                                        <div class="children-list-inner" style="animation: none;">
+                                            ${html}
                                         </div>
                                     </div>
                                 </div>
