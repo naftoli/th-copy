@@ -41,7 +41,9 @@ if ($school_id && $screen_slug) {
                COALESCE(ss.promotions_gender, '0') as promotions_gender,
                COALESCE(ss.show_birthdays, 0) as show_birthdays,
                COALESCE(ss.birthdays_days, 7) as birthdays_days,
-               COALESCE(ss.birthdays_gender, '0') as birthdays_gender
+               COALESCE(ss.birthdays_gender, '0') as birthdays_gender,
+               COALESCE(ss.show_chidon, 0) as show_chidon,
+               COALESCE(ss.show_chayolei, 0) as show_chayolei
         FROM screens s
         LEFT JOIN screen_settings ss ON s.screen_id = ss.screen_id
         WHERE s.school_id = ? AND s.url = ?

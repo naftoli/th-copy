@@ -199,6 +199,52 @@ $schools = $adminSchools->getSchools();
             color: var(--primary-color);
         }
 
+        /* Tab Styling */
+        .nav-tabs {
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #6c757d;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            color: var(--primary-color);
+            background-color: transparent;
+        }
+
+        .nav-tabs .nav-link.active {
+            border-bottom: 3px solid var(--primary-color);
+            color: var(--primary-color);
+            background-color: transparent;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            padding-top: 1.5rem;
+        }
+
+        .tab-pane {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
 
 
         .screens-section {
@@ -316,7 +362,7 @@ $schools = $adminSchools->getSchools();
                         <input type="hidden" id="editScreenId" value="">
                         
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group mb-3">
                                     <label for="modalSchoolId" class="form-label">School Name</label>
                                     <select name="school_id" id="modalSchoolId" class="form-select" required>
@@ -328,169 +374,220 @@ $schools = $adminSchools->getSchools();
                                     <div class="invalid-feedback">Please select a school.</div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="modalScreenName" class="form-label">Screen Name</label>
-                                    <input type="text" id="modalScreenName" name="screen_name" class="form-control" required 
-                                           placeholder="e.g., Main Lobby, Cafeteria, Library">
-                                    <div class="invalid-feedback">Please enter a screen name.</div>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="modalScreenSize" class="form-label">Screen Size</label>
-                                    <select name="screen_size" id="modalScreenSize" class="form-select" required>
-                                        <option value="">Select screen size...</option>
-                                        <option value="1920x1080">1920x1080</option>
-                                        <option value="1366x768">1366x768</option>
-                                        <option value="1280x720">1280x720</option>
-                                        <option value="1024x768">1024x768</option>
-                                        <option value="800x600">800x600</option>
-                                    </select>
-                                    <div class="invalid-feedback">Please select a screen size.</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="modalUrl" class="form-label">URL</label>
-                                    <input type="text" id="modalUrl" name="url" class="form-control" placeholder="Auto-generated from screen name">
-                                    <small class="form-text text-muted">Leave empty to auto-generate from screen name</small>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group mb-3">
-                                    <label for="modalPassword" class="form-label">Display PIN</label>
-                                    <input type="number" id="modalPassword" name="password" class="form-control" required>
-                                    <div class="invalid-feedback">Please enter a PIN.</div>
-                                    <small class="form-text text-muted">PIN required to protect screen access</small>
-                                </div>
-                            </div>
                         </div>
                         
                         <!-- Settings Section -->
                         <div id="settingsSection" style="display: none;">
                             <hr class="my-4">
-                            <div class="d-flex align-items-center mb-4">
-                                <div class="flex-grow-1">
-                                    <p class="text-muted mb-0">Configure what content appears on this screen</p>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Promotions</label>
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="showPromotions" name="show_promotions">
-                                            <label class="form-check-label" for="showPromotions">
-                                                Show promotions on this screen
-                                            </label>
+                            
+                            <!-- Tab Navigation -->
+                            <ul class="nav nav-tabs mb-4" id="settingsTabs" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="screen-settings-tab" data-bs-toggle="tab" data-bs-target="#screen-settings" type="button" role="tab" aria-controls="screen-settings" aria-selected="true">
+                                        <i class="fas fa-tv me-2"></i>Screen Settings
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="content-settings-tab" data-bs-toggle="tab" data-bs-target="#content-settings" type="button" role="tab" aria-controls="content-settings" aria-selected="false">
+                                        <i class="fas fa-cog me-2"></i>Content Settings
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <!-- Tab Content -->
+                            <div class="tab-content" id="settingsTabContent">
+                                <!-- Screen Settings Tab -->
+                                <div class="tab-pane fade show active" id="screen-settings" role="tabpanel" aria-labelledby="screen-settings-tab">
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="flex-grow-1">
+                                            <p class="text-muted mb-0">Configure basic screen settings</p>
                                         </div>
-                                        <div class="form-group mb-2">
-                                            <label for="promotionsDays" class="form-label">Number of days to show promotions</label>
-                                            <select name="promotions_days" id="promotionsDays" class="form-select">
-                                                <option value="1">1 day</option>
-                                                <option value="2">2 days</option>
-                                                <option value="3">3 days</option>
-                                                <option value="4">4 days</option>
-                                                <option value="5">5 days</option>
-                                                <option value="6">6 days</option>
-                                                <option value="7">7 days</option>
-                                                <option value="8">8 days</option>
-                                                <option value="9">9 days</option>
-                                                <option value="10">10 days</option>
-                                                <option value="11">11 days</option>
-                                                <option value="12">12 days</option>
-                                                <option value="13">13 days</option>
-                                                <option value="14">14 days</option>
-                                                <option value="15">15 days</option>
-                                                <option value="16">16 days</option>
-                                                <option value="17">17 days</option>
-                                                <option value="18">18 days</option>
-                                                <option value="19">19 days</option>
-                                                <option value="20">20 days</option>
-                                                <option value="21">21 days</option>
-                                                <option value="22">22 days</option>
-                                                <option value="23">23 days</option>
-                                                <option value="24">24 days</option>
-                                                <option value="25">25 days</option>
-                                                <option value="26">26 days</option>
-                                                <option value="27">27 days</option>
-                                                <option value="28">28 days</option>
-                                                <option value="29">29 days</option>
-                                                <option value="30">30 days</option>
-                                                <option value="60">2 months</option>
-                                                <option value="90">3 months</option>
-                                            </select>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="modalScreenName" class="form-label">Screen Name</label>
+                                                <input type="text" id="modalScreenName" name="screen_name" class="form-control" required 
+                                                       placeholder="e.g., Main Lobby, Cafeteria, Library">
+                                                <div class="invalid-feedback">Please enter a screen name.</div>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="promotionsGender" class="form-label">Gender filter</label>
-                                            <select name="promotions_gender" id="promotionsGender" class="form-select">
-                                                <option value="0">All</option>
-                                                <option value="M">Boys</option>
-                                                <option value="F">Girls</option>
-                                            </select>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="modalScreenSize" class="form-label">Screen Size</label>
+                                                <select name="screen_size" id="modalScreenSize" class="form-select" required>
+                                                    <option value="">Select screen size...</option>
+                                                    <option value="1920x1080">1920x1080</option>
+                                                    <option value="1366x768">1366x768</option>
+                                                    <option value="1280x720">1280x720</option>
+                                                    <option value="1024x768">1024x768</option>
+                                                    <option value="800x600">800x600</option>
+                                                </select>
+                                                <div class="invalid-feedback">Please select a screen size.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="modalUrl" class="form-label">URL</label>
+                                                <input type="text" id="modalUrl" name="url" class="form-control" placeholder="Auto-generated from screen name">
+                                                <small class="form-text text-muted">Leave empty to auto-generate from screen name</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label for="modalPassword" class="form-label">Display PIN</label>
+                                                <input type="number" id="modalPassword" name="password" class="form-control" required>
+                                                <div class="invalid-feedback">Please enter a PIN.</div>
+                                                <small class="form-text text-muted">PIN required to protect screen access</small>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group mb-3">
-                                        <label class="form-label">Birthdays</label>
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="showBirthdays" name="show_birthdays">
-                                            <label class="form-check-label" for="showBirthdays">
-                                                Show birthdays on this screen
-                                            </label>
+                                
+                                <!-- Content Settings Tab -->
+                                <div class="tab-pane fade" id="content-settings" role="tabpanel" aria-labelledby="content-settings-tab">
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="flex-grow-1">
+                                            <p class="text-muted mb-0">Configure what content appears on this screen</p>
                                         </div>
-                                        <div class="form-group mb-2">
-                                            <label for="birthdaysDays" class="form-label">Number of days to show birthdays</label>
-                                            <select name="birthdays_days" id="birthdaysDays" class="form-select">
-                                                <option value="1">1 day</option>
-                                                <option value="2">2 days</option>
-                                                <option value="3">3 days</option>
-                                                <option value="4">4 days</option>
-                                                <option value="5">5 days</option>
-                                                <option value="6">6 days</option>
-                                                <option value="7">7 days</option>
-                                                <option value="8">8 days</option>
-                                                <option value="9">9 days</option>
-                                                <option value="10">10 days</option>
-                                                <option value="11">11 days</option>
-                                                <option value="12">12 days</option>
-                                                <option value="13">13 days</option>
-                                                <option value="14">14 days</option>
-                                                <option value="15">15 days</option>
-                                                <option value="16">16 days</option>
-                                                <option value="17">17 days</option>
-                                                <option value="18">18 days</option>
-                                                <option value="19">19 days</option>
-                                                <option value="20">20 days</option>
-                                                <option value="21">21 days</option>
-                                                <option value="22">22 days</option>
-                                                <option value="23">23 days</option>
-                                                <option value="24">24 days</option>
-                                                <option value="25">25 days</option>
-                                                <option value="26">26 days</option>
-                                                <option value="27">27 days</option>
-                                                <option value="28">28 days</option>
-                                                <option value="29">29 days</option>
-                                                <option value="30">30 days</option>
-                                                <option value="60">2 months</option>
-                                                <option value="90">3 months</option>
-                                            </select>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label class="form-label">Promotions</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showPromotions" name="show_promotions">
+                                                    <label class="form-check-label" for="showPromotions">
+                                                        Show promotions on this screen
+                                                    </label>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label for="promotionsDays" class="form-label">Number of days to show promotions</label>
+                                                    <select name="promotions_days" id="promotionsDays" class="form-select">
+                                                        <option value="1">1 day</option>
+                                                        <option value="2">2 days</option>
+                                                        <option value="3">3 days</option>
+                                                        <option value="4">4 days</option>
+                                                        <option value="5">5 days</option>
+                                                        <option value="6">6 days</option>
+                                                        <option value="7">7 days</option>
+                                                        <option value="8">8 days</option>
+                                                        <option value="9">9 days</option>
+                                                        <option value="10">10 days</option>
+                                                        <option value="11">11 days</option>
+                                                        <option value="12">12 days</option>
+                                                        <option value="13">13 days</option>
+                                                        <option value="14">14 days</option>
+                                                        <option value="15">15 days</option>
+                                                        <option value="16">16 days</option>
+                                                        <option value="17">17 days</option>
+                                                        <option value="18">18 days</option>
+                                                        <option value="19">19 days</option>
+                                                        <option value="20">20 days</option>
+                                                        <option value="21">21 days</option>
+                                                        <option value="22">22 days</option>
+                                                        <option value="23">23 days</option>
+                                                        <option value="24">24 days</option>
+                                                        <option value="25">25 days</option>
+                                                        <option value="26">26 days</option>
+                                                        <option value="27">27 days</option>
+                                                        <option value="28">28 days</option>
+                                                        <option value="29">29 days</option>
+                                                        <option value="30">30 days</option>
+                                                        <option value="60">2 months</option>
+                                                        <option value="90">3 months</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="promotionsGender" class="form-label">Gender filter</label>
+                                                    <select name="promotions_gender" id="promotionsGender" class="form-select">
+                                                        <option value="0">All</option>
+                                                        <option value="M">Boys</option>
+                                                        <option value="F">Girls</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="birthdaysGender" class="form-label">Gender filter</label>
-                                            <select name="birthdays_gender" id="birthdaysGender" class="form-select">
-                                                <option value="0">All</option>
-                                                <option value="M">Boys</option>
-                                                <option value="F">Girls</option>
-                                            </select>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label class="form-label">Birthdays</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showBirthdays" name="show_birthdays">
+                                                    <label class="form-check-label" for="showBirthdays">
+                                                        Show birthdays on this screen
+                                                    </label>
+                                                </div>
+                                                <div class="form-group mb-2">
+                                                    <label for="birthdaysDays" class="form-label">Number of days to show birthdays</label>
+                                                    <select name="birthdays_days" id="birthdaysDays" class="form-select">
+                                                        <option value="1">1 day</option>
+                                                        <option value="2">2 days</option>
+                                                        <option value="3">3 days</option>
+                                                        <option value="4">4 days</option>
+                                                        <option value="5">5 days</option>
+                                                        <option value="6">6 days</option>
+                                                        <option value="7">7 days</option>
+                                                        <option value="8">8 days</option>
+                                                        <option value="9">9 days</option>
+                                                        <option value="10">10 days</option>
+                                                        <option value="11">11 days</option>
+                                                        <option value="12">12 days</option>
+                                                        <option value="13">13 days</option>
+                                                        <option value="14">14 days</option>
+                                                        <option value="15">15 days</option>
+                                                        <option value="16">16 days</option>
+                                                        <option value="17">17 days</option>
+                                                        <option value="18">18 days</option>
+                                                        <option value="19">19 days</option>
+                                                        <option value="20">20 days</option>
+                                                        <option value="21">21 days</option>
+                                                        <option value="22">22 days</option>
+                                                        <option value="23">23 days</option>
+                                                        <option value="24">24 days</option>
+                                                        <option value="25">25 days</option>
+                                                        <option value="26">26 days</option>
+                                                        <option value="27">27 days</option>
+                                                        <option value="28">28 days</option>
+                                                        <option value="29">29 days</option>
+                                                        <option value="30">30 days</option>
+                                                        <option value="60">2 months</option>
+                                                        <option value="90">3 months</option>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="birthdaysGender" class="form-label">Gender filter</label>
+                                                    <select name="birthdays_gender" id="birthdaysGender" class="form-select">
+                                                        <option value="0">All</option>
+                                                        <option value="M">Boys</option>
+                                                        <option value="F">Girls</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <label class="form-label">Announcements</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showChidonAnnouncements" name="show_chidon_announcements">
+                                                    <label class="form-check-label" for="showChidonAnnouncements">
+                                                        Show Chidon Announcements from HQ
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="showChayoleiAnnouncements" name="show_chayolei_announcements">
+                                                    <label class="form-check-label" for="showChayoleiAnnouncements">
+                                                        Show Chayolei Announcements from HQ
+                                                    </label>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -575,6 +672,19 @@ $schools = $adminSchools->getSchools();
             
             // Hide settings section in create mode
             document.getElementById('settingsSection').style.display = 'none';
+            
+            // Reset tabs to first tab when creating new screen
+            const firstTab = document.querySelector('#settingsTabs .nav-link');
+            const firstTabContent = document.querySelector('#settingsTabContent .tab-pane');
+            if (firstTab && firstTabContent) {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('#settingsTabs .nav-link').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('#settingsTabContent .tab-pane').forEach(content => content.classList.remove('show', 'active'));
+                
+                // Add active class to first tab and content
+                firstTab.classList.add('active');
+                firstTabContent.classList.add('show', 'active');
+            }
         }
 
         function openSettingsModal(schoolId, screenUrl, screenName, screenSize, screenPassword, screenId, settings) {
@@ -592,7 +702,9 @@ $schools = $adminSchools->getSchools();
                 promotions_gender: settings.promotions_gender || '0',
                 show_birthdays: parseInt(settings.show_birthdays) || 0,
                 birthdays_days: parseInt(settings.birthdays_days) || 7,
-                birthdays_gender: settings.birthdays_gender || '0'
+                birthdays_gender: settings.birthdays_gender || '0',
+                show_chidon: parseInt(settings.show_chidon) || 0,
+                show_chayolei: parseInt(settings.show_chayolei) || 0
             };
             
             document.getElementById('modalSchoolId').value = schoolId;
@@ -616,6 +728,21 @@ $schools = $adminSchools->getSchools();
             document.getElementById('showBirthdays').checked = currentSettings.show_birthdays == 1;
             document.getElementById('birthdaysDays').value = currentSettings.birthdays_days;
             document.getElementById('birthdaysGender').value = currentSettings.birthdays_gender;
+            document.getElementById('showChidonAnnouncements').checked = currentSettings.show_chidon == 1;
+            document.getElementById('showChayoleiAnnouncements').checked = currentSettings.show_chayolei == 1;
+            
+            // Reset tabs to first tab when opening settings
+            const firstTab = document.querySelector('#settingsTabs .nav-link');
+            const firstTabContent = document.querySelector('#settingsTabContent .tab-pane');
+            if (firstTab && firstTabContent) {
+                // Remove active class from all tabs and content
+                document.querySelectorAll('#settingsTabs .nav-link').forEach(tab => tab.classList.remove('active'));
+                document.querySelectorAll('#settingsTabContent .tab-pane').forEach(content => content.classList.remove('show', 'active'));
+                
+                // Add active class to first tab and content
+                firstTab.classList.add('active');
+                firstTabContent.classList.add('show', 'active');
+            }
         }
 
 
@@ -704,6 +831,8 @@ $schools = $adminSchools->getSchools();
                 formData.append('show_birthdays', document.getElementById('showBirthdays').checked ? 1 : 0);
                 formData.append('birthdays_days', document.getElementById('birthdaysDays').value);
                 formData.append('birthdays_gender', document.getElementById('birthdaysGender').value);
+                formData.append('show_chidon', document.getElementById('showChidonAnnouncements').checked ? 1 : 0);
+                formData.append('show_chayolei', document.getElementById('showChayoleiAnnouncements').checked ? 1 : 0);
             }
             
             fetch(endpoint, {
@@ -797,7 +926,7 @@ $schools = $adminSchools->getSchools();
                                             <button onclick="copyUrl('/screens/${school_id}/${screen.url}')" class="btn btn-success btn-sm">
                                                 <i class="fas fa-copy me-1"></i>Copy
                                             </button>
-                                            <button onclick="openSettingsModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}', '${screen.password || ''}', '${screen.screen_id}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, promotions_gender: '${screen.promotions_gender || '0'}', show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}, birthdays_gender: '${screen.birthdays_gender || '0'}'})" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
+                                            <button onclick="openSettingsModal('${school_id}', '${screen.url}', '${screen.screen_name}', '${screen.screen_size || ''}', '${screen.password || ''}', '${screen.screen_id}', {show_promotions: ${screen.show_promotions || 0}, promotions_days: ${screen.promotions_days || 7}, promotions_gender: '${screen.promotions_gender || '0'}', show_birthdays: ${screen.show_birthdays || 0}, birthdays_days: ${screen.birthdays_days || 7}, birthdays_gender: '${screen.birthdays_gender || '0'}', show_chidon: ${screen.show_chidon || 0}, show_chayolei: ${screen.show_chayolei || 0}})" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#screenModal">
                                                 <i class="fas fa-cog me-1"></i>Settings
                                             </button>
                                             <button onclick="openImagesModal('${screen.screen_id}', '${school_id}')" class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#imagesModal">
