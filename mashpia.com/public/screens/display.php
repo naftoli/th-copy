@@ -529,13 +529,7 @@ if ($school_id && $screen_slug) {
                 font-size: 0.7rem;
             }
             
-            .timestamp {
-                position: absolute;
-                bottom: 10px;
-                left: 10px;
-                font-size: 0.8rem;
-                opacity: 0.7;
-            }
+
             
             /* Responsive adjustments */
             @media (max-width: 1024px) {
@@ -588,7 +582,6 @@ if ($school_id && $screen_slug) {
     <body>
         <div class="screen-container">
             <div class="screen-size"><?php echo $screen_size; ?></div>
-            <div class="timestamp" id="timestamp"></div>
             
             <!-- Announcements Section -->
             <div class="announcements-section">
@@ -659,16 +652,6 @@ if ($school_id && $screen_slug) {
         </div>
         
         <script>
-            // Update timestamp
-            function updateTimestamp() {
-                const now = new Date();
-                const timestamp = now.toLocaleString();
-                document.getElementById('timestamp').textContent = timestamp;
-            }
-            
-            // Update timestamp every second
-            updateTimestamp();
-            setInterval(updateTimestamp, 1000);
             
             async function getPromotions(days) {
                 const promotionsList = document.getElementById('promotions-list');
