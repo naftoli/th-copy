@@ -324,9 +324,8 @@ if ($school_id && $screen_slug) {
             
             .promotions-container {
                 width: 100%;
-                max-width: 800px;
-                height: calc(100% - 40px);
-                max-height: calc(100% - 40px);
+                height: 100%;
+                max-height: 100%;
                 gap: 12px;
                 overflow: hidden;
                 box-sizing: border-box;
@@ -368,9 +367,8 @@ if ($school_id && $screen_slug) {
                 border: 1px solid rgba(255,255,255,0.2);
                 display: flex;
                 flex-direction: column;
-                height: auto;
-                max-height: 300px;
-                margin-bottom: 8px;
+                height: calc(100% - 12px);
+                max-height: calc(100% - 12px);
             }
             
             .date-header {
@@ -393,9 +391,9 @@ if ($school_id && $screen_slug) {
                 overflow-y: auto;
                 padding: 10px;
                 position: relative;
-                height: auto;
-                min-height: 50px;
-                max-height: 250px;
+                height: 100%;
+                max-height: 100%;
+                flex: 1;
             }
             
             .children-list-inner {
@@ -736,7 +734,6 @@ if ($school_id && $screen_slug) {
                             
                             const html = `
                                 <div class="date-section">
-                                    <div class="date-header">Promotions<hr></div>
                                     <div class="children-list">
                                         <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
                                             ${allChildItems}
@@ -817,7 +814,6 @@ if ($school_id && $screen_slug) {
                             
                             const html = `
                                 <div class="date-section">
-                                    <div class="date-header">Birthdays<hr></div>
                                     <div class="children-list">
                                         <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
                                             ${allChildItems}
@@ -868,7 +864,6 @@ if ($school_id && $screen_slug) {
                             
                             const html = `
                                 <div class="date-section">
-                                    <div class="date-header">Latest Shabbos Mevorchim<hr></div>
                                     <div class="children-list">
                                         <div class="children-list-inner ${scrollClass}" style="${animationStyle}">
                                             ${contentToShow}
