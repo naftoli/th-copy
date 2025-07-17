@@ -231,7 +231,7 @@ if ($school_id && $screen_slug) {
             /* Layout Structure */
             .announcements-section {
                 width: 100%;
-                height: 50px;
+                height: 60px;
                 background: rgba(255,255,255,0.08);
                 border-bottom: 1.5px solid rgba(255,255,255,0.13);
                 display: flex;
@@ -245,8 +245,8 @@ if ($school_id && $screen_slug) {
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-                height: calc(<?php echo $screen_height; ?>px - 50px);
-                max-height: calc(<?php echo $screen_height; ?>px - 50px);
+                height: calc(<?php echo $screen_height; ?>px - 60px);
+                max-height: calc(<?php echo $screen_height; ?>px - 60px);
                 box-sizing: border-box;
                 overflow: hidden;
             }
@@ -259,13 +259,13 @@ if ($school_id && $screen_slug) {
             }
             
             .content-row:first-child {
-                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.3);
-                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.3);
+                height: calc((<?php echo $screen_height; ?>px - 60px) * 0.3);
+                max-height: calc((<?php echo $screen_height; ?>px - 60px) * 0.3);
             }
             
             .content-row:last-child {
-                height: calc((<?php echo $screen_height; ?>px - 50px) * 0.7);
-                max-height: calc((<?php echo $screen_height; ?>px - 50px) * 0.7);
+                height: calc((<?php echo $screen_height; ?>px - 60px) * 0.7);
+                max-height: calc((<?php echo $screen_height; ?>px - 60px) * 0.7);
             }
 
             .content-section {
@@ -592,7 +592,7 @@ if ($school_id && $screen_slug) {
             
             <!-- Announcements Section -->
             <div class="announcements-section">
-                <h2 style="font-size:1rem;margin:0;"><i class="fas fa-bullhorn me-2"></i>Announcements</h2>
+                <h2 style="font-size:1.2rem;margin:0;line-height:1.2;max-height:48px;overflow:hidden;"><i class="fas fa-bullhorn me-2"></i>Announcements</h2>
             </div>
 
             <!-- Content Grid -->
