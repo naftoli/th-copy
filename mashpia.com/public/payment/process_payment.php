@@ -100,7 +100,7 @@ if ($charged) {
     // Email notification
     $mail_parms = [
         'to' => $email, 
-        'cc' => "cthshipping@gmail.com", // dovie
+        'bcc' => "cthshipping@gmail.com", // dovie
         'subject' => "Confirmation of Credit Card Transaction",
         'message' => "Thank you for your payment to Tzivos Hashem. Your credit card has been charged $" . $formattedAmount .
             ". Your authorization ID is: " . $response_array[4],
