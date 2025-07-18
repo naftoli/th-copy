@@ -226,10 +226,6 @@ $schools = $adminSchools->getSchools();
             font-weight: 600;
         }
 
-        .tab-content {
-            padding-top: 1.5rem;
-        }
-
         .tab-pane {
             animation: fadeIn 0.3s ease-in-out;
         }
@@ -384,12 +380,17 @@ $schools = $adminSchools->getSchools();
                             <ul class="nav nav-tabs mb-4" id="settingsTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="screen-settings-tab" data-bs-toggle="tab" data-bs-target="#screen-settings" type="button" role="tab" aria-controls="screen-settings" aria-selected="true">
-                                        <i class="fas fa-tv me-2"></i>Screen Settings
+                                        <i class="fas fa-tv me-2"></i>Screen
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link" id="content-settings-tab" data-bs-toggle="tab" data-bs-target="#content-settings" type="button" role="tab" aria-controls="content-settings" aria-selected="false">
-                                        <i class="fas fa-cog me-2"></i>Content Settings
+                                        <i class="fas fa-cog me-2"></i>Content
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="stats-settings-tab" data-bs-toggle="tab" data-bs-target="#stats-settings" type="button" role="tab" aria-controls="stats-settings" aria-selected="false">
+                                        <i class="fas fa-chart-line me-2"></i>Statistics
                                     </button>
                                 </li>
                             </ul>
@@ -585,6 +586,93 @@ $schools = $adminSchools->getSchools();
                                                     <input class="form-check-input" type="checkbox" id="showChayoleiAnnouncements" name="show_chayolei_announcements">
                                                     <label class="form-check-label" for="showChayoleiAnnouncements">
                                                         Show Chayolei Announcements from HQ
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Stats Settings Tab -->
+                                <div class="tab-pane fade" id="stats-settings" role="tabpanel" aria-labelledby="stats-settings-tab">
+                                    <div class="d-flex align-items-center mb-4">
+                                        <div class="flex-grow-1">
+                                            <p class="text-muted mb-0">Check off the statistics you want to show on this screen</p>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                    <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <!-- chayolei stats include:
+                                                    - total number of registered chayolim
+                                                    - total number of children getting hachayols
+                                                    - total number of children that went up in rank this year
+                                                    - total number of children that earned medals this year -->
+                                                <label class="form-label">Chayolei Statistics</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showChayoleiRegistered" name="show_chayolei_registered">
+                                                    <label class="form-check-label" for="showChayoleiRegistered">
+                                                        Total number of registered chayolim
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showHachayols" name="show_hachayols">
+                                                    <label class="form-check-label" for="showHachayols">
+                                                        Total number of children getting hachayols
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showRanks" name="show_ranks">
+                                                    <label class="form-check-label" for="showRanks">
+                                                        Total number of children that went up in rank this year
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showMedals" name="show_medals">
+                                                    <label class="form-check-label" for="showMedals">
+                                                        Total number of children that earned medals this year
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group mb-3">
+                                                <!-- chidon stats include:
+                                                    - total number of enrolled chayolim
+                                                    - total number of chayolim that passed test #1
+                                                    - total number of chayolim that passed test #2
+                                                    - total number of chayolim that passed test #3 
+                                                    - total number of chayolim that registered for the Chidon Experience-->
+                                                <label class="form-label">Chidon Statistics</label>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showChidonEnrolled" name="show_chidon_enrolled">
+                                                    <label class="form-check-label" for="showChidonEnrolled">
+                                                        Total number of enrolled chayolim
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showChidonTest1" name="show_chidon_test1">
+                                                    <label class="form-check-label" for="showChidonTest1">
+                                                        Total number of chayolim that passed test #1
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showChidonTest2" name="show_chidon_test2">
+                                                    <label class="form-check-label" for="showChidonTest2">
+                                                        Total number of chayolim that passed test #2
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showChidonTest3" name="show_chidon_test3">
+                                                    <label class="form-check-label" for="showChidonTest3">
+                                                        Total number of chayolim that passed test #3
+                                                    </label>
+                                                </div>
+                                                <div class="form-check mb-2">
+                                                    <input class="form-check-input" type="checkbox" id="showChidonExperience" name="show_chidon_experience">
+                                                    <label class="form-check-label" for="showChidonExperience">
+                                                        Total number of chayolim that registered for the Chidon Experience
                                                     </label>
                                                 </div>
                                             </div>

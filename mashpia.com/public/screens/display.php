@@ -304,6 +304,18 @@ if ($school_id && $screen_slug) {
                 color: #98fb98;
             }
             
+            .images-title {
+                color: #87ceeb;
+            }
+            
+            .chayolei-stats-title {
+                color: #ffa500;
+            }
+            
+            .chidon-stats-title {
+                color: #da70d6;
+            }
+            
 
             
 
@@ -587,8 +599,8 @@ if ($school_id && $screen_slug) {
                 <!-- Row 2: Images, Future Content 1, Future Content 2 -->
                 <div class="content-row">
                     <div class="content-section">
-                        <h2><i class="fas fa-images me-2"></i>Screen Images</h2>
-                        <div class="images-container">
+                         <h2 class="images-title"><i class="fas fa-images me-2"></i>Screen Images</h2>
+                         <div class="images-container">
                             <?php if (isset($images_to_show) && count($images_to_show)): ?>
                                 <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;align-items:center;">
                                     <?php foreach ($images_to_show as $img): ?>
@@ -604,14 +616,14 @@ if ($school_id && $screen_slug) {
                     </div>
                     
                     <div class="content-section">
-                        <h2><i class="fas fa-plus me-2"></i>Future Content</h2>
-                        <div class="no-content">Coming soon...</div>
-                    </div>
-                    
-                    <div class="content-section">
-                        <h2><i class="fas fa-plus me-2"></i>Future Content</h2>
-                        <div class="no-content">Coming soon...</div>
-                    </div>
+                         <h2 class="chayolei-stats-title"><i class="fas fa-medal me-2"></i>Chayolei Stats</h2>
+                         <div class="no-content">Coming soon...</div>
+                     </div>
+                     
+                     <div class="content-section">
+                         <h2 class="chidon-stats-title"><i class="fas fa-trophy me-2"></i>Chidon Stats</h2>
+                         <div class="no-content">Coming soon...</div>
+                     </div>
                 </div>
             </div>
         </div>
