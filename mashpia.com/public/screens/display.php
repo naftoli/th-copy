@@ -551,8 +551,11 @@ if ($school_id && $screen_slug) {
             <div class="screen-size"><?php echo $screen_size; ?></div>
             
             <!-- Announcements Section -->
-            <div class="announcements-section">
-                <h2 style="font-size:1.2rem;margin:0;line-height:1.2;max-height:48px;overflow:hidden;"><i class="fas fa-bullhorn me-2"></i>Announcements</h2>
+            <div class="announcements-section" id="announcements-container">
+                <div class="loading">
+                    <div class="spinner"></div>
+                    Loading announcements...
+                </div>
             </div>
 
             <!-- Content Grid -->
@@ -851,8 +854,58 @@ if ($school_id && $screen_slug) {
                     });
             }
             
+            function getAnnouncements() {
+                const announcementsContainer = document.getElementById('announcements-container');
+                
+                // Only load announcements if either chidon or chayolei is enabled
+                <?php if ($screen['show_chidon'] || $screen['show_chayolei']): ?>
+                    fetch(`/screens/ajax/getScreenAnnouncements.php?show_chidon=<?php echo $screen['show_chidon']; ?>&show_chayolei=<?php echo $screen['show_chayolei']; ?>`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to fetch announcements: ' + response.status);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data && data.success && data.data && data.data.length > 0) {
+                                let announcementsHtml = '';
+                                data.data.forEach(announcement => {
+                                    let announcementContent = '';
+                                    
+                                    // Add text if present
+                                    if (announcement.text) {
+                                        const fontSize = announcement.text_size || 18;
+                                        announcementContent += `<div style="font-size: ${fontSize}px; margin-bottom: 10px;">${announcement.text}</div>`;
+                                    }
+                                    
+                                    // Add image if present
+                                    if (announcement.image) {
+                                        const imageSize = announcement.image_size || 100;
+                                        announcementContent += `<img src="${announcement.image}" style="max-height: ${imageSize}px; max-width: 100%; object-fit: contain; margin: 5px 0;" alt="Announcement">`;
+                                    }
+                                    
+                                    if (announcementContent) {
+                                        announcementsHtml += `<div style="margin: 10px 0; padding: 10px; background: rgba(255,255,255,0.1); border-radius: 8px;">${announcementContent}</div>`;
+                                    }
+                                });
+                                
+                                announcementsContainer.innerHTML = announcementsHtml;
+                            } else {
+                                announcementsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.7);">No announcements at this time</div>';
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error fetching announcements:', error);
+                            announcementsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.7);">Unable to load announcements</div>';
+                        });
+                <?php else: ?>
+                    announcementsContainer.innerHTML = '<div style="text-align: center; padding: 20px; color: rgba(255,255,255,0.7);">Announcements disabled</div>';
+                <?php endif; ?>
+            }
+            
             // Auto-refresh content every 5 minutes
             function refreshContent() {
+                getAnnouncements();
                 <?php if ($screen['show_promotions']): ?>
                     getPromotions(<?php echo $screen['promotions_days']; ?>);
                 <?php else: ?>

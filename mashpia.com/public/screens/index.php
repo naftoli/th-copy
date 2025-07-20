@@ -372,6 +372,50 @@ $schools = $adminSchools->getSchools();
                             </div>
                         </div>
                         
+                        <!-- Basic Screen Information (Always Visible) -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalScreenName" class="form-label">Screen Name</label>
+                                    <input type="text" id="modalScreenName" name="screen_name" class="form-control" required 
+                                           placeholder="e.g., Main Lobby, Cafeteria, Library">
+                                    <div class="invalid-feedback">Please enter a screen name.</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalScreenSize" class="form-label">Screen Size</label>
+                                    <select name="screen_size" id="modalScreenSize" class="form-select" required>
+                                        <option value="">Select screen size...</option>
+                                        <option value="1920x1080">1920x1080</option>
+                                        <option value="1366x768">1366x768</option>
+                                        <option value="1280x720">1280x720</option>
+                                        <option value="1024x768">1024x768</option>
+                                        <option value="800x600">800x600</option>
+                                    </select>
+                                    <div class="invalid-feedback">Please select a screen size.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalUrl" class="form-label">URL</label>
+                                    <input type="text" id="modalUrl" name="url" class="form-control" placeholder="Auto-generated from screen name">
+                                    <small class="form-text text-muted">Leave empty to auto-generate from screen name</small>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group mb-3">
+                                    <label for="modalPassword" class="form-label">Display PIN</label>
+                                    <input type="number" id="modalPassword" name="password" class="form-control" required>
+                                    <div class="invalid-feedback">Please enter a PIN.</div>
+                                    <small class="form-text text-muted">PIN required to protect screen access</small>
+                                </div>
+                            </div>
+                        </div>
+                        
                         <!-- Settings Section -->
                         <div id="settingsSection" style="display: none;">
                             <hr class="my-4">
@@ -401,51 +445,13 @@ $schools = $adminSchools->getSchools();
                                 <div class="tab-pane fade show active" id="screen-settings" role="tabpanel" aria-labelledby="screen-settings-tab">
                                     <div class="d-flex align-items-center mb-4">
                                         <div class="flex-grow-1">
-                                            <p class="text-muted mb-0">Configure basic screen settings</p>
+                                            <p class="text-muted mb-0">Configure additional screen settings</p>
                                         </div>
                                     </div>
                                     
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="modalScreenName" class="form-label">Screen Name</label>
-                                                <input type="text" id="modalScreenName" name="screen_name" class="form-control" required 
-                                                       placeholder="e.g., Main Lobby, Cafeteria, Library">
-                                                <div class="invalid-feedback">Please enter a screen name.</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="modalScreenSize" class="form-label">Screen Size</label>
-                                                <select name="screen_size" id="modalScreenSize" class="form-select" required>
-                                                    <option value="">Select screen size...</option>
-                                                    <option value="1920x1080">1920x1080</option>
-                                                    <option value="1366x768">1366x768</option>
-                                                    <option value="1280x720">1280x720</option>
-                                                    <option value="1024x768">1024x768</option>
-                                                    <option value="800x600">800x600</option>
-                                                </select>
-                                                <div class="invalid-feedback">Please select a screen size.</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="modalUrl" class="form-label">URL</label>
-                                                <input type="text" id="modalUrl" name="url" class="form-control" placeholder="Auto-generated from screen name">
-                                                <small class="form-text text-muted">Leave empty to auto-generate from screen name</small>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group mb-3">
-                                                <label for="modalPassword" class="form-label">Display PIN</label>
-                                                <input type="number" id="modalPassword" name="password" class="form-control" required>
-                                                <div class="invalid-feedback">Please enter a PIN.</div>
-                                                <small class="form-text text-muted">PIN required to protect screen access</small>
-                                            </div>
-                                        </div>
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle me-2"></i>
+                                        Basic screen information is configured above. Use these tabs to set up content preferences and advanced settings.
                                     </div>
                                 </div>
                                 
@@ -577,13 +583,13 @@ $schools = $adminSchools->getSchools();
                                             <div class="form-group mb-3">
                                                 <label class="form-label">Announcements</label>
                                                 <div class="form-check mb-2">
-                                                    <input class="form-check-input" type="checkbox" id="showChidonAnnouncements" name="show_chidon_announcements">
+                                                    <input class="form-check-input" type="checkbox" id="showChidonAnnouncements" name="show_chidon_announcements" checked>
                                                     <label class="form-check-label" for="showChidonAnnouncements">
                                                         Show Chidon Announcements from HQ
                                                     </label>
                                                 </div>
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="showChayoleiAnnouncements" name="show_chayolei_announcements">
+                                                    <input class="form-check-input" type="checkbox" id="showChayoleiAnnouncements" name="show_chayolei_announcements" checked>
                                                     <label class="form-check-label" for="showChayoleiAnnouncements">
                                                         Show Chayolei Announcements from HQ
                                                     </label>
