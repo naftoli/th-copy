@@ -19,8 +19,6 @@ $cs = new ChayoleiShipping();
 $cs->setYear($data['year']);
 
 $items_chosen = $data['items'];
-$medals_dates = $data['medals_dates'];
-$ranks_dates = $data['ranks_dates'];
 $gender = $data['gender'];
 $schools = $data['schools'];
 
@@ -29,7 +27,7 @@ foreach ($schools as $schoolID) {
     foreach ($items_chosen as $cat => $itemsPerCat) {
         $listOfItems = array_keys($itemsPerCat);
         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        $info[$cat] += $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
+        $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
     }
 }
 
