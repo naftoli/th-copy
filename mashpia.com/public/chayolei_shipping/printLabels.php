@@ -4,6 +4,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 $data = json_decode($_COOKIE['for_labels'], true);
+$_POST = $data;
 //echo "<pre>"; print_r($data); echo "</pre>";
 
 if (empty($data)) {
@@ -26,19 +27,9 @@ $schools = $data['schools'];
 $info = [];
 foreach ($schools as $schoolID) {
     foreach ($items_chosen as $cat => $itemsPerCat) {
-        if ($cat == 'medals') {
-            $info[$cat] = $cs->getMedals($gender, $schoolID, $itemsPerCat, $medals_dates);
-        } else if ($cat == 'ranks') {
-            $info[$cat] = [];
-            $ranks_dates = explode(':', $ranks_dates);
-            foreach ($itemsPerCat as $item) {
-                if ($item == 'rank medals') {
-                    $info[$cat] += $cs->getRankMedals($gender, $schoolID, $ranks_dates);
-                } else if ($item == 'rank books') {
-                    $info[$cat] += $cs->getRankBooks($gender, $schoolID, $ranks_dates);
-                }
-            }
-        } 
+        $listOfItems = array_keys($itemsPerCat);
+        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+        $info[$cat] += $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
     }
 }
 
