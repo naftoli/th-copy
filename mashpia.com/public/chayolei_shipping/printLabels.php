@@ -27,7 +27,7 @@ $info = [];
 foreach ($schools as $schoolID) {
     foreach ($items_chosen as $cat => $itemsPerCat) {
         if ($cat == 'medals') {
-            $info[$cat] = $cs->getMedals($gender, $schoolID, $medals_dates);
+            $info[$cat] = $cs->getMedals($gender, $schoolID, $itemsPerCat, $medals_dates);
         } else if ($cat == 'ranks') {
             $info[$cat] = [];
             foreach ($itemsPerCat as $item) {

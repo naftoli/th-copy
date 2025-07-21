@@ -208,7 +208,7 @@ class ChayoleiShipping
         return $purchases;
     }
 
-    public function getMedals($gender, $school, $dates = '') {
+    public function getMedals($gender, $school, $items, $dates = '') {
         $medals = [];
         $medal_ids = $this->getMedalIDs();
         $subject_names = $this->getSubjectNames();
