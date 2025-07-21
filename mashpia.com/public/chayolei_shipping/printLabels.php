@@ -21,7 +21,7 @@ $items_chosen = $data['items'];
 $medals_dates = $data['medals_dates'];
 $ranks_dates = $data['ranks_dates'];
 $gender = $data['gender'];
-$schools = $data['school'];
+$schools = $data['schools'];
 
 $info = [];
 foreach ($schools as $schoolID) {
@@ -40,6 +40,8 @@ foreach ($schools as $schoolID) {
         } 
     }
 }
-$info['status'] = $cs->getStatus();
+if (!empty($info)) {
+    $info['status'] = $cs->getStatus();
+}
 
 echo "<pre>"; print_r($info); echo "</pre>";
