@@ -238,7 +238,7 @@ class RankReport extends Report {
         $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
         $sql = "
             SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, 
-                   u.*, rm.*, MAX(rm.rank_ord) as rank 
+                   u.*, rm.*, MAX(rm.rank_ord) as `rank` 
             FROM rank_marks rm
             JOIN users u USING ( user_id )
             JOIN schools s USING ( school_id )
@@ -260,6 +260,7 @@ class RankReport extends Report {
         }
         $sql .= "GROUP BY u.user_id ";
         $sql .= "ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first";
+        // echo $sql; exit;
 
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {

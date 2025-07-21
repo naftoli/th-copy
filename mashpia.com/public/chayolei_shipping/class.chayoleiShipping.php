@@ -208,17 +208,17 @@ class ChayoleiShipping
         return $purchases;
     }
 
-    public function getMedals($gender, $school, $items, $dates = '') {
+    public function getMedals(string $gender, int $school, array $items, string $date_limit = '') {
         $medals = [];
         $medal_ids = $this->getMedalIDs();
         $subject_names = $this->getSubjectNames();
         $medal_names = $this->getMedalNames();
         $m = new MedalReport;
-        if (!empty($dates)) {
-            $dates = explode(':', $dates);
+        if (!empty($date_limit)) {
+            $dates = explode(':', $date_limit);
         } else {
             $dates = explode(':', $_POST['medals_dates']);
-        }
+        } 
         $m->overrideDates($dates[0], $dates[1]);
         //set up medals array
         $m->setSchoolId($school);
@@ -277,7 +277,7 @@ class ChayoleiShipping
         return $medal_names;
     }
 
-    public function getRanks($gender, $school, $items) {
+    public function getRanks(string $gender, int $school, array $items) {
         $medals = [];
         $books = [];
         $dates = explode(':', $_POST['ranks_dates']);
@@ -291,7 +291,7 @@ class ChayoleiShipping
         return $ranks;
     }
 
-    public function getRankMedals($gender, $school, $dates) {
+    public function getRankMedals(string $gender, int $school, array $dates) {
         $ranks = [];
         $rank_info = $this->getRankInfo();
         $rr = new RankReport;
@@ -341,7 +341,7 @@ class ChayoleiShipping
         return $rank_medals_shipped;
     }
 
-    public function getRankBooks($gender, $school, $dates) {
+    public function getRankBooks(string $gender, int $school, array $dates) {
         $ranks = [];
         $rr = new RankReport;
         $rr->overrideDates($dates[0], $dates[1]);
