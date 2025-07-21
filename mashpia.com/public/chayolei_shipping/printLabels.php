@@ -42,11 +42,9 @@ if ($getStatus) {
     $info['status'] = $cs->getStatus();
 }
 
-echo "<pre>"; print_r($info); echo "</pre>";
-exit;
-
 $labels = [];
 foreach ($info as $cat => $more) {
+    if ($cat == 'status') continue;
     foreach ($more as $user_id => $items) {
         foreach ($items as $idx => $item) {
             // find out how many of the same item we have
