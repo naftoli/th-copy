@@ -30,6 +30,7 @@ foreach ($schools as $schoolID) {
             $info[$cat] = $cs->getMedals($gender, $schoolID, $itemsPerCat, $medals_dates);
         } else if ($cat == 'ranks') {
             $info[$cat] = [];
+            $ranks_dates = explode(':', $ranks_dates);
             foreach ($itemsPerCat as $item) {
                 if ($item == 'rank medals') {
                     $info[$cat] += $cs->getRankMedals($gender, $schoolID, $ranks_dates);
@@ -40,8 +41,6 @@ foreach ($schools as $schoolID) {
         } 
     }
 }
-if (!empty($info)) {
-    $info['status'] = $cs->getStatus();
-}
+
 
 echo "<pre>"; print_r($info); echo "</pre>";

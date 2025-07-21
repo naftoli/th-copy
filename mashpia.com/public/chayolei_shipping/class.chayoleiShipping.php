@@ -291,7 +291,7 @@ class ChayoleiShipping
         return $ranks;
     }
 
-    private function getRankMedals($gender, $school, $dates) {
+    public function getRankMedals($gender, $school, $dates) {
         $ranks = [];
         $rank_info = $this->getRankInfo();
         $rr = new RankReport;
@@ -341,7 +341,7 @@ class ChayoleiShipping
         return $rank_medals_shipped;
     }
 
-    private function getRankBooks($gender, $school, $dates) {
+    public function getRankBooks($gender, $school, $dates) {
         $ranks = [];
         $rr = new RankReport;
         $rr->overrideDates($dates[0], $dates[1]);
