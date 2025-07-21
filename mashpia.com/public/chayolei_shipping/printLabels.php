@@ -41,4 +41,35 @@ foreach ($info as $cat => $items) {
 if ($getStatus) {
     $info['status'] = $cs->getStatus();
 }
-echo "<pre>"; print_r($info); echo "</pre>";
+
+$labels = [];
+foreach ($info as $cat => $more) {
+    foreach ($more as $user_id => $items) {
+        foreach ($items as $idx => $item) {
+            // find out how many of the same item we have
+            if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
+            else $item_num = 0;
+            // get status and whether to show this item
+            $show_item = false;
+            $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item_num] : [];
+            if (empty($limit_to_status)) $show_item = true;
+            else {
+                foreach ($limit_to_status as $idx) {
+                    if ($idx == 0 && (empty($status) || $status['status'] == 0)) {
+                        $show_item = true;
+                        break;
+                    }
+                    else if (!empty($status) && $status['status'] == $idx) {
+                        $show_item = true;
+                        break;
+                    }
+                }
+            }
+            if ($show_item) {
+                $labels[$user_id][] = $item['item'];
+            }
+        }
+    }
+}
+
+echo "<pre>"; print_r($labels); echo "</pre>";
