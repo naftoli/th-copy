@@ -42,6 +42,9 @@ if ($getStatus) {
     $info['status'] = $cs->getStatus();
 }
 
+echo "<pre>"; print_r($info); echo "</pre>";
+exit;
+
 $labels = [];
 foreach ($info as $cat => $more) {
     foreach ($more as $user_id => $items) {
