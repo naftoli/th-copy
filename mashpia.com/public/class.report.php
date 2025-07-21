@@ -91,6 +91,18 @@ class Report extends ReportBasic {
             if ( $start == $reportDates['start'] )
                 $str .= " selected='selected'";
             $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
+            if ($id != 'date_selection') {
+                $start = $end + 1;
+                $end = unixtojd();
+                $str1 = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
+                $start_he = iconv('WINDOWS-1255', 'UTF-8', $str1);
+                $str2 = jdtojewish($end, true, CAL_JEWISH_ADD_GERESHAYIM);
+                $end_he = iconv('WINDOWS-1255', 'UTF-8', $str2);
+                $str .= "<option value='" . ($start . ':' . $end) . "'";
+                if ( $start == $reportDates['start'] )
+                    $str .= " selected='selected'";
+                $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
+            }
         }
         $str .= "</select>";
         return $str;

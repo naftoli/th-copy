@@ -208,14 +208,17 @@ class ChayoleiShipping
         return $purchases;
     }
 
-    public function getMedals($gender, $school) {
+    public function getMedals($gender, $school, $dates = '') {
         $medals = [];
         $medal_ids = $this->getMedalIDs();
         $subject_names = $this->getSubjectNames();
         $medal_names = $this->getMedalNames();
         $m = new MedalReport;
-        // get dates from $_POST['medals_dates']
-        $dates = explode(':', $_POST['medals_dates']);
+        if (!empty($dates)) {
+            $dates = explode(':', $dates);
+        } else {
+            $dates = explode(':', $_POST['medals_dates']);
+        }
         $m->overrideDates($dates[0], $dates[1]);
         //set up medals array
         $m->setSchoolId($school);

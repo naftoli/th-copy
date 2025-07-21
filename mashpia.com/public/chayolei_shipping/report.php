@@ -25,6 +25,16 @@ $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 
+// build data for printLabels.php
+$for_labels = [];
+$for_labels['items'] = $items_chosen;
+$for_labels['medals_dates'] = $_POST['medals_dates'];
+$for_labels['ranks_dates'] = $_POST['ranks_dates'];
+$for_labels['gender'] = $_POST['gender'];
+$for_labels['year'] = $year;
+$for_labels['schools'] = $_POST['school'];
+$for_labels['limit_to_status'] = $limit_to_status;
+
 $cs = new ChayoleiShipping();
 $cs->setYear($year);
 
@@ -329,7 +339,10 @@ foreach ($item_details_chosen as $field) {
     echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
 }
 echo "</select><br /><br />";
-if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+if ($super) {
+  echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br />";
+  echo "<button class='allLabels no-print' style='margin-top: 10px;'>Print All as Labels</button><br /><br />";
+}
 foreach ($resultsBySchool as $school => $more) :
   if (in_array($_POST['report_type'], ['all', 'summary']) && empty($summary[$school])) continue;
   ?>
@@ -482,7 +495,9 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 <script>
+
   // summary tables don't need to be ordered
   const summary = $(".table.summary").DataTable({
     paging: false
@@ -585,6 +600,14 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const action = parseInt($(elem).val())
     update(elem, action, val)
     save(false)
+  })
+
+  $(".allLabels").click(function (e) {
+    e.preventDefault()
+    const data = '<?= json_encode($for_labels) ?>'
+    Cookies.set('for_labels', data)
+    const url = `printLabels.php`
+    window.open(url, '_blank')
   })
 </script>
 </html>

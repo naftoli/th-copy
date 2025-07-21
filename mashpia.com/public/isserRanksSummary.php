@@ -55,9 +55,11 @@ $for_shipping = [];
         }
       }
 
-      th, td {
-        padding: 3px 10px;
-        vertical-align: top;
+      tr, th, td {
+        font-family: "Arial", sans-serif;
+        padding: 10px;
+        font-size: 14px;
+        border-bottom: 1px #f0f0f0 solid;
       }
 
       .page-break {
