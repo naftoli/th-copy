@@ -42,5 +42,14 @@ foreach ($schools as $schoolID) {
     }
 }
 
-
+$getStatus = false;
+foreach ($info as $cat => $items) {
+    if (!empty($items)) {
+        $getStatus = true;
+        break;
+    }
+}
+if ($getStatus) {
+    $info['status'] = $cs->getStatus();
+}
 echo "<pre>"; print_r($info); echo "</pre>";
