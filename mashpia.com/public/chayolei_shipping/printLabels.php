@@ -51,7 +51,7 @@ foreach ($info as $cat => $more) {
             else $item_num = 0;
             // get status and whether to show this item
             $show_item = false;
-            $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item_num] : [];
+            $status = isset($info['status'][$user_id][$item['id']][$item_num]) ? $info['status'][$user_id][$item['id']][$item_num] : [];
             if (empty($limit_to_status)) $show_item = true;
             else {
                 foreach ($limit_to_status as $idx) {
