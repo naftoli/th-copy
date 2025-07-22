@@ -82,8 +82,8 @@
                     }
                 }
                 if ($show_item) {
-                    $labels[$user_id][] = $item['item'] . 
-                        (isset($item['color']) && $item['color'] ? ' - ' . $item['color'] : '');
+                    $label = (isset($item['color']) && !empty($item['color']) ? $item['color'] . ' ' : '') . $item['item'];
+                    $labels[$user_id][] = $label;
                 }
             }
         }
@@ -224,7 +224,7 @@
     <div id="report_div" name="report_div">
     <div class='topSpace'></div>
         <?php
-        $totalNumMedals = 0;
+        $totalnumItems = 0;
         $i = 1; //counter for columns
         $rows = 1; //counter for rows
         $tempSchool = '';
@@ -254,7 +254,7 @@
                 }
                 $tempGrade = $grade;
                 foreach ($names as $name => $items) {
-                    $numMedals = 1;
+                    $numItems = 1;
                     if ($schoolChanged || $gradeChanged) {
                         if ($schoolChanged) {
                             if (!$firstTime) {
@@ -276,31 +276,31 @@
                         echo "<div class='label'>";
                         echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ")</span><br />";
                         foreach ($items as $item) {
-                            if ($numMedals > 8) {
+                            if ($numItems > 8) {
                                 echo "</div>";
                                 checkForBreak();
                                 echo "<div class='label'>";
                                 echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ") <strong>#2</strong></span><br />";
-                                $numMedals = 1;
+                                $numItems = 1;
                             }
                             echo "<span class='medal'>" . $item . "</span>";
-                            $numMedals++;
-                            $totalNumMedals++;
+                            $numItems++;
+                            $totalnumItems++;
                         }
                     } else {
                         echo "<div class='label'>";
                         echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ")</span><br />";
                         foreach ($items as $item) {
-                            if ($numMedals > 8) {
+                            if ($numItems > 8) {
                                 echo "</div>";
                                 checkForBreak();
                                 echo "<div class='label'>";
                                 echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ") <strong>#2</strong></span><br />";
-                                $numMedals = 1;
+                                $numItems = 1;
                             }
                             echo "<span class='medal'>" . $item . "</span>";
-                            $numMedals++;
-                            $totalNumMedals++;
+                            $numItems++;
+                            $totalnumItems++;
                         }
                     }
                     echo "</div>";

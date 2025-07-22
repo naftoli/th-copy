@@ -55,9 +55,7 @@ class MedalReport extends Report {
                 $filter ";
             if ( $this->school_id > 0 )
                 $sql .= " AND u.school_id = $this->school_id ";
-            $sql .= "
-                AND u.school_id not in (" . implode(',', $this->schoolExceptions) . ")
-            ";
+            if (! $forShipping ) $sql .= " AND u.school_id not in (" . implode(',', $this->schoolExceptions) . ") ";
             if ( $forShipping ) {
                 $sql .= "
                     AND mm.date_shipped IS NULL

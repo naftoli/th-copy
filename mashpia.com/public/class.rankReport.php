@@ -71,9 +71,11 @@ class RankReport extends Report {
         if (!is_null($this->school_id)) {
             $sql .= "AND s.school_id = $this->school_id ";
         }
-        $sql .= "
-            AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
-        ";
+        if (! $forShipping ) {
+            $sql .= "
+                AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+            ";
+        }
         if ( $rankOrd ) {
             $sql .= "AND rm.rank_ord = " . $rankOrd . " ";
         }
@@ -274,7 +276,7 @@ class RankReport extends Report {
         }
     }
 
-    public function getBooksToSend($gender = '', $forShipping = false) {
+    public function getBooksToSend(string $gender = '', bool $forShipping = false) {
         $this->setHighestRanks($gender);
         $this->books = [];
         $this->rank_books_for_shipping = [];

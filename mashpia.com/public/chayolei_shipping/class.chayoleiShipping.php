@@ -297,7 +297,7 @@ class ChayoleiShipping
         $rr = new RankReport;
         $rr->overrideDates($dates[0], $dates[1]);
         $rr->setSchoolId($school);
-        $rr->setRanks('byUser', 0, ' ', $gender);
+        $rr->setRanks('byUser', 0, ' ', $gender, true);
         $rank_medals_for_shipping = $rr->getRankMedalsForShipping();
         if (empty($rank_medals_for_shipping)) return $ranks;
         $rank_medals_shipped = $this->getRankMedalsShipped();
