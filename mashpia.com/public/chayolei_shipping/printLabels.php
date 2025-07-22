@@ -123,6 +123,7 @@ foreach ($rows as $row) {
 $all_info = [];
 foreach ($labels as $user_id => $items) {
     
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
