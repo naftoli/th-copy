@@ -1,33 +1,58 @@
-<?
+<?php 
+require_once '/api/header/db.php';
+require_once '/class.globalSettings.php';
 class MyShliachHachayol {
+	private $year;
 	private $admins;
 	private $children;
 	private $sortedAdmins;
 	
 	public function __construct( $noShip = false, $id = 61 ) {
 		$this->setInfo( $noShip, $id );
-	}	
+		$this->year = GlobalSettings::getRegistrationYear();
+	}
 	
 	private function setInfo( $noShip, $id ) {
-		$sql = "SELECT a.*, a.first as afirst, a.last as alast, u.*  
-                from admins a 
-				join admin_auths aa using (admin_id) 
-				join users u on aa.id = u.user_id 
-				where aa.auth = 'user' 
-				and u.school_id = $id  
-				and u.user_registered > 0 ";
-		if ($noShip) {
-			$sql .= "and no_shipping = 0 ";
-		}
-		$result = mysql_query($sql);
-		while ($row = mysql_fetch_assoc($result)) {
-			$info[] = $row;
-		} 
+		global $MASHPIA_DB;
+		$sql = "SELECT 
+					a.*, a.first AS afirst, a.last AS alast, u.*
+				FROM
+					admins a
+						JOIN
+					admin_auths aa USING (admin_id)
+						JOIN
+					users u ON aa.id = u.user_id
+						JOIN
+					user_registration ur USING (user_id)
+						JOIN
+					hachayols_to_give htg ON htg.user_id = u.user_id
+						AND htg.year = ur.year
+				WHERE
+					aa.auth = 'user' AND u.school_id = :school  
+						AND u.user_registered > 0 
+						AND ur.year = :year";
+		$result = $MASHPIA_DB->prepare($sql);
+		$result->execute([
+			'school' => $id,
+			'year' => $this->year
+		]);
+		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 		
-		foreach ($info as $row) {
+		foreach ($rows as $row) {
+			$type = $id == 61 ? 'THMS%' : 'THAK%';
+			if ($noShip && $this->paidForShipping($row['admin_id'], $type)) continue;
 			$this->admins[$row['admin_id']] = $row;
 			$this->children[$row['admin_id']][] = $row['first'] . ' ' . $row['last'];
 		}
+	}
+
+	private function paidForShipping($admin_id, $type) {
+		global $MASHPIA_DB;
+		$sql = "SELECT * FROM registration_charges WHERE type like :type and admin_id = :admin_id and year = :year";
+		$result = $MASHPIA_DB->prepare($sql);
+		$result->execute(['admin_id' => $admin_id, 'year' => $this->year, 'type' => $type]);
+		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+		return count($rows) > 0;
 	}
 	
 	public function getAdmins() {
