@@ -1,6 +1,7 @@
 <?php 
-require_once '/api/header/db.php';
-require_once '/class.globalSettings.php';
+require_once 'api/header/db.php';
+require_once 'class.globalSettings.php';
+
 class MyShliachHachayol {
 	private $year;
 	private $admins;
@@ -8,39 +9,48 @@ class MyShliachHachayol {
 	private $sortedAdmins;
 	
 	public function __construct( $noShip = false, $id = 61 ) {
-		$this->setInfo( $noShip, $id );
 		$this->year = GlobalSettings::getRegistrationYear();
+		$this->setInfo( $noShip, $id );
+	}
+
+	public function getSql($gender = '') {
+		$sql = "
+			SELECT 
+				a.*, a.first AS afirst, a.last AS alast, u.*
+			FROM
+				admins a
+					JOIN
+				admin_auths aa USING (admin_id)
+					JOIN
+				users u ON aa.id = u.user_id
+					JOIN
+				user_registration ur USING (user_id)
+					JOIN
+				hachayols_to_give htg ON htg.user_id = u.user_id
+					AND htg.year = ur.year
+			WHERE
+				aa.auth = 'user' AND u.school_id = :school  
+					AND u.user_registered > 0 
+					AND ur.year = :year";
+		if ($gender == 'M' || $gender == 'F') {
+			$sql .= " AND u.gender = :gender";
+		}
+		return $sql;
 	}
 	
 	private function setInfo( $noShip, $id ) {
 		global $MASHPIA_DB;
-		$sql = "SELECT 
-					a.*, a.first AS afirst, a.last AS alast, u.*
-				FROM
-					admins a
-						JOIN
-					admin_auths aa USING (admin_id)
-						JOIN
-					users u ON aa.id = u.user_id
-						JOIN
-					user_registration ur USING (user_id)
-						JOIN
-					hachayols_to_give htg ON htg.user_id = u.user_id
-						AND htg.year = ur.year
-				WHERE
-					aa.auth = 'user' AND u.school_id = :school  
-						AND u.user_registered > 0 
-						AND ur.year = :year";
+		$sql = $this->getSql();
 		$result = $MASHPIA_DB->prepare($sql);
 		$result->execute([
 			'school' => $id,
 			'year' => $this->year
 		]);
-		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
-		
+		// $result->debugDumpParams();
+ 		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 		foreach ($rows as $row) {
 			$type = $id == 61 ? 'THMS%' : 'THAK%';
-			if ($noShip && $this->paidForShipping($row['admin_id'], $type)) continue;
+			// if ($noShip && $this->paidForShipping($row['admin_id'], $type)) continue;
 			$this->admins[$row['admin_id']] = $row;
 			$this->children[$row['admin_id']][] = $row['first'] . ' ' . $row['last'];
 		}

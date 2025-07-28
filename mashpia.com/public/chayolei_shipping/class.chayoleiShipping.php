@@ -6,6 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.myShliachHachayol.php';
 
 /**
  * Class ChayoleiShipping
@@ -55,11 +56,12 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['medals', 'ranks', 'name plates','chanuka', 'hei teves'];
+        $categories = ['hachayols', 'medals', 'ranks', 'name plates','chanuka', 'hei teves'];
         return $categories;
     }
 
     public function getItems() {
+        $items['hachayols'] = ['Hachayols'];
         $items['name plates'] = ['Name Plates'];
         $items['medals'] = ['Medals'];
         $items['ranks'] = ['Rank Medals', 'Rank Books'];
@@ -78,6 +80,33 @@ class ChayoleiShipping
             $info[$row['user_id']][$row['item_id']][$row['item_num']] = $row;
         }
         return $info;
+    }
+
+    public function getHachayols($gender, $school, $items) {
+        $hachayols = [];
+        $h = new MyShliachHachayol(true, $school);
+        $sql = $h->getSql($gender);
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'school' => $school,
+            'year' => $this->year, 
+            'gender' => $gender
+        ]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $type = $school == 61 ? 'THMS%' : 'THAK%';
+			// if ($h->paidForShipping($row['admin_id'], $type)) continue;
+            $hachayols[$row['user_id']][] = [
+                'item'  => 'Hachayol',
+                'size'  => '',
+                'name'  => '',
+                'id'    => 'HACH01',
+                'cat'   => 'hachayols',
+                'size'  => '',
+                'qty'   => 1
+            ];
+        }
+        return $hachayols;
     }
 
     private function getYomTovItems($yom_tov) {
