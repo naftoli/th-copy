@@ -292,7 +292,7 @@ ksort($grand_summary);
       font-size: 14px;
     }
 
-    button.saveAll {
+    button.saveAll, button.medalsRanksLabels, button.hachayolsLabels {
       padding: 10px;
       font-size: 16px;
     }
@@ -341,7 +341,13 @@ foreach ($item_details_chosen as $field) {
 echo "</select><br /><br />";
 if ($super) {
   echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br />";
-  echo "<button class='allLabels no-print' style='margin-top: 10px;'>Print All as Labels</button><br /><br />";
+  if ((in_array('medals', $cats) || in_array('ranks', $cats))) {
+    echo "<button class='medalsRanksLabels no-print' style='margin-top: 10px;'>Save & Print All Medals / Ranks as Labels</button><br />";
+  }
+  if (in_array('hachayols', $cats)) {
+    echo "<button class='hachayolsLabels no-print' style='margin-top: 10px;'>Save & Print All Hachayols as Labels</button><br />";
+  }
+  echo "<br />";
 }
 foreach ($resultsBySchool as $school => $more) :
   if (in_array($_POST['report_type'], ['all', 'summary']) && empty($summary[$school])) continue;
@@ -352,7 +358,10 @@ foreach ($resultsBySchool as $school => $more) :
       echo "<h3>" . $schools[$school] . "</h3>";
       if ($super) echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as Shipped</button>";
       if ($super && (in_array('medals', $cats) || in_array('ranks', $cats))) {
-          echo "<br /><button class='schoolPrinted no-print' style='margin-top: 10px;' data-school='" . $school . "'>Save " . $schools[$school] . " as Printed</button>";
+          echo "<br /><button class='schoolMedalsRanksPrinted no-print' style='margin-top: 10px;' data-school='" . $school . "'>Save " . $schools[$school] . " Medals / Ranks as Printed</button>";
+      }
+      if ($super && in_array('hachayols', $cats)) {
+        echo "<br /><button class='schoolHachayolsPrinted no-print' style='margin-top: 10px;' data-school='" . $school . "'>Save " . $schools[$school] . " Hachayols as Printed</button>";
       }
       $address = '';
       foreach ($fields_chosen as $field) {
@@ -569,13 +578,23 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     save()
   })
 
-  $(".schoolPrinted").click(function () {
+  $(".schoolMedalsRanksPrinted").click(function () {
       $(this).parent().find('.shipping').each(function () {
         const cat = $(this).parent().parent().data('cat')
         if (['medals', 'ranks'].includes(cat)) {
           update(this, 6)
         }
       })
+    save()
+  })
+
+  $(".schoolHachayolsPrinted").click(function () {
+    $(this).parent().find('.shipping').each(function () {
+      const cat = $(this).parent().parent().data('cat')
+      if (['hachayols'].includes(cat)) {
+        update(this, 6)
+      }
+    })
     save()
   })
 
@@ -602,12 +621,34 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     save(false)
   })
 
-  $(".allLabels").click(function (e) {
+  $(".medalsRanksLabels").click(function (e) {
     e.preventDefault()
     const data = '<?= json_encode($for_labels) ?>'
     Cookies.set('for_labels', data)
     const url = `printLabels.php`
     window.open(url, '_blank')
+    $(".shipping").each(function () {
+      const cat = $(this).parent().parent().data('cat')
+        if (['medals', 'ranks'].includes(cat)) {
+          update(this, 6)
+        }
+    })
+    // save()
+  })
+
+  $(".hachayolsLabels").click(function (e) {
+    e.preventDefault()
+    const data = '<?= json_encode($for_labels) ?>'
+    Cookies.set('for_labels', data)
+    const url = `printLabels.php?type=hachayols`
+    window.open(url, '_blank')
+    $(".shipping").each(function () {
+      const cat = $(this).parent().parent().data('cat')
+      if (['hachayols'].includes(cat)) {
+        update(this, 6)
+      }
+    })
+    // save()
   })
 </script>
 </html>

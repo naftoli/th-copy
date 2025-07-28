@@ -8,8 +8,8 @@
     //echo "<pre>"; print_r($data); echo "</pre>";
 
     if (empty($data)) {
-    echo "No data provided";
-    exit;
+        echo "No data provided";
+        exit;
     }
 
     function checkForBreak() {
@@ -36,6 +36,18 @@
     $items_chosen = $data['items'];
     $gender = $data['gender'];
     $schools = $data['schools'];
+    $type = $_GET['type'] ?? '';
+
+    if ($type == 'hachayols') {
+        if (in_array(61, $schools) && in_array(269, $schools)) {
+            header('Location: /myShliachHachayolLabels.php?ak=1');
+        } else if (in_array(61, $schools)) {
+            header('Location: /myShliachHachayolLabels.php');
+        } else if (in_array(269, $schools)) {
+            header('Location: /anashHachayolLabels.php');
+        }
+        exit;
+    }
 
     $info = [];
     foreach ($schools as $schoolID) {

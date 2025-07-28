@@ -2,6 +2,12 @@
 $admin_auth = array('school');
 require('header.php');
 
+$ak = $_GET['ak'] ?? false;
+if ($ak) {
+  // open new tab
+  echo "<script>window.open('/anashHachayolLabels.php', '_blank');</script>";
+}
+
 require 'class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
