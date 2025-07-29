@@ -29,7 +29,8 @@ foreach ($rows as $row) {
     $admins[$row['admin_id']] = $row;
 }
 
-$charges = [];
+$chayolei_charges = [];
+$shipping_charges = [];
 $children = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
@@ -56,9 +57,9 @@ foreach ($admins as $admin_id => $admin_info) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
         if ($row['type'] == 'THE') {
-            $charges[$row['user_id']][] = $row;
+            $chayolei_charges[$row['user_id']][] = $row;
         } else {
-            $charges[$admin_id][] = $row;
+            $shipping_charges[$admin_id][] = $row;
         }
         $children[$admin_id][$row['user_id']] = $row['first'] . ' ' . $row['last'];
     }
@@ -100,7 +101,7 @@ foreach ($admins as $admin_id => $admin_info) {
         }
         echo "</td><td>";
         foreach ($details as $user_id => $child_name) {
-            foreach ($charges[$user_id] as $charge) {
+            foreach ($chayolei_charges[$user_id] as $charge) {
                 echo $charge['amount'];
                 if (intval($charge['discount']) > 0) echo ' (discount: ' . $charge['discount'] . ')';
                 echo "<br />";
@@ -108,7 +109,7 @@ foreach ($admins as $admin_id => $admin_info) {
         }
         echo "</td><td>";
         $paid = 0;
-        foreach ($charges[$admin_id] as $charge) {
+        foreach ($shipping_charges[$admin_id] as $charge) {
             if ($charge['type'] != 'THE') {
                 $paid += $charge['amount'];
             }
