@@ -90,7 +90,7 @@ foreach ($admins as $admin_id => $admin_info) {
         $name = $admin['first'] . ' ' . $admin['last'];
         $address = $admin['admin_address1'] . " " . $admin['admin_address2'] . "<br />" . $admin['admin_city'] .
             ", " . $admin['admin_state'] . "<br />" . $admin['admin_postal'] . "<br />" . $admin['admin_country'];
-        echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>" . count($children) . "</td><td>";
+        echo "<tr><td>" . $admin_id . "</td><td>" . $name . "</td><td>" . $address . "</td><td>" . count($details) . "</td><td>";
         foreach ($details as $child_name) {
             echo $child_name . "<br />";
         }
