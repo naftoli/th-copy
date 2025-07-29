@@ -43,11 +43,12 @@ $stmt = $MASHPIA_DB->prepare("
         rc.year = :year 
             AND (type = 'THE' OR type LIKE 'THMS%')
             AND user_id IN (SELECT 
-                id
-            FROM
-                admin_auths
-            WHERE
-                admin_id = :admin)
+                    id
+                FROM
+                    admin_auths
+                WHERE
+                    admin_id = :admin) 
+            OR admin_id = :admin_id
 ");
 foreach ($admins as $admin_id => $admin_info) {
     $stmt->execute([
