@@ -24,7 +24,9 @@ class GlobalSettings {
             // find out current month
             $month = date('m');
             if ( $month > 8 ) return --$year;
-        } 
+        } else if ( in_array( $school_id, [ 61, 269 ] ) ) {
+            $year++;
+        }
         return $year;
     }
     
