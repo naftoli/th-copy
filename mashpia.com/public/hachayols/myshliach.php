@@ -79,8 +79,8 @@ foreach ($admins as $admin_id => $admin_info) {
     <th>Family ID</th>
     <th>Family Name</th>
     <th>Address</th>
-    <th>Children Registered</th>
     <th>Number of Registered Children</th>
+    <th>Children Registered</th>
     <th>Registration amount paid</th>
     <th>Shipping Fee Paid</th>
   </tr>
