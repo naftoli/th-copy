@@ -134,15 +134,11 @@ foreach ($rows as $row) {
             let csvContent = "data:text/csv;charset=utf-8,";
             csvContent += "Family ID,Family Name,Address,Number of Registered Children,Children Registered,Registration amount paid,Shipping Fee Paid\n";
             
-            const rows = document.querySelectorAll("#report tr");
-            console.log("Total rows found:", rows.length);
-            
+            const rows = document.querySelectorAll("#report tr");            
             if (rows.length <= 1) {
                 alert("No data to export");
                 return;
             }
-            
-            let processedRows = 0;
             
             // Skip the first row (header) and process only data rows
             for (let i = 1; i < rows.length; i++) {
@@ -179,13 +175,8 @@ foreach ($rows as $row) {
                     
                     const csvRow = `"${escapedFamilyId}","${escapedFamilyName}","${escapedAddress}","${escapedNumberOfChildren}","${escapedChildrenRegistered}","${escapedRegistrationAmountPaid}","${escapedShippingFeePaid}"\n`;
                     csvContent += csvRow;
-                    processedRows++;
                 }
             }
-            
-            console.log("Total rows processed:", processedRows);
-            console.log("CSV content length:", csvContent.length);
-            console.log("First 500 chars of CSV:", csvContent.substring(0, 500));
             
             const encodedUri = encodeURI(csvContent);
             const link = document.createElement("a");
