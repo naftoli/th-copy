@@ -55,7 +55,11 @@ foreach ($admins as $admin_id => $admin_info) {
     ]);
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
-        $charges[$row['user_id']][] = $row;
+        if ($row['type'] == 'THE') {
+            $charges[$row['user_id']][] = $row;
+        } else {
+            $charges[$row['admin_id']][] = $row;
+        }
         $children[$admin_id][$row['user_id']] = $row['first'] . ' ' . $row['last'];
     }
 }
@@ -95,8 +99,8 @@ foreach ($admins as $admin_id => $admin_info) {
             echo $child_name . "<br />";
         }
         echo "</td><td>";
-        foreach ($details as $user_id => $child_name) {
-            foreach ($charges[$user_id] as $charge) {
+        foreach ($details as $id => $child_name) {
+            foreach ($charges[$id] as $charge) {
                 if ($charge['type'] == 'THE') {
                     echo $charge['amount'];
                     if (intval($charge['discount']) > 0) echo ' (discount: ' . $charge['discount'] . ')';
@@ -106,18 +110,16 @@ foreach ($admins as $admin_id => $admin_info) {
             }
         }
         echo "</td><td>";
-        $paid = false;
-        foreach ($details as $user_id => $child_name) {
-            foreach ($charges[$user_id] as $charge) {
+        $paid = 0;
+        foreach ($details as $id => $child_name) {
+            foreach ($charges[$id] as $charge) {
                 if ($charge['type'] != 'THE') {
-                    $paid = true;
-                    echo $charge['amount'];
-                    echo "<br />";
-                    break;
+                    $paid += $charge['amount'];
                 }
             }
         }
         if (!$paid) echo "NOT PAID";
+        else echo $paid;
         echo "</td></tr>";
     }
     ?>
