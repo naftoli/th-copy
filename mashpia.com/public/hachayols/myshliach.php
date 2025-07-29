@@ -8,61 +8,53 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 
-// get all admins that have children in myshliach
+// get all info about admins and children registered in myshliach
 $admins = [];
-$stmt = $MASHPIA_DB->query("
+$children = [];
+$stmt = $MASHPIA_DB->prepare("
     SELECT 
-        a.* 
+        a.*, u.user_id, u.first as user_first, u.last as user_last
     FROM
         admins a 
             JOIN
         admin_auths aa USING (admin_id) 
             JOIN
-        users u ON u.user_id = aa.id
+        users u ON u.user_id = aa.id 
+            JOIN 
+        user_registration ur ON ur.user_id = u.user_id 
     WHERE
         u.user_registered > 0
-            AND u.school_id = 61 
-    GROUP BY aa.admin_id
+            AND u.school_id = 61 AND ur.year = :year
 ");
+$stmt->execute([
+    'year'  => $year,
+]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $row) {
     $admins[$row['admin_id']] = $row;
+    $children[$row['admin_id']][$row['user_id']] = $row['user_first'] . ' ' . $row['user_last'];
 }
 
 $chayolei_charges = [];
 $shipping_charges = [];
-$children = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        rc.*, u.first, u.last
+        * 
     FROM
-        registration_charges rc
-            JOIN
-        users u USING (user_id)
+        registration_charges  
     WHERE
-        rc.year = :year 
+        year = :year 
             AND (type = 'THE' OR type LIKE 'THMS%')
-            AND user_id IN (SELECT 
-                    id
-                FROM
-                    admin_auths
-                WHERE
-                    admin_id = :admin) 
-            OR admin_id = :admin
 ");
-foreach ($admins as $admin_id => $admin_info) {
-    $stmt->execute([
-        'year'  => $year,
-        'admin' => $admin_id
-    ]);
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($rows as $row) {
-        if ($row['type'] == 'THE') {
-            $chayolei_charges[$row['user_id']][] = $row;
-        } else {
-            $shipping_charges[$admin_id][] = $row;
-        }
-        $children[$admin_id][$row['user_id']] = $row['first'] . ' ' . $row['last'];
+$stmt->execute([
+    'year'  => $year,
+]);
+$rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($rows as $row) {
+    if ($row['type'] == 'THE') {
+        $chayolei_charges[$row['user_id']][] = $row;
+    } else {
+        $shipping_charges[$row['admin_id']][] = $row;
     }
 }
 ?>
@@ -102,17 +94,21 @@ foreach ($admins as $admin_id => $admin_info) {
         }
         echo "</td><td>";
         foreach ($details as $user_id => $child_name) {
-            foreach ($chayolei_charges[$user_id] as $charge) {
-                echo $charge['amount'];
-                if (intval($charge['discount']) > 0) echo ' (discount: ' . $charge['discount'] . ')';
-                echo "<br />";
+            if (isset($chayolei_charges[$user_id])) {
+                foreach ($chayolei_charges[$user_id] as $charge) {
+                    echo $child_name . ": " . $charge['amount'];
+                    if (intval($charge['discount']) > 0) echo ' (discount: ' . $charge['discount'] . ')';
+                    echo "<br />";
+                }
             }
         }
         echo "</td><td>";
         $paid = 0;
-        foreach ($shipping_charges[$admin_id] as $charge) {
-            if ($charge['type'] != 'THE') {
-                $paid += $charge['amount'];
+        if (isset($shipping_charges[$admin_id])) {
+            foreach ($shipping_charges[$admin_id] as $charge) {
+                if ($charge['type'] != 'THE') {
+                    $paid += $charge['amount'];
+                }
             }
         }
         if (!$paid) echo "NOT PAID";
