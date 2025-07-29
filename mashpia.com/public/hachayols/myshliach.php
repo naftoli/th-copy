@@ -148,9 +148,7 @@ foreach ($rows as $row) {
             for (let i = 1; i < rows.length; i++) {
                 const row = rows[i];
                 const cells = row.querySelectorAll("td");
-                
-                console.log(`Row ${i}: Found ${cells.length} cells`);
-                
+                                
                 if (cells.length >= 7) {
                     // Use innerHTML to get the full content including HTML, then clean it
                     const familyId = cells[0].innerHTML.trim();
@@ -161,11 +159,6 @@ foreach ($rows as $row) {
                     const registrationAmountPaid = cells[5].innerHTML.trim();
                     const shippingFeePaid = cells[6].innerHTML.trim();
                     
-                    console.log(`Row ${i} raw data:`, {
-                        familyId, familyName, address, numberOfChildren, 
-                        childrenRegistered, registrationAmountPaid, shippingFeePaid
-                    });
-                    
                     // Clean up the data - remove HTML br tags and replace with semicolons, then clean whitespace
                     const cleanFamilyId = familyId.replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim();
                     const cleanFamilyName = familyName.replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim();
@@ -174,11 +167,6 @@ foreach ($rows as $row) {
                     const cleanChildrenRegistered = childrenRegistered.replace(/<br\s*\/?>/gi, '; ').replace(/\s+/g, ' ').trim();
                     const cleanRegistrationAmountPaid = registrationAmountPaid.replace(/<br\s*\/?>/gi, '; ').replace(/\s+/g, ' ').trim();
                     const cleanShippingFeePaid = shippingFeePaid.replace(/<br\s*\/?>/gi, ' ').replace(/\s+/g, ' ').trim();
-                    
-                    console.log(`Row ${i} cleaned data:`, {
-                        cleanFamilyId, cleanFamilyName, cleanAddress, cleanNumberOfChildren,
-                        cleanChildrenRegistered, cleanRegistrationAmountPaid, cleanShippingFeePaid
-                    });
                     
                     // Escape quotes and wrap in quotes for CSV
                     const escapedFamilyId = cleanFamilyId.replace(/"/g, '""');
@@ -192,10 +180,6 @@ foreach ($rows as $row) {
                     const csvRow = `"${escapedFamilyId}","${escapedFamilyName}","${escapedAddress}","${escapedNumberOfChildren}","${escapedChildrenRegistered}","${escapedRegistrationAmountPaid}","${escapedShippingFeePaid}"\n`;
                     csvContent += csvRow;
                     processedRows++;
-                    
-                    console.log(`Row ${i} CSV row:`, csvRow);
-                } else {
-                    console.log(`Row ${i}: Skipped - insufficient cells (${cells.length})`);
                 }
             }
             
@@ -210,8 +194,6 @@ foreach ($rows as $row) {
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            
-            alert(`CSV download complete! Processed ${processedRows} rows.`);
         }
         </script>
 </html>
