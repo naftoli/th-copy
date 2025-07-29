@@ -58,7 +58,7 @@ foreach ($admins as $admin_id => $admin_info) {
         if ($row['type'] == 'THE') {
             $charges[$row['user_id']][] = $row;
         } else {
-            $charges[$row['admin_id']][] = $row;
+            $charges[$admin_id][] = $row;
         }
         $children[$admin_id][$row['user_id']] = $row['first'] . ' ' . $row['last'];
     }
@@ -99,23 +99,18 @@ foreach ($admins as $admin_id => $admin_info) {
             echo $child_name . "<br />";
         }
         echo "</td><td>";
-        foreach ($details as $id => $child_name) {
-            foreach ($charges[$id] as $charge) {
-                if ($charge['type'] == 'THE') {
-                    echo $charge['amount'];
-                    if (intval($charge['discount']) > 0) echo ' (discount: ' . $charge['discount'] . ')';
-                    echo "<br />";
-                    break;
-                }
+        foreach ($details as $user_id => $child_name) {
+            foreach ($charges[$user_id] as $charge) {
+                echo $charge['amount'];
+                if (intval($charge['discount']) > 0) echo ' (discount: ' . $charge['discount'] . ')';
+                echo "<br />";
             }
         }
         echo "</td><td>";
         $paid = 0;
-        foreach ($details as $id => $child_name) {
-            foreach ($charges[$id] as $charge) {
-                if ($charge['type'] != 'THE') {
-                    $paid += $charge['amount'];
-                }
+        foreach ($charges[$admin_id] as $charge) {
+            if ($charge['type'] != 'THE') {
+                $paid += $charge['amount'];
             }
         }
         if (!$paid) echo "NOT PAID";
