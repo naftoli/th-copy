@@ -48,7 +48,7 @@ $stmt = $MASHPIA_DB->prepare("
                     admin_auths
                 WHERE
                     admin_id = :admin) 
-            OR admin_id = :admin_id
+            OR admin_id = :admin
 ");
 foreach ($admins as $admin_id => $admin_info) {
     $stmt->execute([
