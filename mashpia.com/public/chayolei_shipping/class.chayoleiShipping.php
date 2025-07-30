@@ -87,11 +87,18 @@ class ChayoleiShipping
         $h = new MyShliachHachayol(true, $school);
         $sql = $h->getSql($gender);
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            'school' => $school,
-            'year' => $this->year, 
-            'gender' => $gender
-        ]);
+        if ($gender == 'M' || $gender == 'F') {
+            $stmt->execute([
+                'school' => $school,
+                'year' => $this->year, 
+                'gender' => $gender
+            ]);
+        } else {
+            $stmt->execute([
+                'school' => $school,
+                'year' => $this->year
+            ]);
+        }
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
             $type = $school == 61 ? 'THMS%' : 'THAK%';
