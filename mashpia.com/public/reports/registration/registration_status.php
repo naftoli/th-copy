@@ -43,10 +43,10 @@ $main_query = "
         total_balance_paid,
         total_registered
     FROM
-        school_registrations sr
-            JOIN
-        schools s USING (school_id)
+        schools s 
             LEFT JOIN
+        school_registrations sr USING (school_id) 
+            LEFT JOIN 
         (SELECT 
             school_id, IFNULL(SUM(amount), 0) AS total_chayolei
         FROM
@@ -90,12 +90,15 @@ $main_query = "
                     SELECT user_id FROM user_registration WHERE year = $year
                 )
         GROUP BY school_id) reg USING (school_id)  
-    WHERE
-        sr.year = $year 
+    WHERE 
+        s.test_school = 0 AND (sr.year = $year OR sr.year is null)
 ";
 $main_query = mysql_query( $main_query );
 $data = [];
-while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['school_name']] = $row;
+while( $row = mysql_fetch_assoc( $main_query ) ) {
+    if ($row['total_registered'] == 0) continue;
+    $data[$row['school_name']] = $row;
+}
 ksort($data);
 // echo "<pre>"; print_r($data); echo "</pre>";
 ?>
@@ -437,6 +440,7 @@ ksort($data);
                 it is counted as 2 or 3 kids. As a result, this number may be completely different than the number of registered children
                 that is being shown on the home page of the base commander's site, or any other reports. (This can also include
                 situations where the child paid, and then "unenrolled" but was never removed from payment database). -->
+                The list of schools is based off schools that have any registered children for the current year and are not test schools.
                 The number of registered children is based on the children that are currently registered and have been registered for the current year.
             </p>
         </div>
