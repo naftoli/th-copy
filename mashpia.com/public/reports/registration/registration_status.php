@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once ( __DIR__ . '/../../header.php' );
@@ -41,9 +41,7 @@ $main_query = "
         total_chayolei,
         total_chidon,
         total_balance_paid,
-        total_registered,
-        total_chayolei_eligible, 
-        total_chidon_eligible
+        total_registered
     FROM
         school_registrations sr
             JOIN
@@ -85,26 +83,13 @@ $main_query = "
         (SELECT 
             school_id, COUNT(*) AS total_registered
         FROM
-            users  
+            users u 
         WHERE
-            user_registered > 0 
-        GROUP BY school_id) reg USING (school_id)
-            LEFT JOIN
-        (SELECT 
-            school_id, COUNT(*) AS total_chayolei_eligible
-        FROM
-            users
-        WHERE
-            chayolei_eligible = 1
-        GROUP BY school_id) chayolei_el USING (school_id)
-            LEFT JOIN
-        (SELECT 
-            school_id, COUNT(*) AS total_chidon_eligible
-        FROM
-            users
-        WHERE
-            chidon_eligible = 1
-        GROUP BY school_id) chidon_el USING (school_id) 
+            u.user_registered > 0 
+                AND u.user_id in (
+                    SELECT user_id FROM user_registration WHERE year = $year
+                )
+        GROUP BY school_id) reg USING (school_id)  
     WHERE
         sr.year = $year 
 ";
@@ -112,7 +97,7 @@ $main_query = mysql_query( $main_query );
 $data = [];
 while( $row = mysql_fetch_assoc( $main_query ) ) $data[$row['school_name']] = $row;
 ksort($data);
-//echo "<pre>"; print_r($data); echo "</pre>";
+// echo "<pre>"; print_r($data); echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -462,7 +447,8 @@ ksort($data);
         
         <!-- Data Table -->
         <div class="table-container">
-            <table id="table" class="table table-striped table-hover">
+            <div class="table-responsive">
+                <table id="table" class="table table-striped table-hover">
                 <thead>
                     <tr>
                         <th>Base Type</th>
@@ -479,7 +465,6 @@ ksort($data);
                         <th>Discount</th>
                         <th>Total Paid</th>
                         <th>Current Balance</th>
-                        <th>Eligible Chayolei Soldiers</th>
                         <th>Chayolei Soldiers Registered</th>
                     </tr>
                 </thead>
@@ -552,7 +537,6 @@ ksort($data);
                         <td class="text-end <?= $balance_class ?>">
                             <strong>$<?= number_format($balance, 2) ?></strong>
                         </td>
-                        <td class="text-end"><?= $base['total_chayolei_eligible'] ?></td>
                         <td class="text-end"><?= $base['total_registered'] ?></td>
                     </tr>
                     <?php
@@ -566,6 +550,7 @@ ksort($data);
                     $totals['discount'] += $base['discount'];
                     $totals['total_paid'] += $total_paid;
                     $totals['current_balance'] += $balance;
+                    $totals['total_registered'] += $base['total_registered'];
                 }
                 ?>
                 </tbody>
@@ -583,11 +568,11 @@ ksort($data);
                         <th class="text-end">$<?= number_format($totals['discount'], 2) ?></th>
                         <th class="text-end">$<?= number_format($totals['total_paid'], 2) ?></th>
                         <th class="text-end">$<?= number_format($totals['current_balance'], 2) ?></th>
-                        <th></th>
-                        <th></th>
+                        <th class="text-end"><?= number_format($totals['total_registered'], 0) ?></th>
                     </tr>
                 </tfoot>
             </table>
+            </div>
         </div>
     </div>
 
