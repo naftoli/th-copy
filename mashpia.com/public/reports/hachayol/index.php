@@ -62,7 +62,13 @@ include($_SERVER["DOCUMENT_ROOT"] . '/admin_header.php');
     <a href="/chayolei_shipping/" target="_blank">
       <div class="button">
         <img src="/images/cth_logo.png" height="32" alt="tickets"/>
-        <span class="link-text">Shipping Report</span>
+        <span class="link-text">For Shipping</span>
+      </div>
+    </a>
+    <a href="/hachayols/forPickup.php" target="_blank">
+      <div class="button">
+        <img src="/images/cth_logo.png" height="32" alt="tickets"/>
+        <span class="link-text">For Pickup</span>
       </div>
     </a>
     <!-- <a href="/hachayol_report.php<?= $debug ? "?debug=true" : ""; ?>">
