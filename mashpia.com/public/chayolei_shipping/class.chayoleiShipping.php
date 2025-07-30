@@ -84,7 +84,7 @@ class ChayoleiShipping
 
     public function getHachayols($gender, $school, $items) {
         $hachayols = [];
-        $h = new MyShliachHachayol(true, $school);
+        $h = new MyShliachHachayol($school);
         $sql = $h->getSql($gender);
         $stmt = $this->db->prepare($sql);
         if ($gender == 'M' || $gender == 'F') {
@@ -101,8 +101,7 @@ class ChayoleiShipping
         }
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
-            $type = $school == 61 ? 'THMS%' : 'THAK%';
-			// if ($h->paidForShipping($row['admin_id'], $type)) continue;
+			if (!$h->paidForShipping($row['admin_id'], $school)) continue;
             $hachayols[$row['user_id']][] = [
                 'item'  => 'Hachayol',
                 'size'  => '',
