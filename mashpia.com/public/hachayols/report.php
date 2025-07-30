@@ -92,13 +92,18 @@ if ($year < 5786) {
   <link href="../admin_styles.css" rel="stylesheet" type="text/css">
   <script type="text/javascript" src="../scripts/jquery-1.8.3.js"></script>
   <style>
+
     table {
       font-size: 12px;
     }
 
-    th, td {
-      padding: 3px 10px;
-      border-bottom: 1px solid grey;
+    th {
+      font-size: 14px;
+    }
+
+    tr, th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
     }
   </style>
 </head>
