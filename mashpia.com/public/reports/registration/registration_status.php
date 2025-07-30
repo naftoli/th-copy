@@ -292,8 +292,32 @@ ksort($data);
             padding: 15px 10px;
         }
         
+
+        
+
+        
+
+        
+
+        
         .dataTables_wrapper {
             padding: 20px;
+        }
+        
+        /* Base Type Badge Colors */
+        .badge-tuition {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+            color: white !important;
+        }
+        
+        .badge-guaranteed {
+            background: linear-gradient(135deg, #27ae60, #229954) !important;
+            color: white !important;
+        }
+        
+        .badge-regular {
+            background: linear-gradient(135deg, #3498db, #2980b9) !important;
+            color: white !important;
         }
         
         .dataTables_filter input {
@@ -487,7 +511,25 @@ ksort($data);
                     }
                     ?>
                     <tr>
-                        <td><span class="badge bg-secondary"><?= $types[$base['reg_type']] ?></span></td>
+                        <td>
+                            <?php 
+                            $badge_class = '';
+                            switch($base['reg_type']) {
+                                case 1:
+                                    $badge_class = 'badge-tuition';
+                                    break;
+                                case 2:
+                                    $badge_class = 'badge-guaranteed';
+                                    break;
+                                case 3:
+                                    $badge_class = 'badge-regular';
+                                    break;
+                                default:
+                                    $badge_class = 'bg-secondary';
+                            }
+                            ?>
+                            <span class="badge <?= $badge_class ?>"><?= $types[$base['reg_type']] ?></span>
+                        </td>
                         <td><strong><?= $base['school_number'] ?></strong></td>
                         <td><strong><?= $base['school_name'] ?></strong></td>
                         <td>
@@ -510,8 +552,8 @@ ksort($data);
                         <td class="text-end <?= $balance_class ?>">
                             <strong>$<?= number_format($balance, 2) ?></strong>
                         </td>
-                        <td class="text-center"><?= $base['total_chayolei_eligible'] ?></td>
-                        <td class="text-center"><?= $base['total_registered'] ?></td>
+                        <td class="text-end"><?= $base['total_chayolei_eligible'] ?></td>
+                        <td class="text-end"><?= $base['total_registered'] ?></td>
                     </tr>
                     <?php
                     $totals['chayolei_fee'] += $base['chayolei_fee'];
@@ -552,7 +594,7 @@ ksort($data);
     <!-- Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <!-- DataTables -->
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
@@ -563,77 +605,78 @@ ksort($data);
         $(function() {
             // Initialize DataTable
             $('#table').DataTable({
-                responsive: true,
                 paging: false,
                 ordering: true,
                 info: false,
-                order: [[2, 'asc']],
-                language: {
-                    search: "Search bases:",
-                    lengthMenu: "Show _MENU_ bases per page",
-                    info: "Showing _START_ to _END_ of _TOTAL_ bases",
-                    infoEmpty: "No bases to show",
-                    infoFiltered: "(filtered from _MAX_ total bases)"
-                },
-                columnDefs: [
-                    { targets: [4,5,6,7,8,9,10,11,12,13], className: 'text-end' },
-                    { targets: [14,15], className: 'text-center' }
-                ]
+                order: [[2, 'asc']]
             });
 
             // Add payment form submission
             $("#add_payment_form").on('submit', function(e) {
                 e.preventDefault();
-                const school = $("#school_payment").val();
-                const method = $("#payment_method").val();
-                const type = $("#payment_type").val();
-                const amount = parseFloat($("#payment_amount").val());
-                
-                if (school == '0') {
-                    showAlert('You must choose a school', 'warning');
-                    return;
-                }
-                if (!amount) {
-                    showAlert('You must enter an amount!', 'warning');
-                    return;
-                }
-                
-                // Show loading state
-                const btn = $("#add_payment");
-                const originalText = btn.html();
-                btn.html('<i class="bi bi-hourglass-split"></i> Processing...');
-                btn.prop('disabled', true);
-                
-                $.post('addPayment.php', { 
-                    school: school, 
-                    method: method, 
-                    type: type, 
-                    amount: amount 
-                }, function(result) {
-                    try {
-                        const res = JSON.parse(result);
-                        if (res.success) {
-                            showAlert('Payment added successfully!', 'success');
-                            setTimeout(() => location.reload(), 1500);
-                        } else {
-                            showAlert(res.error || 'An error occurred', 'danger');
-                        }
-                    } catch (e) {
-                        showAlert('An error occurred while processing the response', 'danger');
+                try {
+                    const school = $("#school_payment").val();
+                    const method = $("#payment_method").val();
+                    const type = $("#payment_type").val();
+                    const amount = parseFloat($("#payment_amount").val());
+                    
+                    if (school == '0') {
+                        showAlert('You must choose a school', 'warning');
+                        return;
                     }
-                }).fail(function() {
-                    showAlert('Network error occurred', 'danger');
-                }).always(function() {
-                    btn.html(originalText);
-                    btn.prop('disabled', false);
-                });
+                    if (!amount) {
+                        showAlert('You must enter an amount!', 'warning');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    const btn = $("#add_payment");
+                    if (btn.length > 0) {
+                        const originalText = btn.html();
+                        btn.html('<i class="bi bi-hourglass-split"></i> Processing...');
+                        btn.prop('disabled', true);
+                        
+                        $.post('addPayment.php', { 
+                            school: school, 
+                            method: method, 
+                            type: type, 
+                            amount: amount 
+                        }, function(result) {
+                            try {
+                                const res = JSON.parse(result);
+                                if (res.success) {
+                                    showAlert('Payment added successfully!', 'success');
+                                    setTimeout(() => location.reload(), 1500);
+                                } else {
+                                    showAlert(res.error || 'An error occurred', 'danger');
+                                }
+                            } catch (e) {
+                                showAlert('An error occurred while processing the response', 'danger');
+                            }
+                        }).fail(function() {
+                            showAlert('Network error occurred', 'danger');
+                        }).always(function() {
+                            if (btn.length > 0) {
+                                btn.html(originalText);
+                                btn.prop('disabled', false);
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error in form submission:', error);
+                    showAlert('An error occurred while processing the form', 'danger');
+                }
             });
 
             // Year change handler
             $("#year").change(function() {
-                let y = $(this).val();
-                let url = location.href.split('?')[0];
-                location.href = url + '?year=' + y;
+                try {
+                    let y = $(this).val();
+                    let url = location.href.split('?')[0];
+                    location.href = url + '?year=' + y;
+                } catch (error) {
+                    console.error('Error in year change:', error);
+                }
             });
 
             // Helper function to show alerts
