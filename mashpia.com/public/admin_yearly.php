@@ -85,6 +85,17 @@ elseif(gr('tanya_year')) {
 	<HEAD>
 		<TITLE><?=T_('End of year tasks'), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
 		<LINK href="admin_styles.css" rel="stylesheet" type="text/css">
+		<style>
+			body {
+				line-height: 1.3;
+			}
+			input[type='submit'] {
+				padding: 10px;
+				border-radius: 5px;
+				font-size: 14px;
+				margin: 10px 0;
+			}
+		</style>
 	</HEAD>
 	
 	<BODY>
@@ -102,6 +113,7 @@ elseif(gr('tanya_year')) {
 				<P>
 					<? $result = mq('SELECT school_name, school_id FROM schools where chayolei = 1 OR chidon = 1 ORDER BY school_name'); ?>
 					<? while($row = mysql_fetch_assoc($result)): ?>
+						<? if (empty($row['school_name'])) continue; ?>
 						<LABEL><INPUT type="checkbox" name="school_id[]" value="<?=$row['school_id']?>"> <?=es($row['school_name'])?></LABEL><BR>
 					<? endwhile; ?>
 					

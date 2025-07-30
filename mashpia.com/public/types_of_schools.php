@@ -66,9 +66,16 @@ while ($row = mysql_fetch_assoc($result)) {
         <link href="admin_styles.css" rel="stylesheet" type="text/css">
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <style type="text/css">
-            th, td {
-            	padding: 5px;
-            	font-size: 12px;
+            tr, th, td {
+                padding: 10px;
+                border-bottom: 1px solid #ccc;
+				font-size: 12px;
+            }
+            input[type='submit'] {
+                padding: 10px;
+                border-radius: 5px;
+                font-size: 14px;
+                margin: 10px 0;
             }
         </style>
     </head>
@@ -78,11 +85,11 @@ while ($row = mysql_fetch_assoc($result)) {
     	<h1>Types of Schools Setup</h1>
     	
     	<form action="types_of_schools.php" method="post">
+			<p>Please check off all that apply to each school.</p>
+
     		<div align="center">
-    			<input type="submit" name="submit" value="save" />
+    			<input type="submit" name="submit" value="Save" />
     		</div>
-    		
-    		<p>Please check off all that apply to each school.</p>
     		
 	    	<table>
 	    		<tr>

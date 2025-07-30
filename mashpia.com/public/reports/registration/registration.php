@@ -108,7 +108,7 @@ foreach ($temp as $row) {
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             margin: 20px auto;
             padding: 30px;
-            max-width: 1400px;
+            max-width: 1800px;
         }
         
         .page-header {

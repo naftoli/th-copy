@@ -74,14 +74,20 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Unregister Schools and Students</span>
                 </div>
             </a>
-            <a href="/admin_school_register_report.php<?=$debug ? "?debug=true": "";?>">
+            <!-- <a href="/admin_school_register_report.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
                     <span class="link-text">Old Registration Report</span>
                 </div>
+            </a> -->
+            <a href="/types_of_schools.php<?=$debug ? "?debug=true": "";?>">
+                <div class="button">
+                    <img src="/images/icon_report.png" height="32" alt="report"/>
+                    <span class="link-text">School Types</span>
+                </div>
             </a>
         </div>
-        <div id="action-links">
+        <!-- <div id="action-links">
             <a href="/types_of_schools.php<?=$debug ? "?debug=true": "";?>">
                 <div class="button">
                     <img src="/images/icon_report.png" height="32" alt="report"/>
@@ -94,7 +100,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Registrations by Date/Time</span>
                 </div>
             </a>
-        </div>
+        </div> -->
         <?} // end admin only links ?>
         </div>
         
