@@ -432,11 +432,12 @@ ksort($data);
         <div class="alert-custom">
             <h5><i class="bi bi-exclamation-triangle"></i> Important Information</h5>
             <p>
-                <strong>Financial Report Note:</strong> This report is a <strong>financial</strong> report, and as such, it shows how many children are in each school based
+                <!-- <strong>Financial Report Note:</strong> This report is a <strong>financial</strong> report, and as such, it shows how many children are in each school based
                 on the <strong>charges</strong>. Therefore, when there are multiple charges for one child (whether they paid twice, or three times, etc),
                 it is counted as 2 or 3 kids. As a result, this number may be completely different than the number of registered children
                 that is being shown on the home page of the base commander's site, or any other reports. (This can also include
-                situations where the child paid, and then "unenrolled" but was never removed from payment database).
+                situations where the child paid, and then "unenrolled" but was never removed from payment database). -->
+                The number of registered children is based on the children that are currently registered and have been registered for the current year.
             </p>
         </div>
         
