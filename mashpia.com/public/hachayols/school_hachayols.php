@@ -27,11 +27,13 @@ function getRegisteredStudents() {
         ");
     } else {
         $stmt = $MASHPIA_DB->prepare("
-            SELECT u.*, c.*, aa.admin_id 
+            SELECT u.*, c.*, aa.admin_id, u.hachayol as hachayol_status, 
+                IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
             FROM users u 
             JOIN admin_auths aa ON aa.id = u.user_id 
             JOIN classes c USING (class_id) 
             JOIN user_registration ur ON ur.user_id = u.user_id 
+            LEFT JOIN hachayols_to_give htg ON htg.user_id = u.user_id 
             WHERE u.school_id = :id 
             AND u.user_registered > 0 
             AND ur.year = :year 
@@ -103,8 +105,8 @@ function getGradeData($students) {
             'hebrew_name' => $user['first_he'] . ' ' . $user['last_he'],
             'name' => $user['first'] . ' ' . $user['last'],
             'family_id' => $user['admin_id'],
-            'children' => $children,
-            'hachayol' => in_array($user['user_id'], $children) ? 'yes' : 'no',
+            'hachayol' => intval($user['hachayol']) ? 'yes' : 'no',
+            'children' => $children
         ];
     }
     return ['total' => $total, 'rows' => $rows];
