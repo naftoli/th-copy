@@ -8,9 +8,9 @@ class MyShliachHachayol {
 	private $children;
 	private $sortedAdmins;
 	
-	public function __construct( $noShip = false, $id = 61 ) {
+	public function __construct( $forPickup = false, $id = 61 ) {
 		$this->year = GlobalSettings::getRegistrationYear();
-		$this->setInfo( $noShip, $id );
+		$this->setInfo( $forPickup, $id );
 	}
 
 	public function getSql($gender = '') {
@@ -38,8 +38,9 @@ class MyShliachHachayol {
 		return $sql;
 	}
 	
-	private function setInfo( $noShip, $id ) {
+	private function setInfo( $forPickup, $id ) {
 		global $MASHPIA_DB;
+		
 		$sql = $this->getSql();
 		$result = $MASHPIA_DB->prepare($sql);
 		$result->execute([
@@ -49,15 +50,25 @@ class MyShliachHachayol {
 		// $result->debugDumpParams();
  		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 		foreach ($rows as $row) {
-			$type = $id == 61 ? 'THMS%' : 'THAK%';
-			// if ($noShip && $this->paidForShipping($row['admin_id'], $type)) continue;
+			if (
+				($forPickup && $this->paidForShipping($row['admin_id'], $id)) || 
+				(!$forPickup && !$this->paidForShipping($row['admin_id'], $id))
+			) continue;
 			$this->admins[$row['admin_id']] = $row;
 			$this->children[$row['admin_id']][] = $row['first'] . ' ' . $row['last'];
 		}
 	}
 
-	private function paidForShipping($admin_id, $type) {
+	private function paidForShipping($admin_id, $school_id) {
 		global $MASHPIA_DB;
+
+		if ($school_id == 61) {
+			$type = 'THMS%';
+		} else if ($school_id == 269) {
+			$type = 'THAK%';
+		} else {
+			return false;
+		}
 		$sql = "SELECT * FROM registration_charges WHERE type like :type and admin_id = :admin_id and year = :year";
 		$result = $MASHPIA_DB->prepare($sql);
 		$result->execute(['admin_id' => $admin_id, 'year' => $this->year, 'type' => $type]);
