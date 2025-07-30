@@ -8,8 +8,20 @@ require('header.php');
 <head>
   <link href="admin_styles.css" rel="stylesheet" type="text/css">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hachayol Office Report</title>
   <style type='text/css'>
+    body {
+      line-height: 1.3;
+    }
+
+    input[type='button'] {
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+
     .page-break {
       page-break-after: always;
     }
