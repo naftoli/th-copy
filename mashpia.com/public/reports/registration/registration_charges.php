@@ -50,9 +50,9 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
         width: 100%;
       }
 
-      th, td {
-        border: 1px solid #888;
-        padding: 4px 8px;
+      tr, th, td {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
       }
 
       #details {

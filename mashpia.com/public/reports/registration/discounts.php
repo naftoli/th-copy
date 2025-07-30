@@ -57,10 +57,16 @@ $discounts = $d->getAllDiscounts();
     <style>
         tr, th, td {
             font-size: 14px;
-            padding: 6px;
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
         }
         body {
             line-height: 1.2;
+        }
+        input[type='submit'] {
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
         }
     </style>
 </head>
@@ -113,7 +119,7 @@ $discounts = $d->getAllDiscounts();
             </td>
         </tr>
         <tr>
-            <td colspan="2" align="center"><input type="submit" name="submit" value="create discount" /></td>
+            <td colspan="2" align="center"><input type="submit" name="submit" value="Create Discount" /></td>
         </tr>
     </table>
 </form>
