@@ -247,6 +247,36 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              padding: 4px 6px;
          }
          
+         /* Loading overlay styling */
+         .loading-overlay {
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             bottom: 0;
+             background: rgba(255, 255, 255, 0.95);
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             z-index: 1000;
+             border-radius: 0 0 10px 10px;
+         }
+         
+         .loading-content {
+             text-align: center;
+             padding: 2rem;
+         }
+         
+         .loading-content .spinner-border {
+             width: 3rem;
+             height: 3rem;
+         }
+         
+         /* Hide loading overlay when data is loaded */
+         .loading-overlay.hidden {
+             display: none;
+         }
+         
 
     </style>
 </head>
@@ -304,6 +334,21 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                      </button>
                  </div>
                  
+                 <!-- Loading Overlay -->
+                 <div id="loadingOverlay" class="loading-overlay">
+                     <div class="loading-content">
+                         <div class="spinner-border text-primary" role="status">
+                             <span class="visually-hidden">Loading...</span>
+                         </div>
+                         <div class="mt-3">
+                             <h5 class="text-primary mb-2">Loading Registration Data</h5>
+                             <p class="text-muted mb-0">Please wait while we load all the registration records...</p>
+                             <div class="progress mt-3" style="height: 6px;">
+                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
 
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -462,9 +507,21 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     
-         <script>
+                  <script>
          $(document).ready(function () {
-                          // Initialize DataTable with simple configuration
+             // Show loading overlay
+             $('#loadingOverlay').show().removeClass('hidden');
+             
+             // Animate progress bar
+             var progressBar = $('#loadingOverlay .progress-bar');
+             var progress = 0;
+             var progressInterval = setInterval(function() {
+                 progress += Math.random() * 15;
+                 if (progress > 90) progress = 90;
+                 progressBar.css('width', progress + '%');
+             }, 200);
+             
+             // Initialize DataTable with simple configuration
              var table = $('#detailsTable').DataTable({
                  pageLength: 100,
                  lengthMenu: [[25, 50, 100, 500, 1000, 5000, 10000], [25, 50, 100, 500, 1000, 5000, 10000]],
@@ -486,8 +543,27 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  ],
                  // Configure header row for sorting
                  orderCellsTop: true,
-                 fixedHeader: true
+                 fixedHeader: true,
+                 // Hide loading overlay when DataTable is initialized
+                 initComplete: function() {
+                     // Complete progress bar
+                     clearInterval(progressInterval);
+                     progressBar.css('width', '100%');
+                     
+                     setTimeout(function() {
+                         $('#loadingOverlay').addClass('hidden');
+                     }, 500); // Small delay to ensure smooth transition
+                 }
              });
+             
+             // Fallback: hide loading overlay after a maximum time
+             setTimeout(function() {
+                 if (!$('#loadingOverlay').hasClass('hidden')) {
+                     clearInterval(progressInterval);
+                     progressBar.css('width', '100%');
+                     $('#loadingOverlay').addClass('hidden');
+                 }
+             }, 10000); // 10 second fallback
              
              // Simple filtering function
              function applyFilters() {
@@ -572,6 +648,24 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              
              $('#filterStatus').on('change', function() {
                  applyFilters();
+             });
+             
+             // Clear all filters function
+             function clearAllFilters() {
+                 $('#filterSchool').val('');
+                 $('#filterStudent').val('');
+                 $('#filterType').val('');
+                 $('#filterDateFrom').val('');
+                 $('#filterDateTo').val('');
+                 $('#filterAmountFrom').val('');
+                 $('#filterAmountTo').val('');
+                 $('#filterStatus').val('');
+                 applyFilters(); // Apply the cleared filters
+             }
+             
+             // Clear filters button functionality
+             $('.clear-filters').on('click', function() {
+                 clearAllFilters();
              });
              
              // Refund button click handler
