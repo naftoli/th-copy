@@ -579,8 +579,13 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                      }
                      
                      // Type filter (column 2)
-                     if (typeFilter && data[2] !== typeFilter) {
-                         return false;
+                     if (typeFilter) {
+                         // Extract text content from HTML in the registration type column
+                         // The HTML structure is: <div class="registration-type">Type Name</div><small class="text-muted">Code: CODE</small>
+                         var typeMatch = data[2].match(/<div class="registration-type">([^<]+)<\/div>/);
+                         if (typeMatch && typeMatch[1].trim() !== typeFilter) {
+                             return false;
+                         }
                      }
                      
                      // Date range filter (column 3)
