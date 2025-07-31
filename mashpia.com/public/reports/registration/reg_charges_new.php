@@ -598,8 +598,8 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     
          <script>
          $(document).ready(function () {
-             // Show loading overlay
-             $('#loadingOverlay').show();
+             // Ensure loading overlay is visible
+             $('#loadingOverlay').show().removeClass('hidden');
              
              // Animate progress bar
              var progressBar = $('#loadingOverlay .progress-bar');
@@ -635,15 +635,27 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  fixedHeader: true,
                  // Hide loading overlay when DataTable is initialized
                  initComplete: function() {
+                     console.log('DataTable initialization complete');
                      // Complete progress bar
                      clearInterval(progressInterval);
                      progressBar.css('width', '100%');
                      
                      setTimeout(function() {
                          $('#loadingOverlay').addClass('hidden');
+                         console.log('Loading overlay hidden');
                      }, 500); // Small delay to ensure smooth transition
                  }
              });
+             
+             // Fallback: hide loading overlay after a maximum time
+             setTimeout(function() {
+                 if (!$('#loadingOverlay').hasClass('hidden')) {
+                     console.log('Fallback: hiding loading overlay');
+                     clearInterval(progressInterval);
+                     progressBar.css('width', '100%');
+                     $('#loadingOverlay').addClass('hidden');
+                 }
+             }, 10000); // 10 second fallback
              
              // Custom filtering function
              function customFilter() {
@@ -682,8 +694,18 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                          // Extract text content from HTML in the registration type column
                          // The HTML structure is: <div class="registration-type">Type Name</div><small class="text-muted">Code: CODE</small>
                          var typeMatch = data[2].match(/<div class="registration-type">([^<]+)<\/div>/);
-                         if (typeMatch && typeMatch[1].trim() !== typeFilter) {
-                             return false;
+                         if (!typeMatch) {
+                             // Fallback: try to match the text content directly
+                             var typeText = data[2].replace(/<[^>]*>/g, '').trim();
+                             console.log('Type filter fallback - Raw data:', data[2], 'Extracted text:', typeText, 'Filter:', typeFilter);
+                             if (typeText !== typeFilter) {
+                                 return false;
+                             }
+                         } else {
+                             console.log('Type filter regex match - Extracted:', typeMatch[1].trim(), 'Filter:', typeFilter);
+                             if (typeMatch[1].trim() !== typeFilter) {
+                                 return false;
+                             }
                          }
                      }
                      
@@ -742,6 +764,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              });
              
              $('#filterType, #filterStatus').on('change', function() {
+                 console.log('Type filter changed to:', $('#filterType').val());
                  applyCustomFilters();
              });
              
