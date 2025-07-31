@@ -212,6 +212,27 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              color: #667eea;
          }
          
+         /* Filter row styling */
+         .filters th {
+             padding: 8px;
+             background-color: #f8f9fa;
+             border-bottom: 1px solid #dee2e6;
+         }
+         
+         .filters input,
+         .filters select {
+             font-size: 0.875rem;
+             border-radius: 6px;
+             border: 1px solid #ced4da;
+             transition: border-color 0.3s ease;
+         }
+         
+         .filters input:focus,
+         .filters select:focus {
+             border-color: #667eea;
+             box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+         }
+         
 
     </style>
 </head>
@@ -282,6 +303,31 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                      <th>Amount</th>
                                      <th>Status</th>
                                      <th>Actions</th>
+                                 </tr>
+                                 <tr class="filters">
+                                     <th>
+                                         <input type="text" class="form-control form-control-sm" placeholder="Filter school..." id="filterSchool">
+                                     </th>
+                                     <th>
+                                         <input type="text" class="form-control form-control-sm" placeholder="Filter student..." id="filterStudent">
+                                     </th>
+                                     <th>
+                                         <input type="text" class="form-control form-control-sm" placeholder="Filter type..." id="filterType">
+                                     </th>
+                                     <th>
+                                         <input type="text" class="form-control form-control-sm" placeholder="Filter date..." id="filterDate">
+                                     </th>
+                                     <th>
+                                         <input type="text" class="form-control form-control-sm" placeholder="Filter amount..." id="filterAmount">
+                                     </th>
+                                     <th>
+                                         <select class="form-control form-control-sm" id="filterStatus">
+                                             <option value="">All Status</option>
+                                             <option value="Active">Active</option>
+                                             <option value="Refunded">Refunded</option>
+                                         </select>
+                                     </th>
+                                     <th></th>
                                  </tr>
                              </thead>
                             <tbody>
@@ -408,9 +454,68 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  columnDefs: [
                      { orderable: false, targets: [6] } // Disable sorting for Actions column
                  ]
+                          });
+             
+             // Simple filtering function
+             function applyFilters() {
+                 var schoolFilter = $('#filterSchool').val().toLowerCase();
+                 var studentFilter = $('#filterStudent').val().toLowerCase();
+                 var typeFilter = $('#filterType').val().toLowerCase();
+                 var dateFilter = $('#filterDate').val().toLowerCase();
+                 var amountFilter = $('#filterAmount').val().toLowerCase();
+                 var statusFilter = $('#filterStatus').val();
+                 
+                 // Apply custom filtering
+                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                     // School filter (column 0)
+                     if (schoolFilter && data[0].toLowerCase().indexOf(schoolFilter) === -1) {
+                         return false;
+                     }
+                     
+                     // Student filter (column 1)
+                     if (studentFilter && data[1].toLowerCase().indexOf(studentFilter) === -1) {
+                         return false;
+                     }
+                     
+                     // Type filter (column 2)
+                     if (typeFilter && data[2].toLowerCase().indexOf(typeFilter) === -1) {
+                         return false;
+                     }
+                     
+                     // Date filter (column 3)
+                     if (dateFilter && data[3].toLowerCase().indexOf(dateFilter) === -1) {
+                         return false;
+                     }
+                     
+                     // Amount filter (column 4)
+                     if (amountFilter && data[4].toLowerCase().indexOf(amountFilter) === -1) {
+                         return false;
+                     }
+                     
+                     // Status filter (column 5)
+                     if (statusFilter && data[5].indexOf(statusFilter) === -1) {
+                         return false;
+                     }
+                     
+                     return true;
+                 });
+                 
+                 table.draw();
+                 
+                 // Remove the filter function after applying
+                 $.fn.dataTable.ext.search.pop();
+             }
+             
+             // Apply filters on input changes
+             $('#filterSchool, #filterStudent, #filterType, #filterDate, #filterAmount').on('keyup change', function() {
+                 applyFilters();
              });
-
-            // Refund button click handler
+             
+             $('#filterStatus').on('change', function() {
+                 applyFilters();
+             });
+             
+             // Refund button click handler
             $('.btn-refund').click(function () {
                 const row = $(this).closest('tr');
                 const refundId = row.attr('id');
