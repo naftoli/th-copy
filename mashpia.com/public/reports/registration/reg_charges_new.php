@@ -247,40 +247,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              padding: 4px 6px;
          }
          
-         /* Loading overlay styling */
-         .loading-overlay {
-             position: absolute;
-             top: 0;
-             left: 0;
-             right: 0;
-             bottom: 0;
-             background: rgba(255, 255, 255, 0.95);
-             display: flex;
-             align-items: center;
-             justify-content: center;
-             z-index: 1000;
-             border-radius: 0 0 10px 10px;
-         }
-         
-         /* Ensure overlay is visible by default */
-         #loadingOverlay {
-             display: flex !important;
-         }
-         
-         .loading-content {
-             text-align: center;
-             padding: 2rem;
-         }
-         
-         .loading-content .spinner-border {
-             width: 3rem;
-             height: 3rem;
-         }
-         
-         /* Hide loading overlay when data is loaded */
-         .loading-overlay.hidden {
-             display: none;
-         }
+
          
 
     </style>
@@ -339,23 +306,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                      </button>
                  </div>
                  
-                <div class="card-body p-0 position-relative">
-                    <!-- Loading Overlay -->
-                    <div id="loadingOverlay" class="loading-overlay">
-                        <div class="loading-content">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
-                            </div>
-                            <div class="mt-3">
-                                <h5 class="text-primary mb-2">Loading Registration Data</h5>
-                                <p class="text-muted mb-0">Please wait while we load all the registration records...</p>
-                                <div class="progress mt-3" style="height: 6px;">
-                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
+                <div class="card-body p-0">
                     <div class="table-responsive">
                                                  <table id="detailsTable" class="table table-striped table-hover mb-0">
                              <thead>
@@ -410,50 +361,17 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                      <th></th>
                                  </tr>
                              </thead>
-                            <tbody>
-                                <?php foreach ($details as $detail) { ?>
-                                    <tr id="<?= $detail['registration_charge_id'] ?>">
-                                        <td>
-                                            <div class="school-info">
-                                                <strong><?= $detail['school_number'] ? "#" . $detail['school_number'] : "" ?></strong><br>
-                                                <small><?= $detail['school_name'] ?></small>
+                            <tbody id="tableBody">
+                                <tr id="loadingRow">
+                                    <td colspan="7" class="text-center py-5">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="spinner-border text-primary me-3" role="status">
+                                                <span class="visually-hidden">Loading...</span>
                                             </div>
-                                        </td>
-                                        <td>
-                                            <div class="user-name"><?= $detail['first'] . " " . $detail['last'] ?></div>
-                                            <small class="text-muted"><?= $detail['user_serial'] ? "#" . $detail['user_serial'] : "" ?></small>
-                                        </td>
-                                        <td>
-                                            <div class="registration-type"><?= ChidonShipping::getDescription($detail['type']) ?></div>
-                                            <small class="text-muted">Code: <?= $detail['type'] ?></small>
-                                        </td>
-                                        <td>
-                                            <i class="fas fa-calendar-alt me-1"></i>
-                                            <?= (new DateTime($detail['date']))->format('m/d/Y g:i:sa'); ?>
-                                        </td>
-                                        <td class="amount-cell">$<?= number_format($detail['amount'], 2) ?></td>
-                                        <td>
-                                            <?php if (intval($detail['refunded'])) { ?>
-                                                <span class="badge badge-refunded">
-                                                    <i class="fas fa-undo me-1"></i>Refunded
-                                                </span>
-                                            <?php } else { ?>
-                                                <span class="badge badge-active">
-                                                    <i class="fas fa-check me-1"></i>Active
-                                                </span>
-                                            <?php } ?>
-                                        </td>
-                                        <td>
-                                            <button class="btn btn-refund btn-sm"
-                                                    <?php if (intval($detail['refunded'])) echo " disabled"; ?>
-                                                    data-amount="<?= $detail['amount'] ?>"
-                                                    data-type="<?= $detail['type'] ?>"
-                                                    data-serial="<?= $detail['user_serial'] ?>">
-                                                <i class="fas fa-undo me-1"></i>Refund
-                                            </button>
-                                        </td>
-                                    </tr>
-                                <?php } ?>
+                                            <h5 class="mb-0 text-muted">Loading registration data...</h5>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -514,22 +432,6 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     
                   <script>
          $(document).ready(function () {
-             console.log('Document ready, showing loading overlay');
-             
-             // Show loading overlay
-             $('#loadingOverlay').show().removeClass('hidden');
-             console.log('Loading overlay should be visible');
-             
-             // Animate progress bar
-             var progressBar = $('#loadingOverlay .progress-bar');
-             var progress = 0;
-             var progressInterval = setInterval(function() {
-                 progress += Math.random() * 15;
-                 if (progress > 90) progress = 90;
-                 progressBar.css('width', progress + '%');
-                 console.log('Progress:', progress + '%');
-             }, 200);
-             
              // Initialize DataTable with simple configuration
              var table = $('#detailsTable').DataTable({
                  pageLength: 100,
@@ -553,30 +455,63 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  // Configure header row for sorting
                  orderCellsTop: true,
                  fixedHeader: true,
-                 // Hide loading overlay when DataTable is initialized
+                 // Replace loading row with actual data when initialized
                  initComplete: function() {
-                     console.log('DataTable initialization complete');
-                     // Complete progress bar
-                     clearInterval(progressInterval);
-                     progressBar.css('width', '100%');
-                     console.log('Progress bar completed');
+                     // Remove the loading row
+                     $('#loadingRow').remove();
                      
-                     setTimeout(function() {
-                         $('#loadingOverlay').addClass('hidden');
-                         console.log('Loading overlay hidden');
-                     }, 500); // Small delay to ensure smooth transition
+                     // Add the actual data rows
+                     var tableBody = $('#tableBody');
+                     <?php foreach ($details as $detail) { ?>
+                         tableBody.append(`
+                             <tr id="<?= $detail['registration_charge_id'] ?>">
+                                 <td>
+                                     <div class="school-info">
+                                         <strong><?= $detail['school_number'] ? "#" . $detail['school_number'] : "" ?></strong><br>
+                                         <small><?= $detail['school_name'] ?></small>
+                                     </div>
+                                 </td>
+                                 <td>
+                                     <div class="user-name"><?= $detail['first'] . " " . $detail['last'] ?></div>
+                                     <small class="text-muted"><?= $detail['user_serial'] ? "#" . $detail['user_serial'] : "" ?></small>
+                                 </td>
+                                 <td>
+                                     <div class="registration-type"><?= ChidonShipping::getDescription($detail['type']) ?></div>
+                                     <small class="text-muted">Code: <?= $detail['type'] ?></small>
+                                 </td>
+                                 <td>
+                                     <i class="fas fa-calendar-alt me-1"></i>
+                                     <?= (new DateTime($detail['date']))->format('m/d/Y g:i:sa'); ?>
+                                 </td>
+                                 <td class="amount-cell">$<?= number_format($detail['amount'], 2) ?></td>
+                                 <td>
+                                     <?php if (intval($detail['refunded'])) { ?>
+                                         <span class="badge badge-refunded">
+                                             <i class="fas fa-undo me-1"></i>Refunded
+                                         </span>
+                                     <?php } else { ?>
+                                         <span class="badge badge-active">
+                                             <i class="fas fa-check me-1"></i>Active
+                                         </span>
+                                     <?php } ?>
+                                 </td>
+                                 <td>
+                                     <button class="btn btn-refund btn-sm"
+                                             <?php if (intval($detail['refunded'])) echo " disabled"; ?>
+                                             data-amount="<?= $detail['amount'] ?>"
+                                             data-type="<?= $detail['type'] ?>"
+                                             data-serial="<?= $detail['user_serial'] ?>">
+                                         <i class="fas fa-undo me-1"></i>Refund
+                                     </button>
+                                 </td>
+                             </tr>
+                         `);
+                     <?php } ?>
+                     
+                     // Re-draw the table to show the new data
+                     table.draw();
                  }
              });
-             
-             // Fallback: hide loading overlay after a maximum time
-             setTimeout(function() {
-                 if (!$('#loadingOverlay').hasClass('hidden')) {
-                     console.log('Fallback: hiding loading overlay');
-                     clearInterval(progressInterval);
-                     progressBar.css('width', '100%');
-                     $('#loadingOverlay').addClass('hidden');
-                 }
-             }, 10000); // 10 second fallback
              
              // Simple filtering function
              function applyFilters() {
