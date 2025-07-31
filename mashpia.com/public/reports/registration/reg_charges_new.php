@@ -527,7 +527,8 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
         $(document).ready(function () {
                          // Initialize DataTable
              var table = $('#detailsTable').DataTable({
-                 pageLength: 25,
+                 pageLength: 100,
+                 lengthMenu: [[25, 50, 100, 500, 1000, 5000, 10000], [25, 50, 100, 500, 1000, 5000, 10000]],
                  order: [[3, 'desc']], // Sort by date descending by default
                  responsive: true,
                  language: {
@@ -554,161 +555,94 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  table.draw();
              }
              
-             // Add custom filtering for each column
-             $('#filterSchool').on('keyup change', function() {
-                 var filterValue = $(this).val().toLowerCase();
-                 
-                 // Filter by school info (column 0)
-                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                     var schoolInfo = data[0].toLowerCase();
-                     return schoolInfo.indexOf(filterValue) === -1 ? false : true;
-                 });
-                 
-                 customFilter();
-                 
-                 // Remove the filter function after applying
-                 $.fn.dataTable.ext.search.pop();
-             });
-             
-             $('#filterStudent').on('keyup change', function() {
-                 var filterValue = $(this).val().toLowerCase();
-                 
-                 // Filter by student info (column 1)
-                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                     var studentInfo = data[1].toLowerCase();
-                     return studentInfo.indexOf(filterValue) === -1 ? false : true;
-                 });
-                 
-                 customFilter();
-                 
-                 // Remove the filter function after applying
-                 $.fn.dataTable.ext.search.pop();
-             });
-             
-             $('#filterType').on('change', function() {
-                 var filterValue = $(this).val();
-                 
-                 // Filter by registration type (column 2)
-                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                     if (!filterValue) return true; // Show all if no filter selected
-                     var type = data[2];
-                     return type === filterValue;
-                 });
-                 
-                 customFilter();
-                 
-                 // Remove the filter function after applying
-                 $.fn.dataTable.ext.search.pop();
-             });
-             
-             // Date range filtering function
-             function applyDateRangeFilter() {
+             // Custom filtering function that works with DataTables
+             function applyCustomFilters() {
+                 var schoolFilter = $('#filterSchool').val().toLowerCase();
+                 var studentFilter = $('#filterStudent').val().toLowerCase();
+                 var typeFilter = $('#filterType').val();
                  var fromDate = $('#filterDateFrom').val();
                  var toDate = $('#filterDateTo').val();
-                 
-                 // Filter by registration date (column 3)
-                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                     var dateStr = data[3];
-                     // Extract date from the formatted string (e.g., "12/25/2023 2:30:45pm")
-                     var dateMatch = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-                     if (dateMatch) {
-                         var month = dateMatch[1].padStart(2, '0');
-                         var day = dateMatch[2].padStart(2, '0');
-                         var year = dateMatch[3];
-                         var formattedDate = year + '-' + month + '-' + day;
-                         
-                         // If no date filters are set, show all
-                         if (!fromDate && !toDate) return true;
-                         
-                         // If only from date is set
-                         if (fromDate && !toDate) {
-                             return formattedDate >= fromDate;
-                         }
-                         
-                         // If only to date is set
-                         if (!fromDate && toDate) {
-                             return formattedDate <= toDate;
-                         }
-                         
-                         // If both dates are set
-                         if (fromDate && toDate) {
-                             return formattedDate >= fromDate && formattedDate <= toDate;
-                         }
-                     }
-                     return false;
-                 });
-                 
-                 customFilter();
-                 
-                 // Remove the filter function after applying
-                 $.fn.dataTable.ext.search.pop();
-             }
-             
-             // Apply date range filter when either date input changes
-             $('#filterDateFrom, #filterDateTo').on('change', function() {
-                 applyDateRangeFilter();
-             });
-             
-             // Amount range filtering function
-             function applyAmountRangeFilter() {
                  var fromAmount = parseFloat($('#filterAmountFrom').val()) || 0;
                  var toAmount = parseFloat($('#filterAmountTo').val()) || 0;
+                 var statusFilter = $('#filterStatus').val();
                  
-                 // Filter by amount (column 4)
+                 // Apply custom filtering
                  $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                     var amountStr = data[4];
-                     // Extract numeric value from amount string (e.g., "$50.00")
-                     var amountMatch = amountStr.match(/\$([\d,]+\.?\d*)/);
-                     if (amountMatch) {
-                         var amount = parseFloat(amountMatch[1].replace(/,/g, ''));
-                         
-                         // If no amount filters are set, show all
-                         if (fromAmount === 0 && toAmount === 0) return true;
-                         
-                         // If only from amount is set
-                         if (fromAmount > 0 && toAmount === 0) {
-                             return amount >= fromAmount;
-                         }
-                         
-                         // If only to amount is set
-                         if (fromAmount === 0 && toAmount > 0) {
-                             return amount <= toAmount;
-                         }
-                         
-                         // If both amounts are set
-                         if (fromAmount > 0 && toAmount > 0) {
-                             return amount >= fromAmount && amount <= toAmount;
+                     // School filter (column 0)
+                     if (schoolFilter && data[0].toLowerCase().indexOf(schoolFilter) === -1) {
+                         return false;
+                     }
+                     
+                     // Student filter (column 1)
+                     if (studentFilter && data[1].toLowerCase().indexOf(studentFilter) === -1) {
+                         return false;
+                     }
+                     
+                     // Type filter (column 2)
+                     if (typeFilter && data[2] !== typeFilter) {
+                         return false;
+                     }
+                     
+                     // Date range filter (column 3)
+                     if (fromDate || toDate) {
+                         var dateStr = data[3];
+                         var dateMatch = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                         if (dateMatch) {
+                             var month = dateMatch[1].padStart(2, '0');
+                             var day = dateMatch[2].padStart(2, '0');
+                             var year = dateMatch[3];
+                             var formattedDate = year + '-' + month + '-' + day;
+                             
+                             if (fromDate && formattedDate < fromDate) return false;
+                             if (toDate && formattedDate > toDate) return false;
+                         } else {
+                             return false;
                          }
                      }
-                     return false;
+                     
+                     // Amount range filter (column 4)
+                     if (fromAmount > 0 || toAmount > 0) {
+                         var amountStr = data[4];
+                         var amountMatch = amountStr.match(/\$([\d,]+\.?\d*)/);
+                         if (amountMatch) {
+                             var amount = parseFloat(amountMatch[1].replace(/,/g, ''));
+                             if (fromAmount > 0 && amount < fromAmount) return false;
+                             if (toAmount > 0 && amount > toAmount) return false;
+                         } else {
+                             return false;
+                         }
+                     }
+                     
+                     // Status filter (column 5)
+                     if (statusFilter && data[5].indexOf(statusFilter) === -1) {
+                         return false;
+                     }
+                     
+                     return true;
                  });
                  
-                 customFilter();
+                 table.draw();
                  
                  // Remove the filter function after applying
                  $.fn.dataTable.ext.search.pop();
              }
              
-             // Apply amount range filter when either amount input changes
-             $('#filterAmountFrom, #filterAmountTo').on('keyup change', function() {
-                 applyAmountRangeFilter();
+             // Apply filters on input changes
+             $('#filterSchool, #filterStudent').on('keyup change', function() {
+                 applyCustomFilters();
              });
              
-             $('#filterStatus').on('change', function() {
-                 var filterValue = $(this).val();
-                 
-                 // Filter by status (column 5)
-                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                     var status = data[5];
-                     if (filterValue === '') return true; // Show all if no filter selected
-                     return status.indexOf(filterValue) !== -1;
-                 });
-                 
-                 customFilter();
-                 
-                 // Remove the filter function after applying
-                 $.fn.dataTable.ext.search.pop();
+             $('#filterType, #filterStatus').on('change', function() {
+                 applyCustomFilters();
              });
+             
+             $('#filterDateFrom, #filterDateTo, #filterAmountFrom, #filterAmountTo').on('change', function() {
+                 applyCustomFilters();
+             });
+             
+
+             
+
              
              // Clear all filters
              function clearAllFilters() {
@@ -720,7 +654,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  $('#filterAmountFrom').val('');
                  $('#filterAmountTo').val('');
                  $('#filterStatus').val('');
-                 table.search('').draw();
+                 applyCustomFilters(); // Apply the cleared filters
              }
              
              // Add clear filters button functionality
