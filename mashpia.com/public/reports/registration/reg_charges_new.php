@@ -329,7 +329,12 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                          <input type="text" class="form-control form-control-sm" placeholder="Filter student..." id="filterStudent">
                                      </th>
                                      <th>
-                                         <input type="text" class="form-control form-control-sm" placeholder="Filter type..." id="filterType">
+                                         <select class="form-control form-control-sm" id="filterType">
+                                             <option value="">All Types</option>
+                                             <?php foreach ($totals as $type => $total) { ?>
+                                                 <option value="<?= $type ?>"><?= $type ?></option>
+                                             <?php } ?>
+                                         </select>
                                      </th>
                                      <th>
                                          <div class="row g-1">
