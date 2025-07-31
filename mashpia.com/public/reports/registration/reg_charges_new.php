@@ -362,6 +362,16 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                  </tr>
                              </thead>
                             <tbody id="tableBody">
+                                <tr>
+                                    <td colspan="7" class="text-center py-5">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="spinner-border text-primary me-3" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                            <h5 class="mb-0 text-muted">Loading registration data...</h5>
+                                        </div>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -422,203 +432,202 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     
                   <script>
          $(document).ready(function () {
-             // Show loading message
-             $('#tableBody').html(`
-                 <tr>
-                     <td colspan="7" class="text-center py-5">
-                         <div class="d-flex align-items-center justify-content-center">
-                             <div class="spinner-border text-primary me-3" role="status">
-                                 <span class="visually-hidden">Loading...</span>
-                             </div>
-                             <h5 class="mb-0 text-muted">Loading registration data...</h5>
-                         </div>
-                     </td>
-                 </tr>
-             `);
-             
-             // Initialize DataTable with simple configuration
-             var table = $('#detailsTable').DataTable({
-                 pageLength: 100,
-                 lengthMenu: [[25, 50, 100, 500, 1000, 5000, 10000], [25, 50, 100, 500, 1000, 5000, 10000]],
-                 order: [[3, 'desc']], // Sort by date descending by default
-                 responsive: true,
-                 language: {
-                     search: "Search records:",
-                     lengthMenu: "Show _MENU_ records per page",
-                     info: "Showing _START_ to _END_ of _TOTAL_ records",
-                     paginate: {
-                         first: "First",
-                         last: "Last",
-                         next: "Next",
-                         previous: "Previous"
-                     }
-                 },
-                 columnDefs: [
-                     { orderable: false, targets: [6] } // Disable sorting for Actions column
-                 ],
-                 // Configure header row for sorting
-                 orderCellsTop: true,
-                 fixedHeader: true,
-                 // Replace loading message with actual data when initialized
-                 initComplete: function() {
-                     // Clear the loading message
-                     $('#tableBody').empty();
-                     
-                     // Add the actual data rows
-                     var tableBody = $('#tableBody');
-                     <?php foreach ($details as $detail) { ?>
-                         tableBody.append(`
-                             <tr id="<?= $detail['registration_charge_id'] ?>">
-                                 <td>
-                                     <div class="school-info">
-                                         <strong><?= $detail['school_number'] ? "#" . $detail['school_number'] : "" ?></strong><br>
-                                         <small><?= $detail['school_name'] ?></small>
-                                     </div>
-                                 </td>
-                                 <td>
-                                     <div class="user-name"><?= $detail['first'] . " " . $detail['last'] ?></div>
-                                     <small class="text-muted"><?= $detail['user_serial'] ? "#" . $detail['user_serial'] : "" ?></small>
-                                 </td>
-                                 <td>
-                                     <div class="registration-type"><?= ChidonShipping::getDescription($detail['type']) ?></div>
-                                     <small class="text-muted">Code: <?= $detail['type'] ?></small>
-                                 </td>
-                                 <td>
-                                     <i class="fas fa-calendar-alt me-1"></i>
-                                     <?= (new DateTime($detail['date']))->format('m/d/Y g:i:sa'); ?>
-                                 </td>
-                                 <td class="amount-cell">$<?= number_format($detail['amount'], 2) ?></td>
-                                 <td>
-                                     <?php if (intval($detail['refunded'])) { ?>
-                                         <span class="badge badge-refunded">
-                                             <i class="fas fa-undo me-1"></i>Refunded
-                                         </span>
-                                     <?php } else { ?>
-                                         <span class="badge badge-active">
-                                             <i class="fas fa-check me-1"></i>Active
-                                         </span>
-                                     <?php } ?>
-                                 </td>
-                                 <td>
-                                     <button class="btn btn-refund btn-sm"
-                                             <?php if (intval($detail['refunded'])) echo " disabled"; ?>
-                                             data-amount="<?= $detail['amount'] ?>"
-                                             data-type="<?= $detail['type'] ?>"
-                                             data-serial="<?= $detail['user_serial'] ?>">
-                                         <i class="fas fa-undo me-1"></i>Refund
-                                     </button>
-                                 </td>
-                             </tr>
-                         `);
-                     <?php } ?>
-                     
-                     // Re-draw the table to show the new data
-                     table.draw();
-                 }
-             });
-             
-             // Simple filtering function
-             function applyFilters() {
-                 var schoolFilter = $('#filterSchool').val().toLowerCase();
-                 var studentFilter = $('#filterStudent').val().toLowerCase();
-                 var typeFilter = $('#filterType').val().toLowerCase();
-                 var fromDate = $('#filterDateFrom').val();
-                 var toDate = $('#filterDateTo').val();
-                 var fromAmount = parseFloat($('#filterAmountFrom').val()) || 0;
-                 var toAmount = parseFloat($('#filterAmountTo').val()) || 0;
-                 var statusFilter = $('#filterStatus').val();
+             // Load data first, then initialize DataTable
+             function loadDataAndInitializeTable() {
+                 // Clear the loading message
+                 $('#tableBody').empty();
                  
-                 // Apply custom filtering
-                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-                     // School filter (column 0)
-                     if (schoolFilter && data[0].toLowerCase().indexOf(schoolFilter) === -1) {
-                         return false;
-                     }
-                     
-                     // Student filter (column 1)
-                     if (studentFilter && data[1].toLowerCase().indexOf(studentFilter) === -1) {
-                         return false;
-                     }
-                     
-                     // Type filter (column 2)
-                     if (typeFilter && data[2].toLowerCase().indexOf(typeFilter) === -1) {
-                         return false;
-                     }
-                     
-                     // Date range filter (column 3)
-                     if (fromDate || toDate) {
-                         var dateStr = data[3];
-                         var dateMatch = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
-                         if (dateMatch) {
-                             var month = dateMatch[1].padStart(2, '0');
-                             var day = dateMatch[2].padStart(2, '0');
-                             var year = dateMatch[3];
-                             var formattedDate = year + '-' + month + '-' + day;
-                             
-                             if (fromDate && formattedDate < fromDate) return false;
-                             if (toDate && formattedDate > toDate) return false;
-                         } else {
-                             return false;
+                 // Add the actual data rows
+                 var tableBody = $('#tableBody');
+                 <?php foreach ($details as $detail) { ?>
+                     tableBody.append(`
+                         <tr id="<?= $detail['registration_charge_id'] ?>">
+                             <td>
+                                 <div class="school-info">
+                                     <strong><?= $detail['school_number'] ? "#" . $detail['school_number'] : "" ?></strong><br>
+                                     <small><?= $detail['school_name'] ?></small>
+                                 </div>
+                             </td>
+                             <td>
+                                 <div class="user-name"><?= $detail['first'] . " " . $detail['last'] ?></div>
+                                 <small class="text-muted"><?= $detail['user_serial'] ? "#" . $detail['user_serial'] : "" ?></small>
+                             </td>
+                             <td>
+                                 <div class="registration-type"><?= ChidonShipping::getDescription($detail['type']) ?></div>
+                                 <small class="text-muted">Code: <?= $detail['type'] ?></small>
+                             </td>
+                             <td>
+                                 <i class="fas fa-calendar-alt me-1"></i>
+                                 <?= (new DateTime($detail['date']))->format('m/d/Y g:i:sa'); ?>
+                             </td>
+                             <td class="amount-cell">$<?= number_format($detail['amount'], 2) ?></td>
+                             <td>
+                                 <?php if (intval($detail['refunded'])) { ?>
+                                     <span class="badge badge-refunded">
+                                         <i class="fas fa-undo me-1"></i>Refunded
+                                     </span>
+                                 <?php } else { ?>
+                                     <span class="badge badge-active">
+                                         <i class="fas fa-check me-1"></i>Active
+                                     </span>
+                                 <?php } ?>
+                             </td>
+                             <td>
+                                 <button class="btn btn-refund btn-sm"
+                                         <?php if (intval($detail['refunded'])) echo " disabled"; ?>
+                                         data-amount="<?= $detail['amount'] ?>"
+                                         data-type="<?= $detail['type'] ?>"
+                                         data-serial="<?= $detail['user_serial'] ?>">
+                                     <i class="fas fa-undo me-1"></i>Refund
+                                 </button>
+                             </td>
+                         </tr>
+                     `);
+                 <?php } ?>
+                 
+                 // Now initialize DataTable
+                 var table = $('#detailsTable').DataTable({
+                     pageLength: 100,
+                     lengthMenu: [[25, 50, 100, 500, 1000, 5000, 10000], [25, 50, 100, 500, 1000, 5000, 10000]],
+                     order: [[3, 'desc']], // Sort by date descending by default
+                     responsive: true,
+                     language: {
+                         search: "Search records:",
+                         lengthMenu: "Show _MENU_ records per page",
+                         info: "Showing _START_ to _END_ of _TOTAL_ records",
+                         paginate: {
+                             first: "First",
+                             last: "Last",
+                             next: "Next",
+                             previous: "Previous"
                          }
-                     }
-                     
-                     // Amount range filter (column 4)
-                     if (fromAmount > 0 || toAmount > 0) {
-                         var amountStr = data[4];
-                         var amountMatch = amountStr.match(/\$([\d,]+\.?\d*)/);
-                         if (amountMatch) {
-                             var amount = parseFloat(amountMatch[1].replace(/,/g, ''));
-                             if (fromAmount > 0 && amount < fromAmount) return false;
-                             if (toAmount > 0 && amount > toAmount) return false;
-                         } else {
-                             return false;
-                         }
-                     }
-                     
-                     // Status filter (column 5)
-                     if (statusFilter && data[5].indexOf(statusFilter) === -1) {
-                         return false;
-                     }
-                     
-                     return true;
+                     },
+                     columnDefs: [
+                         { orderable: false, targets: [6] } // Disable sorting for Actions column
+                     ],
+                     // Configure header row for sorting
+                     orderCellsTop: true,
+                     fixedHeader: true
                  });
                  
-                 table.draw();
+                 // Set up filtering after DataTable is initialized
+                 setupFiltering(table);
+             }
+             
+             // Start loading after a short delay to show the loading message
+             setTimeout(loadDataAndInitializeTable, 100);
+             
+             // Set up filtering function
+             function setupFiltering(table) {
+                 function applyFilters() {
+                     var schoolFilter = $('#filterSchool').val().toLowerCase();
+                     var studentFilter = $('#filterStudent').val().toLowerCase();
+                     var typeFilter = $('#filterType').val().toLowerCase();
+                     var fromDate = $('#filterDateFrom').val();
+                     var toDate = $('#filterDateTo').val();
+                     var fromAmount = parseFloat($('#filterAmountFrom').val()) || 0;
+                     var toAmount = parseFloat($('#filterAmountTo').val()) || 0;
+                     var statusFilter = $('#filterStatus').val();
+                     
+                     $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                         // School filter (column 0)
+                         if (schoolFilter && data[0].toLowerCase().indexOf(schoolFilter) === -1) {
+                             return false;
+                         }
+                         
+                         // Student filter (column 1)
+                         if (studentFilter && data[1].toLowerCase().indexOf(studentFilter) === -1) {
+                             return false;
+                         }
+                         
+                         // Type filter (column 2) - extract text from HTML
+                         if (typeFilter) {
+                             var typeText = data[2];
+                             // Extract text from HTML using regex
+                             var match = typeText.match(/<div class="registration-type">([^<]+)<\/div>/);
+                             var extractedText = match ? match[1] : typeText.replace(/<[^>]*>/g, '');
+                             if (extractedText.toLowerCase().indexOf(typeFilter) === -1) {
+                                 return false;
+                             }
+                         }
+                         
+                         // Date range filter (column 3)
+                         if (fromDate || toDate) {
+                             var dateText = data[3];
+                             // Extract date from the formatted string (e.g., "12/25/2023 2:30:45pm")
+                             var dateMatch = dateText.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                             if (dateMatch) {
+                                 var month = parseInt(dateMatch[1]);
+                                 var day = parseInt(dateMatch[2]);
+                                 var year = parseInt(dateMatch[3]);
+                                 var rowDate = new Date(year, month - 1, day);
+                                 
+                                 if (fromDate) {
+                                     var fromDateObj = new Date(fromDate);
+                                     if (rowDate < fromDateObj) {
+                                         return false;
+                                     }
+                                 }
+                                 
+                                 if (toDate) {
+                                     var toDateObj = new Date(toDate);
+                                     if (rowDate > toDateObj) {
+                                         return false;
+                                     }
+                                 }
+                             }
+                         }
+                         
+                         // Amount range filter (column 4)
+                         if (fromAmount > 0 || toAmount > 0) {
+                             var amountText = data[4];
+                             // Extract numeric value from currency string (e.g., "$123.45")
+                             var amountMatch = amountText.match(/\$([\d,]+\.?\d*)/);
+                             if (amountMatch) {
+                                 var amount = parseFloat(amountMatch[1].replace(/,/g, ''));
+                                 
+                                 if (fromAmount > 0 && amount < fromAmount) {
+                                     return false;
+                                 }
+                                 
+                                 if (toAmount > 0 && amount > toAmount) {
+                                     return false;
+                                 }
+                             }
+                         }
+                         
+                         // Status filter (column 5)
+                         if (statusFilter && data[5].indexOf(statusFilter) === -1) {
+                             return false;
+                         }
+                         
+                         return true;
+                     });
+                     
+                     table.draw();
+                     $.fn.dataTable.ext.search.pop();
+                 }
                  
-                 // Remove the filter function after applying
-                 $.fn.dataTable.ext.search.pop();
+                 // Set up event listeners for filters
+                 $('#filterSchool, #filterStudent, #filterType').on('keyup change', applyFilters);
+                 $('#filterDateFrom, #filterDateTo, #filterAmountFrom, #filterAmountTo').on('change', applyFilters);
+                 $('#filterStatus').on('change', applyFilters);
+                 
+                 // Clear filters function
+                 function clearAllFilters() {
+                     $('#filterSchool').val('');
+                     $('#filterStudent').val('');
+                     $('#filterType').val('');
+                     $('#filterDateFrom').val('');
+                     $('#filterDateTo').val('');
+                     $('#filterAmountFrom').val('');
+                     $('#filterAmountTo').val('');
+                     $('#filterStatus').val('');
+                     applyFilters();
+                 }
+                 
+                 $('.clear-filters').on('click', clearAllFilters);
              }
-             
-             // Apply filters on input changes
-             $('#filterSchool, #filterStudent, #filterType').on('keyup change', function() {
-                 applyFilters();
-             });
-             
-             $('#filterDateFrom, #filterDateTo, #filterAmountFrom, #filterAmountTo').on('change', function() {
-                 applyFilters();
-             });
-             
-             $('#filterStatus').on('change', function() {
-                 applyFilters();
-             });
-             
-             // Clear all filters function
-             function clearAllFilters() {
-                 $('#filterSchool').val('');
-                 $('#filterStudent').val('');
-                 $('#filterType').val('');
-                 $('#filterDateFrom').val('');
-                 $('#filterDateTo').val('');
-                 $('#filterAmountFrom').val('');
-                 $('#filterAmountTo').val('');
-                 $('#filterStatus').val('');
-                 applyFilters(); // Apply the cleared filters
-             }
-             
-             // Clear filters button functionality
-             $('.clear-filters').on('click', function() {
-                 clearAllFilters();
-             });
              
              // Refund button click handler
             $('.btn-refund').click(function () {
