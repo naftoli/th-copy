@@ -269,6 +269,63 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
          .amount-range-container .col-6 {
              padding: 0 2px;
          }
+         
+         /* Loading overlay styling */
+         .loading-overlay {
+             position: absolute;
+             top: 0;
+             left: 0;
+             right: 0;
+             bottom: 0;
+             background: rgba(255, 255, 255, 0.95);
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             z-index: 1000;
+             border-radius: 0 0 10px 10px;
+         }
+         
+         .loading-content {
+             text-align: center;
+             padding: 2rem;
+         }
+         
+         .loading-content .spinner-border {
+             width: 3rem;
+             height: 3rem;
+         }
+         
+         /* Hide loading overlay when data is loaded */
+         .loading-overlay.hidden {
+             display: none;
+         }
+         
+         /* Filtering state styling */
+         .table.filtering {
+             opacity: 0.7;
+             transition: opacity 0.3s ease;
+         }
+         
+         .table.filtering::after {
+             content: '';
+             position: absolute;
+             top: 50%;
+             left: 50%;
+             transform: translate(-50%, -50%);
+             width: 20px;
+             height: 20px;
+             border: 2px solid #007bff;
+             border-radius: 50%;
+             border-top-color: transparent;
+             animation: spin 1s linear infinite;
+             z-index: 1001;
+         }
+         
+         @keyframes spin {
+             to {
+                 transform: translate(-50%, -50%) rotate(360deg);
+             }
+         }
     </style>
 </head>
 <body>
@@ -316,13 +373,29 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                 </div>
             </div>
             
-            <!-- Details Section -->
+                         <!-- Details Section -->
              <div class="card">
                  <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                      <h3 class="mb-0"><i class="fas fa-list me-2"></i>Registration Details</h3>
                      <button class="btn btn-outline-light btn-sm clear-filters" title="Clear all filters">
                          <i class="fas fa-times me-1"></i>Clear Filters
                      </button>
+                 </div>
+                 
+                 <!-- Loading Overlay -->
+                 <div id="loadingOverlay" class="loading-overlay">
+                     <div class="loading-content">
+                         <div class="spinner-border text-primary" role="status">
+                             <span class="visually-hidden">Loading...</span>
+                         </div>
+                         <div class="mt-3">
+                             <h5 class="text-primary mb-2">Loading Registration Data</h5>
+                             <p class="text-muted mb-0">Please wait while we load all the registration records...</p>
+                             <div class="progress mt-3" style="height: 6px;">
+                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                             </div>
+                         </div>
+                     </div>
                  </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -523,9 +596,21 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     
-    <script>
-        $(document).ready(function () {
-                         // Initialize DataTable
+         <script>
+         $(document).ready(function () {
+             // Show loading overlay
+             $('#loadingOverlay').show();
+             
+             // Animate progress bar
+             var progressBar = $('#loadingOverlay .progress-bar');
+             var progress = 0;
+             var progressInterval = setInterval(function() {
+                 progress += Math.random() * 15;
+                 if (progress > 90) progress = 90;
+                 progressBar.css('width', progress + '%');
+             }, 200);
+             
+             // Initialize DataTable
              var table = $('#detailsTable').DataTable({
                  pageLength: 100,
                  lengthMenu: [[25, 50, 100, 500, 1000, 5000, 10000], [25, 50, 100, 500, 1000, 5000, 10000]],
@@ -547,7 +632,17 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  ],
                  // Configure header row for sorting
                  orderCellsTop: true,
-                 fixedHeader: true
+                 fixedHeader: true,
+                 // Hide loading overlay when DataTable is initialized
+                 initComplete: function() {
+                     // Complete progress bar
+                     clearInterval(progressInterval);
+                     progressBar.css('width', '100%');
+                     
+                     setTimeout(function() {
+                         $('#loadingOverlay').addClass('hidden');
+                     }, 500); // Small delay to ensure smooth transition
+                 }
              });
              
              // Custom filtering function
@@ -557,6 +652,10 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              
              // Custom filtering function that works with DataTables
              function applyCustomFilters() {
+                 // Show small loading indicator for filtering
+                 var $table = $('#detailsTable');
+                 $table.addClass('filtering');
+                 
                  var schoolFilter = $('#filterSchool').val().toLowerCase();
                  var studentFilter = $('#filterStudent').val().toLowerCase();
                  var typeFilter = $('#filterType').val();
@@ -630,6 +729,11 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  
                  // Remove the filter function after applying
                  $.fn.dataTable.ext.search.pop();
+                 
+                 // Remove filtering class after a short delay
+                 setTimeout(function() {
+                     $table.removeClass('filtering');
+                 }, 300);
              }
              
              // Apply filters on input changes
