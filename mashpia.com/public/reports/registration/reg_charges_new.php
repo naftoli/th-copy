@@ -362,16 +362,6 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                  </tr>
                              </thead>
                             <tbody id="tableBody">
-                                <tr id="loadingRow">
-                                    <td colspan="7" class="text-center py-5">
-                                        <div class="d-flex align-items-center justify-content-center">
-                                            <div class="spinner-border text-primary me-3" role="status">
-                                                <span class="visually-hidden">Loading...</span>
-                                            </div>
-                                            <h5 class="mb-0 text-muted">Loading registration data...</h5>
-                                        </div>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -432,6 +422,20 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     
                   <script>
          $(document).ready(function () {
+             // Show loading message
+             $('#tableBody').html(`
+                 <tr>
+                     <td colspan="7" class="text-center py-5">
+                         <div class="d-flex align-items-center justify-content-center">
+                             <div class="spinner-border text-primary me-3" role="status">
+                                 <span class="visually-hidden">Loading...</span>
+                             </div>
+                             <h5 class="mb-0 text-muted">Loading registration data...</h5>
+                         </div>
+                     </td>
+                 </tr>
+             `);
+             
              // Initialize DataTable with simple configuration
              var table = $('#detailsTable').DataTable({
                  pageLength: 100,
@@ -455,10 +459,10 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  // Configure header row for sorting
                  orderCellsTop: true,
                  fixedHeader: true,
-                 // Replace loading row with actual data when initialized
+                 // Replace loading message with actual data when initialized
                  initComplete: function() {
-                     // Remove the loading row
-                     $('#loadingRow').remove();
+                     // Clear the loading message
+                     $('#tableBody').empty();
                      
                      // Add the actual data rows
                      var tableBody = $('#tableBody');
