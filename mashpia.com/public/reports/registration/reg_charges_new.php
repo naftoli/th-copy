@@ -262,6 +262,11 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              border-radius: 0 0 10px 10px;
          }
          
+         /* Ensure overlay is visible by default */
+         #loadingOverlay {
+             display: flex !important;
+         }
+         
          .loading-content {
              text-align: center;
              padding: 2rem;
@@ -334,23 +339,23 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                      </button>
                  </div>
                  
-                 <!-- Loading Overlay -->
-                 <div id="loadingOverlay" class="loading-overlay">
-                     <div class="loading-content">
-                         <div class="spinner-border text-primary" role="status">
-                             <span class="visually-hidden">Loading...</span>
-                         </div>
-                         <div class="mt-3">
-                             <h5 class="text-primary mb-2">Loading Registration Data</h5>
-                             <p class="text-muted mb-0">Please wait while we load all the registration records...</p>
-                             <div class="progress mt-3" style="height: 6px;">
-                                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
-                             </div>
-                         </div>
-                     </div>
-                 </div>
-
-                <div class="card-body p-0">
+                <div class="card-body p-0 position-relative">
+                    <!-- Loading Overlay -->
+                    <div id="loadingOverlay" class="loading-overlay">
+                        <div class="loading-content">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <div class="mt-3">
+                                <h5 class="text-primary mb-2">Loading Registration Data</h5>
+                                <p class="text-muted mb-0">Please wait while we load all the registration records...</p>
+                                <div class="progress mt-3" style="height: 6px;">
+                                    <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <div class="table-responsive">
                                                  <table id="detailsTable" class="table table-striped table-hover mb-0">
                              <thead>
@@ -509,8 +514,11 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     
                   <script>
          $(document).ready(function () {
+             console.log('Document ready, showing loading overlay');
+             
              // Show loading overlay
              $('#loadingOverlay').show().removeClass('hidden');
+             console.log('Loading overlay should be visible');
              
              // Animate progress bar
              var progressBar = $('#loadingOverlay .progress-bar');
@@ -519,6 +527,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  progress += Math.random() * 15;
                  if (progress > 90) progress = 90;
                  progressBar.css('width', progress + '%');
+                 console.log('Progress:', progress + '%');
              }, 200);
              
              // Initialize DataTable with simple configuration
@@ -546,12 +555,15 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  fixedHeader: true,
                  // Hide loading overlay when DataTable is initialized
                  initComplete: function() {
+                     console.log('DataTable initialization complete');
                      // Complete progress bar
                      clearInterval(progressInterval);
                      progressBar.css('width', '100%');
+                     console.log('Progress bar completed');
                      
                      setTimeout(function() {
                          $('#loadingOverlay').addClass('hidden');
+                         console.log('Loading overlay hidden');
                      }, 500); // Small delay to ensure smooth transition
                  }
              });
@@ -559,6 +571,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              // Fallback: hide loading overlay after a maximum time
              setTimeout(function() {
                  if (!$('#loadingOverlay').hasClass('hidden')) {
+                     console.log('Fallback: hiding loading overlay');
                      clearInterval(progressInterval);
                      progressBar.css('width', '100%');
                      $('#loadingOverlay').addClass('hidden');
