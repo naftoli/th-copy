@@ -219,6 +219,15 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              border-bottom: 1px solid #dee2e6;
          }
          
+         /* Ensure sorting works on the first header row only */
+         .filters th {
+             cursor: default !important;
+         }
+         
+         .filters th:hover {
+             background-color: #f8f9fa !important;
+         }
+         
          .filters input,
          .filters select {
              font-size: 0.875rem;
@@ -317,7 +326,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table id="detailsTable" class="table table-striped table-hover mb-0">
+                                                 <table id="detailsTable" class="table table-striped table-hover mb-0">
                              <thead>
                                  <tr>
                                      <th>School Info</th>
@@ -328,7 +337,9 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                      <th>Status</th>
                                      <th>Actions</th>
                                  </tr>
-                                 <tr class="filters">
+                             </thead>
+                             <thead class="filters">
+                                 <tr>
                                      <th>
                                          <input type="text" class="form-control form-control-sm" placeholder="Filter school..." id="filterSchool">
                                      </th>
@@ -532,7 +543,10 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  },
                  columnDefs: [
                      { orderable: false, targets: [6] } // Disable sorting for Actions column
-                 ]
+                 ],
+                 // Configure header row for sorting
+                 orderCellsTop: true,
+                 fixedHeader: true
              });
              
              // Custom filtering function
