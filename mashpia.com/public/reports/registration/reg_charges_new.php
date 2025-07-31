@@ -233,6 +233,20 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
          }
          
+         /* Range input styling */
+         .filters .row {
+             margin: 0;
+         }
+         
+         .filters .col-6 {
+             padding: 0 2px;
+         }
+         
+         .filters .form-control {
+             font-size: 0.75rem;
+             padding: 4px 6px;
+         }
+         
 
     </style>
 </head>
@@ -304,7 +318,9 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                      <th>Status</th>
                                      <th>Actions</th>
                                  </tr>
-                                 <tr class="filters">
+                             </thead>
+                             <thead class="filters">
+                                 <tr>
                                      <th>
                                          <input type="text" class="form-control form-control-sm" placeholder="Filter school..." id="filterSchool">
                                      </th>
@@ -315,10 +331,24 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                                          <input type="text" class="form-control form-control-sm" placeholder="Filter type..." id="filterType">
                                      </th>
                                      <th>
-                                         <input type="text" class="form-control form-control-sm" placeholder="Filter date..." id="filterDate">
+                                         <div class="row g-1">
+                                             <div class="col-6">
+                                                 <input type="date" class="form-control form-control-sm" id="filterDateFrom" placeholder="From">
+                                             </div>
+                                             <div class="col-6">
+                                                 <input type="date" class="form-control form-control-sm" id="filterDateTo" placeholder="To">
+                                             </div>
+                                         </div>
                                      </th>
                                      <th>
-                                         <input type="text" class="form-control form-control-sm" placeholder="Filter amount..." id="filterAmount">
+                                         <div class="row g-1">
+                                             <div class="col-6">
+                                                 <input type="number" class="form-control form-control-sm" id="filterAmountFrom" placeholder="From $" step="0.01" min="0">
+                                             </div>
+                                             <div class="col-6">
+                                                 <input type="number" class="form-control form-control-sm" id="filterAmountTo" placeholder="To $" step="0.01" min="0">
+                                             </div>
+                                         </div>
                                      </th>
                                      <th>
                                          <select class="form-control form-control-sm" id="filterStatus">
@@ -434,7 +464,7 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
     
          <script>
          $(document).ready(function () {
-             // Initialize DataTable with simple configuration
+                          // Initialize DataTable with simple configuration
              var table = $('#detailsTable').DataTable({
                  pageLength: 100,
                  lengthMenu: [[25, 50, 100, 500, 1000, 5000, 10000], [25, 50, 100, 500, 1000, 5000, 10000]],
@@ -453,16 +483,21 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                  },
                  columnDefs: [
                      { orderable: false, targets: [6] } // Disable sorting for Actions column
-                 ]
-                          });
+                 ],
+                 // Configure header row for sorting
+                 orderCellsTop: true,
+                 fixedHeader: true
+             });
              
              // Simple filtering function
              function applyFilters() {
                  var schoolFilter = $('#filterSchool').val().toLowerCase();
                  var studentFilter = $('#filterStudent').val().toLowerCase();
                  var typeFilter = $('#filterType').val().toLowerCase();
-                 var dateFilter = $('#filterDate').val().toLowerCase();
-                 var amountFilter = $('#filterAmount').val().toLowerCase();
+                 var fromDate = $('#filterDateFrom').val();
+                 var toDate = $('#filterDateTo').val();
+                 var fromAmount = parseFloat($('#filterAmountFrom').val()) || 0;
+                 var toAmount = parseFloat($('#filterAmountTo').val()) || 0;
                  var statusFilter = $('#filterStatus').val();
                  
                  // Apply custom filtering
@@ -482,14 +517,34 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
                          return false;
                      }
                      
-                     // Date filter (column 3)
-                     if (dateFilter && data[3].toLowerCase().indexOf(dateFilter) === -1) {
-                         return false;
+                     // Date range filter (column 3)
+                     if (fromDate || toDate) {
+                         var dateStr = data[3];
+                         var dateMatch = dateStr.match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+                         if (dateMatch) {
+                             var month = dateMatch[1].padStart(2, '0');
+                             var day = dateMatch[2].padStart(2, '0');
+                             var year = dateMatch[3];
+                             var formattedDate = year + '-' + month + '-' + day;
+                             
+                             if (fromDate && formattedDate < fromDate) return false;
+                             if (toDate && formattedDate > toDate) return false;
+                         } else {
+                             return false;
+                         }
                      }
                      
-                     // Amount filter (column 4)
-                     if (amountFilter && data[4].toLowerCase().indexOf(amountFilter) === -1) {
-                         return false;
+                     // Amount range filter (column 4)
+                     if (fromAmount > 0 || toAmount > 0) {
+                         var amountStr = data[4];
+                         var amountMatch = amountStr.match(/\$([\d,]+\.?\d*)/);
+                         if (amountMatch) {
+                             var amount = parseFloat(amountMatch[1].replace(/,/g, ''));
+                             if (fromAmount > 0 && amount < fromAmount) return false;
+                             if (toAmount > 0 && amount > toAmount) return false;
+                         } else {
+                             return false;
+                         }
                      }
                      
                      // Status filter (column 5)
@@ -507,7 +562,11 @@ while ($row = mysql_fetch_assoc($detail_query)) $details[] = $row;
              }
              
              // Apply filters on input changes
-             $('#filterSchool, #filterStudent, #filterType, #filterDate, #filterAmount').on('keyup change', function() {
+             $('#filterSchool, #filterStudent, #filterType').on('keyup change', function() {
+                 applyFilters();
+             });
+             
+             $('#filterDateFrom, #filterDateTo, #filterAmountFrom, #filterAmountTo').on('change', function() {
                  applyFilters();
              });
              
