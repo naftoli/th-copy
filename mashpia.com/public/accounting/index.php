@@ -463,9 +463,9 @@ $schools = $adminSchools->getSchools();
             'prior_balance': 'Prior Balance',
             'prior_balance_paid': 'Prior Balance Paid',
             'registration_type': 'Registration Type',
-            'total_paid': 'Total Paid',
-            'total_discount': 'Total Discount',
-            'total_balance': 'Total Balance',
+            'base_paid': 'Base Paid',
+            'base_discount': 'Base Discount',
+            'base_balance': 'Base Balance',
         }
 
         const soldier_options = {
@@ -477,10 +477,10 @@ $schools = $adminSchools->getSchools();
             'user_name': 'User Name',
             'grade': 'Grade',
             'date_registered': 'Date Registered',
-            'soldier_reg_fee': 'Soldier Registration Fee',
-            'soldier_reg_paid': 'Soldier Registration Paid',
-            'soldier_discount': 'Soldier Discount',
-            'soldier_balance': 'Soldier Balance'
+            'soldier_reg_fee': 'Registration Fee',
+            'soldier_reg_paid': 'Registration Paid',
+            'soldier_discount': 'Discount',
+            'soldier_balance': 'Balance'
         }
         
         function toggleSection(header) {
