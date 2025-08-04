@@ -1886,7 +1886,7 @@ class ChidonShipping
             'YB2' => 'Yahadus Book 2',
             'YB3' => 'Yahadus Book 3',
             'YB4' => 'Yahadus Book 4',
-            'YB5' => 'Yahadus Book 5',
+            'YB5' => 'Yahadus Book 5'
         ];
         return $descriptions[$code] ?? '';
     }

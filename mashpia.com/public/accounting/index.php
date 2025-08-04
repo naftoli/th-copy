@@ -13,6 +13,9 @@ if ($admin_user['auth'] != 'super') {
 require_once '../class.adminSchools.php';
 $adminSchools = new adminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $adminSchools->getSchools();
+
+require_once '../class.globalSettings.php';
+$year = GlobalSettings::getCurrentYear();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -198,7 +201,6 @@ $schools = $adminSchools->getSchools();
         .checkbox-item input[type="checkbox"]:checked + label,
         .checkbox-item input[type="radio"]:checked + label {
             color: var(--secondary-color);
-            font-weight: 600;
         }
         
         .checkbox-item input[type="checkbox"]:checked,
@@ -359,6 +361,20 @@ $schools = $adminSchools->getSchools();
         
         <form action="create_report.php" method="post">
             <div class="sections-grid">
+                <!-- add a year select -->
+                <div style="grid-column: 1 / -1; width: 100%;">
+                    <div class="form-group">
+                        <label for="year">Year</label>
+                        <select name="year" id="year" class="form-select">
+                            <?php
+                            for ($yr = $year; $yr >= 5780; $yr--) {
+                                echo '<option value="' . $yr . '">' . $yr . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+            
                 <div class="card-module">
                     <div class="card-header-module" data-target="schools-section">
                         <h5><i class="bi bi-building"></i> Select Schools</h5>
@@ -389,7 +405,7 @@ $schools = $adminSchools->getSchools();
                         <i class="bi bi-chevron-down toggle-icon"></i>
                     </div>
                     <div class="card-body-module" id="report-type-section">
-                        <div id="report_types" class="checkbox-grid-two-columns"></div>
+                        <div id="report_type" class="checkbox-grid-two-columns"></div>
                     </div>
                 </div>
             </div>
@@ -449,38 +465,41 @@ $schools = $adminSchools->getSchools();
         }
 
         const report_types = {
-            'base' : 'Base Report',
-            'soldier' : 'Soldier Report'
+            'base' : 'Base Charges Report',
+            'soldier' : 'Soldier Charges Report', 
+            'summary' : 'Summary Charges Report', 
         }
         
         const base_options = {
-            'school_id': 'School ID',
-            'school_number': 'School Number',
-            'chayolei_fee': 'Chayolei Base Fee',
-            'chayolei_paid': 'Chayolei Base Paid',
-            'chidon_fee': 'Chidon Base Fee',
-            'chidon_paid': 'Chidon Base Paid',
+            'base_type': 'Registration Type',
+            'school_number': 'Base Number',
+            'school_name': 'Base Name',
+            'date_registered': 'Date Registered',
+            'chayolei_fee': 'Chayolei Fee',
+            'chayolei_paid': 'Chayolei Fee Paid',
+            'chidon_fee': 'Chidon Fee',
+            'chidon_paid': 'Chidon Fee Paid',
             'prior_balance': 'Prior Balance',
             'prior_balance_paid': 'Prior Balance Paid',
-            'registration_type': 'Registration Type',
-            'base_paid': 'Base Paid',
+            'total_owed': 'Total Owed',
             'base_discount': 'Base Discount',
-            'base_balance': 'Base Balance',
+            'total_paid': 'Total Paid',
+            'total_balance': 'Base Balance',
+            'registered_chayolim': 'Soldiers Registered'
         }
 
         const soldier_options = {
-            'school_id': 'School ID',
-            'school_number': 'School Number',
             'registration_type': 'Registration Type',
-            'user_id': 'User ID',
+            'school_number': 'Base Number',
+            'school_name': 'Base Name',
             'user_serial': 'User Serial',
-            'user_name': 'User Name',
             'grade': 'Grade',
+            'user_name': 'User Name',
             'date_registered': 'Date Registered',
-            'soldier_reg_fee': 'Registration Fee',
-            'soldier_reg_paid': 'Registration Paid',
-            'soldier_discount': 'Discount',
-            'soldier_balance': 'Balance'
+            'reg_fee': 'Registration Fee',
+            'reg_paid': 'Registration Paid',
+            'soldier_discount': 'Coupon Discount',
+            'total_balance': 'Balance'
         }
         
         function toggleSection(header) {
@@ -529,9 +548,40 @@ $schools = $adminSchools->getSchools();
         
         // Initialize all sections
         document.addEventListener('DOMContentLoaded', function() {
-            build_checkbox_group(report_types, 'report_types', 'radio');
+            build_checkbox_group(report_types, 'report_type', 'radio');
             build_checkbox_group(base_options, 'base_options', 'checkbox');
             build_checkbox_group(soldier_options, 'soldier_options', 'checkbox');
+            
+            // Add form validation
+            document.querySelector('form').addEventListener('submit', function(e) {
+                const selectedReportType = document.querySelector('input[name="report_type"]:checked');
+                
+                if (!selectedReportType) {
+                    e.preventDefault();
+                    alert('Please select a report type (Base Report or Soldier Report)');
+                    return false;
+                }
+                
+                // Check if at least one option is selected for the chosen report type
+                const reportType = selectedReportType.value;
+                const optionsContainer = document.getElementById(reportType + '_options');
+                const selectedOptions = optionsContainer.querySelectorAll('input[type="checkbox"]:checked');
+                
+                if (selectedOptions.length === 0) {
+                    e.preventDefault();
+                    alert('Please select at least one option for the ' + reportType + ' report');
+                    return false;
+                }
+                
+                // Check if at least one school is selected
+                const schoolSelect = document.getElementById('school_select');
+                const selectedSchools = Array.from(schoolSelect.selectedOptions);
+                if (selectedSchools.length === 0) {
+                    e.preventDefault();
+                    alert('Please select at least one school');
+                    return false;
+                }
+            });
             
             // Add click event listeners to section headers
             document.querySelectorAll('.card-header-module').forEach(header => {
