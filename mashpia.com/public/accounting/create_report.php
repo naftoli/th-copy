@@ -15,7 +15,7 @@ if ($admin_user['auth'] != 'super') {
 $report_type = $_POST['report_type'];
 if ($report_type == 'summary') {
     $schools = '';
-    if ($_POST['school_id'] != '0') {
+    if ($_POST['school_id'][0] > 0) {
         $schools = implode(',', $_POST['school_id']);
     }
     header('Location: summary.php?year=' . $_POST['year'] . '&schools=' . $schools);
@@ -78,7 +78,6 @@ $fields = [
     ]
 ];
 
-// echo "<pre>"; print_r($_POST); echo "</pre>"; 
 // build sql
 $from = [];
 $srd_qry = false;
@@ -155,12 +154,14 @@ if ($report_type == 'base') {
     $table = 'u.';
 }
 $sql .= " WHERE ";
-if ($_POST['school_id'] != '0' && $_POST['school_id'][0] > 0) {
+if ($_POST['school_id'][0] > 0) {
     $sql .= $table . "school_id IN (" . implode(',', $_POST['school_id']) . ")";
 } else {
     $sql .= $table . "school_id != 0";
 }
-if (in_array('sr', $from) || in_array('ur', $from)) {
+if (in_array('sr', $from)) {
+    $sql .= " AND sr.year = :year";
+} else if (in_array('ur', $from)) {
     $sql .= " AND ur.year = :year";
 } else if ($report_type == 'details') {
     $sql .= " AND rc.year = :year";
@@ -209,7 +210,7 @@ if ($total_registered_chayolim) {
                 AND u.user_id in (
                     SELECT user_id FROM user_registration WHERE year = :year
                 )";
-    if ($_POST['school_id'] != '0') {
+    if ($_POST['school_id'][0] > 0) {
         $sql .= " AND u.school_id IN (" . implode(',', $_POST['school_id']) . ")";
     }
     $sql .= " GROUP BY school_id";
@@ -604,7 +605,7 @@ $reg_types = [
                                                 $cellContent = '<span class="status-badge badge-' . strtolower($regType) . '">' . $regType . '</span>';
                                                 break;
                                             case 'total_registered':
-                                                $cellContent = $total_reg[$school_id];
+                                                $cellContent = $total_reg[$school_id] ?? 0;
                                                 $cellClass = 'number-cell';
                                                 break;
                                             case 'total_balance':
