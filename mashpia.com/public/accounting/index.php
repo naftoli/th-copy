@@ -32,7 +32,7 @@ $debug = $_GET['debug'] ?? false;
         <h1>Accounting Report Generator</h1>
         <p>Generate comprehensive accounting reports.</p>
         
-        <form action="create_report.php<?php echo $debug ? '?debug=1' : ''; ?>" method="post">
+        <form action="create_report.php<?php echo $debug ? '?debug=1' : ''; ?>" method="post" target="_blank">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
