@@ -149,8 +149,12 @@ $debug = $_GET['debug'] ?? false;
             'base' : 'Base Charges Report',
             'soldier' : 'Soldier Charges Report', 
             'summary' : 'Summary Transactions Report', 
-            'details' : 'Details Transactions Report', 
-            'settings': 'Update Base Registration Settings'
+            'details' : 'Details Transactions Report',  
+            'base_discounts': 'View / Add Base Vouchers', 
+            'soldier_discounts': 'View / Add Soldier Vouchers',
+            'settings': 'Update Base Registration Settings',
+            'unregister': 'Unregister Base / Soldiers', 
+            'types': 'Update School Types'
         }
         
         const base_options = {
