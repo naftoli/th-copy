@@ -14,16 +14,34 @@ if ($admin_user['auth'] != 'super') {
 
 $debug = $_GET['debug'] ?? false;
 
+$url = false;
 $report_type = $_POST['report_type'];
-if ($report_type == 'summary') {
+switch ($report_type) {
+    case 'summary':
+        $url = 'summary.php';
+        break;
+    case 'settings':
+        $url = 'settings.php';
+        break;
+    case 'base_discounts':
+        $url = '/reports/registration/discounts.php';
+        break;
+    case 'soldier_discounts':
+        $url = '/reports/registration/create_user_discount.php';
+        break;
+    case 'unregister':
+        $url = '/admin_yearly.php';
+        break;
+    case 'types':
+        $url = '/types_of_schools.php';
+        break;
+}
+if ($url) {
     $schools = '';
     if ($_POST['school_id'][0] > 0) {
         $schools = implode(',', $_POST['school_id']);
     }
-    header('Location: summary.php?year=' . $_POST['year'] . '&schools=' . $schools);
-    exit;
-} else if ($report_type == 'settings') {
-    header('Location: settings.php?schools=' . implode(',', $_POST['school_id']));
+    header('Location: ' . $url . '?year=' . $_POST['year'] . '&schools=' . $schools);
     exit;
 }
 
