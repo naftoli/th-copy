@@ -114,6 +114,14 @@ elseif(gr('tanya_year')) {
 					<? $result = mq('SELECT school_name, school_id FROM schools where chayolei = 1 OR chidon = 1 ORDER BY school_name'); ?>
 					<? while($row = mysql_fetch_assoc($result)): ?>
 						<? if (empty($row['school_name'])) continue; ?>
+						<?php 
+						if (isset($_GET['schools']) && $_GET['schools'] != '') {
+							$schools_array = explode(',', $_GET['schools']);
+							if (!in_array($row['school_id'], $schools_array)) {
+								continue;
+							}
+						}
+						?>
 						<LABEL><INPUT type="checkbox" name="school_id[]" value="<?=$row['school_id']?>"> <?=es($row['school_name'])?></LABEL><BR>
 					<? endwhile; ?>
 					
