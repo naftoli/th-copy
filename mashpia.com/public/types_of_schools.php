@@ -55,6 +55,12 @@ $schools = array();
 $sql = "select * from schools order by school_name";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
+	if (isset($_GET['schools']) && $_GET['schools'] != '') {
+		$schools_array = explode(',', $_GET['schools']);
+		if (!in_array($row['school_id'], $schools_array)) {
+			continue;
+		}
+	}
 	$schools[] = $row;
 }
 //echo "<pre>"; print_r($schools); echo "</pre>"; exit;

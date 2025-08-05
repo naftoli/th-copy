@@ -41,7 +41,12 @@ if ($url) {
     if ($_POST['school_id'][0] > 0) {
         $schools = implode(',', $_POST['school_id']);
     }
-    header('Location: ' . $url . '?year=' . $_POST['year'] . '&schools=' . $schools);
+    if (in_array($report_type, ['summary', 'settings'])) {
+        $url .= '?year=' . $_POST['year'] . '&schools=' . $schools;
+    } else {
+        $url .= '?schools=' . $schools;
+    }
+    header('Location: ' . $url);
     exit;
 }
 
