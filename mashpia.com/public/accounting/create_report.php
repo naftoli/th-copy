@@ -267,16 +267,21 @@ $reg_types = [
     <style>
         .table-responsive {
             overflow-x: auto;
-            min-width: 100%;
+            width: 100%;
         }
         .table {
-            width: auto;
-            min-width: 100%;
+            width: 100%;
         }
         .table th,
         .table td {
             white-space: nowrap;
             min-width: 120px;
+        }
+        .table th {
+            position: sticky;
+            top: 0;
+            background-color: #212529;
+            z-index: 1;
         }
     </style>
 </head>
