@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once '../header.php';
@@ -11,6 +11,8 @@ if ($admin_user['auth'] != 'super') {
     echo "Not authorized";
     exit;
 }
+
+$debug = $_GET['debug'] ?? false;
 
 $report_type = $_POST['report_type'];
 if ($report_type == 'summary') {
@@ -25,7 +27,10 @@ if ($report_type == 'summary') {
     exit;
 }
 
-// echo "<pre>"; print_r($_POST); echo "</pre>";
+if ($debug) {
+    echo "<pre>"; print_r($_POST); echo "</pre>";
+}
+
 $tables = [
     's'     => 'schools', 
     'u'     => 'users', 
@@ -33,7 +38,8 @@ $tables = [
     'rc'    => 'registration_charges',
     'sr'    => 'school_registrations', 
     'srd'   => 'school_registration_details', 
-    'c'     => 'classes'
+    'c'     => 'classes',
+    'd'     => 'discounts'
 ];
 
 $fields = [
@@ -50,7 +56,7 @@ $fields = [
         'prior_balance_paid' => 'srd.past_due', 
         'total_owed'    => 'total_owed',  
         'total_paid'    => 'total_paid', 
-        'base_discount' => 'srd.discount',
+        'base_discount' => 'd.amount',
         'total_balance' => 'total_balance', 
         'registered_chayolim' => 'total_registered'
     ], 
@@ -64,7 +70,7 @@ $fields = [
         'date_registered' => 'ur.reg_date',
         'reg_fee'       => 's.chayolei_fee',
         'reg_paid'      => 'ur.paid',
-        'soldier_discount' => 'total_discount',
+        'soldier_discount' => 'd.amount',
         'total_balance' => 'total_balance'
     ],
     'details' => [
@@ -84,7 +90,6 @@ $fields = [
 // build sql
 $from = [];
 $srd_qry = false;
-$soldier_discounts = false;
 $total_registered_chayolim = false;
 // SELECT fields
 $sql = "SELECT ";
@@ -105,8 +110,6 @@ foreach ($_POST[$report_type . '_options'] as $option) {
         if (strpos($f, 'total') !== false) {
             if ($f == 'total_registered') {
                 $total_registered_chayolim = true;
-            } else if ($f == 'total_discount') {
-                $soldier_discounts = true;
             }
             continue;
         }
@@ -151,6 +154,8 @@ foreach ($from as $t) {
             if ($t == 'c') $sql .= ' LEFT JOIN classes c USING (class_id) ';
             else if ($t == 'ur') $sql .= ' LEFT JOIN user_registration ur USING (user_id) ';
             else if ($report_type == 'details' && $t == 'u') $sql .= ' LEFT JOIN users u USING (user_id) ';
+            else if ($report_type == 'base' && $t == 'd') $sql .= ' LEFT JOIN discounts d USING (school_id, year) ';
+            else if ($report_type == 'soldier' && $t == 'd') $sql .= ' LEFT JOIN discounts d USING (user_id, year) ';
             else $sql .= ' LEFT JOIN ' . $tables[$t] . ' ' . $t . ' USING (school_id) ';
         }
     }
@@ -174,7 +179,10 @@ if (in_array('sr', $from)) {
 } else if ($report_type == 'details') {
     $sql .= " AND rc.year = :year";
 }
-// echo $sql;
+if ($debug) {
+    echo $sql;
+}
+
 $stmt = $MASHPIA_DB->prepare($sql);
 if (in_array('sr', $from) || in_array('ur', $from) || in_array('rc', $from)) {
     $stmt->execute([
@@ -232,26 +240,6 @@ if ($total_registered_chayolim) {
         $total_reg[$r['school_id']] = $r['total_registered'];
     }
 }
-
-// get the soldier discounts
-$discounts = [];
-if ($soldier_discounts) {
-    // find out total for any discounts that were used
-    $stmt = $MASHPIA_DB->prepare("
-        SELECT 
-            user_id, discount
-        FROM
-            registration_charges 
-        WHERE
-            year = :year AND type IN ('chayolei', 'THE') AND discount > 0  
-    ");
-    $stmt->execute([':year' => $_POST['year']]);
-    $temp = $stmt->fetchAll();
-    foreach ($temp as $row) {
-        $discounts[$row['user_id']] = $row['discount'];
-    }
-}
-// echo "<pre>"; print_r($discounts); echo "</pre>"; exit;
 
 $reg_types = [
     1 => 'Tuition',
@@ -416,10 +404,9 @@ if ($report_type == 'base') {
                                     $details = explode('.', $field);
                                     $table = $details[0];
                                     $field = $details[1];
-                                    if ($table == 'srd' && $field != 'discount') {
-                                        $field .= '_paid';
-                                    }
+                                    if ($table == 'srd') $field .= '_paid';
                                     if ($field == 'balance') $field = 'past_due';
+                                    if ($field == 'amount') $field = 'discount';
                                 }
                                 $details = explode('_', $field);
                                 $field = implode(' ', $details);
@@ -462,9 +449,8 @@ if ($report_type == 'base') {
                                         case 'chayolei':
                                         case 'chidon':
                                         case 'past_due':
-                                        case 'discount':
                                             $paid = intval($srd_report[$school_id][$field] ?? 0);
-                                            if ($field != 'discount') $total_paid += $paid;
+                                            $total_paid += $paid;
                                             $cellContent = number_format($paid, 2);
                                             $cellClass = 'text-end';
                                             if ($paid > 0) $cellClass .= ' text-success';
@@ -480,7 +466,7 @@ if ($report_type == 'base') {
                                             $cellClass = 'text-end';
                                             break;
                                         case 'total_balance':
-                                            $total_balance = $total_owed - $total_paid - intval($result['discount'] ?? 0);
+                                            $total_balance = $total_owed - $total_paid - intval($result['amount'] ?? 0);
                                             $cellContent = number_format($total_balance, 2);
                                             $cellClass = 'text-end';
                                             if ($total_balance > 0) $cellClass .= ' text-danger';
@@ -497,19 +483,15 @@ if ($report_type == 'base') {
                                         case 'code':
                                             $cellContent = ChidonShipping::getDescription($field);
                                             break;
-                                        case 'total_discount':
-                                            $cellContent = number_format($discounts[$result['user_id']] ?? 0, 2);
-                                            $cellClass = 'text-end';
-                                            if ($cellContent > 0) $cellClass .= ' text-success';
-                                            else $cellClass .= ' text-muted';
-                                            break;
                                         default:
                                             $cellContent = $result[$field];
-                                            if ($field == 'balance' || strpos($field, 'fee') !== false) {
-                                                $total_owed += intval($result[$field]);
+                                            if ($field == 'balance' || strpos($field, 'fee') !== false || $field == 'amount') {
                                                 $cellClass = 'text-end';
                                                 if (intval($result[$field]) > 0) $cellClass .= ' text-danger';
                                                 else $cellClass .= ' text-muted';
+                                            }
+                                            if ($field == 'balance' || strpos($field, 'fee') !== false) {
+                                                $total_owed += intval($result[$field]);
                                             }
                                             break;
                                     }

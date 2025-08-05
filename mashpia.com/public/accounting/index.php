@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once '../header.php';
@@ -16,6 +16,8 @@ $schools = $adminSchools->getSchools();
 
 require_once '../class.globalSettings.php';
 $year = GlobalSettings::getCurrentYear();
+
+$debug = $_GET['debug'] ?? false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -30,7 +32,7 @@ $year = GlobalSettings::getCurrentYear();
         <h1>Accounting Report Generator</h1>
         <p>Generate comprehensive accounting reports.</p>
         
-        <form action="create_report.php" method="post">
+        <form action="create_report.php<?php echo $debug ? '?debug=1' : ''; ?>" method="post">
             <div class="row">
                 <div class="col-md-6">
                     <div class="mb-3">
