@@ -139,8 +139,10 @@ foreach ($from as $t) {
             if (!$srd_qry) {
                 $srd_qry = "SELECT srd.* FROM school_registration_details srd 
                     JOIN school_registrations sr USING (school_registration_id) 
-                    WHERE sr.school_id IN (" . implode(',', $_POST['school_id']) . ") 
-                    AND sr.year = :year";
+                    WHERE sr.year = :year";
+                if ($_POST['school_id'][0] > 0) {
+                    $srd_qry .= " AND sr.school_id IN (" . implode(',', $_POST['school_id']) . ")";
+                }
             }
         } else {
             if ($t == 'c') $sql .= ' LEFT JOIN classes c USING (class_id) ';
@@ -194,6 +196,7 @@ if ($srd_qry) {
     $srd_stmt->execute([
         ':year' => $_POST['year']
     ]);
+    // $srd_stmt->debugDumpParams();
     $srd_results = $srd_stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($srd_results as $srd_result) {
         $srd_report[$srd_result['school_id']][$srd_result['type']] = $srd_result['amount'];
@@ -261,9 +264,24 @@ $reg_types = [
     <title>Accounting Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <style>
+        .table-responsive {
+            overflow-x: auto;
+            min-width: 100%;
+        }
+        .table {
+            width: auto;
+            min-width: 100%;
+        }
+        .table th,
+        .table td {
+            white-space: nowrap;
+            min-width: 120px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-4">
+    <div class="container-fluid mt-4">
         <h1>Accounting <?=ucwords($report_type)?> Report</h1>
         <p>Generated on <?=date('F j, Y \a\t g:i A')?></p>
 
