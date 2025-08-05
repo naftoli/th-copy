@@ -255,6 +255,14 @@ $reg_types = [
     2 => 'Guaranteed',
     3 => 'Regular'
 ];
+
+// Get schools for payment form (only for base reports)
+$schools_for_payment = [];
+if ($report_type == 'base') {
+    require_once '../class.adminSchools.php';
+    $adminSchools = new adminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
+    $schools_for_payment = $adminSchools->getSchools();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -264,6 +272,7 @@ $reg_types = [
     <title>Accounting Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         .table-responsive {
             overflow-x: auto;
@@ -283,12 +292,110 @@ $reg_types = [
             background-color: #212529;
             z-index: 1;
         }
+        .card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        .card-header {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            font-weight: 600;
+        }
+        .alert-custom {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 1px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 5px solid #ffc107;
+        }
+        .alert-custom h5 {
+            color: #856404;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .alert-custom p {
+            color: #856404;
+            margin-bottom: 0;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body>
     <div class="container-fluid mt-4">
         <h1>Accounting <?=ucwords($report_type)?> Report</h1>
-        <p>Generated on <?=date('F j, Y \a\t g:i A')?></p>
+        <p>Generated on <?=date('F j, Y \a\t g:i A')?> for Year <?=$_POST['year']?></p>
+
+        <?php if ($report_type == 'base'): ?>
+        <!-- Add Payment Form -->
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-plus-circle"></i> Add Payment
+            </div>
+            <div class="card-body">
+                <form id="add_payment_form">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="school_payment" class="form-label">School:</label>
+                            <select name="school_payment" id="school_payment" class="form-select">
+                                <option value="0">Choose School</option>
+                                <?php
+                                foreach ($schools_for_payment as $id => $school) {
+                                    echo "<option value='$id'>$school</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="payment_type" class="form-label">Payment Type:</label>
+                            <select name="payment_type" id="payment_type" class="form-select">
+                                <option value="0">Choose Payment Type</option>
+                                <option value="chayolei">Chayolei</option>
+                                <option value="chidon">Chidon</option>
+                                <option value="tanya">Tanya</option>
+                                <option value="rewards">Rewards Program</option>
+                                <option value="past_due">Past Dues</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="payment_method" class="form-label">Payment Method:</label>
+                            <select name="payment_method" id="payment_method" class="form-select">
+                                <option value="cash">Cash</option>
+                                <option value="check">Check</option>
+                                <option value="credit_card">Credit Card</option>
+                                <option value="wire">Wire Transfer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="payment_amount" class="form-label">Amount:</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="text" name="payment_amount" id="payment_amount" class="form-control" placeholder="0.00" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <button type="submit" id="add_payment" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Add Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Important Notes -->
+        <div class="alert-custom">
+            <h5><i class="bi bi-exclamation-triangle"></i> Important Information</h5>
+            <p>
+                The list of schools is based off schools that have any registered children for the current year and are not test schools.
+                The number of registered children is based on the children that are currently registered and have been registered for the current year.
+            </p>
+        </div>
+        <?php endif; ?>
 
         <div class="table-responsive">
             <table id="accountingTable" class="table table-striped table-bordered">
@@ -446,6 +553,82 @@ $reg_types = [
                     $('.dataTables_filter input').attr('placeholder', 'Search...');
                 }
             });
+
+            <?php if ($report_type == 'base'): ?>
+            // Add payment form submission
+            $("#add_payment_form").on('submit', function(e) {
+                e.preventDefault();
+                try {
+                    const school = $("#school_payment").val();
+                    const method = $("#payment_method").val();
+                    const type = $("#payment_type").val();
+                    const amount = parseFloat($("#payment_amount").val());
+                    
+                    if (school == '0') {
+                        showAlert('You must choose a school', 'warning');
+                        return;
+                    }
+                    if (!amount) {
+                        showAlert('You must enter an amount!', 'warning');
+                        return;
+                    }
+                    
+                    // Show loading state
+                    const btn = $("#add_payment");
+                    if (btn.length > 0) {
+                        const originalText = btn.html();
+                        btn.html('<i class="bi bi-hourglass-split"></i> Processing...');
+                        btn.prop('disabled', true);
+                        
+                        $.post('ajax/addPayment.php', { 
+                            school: school, 
+                            method: method, 
+                            type: type, 
+                            amount: amount 
+                        }, function(result) {
+                            try {
+                                const res = JSON.parse(result);
+                                if (res.success) {
+                                    showAlert('Payment added successfully!', 'success');
+                                    setTimeout(() => location.reload(), 1500);
+                                } else {
+                                    showAlert(res.error || 'An error occurred', 'danger');
+                                }
+                            } catch (e) {
+                                showAlert('An error occurred while processing the response', 'danger');
+                            }
+                        }).fail(function() {
+                            showAlert('Network error occurred', 'danger');
+                        }).always(function() {
+                            if (btn.length > 0) {
+                                btn.html(originalText);
+                                btn.prop('disabled', false);
+                            }
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error in form submission:', error);
+                    showAlert('An error occurred while processing the form', 'danger');
+                }
+            });
+
+            // Helper function to show alerts
+            function showAlert(message, type) {
+                const alertHtml = `
+                    <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                        <i class="bi bi-${type === 'success' ? 'check-circle' : type === 'warning' ? 'exclamation-triangle' : 'x-circle'}"></i>
+                        ${message}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                `;
+                $('.container-fluid').prepend(alertHtml);
+                
+                // Auto-dismiss after 5 seconds
+                setTimeout(() => {
+                    $('.alert').alert('close');
+                }, 5000);
+            }
+            <?php endif; ?>
         });
     </script>
 </body>
