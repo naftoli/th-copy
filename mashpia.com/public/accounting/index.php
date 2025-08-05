@@ -413,7 +413,7 @@ $year = GlobalSettings::getCurrentYear();
             <div class="sections-grid">
                 <div class="card-module">
                     <div class="card-header-module" data-target="base-options-section">
-                        <h5><i class="bi bi-gear"></i> Base Options</h5>
+                        <h5><i class="bi bi-gear"></i> Base Options (For Base Report)</h5>
                         <i class="bi bi-chevron-down toggle-icon"></i>
                     </div>
                     <div class="card-body-module" id="base-options-section">
@@ -423,7 +423,7 @@ $year = GlobalSettings::getCurrentYear();
 
                 <div class="card-module">
                     <div class="card-header-module" data-target="soldier-options-section">
-                        <h5><i class="bi bi-gear"></i> Soldier Options</h5>
+                        <h5><i class="bi bi-gear"></i> Soldier Options (For Soldier Report)</h5>
                         <i class="bi bi-chevron-down toggle-icon"></i>
                     </div>
                     <div class="card-body-module" id="soldier-options-section">
