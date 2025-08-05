@@ -20,6 +20,9 @@ if ($report_type == 'summary') {
     }
     header('Location: summary.php?year=' . $_POST['year'] . '&schools=' . $schools);
     exit;
+} else if ($report_type == 'settings') {
+    header('Location: settings.php?schools=' . implode(',', $_POST['school_id']));
+    exit;
 }
 
 // echo "<pre>"; print_r($_POST); echo "</pre>";
