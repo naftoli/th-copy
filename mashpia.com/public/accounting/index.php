@@ -31,15 +31,19 @@ $year = GlobalSettings::getCurrentYear();
         <p>Generate comprehensive accounting reports.</p>
         
         <form action="create_report.php" method="post">
-            <div class="mb-3">
-                <label for="year" class="form-label">Year</label>
-                <select name="year" id="year" class="form-select">
-                    <?php
-                    for ($yr = $year; $yr >= 5780; $yr--) {
-                        echo '<option value="' . $yr . '">' . $yr . '</option>';
-                    }
-                    ?>
-                </select>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="year" class="form-label">Year</label>
+                        <select name="year" id="year" class="form-select">
+                            <?php
+                            for ($yr = $year; $yr >= 5780; $yr--) {
+                                echo '<option value="' . $yr . '">' . $yr . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -66,9 +70,7 @@ $year = GlobalSettings::getCurrentYear();
                             <div class="form-text">Hold Ctrl (or Cmd on Mac) to select multiple schools</div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
                     <div class="card mb-3">
                         <div class="card-header">
                             <h5 class="mb-0">Report Type</h5>
@@ -78,11 +80,9 @@ $year = GlobalSettings::getCurrentYear();
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
                 <div class="col-md-6">
-                    <div class="card mb-3">
+                    <div id="base_options_section" class="card mb-3" style="display: none;">
                         <div class="card-header">
                             <h5 class="mb-0">Base Options (For Base Report)</h5>
                         </div>
@@ -90,10 +90,8 @@ $year = GlobalSettings::getCurrentYear();
                             <div id="base_options" class="row"></div>
                         </div>
                     </div>
-                </div>
 
-                <div class="col-md-6">
-                    <div class="card mb-3">
+                    <div id="soldier_options_section" class="card mb-3" style="display: none;">
                         <div class="card-header">
                             <h5 class="mb-0">Soldier Options (For Soldier Report)</h5>
                         </div>
@@ -101,12 +99,8 @@ $year = GlobalSettings::getCurrentYear();
                             <div id="soldier_options" class="row"></div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card mb-3">
+                    <div id="details_options_section" class="card mb-3" style="display: none;">
                         <div class="card-header">
                             <h5 class="mb-0">Details Options (For Details Report)</h5>
                         </div>
@@ -200,6 +194,23 @@ $year = GlobalSettings::getCurrentYear();
             'reg_amount': 'Amount',
             'refunded': 'Refunded'
         }
+
+        function showOptionsForReportType(reportType) {
+            // Hide all option sections first
+            document.getElementById('base_options_section').style.display = 'none';
+            document.getElementById('soldier_options_section').style.display = 'none';
+            document.getElementById('details_options_section').style.display = 'none';
+
+            // Show the relevant section based on report type
+            if (reportType === 'base') {
+                document.getElementById('base_options_section').style.display = 'block';
+            } else if (reportType === 'soldier') {
+                document.getElementById('soldier_options_section').style.display = 'block';
+            } else if (reportType === 'details') {
+                document.getElementById('details_options_section').style.display = 'block';
+            }
+            // summary report type doesn't need options
+        }
         
         // Initialize all sections
         document.addEventListener('DOMContentLoaded', function() {
@@ -207,6 +218,13 @@ $year = GlobalSettings::getCurrentYear();
             build_checkbox_group(base_options, 'base_options', 'checkbox');
             build_checkbox_group(soldier_options, 'soldier_options', 'checkbox');
             build_checkbox_group(details_options, 'details_options', 'checkbox');
+
+            // Add event listeners for report type radio buttons
+            document.querySelectorAll('input[name="report_type"]').forEach(function(radio) {
+                radio.addEventListener('change', function() {
+                    showOptionsForReportType(this.value);
+                });
+            });
 
             // Add form validation
             document.querySelector('form').addEventListener('submit', function(e) {
@@ -218,15 +236,17 @@ $year = GlobalSettings::getCurrentYear();
                     return false;
                 }
                 
-                // Check if at least one option is selected for the chosen report type
+                // Check if at least one option is selected for the chosen report type (except summary)
                 const reportType = selectedReportType.value;
-                const optionsContainer = document.getElementById(reportType + '_options');
-                const selectedOptions = optionsContainer.querySelectorAll('input[type="checkbox"]:checked');
-                
-                if (selectedOptions.length === 0) {
-                    e.preventDefault();
-                    alert('Please select at least one option for the ' + report_types[reportType] + ' report');
-                    return false;
+                if (reportType !== 'summary') {
+                    const optionsContainer = document.getElementById(reportType + '_options');
+                    const selectedOptions = optionsContainer.querySelectorAll('input[type="checkbox"]:checked');
+                    
+                    if (selectedOptions.length === 0) {
+                        e.preventDefault();
+                        alert('Please select at least one option for the ' + report_types[reportType] + ' report');
+                        return false;
+                    }
                 }
                 
                 // Check if at least one school is selected
