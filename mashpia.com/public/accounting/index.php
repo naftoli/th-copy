@@ -148,7 +148,7 @@ $year = GlobalSettings::getCurrentYear();
             'soldier' : 'Soldier Charges Report', 
             'summary' : 'Summary Transactions Report', 
             'details' : 'Details Transactions Report', 
-            'settings': 'Base Registration Settings'
+            'settings': 'Update Base Registration Settings'
         }
         
         const base_options = {
