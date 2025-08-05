@@ -5,6 +5,7 @@ ini_set('error_reporting', E_ALL);
 $admin_auth = ['school'];
 require_once '../header.php';
 require_once '../api/header/db.php';
+require_once '../chidon_shipping/class.chidonShipping.php';
 
 if ($admin_user['auth'] != 'super') {
     echo "Not authorized";
@@ -51,7 +52,7 @@ $fields = [
         'registered_chayolim' => 'total_registered'
     ], 
     'soldier' => [
-        'registration_type' => 's.reg_type',
+        'reg_type'      => 's.reg_type',
         'school_number' => 's.school_number',
         'school_name'   => 's.school_name',
         'user_serial'   => 'u.user_serial',
@@ -62,9 +63,22 @@ $fields = [
         'reg_paid'      => 'ur.paid',
         'soldier_discount' => 'total_discount',
         'total_balance' => 'total_balance'
+    ],
+    'details' => [
+        'reg_type'      => 's.reg_type',
+        'school_number' => 's.school_number',
+        'school_name'   => 's.school_name',
+        'user_serial'   => 'u.user_serial',
+        'user_name'     => ['u.first', 'u.last'],
+        'type'          => 'rc.type',
+        'code'          => 'code',
+        'reg_date'      => 'rc.date',
+        'reg_amount'    => 'rc.amount',
+        'refunded'      => 'rc.refunded'
     ]
 ];
 
+// echo "<pre>"; print_r($_POST); echo "</pre>"; 
 // build sql
 $from = [];
 $srd_qry = false;
@@ -75,8 +89,11 @@ if ($report_type == 'base') {
     $sql .= "s.school_id, ";
 } else if ($report_type == 'soldier') {
     $sql .= "u.user_id, u.school_id, ";
+} else if ($report_type == 'details') {
+    $sql .= "rc.user_id, rc.school_id, ";
 }
 foreach ($_POST[$report_type . '_options'] as $option) {
+    if ($option == 'code') continue;
     $field = $fields[$report_type][$option];
     if (!is_array($field)) {
         $field = [$field];
@@ -106,12 +123,15 @@ if ($report_type == 'base') {
     $sql .= "schools s ";
 } else if ($report_type == 'soldier') {
     $sql .= "users u ";
+} else if ($report_type == 'details') {
+    $sql .= "registration_charges rc ";
 }
 // LEFT JOIN tables
 foreach ($from as $t) {
     if (
         ($report_type == 'base' && $t != 's') ||
-        ($report_type == 'soldier' && $t != 'u')
+        ($report_type == 'soldier' && $t != 'u') ||
+        ($report_type == 'details' && $t != 'rc')
     ) {
         if ($t == 'srd') {
             if (!$srd_qry) {
@@ -123,6 +143,7 @@ foreach ($from as $t) {
         } else {
             if ($t == 'c') $sql .= ' LEFT JOIN classes c USING (class_id) ';
             else if ($t == 'ur') $sql .= ' LEFT JOIN user_registration ur USING (user_id) ';
+            else if ($report_type == 'details' && $t == 'u') $sql .= ' LEFT JOIN users u USING (user_id) ';
             else $sql .= ' LEFT JOIN ' . $tables[$t] . ' ' . $t . ' USING (school_id) ';
         }
     }
@@ -130,21 +151,23 @@ foreach ($from as $t) {
 // WHERE clause
 if ($report_type == 'base') {
     $table = 's.';
-} else if ($report_type == 'soldier') {
+} else if ($report_type == 'soldier' || $report_type == 'details') {
     $table = 'u.';
 }
 $sql .= " WHERE ";
-if ($_POST['school_id'] != '0') {
+if ($_POST['school_id'] != '0' && $_POST['school_id'][0] > 0) {
     $sql .= $table . "school_id IN (" . implode(',', $_POST['school_id']) . ")";
 } else {
     $sql .= $table . "school_id != 0";
 }
 if (in_array('sr', $from) || in_array('ur', $from)) {
     $sql .= " AND ur.year = :year";
+} else if ($report_type == 'details') {
+    $sql .= " AND rc.year = :year";
 }
-// echo $sql; exit;
+// echo $sql;
 $stmt = $MASHPIA_DB->prepare($sql);
-if (in_array('sr', $from) || in_array('ur', $from)) {
+if (in_array('sr', $from) || in_array('ur', $from) || in_array('rc', $from)) {
     $stmt->execute([
         ':year' => $_POST['year']
     ]);
@@ -513,7 +536,9 @@ $reg_types = [
                             foreach ($fields[$report_type] as $key => $field) {
                                 if (!in_array($key, $_POST[$report_type . '_options'])) continue;
                                 if (is_array($field)) {
-                                    echo '<th>' . ucwords($key) . '</th>';
+                                    $desc = explode('_', $key);
+                                    $desc = implode(' ', $desc);    
+                                    echo '<th>' . ucwords($desc) . '</th>';
                                 } else {
                                     if (strpos($field, '.') !== false) {
                                         $details = explode('.', $field);
@@ -523,8 +548,6 @@ $reg_types = [
                                             $field .= '_paid';
                                         }
                                         if ($field == 'balance') $field = 'past_due';
-                                    } else {
-                                        $field = $f;
                                     }
                                     $details = explode('_', $field);
                                     $field = implode(' ', $details);
@@ -598,6 +621,9 @@ $reg_types = [
                                                 $cellClass = 'number-cell';
                                                 if ($$field > 0) $cellClass .= ' positive-amount';
                                                 else $cellClass .= ' zero-amount';
+                                                break;
+                                            case 'code':
+                                                $cellContent = ChidonShipping::getDescription($field);
                                                 break;
                                             default:
                                                 $cellContent = $result[$field];

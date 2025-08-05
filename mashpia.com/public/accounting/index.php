@@ -432,6 +432,18 @@ $year = GlobalSettings::getCurrentYear();
                 </div>
             </div>
 
+            <div class="sections-grid">
+                <div class="card-module">
+                    <div class="card-header-module" data-target="details-options-section">
+                        <h5><i class="bi bi-gear"></i> Details Options (For Details Report)</h5>
+                        <i class="bi bi-chevron-down toggle-icon"></i>
+                    </div>
+                    <div class="card-body-module" id="details-options-section">
+                        <div id="details_options" class="checkbox-grid-two-columns"></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="text-center mt-4">
                 <button type="submit" class="btn-submit">
                     <i class="bi bi-file-earmark-text"></i> Generate Report
@@ -467,7 +479,8 @@ $year = GlobalSettings::getCurrentYear();
         const report_types = {
             'base' : 'Base Charges Report',
             'soldier' : 'Soldier Charges Report', 
-            'summary' : 'Summary Charges Report', 
+            'summary' : 'Summary Transactions Report', 
+            'details' : 'Details Transactions Report',
         }
         
         const base_options = {
@@ -489,7 +502,7 @@ $year = GlobalSettings::getCurrentYear();
         }
 
         const soldier_options = {
-            'registration_type': 'Registration Type',
+            'reg_type': 'Registration Type',
             'school_number': 'Base Number',
             'school_name': 'Base Name',
             'user_serial': 'User Serial',
@@ -500,6 +513,19 @@ $year = GlobalSettings::getCurrentYear();
             'reg_paid': 'Registration Paid',
             'soldier_discount': 'Coupon Discount',
             'total_balance': 'Balance'
+        }
+
+        const details_options = {
+            'reg_type': 'Registration Type',
+            'school_number': 'Base Number',
+            'school_name': 'Base Name',
+            'user_serial': 'User Serial',
+            'user_name': 'User Name',
+            'type': 'Type',
+            'code': 'Code',
+            'reg_date': 'Registration Date',
+            'reg_amount': 'Amount',
+            'refunded': 'Refunded'
         }
         
         function toggleSection(header) {
@@ -551,14 +577,15 @@ $year = GlobalSettings::getCurrentYear();
             build_checkbox_group(report_types, 'report_type', 'radio');
             build_checkbox_group(base_options, 'base_options', 'checkbox');
             build_checkbox_group(soldier_options, 'soldier_options', 'checkbox');
-            
+            build_checkbox_group(details_options, 'details_options', 'checkbox');
+
             // Add form validation
             document.querySelector('form').addEventListener('submit', function(e) {
                 const selectedReportType = document.querySelector('input[name="report_type"]:checked');
                 
                 if (!selectedReportType) {
                     e.preventDefault();
-                    alert('Please select a report type (Base Report or Soldier Report)');
+                    alert('Please select a report type (Base Report, Soldier Report, or Details Report)');
                     return false;
                 }
                 
@@ -569,7 +596,7 @@ $year = GlobalSettings::getCurrentYear();
                 
                 if (selectedOptions.length === 0) {
                     e.preventDefault();
-                    alert('Please select at least one option for the ' + reportType + ' report');
+                    alert('Please select at least one option for the ' + report_types[reportType] + ' report');
                     return false;
                 }
                 
