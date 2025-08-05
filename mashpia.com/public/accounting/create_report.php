@@ -81,6 +81,7 @@ $fields = [
 // build sql
 $from = [];
 $srd_qry = false;
+$soldier_discounts = false;
 $total_registered_chayolim = false;
 // SELECT fields
 $sql = "SELECT ";
@@ -101,6 +102,8 @@ foreach ($_POST[$report_type . '_options'] as $option) {
         if (strpos($f, 'total') !== false) {
             if ($f == 'total_registered') {
                 $total_registered_chayolim = true;
+            } else if ($f == 'total_discount') {
+                $soldier_discounts = true;
             }
             continue;
         }
@@ -223,6 +226,26 @@ if ($total_registered_chayolim) {
         $total_reg[$r['school_id']] = $r['total_registered'];
     }
 }
+
+// get the soldier discounts
+$discounts = [];
+if ($soldier_discounts) {
+    // find out total for any discounts that were used
+    $stmt = $MASHPIA_DB->prepare("
+        SELECT 
+            user_id, discount
+        FROM
+            registration_charges 
+        WHERE
+            year = :year AND type IN ('chayolei', 'THE') AND discount > 0  
+    ");
+    $stmt->execute([':year' => $_POST['year']]);
+    $temp = $stmt->fetchAll();
+    foreach ($temp as $row) {
+        $discounts[$row['user_id']] = $row['discount'];
+    }
+}
+// echo "<pre>"; print_r($discounts); echo "</pre>"; exit;
 
 $reg_types = [
     1 => 'Tuition',
@@ -625,6 +648,12 @@ $reg_types = [
                                                 break;
                                             case 'code':
                                                 $cellContent = ChidonShipping::getDescription($field);
+                                                break;
+                                            case 'total_discount':
+                                                $cellContent = number_format($discounts[$result['user_id']] ?? 0, 2);
+                                                $cellClass = 'number-cell';
+                                                if ($cellContent > 0) $cellClass .= ' positive-amount';
+                                                else $cellClass .= ' zero-amount';
                                                 break;
                                             default:
                                                 $cellContent = $result[$field];
