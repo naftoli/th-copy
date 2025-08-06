@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accounting Reports</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/react-bootstrap@2.9.0/dist/react-bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { 
+            Container, 
+            Row, 
+            Col, 
+            Form, 
+            Button, 
+            Card, 
+            Alert,
+            FormCheck,
+            FormSelect,
+            Table,
+            InputGroup
+        } = ReactBootstrap;
+
+        function ReportTable({ data, headers }) {
+            const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+            const [filterText, setFilterText] = useState('');
+            const [currentPage, setCurrentPage] = useState(1);
+            const [itemsPerPage, setItemsPerPage] = useState(10);
+
+            const handleSort = (key) => {
+                let direction = 'asc';
+                if (sortConfig.key === key && sortConfig.direction === 'asc') {
+                    direction = 'desc';
+                }
+                setSortConfig({ key, direction });
+            };
+
+            const filteredData = data.filter(row =>
+                Object.values(row).some(value =>
+                    String(value).toLowerCase().includes(filterText.toLowerCase())
+                )
+            );
+
+            const sortedData = [...filteredData].sort((a, b) => {
+                if (!sortConfig.key) return 0;
+                
+                const aValue = a[sortConfig.key];
+                const bValue = b[sortConfig.key];
+                
+                if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+                if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            const indexOfLastItem = currentPage * itemsPerPage;
+            const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+            const currentItems = sortedData.slice(indexOfFirstItem, indexOfLastItem);
+            const totalPages = Math.ceil(sortedData.length / itemsPerPage);
+
+            const getSortIcon = (key) => {
+                if (sortConfig.key !== key) return '↕️';
+                return sortConfig.direction === 'asc' ? '↑' : '↓';
+            };
+
+            return (
+                <div>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <InputGroup style={{ maxWidth: '300px' }}>
+                            <InputGroup.Text>
+                                <i className="bi bi-search"></i>
+                            </InputGroup.Text>
+                            <Form.Control
+                                type="text"
+                                placeholder="Filter data..."
+                                value={filterText}
+                                onChange={(e) => setFilterText(e.target.value)}
+                            />
+                        </InputGroup>
+                        
+                        <div className="d-flex align-items-center">
+                            <span className="me-2">Show:</span>
+                            <FormSelect
+                                value={itemsPerPage}
+                                onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                                style={{ width: '80px' }}
+                            >
+                                <option value={10}>10</option>
+                                <option value={25}>25</option>
+                                <option value={50}>50</option>
+                                <option value={100}>100</option>
+                            </FormSelect>
+                            <span className="ms-2">entries</span>
+                        </div>
+                    </div>
+
+                    <div className="table-responsive">
+                        <Table striped bordered hover>
+                            <thead className="table-dark">
+                                <tr>
+                                    {headers.map(header => (
+                                        <th 
+                                            key={header}
+                                            style={{ cursor: 'pointer' }}
+                                            onClick={() => handleSort(header)}
+                                        >
+                                            {header} {getSortIcon(header)}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {currentItems.map((row, index) => (
+                                    <tr key={index}>
+                                        {headers.map(header => (
+                                            <td key={header}>{row[header] || ''}</td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </Table>
+                    </div>
+
+                    <div className="d-flex justify-content-between align-items-center mt-3">
+                        <div>
+                            Showing {indexOfFirstItem + 1} to {Math.min(indexOfLastItem, sortedData.length)} of {sortedData.length} entries
+                        </div>
+                        <div>
+                            <Button
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
+                                disabled={currentPage === 1}
+                                className="me-2"
+                            >
+                                Previous
+                            </Button>
+                            <span className="mx-2">
+                                Page {currentPage} of {totalPages}
+                            </span>
+                            <Button
+                                variant="outline-secondary"
+                                size="sm"
+                                onClick={() => setCurrentPage(Math.min(totalPages, currentPage + 1))}
+                                disabled={currentPage === totalPages}
+                            >
+                                Next
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        function AccountingReportForm() {
+            const [formData, setFormData] = useState({
+                year: new Date().getFullYear(),
+                schools: [],
+                reportType: '',
+                baseOptions: [],
+                soldierOptions: [],
+                detailsOptions: []
+            });
+
+            const [schools, setSchools] = useState([]);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState('');
+            const [showForm, setShowForm] = useState(true);
+            const [reportData, setReportData] = useState(null);
+            const [generatingReport, setGeneratingReport] = useState(false);
+
+            const reportTypes = {
+                'base': 'Base Charges Report',
+                'soldier': 'Soldier Charges Report',
+                'summary': 'Summary Transactions Report',
+                'details': 'Details Transactions Report',
+                'base_discounts': 'View / Add Base Vouchers',
+                'soldier_discounts': 'View / Add Soldier Vouchers',
+                'settings': 'Update Base Registration Settings',
+                'types': 'Update School Types',
+                'unregister': 'Unregister Base / Soldiers'
+            };
+
+            const baseOptions = {
+                'base_type': 'Registration Type',
+                'school_number': 'Base Number',
+                'school_name': 'Base Name',
+                'date_registered': 'Date Registered',
+                'chayolei_fee': 'Chayolei Fee',
+                'chayolei_paid': 'Chayolei Fee Paid',
+                'chidon_fee': 'Chidon Fee',
+                'chidon_paid': 'Chidon Fee Paid',
+                'prior_balance': 'Prior Balance',
+                'prior_balance_paid': 'Prior Balance Paid',
+                'total_owed': 'Total Owed',
+                'base_discount': 'Base Discount',
+                'total_paid': 'Total Paid',
+                'total_balance': 'Base Balance',
+                'registered_chayolim': 'Soldiers Registered'
+            };
+
+            const soldierOptions = {
+                'reg_type': 'Registration Type',
+                'school_number': 'Base Number',
+                'school_name': 'Base Name',
+                'user_serial': 'User Serial',
+                'grade': 'Grade',
+                'user_name': 'User Name',
+                'date_registered': 'Date Registered',
+                'reg_fee': 'Registration Fee',
+                'reg_paid': 'Registration Paid',
+                'soldier_discount': 'Coupon Discount',
+                'total_balance': 'Balance'
+            };
+
+            const detailsOptions = {
+                'reg_type': 'Registration Type',
+                'school_number': 'Base Number',
+                'school_name': 'Base Name',
+                'user_serial': 'User Serial',
+                'user_name': 'User Name',
+                'type': 'Type',
+                'code': 'Code',
+                'reg_date': 'Registration Date',
+                'reg_amount': 'Amount',
+                'refunded': 'Refunded'
+            };
+
+            // Generate years for dropdown
+            const generateYears = () => {
+                const currentYear = new Date().getFullYear();
+                const years = [];
+                for (let year = currentYear; year >= 5780; year--) {
+                    years.push(year);
+                }
+                return years;
+            };
+
+            // Load schools data
+            useEffect(() => {
+                const timeoutId = setTimeout(() => {
+                    if (loading) {
+                        setError('Request timed out. Please check your connection and try again.');
+                        setLoading(false);
+                    }
+                }, 10000); // 10 second timeout
+
+                fetch('api/getSchools.php')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        clearTimeout(timeoutId);
+                        // Convert the schools object to array format expected by the component
+                        const schoolsArray = Object.entries(data).map(([id, name]) => ({
+                            id: id,
+                            name: name
+                        }));
+                        setSchools(schoolsArray);
+                        setLoading(false);
+                    })
+                    .catch(err => {
+                        clearTimeout(timeoutId);
+                        console.error('Error loading schools:', err);
+                        setError('Failed to load schools: ' + err.message);
+                        setLoading(false);
+                    });
+
+                return () => clearTimeout(timeoutId);
+            }, []);
+
+            const handleInputChange = (field, value) => {
+                setFormData(prev => ({
+                    ...prev,
+                    [field]: value
+                }));
+            };
+
+            const handleSchoolChange = (selectedOptions) => {
+                setFormData(prev => ({
+                    ...prev,
+                    schools: selectedOptions
+                }));
+            };
+
+            const handleOptionChange = (optionType, option, checked) => {
+                setFormData(prev => ({
+                    ...prev,
+                    [optionType]: checked 
+                        ? [...prev[optionType], option]
+                        : prev[optionType].filter(item => item !== option)
+                }));
+            };
+
+            const showOptionsForReportType = (reportType) => {
+                return reportType === 'base' || reportType === 'soldier' || reportType === 'details';
+            };
+
+            const getOptionsForReportType = (reportType) => {
+                switch (reportType) {
+                    case 'base':
+                        return baseOptions;
+                    case 'soldier':
+                        return soldierOptions;
+                    case 'details':
+                        return detailsOptions;
+                    default:
+                        return {};
+                }
+            };
+
+            const validateForm = () => {
+                if (!formData.reportType) {
+                    alert('Please select a report type');
+                    return false;
+                }
+
+                if (formData.schools.length === 0) {
+                    alert('Please select at least one school');
+                    return false;
+                }
+
+                if (showOptionsForReportType(formData.reportType)) {
+                    const optionsKey = formData.reportType + 'Options';
+                    if (formData[optionsKey].length === 0) {
+                        alert(`Please select at least one option for the ${reportTypes[formData.reportType]} report`);
+                        return false;
+                    }
+                }
+
+                return true;
+            };
+
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                
+                if (!validateForm()) {
+                    return;
+                }
+
+                setGeneratingReport(true);
+
+                // Create form data for submission
+                const submitData = new FormData();
+                submitData.append('year', formData.year);
+                submitData.append('report_type', formData.reportType);
+                
+                formData.schools.forEach(school => {
+                    submitData.append('school_id[]', school.value);
+                });
+
+                if (showOptionsForReportType(formData.reportType)) {
+                    const optionsKey = formData.reportType + 'Options';
+                    formData[optionsKey].forEach(option => {
+                        submitData.append(`${formData.reportType}_options[]`, option);
+                    });
+                }
+
+                try {
+                    const response = await fetch('create_report.php', {
+                        method: 'POST',
+                        body: submitData
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        setReportData(data);
+                        setShowForm(false);
+                    } else {
+                        throw new Error('Failed to generate report');
+                    }
+                } catch (error) {
+                    setError('Failed to generate report: ' + error.message);
+                } finally {
+                    setGeneratingReport(false);
+                }
+            };
+
+            const handleDownloadCSV = () => {
+                if (!reportData || !reportData.data) return;
+                
+                const headers = reportData.headers || Object.keys(reportData.data[0] || {});
+                const csvContent = [
+                    headers.join(','),
+                    ...reportData.data.map(row => 
+                        headers.map(header => {
+                            const value = row[header] || '';
+                            return `"${String(value).replace(/"/g, '""')}"`;
+                        }).join(',')
+                    )
+                ].join('\n');
+                
+                const blob = new Blob([csvContent], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `accounting_report_${formData.year}_${formData.reportType}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            };
+
+            const handlePrint = () => {
+                window.print();
+            };
+
+            const handleNewReport = () => {
+                setShowForm(true);
+                setReportData(null);
+                setError('');
+            };
+
+            if (loading) {
+                return (
+                    <Container className="mt-4">
+                        <div className="text-center">
+                            <div className="spinner-border" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                            <p className="mt-2">Loading schools...</p>
+                        </div>
+                    </Container>
+                );
+            }
+
+            if (error) {
+                return (
+                    <Container className="mt-4">
+                        <Alert variant="danger">
+                            <h5>Error Loading Schools</h5>
+                            <p>{error}</p>
+                            <Button 
+                                variant="outline-danger" 
+                                onClick={() => window.location.reload()}
+                            >
+                                Retry
+                            </Button>
+                        </Alert>
+                    </Container>
+                );
+            }
+
+            return (
+                <Container className="mt-4">
+                    <h1>Accounting Reports</h1>
+                    
+                    {showForm && (
+                        <Card className="mb-4">
+                            <Card.Header 
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => setShowForm(!showForm)}
+                            >
+                                <h5 className="mb-0">
+                                    <i className={`bi bi-chevron-${showForm ? 'down' : 'right'}`}></i>
+                                    {' '}Report Configuration
+                                </h5>
+                            </Card.Header>
+                            {showForm && (
+                                <Card.Body>
+                                    <Form onSubmit={handleSubmit}>
+                                        <Row>
+                                            <Col md={6}>
+                                                <div className="mb-3">
+                                                    <Form.Label htmlFor="year">Year</Form.Label>
+                                                    <FormSelect
+                                                        id="year"
+                                                        value={formData.year}
+                                                        onChange={(e) => handleInputChange('year', e.target.value)}
+                                                    >
+                                                        {generateYears().map(year => (
+                                                            <option key={year} value={year}>{year}</option>
+                                                        ))}
+                                                    </FormSelect>
+                                                </div>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col md={6}>
+                                                <Card className="mb-3">
+                                                    <Card.Header>
+                                                        <h5 className="mb-0">Select Schools</h5>
+                                                    </Card.Header>
+                                                    <Card.Body>
+                                                        <Form.Label>Choose Schools for Report</Form.Label>
+                                                        <FormSelect
+                                                            multiple
+                                                            value={formData.schools.map(s => s.value)}
+                                                            onChange={(e) => {
+                                                                const selectedOptions = Array.from(e.target.selectedOptions, option => ({
+                                                                    value: option.value,
+                                                                    label: option.text
+                                                                }));
+                                                                handleSchoolChange(selectedOptions);
+                                                            }}
+                                                            size={6}
+                                                        >
+                                                            <option value="0">All Schools</option>
+                                                            {schools.map(school => (
+                                                                <option key={school.id} value={school.id}>
+                                                                    {school.name}
+                                                                </option>
+                                                            ))}
+                                                        </FormSelect>
+                                                        <Form.Text>Hold Ctrl (or Cmd on Mac) to select multiple schools</Form.Text>
+                                                    </Card.Body>
+                                                </Card>
+
+                                                <Card className="mb-3">
+                                                    <Card.Header>
+                                                        <h5 className="mb-0">Report Type</h5>
+                                                    </Card.Header>
+                                                    <Card.Body>
+                                                        <Row>
+                                                            {Object.entries(reportTypes).map(([key, label]) => (
+                                                                <Col md={6} key={key} className="mb-2">
+                                                                    <FormCheck
+                                                                        type="radio"
+                                                                        name="report_type"
+                                                                        id={`report_type_${key}`}
+                                                                        value={key}
+                                                                        checked={formData.reportType === key}
+                                                                        onChange={(e) => handleInputChange('reportType', e.target.value)}
+                                                                        label={label}
+                                                                    />
+                                                                </Col>
+                                                            ))}
+                                                        </Row>
+                                                    </Card.Body>
+                                                </Card>
+                                            </Col>
+
+                                            <Col md={6}>
+                                                {showOptionsForReportType(formData.reportType) && (
+                                                    <Card className="mb-3">
+                                                        <Card.Header>
+                                                            <h5 className="mb-0">
+                                                                {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Options 
+                                                                (For {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Report)
+                                                            </h5>
+                                                        </Card.Header>
+                                                        <Card.Body>
+                                                            <Row>
+                                                                {Object.entries(getOptionsForReportType(formData.reportType)).map(([key, label]) => (
+                                                                    <Col md={6} key={key} className="mb-2">
+                                                                        <FormCheck
+                                                                            type="checkbox"
+                                                                            id={`${formData.reportType}_option_${key}`}
+                                                                            value={key}
+                                                                            checked={formData[formData.reportType + 'Options'].includes(key)}
+                                                            onChange={(e) => handleOptionChange(
+                                                                formData.reportType + 'Options', 
+                                                                key, 
+                                                                e.target.checked
+                                                            )}
+                                                            label={label}
+                                                        />
+                                                    </Col>
+                                                ))}
+                                            </Row>
+                                        </Card.Body>
+                                    </Card>
+                                )}
+                            </Col>
+                        </Row>
+
+                        <Button 
+                            type="submit" 
+                            variant="primary" 
+                            disabled={generatingReport}
+                        >
+                            {generatingReport ? (
+                                <>
+                                    <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                    Generating Report...
+                                </>
+                            ) : (
+                                'Generate Report'
+                            )}
+                        </Button>
+                    </Form>
+                </Card.Body>
+            )}
+        </Card>
+                    )}
+
+                    {reportData && (
+                        <Card>
+                            <Card.Header>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <h5 className="mb-0">
+                                        {reportTypes[formData.reportType]} - {formData.year}
+                                    </h5>
+                                    <div>
+                                        <Button 
+                                            variant="outline-primary" 
+                                            size="sm" 
+                                            onClick={handleDownloadCSV}
+                                            className="me-2"
+                                        >
+                                            <i className="bi bi-download"></i> Download CSV
+                                        </Button>
+                                        <Button 
+                                            variant="outline-secondary" 
+                                            size="sm" 
+                                            onClick={handlePrint}
+                                            className="me-2"
+                                        >
+                                            <i className="bi bi-printer"></i> Print
+                                        </Button>
+                                        <Button 
+                                            variant="outline-info" 
+                                            size="sm" 
+                                            onClick={handleNewReport}
+                                        >
+                                            <i className="bi bi-plus-circle"></i> New Report
+                                        </Button>
+                                    </div>
+                                </div>
+                            </Card.Header>
+                            <Card.Body>
+                                <ReportTable data={reportData.data} headers={reportData.headers} />
+                            </Card.Body>
+                        </Card>
+                    )}
+                </Container>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<AccountingReportForm />);
+    </script>
+</body>
+</html> 
