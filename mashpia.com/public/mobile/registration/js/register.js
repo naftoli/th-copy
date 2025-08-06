@@ -2937,20 +2937,33 @@ var templates = function () {
         var cc = payment.payment.creditCard;
         console.log(cc)
         cc.cardType = cc.cardType || "Unknown";
-        var msg = '<span>' + cc.cardType + ' ending in ' + cc.cardNumber.slice(4) + '</span>';
-        if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') msg = '<span dir="rtl">כרטיס ' + cc.cardType + ' המסתיים בספרות ' + cc.cardNumber.slice(4) + '</span>'
+        const expiry = cc.expirationDate.split('-');
+        const expiryDate = expiry[1] + '/' + expiry[0].substring(2);
+        var msg = '<span>' + ' ending in ' + cc.cardNumber.slice(4) + '</span>';
+        if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') msg = '<span dir="rtl">כרטיס ' + ' המסתיים בספרות ' + cc.cardNumber.slice(4) + '</span>'
         html +=
-          '<div class="payment-option cc-number identified ' + cc.cardType.toLowerCase() + '">' +
-          '<label class="radio-label">' +
-          '<input type="radio" id="payment_profile" name="payment_profile" value="' +
-          payment.customerPaymentProfileId + '"' +
-          (index === 0 ? "checked" : "") + '/>' +
-          '<span class="radio"></span>' +
-          '</label>&nbsp;<span style="vertical-align: super; margin-left: 60px;">' + msg + '</span>' + 
-          ' <span><input style="vertical-align: bottom" type="month" value="' + cc.expirationDate + '" data-card_exp="' + cc.expirationDate + '"' +
-          ' data-card_num="' + cc.cardNumber + '" onchange="templates.updatePaymentProfile(' + payment.customerPaymentProfileId + ', this)" /></span>' +
-          ' <span style="font-size: smaller; float: right;"><a style="vertical-align: sub;" href="javascript:void(0)" onclick="templates.removePaymentProfile(' + payment.customerPaymentProfileId + '); return false;">delete</a></span>' +
-          '</div>';
+        `
+          <div class="payment-option cc-number identified ${cc.cardType.toLowerCase()}">
+            <label class="radio-label">
+              <input type="radio" id="payment_profile" name="payment_profile" value="${payment.customerPaymentProfileId}" ${index === 0 ? "checked" : ""}/>
+              <span class="radio"></span>
+            </label>
+            <span style="vertical-align: super; margin-left: 60px;">${msg}</span>
+            <span style="vertical-align: super"> 
+              <a href="javascript:void(0)" id="expiry-date-link" 
+                onclick="document.getElementById('expiry-date').value='${cc.expirationDate}';
+                document.getElementById('edit-expiry-modal').style.display='block';">
+              (${expiryDate})</a></span>
+            <span style="font-size: smaller; float: right;"><a style="vertical-align: sub;" href="javascript:void(0)" onclick="templates.removePaymentProfile(${payment.customerPaymentProfileId}); return false;"><i class="fas fa-trash"></i></a></span>
+          </div>
+          <div class="modal" id="edit-expiry-modal" style="position: relative; left: 50%; transform: translateX(-50%); margin-bottom: 10px;">
+            <div class="modal-content">
+              <input type="month" id="expiry-date" value="${cc.expirationDate}" data-card_exp="${cc.expirationDate}" data-card_num="${cc.cardNumber}" 
+                onchange="templates.updatePaymentProfile(${payment.customerPaymentProfileId}, this);
+                document.getElementById('edit-expiry-modal').style.display='none';">
+            </div>
+          </div>
+          `
       });
       var msg2 = '<span style="vertical-align: super;">New Card</span>';
       if (Cookies.get('lang') == 'he' || localStorage.getItem('locallang') == 'he') msg2 = "<span>כרטיס (אשראי) חדש</span>"
@@ -3008,8 +3021,14 @@ var templates = function () {
           alert('Failed to update card: ' + res.error)
         } else {
           alert('Card updated successfully')
+          templates.updateExpiryDateLink(cardInfo.expiryDate)
         }
       })
+    },
+    updateExpiryDateLink: function(expiryDate) {
+      const expiry = expiryDate.split('-');
+      const newExpiryDate = expiry[1] + '/' + expiry[0].substring(2);
+      document.getElementById('expiry-date-link').textContent = `(${newExpiryDate})`;
     }
   }
 }();
