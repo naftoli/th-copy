@@ -1,6 +1,8 @@
 <?php
 // ini_set('display_errors', 1);
 // ini_set('error_reporting', E_ALL);
+header('Location: index.html');
+exit;
 
 $admin_auth = ['school'];
 require_once '../header.php';
@@ -29,8 +31,7 @@ $debug = $_GET['debug'] ?? false;
 </head>
 <body>
     <div class="container mt-4">
-        <h1>Accounting Report Generator</h1>
-        <p>Generate comprehensive accounting reports.</p>
+        <h1>Accounting Reports</h1>
         
         <form action="create_report.php<?php echo $debug ? '?debug=1' : ''; ?>" method="post" target="_blank">
             <div class="row">
