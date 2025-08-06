@@ -6,6 +6,81 @@
     <title>Accounting Reports</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .card-header {
+            transition: background-color 0.3s ease;
+        }
+        
+        .card-header:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .card-body {
+            transition: all 0.3s ease;
+        }
+        
+        .bi-chevron-down, .bi-chevron-right {
+            transition: transform 0.3s ease;
+        }
+        
+        .accordion-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+        
+        .accordion-toggle:hover {
+            background-color: #f8f9fa;
+        }
+        
+        @media print {
+            .card-header {
+                background-color: #f8f9fa !important;
+                color: #000 !important;
+            }
+            
+            .accordion-toggle {
+                display: none !important;
+            }
+            
+            .card-body {
+                display: block !important;
+            }
+            
+            .btn {
+                display: none !important;
+            }
+            
+            .form-control, .form-select, .form-check {
+                border: 1px solid #ccc !important;
+                background-color: #fff !important;
+            }
+        }
+        
+        /* Make container stretch for wide tables */
+        .table-responsive {
+            min-width: 100%;
+            overflow-x: auto;
+        }
+        
+        .table-responsive .table {
+            min-width: max-content;
+        }
+        
+        /* When table is wider than container, stretch the container */
+        @media (min-width: 768px) {
+            .container {
+                max-width: none !important;
+                width: 100% !important;
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+        }
+        
+        /* Ensure the table container can grow */
+        .card-body {
+            overflow-x: auto;
+        }
+    </style>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -15,7 +90,7 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState, useEffect, useRef } = React;
         const { 
             Container, 
             Row, 
@@ -34,7 +109,7 @@
             const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
             const [filterText, setFilterText] = useState('');
             const [currentPage, setCurrentPage] = useState(1);
-            const [itemsPerPage, setItemsPerPage] = useState(10);
+            const [itemsPerPage, setItemsPerPage] = useState(50);
 
             const handleSort = (key) => {
                 let direction = 'asc';
@@ -160,10 +235,167 @@
             );
         }
 
+        function MultiSelect({ options, selectedValues, onChange, placeholder }) {
+            const [isOpen, setIsOpen] = useState(false);
+            const [searchTerm, setSearchTerm] = useState('');
+            const dropdownRef = useRef(null);
+
+            const filteredOptions = options.filter(option =>
+                option.name.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+
+            // Handle click outside to close dropdown
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                        setIsOpen(false);
+                        setSearchTerm('');
+                    }
+                };
+
+                document.addEventListener('mousedown', handleClickOutside);
+                return () => {
+                    document.removeEventListener('mousedown', handleClickOutside);
+                };
+            }, []);
+
+            const handleSelect = (option) => {
+                const isSelected = selectedValues.some(s => s.value === option.id);
+                if (isSelected) {
+                    onChange(selectedValues.filter(s => s.value !== option.id));
+                } else {
+                    onChange([...selectedValues, { value: option.id, label: option.name }]);
+                }
+                setSearchTerm('');
+            };
+
+            const handleRemove = (valueToRemove) => {
+                onChange(selectedValues.filter(s => s.value !== valueToRemove));
+            };
+
+            const handleSelectAll = () => {
+                if (selectedValues.length === options.length) {
+                    // Deselect all individual schools (but keep "All Schools" if selected)
+                    const allSchoolsSelected = selectedValues.filter(s => s.value === '0');
+                    onChange(allSchoolsSelected);
+                } else {
+                    // Select all individual schools (but don't affect "All Schools")
+                    const allSchoolsOption = selectedValues.filter(s => s.value === '0');
+                    const allIndividualSchools = options.map(option => ({ value: option.id, label: option.name }));
+                    onChange([...allSchoolsOption, ...allIndividualSchools]);
+                }
+            };
+
+            return (
+                <div className="position-relative">
+                    <div 
+                        className="form-control d-flex flex-wrap align-items-center"
+                        style={{ minHeight: '38px', cursor: 'pointer' }}
+                        onClick={() => setIsOpen(!isOpen)}
+                        ref={dropdownRef}
+                    >
+                        {selectedValues.length === 0 ? (
+                            <span className="text-muted">{placeholder}</span>
+                        ) : (
+                            <>
+                                {selectedValues.map((selected, index) => (
+                                    <span 
+                                        key={selected.value}
+                                        className="badge bg-primary me-1 mb-1"
+                                        style={{ fontSize: '0.8rem' }}
+                                    >
+                                        {selected.label}
+                                        <button
+                                            type="button"
+                                            className="btn-close btn-close-white ms-1"
+                                            style={{ fontSize: '0.6rem' }}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleRemove(selected.value);
+                                            }}
+                                        />
+                                    </span>
+                                ))}
+                            </>
+                        )}
+                        <i className={`bi bi-chevron-${isOpen ? 'up' : 'down'} ms-auto`}></i>
+                    </div>
+
+                    {isOpen && (
+                        <div className="position-absolute w-100 bg-white border rounded shadow-sm" style={{ zIndex: 1000, maxHeight: '300px', overflowY: 'auto' }} ref={dropdownRef}>
+                            <div className="p-2 border-bottom">
+                                <input
+                                    type="text"
+                                    className="form-control form-control-sm"
+                                    placeholder="Search schools..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    onClick={(e) => e.stopPropagation()}
+                                />
+                            </div>
+                            
+                            <div className="p-2 border-bottom">
+                                <FormCheck
+                                    type="checkbox"
+                                    checked={selectedValues.filter(s => s.value !== '0').length === options.length && options.length > 0}
+                                    onChange={handleSelectAll}
+                                    label="Select All Schools"
+                                    className="fw-bold"
+                                />
+                            </div>
+                            
+                            <div>
+                                <div
+                                    className="px-2 py-1 d-flex align-items-center"
+                                    style={{ cursor: 'pointer' }}
+                                    onClick={() => {
+                                        const isSelected = selectedValues.some(s => s.value === '0');
+                                        if (isSelected) {
+                                            onChange(selectedValues.filter(s => s.value !== '0'));
+                                        } else {
+                                            onChange([...selectedValues, { value: '0', label: 'All Schools' }]);
+                                        }
+                                    }}
+                                    onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
+                                    onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                                >
+                                    <FormCheck
+                                        type="checkbox"
+                                        checked={selectedValues.some(s => s.value === '0')}
+                                        onChange={() => {}} // Handled by parent div
+                                        className="me-2"
+                                    />
+                                    <span className="fw-bold">All Schools</span>
+                                </div>
+                                {filteredOptions.map(option => (
+                                    <div
+                                        key={option.id}
+                                        className="px-2 py-1 d-flex align-items-center"
+                                        style={{ cursor: 'pointer' }}
+                                        onClick={() => handleSelect(option)}
+                                        onMouseEnter={(e) => e.target.style.backgroundColor = '#f8f9fa'}
+                                        onMouseLeave={(e) => e.target.style.backgroundColor = 'transparent'}
+                                    >
+                                        <FormCheck
+                                            type="checkbox"
+                                            checked={selectedValues.some(s => s.value === option.id)}
+                                            onChange={() => {}} // Handled by parent div
+                                            className="me-2"
+                                        />
+                                        <span>{option.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
         function AccountingReportForm() {
             const [formData, setFormData] = useState({
-                year: new Date().getFullYear(),
-                schools: [],
+                year: '',
+                schools: [{ value: '0', label: 'All Schools' }],
                 reportType: '',
                 baseOptions: [],
                 soldierOptions: [],
@@ -173,9 +405,10 @@
             const [schools, setSchools] = useState([]);
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState('');
-            const [showForm, setShowForm] = useState(true);
+            const [isFormExpanded, setIsFormExpanded] = useState(true);
             const [reportData, setReportData] = useState(null);
             const [generatingReport, setGeneratingReport] = useState(false);
+            const [years, setYears] = useState([]);
 
             const reportTypes = {
                 'base': 'Base Charges Report',
@@ -234,16 +467,6 @@
                 'refunded': 'Refunded'
             };
 
-            // Generate years for dropdown
-            const generateYears = () => {
-                const currentYear = new Date().getFullYear();
-                const years = [];
-                for (let year = currentYear; year >= 5780; year--) {
-                    years.push(year);
-                }
-                return years;
-            };
-
             // Load schools data
             useEffect(() => {
                 const timeoutId = setTimeout(() => {
@@ -262,12 +485,37 @@
                     })
                     .then(data => {
                         clearTimeout(timeoutId);
-                        // Convert the schools object to array format expected by the component
-                        const schoolsArray = Object.entries(data).map(([id, name]) => ({
-                            id: id,
-                            name: name
-                        }));
+                        console.log('API Response:', data); // Debug log
+                        
+                        // Handle different possible data structures
+                        let schoolsArray = [];
+                        let yearsArray = [];
+                        
+                        if (data.schools) {
+                            // If schools is an object with id/name pairs, convert to array
+                            if (typeof data.schools === 'object' && !Array.isArray(data.schools)) {
+                                schoolsArray = Object.entries(data.schools).map(([id, name]) => ({
+                                    id: id,
+                                    name: name
+                                }));
+                            } else if (Array.isArray(data.schools)) {
+                                schoolsArray = data.schools;
+                            }
+                        }
+                        
+                        if (data.years) {
+                            yearsArray = Array.isArray(data.years) ? data.years : [];
+                        }
+                        
+                        console.log('Processed schools:', schoolsArray); // Debug log
+                        console.log('Processed years:', yearsArray); // Debug log
+                        
                         setSchools(schoolsArray);
+                        setYears(yearsArray);
+                        setFormData(prev => ({
+                            ...prev,
+                            year: yearsArray.length > 0 ? yearsArray[0] : ''
+                        }));
                         setLoading(false);
                     })
                     .catch(err => {
@@ -367,8 +615,52 @@
                     });
                 }
 
+                // check if current url has a get parameter called debug
+                const urlParams = new URLSearchParams(window.location.search);
+                const debug = urlParams.get('debug');
+                if (debug) {
+                    submitData.append('debug', true);
+                }
+
+                // Handle special report types that require redirect
+                const specialReports = {
+                    settings: 'settings.php',
+                    base_discounts: '/reports/registration/discounts.php',
+                    soldier_discounts: '/reports/registration/create_user_discount.php',
+                    unregister: '/admin_yearly.php',
+                    types: '/types_of_schools.php'
+                };
+
+                const reportType = formData.reportType;
+                if (specialReports[reportType]) {
+                    let url = specialReports[reportType];
+                    let schools = '';
+                    if (formData.schools.length > 0 && Number(formData.schools[0].value) > 0) {
+                        schools = formData.schools.map(s => s.value).join(',');
+                    }
+                    if (['summary', 'settings'].includes(reportType)) {
+                        url += `?year=${formData.year}&schools=${schools}`;
+                    } else {
+                        url += `?schools=${schools}`;
+                    }
+                    window.location.href = url;
+                    setGeneratingReport(false);
+                    return;
+                }
+
+                let url
+                switch (formData.reportType) {
+                    case 'summary':
+                        url = 'api/getSummary.php';
+                        break;
+                    default:
+                        url = 'api/create_report.php';
+                        break;
+                }
+
+                // Handle normal report types
                 try {
-                    const response = await fetch('create_report.php', {
+                    const response = await fetch(url, {
                         method: 'POST',
                         body: submitData
                     });
@@ -376,7 +668,7 @@
                     if (response.ok) {
                         const data = await response.json();
                         setReportData(data);
-                        setShowForm(false);
+                        setIsFormExpanded(false); // Collapse form after successful report generation
                     } else {
                         throw new Error('Failed to generate report');
                     }
@@ -417,7 +709,7 @@
             };
 
             const handleNewReport = () => {
-                setShowForm(true);
+                setIsFormExpanded(true); // Ensure form is expanded
                 setReportData(null);
                 setError('');
             };
@@ -456,30 +748,31 @@
                 <Container className="mt-4">
                     <h1>Accounting Reports</h1>
                     
-                    {showForm && (
-                        <Card className="mb-4">
-                            <Card.Header 
-                                style={{ cursor: 'pointer' }}
-                                onClick={() => setShowForm(!showForm)}
-                            >
-                                <h5 className="mb-0">
-                                    <i className={`bi bi-chevron-${showForm ? 'down' : 'right'}`}></i>
+                    <Card className="mb-4">
+                        <Card.Header 
+                            className="accordion-toggle"
+                            onClick={() => setIsFormExpanded(!isFormExpanded)}
+                        >
+                            <h5 className="mb-0 d-flex justify-content-between align-items-center">
+                                <span>
+                                    <i className={`bi bi-chevron-${isFormExpanded ? 'down' : 'right'}`}></i>
                                     {' '}Report Configuration
-                                </h5>
-                            </Card.Header>
-                            {showForm && (
-                                <Card.Body>
-                                    <Form onSubmit={handleSubmit}>
+                                </span>
+                            </h5>
+                        </Card.Header>
+                        {isFormExpanded && (
+                            <Card.Body>
+                                <Form onSubmit={handleSubmit}>
                                         <Row>
                                             <Col md={6}>
                                                 <div className="mb-3">
                                                     <Form.Label htmlFor="year">Year</Form.Label>
                                                     <FormSelect
-                                                        id="year"
+                                                        id="year" 
                                                         value={formData.year}
                                                         onChange={(e) => handleInputChange('year', e.target.value)}
                                                     >
-                                                        {generateYears().map(year => (
+                                                        {years.map(year => (
                                                             <option key={year} value={year}>{year}</option>
                                                         ))}
                                                     </FormSelect>
@@ -495,26 +788,15 @@
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <Form.Label>Choose Schools for Report</Form.Label>
-                                                        <FormSelect
-                                                            multiple
-                                                            value={formData.schools.map(s => s.value)}
-                                                            onChange={(e) => {
-                                                                const selectedOptions = Array.from(e.target.selectedOptions, option => ({
-                                                                    value: option.value,
-                                                                    label: option.text
-                                                                }));
-                                                                handleSchoolChange(selectedOptions);
-                                                            }}
-                                                            size={6}
-                                                        >
-                                                            <option value="0">All Schools</option>
-                                                            {schools.map(school => (
-                                                                <option key={school.id} value={school.id}>
-                                                                    {school.name}
-                                                                </option>
-                                                            ))}
-                                                        </FormSelect>
-                                                        <Form.Text>Hold Ctrl (or Cmd on Mac) to select multiple schools</Form.Text>
+                                                        <MultiSelect
+                                                            options={schools}
+                                                            selectedValues={formData.schools}
+                                                            onChange={handleSchoolChange}
+                                                            placeholder="Select schools..."
+                                                        />
+                                                        <Form.Text>
+                                                            Selected: {formData.schools.length} of {schools.length} schools
+                                                        </Form.Text>
                                                     </Card.Body>
                                                 </Card>
 
@@ -546,10 +828,38 @@
                                                 {showOptionsForReportType(formData.reportType) && (
                                                     <Card className="mb-3">
                                                         <Card.Header>
-                                                            <h5 className="mb-0">
-                                                                {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Options 
-                                                                (For {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Report)
-                                                            </h5>
+                                                            <div className="d-flex justify-content-between align-items-center">
+                                                                <h5 className="mb-0">
+                                                                    {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Options 
+                                                                    (For {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Report)
+                                                                </h5>
+                                                                <Button
+                                                                    variant="outline-secondary"
+                                                                    size="sm"
+                                                                    onClick={() => {
+                                                                        const optionsKey = formData.reportType + 'Options';
+                                                                        const currentOptions = formData[optionsKey];
+                                                                        const allOptions = Object.keys(getOptionsForReportType(formData.reportType));
+                                                                        
+                                                                        if (currentOptions.length === allOptions.length) {
+                                                                            // Deselect all
+                                                                            handleOptionChange(optionsKey, '', false);
+                                                                            setFormData(prev => ({
+                                                                                ...prev,
+                                                                                [optionsKey]: []
+                                                                            }));
+                                                                        } else {
+                                                                            // Select all
+                                                                            setFormData(prev => ({
+                                                                                ...prev,
+                                                                                [optionsKey]: allOptions
+                                                                            }));
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    {formData[formData.reportType + 'Options'].length === Object.keys(getOptionsForReportType(formData.reportType)).length ? 'Uncheck All' : 'Check All'}
+                                                                </Button>
+                                                            </div>
                                                         </Card.Header>
                                                         <Card.Body>
                                                             <Row>
@@ -560,41 +870,40 @@
                                                                             id={`${formData.reportType}_option_${key}`}
                                                                             value={key}
                                                                             checked={formData[formData.reportType + 'Options'].includes(key)}
-                                                            onChange={(e) => handleOptionChange(
-                                                                formData.reportType + 'Options', 
-                                                                key, 
-                                                                e.target.checked
-                                                            )}
-                                                            label={label}
-                                                        />
-                                                    </Col>
-                                                ))}
-                                            </Row>
-                                        </Card.Body>
-                                    </Card>
-                                )}
-                            </Col>
-                        </Row>
+                                                                            onChange={(e) => handleOptionChange(
+                                                                                formData.reportType + 'Options', 
+                                                                                key, 
+                                                                                e.target.checked
+                                                                            )}
+                                                                            label={label}
+                                                                        />
+                                                                    </Col>
+                                                                ))}
+                                                            </Row>
+                                                        </Card.Body>
+                                                    </Card>
+                                                )}
+                                            </Col>
+                                        </Row>
 
-                        <Button 
-                            type="submit" 
-                            variant="primary" 
-                            disabled={generatingReport}
-                        >
-                            {generatingReport ? (
-                                <>
-                                    <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                    Generating Report...
-                                </>
-                            ) : (
-                                'Generate Report'
+                                        <Button 
+                                            type="submit" 
+                                            variant="primary" 
+                                            disabled={generatingReport}
+                                        >
+                                            {generatingReport ? (
+                                                <>
+                                                    <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                    Generating Report...
+                                                </>
+                                            ) : (
+                                                'Generate Report'
+                                            )}
+                                        </Button>
+                                    </Form>
+                                </Card.Body>
                             )}
-                        </Button>
-                    </Form>
-                </Card.Body>
-            )}
-        </Card>
-                    )}
+                        </Card>
 
                     {reportData && (
                         <Card>
