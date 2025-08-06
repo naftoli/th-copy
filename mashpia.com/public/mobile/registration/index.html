@@ -330,6 +330,43 @@
               </select>
             </div>
           </div>
+          <div id="parent-address" style="margin-top: 10px; margin-bottom: 10px;">
+            <label style="padding: 15px;">
+              Please verify you home address. <b>Please note:</b> <i>When you start typing into the address field, a list of
+              possible addresses will appear. Please select the correct address from the list. If you do not see
+              your address, please enter it manually.</i>
+            </label>
+            <div style="display: flex">
+              <div class="col-6">
+                <label for="address">Address</label>
+                <input type="text" name="address" id="c-address" class="form-control" placeholder="Address" autocomplete="address-line1" /><br />
+              </div>
+              <div class="col-6">
+                <label for="apt">Apt</label>
+                <input type="text" name="apt" id="c-apt" class="form-control" placeholder="Apt #" autocomplete="address-line2" /><br />
+              </div>
+            </div>
+            <div style="display: flex">
+              <div class="col-6">
+                <label for="city">City</label>
+                <input type="text" name="city" id="c-city" class="form-control" placeholder="City" autocomplete="address-level2" /><br />
+              </div>
+              <div class="col-6">
+                <label for="state">State</label>
+                <input type="text" name="state" id="c-state" class="form-control" placeholder="State" autocomplete="address-level1" /><br />
+              </div>
+            </div>
+            <div style="display: flex">
+              <div class="col-6">
+                <label for="zip">Zip</label>
+                <input type="text" name="zip" id="c-zip" class="form-control" placeholder="Zip" autocomplete="postal-code" /><br />
+              </div>
+              <div class="col-6">
+                <label for="country">Country</label>
+                <input type="text" name="country" id="c-country" class="form-control" autocomplete="country-name" /><br />
+              </div>
+            </div>
+          </div>
         </div>
         <div class="hide" id="non_th_school_div">
           <div class="row">

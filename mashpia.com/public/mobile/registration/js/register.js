@@ -739,6 +739,11 @@ var registrationApp = function () {
       }
     })
 
+    alert('before saving address')
+    const saved = await saveAddress('#parent-address')
+    if (!saved) return false
+    alert('after saving address')
+
     // make sure non th school field is not empty
     if ([269, 61].includes(selected_user.school.school_id)) {
       let non_th_school_id = parseInt($("#non_th_school_id").val())
@@ -1186,7 +1191,7 @@ var registrationApp = function () {
     if (selected_charges.chidon && !selected_user.getChidonInfo) {
       // only need to save address if it wasn't already saved once
       if (!parseInt(selected_user.parentAccount['updated_address'])) {
-        saveAddress()
+        saveAddress('#chidon-address')
           .then(async function (saved) {
             if (saved) await nextStep()
           })
@@ -1202,7 +1207,7 @@ var registrationApp = function () {
       await nextStep()
   }
 
-  async function saveAddress() {
+  async function saveAddress(elem) {
     // save address
     let address = {
       address1: $("#c-address").val().trim(),
@@ -1257,7 +1262,7 @@ var registrationApp = function () {
     }
 
     // Add confirmation prompt to shipping address
-    const form = document.querySelector('#chidon-address')
+    const form = document.querySelector(elem)
     const result = await mapboxsearch.confirmAddress(form, {
       accessToken: ACCESS_TOKEN,
       theme: {variables: {border: '3px solid rgba(0,0,0,0.35)', borderRadius: '18px'}},
@@ -1282,7 +1287,6 @@ var registrationApp = function () {
       alert(res.error)
       return false
     }
-    return false
   }
 
   const deviceType = () => {
