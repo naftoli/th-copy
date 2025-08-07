@@ -1,6 +1,6 @@
 <?php
-// ini_set('display_errors', 1);
-// ini_set('error_reporting', E_ALL);
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once '../../header.php';
@@ -20,12 +20,10 @@ if ($debug) {
 $tables = [
     's'     => 'schools', 
     'u'     => 'users', 
-    'ur'    => 'user_registration', 
     'rc'    => 'registration_charges',
     'sr'    => 'school_registrations', 
     'srd'   => 'school_registration_details', 
-    'c'     => 'classes',
-    'd'     => 'discounts'
+    'c'     => 'classes'
 ];
 
 $fields = [
@@ -42,7 +40,7 @@ $fields = [
         'prior_balance_paid' => 'srd.past_due', 
         'total_owed'    => 'total_owed',  
         'total_paid'    => 'total_paid', 
-        'base_discount' => 'd.amount',
+        'base_discount' => 'srd.discount',
         'total_balance' => 'total_balance', 
         'registered_chayolim' => 'total_registered'
     ], 
@@ -53,10 +51,10 @@ $fields = [
         'user_serial'   => 'u.user_serial',
         'grade'         => ['c.class_grade', 'c.class_sub'],
         'user_name'     => ['u.first', 'u.last'],
-        'date_registered' => 'ur.reg_date',
-        'reg_fee'       => 's.chayolei_fee',
-        'reg_paid'      => 'ur.paid',
-        'soldier_discount' => 'd.amount',
+        'date_registered' => 'rc.date',
+        'reg_fee'       => 'reg_fee',
+        'reg_paid'      => 'rc.amount',
+        'soldier_discount' => 'rc.discount',
         'total_balance' => 'total_balance'
     ],
     'details' => [
@@ -65,7 +63,7 @@ $fields = [
         'school_name'   => 's.school_name',
         'user_serial'   => 'u.user_serial',
         'user_name'     => ['u.first', 'u.last'],
-        'type'          => 'type',
+        'type'          => 'type_of_charge',
         'code'          => 'rc.type',
         'reg_date'      => 'rc.date',
         'reg_amount'    => 'rc.amount',
@@ -89,8 +87,9 @@ if ($report_type == 'base') {
     $sql .= "rc.user_id, rc.school_id, ";
 }
 foreach ($_POST[$report_type . '_options'] as $option) {
-    if ($option == 'type') continue;
+    if ($option == 'type_of_charge') continue;
     $field = $fields[$report_type][$option];
+    if ($field == 'reg_fee') $field = ['s.child_fee', 'rc.date'];
     if (!is_array($field)) {
         $field = [$field];
     }
@@ -102,12 +101,14 @@ foreach ($_POST[$report_type . '_options'] as $option) {
             continue;
         }
         $pos = strpos($f, '.');
-        $table = substr($f, 0, $pos);
-        if (!in_array($table, $from)) {
-            $from[] = $table;
-        }
-        if ($table != 'srd') { // for srd we will create a new qry
-            $sql .= $f . ", ";
+        if ($pos !== false) {
+            $table = substr($f, 0, $pos);
+            if (!in_array($table, $from)) {
+                $from[] = $table;
+            }
+            if ($table != 'srd') { // for srd we will create a new qry
+                $sql .= $f . ", ";
+            }
         }
     }
 }
@@ -140,10 +141,8 @@ foreach ($from as $t) {
             }
         } else {
             if ($t == 'c') $sql .= ' LEFT JOIN classes c USING (class_id) ';
-            else if ($t == 'ur') $sql .= ' LEFT JOIN user_registration ur USING (user_id) ';
             else if ($report_type == 'details' && $t == 'u') $sql .= ' LEFT JOIN users u USING (user_id) ';
-            else if ($report_type == 'base' && $t == 'd') $sql .= ' LEFT JOIN discounts d USING (school_id, year) ';
-            else if ($report_type == 'soldier' && $t == 'd') $sql .= ' LEFT JOIN discounts d USING (user_id, year) ';
+            else if ($report_type == 'soldier' && $t == 'rc') $sql .= ' LEFT JOIN registration_charges rc USING (user_id) ';
             else $sql .= ' LEFT JOIN ' . $tables[$t] . ' ' . $t . ' USING (school_id) ';
         }
     }
@@ -162,17 +161,18 @@ if ($_POST['school_id'][0] > 0) {
 }
 if (in_array('sr', $from)) {
     $sql .= " AND sr.year = :year";
-} else if (in_array('ur', $from)) {
-    $sql .= " AND ur.year = :year";
+} else if ($report_type == 'soldier' && in_array('rc', $from)) {
+    $sql .= " AND rc.year = :year AND rc.type = 'THE'";
 } else if ($report_type == 'details') {
     $sql .= " AND rc.year = :year";
-}
+} 
 if ($debug) {
     echo $sql;
+    exit;
 }
 
 $stmt = $MASHPIA_DB->prepare($sql);
-if (in_array('sr', $from) || in_array('ur', $from) || in_array('rc', $from)) {
+if (in_array('sr', $from) || in_array('rc', $from)) {
     $stmt->execute([
         ':year' => $_POST['year']
     ]);
@@ -257,9 +257,10 @@ foreach ($fields[$report_type] as $key => $field) {
             $details = explode('.', $field);
             $table = $details[0];
             $field = $details[1];
-            if ($table == 'srd') $field .= '_paid';
+            if ($table == 'srd' && $field != 'discount') $field .= '_paid';
             if ($field == 'balance') $field = 'past_due';
-            if ($field == 'amount') $field = 'discount';
+            if ($report_type == 'soldier' && $field == 'amount') $field = 'reg_paid';
+            else if ($field == 'type') $field = $key;
         }
         $details = explode('_', $field);
         $field = implode(' ', $details);
@@ -275,6 +276,8 @@ foreach ($report as $school_id => $more) {
     // echo "<pre>"; print_r($result); echo "</pre>";
         $total_owed = 0;
         $total_paid = 0;
+        $total_discount = 0;
+
         $row = [];
         foreach ($fields[$report_type] as $key => $field) {
             if (!in_array($key, $_POST[$report_type . '_options'])) continue;
@@ -310,20 +313,53 @@ foreach ($report as $school_id => $more) {
                         $row[$headers_dec[$key]] = $total_reg[$school_id] ?? 0;
                         break;
                     case 'total_balance':
-                        $total_balance = $total_owed - $total_paid - intval($result['amount'] ?? 0);
+                        $total_balance = $total_owed - $total_paid - $total_discount;
+                        // $row[$headers_dec[$key]] = "Total Owed: $total_owed, Total Paid: $total_paid, Total Discount: $total_discount";
                         $row[$headers_dec[$key]] = number_format($total_balance, 2);
                         break;
                     case 'total_paid':
                     case 'total_owed':
                         $row[$headers_dec[$key]] = number_format($$field, 2);
                         break;
-                    case 'type':
-                        $row[$headers_dec[$key]] = ChidonShipping::getDescription($field);
+                    case 'type_of_charge':
+                        $row[$headers_dec[$key]] = ChidonShipping::getDescription($result['type']);
+                        break;
+                    case 'discount':
+                        if ($table == 'srd') {
+                            $value = abs($srd_report[$school_id][$field] ?? 0);
+                        } else {
+                            $value = $result[$field] ?? 0;
+                        }
+                        $total_discount = $value;
+                        $row[$headers_dec[$key]] = number_format($value, 2);
+                        break;
+                    case 'reg_fee':
+                        $early = true;
+                        $registered = $result['date'];
+                        if ($registered) {
+                            $early_bird = GlobalSettings::earlyBird();
+                            $reg_date = new DateTime($registered);
+                            if ($reg_date > $early_bird) $early = false;
+                        }
+                        $fee = GlobalSettings::calculateChildFee(
+                            $result['reg_type'],
+                            $result['child_fee'],
+                            false,
+                            $early,
+                            false,
+                            false,
+                            $result['school_id'] == 61, 
+                            $result['school_id'] == 269
+                        );
+                        $total_owed += $fee;
+                        $row[$headers_dec[$key]] = number_format($fee, 2);
                         break;
                     default:
                         $row[$headers_dec[$key]] = $result[$field];
-                        if ($field == 'balance' || strpos($field, 'fee') !== false) {
-                            $total_owed += intval($result[$field]);
+                        if ($field == 'balance' || strpos($field, 'fee') !== false) { // balance is past_due
+                            $total_owed += floatval($result[$field]);
+                        } else if ($key == 'reg_paid') {
+                            $total_paid += floatval($result[$field]);
                         }
                         break;
                 }
