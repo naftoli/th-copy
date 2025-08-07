@@ -80,6 +80,27 @@
         .card-body {
             overflow-x: auto;
         }
+        
+        /* Dropdown positioning fixes */
+        .position-relative {
+            overflow: visible !important;
+        }
+        
+        .dropdown-container {
+            overflow: visible !important;
+            position: relative !important;
+            z-index: 9998 !important;
+        }
+        
+        /* Fixed dropdown positioning */
+        .position-fixed {
+            position: fixed !important;
+            z-index: 99999 !important;
+            background: white !important;
+            border: 1px solid #dee2e6 !important;
+            border-radius: 0.375rem !important;
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        }
     </style>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -105,7 +126,7 @@
             InputGroup
         } = ReactBootstrap;
 
-        function ReportTable({ data, headers }) {
+        function ReportTable({ data, headers, reportType }) {
             const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
             const [filterText, setFilterText] = useState('');
             const [currentPage, setCurrentPage] = useState(1);
@@ -144,6 +165,12 @@
             const getSortIcon = (key) => {
                 if (sortConfig.key !== key) return '↕️';
                 return sortConfig.direction === 'asc' ? '↑' : '↓';
+            };
+
+            const handleRefund = (rowIndex) => {
+                // TODO: Implement refund functionality
+                console.log('Refund requested for row:', rowIndex);
+                alert('Refund functionality will be implemented later');
             };
 
             return (
@@ -190,6 +217,9 @@
                                             {header} {getSortIcon(header)}
                                         </th>
                                     ))}
+                                    {reportType === 'details' && (
+                                        <th style={{ width: '100px' }}></th>
+                                    )}
                                 </tr>
                             </thead>
                             <tbody>
@@ -198,6 +228,26 @@
                                         {headers.map(header => (
                                             <td key={header}>{row[header] || ''}</td>
                                         ))}
+                                        {reportType === 'details' && (
+                                            <td className="text-center">
+                                                <Button
+                                                    variant={row['Refunded'] === '1' ? "secondary" : "outline-danger"}
+                                                    size="sm"
+                                                    onClick={() => handleRefund(index)}
+                                                    disabled={row['Refunded'] === '1'}
+                                                >
+                                                    {row['Refunded'] === '1' ? (
+                                                        <>
+                                                            <i className="bi bi-check-circle"></i> Refunded
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <i className="bi bi-arrow-clockwise"></i> Refund
+                                                        </>
+                                                    )}
+                                                </Button>
+                                            </td>
+                                        )}
                                     </tr>
                                 ))}
                             </tbody>
@@ -248,8 +298,12 @@
             useEffect(() => {
                 const handleClickOutside = (event) => {
                     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-                        setIsOpen(false);
-                        setSearchTerm('');
+                        // Check if click is outside the dropdown content as well
+                        const dropdownContent = document.querySelector('.position-fixed');
+                        if (dropdownContent && !dropdownContent.contains(event.target)) {
+                            setIsOpen(false);
+                            setSearchTerm('');
+                        }
                     }
                 };
 
@@ -287,7 +341,7 @@
             };
 
             return (
-                <div className="position-relative">
+                <div className="position-relative dropdown-container">
                     <div 
                         className="form-control d-flex flex-wrap align-items-center"
                         style={{ minHeight: '38px', cursor: 'pointer' }}
@@ -322,7 +376,17 @@
                     </div>
 
                     {isOpen && (
-                        <div className="position-absolute w-100 bg-white border rounded shadow-sm" style={{ zIndex: 1000, maxHeight: '300px', overflowY: 'auto' }} ref={dropdownRef}>
+                        <div 
+                            className="position-fixed bg-white border rounded shadow-sm" 
+                            style={{ 
+                                zIndex: 99999, 
+                                maxHeight: '300px', 
+                                overflowY: 'auto', 
+                                width: dropdownRef.current ? dropdownRef.current.offsetWidth + 'px' : '100%',
+                                top: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().bottom + 'px' : '0px',
+                                left: dropdownRef.current ? dropdownRef.current.getBoundingClientRect().left + 'px' : '0px'
+                            }} 
+                        >
                             <div className="p-2 border-bottom">
                                 <input
                                     type="text"
@@ -409,6 +473,17 @@
             const [reportData, setReportData] = useState(null);
             const [generatingReport, setGeneratingReport] = useState(false);
             const [years, setYears] = useState([]);
+            
+            // Add Payment form state
+            const [paymentForm, setPaymentForm] = useState({
+                school: '0',
+                paymentType: '0',
+                paymentMethod: 'cash',
+                amount: ''
+            });
+            const [addingPayment, setAddingPayment] = useState(false);
+            const [paymentMessage, setPaymentMessage] = useState('');
+            const [isPaymentFormOpen, setIsPaymentFormOpen] = useState(false);
 
             const reportTypes = {
                 'base': 'Base Charges Report',
@@ -466,6 +541,23 @@
                 'reg_amount': 'Amount',
                 'refunded': 'Refunded'
             };
+
+            // Payment types and methods
+            const paymentTypes = [
+                { value: '0', label: 'Choose Payment Type' },
+                { value: 'chayolei', label: 'Chayolei' },
+                { value: 'chidon', label: 'Chidon' },
+                { value: 'tanya', label: 'Tanya' },
+                { value: 'rewards', label: 'Rewards Program' },
+                { value: 'past_due', label: 'Past Dues' }
+            ];
+
+            const paymentMethods = [
+                { value: 'cash', label: 'Cash' },
+                { value: 'check', label: 'Check' },
+                { value: 'credit_card', label: 'Credit Card' },
+                { value: 'wire', label: 'Wire Transfer' }
+            ];
 
             // Load schools data
             useEffect(() => {
@@ -669,6 +761,7 @@
                         const data = await response.json();
                         setReportData(data);
                         setIsFormExpanded(false); // Collapse form after successful report generation
+                        setIsPaymentFormOpen(true); // Open payment form after report generation
                     } else {
                         throw new Error('Failed to generate report');
                     }
@@ -712,7 +805,182 @@
                 setIsFormExpanded(true); // Ensure form is expanded
                 setReportData(null);
                 setError('');
+                setIsPaymentFormOpen(false); // Close payment form when new report is generated
             };
+
+            // Payment form handlers
+            const handlePaymentInputChange = (field, value) => {
+                setPaymentForm(prev => ({
+                    ...prev,
+                    [field]: value
+                }));
+            };
+
+            const handlePaymentSubmit = async (e) => {
+                e.preventDefault();
+                
+                if (paymentForm.school === '0') {
+                    setPaymentMessage({ type: 'warning', text: 'You must choose a school' });
+                    return;
+                }
+                
+                if (paymentForm.paymentType === '0') {
+                    setPaymentMessage({ type: 'warning', text: 'You must choose a payment type' });
+                    return;
+                }
+                
+                if (!paymentForm.amount || parseFloat(paymentForm.amount) <= 0) {
+                    setPaymentMessage({ type: 'warning', text: 'You must enter a valid amount!' });
+                    return;
+                }
+
+                setAddingPayment(true);
+                setPaymentMessage('');
+
+                try {
+                    const formData = new FormData();
+                    formData.append('school', paymentForm.school);
+                    formData.append('method', paymentForm.paymentMethod);
+                    formData.append('type', paymentForm.paymentType);
+                    formData.append('amount', paymentForm.amount);
+
+                    const response = await fetch('api/addPayment.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const result = await response.json();
+                    
+                    if (result.success) {
+                        setPaymentMessage({ type: 'success', text: 'Payment added successfully!' });
+                        // Reset form
+                        setPaymentForm({
+                            school: '0',
+                            paymentType: '0',
+                            paymentMethod: 'cash',
+                            amount: ''
+                        });
+                        // Refresh the report data if it exists
+                        if (reportData) {
+                            // Trigger a new report generation to refresh data
+                            setTimeout(() => {
+                                handleSubmit(new Event('submit'));
+                            }, 1500);
+                        }
+                    } else {
+                        setPaymentMessage({ type: 'danger', text: result.error || 'An error occurred' });
+                    }
+                } catch (error) {
+                    setPaymentMessage({ type: 'danger', text: 'Network error occurred' });
+                } finally {
+                    setAddingPayment(false);
+                }
+            };
+
+            // Payment form component
+            const PaymentForm = () => (
+                <Card className="mb-4">
+                    <Card.Header 
+                        className="accordion-toggle"
+                        onClick={() => setIsPaymentFormOpen(!isPaymentFormOpen)}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        <h5 className="mb-0 d-flex justify-content-between align-items-center">
+                            <span>
+                                <i className={`bi bi-chevron-${isPaymentFormOpen ? 'down' : 'right'}`}></i>
+                                {' '}Add Payment
+                            </span>
+                        </h5>
+                    </Card.Header>
+                    {isPaymentFormOpen && (
+                        <Card.Body>
+                            <Form onSubmit={handlePaymentSubmit}>
+                                <Row>
+                                    <Col md={3} className="mb-3">
+                                        <Form.Label htmlFor="school_payment">School:</Form.Label>
+                                        <FormSelect
+                                            id="school_payment"
+                                            value={paymentForm.school}
+                                            onChange={(e) => handlePaymentInputChange('school', e.target.value)}
+                                        >
+                                            <option value="0">Choose School</option>
+                                            {schools.map(school => (
+                                                <option key={school.id} value={school.id}>{school.name}</option>
+                                            ))}
+                                        </FormSelect>
+                                    </Col>
+                                    <Col md={3} className="mb-3">
+                                        <Form.Label htmlFor="payment_type">Payment Type:</Form.Label>
+                                        <FormSelect
+                                            id="payment_type"
+                                            value={paymentForm.paymentType}
+                                            onChange={(e) => handlePaymentInputChange('paymentType', e.target.value)}
+                                        >
+                                            {paymentTypes.map(type => (
+                                                <option key={type.value} value={type.value}>{type.label}</option>
+                                            ))}
+                                        </FormSelect>
+                                    </Col>
+                                    <Col md={3} className="mb-3">
+                                        <Form.Label htmlFor="payment_method">Payment Method:</Form.Label>
+                                        <FormSelect
+                                            id="payment_method"
+                                            value={paymentForm.paymentMethod}
+                                            onChange={(e) => handlePaymentInputChange('paymentMethod', e.target.value)}
+                                        >
+                                            {paymentMethods.map(method => (
+                                                <option key={method.value} value={method.value}>{method.label}</option>
+                                            ))}
+                                        </FormSelect>
+                                    </Col>
+                                    <Col md={3} className="mb-3">
+                                        <Form.Label htmlFor="payment_amount">Amount:</Form.Label>
+                                        <InputGroup>
+                                            <InputGroup.Text>$</InputGroup.Text>
+                                            <Form.Control
+                                                type="text"
+                                                id="payment_amount"
+                                                placeholder="0.00"
+                                                value={paymentForm.amount}
+                                                onChange={(e) => handlePaymentInputChange('amount', e.target.value)}
+                                            />
+                                        </InputGroup>
+                                    </Col>
+                                </Row>
+                                <div className="text-center">
+                                    <Button 
+                                        type="submit" 
+                                        variant="primary"
+                                        disabled={addingPayment}
+                                    >
+                                        {addingPayment ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                Processing...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="bi bi-plus-circle"></i> Add Payment
+                                            </>
+                                        )}
+                                    </Button>
+                                </div>
+                            </Form>
+                            
+                            {paymentMessage && (
+                                <Alert 
+                                    variant={paymentMessage.type} 
+                                    className="mt-3"
+                                    onClose={() => setPaymentMessage('')}
+                                    dismissible
+                                >
+                                    {paymentMessage.text}
+                                </Alert>
+                            )}
+                        </Card.Body>
+                    )}
+                </Card>
+            );
 
             if (loading) {
                 return (
@@ -905,6 +1173,11 @@
                             )}
                         </Card>
 
+                    {/* Add Payment Section - Only show for base reports */}
+                    {formData.reportType === 'base' && reportData && (
+                        <PaymentForm />
+                    )}
+
                     {reportData && (
                         <Card>
                             <Card.Header>
@@ -940,7 +1213,7 @@
                                 </div>
                             </Card.Header>
                             <Card.Body>
-                                <ReportTable data={reportData.data} headers={reportData.headers} />
+                                <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} />
                             </Card.Body>
                         </Card>
                     )}
