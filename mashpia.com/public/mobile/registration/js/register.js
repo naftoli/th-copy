@@ -2368,12 +2368,12 @@ var templates = function () {
         $("#chidon-books").hide()
         $("#agreements").hide()
         $(".yahadus-poll").attr('disabled', true)
-        $("#c-address").attr('disabled', true)
-        $("#c-apt").attr('disabled', true)
-        $("#c-city").attr('disabled', true)
-        $("#c-state").attr('disabled', true)
-        $("#c-zip").attr('disabled', true)
-        $("#c-country").attr('disabled', true)
+        // $("#c-address").attr('disabled', true)
+        // $("#c-apt").attr('disabled', true)
+        // $("#c-city").attr('disabled', true)
+        // $("#c-state").attr('disabled', true)
+        // $("#c-zip").attr('disabled', true)
+        // $("#c-country").attr('disabled', true)
         // $("#chidon").parent().empty()
       }
     },
@@ -2531,19 +2531,19 @@ var templates = function () {
       $("#yahadus-poll").empty().append(html)
 
       // update the address info
-      if (user.getChidonInfo ||
-        (user.parentAccount.admin_address1 && user.parentAccount.admin_address1 != '' &&
-          user.parentAccount.admin_city && user.parentAccount.admin_city != '' &&
-          user.parentAccount.admin_state && user.parentAccount.admin_state != '' &&
-          user.parentAccount.admin_postal && user.parentAccount.admin_postal != '' &&
-          user.parentAccount.admin_country && user.parentAccount.admin_country != '')) {
-        if (user.parentAccount.admin_address1) $('#c-address').val(user.parentAccount.admin_address1);
-        if (user.parentAccount.admin_address2) $('#c-apt').val(user.parentAccount.admin_address2);
-        if (user.parentAccount.admin_city) $('#c-city').val(user.parentAccount.admin_city);
-        if (user.parentAccount.admin_state) $('#c-state').val(user.parentAccount.admin_state);
-        if (user.parentAccount.admin_postal) $('#c-zip').val(user.parentAccount.admin_postal);
-        if (user.parentAccount.admin_country) $('#c-country').val(user.parentAccount.admin_country);
-      }
+      // if (user.getChidonInfo ||
+      //   (user.parentAccount.admin_address1 && user.parentAccount.admin_address1 != '' &&
+      //     user.parentAccount.admin_city && user.parentAccount.admin_city != '' &&
+      //     user.parentAccount.admin_state && user.parentAccount.admin_state != '' &&
+      //     user.parentAccount.admin_postal && user.parentAccount.admin_postal != '' &&
+      //     user.parentAccount.admin_country && user.parentAccount.admin_country != '')) {
+      //   if (user.parentAccount.admin_address1) $('#c-address').val(user.parentAccount.admin_address1);
+      //   if (user.parentAccount.admin_address2) $('#c-apt').val(user.parentAccount.admin_address2);
+      //   if (user.parentAccount.admin_city) $('#c-city').val(user.parentAccount.admin_city);
+      //   if (user.parentAccount.admin_state) $('#c-state').val(user.parentAccount.admin_state);
+      //   if (user.parentAccount.admin_postal) $('#c-zip').val(user.parentAccount.admin_postal);
+      //   if (user.parentAccount.admin_country) $('#c-country').val(user.parentAccount.admin_country);
+      // }
 
       // reset all fields
       let resets = [
