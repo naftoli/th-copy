@@ -739,10 +739,8 @@ var registrationApp = function () {
       }
     })
 
-    alert('before saving address')
     const saved = await saveAddress('#parent-address')
     if (!saved) return false
-    alert('after saving address')
 
     // make sure non th school field is not empty
     if ([269, 61].includes(selected_user.school.school_id)) {
