@@ -84,7 +84,7 @@ if ($report_type == 'base') {
 } else if ($report_type == 'soldier') {
     $sql .= "u.user_id, u.school_id, ";
 } else if ($report_type == 'details') {
-    $sql .= "rc.user_id, rc.school_id, ";
+    $sql .= "rc.registration_charge_id, rc.user_id, rc.school_id, ";
 }
 foreach ($_POST[$report_type . '_options'] as $option) {
     if ($option == 'type_of_charge') continue;
@@ -279,6 +279,9 @@ foreach ($report as $school_id => $more) {
         $total_discount = 0;
 
         $row = [];
+        if ($report_type == 'details') {
+            $row['reg_charge_id'] = $result['registration_charge_id'];
+        }
         foreach ($fields[$report_type] as $key => $field) {
             if (!in_array($key, $_POST[$report_type . '_options'])) continue;
             if (is_array($field)) {
@@ -295,7 +298,10 @@ foreach ($report as $school_id => $more) {
                     $field = $details[1];
                 }
 
-                if (in_array($field, ['school_id', 'user_id'])) continue;
+                if (in_array($field, ['school_id', 'user_id'])) {
+                    $row[$field] = $result[$field];
+                    continue;
+                }
             
                 switch ($field) {
                     case 'chayolei':

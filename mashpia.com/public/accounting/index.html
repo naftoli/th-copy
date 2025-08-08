@@ -167,10 +167,29 @@
                 return sortConfig.direction === 'asc' ? '↑' : '↓';
             };
 
-            const handleRefund = (rowIndex) => {
+            const handleRefund = (row) => {
                 // TODO: Implement refund functionality
-                console.log('Refund requested for row:', rowIndex);
-                alert('Refund functionality will be implemented later');
+                const confirm = window.confirm('Are you sure you want to refund this charge?\nThis action cannot be undone.');
+                if (!confirm) return;
+                console.log('Refund requested for row:', row);
+                fetch('api/refund.php', {
+                    method: 'POST',
+                    body: JSON.stringify({ info: row })
+                })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log('Refund response:', data);
+                        if (data.success) {
+                            alert('Refund successful');
+                            // refresh the report table
+                            handleSubmit(new Event('submit'));
+                        } else {
+                            alert('Refund failed');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Refund error:', error);
+                    });
             };
 
             return (
@@ -214,7 +233,11 @@
                                             style={{ cursor: 'pointer' }}
                                             onClick={() => handleSort(header)}
                                         >
-                                            {header} {getSortIcon(header)}
+                                            {header.indexOf('_') === -1 && (
+                                                <>
+                                                    {header} {getSortIcon(header)}
+                                                </>
+                                            )}
                                         </th>
                                     ))}
                                     {reportType === 'details' && (
@@ -233,7 +256,7 @@
                                                 <Button
                                                     variant={row['Refunded'] === '1' ? "secondary" : "outline-danger"}
                                                     size="sm"
-                                                    onClick={() => handleRefund(index)}
+                                                    onClick={() => handleRefund(row)}
                                                     disabled={row['Refunded'] === '1'}
                                                 >
                                                     {row['Refunded'] === '1' ? (
@@ -1213,6 +1236,17 @@
                                 </div>
                             </Card.Header>
                             <Card.Body>
+                                {formData.reportType === 'base' && (
+                                    <Alert variant="warning" className="alert-custom mb-4">
+                                        <h5>
+                                            <i className="bi bi-exclamation-triangle"></i> Important Information
+                                        </h5>
+                                        <p className="mb-0">
+                                            The list of schools is based on those with any registered children for the current year and are not test schools.<br />
+                                            The number of registered children reflects those currently registered for the current year.
+                                        </p>
+                                    </Alert>
+                                )}
                                 <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} />
                             </Card.Body>
                         </Card>
