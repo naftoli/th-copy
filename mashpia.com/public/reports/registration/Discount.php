@@ -77,12 +77,44 @@ class DiscountManager
     }
 
     public function getAllStudentDiscounts() {
-        $stmt = $this->db->query("SELECT d.*, u.first, u.last FROM discounts d JOIN users u USING(user_id) where d.user_id > 0");
+        $stmt = $this->db->query("
+            SELECT d.*, u.first, u.last FROM discounts d 
+            JOIN users u USING(user_id) 
+            where d.user_id > 0
+        ");
+        return $stmt->fetchAll();
+    }
+
+    public function getAllStudentDiscountsForYear($year) {
+        $stmt = $this->db->prepare("
+            SELECT d.*, u.first, u.last 
+            FROM discounts d 
+            JOIN users u USING(user_id) 
+            WHERE d.user_id > 0 AND d.year = :year");
+        $stmt->execute([':year' => $year]);
+        // $stmt->debugDumpParams();
+        return $stmt->fetchAll();
+    }
+
+    public function getAllStudentDiscountsForSchoolYear($year, $school_id) {
+        $stmt = $this->db->prepare("
+            SELECT d.*, u.first, u.last 
+            FROM discounts d 
+            JOIN users u USING(user_id) 
+            WHERE d.user_id > 0 AND d.year = :year AND u.school_id = :school");
+        $stmt->execute([
+            ':year'     => $year,
+            ':school'   => $school_id
+        ]);
+        // $stmt->debugDumpParams();
         return $stmt->fetchAll();
     }
 
     public function getDiscountsForYear($year) {
-        $stmt = $this->db->prepare("SELECT * FROM discounts WHERE school_id > 0 AND year = :year");
+        $stmt = $this->db->prepare("
+            SELECT d.*, s.school_name FROM discounts d 
+            LEFT JOIN schools s ON d.school_id = s.school_id 
+            WHERE d.school_id > 0 AND d.year = :year");
         $stmt->execute([':year' => $year]);
         return $stmt->fetchAll();
     }
@@ -107,13 +139,15 @@ class DiscountManager
 
     public function getDiscountsForSchoolYear($year, $school_id) {
         $stmt = $this->db->prepare("
-            SELECT * FROM discounts WHERE year = :year AND school_id = :school
+            SELECT d.*, s.school_name FROM discounts d 
+            LEFT JOIN schools s ON d.school_id = s.school_id 
+            WHERE d.year = :year AND d.school_id = :school
         ");
         $stmt->execute([
             ':year'     => $year,
             ':school'   => $school_id
         ]);
-        return $stmt->fetch();
+        return $stmt->fetchAll();
     }
 
     public function getDiscountForUserYear($year, $user_id) {
