@@ -126,7 +126,7 @@
             InputGroup
         } = ReactBootstrap;
 
-        function ReportTable({ data, headers, reportType }) {
+        function ReportTable({ data, headers, reportType, year }) {
             const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
             const [filterText, setFilterText] = useState('');
             const [currentPage, setCurrentPage] = useState(1);
@@ -171,6 +171,7 @@
                 // TODO: Implement refund functionality
                 const confirm = window.confirm('Are you sure you want to refund this charge?\nThis action cannot be undone.');
                 if (!confirm) return;
+                row['year'] = year;
                 console.log('Refund requested for row:', row);
                 fetch('api/refund.php', {
                     method: 'POST',
@@ -739,9 +740,9 @@
 
                 // Handle special report types that require redirect
                 const specialReports = {
-                    settings: 'settings.php',
-                    base_discounts: '/reports/registration/discounts.php',
-                    soldier_discounts: '/reports/registration/create_user_discount.php',
+                    // base_discounts: '/reports/registration/discounts.php',
+                    // soldier_discounts: '/reports/registration/create_user_discount.php',
+                    settings: '/reports/schools/registration_info.php',
                     unregister: '/admin_yearly.php',
                     types: '/types_of_schools.php'
                 };
@@ -767,6 +768,12 @@
                 switch (formData.reportType) {
                     case 'summary':
                         url = 'api/getSummary.php';
+                        break;
+                    case 'base_discounts':
+                        url = 'api/getBaseDiscounts.php';
+                        break;
+                    case 'soldier_discounts':
+                        url = 'api/getSoldierDiscounts.php';
                         break;
                     default:
                         url = 'api/create_report.php';
@@ -1247,7 +1254,7 @@
                                         </p>
                                     </Alert>
                                 )}
-                                <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} />
+                                <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} year={formData.year} />
                             </Card.Body>
                         </Card>
                     )}
