@@ -5,15 +5,15 @@ include_once $_SERVER['DOCUMENT_ROOT'] . "/api/header/header.php";
 $info = [
     [
         'title' => 'The beginning of the summer',
-        'jd'    => gregoriantojd(7, 9, 2024),
-        'date'  => 'Tuesday July 9, 2024',
-        'hDate' => 'Gimmel Tamuz, 5784'
+        'jd'    => gregoriantojd(6,29, 2025),
+        'date'  => 'Sunday June 29, 2025',
+        'hDate' => 'Gimmel Tamuz, 5785'
     ],
     [
         'title' => 'The beginning of the school year',
-        'date'  => 'Tuesday August 27th, 2024',
-        'jd'    => gregoriantojd(8, 27, 2024),
-        'hDate' => 'Chof Gimmel Menachem-Av, 5784'
+        'date'  => 'Tuesday September 23rd, 2025',
+        'jd'    => gregoriantojd(9, 23, 2025),
+        'hDate' => 'Rosh Hashanah, 5786'
     ]
 ];
 
