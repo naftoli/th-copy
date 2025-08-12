@@ -66,7 +66,7 @@ export class PlatoonsTab extends Component {
           </Callout>
 
           {this.state.platoons.map(platoon =>
-            <Fragment>
+            <Fragment key={platoon.class_id}>
               <p style={ gradeTitleCss }>
                 { platoon.class_grade }
                 { platoon.class_sub ? '-' + platoon.class_sub : '' }

@@ -20,6 +20,7 @@ for ($i = $year; $i >= 5780; $i--) {
 }
 
 echo json_encode([
+    'year' => $year,
     'years' => $years,
     'schools' => $schools
 ]);
