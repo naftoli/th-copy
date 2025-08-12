@@ -14,7 +14,7 @@ export class PaymentTab extends React.Component {
   //* initial state
   state = {
     terms: {
-      meet: 0, tools: 0, wwtc: 0, yan: 0, mivtzoim: 0, whatsapp: 0, data: 0, reg: 0, bc: 0, siddur_gift: 0
+      meet: 0, tools: 0, wwtc: 0, yan: 0, mivtzoim: 0, whatsapp: 0, data: 0, reg: 0, bc: 0
     }
   }
 
@@ -44,29 +44,6 @@ export class PaymentTab extends React.Component {
     // update the master state.
     this.props.onStateUpdate( 'terms' )( allTerms );
   });
-
-  checkTerms = () => {
-    console.log(this.state.terms)
-    // make sure that if the yearly gift is checked, we alert the user
-    if ( this.state.terms.siddur_gift ) {
-      const msg = "I realize I have committed to learning Peirush Hamilos this year, " +
-        "thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.\nIf you are not committed, please click 'cancel'.";
-      if (window.confirm(msg)) this.props.onGiftChange(1);
-      else {
-        this.props.onGiftChange(0, false)
-        this.setState({
-          terms: {
-            ...this.state.terms,
-            siddur_gift: 0
-          }
-        })
-      }
-      // this.props.register()
-    } else {
-      this.props.onGiftChange(0);
-      // this.props.register()
-    }
-  }
 
   //* render the page
   render(){
@@ -188,7 +165,7 @@ export class PaymentTab extends React.Component {
 
         <NavigationRow back={ back }>
           <Button color='primary'
-              onClick={ this.checkTerms } disabled={ !this.props.terms }>
+              onClick={ this.props.register } disabled={ !this.props.terms }>
             { total > 0 ? 'Pay and' : '' } Register <FontAwesome icon='registered' regular />
           </Button>
         </NavigationRow>

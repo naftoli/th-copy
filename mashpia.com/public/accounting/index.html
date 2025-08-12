@@ -907,8 +907,37 @@
                 }
             };
 
-            // Payment form component
-            const PaymentForm = () => (
+            // Memoized callbacks to prevent component recreation
+            const setPaymentFormCallback = React.useCallback((updater) => {
+                setPaymentForm(updater);
+            }, []);
+
+            const setIsPaymentFormOpenCallback = React.useCallback((value) => {
+                setIsPaymentFormOpen(value);
+            }, []);
+
+            const setPaymentMessageCallback = React.useCallback((message) => {
+                setPaymentMessage(message);
+            }, []);
+
+            // Memoize schools array to prevent unnecessary re-renders
+            const memoizedSchools = React.useMemo(() => schools, [schools]);
+
+            // Payment form component - memoized to prevent recreation
+            const PaymentForm = React.memo(({ 
+                paymentForm, 
+                setPaymentForm, 
+                schools, 
+                addingPayment, 
+                paymentMessage, 
+                isPaymentFormOpen, 
+                setIsPaymentFormOpen,
+                handlePaymentInputChange,
+                handlePaymentSubmit,
+                setPaymentMessage,
+                paymentTypes,
+                paymentMethods
+            }) => (
                 <Card className="mb-4">
                     <Card.Header 
                         className="accordion-toggle"
@@ -1010,7 +1039,7 @@
                         </Card.Body>
                     )}
                 </Card>
-            );
+            ));
 
             if (loading) {
                 return (
@@ -1205,16 +1234,65 @@
 
                     {/* Add Payment Section - Only show for base reports */}
                     {formData.reportType === 'base' && reportData && (
-                        <PaymentForm />
+                        <Card className="mb-4">
+                            <Card.Header>
+                                <h6 className="mb-0">Add Payment</h6>
+                            </Card.Header>
+                            <Card.Body>
+                                <PaymentForm 
+                                    paymentForm={paymentForm}
+                                    setPaymentForm={setPaymentFormCallback}
+                                    schools={memoizedSchools}
+                                    addingPayment={addingPayment}
+                                    paymentMessage={paymentMessage}
+                                    isPaymentFormOpen={isPaymentFormOpen}
+                                    setIsPaymentFormOpen={setIsPaymentFormOpenCallback}
+                                    handlePaymentInputChange={handlePaymentInputChange}
+                                    handlePaymentSubmit={handlePaymentSubmit}
+                                    setPaymentMessage={setPaymentMessageCallback}
+                                    paymentTypes={paymentTypes}
+                                    paymentMethods={paymentMethods}
+                                />
+                            </Card.Body>
+                        </Card>
                     )}
 
+                    {/* Add Voucher Section - Show for both base and soldier discount reports */}
+                    {(formData.reportType === 'base_discounts' || formData.reportType === 'soldier_discounts') && reportData && (
+                        <Card className="mb-4">
+                            <Card.Header>
+                                <h6 className="mb-0">Add Voucher</h6>
+                            </Card.Header>
+                            <Card.Body>
+                                <DiscountForm 
+                                    discountForm={discountForm}
+                                    setDiscountForm={setDiscountForm}
+                                    schools={memoizedSchools}
+                                    grades={grades}
+                                    students={students}
+                                    addingDiscount={addingDiscount}
+                                    discountMessage={discountMessage}
+                                    isDiscountFormOpen={isDiscountFormOpen}
+                                    setIsDiscountFormOpen={setIsDiscountFormOpen}
+                                    handleDiscountInputChange={handleDiscountInputChange}
+                                    handleDiscountTypeChange={handleDiscountTypeChange}
+                                    handleDiscountSchoolChange={handleDiscountSchoolChange}
+                                    handleGradeChange={handleGradeChange}
+                                    handleDiscountSubmit={handleDiscountSubmit}
+                                    setDiscountMessage={setDiscountMessage}
+                                />
+                            </Card.Body>
+                        </Card>
+                    )}
+
+                    {/* Results Section - Only show when report data exists */}
                     {reportData && (
                         <Card>
                             <Card.Header>
                                 <div className="d-flex justify-content-between align-items-center">
-                                    <h5 className="mb-0">
+                                    <h6 className="mb-0">
                                         {reportTypes[formData.reportType]} - {formData.year}
-                                    </h5>
+                                    </h6>
                                     <div>
                                         <Button 
                                             variant="outline-primary" 
@@ -1245,19 +1323,19 @@
                             <Card.Body>
                                 {formData.reportType === 'base' && (
                                     <Alert variant="warning" className="alert-custom mb-4">
-                                        <h5>
+                                        <h6>
                                             <i className="bi bi-exclamation-triangle"></i> Important Information
-                                        </h5>
-                                        <p className="mb-0">
-                                            The list of schools is based on those with any registered children for the current year and are not test schools.<br />
-                                            The number of registered children reflects those currently registered for the current year.
-                                        </p>
-                                    </Alert>
-                                )}
-                                <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} year={formData.year} />
-                            </Card.Body>
-                        </Card>
-                    )}
+                                        </h6>
+                                            <p className="mb-0">
+                                                The list of schools is based on those with any registered children for the current year and are not test schools.<br />
+                                                The number of registered children reflects those currently registered for the current year.
+                                            </p>
+                                        </Alert>
+                                    )}
+                                    <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} year={formData.year} />
+                                </Card.Body>
+                            </Card>
+                        )}
                 </Container>
             );
         }

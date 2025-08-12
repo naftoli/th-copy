@@ -15,3 +15,4 @@ export const DEFAULT_PRIZE = '/v2/images/imgsrepo/default.png';
 
 // api keys
 export const GOOGLE_CLIENT_ID = '356394568289-o9uqieb96qevc8a1plmm5voa6so0l2fd.apps.googleusercontent.com';
+export const MAPBOX_ACCESS_TOKEN = 'pk.eyJ1IjoibmFmdG9saXIiLCJhIjoiY2xsZTR5NHFuMDBzeTNzdWxqcnd1ZGJ0ZSJ9.7M6yPlYYDHRE-QcRUp_z9A';

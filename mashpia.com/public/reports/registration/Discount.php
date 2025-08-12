@@ -1,27 +1,67 @@
 <?php
-class Discount
-{
-    public function __construct($year, $school_id, $amount, $reason, $created_by, $used = null, $created = '') {
+abstract class DiscountBase {
+    public function __construct($year, $amount, $reason, $created_by, $used = null, $created = '') {
         $this->year = $year;
-        $this->school_id = $school_id;
         $this->amount = $amount;
         $this->reason = $reason;
         $this->created_by = $created_by;
         $this->used = $used;
         $this->created = $created;
     }
+    abstract public function createDiscountCoupon();
 }
 
-class StudentDiscount
+class SchoolDiscount extends DiscountBase
+{
+    public function __construct($year, $school_id, $amount, $reason, $created_by, $used = null, $created = '') {
+        parent::__construct($year, $amount, $reason, $created_by, $used, $created);
+        $this->school_id = $school_id;
+    }
+
+    public function createDiscountCoupon() {
+        $stmt = $this->db->prepare("
+            INSERT INTO discounts 
+            SET year = :year, 
+                school_id = :school, 
+                amount = :amount, 
+                reason = :reason, 
+                created_by = :created_by,
+                created = now()
+        ");
+        return $stmt->execute([
+            ':year'     => $this->year,
+            ':school'   => $this->school_id,
+            ':amount'   => $this->amount,
+            ':reason'   => $this->reason,
+            ':created_by'   => $this->created_by
+        ]);
+    }
+}
+
+class StudentDiscount extends DiscountBase
 {
     public function __construct($year, $user_id, $amount, $reason, $created_by, $used = null, $created = '') {
-        $this->year = $year;
+        parent::__construct($year, $amount, $reason, $created_by, $used, $created);
         $this->user_id = $user_id;
-        $this->amount = $amount;
-        $this->reason = $reason;
-        $this->created_by = $created_by;
-        $this->used = $used;
-        $this->created = $created;
+    }
+
+    public function createDiscountCoupon() {
+        $stmt = $this->db->prepare("
+            INSERT INTO discounts 
+            SET year = :year, 
+                user_id = :user, 
+                amount = :amount, 
+                reason = :reason, 
+                created_by = :created_by,
+                created = now()
+        ");
+        return $stmt->execute([
+            ':year'     => $this->year,
+            ':user'     => $this->user_id,
+            ':amount'   => $this->amount,
+            ':reason'   => $this->reason,
+            ':created_by'   => $this->created_by
+        ]);
     }
 }
 
@@ -33,42 +73,8 @@ class DiscountManager
         $this->db = $db;
     }
 
-    public function createDiscount(Discount $d) {
-        $stmt = $this->db->prepare("
-            INSERT INTO discounts 
-            SET year = :year, 
-                school_id = :school, 
-                amount = :amount, 
-                reason = :reason, 
-                created_by = :created_by,
-                created = now()
-        ");
-        return $stmt->execute([
-            ':year'     => $d->year,
-            ':school'   => $d->school_id,
-            ':amount'   => $d->amount,
-            ':reason'   => $d->reason,
-            ':created_by'   => $d->created_by
-        ]);
-    }
-
-    public function createStudentDiscount(StudentDiscount $d) {
-        $stmt = $this->db->prepare("
-            INSERT INTO discounts 
-            SET year = :year, 
-                user_id = :user, 
-                amount = :amount, 
-                reason = :reason, 
-                created_by = :created_by,
-                created = now()
-        ");
-        return $stmt->execute([
-            ':year'     => $d->year,
-            ':user'   => $d->user_id,
-            ':amount'   => $d->amount,
-            ':reason'   => $d->reason,
-            ':created_by'   => $d->created_by
-        ]);
+    public function createDiscount(DiscountBase $d) {
+        return $d->createDiscountCoupon();
     }
 
     public function getAllDiscounts() {

@@ -14,6 +14,7 @@ import { ModulesTab } from './includes/tabs/registration/ModulesTab';
 import { PaymentTab } from './includes/tabs/registration/PaymentTab';
 import { SettingsTab } from './includes/tabs/registration/SettingsTab';
 import { PlatoonsTab } from "./includes/tabs";
+import { ContactsTab } from './includes/tabs/ContactsTab';
 // functions
 import memoize from 'memoize-one';
 import { toast } from 'react-toastify';
@@ -86,12 +87,6 @@ class RegistrationPage extends Component {
   onUpdate = updates => {
     this.setState({ base: { ...this.state.base, ...updates } });
   }
-
-  updateSiddurGift = ((gift, register = true) => {
-    this.setState({siddur_gift: gift}, () => {
-      if (register) this.register()
-    })
-  })
 
   // * event handlers
   onChange = onInputChange( this.onUpdate );
@@ -202,9 +197,10 @@ class RegistrationPage extends Component {
       { tab: 1, ...navProps, icon: 'school',    title: 'Base Information', valid: valid.base },
       { tab: 2, ...navProps, icon: 'truck',     title: 'Shipping', disabled: this.tabDisabled( 2 ), valid: valid.shipping },
       { tab: 3, ...navProps, icon: 'school',    title: 'Platoons', disabled: this.tabDisabled( 3 ) },
-      { tab: 4, ...navProps, icon: 'tasks',     title: 'Modules', disabled: this.tabDisabled( 4 ),  valid: valid.modules },
-      { tab: 5, ...navProps, icon: 'sliders-h', title: 'Settings',  disabled: this.tabDisabled( 5 ) },
-      { tab: 6, ...navProps, icon: 'file-invoice', title: 'Payment', disabled: this.tabDisabled( 6 ) },
+      { tab: 4, ...navProps, icon: 'contact-card',    title: 'Contacts', disabled: this.tabDisabled( 4 ), valid: valid.contacts },
+      { tab: 5, ...navProps, icon: 'tasks',     title: 'Modules', disabled: this.tabDisabled( 5 ),  valid: valid.modules },
+      { tab: 6, ...navProps, icon: 'sliders-h', title: 'Settings',  disabled: this.tabDisabled( 6 ) },
+      { tab: 7, ...navProps, icon: 'file-invoice', title: 'Payment', disabled: this.tabDisabled( 7 ) },
     ];
 
     return (
@@ -242,30 +238,37 @@ class RegistrationPage extends Component {
               onSubmit={ this.submitTab( 3 ) }
               onValidChange={ this.updateValid('platoons') } />
 
-          <ModulesTab
+          <ContactsTab
             tabId={ 4 }
             base={ base }
             back={ this.back }
-            onChange={ this.onCheckboxChange }
-            onSubmit={ this.submitTab( 4 ) }
-            onValidChange={ this.updateValid('modules') } />
+            onUpdate={ this.onUpdate }
+            onSubmit={ this.submitTab( 4 ) } 
+            onValidChange={ this.updateValid('contacts') } />
 
-          <SettingsTab
+          <ModulesTab
             tabId={ 5 }
             base={ base }
             back={ this.back }
+            onChange={ this.onCheckboxChange }
+            onSubmit={ this.submitTab( 5 ) }
+            onValidChange={ this.updateValid('modules') } />
+
+          <SettingsTab
+            tabId={ 6 }
+            base={ base }
+            back={ this.back }
             onUpdate={ this.onUpdate }
-            onSubmit={ this.submitTab( 5 ) } />
+            onSubmit={ this.submitTab( 6 ) } />
 
           <PaymentTab
             cc={ cc }
-            tabId={ 6 }
+            tabId={ 7 }
             base={ base }
             back={ this.back }
             terms={ terms }
             discount={ discount }
             register={ this.register }
-            onGiftChange={ this.updateSiddurGift }
             onStateUpdate={ this.onStateUpdate } />
         </TabContent>
       </div>
