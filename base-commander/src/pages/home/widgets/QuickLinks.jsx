@@ -47,7 +47,7 @@ export class Resources extends Component {
           <h2>Resources</h2>
 
           <div id='links'>
-            <a href='//dropbox.com/sh/c2g76cp76it1bf6/AABw7AHHEKWfahv-yIFXV8Qsa?dl=0' target='_blank' rel="noopener noreferrer">
+            <a href='https://docs.google.com/document/d/1gyiFgk4uk5yF6PpsepfR3otyiDZ-_GvTlONIbMZDwT0/edit?usp=drivesdk' target='_blank' rel="noopener noreferrer">
               <img src={`${LEGACY_URL}/homeIcons/dropbox.svg`} alt='hachayol'/>
               Resources
             </a>
