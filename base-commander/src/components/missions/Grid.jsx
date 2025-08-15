@@ -14,10 +14,17 @@ class GridCell extends Component {
     let value = e.target.checked ? '1' : '0';
     let { mission, soldier } = this.props;
 
-    if ( e.target.type === 'number' )
+    if ( e.target.type === 'number' ) {
       value = e.target.value;
-
-    this.props.onChange( value, mission, soldier );
+      // wait a few seconds and check if the value is still the same
+      setTimeout(() => {
+        if ( e.target.value === value ) {
+          this.props.onChange( value, mission, soldier );
+        }
+      }, 1000);
+    } else {
+      this.props.onChange( value, mission, soldier );
+    }
   }
 
   render() {
@@ -34,8 +41,10 @@ class GridCell extends Component {
       return <Input 
         min='0'
         type='number'
-        value={ value }
-        onChange={ this.onChange } />;
+        value={ value } 
+        onKeyUp={ this.onChange }
+        // onChange={ this.onChange } 
+        />;
     }
 
     if ( !value && soldier )
