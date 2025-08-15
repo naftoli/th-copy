@@ -4,6 +4,7 @@ import API from "../../../../../api/api";
 import { Input, Row, Col, TabPane, Button } from 'reactstrap';
 import { NavigationRow } from '../rows/registration/NavigationRow';
 import { Form, Checkbox } from "components/inputs";
+import { GradeSelect } from "components/selects";
 
 export class ContactsTab extends Component {
 
@@ -164,6 +165,25 @@ export class ContactsTab extends Component {
       }
       return { contacts: updated };
     });
+  }
+
+  // Helper function to convert comma-delimited string to array for multiselect
+  gradesStringToArray = (gradesString) => {
+    if (!gradesString) return [];
+    return gradesString.split(',').map(grade => grade.trim()).filter(grade => grade);
+  }
+
+  // Helper function to convert array back to comma-delimited string for database
+  gradesArrayToString = (gradesArray) => {
+    if (!gradesArray || !Array.isArray(gradesArray)) return '';
+    return gradesArray.join(', ');
+  }
+
+  // Handler for grade multiselect changes
+  onGradesChange = (section, index = null) => (selectedOptions) => {
+    const gradesArray = selectedOptions ? selectedOptions.map(option => option.value) : [];
+    const gradesString = this.gradesArrayToString(gradesArray);
+    this.setField(section, 'grades', gradesString, index);
   }
 
   addExtraPrincipal = () => {
@@ -362,8 +382,15 @@ export class ContactsTab extends Component {
                 <Input value={this.state.contacts.principal.phone} onChange={e => this.setField('principal', 'phone', e.target.value)} />
               </Col>
               <Col sm={12} className="mb-3">
-                <label>Grades (comma separated)</label>
-                <Input value={this.state.contacts.principal.grades} onChange={e => this.setField('principal', 'grades', e.target.value)} />
+                <label>Grades</label>
+                <GradeSelect
+                  isMulti
+                  isClearable
+                  values={this.gradesStringToArray(this.state.contacts.principal.grades)}
+                  openMenuOnFocus={false}
+                  placeholder="Select Grades"
+                  onChange={this.onGradesChange('principal')}
+                />
               </Col>
             </Row>
 
@@ -392,8 +419,15 @@ export class ContactsTab extends Component {
                   </Col>
                   
                   <Col sm={12} className="mb-3">
-                    <label>Grades (comma separated)</label>
-                    <Input value={p.grades} onChange={e => this.setField('extra_principals', 'grades', e.target.value, idx)} />
+                    <label>Grades</label>
+                    <GradeSelect
+                      isMulti
+                      isClearable
+                      values={this.gradesStringToArray(p.grades)}
+                      openMenuOnFocus={false}
+                      placeholder="Select Grades"
+                      onChange={this.onGradesChange('extra_principals', idx)}
+                    />
                   </Col>
                 </Row>
               </div>
