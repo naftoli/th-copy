@@ -34,9 +34,8 @@ export class PaymentTab extends React.Component {
     let { terms } = this.state;
     // update the terms
     terms = { ...terms, ...update };
-    // check that all the checkboxes where checked except for the siddur gift
+    // check that all the checkboxes where checked
     const allTerms = Object.keys( terms )
-      .filter( k => k !== 'siddur_gift' )
       .map( k => terms[k] )
       .reduce( ( a, b ) => a && b, true );
 
@@ -104,11 +103,6 @@ export class PaymentTab extends React.Component {
           <Checkbox required checked={ terms.data } name='data' { ...checkboxProps }>
             I understand that Tzivos Hashem reserves the right to use and store any data that I upload
             for this base (school). And that they may do with that data whatever it wants to.
-          </Checkbox>
-
-          <Checkbox checked={ terms.siddur_gift } name='siddur_gift' { ...checkboxProps }>
-            <b>Special for 5785:</b> I would like to receive a Siddur for each of my Chayolim and Teachers in my school
-            sponsored by Rabbi Moshe and Ruti Weiss, and we are committed to learning Peirush Hamilos in my school.
           </Checkbox>
         </Callout>
         
