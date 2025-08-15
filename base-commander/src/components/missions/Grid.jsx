@@ -10,20 +10,48 @@ import './styles/Grid.scss';
 
 class GridCell extends Component {
 
+  constructor(props) {
+    super(props);
+    this.debounceTimer = null;
+  }
+
   onChange = e => {
     let value = e.target.checked ? '1' : '0';
     let { mission, soldier } = this.props;
 
     if ( e.target.type === 'number' ) {
       value = e.target.value;
-      // wait a few seconds and check if the value is still the same
-      setTimeout(() => {
-        if ( e.target.value === value ) {
-          this.props.onChange( value, mission, soldier );
-        }
-      }, 1000);
+      // Clear any existing timer
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+      // Debounce the save to prevent excessive API calls
+      this.debounceTimer = setTimeout(() => {
+        this.props.onChange( value, mission, soldier );
+      }, 300); // 300ms delay - much shorter than 1 second
     } else {
       this.props.onChange( value, mission, soldier );
+    }
+  }
+
+  onBlur = e => {
+    // Clear any pending debounced save
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+      this.debounceTimer = null;
+    }
+    // Save immediately on blur for number inputs
+    if ( e.target.type === 'number' ) {
+      const value = e.target.value;
+      const { mission, soldier } = this.props;
+      this.props.onChange( value, mission, soldier );
+    }
+  }
+
+  componentWillUnmount() {
+    // Clean up timer if component unmounts
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
     }
   }
 
@@ -42,8 +70,8 @@ class GridCell extends Component {
         min='0'
         type='number'
         value={ value } 
-        onKeyUp={ this.onChange }
-        // onChange={ this.onChange } 
+        onChange={ this.onChange }
+        onBlur={ this.onBlur }
         />;
     }
 
