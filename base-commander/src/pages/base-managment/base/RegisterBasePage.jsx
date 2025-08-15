@@ -88,6 +88,12 @@ class RegistrationPage extends Component {
     this.setState({ base: { ...this.state.base, ...updates } });
   }
 
+  updateSiddurGift = ((gift, register = true) => {
+    this.setState({siddur_gift: gift}, () => {
+      if (register) this.register()
+    })
+  })
+
   // * event handlers
   onChange = onInputChange( this.onUpdate );
   onCheckboxChange = onCheckboxChange( this.onUpdate );
@@ -269,6 +275,7 @@ class RegistrationPage extends Component {
             terms={ terms }
             discount={ discount }
             register={ this.register }
+            updateSiddurGift={ this.updateSiddurGift }
             onStateUpdate={ this.onStateUpdate } />
         </TabContent>
       </div>

@@ -35,6 +35,9 @@ elseif (gr('school_era')) {
 	mq("UPDATE classes SET 
 				updated = 0 
 				WHERE class_era = 0 AND school_id IN ($schools)");
+
+	// update the siddur gift
+	mq("UPDATE schools SET siddur_gift = 0 WHERE school_id IN ($schools)");
 				
 	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $year);
 } 
