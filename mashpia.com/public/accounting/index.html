@@ -1041,6 +1041,263 @@
                 </Card>
             ));
 
+            // Discount form state and handlers
+            const [discountForm, setDiscountForm] = useState({
+                discountType: 'base',
+                year: formData.year || '',
+                school: '0',
+                grade: '',
+                student: '',
+                amount: '',
+                reason: '',
+                created_by: ''
+            });
+            const [addingDiscount, setAddingDiscount] = useState(false);
+            const [discountMessage, setDiscountMessage] = useState('');
+            const [isDiscountFormOpen, setIsDiscountFormOpen] = useState(false);
+            const [students, setStudents] = useState([]);
+            const grades = ['3', '4', '5', '6', '7', '8'];
+
+            // Keep discount year in sync with main year
+            useEffect(() => {
+                setDiscountForm(prev => ({ ...prev, year: formData.year || prev.year }));
+            }, [formData.year]);
+
+            // Auto-select discount type based on selected report
+            useEffect(() => {
+                if (formData.reportType === 'base_discounts') {
+                    setDiscountForm(prev => ({ ...prev, discountType: 'base' }));
+                } else if (formData.reportType === 'soldier_discounts') {
+                    setDiscountForm(prev => ({ ...prev, discountType: 'soldier' }));
+                }
+            }, [formData.reportType]);
+
+            const handleDiscountInputChange = (field, value) => {
+                setDiscountForm(prev => ({ ...prev, [field]: value }));
+            };
+
+            const handleDiscountTypeChange = (value) => {
+                setDiscountForm(prev => ({ ...prev, discountType: value }));
+            };
+
+            const handleDiscountSchoolChange = (value) => {
+                setDiscountForm(prev => ({ ...prev, school: value }));
+                // Optionally load students when soldier discount selected
+                // setStudents([]);
+            };
+
+            const handleGradeChange = (value) => {
+                setDiscountForm(prev => ({ ...prev, grade: value }));
+                // Optionally load students when grade changes
+                // setStudents([]);
+            };
+
+            const handleDiscountSubmit = async (e) => {
+                e.preventDefault();
+                setAddingDiscount(true);
+                setDiscountMessage('');
+
+                try {
+                    if (discountForm.discountType === 'base') {
+                        if (discountForm.school === '0') {
+                            setDiscountMessage({ type: 'warning', text: 'Please choose a school' });
+                            setAddingDiscount(false);
+                            return;
+                        }
+                    } else {
+                        if (discountForm.school === '0' || !discountForm.student) {
+                            setDiscountMessage({ type: 'warning', text: 'Please choose a school and enter a student serial' });
+                            setAddingDiscount(false);
+                            return;
+                        }
+                    }
+
+                    if (!discountForm.amount || parseFloat(discountForm.amount) <= 0) {
+                        setDiscountMessage({ type: 'warning', text: 'You must enter a valid amount!' });
+                        setAddingDiscount(false);
+                        return;
+                    }
+
+                    const fd = new FormData();
+                    fd.append('discount_type', discountForm.discountType);
+                    fd.append('year', discountForm.year);
+                    fd.append('amount', discountForm.amount);
+                    fd.append('reason', discountForm.reason);
+                    fd.append('created_by', discountForm.created_by);
+                    fd.append('school_id', discountForm.school);
+                    if (discountForm.discountType === 'soldier') {
+                        fd.append('user_id', discountForm.student);
+                        if (discountForm.grade) fd.append('grade', discountForm.grade);
+                    }
+
+                    const response = await fetch('api/createDiscount.php', {
+                        method: 'POST',
+                        body: fd
+                    });
+
+                    const result = await response.json();
+                    if (result && (result.success || result.status === 'ok')) {
+                        setDiscountMessage({ type: 'success', text: 'Voucher created successfully!' });
+                        setDiscountForm(prev => ({
+                            ...prev,
+                            amount: '',
+                            reason: '',
+                            created_by: ''
+                        }));
+                        if (reportData) {
+                            setTimeout(() => {
+                                handleSubmit(new Event('submit'));
+                            }, 1500);
+                        }
+                    } else {
+                        setDiscountMessage({ type: 'danger', text: (result && (result.error || result.message)) || 'Failed to create voucher' });
+                    }
+                } catch (err) {
+                    setDiscountMessage({ type: 'danger', text: err.message || 'Failed to create voucher' });
+                } finally {
+                    setAddingDiscount(false);
+                }
+            };
+
+            // Inline DiscountForm component
+            const DiscountForm = React.memo(({ 
+                discountForm,
+                setDiscountForm,
+                schools,
+                grades,
+                students,
+                addingDiscount,
+                discountMessage,
+                isDiscountFormOpen,
+                setIsDiscountFormOpen,
+                handleDiscountInputChange,
+                handleDiscountTypeChange,
+                handleDiscountSchoolChange,
+                handleGradeChange,
+                handleDiscountSubmit,
+                setDiscountMessage
+            }) => (
+                <>
+                    <Form onSubmit={handleDiscountSubmit}>
+                        <Row>
+                            <Col md={3} className="mb-3">
+                                <Form.Label>Type</Form.Label>
+                                <FormSelect
+                                    value={discountForm.discountType}
+                                    onChange={(e) => handleDiscountTypeChange(e.target.value)}
+                                >
+                                    <option value="base">Base</option>
+                                    <option value="soldier">Soldier</option>
+                                </FormSelect>
+                            </Col>
+                            <Col md={3} className="mb-3">
+                                <Form.Label>Year</Form.Label>
+                                <FormSelect
+                                    value={discountForm.year}
+                                    onChange={(e) => handleDiscountInputChange('year', e.target.value)}
+                                >
+                                    {([discountForm.year || formData.year].filter(Boolean)).map(y => (
+                                        <option key={y} value={y}>{y}</option>
+                                    ))}
+                                </FormSelect>
+                            </Col>
+                            <Col md={6} className="mb-3">
+                                <Form.Label>School</Form.Label>
+                                <FormSelect
+                                    value={discountForm.school}
+                                    onChange={(e) => handleDiscountSchoolChange(e.target.value)}
+                                >
+                                    <option value="0">Choose School</option>
+                                    {schools.map(s => (
+                                        <option key={s.id} value={s.id}>{s.name}</option>
+                                    ))}
+                                </FormSelect>
+                            </Col>
+
+                            {discountForm.discountType === 'soldier' && (
+                                <>
+                                    <Col md={3} className="mb-3">
+                                        <Form.Label>Grade</Form.Label>
+                                        <FormSelect
+                                            value={discountForm.grade}
+                                            onChange={(e) => handleGradeChange(e.target.value)}
+                                        >
+                                            <option value="">Choose Grade</option>
+                                            {grades.map(g => (
+                                                <option key={g} value={g}>{g}</option>
+                                            ))}
+                                        </FormSelect>
+                                    </Col>
+                                    <Col md={9} className="mb-3">
+                                        <Form.Label>Student Serial</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            value={discountForm.student}
+                                            onChange={(e) => handleDiscountInputChange('student', e.target.value)}
+                                            placeholder="Enter student serial"
+                                        />
+                                    </Col>
+                                </>
+                            )}
+
+                            <Col md={4} className="mb-3">
+                                <Form.Label>Amount</Form.Label>
+                                <InputGroup>
+                                    <InputGroup.Text>$</InputGroup.Text>
+                                    <Form.Control
+                                        type="text"
+                                        value={discountForm.amount}
+                                        onChange={(e) => handleDiscountInputChange('amount', e.target.value)}
+                                        placeholder="0.00"
+                                    />
+                                </InputGroup>
+                            </Col>
+                            <Col md={4} className="mb-3">
+                                <Form.Label>Reason</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={discountForm.reason}
+                                    onChange={(e) => handleDiscountInputChange('reason', e.target.value)}
+                                    placeholder="Reason for voucher"
+                                />
+                            </Col>
+                            <Col md={4} className="mb-3">
+                                <Form.Label>Created By</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={discountForm.created_by}
+                                    onChange={(e) => handleDiscountInputChange('created_by', e.target.value)}
+                                    placeholder="Your name"
+                                />
+                            </Col>
+                        </Row>
+                        <div className="text-center">
+                            <Button type="submit" variant="primary" disabled={addingDiscount}>
+                                {addingDiscount ? (
+                                    <>
+                                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                        Processing...
+                                    </>
+                                ) : (
+                                    <>Create Voucher</>
+                                )}
+                            </Button>
+                        </div>
+                    </Form>
+
+                    {discountMessage && (
+                        <Alert 
+                            variant={discountMessage.type} 
+                            className="mt-3"
+                            onClose={() => setDiscountMessage('')}
+                            dismissible
+                        >
+                            {discountMessage.text}
+                        </Alert>
+                    )}
+                </>
+            ));
+
             if (loading) {
                 return (
                     <Container className="mt-4">
@@ -1326,16 +1583,16 @@
                                         <h6>
                                             <i className="bi bi-exclamation-triangle"></i> Important Information
                                         </h6>
-                                            <p className="mb-0">
-                                                The list of schools is based on those with any registered children for the current year and are not test schools.<br />
-                                                The number of registered children reflects those currently registered for the current year.
-                                            </p>
-                                        </Alert>
-                                    )}
-                                    <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} year={formData.year} />
-                                </Card.Body>
-                            </Card>
-                        )}
+                                        <p className="mb-0">
+                                            The list of schools is based on those with any registered children for the current year and are not test schools.<br />
+                                            The number of registered children reflects those currently registered for the current year.
+                                        </p>
+                                    </Alert>
+                                )}
+                                <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} year={formData.year} />
+                            </Card.Body>
+                        </Card>
+                    )}
                 </Container>
             );
         }
