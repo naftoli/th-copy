@@ -106,6 +106,10 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script src="https://unpkg.com/react-bootstrap@2.9.0/dist/react-bootstrap.min.js"></script>
+    <script type="text/babel" data-presets="react" src="/accounting/js/components/MultiSelect.js"></script>
+    <script type="text/babel" data-presets="react" src="/accounting/js/components/PaymentForm.js"></script>
+    <script type="text/babel" data-presets="react" src="/accounting/js/components/DiscountForm.js"></script>
+    <script type="text/babel" data-presets="react" src="/accounting/js/components/RegistrationInfo.js"></script>
 </head>
 <body>
     <div id="root"></div>
@@ -309,7 +313,174 @@
             );
         }
 
-        function MultiSelect({ options, selectedValues, onChange, placeholder }) {
+        function EditableSettingsTable({ data, headers }) {
+            const [rows, setRows] = useState(() => Array.isArray(data) ? data.map(r => ({ ...r })) : []);
+            const [savingIndex, setSavingIndex] = useState(null);
+            const [rowMessage, setRowMessage] = useState({});
+
+            const headerToField = (header) => {
+                const map = {
+                    'Year': 'year',
+                    'School Number': 'school_number',
+                    'School Name': 'school_name',
+                    'Reg Type': 'reg_type',
+                    'School Charge Date': 'school_charge_date',
+                    'Chayolei Fee': 'chayolei_fee',
+                    'Chidon Fee': 'chidon_fee',
+                    'Past Due': 'balance',
+                    'Child Fee': 'child_fee',
+                    'Early Bird': 'early_bird',
+                    'Notes': 'registration_notes',
+                    'Registration Notes': 'registration_notes'
+                };
+                return map[header] || header;
+            };
+
+            const isReadOnly = (header) => header === 'School Number' || header === 'School Name';
+
+            const inputTypeFor = (header) => {
+                if (header.indexOf('Date') !== -1 || header === 'Early Bird') return 'date';
+                if (header.indexOf('Fee') !== -1 || header === 'Balance' || header === 'Past Due') return 'number';
+                if (header === 'Notes' || header === 'Registration Notes') return 'textarea';
+                return 'text';
+            };
+
+            const toYyyyMmDd = (value) => {
+                if (!value) return '';
+                const str = String(value);
+                if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+                const d = new Date(str);
+                if (isNaN(d.getTime())) return '';
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                return `${d.getFullYear()}-${mm}-${dd}`;
+            };
+
+            const normalizeRegTypeValue = (val) => {
+                const s = String(val ?? '').toLowerCase();
+                if (s === '1' || s.includes('tuition')) return '1';
+                if (s === '2' || s.includes('guaranteed')) return '2';
+                if (s === '3' || s.includes('regular') || s.includes('by parent')) return '3';
+                return '';
+            };
+
+            const setCell = (rowIdx, header, value) => {
+                setRows(prev => prev.map((r, i) => i === rowIdx ? { ...r, [header]: value } : r));
+                setRowMessage(prev => ({ ...prev, [rowIdx]: null }));
+            };
+
+            const saveRow = async (rowIdx) => {
+                try {
+                    setSavingIndex(rowIdx);
+                    setRowMessage(prev => ({ ...prev, [rowIdx]: null }));
+                    const row = rows[rowIdx] || {};
+                    const fd = new FormData();
+                    // Identifier to locate base on backend
+                    if (row['School Number']) fd.append('school_number', row['School Number']);
+                    // Include editable fields with proper value normalization
+                    headers.forEach(h => {
+                        if (isReadOnly(h)) return;
+                        const fieldKey = headerToField(h);
+                        let v = row[h];
+                        if (v == null && (fieldKey in row)) {
+                            v = row[fieldKey];
+                        }
+                        // Normalize specific field types
+                        if (h === 'Reg Type') {
+                            v = normalizeRegTypeValue(v);
+                        }
+                        if (inputTypeFor(h) === 'date') {
+                            v = toYyyyMmDd(v);
+                        }
+                        if (v == null) v = '';
+                        fd.append(fieldKey, v);
+                    });
+
+                    const res = await fetch('api/saveBase.php', { method: 'POST', body: fd });
+                    const json = await res.json().catch(() => ({}));
+                    if (!res.ok || (json && json.error) || json.success === false) {
+                        const msg = (json && (json.error || json.message)) || 'Failed to save';
+                        throw new Error(msg);
+                    }
+                    setRowMessage(prev => ({ ...prev, [rowIdx]: { type: 'success', text: 'Saved' } }));
+                } catch (e) {
+                    setRowMessage(prev => ({ ...prev, [rowIdx]: { type: 'danger', text: e.message || 'Save failed' } }));
+                } finally {
+                    setSavingIndex(null);
+                }
+            };
+
+            return (
+                <div className="table-responsive">
+                    <Table striped bordered hover>
+                        <thead className="table-dark">
+                            <tr>
+                                {headers.map(h => (
+                                    <th key={h}>{h}</th>
+                                ))}
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {rows.map((row, idx) => (
+                                <tr key={idx}>
+                                    {headers.map(h => {
+                                        const readOnly = isReadOnly(h);
+                                        const type = inputTypeFor(h);
+                                        const fieldKey = headerToField(h);
+                                        let val = row[h];
+                                        if (val == null && fieldKey in row) {
+                                            val = row[fieldKey];
+                                        }
+                                        if (type === 'date') {
+                                            val = toYyyyMmDd(val);
+                                        }
+                                        if (readOnly) {
+                                            return <td key={h}>{val}</td>;
+                                        }
+                                        if (h === 'Reg Type') {
+                                            return (
+                                                <td key={h}>
+                                                    <Form.Select value={normalizeRegTypeValue(val)} onChange={(e) => setCell(idx, h, e.target.value)}>
+                                                        <option value="">Select...</option>
+                                                        <option value="1">Tuition</option>
+                                                        <option value="2">Guaranteed</option>
+                                                        <option value="3">Regular</option>
+                                                    </Form.Select>
+                                                </td>
+                                            );
+                                        }
+                                        if (type === 'textarea') {
+                                            return (
+                                                <td key={h}>
+                                                    <Form.Control as="textarea" rows={2} value={val} onChange={(e) => setCell(idx, h, e.target.value)} />
+                                                </td>
+                                            );
+                                        }
+                                        return (
+                                            <td key={h}>
+                                                <Form.Control type={type} value={val} onChange={(e) => setCell(idx, h, e.target.value)} />
+                                            </td>
+                                        );
+                                    })}
+                                    <td className="text-center">
+                                        <Button size="sm" variant="primary" disabled={savingIndex === idx} onClick={() => saveRow(idx)}>
+                                            {savingIndex === idx ? 'Saving...' : 'Save'}
+                                        </Button>
+                                        {rowMessage[idx] && (
+                                            <span className={`ms-2 text-${rowMessage[idx].type}`}>{rowMessage[idx].text}</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+                </div>
+            );
+        }
+
+        // Use external MultiSelect if present to avoid redeclaration
+        const InlineMultiSelect = ({ options, selectedValues, onChange, placeholder }) => {
             const [isOpen, setIsOpen] = useState(false);
             const [searchTerm, setSearchTerm] = useState('');
             const dropdownRef = useRef(null);
@@ -487,7 +658,8 @@
                 reportType: '',
                 baseOptions: [],
                 soldierOptions: [],
-                detailsOptions: []
+                detailsOptions: [],
+                settingsOptions: []
             });
 
             const [schools, setSchools] = useState([]);
@@ -564,6 +736,19 @@
                 'reg_date': 'Registration Date',
                 'reg_amount': 'Amount',
                 'refunded': 'Refunded'
+            };
+
+            const settingsOptions = {
+                'school_number': 'Base Number',
+                'school_name': 'Base Name',
+                'reg_type': 'Registration Type',
+                'school_charge_date': 'School Charge Date',
+                'chayolei_fee': 'Chayolei Fee',
+                'chidon_fee': 'Chidon Fee',
+                'balance': 'Past Dues Balance',
+                'child_fee': 'Child Fee',
+                'early_bird': 'Early Bird Fee',
+                'registration_notes': 'Registration Notes'               
             };
 
             // Payment types and methods
@@ -668,7 +853,7 @@
             };
 
             const showOptionsForReportType = (reportType) => {
-                return reportType === 'base' || reportType === 'soldier' || reportType === 'details';
+                return reportType === 'base' || reportType === 'soldier' || reportType === 'details' || reportType === 'settings';
             };
 
             const getOptionsForReportType = (reportType) => {
@@ -679,6 +864,8 @@
                         return soldierOptions;
                     case 'details':
                         return detailsOptions;
+                    case 'settings':
+                        return settingsOptions;
                     default:
                         return {};
                 }
@@ -742,7 +929,7 @@
                 const specialReports = {
                     // base_discounts: '/reports/registration/discounts.php',
                     // soldier_discounts: '/reports/registration/create_user_discount.php',
-                    settings: '/reports/schools/registration_info.php',
+                    // settings: '/reports/schools/registration_info.php',
                     unregister: '/admin_yearly.php',
                     types: '/types_of_schools.php'
                 };
@@ -780,7 +967,7 @@
                         break;
                 }
 
-                // Handle normal report types
+                // Handle normal report types (including settings)
                 try {
                     const response = await fetch(url, {
                         method: 'POST',
@@ -1372,12 +1559,21 @@
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <Form.Label>Choose Schools for Report</Form.Label>
-                                                        <MultiSelect
+                                                        {(window.AppComponents && window.AppComponents.MultiSelect) ? (
+                                                            <window.AppComponents.MultiSelect
                                                             options={schools}
                                                             selectedValues={formData.schools}
                                                             onChange={handleSchoolChange}
                                                             placeholder="Select schools..."
                                                         />
+                                                        ) : (
+                                                            <InlineMultiSelect
+                                                                options={schools}
+                                                                selectedValues={formData.schools}
+                                                                onChange={handleSchoolChange}
+                                                                placeholder="Select schools..."
+                                                            />
+                                                        )}
                                                         <Form.Text>
                                                             Selected: {formData.schools.length} of {schools.length} schools
                                                         </Form.Text>
@@ -1589,7 +1785,11 @@
                                         </p>
                                     </Alert>
                                 )}
+                                {formData.reportType === 'settings' ? (
+                                    <EditableSettingsTable data={reportData.data} headers={reportData.headers} />
+                                ) : (
                                 <ReportTable data={reportData.data} headers={reportData.headers} reportType={formData.reportType} year={formData.year} />
+                                )}
                             </Card.Body>
                         </Card>
                     )}

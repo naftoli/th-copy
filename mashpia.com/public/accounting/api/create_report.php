@@ -68,6 +68,18 @@ $fields = [
         'reg_date'      => 'rc.date',
         'reg_amount'    => 'rc.amount',
         'refunded'      => 'rc.refunded'
+    ], 
+    'settings' => [
+        'school_number' => 's.school_number',
+        'school_name'   => 's.school_name',
+        'reg_type'      => 's.reg_type',
+        'school_charge_date' => 's.school_charge_date',
+        'chayolei_fee'  => 's.chayolei_fee',
+        'chidon_fee'    => 's.chidon_fee',
+        'balance'       => 's.balance',
+        'child_fee'     => 's.child_fee',
+        'early_bird'    => 's.early_bird',
+        'registration_notes' => 's.registration_notes'
     ]
 ];
 
@@ -79,7 +91,7 @@ $srd_qry = false;
 $total_registered_chayolim = false;
 // SELECT fields
 $sql = "SELECT ";
-if ($report_type == 'base') {
+if ($report_type == 'base' || $report_type == 'settings') {
     $sql .= "s.school_id, ";
 } else if ($report_type == 'soldier') {
     $sql .= "u.user_id, u.school_id, ";
@@ -116,7 +128,7 @@ foreach ($_POST[$report_type . '_options'] as $option) {
 $sql = substr($sql, 0, strlen($sql) - 2);
 // FROM tables
 $sql .= " FROM ";
-if ($report_type == 'base') {
+if ($report_type == 'base' || $report_type == 'settings') {
     $sql .= "schools s ";
 } else if ($report_type == 'soldier') {
     $sql .= "users u ";
@@ -126,7 +138,8 @@ if ($report_type == 'base') {
 // LEFT JOIN tables
 foreach ($from as $t) {
     if (
-        ($report_type == 'base' && $t != 's') ||
+        ($report_type == 'base' && $t != 's') || 
+        ($report_type == 'settings' && $t != 's') ||
         ($report_type == 'soldier' && $t != 'u') ||
         ($report_type == 'details' && $t != 'rc')
     ) {
@@ -148,7 +161,7 @@ foreach ($from as $t) {
     }
 }
 // WHERE clause
-if ($report_type == 'base') {
+if ($report_type == 'base' || $report_type == 'settings') {
     $table = 's.';
 } else if ($report_type == 'soldier' || $report_type == 'details') {
     $table = 'u.';
