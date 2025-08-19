@@ -6,12 +6,24 @@ export const getRegistration = () => dispatch => {
     .then( data => dispatch( actions.setRegistration( data ) ) );
 }
 
-export const getBirthdays = () => dispatch => {
-  return API.get( `/core/homepage/birthdays` )
+export const getBirthdays = (fromDate = null, toDate = null) => dispatch => {
+  let url = `/core/homepage/birthdays`;
+  
+  if (fromDate && toDate) {
+    url += `?start=${fromDate}&end=${toDate}`;
+  }
+  
+  return API.get( url )
     .then( birthdays => dispatch( actions.setBirthdays( birthdays ) ) );
 }
 
-export const getPromotions = () => dispatch => {
-  return API.get( `/core/homepage/promotions` )
+export const getPromotions = (fromDate = null, toDate = null) => dispatch => {
+  let url = `/core/homepage/promotions`;
+  
+  if (fromDate && toDate) {
+    url += `?start=${fromDate}&end=${toDate}`;
+  }
+  
+  return API.get( url )
     .then( promotions => dispatch( actions.setPromotions( promotions ) ) );
 }
