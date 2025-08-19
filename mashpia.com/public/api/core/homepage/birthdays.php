@@ -13,9 +13,22 @@ class BirthdayRouter {
         if ( !$filter )
             json_error( 'Access Deinied: HOME-BIRTHDAY-26' );
 
-        $end_date = intval(unixtojd());
-        $start = isset($_GET['start']) ? intval($_GET['start']) : 7;
-        $start_date =  $end_date - $start; // x days of birthdays
+        $end = isset($_GET['end']) ? $_GET['end'] : null;
+        $start = isset($_GET['start']) ? $_GET['start'] : null;
+    
+        if ($end) {
+            $dateInfo = explode( '-', $end );
+            $end_date = gregoriantojd( $dateInfo[1], $dateInfo[2], $dateInfo[0] );
+        } else {
+            $end_date = intval(unixtojd());
+        }
+
+        if ($start) {
+            $dateInfo = explode( '-', $start );
+            $start_date = gregoriantojd( $dateInfo[1], $dateInfo[2], $dateInfo[0] );
+        } else {
+            $start_date = $end_date - 7; // x days of birthdays
+        }
 
         $extra = '';
         if (isset($_GET['gender'])) {
