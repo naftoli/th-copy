@@ -13,8 +13,8 @@ import { getStore, placeOrder } from 'store/rewards/orders/operations';
 
 const initialState = {
   class_id: false,  user_id: false,
-  loading: false, prize: false,
-  saving: false, qty: 1
+  loading: false, items: [],
+  saving: false
 }
 
 class OrderModal extends Component {
@@ -38,10 +38,72 @@ class OrderModal extends Component {
     { user_id: value },
     () => this.loadStore()
   );
-  // update the selected prize
-  updatePrize = prize => this.setState({ prize });
-  // update the qty
-  updateQty = ({ target }) => this.setState({ qty: target.value });
+  // update an item at specific index
+  updateItem = (index, updatedItem) => {
+    this.setState(prev => {
+      const newItems = prev.items.map((item, i) => i === index ? updatedItem : item);
+      
+      // Calculate total cost
+      const total = newItems.reduce((sum, item) => {
+        return sum + (item.prize && item.qty ? item.prize.points * item.qty : 0);
+      }, 0);
+      
+      // If total exceeds available miles, adjust quantities or show error
+      if (total > this.props.store.miles) {
+        // Try to adjust the quantity of the current item
+        if (updatedItem.prize && updatedItem.qty) {
+          const maxQty = Math.floor(this.props.store.miles / updatedItem.prize.points);
+          if (maxQty > 0) {
+            // Adjust quantity to fit within available miles
+            const adjustedItem = { ...updatedItem, qty: Math.min(updatedItem.qty, maxQty) };
+            const adjustedItems = newItems.map((item, i) => i === index ? adjustedItem : item);
+            
+            // Show toast notification
+            toast.warning(`Quantity adjusted to ${adjustedItem.qty} due to insufficient miles.`);
+            
+            return { items: adjustedItems };
+          } else {
+            // Remove the item if it can't be afforded at all
+            toast.error('Item removed - insufficient miles for this prize.');
+            return { items: newItems.filter((_, i) => i !== index) };
+          }
+        }
+      }
+      
+      return { items: newItems };
+    });
+  };
+  
+  // add a new item
+  addItem = () => {
+    this.setState(prev => {
+      const newItems = [...prev.items, { prize: false, qty: 1 }];
+      
+      // If this is the first item and we have store data, set the first available prize
+      if (newItems.length === 1 && this.props.store && this.props.store.prizes && this.props.store.prizes.length > 0) {
+        newItems[0].prize = this.props.store.prizes[0];
+      }
+      
+      // Check if adding this item would exceed available miles
+      const total = newItems.reduce((sum, item) => {
+        return sum + (item.prize && item.qty ? item.prize.points * item.qty : 0);
+      }, 0);
+      
+      if (total > this.props.store.miles) {
+        toast.error('Cannot add more items - insufficient miles available.');
+        return prev; // Don't add the item
+      }
+      
+      return { items: newItems };
+    });
+  };
+  
+  // remove an item at specific index
+  removeItem = (index) => {
+    this.setState(prev => ({
+      items: prev.items.filter((_, i) => i !== index)
+    }));
+  };
 
   loadStore = () => {
     this.setState({ loading: true })
@@ -59,7 +121,16 @@ class OrderModal extends Component {
     e.preventDefault();
     this.setState({ saving: true })
 
-    this.props.placeOrder( this.state )
+    // Convert items array to the format expected by the API
+    const orderData = {
+      ...this.state,
+      items: this.state.items.map(item => ({
+        prize_id: item.prize.prize_id,
+        qty: item.qty
+      }))
+    };
+
+    this.props.placeOrder( orderData )
     .then( this.props.toggle )
     .catch( e => toast.error( e.message ) )
     .then( () => this.setState({ saving: false }) )
@@ -67,7 +138,7 @@ class OrderModal extends Component {
 
   render(){
     let { isOpen, login, toggle, store } = this.props;
-    const { loading, class_id, user_id, prize, qty, saving } = this.state;
+    const { loading, class_id, user_id, items, saving } = this.state;
     const bc = isBC( login.code );
 
     // render the form or a spinner
@@ -75,12 +146,12 @@ class OrderModal extends Component {
 
     if ( !loading && store ) orderForm = (
       <OrderForm 
-        qty={ qty }
+        items={ items }
         store={ store }
-        prize={ prize }
         saving={ saving }
-        updateQty={ this.updateQty }
-        updatePrize={ this.updatePrize }/>
+        updateItem={ this.updateItem }
+        addItem={ this.addItem }
+        removeItem={ this.removeItem }/>
     );
 
     return (

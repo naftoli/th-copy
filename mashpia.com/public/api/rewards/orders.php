@@ -75,15 +75,49 @@ class OrdersRouter {
         global $POINTS_DB;
         // get the post params
         $user = \Soldier::find([ $_POST['user_id'] ]);
-        $qty = intval( $_POST['qty'] );
-        $prize = $_POST['prize'];
-        if ( $qty <= 0 )
-            return json_error('Cannot order 0 prizes.');
-        // make sure they have the money
-        $total = intval( $prize['points'] ) * $qty;
-        if ( $total > $user->storeMiles() )
-            return json_error('Not Enough Miles');
-
+        $items = $_POST['items'] ?? [];
+        
+        if (empty($items)) {
+            return json_error('No items in order.');
+        }
+        
+        // validate all items and calculate total
+        $total_cost = 0;
+        $validated_items = [];
+        
+        foreach ($items as $item) {
+            $prize_id = intval($item['prize_id']);
+            $qty = intval($item['qty']);
+            
+            if ($qty <= 0) {
+                return json_error('Cannot order 0 prizes.');
+            }
+            
+            // get prize details
+            $prize_query = $POINTS_DB->prepare('SELECT * FROM prizes WHERE prize_id = ?');
+            $prize_query->execute([$prize_id]);
+            $prize = $prize_query->fetch();
+            
+            if (!$prize) {
+                return json_error('Invalid prize ID: ' . $prize_id);
+            }
+            
+            $item_total = intval($prize['points']) * $qty;
+            $total_cost += $item_total;
+            
+            $validated_items[] = [
+                'prize_id' => $prize_id,
+                'qty' => $qty,
+                'prize' => $prize,
+                'item_total' => $item_total
+            ];
+        }
+        
+        // make sure they have enough miles
+        if ($total_cost > $user->storeMiles()) {
+            return json_error('Not Enough Miles. Total cost: ' . $total_cost . ', Available: ' . $user->storeMiles());
+        }
+        
         // generate order number
         $order_number = $POINTS_DB->query(
             "SELECT serial FROM ( "
@@ -92,54 +126,78 @@ class OrdersRouter {
                 .") "
             .") AS numbers HAVING LENGTH(serial) = 10 LIMIT 1;"
         )->fetch()['serial'];
-
-        // update user_prizes
-        $order_query = $POINTS_DB->prepare(
-            'INSERT INTO user_prizes '
-            .'(prize_id, user_id, institution_id, quantity, serial) '
-            .'VALUES ( ?, ?, ?, ?, ? )'
-        );
-        $status = $order_query->execute([
-            $prize['prize_id'], $user->user_id,
-            $user->school_id, $qty, $order_number
-        ]);
-        if ( !$status ) return json_error( 'Could not create order' );
-
-        $user_prize_id = $POINTS_DB->lastInsertId();
-
-        // update user_points
-        $user_points = $POINTS_DB->prepare(
-            'INSERT INTO user_points '
-            .'(prize_id, user_prize_id, user_id, institution_id, points, resource_name) '
-            .'VALUES ( ?, ?, ?, ?, ?, "store" )'
-        );
-        $status = $user_points->execute([
-            $prize['prize_id'], $user_prize_id, 
-            $user->user_id, $user->school_id, $total * -1
-        ]);
-        if ( !$status ) return json_error( 'Could not subtract points' );
-
-        // update stock
-        $stock_query = $POINTS_DB->prepare(
-            'UPDATE prizes SET prize_count = prize_count - ? WHERE prize_id = ?'
-        );
-        if ( !$stock_query->execute([ $qty, $prize['prize_id'] ]) )
-            return json_error('Could not update stock');
-
-        // return a the order for the client
-        json_response([
-            'created' => date("Y-m-d H:i:s"),
-            'first' => $user->first,
-            'last' => $user->last,
-            'platoon' => $user->platoon->name(),
-            'points' => $prize['points'],
-            'prize_name' => $prize['prize_name'],
-            'quantity' => $qty,
-            'status' => "Checked Out",
-            'total' => $total * -1,
-            'user_prize_id' => $user_prize_id,
-            'user_serial' => $user->user_serial
-        ]);
+        
+        // start transaction
+        $POINTS_DB->beginTransaction();
+        
+        try {
+            $order_results = [];
+            
+            foreach ($validated_items as $item) {
+                // insert user_prizes record
+                $order_query = $POINTS_DB->prepare(
+                    'INSERT INTO user_prizes '
+                    .'(prize_id, user_id, institution_id, quantity, serial) '
+                    .'VALUES ( ?, ?, ?, ?, ? )'
+                );
+                $status = $order_query->execute([
+                    $item['prize_id'], $user->user_id,
+                    $user->school_id, $item['qty'], $order_number
+                ]);
+                if (!$status) {
+                    throw new Exception('Could not create order for prize ID: ' . $item['prize_id']);
+                }
+                
+                $user_prize_id = $POINTS_DB->lastInsertId();
+                
+                // insert user_points record
+                $user_points = $POINTS_DB->prepare(
+                    'INSERT INTO user_points '
+                    .'(prize_id, user_prize_id, user_id, institution_id, points, resource_name) '
+                    .'VALUES ( ?, ?, ?, ?, ?, "store" )'
+                );
+                $status = $user_points->execute([
+                    $item['prize_id'], $user_prize_id, 
+                    $user->user_id, $user->school_id, $item['item_total'] * -1
+                ]);
+                if (!$status) {
+                    throw new Exception('Could not subtract points for prize ID: ' . $item['prize_id']);
+                }
+                
+                // update stock
+                $stock_query = $POINTS_DB->prepare(
+                    'UPDATE prizes SET prize_count = prize_count - ? WHERE prize_id = ?'
+                );
+                if (!$stock_query->execute([$item['qty'], $item['prize_id']])) {
+                    throw new Exception('Could not update stock for prize ID: ' . $item['prize_id']);
+                }
+                
+                $order_results[] = [
+                    'created' => date("Y-m-d H:i:s"),
+                    'first' => $user->first,
+                    'last' => $user->last,
+                    'platoon' => $user->platoon->name(),
+                    'points' => $item['prize']['points'],
+                    'prize_name' => $item['prize']['prize_name'],
+                    'quantity' => $item['qty'],
+                    'status' => "Checked Out",
+                    'total' => $item['item_total'] * -1,
+                    'user_prize_id' => $user_prize_id,
+                    'user_serial' => $user->user_serial
+                ];
+            }
+            
+            // commit transaction
+            $POINTS_DB->commit();
+            
+            // return the orders for the client
+            json_response($order_results);
+            
+        } catch (Exception $e) {
+            // rollback transaction on error
+            $POINTS_DB->rollback();
+            return json_error($e->getMessage());
+        }
     }
 
     // redeem orders

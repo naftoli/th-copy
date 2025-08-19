@@ -3,16 +3,18 @@ import React, { Component } from 'react';
 import { NumberDisplay } from 'components/ui';
 import { Select } from 'components/inputs';
 import { SaveButton } from 'components/buttons';
-import { Row, Col, Label, Input } from 'reactstrap';
+import { Row, Col, Label, Input, Button } from 'reactstrap';
 
 export class OrderForm extends Component {
 
   componentDidMount(){
-    let { prize, updatePrize } = this.props;
+    let { items, addItem } = this.props;
     let prizeOptions = this.getOptions();
-    // select the first prize
-    if ( !prize && prizeOptions.length > 0 )
-      updatePrize( prizeOptions[0] );
+    // select the first prize if no items exist
+    if ( (!items || items.length === 0) && prizeOptions.length > 0 ) {
+      // Initialize with first item using addItem
+      addItem();
+    }
   }
 
   getOptions = () => {
@@ -27,43 +29,117 @@ export class OrderForm extends Component {
   }
 
   render() {
-    let { prize, store, qty, saving, ...props } = this.props;
-    // generate the max qty
-    let max = 100;
-    if ( prize )
-      max = Math.floor( store.miles / prize.points );
-    if ( prize && max > prize.prize_count )
-      max = prize.prize_count;
-    if ( prize.one_per_user )
-      max = 1;
+    let { items, store, saving, ...props } = this.props;
+    
     // generate the options
     let prizeOptions = this.getOptions();
+    
     // calculate the total being spent
-    const total = prize && qty ? prize.points * qty : 0;
-    // set disabled and error messages
-    const one_per_user_invalid = qty > 1 && !!prize.one_per_user;
-    const disabled = !prize || qty > max;
+    const total = items ? items.reduce((sum, item) => {
+      return sum + (item.prize && item.qty ? item.prize.points * item.qty : 0);
+    }, 0) : 0;
+    
+    // check if total exceeds available miles
+    const exceedsMiles = total > store.miles;
+    
+    // check if any item is invalid
+    const hasInvalidItems = items ? items.some(item => {
+      if (!item.prize) return true;
+      
+      let max = 100;
+      if (item.prize) {
+        max = Math.floor(store.miles / item.prize.points);
+        if (max > item.prize.prize_count) max = item.prize.prize_count;
+        if (item.prize.one_per_user) max = 1;
+      }
+      
+      return item.qty > max || (item.qty > 1 && !!item.prize.one_per_user);
+    }) : true;
+    
+    const disabled = !items || items.length === 0 || hasInvalidItems || exceedsMiles;
   
     return (
       <div id='OrderForm'>
-        <Row>
-          <Col xs={ 9 } sm={ 8 }>
-            <Label>Prize</Label>
-            <Select value={ prize }
-              options={ prizeOptions }
-              openMenuOnFocus={ false }
-              onChange={ props.updatePrize }/>
-          </Col>
-  
-          <Col xs={ 3 } sm={ 4 }>
-            <Label>Qty</Label>
-            <Input type='number' min={ 1 } max={ max } required
-              value={ qty } onChange={ props.updateQty } />
-            { max > 0 && !prize.one_per_user && <div className='invalid-message'>1 - <NumberDisplay value={ max } /></div> }
-            { one_per_user_invalid && <div className='invalid-message'>1 per soldier</div> }
+        {items && items.map((item, index) => {
+          // generate the max qty for this item
+          let max = 100;
+          if (item.prize) {
+            max = Math.floor(store.miles / item.prize.points);
+            if (max > item.prize.prize_count) max = item.prize.prize_count;
+            if (item.prize.one_per_user) max = 1;
+          }
+          
+          const one_per_user_invalid = item.qty > 1 && !!(item.prize && item.prize.one_per_user);
+          
+          return (
+            <div key={index} className="mb-3">
+              <Row>
+                <Col xs={ 9 } sm={ 8 }>
+                  <Label>Prize {index + 1}</Label>
+                  <Select 
+                    value={ item.prize }
+                    options={ prizeOptions }
+                    openMenuOnFocus={ false }
+                    onChange={ (prize) => props.updateItem(index, { ...item, prize }) }
+                  />
+                </Col>
+        
+                <Col xs={ 3 } sm={ 4 }>
+                  <Label>Qty</Label>
+                  <Input 
+                    type='number' 
+                    min={ 1 } 
+                    max={ max } 
+                    required
+                    value={ item.qty } 
+                    onChange={ (e) => props.updateItem(index, { ...item, qty: parseInt(e.target.value) || 1 }) } 
+                  />
+                  { max > 0 && !(item.prize && item.prize.one_per_user) && <div className='invalid-message'>1 - <NumberDisplay value={ max } /></div> }
+                  { one_per_user_invalid && <div className='invalid-message'>1 per soldier</div> }
+                </Col>
+              </Row>
+              
+              {items.length > 1 && (
+                <Row>
+                  <Col xs={12} className="text-end">
+                    <Button 
+                      color="danger" 
+                      size="sm" 
+                      onClick={() => props.removeItem(index)}
+                      className="mt-2"
+                    >
+                      Remove Item
+                    </Button>
+                  </Col>
+                </Row>
+              )}
+            </div>
+          );
+        })}
+        
+        <Row className="mb-3">
+          <Col xs={12} className="text-center">
+            <Button 
+              color="outline-primary" 
+              size="sm" 
+              onClick={props.addItem}
+            >
+              Add Another Item
+            </Button>
           </Col>
         </Row>
   
+        {exceedsMiles && (
+          <Row className="mb-3">
+            <Col xs={12}>
+              <div className="alert alert-danger">
+                <strong>Insufficient Miles:</strong> Total order cost ({total.toLocaleString()} miles) exceeds available miles ({store.miles.toLocaleString()} miles). 
+                Please reduce quantities or remove items.
+              </div>
+            </Col>
+          </Row>
+        )}
+        
         <Row id='total-row'>
           <Col xs={ 6 } sm={ 4 }>
             <Label>Soldier's Miles</Label>
