@@ -92,7 +92,7 @@ export class OrderForm extends Component {
                     max={ max } 
                     required
                     value={ item.qty } 
-                    onChange={ (e) => props.updateItem(index, { ...item, qty: parseInt(e.target.value) || 1 }) } 
+                    onChange={ (e) => props.updateItem(index, { ...item, qty: parseInt(e.target.value, 10) || 1 }) } 
                   />
                   { max > 0 && !(item.prize && item.prize.one_per_user) && <div className='invalid-message'>1 - <NumberDisplay value={ max } /></div> }
                   { one_per_user_invalid && <div className='invalid-message'>1 per soldier</div> }
