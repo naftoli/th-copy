@@ -195,6 +195,15 @@ export class ContactsTab extends Component {
     }));
   }
 
+  removeExtraPrincipal = (index) => {
+    this.setState(prev => ({
+      contacts: {
+        ...prev.contacts,
+        extra_principals: prev.contacts.extra_principals.filter((_, i) => i !== index)
+      }
+    }));
+  }
+
   saveNewExtraPrincipals = () => {
     const { contacts } = this.state;
     const newPrincipals = (contacts.extra_principals || []).filter(p => !p.id);
@@ -382,7 +391,7 @@ export class ContactsTab extends Component {
                 <Input value={this.state.contacts.principal.phone} onChange={e => this.setField('principal', 'phone', e.target.value)} />
               </Col>
               <Col sm={12} className="mb-3">
-                <label>Grades</label>
+                <label>Grades (Leave blank for all)</label>
                 <GradeSelect
                   isMulti
                   isClearable
@@ -404,6 +413,19 @@ export class ContactsTab extends Component {
             )}
             {this.state.contacts.extra_principals.map((p, idx) => (
               <div key={idx} className="border rounded p-3 mb-3">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <h6 className="mb-0">Additional Principal {idx + 1}</h6>
+                  {!p.id && (
+                    <Button 
+                      color="danger" 
+                      size="sm" 
+                      onClick={() => this.removeExtraPrincipal(idx)}
+                      className="btn-sm"
+                    >
+                      <i className="fa fa-trash"></i> Remove
+                    </Button>
+                  )}
+                </div>
                 <Row>
                   <Col sm={4} className="mb-3">
                     <label>Name</label>
@@ -419,7 +441,7 @@ export class ContactsTab extends Component {
                   </Col>
                   
                   <Col sm={12} className="mb-3">
-                    <label>Grades</label>
+                    <label>Grades (Leave blank for all)</label>
                     <GradeSelect
                       isMulti
                       isClearable
