@@ -434,6 +434,10 @@
                                         if (type === 'date') {
                                             val = toYyyyMmDd(val);
                                         }
+                                        // Ensure val is never null for input fields
+                                        if (val == null) {
+                                            val = '';
+                                        }
                                         if (readOnly) {
                                             return <td key={h}>{val}</td>;
                                         }
@@ -650,274 +654,9 @@
             );
         }
 
-        // Move DiscountForm outside to prevent re-renders
-        const DiscountForm = ({ 
-            discountForm,
-            setDiscountForm,
-            schools,
-            grades,
-            students,
-            addingDiscount,
-            discountMessage,
-            isDiscountFormOpen,
-            setIsDiscountFormOpen,
-            handleDiscountInputChange,
-            handleDiscountTypeChange,
-            handleDiscountSchoolChange,
-            handleGradeChange,
-            handleDiscountSubmit,
-            setDiscountMessage,
-            formData
-        }) => {
-            console.log('DiscountForm re-rendering');
-            return (
-                <>
-                    <Form onSubmit={handleDiscountSubmit}>
-                        <Row>
-                            <Col md={3} className="mb-3">
-                                <Form.Label>Type</Form.Label>
-                                <FormSelect
-                                    value={discountForm.discountType}
-                                    onChange={(e) => handleDiscountTypeChange(e.target.value)}
-                                >
-                                    <option value="base">Base</option>
-                                    <option value="soldier">Soldier</option>
-                                </FormSelect>
-                            </Col>
-                            <Col md={3} className="mb-3">
-                                <Form.Label>Year</Form.Label>
-                                <FormSelect
-                                    value={discountForm.year}
-                                    onChange={(e) => handleDiscountInputChange('year', e.target.value)}
-                                >
-                                    {([discountForm.year || formData.year].filter(Boolean)).map(y => (
-                                        <option key={y} value={y}>{y}</option>
-                                    ))}
-                                </FormSelect>
-                            </Col>
-                            <Col md={6} className="mb-3">
-                                <Form.Label>School</Form.Label>
-                                <FormSelect
-                                    value={discountForm.school}
-                                    onChange={(e) => handleDiscountSchoolChange(e.target.value)}
-                                >
-                                    <option value="0">Choose School</option>
-                                    {schools.map(s => (
-                                        <option key={s.id} value={s.id}>{s.name}</option>
-                                    ))}
-                                </FormSelect>
-                            </Col>
+        // Using external DiscountForm component
 
-                            {discountForm.discountType === 'soldier' && (
-                                <>
-                                    <Col md={3} className="mb-3">
-                                        <Form.Label>Grade</Form.Label>
-                                        <FormSelect
-                                            value={discountForm.grade}
-                                            onChange={(e) => handleGradeChange(e.target.value)}
-                                        >
-                                            <option value="">Choose Grade</option>
-                                            {grades.map(g => (
-                                                <option key={g} value={g}>{g}</option>
-                                            ))}
-                                        </FormSelect>
-                                    </Col>
-                                    <Col md={9} className="mb-3">
-                                        <Form.Label>Student Serial</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            value={discountForm.student}
-                                            onChange={(e) => handleDiscountInputChange('student', e.target.value)}
-                                            onFocus={(e) => console.log('Student input focused')}
-                                            onBlur={(e) => console.log('Student input blurred')}
-                                            placeholder="Enter student serial"
-                                        />
-                                    </Col>
-                                </>
-                            )}
-
-                            <Col md={4} className="mb-3">
-                                <Form.Label>Amount</Form.Label>
-                                <InputGroup>
-                                    <InputGroup.Text>$</InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        value={discountForm.amount}
-                                        onChange={(e) => handleDiscountInputChange('amount', e.target.value)}
-                                        onFocus={(e) => console.log('Amount input focused')}
-                                        onBlur={(e) => console.log('Amount input blurred')}
-                                        placeholder="0.00"
-                                    />
-                                </InputGroup>
-                            </Col>
-                            <Col md={4} className="mb-3">
-                                <Form.Label>Reason</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={discountForm.reason}
-                                    onChange={(e) => handleDiscountInputChange('reason', e.target.value)}
-                                    onFocus={(e) => console.log('Reason input focused')}
-                                    onBlur={(e) => console.log('Reason input blurred')}
-                                    placeholder="Reason for voucher"
-                                />
-                            </Col>
-                            <Col md={4} className="mb-3">
-                                <Form.Label>Created By</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={discountForm.created_by}
-                                    onChange={(e) => handleDiscountInputChange('created_by', e.target.value)}
-                                    onFocus={(e) => console.log('Created by input focused')}
-                                    onBlur={(e) => console.log('Created by input blurred')}
-                                    placeholder="Your name"
-                                />
-                            </Col>
-                        </Row>
-                        <div className="text-center">
-                            <Button type="submit" variant="primary" disabled={addingDiscount}>
-                                {addingDiscount ? (
-                                    <>
-                                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                        Processing...
-                                    </>
-                                ) : (
-                                    <>Create Voucher</>
-                                )}
-                            </Button>
-                        </div>
-                    </Form>
-
-                    {discountMessage && (
-                        <Alert 
-                            variant={discountMessage.type} 
-                            className="mt-3"
-                            onClose={() => setDiscountMessage('')}
-                            dismissible
-                        >
-                            {discountMessage.text}
-                        </Alert>
-                    )}
-                </>
-            );
-        };
-
-        // Move PaymentForm outside to prevent re-renders
-        const PaymentForm = ({ 
-            paymentForm, 
-            setPaymentForm, 
-            schools, 
-            addingPayment, 
-            paymentMessage, 
-            isPaymentFormOpen, 
-            setIsPaymentFormOpen,
-            handlePaymentInputChange,
-            handlePaymentSubmit,
-            setPaymentMessage,
-            paymentTypes,
-            paymentMethods
-        }) => (
-            <Card className="mb-4">
-                <Card.Header 
-                    className="accordion-toggle"
-                    onClick={() => setIsPaymentFormOpen(!isPaymentFormOpen)}
-                    style={{ cursor: 'pointer' }}
-                >
-                    <h5 className="mb-0 d-flex justify-content-between align-items-center">
-                        <span>
-                            <i className={'bi bi-chevron-' + (isPaymentFormOpen ? 'down' : 'right')}></i>
-                            {' '}Add Payment
-                        </span>
-                    </h5>
-                </Card.Header>
-                {isPaymentFormOpen && (
-                    <Card.Body>
-                        <Form onSubmit={handlePaymentSubmit}>
-                            <Row>
-                                <Col md={3} className="mb-3">
-                                    <Form.Label htmlFor="school_payment">School:</Form.Label>
-                                    <FormSelect
-                                        id="school_payment"
-                                        value={paymentForm.school}
-                                        onChange={(e) => handlePaymentInputChange('school', e.target.value)}
-                                    >
-                                        <option value="0">Choose School</option>
-                                        {schools.map(school => (
-                                            <option key={school.id} value={school.id}>{school.name}</option>
-                                        ))}
-                                    </FormSelect>
-                                </Col>
-                                <Col md={3} className="mb-3">
-                                    <Form.Label htmlFor="payment_type">Payment Type:</Form.Label>
-                                    <FormSelect
-                                        id="payment_type"
-                                        value={paymentForm.paymentType}
-                                        onChange={(e) => handlePaymentInputChange('paymentType', e.target.value)}
-                                    >
-                                        {paymentTypes.map(type => (
-                                            <option key={type.value} value={type.value}>{type.label}</option>
-                                        ))}
-                                    </FormSelect>
-                                </Col>
-                                <Col md={3} className="mb-3">
-                                    <Form.Label htmlFor="payment_method">Payment Method:</Form.Label>
-                                    <FormSelect
-                                        id="payment_method"
-                                        value={paymentForm.paymentMethod}
-                                        onChange={(e) => handlePaymentInputChange('paymentMethod', e.target.value)}
-                                    >
-                                        {paymentMethods.map(method => (
-                                            <option key={method.value} value={method.value}>{method.label}</option>
-                                        ))}
-                                    </FormSelect>
-                                </Col>
-                                <Col md={3} className="mb-3">
-                                    <Form.Label htmlFor="payment_amount">Amount:</Form.Label>
-                                    <InputGroup>
-                                        <InputGroup.Text>$</InputGroup.Text>
-                                        <Form.Control
-                                            type="text"
-                                            id="payment_amount"
-                                            placeholder="0.00"
-                                            value={paymentForm.amount}
-                                            onChange={(e) => handlePaymentInputChange('amount', e.target.value)}
-                                        />
-                                    </InputGroup>
-                                </Col>
-                            </Row>
-                            <div className="text-center">
-                                <Button 
-                                    type="submit" 
-                                    variant="primary"
-                                    disabled={addingPayment}
-                                >
-                                    {addingPayment ? (
-                                        <>
-                                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                            Processing...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <i className="bi bi-plus-circle"></i> Add Payment
-                                        </>
-                                    )}
-                                </Button>
-                            </div>
-                        </Form>
-                        
-                        {paymentMessage && (
-                            <Alert 
-                                variant={paymentMessage.type} 
-                                className="mt-3"
-                                onClose={() => setPaymentMessage('')}
-                                dismissible
-                            >
-                                {paymentMessage.text}
-                            </Alert>
-                        )}
-                    </Card.Body>
-                )}
-            </Card>
-        );
+        // Using external PaymentForm component
 
         function AccountingReportForm() {
             const [formData, setFormData] = useState({
@@ -1363,26 +1102,16 @@
             };
 
             // Memoized callbacks to prevent component recreation
-            const setPaymentFormCallback = React.useCallback((updater) => {
-                setPaymentForm(updater);
-            }, []);
 
-            const setIsPaymentFormOpenCallback = React.useCallback((value) => {
-                setIsPaymentFormOpen(value);
-            }, []);
-
-            const setPaymentMessageCallback = React.useCallback((message) => {
-                setPaymentMessage(message);
-            }, []);
 
             // Memoize schools array to prevent unnecessary re-renders
             const memoizedSchools = React.useMemo(() => schools, [schools]);
 
             // PaymentForm component moved outside to prevent re-renders
 
-            // Discount form state and handlers
+            // Discount form state and handlers - moved to external component
             const [discountForm, setDiscountForm] = useState({
-                discountType: 'base',
+                discountType: formData.reportType === 'soldier_discounts' ? 'soldier' : 'base',
                 year: formData.year || '',
                 school: '0',
                 grade: '',
@@ -1395,25 +1124,16 @@
             const [discountMessage, setDiscountMessage] = useState('');
             const [isDiscountFormOpen, setIsDiscountFormOpen] = useState(false);
             const [students, setStudents] = useState([]);
-            const grades = ['3', '4', '5', '6', '7', '8'];
+            const [availableGrades, setAvailableGrades] = useState([]);
 
-            // Create a stable version of discountForm that excludes input field values
-            const stableDiscountForm = React.useMemo(() => ({
-                discountType: discountForm.discountType,
-                year: discountForm.year,
-                school: discountForm.school,
-                grade: discountForm.grade
-                // Exclude input field values: amount, reason, created_by, student
-            }), [
-                discountForm.discountType,
-                discountForm.year,
-                discountForm.school,
-                discountForm.grade
-            ]);
-
+            // Discount form handlers
             const handleDiscountInputChange = React.useCallback((field, value) => {
-                console.log('Discount input change:', field, value);
-                setDiscountForm(prev => ({ ...prev, [field]: value }));
+                console.log('handleDiscountInputChange called:', field, value);
+                setDiscountForm(prev => {
+                    const newState = { ...prev, [field]: value };
+                    console.log('New discount form state:', newState);
+                    return newState;
+                });
             }, []);
 
             const handleDiscountTypeChange = React.useCallback((value) => {
@@ -1421,16 +1141,80 @@
             }, []);
 
             const handleDiscountSchoolChange = React.useCallback((value) => {
-                setDiscountForm(prev => ({ ...prev, school: value }));
-                // Optionally load students when soldier discount selected
-                // setStudents([]);
-            }, []);
+                setDiscountForm(prev => ({ ...prev, school: value, grade: '', student: '' }));
+                setStudents([]);
+                // Load grades for the selected school if it's a soldier discount
+                if (value !== '0' && discountForm.discountType === 'soldier') {
+                    loadGrades(value);
+                } else {
+                    setAvailableGrades([]);
+                }
+            }, [discountForm.discountType]);
 
             const handleGradeChange = React.useCallback((value) => {
-                setDiscountForm(prev => ({ ...prev, grade: value }));
-                // Optionally load students when grade changes
-                // setStudents([]);
+                setDiscountForm(prev => ({ ...prev, grade: value, student: '' }));
+                // Load students when grade changes
+                if (value && discountForm.school !== '0') {
+                    loadStudents(discountForm.school, value);
+                } else {
+                    setStudents([]);
+                }
+            }, [discountForm.school]);
+
+            const loadGrades = React.useCallback(async (schoolId) => {
+                try {
+                    const formData = new FormData();
+                    formData.append('school_id', schoolId);
+                    
+                    const response = await fetch('api/getGrades.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        setAvailableGrades(result.data);
+                    } else {
+                        setAvailableGrades([]);
+                    }
+                } catch (error) {
+                    console.error('Error loading grades:', error);
+                    setAvailableGrades([]);
+                }
             }, []);
+
+            const loadStudents = React.useCallback(async (schoolId, classId) => {
+                try {
+                    const formData = new FormData();
+                    formData.append('school_id', schoolId);
+                    formData.append('class_id', classId);
+                    
+                    const response = await fetch('api/getStudents.php', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const result = await response.json();
+                    if (result.success && result.data) {
+                        setStudents(result.data);
+                    } else {
+                        setStudents([]);
+                    }
+                } catch (error) {
+                    console.error('Error loading students:', error);
+                    setStudents([]);
+                }
+            }, []);
+
+            // Update discount type and year when report type changes
+            React.useEffect(() => {
+                const newDiscountType = formData.reportType === 'soldier_discounts' ? 'soldier' : 'base';
+                setDiscountForm(prev => ({ 
+                    ...prev, 
+                    discountType: newDiscountType,
+                    year: formData.year || prev.year 
+                }));
+            }, [formData.reportType, formData.year]);
 
             const handleDiscountSubmit = async (e) => {
                 e.preventDefault();
@@ -1458,6 +1242,11 @@
                         return;
                     }
 
+                    // Debug: Log the discountForm state
+                    console.log('Submitting discount form:', discountForm);
+                    console.log('Year value:', discountForm.year);
+                    console.log('formData.year:', formData.year);
+
                     const fd = new FormData();
                     fd.append('discount_type', discountForm.discountType);
                     fd.append('year', discountForm.year);
@@ -1484,12 +1273,6 @@
                             reason: '',
                             created_by: ''
                         }));
-                        // Removed automatic report regeneration to prevent input focus issues
-                        // if (reportData) {
-                        //     setTimeout(() => {
-                        //         handleSubmit(new Event('submit'));
-                        //     }, 1500);
-                        // }
                     } else {
                         setDiscountMessage({ type: 'danger', text: (result && (result.error || result.message)) || 'Failed to create voucher' });
                     }
@@ -1704,57 +1487,41 @@
 
                     {/* Add Payment Section - Only show for base reports */}
                     {formData.reportType === 'base' && reportData && (
-                        <Card className="mb-4">
-                            <Card.Header>
-                                <h6 className="mb-0">Add Payment</h6>
-                            </Card.Header>
-                            <Card.Body>
-                                <PaymentForm 
-                                    paymentForm={paymentForm}
-                                    setPaymentForm={setPaymentFormCallback}
-                                    schools={memoizedSchools}
-                                    addingPayment={addingPayment}
-                                    paymentMessage={paymentMessage}
-                                    isPaymentFormOpen={isPaymentFormOpen}
-                                    setIsPaymentFormOpen={setIsPaymentFormOpenCallback}
-                                    handlePaymentInputChange={handlePaymentInputChange}
-                                    handlePaymentSubmit={handlePaymentSubmit}
-                                    setPaymentMessage={setPaymentMessageCallback}
-                                    paymentTypes={paymentTypes}
-                                    paymentMethods={paymentMethods}
-                                />
-                            </Card.Body>
-                        </Card>
+                        <window.AppComponents.PaymentForm 
+                            paymentForm={paymentForm}
+                            setPaymentForm={setPaymentForm}
+                            schools={memoizedSchools}
+                            addingPayment={addingPayment}
+                            paymentMessage={paymentMessage}
+                            isPaymentFormOpen={isPaymentFormOpen}
+                            setIsPaymentFormOpen={setIsPaymentFormOpen}
+                            handlePaymentInputChange={handlePaymentInputChange}
+                            handlePaymentSubmit={handlePaymentSubmit}
+                            setPaymentMessage={setPaymentMessage}
+                            paymentTypes={paymentTypes}
+                            paymentMethods={paymentMethods}
+                        />
                     )}
 
                     {/* Add Voucher Section - Show for both base and soldier discount reports */}
                     {(formData.reportType === 'base_discounts' || formData.reportType === 'soldier_discounts') && reportData && (
-                        <Card className="mb-4">
-                            <Card.Header>
-                                <h6 className="mb-0">Add Voucher</h6>
-                            </Card.Header>
-                            <Card.Body>
-                                <DiscountForm 
-                                    key="discount-form-stable"
-                                    discountForm={discountForm}
-                                    setDiscountForm={setDiscountForm}
-                                    schools={memoizedSchools}
-                                    grades={grades}
-                                    students={students}
-                                    addingDiscount={addingDiscount}
-                                    discountMessage={discountMessage}
-                                    isDiscountFormOpen={isDiscountFormOpen}
-                                    setIsDiscountFormOpen={setIsDiscountFormOpen}
-                                    handleDiscountInputChange={handleDiscountInputChange}
-                                    handleDiscountTypeChange={handleDiscountTypeChange}
-                                    handleDiscountSchoolChange={handleDiscountSchoolChange}
-                                    handleGradeChange={handleGradeChange}
-                                    handleDiscountSubmit={handleDiscountSubmit}
-                                    setDiscountMessage={setDiscountMessage}
-                                    formData={formData}
-                                />
-                            </Card.Body>
-                        </Card>
+                        <window.AppComponents.DiscountForm 
+                            key="discount-form-stable"
+                            discountForm={discountForm}
+                            setDiscountForm={setDiscountForm}
+                            schools={memoizedSchools}
+                            students={students}
+                            addingDiscount={addingDiscount}
+                            discountMessage={discountMessage}
+                            handleDiscountInputChange={handleDiscountInputChange}
+                            handleDiscountTypeChange={handleDiscountTypeChange}
+                            handleDiscountSchoolChange={handleDiscountSchoolChange}
+                            handleGradeChange={handleGradeChange}
+                            handleDiscountSubmit={handleDiscountSubmit}
+                            setDiscountMessage={setDiscountMessage}
+                            formData={formData}
+                            availableGrades={availableGrades}
+                        />
                     )}
 
                     {/* Results Section - Only show when report data exists */}
