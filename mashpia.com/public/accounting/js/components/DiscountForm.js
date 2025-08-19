@@ -122,7 +122,6 @@
                     value={discountForm.amount}
                     onChange={(e) => handleDiscountInputChange('amount', e.target.value)}
                     placeholder="0.00"
-                    step="0.01"
                     min="0"
                     />
                 </InputGroup>
