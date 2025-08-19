@@ -566,7 +566,7 @@
                                 ))}
                             </>
                         )}
-                        <i className={`bi bi-chevron-${isOpen ? 'up' : 'down'} ms-auto`}></i>
+                        <i className={'bi bi-chevron-' + (isOpen ? 'up' : 'down') + ' ms-auto'}></i>
                     </div>
 
                     {isOpen && (
@@ -649,6 +649,275 @@
                 </div>
             );
         }
+
+        // Move DiscountForm outside to prevent re-renders
+        const DiscountForm = ({ 
+            discountForm,
+            setDiscountForm,
+            schools,
+            grades,
+            students,
+            addingDiscount,
+            discountMessage,
+            isDiscountFormOpen,
+            setIsDiscountFormOpen,
+            handleDiscountInputChange,
+            handleDiscountTypeChange,
+            handleDiscountSchoolChange,
+            handleGradeChange,
+            handleDiscountSubmit,
+            setDiscountMessage,
+            formData
+        }) => {
+            console.log('DiscountForm re-rendering');
+            return (
+                <>
+                    <Form onSubmit={handleDiscountSubmit}>
+                        <Row>
+                            <Col md={3} className="mb-3">
+                                <Form.Label>Type</Form.Label>
+                                <FormSelect
+                                    value={discountForm.discountType}
+                                    onChange={(e) => handleDiscountTypeChange(e.target.value)}
+                                >
+                                    <option value="base">Base</option>
+                                    <option value="soldier">Soldier</option>
+                                </FormSelect>
+                            </Col>
+                            <Col md={3} className="mb-3">
+                                <Form.Label>Year</Form.Label>
+                                <FormSelect
+                                    value={discountForm.year}
+                                    onChange={(e) => handleDiscountInputChange('year', e.target.value)}
+                                >
+                                    {([discountForm.year || formData.year].filter(Boolean)).map(y => (
+                                        <option key={y} value={y}>{y}</option>
+                                    ))}
+                                </FormSelect>
+                            </Col>
+                            <Col md={6} className="mb-3">
+                                <Form.Label>School</Form.Label>
+                                <FormSelect
+                                    value={discountForm.school}
+                                    onChange={(e) => handleDiscountSchoolChange(e.target.value)}
+                                >
+                                    <option value="0">Choose School</option>
+                                    {schools.map(s => (
+                                        <option key={s.id} value={s.id}>{s.name}</option>
+                                    ))}
+                                </FormSelect>
+                            </Col>
+
+                            {discountForm.discountType === 'soldier' && (
+                                <>
+                                    <Col md={3} className="mb-3">
+                                        <Form.Label>Grade</Form.Label>
+                                        <FormSelect
+                                            value={discountForm.grade}
+                                            onChange={(e) => handleGradeChange(e.target.value)}
+                                        >
+                                            <option value="">Choose Grade</option>
+                                            {grades.map(g => (
+                                                <option key={g} value={g}>{g}</option>
+                                            ))}
+                                        </FormSelect>
+                                    </Col>
+                                    <Col md={9} className="mb-3">
+                                        <Form.Label>Student Serial</Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            value={discountForm.student}
+                                            onChange={(e) => handleDiscountInputChange('student', e.target.value)}
+                                            onFocus={(e) => console.log('Student input focused')}
+                                            onBlur={(e) => console.log('Student input blurred')}
+                                            placeholder="Enter student serial"
+                                        />
+                                    </Col>
+                                </>
+                            )}
+
+                            <Col md={4} className="mb-3">
+                                <Form.Label>Amount</Form.Label>
+                                <InputGroup>
+                                    <InputGroup.Text>$</InputGroup.Text>
+                                    <Form.Control
+                                        type="text"
+                                        value={discountForm.amount}
+                                        onChange={(e) => handleDiscountInputChange('amount', e.target.value)}
+                                        onFocus={(e) => console.log('Amount input focused')}
+                                        onBlur={(e) => console.log('Amount input blurred')}
+                                        placeholder="0.00"
+                                    />
+                                </InputGroup>
+                            </Col>
+                            <Col md={4} className="mb-3">
+                                <Form.Label>Reason</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={discountForm.reason}
+                                    onChange={(e) => handleDiscountInputChange('reason', e.target.value)}
+                                    onFocus={(e) => console.log('Reason input focused')}
+                                    onBlur={(e) => console.log('Reason input blurred')}
+                                    placeholder="Reason for voucher"
+                                />
+                            </Col>
+                            <Col md={4} className="mb-3">
+                                <Form.Label>Created By</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    value={discountForm.created_by}
+                                    onChange={(e) => handleDiscountInputChange('created_by', e.target.value)}
+                                    onFocus={(e) => console.log('Created by input focused')}
+                                    onBlur={(e) => console.log('Created by input blurred')}
+                                    placeholder="Your name"
+                                />
+                            </Col>
+                        </Row>
+                        <div className="text-center">
+                            <Button type="submit" variant="primary" disabled={addingDiscount}>
+                                {addingDiscount ? (
+                                    <>
+                                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                        Processing...
+                                    </>
+                                ) : (
+                                    <>Create Voucher</>
+                                )}
+                            </Button>
+                        </div>
+                    </Form>
+
+                    {discountMessage && (
+                        <Alert 
+                            variant={discountMessage.type} 
+                            className="mt-3"
+                            onClose={() => setDiscountMessage('')}
+                            dismissible
+                        >
+                            {discountMessage.text}
+                        </Alert>
+                    )}
+                </>
+            );
+        };
+
+        // Move PaymentForm outside to prevent re-renders
+        const PaymentForm = ({ 
+            paymentForm, 
+            setPaymentForm, 
+            schools, 
+            addingPayment, 
+            paymentMessage, 
+            isPaymentFormOpen, 
+            setIsPaymentFormOpen,
+            handlePaymentInputChange,
+            handlePaymentSubmit,
+            setPaymentMessage,
+            paymentTypes,
+            paymentMethods
+        }) => (
+            <Card className="mb-4">
+                <Card.Header 
+                    className="accordion-toggle"
+                    onClick={() => setIsPaymentFormOpen(!isPaymentFormOpen)}
+                    style={{ cursor: 'pointer' }}
+                >
+                    <h5 className="mb-0 d-flex justify-content-between align-items-center">
+                        <span>
+                            <i className={'bi bi-chevron-' + (isPaymentFormOpen ? 'down' : 'right')}></i>
+                            {' '}Add Payment
+                        </span>
+                    </h5>
+                </Card.Header>
+                {isPaymentFormOpen && (
+                    <Card.Body>
+                        <Form onSubmit={handlePaymentSubmit}>
+                            <Row>
+                                <Col md={3} className="mb-3">
+                                    <Form.Label htmlFor="school_payment">School:</Form.Label>
+                                    <FormSelect
+                                        id="school_payment"
+                                        value={paymentForm.school}
+                                        onChange={(e) => handlePaymentInputChange('school', e.target.value)}
+                                    >
+                                        <option value="0">Choose School</option>
+                                        {schools.map(school => (
+                                            <option key={school.id} value={school.id}>{school.name}</option>
+                                        ))}
+                                    </FormSelect>
+                                </Col>
+                                <Col md={3} className="mb-3">
+                                    <Form.Label htmlFor="payment_type">Payment Type:</Form.Label>
+                                    <FormSelect
+                                        id="payment_type"
+                                        value={paymentForm.paymentType}
+                                        onChange={(e) => handlePaymentInputChange('paymentType', e.target.value)}
+                                    >
+                                        {paymentTypes.map(type => (
+                                            <option key={type.value} value={type.value}>{type.label}</option>
+                                        ))}
+                                    </FormSelect>
+                                </Col>
+                                <Col md={3} className="mb-3">
+                                    <Form.Label htmlFor="payment_method">Payment Method:</Form.Label>
+                                    <FormSelect
+                                        id="payment_method"
+                                        value={paymentForm.paymentMethod}
+                                        onChange={(e) => handlePaymentInputChange('paymentMethod', e.target.value)}
+                                    >
+                                        {paymentMethods.map(method => (
+                                            <option key={method.value} value={method.value}>{method.label}</option>
+                                        ))}
+                                    </FormSelect>
+                                </Col>
+                                <Col md={3} className="mb-3">
+                                    <Form.Label htmlFor="payment_amount">Amount:</Form.Label>
+                                    <InputGroup>
+                                        <InputGroup.Text>$</InputGroup.Text>
+                                        <Form.Control
+                                            type="text"
+                                            id="payment_amount"
+                                            placeholder="0.00"
+                                            value={paymentForm.amount}
+                                            onChange={(e) => handlePaymentInputChange('amount', e.target.value)}
+                                        />
+                                    </InputGroup>
+                                </Col>
+                            </Row>
+                            <div className="text-center">
+                                <Button 
+                                    type="submit" 
+                                    variant="primary"
+                                    disabled={addingPayment}
+                                >
+                                    {addingPayment ? (
+                                        <>
+                                            <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                            Processing...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="bi bi-plus-circle"></i> Add Payment
+                                        </>
+                                    )}
+                                </Button>
+                            </div>
+                        </Form>
+                        
+                        {paymentMessage && (
+                            <Alert 
+                                variant={paymentMessage.type} 
+                                className="mt-3"
+                                onClose={() => setPaymentMessage('')}
+                                dismissible
+                            >
+                                {paymentMessage.text}
+                            </Alert>
+                        )}
+                    </Card.Body>
+                )}
+            </Card>
+        );
 
         function AccountingReportForm() {
             const [formData, setFormData] = useState({
@@ -1109,123 +1378,7 @@
             // Memoize schools array to prevent unnecessary re-renders
             const memoizedSchools = React.useMemo(() => schools, [schools]);
 
-            // Payment form component - memoized to prevent recreation
-            const PaymentForm = React.memo(({ 
-                paymentForm, 
-                setPaymentForm, 
-                schools, 
-                addingPayment, 
-                paymentMessage, 
-                isPaymentFormOpen, 
-                setIsPaymentFormOpen,
-                handlePaymentInputChange,
-                handlePaymentSubmit,
-                setPaymentMessage,
-                paymentTypes,
-                paymentMethods
-            }) => (
-                <Card className="mb-4">
-                    <Card.Header 
-                        className="accordion-toggle"
-                        onClick={() => setIsPaymentFormOpen(!isPaymentFormOpen)}
-                        style={{ cursor: 'pointer' }}
-                    >
-                        <h5 className="mb-0 d-flex justify-content-between align-items-center">
-                            <span>
-                                <i className={`bi bi-chevron-${isPaymentFormOpen ? 'down' : 'right'}`}></i>
-                                {' '}Add Payment
-                            </span>
-                        </h5>
-                    </Card.Header>
-                    {isPaymentFormOpen && (
-                        <Card.Body>
-                            <Form onSubmit={handlePaymentSubmit}>
-                                <Row>
-                                    <Col md={3} className="mb-3">
-                                        <Form.Label htmlFor="school_payment">School:</Form.Label>
-                                        <FormSelect
-                                            id="school_payment"
-                                            value={paymentForm.school}
-                                            onChange={(e) => handlePaymentInputChange('school', e.target.value)}
-                                        >
-                                            <option value="0">Choose School</option>
-                                            {schools.map(school => (
-                                                <option key={school.id} value={school.id}>{school.name}</option>
-                                            ))}
-                                        </FormSelect>
-                                    </Col>
-                                    <Col md={3} className="mb-3">
-                                        <Form.Label htmlFor="payment_type">Payment Type:</Form.Label>
-                                        <FormSelect
-                                            id="payment_type"
-                                            value={paymentForm.paymentType}
-                                            onChange={(e) => handlePaymentInputChange('paymentType', e.target.value)}
-                                        >
-                                            {paymentTypes.map(type => (
-                                                <option key={type.value} value={type.value}>{type.label}</option>
-                                            ))}
-                                        </FormSelect>
-                                    </Col>
-                                    <Col md={3} className="mb-3">
-                                        <Form.Label htmlFor="payment_method">Payment Method:</Form.Label>
-                                        <FormSelect
-                                            id="payment_method"
-                                            value={paymentForm.paymentMethod}
-                                            onChange={(e) => handlePaymentInputChange('paymentMethod', e.target.value)}
-                                        >
-                                            {paymentMethods.map(method => (
-                                                <option key={method.value} value={method.value}>{method.label}</option>
-                                            ))}
-                                        </FormSelect>
-                                    </Col>
-                                    <Col md={3} className="mb-3">
-                                        <Form.Label htmlFor="payment_amount">Amount:</Form.Label>
-                                        <InputGroup>
-                                            <InputGroup.Text>$</InputGroup.Text>
-                                            <Form.Control
-                                                type="text"
-                                                id="payment_amount"
-                                                placeholder="0.00"
-                                                value={paymentForm.amount}
-                                                onChange={(e) => handlePaymentInputChange('amount', e.target.value)}
-                                            />
-                                        </InputGroup>
-                                    </Col>
-                                </Row>
-                                <div className="text-center">
-                                    <Button 
-                                        type="submit" 
-                                        variant="primary"
-                                        disabled={addingPayment}
-                                    >
-                                        {addingPayment ? (
-                                            <>
-                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                                Processing...
-                                            </>
-                                        ) : (
-                                            <>
-                                                <i className="bi bi-plus-circle"></i> Add Payment
-                                            </>
-                                        )}
-                                    </Button>
-                                </div>
-                            </Form>
-                            
-                            {paymentMessage && (
-                                <Alert 
-                                    variant={paymentMessage.type} 
-                                    className="mt-3"
-                                    onClose={() => setPaymentMessage('')}
-                                    dismissible
-                                >
-                                    {paymentMessage.text}
-                                </Alert>
-                            )}
-                        </Card.Body>
-                    )}
-                </Card>
-            ));
+            // PaymentForm component moved outside to prevent re-renders
 
             // Discount form state and handlers
             const [discountForm, setDiscountForm] = useState({
@@ -1244,39 +1397,40 @@
             const [students, setStudents] = useState([]);
             const grades = ['3', '4', '5', '6', '7', '8'];
 
-            // Keep discount year in sync with main year
-            useEffect(() => {
-                setDiscountForm(prev => ({ ...prev, year: formData.year || prev.year }));
-            }, [formData.year]);
+            // Create a stable version of discountForm that excludes input field values
+            const stableDiscountForm = React.useMemo(() => ({
+                discountType: discountForm.discountType,
+                year: discountForm.year,
+                school: discountForm.school,
+                grade: discountForm.grade
+                // Exclude input field values: amount, reason, created_by, student
+            }), [
+                discountForm.discountType,
+                discountForm.year,
+                discountForm.school,
+                discountForm.grade
+            ]);
 
-            // Auto-select discount type based on selected report
-            useEffect(() => {
-                if (formData.reportType === 'base_discounts') {
-                    setDiscountForm(prev => ({ ...prev, discountType: 'base' }));
-                } else if (formData.reportType === 'soldier_discounts') {
-                    setDiscountForm(prev => ({ ...prev, discountType: 'soldier' }));
-                }
-            }, [formData.reportType]);
-
-            const handleDiscountInputChange = (field, value) => {
+            const handleDiscountInputChange = React.useCallback((field, value) => {
+                console.log('Discount input change:', field, value);
                 setDiscountForm(prev => ({ ...prev, [field]: value }));
-            };
+            }, []);
 
-            const handleDiscountTypeChange = (value) => {
+            const handleDiscountTypeChange = React.useCallback((value) => {
                 setDiscountForm(prev => ({ ...prev, discountType: value }));
-            };
+            }, []);
 
-            const handleDiscountSchoolChange = (value) => {
+            const handleDiscountSchoolChange = React.useCallback((value) => {
                 setDiscountForm(prev => ({ ...prev, school: value }));
                 // Optionally load students when soldier discount selected
                 // setStudents([]);
-            };
+            }, []);
 
-            const handleGradeChange = (value) => {
+            const handleGradeChange = React.useCallback((value) => {
                 setDiscountForm(prev => ({ ...prev, grade: value }));
                 // Optionally load students when grade changes
                 // setStudents([]);
-            };
+            }, []);
 
             const handleDiscountSubmit = async (e) => {
                 e.preventDefault();
@@ -1330,11 +1484,12 @@
                             reason: '',
                             created_by: ''
                         }));
-                        if (reportData) {
-                            setTimeout(() => {
-                                handleSubmit(new Event('submit'));
-                            }, 1500);
-                        }
+                        // Removed automatic report regeneration to prevent input focus issues
+                        // if (reportData) {
+                        //     setTimeout(() => {
+                        //         handleSubmit(new Event('submit'));
+                        //     }, 1500);
+                        // }
                     } else {
                         setDiscountMessage({ type: 'danger', text: (result && (result.error || result.message)) || 'Failed to create voucher' });
                     }
@@ -1345,144 +1500,7 @@
                 }
             };
 
-            // Inline DiscountForm component
-            const DiscountForm = React.memo(({ 
-                discountForm,
-                setDiscountForm,
-                schools,
-                grades,
-                students,
-                addingDiscount,
-                discountMessage,
-                isDiscountFormOpen,
-                setIsDiscountFormOpen,
-                handleDiscountInputChange,
-                handleDiscountTypeChange,
-                handleDiscountSchoolChange,
-                handleGradeChange,
-                handleDiscountSubmit,
-                setDiscountMessage
-            }) => (
-                <>
-                    <Form onSubmit={handleDiscountSubmit}>
-                        <Row>
-                            <Col md={3} className="mb-3">
-                                <Form.Label>Type</Form.Label>
-                                <FormSelect
-                                    value={discountForm.discountType}
-                                    onChange={(e) => handleDiscountTypeChange(e.target.value)}
-                                >
-                                    <option value="base">Base</option>
-                                    <option value="soldier">Soldier</option>
-                                </FormSelect>
-                            </Col>
-                            <Col md={3} className="mb-3">
-                                <Form.Label>Year</Form.Label>
-                                <FormSelect
-                                    value={discountForm.year}
-                                    onChange={(e) => handleDiscountInputChange('year', e.target.value)}
-                                >
-                                    {([discountForm.year || formData.year].filter(Boolean)).map(y => (
-                                        <option key={y} value={y}>{y}</option>
-                                    ))}
-                                </FormSelect>
-                            </Col>
-                            <Col md={6} className="mb-3">
-                                <Form.Label>School</Form.Label>
-                                <FormSelect
-                                    value={discountForm.school}
-                                    onChange={(e) => handleDiscountSchoolChange(e.target.value)}
-                                >
-                                    <option value="0">Choose School</option>
-                                    {schools.map(s => (
-                                        <option key={s.id} value={s.id}>{s.name}</option>
-                                    ))}
-                                </FormSelect>
-                            </Col>
-
-                            {discountForm.discountType === 'soldier' && (
-                                <>
-                                    <Col md={3} className="mb-3">
-                                        <Form.Label>Grade</Form.Label>
-                                        <FormSelect
-                                            value={discountForm.grade}
-                                            onChange={(e) => handleGradeChange(e.target.value)}
-                                        >
-                                            <option value="">Choose Grade</option>
-                                            {grades.map(g => (
-                                                <option key={g} value={g}>{g}</option>
-                                            ))}
-                                        </FormSelect>
-                                    </Col>
-                                    <Col md={9} className="mb-3">
-                                        <Form.Label>Student Serial</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            value={discountForm.student}
-                                            onChange={(e) => handleDiscountInputChange('student', e.target.value)}
-                                            placeholder="Enter student serial"
-                                        />
-                                    </Col>
-                                </>
-                            )}
-
-                            <Col md={4} className="mb-3">
-                                <Form.Label>Amount</Form.Label>
-                                <InputGroup>
-                                    <InputGroup.Text>$</InputGroup.Text>
-                                    <Form.Control
-                                        type="text"
-                                        value={discountForm.amount}
-                                        onChange={(e) => handleDiscountInputChange('amount', e.target.value)}
-                                        placeholder="0.00"
-                                    />
-                                </InputGroup>
-                            </Col>
-                            <Col md={4} className="mb-3">
-                                <Form.Label>Reason</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={discountForm.reason}
-                                    onChange={(e) => handleDiscountInputChange('reason', e.target.value)}
-                                    placeholder="Reason for voucher"
-                                />
-                            </Col>
-                            <Col md={4} className="mb-3">
-                                <Form.Label>Created By</Form.Label>
-                                <Form.Control
-                                    type="text"
-                                    value={discountForm.created_by}
-                                    onChange={(e) => handleDiscountInputChange('created_by', e.target.value)}
-                                    placeholder="Your name"
-                                />
-                            </Col>
-                        </Row>
-                        <div className="text-center">
-                            <Button type="submit" variant="primary" disabled={addingDiscount}>
-                                {addingDiscount ? (
-                                    <>
-                                        <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                        Processing...
-                                    </>
-                                ) : (
-                                    <>Create Voucher</>
-                                )}
-                            </Button>
-                        </div>
-                    </Form>
-
-                    {discountMessage && (
-                        <Alert 
-                            variant={discountMessage.type} 
-                            className="mt-3"
-                            onClose={() => setDiscountMessage('')}
-                            dismissible
-                        >
-                            {discountMessage.text}
-                        </Alert>
-                    )}
-                </>
-            ));
+            // DiscountForm component moved outside to prevent re-renders
 
             if (loading) {
                 return (
@@ -1525,7 +1543,7 @@
                         >
                             <h5 className="mb-0 d-flex justify-content-between align-items-center">
                                 <span>
-                                    <i className={`bi bi-chevron-${isFormExpanded ? 'down' : 'right'}`}></i>
+                                    <i className={'bi bi-chevron-' + (isFormExpanded ? 'down' : 'right')}></i>
                                     {' '}Report Configuration
                                 </span>
                             </h5>
@@ -1533,67 +1551,127 @@
                         {isFormExpanded && (
                             <Card.Body>
                                 <Form onSubmit={handleSubmit}>
-                                        <Row>
-                                            <Col md={6}>
-                                                <div className="mb-3">
-                                                    <Form.Label htmlFor="year">Year</Form.Label>
-                                                    <FormSelect
-                                                        id="year" 
-                                                        value={formData.year}
-                                                        onChange={(e) => handleInputChange('year', e.target.value)}
-                                                    >
-                                                        {years.map(year => (
-                                                            <option key={year} value={year}>{year}</option>
-                                                        ))}
-                                                    </FormSelect>
-                                                </div>
-                                            </Col>
-                                        </Row>
+                                    <Row>
+                                        <Col md={6}>
+                                            <div className="mb-3">
+                                                <Form.Label htmlFor="year">Year</Form.Label>
+                                                <FormSelect
+                                                    id="year" 
+                                                    value={formData.year}
+                                                    onChange={(e) => handleInputChange('year', e.target.value)}
+                                                >
+                                                    {years.map(year => (
+                                                        <option key={year} value={year}>{year}</option>
+                                                    ))}
+                                                </FormSelect>
+                                            </div>
+                                        </Col>
+                                    </Row>
 
-                                        <Row>
-                                            <Col md={6}>
-                                                <Card className="mb-3">
-                                                    <Card.Header>
-                                                        <h5 className="mb-0">Select Schools</h5>
-                                                    </Card.Header>
-                                                    <Card.Body>
-                                                        <Form.Label>Choose Schools for Report</Form.Label>
-                                                        {(window.AppComponents && window.AppComponents.MultiSelect) ? (
-                                                            <window.AppComponents.MultiSelect
+                                    <Row>
+                                        <Col md={6}>
+                                            <Card className="mb-3">
+                                                <Card.Header>
+                                                    <h5 className="mb-0">Select Schools</h5>
+                                                </Card.Header>
+                                                <Card.Body>
+                                                    <Form.Label>Choose Schools for Report</Form.Label>
+                                                    {(window.AppComponents && window.AppComponents.MultiSelect) ? (
+                                                        <window.AppComponents.MultiSelect
+                                                        options={schools}
+                                                        selectedValues={formData.schools}
+                                                        onChange={handleSchoolChange}
+                                                        placeholder="Select schools..."
+                                                    />
+                                                    ) : (
+                                                        <InlineMultiSelect
                                                             options={schools}
                                                             selectedValues={formData.schools}
                                                             onChange={handleSchoolChange}
                                                             placeholder="Select schools..."
                                                         />
-                                                        ) : (
-                                                            <InlineMultiSelect
-                                                                options={schools}
-                                                                selectedValues={formData.schools}
-                                                                onChange={handleSchoolChange}
-                                                                placeholder="Select schools..."
-                                                            />
-                                                        )}
-                                                        <Form.Text>
-                                                            Selected: {formData.schools.length} of {schools.length} schools
-                                                        </Form.Text>
-                                                    </Card.Body>
-                                                </Card>
+                                                    )}
+                                                    <Form.Text>
+                                                        Selected: {formData.schools.length} of {schools.length} schools
+                                                    </Form.Text>
+                                                </Card.Body>
+                                            </Card>
 
+                                            <Card className="mb-3">
+                                                <Card.Header>
+                                                    <h5 className="mb-0">Report Type</h5>
+                                                </Card.Header>
+                                                <Card.Body>
+                                                    <Row>
+                                                        {Object.entries(reportTypes).map(([key, label]) => (
+                                                            <Col md={6} key={key} className="mb-2">
+                                                                <FormCheck
+                                                                    type="radio"
+                                                                    name="report_type"
+                                                                    id={`report_type_${key}`}
+                                                                    value={key}
+                                                                    checked={formData.reportType === key}
+                                                                    onChange={(e) => handleInputChange('reportType', e.target.value)}
+                                                                    label={label}
+                                                                />
+                                                            </Col>
+                                                        ))}
+                                                    </Row>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+
+                                        <Col md={6}>
+                                            {showOptionsForReportType(formData.reportType) && (
                                                 <Card className="mb-3">
                                                     <Card.Header>
-                                                        <h5 className="mb-0">Report Type</h5>
+                                                        <div className="d-flex justify-content-between align-items-center">
+                                                            <h5 className="mb-0">
+                                                                {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Options 
+                                                                (For {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Report)
+                                                            </h5>
+                                                            <Button
+                                                                variant="outline-secondary"
+                                                                size="sm"
+                                                                onClick={() => {
+                                                                    const optionsKey = formData.reportType + 'Options';
+                                                                    const currentOptions = formData[optionsKey];
+                                                                    const allOptions = Object.keys(getOptionsForReportType(formData.reportType));
+                                                                    
+                                                                    if (currentOptions.length === allOptions.length) {
+                                                                        // Deselect all
+                                                                        handleOptionChange(optionsKey, '', false);
+                                                                        setFormData(prev => ({
+                                                                            ...prev,
+                                                                            [optionsKey]: []
+                                                                        }));
+                                                                    } else {
+                                                                        // Select all
+                                                                        setFormData(prev => ({
+                                                                            ...prev,
+                                                                            [optionsKey]: allOptions
+                                                                        }));
+                                                                    }
+                                                                }}
+                                                            >
+                                                                {formData[formData.reportType + 'Options'].length === Object.keys(getOptionsForReportType(formData.reportType)).length ? 'Uncheck All' : 'Check All'}
+                                                            </Button>
+                                                        </div>
                                                     </Card.Header>
                                                     <Card.Body>
                                                         <Row>
-                                                            {Object.entries(reportTypes).map(([key, label]) => (
+                                                            {Object.entries(getOptionsForReportType(formData.reportType)).map(([key, label]) => (
                                                                 <Col md={6} key={key} className="mb-2">
                                                                     <FormCheck
-                                                                        type="radio"
-                                                                        name="report_type"
-                                                                        id={`report_type_${key}`}
+                                                                        type="checkbox"
+                                                                        id={`${formData.reportType}_option_${key}`}
                                                                         value={key}
-                                                                        checked={formData.reportType === key}
-                                                                        onChange={(e) => handleInputChange('reportType', e.target.value)}
+                                                                        checked={formData[formData.reportType + 'Options'].includes(key)}
+                                                                        onChange={(e) => handleOptionChange(
+                                                                            formData.reportType + 'Options', 
+                                                                            key, 
+                                                                            e.target.checked
+                                                                        )}
                                                                         label={label}
                                                                     />
                                                                 </Col>
@@ -1601,88 +1679,28 @@
                                                         </Row>
                                                     </Card.Body>
                                                 </Card>
-                                            </Col>
-
-                                            <Col md={6}>
-                                                {showOptionsForReportType(formData.reportType) && (
-                                                    <Card className="mb-3">
-                                                        <Card.Header>
-                                                            <div className="d-flex justify-content-between align-items-center">
-                                                                <h5 className="mb-0">
-                                                                    {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Options 
-                                                                    (For {formData.reportType.charAt(0).toUpperCase() + formData.reportType.slice(1)} Report)
-                                                                </h5>
-                                                                <Button
-                                                                    variant="outline-secondary"
-                                                                    size="sm"
-                                                                    onClick={() => {
-                                                                        const optionsKey = formData.reportType + 'Options';
-                                                                        const currentOptions = formData[optionsKey];
-                                                                        const allOptions = Object.keys(getOptionsForReportType(formData.reportType));
-                                                                        
-                                                                        if (currentOptions.length === allOptions.length) {
-                                                                            // Deselect all
-                                                                            handleOptionChange(optionsKey, '', false);
-                                                                            setFormData(prev => ({
-                                                                                ...prev,
-                                                                                [optionsKey]: []
-                                                                            }));
-                                                                        } else {
-                                                                            // Select all
-                                                                            setFormData(prev => ({
-                                                                                ...prev,
-                                                                                [optionsKey]: allOptions
-                                                                            }));
-                                                                        }
-                                                                    }}
-                                                                >
-                                                                    {formData[formData.reportType + 'Options'].length === Object.keys(getOptionsForReportType(formData.reportType)).length ? 'Uncheck All' : 'Check All'}
-                                                                </Button>
-                                                            </div>
-                                                        </Card.Header>
-                                                        <Card.Body>
-                                                            <Row>
-                                                                {Object.entries(getOptionsForReportType(formData.reportType)).map(([key, label]) => (
-                                                                    <Col md={6} key={key} className="mb-2">
-                                                                        <FormCheck
-                                                                            type="checkbox"
-                                                                            id={`${formData.reportType}_option_${key}`}
-                                                                            value={key}
-                                                                            checked={formData[formData.reportType + 'Options'].includes(key)}
-                                                                            onChange={(e) => handleOptionChange(
-                                                                                formData.reportType + 'Options', 
-                                                                                key, 
-                                                                                e.target.checked
-                                                                            )}
-                                                                            label={label}
-                                                                        />
-                                                                    </Col>
-                                                                ))}
-                                                            </Row>
-                                                        </Card.Body>
-                                                    </Card>
-                                                )}
-                                            </Col>
-                                        </Row>
-
-                                        <Button 
-                                            type="submit" 
-                                            variant="primary" 
-                                            disabled={generatingReport}
-                                        >
-                                            {generatingReport ? (
-                                                <>
-                                                    <span className="spinner-border spinner-border-sm me-2" role="status"></span>
-                                                    Generating Report...
-                                                </>
-                                            ) : (
-                                                'Generate Report'
                                             )}
-                                        </Button>
-                                    </Form>
-                                </Card.Body>
-                            )}
-                        </Card>
+                                        </Col>
+                                    </Row>
+
+                                    <Button 
+                                        type="submit" 
+                                        variant="primary" 
+                                        disabled={generatingReport}
+                                    >
+                                        {generatingReport ? (
+                                            <>
+                                                <span className="spinner-border spinner-border-sm me-2" role="status"></span>
+                                                Generating Report...
+                                            </>
+                                        ) : (
+                                            'Generate Report'
+                                        )}
+                                    </Button>
+                                </Form>
+                            </Card.Body>
+                        )}
+                    </Card>
 
                     {/* Add Payment Section - Only show for base reports */}
                     {formData.reportType === 'base' && reportData && (
@@ -1717,6 +1735,7 @@
                             </Card.Header>
                             <Card.Body>
                                 <DiscountForm 
+                                    key="discount-form-stable"
                                     discountForm={discountForm}
                                     setDiscountForm={setDiscountForm}
                                     schools={memoizedSchools}
@@ -1732,6 +1751,7 @@
                                     handleGradeChange={handleGradeChange}
                                     handleDiscountSubmit={handleDiscountSubmit}
                                     setDiscountMessage={setDiscountMessage}
+                                    formData={formData}
                                 />
                             </Card.Body>
                         </Card>
@@ -1794,10 +1814,10 @@
                     )}
                 </Container>
             );
-        }
+        };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<AccountingReportForm />);
     </script>
 </body>
-</html> 
+</html>
