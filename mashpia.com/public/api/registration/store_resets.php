@@ -11,9 +11,9 @@ $info = [
     ],
     [
         'title' => 'The beginning of the school year',
-        'date'  => 'Tuesday September 23rd, 2025',
-        'jd'    => gregoriantojd(9, 23, 2025),
-        'hDate' => 'Rosh Hashanah, 5786'
+        'date'  => 'Friday September 5th, 2025',
+        'jd'    => gregoriantojd(9, 5, 2025),
+        'hDate' => 'Yud Beis Elul, 5785'
     ]
 ];
 
