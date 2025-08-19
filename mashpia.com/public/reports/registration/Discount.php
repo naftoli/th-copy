@@ -1,25 +1,25 @@
 <?php
-abstract class DiscountBase {
-    public function __construct($year, $amount, $reason, $created_by, $used = null, $created = '') {
+abstract class DiscountBase 
+{
+    public function __construct($year, $amount, $reason, $created_by) {
         $this->year = $year;
         $this->amount = $amount;
         $this->reason = $reason;
         $this->created_by = $created_by;
-        $this->used = $used;
-        $this->created = $created;
     }
-    abstract public function createDiscountCoupon();
+
+    abstract public function createDiscountCoupon($db);
 }
 
 class SchoolDiscount extends DiscountBase
 {
-    public function __construct($year, $school_id, $amount, $reason, $created_by, $used = null, $created = '') {
-        parent::__construct($year, $amount, $reason, $created_by, $used, $created);
+    public function __construct($year, $school_id, $amount, $reason, $created_by) {
+        parent::__construct($year, $amount, $reason, $created_by);
         $this->school_id = $school_id;
     }
 
-    public function createDiscountCoupon() {
-        $stmt = $this->db->prepare("
+    public function createDiscountCoupon($db) {
+        $stmt = $db->prepare("
             INSERT INTO discounts 
             SET year = :year, 
                 school_id = :school, 
@@ -40,13 +40,13 @@ class SchoolDiscount extends DiscountBase
 
 class StudentDiscount extends DiscountBase
 {
-    public function __construct($year, $user_id, $amount, $reason, $created_by, $used = null, $created = '') {
-        parent::__construct($year, $amount, $reason, $created_by, $used, $created);
+    public function __construct($year, $user_id, $amount, $reason, $created_by) {
+        parent::__construct($year, $amount, $reason, $created_by);
         $this->user_id = $user_id;
     }
 
-    public function createDiscountCoupon() {
-        $stmt = $this->db->prepare("
+    public function createDiscountCoupon($db) {
+        $stmt = $db->prepare("
             INSERT INTO discounts 
             SET year = :year, 
                 user_id = :user, 
@@ -74,7 +74,7 @@ class DiscountManager
     }
 
     public function createDiscount(DiscountBase $d) {
-        return $d->createDiscountCoupon();
+        return $d->createDiscountCoupon($this->db);
     }
 
     public function getAllDiscounts() {

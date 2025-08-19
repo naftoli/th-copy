@@ -77,11 +77,12 @@
               <InputGroup>
                 <InputGroup.Text>$</InputGroup.Text>
                 <Form.Control
-                  type="text"
+                  type="number"
                   id="payment_amount"
                   placeholder="0.00"
                   value={paymentForm.amount}
                   onChange={(e) => handlePaymentInputChange('amount', e.target.value)}
+                  min="0"
                 />
               </InputGroup>
             </Col>

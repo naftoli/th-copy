@@ -62,7 +62,7 @@ try {
 
         $discount = new StudentDiscount($year, $user_id, $amount, $reason, $created_by);
     }
-        
+
     $dm = new DiscountManager($MASHPIA_DB);
     if ($dm->createDiscount($discount)) {
         echo json_encode(['success' => true, 'message' => 'Discount created successfully']);

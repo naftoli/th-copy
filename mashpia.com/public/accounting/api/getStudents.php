@@ -12,15 +12,15 @@ if ($admin_user['auth'] != 'super') {
 }
 
 $school_id = $_POST['school_id'] ?? '';
-$grade_id = $_POST['grade_id'] ?? '';
+$class_id = $_POST['class_id'] ?? '';
 
-if (empty($school_id) || empty($grade_id)) {
-    echo json_encode(['success' => false, 'message' => 'School and grade are required']);
+if (empty($school_id) || empty($class_id)) {
+    echo json_encode(['success' => false, 'message' => 'School and class are required']);
     exit;
 }
 
-if (!is_numeric($school_id) || !is_numeric($grade_id)) {
-    echo json_encode(['success' => false, 'message' => 'Invalid school or grade ID']);
+if (!is_numeric($school_id) || !is_numeric($class_id)) {
+    echo json_encode(['success' => false, 'message' => 'Invalid school or class ID']);
     exit;
 }
 
@@ -37,7 +37,7 @@ try {
     
     $stmt->execute([
         ':school_id' => $school_id,
-        ':grade_id' => $grade_id
+        ':grade_id' => $class_id
     ]);
     
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
