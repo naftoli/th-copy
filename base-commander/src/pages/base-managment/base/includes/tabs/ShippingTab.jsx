@@ -40,7 +40,7 @@ export class ShippingTab extends Component {
           validateAfterSubmit={ !!back }>
 
           <Callout color="warning">
-            Tzivos Hashem HQ sends out medals, rank books, magazines, and other items for your chayolim approximately once monthly.
+            Tzivos Hashem HQ sends out medals, rank books, Hachayol, and other items for your chayolim approximately once monthly.
             Please indicate whether you would like yours to be shipped to your school or prepared for pickup from our Crown Heights warehouse.
           </Callout>
 
