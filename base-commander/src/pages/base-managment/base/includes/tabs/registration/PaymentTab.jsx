@@ -189,7 +189,7 @@ export class PaymentTab extends React.Component {
         <NavigationRow back={ back }>
           <Button color='primary'
               onClick={ this.checkTerms } disabled={ !this.props.terms }>
-            { total > 0 ? 'Pay and' : '' } Register <FontAwesome icon='registered' regular />
+            { total > 0 ? 'Pay and' : '' } Register
           </Button>
         </NavigationRow>
       </TabPane>
