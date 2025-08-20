@@ -48,7 +48,8 @@ export class SettingsTab extends Component {
               </p>
 
               <RegTypeRow
-                early_bird_date={ base.early_bird }
+                early_bird_date={ base.early_bird } 
+                guaranteed_date={ base.school_charge_date }
                 regType={ reg_type }
                 onUpdate={ onUpdate }
                 childFee={ child_fee }
