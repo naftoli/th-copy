@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Checkbox } from 'components/inputs';
-import { Callout, CurrencyDisplay, FontAwesome } from 'components/ui';
+import { Callout, CurrencyDisplay } from 'components/ui';
 import { Row, Col, TabPane, UncontrolledTooltip, Button } from 'reactstrap';
 
 import { NavigationRow } from '../../rows/registration/NavigationRow';
