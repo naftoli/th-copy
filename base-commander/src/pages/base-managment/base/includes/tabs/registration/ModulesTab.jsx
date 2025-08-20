@@ -116,7 +116,7 @@ export class ModulesTab extends React.Component {
 
               <div className='details'>
                 <p>
-                  Join us in teaching Safer Hamitzvos to every Jewish boy and girl.
+                  Join us in teaching Sefer Hamitzvos to every Jewish boy and girl.
                 </p>
                 <ul className='checkboxes'>
                   <li>Discount on Yahadus Books when ordering during soldier registration.</li>
