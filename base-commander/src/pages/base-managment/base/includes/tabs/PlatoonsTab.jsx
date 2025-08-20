@@ -61,8 +61,7 @@ export class PlatoonsTab extends Component {
           </p>
 
           <Callout color="warning">
-            Please review the platoons that you have and update the teachers information so that we can be in touch
-            with them throughout the year.
+            Please review the platoons that you have and update the teachers information so that they can stay in the loop throughout the year.
           </Callout>
 
           {this.state.platoons.map(platoon =>
