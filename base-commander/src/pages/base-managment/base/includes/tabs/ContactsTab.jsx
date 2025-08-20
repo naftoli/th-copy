@@ -332,38 +332,19 @@ export class ContactsTab extends Component {
             <h5 className="mt-3">Base Commander</h5>
             <Row>
               <Col sm={4} className="mb-3">
-                <label>Name</label>
-                <Input value={this.state.contacts.bc.name} onChange={e => this.setField('bc', 'name', e.target.value)} />
+                <label>Name *</label>
+                <Input required value={this.state.contacts.bc.name} onChange={e => this.setField('bc', 'name', e.target.value)} />
               </Col>
               <Col sm={4} className="mb-3">
-                <label>Email</label>
-                <Input type="email" value={this.state.contacts.bc.email} onChange={e => this.setField('bc', 'email', e.target.value)} />
+                <label>Email *</label>
+                <Input required type="email" value={this.state.contacts.bc.email} onChange={e => this.setField('bc', 'email', e.target.value)} />
               </Col>
               <Col sm={4} className="mb-3">
-                <label>Phone</label>
-                <Input value={this.state.contacts.bc.phone} onChange={e => this.setField('bc', 'phone', e.target.value)} />
+                <label>Phone *</label>
+                <Input required value={this.state.contacts.bc.phone} onChange={e => this.setField('bc', 'phone', e.target.value)} />
               </Col>
             </Row>
-
-            {/* Chidon Contact */}
-            <h5 className="mt-3">Chidon Contact</h5>
             <Row>
-              {this.state.contacts.chidon.is_bc !== '1' && (
-                <Fragment>
-                  <Col sm={4} className="mb-3">
-                    <label>Name</label>
-                    <Input value={this.state.contacts.chidon.name} onChange={e => this.setField('chidon', 'name', e.target.value)} />
-                  </Col>
-                  <Col sm={4} className="mb-3">
-                    <label>Email</label>
-                    <Input type="email" value={this.state.contacts.chidon.email} onChange={e => this.setField('chidon', 'email', e.target.value)} />
-                  </Col>
-                  <Col sm={4} className="mb-3">
-                    <label>Phone</label>
-                    <Input value={this.state.contacts.chidon.phone} onChange={e => this.setField('chidon', 'phone', e.target.value)} />
-                  </Col>
-                </Fragment>
-              )}
               <Col sm={12} className="mb-3">
                 <Checkbox
                   name="chidon_is_bc"
@@ -375,20 +356,41 @@ export class ContactsTab extends Component {
               </Col>
             </Row>
 
+            {/* Chidon Contact */}
+            <h5 className="mt-3">Chidon Contact</h5>
+            <Row>
+              {this.state.contacts.chidon.is_bc !== '1' && (
+                <Fragment>
+                  <Col sm={4} className="mb-3">
+                    <label>Name *</label>
+                    <Input required = {this.state.contacts.chidon.is_bc === '0'} value={this.state.contacts.chidon.name} onChange={e => this.setField('chidon', 'name', e.target.value)} />
+                  </Col>
+                  <Col sm={4} className="mb-3">
+                    <label>Email *</label>
+                    <Input required = {this.state.contacts.chidon.is_bc === '0'} type="email" value={this.state.contacts.chidon.email} onChange={e => this.setField('chidon', 'email', e.target.value)} />
+                  </Col>
+                  <Col sm={4} className="mb-3">
+                    <label>Phone *</label>
+                    <Input required = {this.state.contacts.chidon.is_bc === '0'} value={this.state.contacts.chidon.phone} onChange={e => this.setField('chidon', 'phone', e.target.value)} />
+                  </Col>
+                </Fragment>
+              )}
+            </Row>
+
             {/* Principal */}
             <h5 className="mt-3">Principal</h5>
             <Row>
               <Col sm={4} className="mb-3">
-                <label>Name</label>
-                <Input value={this.state.contacts.principal.name} onChange={e => this.setField('principal', 'name', e.target.value)} />
+                <label>Name *</label>
+                <Input required value={this.state.contacts.principal.name} onChange={e => this.setField('principal', 'name', e.target.value)} />
               </Col>
               <Col sm={4} className="mb-3">
-                <label>Email</label>
-                <Input type="email" value={this.state.contacts.principal.email} onChange={e => this.setField('principal', 'email', e.target.value)} />
+                <label>Email *</label>
+                <Input required type="email" value={this.state.contacts.principal.email} onChange={e => this.setField('principal', 'email', e.target.value)} />
               </Col>
               <Col sm={4} className="mb-3">
-                <label>Phone</label>
-                <Input value={this.state.contacts.principal.phone} onChange={e => this.setField('principal', 'phone', e.target.value)} />
+                <label>Phone *</label>
+                <Input required value={this.state.contacts.principal.phone} onChange={e => this.setField('principal', 'phone', e.target.value)} />
               </Col>
               <Col sm={12} className="mb-3">
                 <label>Grades (Leave blank for all)</label>

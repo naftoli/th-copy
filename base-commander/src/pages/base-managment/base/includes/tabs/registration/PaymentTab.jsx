@@ -130,8 +130,8 @@ export class PaymentTab extends React.Component {
           </Checkbox>
 
           <Checkbox checked={ terms.siddur_gift } name='siddur_gift' { ...checkboxProps }>
-            I would like to receive a Siddur for each of my Chayolim and Teachers in my school
-            sponsored by Rabbi Moshe and Ruti Weiss, and we are committed to learning Peirush Hamilos in my school.
+            My school is committed to learning Peirush Hamilos in my school with the Tzivos Hashem Peirush Hamilos Curriculum 
+            and I would like to receive a Siddur for every chayol in my school that passes the tests. (Sponsored by Rabbi Moshe and Ruti Weiss)
           </Checkbox>
         </Callout>
         
