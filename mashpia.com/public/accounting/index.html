@@ -166,8 +166,8 @@
             const totalPages = Math.ceil(sortedData.length / itemsPerPage);
 
             const getSortIcon = (key) => {
-                if (sortConfig.key !== key) return ' ↕';
-                return sortConfig.direction === 'asc' ? ' ↑' : ' ↓';
+                if (sortConfig.key !== key) return '';
+                return sortConfig.direction === 'asc' ? '↑' : '↓';
             };
 
             const handleRefund = (row) => {

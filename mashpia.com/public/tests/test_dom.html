@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test DOM</title>
+    <style>
+        #my-div {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Test DOM</h1>
+    <div id="my-div"></div>
+    <script>
+        const myDiv = document.getElementById('my-div');
+        console.log(myDiv.offsetWidth);
+    </script>
+</body>
+
+</html>
