@@ -25,25 +25,25 @@ export class ShippingRow extends Component {
           </Input>
         </Col>
         <Col xs={6} sm={4}>
-          <label>Ship To First Name</label>
+          <label>Ship To First Name *</label>
           <Input { ...inputProps }
             name='shipping_first'
             value={ shipping_first || '' } />
         </Col>
         <Col xs={6} sm={4}>
-          <label>Ship To Last Name</label>
+          <label>Ship To Last Name *</label>
           <Input { ...inputProps }
             name='shipping_last' 
             value={ shipping_last || '' } />
         </Col>
         <Col xs={6} sm={4}>
-          <label>Ship To Chidon First Name (optional)</label>
+          <label>Ship To for Chidon First Name (optional)</label>
           <Input { ...chidonProps }
             name='chidon_first'
             value={ chidon_first || '' } />
         </Col>
         <Col xs={6} sm={4}>
-          <label>Ship To Chidon Last Name (optional)</label>
+          <label>Ship To for Chidon Last Name (optional)</label>
           <Input { ...chidonProps }
             name='chidon_last'
             value={ chidon_last || '' } />
