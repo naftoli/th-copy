@@ -74,7 +74,7 @@ class UsersRouter {
         // setup the variables we will need later
         $year = GlobalSettings::getRegistrationYear( $school->school_id );
         $total = intval( $_POST['total'] );
-        $trans_id = false;
+        $trans_id = 0;
         $payment_response = false;
         // if we need to charge them
         if ( $total > 0 ) {
@@ -118,7 +118,8 @@ class UsersRouter {
         $fee = $school->soldierFee();
 
         foreach( $users as $user ) {
-            $user_errors = $user->registerChayolei( $admin->admin_id, $year, $fee );
+            $user_errors = $user->registerChayolei( $admin->admin_id, $year, $fee, $trans_id );
+            $user->checkHachayol($year);
             if ( count( $user_errors ) > 0 )
                 $errors[ $user->user_id ] = $user_errors;
         }
