@@ -35,6 +35,7 @@ if ($year < 5786) {
         $hachayols[] = intval($row['user_id']);
     }
 } else {
+    // same qry as the checkHachayol function in Soldier.php
     $stmt = $MASHPIA_DB->prepare("
         SELECT h.user_id FROM hachayols_to_give h 
         JOIN users u ON h.user_id = u.user_id 

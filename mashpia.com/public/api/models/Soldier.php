@@ -474,6 +474,64 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
     }
 
+    public function checkHachayol($year) {
+        global $MASHPIA_DB;
+        
+        // find parent account
+        $parent = $this->parentAccount();
+        if (!$parent) {
+            // add hachayol to child
+            $this->addHachayol($this->user_id, $year);
+            return;
+        }
+
+        // find if any children of parent have hachayol
+        $sql = "SELECT h.user_id FROM hachayols_to_give h 
+                JOIN users u ON h.user_id = u.user_id 
+                JOIN admin_auths aa ON h.user_id = aa.id 
+                WHERE aa.admin_id = :admin_id 
+                AND h.year = :year";
+        $stmt = $MASHPIA_DB->prepare($sql);
+        $stmt->execute([
+            ':admin_id' => $parent['admin_id'],
+            ':year' => $year
+        ]);
+        $children = $stmt->fetchAll();
+        if (empty($children)) {
+            $children = $this->getEligibleChildren($parent['admin_id']);
+            // sometimes no one gets hachayol for example australian schools
+            if (! empty($children)) {
+                $child = $this->getChildForHachayol($children);
+                $this->addHachayol($child, $year);
+            }
+        }
+    }
+
+    private function getEligibleChildren($admin_id) {
+        global $MASHPIA_DB;
+
+        $school_exceptions = GlobalSettings::getAustralian();
+        $sql = "SELECT u.user_id, u.dob, c.class_grade FROM users u 
+                JOIN classes c ON c.class_id = u.class_id 
+                JOIN admin_auths aa ON u.user_id = aa.id 
+                WHERE aa.admin_id = :admin_id 
+                AND u.school_id NOT IN (" . implode(',', $school_exceptions) . ") 
+                AND c.class_era = 0 
+                ORDER BY c.class_grade DESC, u.dob DESC";
+        $stmt = $MASHPIA_DB->prepare($sql);
+        $stmt->execute([':admin_id' => $admin_id]);
+        return $stmt->fetchAll();
+    }
+
+    private function getChildForHachayol($children) {
+        foreach ($children as $child) {
+            if ($child['class_grade'] <= 5 || $child['class_grade'] == 'Pre1a') {
+                return $child['user_id'];
+            }
+        }
+        return $children[0]['user_id'];
+    }
+
     //get all the registration charges
     public function registrationCharges() {
         global $MASHPIA_DB;
