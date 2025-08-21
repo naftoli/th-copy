@@ -26,7 +26,7 @@ export class ShippingTab extends Component {
     // load the base
     const {
       shipping_first,   shipping_last, shipping_phone,
-      shipping_method,  shipping_requests,  ...base
+      shipping_method,  shipping_requests, chidon_first, chidon_last,  ...base
     } = this.props.base;
 
     const hideShipping = shipping_method === 'pickup';
@@ -49,6 +49,8 @@ export class ShippingTab extends Component {
             onChange={ this.onChange }
             shipping_last={ shipping_last }
             shipping_first={ shipping_first }
+            chidon_first={ chidon_first }
+            chidon_last={ chidon_last }
             shipping_method={ shipping_method } />
 
           <AddressRow
