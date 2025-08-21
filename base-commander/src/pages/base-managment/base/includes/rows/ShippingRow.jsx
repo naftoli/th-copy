@@ -17,7 +17,7 @@ export class ShippingRow extends Component {
     return (
       <Row>
         <Col xs={12} sm={4}>
-          <label>Shipping Method</label>
+          <label>Shipping Method *</label>
           <Input type="select"    name='shipping_method'
               { ...inputProps }   value={ shipping_method }>
             <option value='pickup'>Pickup</option>
@@ -37,13 +37,13 @@ export class ShippingRow extends Component {
             value={ shipping_last || '' } />
         </Col>
         <Col xs={6} sm={4}>
-          <label>Ship To Chidon First Name</label>
+          <label>Ship To Chidon First Name (optional)</label>
           <Input { ...chidonProps }
             name='chidon_first'
             value={ chidon_first || '' } />
         </Col>
         <Col xs={6} sm={4}>
-          <label>Ship To Chidon Last Name</label>
+          <label>Ship To Chidon Last Name (optional)</label>
           <Input { ...chidonProps }
             name='chidon_last'
             value={ chidon_last || '' } />
