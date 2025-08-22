@@ -298,18 +298,19 @@ if (isset($_POST['submit'])) {
 
                 // set the start date from the array if it is full and $startDate is empty
                 if (isset($arrStart) && !empty($arrStart) && empty($startDate)) {
-                    $year = in_array($arrStart[0], array(12, 13)) && $mission_number < 70 ? $missionYear - 1 : $missionYear;
+                    // we have stuff in yoma depagra that's month 12 for coming year
+                    $year = $arrStart[0] == 13 || ($arrStart[0] == 12 && $mission_number < 10) ? $missionYear - 1 : $missionYear;
                     $startDate = jewishtojd($arrStart[0], $arrStart[1], $year);
-                    $year = in_array($arrEnd[0], array(12, 13)) && $mission_number < 70 ? $missionYear - 1 : $missionYear;
+                    $year = $arrEnd[0] == 13 || ($arrEnd[0] == 12 && $mission_number < 10) ? $missionYear - 1 : $missionYear;
                     $endDate = jewishtojd($arrEnd[0], $arrEnd[1], $year);
                 }
 
                 $start = $startDate;
                 $end = $endDate;
                 foreach ($types as $type) {
-                    if (in_array($type, array(2, 12, 14))) {
+                    if (in_array($type, array(2, 4, 12, 14))) {
                         $pic = $pic_boys;
-                    } else if (in_array($type, array(3, 13, 15))) {
+                    } else if (in_array($type, array(3, 5, 13, 15))) {
                         $pic = $pic_girls;
                     }
                     for ($level = $firstLevel; $level <= $lastLevel; $level++) {
