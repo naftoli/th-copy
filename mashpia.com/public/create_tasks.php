@@ -414,7 +414,7 @@ if (isset($_POST['submit'])) {
                 // create fix for when start date has a date but not end date
                 if (count($arrStart) == 1 && empty($arrEnd)) {
                     $startTemp = $arrStart[0];
-                    $endTemp = $endDate;
+                    $endTemp = $defaultEnd;
                     $arrStart = []; // reset array
                     while ($startTemp < $endTemp) {
                         $arrStart[] = $startTemp;
