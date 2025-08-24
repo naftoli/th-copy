@@ -51,9 +51,9 @@ export class PaymentTab extends React.Component {
     if ( this.state.terms.siddur_gift ) {
       const msg = "I realize I have committed to learning Peirush Hamilos this year, " +
         "thanks to the Siddurim sponsored by Rabbi Moshe and Ruti Weiss.\nIf you are not committed, please click 'cancel'.";
-      if (window.confirm(msg)) this.props.onGiftChange(1);
+      if (window.confirm(msg)) this.props.updateSiddurGift(1);
       else {
-        this.props.onGiftChange(0, false)
+        this.props.updateSiddurGift(0, false)
         this.setState({
           terms: {
             ...this.state.terms,
@@ -63,7 +63,7 @@ export class PaymentTab extends React.Component {
       }
       // this.props.register()
     } else {
-      this.props.onGiftChange(0);
+      this.props.updateSiddurGift(0);
       // this.props.register()
     }
   }
@@ -130,7 +130,7 @@ export class PaymentTab extends React.Component {
           </Checkbox>
 
           <Checkbox checked={ terms.siddur_gift } name='siddur_gift' { ...checkboxProps }>
-            My school is committed to learning Peirush Hamilos in my school with the Tzivos Hashem Peirush Hamilos Curriculum 
+            OPTIONAL: My school is committed to learning Peirush Hamilos in my school with the Tzivos Hashem Peirush Hamilos Curriculum 
             and I would like to receive a Siddur for every chayol in my school that passes the tests. (Sponsored by Rabbi Moshe and Ruti Weiss)
           </Checkbox>
         </Callout>
