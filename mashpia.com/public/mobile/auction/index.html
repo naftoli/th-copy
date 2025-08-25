@@ -833,11 +833,11 @@
 			</div>
 
 			<div id="main">
-<!--				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n2"-->
-<!--					data-key="AuctionEnded">-->
-<!--					<br /><br />-->
-<!--					The auction for 5785 has ended.-->
-<!--				</div>-->
+				<div id="AuctionEnded" style="text-align: center; font-size: 20px;" class="i18n2"
+					data-key="AuctionEnded">
+					<br /><br />
+					The auction for 5785 has ended.
+				</div>
 			</div>
 
 		</div>
@@ -941,7 +941,7 @@
 			var cartQty = 0;
 			var totalPrice = 0;
 			var originalBal = 0;
-			var auction_id = 84;
+			var auction_id = 0;
 			var separator = '|';
 
 			var float_element = "";
@@ -1273,7 +1273,11 @@
 		});
 
 		$("#cart-img").click(function () {
-			location.href = "cart.html?id=" + user;
+			if (auction_id > 0) {
+				location.href = "cart.html?id=" + user;
+			} else {
+				alert('Auction is currently closed.');
+			}
 		});
 	})
 	</script>
