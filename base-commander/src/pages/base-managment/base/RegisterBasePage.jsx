@@ -203,7 +203,7 @@ class RegistrationPage extends Component {
       { tab: 1, ...navProps, icon: 'school',    title: 'Base Information', valid: valid.base },
       { tab: 2, ...navProps, icon: 'truck',     title: 'Shipping', disabled: this.tabDisabled( 2 ), valid: valid.shipping },
       { tab: 3, ...navProps, icon: 'school',    title: 'Platoons', disabled: this.tabDisabled( 3 ) },
-      { tab: 4, ...navProps, icon: 'address-book',    title: 'Contacts', disabled: this.tabDisabled( 4 ), valid: valid.contacts },
+      { tab: 4, ...navProps, icon: 'address-book',    title: 'Contacts', disabled: this.tabDisabled( 4 ) },
       { tab: 5, ...navProps, icon: 'tasks',     title: 'Modules', disabled: this.tabDisabled( 5 ),  valid: valid.modules },
       { tab: 6, ...navProps, icon: 'sliders-h', title: 'Settings',  disabled: this.tabDisabled( 6 ) },
       { tab: 7, ...navProps, icon: 'file-invoice', title: 'Payment', disabled: this.tabDisabled( 7 ) },
