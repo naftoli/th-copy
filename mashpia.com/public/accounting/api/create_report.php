@@ -96,7 +96,7 @@ if ($report_type == 'base' || $report_type == 'settings') {
 } else if ($report_type == 'soldier') {
     $sql .= "u.user_id, u.school_id, ";
 } else if ($report_type == 'details') {
-    $sql .= "rc.registration_charge_id, rc.user_id, rc.school_id, ";
+    $sql .= "rc.registration_charge_id, rc.trans_id, rc.user_id, rc.school_id, ";
 }
 foreach ($_POST[$report_type . '_options'] as $option) {
     if ($option == 'type_of_charge') continue;
@@ -294,6 +294,7 @@ foreach ($report as $school_id => $more) {
         $row = [];
         if ($report_type == 'details') {
             $row['reg_charge_id'] = $result['registration_charge_id'];
+            $row['trans_id'] = $result['trans_id'];
         }
         foreach ($fields[$report_type] as $key => $field) {
             if (!in_array($key, $_POST[$report_type . '_options'])) continue;
