@@ -1919,16 +1919,19 @@ var registrationApp = function () {
       alert('Could not get hachayols information.')
       return false
     }
-    // if no hachayols set, get oldest child
-    if (!hachayols.length) oldest = getOldestChild(children)
-
+    // if no hachayols set, get oldest child and add to hachayols
+    if (!hachayols.length) {
+      oldest = getOldestChild(children)
+      hachayols.push(oldest)
+    }
+      
     let html = "<div style='margin-left: 2em; margin-top: -2em;'>"
     for (let c in children) {
       let child = children[c]
       html += `<label for="${child.user_id}">
                   <div style='float: left; margin-right: 10px;'>
                     <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" 
-                      ${( !hachayols.length && oldest === child.user_id || hachayols.includes(child.user_id) ? 'checked' : '')} /> 
+                      ${( hachayols.includes(child.user_id) ? 'checked' : '')} /> 
                     <span class="checkbox"></span>
                   </div>
                   <div>
