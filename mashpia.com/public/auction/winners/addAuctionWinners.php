@@ -15,7 +15,7 @@ if ( isset( $_FILES['add'] ) ) {
       $prize = $data[0];
       $serial = $data[1];
 
-      if ( $prize && $serial ) {
+      if ( is_numeric( $prize ) && is_numeric( $serial ) ) {
         $sql = "insert ignore into auction_winners 
                 set auction_id = " . $auction_id . ", 
                 prize_id = " . $prize . ",  
