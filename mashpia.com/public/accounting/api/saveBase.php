@@ -38,7 +38,7 @@ $res = $stmt->execute([
     ':chayolei_fee' => $chayolei_fee,
     ':chidon_fee' => $chidon_fee,
     ':balance' => $balance,
-    ':child_fee' => $child_fee,
+    ':child_fee' => $child_fee == '' ? null : $child_fee,
     ':early_bird' => $early_bird,
     ':registration_notes' => $registration_notes,
     ':school_number' => $school_number
