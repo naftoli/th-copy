@@ -1853,6 +1853,7 @@ class ChidonShipping
 
             'LDE'       => 'Chidon Enrollment',
             'KHKE'      => 'KHK Enrollment',
+            
             'MYSLDS-10' => 'MyShliach Limmud Enrollment Shipping Fee',
             'AKLDS-10'  => 'Anash Kinder Limmud Enrollment Shipping Fee',
             'AKLDBC-20' => 'Anash Kinder Limmud Enrollment BC Fee',
