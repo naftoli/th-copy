@@ -124,7 +124,9 @@ foreach( $purchases as $school_id => $more ) {
         }
       }
     }
-    $school_address = $base['shipping_first'] . ' ' . $base['shipping_last'] . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" .
+    $first = is_null($base['chidon_first']) || $base['chidon_first'] == '' ? $base['shipping_first'] : $base['chidon_first'];
+    $last = is_null($base['chidon_last']) || $base['chidon_last'] == '' ? $base['shipping_last'] : $base['chidon_last'];
+    $school_address = $first . ' ' . $last . "<br />" . $base['shipping_address1'] . ' ' . $base['shipping_address2'] . "<br />" .
         $base['shipping_city'] . ', ' . $base['shipping_state'] . ' ' . $base['shipping_postal'] . "<br />" . $base['shipping_country'];
     ?>
   <h2><?=$base[ 'school_name' ]?></h2>
