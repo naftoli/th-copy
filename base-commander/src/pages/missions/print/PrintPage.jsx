@@ -50,7 +50,11 @@ class PrintPage extends Component {
     const today = parseInt( julian( new Date() ), 10 );
     // get the first week after the current week and select it
     const parsha = parshos.find( parsha => today < parsha.start );
-    this.setState({ parsha_ids: [ parsha.id ] });
+    console.log("Parsha: ", parsha);
+    // Only set parsha_ids if a valid parsha was found
+    if (parsha) {
+      this.setState({ parsha_ids: [ parsha.id ] });
+    }
   }
 
   showInstructions = () => {
