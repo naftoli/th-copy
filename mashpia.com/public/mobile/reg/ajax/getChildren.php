@@ -174,7 +174,7 @@ if (!empty($users)) {
 
         $reg_query = mysql_query($qry);
         $row = array_merge($row, mysql_fetch_assoc($reg_query));
-        $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 ? 1 : 0;
+        $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 || GlobalSettings::isAustralian($row['school_id']) ? 1 : 0;
         if (intval($row['reg_chidon'])) $children[$row['user_id']]['chidonRegistered'] = 1;
         if (intval($row['th_chidon_id'])) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
         $children[$row['user_id']]['ultimate_trip'] = intval($row['ultimate_trip']);
@@ -341,7 +341,8 @@ if (!empty($users)) {
         }
         if (!$row['reg_chidon'] // if not in chidon
             && intval($row['class_grade']) >= 3 // and in grade 3+
-            && (intval($row['class_grade']) < 8 || GlobalSettings::isAustralian($row['school_id']) && intval($row['class_grade']) <= 8) // not in grade 8
+            // && (intval($row['class_grade']) <= 8 || (GlobalSettings::isAustralian($row['school_id']) && intval($row['class_grade']) <= 8)) // not in grade 8
+            && intval($row['class_grade']) <= 8 
             && intval($row['chidon']) // make sure the kid is in chidon
             && intval($row['school_chidon']) // make sure school has chidon
             && !in_array(intval($children[$row['user_id']]['school_id']), $exceptions) // make sure not one of these schools
@@ -358,7 +359,7 @@ if (!empty($users)) {
 //        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['editChidon'] = false;
 
         // if school hasn't registered, turn off chayolei, chidon registration
-        if (!$children[$row['user_id']]['schoolTypeRegistered']) {
+        if (! $children[$row['user_id']]['schoolTypeRegistered']) {
             $children[$row['user_id']]['reg_types'] = [];
             $children[$row['user_id']]['editChidon'] = false;
         }
