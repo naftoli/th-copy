@@ -578,9 +578,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // only add th_chidon_id if the user is in grade 3-7 and school is set as chidon school
         // chidonEdit key indicates true/false the way it's meant to mean
         $exceptions = [482,544,583];
-        if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && (intval($this->platoon->class_grade) < 8 || GlobalSettings::isAustralian($this->school_id) && intval($this->platoon->class_grade) <= 8) &&
+        // if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && (intval($this->platoon->class_grade) < 8 || GlobalSettings::isAustralian($this->school_id) && intval($this->platoon->class_grade) <= 8) &&
+        if ( 
+            $this->platoon && intval($this->platoon->class_grade) >= 3 && intval($this->platoon->class_grade) <= 8 && 
             (intval($row['school_chidon']) || in_array($this->school_id, [49, 192])) && intval($row['chidon']) && !in_array( $this->school_id, $exceptions )
-        
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
             $result['chidonEdit'] = !!$row['th_chidon_id'];
@@ -617,7 +618,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 $result['chidon'] = true; // disable chidon reg if school is not registered
             }
         }
-        
+
         // check if child is eligible for khk track when registering for chidon
         $eligible = KHK::enrollmentEligibility([$this->user_id]);
         $result['khk'] = !$eligible[$this->user_id]; // true means not eligible for khk
