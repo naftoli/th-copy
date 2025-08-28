@@ -11,6 +11,11 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+if (! isset($_COOKIE['naftoli'])) {
+    echo json_encode(['success' => false, 'message' => 'Not authorized']);
+    exit;
+}
+
 $jsonData = file_get_contents('php://input');
 $reg_charge = json_decode($jsonData, true)['info'];
 
