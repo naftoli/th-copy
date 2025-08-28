@@ -100,54 +100,56 @@ class ChidonShipping
      */
     public function getGuides($gender, $school, $guides = []) {
         $info = [];
-        if (in_array('study guides', $guides)) {
-            $sql = "select * from th_chidon tc 
-                    join users u using (user_id) 
-                    where tc.year = :year";
-            if ($gender == 'm') $sql .= " and u.gender = 'M'";
-            if ($gender == 'f') $sql .= " and u.gender = 'F'";
-            if ($school > 0) $sql .= " and u.school_id = " . $school;
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute(['year' => $this->year]);
-            $rows = $stmt->fetchAll();
-            foreach ($rows as $row) {
-                $cat = 'guides';
-                $item = 'study guides';
-                $book = $row['book'];
-                $id = $this->getItemID($cat, $item, 'study guide ' . $book);
-                $info[$row['user_id']][] = [
-                    'item'  => $item,
-                    'size'  => $book,
-                    'color' => '',
-                    'name'  => '',
-                    'id'    => $id,
-                    'cat'   => $cat
-                ];
-            }
-        }
-        if (in_array('khk guides', $guides)) {
-            $sql = "select * from th_chidon tc 
-                    join users u using (user_id) 
-                    where khk_reg = 1 and year = :year";
-            if ($gender == 'm') $sql .= " and u.gender = 'M'";
-            if ($gender == 'f') $sql .= " and u.gender = 'F'";
-            if ($school > 0) $sql .= " and u.school_id = " . $school;
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute(['year' => $this->year]);
-            $rows = $stmt->fetchAll();
-            foreach ($rows as $row) {
-                $cat = 'guides';
-                $item = 'khk guides';
-                $id = $this->getItemID($cat, $item);
-                $he_name = $row['first_he'] . ' ' . $row['last_he'];
-                $info[$row['user_id']][] = [
-                    'item'  => $item,
-                    'size'  => '',
-                    'color' => '',
-                    'name'  => $he_name,
-                    'id'    => $id,
-                    'cat'   => $cat
-                ];
+        foreach ($guides as $guide) {
+            if (in_array($guide, ['study guides', 'limud tracker'])) {
+                $sql = "select * from th_chidon tc 
+                        join users u using (user_id) 
+                        where tc.year = :year";
+                if ($gender == 'm') $sql .= " and u.gender = 'M'";
+                if ($gender == 'f') $sql .= " and u.gender = 'F'";
+                if ($school > 0) $sql .= " and u.school_id = " . $school;
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute(['year' => $this->year]);
+                $rows = $stmt->fetchAll();
+                foreach ($rows as $row) {
+                    $cat = 'guides';
+                    $item = $guide;
+                    $book = $row['book'];
+                    if ($guide == 'limud tracker') $id = $this->getItemID($cat, $item);
+                    else if ($guide == 'study guides') $id = $this->getItemID($cat, $item, 'study guide ' . $book);
+                    $info[$row['user_id']][] = [
+                        'item'  => $item,
+                        'size'  => $book,
+                        'color' => '',
+                        'name'  => '',
+                        'id'    => $id,
+                        'cat'   => $cat
+                    ];
+                }
+            } else if ($guide == 'khk guides') {
+                $sql = "select * from th_chidon tc 
+                        join users u using (user_id) 
+                        where khk_reg = 1 and year = :year";
+                if ($gender == 'm') $sql .= " and u.gender = 'M'";
+                if ($gender == 'f') $sql .= " and u.gender = 'F'";
+                if ($school > 0) $sql .= " and u.school_id = " . $school;
+                $stmt = $this->db->prepare($sql);
+                $stmt->execute(['year' => $this->year]);
+                $rows = $stmt->fetchAll();
+                foreach ($rows as $row) {
+                    $cat = 'guides';
+                    $item = 'khk guides';
+                    $id = $this->getItemID($cat, $item);
+                    $he_name = $row['first_he'] . ' ' . $row['last_he'];
+                    $info[$row['user_id']][] = [
+                        'item'  => $item,
+                        'size'  => '',
+                        'color' => '',
+                        'name'  => $he_name,
+                        'id'    => $id,
+                        'cat'   => $cat
+                    ];
+                }
             }
         }
 
@@ -1512,7 +1514,7 @@ class ChidonShipping
 
         $items = [
             'brochures'             => ['brochure'],
-            'guides'                => ['study guides', 'khk guides'],
+            'guides'                => ['study guides', 'khk guides', 'limud tracker'],
             'yahadus books'         => ['during enrollment', 'end of yr sale'],
             'enrollment prize'      => ['kop cards'],
             'recruitment prizes'    => ['book light', 'rechargeable fan', 'watch', 'neck pillow', 'mini duffle bag'],
@@ -1561,7 +1563,8 @@ class ChidonShipping
                     'study guide 4' => 'CHI01D',
                     'study guide 5' => 'CHI01E'
                 ],
-                'khk guides'     => 'CHI012'
+                'khk guides'     => 'CHI012',
+                'limud tracker'  => 'CHI010'
             ],
             'recruitment prizes'    => [
                 'book light'    => 'CHI013',
