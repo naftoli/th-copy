@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.myShliachHachayol.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.hachayol.php';
 
 /**
  * Class ChayoleiShipping
@@ -84,24 +84,10 @@ class ChayoleiShipping
 
     public function getHachayols($gender, $school, $items) {
         $hachayols = [];
-        $h = new MyShliachHachayol($school);
-        $sql = $h->getSql($gender);
-        $stmt = $this->db->prepare($sql);
-        if ($gender == 'M' || $gender == 'F') {
-            $stmt->execute([
-                'school' => $school,
-                'year' => $this->year, 
-                'gender' => $gender
-            ]);
-        } else {
-            $stmt->execute([
-                'school' => $school,
-                'year' => $this->year
-            ]);
-        }
-        $rows = $stmt->fetchAll();
+        $h = new Hachayol();
+        $h->setSchools($school);
+        $rows = $h->runSql($gender, $school, $this->year);
         foreach ($rows as $row) {
-			if (!$h->paidForShipping($row['admin_id'], $school)) continue;
             $hachayols[$row['user_id']][] = [
                 'item'  => 'Hachayol',
                 'size'  => '',
