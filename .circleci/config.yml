@@ -5,11 +5,11 @@ jobs:
   test-react:
     # use node js
     docker:
-      - image: circleci/node:8.12
-    
+      - image: circleci/node:14.21.3
+
     # use the base-commander project as the working directory
     working_directory: ~/repo/base-commander
-    
+
     steps:
       # attempt to load the repo from the cache
       - restore_cache:
@@ -29,9 +29,9 @@ jobs:
       # cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       # Download dependencies
       - run: yarn install
@@ -71,9 +71,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - composer-v1-dependencies-{{ checksum "composer.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - composer-v1-dependencies-
+            - composer-v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - composer-v1-dependencies-
       # install required PHP extensions
       - run:
           name: Install PHP extensions
@@ -89,11 +89,11 @@ jobs:
           key: composer-v1-dependencies-{{ checksum "composer.json" }}
       # run tests in tests folder
       - run: ./vendor/bin/phpunit --bootstrap vendor/autoload.php tests
-  
+
   build-react:
     # Use node to build the react client
     docker:
-      - image: circleci/node:8.12
+      - image: circleci/node:14.21.3
     # use the base-commander project as the working directory
     working_directory: ~/repo/base-commander
 
@@ -119,9 +119,9 @@ jobs:
       # load cached dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
 
       # Download dependencies
       - run: yarn install
@@ -146,11 +146,11 @@ jobs:
       - image: circleci/node:8.12
     # work in the repository
     working_directory: ~/repo
-    
+
     steps:
       - attach_workspace:
           at: ~/repo
-      
+
       - run:
           name: Add Test.Mashpia.com to known_hosts
           command: |
@@ -171,7 +171,6 @@ jobs:
           name: Run the Deployment script
           command: |
             ssh -p 522 mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
-
 
   # deploy build artifacts to test3
   deploy-raffles:
@@ -209,19 +208,17 @@ jobs:
           command: |
             ssh -p 522 mashtest3@test3.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
 
-
-
   # deploy build artifacts to staging
   deploy-production:
     docker:
       - image: circleci/node:8.12
     # work in the repository
     working_directory: ~/repo
-    
+
     steps:
       - attach_workspace:
           at: ~/repo
-      
+
       - run:
           name: Add Mashpia.com to known_hosts
           command: |
@@ -229,8 +226,8 @@ jobs:
             ssh-keyscan -p 522 -H ssh.mashpia.com >> ~/.ssh/known_hosts;
 
       - run:
-          name: 'Create deploy/build folder'
-          command: | 
+          name: "Create deploy/build folder"
+          command: |
             ssh -p 522 mashpia@ssh.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
@@ -242,20 +239,19 @@ jobs:
           name: Run the Deployment script
           command: |
             ssh -p 522 mashpia@ssh.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
-      
 
 workflows:
   version: 2
-  
+
   test-deploy:
     jobs:
       # - test-php
-#      - test-react
+      #      - test-react
 
       - build-react:
           requires:
             # - test-php
-#            - test-react
+          #            - test-react
           filters:
             branches:
               only:
