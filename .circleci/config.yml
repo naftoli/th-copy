@@ -5,7 +5,7 @@ jobs:
   test-react:
     # use node js
     docker:
-      - image: cimg/node:14.21.3
+      - image: circleci/node:8.12
 
     # use the base-commander project as the working directory
     working_directory: ~/repo/base-commander
@@ -93,7 +93,7 @@ jobs:
   build-react:
     # Use node to build the react client
     docker:
-      - image: cimg/node:14.21.3
+      - image: circleci/node:8.12
     # use the base-commander project as the working directory
     working_directory: ~/repo/base-commander
 
