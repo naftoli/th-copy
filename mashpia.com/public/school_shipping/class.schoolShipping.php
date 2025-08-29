@@ -22,7 +22,8 @@ class SchoolShipping
     public function getCategories() {
         $categories = [
             'raffles' => 'Raffles',
-            'chidon' => 'Chidon'
+            'chidon' => 'Chidon', 
+            'hachayols' => 'Hachayols'
         ];
         return $categories;
     }
@@ -30,7 +31,8 @@ class SchoolShipping
     public function getItems() {
         $items = [
             'Raffles' => ['5M Raffle', '60M Raffle', 'Auction'],
-            'Chidon' => ['Celeb Box Items', 'Sweaters']
+            'Chidon' => ['Celeb Box Items', 'Sweaters'],
+            'Hachayols' => ['Teacher Hachayols']
         ];
         return $items;
     }
@@ -282,6 +284,31 @@ class SchoolShipping
             }
         }
         return $info;
+    }
+
+    public function getHachayols(array $schools, array $items) {
+        global $MASHPIA_DB;
+
+        $hachayols = [];
+        $sql = "SELECT 
+                    school_id, COUNT(*) AS total
+                FROM
+                    classes
+                WHERE
+                    school_id IN (" . implode(',', $schools) . ")
+                        AND class_era = 0
+                GROUP BY school_id";
+        $stmt = $MASHPIA_DB->query($sql);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $hachayols[$row['school_id']][] = [
+                'id' => 'HAC001',
+                'item' => 'Teacher Hachayols',
+                'cat' => 'Hachayols',
+                'qty' => $row['total']
+            ];
+        }
+        return $hachayols;
     }
 
     private function getDescForCelebBoxItems() {

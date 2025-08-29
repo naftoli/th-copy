@@ -24,6 +24,44 @@ class Hachayol
         $this->testSchools = false;
     }
 
+    public function runSql($gender = '', $school = 0, $year = 0)
+    {
+        $sql = "SELECT 
+                    a.*, a.first AS afirst, a.last AS alast, u.*
+                FROM
+                    admins a
+                        JOIN
+                    admin_auths aa USING (admin_id)
+                        JOIN
+                    users u ON aa.id = u.user_id
+                        JOIN
+                    user_registration ur USING (user_id)
+                        JOIN
+                    hachayols_to_give htg ON htg.user_id = u.user_id
+                        AND htg.year = ur.year
+                WHERE
+                    aa.auth = 'user' AND u.school_id = :school  
+                        AND u.user_registered > 0 
+                        AND ur.year = :year";
+		if ($gender == 'M' || $gender == 'F') {
+			$sql .= " AND u.gender = :gender";
+		}
+        $stmt = $this->db->prepare($sql);
+        if ($gender == 'M' || $gender == 'F') {
+            $stmt->execute([
+                'school' => $school,
+                'year' => $year, 
+                'gender' => $gender
+            ]);
+        } else {
+            $stmt->execute([
+                'school' => $school,
+                'year' => $year
+            ]);
+        }
+        return $stmt->fetchAll();
+    }
+
     public function setSchools($id = null, $test_school = false)
     {
         //get list of schools with totals per school of registered students
@@ -132,8 +170,8 @@ class Hachayol
                 join classes c using (class_id) 
                 join schools s on (u.school_id = s.school_id) 
                 join user_registration ur on (ur.user_id = u.user_id) 
-                where u.user_registered > 0 
-                and u.hachayol = 1 
+                JOIN hachayols_to_give htg ON htg.user_id = u.user_id AND htg.year = ur.year
+                WHERE u.user_registered > 0 
                 and s.school_id = ? 
                 and ur.year = ? 
                 order by c.class_grade, c.class_sub, u.last, u.first";
