@@ -56,6 +56,9 @@ for (; $i > 0; $i--) {
         th, td {
             padding: 5px;
         }
+        .student {
+            max-width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -81,7 +84,7 @@ for (; $i > 0; $i--) {
         <th>Serial Number</th>
         <th>School</th>
         <th>Grade</th>
-        <th>Student</th>
+        <th class="student">Student</th>
         <!--                <th>Number of times Registered for Shabbaton</th>-->
         <?php foreach ($years as $yr) { echo "<th>" . $yr . "</th>"; } ?>
         <th>Eligible</th>
@@ -113,7 +116,7 @@ for (; $i > 0; $i--) {
                 if ($eligible) $khkTotal++;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
                 echo "<tr id='" . $child['user_id'] . "'><td>" . $child['user_serial'] . "</td><td>" . $school .
-                    "</td><td>" . $grade . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td>";
+                    "</td><td>" . $grade . "</td><td class='student'>" . $child['first'] . ' ' . $child['last'] . "</td>";
                 foreach ($years as $yr) {
                     $value = $yrsDetails[$user_id][$yr];
                     echo "<td>" . ($value ? "&#10003;" : "&#10007;") . "</td>";
