@@ -167,7 +167,7 @@ class GlobalSettings {
     }
 
     public static function getAustralian() {
-        return [ 66, 110, 112, 180, 713, 709 ];
+        return [ 66, 110, 112, 180, 690, 713, 709 ];
     }
 
      /**

@@ -24,8 +24,7 @@ class Points
         $this->store_reset = $row['store_reset'];
         $this->usercode = $row['user_code']; 
         $this->school_id = $row['school_id'];
-        $australian = [ 55, 66, 110, 112, 180 ];
-        if ( in_array( $this->school_id, $australian ) ) $this->australian = true;
+        if ( GlobalSettings::isAustralian( $this->school_id ) ) $this->australian = true;
         $this->debug = false;
         $this->setPointsStart();
     }
