@@ -426,7 +426,7 @@ var registrationApp = function () {
     school_id = selected_user.school.school_id;
 
     // yahadus registration
-    var australian = [55, 66, 110, 112, 180, 256, 643, 709, 713, 690];
+    var australian = [55, 66, 110, 112, 180, 256, 643, 690, 709, 713];
     $('.book-bought').click(function () {
       if ($(this).val() === '0') {
         console.log(school_id)
