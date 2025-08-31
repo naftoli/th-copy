@@ -73,17 +73,20 @@ class GlobalSettings {
      * @return integer
      */
     public static function getRegCost(int $type, bool $early_bird, $myshliach = false, $anashKinder = false) {
-        if ($type == 1) return 50;
-        else if ($anashKinder) return 65;
+        $fee = 65;
+        if ($type == 1) $fee = 50;
+        else if ($anashKinder) $fee = 65;
         else if ($early_bird) {
             switch ($type) {
                 case 2:
-                    return 55;
+                    $fee = 55;
+                    break;
                 case 3:
-                    return $myshliach ? 50 : 60;
+                    $fee = $myshliach ? 50 : 60;
+                    break;
             }
         }
-        return 65;
+        return $fee;
     }
 
     /**
