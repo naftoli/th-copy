@@ -833,6 +833,11 @@ var registrationApp = function () {
       //   return showError('You must enter your hebrew last name in Hebrew characters.')
       // }
 
+      // make sure an amount was chosen for the chayolei fee
+      if (!$("#chayolei-fee").val() || $("#chayolei-fee").val() == 0) {
+        return showError('You must choose an amount you are paying for Chayolei.')
+      }
+
       // check that verification is checked off
       if (!$("#he_name").is(":checked")) {
         return showError('You must indicate your verification of the spelling of your hebrew name.')
