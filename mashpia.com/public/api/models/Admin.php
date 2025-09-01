@@ -312,14 +312,26 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      *      error: string
      */
     public function createPaymentProfile( $payment_info, $setAsDefault = true ) {
+        $billTo = [
+            'firstName' => $this->first,
+            'lastName' => $this->last, 
+            'address' => $this->admin_address1,
+            'city' => $this->admin_city,
+            'state' => $this->admin_state,
+            'zip' => $this->admin_postal
+        ];
+
         // if we do not have a customer profile
         if ( !$this->customerProfile() instanceof classes\authorize\CustomerProfile ) {
             // create the account
             $payment_profile = classes\authorize\PaymentProfile::createBasicArray(
-                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code']
+                $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'], $billTo
             );
             $this->customer_profile = classes\authorize\CustomerProfile::create(
-                "cth_admin_" . $this->admin_id, $this->admin_email, $this->name(), $payment_profile
+                "cth_admin_" . $this->admin_id, 
+                $this->admin_email, 
+                $this->name(), 
+                $payment_profile
             );
 
             // handle errors
@@ -329,14 +341,12 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
             $this->authorize_customer_profile_id = $this->customer_profile->customerProfileId;
             $this->save();
         }
-        $billTo = [
-            'firstName' => $this->first,
-            'lastName' => $this->last
-        ];
+
         $payment_profile = classes\authorize\PaymentProfile::create(
             $payment_info['cc-number'], $payment_info['cc-exp'], $payment_info['x_card_code'],
             $this->authorize_customer_profile_id, $billTo, true
         );
+
         if ( !($payment_profile instanceof classes\authorize\PaymentProfile) )
             return $payment_profile['messages']['message'][0]['text'];
         return $payment_profile;
