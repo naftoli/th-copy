@@ -2,6 +2,7 @@
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
 include_once( __DIR__ . "/../tools/functions/format/parents.php" );
+require_once __DIR__ . "/../../../includes/globals.php";
 
 class StaffRouter {
 
@@ -12,7 +13,7 @@ class StaffRouter {
     ];
 
     public function index() {
-        global $current_user; global $MASHPIA_DB;
+        global $current_user; global $MASHPIA_DB; global $ENCRYPTION_KEY;
 
         $filters = [];   $params = [];
         // limit based on admin type
@@ -43,6 +44,9 @@ class StaffRouter {
 
         $staff = [];
         while( $admin = $query->fetch() ){
+            // password is encrypted
+            $admin['password'] = decryptPassword($admin['password'], ENCRYPTION_KEY);
+            
             $platoon = trim( (new Platoon([
                 'class_grade' => $admin['class_grade'], 'class_sub' => $admin['class_sub']
             ]))->name() );
