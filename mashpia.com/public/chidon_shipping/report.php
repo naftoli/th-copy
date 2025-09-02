@@ -231,14 +231,6 @@ ksort($grand_summary);
       padding: 10px;
       font-size: 16px;
     }
-
-    .printing {
-      display: none !important;
-    }
-
-    .summaryOnly, .summaryOnly * {
-      display: block !important;
-    }
   }
 }
   </style>
@@ -597,7 +589,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     printWindow.focus();
     printWindow.print();
     printWindow.close();
-
   }
 }
 </script>
