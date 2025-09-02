@@ -264,15 +264,24 @@ foreach ($item_details_chosen as $field) {
     echo "<option value='" . $idx++ . ":desc'>" . ucwords($field) . " - Desc</option>";
 }
 echo "</select><br /><br />";
+
+if ($super) {
+  echo "<button class='printSummary no-print' onclick='printSummary()' style='margin-bottom: 10px;'>Print Summary Only</button><br />";
+  echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+  if (in_array($_POST['report_type'], ['all', 'details'])) {
+    echo "Change Shipment Number: <select name='changeShipmentNumber' id='changeShipmentNumber'>";
+    for ($i = 1; $i <= 3; $i++) {
+      echo "<option value='" . $i . "'>" . $i . "</option>";
+    }
+    echo "</select><br /><br />";
+  }
+}
+
 foreach ($resultsBySchool as $school => $more) : ?>
   <div class="header" id="<?= $school ?>">
       <?php
       if (!isset($schools[$school])) continue;
       if (!isset($summary[$school])) continue;
-      if ($super) {
-        echo "<button class='printSummary no-print' onclick='printSummary()' style='margin-bottom: 10px;'>Print Summary Only</button><br />";
-        echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
-      }
       echo "<h3>" . $schools[$school] . "</h3>";
       echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as ";
       if ($super) echo "Shipped";
@@ -553,6 +562,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   window.onload = function() {
     if (!super_admin) {
       $(".shipment_number").attr('disabled', true)
+    } else {
+      $("#changeShipmentNumber").change(function () {
+        const ship_num = $(this).val()
+        $(".shipment_number").val(ship_num)
+      })
     }
   }
 
