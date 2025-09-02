@@ -266,7 +266,7 @@ foreach ($item_details_chosen as $field) {
 echo "</select><br /><br />";
 
 if ($super) {
-  echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br />";
+  echo "<button class='saveAll no-print' style='margin-bottom: 10px;'>Save All Schools as Shipped</button><br />";
   echo "<button class='printSummary no-print' onclick='printSummary()'>Print Summary Only</button><br />";
   if (in_array($_POST['report_type'], ['all', 'details'])) {
     echo "Change Shipment Number: <select name='changeShipmentNumber' id='changeShipmentNumber'>";
