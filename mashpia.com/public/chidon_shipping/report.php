@@ -191,7 +191,7 @@ ksort($grand_summary);
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shipping Reports</title>
-  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
   <style>
     body {
       font-family: sans-serif;
@@ -564,19 +564,14 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     });
     
     // Create a new window for printing
-    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    const printWindow = window.open('', '_blank', 'width=1200,height=800');
     
     // Write the content to the new window
     printWindow.document.write(`
         <html>
             <head>
                 <title>Print</title>
-                <style>
-                    body { font-family: Arial, sans-serif; }
-                    @media print {
-                        body { margin: 0; }
-                    }
-                </style>
+                <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
             </head>
             <body>
                 ${printContent}
