@@ -437,8 +437,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function registrationRates() {
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
-        // add chidon if user is in grade 3+
-        if ( $this->platoon && intval($this->platoon->class_grade) > 2 )
+        // add chidon if user is in grade 4+
+        if ( $this->platoon && intval($this->platoon->class_grade) >= 4 )
             $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
@@ -580,7 +580,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $exceptions = [482,544,583];
         // if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && (intval($this->platoon->class_grade) < 8 || GlobalSettings::isAustralian($this->school_id) && intval($this->platoon->class_grade) <= 8) &&
         if ( 
-            $this->platoon && intval($this->platoon->class_grade) >= 3 && intval($this->platoon->class_grade) <= 8 && 
+            $this->platoon && intval($this->platoon->class_grade) >= 4 && intval($this->platoon->class_grade) <= 8 && 
             (intval($row['school_chidon']) || in_array($this->school_id, [49, 192])) && intval($row['chidon']) && !in_array( $this->school_id, $exceptions )
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
