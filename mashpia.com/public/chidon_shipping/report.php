@@ -571,7 +571,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
         <html>
           <head>
             <title>Print</title>
-            <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
             <style>
               body {
                 font-family: sans-serif;
@@ -584,16 +583,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
                 font-size: 14px;
                 padding: 5px;
                 border-bottom: 1px solid grey;
-              }
-
-              .header {
-                font-size: 14px;
-                line-height: 1.4;
-                margin-bottom: 20px;
-              }
-
-              .dataTables_filter {
-                display: none;
               }
             </style>                  
           </head>
