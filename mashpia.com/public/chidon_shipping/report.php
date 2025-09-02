@@ -565,12 +565,39 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   function printSummary() {
-    // Add print class to body
-    document.body.classList.add('printing');
-    // Print
-    window.print();
-    // Remove print class
-    document.body.classList.remove('printing');
+    // Get the div content
+    let printContent = "";
+    $(".summary").each(function() {
+      printContent += $(this).html();
+    });
+    
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    
+    // Write the content to the new window
+    printWindow.document.write(`
+        <html>
+            <head>
+                <title>Print</title>
+                <style>
+                    body { font-family: Arial, sans-serif; }
+                    @media print {
+                        body { margin: 0; }
+                    }
+                </style>
+            </head>
+            <body>
+                ${printContent}
+            </body>
+        </html>
+    `);
+    
+    // Close the document and print
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+
   }
 }
 </script>
