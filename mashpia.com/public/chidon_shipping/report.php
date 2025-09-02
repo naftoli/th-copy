@@ -567,12 +567,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   function printSummary() {
     // Add print class to body
     document.body.classList.add('printing');
-    $(".summary").addClass('summaryOnly');
     // Print
     window.print();
     // Remove print class
-    $(".summary").removeClass('summaryOnly');
     document.body.classList.remove('printing');
+  }
 }
 </script>
 </html>
