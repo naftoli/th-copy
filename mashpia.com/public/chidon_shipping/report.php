@@ -227,7 +227,7 @@ ksort($grand_summary);
       font-size: 14px;
     }
 
-    button.saveAll {
+    button.saveAll, button.printSummary {
       padding: 10px;
       font-size: 16px;
     }
@@ -266,15 +266,16 @@ foreach ($item_details_chosen as $field) {
 echo "</select><br /><br />";
 
 if ($super) {
-  echo "<button class='printSummary no-print' onclick='printSummary()' style='margin-bottom: 10px;'>Print Summary Only</button><br />";
-  echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+  echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br />";
+  echo "<button class='printSummary no-print' onclick='printSummary()'>Print Summary Only</button><br />";
   if (in_array($_POST['report_type'], ['all', 'details'])) {
     echo "Change Shipment Number: <select name='changeShipmentNumber' id='changeShipmentNumber'>";
     for ($i = 1; $i <= 3; $i++) {
       echo "<option value='" . $i . "'>" . $i . "</option>";
     }
-    echo "</select><br /><br />";
+    echo "</select><br />";
   }
+  echo "<br />";
 }
 
 foreach ($resultsBySchool as $school => $more) : ?>
