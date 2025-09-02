@@ -233,8 +233,11 @@ ksort($grand_summary);
     }
 
     @media print {
-      not(.summaryOnly) {
+      body {
         display: none !important;
+      }
+      .summaryOnly {
+        display: block !important;
       }
     }
   }
@@ -276,7 +279,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
       if (!isset($schools[$school])) continue;
       if (!isset($summary[$school])) continue;
       if ($super) {
-        echo "<button class='printSummary no-print' onclick='printSummary()'>Print Summary Only</button><br />";
+        echo "<button class='printSummary no-print' onclick='printSummary()' style='margin-bottom: 10px;'>Print Summary Only</button><br />";
         echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
       }
       echo "<h3>" . $schools[$school] . "</h3>";
