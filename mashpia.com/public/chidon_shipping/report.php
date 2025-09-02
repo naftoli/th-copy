@@ -231,6 +231,14 @@ ksort($grand_summary);
       padding: 10px;
       font-size: 16px;
     }
+
+    @media print {
+      not(.summaryOnly) {
+        display: none !important;
+      }
+    }
+  }
+}
   </style>
 </head>
 <body>
@@ -267,7 +275,10 @@ foreach ($resultsBySchool as $school => $more) : ?>
       <?php
       if (!isset($schools[$school])) continue;
       if (!isset($summary[$school])) continue;
-      if ($super) echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+      if ($super) {
+        echo "<button class='printSummary no-print' onclick='printSummary()'>Print Summary Only</button><br />";
+        echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br /><br />";
+      }
       echo "<h3>" . $schools[$school] . "</h3>";
       echo "<button class='saveSchool no-print'>Save " . $schools[$school] . " as ";
       if ($super) echo "Shipped";
@@ -306,36 +317,38 @@ foreach ($resultsBySchool as $school => $more) : ?>
     <!--        /> I have reviewed and updated the shipping status for the entire school.-->
     <!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-        <h3>Summary</h3>
-        <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
-          <thead>
-          <tr>
-            <th>Item ID</th>
-            <th>Quantity</th>
-            <th>Item Name</th>
-            <th>Size</th>
-            <th>Gender/Color</th>
-            <th>Category</th>
-            <!--            <th>Status</th>-->
-          </tr>
-          </thead>
-          <tbody>
-          <?php
-          if (isset($summary[$school])) {
-              foreach ($summary[$school] as $id => $qty) {
-                  echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
-                  $item = $summary_items[$id];
-                  foreach (['item', 'size', 'color', 'cat'] as $attr) {
-                      echo "<td>";
-                      if (isset($item[$attr])) echo $item[$attr];
-                      echo "</td>";
-                  }
-                  echo "</tr>";
-              }
-          }
-          ?>
-          </tbody>
-        </table>
+        <div class='summary'>
+          <h3>Summary</h3>
+          <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
+            <thead>
+            <tr>
+              <th>Item ID</th>
+              <th>Quantity</th>
+              <th>Item Name</th>
+              <th>Size</th>
+              <th>Gender/Color</th>
+              <th>Category</th>
+              <!--            <th>Status</th>-->
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            if (isset($summary[$school])) {
+                foreach ($summary[$school] as $id => $qty) {
+                    echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
+                    $item = $summary_items[$id];
+                    foreach (['item', 'size', 'color', 'cat'] as $attr) {
+                        echo "<td>";
+                        if (isset($item[$attr])) echo $item[$attr];
+                        echo "</td>";
+                    }
+                    echo "</tr>";
+                }
+            }
+            ?>
+            </tbody>
+          </table>
+        </div>
         <p class="no-print"></p>
         <div style="page-break-after: always"></div>
       <?php endif; ?>
@@ -548,5 +561,14 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       $(".shipment_number").attr('disabled', true)
     }
   }
+
+  function printSummary() {
+    // Add print class to body
+    $(".summary").addClass('summaryOnly');
+    // Print
+    window.print();
+    // Remove print class
+    $(".summary").removeClass('summaryOnly');
+}
 </script>
 </html>
