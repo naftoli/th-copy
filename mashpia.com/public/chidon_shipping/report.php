@@ -233,11 +233,10 @@ ksort($grand_summary);
     }
 
     @media print {
-      *:not(.summaryOnly) {
+      body {
         display: none !important;
       }
-
-      .summaryOnly {
+      .summaryOnly * {
         display: block !important;
       }
     }
