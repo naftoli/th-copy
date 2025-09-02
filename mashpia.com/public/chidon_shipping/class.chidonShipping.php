@@ -101,7 +101,7 @@ class ChidonShipping
     public function getGuides($gender, $school, $guides = []) {
         $info = [];
         foreach ($guides as $guide) {
-            if (in_array($guide, ['study guides', 'limud tracker', 'chidon_bookmark'])) {
+            if (in_array($guide, ['study guides', 'limud trackers', 'chidon bookmarks'])) {
                 $sql = "select * from th_chidon tc 
                         join users u using (user_id) 
                         where tc.year = :year";
@@ -113,12 +113,11 @@ class ChidonShipping
                 $rows = $stmt->fetchAll();
                 foreach ($rows as $row) {
                     $cat = 'guides';
-                    $item = $guide;
+                    $item = substr($guide, 0, strlen($guide) - 1);
                     $book = $row['book'];
-                    if (in_array($guide, ['limud tracker', 'chidon_bookmark'])) $id = $this->getItemID($cat, $item);
-                    else if ($guide == 'study guides') $id = $this->getItemID($cat, $item, 'study guide ' . $book);
+                    $id = $this->getItemID($cat, $guide, $item . ' ' . $book);
                     $info[$row['user_id']][] = [
-                        'item'  => $item,
+                        'item'  => $guide,
                         'size'  => $book,
                         'color' => '',
                         'name'  => '',
@@ -138,11 +137,10 @@ class ChidonShipping
                 $rows = $stmt->fetchAll();
                 foreach ($rows as $row) {
                     $cat = 'guides';
-                    $item = 'khk guides';
-                    $id = $this->getItemID($cat, $item);
+                    $id = $this->getItemID($cat, $guide);
                     $he_name = $row['first_he'] . ' ' . $row['last_he'];
                     $info[$row['user_id']][] = [
-                        'item'  => $item,
+                        'item'  => $guide,
                         'size'  => '',
                         'color' => '',
                         'name'  => $he_name,
@@ -1514,7 +1512,7 @@ class ChidonShipping
 
         $items = [
             'brochures'             => ['brochure'],
-            'guides'                => ['study guides', 'khk guides', 'limud tracker', 'chidon_bookmark'],
+            'guides'                => ['study guides', 'khk guides', 'limud trackers', 'chidon bookmarks'],
             'yahadus books'         => ['during enrollment', 'end of yr sale'],
             'enrollment prize'      => ['kop cards'],
             'recruitment prizes'    => ['book light', 'rechargeable fan', 'watch', 'neck pillow', 'mini duffle bag'],
@@ -1563,9 +1561,21 @@ class ChidonShipping
                     'study guide 4' => 'CHI01D',
                     'study guide 5' => 'CHI01E'
                 ],
+                'limud trackers'  => [
+                    'limud tracker 1' => 'CHI02A',
+                    'limud tracker 2' => 'CHI02B',
+                    'limud tracker 3' => 'CHI02C',
+                    'limud tracker 4' => 'CHI02D',
+                    'limud tracker 5' => 'CHI02E'
+                ], 
+                'chidon bookmarks' => [
+                    'chidon bookmark 1' => 'CHI03A',
+                    'chidon bookmark 2' => 'CHI03B',
+                    'chidon bookmark 3' => 'CHI03C',
+                    'chidon bookmark 4' => 'CHI03D',
+                    'chidon bookmark 5' => 'CHI03E'
+                ],
                 'khk guides'     => 'CHI012',
-                'limud tracker'  => 'CHI010', 
-                'chidon_bookmark' => 'CHI011'
             ],
             'recruitment prizes'    => [
                 'book light'    => 'CHI013',
