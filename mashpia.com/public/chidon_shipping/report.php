@@ -233,7 +233,7 @@ ksort($grand_summary);
     }
 
     @media print {
-      body {
+      body:not(.summaryOnly) {
         display: none !important;
       }
       .summaryOnly {
