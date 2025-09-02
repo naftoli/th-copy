@@ -569,13 +569,37 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     // Write the content to the new window
     printWindow.document.write(`
         <html>
-            <head>
-                <title>Print</title>
-                <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
-            </head>
-            <body>
-                ${printContent}
-            </body>
+          <head>
+            <title>Print</title>
+            <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+            <style>
+              body {
+                font-family: sans-serif;
+                font-size: 14px;
+                padding-left: 3%;
+                padding-right: 3%;
+              }
+
+              th, th, td {
+                font-size: 14px;
+                padding: 5px;
+                border-bottom: 1px solid grey;
+              }
+
+              .header {
+                font-size: 14px;
+                line-height: 1.4;
+                margin-bottom: 20px;
+              }
+
+              .dataTables_filter {
+                display: none;
+              }
+            </style>                  
+          </head>
+          <body>
+              ${printContent}
+          </body>
         </html>
     `);
     
