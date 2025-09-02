@@ -590,6 +590,5 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     printWindow.print();
     printWindow.close();
   }
-}
 </script>
 </html>
