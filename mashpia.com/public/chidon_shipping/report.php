@@ -159,6 +159,8 @@ if (in_array('c.class_sub', $fields_chosen)) $sql .= ", c.class_sub";
 if (in_array('u.last', $fields_chosen)) $sql .= ", u.last";
 if (in_array('u.first', $fields_chosen)) $sql .= ", u.first";
 
+if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) echo $sql;
+
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
 
