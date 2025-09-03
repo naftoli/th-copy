@@ -328,20 +328,20 @@ foreach ($resultsBySchool as $school => $more) : ?>
             <tr>
               <th>Item ID</th>
               <th>Quantity</th>
-              <th>Item Name</th>
-              <th>Size</th>
-              <th>Gender/Color</th>
-              <th>Category</th>
-              <!--            <th>Status</th>-->
+              <?php foreach ($item_details_chosen as $field) {
+                echo "<th>" . $field . "</th>";
+              } ?>
             </tr>
             </thead>
             <tbody>
             <?php
             if (isset($summary[$school])) {
                 foreach ($summary[$school] as $id => $qty) {
-                    echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
+                    echo "<tr>";
+                    echo "<td>" . $id . "</td><td>" . $qty . "</td>";
                     $item = $summary_items[$id];
                     foreach (['item', 'size', 'color', 'cat'] as $attr) {
+                        if (! in_array($attr, $item_details_chosen)) continue;
                         echo "<td>";
                         if (isset($item[$attr])) echo $item[$attr];
                         echo "</td>";
