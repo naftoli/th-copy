@@ -292,21 +292,31 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function connectToParent($admin_id, $admin_email) {
         global $MASHPIA_DB;
 
-        // make sure admin_id is an integer
-        if (! is_numeric($admin_id)) return false;
+        // make sure admin_id is an integer and email is not empty
+        if (! is_numeric($admin_id) && empty($admin_email)) return false;
 
         // if there's an email, make sure it's a valid email
-        if (!$admin_id && $admin_email && ! filter_var($admin_email, FILTER_VALIDATE_EMAIL)) return false;
+        // check if multiple emails are being passed in
+        if (strpos($admin_email, ',') !== false) {
+            $admin_emails = explode(',', $admin_email);
+        } else {
+            $admin_emails = [$admin_email];
+        }
 
         // check if parent exists either with this email or admin_id
         $stmt = $MASHPIA_DB->prepare("
             SELECT * FROM admins WHERE admin_id = :admin OR admin_email = :email");
-        $stmt->execute([
-            ':admin' => $admin_id,
-            ':email' => $admin_email
-        ]);
-        $parent = $stmt->fetch();
+
+        foreach ($admin_emails as $email) {
+            $stmt->execute([
+                ':admin' => $admin_id,
+                ':email' => $admin_email
+            ]);
+            $parent = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($parent) break;
+        }
         if (!$parent) return false;
+
         // check if parent is already connected to this child
         $stmt = $MASHPIA_DB->prepare("
             SELECT * FROM admin_auths WHERE id = :child AND admin_id = :parent AND auth = 'user'");
