@@ -142,6 +142,7 @@ $items = $cs->getItems();
     let checked = $(this).is(":checked")
     console.log({ elem, checked })
     $(elem).each( function () {
+      if (this.disabled) return;
       this.checked = checked
     })
   }

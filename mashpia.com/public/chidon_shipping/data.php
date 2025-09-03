@@ -50,7 +50,9 @@ function build_details() {
     global $item_details;
     $html = "<input type='checkbox' name='all_details' id='all_details' /> ALL DETAILS<br />";
     foreach ($item_details as $desc => $detail) {
-        $html .= "<input type='checkbox' name='details[" . $desc . "]' class='detail' /> " . ucwords($detail) . "<br />";
+        $html .= "<input type='checkbox' name='details[" . $desc . "]' class='detail'";
+        if (in_array($desc, ['id', 'qty']) ) $html .= " checked disabled";        
+        $html .= " /> " . ucwords($detail) . "<br />";
     }
     return $html;
 }
