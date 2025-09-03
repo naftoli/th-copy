@@ -150,16 +150,12 @@ if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
 
-if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $sql .= " AND u.user_registered < '2025-09-01 16:55:00'";
-
 //******* ORDER BY *********//
 $sql .= " ORDER BY u.school_id";
 if (in_array('c.class_grade', $fields_chosen)) $sql .= ", c.class_grade";
 if (in_array('c.class_sub', $fields_chosen)) $sql .= ", c.class_sub";
 if (in_array('u.last', $fields_chosen)) $sql .= ", u.last";
 if (in_array('u.first', $fields_chosen)) $sql .= ", u.first";
-
-if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) echo $sql;
 
 $stmt = $MASHPIA_DB->query($sql);
 $results = $stmt->fetchAll();
