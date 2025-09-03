@@ -81,7 +81,7 @@ foreach ($info as $row) {
         $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
         $action = intval($row['action']);
         if ($found) {
-            if ($action == 1 && $found['status'] != 2) { // if already set as received, don't change it
+            if ($action == 1) {
                 $res = $stmtUpdateWithDate->execute([
                     'year'      => $year,
                     'user'      => $row['user'],
