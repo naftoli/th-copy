@@ -231,14 +231,6 @@ workflows:
               only:
                 - testing
 
-      - deploy-raffles:
-          requires:
-            - build-react
-          filters:
-            branches:
-              only:
-                - updates
-
       - deploy-production:
           requires:
             - build-react
