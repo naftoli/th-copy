@@ -321,8 +321,8 @@ foreach ($resultsBySchool as $school => $more) : ?>
     <!--        /> I have reviewed and updated the shipping status for the entire school.-->
     <!--      </p>-->
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
-        <div class='summary'>
-          <h3>Summary</h3>
+        <div class='summary-div'>
+          <h3>Summary for <?= $schools[$school] ?></h3>
           <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
             <thead>
             <tr>
@@ -574,8 +574,9 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   function printSummary() {
     // Get the div content
     let printContent = "";
-    $(".summary").each(function() {
-      printContent += $(this).html();
+    $(".summary-div").each(function() {
+      const html = $(this).html();
+      printContent += html + '<div style="page-break-after: always"></div>';
     });
     
     // Create a new window for printing
