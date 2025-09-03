@@ -210,7 +210,8 @@ class Points
         } else {
 //            if ($this->australian) $reset_date = $this->yearStart;
 //            else $reset_date = 2455441; // Sept 1, 2010
-            $reset_date = $this->yearStart;
+            // $reset_date = $this->yearStart;
+            $reset_date = 2455441; // Sept 1, 2010
         }
         return $reset_date;
     }
