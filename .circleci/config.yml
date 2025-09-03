@@ -145,11 +145,11 @@ jobs:
     docker:
       - image: circleci/node:8.12
     # work in the repository
-    working_directory: ~/repo
+    working_directory: ~/www/repo
 
     steps:
       - attach_workspace:
-          at: ~/repo
+          at: ~/www/repo
 
       - run:
           name: Add Test.Mashpia.com to known_hosts
@@ -160,17 +160,17 @@ jobs:
       - run:
           name: Create deploy/build
           command: |
-            ssh -p 522 mashtest@test.mashpia.com "mkdir -p www/tzivos-hashem/deploy/build"
+            ssh -p 522 mashtest@test.mashpia.com "mkdir -p tzivos-hashem/deploy/build"
 
       - run:
           name: Send the react build Over SSH to deploy/build
           command: |
-            scp -P 522 -r base-commander/build mashtest@test.mashpia.com:www/tzivos-hashem/deploy
+            scp -P 522 -r base-commander/build mashtest@test.mashpia.com:tzivos-hashem/deploy
 
       - run:
           name: Run the Deployment script
           command: |
-            ssh -p 522 mashtest@test.mashpia.com "./www/tzivos-hashem/deploy/deploy.sh"
+            ssh -p 522 mashtest@test.mashpia.com "./tzivos-hashem/deploy/deploy.sh"
 
   # deploy build artifacts to staging
   deploy-production:
@@ -221,7 +221,6 @@ workflows:
               only:
                 - master
                 - testing
-                - updates
 
       - deploy-testing:
           requires:
