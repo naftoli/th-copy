@@ -145,11 +145,11 @@ jobs:
     docker:
       - image: circleci/node:8.12
     # work in the repository
-    working_directory: ~/www/repo
+    working_directory: ~/repo
 
     steps:
       - attach_workspace:
-          at: ~/www/repo
+          at: ~/repo
 
       - run:
           name: Add Test.Mashpia.com to known_hosts
