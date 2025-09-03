@@ -310,7 +310,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         foreach ($admin_emails as $email) {
             $stmt->execute([
                 ':admin' => $admin_id,
-                ':email' => $admin_email
+                ':email' => $email
             ]);
             $parent = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($parent) break;
