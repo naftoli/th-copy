@@ -119,7 +119,7 @@ class GlobalSettings {
         // type 1 soldiers pay nothing in parent acct
         if ( $type == 1 && $is_soldier ) {
             return 0;
-        } else if (!is_null($fee)) {
+        } else if (!is_null($fee) && intval($fee) > 0) {
             return intval($fee);
         }
 
