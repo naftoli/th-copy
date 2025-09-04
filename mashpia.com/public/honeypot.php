@@ -20,6 +20,17 @@ if (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) {
     $visitorIp = $_SERVER['REMOTE_ADDR'];
 }
 
+// allow these ips
+$allowedIps = [
+    "127.0.0.1",
+    "192.168.1.1",
+    "69.164.131.146"
+];
+
+if (in_array($visitorIp, $allowedIps)) {
+    exit;
+}
+
 // Cloudflare Firewall API endpoint
 $apiUrl = "https://api.cloudflare.com/client/v4/accounts/{$accountID}/firewall/access_rules/rules";
 
