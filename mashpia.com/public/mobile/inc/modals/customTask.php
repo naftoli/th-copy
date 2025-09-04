@@ -23,12 +23,12 @@ $admin->get_markable_children(); // get the children he can mark...
 //echo "</pre>";
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 
 //find end date of this year's parshos
-$end = mysql_fetch_assoc(mysql_query("SELECT end FROM parshos WHERE year = " . $year . " ORDER BY end DESC LIMIT 1"))['end'];
+$end_date = mysql_fetch_assoc(mysql_query("SELECT end FROM parshos WHERE year = " . $year . " ORDER BY end DESC LIMIT 1"))['end'];
 // get all the parshas from today untill the end of the year
-$parsha_query = mysql_query("SELECT * FROM parshos WHERE start >= ".(unixtojd() - 7)." and end <= " . $end);
+$parsha_query = mysql_query("SELECT * FROM parshos WHERE start >= ".(unixtojd() - 7)." and end <= " . $end_date);
 $parshos = [];
 while ($parsha = mysql_fetch_assoc($parsha_query)) {
     $parshos[$parsha['name']] = [
