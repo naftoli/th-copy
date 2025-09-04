@@ -13,8 +13,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 function getRegisteredStudents() {
     global $MASHPIA_DB, $year, $schools;
     $stmt = $MASHPIA_DB->prepare("
-        SELECT u.*, c.*, aa.admin_id, u.hachayol as hachayol_status, 
-            IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
+        SELECT u.*, c.*, aa.admin_id, IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
         FROM users u 
         JOIN admin_auths aa ON aa.id = u.user_id 
         JOIN classes c USING (class_id) 
@@ -23,7 +22,7 @@ function getRegisteredStudents() {
         WHERE u.school_id = :id 
         AND u.user_registered > 0 
         AND ur.year = :year 
-        ORDER BY class_grade, class_sub, hachayol_status DESC, last, first
+        ORDER BY class_grade, class_sub, hachayol DESC, last, first
     ");
 
     $users = [];
