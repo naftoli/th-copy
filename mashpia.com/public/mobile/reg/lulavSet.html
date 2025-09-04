@@ -169,6 +169,17 @@
                                 <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
                                 <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
                             </div>
+                            <!-- add address and state -->
+                            <div class="form-group">
+                                <label for="address" class="control-label mb-1">Address</label>
+                                <input id="address" name="address" type="text" class="form-control" placeholder="Address" maxlength="100" />
+                                <!-- <span class="invalid-feedback">Enter a valid address</span> -->
+                            </div>
+                            <div class="form-group">
+                                <label for="state" class="control-label mb-1">State</label>
+                                <input id="state" name="state" type="text" class="form-control" placeholder="State" maxlength="2" />
+                                <!-- <span class="invalid-feedback">Enter a valid state</span> -->
+                            </div>
                             <div class="form-group">
                                 <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
                                 <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
@@ -304,8 +315,10 @@
                     var exp = $("#cc-exp").val().trim();
                     var zip = $("#zip").val().trim();
                     var cvv = $("#x_card_code").val().trim();
+                    var address = $("#address").val().trim();
+                    var state = $("#state").val().trim();
 
-                    if ( !first || !last || !num || !exp || !zip || !cvv ) {
+                    if ( !first || !last || !num || !exp || !zip || !cvv || !address || !state ) {
                         alert("You must fill in all fields.");
                         return false;
                     }
@@ -326,6 +339,8 @@
                     info.cc.exp = exp;
                     info.zip = zip;
                     info.cvv = cvv;
+                    info.address = address;
+                    info.state = state;
                     info.users = [];
                     $.each($(".lulav:checked"), function() {
                         var id = $(this).attr('id');

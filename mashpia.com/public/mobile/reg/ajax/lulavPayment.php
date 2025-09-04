@@ -19,8 +19,8 @@ $first_name = $info['cc']['first'];
 $last_name = $info['cc']['last'];
 $zip = $info['zip'];
 $cvv = $info['cvv'];
-$address = "";
-$state = "";
+$address = $info['address'];
+$state = $info['state'];
 $item_id = $info['item_id'] ?? 1;
 
 $description = "000:00 #lulav " . $amount;
