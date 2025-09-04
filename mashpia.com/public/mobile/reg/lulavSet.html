@@ -141,7 +141,7 @@
                     </div>
                     <hr />
 
-                    <form action="" method="post">
+                    <form action="" method="post" id="checkout-form" style="display: none;">
                         <div class="row">
                             <h2>Checkout</h2>
                             <div class="form-group">
@@ -171,17 +171,17 @@
                             </div>
                             <!-- add address and state -->
                             <div class="form-group">
-                                <label for="address" class="control-label mb-1">Address</label>
+                                <label for="address" class="control-label mb-1">BillingAddress</label>
                                 <input id="address" name="address" type="text" class="form-control" placeholder="Address" maxlength="100" />
                                 <!-- <span class="invalid-feedback">Enter a valid address</span> -->
                             </div>
                             <div class="form-group">
-                                <label for="state" class="control-label mb-1">State</label>
+                                <label for="state" class="control-label mb-1">Billing State</label>
                                 <input id="state" name="state" type="text" class="form-control" placeholder="State" maxlength="2" />
                                 <!-- <span class="invalid-feedback">Enter a valid state</span> -->
                             </div>
                             <div class="form-group">
-                                <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
+                                <label for="zip" class="control-label mb-1">Billing Zip / Postal Code</label>
                                 <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
                                 <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
                             </div>
@@ -302,6 +302,11 @@
                 var amount = parseFloat(total).toFixed(2);
                 $("#amount").text( amount );
                 $("#total").val( amount );
+                if ( amount > 0 ) {
+                    $("#checkout-form").show();
+                } else {
+                    $("#checkout-form").hide();
+                }
             }
 
             function purchaseSets( e ) {
