@@ -10,8 +10,9 @@ $objMissions = [];
 
 // * Get the list of parshos for the dropdown
 $parshos = [];
-$dates = GlobalSettings::getCurYearDates();
-$sql = "select * from parshos where start >= " . $dates['start'] . " and end <= " . $dates['end'] . " order by start";
+$start = GlobalSettings::getSummerMissionsStart();
+$end = GlobalSettings::getCurYearDates()['end'];
+$sql = "select * from parshos where start >= " . $start . " and end <= " . $end . " order by start";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_object($result)) {
     $parshos[] = $row;
