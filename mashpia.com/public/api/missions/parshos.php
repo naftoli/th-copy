@@ -6,7 +6,7 @@ class ParshaRouter {
     public function index() {
         global $MASHPIA_DB;
 
-        $start = GlobalSettings::getCurYearDates()['start'];
+        $start = GlobalSettings::getSummerMissionsStart();
         $end = GlobalSettings::getCurYearDates()['end'];
         $qry = "SELECT * FROM parshos WHERE start >= :start AND end <= :end";
         $stmt = $MASHPIA_DB->prepare( $qry );
