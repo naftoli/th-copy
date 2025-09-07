@@ -64,6 +64,7 @@ class UsersUploadRouter {
                 }
                 // make sure that the headers are valid
                 $diff = array_diff( $headers, $columnNames );
+
                 if ( count($diff) > 0 )
                     json_error(
                          "You have an incorrect excel sheet.\n"
@@ -147,18 +148,48 @@ class UsersUploadRouter {
                         } else {
                             $dob = $value;
                         }
+                        
                         // make sure it is a valid date
                         try {
-                            $dob = new \DateTime( $dob );
+                            // Clean any hidden Unicode characters first
+                            if (is_string($dob)) {
+                                $dob = preg_replace('/[^\d\/\-\s]/', '', trim($dob));
+                            }
+                            
+                            // Handle string dates more explicitly
+                            if (is_string($dob)) {
+                                // Try to parse MM/DD/YYYY or M/D/YYYY format
+                                if (preg_match('/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/', $dob, $matches)) {
+                                    $month = $matches[1];
+                                    $day = $matches[2]; 
+                                    $year = $matches[3];
+                                    $dob = DateTime::createFromFormat('n/j/Y', "$month/$day/$year");
+                                    if ($dob === false) {
+                                        throw new Exception("Invalid date format");
+                                    }
+                                } else {
+                                    // Fallback to DateTime constructor
+                                    $dob = new \DateTime($dob);
+                                }
+                            } else {
+                                // Handle gregorian date string from jdtogregorian (format: "12/19/2018")
+                                $dob = new \DateTime($dob);
+                            }
+                            
                             // check that it is in our year range
                             $year = date('Y');
-                            $startYear = $year - 5; $endYear = $year - 15;
-                            if ( $dob->format('Y') > $startYear || $dob->format('Y') < $endYear ) {
-                                $errors[] ="$errorString Date of Birth must be between $startYear and $endYear. Year is " . $dob->format('Y');
+                            $startYear = $year - 5; 
+                            $endYear = $year - 15;
+                            
+                            // Child should be between 5-15 years old, so birth year should be between endYear and startYear
+                            if ( $dob->format('Y') < $endYear || $dob->format('Y') > $startYear ) {
+                                $errors[] = "$errorString Date of Birth must be between $endYear and $startYear. Year is " . $dob->format('Y');
                             }
+                            
                             $value = $dob->format('Y-m-d');
+                            
                         } catch ( Exception $e ) {
-                            $errors[] ="$errorString Date of Birth must follow the format MM/DD/YYYY.";
+                            $errors[] = "$errorString Date of Birth must follow the format MM/DD/YYYY. Error: " . $e->getMessage();
                         }
                     }
 
