@@ -57,6 +57,20 @@ class PrizesPage extends Component {
   toggleRow = ( selection, row ) => this.setState({ selection });
   toggleAll = ( selection ) => this.setState({ selection });
 
+  // toggle selection from the Discount cell only
+  toggleRowFromCell = ( row ) => {
+    let selection = [ ...this.state.selection ];
+    const id = this.getId( row );
+    const keyIndex = selection.indexOf( id );
+
+    if ( keyIndex >= 0 )
+      selection = [ ...selection.slice( 0, keyIndex ), ...selection.slice( keyIndex + 1 ) ];
+    else
+      selection.push( id );
+
+    this.setState({ selection });
+  }
+
   // update prizes in a modal ( not much data )
   togglePrize = () => this.setState({
     prizeModal: { ...this.state.prizeModal, show: false }
@@ -248,7 +262,8 @@ class PrizesPage extends Component {
     let columns = getColumns({
       editPrize, editPicture, updateToggle,
       showPlatoons: true,
-      updateNumPerUser: this.updateNumPerUser
+      updateNumPerUser: this.updateNumPerUser,
+      toggleRowFromCell: this.toggleRowFromCell
     });
 
     if ( isAdmin( login.code ) )
@@ -322,6 +337,11 @@ class PrizesPage extends Component {
           selection={ selection }
           toggleRow={ this.toggleRow }
           toggleAll={ this.toggleAll }
+          getTrProps={ (state, row) => {
+            const selected = row ? this.state.selection.includes( this.getId( row.original ) ) : false;
+            return { className: selected ? 'selectable selected-row' : 'selectable' };
+          } }
+          checkboxTogglesRow
           maxSelectionSize={ prizes.length } />
 
         <PrizeModal 
