@@ -1,6 +1,11 @@
 <?php
 $admin_auth = ['school'];
-require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+if ($admin_user['auth'] != 'super') {
+    echo "You are not authorized to access this page.";
+    exit;
+}
 
 if ( isset( $_FILES['add'] ) ) {
   $raffle = $_POST['number'];
