@@ -323,25 +323,26 @@ foreach ($resultsBySchool as $school => $more) : ?>
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <div class='summary-div'>
           <h3>Summary for <?= $schools[$school] ?></h3>
+          <h3>Summary</h3>
           <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
             <thead>
             <tr>
               <th>Item ID</th>
               <th>Quantity</th>
-              <?php foreach ($item_details_chosen as $field) {
-                echo "<th>" . $field . "</th>";
-              } ?>
+              <th>Item Name</th>
+              <th>Size</th>
+              <th>Gender/Color</th>
+              <th>Category</th>
+              <!--            <th>Status</th>-->
             </tr>
             </thead>
             <tbody>
             <?php
             if (isset($summary[$school])) {
                 foreach ($summary[$school] as $id => $qty) {
-                    echo "<tr>";
-                    echo "<td>" . $id . "</td><td>" . $qty . "</td>";
+                    echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
                     $item = $summary_items[$id];
                     foreach (['item', 'size', 'color', 'cat'] as $attr) {
-                        if (! in_array($attr, $item_details_chosen)) continue;
                         echo "<td>";
                         if (isset($item[$attr])) echo $item[$attr];
                         echo "</td>";
