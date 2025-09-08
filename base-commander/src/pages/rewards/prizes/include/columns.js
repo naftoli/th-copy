@@ -9,7 +9,8 @@ import { Input } from 'reactstrap';
 import { yesNoFilter, yesNoFilterRender } from 'functions/tables';
 
 export function getColumns({
-  editPicture, editPrize, updateToggle, isTemplate = false, updateNumPerUser
+  editPicture, editPrize, updateToggle, isTemplate = false, updateNumPerUser,
+  toggleRowFromCell
 }) {
 
   const dropdown = yesNoFilterRender('On', 'Off');
@@ -86,13 +87,15 @@ export function getColumns({
       { Header: 'Discount', accessor: 'discount_amount',
         Cell: props => {
           const { discount_amount, discount_type } = props.original;
-          if (!discount_amount || discount_amount <= 0) return '-';
-          
-          if (discount_type === 'percent') {
-            return `${discount_amount}% off`;
-          } else {
-            return `${discount_amount} miles off`;
-          }
+          const content = (!discount_amount || discount_amount <= 0)
+            ? '-'
+            : (discount_type === 'percent' ? `${discount_amount}% off` : `${discount_amount} miles off`);
+          return (
+            <span style={{ cursor: toggleRowFromCell ? 'pointer' : 'default' }}
+              onClick={ toggleRowFromCell ? () => toggleRowFromCell(props.original) : undefined }>
+              {content}
+            </span>
+          );
         }
       },
 
