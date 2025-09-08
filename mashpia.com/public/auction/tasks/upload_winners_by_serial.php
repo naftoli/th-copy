@@ -31,28 +31,18 @@ if ( isset( $_FILES['add'] ) ) {
         } else {
             while ($data = fgetcsv($file)) {
                 $prize = intval($data[0]);
-                $serial = intval($data[1]);
+                $user_id = intval($data[1]);
 
-                if ($serial > 0) {
-                    $sql = "select user_id from users where user_serial = " . $serial;
-                    $result = mysql_query($sql);
-                    $row = mysql_fetch_assoc($result);
-                    $user_id = $row['user_id'];
-                    echo "User ID: " . $user_id . "<br />";
-                    echo "Prize: " . $prize . "<br />";
-                    echo "Serial: " . $serial . "<br />";
-
-                    if ($auction_id && $user_id && $prize) {
-                        $sql = "insert into auction_winners (auction_id, user_id, prize_id, quantity) 
-                                values ($auction_id, $user_id, $prize, 1)";
-                        if (mysql_query($sql)) {
-                            $updated++;
-                            echo $sql . "<br />";
-                        } else {
-                            $success = false;
-                            echo $sql . "<br />" . mysql_error();
-                            break;
-                        }
+                if ($auction_id > 0 && $user_id > 0 && $prize > 0) {
+                    $sql = "insert into auction_winners (auction_id, user_id, prize_id, quantity) 
+                            values ($auction_id, $user_id, $prize, 1)";
+                    if (mysql_query($sql)) {
+                        $updated++;
+                        echo $sql . "<br />";
+                    } else {
+                        $success = false;
+                        echo $sql . "<br />" . mysql_error();
+                        break;
                     }
                 }
             }
