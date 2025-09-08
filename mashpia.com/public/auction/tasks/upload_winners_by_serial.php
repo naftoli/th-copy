@@ -12,6 +12,7 @@ $sql = "select auction_id from auctions order by auction_id desc limit 1";
 $result = mysql_query($sql);
 $row = mysql_fetch_assoc($result);
 $auction_id = intval($row['auction_id']);
+echo "Auction ID: " . $auction_id . "<br />";
 
 // get winners from file
 if ( isset( $_FILES['add'] ) ) {
@@ -37,6 +38,9 @@ if ( isset( $_FILES['add'] ) ) {
                     $result = mysql_query($sql);
                     $row = mysql_fetch_assoc($result);
                     $user_id = $row['user_id'];
+                    echo "User ID: " . $user_id . "<br />";
+                    echo "Prize: " . $prize . "<br />";
+                    echo "Serial: " . $serial . "<br />";
 
                     if ($auction_id && $user_id && $prize) {
                         $sql = "insert into auction_winners (auction_id, user_id, prize_id, quantity) 
