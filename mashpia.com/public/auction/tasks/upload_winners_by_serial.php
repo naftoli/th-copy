@@ -38,6 +38,9 @@ if ( isset( $_FILES['add'] ) ) {
                     $result = mysql_query($sql);
                     $row = mysql_fetch_assoc($result);
                     $user_id = $row['user_id'];
+                    echo "User ID: " . $user_id . "<br />";
+                    echo "Prize: " . $prize . "<br />";
+                    echo "Serial: " . $serial . "<br />";
 
                     if ($auction_id && $user_id && $prize) {
                         $sql = "insert into auction_winners (auction_id, user_id, prize_id, quantity) 
