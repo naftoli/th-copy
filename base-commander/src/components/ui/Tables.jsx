@@ -37,7 +37,9 @@ export class SelectTable extends Component {
     toggleRow: PropTypes.func,
     // array of selected id's from getId
     selection: PropTypes.array.isRequired,
-    maxSelectionSize: PropTypes.number.isRequired
+    maxSelectionSize: PropTypes.number.isRequired,
+    // when true, clicking the checkbox toggles selection
+    checkboxTogglesRow: PropTypes.bool
   }
 
   state = { selectAll: false }
@@ -106,7 +108,7 @@ export class SelectTable extends Component {
     columns = [
       { id: 'checkbox', accessor: '', width: 38,
         filterable: false, sortable: false, resizable: false,
-        Cell: ({ original }) => <Checkbox onChange={ () => {} } 
+        Cell: ({ original }) => <Checkbox onChange={ this.props.checkboxTogglesRow ? () => this.toggleRow( original ) : () => {} } 
           checked={ isSelected( getId( original ) ) } />, 
         Header: () => <Checkbox onChange={ toggleAll } 
           checked={ this.state.selectAll } setRef={ ref => { this.checkAll = ref } } />
