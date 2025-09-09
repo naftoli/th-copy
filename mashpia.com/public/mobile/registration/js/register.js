@@ -451,10 +451,10 @@ var registrationApp = function () {
         $('#yahadus-registration').hide();
         // $( '#step-2 form #yahadus-registration-no input' )[0].checked = false;
         // $( '#step-2 form #yahadus-registration-no').hide();
-        if (selected_user.getChidonInfo) { // if we are editing chidon info
-          $('#book-purchase').hide()
-          $(".yahadus-myshliach").hide()
-        } else {
+        // if (selected_user.getChidonInfo) { // if we are editing chidon info
+        //   $('#book-purchase').hide()
+        //   $(".yahadus-myshliach").hide()
+        // } else {
           $('#book-purchase').show();
           $(".yahadus-myshliach").hide()
           if ([61, 269].includes(school_id)) {
@@ -464,7 +464,7 @@ var registrationApp = function () {
             $(".book-purchase-item").show()
             $(".book-purchase-myshliach").hide()
           }
-        }
+        // }
       }
     });
 
@@ -687,7 +687,7 @@ var registrationApp = function () {
   /*********************** FORM HANDLERS ***********************/
   function checkField(field) {
     // skip if we are editing registration
-    if (['#chidon-fee', '.book-bought'].includes(field.field) && selected_user.getChidonInfo) return false
+    if (['#chidon-fee', '.book-bought', '#bookVersion'].includes(field.field) && selected_user.getChidonInfo) return false
     let value, checked
     switch (field.type) {
       case 'value':
