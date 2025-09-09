@@ -58,7 +58,7 @@ if ($year < 5786) {
 } else {
     // then get all users per admin
     $sqlUsers = "select u.user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
-                  IF(htg.user_id IS NOT NULL, 1, 0) as hachayol_to_give
+                  IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
                 from users u 
                 join classes c on c.class_id = u.class_id 
                 join admin_auths aa on u.user_id = aa.id 
