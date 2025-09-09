@@ -315,10 +315,10 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
         $billTo = [
             'firstName' => $this->first,
             'lastName' => $this->last, 
-            'address' => isset($payment_info['address']) && !empty($payment_info['address']) ? $payment_info['address'] : $this->admin_address1,
+            'address' => $this->admin_address1,
             'city' => $this->admin_city,
-            'state' => isset($payment_info['state']) && !empty($payment_info['state']) ? $payment_info['state'] : $this->admin_state,
-            'zip' => isset($payment_info['zip']) && !empty($payment_info['zip']) ? $payment_info['zip'] : $this->admin_postal
+            'state' => $this->admin_state,
+            'zip' => $this->admin_postal
         ];
 
         // if we do not have a customer profile

@@ -2086,9 +2086,6 @@ var registrationApp = function () {
     postData.payment["cc-number"] = postData.payment["cc-number"].replace(/ /g, '');
     postData.payment["cc-exp"] = postData.payment["cc-exp"].replace(/ /g, '');
     postData.payment["x_card_code"] = postData.payment["x_card_code"].replace(/ /g, '');
-    postData.payment["address"] = postData.payment["address"].replace(/ /g, '');
-    postData.payment["state"] = postData.payment["state"].replace(/ /g, '');
-    postData.payment["zip"] = postData.payment["zip"].replace(/ /g, '');
     // validate form
     if (postData.payment["cc-number"]) {
       event.target.checkValidity();
