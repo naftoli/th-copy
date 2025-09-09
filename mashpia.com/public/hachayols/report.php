@@ -57,8 +57,8 @@ if ($year < 5786) {
     $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 } else {
     // then get all users per admin
-    $sqlUsers = "select u.user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
-                  IF(htg.user_id IS NOT NULL, 1, 0) as hachayol_to_give
+    $sqlUsers = "select u.user_id, u.school_id, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
+                  IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
                 from users u 
                 join classes c on c.class_id = u.class_id 
                 join admin_auths aa on u.user_id = aa.id 
@@ -70,8 +70,8 @@ if ($year < 5786) {
     $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
     // get users that don't have an admin account
-    $sqlMissing = "select u.user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
-                      IF(htg.user_id IS NOT NULL, 1, 0) as hachayol_to_give 
+    $sqlMissing = "select u.user_id, u.school_id, first, last, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
+                      IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
                     from users u 
                     join classes c on c.class_id = u.class_id 
                     left join admin_auths aa on aa.id = u.user_id 
@@ -140,8 +140,7 @@ if ($year < 5786) {
           // find out if hachayol child is in this school or not
           $disable = false;
           foreach ($children as $child) {
-              $hachayol = $year < 5786 ? $child['hachayol'] : $child['hachayol_to_give'];
-              if (!$super && $hachayol == 1 && $child['school_id'] != $school_id) {
+              if (!$super && $child['hachayol'] == 1 && $child['school_id'] != $school_id) {
                   $disable = true;
                   break;
               }
@@ -149,13 +148,12 @@ if ($year < 5786) {
 
           echo "<tr><td>" . $admin['admin_id'] . "</td><td>" . $admin['first'] . ' ' . $admin['last'] . "</td><td>";
           foreach ($children as $i => $child) {
-              $hachayol = $year < 5786 ? $child['hachayol'] : $child['hachayol_to_give'];
               // find out child's school / grade
               $school = $all_schools[$child['school_id']];
               $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
               $id = $admin['admin_id'] . ':' . $j[$admin['admin_id']];
               echo "<input type='radio' name='hachayol[$id]' class='hachayol' id='" . $child['user_id'] . "'";
-              if ($hachayol == 1 && $child['reg_date']) echo " checked";
+              if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
               if ($disable) echo " disabled";
               echo " />";
               echo $child['first'] . " (" . $school . ' : ' . $grade . ")<br />";
@@ -169,12 +167,11 @@ if ($year < 5786) {
       ]);
       $missing = $stmtMissing->fetchAll();
       foreach ($missing as $idx => $child) {
-          $hachayol = $year < 5786 ? $child['hachayol'] : $child['hachayol_to_give'];
           $school = $all_schools[$child['school_id']];
           $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
           echo "<tr><td colspan='2'>No Parent Account</td><td>";
           echo "<input type='radio' name='hachayol[" . $unique_id++ . "]' class='hachayol toCheck' id='" . $child['user_id'] . "'";
-          if ($hachayol == 1 && $child['reg_date']) echo " checked";
+          if ($child['hachayol'] == 1 && $child['reg_date']) echo " checked";
           echo " />";
           echo $child['first'] . ' ' . $child['last'] . " (" . $school . ' : ' . $grade . ")</td></tr>";
       }

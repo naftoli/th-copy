@@ -13,7 +13,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 function getRegisteredStudents() {
     global $MASHPIA_DB, $year, $schools;
     $stmt = $MASHPIA_DB->prepare("
-        SELECT u.*, c.*, aa.admin_id, IF(htg.user_id IS NOT NULL, 1, 0) as hachayol_to_give
+        SELECT u.*, c.*, aa.admin_id, IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
         FROM users u 
         JOIN admin_auths aa ON aa.id = u.user_id 
         JOIN classes c USING (class_id) 
@@ -22,7 +22,7 @@ function getRegisteredStudents() {
         WHERE u.school_id = :id 
         AND u.user_registered > 0 
         AND ur.year = :year 
-        ORDER BY class_grade, class_sub, hachayol_to_give DESC, last, first
+        ORDER BY class_grade, class_sub, hachayol DESC, last, first
     ");
 
     $users = [];
@@ -66,7 +66,7 @@ function getGradeData($students) {
     $total = 0;
     $rows = [];
     foreach ($students as $user) {
-        if (intval($user['hachayol_to_give'])) {
+        if (intval($user['hachayol'])) {
             $total++;
         }
         $rows[] = [
@@ -74,7 +74,7 @@ function getGradeData($students) {
             'hebrew_name' => $user['first_he'] . ' ' . $user['last_he'],
             'name' => $user['first'] . ' ' . $user['last'],
             'family_id' => $user['admin_id'],
-            'hachayol' => intval($user['hachayol_to_give']) ? 'yes' : 'no',
+            'hachayol' => intval($user['hachayol']) ? 'yes' : 'no',
             'children' => getHachayolInfo($user)
         ];
     }
