@@ -219,7 +219,7 @@
 
             $.post('ajax/lulavPurchases.php', function( sold ) {
                 var startWith = 2000;
-                var alreadySold = 0;
+                var alreadySold = 3;
                 if (sold) alreadySold += parseInt( sold );
                 var leftToSell = startWith - alreadySold;
                 if ( leftToSell < 0 ) leftToSell = 0;
