@@ -13,14 +13,8 @@ if ( $admin_user['auth'] != 'super' && $admin_user['admin_id'] != 175069 ) {
 <style>
   body, table {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
   }
-  table {
-    width: 100%;
-  }
-  th, td {
-    border: 1px solid black;
-    vertical-align: text-top;
-    padding: 6px;
 }
 </style>
 </head>
