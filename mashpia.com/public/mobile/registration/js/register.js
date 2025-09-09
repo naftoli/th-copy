@@ -1450,6 +1450,7 @@ var registrationApp = function () {
 
       $(".he_name").blur(function (e) {
         let he_name = e.target.value.trim()
+        if (!he_name) return
         // add prize to list
         if (he_name.length && !$(this).parent().parent().find('.prize').is(":checked")) {
           $(this).parent().parent().find('.prize').trigger('click')
