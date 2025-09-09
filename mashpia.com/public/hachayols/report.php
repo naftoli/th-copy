@@ -57,7 +57,7 @@ if ($year < 5786) {
     $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 } else {
     // then get all users per admin
-    $sqlUsers = "select u.user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
+    $sqlUsers = "select u.user_id, u.school_id, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
                   IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
                 from users u 
                 join classes c on c.class_id = u.class_id 
@@ -70,7 +70,7 @@ if ($year < 5786) {
     $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
     // get users that don't have an admin account
-    $sqlMissing = "select u.user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
+    $sqlMissing = "select u.user_id, u.school_id, first, last, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
                       IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
                     from users u 
                     join classes c on c.class_id = u.class_id 
