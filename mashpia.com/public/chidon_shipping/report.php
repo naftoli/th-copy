@@ -147,18 +147,16 @@ if (isset($_COOKIE['naftoli'])) {
 
 //********* WHERE *********//
 $sql .= " WHERE 1";
+$sql .= " AND u.school_id in (" . implode(",", $list_of_schools) . ")";
 if (isset($_COOKIE['naftoli'])) {
-  $sql .= " AND u.school_id in (33, 49, 192, 54, 255, 542, 30, 9, 471, 60, 621, 780)";
   $sql .= " AND ur.reg_date < '2025-09-01 16:56:00'";
-}
-else {
-  $sql .= " AND u.school_id in (" . implode(",", $list_of_schools) . ")";
 }
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 //if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
+
 //******* ORDER BY *********//
 $sql .= " ORDER BY u.school_id";
 if (in_array('c.class_grade', $fields_chosen)) $sql .= ", c.class_grade";
