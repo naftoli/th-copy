@@ -2393,6 +2393,7 @@ var templates = function () {
 
       // reset all fee checkboxes
       $('#chayolei-registration input')[0].checked = false
+
       $('#chidon-registration input')[0].checked = false
       $('#yahadus-registration input')[0].checked = false
       $('#khk input')[0].checked = false
@@ -2650,6 +2651,10 @@ var templates = function () {
           field: '#khk_enrollment',
           type: 'checkbox',
           db: 'khk_reg'
+        },
+        {
+          field: '#he_name',
+          type: 'checkbox',
         },
         {
           field: '#media',
