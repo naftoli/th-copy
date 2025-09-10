@@ -141,10 +141,19 @@ foreach ($tables as $table) {
     if ($table == 'u') continue;
     $sql .= $tableAliases[$table] . " ";
 }
+if (isset($_COOKIE['naftoli'])) {
+  $sql .= " join user_registration ur on ur.user_id = u.user_id ";
+}
 
 //********* WHERE *********//
 $sql .= " WHERE 1";
-$sql .= " AND u.school_id in (" . implode(",", $list_of_schools) . ")";
+if (isset($_COOKIE['naftoli'])) {
+  $sql .= " AND u.school_id in (33, 49, 192, 54, 255, 542, 30, 9, 471, 60, 621, 780)";
+  $sql .= " AND ur.reg_date < '2025-09-01 16:56:00'";
+}
+else {
+  $sql .= " AND u.school_id in (" . implode(",", $list_of_schools) . ")";
+}
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 //if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
