@@ -312,13 +312,14 @@ class Admin extends ActiveRecord\Model implements JsonSerializable {
      *      error: string
      */
     public function createPaymentProfile( $payment_info, $setAsDefault = true ) {
+        if ( !$payment_info['zip'] ) return "Zip code is required";
         $billTo = [
             'firstName' => $this->first,
             'lastName' => $this->last, 
             'address' => $this->admin_address1,
             'city' => $this->admin_city,
             'state' => $this->admin_state,
-            'zip' => $payment_info['zip'] ? $payment_info['zip'] : $this->admin_postal
+            'zip' => $payment_info['zip']
         ];
 
         // if we do not have a customer profile
