@@ -326,7 +326,11 @@ class School extends ActiveRecord\Model implements JsonSerializable {
 
     // get the early bird, or the default
     public function earlyBird() {
-        return GlobalSettings::earlyBird();
+        $early_bird = GlobalSettings::earlyBird();
+        if ( $this->early_bird > $early_bird ) {
+            $early_bird = $this->early_bird;
+        }
+        return $early_bird;
     }
 
     // get the current registration prices, subject to change at any time
