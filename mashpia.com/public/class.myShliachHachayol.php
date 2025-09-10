@@ -7,10 +7,16 @@ class MyShliachHachayol {
 	private $admins;
 	private $children;
 	private $sortedAdmins;
+	private $checkForShipping;
 	
 	public function __construct( $forPickup = false, $id = 61 ) {
 		$this->year = GlobalSettings::getRegistrationYear();
 		$this->setInfo( $forPickup, $id );
+		$this->checkForShipping = true;
+	}
+
+	public function setCheckForShipping($checkForShipping) {
+		$this->checkForShipping = $checkForShipping;
 	}
 
 	public function getSql($gender = '') {
@@ -50,10 +56,13 @@ class MyShliachHachayol {
 		// $result->debugDumpParams();
  		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 		foreach ($rows as $row) {
-			if (
-				($forPickup && $this->paidForShipping($row['admin_id'], $id)) || 
-				(!$forPickup && !$this->paidForShipping($row['admin_id'], $id))
-			) continue;
+			if ($this->checkForShipping) {
+				$shippingPaid = $this->paidForShipping($row['admin_id'], $id);
+				if (
+					($forPickup && $shippingPaid) || 
+					(!$forPickup && !$shippingPaid)
+				) continue;
+			}
 			$this->admins[$row['admin_id']] = $row;
 			$this->children[$row['admin_id']][] = $row['first'] . ' ' . $row['last'];
 		}
@@ -69,7 +78,8 @@ class MyShliachHachayol {
 		} else {
 			return false;
 		}
-		$sql = "SELECT * FROM registration_charges WHERE type like :type and admin_id = :admin_id and year = :year";
+		$sql = "SELECT * FROM registration_charges WHERE type like :type and user_id in (
+			SELECT id FROM admin_auths WHERE admin_id = :admin_id) and year = :year";
 		$result = $MASHPIA_DB->prepare($sql);
 		$result->execute(['admin_id' => $admin_id, 'year' => $this->year, 'type' => $type]);
 		$rows = $result->fetchAll(PDO::FETCH_ASSOC);

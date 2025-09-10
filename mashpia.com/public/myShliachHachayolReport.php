@@ -1,14 +1,46 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 $admin_auth = array('school'); 
 require('header.php');
 
 require 'class.myShliachHachayol.php';
 
-$hachayol = new MyShliachHachayol();
+if (isset($_GET['id'])) {
+	$id = $_GET['id'];
+} else {
+	$id = 61;
+}
+
+$hachayol = new MyShliachHachayol(false, $id);
 $admins = $hachayol->getAdmins();
 $children = $hachayol->getChildren();
 
 //echo "<pre>"; print_r($children); echo "</pre>";
+// CSV download
+if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
+	header('Content-Type: text/csv; charset=utf-8');
+	header('Content-Disposition: attachment; filename="hachayol_report.csv"');
+	$out = fopen('php://output', 'w');
+	// headers
+	fputcsv($out, array('Number of Hachayols to Send', 'Parent', 'Address', 'Children'));
+	foreach ( $admins as $adminId => $admin ) {
+		$num = isset($children[$adminId]) ? count($children[$adminId]) : 0;
+		$parent = trim($admin['afirst'] . ' ' . $admin['alast']);
+		$addressParts = array_filter([
+			$admin['admin_address1'],
+			$admin['admin_address2'],
+			trim($admin['admin_city'] . ', ' . $admin['admin_state'] . ' ' . $admin['admin_postal']),
+			$admin['admin_country']
+		]);
+		$address = implode(', ', $addressParts);
+		$kids = isset($children[$adminId]) ? implode(' | ', $children[$adminId]) : '';
+		fputcsv($out, array($num, $parent, $address, $kids));
+	}
+	fclose($out);
+	exit;
+}
 ?>
 <!doctype html>
 <html>
@@ -18,36 +50,30 @@ $children = $hachayol->getChildren();
 		<title>Hachayol Report</title>
 		<style>
 			tr, th, td {
-				padding: 3px;
 				font-size: 12px;
-				vertical-align: top;
-			}
-			.num {
-				width: 60px;
-			}
-			.hachayols {
-				width: 20px;
-				text-align: center;
+				padding: 10px;
+				border-bottom: 1px solid #ccc;
 			}
 		</style>
 	</head>
 	
 	<body>
 	<? include('admin_header.php'); ?>
-	<h1>Hachayol Report</h1>
+	<h1>Hachayol Report (Paid for Shipping)</h1>
+		<p>
+			<a href="?id=<?=$id?>&download=csv" style="display:inline-block;padding:8px 12px;background:#1b2b51;color:#fff;text-decoration:none;border-radius:4px;">Download CSV</a>
+		</p>
 		<table>
 			<tr>
-				<th class='num'>Number of Hachayols to Send</th>
+				<th>Number of Hachayols to Send</th>
 				<th>Parent</th>
 				<th>Address</th>
 				<th>Children</th>
-				<th>Do NOT Ship</th>
 			</tr>
 		<? foreach ($admins as $id => $admin) : ?>
 			<tr>
-				<td class='numInput'>
-					<input type='text' class='hachayols' value='<?=$admin['num_hachayols']?>' />
-					<span class='<?=$id?>'></span>
+				<td>
+					<?=count($children[$id])?>
 				</td>
 				<td><?=$admin['afirst'] . ' ' . $admin['alast']?></td>
 				<td><?=$admin['admin_address1'] . "<br />" . (empty($admin['admin_address2']) ? '' : 
@@ -63,47 +89,8 @@ $children = $hachayol->getChildren();
 						?>
 					</table>
 				</td>
-				<td>
-					<?
-					 $noShip = $admin['no_shipping'] ? true : false; 
-					 echo "<input type='checkbox' class='ship' ";
-					 if ($noShip) echo "checked='checked' ";
-					 echo "/>";
-					 ?>
-					 <span class='<?=$id?>'></span>
-				</td>
 			</tr>
 		<? endforeach; ?>
 		</table>		
 	</body>
-	
-	<script src="jquery-1.8.1.min.js"></script>
-	<script>
-		$( function() {
-			$(".hachayols").blur( function() {
-				var id = $(this).parent().find('span').attr('class');
-				var val = $(this).val().trim();
-				if (val == '') return;
-				$.post('ajax/updateHachayols.php', {id : id, val: val}, function( success ) {
-					if (success == 1) {
-						alert("updated");
-					} else if (success == 0) {
-						alert("error updating");
-					}
-				});
-			});
-			
-			$(".ship").click( function() {
-				var id = $(this).parent().find('span').attr('class');
-				var checked = $(this).is(":checked");
-				$.post('ajax/updateShipping.php', {id : id, ship : checked}, function( success ) {
-					if (success == 1) {
-						alert('updated');
-					} else if (success == 0) {
-						alert('error updating');
-					}
-				});
-			});
-		});
-	</script>
 </html>
