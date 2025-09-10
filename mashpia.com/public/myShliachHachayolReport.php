@@ -24,19 +24,44 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 	header('Content-Disposition: attachment; filename="hachayol_report.csv"');
 	$out = fopen('php://output', 'w');
 	// headers
-	fputcsv($out, array('Number of Hachayols to Send', 'Parent', 'Address', 'Children'));
+	fputcsv($out, array(
+		'Number of Hachayols to Send',
+		'Family ID',
+		'Parent',
+		'Address',
+		'Address 2',
+		'City',
+		'State',
+		'Zip',
+		'Country',
+		'Children To Get Hachayol',
+		'School'
+	));
 	foreach ( $admins as $adminId => $admin ) {
 		$num = isset($children[$adminId]) ? count($children[$adminId]) : 0;
-		$parent = trim($admin['afirst'] . ' ' . $admin['alast']);
-		$addressParts = array_filter([
-			$admin['admin_address1'],
-			$admin['admin_address2'],
-			trim($admin['admin_city'] . ', ' . $admin['admin_state'] . ' ' . $admin['admin_postal']),
-			$admin['admin_country']
-		]);
-		$address = implode(', ', $addressParts);
+		$familyId = $admin['admin_id'];
+		$parent = trim($admin['alast'] . ' Family');
+		$address1 = $admin['admin_address1'];
+		$address2 = $admin['admin_address2'];
+		$city = $admin['admin_city'];
+		$state = $admin['admin_state'];
+		$zip = $admin['admin_postal'];
+		$country = $admin['admin_country'];
 		$kids = isset($children[$adminId]) ? implode(' | ', $children[$adminId]) : '';
-		fputcsv($out, array($num, $parent, $address, $kids));
+		$school = ($id == 61 ? 'MS' : 'AK');
+		fputcsv($out, array(
+			$num,
+			$familyId,
+			$parent,
+			$address1,
+			$address2,
+			$city,
+			$state,
+			$zip,
+			$country,
+			$kids,
+			$school
+		));
 	}
 	fclose($out);
 	exit;
