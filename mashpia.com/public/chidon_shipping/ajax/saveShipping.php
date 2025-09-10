@@ -30,7 +30,8 @@ $stmtInsert = $MASHPIA_DB->prepare($insert);
 $update = "UPDATE $table 
             SET 
                 status = :status,
-                description = :desc 
+                description = :desc, 
+                shipment_number = :ship_num    
             WHERE 
                 year = :year 
                     AND user_id = :user 
@@ -56,7 +57,7 @@ $updateRemoveDate = "UPDATE $table
                         status = :status,
                         description = :desc,
                         date_shipped = NULL, 
-                        shipment_number = NULL 
+                        shipment_number = 0 
                     WHERE 
                         year = :year 
                             AND user_id = :user 
@@ -106,7 +107,8 @@ foreach ($info as $row) {
                     'item'      => $row['item'],
                     'num'       => $row['num'],
                     'status'    => $action,
-                    'desc'      => $row['desc']
+                    'desc'      => $row['desc'],
+                    'ship_num'  => $row['ship_num']
                 ]);
             }
         } else {
