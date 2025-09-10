@@ -42,7 +42,7 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 	exit;
 }
 ?>
-<!doctype html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="UTF-8" />
@@ -66,29 +66,36 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 		<table>
 			<tr>
 				<th>Number of Hachayols to Send</th>
+				<th>Family ID</th>
 				<th>Parent</th>
 				<th>Address</th>
-				<th>Children</th>
+				<th>Address 2</th>
+				<th>City</th>
+				<th>State</th>
+				<th>Zip</th>
+				<th>Country</th>
+				<th>Children To Get Hachayol</th>
+				<th>School</th>
 			</tr>
 		<? foreach ($admins as $id => $admin) : ?>
 			<tr>
-				<td>
-					<?=count($children[$id])?>
-				</td>
+				<td><?=count($children[$id])?></td>
+				<td><?=$admin['admin_id']?></td>
 				<td><?=$admin['afirst'] . ' ' . $admin['alast']?></td>
-				<td><?=$admin['admin_address1'] . "<br />" . (empty($admin['admin_address2']) ? '' : 
-						$admin['admin_address2'] . "<br />") . $admin['admin_city'] . ', ' 
-						. $admin['admin_state'] . '  ' . $admin['admin_postal'] . "<br />" . 
-						$admin['admin_country']?></td>
+				<td><?=$admin['admin_address1']?></td>
+				<td><?=$admin['admin_address2']?></td>
+				<td><?=$admin['admin_city']?></td>
+				<td><?=$admin['admin_state']?></td>
+				<td><?=$admin['admin_postal']?></td>
+				<td><?=$admin['admin_country']?></td>
 				<td>
-					<table>
-						<?
-						foreach ($children[$id] as $child) {
-							echo $child . "<br />";
-						}
-						?>
-					</table>
+					<?php
+					foreach ($children[$id] as $child) {
+						echo $child . "<br />";
+					}
+					?>
 				</td>
+				<td><?= $id == 61 ? 'MS' : 'AK' ?></td>
 			</tr>
 		<? endforeach; ?>
 		</table>		
