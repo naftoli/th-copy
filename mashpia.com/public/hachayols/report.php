@@ -6,7 +6,7 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 
 $super = $admin_user['auth'] == 'super';
 
@@ -57,8 +57,8 @@ if ($year < 5786) {
     $stmtMissing = $MASHPIA_DB->prepare($sqlMissing);
 } else {
     // then get all users per admin
-    $sqlUsers = "select u.user_id, u.school_id, hachayol, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
-                  IF(htg.user_id IS NOT NULL, 1, 0) as hachayol_to_give
+    $sqlUsers = "select u.user_id, u.school_id, first, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
+                  IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
                 from users u 
                 join classes c on c.class_id = u.class_id 
                 join admin_auths aa on u.user_id = aa.id 
@@ -70,7 +70,7 @@ if ($year < 5786) {
     $stmtUsers = $MASHPIA_DB->prepare($sqlUsers);
 
     // get users that don't have an admin account
-    $sqlMissing = "select u.user_id, u.school_id, hachayol, first, last, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
+    $sqlMissing = "select u.user_id, u.school_id, first, last, c.class_grade, c.class_sub, ur.reg_date, u.hachayol as hachayol_status,  
                       IF(htg.user_id IS NOT NULL, 1, 0) as hachayol
                     from users u 
                     join classes c on c.class_id = u.class_id 

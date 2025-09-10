@@ -14,6 +14,7 @@ if (isset($_GET['id'])) {
 }
 
 $hachayol = new MyShliachHachayol(false, $id);
+$hachayol->setCheckForShipping(false);
 $admins = $hachayol->getAdmins();
 $children = $hachayol->getChildren();
 
