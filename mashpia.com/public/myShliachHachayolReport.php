@@ -81,7 +81,7 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 			<tr>
 				<td><?=count($children[$id])?></td>
 				<td><?=$admin['admin_id']?></td>
-				<td><?=$admin['afirst'] . ' ' . $admin['alast']?></td>
+				<td><?=$admin['alast'] . ' Family'?></td>
 				<td><?=$admin['admin_address1']?></td>
 				<td><?=$admin['admin_address2']?></td>
 				<td><?=$admin['admin_city']?></td>
