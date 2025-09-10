@@ -142,14 +142,14 @@ foreach ($tables as $table) {
     $sql .= $tableAliases[$table] . " ";
 }
 if (isset($_COOKIE['naftoli'])) {
-  $sql .= " join user_registration ur on ur.user_id = u.user_id ";
+  // $sql .= " join user_registration ur on ur.user_id = u.user_id ";
 }
 
 //********* WHERE *********//
 $sql .= " WHERE 1";
 $sql .= " AND u.school_id in (" . implode(",", $list_of_schools) . ")";
 if (isset($_COOKIE['naftoli'])) {
-  $sql .= " AND ur.reg_date < '2025-09-01 16:56:00'";
+  // $sql .= " AND ur.reg_date < '2025-09-01 16:56:00'";
 }
 if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 //if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
