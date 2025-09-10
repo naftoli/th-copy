@@ -158,7 +158,7 @@ if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 //if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
-
+echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 //******* ORDER BY *********//
 $sql .= " ORDER BY u.school_id";
 if (in_array('c.class_grade', $fields_chosen)) $sql .= ", c.class_grade";
