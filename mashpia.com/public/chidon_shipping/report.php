@@ -484,7 +484,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   const super_admin = <?= $super ? 1 : 0; ?>;
   const year = <?= $year; ?>;
 
-  function update(elem, action, desc = '', ship_num = 0) {
+  function update(elem, action, desc = '', ship_num = 1) {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
@@ -507,7 +507,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', {info, year}, function (result) {
+    $.post('ajax/saveShipping.php', { info, year }, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
       else if (!res.success && res.error) {
@@ -519,16 +519,20 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveAll").click(function () {
     $(".shipping").each(function () {
-      let action = super_admin ? 1 : 2
-      update(this, action)
+      const action = super_admin ? 1 : 2
+      const desc = $(this).parent().parent().find('.description').val()
+      const ship_num = $(this).parent().parent().find('.shipment_number').val()
+      update(this, action, desc, ship_num)
     })
     save()
   })
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      let action = super_admin ? 1 : 2
-      update(this, action)
+      const action = super_admin ? 1 : 2
+      const desc = $(this).parent().parent().find('.description').val()
+      const ship_num = $(this).parent().parent().find('.shipment_number').val()
+      update(this, action, desc, ship_num)
     })
     save()
   })
@@ -536,7 +540,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   $(".shipping").change(function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
-    let ship_num = 0
+    const desc = $(this).parent().parent().find('.description').val()
+    const ship_num = $(this).parent().parent().find('.shipment_number').val()
     if (!super_admin && action == 0) {
       $(this).val(originalVal)
       alert('You cannot change to Not Yet Shipped!')
@@ -544,11 +549,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     } else if (!super_admin && action == 4) {
       alert('You must explain the damage before it can be saved.')
       return false
-    } else if (action == 1) {
-      // get shipment number
-      ship_num = $(this).parent().parent().find('.shipment_number').val()
-    }
-    update(this, action, '', ship_num)
+    } 
+    update(this, action, desc, ship_num)
     save(false)
   })
 
@@ -556,7 +558,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const ship_num = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
-    update(elem, action, '', ship_num)
+    const desc = $(elem).parent().parent().find('.description').val()
+    update(elem, action, desc, ship_num)
     save(false)
   })
 
@@ -564,7 +567,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
-    update(elem, action, val)
+    const ship_num = $(elem).parent().parent().find('.shipment_number').val()
+    update(elem, action, val, ship_num)
     save(false)
   })
 
