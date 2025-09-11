@@ -22,6 +22,11 @@ class Report extends ReportBasic {
             }
             $year = GlobalSettings::getCurrentYear();
         }
+        // find out if we are in elul
+        $heMonth = jdmonthname(unixtojd(), CAL_MONTH_JEWISH);
+        if ($heMonth == 'Elul') {
+            $year++;
+        }
         $sql = "SELECT * FROM system_dates WHERE year = $year order by jd_date";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
@@ -52,7 +57,7 @@ class Report extends ReportBasic {
     }
 
     public function getHtmlSelect($join = 0, $id = 'date_selection') {
-        $first = 1;
+        $first = 0;
         if ($join) {
             // change dates
             $start = $this->dates[$first] + 1;
@@ -78,7 +83,7 @@ class Report extends ReportBasic {
             $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
         }
 
-        for ( ; $i < $num; $i++ ) {
+        for ( ; $i < $num; $i++ ) { // only go up to second to last date b/c the last date is the end of the current date
             $start = $this->dates[$i]+1;
             $end = $this->dates[$i+1];
 
@@ -91,18 +96,18 @@ class Report extends ReportBasic {
             if ( $start == $reportDates['start'] )
                 $str .= " selected='selected'";
             $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
-            if ($id != 'date_selection') {
-                $start = $end + 1;
-                $end = unixtojd();
-                $str1 = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
-                $start_he = iconv('WINDOWS-1255', 'UTF-8', $str1);
-                $str2 = jdtojewish($end, true, CAL_JEWISH_ADD_GERESHAYIM);
-                $end_he = iconv('WINDOWS-1255', 'UTF-8', $str2);
-                $str .= "<option value='" . ($start . ':' . $end) . "'";
-                if ( $start == $reportDates['start'] )
-                    $str .= " selected='selected'";
-                $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
-            }
+            // if ($id != 'date_selection') {
+            //     $start = $end + 1;
+            //     $end = unixtojd();
+            //     $str1 = jdtojewish($start, true, CAL_JEWISH_ADD_GERESHAYIM);
+            //     $start_he = iconv('WINDOWS-1255', 'UTF-8', $str1);
+            //     $str2 = jdtojewish($end, true, CAL_JEWISH_ADD_GERESHAYIM);
+            //     $end_he = iconv('WINDOWS-1255', 'UTF-8', $str2);
+            //     $str .= "<option value='" . ($start . ':' . $end) . "'";
+            //     if ( $start == $reportDates['start'] )
+            //         $str .= " selected='selected'";
+            //     $str .= ">" . ($start_he . ' - ' . $end_he) . "</option>";
+            // }
         }
         $str .= "</select>";
         return $str;
