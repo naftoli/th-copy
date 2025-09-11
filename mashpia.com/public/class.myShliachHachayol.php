@@ -7,16 +7,19 @@ class MyShliachHachayol {
 	private $admins;
 	private $children;
 	private $sortedAdmins;
-	private $checkForShipping;
+	private $checkPaidForShipping;
+	private $checkIfAlreadyShipped;
 	
-	public function __construct( $forPickup = false, $id = 61 ) {
+	public function __construct( $forPickup = false, $id = 61, $checkIfAlreadyShipped = false ) {
+		// we only check if already shipped for shipment 1 and ms/ak catchup
+		$this->checkIfAlreadyShipped = $checkIfAlreadyShipped;
 		$this->year = GlobalSettings::getRegistrationYear();
-		$this->setInfo( $forPickup, $id );
-		$this->checkForShipping = true;
+		$this->setInfo( $forPickup, $id ); 
+		$this->checkPaidForShipping = true;
 	}
 
-	public function setCheckForShipping($checkForShipping) {
-		$this->checkForShipping = $checkForShipping;
+	public function setCheckPaidForShipping(bool $value) {
+		$this->checkPaidForShipping = $value;
 	}
 
 	public function getSql($gender = '') {
@@ -28,18 +31,21 @@ class MyShliachHachayol {
 					JOIN
 				admin_auths aa USING (admin_id)
 					JOIN
-				users u ON aa.id = u.user_id
+				users u ON aa.id = u.user_id 
 					JOIN
-				user_registration ur USING (user_id)
+				user_registration ur USING (user_id) 
 					JOIN
-				hachayols_to_give htg ON htg.user_id = u.user_id
-					AND htg.year = ur.year
+				hachayols_to_give htg ON htg.user_id = u.user_id 
+					AND htg.year = ur.year 
 			WHERE
-				aa.auth = 'user' AND u.school_id = :school  
+				aa.auth = 'user' AND u.school_id = :school 
 					AND u.user_registered > 0 
 					AND ur.year = :year";
 		if ($gender == 'M' || $gender == 'F') {
 			$sql .= " AND u.gender = :gender";
+		}
+		if ($this->checkIfAlreadyShipped) {
+			$sql .= " AND u.user_id NOT IN (SELECT user_id FROM th_chidon_shipping WHERE year = 5786 AND item_id = 'HACH01' AND shipment_number = 1)";
 		}
 		return $sql;
 	}
@@ -56,7 +62,7 @@ class MyShliachHachayol {
 		// $result->debugDumpParams();
  		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
 		foreach ($rows as $row) {
-			if ($this->checkForShipping) {
+			if ($this->checkPaidForShipping) {
 				$shippingPaid = $this->paidForShipping($row['admin_id'], $id);
 				if (
 					($forPickup && $shippingPaid) || 
