@@ -88,8 +88,15 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 	<? include('admin_header.php'); ?>
 	<h1>Hachayol Report (Paid for Shipping)</h1>
 		<p>
-			<a href="?id=<?=$id?>&download=csv" style="display:inline-block;padding:8px 12px;background:#1b2b51;color:#fff;text-decoration:none;border-radius:4px;">Download CSV</a>
+			<a href="?id=<?=$id?>&download=csv" class="btn">Download CSV</a>
 		</p>
+		Shipment Number: <select id="shipment_number" class="form-control">
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+		</select>
+		<button onclick="setAsShipped()" class="btn btn-primary">Set as Shipped</button>
 		<table>
 			<tr>
 				<th>Number of Hachayols to Send</th>
@@ -117,8 +124,8 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 				<td><?=$admin['admin_country']?></td>
 				<td>
 					<?php
-					foreach ($children[$admin_id] as $child) {
-						echo $child . "<br />";
+					foreach ($children[$admin_id] as $user_id => $child) {
+						echo "<span class='shipped' id=" . $user_id . ">" . $child . "</span><br />";
 						$totalHachayols++;
 					}
 					?>
@@ -130,4 +137,26 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 		<br />		
 		<p>Total Hachayols: <?=$totalHachayols?></p>
 	</body>
+	<script>
+		const setAsShipped = () => {
+			let toShip = [];
+			const shipped = document.querySelectorAll('.shipped');
+			shipped.forEach(elem => {
+				toShip.push(elem.id);
+			});
+			// console.log(toShip);
+			fetch('hachayols/api/setAsShipped.php', {
+				method: 'POST',
+				body: JSON.stringify({ info: toShip, total: toShip.length, shipment_number: document.getElementById('shipment_number').value })
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					alert('Hachayols set as shipped.');
+				} else {
+					alert('Failed to set hachayols as shipped.');
+				}
+			});
+		}
+	</script>
 </html>
