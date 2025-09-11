@@ -11,7 +11,7 @@ if ($admin_user['auth'] != 'super') {
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 ?>
 <!DOCTYPE html>
 <html>
@@ -30,6 +30,9 @@ $year = GlobalSettings::getCurrentYear();
 <body>
     <?php include('../admin_header.php'); ?>
     <h1>System Dates</h1>
+    <p class="infobox">
+        Please note, you need to enter the end dates. For the first date enter the day before the first date.
+    </p>
     <select name="year" id="year">
     <?php for ($i = 0; $i <= 5; $i++) { ?>
         <option value="<?php echo $year - $i; ?>" <?php if ($year - $i == $year) echo 'selected'; ?>><?php echo $year - $i; ?></option>
