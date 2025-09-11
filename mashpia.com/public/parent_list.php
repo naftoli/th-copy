@@ -2,7 +2,7 @@
 require_once '../includes/globals.php';
 $admin_auth = array('school'); 
 require('header.php');
-if ( $admin_user['auth'] != 'super' && $admin_user['admin_id'] != 175069 ) {
+if ( $admin_user['auth'] != 'super' && !in_array($admin_user['admin_id'], [9601, 175069]) ) {
 	die('You are not authorized to access this page');
 }
 ?>
