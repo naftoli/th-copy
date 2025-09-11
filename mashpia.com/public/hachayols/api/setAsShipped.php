@@ -23,13 +23,9 @@ if ($total != count($info)) {
     exit;
 }
 
-$stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO th_chidon_shipping 
+$stmt = $MASHPIA_DB->prepare("INSERT INTO th_chidon_shipping 
                                 (year, user_id, item_id, item_num, status, date_shipped, shipment_number) 
-                                VALUES (:year, :user, :item, :num, :status, :date, :shipment_number) 
-                                ON DUPLICATE KEY UPDATE 
-                                status = 1,
-                                date_shipped = NOW(),
-                                shipment_number = :shipment_number");
+                                VALUES (:year, :user, :item, :num, :status, :date, :shipment_number)");
 
 $MASHPIA_DB->beginTransaction();
 $success = true;
