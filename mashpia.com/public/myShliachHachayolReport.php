@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('error_reporting', E_ALL);
 
 $admin_auth = array('school'); 
 require('header.php');
@@ -16,6 +16,8 @@ if (isset($_GET['id'])) {
 $hachayol = new MyShliachHachayol(false, $id);
 $admins = $hachayol->getAdmins();
 $children = $hachayol->getChildren();
+
+$totalHachayols = 0;
 
 //echo "<pre>"; print_r($children); echo "</pre>";
 // CSV download
@@ -117,12 +119,15 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 					<?php
 					foreach ($children[$id] as $child) {
 						echo $child . "<br />";
+						$totalHachayols++;
 					}
 					?>
 				</td>
 				<td><?= $id == 61 ? 'MS' : 'AK' ?></td>
 			</tr>
 		<? endforeach; ?>
-		</table>		
+		</table>
+		<br />		
+		<p>Total Hachayols: <?=$totalHachayols?></p>
 	</body>
 </html>
