@@ -104,9 +104,9 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 				<th>Children To Get Hachayol</th>
 				<th>School</th>
 			</tr>
-		<? foreach ($admins as $id => $admin) : ?>
+		<? foreach ($admins as $admin_id => $admin) : ?>
 			<tr>
-				<td><?=count($children[$id])?></td>
+				<td><?=count($children[$admin_id])?></td>
 				<td><?=$admin['admin_id']?></td>
 				<td><?=$admin['alast'] . ' Family'?></td>
 				<td><?=$admin['admin_address1']?></td>
@@ -117,7 +117,7 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 				<td><?=$admin['admin_country']?></td>
 				<td>
 					<?php
-					foreach ($children[$id] as $child) {
+					foreach ($children[$admin_id] as $child) {
 						echo $child . "<br />";
 						$totalHachayols++;
 					}
