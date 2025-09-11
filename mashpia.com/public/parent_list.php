@@ -1,7 +1,11 @@
 <?php
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 require_once '../includes/globals.php';
 $admin_auth = array('school'); 
 require('header.php');
+
 if ( $admin_user['auth'] != 'super' && !in_array($admin_user['admin_id'], [9601, 175069]) ) {
 	die('You are not authorized to access this page');
 }
@@ -37,7 +41,7 @@ if ( $admin_user['auth'] != 'super' && !in_array($admin_user['admin_id'], [9601,
 <th>School</th>
 <? endif; ?>
 </tr>
-<?
+<?php
 require_once 'class.adminSchools.php';       
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
@@ -47,7 +51,6 @@ foreach ($schools as $id => $school) {
 }
         
 //get list of parents
-include_once('db.php');
 $sql = "
 SELECT DISTINCT a.admin_id, a.username, a.password, a.first, a.last, a.admin_address1, a.admin_city, a.admin_state, a.admin_postal, a.admin_country, 
                 a.admin_email, a.admin_phone_mobile, a.admin_phone_mobile2 FROM admins AS a 

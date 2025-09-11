@@ -233,7 +233,7 @@ if(!isset($no_login)) {
 			exit;
 		}
 	} catch ( AccessDeinedException $e ) {
-		include( __DIR__ . '/unauthorized.php' );
+		echo "Access Denied";
 		exit;
 	}
 }
