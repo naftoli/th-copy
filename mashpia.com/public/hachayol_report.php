@@ -70,7 +70,7 @@ foreach ($poster_types as $type => $name) {
 
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . '/class.hachayol.php');
-require_once($_SERVER['DOCUMENT_ROOT'] . '/reports/shipping/functions/get_hachayols.php'); // load the new hachayol shipping functions....
+// require_once($_SERVER['DOCUMENT_ROOT'] . '/reports/shipping/functions/get_hachayols.php'); // load the new hachayol shipping functions....
 $h = new Hachayol;
 
 //find out if admin is super
@@ -81,7 +81,6 @@ if ($admin->auth == 'super') {
 }
 
 $schools = $h->getSchools();
-$h->setChidonNumbers(); // find out the chidon eligible children
 
 //variables for grand totals
 $grandTotal = 0;
@@ -113,7 +112,6 @@ foreach ($orderedSchools as $total => $more) {
         foreach ($other as $school_id => $school) {
             $grandTotal += $total;
             $totals[$type] += $total;
-//                $chidonNum = $h->getChidonNumber( $id );
             if ($type == 'pickup') echo "<h2>For Pickup</h2>";
             else if ($type == 'deliver') echo "<h2>For Delivery</h2>";
             echo "<div class='info'>";
