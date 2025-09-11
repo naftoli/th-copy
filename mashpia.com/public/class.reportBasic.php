@@ -22,7 +22,7 @@ class ReportBasic {
         $end = null;
         foreach ( $this->dates as $date ) {
 //            if ( $today <= ($date + 25) ) {
-            if ( $today < $date ) {
+            if ( $today <= $date ) {
                 $end = $date;
                 break;
             } else {
