@@ -64,7 +64,7 @@ class MyShliachHachayol {
 				) continue;
 			}
 			$this->admins[$row['admin_id']] = $row;
-			$this->children[$row['admin_id']][] = $row['first'] . ' ' . $row['last'];
+			$this->children[$row['admin_id']][$row['user_id']] = $row['first'] . ' ' . $row['last'];
 		}
 	}
 
