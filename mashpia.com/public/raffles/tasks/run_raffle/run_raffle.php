@@ -25,10 +25,10 @@ require_once(dirname(__FILE__)."/weekly_raffle.php");
 use raffles\weekly\Raffle as Raffle; // use the raffle from its namespace
 
 function alreadyWon($user, $type) {
-    $year = GlobalSettings::getCurrentYear();
+    $dates = GlobalSettings::getCurYearDates();
     $sql = "select * from raffle_winners where user_id = $user and raffle_id in (
-            select raffle_id from raffles where type = '$type' and year = $year
-        )";
+            select raffle_id from raffles where type = '$type' and start_date > " . $dates['start'] . 
+            " and end_date < " . $dates['end'] . ")" ;
     $result = mysql_query($sql);
     return mysql_num_rows($result) > 0;
 }
