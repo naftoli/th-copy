@@ -6,7 +6,7 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$dates = GlobalSettings::getCurYearDates();
 
 if ( $admin_user['auth'] != 'super' ) {
     echo "No Permission.";
@@ -15,8 +15,8 @@ if ( $admin_user['auth'] != 'super' ) {
 
 // get 60m raffles
 $raffles = [];
-$stmtRaffles = $MASHPIA_DB->prepare("SELECT * FROM `raffles` WHERE `type` = 'monthly' and `year` = ? ORDER BY `raffle_id`");
-$stmtRaffles->execute([$year]);
+$stmtRaffles = $MASHPIA_DB->prepare("SELECT * FROM `raffles` WHERE `type` = 'monthly' and `start_date` > ? and `end_date` < ? ORDER BY `raffle_id`");
+$stmtRaffles->execute([$dates['start'], $dates['end']]);
 $rows = $stmtRaffles->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $raffle) {
     $raffles[$raffle['raffle_id']] = $raffle['name'];
