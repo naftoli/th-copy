@@ -19,9 +19,6 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
-
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Prize.php');
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
@@ -57,14 +54,6 @@ $prizes = Prize::loadAll($filter);
             echo "<td>".$prize->type_of_prize."</td>"; // show the type
             echo "<td>".$prize->date_created->format('m/d/Y')."</td>"; // show the date created
             echo "<td><img src='".$prize->thumbnail."' height='50'></td>"; // show the thumbnail at the full size
-            // get parshos
-//            $parshos = '';
-//            $raffles = $prize->get_raffles($year);
-//            foreach ($raffles as $raffle) {
-//                $parshos .= $raffle->name.'<br />';
-//            }
-////            // remove last comma
-//            echo "<td>".$parshos."</td>"; // show the parshos
             // show the view/edit button
             echo "<td>".
                 "<a href='prize_form.php?action=edit&prize_id=".$prize->prize_id.($debug ? "&debug=true" : "")."' class='button'>View/Edit</a>".
