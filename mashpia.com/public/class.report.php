@@ -23,10 +23,10 @@ class Report extends ReportBasic {
             $year = GlobalSettings::getCurrentYear();
         }
         // find out if we are in elul
-        $heMonth = jdmonthname(unixtojd(), CAL_MONTH_JEWISH);
-        if ($heMonth == 'Elul') {
-            $year++;
-        }
+        // $heMonth = jdmonthname(unixtojd(), CAL_MONTH_JEWISH);
+        // if ($heMonth == 'Elul') {
+        //     $year++;
+        // }
         $sql = "SELECT * FROM system_dates WHERE year = $year order by jd_date";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
