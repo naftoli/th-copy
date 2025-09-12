@@ -956,6 +956,7 @@
       html += `<h5>Total Points: ${total}</h5>`
       html += `<h5>Chidon Prizes Paid: ${paid ? 'Yes' : 'No'}</h5>`
       html += `<h5>To change your prize selection please click <a href="/mobile/registration/index.html?user_id=${child.user_id}">here</a></h5>`
+      html += `<h5>Click <a href="javascript:window.open('certs.html?user=${child.user_id}', '_blank')">here</a> to review the certificate.</h5>`
       $("#viewEnrollmentInfoModal .modal-body").html(html)
       $("#viewEnrollmentInfoModal").modal('show')
     })
