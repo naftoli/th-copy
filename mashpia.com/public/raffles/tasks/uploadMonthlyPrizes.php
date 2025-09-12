@@ -15,7 +15,11 @@ if ( $admin_user['auth'] != 'super' ) {
 
 // get 60m raffles
 $raffles = [];
-$stmtRaffles = $MASHPIA_DB->prepare("SELECT * FROM `raffles` WHERE `type` = 'monthly' and `start_date` > ? and `end_date` < ? ORDER BY `raffle_id`");
+$stmtRaffles = $MASHPIA_DB->prepare("
+    SELECT * FROM `raffles` 
+    WHERE `type` = 'monthly' 
+    AND `start_date` > ? AND `end_date` < ? 
+    ORDER BY `raffle_id`");
 $stmtRaffles->execute([$dates['start'], $dates['end']]);
 $rows = $stmtRaffles->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $raffle) {
