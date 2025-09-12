@@ -21,12 +21,10 @@ function parseDateToJd($date, $format="Y-m-d"){
     return $jd_date;
 }
 
-function get_parshos($year=false) { // set the year to be an optional paramater
-    $year = GlobalSettings::getCurrentYear();
-    $nextYr = $year + 1;
-    $result = []; // the parshios
+function get_parshos() { 
+    $result = []; 
     $dates = GlobalSettings::getCurYearDates();
-    $sql = "SELECT * FROM parshos WHERE (start >= " . $dates['start'] . " AND end <= " . $dates['end'] . ") OR year IN ($year, $nextYr) ORDER BY id";
+    $sql = "SELECT * FROM parshos WHERE start >= " . $dates['start'] . " AND end <= " . $dates['end'] . " ORDER BY id";
     $query = mysql_query($sql);
     while($row = mysql_fetch_assoc($query)){
         $result[$row['id']] = $row; // set the associative array to look like parsha_id => parsha info
