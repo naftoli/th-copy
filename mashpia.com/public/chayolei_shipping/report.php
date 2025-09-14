@@ -342,7 +342,7 @@ echo "</select><br /><br />";
 if ($super) {
   echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br />";
   if ((in_array('medals', $cats) || in_array('ranks', $cats))) {
-    echo "<button class='medalsRanksLabels no-print' style='margin-top: 10px;'>Save & Print All Medals / Ranks as Labels</button><br />";
+    // echo "<button class='medalsRanksLabels no-print' style='margin-top: 10px;'>Save & Print All Medals / Ranks as Labels</button><br />";
   }
   if (in_array('hachayols', $cats)) {
     echo "<button class='hachayolsLabels no-print' style='margin-top: 10px;'>Save & Print All Hachayols as Labels</button><br />";
