@@ -100,7 +100,7 @@
             }
         }
     }
-    // echo "<pre>"; print_r($labels); echo "</pre>"; 
+    echo "<pre>"; print_r($labels); echo "</pre>"; exit;
 
     // get school, school_address, class, first and last name from user_id
     $sql = "
