@@ -35,7 +35,7 @@ class MedalReport extends Report {
             AND (
                 (mm.date_awarded >= $start AND mm.date_awarded <= $end) 
                 OR 
-                (mm.date_awarded > " . $this->dates[1] . " AND mm.date_awarded < $start AND mm.date_shipped IS NULL)
+                (mm.date_awarded > " . $this->dates[0] . " AND mm.date_awarded < $start AND mm.date_shipped IS NULL)
             ) 
         ";
         if ($detailed) {
@@ -68,6 +68,7 @@ class MedalReport extends Report {
             $sql .= "
                 ORDER BY sch.school_name, s.subject_id, mm.medal_ord, u.last, u.first 
             ";
+            // echo $sql; exit;
         } else {
             $sql = "
                 SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total  

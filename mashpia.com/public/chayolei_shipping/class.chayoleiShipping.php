@@ -242,7 +242,9 @@ class ChayoleiShipping
         } 
         $m->overrideDates($dates[0], $dates[1]);
         //set up medals array
-        $m->setSchoolId($school);
+        if ($school > 0) {
+            $m->setSchoolId($school);
+        }
         $m->setMedalDetails(true, $gender);
         $medals_for_shipping = $m->getMedalsForShipping();
         foreach ($medals_for_shipping as $user_id => $subjects) {
