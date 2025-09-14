@@ -555,6 +555,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   function save(reload = true) {
+    console.log(info)
+    return false;
     $.post('ajax/saveShipping.php', {info, year}, function (result) {
       const res = JSON.parse(result)
       if (res.success && reload) location.reload()
