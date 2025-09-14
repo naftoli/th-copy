@@ -6,7 +6,7 @@ $admin_auth = ['school'];
 require_once '../header.php';
 require_once '../api/header/db.php';
 require_once '../class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
+$year = GlobalSettings::getRegistrationYear();
 
 // make sure only super auth can view
 if ( $admin_user['auth'] != 'super' ) {
