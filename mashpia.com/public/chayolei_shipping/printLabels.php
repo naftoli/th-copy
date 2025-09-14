@@ -5,7 +5,7 @@
 
     $data = json_decode($_COOKIE['for_labels'], true);
     $_POST = $data;
-    //echo "<pre>"; print_r($data); echo "</pre>";
+    echo "<pre>"; print_r($data); echo "</pre>";
 
     if (empty($data)) {
         echo "No data provided";
