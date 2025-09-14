@@ -31,7 +31,8 @@ if(!$raffle_id && isset( $_GET['v'] ) && $_GET['v'] == 2){
         $raffles[] = $raffle;
     }
 } elseif(!$raffle_id) {
-    $raffles = Raffle::loadAll("WHERE year = " . GlobalSettings::getCurrentYear() . " ORDER BY date_ran desc, type"); // show the most recent raffles with weekly having a higher priority then monthly to maintain order
+    $dates = GlobalSettings::getCurYearDates();
+    $raffles = Raffle::loadAll("WHERE start_date >= " . $dates['start'] . " AND end_date <= " . $dates['end'] . " ORDER BY date_ran desc, type"); // show the most recent raffles with weekly having a higher priority then monthly to maintain order
 } else {
     $raffles = []; // create a raffles array
     $raffles[] = Raffle::load($raffle_id); // and add the raffle they asked for
