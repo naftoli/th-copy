@@ -522,7 +522,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       console.log(data)
       if (data.success && reload) location.reload()
       else if (!data.success && data.error) alert(data.error)
-    if (data.info) console.log(data.info)
+      if (data.info) console.log(data.info)
     })
     .catch(error => {
       console.log(error)
