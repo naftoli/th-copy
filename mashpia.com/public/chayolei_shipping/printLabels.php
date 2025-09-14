@@ -57,7 +57,8 @@
             $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
         }
     }
-
+    echo "<pre>"; print_r($info); echo "</pre>"; exit;
+    
     $getStatus = false;
     foreach ($info as $cat => $items) {
         if (!empty($items)) {
