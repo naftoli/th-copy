@@ -633,7 +633,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
           update(this, 6)
         }
     })
-    // save()
+    save()
   })
 
   $(".hachayolsLabels").click(function (e) {
@@ -648,7 +648,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
         update(this, 6)
       }
     })
-    // save()
+    save()
   })
 </script>
 </html>

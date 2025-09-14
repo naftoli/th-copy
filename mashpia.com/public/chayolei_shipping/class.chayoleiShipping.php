@@ -251,7 +251,7 @@ class ChayoleiShipping
                     $medal_ord = $row['medal_ord'];
                     $medal_id = $medal_ids[$subject_id][$medal_ord];                    
                     $medals[$user_id][] = [
-                        'item'  => $subject_names[$subject_id] . ' Medal',
+                        'item'  => $subject_names[$subject_id],
                         'size'  => '',
                         'name'  => $row['first'] . ' ' . $row['last'],
                         'id'    => $medal_id,
@@ -282,6 +282,7 @@ class ChayoleiShipping
         $stmt = $this->db->query($sql);
         $rows = $stmt->fetchAll();
         foreach ($rows as $row) {
+            if ($row['subject_name'] == 'שבת מברכים תהילים') $row['subject_name'] = 'WWTC';
             $subjects[$row['subject_id']] = $row['subject_name'];
         }
         return $subjects;
