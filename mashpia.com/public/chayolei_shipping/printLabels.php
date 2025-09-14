@@ -57,7 +57,6 @@
             $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
         }
     }
-    echo "<pre>"; print_r($info); echo "</pre>"; exit;
     
     $getStatus = false;
     foreach ($info as $cat => $items) {
@@ -101,7 +100,6 @@
             }
         }
     }
-    echo "<pre>"; print_r($labels); echo "</pre>"; exit;
 
     // get school, school_address, class, first and last name from user_id
     $sql = "
