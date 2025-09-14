@@ -250,7 +250,7 @@ class RankReport extends Report {
             AND u.user_registered > 0 
             AND ur.year = $this->year  
             $filter ";
-        if (!is_null($this->school_id)) {
+        if (!is_null($this->school_id) && $this->school_id > 0) {
             $sql .= "AND s.school_id = $this->school_id ";
         } else {
             $sql .= "
