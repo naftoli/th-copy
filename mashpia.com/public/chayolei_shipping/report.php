@@ -563,7 +563,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
             'Content-Type': 'application/json',
             'Accept-Encoding': 'gzip, deflate' // Browser will compress automatically
         },
-        body: JSON.stringify({info, year})
+        body: JSON.stringify({ info, year })
     })
     .then(response => response.json())
     .then(data => {
