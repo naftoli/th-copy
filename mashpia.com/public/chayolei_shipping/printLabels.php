@@ -5,7 +5,8 @@
 
     $data = json_decode($_COOKIE['for_labels'], true);
     $_POST = $data;
-    echo "<pre>"; print_r($data); echo "</pre>";
+    $all = $_GET['all'] ?? false;
+    // echo "<pre>"; print_r($data); echo "</pre>";
 
     if (empty($data)) {
         echo "No data provided";
@@ -50,11 +51,20 @@
     }
 
     $info = [];
-    foreach ($schools as $schoolID) {
+    if ($all) {
+        // show all schools for all items
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
+            $info[$cat] = $cs->$nameOfFunc($gender, 0, $listOfItems);
+        }
+    } else {
+        foreach ($schools as $schoolID) {
+            foreach ($items_chosen as $cat => $itemsPerCat) {
+                $listOfItems = array_keys($itemsPerCat);
+                $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+                $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
+            }
         }
     }
     

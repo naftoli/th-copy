@@ -625,7 +625,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     e.preventDefault()
     const data = '<?= json_encode($for_labels) ?>'
     Cookies.set('for_labels', data)
-    const url = `printLabels.php`
+    const url = `printLabels.php?all=1`
     window.open(url, '_blank')
     $(".shipping").each(function () {
       const cat = $(this).parent().parent().data('cat')
