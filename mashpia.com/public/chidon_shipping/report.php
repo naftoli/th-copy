@@ -26,6 +26,7 @@ $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) 
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 $ship_to = isset($_POST['ship_to']) ? $_POST['ship_to'] : 'all';
 $list_of_schools = $_POST['school'];
+$shipment_number = isset($_POST['shipment_number']) ? $_POST['shipment_number'] : 0;
 
 $cs = new ChidonShipping();
 $cs->setYear($year);

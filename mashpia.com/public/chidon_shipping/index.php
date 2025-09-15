@@ -98,13 +98,23 @@ $items = $cs->getItems();
       </select><br />
       <h4>Status</h4>
       <p>
-        <input type="checkbox" name="status[]" value="0" /> Not Yet Shipped<br />
-        <input type="checkbox" name="status[]" value="1" /> Shipped<br />
-        <input type="checkbox" name="status[]" value="2" /> Received<br />
-        <input type="checkbox" name="status[]" value="3" /> Missing<br />
-        <input type="checkbox" name="status[]" value="4" /> Damaged<br />
-        <input type="checkbox" name="status[]" value="5" /> Replaced<br />
+        <input type="checkbox" name="status[]" class="status" value="0" /> Not Yet Shipped<br />
+        <input type="checkbox" name="status[]" class="status" value="1" /> Shipped<br />
+        <input type="checkbox" name="status[]" class="status" value="2" /> Received<br />
+        <input type="checkbox" name="status[]" class="status" value="3" /> Missing<br />
+        <input type="checkbox" name="status[]" class="status" value="4" /> Damaged<br />
+        <input type="checkbox" name="status[]" class="status" value="5" /> Replaced<br />
       </p>
+    </fieldset>
+
+    <fieldset>
+      <legend>Shipment Number</legend>
+      <select name="shipment_number" id="shipment_number">
+        <option value="0">Any/All</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
     </fieldset>
 
     <fieldset id="shipping" style="display: none">
@@ -187,6 +197,15 @@ $items = $cs->getItems();
 
   $("#school").change( function() {
     showDropdown()
+  })
+
+  $("#shipment_number").change( function() {
+    const val = $(this).val()
+    if (val == 0) return
+    const elem = $(".status").eq(1)
+    if (!elem.is(":checked")) {
+      elem.prop("checked", true)
+    }
   })
 
   $(function() {
