@@ -41,7 +41,7 @@ $stmtInsert = $MASHPIA_DB->prepare($insert);
 $update = "UPDATE $table 
             SET 
                 status = :status,
-                description = :desc,     
+                description = :desc      
             WHERE 
                 year = :year 
                     AND user_id = :user 
@@ -87,6 +87,7 @@ foreach ($info as $row) {
         'num'       => $row['num'],
         'ship_num'  => $row['ship_num']
     ]);
+    // $stmtSelect->debugDumpParams();
     if (! $res) {
         $success = false;
         break;
@@ -124,6 +125,7 @@ foreach ($info as $row) {
                     'desc'      => $row['desc'],
                     'ship_num'  => $row['ship_num']
                 ]);
+                // $stmtUpdate->debugDumpParams();
             }
         } else {
             $res = $stmtInsert->execute([
