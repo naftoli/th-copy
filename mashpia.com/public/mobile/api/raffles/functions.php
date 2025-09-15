@@ -172,12 +172,13 @@ function getDailyTaskInfo( $user_id, $type ) {
             AND end_date >= " . $today;
     } else {
         require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-        $year = GlobalSettings::getCurrentYear();
-        $sql_raffles = "select * from raffles 
-                        where type = '" . $type . "' 
-                        and year = " . $year . " 
-                        and start_date <= " . unixtojd() . "
-                        order by run_date desc";
+        $dates = GlobalSettings::getCurYearDates();
+        $sql_raffles = "SELECT * FROM raffles 
+                        WHERE type = '" . $type . "' 
+                        AND start_date >= " . $dates['start'] . " 
+                        AND end_date <= " . $dates['end'] . " 
+                        AND start_date <= " . unixtojd() . "
+                        ORDER BY run_date DESC";
     }
     $result_raffles = mysql_query($sql_raffles);
     while ($row = mysql_fetch_assoc($result_raffles)) {

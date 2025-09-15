@@ -6,13 +6,24 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = $_POST['year'] ?? GlobalSettings::getChidonRegYear();
 
-$info = $_POST['info'];
+// Check if data is compressed
+$input = file_get_contents('php://input');
 
+if (isset($_SERVER['HTTP_CONTENT_ENCODING']) && $_SERVER['HTTP_CONTENT_ENCODING'] === 'gzip') {
+    $input = gzdecode($input);
+}
+
+$data = json_decode($input, true);
+$info = $data['info'];
+$year = $data['year'] ?? GlobalSettings::getCurrentYear();
 $table = 'th_chidon_shipping';
 
-$select = "SELECT * FROM $table WHERE year = :year AND user_id = :user AND item_id = :item AND item_num = :num";
+$select = "SELECT * FROM $table WHERE year = :year 
+            AND user_id = :user 
+            AND item_id = :item 
+            AND item_num = :num 
+            AND shipment_number = :ship_num";
 $stmtSelect = $MASHPIA_DB->prepare($select);
 
 // can only insert for not yet shipped or shipped
@@ -30,13 +41,13 @@ $stmtInsert = $MASHPIA_DB->prepare($insert);
 $update = "UPDATE $table 
             SET 
                 status = :status,
-                description = :desc, 
-                shipment_number = :ship_num    
+                description = :desc,     
             WHERE 
                 year = :year 
                     AND user_id = :user 
                     AND item_id = :item 
-                    AND item_num = :num";
+                    AND item_num = :num
+                    AND shipment_number = :ship_num";
 $stmtUpdate = $MASHPIA_DB->prepare($update);
 
 $updateWithDate = "UPDATE $table 
@@ -44,12 +55,12 @@ $updateWithDate = "UPDATE $table
                         status = 1, 
                         description = :desc,
                         date_shipped = NOW(), 
-                        shipment_number = :ship_num 
                     WHERE 
                         year = :year 
                             AND user_id = :user 
                             AND item_id = :item 
-                            AND item_num = :num";
+                            AND item_num = :num
+                            AND shipment_number = :ship_num";
 $stmtUpdateWithDate = $MASHPIA_DB->prepare($updateWithDate);
 
 $updateRemoveDate = "UPDATE $table 
@@ -62,7 +73,8 @@ $updateRemoveDate = "UPDATE $table
                         year = :year 
                             AND user_id = :user 
                             AND item_id = :item 
-                            AND item_num = :num";
+                            AND item_num = :num 
+                            AND shipment_number = :ship_num";
 $stmtUpdateRemoveDate = $MASHPIA_DB->prepare($updateRemoveDate);
 
 $MASHPIA_DB->beginTransaction();
@@ -72,7 +84,8 @@ foreach ($info as $row) {
         'year'      => $year,
         'user'      => $row['user'],
         'item'      => $row['item'],
-        'num'       => $row['num']
+        'num'       => $row['num'],
+        'ship_num'  => $row['ship_num']
     ]);
     if (! $res) {
         $success = false;
@@ -98,7 +111,8 @@ foreach ($info as $row) {
                     'item'      => $row['item'],
                     'num'       => $row['num'],
                     'status'    => $action,
-                    'desc'      => $row['desc']
+                    'desc'      => $row['desc'],
+                    'ship_num'  => $row['ship_num']
                 ]);
             } else {
                 $res = $stmtUpdate->execute([
