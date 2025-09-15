@@ -56,7 +56,7 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['hachayols', 'medals', 'ranks', 'name plates','chanuka', 'hei teves'];
+        $categories = ['hachayols', 'medals', 'ranks', 'name plates','mivtzoim', 'hei teves'];
         return $categories;
     }
 
@@ -65,7 +65,7 @@ class ChayoleiShipping
         $items['name plates'] = ['Name Plates'];
         $items['medals'] = ['Medals'];
         $items['ranks'] = ['Rank Medals', 'Rank Books'];
-        $items['chanuka'] = $this->getYomTovItems('Chanuka');
+        $items['mivtzoim'] = $this->getYomTovItems(['Mivtza Lulav', 'Chanuka']);
         $items['hei teves'] = $this->getYomTovItems('Hei Teves');
         return $items;
     }
@@ -109,13 +109,16 @@ class ChayoleiShipping
             FROM    
                 mashpia_purchases.mivtzoim_items 
             WHERE
-                yom_tov = :yom_tov 
+                yom_tov IN (:yom_tov) 
             ORDER BY ord";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['yom_tov' => $yom_tov]);
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            $items[] = $row['item'];
+        if (! is_array($yom_tov)) $yom_tov = [$yom_tov];
+        foreach ($yom_tov as $yom_tov) {
+            $stmt->execute(['yom_tov' => $yom_tov]);
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                $items[] = $row['item'];
+            }
         }
         return $items;
     }
