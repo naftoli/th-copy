@@ -188,7 +188,7 @@ class ChayoleiShipping
                 'size'  => '',
                 'name'  => '',
                 'id'    => $info['shipping_code'],
-                'cat'   => 'hei teves',
+                'cat'   => 'mivtzoim',
                 'size'  => $info['size'],
                 'qty'   => $row['qty']
             ];
