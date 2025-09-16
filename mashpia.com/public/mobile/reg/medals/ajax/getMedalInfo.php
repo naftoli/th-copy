@@ -2,7 +2,7 @@
 $admin_auth = ['school', 'user'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-$user = mysql_real_escape_string( $_POST['user_id'] );
+$user = mysql_real_escape_string( $_REQUEST['user_id'] );
 
 $monthly_subjects = [1, 12, 15, 93, 106];
 //$ds_weekly = [126];
