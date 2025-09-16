@@ -56,7 +56,7 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['hachayols', 'medals', 'ranks', 'name plates','chanuka', 'hei teves'];
+        $categories = ['hachayols', 'medals', 'ranks', 'name plates','mivtzoim', 'hei teves'];
         return $categories;
     }
 
@@ -65,7 +65,7 @@ class ChayoleiShipping
         $items['name plates'] = ['Name Plates'];
         $items['medals'] = ['Medals'];
         $items['ranks'] = ['Rank Medals', 'Rank Books'];
-        $items['chanuka'] = $this->getYomTovItems('Chanuka');
+        $items['mivtzoim'] = $this->getYomTovItems(['Mivtza Lulav', 'Chanuka']);
         $items['hei teves'] = $this->getYomTovItems('Hei Teves');
         return $items;
     }
@@ -109,19 +109,27 @@ class ChayoleiShipping
             FROM    
                 mashpia_purchases.mivtzoim_items 
             WHERE
-                yom_tov = :yom_tov 
+                yom_tov IN (:yom_tov) 
             ORDER BY ord";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute(['yom_tov' => $yom_tov]);
-        $rows = $stmt->fetchAll();
-        foreach ($rows as $row) {
-            $items[] = $row['item'];
+        if (! is_array($yom_tov)) $yom_tov = [$yom_tov];
+        foreach ($yom_tov as $yom_tov) {
+            $stmt->execute(['yom_tov' => $yom_tov]);
+            // $stmt->debugDumpParams();
+            $rows = $stmt->fetchAll();
+            foreach ($rows as $row) {
+                $items[] = $row['item'];
+            }
         }
         return $items;
     }
 
-    private function getPurchases($gender, $school, $items, $yom_tov) {
+    private function getPurchases($gender, $school, $items) {
         $purchases = [];
+        $itemsList = [];
+        foreach ($items as $item) {
+            $itemsList[] = ucwords($item);
+        }
         $sql = "
             SELECT 
                 *
@@ -134,16 +142,16 @@ class ChayoleiShipping
                     JOIN
                 users u USING (user_id)
             WHERE
-                mi.yom_tov = :yom_tov
+                mi.item in ('" . implode("','", $itemsList) . "')
                     AND p.year = :year";
         if ($gender == 'm') $sql .= " AND u.gender = 'M'";
         else if ($gender == 'f') $sql .= " AND u.gender = 'F'";
         if ($school > 0) $sql .= " AND u.school_id = " . $school;
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
-            'year'      => $this->year,
-            'yom_tov'   => $yom_tov
+            'year'      => $this->year
         ]);
+        // $stmt->debugDumpParams();
         $rows = $stmt->fetchAll();
         // find all items related to same individual and add up all the qtys of that item into one entity
         $userItems = [];
@@ -190,11 +198,11 @@ class ChayoleiShipping
     }
 
     public function getHeiTeves($gender, $school, $items) {
-        return $this->getPurchases($gender, $school, $items, 'Hei Teves');
+        return $this->getPurchases($gender, $school, $items);
     }
 
-    public function getChanuka($gender, $school, $items) {
-        return $this->getPurchases($gender, $school, $items, 'Chanuka');
+    public function getMivtzoim($gender, $school, $items) {
+        return $this->getPurchases($gender, $school, $items);
     }
 
     public function getNamePlates($gender, $school, $items) {
