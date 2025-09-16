@@ -57,7 +57,7 @@ if ($report_type == 'file') {
             }
         }
 
-        $shipping_paid = getShippingPaid($ship_to);
+        // $shipping_paid = getShippingPaid($ship_to);
         if ($ship_to == 'domestic') {
             $csv = createCSV($info, $year, $school_id, $ship_to); // filter out all users that ONLY live in the usa
             $file = $school_id . '-usa.csv';
