@@ -73,7 +73,7 @@ function build_items() {
 }
 
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status, $super, $show_date;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status, $super, $show_date, $shipment_number;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
@@ -100,6 +100,7 @@ function createHtmlForItem($school, $row, $output = true) {
                 }
                 if ($show_item) {
                     if ($output) {
+                        if ($shipment_number > 0 && isset($status['shipment_number']) && $status['shipment_number'] != $shipment_number) continue;
                         // create new row
                         echo "<tr>";
                         foreach ($fields_chosen as $field) {

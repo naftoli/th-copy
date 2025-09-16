@@ -108,10 +108,6 @@ $items = $cs->getItems();
     </fieldset>
 
     <fieldset>
-      <legend>Group By</legend>
-    </fieldset>
-
-    <fieldset>
       <legend>Type of Report</legend>
       <select name="report_type">
         <option value="all">Summary and Details</option>
