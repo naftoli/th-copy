@@ -40,6 +40,8 @@ $info = [];
 $schools = [61, 269];
 foreach ($schools as $school) {
     $stmt->execute(['school' => $school]);
+    $stmt->debugDumpParams();
+    echo "<br />";
     $rows = $stmt->fetchAll();
     foreach ($rows as $row) {
         $info[$row['registration_charge_id']] = $row;
