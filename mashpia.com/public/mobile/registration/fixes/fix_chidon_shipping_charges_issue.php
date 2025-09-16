@@ -69,6 +69,11 @@ foreach ($schools as $school) {
             break;
         }
         foreach ($types as $type) {
+            if (in_array($type, ['MYSLDS-10', 'AKLDS-10'])) {
+                $amount = 10;
+            } else if (in_array($type, ['AKLDBC-20'])) {
+                $amount = 20;
+            }
             $res = $stmtInsert->execute([
                 'trans_id' => $trans_id, 
                 'user_id' => $user_id, 
