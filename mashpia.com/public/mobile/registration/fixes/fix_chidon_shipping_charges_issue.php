@@ -33,15 +33,15 @@ $stmtInsert = $MASHPIA_DB->prepare(
     VALUES( :trans_id, :user_id, :school_id, :admin_id, :type, :amount, :year, :discount )"
 );
 
-$success = false;
+$success = true;
 $MASHPIA_DB->beginTransaction();
 
 $info = [];
 $schools = [61, 269];
 foreach ($schools as $school) {
     $stmt->execute(['school' => $school]);
-    $stmt->debugDumpParams();
-    echo "<br />";
+    // $stmt->debugDumpParams();
+    // echo "<br />";
     $rows = $stmt->fetchAll();
     foreach ($rows as $row) {
         $info[$row['registration_charge_id']] = $row;
@@ -62,8 +62,8 @@ foreach ($schools as $school) {
             $types = ['AKLDS-10', 'AKLDBC-20'];
         }
         $res = $stmtUpdate->execute(['id' => $id, 'amount' => $amount]);
-        $stmtUpdate->debugDumpParams();
-        echo "<br />";
+        // $stmtUpdate->debugDumpParams();
+        // echo "<br />";
         if (!$res) {
             $success = false;
             break;
@@ -83,8 +83,8 @@ foreach ($schools as $school) {
                 'amount' => $amount, 
                 'year' => $year, 
                 'discount' => $discount]);
-            $stmtInsert->debugDumpParams();
-            echo "<br /><br />";
+            // $stmtInsert->debugDumpParams();
+            // echo "<br /><br />";
             if (!$res) {
                 $success = false;
                 break;
@@ -93,7 +93,6 @@ foreach ($schools as $school) {
     }
 }
 
-$success = false;
 if ($success) {
     $MASHPIA_DB->commit();
     echo "success";
@@ -101,5 +100,4 @@ if ($success) {
     $MASHPIA_DB->rollBack();
     echo "error";
 }
-echo "<pre>"; print_r($info); echo "</pre>";
 ?>
