@@ -304,19 +304,19 @@ class ChidonShipping
             }
         }
         // add specific child as exception
-        if ($school == 269 || !$school) {
-            $children[5784][55187] = [
-                'gender'    => 'M',
-                'credits'   => 4
-            ];
-        }
+        // if ($school == 269 || !$school) {
+        //     $children[5784][55187] = [
+        //         'gender'    => 'M',
+        //         'credits'   => 4
+        //     ];
+        // }
         // add another child as exception
-        if ($school == 690 || !$school) {
-            $children[5784][55248] = [
-                'gender'    => 'F',
-                'credits'   => 2
-            ];
-        }
+        // if ($school == 690 || !$school) {
+        //     $children[5784][55248] = [
+        //         'gender'    => 'F',
+        //         'credits'   => 2
+        //     ];
+        // }
         return $children;
     }
 
