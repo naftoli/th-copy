@@ -31,11 +31,14 @@ class IdCardsRouter {
 //        if ( isset($_POST['earned_before']) ) { // expect julian date from client
 //            $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_before'];
 //        }
-        if ( isset($_POST['earned_start']) ) {
+        if ( isset($_POST['earned_start']) && $_POST['earned_start'] > 0 ) {
             $filters[] = 'rm.date_promoted >= ?'; $params[] = $_POST['earned_start'];
         }
-        if ( isset($_POST['earned_end']) ) {
+        if ( isset($_POST['earned_end']) && $_POST['earned_end'] > 0 ) {
             $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_end'];
+        }
+        if ( isset($_POST['earned_before']) && $_POST['earned_before'] > 0 ) {
+            $filters[] = 'rm.date_promoted <= ?'; $params[] = $_POST['earned_before'];
         }
         // combine the filters
         $filters[] = 'u.user_registered > 0';
@@ -62,6 +65,7 @@ class IdCardsRouter {
             ." LEFT JOIN ranks r USING (rank_ord) JOIN schools s USING (school_id) "
             ." LEFT JOIN classes c USING (class_id) WHERE $filters "
             ." ORDER BY s.school_name, c.class_grade, c.class_sub, u.first, u.last, rm.rank_ord;";
+            // echo $sql; exit;
         $query = $MASHPIA_DB->prepare( $sql );
         $query->execute( $params );
 
