@@ -52,7 +52,7 @@ function getPrizeInfo( $raffleID, $type = 'weekly' ) {
         if ($row = mysql_fetch_assoc($result)) {
             $info['name'] = $row['name'];
             $info['pic'] = $row['picture'];
-            $info['thumb'] = $row['thumb'];
+            $info['thumb'] = $row['thumb'] ?? '';
         }
     } else if ($type == 'monthly') {
         $sql = "SELECT prize_name, prize_image_id
