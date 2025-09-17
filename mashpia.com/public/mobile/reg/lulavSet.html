@@ -218,68 +218,73 @@
             // if ( now >= 1694577599 ) {
             //     soldOut = true;
             // }
+            soldOut = true;
+            $("#sold-out").show();
+            $("#purchases").hide();
 
-            $.post('ajax/lulavPurchases.php', function( sold ) {
-                var startWith = 2500;
-                var alreadySold = 923;
-                if (sold) alreadySold += parseInt( sold );
-                var leftToSell = startWith - alreadySold;
-                if ( leftToSell < 0 ) leftToSell = 0;
-                $(".sold").text( alreadySold );
-                $("#leftToSell").text( leftToSell );
-                if ( soldOut || leftToSell < 1 ) {
-                    // location.href = 'lulavSet2.html'
-                    soldOut = true;
-                    $("#sold-out").show();
-                    $("#purchases").hide();
-                }
-            });
+            if (!soldOut) {
+                $.post('ajax/lulavPurchases.php', function( sold ) {
+                    var startWith = 2500;
+                    var alreadySold = 923;
+                    if (sold) alreadySold += parseInt( sold );
+                    var leftToSell = startWith - alreadySold;
+                    if ( leftToSell < 0 ) leftToSell = 0;
+                    $(".sold").text( alreadySold );
+                    $("#leftToSell").text( leftToSell );
+                    if ( soldOut || leftToSell < 1 ) {
+                        // location.href = 'lulavSet2.html'
+                        soldOut = true;
+                        $("#sold-out").show();
+                        $("#purchases").hide();
+                    }
+                });
 
-            // load children
-            $.post('ajax/getChildren.php', { admin : admin }, function( success ) {
-                if ( success == -1 ) {
-                    window.location = "index.html";
-                } else {
-                    var data = $.parseJSON( success );
-                    var children = data.children;
+                // load children
+                $.post('ajax/getChildren.php', { admin : admin }, function( success ) {
+                    if ( success == -1 ) {
+                        window.location = "index.html";
+                    } else {
+                        var data = $.parseJSON( success );
+                        var children = data.children;
 
-                    // sepearate registered and un-registered
-                    var registred_children = {};
-                    var unregistered_children = {};
+                        // sepearate registered and un-registered
+                        var registred_children = {};
+                        var unregistered_children = {};
 
-                    for (var c in children) {
-                        var child = children[c];
-                        if (child.mivtzaLulav) {
-                            registred_children[c] = child;
+                        for (var c in children) {
+                            var child = children[c];
+                            if (child.mivtzaLulav) {
+                                registred_children[c] = child;
+                            } else {
+                                unregistered_children[c] = child;
+                            }
+                        }
+
+                        Handlebars.registerHelper('isAnash', function(school) {
+                            return parseInt(school) === 269
+                        })
+
+                        // Grab the template script
+                        var tplScript = $("#childrenTpl").html();
+
+                        // Compile the template
+                        var tpl = Handlebars.compile( tplScript );
+
+                        // Pass our data to the template
+                        var html = tpl( { children : registred_children } );
+
+                        $("#purchase_info").show();
+                        if ( $.trim( html ) === '' ) {
+                            $("#no-children").show();
                         } else {
-                            unregistered_children[c] = child;
+                            // Add the compiled html to the page
+                            $(".chilrens").append( html );
+                            if ( soldOut ) $("#sold-out").show();
+                            else $("#purchases").show();
                         }
                     }
-
-                    Handlebars.registerHelper('isAnash', function(school) {
-                        return parseInt(school) === 269
-                    })
-
-                    // Grab the template script
-                    var tplScript = $("#childrenTpl").html();
-
-                    // Compile the template
-                    var tpl = Handlebars.compile( tplScript );
-
-                    // Pass our data to the template
-                    var html = tpl( { children : registred_children } );
-
-                    $("#purchase_info").show();
-                    if ( $.trim( html ) === '' ) {
-                        $("#no-children").show();
-                    } else {
-                        // Add the compiled html to the page
-                        $(".chilrens").append( html );
-                        if ( soldOut ) $("#sold-out").show();
-                        else $("#purchases").show();
-                    }
-                }
-            });
+                });
+            }
 
             $(document).on('click', '.lulav', calcAmount);
             $(document).on("click", "#purchase", purchaseSets);
