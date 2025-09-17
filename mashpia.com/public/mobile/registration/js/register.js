@@ -2313,10 +2313,12 @@ var templates = function () {
       if (user.school.school_id == 61) fees = [35, 40, 45, 50]
       else if (user.school.school_id == 269) fees = [55, 60, 65, 70]
 
-      if (new Date() > new Date('2025-09-18T00:00:00')) {
+      const student_exceptions = []
+
+      if (new Date() > new Date('2025-09-18T00:00:00') && !student_exceptions.includes(user.user_id)) {
         fees = [50]
         if (user.school.school_id == 61) fees = [60]
-        else if (user.school.school_id == 269) fees = [70]
+        else if (user.school.school_id == 269) fees = [80]
       }
 
       for (let fee of fees) {
