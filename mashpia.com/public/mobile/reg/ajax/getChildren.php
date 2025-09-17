@@ -373,7 +373,7 @@ if (!empty($users)) {
 //        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // for editing ultimate trip
-        if (intval($row['ultimate_trip'])) {
+        if (intval($row['ultimate_trip']) && new Date() < new Date('2025-10-28T00:00:00')) {
             $children[$row['user_id']]['editUltimateTrip'] = true;
         }
 
