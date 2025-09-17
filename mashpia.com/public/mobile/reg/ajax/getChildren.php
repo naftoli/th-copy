@@ -364,16 +364,16 @@ if (!empty($users)) {
             $children[$row['user_id']]['editChidon'] = false;
         }
 
-        // turn off chidon past certain date
-//        if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon()) {
-            // $children[$row['user_id']]['reg_types']['chidon'] = false;
-//            $children[$row['user_id']]['editChidon'] = false;
-//        }
+         // turn off chidon past certain date
+        if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon()) {
+            $children[$row['user_id']]['reg_types']['chidon'] = false;
+            $children[$row['user_id']]['editChidon'] = false;
+        }
         // turn off chayolei
 //        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['reg_types']['chayolei'] = false;
 
         // for editing ultimate trip
-        if (intval($row['ultimate_trip']) && new Date() < new Date('2025-10-28T00:00:00')) {
+        if (intval($row['ultimate_trip'])) {
             $children[$row['user_id']]['editUltimateTrip'] = true;
         }
 
