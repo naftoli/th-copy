@@ -113,9 +113,8 @@ if (isset($_POST['submit'])) {
     require_once 'class.globalSettings.php';
     $missionYear = GlobalSettings::getRegistrationYear();
 
-    $defaultStart = 2460574; // Sept. 20, 2024
-    $defaultEnd = 2460860; // July 3, 2025
-    // $defaultEnd = 2460916; // August 28, 2025
+    $defaultStart = 2460938; // Sept. 19, 2025
+    $defaultEnd = 2461299; // August 20, 2026
 
     $weeks = array();
     $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
