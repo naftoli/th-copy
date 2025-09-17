@@ -179,8 +179,12 @@ class UserRegistrationRouter {
 
         /******************************** PAYMENT ********************************/
         $trans_id = 0;
-//        if (isset($_COOKIE['naftoli'])) {}
-//        else if ( $total != 0 ) {
+        // exceptions for parents that paid manually
+        $parents_paid = [201418, 170313];
+        if (in_array($admin->admin_id, $parents_paid)) {
+            $total = 0;
+            $trans_id = 1111111;
+        }
         if ( $total != 0 ) {
             $customer_profile = $admin->customerProfile();
             // if we have a payment profile provided
@@ -229,7 +233,7 @@ class UserRegistrationRouter {
                 }
             }
 
-            // description for authorize and db
+            // description for authorize.net
             // based off "code" variable in registration array
             $desc = [];
             foreach ($cart as $item) {
