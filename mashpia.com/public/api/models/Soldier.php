@@ -665,10 +665,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if (!$result['chayolei'] && !$isBC && intval($row['reg_type']) == 1) $result['chayolei'] = true;
 
         // turn off chidon & chidon edit after certain date
-//        if (!isset($_COOKIE['naftoli']) && self::turnOffChidon()) {
-            // $result['chidon'] = true;
-//            $result['chidonEdit'] = false;
-//        }
+       if (!isset($_COOKIE['naftoli']) && self::turnOffChidon()) {
+            $result['chidon'] = true;
+            $result['chidonEdit'] = false;
+       }
 
         // turn off chayolei
 //        if (! isset($_COOKIE['naftoli'])) $result['chayolei'] = true;
@@ -680,7 +680,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $timezone = new DateTimeZone('America/New_York');
 
         // Create DateTime objects for the target date and current time
-        $targetDate = new DateTime('2025-11-12 13:00:00', $timezone);
+        $targetDate = new DateTime('2025-10-28 00:00:00', $timezone);
         $now = new DateTime('now', $timezone);
 
         // Compare the dates
