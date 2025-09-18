@@ -105,7 +105,7 @@
 
       { "label": "Eligibility & Registered Report", "legacy": true, "path": "/chidonOld/newReports/registered_report.html" },
 
-      { "label": "KHK EnrollmentEligibility Override", "legacy": true, "path": "/khk/enrollment_eligibility.php" },
+      { "label": "KHK Enrollment Eligibility Override", "legacy": true, "path": "/khk/enrollment_eligibility.php" },
       
       { "label": "Choosing Reps", "legacy": true, "path": "/chidonTests/setReps.php" },
       
