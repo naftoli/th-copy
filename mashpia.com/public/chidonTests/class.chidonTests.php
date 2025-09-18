@@ -946,7 +946,7 @@ class KHK {
     // find out if child is eligible to enroll into khk track
     public static function enrollmentEligibility(array $user_ids) {
         $info = [];
-        $exceptions = [50965, 51555, 53159, 57585, 57950, 58471, 72486, 74024, 57046, 61855, 68746, 57046, 56944];
+        $exceptions = [50965, 51555, 53159, 57585, 57950, 58471, 72486, 74024, 57046, 61855, 68746, 57046, 56944, 57075];
         $year = GlobalSettings::getChidonRegYear();
         foreach ($user_ids as $user_id) {
             if (in_array($user_id, $exceptions)) {
