@@ -2298,7 +2298,7 @@ var templates = function () {
       // Compare the dates
       return targetEST > nowEST;
     },
-    setChidonReg: function (user) {
+    setChidonReg: async function (user) {
       /*
             There's a couple of different scenarios that can be happening
             1. a non-registered child is shown for the first time
@@ -2313,7 +2313,13 @@ var templates = function () {
       if (user.school.school_id == 61) fees = [35, 40, 45, 50]
       else if (user.school.school_id == 269) fees = [55, 60, 65, 70]
 
-      if (new Date() > new Date('2025-09-18T00:00:00')) {
+      async function checkChangeFees() {
+        const res = await fetch('api/checkChangeFees.php')
+        const data = await res.json()
+        return data
+      }
+
+      if (await checkChangeFees()) {
         fees = [50]
         if (user.school.school_id == 61) fees = [60]
         else if (user.school.school_id == 269) fees = [80]
