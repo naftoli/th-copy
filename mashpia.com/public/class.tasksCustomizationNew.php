@@ -1378,7 +1378,7 @@ class TasksCustomizationNew {
         $arrTasks = $this->prepareTasks($tasks, $missions);
         $defaults = $arrTasks[0];
 		$exceptions = $arrTasks[1];
-		echo "<pre>"; print_r( $exceptions ); print_r( $defaults ); echo "</pre>"; exit;
+		// echo "<pre>"; print_r( $exceptions ); print_r( $defaults ); echo "</pre>"; exit;
         //add tasks that are off by default to defaults table
         //echo "<pre>"; print_r( $defaults ); echo "</pre>";
 		foreach ($defaults as $id) {
