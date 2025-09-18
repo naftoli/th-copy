@@ -2323,9 +2323,9 @@ var templates = function () {
       const school_exceptions = [87, 659]
 
       if (
-        !user_exceptions.includes(user.user_id) 
-        && !school_exceptions.includes(user.school.school_id)
-        && await checkChangeFees()
+        !user_exceptions.includes(user.user_id) && 
+        !school_exceptions.includes(user.school.school_id) &&
+        await checkChangeFees()
       ) {
         fees = [50]
         if (user.school.school_id == 61) fees = [60]
