@@ -337,7 +337,7 @@ class TasksCustomizationNew {
                     $sql = "select * from {$this->type}_task_exceptions 
                             where date_task_id in ($in)  
                             and {$this->type}_id = " . $this->id;
-                    //echo $sql;
+                    echo $sql; exit;
                     $result = mysql_query( $sql );
                     if ( mysql_num_rows( $result ) == $numTaskIDs ) {
                     	//echo $sql;
@@ -594,13 +594,17 @@ class TasksCustomizationNew {
 			echo "<pre>"; print_r( $tasks ); echo "</pre>";
 		}   
 		
-		//check for exceptions (even if the default is on for the school there may be an exception for the class / user) 
-		foreach ($tasks as $task => $on) {
+		//check for exceptions (even if the default is on for the school there may be an exception for the class / user) x
+        $exceptions = $this->getExceptions();
+        foreach ($tasks as $task => $on) {
 			if ($on) {
             	$ids = $this->getTaskIDs( $task, array(), $subject_id );
-	            if ( $this->isException( $ids ) ) {
-	                $tasks[$task] = 0;
-	            }
+	            foreach ($ids as $id) {
+					if (in_array($id, $exceptions)) {
+						$tasks[$task] = 0;
+						break;
+					}
+				}
 			}
 		}
 
@@ -663,6 +667,30 @@ class TasksCustomizationNew {
         }
         return $allInfo;
     }
+
+	public function getExceptions() {
+        $table = $this->type . "_task_exceptions";
+		$sql = "
+            SELECT 
+                *
+            FROM
+                $table 
+                    JOIN
+                date_tasks dt USING (date_task_id)
+                    JOIN
+                date_tasks_missions dtm USING (date_tasks_mission_id)
+            WHERE
+                {$this->type}_id = $this->id
+                    AND dtm.start_date >= $this->start
+                    AND dtm.end_date <= $this->end
+		";
+		$result = mysql_query($sql);
+		$exceptions = array();
+		while ($row = mysql_fetch_assoc($result)) {
+			$exceptions[] = $row['date_task_id'];
+		}
+		return $exceptions;
+	}
 
 	public function getYDTasks( $catNum, $debug = false ) {
     	$this->debug = $debug;
