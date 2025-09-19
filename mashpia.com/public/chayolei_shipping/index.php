@@ -108,6 +108,16 @@ $items = $cs->getItems();
     </fieldset>
 
     <fieldset>
+      <legend>Shipment Number</legend>
+      <select name="shipment_number" id="shipment_number">
+        <option value="0">Any/All</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
       <legend>Type of Report</legend>
       <select name="report_type">
         <option value="all">Summary and Details</option>
