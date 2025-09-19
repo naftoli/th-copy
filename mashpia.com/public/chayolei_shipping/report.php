@@ -167,6 +167,7 @@ exit;
 
 // get list of schools to iterate over
 $list_of_schools = $_POST['school'];
+$shipment_number = isset($_POST['shipment_number']) ? $_POST['shipment_number'] : 0;
 
 // get results for chosen items
 $info = [];
@@ -347,6 +348,13 @@ if ($super) {
   if (in_array('hachayols', $cats)) {
     // echo "<button class='hachayolsLabels no-print' style='margin-top: 10px;'>Save & Print All Hachayols as Labels</button><br />";
   }
+  if (in_array($_POST['report_type'], ['all', 'details'])) {
+    echo "<br />Change Shipment Number: <select name='changeShipmentNumber' id='changeShipmentNumber'>";
+    for ($i = 1; $i <= 9; $i++) {
+      echo "<option value='" . $i . "'>" . $i . "</option>";
+    }
+    echo "</select><br />";
+  }
   echo "<br />";
 }
 foreach ($resultsBySchool as $school => $more) :
@@ -444,6 +452,7 @@ foreach ($resultsBySchool as $school => $more) :
                   }
               }
               echo "<th class='no-print'>Status</th>";
+              echo "<th class='no-print'>Shipment Number</th>";
               echo "<th class='no-print'>Explain the damage</th>"
               ?>
           </tr>
@@ -540,7 +549,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   const super_admin = <?= $super ? 1 : 0; ?>;
   const year = <?= $year; ?>;
 
-  function update(elem, action, desc = '') {
+  function update(elem, action, desc = '', ship_num = 1) {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
@@ -548,7 +557,15 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const num = ids[2]
     action = parseInt(action)
     if (action != 4 || (action == 4 && desc)) {
-      info.push({action, item, user, desc, num})
+      // find out if item already exists
+      const found = info.find(e => e.item == item && e.user == user && e.num == num)
+      if (found) {
+        found.action = action
+        found.desc = desc
+        found.ship_num = ship_num
+      } else {
+        info.push({ action, item, user, desc, num, ship_num })
+      }
     } else {
       alert('You must explain the damage before it can be saved.')
     }
@@ -570,6 +587,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       console.log(data)
       if (data.success && reload) location.reload()
       else if (!data.success && data.error) alert(data.error)
+      if (data.info) console.log(data.info)
     })
     .catch(error => {
       console.log(error)
@@ -578,36 +596,20 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveAll").click(function () {
     $(".shipping").each(function () {
-      let action = super_admin ? 1 : 2
-      update(this, action)
+      const action = super_admin ? 1 : 2
+      const desc = $(this).parent().parent().find('.description').val()
+      const ship_num = $(this).parent().parent().find('.shipment_number').val()
+      update(this, action, desc, ship_num)
     })
     save()
   })
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      let action = super_admin ? 1 : 2
-      update(this, action)
-    })
-    save()
-  })
-
-  $(".schoolMedalsRanksPrinted").click(function () {
-      $(this).parent().find('.shipping').each(function () {
-        const cat = $(this).parent().parent().data('cat')
-        if (['medals', 'ranks'].includes(cat)) {
-          update(this, 6)
-        }
-      })
-    save()
-  })
-
-  $(".schoolHachayolsPrinted").click(function () {
-    $(this).parent().find('.shipping').each(function () {
-      const cat = $(this).parent().parent().data('cat')
-      if (['hachayols'].includes(cat)) {
-        update(this, 6)
-      }
+      const action = super_admin ? 1 : 2
+      const desc = $(this).parent().parent().find('.description').val()
+      const ship_num = $(this).parent().parent().find('.shipment_number').val()
+      update(this, action, desc, ship_num)
     })
     save()
   })
@@ -615,6 +617,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   $(".shipping").change(function () {
     const originalVal = $(this).data('original-value')
     const action = parseInt(this.value)
+    const desc = $(this).parent().parent().find('.description').val()
+    const ship_num = $(this).parent().parent().find('.shipment_number').val()
     if (!super_admin && action == 0) {
       $(this).val(originalVal)
       alert('You cannot change to Not Yet Shipped!')
@@ -622,8 +626,17 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     } else if (!super_admin && action == 4) {
       alert('You must explain the damage before it can be saved.')
       return false
-    }
-    update(this, action)
+    } 
+    update(this, action, desc, ship_num)
+    save(false)
+  })
+
+  $(".shipment_number").blur(function () {
+    const ship_num = $(this).val()
+    const elem = $(this).parent().parent().find('.shipping')
+    const action = parseInt($(elem).val())
+    const desc = $(elem).parent().parent().find('.description').val()
+    update(elem, action, desc, ship_num)
     save(false)
   })
 
@@ -631,38 +644,21 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
-    update(elem, action, val)
+    const ship_num = $(elem).parent().parent().find('.shipment_number').val()
+    update(elem, action, val, ship_num)
     save(false)
   })
 
-  $(".medalsRanksLabels").click(function (e) {
-    e.preventDefault()
-    const data = '<?= json_encode($for_labels) ?>'
-    Cookies.set('for_labels', data)
-    const url = `printLabels.php?all=1`
-    window.open(url, '_blank')
-    $(".shipping").each(function () {
-      const cat = $(this).parent().parent().data('cat')
-        if (['medals', 'ranks'].includes(cat)) {
-          update(this, 6)
-        }
-    })
-    save()
-  })
+  window.onload = function() {
+    if (!super_admin) {
+      $(".shipment_number").attr('disabled', true)
+    } else {
+      $("#changeShipmentNumber").change(function () {
+        const ship_num = $(this).val()
+        $(".shipment_number").val(ship_num)
+      })
+    }
+  }
 
-  $(".hachayolsLabels").click(function (e) {
-    e.preventDefault()
-    const data = '<?= json_encode($for_labels) ?>'
-    Cookies.set('for_labels', data)
-    const url = `printLabels.php?type=hachayols`
-    window.open(url, '_blank')
-    $(".shipping").each(function () {
-      const cat = $(this).parent().parent().data('cat')
-      if (['hachayols'].includes(cat)) {
-        update(this, 6)
-      }
-    })
-    save()
-  })
 </script>
 </html>
