@@ -52,7 +52,7 @@ $r = new Report();
 
             <fieldset>
                 <legend>Date Options</legend>
-                Choose the date:
+                Choose the end date:
                 <select name="date">
                     <?php
                     $r->setDateSelection('he');

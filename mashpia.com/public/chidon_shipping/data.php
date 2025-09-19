@@ -146,7 +146,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "><select name='shipment_number' class='shipment_number'";
                         if (!$super || isset($status['status']) && $status['status'] == 1) echo " disabled";
                         echo ">";
-                        for ($s = 1; $s <= 3; $s++) {
+                        for ($s = 1; $s <= 9; $s++) {
                             echo "<option value='$s'";
                             if (isset($status['shipment_number']) && $status['shipment_number'] == $s) echo " selected";
                             echo ">$s</option>";

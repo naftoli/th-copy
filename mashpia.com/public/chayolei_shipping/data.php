@@ -79,7 +79,7 @@ function build_dates($id) {
 }
 
 function createHtmlForItem($school, $row, $output = true) {
-    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status, $super;
+    global $info, $fields_chosen, $item_details_chosen, $items_chosen, $limit_to_status, $super, $shipment_number;
 
     foreach ($items_chosen as $cat => $more) {
         if (isset($info[$cat]) && isset($info[$cat][$row['user_id']])) {
@@ -106,6 +106,7 @@ function createHtmlForItem($school, $row, $output = true) {
                 }
                 if ($show_item) {
                     if ($output) {
+                        if ($shipment_number > 0 && isset($status['shipment_number']) && $status['shipment_number'] != $shipment_number) continue;
                         // create new row
                         echo "<tr data-cat='$cat'>";
                         foreach ($fields_chosen as $field) {
@@ -146,7 +147,19 @@ function createHtmlForItem($school, $row, $output = true) {
                             else if (!empty($status) && $i == $status['status']) echo " selected";
                             echo ">" . $val . "</option>";
                         }
-                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . ($status['description'] ?? '') . "</textarea></td></tr>";
+                        echo "</select></td>";
+                        echo "<td";
+                        if (isset($status['shipment_number'])) echo " data-order='" . $status['shipment_number'] . "'";
+                        echo "><select name='shipment_number' class='shipment_number'";
+                        if (!$super || isset($status['status']) && $status['status'] == 1) echo " disabled";
+                        echo ">";
+                        for ($s = 1; $s <= 9; $s++) {
+                            echo "<option value='$s'";
+                            if (isset($status['shipment_number']) && $status['shipment_number'] == $s) echo " selected";
+                            echo ">$s</option>";
+                        }
+                        echo "</select></td>";
+                        echo "<td><textarea class='description' rows='3' cols='15'>" . ($status['description'] ?? '') . "</textarea></td></tr>";
                     } else {
                         // update summary
                         addToSummary($item, $school);

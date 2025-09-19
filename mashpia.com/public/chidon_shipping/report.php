@@ -277,8 +277,8 @@ if ($super) {
   echo "<button class='saveAll no-print' style='margin-bottom: 10px;'>Save All Schools as Shipped</button><br />";
   echo "<button class='printSummary no-print' onclick='printSummary()'>Print Summary Only</button><br />";
   if (in_array($_POST['report_type'], ['all', 'details'])) {
-    echo "Change Shipment Number: <select name='changeShipmentNumber' id='changeShipmentNumber'>";
-    for ($i = 1; $i <= 3; $i++) {
+    echo "<br />Change Shipment Number: <select name='changeShipmentNumber' id='changeShipmentNumber'>";
+    for ($i = 1; $i <= 9; $i++) {
       echo "<option value='" . $i . "'>" . $i . "</option>";
     }
     echo "</select><br />";

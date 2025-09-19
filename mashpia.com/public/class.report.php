@@ -18,7 +18,7 @@ class Report extends ReportBasic {
         if (! $year) {
             // check if global settings exists
             if (! class_exists('GlobalSettings')) {
-                require_once '/class.globalSettings.php';
+                require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
             }
             $year = GlobalSettings::getCurrentYear();
         }

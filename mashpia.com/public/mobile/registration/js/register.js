@@ -2309,7 +2309,6 @@ var templates = function () {
             **/
       let html = '<option value="0">Select Amount to Pay</option>'
       let fees = [25, 30, 40, 50]
-      // if (user.school.school_id == 471 && this.beforeDate('2025-09-10T00:00:00')) fees = [20, 25, 30, 40, 50]
       if (user.school.school_id == 61) fees = [35, 40, 45, 50]
       else if (user.school.school_id == 269) fees = [55, 60, 65, 70]
 
@@ -2319,7 +2318,14 @@ var templates = function () {
         return data
       }
 
-      if (await checkChangeFees()) {
+      const user_exceptions = [69321, 80985]
+      const school_exceptions = [87, 659]
+
+      if (
+        !user_exceptions.includes(user.user_id) && 
+        !school_exceptions.includes(user.school.school_id) &&
+        await checkChangeFees()
+      ) {
         fees = [50]
         if (user.school.school_id == 61) fees = [60]
         else if (user.school.school_id == 269) fees = [80]

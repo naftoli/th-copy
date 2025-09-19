@@ -19,7 +19,11 @@ $info = $data['info'];
 $year = $data['year'] ?? GlobalSettings::getCurrentYear();
 $table = 'th_chidon_shipping';
 
-$select = "SELECT * FROM $table WHERE year = :year AND user_id = :user AND item_id = :item AND item_num = :num";
+$select = "SELECT * FROM $table WHERE year = :year 
+            AND user_id = :user 
+            AND item_id = :item 
+            AND item_num = :num 
+            AND shipment_number = :ship_num";
 $stmtSelect = $MASHPIA_DB->prepare($select);
 
 // can only insert for not yet shipped or shipped
@@ -29,19 +33,49 @@ $insert = "INSERT INTO $table
                 user_id = :user, 
                 item_id = :item, 
                 item_num = :num,
-                status = :status";
+                status = :status, 
+                date_shipped = :date, 
+                shipment_number = :ship_num";
 $stmtInsert = $MASHPIA_DB->prepare($insert);
 
 $update = "UPDATE $table 
             SET 
                 status = :status,
-                description = :desc 
+                description = :desc      
             WHERE 
                 year = :year 
-                AND user_id = :user 
-                AND item_id = :item 
-                AND item_num = :num";
+                    AND user_id = :user 
+                    AND item_id = :item 
+                    AND item_num = :num
+                    AND shipment_number = :ship_num";
 $stmtUpdate = $MASHPIA_DB->prepare($update);
+
+$updateWithDate = "UPDATE $table 
+                    SET 
+                        status = 1, 
+                        description = :desc,
+                        date_shipped = NOW(), 
+                    WHERE 
+                        year = :year 
+                            AND user_id = :user 
+                            AND item_id = :item 
+                            AND item_num = :num
+                            AND shipment_number = :ship_num";
+$stmtUpdateWithDate = $MASHPIA_DB->prepare($updateWithDate);
+
+$updateRemoveDate = "UPDATE $table 
+                    SET 
+                        status = :status,
+                        description = :desc,
+                        date_shipped = NULL, 
+                        shipment_number = 0 
+                    WHERE 
+                        year = :year 
+                            AND user_id = :user 
+                            AND item_id = :item 
+                            AND item_num = :num 
+                            AND shipment_number = :ship_num";
+$stmtUpdateRemoveDate = $MASHPIA_DB->prepare($updateRemoveDate);
 
 $MASHPIA_DB->beginTransaction();
 $success = true;
@@ -50,30 +84,58 @@ foreach ($info as $row) {
         'year'      => $year,
         'user'      => $row['user'],
         'item'      => $row['item'],
-        'num'       => $row['num']
+        'num'       => $row['num'],
+        'ship_num'  => $row['ship_num']
     ]);
+    // $stmtSelect->debugDumpParams();
     if (! $res) {
         $success = false;
         break;
     } else {
         // find out if we need to insert or update
         $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        $action = intval($row['action']);
         if ($found) {
-            $res = $stmtUpdate->execute([
-                'year'      => $year,
-                'user'      => $row['user'],
-                'item'      => $row['item'],
-                'num'       => $row['num'],
-                'status'    => intval($row['action']),
-                'desc'      => $row['desc']
-            ]);
+            if ($action == 1) {
+                $res = $stmtUpdateWithDate->execute([
+                    'year'      => $year,
+                    'user'      => $row['user'],
+                    'item'      => $row['item'],
+                    'num'       => $row['num'],
+                    'desc'      => $row['desc'], 
+                    'ship_num'  => $row['ship_num']
+                ]);
+            } else if ($action == 0) {
+                $res = $stmtUpdateRemoveDate->execute([
+                    'year'      => $year,
+                    'user'      => $row['user'],
+                    'item'      => $row['item'],
+                    'num'       => $row['num'],
+                    'status'    => $action,
+                    'desc'      => $row['desc'],
+                    'ship_num'  => $row['ship_num']
+                ]);
+            } else {
+                $res = $stmtUpdate->execute([
+                    'year'      => $year,
+                    'user'      => $row['user'],
+                    'item'      => $row['item'],
+                    'num'       => $row['num'],
+                    'status'    => $action,
+                    'desc'      => $row['desc'],
+                    'ship_num'  => $row['ship_num']
+                ]);
+                // $stmtUpdate->debugDumpParams();
+            }
         } else {
             $res = $stmtInsert->execute([
                 'year'      => $year,
                 'user'      => $row['user'],
                 'item'      => $row['item'],
                 'num'       => $row['num'],
-                'status'    => intval($row['action'])
+                'status'    => $action,
+                'date'      => $action == 1 ? date('Y-m-d H:i:s') : NULL, 
+                'ship_num'  => $row['ship_num']
             ]);
         }
         if (! $res) {
@@ -87,5 +149,6 @@ else $MASHPIA_DB->rollBack();
 
 echo json_encode([
     'success'   => $success,
-    'error'     => 'There was an error updating the status.'
+    'error'     => 'There was an error updating the status.',
+    'info'      => $MASHPIA_DB->errorInfo()
 ]);
