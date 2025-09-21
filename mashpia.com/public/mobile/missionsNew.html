@@ -644,6 +644,11 @@
 			width: 20px;
 			font-weight: 100;
 		}
+
+		.audioLinks {
+			cursor: pointer;
+			display: none;
+		}
 	</style>
 	<!--<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>-->
 
@@ -949,7 +954,9 @@
 
 		}); // end on page loaded listener
 
-
+	if (Cookies.get('naftoli')) {
+		$('.audioLinks').show();
+	}
 	</script>
 	<script>
 		(function (i, s, o, g, r, a, m) {

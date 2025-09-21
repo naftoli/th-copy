@@ -128,7 +128,7 @@ foreach ($info as $details) {
                 }
                 $tasks = [
                     [
-                        'name'  => "<span class='audioLinks'>Today's unit(s) are: <b>" . $units . "</b>.<br /><i>You need to learn " . $minutes[$track] . " minutes per day.</i><br />How many minutes did you learn today?<br />Audio of today's unit(s): " . implode(', ', $audioLinks) . "</span>",
+                        'name'  => "Today's unit(s) are: <b>" . $units . "</b>. <span class='audioLinks'>Audio of today's unit(s): " . implode(', ', $audioLinks) . "</span><br /><i>You need to learn " . $minutes[$track] . " minutes per day.</i><br />How many minutes did you learn today?",
                         'qty'   => 120
                     ],
                     [
