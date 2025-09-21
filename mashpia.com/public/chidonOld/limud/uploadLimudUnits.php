@@ -7,6 +7,7 @@
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonRegYear();
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
@@ -100,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv'])) {
                     $rowIndex++;
                     continue;
                 }
-                // Expect at least 6 columns: day, book1..book5
+                // Expect at least 6 columns: date, book1..book5
                 // If there are more, ignore extras; if fewer, pad with empties
                 for ($i = count($row); $i < 6; $i++) $row[$i] = '';
 
@@ -117,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv'])) {
                     $unitList = expand_units($cell);
                     foreach ($unitList as $unit) {
                         // Compose SQL; assume integers for book and unit
-                        $queries[] = sprintf('INSERT INTO limud_book_units_by_date (date, book, unit) VALUES (%s, %d, %d)', $date, $book, intval($unit));
+                        $queries[] = sprintf('INSERT INTO limud_book_units (date, book, unit) VALUES (%s, %d, %d)', $date, $book, intval($unit));
                     }
                 }
                 $rowIndex++;
