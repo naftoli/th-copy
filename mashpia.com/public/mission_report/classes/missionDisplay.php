@@ -1448,7 +1448,7 @@ abstract class MissionDisplay {
 										$class = "unmarked";
 									}
 									$input = false;
-									if (!is_null($no_label_task->quantity)) {
+									if (!is_null($no_label_task->quantity) && $no_label_task->quantity > 0) {
 										$input = true;
 										$class .= " textInput";
 									}
