@@ -17,8 +17,14 @@ if ($admin_user['auth'] != 'super') {
 function getJulianDate($heDate) {
     global $year;
     $params = explode(',', $heDate);
-    $yy = $params[1] == 12 ? $year - 1 : $year;
-    $jd = jewishtojd($params[1], $params[0], $yy);
+    if ($params[1] == 12) {
+        $yy = $year - 1;
+        $mm = $params[0] + 1;
+    } else {
+        $yy = $year;
+        $mm = $params[0];
+    }
+    $jd = jewishtojd($params[1], $mm, $yy);
     return getGregorianFromJd($jd);
 }
 
