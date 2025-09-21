@@ -939,11 +939,11 @@ $daySchoolSubjects = setDaySchoolSubjects();
 </div>
 <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
 <script>
-	function showAudioPlayer() {
-		var audioFile = 'chidonOld/limud/audio_links/' + document.getElementById('audioPlayer').dataset.audio + '.mp3';
+	function showAudioPlayer(e) {
+		var audioFile = 'chidonOld/limud/audio_links/' + e.dataset.audio + '.mp3';
 		document.getElementById('audioModal').style.display = 'block';
 		document.getElementById('overlay').style.display = 'block';
-		document.getElementById('audioPlayer').src = audioFile;
+		document.getElementById('audioPlayer source').src = audioFile;
 	}
 	
 	function closeAudioPlayer() {

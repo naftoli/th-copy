@@ -1,3 +1,5 @@
+$('.audioLinks').hide();
+
 // footer is apparently not rendered.
 $(".userMission").each( function() {			
     var user = $(this).attr('id');	
