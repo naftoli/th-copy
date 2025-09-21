@@ -131,10 +131,10 @@ for (; $i > 0; $i--) {
                     echo "</td>";
                 }
                 echo "<td>";
-                $sqlKhk = "select khk_reg from th_chidon where year = $chosen and user_id = " . $user_id;
+                $sqlKhk = "select khk_override from th_chidon where year = $chosen and user_id = " . $user_id;
                 $resKhk = mysql_query($sqlKhk);
                 $rowKhk = mysql_fetch_assoc($resKhk);
-                echo $rowKhk['khk_reg'] ? "&#10003;" : "&#10007;";
+                echo $rowKhk['khk_override'] ? "&#10003;" : "&#10007;";
                 echo "</td></tr>";
             }
         }
