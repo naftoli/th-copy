@@ -125,8 +125,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv'])) {
                     $unitList = expand_units($cell);
                     foreach ($unitList as $unit) {
                         // Compose SQL; assume integers for book and unit
-                        $queries[] = sprintf('INSERT INTO limud_book_units (day, date, book, unit, year) 
-                                VALUES (%d, %s, %d, %d, %d)', $day, '$date', $book, intval($unit), $year);
+                        $queries[] = "INSERT INTO limud_book_units (day, date, book, unit, year) 
+                                VALUES ($day, '$date', $book, $unit, $year)";
                     }
                 }
                 $day++;
