@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv'])) {
             </div>
             <div class="row actions">
                 <button type="submit">Generate SQL</button>
-                <span class="muted">Table: <code>limud_book_units_by_date(date, book, unit)</code></span>
+                <span class="muted">Table: <code>limud_book_units</code></span>
             </div>
             <div class="row note">
                 Expected columns: <code>date</code>, <code>book 1 units</code>, <code>book 2 units</code>, <code>book 3 units</code>, <code>book 4 units</code>, <code>book 5 units</code>.
