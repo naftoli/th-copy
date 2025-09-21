@@ -943,7 +943,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		var audioFile = 'chidonOld/limud/audio_links/' + e.dataset.audio + '.mp3';
 		document.getElementById('audioModal').style.display = 'block';
 		document.getElementById('overlay').style.display = 'block';
-		document.getElementById('audioPlayer source').src = audioFile;
+		document.getElementById('audioPlayer').find('source').attr('src', audioFile);
 	}
 	
 	function closeAudioPlayer() {
