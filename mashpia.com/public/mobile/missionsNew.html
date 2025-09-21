@@ -646,7 +646,6 @@
 		}
 
 		.audioLinks {
-			cursor: pointer;
 			display: inline;
 			visibility: hidden;
 		}
@@ -956,7 +955,7 @@
 		}); // end on page loaded listener
 
 	if (Cookies.get('naftoli')) {
-		$('.audioLinks').show();
+		$('.audioLinks').attr('visibility', 'visible')
 	}
 	</script>
 	<script>
