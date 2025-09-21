@@ -194,7 +194,6 @@ foreach ($info as $details) {
                 }
             }
         }
-        break 2;
     }
 }
 // $success = false;

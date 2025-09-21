@@ -904,9 +904,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                                             </div>
                                                             <div class="long">
                                                                 <?=$no_label_task->task_name?>
-                                                                <?php if ($no_label_task->short_name == 'Limmud Track' && $no_label_task->quantity) : ?>
-                                                                    <br />Click <a href="stopwatch.html" target="_blank">here</a> for timer / stopwatch.
-                                                                <?php endif; ?>
                                                             </div>
                                                         </label>
                                                     </div>
