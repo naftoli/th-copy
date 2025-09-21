@@ -124,15 +124,15 @@ foreach ($info as $details) {
                 $individualUnits = explode(',', $units);
                 $audioLinks = [];
                 foreach ($individualUnits as $unit) {
-                    $audioLinks[] = "<a href='audio_links/" . $unit . ".mp3'>" . $unit . "</a>";
+                    $audioLinks[] = "<a href='audio_links/" . $unit . ".mp3'>Unit " . $unit . "</a>";
                 }
                 $tasks = [
                     [
                         'name'  => "<i>Today's unit(s) are: " . $units . 
                         ".<br />You need to learn " . $minutes[$track] . " minutes per day.</i>
                         <br />I learned ___ minutes today.<br />
-                        <span class='audioLinks' style='display: none;'>Here are the links to listen to the audio of today's unit(s):<br />
-                        " . implode('<br />', $audioLinks) . "</span>",
+                        <span class='audioLinks' style='display: none;'><strong><i>Links to the audio of today's unit(s):<br />
+                        " . implode('<br />', $audioLinks) . "</i></strong></span>",
                         'qty'   => 120
                     ],
                     [
