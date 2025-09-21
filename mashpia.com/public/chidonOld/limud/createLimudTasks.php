@@ -193,12 +193,12 @@ foreach ($info as $details) {
                                 $success = false;
                                 break 5;
                             }
-                            break5;
                         }
                     }
                 }
             }
         }
+        break 2;
     }
 }
 // $success = false;
