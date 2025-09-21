@@ -931,7 +931,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 <div id="audioModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1000;">
     <h3>Audio Player</h3>
     <audio id="audioPlayer" controls style="width:300px;">
-        <source src="your-audio-file.mp3" type="audio/mpeg">
+        <source id="audioSource" src="your-audio-file.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
     <br><br>
@@ -943,7 +943,8 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		var audioFile = 'chidonOld/limud/audio_links/' + e.dataset.audio + '.mp3';
 		document.getElementById('audioModal').style.display = 'block';
 		document.getElementById('overlay').style.display = 'block';
-		document.getElementById('audioPlayer').find('source').attr('src', audioFile);
+		document.getElementById('audioSource').src = audioFile;
+		document.getElementById('audioPlayer').load();
 	}
 	
 	function closeAudioPlayer() {
