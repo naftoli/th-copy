@@ -133,7 +133,7 @@ foreach ($info as $details) {
                     ],
                     [
                         'name'  => "I am Up To Date",
-                        'qty'   => 0
+                        'qty'   => null
                     ]
                 ];
                 // find out hebrew date of mission
