@@ -1522,34 +1522,6 @@ abstract class MissionDisplay {
 				}
 			?>
 			</div>
-
-
-<div id="audioTooltip" style="display:none; position:absolute; background:white; padding:10px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
-    <audio id="tooltipAudio" controls style="width:200px;"></audio>
-</div>
-
-<script>
-$(document).ready(function() {
-    $('.audio-link').click(function(e) {
-        e.preventDefault();
-        const audioSrc = $(this).data('audio');
-        const offset = $(this).offset();
-        
-        $('#tooltipAudio').attr('src', audioSrc);
-        $('#audioTooltip').css({
-            top: offset.top + 25,
-            left: offset.left
-        }).fadeIn();
-    });
-    
-    $(document).click(function(e) {
-        if (!$(e.target).closest('#audioTooltip, .audio-link').length) {
-            $('#audioTooltip').fadeOut();
-            $('#tooltipAudio')[0].pause();
-        }
-    });
-});
-</script>
 			
 			<div id="<?=$user->user_id?>" class="bottomFooter" align="center" dir="ltr">
 				<input type="hidden" class="pages" value="<?=$page?>" />
@@ -1597,6 +1569,30 @@ $(document).ready(function() {
 				<div style="clear: both"></div>
 			</div> 
 		</div>
+
+<div id="audioModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1000;">
+    <h3>Audio Player</h3>
+    <audio id="audioPlayer" controls style="width:300px;">
+        <source src="your-audio-file.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <br><br>
+    <button onclick="closeAudioPlayer()">Close</button>
+</div>
+<div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
+<script>
+	function showAudioPlayer($audioFile) {
+		document.getElementById('audioModal').style.display = 'block';
+		document.getElementById('overlay').style.display = 'block';
+		document.getElementById('audioPlayer').src = $audioFile;
+	}
+	
+	function closeAudioPlayer() {
+		document.getElementById('audioModal').style.display = 'none';
+		document.getElementById('overlay').style.display = 'none';
+		document.getElementById('audioPlayer').pause();
+	}
+</script>
 		<?
 		chdir("classes");
 	}
