@@ -131,8 +131,8 @@ foreach ($info as $details) {
                         'name'  => "<i>Today's unit(s) are: " . $units . 
                         ".<br />You need to learn " . $minutes[$track] . " minutes per day.</i>
                         <br />I learned ___ minutes today.<br />
-                        Here are the links to listen to the audio of today's unit(s):<br />
-                        " . implode('<br />', $audioLinks) . "",
+                        <span class='audioLinks'>Here are the links to listen to the audio of today's unit(s):<br />
+                        " . implode('<br />', $audioLinks) . "</span>",
                         'qty'   => 120
                     ],
                     [
