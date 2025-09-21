@@ -124,7 +124,7 @@ foreach ($info as $details) {
                 $individualUnits = explode(',', $units);
                 $audioLinks = [];
                 foreach ($individualUnits as $unit) {
-                    $audioLinks[] = "<a class='audio-link' data-audio=/chidonOld/limud/audio_links/" . $unit . ".mp3 href='#'>Unit " . $unit . "</a>";
+                    $audioLinks[] = "<a class='audio-link' data-audio=/chidonOld/limud/audio_links/" . $unit . ".mp3 href=#>Unit " . $unit . "</a>";
                 }
                 $tasks = [
                     [
