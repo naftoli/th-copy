@@ -1522,6 +1522,34 @@ abstract class MissionDisplay {
 				}
 			?>
 			</div>
+
+
+<div id="audioTooltip" style="display:none; position:absolute; background:white; padding:10px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.2);">
+    <audio id="tooltipAudio" controls style="width:200px;"></audio>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('.audio-link').click(function(e) {
+        e.preventDefault();
+        const audioSrc = $(this).data('audio');
+        const offset = $(this).offset();
+        
+        $('#tooltipAudio').attr('src', audioSrc);
+        $('#audioTooltip').css({
+            top: offset.top + 25,
+            left: offset.left
+        }).fadeIn();
+    });
+    
+    $(document).click(function(e) {
+        if (!$(e.target).closest('#audioTooltip, .audio-link').length) {
+            $('#audioTooltip').fadeOut();
+            $('#tooltipAudio')[0].pause();
+        }
+    });
+});
+</script>
 			
 			<div id="<?=$user->user_id?>" class="bottomFooter" align="center" dir="ltr">
 				<input type="hidden" class="pages" value="<?=$page?>" />
