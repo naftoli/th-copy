@@ -1,7 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('ERROR_REPORTING', E_ALL);
-
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
