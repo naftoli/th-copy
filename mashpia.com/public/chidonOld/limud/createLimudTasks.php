@@ -132,8 +132,7 @@ foreach ($info as $details) {
                         'qty'   => 120
                     ],
                     [
-                        'name'  => "I am Up To Date",
-                        'qty'   => null
+                        'name'  => "I am Up To Date"
                     ]
                 ];
                 // find out hebrew date of mission
@@ -181,8 +180,10 @@ foreach ($info as $details) {
                                 description = '', 
                                 grid_id = $grid, 
                                 mission_marking = 1, 
-                                grid_marking = 0, 
-                                quantity = " . $task['qty'];
+                                grid_marking = 0";
+                            if ($task['qty'] > 0) {
+                                $sql .= ", quantity = " . $task['qty'];
+                            }
                             // echo $sql; continue;
                             if (!mysql_query($sql)) {
                                 $success = false;
