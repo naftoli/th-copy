@@ -30,7 +30,8 @@ $("select#soldier").change( function( e ){
 $( '#scanNext' ).click( function() { $('#lookup-user').val('').focus() });
 
 // show audio links
-$( '.audioLinks' ).show();
+if (Cookies.get('naftoli'))
+    $( '.audioLinks' ).show();
 
 /**
  * Returns an event handler for the checkboxes on the page.
