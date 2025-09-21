@@ -28,7 +28,7 @@ function getMissionNumber() {
 function getJulianDate($heDate) {
     global $year;
     $params = explode(',', $heDate);
-    $yy = $params[1] == 13 ? $year - 1 : $year;
+    $yy = $params[1] == 12 ? $year - 1 : $year;
     $jd = jewishtojd($params[1], $params[0], $yy);
     return $jd;
 }

@@ -13,6 +13,21 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+function getJulianDate($heDate) {
+    global $year;
+    $params = explode(',', $heDate);
+    $yy = $params[1] == 12 ? $year - 1 : $year;
+    $jd = jewishtojd($params[1], $params[0], $yy);
+    return getGregorianFromJd($jd);
+}
+
+function getGregorianFromJd($jd) {
+    $gregorian = jdtogregorian($jd);
+    // return mm/dd/yyyy
+    $gregorian = explode('/', $gregorian);
+    return $gregorian[2] . '-' . $gregorian[0] . '-' . $gregorian[1];
+}
+
 // Helper: expand a string of units into an array of integers
 function expand_units($str) {
     $units = [];
@@ -89,13 +104,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv'])) {
                 // If there are more, ignore extras; if fewer, pad with empties
                 for ($i = count($row); $i < 6; $i++) $row[$i] = '';
 
-                $dayRaw = trim((string)$row[0]);
-                if ($dayRaw === '') {
+                $dateRaw = trim((string)$row[0]);
+                if ($dateRaw === '') {
                     $rowIndex++;
-                    continue; // skip rows without a day
+                    continue; // skip rows without a date
                 }
-                // Allow day to be numeric; if not numeric, keep as string but escape later
-                $dayIsNumeric = (preg_match('/^-?\d+(?:\.\d+)?$/', $dayRaw) === 1);
+                $date = getJulianDate($dateRaw);
 
                 for ($book = 1; $book <= 5; $book++) {
                     $cell = isset($row[$book]) ? trim((string)$row[$book]) : '';
@@ -103,8 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv'])) {
                     $unitList = expand_units($cell);
                     foreach ($unitList as $unit) {
                         // Compose SQL; assume integers for book and unit
-                        $dayValue = $dayIsNumeric ? $dayRaw : ("'" . addslashes($dayRaw) . "'");
-                        $queries[] = sprintf('INSERT INTO limud_book_units (day, book, unit) VALUES (%s, %d, %d)', $dayValue, $book, intval($unit));
+                        $queries[] = sprintf('INSERT INTO limud_book_units_by_date (date, book, unit) VALUES (%s, %d, %d)', $date, $book, intval($unit));
                     }
                 }
                 $rowIndex++;
@@ -168,10 +181,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['csv'])) {
             </div>
             <div class="row actions">
                 <button type="submit">Generate SQL</button>
-                <span class="muted">Table: <code>limud_book_units(day, book, unit)</code></span>
+                <span class="muted">Table: <code>limud_book_units_by_date(date, book, unit)</code></span>
             </div>
             <div class="row note">
-                Expected columns: <code>day</code>, <code>book 1 units</code>, <code>book 2 units</code>, <code>book 3 units</code>, <code>book 4 units</code>, <code>book 5 units</code>.
+                Expected columns: <code>date</code>, <code>book 1 units</code>, <code>book 2 units</code>, <code>book 3 units</code>, <code>book 4 units</code>, <code>book 5 units</code>.
                 Unit cells may include ranges like <code>6 -9</code>; these will be expanded into individual inserts.
             </div>
         </form>
