@@ -128,7 +128,7 @@ foreach ($info as $details) {
                 }
                 $tasks = [
                     [
-                        'name'  => "<span class='audioLinks' style='display: none;'>
+                        'name'  => "<span class='audioLinks'>
                         Today's unit(s) are: " . $units . ".<br />
                         <i>You need to learn " . $minutes[$track] . " minutes per day.</i><br />
                         Links to the audio of today's unit(s): 
