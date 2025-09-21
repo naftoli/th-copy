@@ -188,7 +188,7 @@ foreach ($info as $details) {
                                 mission_marking = 1, 
                                 grid_marking = 0, 
                                 quantity = " . $task['qty'];
-                            // echo $sql; continue;
+                            echo $sql; continue;
                             if (!mysql_query($sql)) {
                                 $success = false;
                                 break 5;
@@ -200,7 +200,7 @@ foreach ($info as $details) {
         }
     }
 }
-// $success = false;
+$success = false;
 
 if ($success) {
     echo "done.";
