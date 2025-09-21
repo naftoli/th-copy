@@ -29,6 +29,8 @@ $("select#soldier").change( function( e ){
 // always bring focus to the barcode/serial input
 $( '#scanNext' ).click( function() { $('#lookup-user').val('').focus() });
 
+$('.audioLinks').hide();
+
 /**
  * Returns an event handler for the checkboxes on the page.
  * 

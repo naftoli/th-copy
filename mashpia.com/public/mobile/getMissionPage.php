@@ -904,9 +904,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
                                                             </div>
                                                             <div class="long">
                                                                 <?=$no_label_task->task_name?>
-                                                                <?php if ($no_label_task->short_name == 'Limmud Track' && $no_label_task->quantity) : ?>
-                                                                    <br />Click <a href="stopwatch.html" target="_blank">here</a> for timer / stopwatch.
-                                                                <?php endif; ?>
                                                             </div>
                                                         </label>
                                                     </div>
@@ -927,6 +924,32 @@ $daySchoolSubjects = setDaySchoolSubjects();
                 }
             }        
             ?>
+
+<div id="audioModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1000;">
+    <h3>Audio Player</h3>
+    <audio id="audioPlayer" controls style="width:300px;">
+        <source type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <br><br>
+    <button onclick="closeAudioPlayer()">Close</button>
+</div>
+<div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
+<script>
+	function showAudioPlayer(e) {
+		var audioFile = 'chidonOld/limud/audio_links/' + e.dataset.audio + '.mp3';
+		document.getElementById('audioModal').style.display = 'block';
+		document.getElementById('overlay').style.display = 'block';
+		document.getElementById('audioPlayer').src = audioFile;
+		document.getElementById('audioPlayer').load();
+	}
+	
+	function closeAudioPlayer() {
+		document.getElementById('audioModal').style.display = 'none';
+		document.getElementById('overlay').style.display = 'none';
+		document.getElementById('audioPlayer').pause();
+	}
+</script>
             
             <?php if (isset($_GET['naftoli'])) : ?>
                 <div class="panel panel-default">

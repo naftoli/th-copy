@@ -2,13 +2,12 @@
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonRegYear();
 
 if ($admin_user['auth'] != 'super') {
     echo "No permission.";
     exit;
 }
-
-$year = GlobalSettings::getChidonRegYear();
 
 function getMissionNumber() {
     global $subject_id;
@@ -23,14 +22,6 @@ function getMissionNumber() {
     $result = mysql_query($sql);
     $row = mysql_fetch_assoc($result);
     return intval($row['mission_number']);
-}
-
-function getJulianDate($heDate) {
-    global $year;
-    $params = explode(',', $heDate);
-    $yy = $params[1] == 12 ? $year - 1 : $year;
-    $jd = jewishtojd($params[1], $params[0], $yy);
-    return $jd;
 }
 
 $grid_id = 20010;
@@ -50,23 +41,66 @@ $minutes = [
     4 => 45
 ];
 
+// Get limud task information from database instead of CSV
 $info = [];
-if (($handle = fopen('LimmudTasks5784.csv', "r")) !== false) {
-    $j = 0; // counter for rows
-    while (($data = fgetcsv($handle, 1000, ",")) !== false) {
-        if ($j == 0) {
-            $j++;
-            continue;
+
+// Query to get all limud book units for the current year, grouped by date
+$sql = "SELECT 
+            date,
+            day,
+            book,
+            GROUP_CONCAT(unit ORDER BY unit SEPARATOR ',') as units
+        FROM limud_book_units 
+        WHERE year = $year 
+        GROUP BY date, day, book 
+        ORDER BY day, book";
+
+$result = mysql_query($sql);
+if (!$result) {
+    echo "Error querying database: " . mysql_error();
+    exit;
+}
+
+// Process the database results to match the expected structure
+$dateData = [];
+while ($row = mysql_fetch_assoc($result)) {
+    $date = $row['date'];
+    $book = $row['book'];
+    $units = $row['units'];
+    
+    // Convert date to Julian date for consistency with existing code
+    $dateObj = DateTime::createFromFormat('Y-m-d', $date);
+    if ($dateObj) {
+        $julianDate = gregoriantojd($dateObj->format('m'), $dateObj->format('d'), $dateObj->format('Y'));
+        
+        if (!isset($dateData[$date])) {
+            $dateData[$date] = [
+                'start' => $julianDate,
+                'day' => $row['day']
+            ];
+            // Initialize all levels to empty
+            foreach ($levels as $level) {
+                $dateData[$date]['level_' . $level] = '';
+            }
         }
-        $i = 0; // counter for columns
-        $info[$j]['start'] = $data[$i];
-        foreach ($levels as $level) {
-            $info[$j]['level_' . $level] = $data[++$i];
+        
+        // Map book numbers to grade levels (assuming book 1-5 maps to levels 10-14)
+        $levelIndex = $book + 9; // book 1 -> level 10, book 2 -> level 11, etc.
+        if (in_array($levelIndex, $levels)) {
+            $dateData[$date]['level_' . $levelIndex] = $units;
         }
-        $j++;
     }
-} else {
-    echo "Error opening file.";
+}
+
+// Convert associative array to indexed array to match original structure
+$j = 1;
+foreach ($dateData as $date => $data) {
+    $info[$j] = $data;
+    $j++;
+}
+
+if (empty($info)) {
+    echo "No limud task data found in database for year $year.";
     exit;
 }
 
@@ -79,20 +113,26 @@ mysql_query('begin');
 
 $success = true;
 foreach ($info as $details) {
-    $start = getJulianDate($details['start']);
+    $start = $details['start']; // Already converted to Julian date in the database query processing
     $end = $start;
     foreach ($types as $type) {
         foreach ($levels as $level) {
             if (! $details['level_' . $level]) continue;
             foreach ($tracks as $track => $desc) {
+                $units = $details['level_' . $level];
+                // audio links 
+                $individualUnits = explode(',', $units);
+                $audioLinks = [];
+                foreach ($individualUnits as $unit) {
+                    $audioLinks[] = "<a href=# data-audio=" . $unit . " onclick=showAudioPlayer(this)>Unit " . $unit . "</a>";
+                }
                 $tasks = [
                     [
-                        'name'  => "<i>Today's unit(s) are: " . $details['level_' . $level] . ".<br />You need to learn " . $minutes[$track] . " minutes per day.</i><br />I learned ___ minutes today.",
+                        'name'  => "Today's unit(s) are: <b>" . $units . "</b>. <div class='audioLinks'>Audio Links: " . implode(', ', $audioLinks) . "</div><br /><i>You need to learn " . $minutes[$track] . " minutes per day.</i><br />How many minutes did you learn today?",
                         'qty'   => 120
                     ],
                     [
-                        'name'  => "I am Up To Date",
-                        'qty'   => 0
+                        'name'  => "I am Up To Date"
                     ]
                 ];
                 // find out hebrew date of mission
@@ -140,8 +180,11 @@ foreach ($info as $details) {
                                 description = '', 
                                 grid_id = $grid, 
                                 mission_marking = 1, 
-                                grid_marking = 0, 
-                                quantity = " . $task['qty'];
+                                grid_marking = 0";
+                            if ($task['qty'] > 0) {
+                                $sql .= ", quantity = " . $task['qty'];
+                            }
+                            // echo $sql; continue;
                             if (!mysql_query($sql)) {
                                 $success = false;
                                 break 5;
@@ -153,6 +196,7 @@ foreach ($info as $details) {
         }
     }
 }
+// $success = false;
 
 if ($success) {
     echo "done.";

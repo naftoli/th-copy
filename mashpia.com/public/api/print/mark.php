@@ -159,6 +159,7 @@ foreach ( $missions as $mission ) {
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
     <script src='mark.js'></script>
+    <script src="/scripts/js.cookie.js"></script>
 
     <?php // ! *************************** Debug *************************** ?>
     <pre>

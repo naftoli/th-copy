@@ -337,7 +337,7 @@ class TasksCustomizationNew {
                     $sql = "select * from {$this->type}_task_exceptions 
                             where date_task_id in ($in)  
                             and {$this->type}_id = " . $this->id;
-                    //echo $sql;
+                    echo $sql; exit;
                     $result = mysql_query( $sql );
                     if ( mysql_num_rows( $result ) == $numTaskIDs ) {
                     	//echo $sql;
@@ -1378,7 +1378,7 @@ class TasksCustomizationNew {
         $arrTasks = $this->prepareTasks($tasks, $missions);
         $defaults = $arrTasks[0];
 		$exceptions = $arrTasks[1];
-		
+		// echo "<pre>"; print_r( $exceptions ); print_r( $defaults ); echo "</pre>"; exit;
         //add tasks that are off by default to defaults table
         //echo "<pre>"; print_r( $defaults ); echo "</pre>";
 		foreach ($defaults as $id) {
