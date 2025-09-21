@@ -19,11 +19,10 @@ function getJulianDate($heDate) {
     $params = explode(',', $heDate);
     $dd = intval($params[0]);
     $mm = intval($params[1]);
+    $yy = intval($year);
     if ($mm == 12) {
         $yy--;
         $mm++;
-    } else {
-        $yy = $year;
     }
     $jd = jewishtojd($mm, $dd, $yy);
     return getGregorianFromJd($jd);
