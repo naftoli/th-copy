@@ -941,7 +941,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		document.getElementById('audioModal').style.display = 'block';
 		document.getElementById('overlay').style.display = 'block';
 		document.getElementById('audioPlayer').src = audioFile;
-		document.getElementById('audioPlayer').load();
+		document.getElementById('audioPlayer').play();
 	}
 	
 	function closeAudioPlayer() {
