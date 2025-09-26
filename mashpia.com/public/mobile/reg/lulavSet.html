@@ -77,7 +77,7 @@
                     <div class="col-12" style="font-size: 16px;">                   
                         Lulav Sets cost ONLY $13. We will only ship the sets to your child's school. Shipping charges may be different per school.
                         <hr />
-                        <h2>Number of sets: 2500</h2>
+                        <h2>Number of sets: <span id="numSets"></span></h2>
                         <h2>Already Sold: <span class="sold"></span></h2>
                         <h2>Currently Available: <span id="leftToSell"></span></h2>
                     </div>
@@ -225,6 +225,7 @@
             if (!soldOut) {
                 $.post('ajax/lulavPurchases.php', function( sold ) {
                     var startWith = 2500;
+                    $("#numSets").text( startWith );
                     var alreadySold = 923;
                     if (sold) alreadySold += parseInt( sold );
                     var leftToSell = startWith - alreadySold;
@@ -318,7 +319,13 @@
 
             function purchaseSets( e ) {
                 e.preventDefault();
-                var total = $("#total").val();
+				// Prevent double-submission
+				if ( $("#purchase").attr('data-processing') === 'true' ) {
+					return false;
+				}
+				$("#purchase").attr('data-processing', 'true');
+				$("#purchase").attr('disabled', true);
+				var total = $("#total").val();
                 if ( total > 0 ) {
 
                     var first = $("#cc-first").val().trim();
@@ -332,11 +339,15 @@
 
                     if ( !first || !last || !num || !exp || !zip || !cvv || !address || !state ) {
                         alert("You must fill in all fields.");
+                        $("#purchase").attr('data-processing', 'false');
+                        $("#purchase").attr('disabled', false);
                         return false;
                     }
 
                     if ( isNaN( num ) || isNaN( exp ) || isNaN( cvv ) ) {
                         alert("Credit Card Number, Expiry Date, and Security Code may only contain DIGITS.");
+                        $("#purchase").attr('data-processing', 'false');
+                        $("#purchase").attr('disabled', false);
                         return false;
                     }
 
@@ -358,19 +369,26 @@
                         var id = $(this).attr('id');
                         info.users.push( id );
                     });
+                    info.yom_tov = "Mivtza Lulav";
 
                     var num_sets = info.users.length;
                     $.post('ajax/lulavPayment.php', { info: info }, function( info ) {
                         var result = JSON.parse( info );
                         if ( result.success ) {
                             alert("Thank you! You have successfully purchased " + num_sets + " set(s). Your child(ren)'s school will receive them for your child(ren).");
+                            $("#purchase").attr('data-processing', 'true');
+                            $("#purchase").attr('disabled', true);
                             location.href = 'parent_detail.html'
                         } else {
                             alert( result.error );
+                            $("#purchase").attr('data-processing', 'false');
+                            $("#purchase").attr('disabled', false);
                         }
                     });
                 } else {
                     alert("You have not indicated how many sets you need.");
+                    $("#purchase").attr('data-processing', 'false');
+                    $("#purchase").attr('disabled', false);
                 }
             }
         });
