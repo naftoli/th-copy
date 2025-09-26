@@ -46,8 +46,8 @@ function paymentInProgress() {
 }
 // ************** END PAYMENT FUNCTIONS ***************************/
 
-function saveToDb($info) {
-    global $m, $item_id;
+function saveToDb($purchaseInfo) {
+    global $m, $info, $item_id;
 
     $details = [];
     $qty = 1;
@@ -55,7 +55,7 @@ function saveToDb($info) {
         $details[$user_id][$item_id] = $qty;
     }
 
-    return $m->createPurchase( $info, $details );
+    return $m->createPurchase( $purchaseInfo, $details );
 }
 
 function updateTransactions($strResponse) {
