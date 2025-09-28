@@ -67,18 +67,20 @@ print_r($delete);
 print_r($info); 
 echo "</pre>";
 
-$success = true;
-$MASHPIA_DB->beginTransaction();
-foreach ($qrys as $sql) {
-    $success = $MASHPIA_DB->query($sql);
-    if (!$success) {
-        break;
+if (isset($_GET['fix']) && $_GET['fix'] == 1) {
+    $success = true;
+    $MASHPIA_DB->beginTransaction();
+    foreach ($qrys as $sql) {
+        $success = $MASHPIA_DB->query($sql);
+        if (!$success) {
+            break;
+        }
     }
-}
-if ($success) {
-    $MASHPIA_DB->commit();
-    echo "done";
-} else {
-    $MASHPIA_DB->rollBack();
-    echo "failed";
+    if ($success) {
+        $MASHPIA_DB->commit();
+        echo "done";
+    } else {
+        $MASHPIA_DB->rollBack();
+        echo "failed";
+    }
 }
