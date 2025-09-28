@@ -15,7 +15,7 @@ $sql = "SELECT
         FROM
             hachayols_to_give h
                 JOIN
-            admin_auths aa ON aa.id = h.user_id
+            admin_auths aa ON aa.id = h.user_id and aa.role_id = 1 
         WHERE
             year = :year
         ORDER BY admin_id , user_id";
@@ -49,7 +49,7 @@ foreach ($info as $admin_id => $more) {
     $numPayments = $more['payments'];
     $numHachayols = count($hachayols);
     if ($numHachayols > ($numPayments + 1)) {
-        for ($i = $numPayments; $i < $numHachayols; $i++) {
+        for ($i = $numPayments + 1; $i < $numHachayols; $i++) {
             $delete[] = $hachayols[$i];
         }
     } else if ($numHachayols < ($numPayments + 1)) {
