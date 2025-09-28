@@ -119,9 +119,10 @@ class UsersRouter {
 
         foreach( $users as $user ) {
             $user_errors = $user->registerChayolei( $admin->admin_id, $year, $fee, $trans_id );
-            $user->checkHachayol($year);
             if ( count( $user_errors ) > 0 )
                 $errors[ $user->user_id ] = $user_errors;
+            else 
+                $user->checkHachayol($year);
         }
         // email any errors
         if ( count( $errors ) > 0 ) {
