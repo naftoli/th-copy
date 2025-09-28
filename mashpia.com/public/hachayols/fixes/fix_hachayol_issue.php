@@ -44,6 +44,7 @@ foreach ($rows as $row) {
 
 $insert = [];
 $delete = [];
+$qrys = [];
 foreach ($info as $admin_id => $more) {
     $hachayols = $more['hachayols'];
     $numPayments = $more['payments'];
@@ -51,6 +52,7 @@ foreach ($info as $admin_id => $more) {
     if ($numHachayols > ($numPayments + 1)) {
         for ($i = $numPayments + 1; $i < $numHachayols; $i++) {
             $delete[] = $hachayols[$i];
+            $qrys[] = "DELETE FROM hachayols_to_give WHERE user_id = " . $hachayols[$i] . " AND year = " . $year;
         }
     } else if ($numHachayols < ($numPayments + 1)) {
         for ($i = $numHachayols; $i < ($numPayments + 1); $i++) {
@@ -64,3 +66,19 @@ print_r($insert);
 print_r($delete); 
 print_r($info); 
 echo "</pre>";
+
+$success = true;
+$MASHPIA_DB->beginTransaction();
+foreach ($qrys as $sql) {
+    $success = $MASHPIA_DB->query($sql);
+    if (!$success) {
+        break;
+    }
+}
+if ($success) {
+    $MASHPIA_DB->commit();
+    echo "done";
+} else {
+    $MASHPIA_DB->rollBack();
+    echo "failed";
+}
