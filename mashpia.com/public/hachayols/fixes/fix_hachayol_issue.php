@@ -99,7 +99,7 @@ foreach ($info as $admin_id => $more) {
 echo "<pre>"; 
 print_r($insert); 
 print_r($delete); 
-print_r($info); 
+print_r($qrys); 
 echo "</pre>";
 
 if (isset($_GET['fix']) && $_GET['fix'] == 1) {
