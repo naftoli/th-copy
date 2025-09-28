@@ -67,7 +67,34 @@ if ($year < 5786) {
     $description = substr($description, 0, strlen($description) - 1);
 }
 
+// ****************** PROCESSING GUARD ***************************/
+function startPayment() {
+    global $admin_id, $MASHPIA_DB;
+    $MASHPIA_DB->query("INSERT INTO payment_processing (admin_id) VALUES (" . intval($admin_id) . ")");
+}
+
+function endPayment() {
+    global $admin_id, $MASHPIA_DB;
+    $MASHPIA_DB->query("DELETE FROM payment_processing WHERE admin_id = " . intval($admin_id));
+}
+
+function paymentInProgress() {
+    global $admin_id, $MASHPIA_DB;
+    $stmt = $MASHPIA_DB->query("SELECT 1 FROM payment_processing WHERE admin_id = " . intval($admin_id) . " LIMIT 1");
+    return (bool)$stmt->fetchColumn();
+}
+// **************************************************************
+
 if ( $amount > 0 ) {
+    // Guard: prevent duplicate processing for same admin
+    if (paymentInProgress()) {
+        echo json_encode([
+            'success' => false,
+            'error' => 'Your payment is already being processed. Please wait for it to complete.'
+        ]);
+        exit;
+    }
+    startPayment();
     require_once $_SERVER['DOCUMENT_ROOT'] . '/authorize.php';
     $trans_id = 0;
 
@@ -175,12 +202,14 @@ if ( $amount > 0 ) {
         }
         // commit transaction
         $MASHPIA_DB->commit();
+        endPayment();
         // send email confirmation
         sendEmailConf($response_array[6]);
         echo json_encode([
             'success'   => true
         ]);
     } else {
+        endPayment();
         echo json_encode([
             'success' => false,
             'error' => $response_array[3]
