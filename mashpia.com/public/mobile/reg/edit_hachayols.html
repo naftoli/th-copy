@@ -252,6 +252,11 @@
     const purchase = async ( e ) => {
       e.preventDefault();
 
+      // Prevent double-submission
+      if ($("button#purchase").attr('data-processing') === 'true') {
+        return false;
+      }
+
       const list = getHachayolList()
       if (total > 0) {
         const errors = checkForErrors()
@@ -260,13 +265,15 @@
           return false
         }
         if (!confirm('You are about to be charged $' + total + '.\nAre you sure you want to proceed?')) return false
-        // disable puchase button so that they don't accidentally or purposely click it again
+        // mark processing and disable button just before network call
+        $("button#purchase").attr('data-processing', 'true');
         $("button#purchase").attr('disabled', true);
         purchaseRes = JSON.parse(await processPayment(list))
-        $("button#purchase").attr('disabled', false); // allow button to be clicked again if needed
         if (purchaseRes.error) {
           alert(purchaseRes.error)
           console.log(purchaseRes.details)
+          $("button#purchase").attr('data-processing', 'false');
+          $("button#purchase").attr('disabled', false);
         } else {
           const hachayols = JSON.parse(await updateHachayols(list))
           if (hachayols.success) {
@@ -275,15 +282,27 @@
           } else {
             console.log(hachayols)
             alert('You payment has been received but there was an error updating your Hachayols. Please contact us by emailing to "support@tzivoshashem.org"')
+            $("button#purchase").attr('data-processing', 'false');
+            $("button#purchase").attr('disabled', false);
           }
         }
       } else {
+        // mark processing and disable button just before network call
+        $("button#purchase").attr('data-processing', 'true');
+        $("button#purchase").attr('disabled', true);
         const hachayols = JSON.parse(await updateHachayols(list))
         if (hachayols.success) {
           alert('You have successfully updated your Hachayol Settings.')
           location.href = '/mobile'
-        } else if (hachayols.error) alert(hachayols.error)
-        else alert('There was an error updating your Hachayols. Please contact us by emailing to "support@tzivoshashem.org"')
+        } else if (hachayols.error) {
+          alert(hachayols.error)
+          $("button#purchase").attr('data-processing', 'false');
+          $("button#purchase").attr('disabled', false);
+        } else {
+          alert('There was an error updating your Hachayols. Please contact us by emailing to "support@tzivoshashem.org"')
+          $("button#purchase").attr('data-processing', 'false');
+          $("button#purchase").attr('disabled', false);
+        }
       }
     }
 
