@@ -1,5 +1,7 @@
 <?php
 ini_set('display_errors',1);
+ini_set('max_execution_time', 600);
+
 require_once 'db.php';
 require_once 'class.heDob.php';
 require_once 'class.birthdayEn.php';
