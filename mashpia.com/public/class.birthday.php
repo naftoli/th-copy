@@ -171,7 +171,7 @@ abstract class Birthday {
 			foreach( $this->boysAgeTasks as $age => $task ) {
 				if ( $year >= $age && $user['gender'] == 'M' ){
 					if ( !$t->createTask( $task, $points, 0, null, $this->grid_ids[$grid_id_idx++] ) ) {
-						$this->errors[] = "problm creating task " . mysql_error();
+						$this->errors[] = "problem creating task " . mysql_error();
 					}
 				}
 			}
