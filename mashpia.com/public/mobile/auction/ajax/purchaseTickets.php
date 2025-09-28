@@ -8,10 +8,43 @@ $admin = mysql_real_escape_string($_POST['admin']);
 require '../../reg/ajax/encrypt.php';
 $admin = encrypt_decrypt('decrypt', $admin);
 
+// ****************** PROCESSING GUARD (similar to Hei Teves) ***************************/
+function startPayment() {
+    global $admin;
+    if (!$admin) return;
+    $sql = "INSERT INTO payment_processing (admin_id) VALUES (" . intval($admin) . ")";
+    mysql_query($sql);
+}
+
+function endPayment() {
+    global $admin;
+    if (!$admin) return;
+    $sql = "DELETE FROM payment_processing WHERE admin_id = " . intval($admin);
+    mysql_query($sql);
+}
+
+function paymentInProgress() {
+    global $admin;
+    if (!$admin) return false;
+    $sql = "SELECT * FROM payment_processing WHERE admin_id = " . intval($admin);
+    $result = mysql_query($sql);
+    return $result && mysql_num_rows($result) > 0;
+}
+// **************************************************************************************
+
 // make sure user is part of admin account
 $sql = "select * from admin_auths where id = " . $user . " and admin_id = " . $admin . " and role_id = 1";
 $result = mysql_query($sql);
 if (mysql_num_rows($result) > 0) {
+
+    // Guard: ensure no other purchase is in progress for this admin
+    if (paymentInProgress()) {
+        echo "Another save is currently processing. Please wait a moment and try again.";
+        exit;
+    }
+
+    // Mark processing start
+    startPayment();
 		
 	$cart = json_decode($_POST['cart']);
 	$qrys = array();
@@ -43,10 +76,12 @@ if (mysql_num_rows($result) > 0) {
 	if ($success) {
 		mysql_query("commit");
 		mysql_query("set autocommit=1");
+		endPayment();
 		echo 0;
 	} else {
 		mysql_query("rollback");
 		mysql_query("set autocommit=1");
+		endPayment();
 		echo 1;
 	}
 }

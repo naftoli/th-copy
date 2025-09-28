@@ -694,31 +694,46 @@
     			}
             });
             
-            $("#purchase").click( function() {
+			$("#purchase").click( function() {
                 // after deadline alert and return
 				//alert('We are sorry but the auction deadline has past. You can no longer put in tickets for the auction.');
 				//return false;
     			
+				// Prevent double-submission
+				if ($("#purchase").attr('data-processing') === 'true') {
+					return false;
+				}
+				
     			if (!cart.length) {
     				alert('You have nothing left in your cart!');
     				location.href = "index.html?id=" + user;
                     return;
     			}
-    			
+				
+				$("#purchase").attr('data-processing', 'true');
+				$("#purchase").attr('disabled', true);
+				
     			//alert('Not ready yet.');
-                $.post('ajax/purchaseTickets.php', { admin : Cookies.get('admin'), cart : JSON.stringify(cart), user : user, auction : auction_id }, function( error ) {
+				$.post('ajax/purchaseTickets.php', { admin : Cookies.get('admin'), cart : JSON.stringify(cart), user : user, auction : auction_id }, function( error ) {
                     if (error == 0) {
                         //alert('Your purchase has been successful.');
     					localStorage.removeItem('auctionCart' + user);
     					sessionStorage.removeItem('cartLoaded');
     					alert('Saved.');
-                        location.href = "index.html?id=" + user;
+						// Keep disabled while redirecting
+						location.href = "index.html?id=" + user;
                         return;
                     } else {
                         alert(error);
+						$("#purchase").attr('data-processing', 'false');
+						$("#purchase").attr('disabled', false);
                         return;
                     } 
-                });
+				}).fail(function() {
+					alert('An error occurred while saving your cart. Please try again.');
+					$("#purchase").attr('data-processing', 'false');
+					$("#purchase").attr('disabled', false);
+				});
             });
 
     		$("#back").click( function() {
