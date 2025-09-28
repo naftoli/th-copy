@@ -42,4 +42,25 @@ foreach ($rows as $row) {
     $info[$admin_id]['payments'] = count($rows2);
 }
 
-echo "<pre>"; print_r($info); echo "</pre>";
+$insert = [];
+$delete = [];
+foreach ($info as $admin_id => $more) {
+    $hachayols = $more['hachayols'];
+    $numPayments = $more['payments'];
+    $numHachayols = count($hachayols);
+    if ($numHachayols > ($numPayments + 1)) {
+        for ($i = $numPayments; $i < $numHachayols; $i++) {
+            $delete[] = $hachayols[$i];
+        }
+    } else if ($numHachayols < ($numPayments + 1)) {
+        for ($i = $numHachayols; $i < ($numPayments + 1); $i++) {
+            $insert[] = $admin_id;
+        }
+    }
+}
+
+echo "<pre>"; 
+print_r($insert); 
+print_r($delete); 
+print_r($info); 
+echo "</pre>";
