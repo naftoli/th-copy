@@ -20,7 +20,7 @@ while ($row = mysql_fetch_assoc( $result )) {
 
 foreach ($users as $user_id) {
     $b = new BirthdayEn( $user_id );
-//    $b->enablePrevious();
+    $b->enablePrevious();
     $b->setBirthday();
     $errors = $b->getErrors();
     if ( $errors ) {
@@ -30,7 +30,7 @@ foreach ($users as $user_id) {
         echo "<br />";
     }
     $bi = new BirthdayYi( $user_id );
-//    $bi->enablePrevious();
+    $bi->enablePrevious();
     $bi->setBirthday();
     $errors = $bi->getErrors();
     if ( $errors ) {
