@@ -755,24 +755,37 @@
                 }
             });
             
-            $("#purchase").click( function() {
-                if (!cart.length) {
-                    alert('You have nothing left in your cart!');
-                    location.href = "index.html?id=" + user;
-                    return;
-                }
-                $.post('ajax/purchase.php', { cart : JSON.stringify(cart), user : user }, function( error ) {
-                    if (error == 0) {
-                        alert('Your purchase has been successful.');
-                        localStorage.removeItem('storeCart' + user);
-                        location.href = "index.html?id=" + user;
-                        return;
-                    } else {
-                        alert(error);
-                        return;
-                    } 
-                });
-            });
+			$("#purchase").click( function() {
+				// Prevent double-submission
+				if ($("#purchase").attr('data-processing') === 'true') {
+					return false;
+				}
+				if (!cart.length) {
+					alert('You have nothing left in your cart!');
+					location.href = "index.html?id=" + user;
+					return;
+				}
+				$("#purchase").attr('data-processing', 'true');
+				$("#purchase").attr('disabled', true);
+				$.post('ajax/purchase.php', { cart : JSON.stringify(cart), user : user }, function( error ) {
+					if (error == 0) {
+						alert('Your purchase has been successful.');
+						localStorage.removeItem('storeCart' + user);
+						// Keep disabled and processing true; redirect
+						location.href = "index.html?id=" + user;
+						return;
+					} else {
+						alert(error);
+						$("#purchase").attr('data-processing', 'false');
+						$("#purchase").attr('disabled', false);
+						return;
+					}
+				}).fail(function() {
+					alert('An error occurred while processing your purchase. Please try again.');
+					$("#purchase").attr('data-processing', 'false');
+					$("#purchase").attr('disabled', false);
+				});
+			});
             
             $("#back").click( function() {
                 location.href = "index.html?id=" + user;
