@@ -84,7 +84,6 @@ foreach ($info as $row) {
         'user'      => $row['user'],
         'item'      => $row['item'],
         'num'       => $row['num'],
-        'ship_num'  => $row['ship_num']
     ]);
     // $stmtSelect->debugDumpParams();
     if (! $res) {
@@ -104,9 +103,9 @@ foreach ($info as $row) {
                     'desc'      => $row['desc'], 
                     'ship_num'  => $row['ship_num']
                 ]);
-                if (! $res) {
-                    $stmtUpdateWithDate->debugDumpParams();
-                }
+                // if (! $res) {
+                //     $stmtUpdateWithDate->debugDumpParams();
+                // }
             } else if ($action == 0) {
                 $res = $stmtUpdateRemoveDate->execute([
                     'year'      => $year,
