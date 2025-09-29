@@ -342,8 +342,12 @@ if (isset($_POST['submit'])) {
                             break;
                         // Add a period to the task name
                         case 23:
+                            // skip row if it's empty
+                            if (empty($val)) {
+                                continue 2;
+                            }
                             $task = $val;
-                            if (!strpos($task, '.'))
+                            if (strpos($task, '.') === false)
                                 $task .= ".";
                             break;
                         // turn the label id into an int for the forgin key relationship

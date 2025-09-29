@@ -490,16 +490,18 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // find parent account
         $parent = $this->parentAccount();
         if (!$parent) {
-            // add hachayol to child
-            $this->addHachayol($this->user_id, $year);
+            // No parent context. Respect Australian exceptions, otherwise ensure at least one per family (solo) receives Hachayol
+            $australianSchools = GlobalSettings::getAustralian();
+            if (!in_array($this->school_id, $australianSchools)) {
+                $this->addHachayol($this->user_id, $year);
+            }
             return;
         }
 
         // find if any children of parent have hachayol
         $sql = "SELECT h.user_id FROM hachayols_to_give h 
-                JOIN users u ON h.user_id = u.user_id 
                 JOIN admin_auths aa ON h.user_id = aa.id 
-                WHERE aa.admin_id = :admin_id 
+                WHERE aa.admin_id = :admin_id AND aa.role_id = 1
                 AND h.year = :year";
         $stmt = $MASHPIA_DB->prepare($sql);
         $stmt->execute([
@@ -524,7 +526,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $sql = "SELECT u.user_id, u.dob, c.class_grade FROM users u 
                 JOIN classes c ON c.class_id = u.class_id 
                 JOIN admin_auths aa ON u.user_id = aa.id 
-                WHERE aa.admin_id = :admin_id 
+                WHERE aa.admin_id = :admin_id AND aa.role_id = 1
                 AND u.school_id NOT IN (" . implode(',', $school_exceptions) . ") 
                 AND c.class_era = 0 
                 ORDER BY c.class_grade DESC, u.dob DESC";
@@ -535,10 +537,14 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
     private function getChildForHachayol($children) {
         foreach ($children as $child) {
-            if ($child['class_grade'] <= 5 || $child['class_grade'] == 'Pre1a') {
+            $gradeRaw = $child['class_grade'];
+            $isNumeric = is_numeric($gradeRaw);
+            $gradeNum = $isNumeric ? intval($gradeRaw) : null;
+            if (($isNumeric && $gradeNum <= 5) || strcasecmp($gradeRaw, 'Pre1a') === 0) {
                 return $child['user_id'];
             }
         }
+        // If no early-grade child found, still ensure at least one per family
         return $children[0]['user_id'];
     }
 

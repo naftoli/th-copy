@@ -152,7 +152,9 @@ class SchoolShipping
             'start' => $start_yr
         ]);
         $row = $stmt->fetch();
-        $raffles[$row['raffle_id']] = $row['name'];
+        if ($row) {
+            $raffles[$row['raffle_id']] = $row['name'];
+        }
         // then get all raffles from this year
         $sql = "select * from raffles where type = 'weekly' and year = :year";
         $stmt = $this->db->prepare($sql);
