@@ -25,7 +25,7 @@ $select = "SELECT * FROM $table WHERE year = :year
             AND item_num = :num";
 $stmtSelect = $MASHPIA_DB->prepare($select);
 
-// can only insert for not yet shipped or shipped
+// can only insert for not yet shipped
 $insert = "INSERT INTO $table  
             SET 
                 year = :year, 
