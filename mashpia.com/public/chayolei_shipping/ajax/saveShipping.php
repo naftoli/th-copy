@@ -22,11 +22,10 @@ $table = 'th_chidon_shipping';
 $select = "SELECT * FROM $table WHERE year = :year 
             AND user_id = :user 
             AND item_id = :item 
-            AND item_num = :num 
-            AND shipment_number = :ship_num";
+            AND item_num = :num";
 $stmtSelect = $MASHPIA_DB->prepare($select);
 
-// can only insert for not yet shipped or shipped
+// can only insert for not yet shipped
 $insert = "INSERT INTO $table  
             SET 
                 year = :year, 
@@ -55,12 +54,12 @@ $updateWithDate = "UPDATE $table
                         status = 1, 
                         description = :desc,
                         date_shipped = NOW(), 
+                        shipment_number = :ship_num
                     WHERE 
                         year = :year 
                             AND user_id = :user 
                             AND item_id = :item 
-                            AND item_num = :num
-                            AND shipment_number = :ship_num";
+                            AND item_num = :num";
 $stmtUpdateWithDate = $MASHPIA_DB->prepare($updateWithDate);
 
 $updateRemoveDate = "UPDATE $table 
@@ -85,7 +84,6 @@ foreach ($info as $row) {
         'user'      => $row['user'],
         'item'      => $row['item'],
         'num'       => $row['num'],
-        'ship_num'  => $row['ship_num']
     ]);
     // $stmtSelect->debugDumpParams();
     if (! $res) {
@@ -105,6 +103,9 @@ foreach ($info as $row) {
                     'desc'      => $row['desc'], 
                     'ship_num'  => $row['ship_num']
                 ]);
+                // if (! $res) {
+                //     $stmtUpdateWithDate->debugDumpParams();
+                // }
             } else if ($action == 0) {
                 $res = $stmtUpdateRemoveDate->execute([
                     'year'      => $year,
