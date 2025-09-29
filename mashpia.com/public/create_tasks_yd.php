@@ -266,7 +266,7 @@ if (isset($_POST['submit'])) {
                                 continue 2;
                             }
                             $task = $val;
-                            if (!strpos($task, '.'))
+                            if (strpos($task, '.') === false)
                                 $task .= ".";
                             break;
                         // turn the label id into an int for the forgin key relationship
