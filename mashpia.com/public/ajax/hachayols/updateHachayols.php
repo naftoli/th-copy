@@ -15,7 +15,7 @@ if (!$adminEnc) {
 }
 $admin_id = encrypt_decrypt('decrypt', $adminEnc);
 
-$stmtAdd = $MASHPIA_DB->prepare("INSERT IGNORE INTO hachayols_to_give (user_id, year) VALUES (:user, :year)");
+$stmtAdd = $MASHPIA_DB->prepare("INSERT IGNORE INTO hachayols_to_give (user_id, year, admin_id) VALUES (:user, :year, :admin_id)");
 $stmtRemove = $MASHPIA_DB->prepare("DELETE FROM hachayols_to_give WHERE user_id = :user AND year = :year");
 
 $toAdd = $_POST['toAdd'];
@@ -54,7 +54,8 @@ $success = true;
 foreach ($toAdd as $user_id) {
     $res = $stmtAdd->execute([
         'user'  => $user_id,
-        'year'  => $year
+        'year'  => $year,
+        'admin_id' => $admin_id
     ]);
     if (!$res) {
         $success = false;
