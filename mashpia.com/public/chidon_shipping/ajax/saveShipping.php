@@ -55,12 +55,12 @@ $updateWithDate = "UPDATE $table
                         status = 1, 
                         description = :desc,
                         date_shipped = NOW(), 
+                        shipment_number = :ship_num
                     WHERE 
                         year = :year 
                             AND user_id = :user 
                             AND item_id = :item 
-                            AND item_num = :num
-                            AND shipment_number = :ship_num";
+                            AND item_num = :num";
 $stmtUpdateWithDate = $MASHPIA_DB->prepare($updateWithDate);
 
 $updateRemoveDate = "UPDATE $table 
