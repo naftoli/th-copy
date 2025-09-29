@@ -39,6 +39,7 @@ foreach ($doubles as $double) {
     }
 }
 
-echo "<pre>";
-print_r($qrys);
-echo "</pre>";
+foreach ($qrys as $qry) {
+    $MASHPIA_DB->exec($qry);
+}
+echo "Done.";
