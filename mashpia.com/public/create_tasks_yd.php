@@ -261,6 +261,10 @@ if (isset($_POST['submit'])) {
                             break;
                         // Add a period to the task name
                         case 25:
+                            // skip row if it's empty
+                            if (empty($val)) {
+                                continue 2;
+                            }
                             $task = $val;
                             if (!strpos($task, '.'))
                                 $task .= ".";
