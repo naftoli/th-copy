@@ -7,8 +7,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
-$super_auth = $admin_user['auth'] == 'super';
-
 // Check if data is compressed
 $input = file_get_contents('php://input');
 
@@ -27,7 +25,7 @@ $select = "SELECT * FROM $table WHERE year = :year
             AND item_num = :num";
 $stmtSelect = $MASHPIA_DB->prepare($select);
 
-// can only insert for not yet shipped
+// can only insert for not yet shipped or shipped
 $insert = "INSERT INTO $table  
             SET 
                 year = :year, 
@@ -51,17 +49,31 @@ $update = "UPDATE $table
                     AND shipment_number = :ship_num";
 $stmtUpdate = $MASHPIA_DB->prepare($update);
 
+$updateWithDate = "UPDATE $table 
+                    SET 
+                        status = 1, 
+                        description = :desc,
+                        date_shipped = NOW(), 
+                        shipment_number = :ship_num
+                    WHERE 
+                        year = :year 
+                            AND user_id = :user 
+                            AND item_id = :item 
+                            AND item_num = :num";
+$stmtUpdateWithDate = $MASHPIA_DB->prepare($updateWithDate);
+
 $updateRemoveDate = "UPDATE $table 
                     SET 
-                        status = 0,
-                        description = '',
+                        status = :status,
+                        description = :desc,
                         date_shipped = NULL, 
                         shipment_number = 0 
                     WHERE 
                         year = :year 
                             AND user_id = :user 
                             AND item_id = :item 
-                            AND item_num = :num";
+                            AND item_num = :num 
+                            AND shipment_number = :ship_num";
 $stmtUpdateRemoveDate = $MASHPIA_DB->prepare($updateRemoveDate);
 
 $MASHPIA_DB->beginTransaction();
@@ -73,35 +85,27 @@ foreach ($info as $row) {
         'item'      => $row['item'],
         'num'       => $row['num'],
     ]);
-    
     // $stmtSelect->debugDumpParams();
     if (! $res) {
         $success = false;
         break;
     } else {
         // find out if we need to insert or update
-        $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);        
+        $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        $action = intval($row['action']);
         if ($found) {
-            $action = intval($row['action']);
-            if ($found['status'] > 0 && $action == 1) {
-                $action = 5;
-            }
-            if (in_array($action, [1, 5])) {
-                if (! $super_auth) $res = false;
-                else {
-                    $res = $stmtUpdateWithDate->execute([
-                        'year'      => $year,
-                        'user'      => $row['user'],
-                        'item'      => $row['item'],
-                        'num'       => $row['num'],
-                        'desc'      => $row['desc'], 
-                        'ship_num'  => $row['ship_num'], 
-                        'status'    => $action
-                    ]);
-                    // if (! $res) {
-                    //     $stmtUpdateWithDate->debugDumpParams();
-                    // }
-                }
+            if ($action == 1) {
+                $res = $stmtUpdateWithDate->execute([
+                    'year'      => $year,
+                    'user'      => $row['user'],
+                    'item'      => $row['item'],
+                    'num'       => $row['num'],
+                    'desc'      => $row['desc'], 
+                    'ship_num'  => $row['ship_num']
+                ]);
+                // if (! $res) {
+                //     $stmtUpdateWithDate->debugDumpParams();
+                // }
             } else if ($action == 0) {
                 $res = $stmtUpdateRemoveDate->execute([
                     'year'      => $year,
