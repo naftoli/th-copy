@@ -90,7 +90,7 @@ foreach ($info as $admin_id => $more) {
             $children = getEligibleChildren($admin_id, $more['hachayols']);
             if (! empty($children)) {
                 $child = getChildForHachayol($children);
-                $qrys[] = "INSERT INTO hachayols_to_give (user_id, year) VALUES (" . $child . ", " . $year . ")";
+                $qrys[] = "INSERT INTO hachayols_to_give (user_id, year, admin_id) VALUES (" . $child . ", " . $year . ", " . $admin_id . ")";
             }
         }
     }

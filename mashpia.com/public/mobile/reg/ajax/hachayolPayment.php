@@ -153,7 +153,7 @@ if ( $amount > 0 ) {
         if ($year < 5786) {
             $stmt2 = $MASHPIA_DB->prepare("update users set hachayol = 1 where user_id = :user");
         } else {
-            $stmt2 = $MASHPIA_DB->prepare("insert ignore into hachayols_to_give set year = :year, user_id = :user");
+            $stmt2 = $MASHPIA_DB->prepare("insert ignore into hachayols_to_give set year = :year, user_id = :user, admin_id = :admin");
         }
 
         foreach ($users as $user) {
@@ -185,7 +185,8 @@ if ( $amount > 0 ) {
                 ]);
                 $res2 = $stmt2->execute([
                     'user'  => $user['user_id'],
-                    'year'  => $year
+                    'year'  => $year,
+                    'admin' => $admin_id
                 ]);
             }
             if (!$res || !$res2) {

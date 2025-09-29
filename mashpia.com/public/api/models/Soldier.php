@@ -817,8 +817,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
     public function addHachayol($user_id, $year) {
         global $MASHPIA_DB;
-        $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO hachayols_to_give (user_id, year) VALUES (:user, :year)");
-        $res = $stmt->execute([':user' => $user_id, ':year' => $year]);
+        $stmt = $MASHPIA_DB->prepare("INSERT IGNORE INTO hachayols_to_give (user_id, year, admin_id) VALUES (:user, :year, :admin_id)");
+        if (! $this->parent) $this->parent = $this->parentAccount();
+        $res = $stmt->execute([':user' => $user_id, ':year' => $year, ':admin_id' => $this->parent->admin_id ?? 0]);
         return $res;
     }
 
