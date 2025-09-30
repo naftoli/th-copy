@@ -153,7 +153,7 @@ print_r($updates);
 echo "</pre>";
 
 // Uncomment below to actually execute the updates
-if (!empty($updates)) {
+if (!empty($updates) && isset($_GET['fix']) && $_GET['fix'] == 1) {
     $MASHPIA_DB->beginTransaction();
     try {
         foreach ($updates as $update) {
