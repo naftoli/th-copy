@@ -25,7 +25,6 @@ $stmt = $MASHPIA_DB->prepare("
         hachayols_to_give h USING (user_id, year)
     WHERE
         ur.year = :year
-    GROUP BY aa.admin_id
     ORDER BY aa.admin_id, class_grade
 ");
 $stmt->execute(['year' => $year]);
@@ -35,6 +34,7 @@ $info = [];
 foreach ($rows as $row) {
     $info[$row['admin_id']][] = $row;
 }
+
 echo "<pre>";
 print_r($info);
 echo "</pre>";
