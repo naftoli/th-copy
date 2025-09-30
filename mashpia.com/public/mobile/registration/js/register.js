@@ -1897,14 +1897,30 @@ var registrationApp = function () {
   }
 
   function getOldestChild(children) {
-    // find oldest child that is 10 yrs old or under. use child's dob to calculate age
-    let oldest = children[0].user_id
-    let oldestAge = calculateAge(children[0].dob)
-    for (let c in children) {
-      let age = calculateAge(children[c].dob)
+    // find oldest child that is 10 yrs old or under (registered OR currently registering)
+    // filter for children who are already registered OR currently being registered for chayolei
+    const registeringChildren = children.filter(c => {
+      // Check if already registered
+      if (c.user_registered && c.user_registered !== 'null' && c.user_registered !== '0000-00-00') return true
+      
+      // Check if currently being registered in cart
+      const isRegistering = state.cart.some(item => 
+        item.meta.user_id === c.user_id && 
+        item.meta.type === 'registration' && 
+        item.meta.registration_type === 'chayolei'
+      )
+      return isRegistering
+    })
+    
+    const childrenToCheck = registeringChildren.length > 0 ? registeringChildren : children
+    
+    let oldest = childrenToCheck[0].user_id
+    let oldestAge = calculateAge(childrenToCheck[0].dob)
+    for (let c in childrenToCheck) {
+      let age = calculateAge(childrenToCheck[c].dob)
       if (age > 10) continue
       if (age > oldestAge) {
-        oldest = children[c].user_id
+        oldest = childrenToCheck[c].user_id
         oldestAge = age
       }
     }
@@ -1917,23 +1933,58 @@ var registrationApp = function () {
     const children = allChildren.filter((child, index, arr) => 
       arr.findIndex(c => c.user_id === child.user_id) === index
     );
+    
+    // Filter to only show registered or currently registering children
+    const eligibleChildren = children.filter(c => {
+      // Check if already registered
+      if (c.user_registered && c.user_registered !== 'null' && c.user_registered !== '0000-00-00') return true
+      
+      // Check if currently being registered in cart
+      const isRegistering = state.cart.some(item => 
+        item.meta.user_id === c.user_id && 
+        item.meta.type === 'registration' && 
+        item.meta.registration_type === 'chayolei'
+      )
+      return isRegistering
+    })
+        
     // get children that are set to get hachayol
     let oldest = null
-    const { success, hachayols } = await fetch('/ajax/hachayols/getHachayolsInfo.php')
+    const response = await fetch('/ajax/hachayols/getHachayolsInfo.php')
       .then(res => res.json())
-    if (!success) {
+    if (!response.success) {
       alert('Could not get hachayols information.')
       return false
     }
+    
+    let hachayols = response.hachayols
+    
+    // Check if existing hachayols are for non-eligible children
+    const ineligibleHachayols = hachayols.filter(hId => {
+      return !eligibleChildren.some(c => c.user_id === hId)
+    })
+    
+    // If there are ineligible hachayols and we have eligible children, swap them
+    if (ineligibleHachayols.length > 0 && eligibleChildren.length > 0) {
+      // Remove ineligible hachayols from the list
+      hachayols = hachayols.filter(hId => !ineligibleHachayols.includes(hId))
+      
+      // Get the oldest eligible child to replace them
+      oldest = getOldestChild(eligibleChildren)
+      if (oldest && !hachayols.includes(oldest)) {
+        hachayols.push(oldest)
+      }
+    }
+    
     // if no hachayols set, get oldest child and add to hachayols
-    if (!hachayols.length) {
-      oldest = getOldestChild(children)
+    if (!hachayols.length && eligibleChildren.length > 0) {
+      oldest = getOldestChild(eligibleChildren)
       hachayols.push(oldest)
     }
       
     let html = "<div style='margin-left: 2em; margin-top: -2em;'>"
-    for (let c in children) {
-      let child = children[c]
+    for (let c in eligibleChildren) {
+      let child = eligibleChildren[c]
       html += `<label for="${child.user_id}">
                   <div style='float: left; margin-right: 10px;'>
                     <input type="checkbox" name="hachayol[]" class="hachayol" id="${child.user_id}" value="${child.user_id}" 
@@ -1951,7 +2002,7 @@ var registrationApp = function () {
     $("#hachayolChildren").empty().append(html)
     $("#hachayol").modal('show')
     $("#hachayol").on('hidden.bs.modal', function () {
-      processHachayols(hachayols)
+      processHachayols(hachayols, eligibleChildren, ineligibleHachayols)
     })
   }
 
@@ -1965,12 +2016,8 @@ var registrationApp = function () {
     }
   })
 
-  async function processHachayols(hachayols) {
+  async function processHachayols(hachayols, eligibleChildren, ineligibleHachayols = []) {
     const numChecked = $(".hachayol:checked").length
-    const allChildren = [...state.users, ...state.registered];
-    const children = allChildren.filter((child, index, arr) => 
-      arr.findIndex(c => c.user_id === child.user_id) === index
-    );
     if (numChecked < hachayols.length) {
       alert('You must have at least ' + hachayols.length + ' child(ren) checked.')
       $("#hachayol").modal('show')
@@ -1982,7 +2029,7 @@ var registrationApp = function () {
     if (numChecked > hachayols.length) {
       for (let i = hachayols.length; i < numChecked; i++) {
         const id = $(".hachayol:checked").eq(i).val()
-        const family_id = children.find(user => user.user_id == id).parentAccount.admin_id
+        const family_id = eligibleChildren.find(user => user.user_id == id).parentAccount.admin_id
         // check if this child is already in the cart
         const alreadyInCart = state.cart.find(item => item.meta.user_id == id && item.meta.type == 'hachayol')
         if (alreadyInCart) continue
@@ -2002,18 +2049,25 @@ var registrationApp = function () {
     }
 
     let toAdd = []
-    let toRemove = []
+    let toRemove = [...ineligibleHachayols] // Start with ineligible hachayols to remove
     $(".hachayol").each(function () {
       let id = parseInt($(this).val())
       let checked = $(this).is(":checked")
+      
       if (checked) {
-        // only add if not already added to cart, the cart hachayols are updated when the user checks out
-        if (!addedToCart.includes(id)) toAdd.push(id) 
+        // only add if not already added to cart (all children in modal are eligible)
+        if (!addedToCart.includes(id)) {
+          toAdd.push(id)
+        }
       } else {
-        toRemove.push(id)
+        // only add to remove if not already in the ineligible list
+        if (!toRemove.includes(id)) {
+          toRemove.push(id)
+        }
       }
     })
-    console.log(toAdd, toRemove)
+    console.log('toAdd:', toAdd)
+    console.log('toRemove (including ineligible):', toRemove)
 
     if (toAdd.length || toRemove.length) {
       const result = await $.post('/ajax/hachayols/updateHachayols.php', { toAdd, toRemove })
