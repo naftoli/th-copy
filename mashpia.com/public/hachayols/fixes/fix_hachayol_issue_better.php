@@ -78,6 +78,7 @@ foreach ($info as $admin_id => $children) {
         if ($candidate) {
             $issues_found[] = "Admin $admin_id has no hachayol assigned. Will assign to user {$candidate['user_id']} (Grade {$candidate['class_grade']})";
             $updates[] = [
+                'admin_id' => $admin_id,
                 'user_id' => $candidate['user_id'],
                 'action' => 'assign_new'
             ];
@@ -92,6 +93,7 @@ foreach ($info as $admin_id => $children) {
             if ($candidate) {
                 $issues_found[] = "Admin $admin_id has unregistered user {$unregistered['user_id']} with hachayol {$unregistered['hachayol_id']}. Will swap to registered user {$candidate['user_id']} (Grade {$candidate['class_grade']})";
                 $updates[] = [
+                    'admin_id' => $admin_id,
                     'from_user_id' => $unregistered['user_id'],
                     'to_user_id' => $candidate['user_id'],
                     'hachayol_id' => $unregistered['hachayol_id'],
@@ -151,7 +153,6 @@ print_r($updates);
 echo "</pre>";
 
 // Uncomment below to actually execute the updates
-/*
 if (!empty($updates)) {
     $MASHPIA_DB->beginTransaction();
     try {
@@ -159,10 +160,11 @@ if (!empty($updates)) {
             if ($update['action'] == 'assign_new') {
                 // Insert new hachayol assignment
                 $stmt = $MASHPIA_DB->prepare("
-                    INSERT INTO hachayols_to_give (user_id, year, hachayol_id)
-                    VALUES (:user_id, :year, NULL)
+                    INSERT INTO hachayols_to_give (user_id, year, admin_id)
+                    VALUES (:user_id, :year, :admin_id)
                 ");
                 $stmt->execute([
+                    'admin_id' => $update['admin_id'],
                     'user_id' => $update['user_id'],
                     'year' => $year
                 ]);
@@ -170,12 +172,14 @@ if (!empty($updates)) {
                 // Update existing hachayol assignment
                 $stmt = $MASHPIA_DB->prepare("
                     UPDATE hachayols_to_give 
-                    SET user_id = :to_user_id 
+                    SET user_id = :to_user_id, 
+                    admin_id = :admin_id 
                     WHERE user_id = :from_user_id 
                     AND year = :year 
                     AND hachayol_id = :hachayol_id
                 ");
                 $stmt->execute([
+                    'admin_id' => $update['admin_id'],
                     'to_user_id' => $update['to_user_id'],
                     'from_user_id' => $update['from_user_id'],
                     'year' => $year,
@@ -190,4 +194,3 @@ if (!empty($updates)) {
         echo "<p style='color: red;'><strong>Error: " . $e->getMessage() . "</strong></p>";
     }
 }
-*/
