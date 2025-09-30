@@ -23,33 +23,25 @@ require '../../../class.points.php';
 $user = mysql_real_escape_string($_POST['user']);
 $cart = json_decode($_POST['cart']);
 
-// Derive admin_id for this user (role_id 1 indicates primary account holder)
-$admin_id = null;
-$adminRes = mysql_query("select admin_id from admin_auths where id = " . intval($user) . " and role_id = 1 limit 1");
-if ($adminRes && mysql_num_rows($adminRes) > 0) {
-    $adminRow = mysql_fetch_assoc($adminRes);
-    $admin_id = intval($adminRow['admin_id']);
-}
-
 // ****************** PROCESSING GUARD (similar to Hei Teves) ***************************/
 function startPayment() {
-    global $admin_id;
-    if (!$admin_id) return;
-    $sql = "INSERT INTO payment_processing (admin_id) VALUES (" . $admin_id . ")";
+    global $user;
+    if (!$user) return;
+    $sql = "INSERT INTO payment_processing (user_id) VALUES (" . $user . ")";
     mysql_query($sql);
 }
 
 function endPayment() {
-    global $admin_id;
-    if (!$admin_id) return;
-    $sql = "DELETE FROM payment_processing WHERE admin_id = " . $admin_id;
+    global $user;
+    if (!$user) return;
+    $sql = "DELETE FROM payment_processing WHERE user_id = " . $user;
     mysql_query($sql);
 }
 
 function paymentInProgress() {
-    global $admin_id;
-    if (!$admin_id) return false;
-    $sql = "SELECT * FROM payment_processing WHERE admin_id = " . $admin_id;
+    global $user;
+    if (!$user) return false;
+    $sql = "SELECT * FROM payment_processing WHERE user_id = " . $user;
     $result = mysql_query($sql);
     return $result && mysql_num_rows($result) > 0;
 }
@@ -89,8 +81,8 @@ if ($usedPoints > $availableP) {
     exit;
 }
 
-// Guard: ensure no other purchase is in progress for this admin
-if ($admin_id && paymentInProgress()) {
+// Guard: ensure no other purchase is in progress for this user
+if ($user && paymentInProgress()) {
     echo "Your purchase is already being processed. Please wait for it to complete.";
     exit;
 }
