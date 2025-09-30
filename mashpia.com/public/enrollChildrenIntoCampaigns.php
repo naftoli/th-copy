@@ -7,12 +7,19 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
-$ids = [];
-$school_id = $_GET['school_id'];
-$sql = "select user_id from users where school_id = " . mysql_real_escape_string( $school_id );
-$result = mysql_query( $sql );
-while ( $row = mysql_fetch_assoc( $result ) ) {
-    $ids[] = $row['user_id'];
+if (isset($_GET['type'])) {
+    $type = $_GET['type'];
+    if ($type == 'user') {
+        $ids = [$_GET['id']];
+    }
+} else {
+    $ids = [];
+    $school_id = $_GET['school_id'];
+    $sql = "select user_id from users where school_id = " . mysql_real_escape_string( $school_id );
+    $result = mysql_query( $sql );
+    while ( $row = mysql_fetch_assoc( $result ) ) {
+        $ids[] = $row['user_id'];
+    }
 }
 
 require_once 'class.campaignEnrollment.php';
