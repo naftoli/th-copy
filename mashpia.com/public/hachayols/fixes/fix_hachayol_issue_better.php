@@ -30,6 +30,11 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 $stmt->execute(['year' => $year]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$info = [];
+foreach ($rows as $row) {
+    $info[$row['admin_id']][] = $row;
+}
 echo "<pre>";
-print_r($rows);
+print_r($info);
 echo "</pre>";
