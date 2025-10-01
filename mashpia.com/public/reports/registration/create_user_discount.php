@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+// ini_set('display_errors', 1);
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 
@@ -36,7 +36,7 @@ if ( isset( $_POST['submit'] ) ) {
     if ( empty( $msg ) ) {
         $discount = new StudentDiscount($year, $user_id, $amount, $reason, $created_by);
         $d = new DiscountManager($MASHPIA_DB);
-        if ($d->createStudentDiscount($discount)) {
+        if ($d->createDiscount($discount)) {
             $msg = "Your discount has been created.";
         } else {
             $msg = "There was an error creating your discount.";
