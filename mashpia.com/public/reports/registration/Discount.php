@@ -1,6 +1,11 @@
 <?php
 abstract class DiscountBase 
 {
+    public $year;
+    public $amount;
+    public $reason;
+    public $created_by;
+
     public function __construct($year, $amount, $reason, $created_by) {
         $this->year = $year;
         $this->amount = $amount;
@@ -13,6 +18,8 @@ abstract class DiscountBase
 
 class SchoolDiscount extends DiscountBase
 {
+    public $school_id;
+    
     public function __construct($year, $school_id, $amount, $reason, $created_by) {
         parent::__construct($year, $amount, $reason, $created_by);
         $this->school_id = $school_id;
@@ -40,6 +47,8 @@ class SchoolDiscount extends DiscountBase
 
 class StudentDiscount extends DiscountBase
 {
+    public $user_id;
+    
     public function __construct($year, $user_id, $amount, $reason, $created_by) {
         parent::__construct($year, $amount, $reason, $created_by);
         $this->user_id = $user_id;
