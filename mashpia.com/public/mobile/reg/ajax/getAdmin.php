@@ -1,4 +1,6 @@
 <?php
+// Suppress any output before JSON
+ob_start();
 require '../../../db.php';
 
 function thumb( $img ) {
@@ -26,14 +28,22 @@ $result = mysql_query($sql);
 if (mysql_num_rows($result) > 0) {
 	$row = mysql_fetch_assoc($result);
 	if (!empty( $row['father_pic'] )) {
-		thumb( '../' . $row['father_pic'] );
+		$fileFather = '../' . $row['father_pic'];
+		if (file_exists($fileFather))
+			thumb($fileFather);
 	}
 	if (!empty( $row['mother_pic'] )) {
-		thumb( '../' . $row['mother_pic'] );
+		$fileMother = '../' . $row['mother_pic'];
+		if (file_exists($fileMother))
+			thumb($fileMother);
 	}
 	$row['password'] = '*********';
+	
+	// Clear any error output and send clean JSON
+	ob_end_clean();
 	echo json_encode( $row );
 } else {
+	ob_end_clean();
 	echo -1;
 }
 ?>
