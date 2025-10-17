@@ -10,7 +10,6 @@ $shipment_number_filter = isset($_GET['shipment_number']) ? intval($_GET['shipme
 
 $report = new ComprehensiveShipmentReport($school_id);
 $family_shipment_details = $report->getFamilyShipmentDetails($shipment_number_filter);
-
 ?>
 <!DOCTYPE html>
 <html>
