@@ -11,8 +11,8 @@ $testNum = isset($_GET['test']) ? $_GET['test'] : $ct->figureOutTestNum();
 $dates = $ct->getDates();
 
 $totals = [];
-for ($i = 0; $i < $testNum; $i++) {
-    $totals[$i] = $ct->getTotalMinutesLearned($user_id, $dates[$i]);
+for ($i = 1; $i <= $testNum; $i++) {
+    $totals[$i-1] = $ct->getTotalMinutesLearned($user_id, $i);
 }
 
 echo json_encode($totals);

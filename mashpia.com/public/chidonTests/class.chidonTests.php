@@ -448,14 +448,13 @@ class ChidonTests
         return $stmt->fetchAll();
     }
 
-    public function getTotalMinutesLearned( $user_id, $dates, $fixIdxOffset = true, $untilToday = false ) {
-        $idx = 0;
-        if ($fixIdxOffset) $idx = 1; // could be different type of dates array getting passed in
-        $dateArr = explode('/', $dates[$idx]);
+    public function getTotalMinutesLearned( $user_id, $test_num, $untilToday = false ) {
+        $dates = $this->getDates()[$test_num-1];
+        $dateArr = explode('/', $dates[1]);
         $start = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         if ($untilToday) $end = unixtojd();
         else {
-            $dateArr = explode('/', $dates[count($dates)-1]);
+            $dateArr = explode('/', $dates[2]);
             $end = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         }
         $stmt = $this->db->prepare("

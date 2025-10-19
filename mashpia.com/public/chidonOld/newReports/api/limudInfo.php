@@ -78,7 +78,7 @@ foreach ($students as $student) {
         $passing_avg = getPassingAvg($student['user_id']);
         $track_passed = '';
     } else {
-//        $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[0], true, $untilToday);
+//        $learned = $ct->getTotalMinutesLearned($student['user_id'], $test_num, true);
         $avgs = calculateAvgs($student['th_chidon_id']);
         $passing_avg = getPassingAvg($student['user_id']);
         $track_passed = isset($marks[$student['th_chidon_id']]) ? $ct->getHighestTrack($marks[$student['th_chidon_id']], $student['user_id'], false, $test_num) : '';
