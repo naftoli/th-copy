@@ -343,7 +343,7 @@ echo "</select><br /><br />";
 if ($super) {
   echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br />";
   if ((in_array('medals', $cats) || in_array('ranks', $cats))) {
-    echo "<button class='medalsRanksLabels no-print' style='margin-top: 10px;'>Save & Print All Medals / Ranks as Labels</button><br />";
+    echo "<button class='medalsRanksLabels no-print' style='margin-top: 10px;'>Save & Print as Labels</button><br />";
   }
   if (in_array('hachayols', $cats)) {
     // echo "<button class='hachayolsLabels no-print' style='margin-top: 10px;'>Save & Print All Hachayols as Labels</button><br />";
@@ -514,8 +514,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
+<script src="/scripts/js.cookie.js"></script>
 <script>
-
   // summary tables don't need to be ordered
   const summary = $(".table.summary").DataTable({
     paging: false
@@ -571,7 +571,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     }
   }
 
-  function save(reload = true) {
+  function save(reload = true, printLabels = false) {
     console.log(info)
     // return false;
     fetch('ajax/saveShipping.php', {
@@ -586,6 +586,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     .then(data => {
       console.log(data)
       if (data.success && reload) location.reload()
+      else if (data.success && printLabels) window.location.href = 'printLabels.php';
       else if (!data.success && data.error) alert(data.error)
       if (data.info) console.log(data.info)
     })
@@ -660,5 +661,15 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     }
   }
 
+  $(".medalsRanksLabels").click(function () {
+    Cookies.set('for_labels', <?= json_encode($for_labels); ?>);
+    $(".shipping").each(function () {
+      const action = super_admin ? 1 : 2
+      const desc = $(this).parent().parent().find('.description').val()
+      const ship_num = $(this).parent().parent().find('.shipment_number').val()
+      update(this, action, desc, ship_num)
+    })
+    save(false, true)
+  })
 </script>
 </html>
