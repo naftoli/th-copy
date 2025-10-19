@@ -316,17 +316,13 @@ if (count($schools) == 1) {
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
 
-  $("#enterMarksButton").click( function(e) {
+  $("#enterMarksButton").click( async function(e) {
     e.preventDefault()
-    const superAdmin = <?= $super ?>;
+    const superAdmin = <?= $super ? 1 : 0 ?>;
     if (! superAdmin) {
       let res = await save('avgFinalIyun')
-      if (res) {
-        res = await save('avgScoreIyun')
-        if (res) {
-          location.href = 'enterScores.php'
-        }
-      }
+      if (res) res = await save('avgScoreIyun')
+      if (res) location.href = 'enterScores.php'
     } else {
       location.href = 'enterScores.php'
     }
