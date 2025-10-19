@@ -37,7 +37,7 @@ $info['grade'] = $info['class_grade'] . (empty($info['class_sub']) ? '' : '-' . 
 $passed = $chidon->getHighestTrackPassed($info, $test_num)['highest_track'];
 $info['track_passed'] = $passed ? $types[$passed] : '';
 $info['required'] = daysPassed() * $minutes[$info['test_type']];
-$info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test_num], true);
+$info['learned'] = $chidon->getTotalMinutesLearned($user_id, $learningDays[$test_num], false, true);
 ?>
 <!DOCTYPE html>
 <html>

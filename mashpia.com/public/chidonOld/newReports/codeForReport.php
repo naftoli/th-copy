@@ -168,13 +168,15 @@ function getFieldDesc($row, $field, $separator = ' ') {
 
 function daysPassed() {
     global $learningDays, $test_num;
-    $today = unixtojd();
+    $today = ceil(unixtojd());
     // find today in array
     foreach ($learningDays[$test_num] as $day => $date) {
         $dateArr = explode('/', $date);
         $jd = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
-        if ($today < $jd) return $day;
-        else if ($today == $jd) return $day + 1;
-        else if ($day == count($learningDays[$test_num]) - 1 && $today > $jd) return $day + 1;
+        if ($today < $jd) return 0;
+        else if (
+            $today == $jd ||
+            ($today == $jd + 1 && $day == count($learningDays[$test_num]) - 1)
+        ) return $day;
     }
 }

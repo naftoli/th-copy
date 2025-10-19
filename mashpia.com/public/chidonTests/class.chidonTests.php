@@ -450,12 +450,12 @@ class ChidonTests
 
     public function getTotalMinutesLearned( $user_id, $dates, $fixIdxOffset = true, $untilToday = false ) {
         $idx = 0;
-        if ($fixIdxOffset) $idx = 1;
-        $dateArr = explode('/', $dates[$idx++]);
+        if ($fixIdxOffset) $idx = 1; // could be different type of dates array getting passed in
+        $dateArr = explode('/', $dates[$idx]);
         $start = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         if ($untilToday) $end = unixtojd();
         else {
-            $dateArr = explode('/', $dates[$idx]);
+            $dateArr = explode('/', $dates[count($dates)-1]);
             $end = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         }
         $stmt = $this->db->prepare("
@@ -475,7 +475,7 @@ class ChidonTests
             ':end'      => $end,
             ':user'     => $user_id
         ]);
-//        $stmt->debugDumpParams();
+        // $stmt->debugDumpParams();
         return $stmt->fetch()['total'];
     }
 
