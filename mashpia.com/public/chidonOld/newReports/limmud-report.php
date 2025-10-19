@@ -26,7 +26,6 @@ foreach ($limmud as $row) {
     $limmudInfo[$row['user_id']][] = $row;
 }
 
-
 $info = [];
 foreach ($schools as $school_id => $name) {
     $sql = "select u.user_id, u.user_serial, u.first, u.last, c.school_id, c.class_id, c.class_grade, c.class_sub, 

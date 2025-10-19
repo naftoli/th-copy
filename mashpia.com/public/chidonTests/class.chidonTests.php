@@ -423,11 +423,11 @@ class ChidonTests
 
     public function getLearned( $dates, $untilToday = false ) {
         $dateArr = explode('/', $dates[0]);
-        $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+        $start = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         if ($untilToday) $end = unixtojd();
         else {
             $dateArr = explode('/', $dates[count($dates)-1]);
-            $end = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+            $end = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         }
         $stmt = $this->db->prepare("
             SELECT 
