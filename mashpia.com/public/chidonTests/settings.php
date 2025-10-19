@@ -316,11 +316,16 @@ if (count($schools) == 1) {
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
 
-  $("#enterMarksButton").click( function(e) {
+  $("#enterMarksButton").click( async function(e) {
     e.preventDefault()
-    let res = save('avgFinalIyun')
-    if (res) res = save('avgScoreIyun')
-    if (res) location.href = 'enterScores.php'
+    try {
+      let res = await save('avgFinalIyun')
+      if (res) res = await save('avgScoreIyun')
+      if (res) location.href = 'enterScores.php'
+      else alert('Error saving settings')
+    } catch (error) {
+      alert(error.message)
+    }
   });
 
   $("#settings_report").click( function() {
