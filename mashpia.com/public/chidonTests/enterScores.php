@@ -41,54 +41,46 @@ if ($admin_user['auth'] != 'super') {
     }
 }
 
-// initialize all tests to not be disabled
-$disabled = false;
-$disableIyun = false;
+// initialize all tests to be disabled
+$disabled = true;
+
 // school exceptions
 $exceptions = [
-    1 => [54, 61, 112, 66],
-    2 => [54, 108, 61, 112, 66],
+    1 => [],
+    2 => [],
     3 => []
 ];
 $exceptionsDates = [
     1 => [
-      61 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York')),
-	  112 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York')),
-	  66 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'))
+      
     ],
     2 => [
-      54 => new DateTime('2025-01-09 00:00:00', new DateTimeZone('America/New_York')),
-      108 => new DateTime('2025-01-22 00:00:00', new DateTimeZone('America/New_York')),
-      61 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York')),
-	  112 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York')),
-	  66 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'))
+      
     ],
     3 => [
-      61 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York')),
-	  817 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York')),
-	  112 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York')),
-	  66 => new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'))
+      
     ]
 ];
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
+    $opening = ChidonTests::getOpeningDates();
     $shutdown = ChidonTests::getClosingDates();
-    if ($shutdown[$testNumber] && $today >= $shutdown[$testNumber]) {
-        $school_id = $admin_user['auths']['school'][0];
-        if (
-            !in_array($school_id, $exceptions[$testNumber]) ||
-            $today >= $exceptionsDates[$testNumber][$school_id]
-        ) {
-            $disabled = true;
-        }
+    if ($opening[$testNumber] && $today >= $opening[$testNumber] && $shutdown[$testNumber] && $today < $shutdown[$testNumber]) {
+        $disabled = false;
     }
-} else {
-    if (!in_array($admin_user['admin_id'], [200719, 200721, 200811]))
-        $disabled = true;
-}
+    if ($disabled) {
+      $school_id = $admin_user['auths']['school'][0];
+      if (
+          in_array($school_id, $exceptions[$testNumber]) ||
+          (isset($exceptionsDates[$testNumber][$school_id]) && $today < $exceptionsDates[$testNumber][$school_id])
+      ) {
+        $disabled = false;
+      }
+    }
+} 
 
-if ($admin_user['admin_id'] == 200719) $disabled = false; // zalmen can override all
+if ($admin_user['admin_id'] == 175069) $disabled = false; // naftoli can override all
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
 
