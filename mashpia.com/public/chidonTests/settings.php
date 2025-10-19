@@ -282,7 +282,7 @@ if (count($schools) == 1) {
       </form>
     </fieldset>
 
-    <?php if ($super) : ?>
+    <!-- <?php if ($super) : ?>
       <fieldset style="float: right;">
         <legend>Finals Level</legend>
         <form id="levelsFinals">
@@ -297,7 +297,7 @@ if (count($schools) == 1) {
           <button class="save" onclick="save('levelsFinals'); return false;">Save</button>
         </form>
       </fieldset>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
     <div style="clear: both;"></div>
     <br />
