@@ -222,6 +222,8 @@ if (count($schools) == 1) {
           The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
           The Iyun test avg is set to <b>80 non-cumulative or 90 cumulative</b>.
         </p>
+        <input type="hidden" name="avg" id="avg_score_iyun" value="80" />
+        <input type="hidden" name="tracks[]" id="tracks_iyun" value="genius" />
       <?php endif; ?>
     </fieldset>
 
@@ -256,6 +258,8 @@ if (count($schools) == 1) {
           The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
           The Iyun test final avg is set to <b>80 non-cumulative or 90 cumulative</b>.
         </p>
+        <input type="hidden" name="avgFinal" id="avg_final_iyun" value="80" />
+        <input type="hidden" name="tracks[]" id="tracks_iyun" value="genius" />
       <?php endif; ?>
     </fieldset>
 
