@@ -28,10 +28,10 @@ if ($admin_user['auth'] != 'super') {
     $school_id = $admin_user['auths']['school'][0];
     $settings = $ct->getSettings($school_id, 0, 0);
     foreach (['chidon_passing_avgs', 'chidon_final_passing_avgs', 'chidon_test_levels'] as $table) {
-        if ($table == 'chidon_test_levels') $details = ['tests', 'finals'];
+        if ($table == 'chidon_test_levels') $details = ['tests']; // finals are not used for tests
         else $details = ['maven', 'pro', 'expert', 'genius'];
         foreach ($details as $type) {
-            if ($type == 'genius' && !$super) $settings[$school_id][$table][$type] = 80;
+            if ($type == 'genius' && !$super) $settings[$school_id][$table][$type] = 80; // genius is disabled for non-super users
             if (empty($settings[$school_id][$table][$type])) {
                 $settingsSet = false;
                 break;
