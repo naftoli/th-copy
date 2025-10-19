@@ -318,12 +318,18 @@ if (count($schools) == 1) {
 
   $("#enterMarksButton").click( function(e) {
     e.preventDefault()
-    const super = <?= $super ?>;
-    if (! super) {
-      save('avgFinalIyun')
-      save('avgScoreIyun')
+    const superAdmin = <?= $super ?>;
+    if (! superAdmin) {
+      let res = await save('avgFinalIyun')
+      if (res) {
+        res = await save('avgScoreIyun')
+        if (res) {
+          location.href = 'enterScores.php'
+        }
+      }
+    } else {
+      location.href = 'enterScores.php'
     }
-    location.href = 'enterScores.php'
   })
 
   $("#settings_report").click( function() {
