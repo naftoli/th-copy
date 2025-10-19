@@ -316,17 +316,12 @@ if (count($schools) == 1) {
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
 
-  $("#enterMarksButton").click( async function(e) {
+  $("#enterMarksButton").click( function(e) {
     e.preventDefault()
-    const superAdmin = <?= $super ? 1 : 0 ?>;
-    if (! superAdmin) {
-      let res = await save('avgFinalIyun')
-      if (res) res = await save('avgScoreIyun')
-      if (res) location.href = 'enterScores.php'
-    } else {
-      location.href = 'enterScores.php'
-    }
-  })
+    let res = save('avgFinalIyun')
+    if (res) res = save('avgScoreIyun')
+    if (res) location.href = 'enterScores.php'
+  });
 
   $("#settings_report").click( function() {
     // open in new tab
