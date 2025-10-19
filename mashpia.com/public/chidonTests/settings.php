@@ -316,7 +316,7 @@ if (count($schools) == 1) {
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
 
-  $("#enterMarksButton").on('click', async function(e) {
+  document.getElementById('enterMarksButton').addEventListener('click', async function(e) {
     e.preventDefault()
     try {
       await save('avgFinalIyun')
@@ -327,7 +327,7 @@ if (count($schools) == 1) {
     }
   });
 
-  $("#settings_report").on('click', function() {
+  document.getElementById('settings_report').addEventListener('click', function() {
     // open in new tab
     window.open('reports/settings_report.html', '_blank')
   })
