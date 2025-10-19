@@ -56,31 +56,42 @@ foreach ($schools as $school_id => $school) {
 ksort($info);
 //echo "<pre>"; print_r($info); echo "</pre>"; exit;
 
-// initialize all tests to not be disabled
+// initialize all tests to be disabled
 $disable = [];
 for ($i = 1; $i <= 4; $i++) {
-    $disable[$i] = false;
+    $disable[$i] = true;
+    if ($admin_user['admin_id'] == 175069) $disable[$i] = false; // naftoli can override all
 }
+
+$opening = [
+    new DateTime('2025-10-19 00:00:00', new DateTimeZone('America/New_York')),
+    new DateTime('2025-11-11 00:00:00', new DateTimeZone('America/New_York')),
+    new DateTime('2025-12-29 00:00:00', new DateTimeZone('America/New_York')),
+    new DateTime('2026-01-27 00:00:00', new DateTimeZone('America/New_York')),
+];
+
+$shutdown = [
+    new DateTime('2025-10-31 00:00:00', new DateTimeZone('America/New_York')),
+    new DateTime('2025-11-18 00:00:00', new DateTimeZone('America/New_York')),
+    new DateTime('2026-01-06 00:00:00', new DateTimeZone('America/New_York')),
+    new DateTime('2026-01-30 00:00:00', new DateTimeZone('America/New_York')),
+];
 
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown1 = new DateTime('2024-11-12 00:00:00', new DateTimeZone('America/New_York'));
-    $shutdown2 = new DateTime('2024-12-03 00:00:00', new DateTimeZone('America/New_York'));
-    $shutdown3 = new DateTime('2025-01-16 00:00:00', new DateTimeZone('America/New_York'));
-    $shutdown4 = new DateTime('2025-02-10 00:00:00', new DateTimeZone('America/New_York'));
 
-    if ($today >= $shutdown1) {
-        $disable[1] = true;
+    if ($today >= $opening[0] && $today < $shutdown[0]) {
+        $disable[1] = false;
     }
-    if ($today >= $shutdown2) {
-        $disable[2] = true;
+    if ($today >= $opening[1] && $today < $shutdown[1]) {
+        $disable[2] = false;
     }
-    if ($today >= $shutdown3) {
-        $disable[3] = true;
+    if ($today >= $opening[2] && $today < $shutdown[2]) {
+        $disable[3] = false;
     }
-    if ($today >= $shutdown4) {
-        $disable[4] = true;
+    if ($today >= $opening[3] && $today < $shutdown[3]) {
+        $disable[4] = false;
     }
 }
 ?>
