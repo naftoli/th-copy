@@ -75,7 +75,7 @@ foreach ($students as $student) {
     if (! isset($marks[$student['th_chidon_id']])) {
 //        $learned = 0;
         $avgs = ['maven' => 0, 'pro' => 0, 'expert' => 0, 'genius' => 0];
-        $passing_avg = 0;
+        $passing_avg = getPassingAvg($student['user_id']);
         $track_passed = '';
     } else {
 //        $learned = $ct->getTotalMinutesLearned($student['user_id'], $dates[0], true, $untilToday);
