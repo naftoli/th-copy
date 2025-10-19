@@ -926,16 +926,30 @@ class ChidonTests
     }
 
     /**
+     * Create function to find out which dates to open marking
+     * @param string $date
+     * @return boolean
+     */
+    public static function getOpeningDates() {
+        $shutdown = [];
+        $opening[1] = new DateTime('2025-10-19 00:00:00', new DateTimeZone('America/New_York'));
+        $opening[2] = new DateTime('2025-12-11 00:00:00', new DateTimeZone('America/New_York'));
+        $opening[3] = new DateTime('2026-01-22 00:00:00', new DateTimeZone('America/New_York'));
+        $opening[3] = new DateTime('2026-02-19 00:00:00', new DateTimeZone('America/New_York'));
+        return $opening;
+    }
+
+    /**
      * Create function to find out which dates to close marking
      * @param string $date
      * @return boolean
      */
     public static function getClosingDates() {
         $shutdown = [];
-        $shutdown[1] = new DateTime('2024-11-26 12:00:00', new DateTimeZone('America/New_York'));
-        $shutdown[2] = new DateTime('2025-01-03 00:00:00', new DateTimeZone('America/New_York'));
-        $shutdown[3] = new DateTime('2025-02-17 00:00:00', new DateTimeZone('America/New_York'));
-        $shutdown[3] = new DateTime('2025-03-19 00:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[1] = new DateTime('2025-11-13 00:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[2] = new DateTime('2025-12-17 00:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[3] = new DateTime('2026-01-30 00:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[3] = new DateTime('2026-02-23 00:00:00', new DateTimeZone('America/New_York'));
         return $shutdown;
     }
 }
