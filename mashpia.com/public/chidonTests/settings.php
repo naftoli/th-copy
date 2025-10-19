@@ -302,7 +302,7 @@ if (count($schools) == 1) {
     <div style="clear: both;"></div>
     <br />
     <div style="clear:both;">
-      <button onclick="location.href='enterScores.php'; return false;">Go to Enter Marks Page</button>
+      <button id="enterMarksButton">Go to Enter Marks Page</button>
     </div>
   </div>
 </div>
@@ -314,6 +314,16 @@ if (count($schools) == 1) {
     let fromMarks = url.searchParams.get('fromMarks')
     if (fromMarks) alert('You can only enter the marks once you have set the avgs per track and level for your school.')
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
+  })
+
+  $("#enterMarksButton").click( function(e) {
+    e.preventDefault()
+    const super = <?= $super ?>;
+    if (! super) {
+      save('avgFinalIyun')
+      save('avgScoreIyun')
+    }
+    location.href = 'enterScores.php'
   })
 
   $("#settings_report").click( function() {
