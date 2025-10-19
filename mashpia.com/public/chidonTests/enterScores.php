@@ -6,6 +6,8 @@ $admin_auth = ['school'];
 require $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
+$super = $admin_user['auth'] == 'super';
+
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true); // add chidon schools
 $schools = $as->getSchools();
@@ -29,6 +31,7 @@ if ($admin_user['auth'] != 'super') {
         if ($table == 'chidon_test_levels') $details = ['tests', 'finals'];
         else $details = ['maven', 'pro', 'expert', 'genius'];
         foreach ($details as $type) {
+            if ($type == 'genius' && !$super) $settings[$school_id][$table][$type] = 80;
             if (empty($settings[$school_id][$table][$type])) {
                 $settingsSet = false;
                 break;
