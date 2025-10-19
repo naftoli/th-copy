@@ -44,6 +44,11 @@ if (!function_exists('encryptPassword')) {
 
 if (!function_exists('decryptPassword')) {
     function decryptPassword($encryptedPassword, $key) {
+        // Check if $encryptedPassword is valid base64
+        if (base64_encode(base64_decode($encryptedPassword, true)) !== $encryptedPassword) {
+            // Not base64, return original password
+            return $encryptedPassword;
+        }
         list($encrypted_data, $iv) = explode('::', base64_decode($encryptedPassword), 2);
         return openssl_decrypt($encrypted_data, 'aes-256-cbc', $key, 0, $iv);
     }
