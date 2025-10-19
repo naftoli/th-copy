@@ -585,8 +585,10 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     .then(response => response.json())
     .then(data => {
       console.log(data)
+      if (data.success && printLabels) {
+        window.open('printLabels.php', '_blank');
+      }
       if (data.success && reload) location.reload()
-      else if (data.success && printLabels) window.location.href = 'printLabels.php';
       else if (!data.success && data.error) alert(data.error)
       if (data.info) console.log(data.info)
     })
@@ -669,7 +671,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       const ship_num = $(this).parent().parent().find('.shipment_number').val()
       update(this, action, desc, ship_num)
     })
-    save(false, true)
+    save(true, true)
   })
 </script>
 </html>
