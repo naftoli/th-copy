@@ -105,8 +105,8 @@ function createHtmlForItem($school, $row, $output = true) {
                     }
                 }
                 if ($show_item) {
+                    if ($shipment_number > 0 && isset($status['shipment_number']) && $status['shipment_number'] != $shipment_number) continue;
                     if ($output) {
-                        if ($shipment_number > 0 && isset($status['shipment_number']) && $status['shipment_number'] != $shipment_number) continue;
                         // create new row
                         echo "<tr data-cat='$cat'>";
                         foreach ($fields_chosen as $field) {
