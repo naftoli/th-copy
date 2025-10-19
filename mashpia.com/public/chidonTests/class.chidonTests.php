@@ -45,16 +45,16 @@ class ChidonTests
         $this->genderOnly = false;
         $this->dates = [
             [
-                1 => '09/26/2024',
-                2 => '11/20/2024'
+                1 => '09/16/2025',
+                2 => '11/05/2025'
             ],
             [
-                1 => '11/21/2024',
-                2 => '12/23/2024'
+                1 => '11/06/2025',
+                2 => '12/10/2025'
             ],
             [
-                1 => '12/24/2024',
-                2 => '2/3/2025'
+                1 => '12/11/2025',
+                2 => '01/21/2026'
             ]
         ];
     }
@@ -481,11 +481,11 @@ class ChidonTests
 
     public function getTotalDaysLearned( $user_id, $dates, $untilToday = false ) {
         $dateArr = explode('/', $dates[0]);
-        $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+        $start = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         if ($untilToday) $end = unixtojd();
         else {
             $dateArr = explode('/', $dates[count($dates)-1]);
-            $end = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+            $end = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         }
         $stmt = $this->db->prepare("
             SELECT 
@@ -541,9 +541,9 @@ class ChidonTests
 
     public function getLimmudDetails($user_id, $dates) {
         $dateArr = explode('/', $dates[0]);
-        $start = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+        $start = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
         $dateArr = explode('/', $dates[count($dates)-1]);
-        $end = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+        $end = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
 
         $info = [];
         $stmt = $this->db->prepare("
@@ -574,7 +574,7 @@ class ChidonTests
             $details[$day]['upToDate'] = false;
 
             $dateArr = explode('/', $date);
-            $jd = gregoriantojd($dateArr[0], $dateArr[1], '20' . $dateArr[2]);
+            $jd = gregoriantojd($dateArr[0], $dateArr[1], $dateArr[2]);
             if (isset($info[$jd][20010])) {
                 // could have multiple entries
                 // find largest amount
