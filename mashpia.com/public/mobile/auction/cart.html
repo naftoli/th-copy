@@ -714,7 +714,7 @@
 				$("#purchase").attr('disabled', true);
 				
     			//alert('Not ready yet.');
-				$.post('ajax/purchaseTickets.php', { admin : Cookies.get('admin'), cart : JSON.stringify(cart), user : user, auction : auction_id }, function( error ) {
+				$.post('ajax/purchaseTickets.php', { cart : JSON.stringify(cart), user : user, auction : auction_id }, function( error ) {
                     if (error == 0) {
                         //alert('Your purchase has been successful.');
     					localStorage.removeItem('auctionCart' + user);

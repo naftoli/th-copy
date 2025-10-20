@@ -3,10 +3,6 @@ require '../../../db.php';
 
 $auction_id = (int)mysql_real_escape_string($_POST['auction']);
 $user = (int)mysql_real_escape_string($_POST['user']);
-$admin = mysql_real_escape_string($_POST['admin']);
-
-require '../../reg/ajax/encrypt.php';
-$admin = encrypt_decrypt('decrypt', $admin);
 
 // ****************** PROCESSING GUARD (similar to Hei Teves) ***************************/
 function startPayment() {
@@ -37,7 +33,7 @@ function paymentInProgress() {
 // $result = mysql_query($sql);
 // if (mysql_num_rows($result) > 0) {
 
-    // Guard: ensure no other purchase is in progress for this admin
+    // Guard: ensure no other purchase is in progress for this user
     if (paymentInProgress()) {
         echo "Another save is currently processing. Please wait a moment and try again.";
         exit;
@@ -73,15 +69,15 @@ function paymentInProgress() {
 			break;
 		}
 	}
+	endPayment();
+
 	if ($success) {
 		mysql_query("commit");
 		mysql_query("set autocommit=1");
-		endPayment();
 		echo 0;
 	} else {
 		mysql_query("rollback");
 		mysql_query("set autocommit=1");
-		endPayment();
 		echo 1;
 	}
 // }
