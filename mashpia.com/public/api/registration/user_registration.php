@@ -441,6 +441,11 @@ class UserRegistrationRouter {
 //                                    if (! isset($_COOKIE['naftoli']))
                                         $r->sendEmail($recruitedChild);
                                 }
+
+                                // send email to anash kinder about child's registration
+                                if ($user->school_id == 269) {
+                                    $this->sendEmailToAK($user, $chidonYr, 'chidon');
+                                }
                             }
 
                             // add chidon prizes
@@ -825,13 +830,21 @@ Tzivos Hashem HQ</body></html>";
         return 0; // no error
     }
 
-    private function sendEmailToAK($user, $year)
+    private function sendEmailToAK($user, $year, $type = 'chayolei')
     {
         $to = 'anash@tzivoshashem.org';
-        $subject = "Anash Kinder Registration $year";
+        if ($type == 'chayolei') {
+            $subject = "Anash Kinder Chayolei Registration $year";
+        } else if ($type == 'chidon') {
+            $subject = "Anash Kinder Chidon Registration $year";
+        }
         $message = "<html><body>";
-        $message .= "<h2>Chidon Registration</h2>";
-        $message .= "<p>" . $user->first . ' ' . $user->last . " (ID: " . $user->user_id . ") has just registered for the CTH program.</p></body></html>";
+        if ($type == 'chayolei') {
+            $message .= "<h2>Chayolei Registration</h2>";
+        } else if ($type == 'chidon') {
+            $message .= "<h2>Chidon Registration</h2>";
+        }
+        $message .= "<p>" . $user->first . ' ' . $user->last . " (ID: " . $user->user_id . ") has just registered for the " . ucwords($type) . " program.</p></body></html>";
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'From: Tzivos Hashem HQ <admin@tzivoshashem.org>';
