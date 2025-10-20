@@ -91,7 +91,7 @@ $year = GlobalSettings::getChidonRegYear();
     </fieldset>
 
     <fieldset>
-      <h4>Status</h4>
+      <legend>Status</legend>
       <p>
         <input type="checkbox" name="status[]" value="0" /> Not Yet Shipped<br />
         <input type="checkbox" name="status[]" value="1" /> Shipped<br />
