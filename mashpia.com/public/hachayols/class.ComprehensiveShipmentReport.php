@@ -28,8 +28,7 @@ class ComprehensiveShipmentReport {
             JOIN user_registration ur USING (user_id) 
             JOIN hachayols_to_give htg ON htg.user_id = u.user_id AND htg.year = ur.year 
             WHERE aa.auth = 'user' AND u.school_id = :school_id 
-              AND u.user_registered > 0 AND ur.year = :year 
-            GROUP BY u.user_id;
+              AND u.user_registered > 0 AND ur.year = :year;
         ";
         $stmt_children = $MASHPIA_DB->prepare($sql_children);
         $stmt_children->execute(['school_id' => $this->school_id, 'year' => $this->year]);
