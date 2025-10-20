@@ -389,7 +389,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       if (bc) action = 2
       update(this, action, qty)
     })
-    save(false)
+    save()
   })
 
   $(".saveSchool").click(function () {
