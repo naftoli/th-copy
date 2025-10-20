@@ -77,19 +77,25 @@ foreach ($info as $row) {
         }
         if (! $res) {
             $success = false;
-            if ($found) {
-                $stmtUpdate->debugDumpParams();
-            } else {
-                $stmtInsert->debugDumpParams();
-            }
             break;
         }
     }
 }
 if ($success) $MASHPIA_DB->commit();
-else $MASHPIA_DB->rollBack();
+else {
+    $MASHPIA_DB->rollBack();
+    ob_start();
+    if ($found) {
+        echo $stmtUpdate->debugDumpParams();
+    } else {
+        echo $stmtInsert->debugDumpParams();
+    }
+    $error_info = ob_get_clean();
+    ob_end_flush();
+}
 
 echo json_encode([
     'success'   => $success,
     'error'     => 'There was an error updating the status.',
+    'error_info'=> $error_info
 ]);
