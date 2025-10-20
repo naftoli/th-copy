@@ -69,14 +69,15 @@ function paymentInProgress() {
 			break;
 		}
 	}
-	endPayment();
 
 	if ($success) {
 		mysql_query("commit");
+		endPayment();
 		mysql_query("set autocommit=1");
 		echo 0;
 	} else {
 		mysql_query("rollback");
+		endPayment();
 		mysql_query("set autocommit=1");
 		echo 1;
 	}
