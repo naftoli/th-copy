@@ -6,7 +6,6 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = $_POST['year'] ?? GlobalSettings::getRegistrationYear();
 
 // Check if data is compressed
 $input = file_get_contents('php://input');
@@ -15,6 +14,9 @@ if (isset($_SERVER['HTTP_CONTENT_ENCODING']) && $_SERVER['HTTP_CONTENT_ENCODING'
     $input = gzdecode($input);
 }
 
+$data = json_decode($input, true);
+$info = $data['info'];
+$year = $data['year'] ?? GlobalSettings::getCurrentYear();
 $table = 'school_shipping';
 
 $select = "SELECT * FROM $table WHERE year = :year AND school_id = :school AND item_id = :item";
