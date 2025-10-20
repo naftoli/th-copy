@@ -338,7 +338,7 @@ class ChayoleiShipping
                 // check if this user has already received this rank medal from before the time we included this in the shipping report
                 if (isset($rank_medals_shipped[$user_id]) && in_array($row['rank_ord'], $rank_medals_shipped[$user_id])) continue;
                 $ranks[$user_id][] = [
-                    'item'  => $rank_info[$row['rank_ord']]['rank_name'] . ' Rank Medal',
+                    'item'  => $rank_info[$row['rank_ord']]['rank_name'],
                     'size'  => '',
                     'name'  => $row['first'] . ' ' . $row['last'],
                     'id'    => $rank_info[$row['rank_ord']]['shipping_code'],
