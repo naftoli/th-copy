@@ -11,7 +11,7 @@ $shipment_number_filter = isset($_GET['shipment_number']) ? intval($_GET['shipme
 $report = new ComprehensiveShipmentReport($school_id);
 $family_shipment_details = $report->getFamilyShipmentDetails($shipment_number_filter);
 
-$families = 0;
+$hachayols_to_send = 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -75,7 +75,6 @@ $families = 0;
         <tbody>
             <?php if (!empty($family_shipment_details)): ?>
                 <?php foreach ($family_shipment_details as $family): ?>
-                    <?php $families++; ?>
                     <tr>
                         <td><?php echo htmlspecialchars($family['family_id']); ?></td>
                         <td><?php echo htmlspecialchars($family['family_name']); ?></td>
@@ -97,6 +96,7 @@ $families = 0;
                                 </thead>
                                 <tbody>
                                     <?php foreach ($family['children'] as $child): ?>
+                                        <?php $hachayols_to_send++; ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($child['name']); ?></td>
                                             <?php foreach ($child['shipments'] as $is_shipped): ?>
@@ -122,7 +122,8 @@ $families = 0;
             <?php endif; ?>
         </tbody>
     </table>
-    <p>Total families: <?php echo $families; ?></p>
+    <br />
+    <p>Total hachayols to send: <?= $hachayols_to_send; ?></p>
     </div>
 </body>
 </html>

@@ -5,10 +5,12 @@ require_once __DIR__ . '/../api/header/db.php';
 class ComprehensiveShipmentReport {
     private $year;
     private $school_id;
+    private $check_for_payment;
 
-    public function __construct($school_id) {
+    public function __construct($school_id, $check_for_payment = true) {
         $this->year = GlobalSettings::getChidonRegYear();
         $this->school_id = intval($school_id);
+        $this->check_for_payment = $check_for_payment;
     }
 
     public function getFamilyShipmentDetails($max_shipment_number) {
@@ -26,10 +28,12 @@ class ComprehensiveShipmentReport {
             JOIN user_registration ur USING (user_id) 
             JOIN hachayols_to_give htg ON htg.user_id = u.user_id AND htg.year = ur.year 
             WHERE aa.auth = 'user' AND u.school_id = :school_id 
-              AND u.user_registered > 0 AND ur.year = :year;
+              AND u.user_registered > 0 AND ur.year = :year 
+            GROUP BY u.user_id;
         ";
         $stmt_children = $MASHPIA_DB->prepare($sql_children);
         $stmt_children->execute(['school_id' => $this->school_id, 'year' => $this->year]);
+        // $stmt_children->debugDumpParams();
         $all_children = $stmt_children->fetchAll(PDO::FETCH_ASSOC);
 
         if (empty($all_children)) {
@@ -53,9 +57,15 @@ class ComprehensiveShipmentReport {
         }
 
         // 3. Aggregate data by family
+        $removed = 0;
         $families = [];
         foreach ($all_children as $index => $child) {
             $admin_id = $child['admin_id'];
+
+            if ($this->check_for_payment && !$this->paidForShipping($admin_id)) {
+                $removed++;
+                continue;
+            }
 
             if (!isset($families[$admin_id])) {
                 $families[$admin_id] = [
@@ -91,7 +101,9 @@ class ComprehensiveShipmentReport {
                 }
             }
         }
-        
+        // echo $removed . " families removed<br />";
+        // echo count($families) . " families found<br />";
+
         // Sort by family name
         usort($families, function($a, $b) {
             return strcmp($a['family_name'], $b['family_name']);
@@ -136,5 +148,23 @@ class ComprehensiveShipmentReport {
         ];
 
         return in_array($admin_id, $family_ids);
+    }
+
+    private function paidForShipping($admin_id) {
+        global $MASHPIA_DB;
+
+        if ($this->school_id == 61) {
+            $type = 'THMS%';
+        } else if ($this->school_id == 269) {
+            $type = 'THAK%';
+        } else {
+            return false;
+        }
+        $sql = "SELECT * FROM registration_charges WHERE type like :type and user_id in (
+            SELECT id FROM admin_auths WHERE admin_id = :admin_id) and year = :year";
+        $result = $MASHPIA_DB->prepare($sql);
+        $result->execute(['admin_id' => $admin_id, 'year' => $this->year, 'type' => $type]);
+        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
+        return count($rows) > 0;
     }
 }
