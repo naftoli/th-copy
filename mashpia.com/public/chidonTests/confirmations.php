@@ -63,9 +63,7 @@ $tracks = [
 ];
 
 // list of children whose prizes were deleted b/c they had more than one personalized prize
-$deleted = [7754689, 7758082, 7758438, 7760528, 7763104, 7763344, 7763352, 7763585, 7764789, 7765193, 7770020, 7770948,
-    7771049, 7771259, 7771422, 7772403, 7772617, 7773774, 7774117, 7774204, 7774528, 7774550, 7774695, 7775756, 7777592,
-    7778891, 7779021, 7779959, 7781249, 7782388, 7785394];
+$deleted = [];
 
 // load csv file with payments that need to be done
 $payments = [];
@@ -76,10 +74,10 @@ while (($data = fgetcsv($handle)) !== false) {
 
 // load csv file with ppl that have more than 75 credits worth of prizes
 $over75 = [];
-$handle = fopen('https://mashpia.com/chidonOld/newReports/over75.csv', 'r');
-while (($data = fgetcsv($handle)) !== false) {
-    $over75[$data[0]] = $data[1];
-}
+// $handle = fopen('https://mashpia.com/chidonOld/newReports/over75.csv', 'r');
+// while (($data = fgetcsv($handle)) !== false) {
+//     $over75[$data[0]] = $data[1];
+// }
 ?>
 <!DOCTYPE html>
 <html>
@@ -187,7 +185,7 @@ foreach ($info as $school => $students) {
         <h3>Dear <?= $name ?> (<?= $serial ?>) - <?= $grade ?></h3>
         <br/>
         <p>We want to ensure that all your chidon information is accurate. This is your final opportunity to make
-          changes to your Chidon details. You have until 10 Cheshvan • November 11 to make any changes,
+          changes to your Chidon details. You have until 5 Cheshvan • October 27 to make any changes,
           after that point, no changes will be possible.</p>
         <div class="conf">
           Hebrew Name spelling for awards: <?= $he_name ?><br/>
