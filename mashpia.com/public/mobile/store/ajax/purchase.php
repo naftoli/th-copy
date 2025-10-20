@@ -160,12 +160,13 @@ foreach ($cart as $item) {
     }
 }
 
-endPayment();
 if (!$success) {
     mysql_query("rollback");
+    endPayment();
     echo mysql_error();
 } else {
     mysql_query("commit");
+    endPayment();
     echo 0;
 }
 mysql_query("set autocommit=1");
