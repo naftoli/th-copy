@@ -160,7 +160,7 @@ foreach ($cart as $item) {
         }
     }
 }
-$success = false;
+
 if (!$success) {
     mysql_query("rollback");
     endPayment();
