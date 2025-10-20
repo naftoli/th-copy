@@ -373,9 +373,12 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     .then(response => response.json())
     .then(data => {
       console.log(data)
+      if (data.success) alert('Saved successfully')
+      else if (!data.success) {
+        alert(data.error)
+        console.log(data.error_info)
+      }
       if (data.success && reload) location.reload()
-      else if (!data.success && data.error) alert(data.error)
-      if (data.info) console.log(data.info)
     })
     .catch(error => {
       console.log(error)
