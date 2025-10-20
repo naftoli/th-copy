@@ -256,7 +256,7 @@ foreach ($labels as $user_id => $items) {
             $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
             $shippingAddress = $r['shipping_address1'] .
                 (empty($r['shipping_address2']) ? '' : ' ' . $r['shipping_address2']) . "<br />" .
-                $r['shipping_city'] . ", " . $r['shipping_state'] . " " . $r['shipping$dataal'] .
+                $r['shipping_city'] . ", " . $r['shipping_state'] . " " . $r['shipping_postal'] .
                 "<br />" . $r['shipping_country'];
             $schoolChanged = true;
         }
