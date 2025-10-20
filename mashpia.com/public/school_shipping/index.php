@@ -87,7 +87,10 @@ $year = GlobalSettings::getChidonRegYear();
             echo "<option value=" . $id . ">" . $school . "</option>";
         }
         ?>
-        </select><br />
+      </select><br />
+    </fieldset>
+
+    <fieldset>
       <h4>Status</h4>
       <p>
         <input type="checkbox" name="status[]" value="0" /> Not Yet Shipped<br />
