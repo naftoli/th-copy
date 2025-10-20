@@ -10,6 +10,8 @@ $shipment_number_filter = isset($_GET['shipment_number']) ? intval($_GET['shipme
 
 $report = new ComprehensiveShipmentReport($school_id);
 $family_shipment_details = $report->getFamilyShipmentDetails($shipment_number_filter);
+
+$families = 0;
 ?>
 <!DOCTYPE html>
 <html>
@@ -73,6 +75,7 @@ $family_shipment_details = $report->getFamilyShipmentDetails($shipment_number_fi
         <tbody>
             <?php if (!empty($family_shipment_details)): ?>
                 <?php foreach ($family_shipment_details as $family): ?>
+                    <?php $families++; ?>
                     <tr>
                         <td><?php echo htmlspecialchars($family['family_id']); ?></td>
                         <td><?php echo htmlspecialchars($family['family_name']); ?></td>
@@ -119,6 +122,7 @@ $family_shipment_details = $report->getFamilyShipmentDetails($shipment_number_fi
             <?php endif; ?>
         </tbody>
     </table>
+    <p>Total families: <?php echo $families; ?></p>
     </div>
 </body>
 </html>
