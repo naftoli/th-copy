@@ -77,6 +77,11 @@ foreach ($info as $row) {
         }
         if (! $res) {
             $success = false;
+            if ($found) {
+                $stmtUpdate->debugDumpParams();
+            } else {
+                $stmtInsert->debugDumpParams();
+            }
             break;
         }
     }
@@ -87,5 +92,4 @@ else $MASHPIA_DB->rollBack();
 echo json_encode([
     'success'   => $success,
     'error'     => 'There was an error updating the status.',
-    'error_info'=> $success ? '' : $found ? $stmtUpdate->debugDumpParams() : $stmtInsert->debugDumpParams()
 ]);
