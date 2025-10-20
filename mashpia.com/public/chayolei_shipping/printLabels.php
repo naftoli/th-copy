@@ -62,7 +62,6 @@ $info = [];
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            echo $nameOfFunc . "<br />";
             $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
         }
     }
