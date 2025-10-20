@@ -25,6 +25,10 @@ $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 
+// get list of schools to iterate over
+$list_of_schools = $_POST['school'];
+$shipment_number = isset($_POST['shipment_number']) ? $_POST['shipment_number'] : 0;
+
 // build data for printLabels.php
 $for_labels = [];
 $for_labels['items'] = $items_chosen;
@@ -36,7 +40,7 @@ $for_labels['schools'] = $_POST['school'];
 $for_labels['limit_to_status'] = $limit_to_status;
 $for_labels['fields'] = $fields_chosen;
 $for_labels['details'] = $item_details_chosen;
-$for_labels['school'] = $_POST['school'];
+$for_labels['shipment_number'] = $shipment_number;
 
 $cs = new ChayoleiShipping();
 $cs->setYear($year);
