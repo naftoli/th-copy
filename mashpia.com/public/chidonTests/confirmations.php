@@ -61,23 +61,6 @@ $tracks = [
     'expert' => 'Havanah',
     'genius' => 'Iyun'
 ];
-
-// list of children whose prizes were deleted b/c they had more than one personalized prize
-$deleted = [];
-
-// load csv file with payments that need to be done
-$payments = [];
-$handle = fopen('https://mashpia.com/chidonOld/newReports/needsPayment.csv', 'r');
-while (($data = fgetcsv($handle)) !== false) {
-    $payments[$data[0]] = $data[1];
-}
-
-// load csv file with ppl that have more than 75 credits worth of prizes
-$over75 = [];
-// $handle = fopen('https://mashpia.com/chidonOld/newReports/over75.csv', 'r');
-// while (($data = fgetcsv($handle)) !== false) {
-//     $over75[$data[0]] = $data[1];
-// }
 ?>
 <!DOCTYPE html>
 <html>
@@ -156,29 +139,7 @@ foreach ($info as $school => $students) {
     $gender = $student['gender'];
     $user_id = $student['user_id'];
     $prizes_chosen = isset($prizes[$school][$user_id]) ? $prizes[$school][$user_id] : [];
-
-    // figure out if we need to let the parent know that they need to review the prizes
     $serial = $student['user_serial'];
-    if (in_array($serial, $deleted)) {
-        $problem = "Important note: There was a bug in the system and when you enrolled, 
-                  it allowed you to choose more than 75 credits worth of personalized prizes which were not even paid for. 
-                  As a result, we had to remove those prizes. Please login and choose up to 75 credits worth of prizes. 
-                  If you don't choose the prizes before the 10th of cheshvan, you will not receive any prizes.  
-                  Sorry for the inconvenience.";
-    } else if (isset($payments[$serial])) {
-        $problem = "Important note: When a personalized prizes is chosen, it must be paid for in advance and 
-                  there is no refunds for this prize, even if you don't register for the prizes after test three, unfortunately, 
-                  there was a bug in the system and when you chose your personalized prizes it did not charge the card on file. 
-                  Please make sure to login and pay now so that your prizes can be personalized. If you don't pay by the 10th of 
-                  cheshvan, your prizes will not be personalized. Sorry for the inconvenience.";
-    } else if (isset($over75[$serial])) {
-        $problem = "Important note: There was a bug in the system and when you enrolled, 
-                  it allowed you to choose more than 75 credits worth of prizes. Please edit your choice of prizes with up to 75 credits. 
-                  If you don't edit the prizes before the 10th of cheshvan, HQ will determine which prizes you will receive. 
-                  Sorry for the inconvenience.";
-    } else {
-        $problem = '';
-    }
     ?>
     <div class="outer">
       <div class="inner">
@@ -218,7 +179,6 @@ foreach ($info as $school => $students) {
         </div>
       </div>
       <br/>
-      <p><?= $problem ?></p>
       <br/>
       <?php
       // figure out which certificate to use
