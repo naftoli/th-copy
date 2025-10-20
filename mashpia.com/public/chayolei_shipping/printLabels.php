@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $data = json_decode($_COOKIE['for_labels'], true);
 $_POST = $data; // needed for medals and ranks in class.chayoleiShipping.php
 // echo "<pre>"; print_r($data); echo "</pre>";
-$all = $_GET['all'] ?? false;
+// $all = $_GET['all'] ?? false;
 
 function checkForBreak() {
     global $i, $rows;
@@ -34,7 +34,7 @@ $cats = array_keys($items_chosen);
 $fields_chosen = array_keys($data['fields']);
 $item_details_chosen = isset($data['details']) ? array_keys($data['details']) : [];
 $limit_to_status = isset($data['limit_to_status']) ? $data['limit_to_status'] : [];
-$schools = isset($data['school']) ? $data['school'] : [];
+$schools = isset($data['schools']) ? $data['schools'] : [];
 $gender = isset($data['gender']) ? $data['gender'] : '';
 $shipment_number = isset($data['shipment_number']) ? $data['shipment_number'] : 0;
 
@@ -50,22 +50,23 @@ $shipment_number = isset($data['shipment_number']) ? $data['shipment_number'] : 
 // }
 
 $info = [];
-if ($all) {
-    // show all schools for all items
-    foreach ($items_chosen as $cat => $itemsPerCat) {
-        $listOfItems = array_keys($itemsPerCat);
-        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        $info[$cat] = $cs->$nameOfFunc($gender, 0, $listOfItems);
-    }
-} else {
+// if ($all) {
+//     // show all schools for all items
+//     foreach ($items_chosen as $cat => $itemsPerCat) {
+//         $listOfItems = array_keys($itemsPerCat);
+//         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+//         $info[$cat] = $cs->$nameOfFunc($gender, 0, $listOfItems);
+//     }
+// } else {
     foreach ($schools as $schoolID) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+            echo $nameOfFunc . "<br />";
             $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
         }
     }
-}
+// }
 if (empty($info)) {
     echo "No data found for current selection";
     exit;
