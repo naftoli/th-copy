@@ -27,21 +27,21 @@ $cart = json_decode($_POST['cart']);
 function startPayment() {
     global $user;
     if (!$user) return;
-    $sql = "INSERT INTO payment_processing (user_id) VALUES (" . $user . ")";
+    $sql = "INSERT INTO payment_processing (user_id) VALUES (" . intval($user) . ")";
     mysql_query($sql);
 }
 
 function endPayment() {
     global $user;
     if (!$user) return;
-    $sql = "DELETE FROM payment_processing WHERE user_id = " . $user;
+    $sql = "DELETE FROM payment_processing WHERE user_id = " . intval($user);
     mysql_query($sql);
 }
 
 function paymentInProgress() {
     global $user;
     if (!$user) return false;
-    $sql = "SELECT * FROM payment_processing WHERE user_id = " . $user;
+    $sql = "SELECT * FROM payment_processing WHERE user_id = " . intval($user);
     $result = mysql_query($sql);
     return $result && mysql_num_rows($result) > 0;
 }
