@@ -16,7 +16,6 @@ if (isset($_GET['id'])) {
 $hachayol = new MyShliachHachayol(false, $id);
 $admins = $hachayol->getAdmins();
 $children = $hachayol->getChildren();
-
 $totalHachayols = 0;
 
 //echo "<pre>"; print_r($children); echo "</pre>";
