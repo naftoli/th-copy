@@ -370,7 +370,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     })
   }
 
-  $("#saveAll").click(function () {
+  $(".saveAll").click(function () {
     $(".shipping").each(function () {
       let qty = $(this).parent().parent().find('td:eq(3)').text()
       let action = 1
