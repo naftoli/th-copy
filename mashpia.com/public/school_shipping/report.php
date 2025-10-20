@@ -360,13 +360,25 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', {info, year}, function (result) {
-      const res = JSON.parse(result)
-      if (res.success && reload) location.reload()
-      else if (!res.success && res.error) {
-        alert(res.error)
-        console.log(res.error_info)
-      }
+    console.log(info)
+    // return false;
+    fetch('ajax/saveShipping.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip, deflate' // Browser will compress automatically
+        },
+        body: JSON.stringify({ info, year })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      if (data.success && reload) location.reload()
+      else if (!data.success && data.error) alert(data.error)
+      if (data.info) console.log(data.info)
+    })
+    .catch(error => {
+      console.log(error)
     })
   }
 

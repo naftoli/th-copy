@@ -8,7 +8,12 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = $_POST['year'] ?? GlobalSettings::getRegistrationYear();
 
-$info = $_POST['info'];
+// Check if data is compressed
+$input = file_get_contents('php://input');
+
+if (isset($_SERVER['HTTP_CONTENT_ENCODING']) && $_SERVER['HTTP_CONTENT_ENCODING'] === 'gzip') {
+    $input = gzdecode($input);
+}
 
 $table = 'school_shipping';
 
