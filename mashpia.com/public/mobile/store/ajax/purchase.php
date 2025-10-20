@@ -112,7 +112,7 @@ foreach ($cart as $item) {
         while (!$strSerial)
         {
             $strSerial = rand_num_string(10);
-            $sql = "select serial from pointsDB.user_prizes where serial = '" . $strSerial . "'";
+            $sql = "select serial from user_prizes where serial = '" . mysql_real_escape_string($strSerial) . "'";
             $result = mysql_query($sql);
             if (mysql_num_rows($result) > 0)
                 $strSerial = FALSE;
@@ -123,7 +123,7 @@ foreach ($cart as $item) {
                 ." user_id = " . $user . ","
                 ." institution_id = " . $institution_id . ","
                 ." quantity = " . $qty . ","
-                ." serial = '" . $strSerial . "',"
+                ." serial = '" . mysql_real_escape_string($strSerial) . "',"
                 ." status = 'Checked Out',"
                 ." actual_points = " . $points . ","
                 ." created = now()";
