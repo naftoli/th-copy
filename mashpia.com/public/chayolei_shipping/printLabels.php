@@ -33,9 +33,10 @@ $items_chosen = isset($data['items']) ? $data['items'] : [];
 $cats = array_keys($items_chosen);
 $fields_chosen = array_keys($data['fields']);
 $item_details_chosen = isset($data['details']) ? array_keys($data['details']) : [];
-$limit_to_status = isset($data['status']) ? $data['status'] : [];
+$limit_to_status = isset($data['limit_to_status']) ? $data['limit_to_status'] : [];
 $schools = isset($data['school']) ? $data['school'] : [];
 $gender = isset($data['gender']) ? $data['gender'] : '';
+$shipment_number = isset($data['shipment_number']) ? $data['shipment_number'] : 0;
 
 // if ($type == 'hachayols' && in_array([61, 269], $schools)) {
 //     if (in_array(61, $schools) && in_array(269, $schools)) {
@@ -78,7 +79,8 @@ foreach ($info as $cat => $more) {
         foreach ($items as $idx => $item) {
             // find out how many of the same item we have
             if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
-            else $item_num = 0;
+            else $item_num = 0;                
+
             // get status and whether to show this item
             $show_item = false;
             $status = isset($info['status'][$user_id][$item['id']][$item_num]) ? $info['status'][$user_id][$item['id']][$item_num] : [];
@@ -96,6 +98,7 @@ foreach ($info as $cat => $more) {
                 }
             }
             if ($show_item) {
+                if ($shipment_number > 0 && isset($status['shipment_number']) && $status['shipment_number'] != $shipment_number) continue;
                 $label = (isset($item['color']) && !empty($item['color']) ? $item['color'] . ' ' : '') . $item['item'];
                 $labels[$user_id][] = $label;
             }
