@@ -34,6 +34,9 @@ $for_labels['gender'] = $_POST['gender'];
 $for_labels['year'] = $year;
 $for_labels['schools'] = $_POST['school'];
 $for_labels['limit_to_status'] = $limit_to_status;
+$for_labels['fields'] = $fields_chosen;
+$for_labels['details'] = $item_details_chosen;
+$for_labels['school'] = $_POST['school'];
 
 $cs = new ChayoleiShipping();
 $cs->setYear($year);

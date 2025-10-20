@@ -4,14 +4,9 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
 $data = json_decode($_COOKIE['for_labels'], true);
-$_POST = $data;
-$all = $_GET['all'] ?? false;
+$_POST = $data; // needed for medals and ranks in class.chayoleiShipping.php
 // echo "<pre>"; print_r($data); echo "</pre>";
-
-if (empty($data)) {
-    echo "No data provided";
-    exit;
-}
+$all = $_GET['all'] ?? false;
 
 function checkForBreak() {
     global $i, $rows;
@@ -34,21 +29,24 @@ require 'data.php';
 $cs = new ChayoleiShipping();
 $cs->setYear($data['year']);
 
-$items_chosen = $data['items'];
-$gender = $data['gender'];
-$schools = $data['schools'];
-$type = $_GET['type'] ?? '';
+$items_chosen = isset($data['items']) ? $data['items'] : [];
+$cats = array_keys($items_chosen);
+$fields_chosen = array_keys($data['fields']);
+$item_details_chosen = isset($data['details']) ? array_keys($data['details']) : [];
+$limit_to_status = isset($data['status']) ? $data['status'] : [];
+$schools = isset($data['school']) ? $data['school'] : [];
+$gender = isset($data['gender']) ? $data['gender'] : '';
 
-if ($type == 'hachayols') {
-    if (in_array(61, $schools) && in_array(269, $schools)) {
-        header('Location: /myShliachHachayolLabels.php?ak=1');
-    } else if (in_array(61, $schools)) {
-        header('Location: /myShliachHachayolLabels.php');
-    } else if (in_array(269, $schools)) {
-        header('Location: /anashHachayolLabels.php');
-    }
-    exit;
-}
+// if ($type == 'hachayols' && in_array([61, 269], $schools)) {
+//     if (in_array(61, $schools) && in_array(269, $schools)) {
+//         header('Location: /myShliachHachayolLabels.php?ak=1');
+//     } else if (in_array(61, $schools)) {
+//         header('Location: /myShliachHachayolLabels.php');
+//     } else if (in_array(269, $schools)) {
+//         header('Location: /anashHachayolLabels.php');
+//     }
+//     exit;
+// }
 
 $info = [];
 if ($all) {
@@ -67,18 +65,12 @@ if ($all) {
         }
     }
 }
-
-$getStatus = false;
-foreach ($info as $cat => $items) {
-    if (!empty($items)) {
-        $getStatus = true;
-        break;
-    }
-}
-if ($getStatus) {
-    $info['status'] = $cs->getStatus();
+if (empty($info)) {
+    echo "No data found for current selection";
+    exit;
 }
 
+$info['status'] = $cs->getStatus();
 $labels = [];
 foreach ($info as $cat => $more) {
     if ($cat == 'status') continue;
@@ -264,7 +256,7 @@ foreach ($labels as $user_id => $items) {
             $shippingName = $r['shipping_first'] . " " . $r['shipping_last'];
             $shippingAddress = $r['shipping_address1'] .
                 (empty($r['shipping_address2']) ? '' : ' ' . $r['shipping_address2']) . "<br />" .
-                $r['shipping_city'] . ", " . $r['shipping_state'] . " " . $r['shipping_postal'] .
+                $r['shipping_city'] . ", " . $r['shipping_state'] . " " . $r['shipping$dataal'] .
                 "<br />" . $r['shipping_country'];
             $schoolChanged = true;
         }
