@@ -34,6 +34,7 @@ function startPayment() {
 function endPayment() {
     global $user;
     if (!$user) return;
+    mysql_select_db('mashpiadb');
     $sql = "DELETE FROM payment_processing WHERE user_id = " . intval($user);
     mysql_query($sql);
 }
@@ -159,7 +160,7 @@ foreach ($cart as $item) {
         }
     }
 }
-
+$success = false;
 if (!$success) {
     mysql_query("rollback");
     endPayment();
