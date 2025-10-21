@@ -446,6 +446,7 @@ class ChayoleiShipping
     }
 
     private function getBirthdayEnvelope($users) {
+        $birthdays = [];
         foreach ($users as $user) {
             $birthdays[$user['user_id']][] = [
                 'item'  => 'Birthday Envelope',
@@ -461,6 +462,7 @@ class ChayoleiShipping
     }
 
     private function getBoysBirthdayCard($users) {
+        $birthdays = [];
         foreach ($users as $user) {
             if (strtolower($user['gender']) != 'm') continue;
             $birthdays[$user['user_id']][] = [
@@ -477,6 +479,7 @@ class ChayoleiShipping
     }
 
     private function getGirlsBirthdayCard($users) {
+        $birthdays = [];
         foreach ($users as $user) {
             if (strtolower($user['gender']) != 'f') continue;
             $birthdays[$user['user_id']][] = [
