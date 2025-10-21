@@ -54,93 +54,27 @@ abstract class Birthday {
 		}
 		//get birthday date
 		$user = $t->getUserInfo();
-		$dob = $user['dob'];
 		/*
 		if ( !empty( $user['dob_he'] ) && strpos( $user['dob_he'], '"' ) ) {
 			//echo $user['dob_he'] . "<br />";
 			return;
 		}
 		*/
-		if ( empty( $dob ) ) {
+		if ( empty( $user['dob'] ) ) {
 			$this->errors[] = $user['first'] . ' ' . $user['last'] . ' is missing a dob.' . "<br />";
 			return false;
 		}
-		$arrDOB = explode('-', $dob);
-		//check that dob makes sense
-		$yy = $arrDOB[0];
-		$mm = $arrDOB[1];
-		$dd = $arrDOB[2];
-		if ($yy > date('Y') || $yy < (date('Y') - 15) || $mm == 0 || $dd == 0) {
-			//echo $user['user_id'] . "<br />";
-			//print_r( $arrDOB );
-			//echo "<br /><br />";
-			$this->errors[] = "Invalid dob: " . implode(',', $arrDOB);
-		}
-		//check if dob_he should be one day further
-		if ($user['dob_he_offset']) {
-			//add one to dob
-			$date = new DateTime( $dob );
-			$date->add( new DateInterval( 'P1D' ) );
-			$newDate = $date->format( 'Y-m-d' );
-			$arrDOB = explode('-', $newDate);
-		}
-		$jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
-		$jewish = jdtojewish($jd, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH);
-		$j = iconv('WINDOWS-1255', 'UTF-8', $jewish);
-		//if ( empty( $user['dob_he'] ) || ( !empty( $user['dob_he'] ) && !strpos( $user['dob_he'], '"' ) ) )
 
-		//find out if user born in leap year
-		$jDate = jdtojewish($jd);
-		$arrJDate = explode("/", $jDate);
-		$hMonth = $arrJDate[0];
-		$hDay = $arrJDate[1];
-		if (((7 * $arrJDate[2] + 1) % 19) < 7) {
-			$bornInLeap = true;
-		} else {
-			$bornInLeap = false;
+		$info = $this->calculateAge($user);
+		if (empty($info)) {
+			$this->errors[] = $user['first'] . ' ' . $user['last'] . ' is missing a dob.' . "<br />";
+			return false;
 		}
-
-		// check if the birthday is before the current date (so it is in the past and we need to add the birthday for next year)
-		if ( !$this->enablePrev ) {
-			$jNow = jdtojewish(unixtojd()); // get the current jewish date from the unix timestamp
-			$arrJNow = explode('/', $jNow); // split the year up into an array like so [m, d, y]
-			// if the month is before/equal to today and the date is before/equal to today
-			if ($arrJDate[0] <= $arrJNow[0] && $arrJDate[1] <= $arrJNow[1]) $this->year++; // then jump to next year
-		}
-
-		//find out if birthday year is leap year
-		$leap = ((7 * $this->year + 1) % 19) < 7;
-
-		//if born in regular year and current year is leap year,
-		//and month is adar, then month needs to be changed to adar II
-		if (!$bornInLeap && $leap && $hMonth == 6) {
-			$hMonth++;
-		}
-
-		$date = jewishtojd($hMonth, $hDay, $this->year);
+		list($year, $yomHoledes, $date) = extract($info);
 		$t->setDates( $date, $date );
-		//get hebrew date of birthday for mission name
-		$he_date = jdtojewish( $date, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
-		$yomHoledes = iconv( 'WINDOWS-1255', 'UTF-8', $he_date );
-		$year = $this->year - $arrJDate[2];
 		$missionName = $this->missionName($yomHoledes, $year);
 		$mission = mysql_real_escape_string( $missionName );
-
-		// if ( $date > 2459089 ) { // Aug 20, 2020
-		//	 @mail(
-		//		 "bugs@tzivoshashem.org", "Error: Invalid Birthday Dates",
-		//		 json_encode([
-		//			 "date" => $date,
-		//			 "jewishtojd" => [ $hMonth, $hDay, $this->year ],
-		//			 "user_id" => $this->user_id,
-		//			 "mission" => $mission,
-		//			 "server" => $_SERVER,
-		//			 "request" => $_REQUEST
-		//		 ])
-		//	 );
-		//	 return false;
-		// }
-
+		
 		if ( !$t->createMission( $mission, $this->description ) ) {
 			$this->errors[] = $this->user_id . " is not signed up to a class and is not signed up to yoma depagra / yom tov";
 			return false;
@@ -194,5 +128,71 @@ abstract class Birthday {
 		} else {
 			return false;
 		}
+	}
+
+	public function calculateAge($user) {
+		if (empty($user['dob'])) {
+			$this->errors[] = "Invalid dob: " . $user['dob'];
+			return false;
+		}
+		$arrDOB = explode('-', $user['dob']);
+		//check that dob makes sense
+		$yy = $arrDOB[0];
+		$mm = $arrDOB[1];
+		$dd = $arrDOB[2];
+		if ($yy > date('Y') || $yy < (date('Y') - 15) || $mm == 0 || $dd == 0) {
+			//echo $user['user_id'] . "<br />";
+			//print_r( $arrDOB );
+			//echo "<br /><br />";
+			$this->errors[] = "Invalid dob: " . implode(',', $arrDOB);
+		}
+		//check if dob_he should be one day further
+		if (isset($user['dob_he_offset']) && $user['dob_he_offset']) {
+			//add one to dob
+			$date = new DateTime( $user['dob'] );
+			$date->add( new DateInterval( 'P1D' ) );
+			$newDate = $date->format( 'Y-m-d' );
+			$arrDOB = explode('-', $newDate);
+		}
+		$jd = gregoriantojd($arrDOB[1], $arrDOB[2], $arrDOB[0]);
+		$jewish = jdtojewish($jd, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH);
+		$j = iconv('WINDOWS-1255', 'UTF-8', $jewish);
+		//if ( empty( $user['dob_he'] ) || ( !empty( $user['dob_he'] ) && !strpos( $user['dob_he'], '"' ) ) )
+
+		//find out if user born in leap year
+		$jDate = jdtojewish($jd);
+		$arrJDate = explode("/", $jDate);
+		$hMonth = $arrJDate[0];
+		$hDay = $arrJDate[1];
+		if (((7 * $arrJDate[2] + 1) % 19) < 7) {
+			$bornInLeap = true;
+		} else {
+			$bornInLeap = false;
+		}
+
+		// check if the birthday is before the current date (so it is in the past and we need to add the birthday for next year)
+		if ( !$this->enablePrev ) {
+			$jNow = jdtojewish(unixtojd()); // get the current jewish date from the unix timestamp
+			$arrJNow = explode('/', $jNow); // split the year up into an array like so [m, d, y]
+			// if the month is before/equal to today and the date is before/equal to today
+			if ($arrJDate[0] <= $arrJNow[0] && $arrJDate[1] <= $arrJNow[1]) $this->year++; // then jump to next year
+		}
+
+		//find out if birthday year is leap year
+		$leap = ((7 * $this->year + 1) % 19) < 7;
+
+		//if born in regular year and current year is leap year,
+		//and month is adar, then month needs to be changed to adar II
+		if (!$bornInLeap && $leap && $hMonth == 6) {
+			$hMonth++;
+		}
+
+		// mission date
+		$date = jewishtojd($hMonth, $hDay, $this->year);
+		//get hebrew date of birthday for mission name
+		$he_date = jdtojewish( $date, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH );
+		$yomHoledes = iconv( 'WINDOWS-1255', 'UTF-8', $he_date );
+		$age = $this->year - $arrJDate[2];
+		return [$age, $yomHoledes, $date];
 	}
 }

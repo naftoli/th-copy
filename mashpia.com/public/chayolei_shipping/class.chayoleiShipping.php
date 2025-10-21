@@ -7,6 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.medalReport.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.rankReport.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.hachayol.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.birthdayEn.php';
 
 /**
  * Class ChayoleiShipping
@@ -56,11 +57,12 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['hachayols', 'medals', 'ranks', 'name plates','mivtzoim', 'hei teves'];
+        $categories = ['birthdays', 'hachayols', 'medals', 'ranks', 'name plates','mivtzoim', 'hei teves'];
         return $categories;
     }
 
     public function getItems() {
+        $items['birthdays'] = ['Birthday Envelope', 'Boys Birthday Card', 'Girls Birthday Card', 'Kapital Card Age 6', 'Kapital Card Age 7', 'Kapital Card Age 8', 'Kapital Card Age 9', 'Kapital Card Age 10', 'Kapital Card Age 11', 'Kapital Card Age 12'];
         $items['hachayols'] = ['Hachayols'];
         $items['name plates'] = ['Name Plates'];
         $items['medals'] = ['Medals'];
@@ -399,5 +401,146 @@ class ChayoleiShipping
             }
         }
         return $ranks;
+    }
+
+    public function getBirthdays($gender, $school, $items) {
+        $birthdays = [];
+        // all registered users in school
+        $users = $this->getUsers($school, $gender);
+        if (empty($users)) return [];
+
+        foreach ($items as $item) {
+            switch ($item) {
+                case 'birthday envelope':
+                    $b = $this->getBirthdayEnvelope($users);
+                    break;
+                case 'boys birthday card':
+                    $b = $this->getBoysBirthdayCard($users);
+                    break;
+                case 'girls birthday card':
+                    $b = $this->getGirlsBirthdayCard($users);
+                    break;
+                case 'kapital card age 6':
+                case 'kapital card age 7':
+                case 'kapital card age 8':
+                case 'kapital card age 9':
+                case 'kapital card age 10':
+                case 'kapital card age 11':
+                case 'kapital card age 12':
+                    $b = $this->getKapitalCard($users, $item);
+                    break;
+                default:
+                    $b = [];
+                    break;
+            }
+            foreach ($users as $user) {
+                if (isset($b[$user['user_id']])) {
+                    foreach ($b[$user['user_id']] as $item) {
+                        $birthdays[$user['user_id']][] = $item;
+                    }
+                }
+            }
+        }
+        // echo "<pre>"; print_r($birthdays); echo "</pre>"; 
+        return $birthdays;
+    }
+
+    private function getBirthdayEnvelope($users) {
+        foreach ($users as $user) {
+            $birthdays[$user['user_id']][] = [
+                'item'  => 'Birthday Envelope',
+                'size'  => '',
+                'name'  => $user['first'] . ' ' . $user['last'],
+                'id'    => 'BE01',
+                'cat'   => 'birthdays',
+                'size'  => '',
+                'qty'   => 1
+            ];
+        }
+        return $birthdays;
+    }
+
+    private function getBoysBirthdayCard($users) {
+        foreach ($users as $user) {
+            if (strtolower($user['gender']) != 'm') continue;
+            $birthdays[$user['user_id']][] = [
+                'item'  => 'Boys Birthday Card',
+                'size'  => '',
+                'name'  => $user['first'] . ' ' . $user['last'],
+                'id'    => 'BBC01',
+                'cat'   => 'birthdays',
+                'size'  => '',
+                'qty'   => 1
+            ];
+        }
+        return $birthdays;
+    }
+
+    private function getGirlsBirthdayCard($users) {
+        foreach ($users as $user) {
+            if (strtolower($user['gender']) != 'f') continue;
+            $birthdays[$user['user_id']][] = [
+                'item'  => 'Girls Birthday Card',
+                'size'  => '',
+                'name'  => $user['first'] . ' ' . $user['last'],
+                'id'    => 'GBC01',
+                'cat'   => 'birthdays',
+                'size'  => '',
+                'qty'   => 1
+            ];
+        }
+        return $birthdays;
+    }
+
+    private function getKapitalCard($users, $item) {
+        $birthdays = [];
+        $itemInfo = explode(' ', $item);
+        $age_card = intval($itemInfo[3]);
+        foreach ($users as $user) {
+            $age = intval($user['age']);
+            if ($age == $age_card) {
+                $birthdays[$user['user_id']][] = [
+                    'item'  => 'Kapital Card Age ' . $age_card,
+                    'size'  => '',
+                    'name'  => $user['first'] . ' ' . $user['last'],
+                    'id'    => 'KC' . $age_card,
+                    'cat'   => 'birthdays',
+                    'size'  => '',
+                    'qty'   => 1
+                ];
+            }
+        }
+        return $birthdays;
+    }
+
+    private function getUsers($school, $gender) {
+        $users = [];
+        $sql = "SELECT 
+                    u.*, b.date_tasks_mission_id 
+                FROM
+                    users u
+                        JOIN
+                    birthdays b USING (user_id)
+                WHERE
+                    user_registered IS NOT NULL
+                        AND user_registered != ''
+                        AND user_registered != '0000-00-00'
+                        AND school_id = :school";
+        if ($gender == 'm') $sql .= " AND gender = 'M'";
+        else if ($gender == 'f') $sql .= " AND gender = 'F'";
+        $sql .= " GROUP BY user_id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['school' => $school]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $user) {
+            // check if child has a birthday between ages 6 and 12
+            $b = new BirthdayEn($user['user_id']);
+            $age = intval($b->calculateAge($user)[0]);
+            if ($age >= 6 && $age <= 12) {
+                $user['age'] = $age;
+                $users[] = $user;
+            }
+        }
+        return $users;
     }
 }
