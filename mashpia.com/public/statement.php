@@ -1,4 +1,7 @@
 <?php
+if (!isset($_COOKIE['kiosk_machine'])) {
+	setcookie('kiosk_machine', '1', time() + 365*24*60*60, '/'); //refresh cookie
+}
 ini_set('display_errors',1);
 //header("Location: under_construction.php");
 $agent = @$_SERVER['HTTP_USER_AGENT'];

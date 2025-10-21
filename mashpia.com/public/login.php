@@ -5,9 +5,18 @@ $url = $_SERVER["REQUEST_URI"];
 if (isset($_COOKIE['kiosk_machine']) && isset($admin_auth)) 
 {
 	header('Location: http' . (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on' ? 's' : '') . "://{$_SERVER['HTTP_HOST']}" . rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') . '/kiosk.php'); 
+	exit;
 }
-header("Location: /");
-exit;
+
+// Check if we're in kiosk mode but don't have admin_auth set
+// In this case, show the login form instead of redirecting
+if (isset($_COOKIE['kiosk_machine']) && !isset($admin_auth)) {
+	// Don't redirect, show the login form below
+} else {
+	// For non-kiosk mode, redirect to home
+	header("Location: /");
+	exit;
+}
 $username = agr($_COOKIE, 'username_default'); 
 
 if (!isset($login_query_string)) 
