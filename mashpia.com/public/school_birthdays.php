@@ -8,7 +8,7 @@ $schools = $as->getSchools();
 
 require_once 'class.globalSettings.php';
 $startEnd = GlobalSettings::getCurYearDates();
-$startEnd['start'] = 2460280;
+// $startEnd['start'] = 2460280;
 
 //get dates
 $dates = [];
