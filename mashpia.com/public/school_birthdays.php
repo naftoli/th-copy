@@ -316,8 +316,6 @@ $today = unixtojd();
           });
           schools = schools.substr(0, schools.length - 1);
           $('#schools').val(schools);
-        } else {
-          schools = $('#schools').val();
         }
 
         var parshas = '';
@@ -365,26 +363,26 @@ $today = unixtojd();
       <input type="hidden" name="gender" id="gender"/>
     </form>
   
-    <?php if (count($schools) > 1) : ?>
     <div class="form-section">
       <h2>School Selection</h2>
       <div class="form-group">
         <label for="schoolSelect">Select Schools (Hold Ctrl/Cmd to select multiple)</label>
+        <?php if (count($schools) > 1) : ?>
         <select id="schoolSelect" name="schools[]" class="form-control" multiple>
-          <?
-          foreach ($schools as $id => $school) {
+            <?php foreach ($schools as $id => $school) { ?>
               //skip certain schools
               // if (in_array($id, array(82, 65, 79, 187, 198, 241)))
               //     continue;
               echo "<option value='" . $id . "'>" . htmlspecialchars($school) . "</option>";
-          }
-          ?>
-        </select>
+            <?php } ?>
+          </select>
+          <?php else: ?>
+            <select id="schoolSelect" name="schools[]" class="form-control">
+              <option value="<?= key($schools) ?>"><?= htmlspecialchars(current($schools)) ?></option>
+            </select>
+          <?php endif; ?>
       </div>
     </div>
-    <?php else: ?>
-      <input type="hidden" name="schools" id="schools" value="<?= key($schools) ?>"/>
-    <?php endif; ?>
 
 
     <div class="form-section">
