@@ -117,11 +117,11 @@ abstract class Birthday {
 		}
 
 		// not deleting anymore
-		// if ($this->lang_id === 1) {
-		// 	// only delete prev ones when creating english mission
-		// 	$sql = "delete from birthdays where user_id = " . $this->user_id;
-		// 	mysql_query( $sql );
-		// }
+		if ($this->lang_id === 1) {
+			// only delete prev ones when creating english mission
+			$sql = "delete from birthdays where user_id = " . $this->user_id;
+			mysql_query( $sql );
+		}
 
 		//add user_id and mission_id to birthday database
 		if (empty($this->errors)) {
