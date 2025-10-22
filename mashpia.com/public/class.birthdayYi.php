@@ -28,6 +28,6 @@ class BirthdayYi extends Birthday {
 	);
 
 	protected function missionName($yomHoledes, $yearsOld) {
-		return "מזל טוב פאר דיין יום הולדת - " . $yomHoledes;
+		return "מזל טוב פאר דיין יום הולדת ה - " . $yearsOld;
 	}
 }
