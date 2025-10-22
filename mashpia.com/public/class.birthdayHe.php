@@ -7,7 +7,7 @@ class BirthdayHe extends Birthday {
     protected $category = 'יום הולדת';
     protected $mandTasks = array(
         "אמרתי את פרק התהילים החדש שלי.",
-        "עשיתי התוועדות כדי להודות לקב\"ה שהגעתי ליום המיוחד הזה.",
+        "עשיתי התוועדות כדי להודות לה' שהגעתי ליום המיוחד הזה",
         "קיבלתי החלטה חדשה. מה ההחלטה שלך?________________________"
     );
     protected $optTasks = array(
@@ -28,6 +28,6 @@ class BirthdayHe extends Birthday {
     );
 
     protected function missionName($yomHoledes, $yearsOld) {
-        return "מזל טוב לרגל היום ההולדת ה - " . $yomHoledes;
+        return "מזל טוב לרגל היום ההולדת ה - " . $yearsOld;
     }
 }

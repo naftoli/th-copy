@@ -114,7 +114,7 @@ class NewTasks {
         //}       
     }
     
-    public function createMission( $name, $description ) {
+    public function createMission( $name, $description, $gender = null ) {
         $this->setSubject(); 
         if ( $this->getUserTrack() ) {
             //check if mission with this school_type_id, name, level and track_id exists
@@ -129,6 +129,9 @@ class NewTasks {
                     and end_date = " . $this->dates['end'] . "
 					and lang_id = " . $this->lang . " 
                     and personal = 1";
+            if ( $gender ) {
+                $sql .= " and gender = '" . $gender . "'";
+            }
             $result = mysql_query( $sql ) or die( $this->user_id . "<br />" . $sql . "<br />" );
             $num = mysql_num_rows( $result );
             if ( $num > 0 ) {
@@ -148,6 +151,9 @@ class NewTasks {
                         end_date = " . $this->dates['end'] . ",
 						lang_id = " . $this->lang . ", 
                         personal = 1";
+                if ( $gender ) {
+                    $sql .= ", gender = '" . $gender . "'";
+                }
                 if ( mysql_query( $sql ) ) {
                     $this->mission_id = mysql_insert_id();
                     return true;
@@ -192,8 +198,10 @@ class NewTasks {
         }
         if ( mysql_query( $sql ) ) {
             return true;
-        } 
-        return false;
+        } else {
+            echo mysql_error() . "<br />";
+            return false;
+        }
     }
     
     public function getMissionID() {
