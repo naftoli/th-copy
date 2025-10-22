@@ -309,11 +309,16 @@ $today = unixtojd();
 
       $('#get_birthdays').click(function () {
         var schools = '';
-        $("#schoolSelect option:selected").each(function () {
-          schools = schools + $(this).val() + ':';
-        });
-        schools = schools.substr(0, schools.length - 1);
-        $('#schools').val(schools);
+        // check if schoolSelect exists
+        if ($('#schoolSelect').length > 0) {
+          $("#schoolSelect option:selected").each(function () {
+            schools = schools + $(this).val() + ':';
+          });
+          schools = schools.substr(0, schools.length - 1);
+          $('#schools').val(schools);
+        } else {
+          schools = $('#schools').val();
+        }
 
         var parshas = '';
         var parshaMethod = $('input[name="parshaMethod"]:checked').val();
