@@ -1,5 +1,5 @@
 <?php
-$admin_auth = array('user');
+$admin_auth = array('school');
 require('header.php');
 
 require_once 'class.adminSchools.php';
