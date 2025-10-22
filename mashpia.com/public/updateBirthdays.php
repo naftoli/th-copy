@@ -49,8 +49,6 @@ while ( $row = mysql_fetch_assoc($result) ) {
 $updated = 0;
 foreach ($users as $user_id) {
     if (needsUpdate($user_id)) {
-        echo $user_id . " needs update<br />";
-        continue;
         $h = new HeDob( $user_id, true );
         $h->setHeDob();
         // create birthday missions
