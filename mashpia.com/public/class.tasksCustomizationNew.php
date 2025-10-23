@@ -337,7 +337,7 @@ class TasksCustomizationNew {
                     $sql = "select * from {$this->type}_task_exceptions 
                             where date_task_id in ($in)  
                             and {$this->type}_id = " . $this->id;
-                    echo $sql; exit;
+                    // echo $sql; exit;
                     $result = mysql_query( $sql );
                     if ( mysql_num_rows( $result ) == $numTaskIDs ) {
                     	//echo $sql;
@@ -1593,7 +1593,7 @@ class TasksCustomizationNew {
 		$sql = "update user_tracks set enrolled = 1 where user_id in (" . implode(",", $users) . ")";
 		//echo $sql;
         if (!mysql_query($sql)) {
-        	echo $sql;
+        	// echo $sql;
             return false;
         }
         
@@ -1622,7 +1622,7 @@ class TasksCustomizationNew {
 				and dtm.start_date >= " . unixtojd();
 		*/
         if (!(mysql_query($sql1) && mysql_query($sql2) && mysql_query($sql3))) {
-        	echo $sql1 . " " . $sql2 . " " . $sql3;
+        	// echo $sql1 . " " . $sql2 . " " . $sql3;
             return false;
         }
 		
@@ -1654,7 +1654,7 @@ class TasksCustomizationNew {
 					and dtm.start_date >= " . unixtojd();
 			*/
 			if (!(mysql_query($sql1) && mysql_query($sql2) && mysql_query($sql3))) {
-				echo $sql1 . " " . $sql2 . " " . $sql3;
+				// echo $sql1 . " " . $sql2 . " " . $sql3;
 				return false;
 			}
 		}
