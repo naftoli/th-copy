@@ -117,8 +117,8 @@ abstract class Birthday {
 		}
 
 		// not deleting anymore
-		if ($this->lang_id === 1) {
-			// only delete prev ones when creating english mission
+		if ($this->year == GlobalSettings::getCurrentYear() && $this->lang_id == 1) {
+			// only delete prev ones when creating english mission and the year is the current year
 			$sql = "delete from birthdays where user_id = " . $this->user_id;
 			mysql_query( $sql );
 		}
