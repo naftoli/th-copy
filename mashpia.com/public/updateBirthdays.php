@@ -47,21 +47,18 @@ while ( $row = mysql_fetch_assoc($result) ) {
 }
 
 $updated = 0;
-$years = [5787, 5788, 5789, 5790];
-foreach ($years as $yr) {
-    foreach ($users as $user_id) {
-        if (needsUpdate($user_id)) {
-            $h = new HeDob( $user_id, true );
-            $h->setHeDob();
-            // create birthday missions
-            $b = new BirthdayEn( $user_id, $yr );
-            $b->setBirthday();
-            $bi = new BirthdayYi( $user_id, $yr );
-            $bi->setBirthday();
-            $bh = new BirthdayHe( $user_id, $yr );
-            $bh->setBirthday();
-            $updated++;
-        }
+foreach ($users as $user_id) {
+    if (needsUpdate($user_id)) {
+        $h = new HeDob( $user_id, true );
+        $h->setHeDob();
+        // create birthday missions
+        $b = new BirthdayEn( $user_id );
+        $b->setBirthday();
+        $bi = new BirthdayYi( $user_id );
+        $bi->setBirthday();
+        $bh = new BirthdayHe( $user_id );
+        $bh->setBirthday();
+        $updated++;
     }
 }
 echo "Updated $updated users";
