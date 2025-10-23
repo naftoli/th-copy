@@ -369,12 +369,14 @@ $today = unixtojd();
         <label for="schoolSelect">Select Schools (Hold Ctrl/Cmd to select multiple)</label>
         <?php if (count($schools) > 1) : ?>
         <select id="schoolSelect" name="schools[]" class="form-control" multiple>
-            <?php foreach ($schools as $id => $school) { ?>
+            <?php 
+            foreach ($schools as $id => $school) {
               //skip certain schools
               // if (in_array($id, array(82, 65, 79, 187, 198, 241)))
               //     continue;
               echo "<option value='" . $id . "'>" . htmlspecialchars($school) . "</option>";
-            <?php } ?>
+            } 
+            ?>
           </select>
           <?php else: ?>
             <select id="schoolSelect" name="schools[]" class="form-control">
