@@ -19,10 +19,27 @@ if (isset($_GET['school'])) {
     $schools = explode(':', $_POST['schools']);
     $parshas = explode(':', $_POST['parshas']);
     $gender = $_POST['gender'] ?? '';
-    //get dates
-    $dates = [];
+
+    // check if parshas are parsha end dates (jd format) or actual dates (yyyy-mm-dd format)
+    $dateRange = [];
+    foreach ($parshas as $key => $parsha) {
+      if (strpos($parsha, '-') !== false) {
+        $date = explode('-', $parsha);
+        $jd = gregoriantojd($date[1], $date[2], $date[0]);
+        if ($key == 0) {
+          $dateRange['start'] = $jd;
+        } else {
+          $dateRange['end'] = $jd;
+        }
+      } 
+    }
+    
     $numDates = 0;
-    $sqlReport = "select start, end, name from parshos where end in (" . implode(',', $parshas) . ")";
+    if (! empty($dateRange)) {
+      $sqlReport = "select start, end, name from parshos where start >= " . ($dateRange['start'] + 6) . " and end <= " . ($dateRange['end'] + 6);
+    } else {
+      $sqlReport = "select start, end, name from parshos where end in (" . implode(',', $parshas) . ")";
+    }
     $resultReport = mysql_query($sqlReport);
     while ($rowReport = mysql_fetch_assoc($resultReport)) {
         $dates['start'][] = $rowReport['start'];
