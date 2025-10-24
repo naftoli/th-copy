@@ -10,7 +10,7 @@ if (isset($_GET['school'])) {
     $class_id = $_GET['class'];
     $user_id = $_GET['user'];
     $parsha = $_GET['parsha'];
-    $gender = $_GET['gender'];
+    $gender = $_GET['gender'] ?? '';
     $dates = explode(":", $parsha);
     $start = $dates[0];
     $end = $dates[1];
@@ -18,9 +18,9 @@ if (isset($_GET['school'])) {
 } else if (isset($_POST['schools'])) {
     $schools = explode(':', $_POST['schools']);
     $parshas = explode(':', $_POST['parshas']);
-    $gender = $_POST['gender'];
+    $gender = $_POST['gender'] ?? '';
     //get dates
-    $dates = array();
+    $dates = [];
     $numDates = 0;
     $sqlReport = "select start, end, name from parshos where end in (" . implode(',', $parshas) . ")";
     $resultReport = mysql_query($sqlReport);
@@ -50,10 +50,10 @@ if (isset($school_id)) {
         $sql .= " and u.user_id = " . $user_id;
     }
     if ($gender == 'm') {
-        $sql .= " and school_type_id in (2,12) ";
+        $sql .= " and (gender = 'M') ";
     } else if ($gender == 'f') {
-        $sql .= " and school_type_id in (3,13) ";
-    }
+        $sql .= " and (gender = 'F') ";
+    } 
     $sql .= " order by c.class_grade, c.class_sub, u.last, u.first";
 } else {
     $sql = "select u.user_id, u.first, u.last, u.first_he, u.last_he, u.he_name, c.class_grade, c.class_sub, s.school_name, u.dob  
@@ -67,7 +67,7 @@ if (isset($school_id)) {
         $sql .= " and (gender = 'M' or gender = 'm') ";
     } else if ($gender == 'f') {
         $sql .= " and (gender = 'F' or gender = 'f') ";
-    }
+    } 
     $sql .= "order by s.school_name, c.class_grade, c.class_sub, u.last, u.first";
     //echo $sql;
 }
@@ -147,13 +147,14 @@ while ($row = mysql_fetch_assoc($result)) {
     }
 
     .name {
-      margin-left: 2.6cm;
+      margin-left: 7.6in;
+      margin-top: 2in;
       width: 6cm;
       font-size: 30px;
       font-weight: bold;
       text-align: center;
       font-family: DirtyEgo;
-      transform: rotate(180deg);
+      /* transform: rotate(180deg); */
     }
 
     .grade {
