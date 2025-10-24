@@ -31,7 +31,7 @@ $today = unixtojd();
   <style type="text/css">
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      background-color: #f8fafc;
+      /* background-color: #f8fafc; */
       margin: 0;
       padding: 20px;
       padding-top: 0px;
@@ -342,8 +342,8 @@ $today = unixtojd();
         var gender = $('input[name="gender"]:checked').val();
         $("#gender").val(gender);
 
-        if (schools == '' || parshas == '' || $("#gender").val() == '') {
-          alert('You must pick at least one school, one parsha (or date range), and the gender.');
+        if (schools == '' || parshas == '') {
+          alert('You must pick at least one school, and one parsha (or date range).');
         } else {
           $('#get_birthday_form').submit();
         }
