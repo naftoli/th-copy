@@ -350,7 +350,7 @@ echo "</select><br /><br />";
 if ($super) {
   echo "<button class='saveAll no-print'>Save All Schools as Shipped</button><br />";
   if ((in_array('medals', $cats) || in_array('ranks', $cats))) {
-    echo "<button class='medalsRanksLabels no-print' style='margin-top: 10px;'>Save & Print as Labels</button><br />";
+    echo "<button class='medalsRanksLabels no-print' style='margin-top: 10px;'>Print as Labels</button><br />";
   }
   if (in_array('hachayols', $cats)) {
     // echo "<button class='hachayolsLabels no-print' style='margin-top: 10px;'>Save & Print All Hachayols as Labels</button><br />";
@@ -578,7 +578,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     }
   }
 
-  function save(reload = true, printLabels = false) {
+  function save(reload = true) {
     console.log(info)
     // return false;
     fetch('ajax/saveShipping.php', {
@@ -592,9 +592,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     .then(response => response.json())
     .then(data => {
       console.log(data)
-      if (data.success && printLabels) {
-        window.open('printLabels.php', '_blank');
-      }
+      if (data.success) alert('Saved successfully')
       if (data.success && reload) location.reload()
       else if (!data.success && data.error) alert(data.error)
       if (data.info) console.log(data.info)
@@ -672,13 +670,12 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".medalsRanksLabels").click(function () {
     Cookies.set('for_labels', <?= json_encode($for_labels); ?>);
-    $(".shipping").each(function () {
-      const action = super_admin ? 1 : 2
-      const desc = $(this).parent().parent().find('.description').val()
-      const ship_num = $(this).parent().parent().find('.shipment_number').val()
-      update(this, action, desc, ship_num)
-    })
-    // save(true, true)
+    // $(".shipping").each(function () {
+    //   const action = super_admin ? 1 : 2
+    //   const desc = $(this).parent().parent().find('.description').val()
+    //   const ship_num = $(this).parent().parent().find('.shipment_number').val()
+    //   update(this, action, desc, ship_num)
+    // })
     window.open('printLabels.php', '_blank');
   })
 </script>
