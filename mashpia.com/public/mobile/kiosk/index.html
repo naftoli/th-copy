@@ -45,11 +45,11 @@
             <div class="manual" id="manual-scanner">
                 <div class="alert alert-warning">
                     <div class="scanner-background">
-                        <h2>Enter the digits underneath the barcode on your ID card</h2>
+                        <h2>Enter the serial number of the child</h2>
 
                         <form name="cardForm" id="cardForm">
                             <input type="text" class="form-control" id="scanner" name="scanner"
-                                placeholder="ID Card Number" autocomplete="off" autofocus />
+                                placeholder="Serial Number" autocomplete="off" autofocus />
                         </form>
                     </div>
                 </div>
@@ -87,12 +87,12 @@
     <script src="lib/quagga.min.js"></script>
     <script src="js/main.js"></script>
     <script>
-        // allow admins to manually enter barcode number at end of url prefixed with ?
+        // allow admins to manually enter serial number at end of url prefixed with ?
         var pos = location.href.indexOf('?');
         if (pos != -1) {
-            // get barcode
-            var code = location.href.substring(pos + 1);
-            checkNumber(code);
+            // get serial number
+            var serial = location.href.substring(pos + 1);
+            checkNumber(serial);
         }
     </script>
 </body>
