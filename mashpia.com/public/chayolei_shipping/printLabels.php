@@ -62,7 +62,8 @@ $info = [];
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
+            if (!isset($info[$cat])) $info[$cat] = [];
+            $info[$cat] += $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
         }
     }
 // }
@@ -106,18 +107,34 @@ foreach ($info as $cat => $more) {
     }
 }
 
-// get school, school_address, class, first and last name from user_id
-$sql = "
-    SELECT 
-        s.*, c.class_grade, c.class_sub, u.user_id, u.first, u.last
-    FROM
-        users u
-            JOIN
-        schools s USING (school_id)
-            JOIN
-        classes c ON c.class_id = u.class_id
-    WHERE
-        user_id IN (" . implode(',', array_keys($labels)) . ")";
+if (in_array([61, 269], $schools)) {
+    $sql = "
+        SELECT 
+            a.admin_id, a.first as parent_first, a.last as parent_last, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_postal, a.admin_country, 
+            u.user_id, u.first, u.last 
+        FROM
+            admin_auths aa
+                JOIN
+            admins a ON a.admin_id = aa.admin_id
+                JOIN
+            users u ON u.user_id = aa.id
+        WHERE
+            aa.auth = 'user'
+            AND u.school_id IN (" . implode(',', $schools) . ")";
+} else {
+    // get school, school_address, class, first and last name from user_id
+    $sql = "
+        SELECT 
+            s.*, c.class_grade, c.class_sub, u.user_id, u.first, u.last
+        FROM
+            users u
+                JOIN
+            schools s USING (school_id)
+                JOIN
+            classes c ON c.class_id = u.class_id
+        WHERE
+            user_id IN (" . implode(',', array_keys($labels)) . ")";
+}
 $stmt = $MASHPIA_DB->query($sql);
 $rows = $stmt->fetchAll();
 $user_info = [];
@@ -130,9 +147,9 @@ $all_info = [];
 $school_info = [];
 foreach ($labels as $user_id => $items) {
     $user = $user_info[$user_id];
+    $name = $user['first'] . " " . $user['last'];
     $school = $user['school_name'];
     $class = $user['class_grade'] . (empty($user['class_sub']) ? '' : "-" . $user['class_sub']);
-    $name = $user['first'] . " " . $user['last'];
     $all_info[$school][$class][$name] = $items;
     $school_info[$user['school_id']] = $user;
 }
