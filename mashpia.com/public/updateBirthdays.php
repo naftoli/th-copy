@@ -9,7 +9,7 @@ require_once 'class.birthdayEn.php';
 require_once 'class.birthdayYi.php';
 require_once 'class.birthdayHe.php';
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::getBirthdayYear();
+$year = GlobalSettings::getCurrentYear();
 
 function needsUpdate($user_id) {
     global $MASHPIA_DB;

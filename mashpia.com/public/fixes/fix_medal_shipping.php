@@ -27,7 +27,7 @@ $stmtUpdate = $MASHPIA_DB->prepare("
     AND user_id = :user_id
 ");
 
-$sql = "select * from th_chidon_shipping where item_id like '%MS%'";
+$sql = "select * from th_chidon_shipping where item_id like '%MS%' and status != 0";
 $stmtShipped = $MASHPIA_DB->query($sql);
 $rowsShipped = $stmtShipped->fetchAll();
 

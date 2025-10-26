@@ -7,7 +7,7 @@ class WpBirthday
   private $year;
 
   public function __construct( $user_id = 0 ) {
-    $this->year = GlobalSettings::getBirthdayYear();
+    $this->year = GlobalSettings::getCurrentYear();
     $this->usersInfo = $this->getUsersInfo( $user_id );
   }
 
