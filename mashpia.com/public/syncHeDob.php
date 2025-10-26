@@ -4,7 +4,7 @@ ini_set('max_execution_time', 300);
 require 'db.php';
 
 require 'class.globalSettings.php';
-$year = GlobalSettings::getBirthdayYear();
+$year = GlobalSettings::getCurrentYear();
 
 $info = array();
 $sql = "select s.school_name, u.first, u.last, u.gender, d.*
