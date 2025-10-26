@@ -44,14 +44,17 @@ foreach ($rowsShipped as $rowShipped) {
         'medal_ord' => $medal_ord,
         'user_id' => $user_id,
     ]);
-    $stmtUpdate->debugDumpParams();
+    // $stmtUpdate->debugDumpParams();
     if (!$res) {
         $success = false;
+        echo "Failed to update medal for user " . $user_id . " and subject " . $subject_id . " and medal " . $medal_ord . "\n";
+        $stmtUpdate->errorInfo();
+        $stmtUpdate->debugDumpParams();
         break;
     }
 }
 
-$success = false;
+// $success = false;
 if ($success) {
     $MASHPIA_DB->commit();
     echo "Successfully updated all medals that were shipped in the medal_marks table to have the date_received date set to the date_shipped date";
