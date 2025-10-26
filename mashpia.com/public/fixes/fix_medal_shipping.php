@@ -49,7 +49,7 @@ foreach ($rowsShipped as $rowShipped) {
         $success = false;
         echo "Failed to update medal for user " . $user_id . " and subject " . $subject_id . " and medal " . $medal_ord . "\n";
         $stmtUpdate->errorInfo();
-        $stmtUpdate->debugDumpParams();
+        // $stmtUpdate->debugDumpParams();
         break;
     }
 }
