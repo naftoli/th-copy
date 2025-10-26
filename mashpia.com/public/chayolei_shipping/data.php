@@ -128,7 +128,9 @@ function createHtmlForItem($school, $row, $output = true) {
                         // add column for shipping info
                         echo "<td class='no-print'>";
                         $originalValue = empty($status) ? 0 : $status['status'];
-                        echo "<select id='" . $item['id'] . ':' . $row['user_id'] . ':' . $item_num . "' class='shipping' data-original-value='$originalValue'>";
+                        $id = $item['id'] . ':' . $row['user_id'] . ':' . $item_num;
+                        if ($cat == 'medals') $id .= ':' . $item['subject_id'] . ':' . $item['medal_ord'];
+                        echo "<select id='" . $id . "' class='shipping' data-original-value='$originalValue'>";
                         if (!$super && (empty($status) || $status['status'] == 0)) $options = ['Not Yet Shipped'];
                         else $options = ['Not Yet Shipped', 'Shipped', 'Received', 'Missing', 'Damaged', 'Replaced', 'Printed'];
                         foreach ($options as $i => $val) {

@@ -559,9 +559,15 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   function update(elem, action, desc = '', ship_num = 1) {
     const id = $(elem).attr('id')
     const ids = id.split(':')
+    console.log(ids)
     const item = ids[0]
     const user = ids[1]
     const num = ids[2]
+    let subject = null, medal = null;
+    if (ids.length > 3) {
+      subject = ids[3]
+      medal = ids[4]
+    }
     action = parseInt(action)
     if (action != 4 || (action == 4 && desc)) {
       // find out if item already exists
@@ -571,7 +577,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
         found.desc = desc
         found.ship_num = ship_num
       } else {
-        info.push({ action, item, user, desc, num, ship_num })
+        if (ids.length > 3) {
+          info.push({ action, item, user, desc, num, ship_num, subject, medal })
+        } else {
+          info.push({ action, item, user, desc, num, ship_num })
+        }
       }
     } else {
       alert('You must explain the damage before it can be saved.')
