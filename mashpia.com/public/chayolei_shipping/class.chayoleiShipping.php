@@ -250,6 +250,7 @@ class ChayoleiShipping
         } else {
             $dates = explode(':', $_POST['medals_dates']);
         } 
+        // echo "<pre>"; print_r($dates); echo "</pre>"; exit;
         $m->overrideDates($dates[0], $dates[1]);
         //set up medals array
         if ($school > 0) {
@@ -269,7 +270,9 @@ class ChayoleiShipping
                         'id'    => $medal_id,
                         'cat'   => 'medals',
                         'color' => $medal_names[$medal_ord],
-                        'qty'   => 1
+                        'qty'   => 1, 
+                        'medal_ord' => $medal_ord, 
+                        'subject_id' => $subject_id,
                     ];
                 }
             }

@@ -76,6 +76,15 @@ $updateRemoveDate = "UPDATE $table
                             AND shipment_number = :ship_num";
 $stmtUpdateRemoveDate = $MASHPIA_DB->prepare($updateRemoveDate);
 
+$medalUpdate = "
+    UPDATE medal_marks 
+    SET date_shipped = NOW(), 
+    date_received = NOW() 
+    WHERE user_id = :user 
+    AND subject_id = :subject 
+    AND medal_ord = :medal";
+$stmtMedalUpdate = $MASHPIA_DB->prepare($medalUpdate);
+
 $MASHPIA_DB->beginTransaction();
 $success = true;
 foreach ($info as $row) {
@@ -142,6 +151,12 @@ foreach ($info as $row) {
         if (! $res) {
             $success = false;
             break;
+        } else if ($action == 1 && isset($row['subject']) && isset($row['medal'])) {
+            $resMedalUpdate = $stmtMedalUpdate->execute([
+                'user'      => $row['user'],
+                'subject'   => $row['subject'],
+                'medal'     => $row['medal'],
+            ]);
         }
     }
 }
