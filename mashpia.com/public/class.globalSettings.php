@@ -37,10 +37,6 @@ class GlobalSettings {
     public static function getChidonRegYear() {
         return self::getHelper('chidon_reg_year');
     }
-    
-    public static function getBirthdayYear() {
-        return self::getHelper('birthday_year');
-    }
 
     public static function getCharidyYear() {
         return self::getHelper('charidy_year');
