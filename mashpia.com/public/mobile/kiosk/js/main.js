@@ -32,8 +32,8 @@ Quagga.onDetected( function( data ) {
 Quagga.onProcessed( showScanningBox );
 
 // check the number as a user posts it
-function checkNumber( cardNumber ) {
-    $.post( 'api/checkID.php', { card : cardNumber }, login );
+function checkNumber( serial ) {
+    $.post( 'api/checkID.php', { serial : serial }, login );
     // if ( cardNumber.match(/^3{1}\d{19}$/) ) {
     //     $.post( 'api/checkID.php', { card : cardNumber }, login );
     // } else {
@@ -49,8 +49,8 @@ function login( response ) {
     localStorage.setItem( "login", "user" );
     localStorage.setItem( "id", response.user_id );
     localStorage.setItem( "kiosk", true );
-    // and redirect to their profile page
-    location.href = "/mobile/reg/medals/index.html?id=" + response.user_id;
+    // and redirect to the scanning page
+    location.href = "/mobile/store/scan.html?id=" + response.user_id;
 }
 
 // show errors to the user in a nice, async way

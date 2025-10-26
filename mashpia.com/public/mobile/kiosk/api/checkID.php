@@ -8,16 +8,14 @@ $response = [
 ];
 
 // parse the card number
-$card_number = mysql_real_escape_string( $_POST['card'] );
-// remove first number (3, not stored in DBS)
-$card_number = substr($card_number, 1);
+$serial = mysql_real_escape_string( $_POST['serial'] );
 
 // load the user from the database
 $user_query = mysql_query(
-    "SELECT * FROM users WHERE user_code = " . $card_number
+    "SELECT * FROM users WHERE user_serial = " . $serial
 );
 
-if ( mysql_num_rows( $user_query ) ) { // ID card exists
+if ( mysql_num_rows( $user_query ) ) { // serial number exists
     $user = mysql_fetch_assoc( $user_query );
     // make sure that the user is registered for the current year.
     if ( $user['user_registered'] > 0 ) {
@@ -37,7 +35,7 @@ if ( mysql_num_rows( $user_query ) ) { // ID card exists
         $response['body'] = "You are not registered for the current year.";
     }
 } else { // no user
-    $response['body'] = "Invalid ID Card";
+    $response['body'] = "Invalid Serial Number";
 }
 // render the response as JSON
 echo json_encode($response);
