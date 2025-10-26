@@ -130,7 +130,7 @@ class MedalReport extends Report {
     
     public function setMedalDetails($forShipping = false, $gender = '') {
         $sql = $this->createSql(true, $forShipping, $gender);
-    //    echo $sql . "<br />"; return;
+        // echo $sql . "<br />"; exit;
         $prevGrade = "";
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
