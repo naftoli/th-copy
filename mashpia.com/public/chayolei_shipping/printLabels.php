@@ -38,7 +38,7 @@ $schools = isset($data['schools']) ? $data['schools'] : [];
 $gender = isset($data['gender']) ? $data['gender'] : '';
 $shipment_number = isset($data['shipment_number']) ? $data['shipment_number'] : 0;
 
-if (in_array([61, 269], $schools)) {
+if (in_array(61, $schools) || in_array(269, $schools)) {
     header('Location: printLabels2.php');
     exit;
 }
