@@ -14,51 +14,30 @@ $("#cardForm").submit( function( event ){
 })
 
 Quagga.onDetected( function( data ) {
-    if ( !checkNumber( data.codeResult.code ) ) {
-        setTimeout( function() {
-            showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
-        }, 1000 );
-    }
+    checkNumber( data.codeResult.code )
 });
 
-Quagga.onProcessed( showScanningBox );
-
 // check the number as a user posts it
-function checkNumber( number ) {
-    $.post( 'api/checkID.php', { number }, login );
-}
-
-// login the user based on the response
-function login( response ) {
-    response = $.parseJSON( response );
-    if ( !response.success ) return showError( response.body );
-    // log the user in
-    localStorage.setItem( "login", "user" );
-    localStorage.setItem( "id", response.user_id );
-    localStorage.setItem( "kiosk", true );
-    // and redirect to the scanning page
-    location.href = "/mobile/store/scan.html?id=" + response.user_id;
-}
-
-// show errors to the user in a nice, async way
-function showError( error ) {
-    $('#errorModal .modal-body p').text( error );
-    $('#errorModal').modal('show');
-    return false;
-};
-
-// show a box when the user scans the code
-function showScanningBox( result ) {
-    var drawingCtx = Quagga.canvas.ctx.overlay,
-        drawingCanvas = Quagga.canvas.dom.overlay;
-
-    if ( result && result.box ) {
-        Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
-    }
-
-    if ( result && result.codeResult && result.codeResult.code) {
-        Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
-    }
+async function checkNumber( number ) {
+    const url = location.href.toString();
+    const pos = url.indexOf('=');
+    const user = url.substring(pos + 1);
+    const res = await fetch('ajax/checkCard.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            user: user,
+            card: number
+        })
+    })
+    const data = await res.json()
+    setTimeout( function() {
+        alert(data.msg ? data.msg : "Card scanned successfully")
+    }, 1000 );
+    $("#scanner").val('')
+    return true;
 }
 
 // setup the quaggajs scanner
@@ -66,7 +45,7 @@ function setupScanner( mode ){
     mode = mode ? mode : "environment"; // or user
     var config = {
         inputStream: {
-            name : "Live",  type : "LiveStream",    target: "#scanner",
+            name : "Live",  type : "LiveStream",    target: "#barcode_scanner",
             constraints: {
                 width: { min: 640 },
                 height: { min: 480 },

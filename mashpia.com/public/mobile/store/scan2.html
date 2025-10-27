@@ -575,10 +575,31 @@
 			cursor: pointer;
 		}
 
-		#camera video{
+		#scanner video{
             width:100%;
             max-width: 640px;
         }
+		
+		.scanner-background {
+			background-image: url("/mobile/img_new/scanner-2-color-red-svg.svg");
+			background-position: top;
+			background-repeat: no-repeat;
+			padding: 20%;
+			padding-right: 0px;
+		}
+
+		.scanner-background h2 {
+			font-size: 1.2em;
+		}
+
+		canvas.drawingBuffer, #barcode_scanner, video {
+			width: 100%;
+			height: 100%;
+			-o-object-fit: cover;
+			object-fit: cover;
+			z-index: 1;
+		}
+
 		.drawingBuffer {
 			display: none;
 		}
@@ -725,13 +746,8 @@
 </body>
 <script src="/mobile/js/js.cookie.js"></script>
 <script src="/mobile/js/authenticate.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+<script src="lib/quagga.min.js"></script>
 <script src="js/main.js"></script>
-<script>
-    Quagga.onDetected(function (result) {
-        alert("Detected barcode: " + result.codeResult.code);
-    });
-</script>
 <script>
 	if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 		$(".bug-report").hide()
@@ -771,36 +787,6 @@
 			// set the USER ID for bug reports
 			$(".bug-report img").data("user_id", user);
 		});
-
-		$("#scan").submit(async function (e) {
-			e.preventDefault();
-			$("#submit").attr('disabled', true);
-			const res = await processCard()
-			$("#submit").attr('disabled', false);
-		});
-
-		async function processCard() {
-			const card = $("#scanner").val();
-			if (card.length == 20) {
-				const res = await fetch('ajax/checkCard.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						user: user,
-						card: card
-					})
-				})
-				const data = await res.json()
-				if (data.msg) alert(data.msg)
-				$("#scanner").val('')
-				return true
-			} else {
-				alert(i18next.t('digitstw'));
-				return false
-			}
-		}
 	});
 </script>
 
