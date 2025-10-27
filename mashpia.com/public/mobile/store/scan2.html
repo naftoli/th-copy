@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en" dir="ltr">
 
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-	<title>Mobile Store</title>
+	<title class="i18n" data-key="Title">Mobile Store</title>
 	<style type="text/css">
 		@charset "UTF-8";
 
@@ -148,10 +148,6 @@
 			padding-left: 15px;
 			margin-right: auto;
 			margin-left: auto
-		}
-
-		input[type=file] {
-			display: block
 		}
 
 		.form-control {
@@ -313,7 +309,7 @@
 		}
 
 		.footer .span3 {
-			background-color: #4258a2
+			background-color: #4258a2;
 		}
 
 		.footer .span3 span {
@@ -410,8 +406,12 @@
 		}
 
 		p {
-			color: #555;
-			font-family: PTSans
+			color: #fff;
+			font-family: Exo
+		}
+
+		.hebrew {
+			font-family: Tkuma !important;
 		}
 	</style>
 	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
@@ -422,12 +422,77 @@
 	<noscript>
 		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
 			rel="stylesheet"></noscript>
-	<script>!function (e) { "use strict"; var t = function (t, n, r) { function o(e) { if (i.body) return e(); setTimeout(function () { o(e) }) } function a() { d.addEventListener && d.removeEventListener("load", a), d.media = r || "all" } var l, i = e.document, d = i.createElement("link"); if (n) l = n; else { var s = (i.body || i.getElementsByTagName("head")[0]).childNodes; l = s[s.length - 1] } var u = i.styleSheets; d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () { l.parentNode.insertBefore(d, n ? l : l.nextSibling) }); var f = function (e) { for (var t = d.href, n = u.length; n--;)if (u[n].href === t) return e(); setTimeout(function () { f(e) }) }; return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d }; "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t }("undefined" != typeof global ? global : this), function (e) { if (e.loadCSS) { var t = loadCSS.relpreload = {}; if (t.support = function () { try { return e.document.createElement("link").relList.supports("preload") } catch (e) { return !1 } }, t.poly = function () { for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) { var r = t[n]; "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null) } }, !t.support()) { t.poly(); var n = e.setInterval(t.poly, 300); e.addEventListener && e.addEventListener("load", function () { t.poly(), e.clearInterval(n) }), e.attachEvent && e.attachEvent("onload", function () { e.clearInterval(n) }) } } }(this);</script>
+	<script>
+		! function (e) {
+			"use strict";
+			var t = function (t, n, r) {
+				function o(e) {
+					if (i.body) return e();
+					setTimeout(function () {
+						o(e)
+					})
+				}
+
+				function a() {
+					d.addEventListener && d.removeEventListener("load", a), d.media = r || "all"
+				}
+				var l, i = e.document,
+					d = i.createElement("link");
+				if (n) l = n;
+				else {
+					var s = (i.body || i.getElementsByTagName("head")[0]).childNodes;
+					l = s[s.length - 1]
+				}
+				var u = i.styleSheets;
+				d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () {
+					l.parentNode.insertBefore(d, n ? l : l.nextSibling)
+				});
+				var f = function (e) {
+					for (var t = d.href, n = u.length; n--;)
+						if (u[n].href === t) return e();
+					setTimeout(function () {
+						f(e)
+					})
+				};
+				return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d
+			};
+			"undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
+		}("undefined" != typeof global ? global : this),
+			function (e) {
+				if (e.loadCSS) {
+					var t = loadCSS.relpreload = {};
+					if (t.support = function () {
+						try {
+							return e.document.createElement("link").relList.supports("preload")
+						} catch (e) {
+							return !1
+						}
+					}, t.poly = function () {
+						for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) {
+							var r = t[n];
+							"preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute(
+								"media")), r.rel = null)
+						}
+					}, !t.support()) {
+						t.poly();
+						var n = e.setInterval(t.poly, 300);
+						e.addEventListener && e.addEventListener("load", function () {
+							t.poly(), e.clearInterval(n)
+						}), e.attachEvent && e.attachEvent("onload", function () {
+							e.clearInterval(n)
+						})
+					}
+				}
+			}(this);
+	</script>
 	<script src="js/all.js" defer></script>
+	<!--    Bug Report code -->
+	<link rel="stylesheet" href="/mobile/css/bug_report.css" />
+	<script src="/mobile/js/bug_report.js?v=2.0" defer></script>
 	<style>
 		.innerImg {
 			/* Location of the image */
-			background-image: url(/kiosk/images/scan_cover.png);
+			background-image: url("../img_new/scanner-2-color-red-svg.svg");
 
 			/* Background image is centered vertically and horizontally at all times */
 			background-position: center center;
@@ -460,80 +525,145 @@
 			max-width: 200px;
 		}
 
+		.innerImg p {
+			width: 60%;
+			max-width: 330px;
+			padding-top: 100px;
+		}
+
+		#page-title {
+			font-size: 25px;
+			font-weight: 700;
+			color: #fff;
+			text-align: center;
+			width: auto;
+			display: block;
+			padding: 5px 0px;
+			transition: .25s;
+		}
+
 		.content {
 			max-width: 1024px;
 			margin: auto;
 		}
+
+		@media (min-width: 525px) {
+			#page-title {
+				font-size: 40px;
+				padding: 10px 0px;
+			}
+		}
+
+		#toggle-manual {
+			z-index: 100;
+			width: 75px;
+			height: 45px;
+			transition: .5s;
+			display: none;
+			padding: 10px;
+			background: #fff3cd;
+			border-radius: 15px;
+			text-align: center;
+		}
+		#toggle-manual img{
+			max-width: 100%;
+			max-height: 100%;   
+		}
+
+		#toggle-manual:hover{
+			transform: scale(1.3);
+			cursor: pointer;
+		}
+
+		#camera video{
+            width:100%;
+            max-width: 640px;
+        }
+		.drawingBuffer {
+			display: none;
+		}
 	</style>
+
+	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
+	<script src="../js/translation/store/scan/scan.js"></script>
+
 </head>
 
 <body class="page-goals">
 	<header class="navbar" id="top" role="banner">
-		<div class="container">
-			<div class="navbar-header">
-				<h1>Scanner</h1>
-			</div>
+		<div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+			<span id="page-title" class="i18n" data-key="pageTitle">SCANNER</span>
 		</div>
 	</header>
 
-	<div class="container">
-		<div class="content">
-			<div style="display: flex; background: #343862;">
-				<div class="span12 footer media-group subMenu" style="width: 100%;">
-					<a href="" id="storeMenu">
-						<div class="span3" style="width:50%">
-							<div class="menu-item">
-								<div class="span12">
-									<img src="store.gif">
-								</div>
-								<div class="span12">
-									<span>Store</span>
-								</div>
-							</div>
+	<div style="display: flex; background: #343862;">
+		<div class="span12 footer media-group subMenu" style="width: 100%;">
+			<a href="" id="storeMenu">
+				<div class="span3" style="width:33.3%">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="../img_new/store-color-white.svg">
 						</div>
-					</a>
-					<a href="" id="scanMenu">
-						<div class="span3 active" style="width:50%">
-							<div class="menu-item">
-								<div class="span12">
-									<img src="scanner.gif">
-								</div>
-								<div class="span12">
-									<span>Scanner</span>
-								</div>
-							</div>
-						</div>
-					</a>
-					<!-- <a href="" id="auctionMenu">
-							<div class="span3" style="width:33.3%">
-								<div class="menu-item">
-									<div class="span12">
-										<img src="/mobile/reg/icons/auction.gif">
-									</div>
-									<div class="span12">
-										<span>Auction</span>
-									</div>
-								</div>
-							</div>
-						</a> -->
-				</div>
-			</div>
-
-			<div class="personalImg"></div>
-
-			<div id="main" class="alert alert-warning">
-				<div align="center">
-					<!--<img class="img-responsive" src="/kiosk/images/scan_cover.png" /><br />-->
-					<div class="innerImg">
-						<br><br><br><br>
-						<p>Type in your achievement card barcode number here.</p>
-						<div class="form-group">
-							<input type="text" class="form-control" id="scanner" placeholder="Enter Digits">
-							<input type="file" accept="image/*" capture="camera">
+						<div class="span12">
+							<span class="i18n" data-key="Store">Store</span>
 						</div>
 					</div>
-					<button type="submit" id="scan" class="btn btn-danger">Submit</button>
 				</div>
+			</a>
+			<a href="" id="scanMenu">
+				<div class="span3 active" style="width:33.3%">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="../img_new/scanner-1-color-white.svg">
+						</div>
+						<div class="span12">
+							<span class="i18n" data-key="Scanner">Scanner</span>
+						</div>
+					</div>
+				</div>
+			</a>
+			<a href="" id="auctionMenu">
+				<div class="span3" style="width:33.3%">
+					<div class="menu-item">
+						<div class="span12">
+							<img src="../img_new/ticket-color-white.svg">
+						</div>
+						<div class="span12">
+							<span class="i18n" data-key="Auction">Auction</span>
+						</div>
+					</div>
+				</div>
+			</a>
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="content">
+
+			<div class="personalImg"></div>
+			<div class="bug-report">
+				<img src="/mobile/img_new/tools-color-white-svg.svg" data-category="Scanning" alt="bug-report" />
+			</div>
+
+			<div id="main" class="alert alert-warning">
+				<form id="scan">
+					<!--<img class="img-responsive" src="/kiosk/images/scan_cover.png" /><br />-->
+					<div class="manual" id="manual-scanner">
+						<div class="innerImg">
+							<p style="margin: auto;" class="i18n" data-key="BarcodeHere">Type in your achievement card
+								barcode number here.</p>
+							<div class="form-group">
+								<input type="text" class="form-control" data-key="EnterDigits" id="scanner"
+									placeholder="Enter Digits" autofocus style="margin: auto;">
+							</div>
+						</div>
+					</div>
+					<div id="barcode_scanner" class="viewport"></div>
+					<div id="toggle-manual" style="display: none;">
+						<img src="/mobile/img_new/scanner-2-color-red-svg.svg" alt="manual" />
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
@@ -543,39 +673,25 @@
 	<div style="position: fixed;width: 100%;bottom:0px; z-index: 1000; background: #4258a2;display:flex;">
 		<div class="span12 footer">
 			<div class="span3">
-				<a href="/mobile/reg/parent_detail.html" id="mainLink">
+				<a href="../reg/parent_detail.html" id="mainLink">
 					<div class="menu-item">
 						<div class="span12">
-							<img src="/mobile/images/menu1.png">
+							<img src="../img_new/boy-color-white.svg">
 						</div>
 						<div class="span12">
-							<span>Accounts</span>
+							<span class="i18n" data-key="Accounts">Accounts</span>
 						</div>
 					</div>
 				</a>
 			</div>
-			<!--
-				<div class="span3">
-					<a href="#" id="goalsLink">
-					<div class="menu-item">
-						<div class="span12">
-							<img src="images/menu3.png">
-						</div>
-						<div class="span12">
-							<span>Goals</span>
-						</div>
-					</div>
-					</a>
-				</div>
-			-->
 			<div class="span3">
 				<a href="#" id="missionsLink">
 					<div class="menu-item">
 						<div class="span12">
-							<img src="/mobile/images/menu2.png">
+							<img src="../img_new/square-check-color-white.svg">
 						</div>
 						<div class="span12">
-							<span>Missions</span>
+							<span class="i18n" data-key="Missions">Missions</span>
 						</div>
 					</div>
 				</a>
@@ -584,10 +700,10 @@
 				<a href="#" id="rankLink">
 					<div class="menu-item">
 						<div class="span12">
-							<img src="/mobile/images/menu4.png">
+							<img src="../img_new/achievements-color-white.svg">
 						</div>
 						<div class="span12">
-							<span>Achievements</span>
+							<span class="i18n" data-key="Achievements">Achievements</span>
 						</div>
 					</div>
 				</a>
@@ -596,10 +712,10 @@
 				<a href="#" id="storeLink">
 					<div class="menu-item">
 						<div class="span12">
-							<img src="/mobile/images/store-icon.png">
+							<img src="../img_new/cart-color-white.svg">
 						</div>
 						<div class="span12">
-							<span>Rewards</span>
+							<span class="i18n" data-key="Rewards">Rewards</span>
 						</div>
 					</div>
 				</a>
@@ -607,7 +723,20 @@
 		</div>
 	</div>
 </body>
+<script src="/mobile/js/js.cookie.js"></script>
 <script src="/mobile/js/authenticate.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+    Quagga.onDetected(function (result) {
+        alert("Detected barcode: " + result.codeResult.code);
+    });
+</script>
+<script>
+	if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
+		$(".bug-report").hide()
+	}
+</script>
 <script>
 	document.addEventListener("DOMContentLoaded", function (event) {
 		var url = location.href.toString();
@@ -619,39 +748,59 @@
 			$("#mainLink").attr('href', '/mobile/reg/medals/?id=' + user);
 		}
 
-		$("#missionsLink").attr('href', '/mobile/missionsNew.html?id=' + user);
-		$("#goalsLink").attr('href', '/mobile/goalsNew.html?id=' + user);
-		$("#rankLink").attr('href', '/mobile/reg/rank.html?id=' + user);
-		$("#storeLink").attr('href', '/mobile/store/index.html?id=' + user);
-		$("#storeMenu").attr('href', '/mobile/store/index.html?id=' + user);
-		$("#auctionMenu").attr('href', '/mobile/auction/index.html?id=' + user);
+		$("#missionsLink").attr('href', '../missionsNew.html?id=' + user);
+		$("#goalsLink").attr('href', '../goalsNew.html?id=' + user);
+		$("#rankLink").attr('href', '../reg/rank.html?id=' + user);
+		$("#storeLink").attr('href', 'index.html?id=' + user);
+		$("#storeMenu").attr('href', 'index.html?id=' + user);
+		$("#auctionMenu").attr('href', '../auction/index.html?id=' + user);
 
-		$.post('../reg/ajax/getPhoto.php', { user_id: user }, function (success) {
+		$.post('../reg/ajax/getPhoto.php', {
+			user_id: user
+		}, function (success) {
 			var info = $.parseJSON(success);
-			var html = '<a href="/mobile/reg/medals/index.html?id=' + user + '">';
-			if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info.mobile_pic + '">';
-			else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info.thumb + '">';
-			else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' + info.photo + '">';
+			var html = '<a href="../reg/medals/index.html?id=' + user + '">';
+			if (info.mobile_pic) html += '<img id="userImg" src="https://mashpia.com/mobile/reg/' + info
+				.mobile_pic + '">';
+			else if (info.thumb) html += '<img id="userImg" src="https://mashpia.com/thumbs/' + info
+				.thumb + '">';
+			else if (info.photo) html += '<img id="userImg" src="https://mashpia.com/file_view.php?id=' +
+				info.photo + '">';
 			html += '</a>';
 			$(".personalImg").append(html);
+			// set the USER ID for bug reports
+			$(".bug-report img").data("user_id", user);
 		});
 
-		$("#scan").click(function () {
-			var card = $("#scanner").val();
-			if (card.length == 20) {
-				$("#submit").attr('disabled', true);
-				$.post('ajax/checkCard.php', {
-					admin: Cookies.get("admin"),
-					user: user,
-					card: card
-				}, function (success) {
-					alert(success);
-					$("#scanner").val('');
-					$("#submit").attr('disabled', false);
-			} else {
-				alert('Card must be 20 digits.');
-			}
+		$("#scan").submit(async function (e) {
+			e.preventDefault();
+			$("#submit").attr('disabled', true);
+			const res = await processCard()
+			$("#submit").attr('disabled', false);
 		});
+
+		async function processCard() {
+			const card = $("#scanner").val();
+			if (card.length == 20) {
+				const res = await fetch('ajax/checkCard.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						user: user,
+						card: card
+					})
+				})
+				const data = await res.json()
+				if (data.msg) alert(data.msg)
+				$("#scanner").val('')
+				return true
+			} else {
+				alert(i18next.t('digitstw'));
+				return false
+			}
+		}
 	});
 </script>
 
