@@ -2,15 +2,15 @@
 setupScanner( "environment" );
 $("#toggle-manual").click( toggleManual );
 // detect the info on the scanner input
-$("#manual-scanner #scanner").keyup( function( event ) {
+$("#manual-scanner #scanner").keyup( async function( event ) {
     if ( event.target.value.length == 20 ) {
-        checkNumber( event.target.value );
+        await checkNumber( event.target.value );
     }
 });
 
-$("#cardForm").submit( function( event ){
+$("#cardForm").submit( async function( event ){
     event.preventDefault();
-    checkNumber( $('#scanner').val() )
+    await checkNumber( $('#scanner').val() )
 })
 
 Quagga.onDetected( async function( data ) {
