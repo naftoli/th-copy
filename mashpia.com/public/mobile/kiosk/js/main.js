@@ -3,23 +3,15 @@ setupScanner( "environment" );
 $("#toggle-manual").click( toggleManual );
 // detect the info on the scanner input
 $("#manual-scanner #scanner").keyup( function( event ) {
-    if ( event.target.value.length > 18 ) {
+    if ( event.target.value.length == 7 || event.target.value.length == 19 || event.target.value.length == 20 ) {
         checkNumber( event.target.value );
     }
-    // if ( event.target.value.match(/^3{1}\d{19}$/) ) {
-    //     checkNumber( event.target.value );
-    // } else if ( event.target.value.length === 20 ) {
-    //     showError( "Please enter a valid barcode" );
-    // } else if ( event.target.value.length > 20) {
-    //     event.target.value = event.target.value.slice(0, 20);
-    // }
 });
 
 $("#cardForm").submit( function( event ){
     event.preventDefault();
     checkNumber( $('#scanner').val() )
 })
-
 
 Quagga.onDetected( function( data ) {
     if ( !checkNumber( data.codeResult.code ) ) {
@@ -32,13 +24,8 @@ Quagga.onDetected( function( data ) {
 Quagga.onProcessed( showScanningBox );
 
 // check the number as a user posts it
-function checkNumber( serial ) {
-    $.post( 'api/checkID.php', { serial : serial }, login );
-    // if ( cardNumber.match(/^3{1}\d{19}$/) ) {
-    //     $.post( 'api/checkID.php', { card : cardNumber }, login );
-    // } else {
-    //     console.error( "Invalid. Detected: ", cardNumber );
-    // }
+function checkNumber( number ) {
+    $.post( 'api/checkID.php', { number }, login );
 }
 
 // login the user based on the response
