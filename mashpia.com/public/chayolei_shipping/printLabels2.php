@@ -91,7 +91,7 @@ foreach ($info as $cat => $more) {
 $sql = "
     SELECT 
         a.admin_id, a.first as parent_first, a.last as parent_last, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_postal, a.admin_country, 
-        u.user_id, u.first, u.last 
+        u.user_id, u.first, u.last, u.school_id
     FROM
         users u 
         join admin_auths aa on aa.id = u.user_id
@@ -117,7 +117,11 @@ foreach ($labels as $user_id => $items) {
     $parent_name = $user['parent_first'] . " " . $user['parent_last'];
     $parent_address = $user['admin_address1'] . " " . $user['admin_address2'] . "<br />" . $user['admin_city'] . ", " . $user['admin_state'] . " " . 
             $user['admin_postal'] . "<br />" . $user['admin_country'];
-    $all_info[$admin_id][$user_id][$name] = $items;
+    $all_info[$admin_id][$user_id] = [
+        'name' => $name,
+        'items' => $items,
+        'school_id' => $user['school_id']
+    ];
     $parent_info[$admin_id] = ['parent_name' => ucwords($parent_name), 'parent_address' => $parent_address];
 }
 // echo "<pre>"; print_r($all_info); echo "</pre>"; exit;
@@ -230,25 +234,27 @@ foreach ($labels as $user_id => $items) {
         $shipping_name = $parent_info[$admin_id]['parent_name'];
         $shipping_address = $parent_info[$admin_id]['parent_address'];
         echo "<div class='label'>";
-        echo "<span class='name'>" . $shipping_name . "<br />" . $shipping_address . "</span>";
+        echo "<span class='name'><b>" . $shipping_name . "</b><br />" . $shipping_address . "</span>";
         echo "</div>";
         checkForBreak();
-        foreach ($more as $user_id => $names) {
-            foreach ($names as $name => $items) {
-                echo "<div class='label'>";
-                echo "<span class='name'>" . $name . "</span><br />";
-                $numItems = 1;
-                foreach ($items as $item) {
-                    if ($numItems > 8) {
-                        echo "</div>";
-                        checkForBreak();
-                        echo "<div class='label'>";
-                        echo "<span class='name'>" . $name . " <strong>#2</strong></span><br />";
-                        $numItems = 1;
-                    }
-                    echo "<span class='medal'>" . $item . "</span>";
-                    $numItems++;
+        foreach ($more as $user_id => $details) {
+            $name = $details['name'];
+            $items = $details['items'];
+            $school_id = $details['school_id'];
+            $school = $school_id == 61 ? 'My Shliach' : 'Anash Kinder';
+            echo "<div class='label'>";
+            echo "<span class='name'>" . $name . " (" . $school . " - " . $admin_id . ")</span><br />";
+            $numItems = 1;
+            foreach ($items as $item) {
+                if ($numItems > 8) {
+                    echo "</div>";
+                    checkForBreak();
+                    echo "<div class='label'>";
+                    echo "<span class='name'>" . $name . " <strong>#2</strong> (" . $school . " - " . $admin_id . ")</span><br />";
+                    $numItems = 1;
                 }
+                echo "<span class='medal'>" . $item . "</span>";
+                $numItems++;
             }
             echo "</div>";
             checkForBreak();
