@@ -13,10 +13,8 @@ $("#cardForm").submit( function( event ){
     checkNumber( $('#scanner').val() )
 })
 
-Quagga.onDetected( function( data ) {
-    setTimeout( function() {
-        checkNumber( data.codeResult.code )
-    }, 1000 );
+Quagga.onDetected( async function( data ) {
+    await checkNumber( data.codeResult.code )
 });
 
 // check the number as a user posts it
