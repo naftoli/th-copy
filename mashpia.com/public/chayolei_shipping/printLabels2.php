@@ -256,8 +256,20 @@ ksort($parent_info);
                     echo "<span class='name'>" . $name . " <strong>#2</strong> (" . $school . "-" . $admin_id . ")</span><br />";
                     $numItems = 1;
                 }
-                echo "<span class='medal'>" . $item . "</span>";
-                $numItems++;
+                if (strpos($item, 'Rank Book') !== false && $numItems > 1) {
+                    $num = $numItems <= 8 ? 2 : 3;
+                    // create a new label
+                    echo "</div>";
+                    checkForBreak();
+                    echo "<div class='label'>";
+                    echo "<span class='name'>" . $name . " <strong>#" . $num . "</strong> (" . $school . "-" . $admin_id . ")</span><br />";
+                    $numItems = 1;
+                    echo $item;
+                    $numItems++;
+                } else {
+                    echo "<span class='medal'>" . $item . "</span>";
+                    $numItems++;
+                }
             }
             echo "</div>";
             checkForBreak();
