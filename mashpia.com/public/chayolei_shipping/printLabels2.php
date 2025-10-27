@@ -264,12 +264,10 @@ ksort($parent_info);
                     echo "<div class='label'>";
                     echo "<span class='name'>" . $name . " <strong>#" . $num . "</strong> (" . $school . "-" . $admin_id . ")</span><br />";
                     $numItems = 1;
-                    echo $item;
-                    $numItems++;
-                } else {
-                    echo "<span class='medal'>" . $item . "</span>";
-                    $numItems++;
                 }
+                if (strpos($item, 'Rank Book') !== false) echo $item;
+                else echo "<span class='medal'>" . $item . "</span>";
+                $numItems++;
             }
             echo "</div>";
             checkForBreak();
