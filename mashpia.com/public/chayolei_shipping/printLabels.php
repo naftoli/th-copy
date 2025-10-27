@@ -38,35 +38,19 @@ $schools = isset($data['schools']) ? $data['schools'] : [];
 $gender = isset($data['gender']) ? $data['gender'] : '';
 $shipment_number = isset($data['shipment_number']) ? $data['shipment_number'] : 0;
 
-// if ($type == 'hachayols' && in_array([61, 269], $schools)) {
-//     if (in_array(61, $schools) && in_array(269, $schools)) {
-//         header('Location: /myShliachHachayolLabels.php?ak=1');
-//     } else if (in_array(61, $schools)) {
-//         header('Location: /myShliachHachayolLabels.php');
-//     } else if (in_array(269, $schools)) {
-//         header('Location: /anashHachayolLabels.php');
-//     }
-//     exit;
-// }
-
+if (in_array([61, 269], $schools)) {
+    header('Location: printLabels2.php');
+    exit;
+}
 $info = [];
-// if ($all) {
-//     // show all schools for all items
-//     foreach ($items_chosen as $cat => $itemsPerCat) {
-//         $listOfItems = array_keys($itemsPerCat);
-//         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-//         $info[$cat] = $cs->$nameOfFunc($gender, 0, $listOfItems);
-//     }
-// } else {
-    foreach ($schools as $schoolID) {
-        foreach ($items_chosen as $cat => $itemsPerCat) {
-            $listOfItems = array_keys($itemsPerCat);
-            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            if (!isset($info[$cat])) $info[$cat] = [];
-            $info[$cat] += $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
-        }
+foreach ($schools as $schoolID) {
+    foreach ($items_chosen as $cat => $itemsPerCat) {
+        $listOfItems = array_keys($itemsPerCat);
+        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+        if (!isset($info[$cat])) $info[$cat] = [];
+        $info[$cat] += $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
     }
-// }
+}
 if (empty($info)) {
     echo "No data found for current selection";
     exit;
@@ -107,34 +91,18 @@ foreach ($info as $cat => $more) {
     }
 }
 
-if (in_array([61, 269], $schools)) {
-    $sql = "
-        SELECT 
-            a.admin_id, a.first as parent_first, a.last as parent_last, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_postal, a.admin_country, 
-            u.user_id, u.first, u.last 
-        FROM
-            admin_auths aa
-                JOIN
-            admins a ON a.admin_id = aa.admin_id
-                JOIN
-            users u ON u.user_id = aa.id
-        WHERE
-            aa.auth = 'user'
-            AND u.school_id IN (" . implode(',', $schools) . ")";
-} else {
-    // get school, school_address, class, first and last name from user_id
-    $sql = "
-        SELECT 
-            s.*, c.class_grade, c.class_sub, u.user_id, u.first, u.last
-        FROM
-            users u
-                JOIN
-            schools s USING (school_id)
-                JOIN
-            classes c ON c.class_id = u.class_id
-        WHERE
-            user_id IN (" . implode(',', array_keys($labels)) . ")";
-}
+// get school, school_address, class, first and last name from user_id
+$sql = "
+    SELECT 
+        s.*, c.class_grade, c.class_sub, u.user_id, u.first, u.last
+    FROM
+        users u
+            JOIN
+        schools s USING (school_id)
+            JOIN
+        classes c ON c.class_id = u.class_id
+    WHERE
+        user_id IN (" . implode(',', array_keys($labels)) . ")";
 $stmt = $MASHPIA_DB->query($sql);
 $rows = $stmt->fetchAll();
 $user_info = [];
