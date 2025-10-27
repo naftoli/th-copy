@@ -14,7 +14,9 @@ $("#cardForm").submit( function( event ){
 })
 
 Quagga.onDetected( function( data ) {
-    checkNumber( data.codeResult.code )
+    setTimeout( function() {
+        checkNumber( data.codeResult.code )
+    }, 1000 );
 });
 
 // check the number as a user posts it
