@@ -125,6 +125,8 @@ foreach ($labels as $user_id => $items) {
     ];
     $parent_info[$admin_id] = ['parent_name' => ucwords($parent_name), 'parent_address' => $parent_address];
 }
+ksort($all_info);
+ksort($parent_info);
 // echo "<pre>"; print_r($all_info); echo "</pre>"; exit;
 ?>
 <!DOCTYPE html>
