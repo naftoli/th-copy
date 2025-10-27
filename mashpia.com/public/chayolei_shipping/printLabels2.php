@@ -38,34 +38,14 @@ $schools = isset($data['schools']) ? $data['schools'] : [];
 $gender = isset($data['gender']) ? $data['gender'] : '';
 $shipment_number = isset($data['shipment_number']) ? $data['shipment_number'] : 0;
 
-// if ($type == 'hachayols' && in_array([61, 269], $schools)) {
-//     if (in_array(61, $schools) && in_array(269, $schools)) {
-//         header('Location: /myShliachHachayolLabels.php?ak=1');
-//     } else if (in_array(61, $schools)) {
-//         header('Location: /myShliachHachayolLabels.php');
-//     } else if (in_array(269, $schools)) {
-//         header('Location: /anashHachayolLabels.php');
-//     }
-//     exit;
-// }
-
 $info = [];
-// if ($all) {
-//     // show all schools for all items
-//     foreach ($items_chosen as $cat => $itemsPerCat) {
-//         $listOfItems = array_keys($itemsPerCat);
-//         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-//         $info[$cat] = $cs->$nameOfFunc($gender, 0, $listOfItems);
-//     }
-// } else {
-    foreach ($schools as $schoolID) {
-        foreach ($items_chosen as $cat => $itemsPerCat) {
-            $listOfItems = array_keys($itemsPerCat);
-            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-            $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
-        }
+foreach ($schools as $schoolID) {
+    foreach ($items_chosen as $cat => $itemsPerCat) {
+        $listOfItems = array_keys($itemsPerCat);
+        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
+        $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
     }
-// }
+}
 if (empty($info)) {
     echo "No data found for current selection";
     exit;
@@ -106,33 +86,18 @@ foreach ($info as $cat => $more) {
     }
 }
 
-if (in_array(61, $schools) || in_array(269, $schools)) {
-    // get parent first, last, address, city, state, postal, country from user_id
-    $sql = "
-        SELECT 
-            a.admin_id, a.first as parent_first, a.last as parent_last, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_postal, a.admin_country, 
-            u.user_id, u.first, u.last 
-        FROM
-            users u 
-            join admin_auths aa on aa.id = u.user_id
-            join admins a using (admin_id)
-        WHERE
-            aa.auth = 'user'
-            AND u.user_id IN (" . implode(',', array_keys($labels)) . ")";
-} else {
-    // get school, school_address, class, first and last name from user_id
-    $sql = "
-        SELECT 
-            s.*, c.class_grade, c.class_sub, u.user_id, u.first, u.last
-        FROM
-            users u
-                JOIN
-            schools s USING (school_id)
-                JOIN
-            classes c ON c.class_id = u.class_id
-        WHERE
-            user_id IN (" . implode(',', array_keys($labels)) . ")";
-}
+// get parent first, last, address, city, state, postal, country from user_id
+$sql = "
+    SELECT 
+        a.admin_id, a.first as parent_first, a.last as parent_last, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_postal, a.admin_country, 
+        u.user_id, u.first, u.last 
+    FROM
+        users u 
+        join admin_auths aa on aa.id = u.user_id
+        join admins a using (admin_id)
+    WHERE
+        aa.auth = 'user'
+        AND u.user_id IN (" . implode(',', array_keys($labels)) . ")";
 $stmt = $MASHPIA_DB->query($sql);
 $rows = $stmt->fetchAll();
 $user_info = [];
@@ -147,23 +112,12 @@ $parent_info = [];
 foreach ($labels as $user_id => $items) {
     $user = $user_info[$user_id];
     $name = $user['first'] . " " . $user['last'];
-    if (in_array(61, $schools) || in_array(269, $schools)) {
-        $admin_id = $user['admin_id'];
-        $parent_name = $user['parent_first'] . " " . $user['parent_last'];
-        $parent_address = $user['admin_address1'] . " " . $user['admin_address2'] . "<br />" . $user['admin_city'] . ", " . $user['admin_state'] . " " . 
-                $user['admin_postal'] . "<br />" . $user['admin_country'];
-        $all_info['parents'][$admin_id]['class'][$name] = $items;
-        $parent_info[$admin_id] = ['parent_name' => $parent_name, 'parent_address' => $parent_address];
-    } else {
-        $school_id = $user['school_id'];
-        $school = $user['school_name'];
-        $shipping_name = $user['shipping_first'] . " " . $user['shipping_last'];
-        $school_address = $user['shipping_address1'] . " " . $user['shipping_address2'] . "<br />" . $user['shipping_city'] . ", " . $user['shipping_state'] . " " . 
-                $user['shipping_postal'] . "<br />" . $user['shipping_country'];
-        $class = $user['class_grade'] . (empty($user['class_sub']) ? '' : "-" . $user['class_sub']);
-        $all_info['schools'][$school_id][$class][$name] = $items;
-        $school_info[$school_id] = ['school' => $school, 'shipping_name' => $shipping_name, 'school_address' => $school_address];
-    }
+    $admin_id = $user['admin_id'];
+    $parent_name = $user['parent_first'] . " " . $user['parent_last'];
+    $parent_address = $user['admin_address1'] . " " . $user['admin_address2'] . "<br />" . $user['admin_city'] . ", " . $user['admin_state'] . " " . 
+            $user['admin_postal'] . "<br />" . $user['admin_country'];
+    $all_info[$admin_id][$user_id][$name] = $items;
+    $parent_info[$admin_id] = ['parent_name' => $parent_name, 'parent_address' => $parent_address];
 }
 // echo "<pre>"; print_r($all_info); echo "</pre>"; exit;
 ?>
@@ -277,82 +231,32 @@ foreach ($labels as $user_id => $items) {
     $tempClass = '';
     $classChanged = false; //variable to find out when class changes
     $firstTime = true;
-    foreach ($all_info as $type => $more) {
-        foreach ($more as $id => $details) {
-            if ($tempID != $id) {
-                $idChanged = true;
-                $tempID = $id;
-            }
-            foreach ($details as $class => $names) {
-                if ($tempClass != $class) {
-                    $classChanged = true;
-                    $tempClass = $class;
-                }
-                foreach ($names as $name => $items) {
-                    $numItems = 1;
-                    if ($idChanged || $classChanged) {
-                        if ($type == 'parents') {
-                            $shipping_name = $parent_info[$id]['parent_name'];
-                            $shipping_address = $parent_info[$id]['parent_address'];
-                        } else {
-                            $shipping_name = $school_info[$id]['shipping_name'];
-                            $shipping_address = $school_info[$id]['school_address'];
-                        }
-                        if ($idChanged) {
-                            if (!$firstTime) {
-                                echo "<div class='page-break'></div><div class='topSpace'></div>";
-                                $i = 1;
-                            }
-                            else $firstTime = false;
-                            echo "<div class='label'>";
-                            echo "<span class='name'>";
-                            if ($type == 'schools') {
-                                echo "<b>" . $school . "</b><br />";
-                            } 
-                            echo "<br />" . $shipping_name . "<br />" . $shipping_address . "</span>";
-                            $idChanged = false;
-                        } else if ($classChanged) {
-                            echo "<div class='label'>";
-                            echo "<span class='name'><b>" . $school . "</b><br />" . $grade . "</span>";
-                            $classChanged = false;
-                        }
-                        //put current user info on new label so that we don't lose this user
+    foreach ($all_info as $admin_id => $more) {
+        $shipping_name = $parent_info[$admin_id]['parent_name'];
+        $shipping_address = $parent_info[$admin_id]['parent_address'];
+        echo "<div class='label'>";
+        echo "<span class='name'>" . $shipping_name . "<br />" . $shipping_address . "</span>";
+        echo "</div>";
+        checkForBreak();
+        foreach ($more as $user_id => $names) {
+            foreach ($names as $name => $items) {
+                echo "<div class='label'>";
+                echo "<span class='name'>" . $name . "</span><br />";
+                foreach ($items as $item) {
+                    if ($numItems > 8) {
                         echo "</div>";
                         checkForBreak();
                         echo "<div class='label'>";
-                        echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ")</span><br />";
-                        foreach ($items as $item) {
-                            if ($numItems > 8) {
-                                echo "</div>";
-                                checkForBreak();
-                                echo "<div class='label'>";
-                                echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ") <strong>#2</strong></span><br />";
-                                $numItems = 1;
-                            }
-                            echo "<span class='medal'>" . $item . "</span>";
-                            $numItems++;
-                            $totalnumItems++;
-                        }
-                    } else {
-                        echo "<div class='label'>";
-                        echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ")</span><br />";
-                        foreach ($items as $item) {
-                            if ($numItems > 8) {
-                                echo "</div>";
-                                checkForBreak();
-                                echo "<div class='label'>";
-                                echo "<span class='name'>" . $school . "<br />" . $name . " (Grade: " . $grade . ") <strong>#2</strong></span><br />";
-                                $numItems = 1;
-                            }
-                            echo "<span class='medal'>" . $item . "</span>";
-                            $numItems++;
-                            $totalnumItems++;
-                        }
+                        echo "<span class='name'>" . $name . " <strong>#2</strong></span><br />";
+                        $numItems = 1;
                     }
-                    echo "</div>";
-                    checkForBreak();
+                    echo "<span class='medal'>" . $item . "</span>";
+                    $numItems++;
+                    $totalnumItems++;
                 }
             }
+            echo "</div>";
+            checkForBreak();
         }
     }
     ?>
