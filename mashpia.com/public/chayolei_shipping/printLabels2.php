@@ -223,14 +223,8 @@ foreach ($labels as $user_id => $items) {
 <div id="report_div" name="report_div">
 <div class='topSpace'></div>
     <?php
-    $totalnumItems = 0;
     $i = 1; //counter for columns
     $rows = 1; //counter for rows
-    $tempID = '';
-    $idChanged = false; //variable to find out when id changes
-    $tempClass = '';
-    $classChanged = false; //variable to find out when class changes
-    $firstTime = true;
     foreach ($all_info as $admin_id => $more) {
         $shipping_name = $parent_info[$admin_id]['parent_name'];
         $shipping_address = $parent_info[$admin_id]['parent_address'];
@@ -242,6 +236,8 @@ foreach ($labels as $user_id => $items) {
             foreach ($names as $name => $items) {
                 echo "<div class='label'>";
                 echo "<span class='name'>" . $name . "</span><br />";
+                checkForBreak();
+                $numItems = 1;
                 foreach ($items as $item) {
                     if ($numItems > 8) {
                         echo "</div>";
@@ -252,7 +248,6 @@ foreach ($labels as $user_id => $items) {
                     }
                     echo "<span class='medal'>" . $item . "</span>";
                     $numItems++;
-                    $totalnumItems++;
                 }
             }
             echo "</div>";
