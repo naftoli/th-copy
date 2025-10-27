@@ -12,17 +12,22 @@ $number = mysql_real_escape_string( $_POST['number'] );
 
 // load the user from the database
 // make sure the number starts with a 3 or a 7
-if ( substr( $number, 0, 1 ) != '3' && substr( $number, 0, 1 ) != '7' ) {
-    $response['body'] = "Invalid Number";
+// if ( substr( $number, 0, 1 ) != '3' && substr( $number, 0, 1 ) != '7' ) {
+//     $response['body'] = "Invalid Number";
+//     echo json_encode($response);
+//     exit;
+// }
+if ( substr( $number, 0, 1 ) != '3' ) {
+    $response['body'] = "Invalid Number, must start with a 3";
     echo json_encode($response);
     exit;
 }
-if ( strlen( $number ) == 7 ) {
-    $sql = "SELECT * FROM users WHERE user_serial = " . $number;
-} else {
+// if ( strlen( $number ) == 7 ) {
+//     $sql = "SELECT * FROM users WHERE user_serial = " . $number;
+// } else {
     $number = substr( $number, 1 );
     $sql = "SELECT * FROM users WHERE user_code = " . $number;
-}
+// }
 $user_query = mysql_query( $sql );
 
 if ( mysql_num_rows( $user_query ) ) { // user exists

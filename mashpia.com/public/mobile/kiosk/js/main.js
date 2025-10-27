@@ -3,7 +3,10 @@ setupScanner( "environment" );
 $("#toggle-manual").click( toggleManual );
 // detect the info on the scanner input
 $("#manual-scanner #scanner").keyup( function( event ) {
-    if ( event.target.value.length == 7 || event.target.value.length == 19 || event.target.value.length == 20 ) {
+    // if ( event.target.value.length == 7 || event.target.value.length == 19 || event.target.value.length == 20 ) {
+    //     checkNumber( event.target.value );
+    // }
+    if ( event.target.value.length == 20 ) {
         checkNumber( event.target.value );
     }
 });
