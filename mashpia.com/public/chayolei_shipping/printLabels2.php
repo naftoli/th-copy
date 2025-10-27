@@ -178,7 +178,7 @@ foreach ($labels as $user_id => $items) {
 
         @media screen {
             #report_div {
-                /* display: none; */
+                display: none;
             }
 
             .no-print {
