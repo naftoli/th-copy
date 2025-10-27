@@ -111,6 +111,7 @@ $all_info = [];
 $school_info = [];
 $parent_info = [];
 foreach ($labels as $user_id => $items) {
+    if (!isset($user_info[$user_id])) continue;
     $user = $user_info[$user_id];
     $name = ucwords($user['first'] . " " . $user['last']);
     $admin_id = $user['admin_id'];
@@ -234,14 +235,14 @@ foreach ($labels as $user_id => $items) {
         $shipping_name = $parent_info[$admin_id]['parent_name'];
         $shipping_address = $parent_info[$admin_id]['parent_address'];
         echo "<div class='label'>";
-        echo "<span class='name'><b>" . $shipping_name . "</b><br />" . $shipping_address . "</span>";
+        echo "<span class='name'><b>" . $shipping_name . " (" . $admin_id . ")</b><br />" . $shipping_address . "</span>";
         echo "</div>";
         checkForBreak();
         foreach ($more as $user_id => $details) {
             $name = $details['name'];
             $items = $details['items'];
             $school_id = $details['school_id'];
-            $school = $school_id == 61 ? 'My Shliach' : 'Anash Kinder';
+            $school = $school_id == 61 ? 'MS' : 'AK';
             echo "<div class='label'>";
             echo "<span class='name'>" . $name . " (" . $school . " - " . $admin_id . ")</span><br />";
             $numItems = 1;
