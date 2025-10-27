@@ -244,14 +244,14 @@ foreach ($labels as $user_id => $items) {
             $school_id = $details['school_id'];
             $school = $school_id == 61 ? 'MS' : 'AK';
             echo "<div class='label'>";
-            echo "<span class='name'>" . $name . " (" . $school . " - " . $admin_id . ")</span><br />";
+            echo "<span class='name'>" . $name . " (" . $school . "-" . $admin_id . ")</span><br />";
             $numItems = 1;
             foreach ($items as $item) {
                 if ($numItems > 8) {
                     echo "</div>";
                     checkForBreak();
                     echo "<div class='label'>";
-                    echo "<span class='name'>" . $name . " <strong>#2</strong> (" . $school . " - " . $admin_id . ")</span><br />";
+                    echo "<span class='name'>" . $name . " <strong>#2</strong> (" . $school . "-" . $admin_id . ")</span><br />";
                     $numItems = 1;
                 }
                 echo "<span class='medal'>" . $item . "</span>";
