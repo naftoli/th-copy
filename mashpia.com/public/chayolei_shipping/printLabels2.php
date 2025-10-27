@@ -43,7 +43,8 @@ foreach ($schools as $schoolID) {
     foreach ($items_chosen as $cat => $itemsPerCat) {
         $listOfItems = array_keys($itemsPerCat);
         $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        $info[$cat] = $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
+        if (!isset($info[$cat])) $info[$cat] = [];
+        $info[$cat] += $cs->$nameOfFunc($gender, $schoolID, $listOfItems);
     }
 }
 if (empty($info)) {
@@ -111,13 +112,13 @@ $school_info = [];
 $parent_info = [];
 foreach ($labels as $user_id => $items) {
     $user = $user_info[$user_id];
-    $name = $user['first'] . " " . $user['last'];
+    $name = ucwords($user['first'] . " " . $user['last']);
     $admin_id = $user['admin_id'];
     $parent_name = $user['parent_first'] . " " . $user['parent_last'];
     $parent_address = $user['admin_address1'] . " " . $user['admin_address2'] . "<br />" . $user['admin_city'] . ", " . $user['admin_state'] . " " . 
             $user['admin_postal'] . "<br />" . $user['admin_country'];
     $all_info[$admin_id][$user_id][$name] = $items;
-    $parent_info[$admin_id] = ['parent_name' => $parent_name, 'parent_address' => $parent_address];
+    $parent_info[$admin_id] = ['parent_name' => ucwords($parent_name), 'parent_address' => $parent_address];
 }
 // echo "<pre>"; print_r($all_info); echo "</pre>"; exit;
 ?>
@@ -177,7 +178,7 @@ foreach ($labels as $user_id => $items) {
 
         @media screen {
             #report_div {
-                display: none;
+                /* display: none; */
             }
 
             .no-print {
@@ -236,7 +237,6 @@ foreach ($labels as $user_id => $items) {
             foreach ($names as $name => $items) {
                 echo "<div class='label'>";
                 echo "<span class='name'>" . $name . "</span><br />";
-                checkForBreak();
                 $numItems = 1;
                 foreach ($items as $item) {
                     if ($numItems > 8) {
