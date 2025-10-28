@@ -1178,7 +1178,6 @@ class ShabbosMevorchim
                         AND user_registered > 0 
                         AND ut.subject_id = 1 
                         ORDER BY last, first";
-            echo $sqlUsers . "<br />";
             $stmt = $this->db->query($sqlUsers);
             $users[$id] = $stmt->fetchAll();
         }
@@ -1199,9 +1198,9 @@ class ShabbosMevorchim
                 $this->doneQuotas[$key][$sid] = 0;
                 $this->participated[$key][$sid] = 0;
                 // for each class
-                foreach ($users as $class => $info) {
+                foreach ($users as $class => $details) {
                     // for each user in the class.
-                    foreach ($info as $user) {
+                    foreach ($details as $user) {
                         if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
                             $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
                         else {
@@ -1235,7 +1234,7 @@ class ShabbosMevorchim
                             $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
                         }
 
-                        if ($sid && $total > 0) {
+                        if ($total > 0) {
                             $this->participated[$key][$sid]++;
                             if ($total >= $this->studentResults[$date][$class][$user['user_id']][$key]) {
                                 $this->doneQuotas[$key][$sid]++;
