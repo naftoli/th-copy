@@ -1170,6 +1170,12 @@ class ShabbosMevorchim
         if (!$sid) $sid = $this->school_id;
         if (empty($this->classes)) $this->setClasses($sid);
 
+        // Initialize counters for this school to ensure fresh start
+        foreach ($this->tasks as $key => $task) {
+            $this->doneQuotas[$key][$sid] = 0;
+            $this->participated[$key][$sid] = 0;
+        }
+
         $users = array();
         foreach ($this->classes as $id => $info) {
             $sqlUsers = "SELECT u.*, ut.track_id, ut.level FROM users u 
@@ -1195,10 +1201,6 @@ class ShabbosMevorchim
             foreach ($this->tasks as $key => $task) {
                 // skip task #2
                 if ($forScreen && $key == 'Minutes') continue;
-                
-                // Initialize counters for this school and task
-                if (!isset($this->doneQuotas[$key][$sid])) $this->doneQuotas[$key][$sid] = 0;
-                if (!isset($this->participated[$key][$sid])) $this->participated[$key][$sid] = 0;
                 
                 // for each class
                 foreach ($users as $class => $details) {
