@@ -1172,13 +1172,14 @@ class ShabbosMevorchim
 
         $users = array();
         foreach ($this->classes as $id => $info) {
-            $stmt = $this->db->query("
-                        SELECT u.*, ut.track_id, ut.level FROM users u 
+            $sqlUsers = "SELECT u.*, ut.track_id, ut.level FROM users u 
                         join user_tracks ut using (user_id) 
                         WHERE class_id = $id 
                         AND user_registered > 0 
                         AND ut.subject_id = 1 
-                        ORDER BY last, first");
+                        ORDER BY last, first";
+            echo $sqlUsers . "<br />";
+            $stmt = $this->db->query($sqlUsers);
             $users[$id] = $stmt->fetchAll();
         }
 
@@ -1187,7 +1188,7 @@ class ShabbosMevorchim
                 $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
             }
         }
-        echo $sid . "<br />"; 
+ 
         // cache results
         $cached = [];
         foreach ($dates as $date) {
