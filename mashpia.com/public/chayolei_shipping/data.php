@@ -74,7 +74,7 @@ function build_items() {
 function build_dates($id) {
     require_once __DIR__ . '/../class.report.php';
     $r = new Report();
-    $selection = $r->getHtmlSelect(0, $id);
+    $selection = $r->getHtmlSelect(0, $id, true);
     return $selection;
 }
 
