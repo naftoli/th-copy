@@ -1187,7 +1187,7 @@ class ShabbosMevorchim
                 $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
             }
         }
-
+        echo $sid . "<br />"; 
         // cache results
         $cached = [];
         foreach ($dates as $date) {
