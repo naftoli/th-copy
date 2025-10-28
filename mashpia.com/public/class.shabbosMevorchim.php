@@ -1195,8 +1195,11 @@ class ShabbosMevorchim
             foreach ($this->tasks as $key => $task) {
                 // skip task #2
                 if ($forScreen && $key == 'Minutes') continue;
-                $this->doneQuotas[$key][$sid] = 0;
-                $this->participated[$key][$sid] = 0;
+                
+                // Initialize counters for this school and task
+                if (!isset($this->doneQuotas[$key][$sid])) $this->doneQuotas[$key][$sid] = 0;
+                if (!isset($this->participated[$key][$sid])) $this->participated[$key][$sid] = 0;
+                
                 // for each class
                 foreach ($users as $class => $details) {
                     // for each user in the class.
