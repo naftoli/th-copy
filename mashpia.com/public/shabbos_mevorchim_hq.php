@@ -123,8 +123,9 @@ if (isset($_POST['submit']) || isset($_GET['date'])) {
 		$schools = $sm->getSchools();
 		foreach ($schools as $sid => $school) {
             $sm->setStudentResults($sid, $date);
+            break;
         }
-        $sm->generateHQReport();
+        $sm->generateHQReport(true);
         ?>
         </div>
     </div>

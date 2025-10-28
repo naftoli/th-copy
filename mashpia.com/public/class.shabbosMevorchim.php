@@ -1602,13 +1602,18 @@ class ShabbosMevorchim
 
     public function generateHQReport($debug = false)
     {
+        echo "<pre>"; 
+        print_r($this->armyResultsOrdered);
+        print_r($this->doneQuotas);
+        print_r($this->totalUsers);
+        echo "</pre>"; 
         foreach ($this->armyResultsOrdered as $key => $results) {
             if ($key == 'Minutes') continue;
 
             // figure out order based on percent of done quotas
             $ordered = array();
             foreach ($results as $id => $total) {
-                $quota = round(($this->doneQuotas[$key][$id] / $this->totalUsers[$id]) * 100.00, 2);
+                $quota = round(($this->doneQuotas[$key][$id] / $this->totalUsers[$id]) * 100, 2);
                 $ordered[$id] = $quota;
             }
             arsort($ordered);
@@ -1616,7 +1621,6 @@ class ShabbosMevorchim
                 echo "<pre>";
                 print_r($ordered);
                 echo "</pre>";
-                exit;
             }
 
             echo "<h3>" . $key . "</h3>";
@@ -1642,7 +1646,7 @@ class ShabbosMevorchim
                   echo "<tr><td>" . $this->schools[$id] . "</td><td>" . $this->totalUsers[$id] . "</td><td>" .
                       $goal . "</td><td>" . $done . " <span class='percent'>(" .
                       $this->armyResultsOrdered[$key][$id] . "%)</span></td><td>" .
-                      round(($this->participated[$key][$id] / $this->totalUsers[$id]) * 100.00) . "%</td><td>" .
+                      round(($this->participated[$key][$id] / $this->totalUsers[$id]) * 100) . "%</td><td>" .
                       $quota . "%</td><td>" .
                       round($done / $this->totalUsers[$id]) . "</td><td>" .
                       round($minutesDone / $this->totalUsers[$id]) . "</td></tr>";;
