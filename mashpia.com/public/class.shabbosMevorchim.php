@@ -1231,13 +1231,14 @@ class ShabbosMevorchim
                                 $total = $row2['total'];
                                 $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
                             } else {
+                                $total = 0;
                                 $this->studentDoneResults[$date][$class][$user['user_id']][$key] = 0;
                             }
                         }
 
                         if ($sid && $total > 0) {
                             $this->participated[$key][$sid]++;
-                            if ($total >= $row1['quantity']) {
+                            if ($total >= $this->studentResults[$date][$class][$user['user_id']][$key]) {
                                 $this->doneQuotas[$key][$sid]++;
                             }
                         }
