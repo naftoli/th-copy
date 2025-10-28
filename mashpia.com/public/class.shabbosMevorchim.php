@@ -1221,7 +1221,6 @@ class ShabbosMevorchim
                         $total = 0;
                         if ($rowBackup['total'] > 0 || $backupRan) { // or we are after the date of the backup.
                             if (isset($rowBackup['total'])) $total = $rowBackup['total'];
-                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
                         } else {
                             if (
                                 isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
@@ -1231,12 +1230,12 @@ class ShabbosMevorchim
                                 $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
                                 if (isset($row2['total'])) $total = $row2['total'];
                             }
-                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
                         }
+                        $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
 
                         if ($total > 0) {
                             $this->participated[$key][$sid]++;
-                            if ($total >= $this->studentResults[$date][$class][$user['user_id']][$key]) {
+                            if (intval($total) >= intval($this->studentResults[$date][$class][$user['user_id']][$key])) {
                                 $this->doneQuotas[$key][$sid]++;
                             }
                         }
@@ -1244,7 +1243,6 @@ class ShabbosMevorchim
                 }
             }
         }
-        echo "<pre>"; print_r($this->participated); print_r($this->doneQuotas); echo "</pre>"; 
     }
 
     public function getUsers() 
