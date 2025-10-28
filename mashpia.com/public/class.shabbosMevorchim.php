@@ -1244,6 +1244,7 @@ class ShabbosMevorchim
                 }
             }
         }
+        echo "<pre>"; print_r($this->participated); print_r($this->doneQuotas); echo "</pre>"; exit;
     }
 
     public function getUsers() 
