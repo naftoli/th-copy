@@ -1642,7 +1642,7 @@ class ShabbosMevorchim
                   echo "<tr><td>" . $this->schools[$id] . "</td><td>" . $this->totalUsers[$id] . "</td><td>" .
                       $goal . "</td><td>" . $done . " <span class='percent'>(" .
                       $this->armyResultsOrdered[$key][$id] . "%)</span></td><td>" .
-                      round($this->participated[$key][$id] / $this->totalUsers[$id] * 100.00) . "%</td><td>" .
+                      round(($this->participated[$key][$id] / $this->totalUsers[$id]) * 100.00) . "%</td><td>" .
                       $quota . "%</td><td>" .
                       round($done / $this->totalUsers[$id]) . "</td><td>" .
                       round($minutesDone / $this->totalUsers[$id]) . "</td></tr>";;
