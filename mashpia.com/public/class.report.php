@@ -56,7 +56,7 @@ class Report extends ReportBasic {
         return $this->dates;
     }
 
-    public function getHtmlSelect($join = 0, $id = 'date_selection') {
+    public function getHtmlSelect($join = 0, $id = 'date_selection', $multiple = false) {
         $first = 0;
         if ($join) {
             // change dates
@@ -66,7 +66,10 @@ class Report extends ReportBasic {
 
         $reportDates = $this->getReportDates();
 
-        $str = "<select name='$id' id='$id'>";
+        $name = $multiple ? $id . '[]' : $id;
+        $str = "<select id='$id' name='$name'";
+        if ($multiple) $str .= " multiple";
+        $str .= ">";
         $num = count($this->dates)-1;
 
         // figure out where to start the loop from

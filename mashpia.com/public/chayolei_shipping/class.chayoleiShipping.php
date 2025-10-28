@@ -248,7 +248,14 @@ class ChayoleiShipping
         if (!empty($date_limit)) {
             $dates = explode(':', $date_limit);
         } else {
-            $dates = explode(':', $_POST['medals_dates']);
+            if (is_array($_POST['medals_dates'])) {
+                $datesArr = $_POST['medals_dates'];
+                $dates_start = explode(':', $datesArr[0]);
+                $dates_end = explode(':', $datesArr[count($datesArr)-1]);
+                $dates = [$dates_start[0], $dates_end[1]];
+            } else {
+                $dates = explode(':', $_POST['medals_dates']);
+            }
         } 
         // echo "<pre>"; print_r($dates); echo "</pre>"; exit;
         $m->overrideDates($dates[0], $dates[1]);
@@ -317,7 +324,14 @@ class ChayoleiShipping
     public function getRanks(string $gender, int $school, array $items) {
         $medals = [];
         $books = [];
-        $dates = explode(':', $_POST['ranks_dates']);
+        if (is_array($_POST['ranks_dates'])) {
+            $datesArr = $_POST['ranks_dates'];
+            $dates_start = explode(':', $datesArr[0]);
+            $dates_end = explode(':', $datesArr[count($datesArr)-1]);
+            $dates = [$dates_start[0], $dates_end[1]];
+        } else {
+            $dates = explode(':', $_POST['ranks_dates']);
+        }
         if (in_array('rank medals', $items)) {
             $medals = $this->getRankMedals($gender, $school, $dates);
         }
