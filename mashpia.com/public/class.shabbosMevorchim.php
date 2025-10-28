@@ -1603,7 +1603,6 @@ class ShabbosMevorchim
     public function generateHQReport($debug = false)
     {
         echo "<pre>"; 
-        print_r($this->armyResultsOrdered);
         print_r($this->doneQuotas);
         print_r($this->totalUsers);
         echo "</pre>"; 
