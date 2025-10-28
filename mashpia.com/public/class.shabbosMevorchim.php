@@ -1168,7 +1168,8 @@ class ShabbosMevorchim
         $stmtBackup = $this->db->prepare($sqlBackup);
 
         if (!$sid) $sid = $this->school_id;
-        if (empty($this->classes)) $this->setClasses($sid);
+        // Always set classes for the current school to ensure fresh data
+        $this->setClasses($sid);
 
         // Initialize counters for this school to ensure fresh start
         foreach ($this->tasks as $key => $task) {
