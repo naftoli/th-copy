@@ -1174,6 +1174,9 @@ class ShabbosMevorchim
         foreach ($this->tasks as $key => $task) {
             $this->doneQuotas[$key][$sid] = 0;
             $this->participated[$key][$sid] = 0;
+            // Initialize tracking arrays to prevent double counting
+            $this->countedUsers[$key][$sid] = array();
+            $this->countedQuotas[$key][$sid] = array();
         }
 
         $users = array();
@@ -1239,9 +1242,17 @@ class ShabbosMevorchim
                         $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
 
                         if ($total > 0) {
-                            $this->participated[$key][$sid]++;
+                            // Only count each user once per school per task
+                            if (!isset($this->countedUsers[$key][$sid][$user['user_id']])) {
+                                $this->participated[$key][$sid]++;
+                                $this->countedUsers[$key][$sid][$user['user_id']] = true;
+                            }
+                            
                             if (intval($total) >= intval($this->studentResults[$date][$class][$user['user_id']][$key])) {
-                                $this->doneQuotas[$key][$sid]++;
+                                if (!isset($this->countedQuotas[$key][$sid][$user['user_id']])) {
+                                    $this->doneQuotas[$key][$sid]++;
+                                    $this->countedQuotas[$key][$sid][$user['user_id']] = true;
+                                }
                             }
                         }
                     }
