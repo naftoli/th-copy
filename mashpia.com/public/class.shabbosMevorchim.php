@@ -1608,7 +1608,7 @@ class ShabbosMevorchim
             // figure out order based on percent of done quotas
             $ordered = array();
             foreach ($results as $id => $total) {
-                $quota = round($this->doneQuotas[$key][$id] / $this->totalUsers[$id] * 100.00, 2);
+                $quota = round(($this->doneQuotas[$key][$id] / $this->totalUsers[$id]) * 100.00, 2);
                 $ordered[$id] = $quota;
             }
             arsort($ordered);
