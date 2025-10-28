@@ -1218,9 +1218,10 @@ class ShabbosMevorchim
                         // check if we have run the backup for this date
                         $backupRan = $this->getBackupRan($date);
 
+                        $total = 0;
                         if ($rowBackup['total'] > 0 || $backupRan) { // or we are after the date of the backup.
-                            $total = $rowBackup['total'] > 0 ? $rowBackup['total'] : 0;
-                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $rowBackup['total'] > 0 ? $rowBackup['total'] : 0;
+                            if (isset($rowBackup['total'])) $total = $rowBackup['total'];
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
                         } else {
                             if (
                                 isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
@@ -1228,12 +1229,9 @@ class ShabbosMevorchim
                             ) {
                                 $stmt2->execute(array($user['user_id'], $date, $date, $task));
                                 $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-                                $total = $row2['total'];
-                                $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $row2['total'];
-                            } else {
-                                $total = 0;
-                                $this->studentDoneResults[$date][$class][$user['user_id']][$key] = 0;
+                                if (isset($row2['total'])) $total = $row2['total'];
                             }
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
                         }
 
                         if ($sid && $total > 0) {
