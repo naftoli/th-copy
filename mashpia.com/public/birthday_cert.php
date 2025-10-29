@@ -1,9 +1,8 @@
 <?
 require 'db.php';
-require 'class.globalSettings.php';
-$jYear = GlobalSettings::getCurrentYear();
+require 'class.birthdayEn.php';
 
-//echo "<pre>"; print_r( $_POST ); echo "</pre>";
+// echo "<pre>"; print_r( $_POST ); echo "</pre>";
 $parshaDates = array();
 if (isset($_GET['school'])) {
     $school_id = $_GET['school'];
@@ -22,20 +21,22 @@ if (isset($_GET['school'])) {
 
     // check if parshas are parsha end dates (jd format) or actual dates (yyyy-mm-dd format)
     $dateRange = [];
+    $parshasChosen = true;
     foreach ($parshas as $key => $parsha) {
       if (strpos($parsha, '-') !== false) {
+        if ($parshasChosen) $parshasChosen = false;
         $date = explode('-', $parsha);
         $jd = gregoriantojd($date[1], $date[2], $date[0]);
         if ($key == 0) {
           $dateRange['start'] = $jd;
-        } else {
+        } else if ($key == count($parshas) - 1) {
           $dateRange['end'] = $jd;
         }
       } 
     }
     
     $numDates = 0;
-    if (! empty($dateRange)) {
+    if (! $parshasChosen) {
       $sqlReport = "select start, end, name from parshos where start >= " . ($dateRange['start'] + 6) . " and end <= " . ($dateRange['end'] + 6);
     } else {
       $sqlReport = "select start, end, name from parshos where end in (" . implode(',', $parshas) . ")";
@@ -46,6 +47,14 @@ if (isset($_GET['school'])) {
         $dates['end'][] = $rowReport['end'];
         $parshaDates[$rowReport['start']] = $rowReport['name'];
         $numDates++;
+    }
+
+    if (! $parshasChosen) {
+      $start = $dateRange['start'];
+      $end = $dateRange['end'];
+    } else {
+      $start = $dates['start'][0];
+      $end = $dates['end'][count($dates['end']) - 1];
     }
 }
 
@@ -88,54 +97,35 @@ if (isset($school_id)) {
     $sql .= "order by s.school_name, c.class_grade, c.class_sub, u.last, u.first";
     //echo $sql;
 }
-//echo $sql; exit;
+// echo $sql; exit;
 
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     //check users dob to see if within dates range
-    //get month and day of hebrew birthday
-    $dob = explode('-', $row['dob']);
-    if ($dob[1] == 0 || $dob[2] == 0) continue;
-    $jd = gregoriantojd($dob[1], $dob[2], $dob[0]);
-    $jewish = jdtojewish($jd);
-    $j = explode('/', $jewish);
-    $jMonth = $j[0];
-    $jDay = $j[1];
+    $b = new BirthdayEn($row['user_id']);
+    $age = intval($b->calculateAge($row)[0]);
+    $jdBirthday = $b->calculateAge($row)[2];
+    // if ($row['user_id'] == 81051) {
+    //   echo "Age: " . $age . "<br />";
+    //   echo "JD Birthday: " . $jdBirthday . "<br />";
+    //   echo "Start: " . $start . "<br />";
+    //   echo "End: " . $end . "<br />";
+    // }
 
-    //find this year's jd equivalent of hebrew birthday
-    $jdNow = jewishtojd($jMonth, $jDay, $jYear);
-    $jewishNow = jdtojewish($jdNow, true, CAL_JEWISH_ADD_GERESHAYIM + CAL_JEWISH_ADD_ALAFIM_GERESH);
-    $jNow = iconv('WINDOWS-1255', 'UTF-8', $jewishNow);
-
-    //find the english year corresponding to hebrew birthday
-    $bd = jdtogregorian($jdNow);
-    $bdArr = explode('/', $bd);
-    $age = ($bdArr[2] - $dob[0]);
-    /*
-      if ( $row['user_id'] == 17100 ) {
-          echo "<pre>"; print_r( $dob ); echo "</pre>";
-          echo $jd . "<br />";
-          echo $jewish . "<br />";
-          echo $jdNow . "<br />";
-          echo $start . ' - ' . $end;
-      }
-       *
-       */
-
-    if (isset($school_id)) {
+    if (! $parshasChosen) {
         //if hebrew date within range then we are good and add user to array otherwise don't add to array
-        if ($jdNow >= $start && $jdNow <= $end) {
+        if ($jdBirthday >= $start && $jdBirthday <= $end) {
             $grade = empty($row['class_sub']) ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
             $heName = empty($row['he_name']) ?
                 ((empty($row['first_he']) && empty($row['last_he'])) ? $row['first'] . ' ' . $row['last'] :
                     $row['first_he'] . '  ' . $row['last_he']) : $row['he_name'];
-            $names[$row['school_name']][$grade][$jNow][$parsha][] = array('age' => $age, 'name' => $heName);
+            $names[$row['school_name']][$grade][$jdBirthday][$parsha][] = array('age' => $age, 'name' => $heName);
         }
     } else {
         //loop through dates array to check if hebrew jd birthday falls within any of them
         $found = false;
         for ($i = 0; $i < $numDates; $i++) {
-            if ($jdNow >= $dates['start'][$i] && $jdNow <= $dates['end'][$i]) {
+            if ($jdBirthday >= $dates['start'][$i] && $jdBirthday <= $dates['end'][$i]) {
                 $found = true;
                 break;
             }
@@ -145,7 +135,7 @@ while ($row = mysql_fetch_assoc($result)) {
             $heName = empty($row['he_name']) ?
                 ((empty($row['first_he']) && empty($row['last_he'])) ? $row['first'] . ' ' . $row['last'] :
                     $row['first_he'] . ' ' . $row['last_he']) : $row['he_name'];
-            $names[$row['school_name']][$grade][$jNow][$parshaDates[$dates['start'][$i]]][] = array('age' => $age, 'name' => $heName);
+            $names[$row['school_name']][$grade][$jdBirthday][$parshaDates[$dates['start'][$i]]][] = array('age' => $age, 'name' => $heName);
         }
     }
 }
