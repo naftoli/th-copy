@@ -207,7 +207,7 @@ require_once('calendar.php');
 			<table>
 				<tr>
 					<th>Grade</th> <th>First Name</th> <th>Last Name</th> 
-					<th>First Hebrew Name</th> <th>Last Hebrew Name</th><th>User ID</th>
+					<th>First Hebrew Name</th> <th>Last Hebrew Name</th>
 					<th><?= $_POST['dob'] == 'en' ? 'English' : 'Hebrew' ?> DOB</th>
 				</tr>
 			<?php
@@ -218,7 +218,6 @@ require_once('calendar.php');
 					<td> <?= $user['last'] ?> </td>
 					<td> <?= $user['first_he'] ?> </td>
 					<td> <?= $user['last_he'] ?> </td>
-					<td><?= $user['user_id'] ?></td>
 					<td><?= $_POST['dob'] == 'en' ? $user['dob'] : $user['dob_he'] ?></td>
 				</tr>
 		<?php } ?>
