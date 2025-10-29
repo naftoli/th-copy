@@ -43,7 +43,7 @@ class JewishDatepicker {
         this.tnext31dayes.setDate(this.tnext31dayes.getDate()+31);
         this.tnext31dayesDay = this.tnext31dayes.getDate();
         this.tnext31dayesDay = (this.tnext31dayesDay < 10) ? '0' + this.tnext31dayesDay.toString() : this.tnext31dayesDay.toString();
-        this.tnext31dayesmanth = this.tnext31dayes.getMonth()+1;
+        this.tnext31dayesmanth = this.tnext31dayes.getMonth()+2;
         this.tnext31dayesmanth = (this.tnext31dayesmanth < 10) ? '0' + this.tnext31dayesmanth.toString() : this.tnext31dayesmanth.toString();
         this.tnext31dayesDate = `${this.tnext31dayesDay}-${this.tnext31dayesmanth}-${this.tnext31dayes.getFullYear()}`;
 
