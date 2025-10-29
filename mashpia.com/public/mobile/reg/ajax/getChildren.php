@@ -365,7 +365,8 @@ if (!empty($users)) {
         }
 
          // turn off chidon past certain date
-        if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon()) {
+        $userExceptions = [81037, 81087];
+        if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon() && !in_array($row['user_id'], $userExceptions)) {
             $children[$row['user_id']]['reg_types']['chidon'] = false;
             $children[$row['user_id']]['editChidon'] = false;
         }
