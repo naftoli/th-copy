@@ -164,8 +164,8 @@ while ($row = mysql_fetch_assoc($result)) {
     }
 
     .name {
-      margin-left: 7.6in;
-      margin-top: 2in;
+      margin-left: 7.3in;
+      margin-top: 1.5in;
       width: 6cm;
       font-size: 30px;
       font-weight: bold;
