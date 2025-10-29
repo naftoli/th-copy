@@ -1,0 +1,570 @@
+<?php
+$admin_auth = array('school');
+require('header.php');
+
+require_once 'class.adminSchools.php';
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
+$schools = $as->getSchools();
+
+require_once 'class.globalSettings.php';
+$startEnd = GlobalSettings::getCurYearDates();
+// $startEnd['start'] = 2460280;
+
+//get dates
+$dates = [];
+$sql = "SELECT * FROM parshos 
+        WHERE start >= " . $startEnd['start'] . "
+        AND end <= " . $startEnd['end'];
+$result = mysql_query($sql);
+while ($row = mysql_fetch_assoc($result)) {
+    $dates[] = $row;
+}
+$today = unixtojd();
+?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>School Birthdays</title>
+  <link href="/admin_styles.css" rel="stylesheet" type="text/css">
+  <style type="text/css">
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      /* background-color: #f8fafc; */
+      margin: 0;
+      padding: 20px;
+      padding-top: 0px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      /* background: white; */
+      border-radius: 12px;
+      /* box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); */
+      overflow: hidden;
+      margin-top: -40px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 2.5rem;
+      font-weight: 300;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .form-section {
+      margin-bottom: 40px;
+    }
+
+    .form-section h2 {
+      color: #374151;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .form-group {
+      flex: 1;
+      min-width: 300px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      background-color: white;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .form-control[multiple] {
+      min-height: 200px;
+      resize: vertical;
+    }
+
+    .date-range-container {
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+
+    .date-range-container .form-group {
+      flex: 1;
+      min-width: 200px;
+      margin-bottom: 15px;
+    }
+
+    #dateRangeContainer {
+      display: none;
+      margin-top: 15px;
+    }
+
+    #dateRangeContainer.show {
+      display: block;
+    }
+
+    #dateRangeContainer .form-control {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 768px) {
+      .date-range-container {
+        flex-direction: column;
+        gap: 15px;
+      }
+      
+      .date-range-container .form-group {
+        min-width: 100%;
+      }
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+
+    .radio-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .radio-item input[type="radio"] {
+      width: 18px;
+      height: 18px;
+      accent-color: #667eea;
+    }
+
+    .radio-item label {
+      margin: 0;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 2px solid #e5e7eb;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .selection-info {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 20px;
+      font-size: 14px;
+      color: #0369a1;
+    }
+
+    .selection-info strong {
+      color: #0c4a6e;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+      }
+      
+      .date-range-container {
+        flex-direction: column;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
+  <link href="/heDatePicker/dist/css/he-datepicker.css" rel="stylesheet">
+  <script src="/heDatePicker/dist/js/he-datepicker.js"></script>
+  <script type="text/javascript">
+    $(function () {
+      // Debug: Test if jQuery is working
+      console.log('jQuery loaded, version:', $.fn.jquery);
+      
+      // Debug: Check if elements exist
+      console.log('Date range container exists:', $('#dateRangeContainer').length);
+      console.log('Parsha select container exists:', $('#parshaSelectContainer').length);
+      console.log('Radio buttons exist:', $('input[name="parshaMethod"]').length);
+      
+      // Update selection info display
+      function updateSelectionInfo() {
+        var selectedSchools = $('#schoolSelect option:selected').length;
+        var selectedGender = $('input[name="gender"]:checked').length;
+        var parshaMethod = $('input[name="parshaMethod"]:checked').val();
+        
+        var info = '<strong>Current Selection:</strong><br>';
+        info += 'Schools: ' + selectedSchools + ' selected<br>';
+        
+        if (parshaMethod === 'parsha') {
+          var selectedParshas = $('#parshaSelect option:selected').length;
+          info += 'Parshas: ' + selectedParshas + ' selected<br>';
+        } else {
+          var startDate = $('#startDate').val();
+          var endDate = $('#endDate').val();
+          if (startDate && endDate) {
+            info += 'Date Range: ' + startDate + ' to ' + endDate + '<br>';
+          } else {
+            info += 'Date Range: Not selected<br>';
+          }
+        }
+        
+        info += 'Gender: ' + (selectedGender > 0 ? $('input[name="gender"]:checked').val() : 'Not selected');
+        
+        $('#selectionInfo').html(info);
+      }
+
+      // Update selection info on change
+      $('#schoolSelect, #parshaSelect, input[name="gender"], input[name="parshaMethod"], #startDate, #endDate').change(updateSelectionInfo);
+      
+      // Initialize selection info
+      updateSelectionInfo();
+
+      // Handle parsha selection method toggle
+      $('input[name="parshaMethod"]').change(function() {
+        console.log('Radio button changed to:', $(this).val());
+        if ($(this).val() === 'parsha') {
+          console.log('Showing parsha select, hiding date range');
+          $('#parshaSelectContainer').show();
+          $('#dateRangeContainer').removeClass('show').hide();
+        } else {
+          console.log('Hiding parsha select, showing date range');
+          $('#parshaSelectContainer').hide();
+          $('#dateRangeContainer').addClass('show').show();
+        }
+      });
+
+      // Initialize with parsha method selected
+      $('input[name="parshaMethod"][value="parsha"]').attr('checked', true);
+      $('#dateRangeContainer').removeClass('show').hide();
+
+      $('#get_birthdays').click(function () {
+        var schools = '';
+        // check if schoolSelect exists
+        if ($('#schoolSelect').length > 0) {
+          $("#schoolSelect option:selected").each(function () {
+            schools = schools + $(this).val() + ':';
+          });
+          schools = schools.substr(0, schools.length - 1);
+          $('#schools').val(schools);
+        }
+
+        var parshas = '';
+        var parshaMethod = $('input[name="parshaMethod"]:checked').val();
+        
+        if (parshaMethod === 'parsha') {
+          $("#parshaSelect option:selected").each(function () {
+            parshas = parshas + $(this).val() + ':';
+          });
+        } else {
+          // Use date range
+          var startDate = $('#startDate').val();
+          var endDate = $('#endDate').val();
+          if (startDate && endDate) {
+            // Convert dates to the format expected by the backend
+            // This would need to be adjusted based on your backend requirements
+            parshas = startDate + ':' + endDate;
+          }
+        }
+        
+        parshas = parshas.substr(0, parshas.length - 1);
+        $('#parshas').val(parshas);
+
+        var gender = $('input[name="gender"]:checked').val();
+        $("#gender").val(gender);
+
+        if (schools == '' || parshas == '') {
+          alert('You must pick at least one school, and one parsha (or date range).');
+        } else {
+          $('#get_birthday_form').submit();
+        }
+      });
+
+      // Initialize Hebrew date pickers with proper callbacks
+      $(document).ready(function() {
+        const startDatepicker = new JewishDatepicker('#startDate_he', {
+            hideHeader: true,
+            color: '#0d6efd',
+            onSelect: function(date, hebrewDate) {
+                console.log('Start date selected:', date, hebrewDate);
+                $('#startDate').val(date);
+                $('#startDate').attr('data-gregorian-date', date);
+            }
+        });
+        
+        const endDatepicker = new JewishDatepicker('#endDate_he', {
+            hideHeader: true,
+            color: '#0d6efd',
+            onSelect: function(date, hebrewDate) {
+                console.log('End date selected:', date, hebrewDate);
+                $('#endDate').val(date);
+                  $('#endDate').attr('data-gregorian-date', date);
+            }
+        });
+        
+        // Apply the positioning fix to both datepickers
+        fixDatepickerPosition(startDatepicker);
+        fixDatepickerPosition(endDatepicker);
+      });
+
+        // Override the positioning method to fix positioning issues
+        function fixDatepickerPosition(datepicker) {
+            const originalSetPosition = datepicker.setPostion;
+            datepicker.setPostion = function() {
+                const wrapper = this.wrapper;
+                const input = this.element;
+                
+                // Force the wrapper to be positioned correctly
+                wrapper.style.position = 'fixed';
+                wrapper.style.zIndex = '99999';
+                
+                // Get the input's position relative to the viewport
+                const rect = input.getBoundingClientRect();
+                
+                // Calculate positions
+                let left = rect.left;
+                let top = rect.bottom + 5; // 5px gap below input
+                
+                // Get wrapper dimensions (force a reflow to get accurate dimensions)
+                wrapper.style.visibility = 'hidden';
+                wrapper.style.display = 'block';
+                const wrapperWidth = wrapper.offsetWidth;
+                const wrapperHeight = wrapper.offsetHeight;
+                wrapper.style.visibility = 'visible';
+                
+                // Check if it would go off the right edge
+                if (left + wrapperWidth > window.innerWidth) {
+                    left = window.innerWidth - wrapperWidth - 10;
+                }
+                
+                // Check if it would go off the bottom edge
+                if (top + wrapperHeight > window.innerHeight) {
+                    // Position above the input instead
+                    top = rect.top - wrapperHeight - 5;
+                }
+                
+                // Ensure it doesn't go off the left edge
+                if (left < 10) {
+                    left = 10;
+                }
+                
+                // Ensure it doesn't go off the top edge
+                if (top < 10) {
+                    top = 10;
+                }
+                
+                // Apply the positioning with !important to override CSS
+                wrapper.style.setProperty('left', left + 'px', 'important');
+                wrapper.style.setProperty('top', top + 'px', 'important');
+                wrapper.style.setProperty('position', 'fixed', 'important');
+                wrapper.style.setProperty('z-index', '99999', 'important');
+                
+                console.log('Datepicker positioned at:', left, top, 'for input:', input.id);
+            };
+            
+            // Override the show/hide methods to ensure proper positioning
+            const originalShow = datepicker.wrapper.classList.remove.bind(datepicker.wrapper.classList, 'off');
+            const originalHide = datepicker.wrapper.classList.add.bind(datepicker.wrapper.classList, 'off');
+            
+            // Override the click handler to ensure positioning is called
+            const input = datepicker.element;
+            input.addEventListener('click', function(e) {
+                e.stopPropagation();
+                // Remove off class to show
+                datepicker.wrapper.classList.remove('off');
+                // Force positioning
+                setTimeout(() => datepicker.setPostion(), 10);
+            });
+            
+            // Re-bind the resize event
+            window.addEventListener('resize', () => {
+                if (!datepicker.wrapper.classList.contains('off')) {
+                    datepicker.setPostion();
+                }
+            });
+        }
+    });
+  </script>
+</head>
+
+<body>
+<? require 'admin_header.php'; ?>
+<h1 class="no-print">School Birthdays</h1>
+<div class="container">  
+  <div class="content">
+    <form name="get_birthday_form" id="get_birthday_form" method="post" action="birthday_cert.php">
+      <input type="hidden" name="schools" id="schools"/>
+      <input type="hidden" name="parshas" id="parshas"/>
+      <input type="hidden" name="gender" id="gender"/>
+    </form>
+  
+    <div class="form-section">
+      <h2>School Selection</h2>
+      <div class="form-group">
+        <label for="schoolSelect">Select Schools (Hold Ctrl/Cmd to select multiple)</label>
+        <?php if (count($schools) > 1) : ?>
+        <select id="schoolSelect" name="schools[]" class="form-control" multiple>
+            <?php 
+            foreach ($schools as $id => $school) {
+              //skip certain schools
+              // if (in_array($id, array(82, 65, 79, 187, 198, 241)))
+              //     continue;
+              echo "<option value='" . $id . "'>" . htmlspecialchars($school) . "</option>";
+            } 
+            ?>
+          </select>
+          <?php else: ?>
+            <select id="schoolSelect" name="schools[]" class="form-control">
+              <option value="<?= key($schools) ?>"><?= htmlspecialchars(current($schools)) ?></option>
+            </select>
+          <?php endif; ?>
+      </div>
+    </div>
+
+
+    <div class="form-section">
+      <h2>Parsha Selection</h2>
+      <div class="form-group">
+        <label>Selection Method</label>
+        <div class="radio-group">
+          <div class="radio-item">
+            <input type="radio" name="parshaMethod" value="parsha" id="parshaMethod1" checked>
+            <label for="parshaMethod1">Select by Parsha</label>
+          </div>
+          <div class="radio-item">
+            <input type="radio" name="parshaMethod" value="date" id="parshaMethod2">
+            <label for="parshaMethod2">Select by Date Range</label>
+          </div>
+        </div>
+      </div>
+      <br />
+
+      <div id="parshaSelectContainer">
+        <div class="form-group">
+          <label for="parshaSelect">Select Parshas (Hold Ctrl/Cmd to select multiple)</label>
+          <select id="parshaSelect" name="parshas[]" class="form-control" multiple>
+            <?
+            foreach ($dates as $date) {
+                echo "<option value='" . $date['end'] . "'>" . htmlspecialchars($date['name']) . "</option>";
+            }
+            ?>
+          </select>
+        </div>
+      </div>
+
+      <div id="dateRangeContainer">
+        <div class="date-range-container">
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" id="startDate" name="startDate" class="form-control" style="display: none;" >
+            <input type="text" class="form-control hebrew-date" id="startDate_he" name="startDate_he" autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" id="endDate" name="endDate" class="form-control" style="display: none;" >
+            <input type="text" class="form-control hebrew-date" id="endDate_he" name="endDate_he" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h2>Gender Selection</h2>
+      <div class="radio-group">
+        <div class="radio-item">
+          <input type="radio" name="gender" value="m" id="genderM">
+          <label for="genderM">Boys</label>
+        </div>
+        <div class="radio-item">
+          <input type="radio" name="gender" value="f" id="genderF">
+          <label for="genderF">Girls</label>
+        </div>
+      </div>
+    </div>
+
+    <div id="selectionInfo" class="selection-info">
+      <strong>Current Selection:</strong><br>
+      Schools: 0 selected<br>
+      Parshas: 0 selected<br>
+      Gender: Not selected
+    </div>
+
+    <div class="button-group">
+      <button type="button" id="get_birthdays" class="btn btn-primary">Generate Birthday Certificates</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
