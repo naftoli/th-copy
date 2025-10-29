@@ -246,8 +246,6 @@ $today = unixtojd();
     }
   </style>
   <script src="https://code.jquery.com/jquery-1.8.3.min.js"></script>
-  <link href="/heDatePicker/dist/css/he-datepicker.css" rel="stylesheet">
-  <script src="/heDatePicker/dist/js/he-datepicker.js"></script>
   <script type="text/javascript">
     $(function () {
       // Debug: Test if jQuery is working
@@ -329,8 +327,8 @@ $today = unixtojd();
           });
         } else {
           // Use date range
-          var startDate = $('#startDate_he').attr('data-gregorian-date');
-          var endDate = $('#endDate_he').attr('data-gregorian-date');
+          var startDate = $('#startDate').val();
+          var endDate = $('#endDate').val();
           if (startDate && endDate) {
             // Convert dates to the format expected by the backend
             // This would need to be adjusted based on your backend requirements
@@ -353,110 +351,6 @@ $today = unixtojd();
           $('#get_birthday_form').submit();
         }
       });
-
-      // Initialize Hebrew date pickers with proper callbacks
-      $(document).ready(function() {
-        const startDatepicker = new JewishDatepicker('#startDate_he', {
-            hideHeader: true,
-            color: '#0d6efd',
-            onSelect: function(date, hebrewDate) {
-                console.log('Start date selected:', date, hebrewDate);
-                $('#startDate').val(date);
-                $('#startDate').attr('data-gregorian-date', date);
-            }
-        });
-        
-        const endDatepicker = new JewishDatepicker('#endDate_he', {
-            hideHeader: true,
-            color: '#0d6efd',
-            onSelect: function(date, hebrewDate) {
-                console.log('End date selected:', date, hebrewDate);
-                $('#endDate').val(date);
-                $('#endDate').attr('data-gregorian-date', date);
-            }
-        });
-
-        // Apply the positioning fix to both datepickers
-        fixDatepickerPosition(startDatepicker);
-        fixDatepickerPosition(endDatepicker);
-      });
-
-        // Override the positioning method to fix positioning issues
-        function fixDatepickerPosition(datepicker) {
-            const originalSetPosition = datepicker.setPostion;
-            datepicker.setPostion = function() {
-                const wrapper = this.wrapper;
-                const input = this.element;
-                
-                // Force the wrapper to be positioned correctly
-                wrapper.style.position = 'fixed';
-                wrapper.style.zIndex = '99999';
-                
-                // Get the input's position relative to the viewport
-                const rect = input.getBoundingClientRect();
-                
-                // Calculate positions
-                let left = rect.left;
-                let top = rect.bottom + 5; // 5px gap below input
-                
-                // Get wrapper dimensions (force a reflow to get accurate dimensions)
-                wrapper.style.visibility = 'hidden';
-                wrapper.style.display = 'block';
-                const wrapperWidth = wrapper.offsetWidth;
-                const wrapperHeight = wrapper.offsetHeight;
-                wrapper.style.visibility = 'visible';
-                
-                // Check if it would go off the right edge
-                if (left + wrapperWidth > window.innerWidth) {
-                    left = window.innerWidth - wrapperWidth - 10;
-                }
-                
-                // Check if it would go off the bottom edge
-                if (top + wrapperHeight > window.innerHeight) {
-                    // Position above the input instead
-                    top = rect.top - wrapperHeight - 5;
-                }
-                
-                // Ensure it doesn't go off the left edge
-                if (left < 10) {
-                    left = 10;
-                }
-                
-                // Ensure it doesn't go off the top edge
-                if (top < 10) {
-                    top = 10;
-                }
-                
-                // Apply the positioning with !important to override CSS
-                wrapper.style.setProperty('left', left + 'px', 'important');
-                wrapper.style.setProperty('top', top + 'px', 'important');
-                wrapper.style.setProperty('position', 'fixed', 'important');
-                wrapper.style.setProperty('z-index', '99999', 'important');
-                
-                console.log('Datepicker positioned at:', left, top, 'for input:', input.id);
-            };
-            
-            // Override the show/hide methods to ensure proper positioning
-            const originalShow = datepicker.wrapper.classList.remove.bind(datepicker.wrapper.classList, 'off');
-            const originalHide = datepicker.wrapper.classList.add.bind(datepicker.wrapper.classList, 'off');
-            
-            // Override the click handler to ensure positioning is called
-            const input = datepicker.element;
-            input.addEventListener('click', function(e) {
-                e.stopPropagation();
-                // Remove off class to show
-                datepicker.wrapper.classList.remove('off');
-                // Force positioning
-                setTimeout(() => datepicker.setPostion(), 10);
-            });
-            
-            // Re-bind the resize event
-            window.addEventListener('resize', () => {
-                if (!datepicker.wrapper.classList.contains('off')) {
-                    datepicker.setPostion();
-                }
-            });
-        }
     });
   </script>
 </head>
@@ -530,13 +424,11 @@ $today = unixtojd();
         <div class="date-range-container">
           <div class="form-group">
             <label for="startDate">Start Date</label>
-            <input type="date" id="startDate" name="startDate" class="form-control" style="display: none;" >
-            <input type="text" class="form-control hebrew-date" id="startDate_he" name="startDate_he" autocomplete="off" />
+            <input type="date" id="startDate" name="startDate" class="form-control">
           </div>
           <div class="form-group">
             <label for="endDate">End Date</label>
-            <input type="date" id="endDate" name="endDate" class="form-control" style="display: none;" >
-            <input type="text" class="form-control hebrew-date" id="endDate_he" name="endDate_he" autocomplete="off" />
+            <input type="date" id="endDate" name="endDate" class="form-control">
           </div>
         </div>
       </div>

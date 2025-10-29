@@ -329,8 +329,8 @@ $today = unixtojd();
           });
         } else {
           // Use date range
-          var startDate = $('#startDate').val();
-          var endDate = $('#endDate').val();
+          var startDate = $('#startDate_he').attr('data-gregorian-date');
+          var endDate = $('#endDate_he').attr('data-gregorian-date');
           if (startDate && endDate) {
             // Convert dates to the format expected by the backend
             // This would need to be adjusted based on your backend requirements
@@ -338,7 +338,10 @@ $today = unixtojd();
           }
         }
         
-        parshas = parshas.substr(0, parshas.length - 1);
+        // if last character is a colon, remove it
+        if (parshas.charAt(parshas.length - 1) == ':') {
+          parshas = parshas.substr(0, parshas.length - 1);
+        }
         $('#parshas').val(parshas);
 
         var gender = $('input[name="gender"]:checked').val();
@@ -369,10 +372,10 @@ $today = unixtojd();
             onSelect: function(date, hebrewDate) {
                 console.log('End date selected:', date, hebrewDate);
                 $('#endDate').val(date);
-                  $('#endDate').attr('data-gregorian-date', date);
+                $('#endDate').attr('data-gregorian-date', date);
             }
         });
-        
+
         // Apply the positioning fix to both datepickers
         fixDatepickerPosition(startDatepicker);
         fixDatepickerPosition(endDatepicker);
