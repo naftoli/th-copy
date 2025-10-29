@@ -336,7 +336,10 @@ $today = unixtojd();
           }
         }
         
-        parshas = parshas.substr(0, parshas.length - 1);
+        // if last character is a colon, remove it
+        if (parshas.charAt(parshas.length - 1) == ':') {
+          parshas = parshas.substr(0, parshas.length - 1);
+        }
         $('#parshas').val(parshas);
 
         var gender = $('input[name="gender"]:checked').val();
