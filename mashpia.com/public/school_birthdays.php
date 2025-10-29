@@ -530,12 +530,12 @@ $today = unixtojd();
         <div class="date-range-container">
           <div class="form-group">
             <label for="startDate">Start Date</label>
-            <!-- <input type="date" id="startDate" name="startDate" class="form-control" style="display: none;" > -->
+            <input type="date" id="startDate" name="startDate" class="form-control" style="display: none;" >
             <input type="text" class="form-control hebrew-date" id="startDate_he" name="startDate_he" autocomplete="off" />
           </div>
           <div class="form-group">
             <label for="endDate">End Date</label>
-            <!-- <input type="date" id="endDate" name="endDate" class="form-control" style="display: none;" > -->
+            <input type="date" id="endDate" name="endDate" class="form-control" style="display: none;" >
             <input type="text" class="form-control hebrew-date" id="endDate_he" name="endDate_he" autocomplete="off" />
           </div>
         </div>
