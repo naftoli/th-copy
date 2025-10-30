@@ -483,11 +483,11 @@
                               <div class="chidonRegInfo" style="color: #17771c">Enrolled for Chidon Limmud {{
                                 this.next_year_chidon }}
                               </div>
-                              <!-- <div class="button-spacing">
-                                <button class="btn btn-primary view_enrollment_info">
+                              <div class="button-spacing">
+                                <button class="btn btn-primary view_enrollment_info" style="display: none;">
                                   <span>View Chidon Limmud Enrollment</span>
                                 </button>
-                              </div> -->
+                              </div>
                               {{/if}}
                             {{/if}}
 
@@ -922,6 +922,10 @@
       pro: 'Yediah',
       expert: 'Havonah',
       genius: 'Iyun'
+    }
+
+    if (Cookies.get('naftoli')) {
+      $(".view_enrollment_info").show();
     }
 
     $(document).on('click', '.view_enrollment_info', function () {
