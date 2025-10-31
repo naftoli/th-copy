@@ -50,7 +50,7 @@ class MilesPage extends Component {
     this.setState({ [target.name]: parseInt( target.value, 10 ) });
 
   // submit buttons
-  addMiles = (storeOnly = false, auctionOnly = false) => {
+  addMiles = (storeOnly = false, auctionOnly = false) => () => {
     updateMiles({ ...this.state, action: 'add', storeOnly, auctionOnly })
   }
   subtractMiles = (storeOnly = false, auctionOnly = false) => () => {
