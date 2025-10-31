@@ -125,7 +125,7 @@ class TaskModal extends Component {
                     })
                   }
                 />
-                <Label htmlFor='auction_only_points'>Auction Only Points</Label>
+                <Label htmlFor='auction_only_points'>Auction Only Miles</Label>
               </Col>
 
 

@@ -113,7 +113,7 @@ class TasksPage extends Component {
         }
       },
       { Header: 'Miles', accessor: 'points', Cell: ({ value }) => <NumberDisplay value={ value }/> },
-      { Header: 'Auction Only Points', id: 'auction_only_points', accessor: 'auction_only_points',
+      { Header: 'Auction Only Miles', id: 'auction_only_points', accessor: 'auction_only_points',
         filterable: true, sortable: true,
         width: 140,
         Cell: ({ original }) => (
