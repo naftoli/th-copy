@@ -94,7 +94,7 @@ class Points
     
     public function getStorePoints() {
         $reset_date = $this->getStoreResetDate();
-        $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date);
+        $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= " . $reset_date . " and auction_only_points = 0");
         if ($this->debug) echo "Store points from mashpia: " . $points . "<br />";
         $points += intval($this->getNonMarksStorePoints($reset_date));
         // $arrParams['user_code'] = $this->usercode;
@@ -236,7 +236,8 @@ class Points
         $gregorian = $arrDate[2] . '-' . $arrDate[0] . '-' . $arrDate[1];
         $sql = "select * from pointsDB.user_points  
                 where user_id = " . $this->user_id . " 
-                and created >= '" . $gregorian . "'";
+                and created >= '" . $gregorian . "' 
+                and auction_only_points = 0";
         $result = mysql_query( $sql );
         while ( $row = mysql_fetch_assoc( $result ) ) {
             $details[] = $row;
@@ -252,11 +253,11 @@ class Points
     private function getNonMarkPoints($start_date = false) {
         $formatted_date = $start_date ? date("Y-m-d", jdtounix($start_date)) : '2000-01-01';
         $sql = "SELECT SUM(points) AS total
-            FROM pointsDB.user_points
-            WHERE user_id = '{$this->user_id}'
-            AND points > 0
-            AND resource_name NOT IN ('store' , 'transaction_manager_store') 
-            AND created >= '$formatted_date'";
+                FROM pointsDB.user_points
+                WHERE user_id = '{$this->user_id}'
+                AND points > 0
+                AND resource_name NOT IN ('store' , 'transaction_manager_store') 
+                AND created >= '$formatted_date'";
         // $GLOBALS['logger']->debug($sql);
         if ($this->debug) echo $sql . "<br />";
         $result = mysql_query( $sql );
@@ -275,7 +276,8 @@ class Points
                 AND up.created >= '$formatted_date' 
                 AND (up.reversed_user_point_id IS NULL OR up.reversed_user_point_id not in (
                     SELECT user_point_id FROM pointsDB.user_points WHERE created < '$formatted_date' AND user_id = '{$this->user_id}'
-                ))";
+                ))
+                AND up.auction_only_points = 0";
 //        }
         if ($this->debug) echo $sql . "<br />";
         // $GLOBALS['logger']->debug($sql);
