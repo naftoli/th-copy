@@ -75,8 +75,8 @@ foreach ($rows as $row) {
     $user_ranks[$row['user_id']] = $row['rank_ord'];
 }
 
-// get all chidon registered kids for 5785
-$year = GlobalSettings::getChidonRegYear();
+// get all chidon registered kids 
+// $year = GlobalSettings::getChidonRegYear();
 $stmt = $MASHPIA_DB->prepare("select * from th_chidon where year = ?");
 $res = $stmt->execute([$year]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -126,7 +126,7 @@ $user_ids = array_unique(array_merge(array_keys($users), array_keys($registratio
             <th>User ID</th>
             <th>User Serial</th>
             <th>User Name</th>
-            <th>Date Registered for 5785</th>
+            <th>Date Registered for <?= $year ?></th>
             <th>Currently registered Date (Users Table)</th>
             <th>Registration Payment</th>
             <th>Registered for Chidon</th>
