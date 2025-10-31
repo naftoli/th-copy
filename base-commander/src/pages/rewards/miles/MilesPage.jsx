@@ -50,11 +50,11 @@ class MilesPage extends Component {
     this.setState({ [target.name]: parseInt( target.value, 10 ) });
 
   // submit buttons
-  addMiles = () => {
-    updateMiles({ ...this.state, action: 'add', auction: true })
+  addMiles = (storeOnly = false, auctionOnly = false) => {
+    updateMiles({ ...this.state, action: 'add', storeOnly, auctionOnly })
   }
-  subtractMiles = auction => () => {
-    updateMiles({ ...this.state, action: 'subtract', auction })
+  subtractMiles = (storeOnly = false, auctionOnly = false) => () => {
+    updateMiles({ ...this.state, action: 'subtract', storeOnly, auctionOnly })
   }
 
   render() {
@@ -116,19 +116,36 @@ class MilesPage extends Component {
             <label>Actions</label>
             <ButtonBar>
               <Button color='primary' 
-                onClick={ this.addMiles }
+                onClick={ this.addMiles() }
                 disabled={ disableActions }>
-                  <InlineSync icon='plus' /> Add
+                  <InlineSync icon='plus' /> Add (All)
+              </Button>
+              <Button color='primary' 
+                onClick={ this.addMiles( true, false) }
+                disabled={ disableActions }>
+                  <InlineSync icon='plus' /> Add (Store Only)
+              </Button>
+              <Button color='primary' 
+                onClick={ this.addMiles( false, true) }
+                disabled={ disableActions }>
+                  <InlineSync icon='plus' /> Add (Auction Only)
+              </Button>
+            </ButtonBar>
+            <ButtonBar>
+              <Button color='danger' 
+                onClick={ this.subtractMiles() }
+                disabled={ disableActions }>
+                  <InlineSync icon='minus' /> Subtract (All)
               </Button>
               <Button color='danger' 
-                onClick={ this.subtractMiles( true ) }
-                disabled={ disableActions }>
-                  <InlineSync icon='minus' /> Subtract (Store + Auction)
-              </Button>
-              <Button color='danger' 
-                onClick={ this.subtractMiles( false ) }
+                onClick={ this.subtractMiles( true, false) }
                 disabled={ disableActions }>
                   <InlineSync icon='minus' /> Subtract (Store Only)
+              </Button>
+              <Button color='danger' 
+                onClick={ this.subtractMiles( false, true) }
+                disabled={ disableActions }>
+                  <InlineSync icon='minus' /> Subtract (Auction Only)
               </Button>
             </ButtonBar>
           </Col>

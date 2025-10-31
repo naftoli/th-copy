@@ -15,7 +15,8 @@ class MilesRouter {
         global $POINTS_DB;
 
         $action = $_POST['action'];
-        $auction = $_POST['auction'];
+        $storeOnly = $_POST['storeOnly'];
+        $auctionOnly = $_POST['auctionOnly'];
         $class_id = $_POST['class_id'];
         $user_id = $_POST['user_id'];
         $miles = intval( $_POST['miles'] );
@@ -36,12 +37,14 @@ class MilesRouter {
             ." FROM mashpiadb.users WHERE $where_column = :where_id"
         );
 
-        // by default, transactions are store only
-        $resource_name = 'transaction_manager_store';
+        // by default transactions are for all miles
+        $resource_name = 'admin_users_manual';
 
-        // allow users to modify total miles ( auction and homepage as well )
-        if ( $auction )
-            $resource_name = 'admin_users_manual';
+        if ( $storeOnly )
+            $resource_name = 'transaction_manager_store';
+        else if ( $auctionOnly )
+            $resource_name = 'auction_only_miles';
+
         // invert number if action is subtract
         if ( $action == 'subtract' )
             $miles = $miles * -1;

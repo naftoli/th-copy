@@ -277,7 +277,7 @@ class Points
                 AND (up.reversed_user_point_id IS NULL OR up.reversed_user_point_id not in (
                     SELECT user_point_id FROM pointsDB.user_points WHERE created < '$formatted_date' AND user_id = '{$this->user_id}'
                 ))
-                AND up.auction_only_points = 0";
+                AND (up.auction_only_points = 0 OR up.resource_name = 'auction_only_miles')";
 //        }
         if ($this->debug) echo $sql . "<br />";
         // $GLOBALS['logger']->debug($sql);
