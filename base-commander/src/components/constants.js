@@ -6,7 +6,7 @@
  */
 
 // url to use when navigating to older pages
-export const LEGACY_URL = process.env.NODE_ENV === "production" ? "" : "//tzivos.local";
+export const LEGACY_URL = process.env.NODE_ENV === "production" ? "" : "//localhost:3000";
 
 // fallback images
 export const DEFAULT_PROFILE = '/mobile/reg/images/profile-photo-default.jpg';

@@ -365,25 +365,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
         </h1>
     </div>
 </div>
-<?php } else if ( !$user->user_registered ) { ?>
-<div class="container">
-    <div class="content">
-        <h1 style='text-align: center; font-weight: bold;'>
-            <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
-                ?>
-                נראה ש <?=$user->first?> לא רשום כעת לצבאות ה<br /><br />
-                נא לרשום <?=$user->gender == 'M' ? 'אותו' : 'אותה'?> לפני שמסמנים משימות
-                <?php
-            } else {
-                ?>
-                It appears that <?=$user->first?> is not currently registered for Tzivos Hashem.<br/><br/>
-                Please Register  before marking missions.
-                <?php
-            }
-            ?>
-        </h1>
-    </div>
-</div>
 <?php } else { ?>
     <div class="container">
         <div class="content">

@@ -6,6 +6,7 @@ import TaskModal from './TaskModal';
 import { Button } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import { ButtonBar, Table, InlineSync, FontAwesome, NumberDisplay } from 'components/ui';
+import { Toggle } from 'components/inputs';
 // functions
 import { toast } from 'react-toastify';
 import { isBC, isAdmin } from 'functions/login';
@@ -62,6 +63,16 @@ class TasksPage extends Component {
     });
   }
 
+  // toggle auction_only_points directly from table
+  toggleAuctionOnly = task => (e) => {
+    e.stopPropagation(); // prevent row selection if there is any
+    const checked = e.target.checked;
+    this.props.updateTask(task.achievement_task_id, { 
+      auction_only_points: checked ? 1 : 0
+    })
+      .catch( err => toast.error( err.message, { autoClose: false } ) );
+  }
+
   // toggle the master modal
   toggle = ( task = {} ) => {
     this.setState({
@@ -102,6 +113,21 @@ class TasksPage extends Component {
         }
       },
       { Header: 'Miles', accessor: 'points', Cell: ({ value }) => <NumberDisplay value={ value }/> },
+      { Header: 'Auction Only Points', id: 'auction_only_points', accessor: 'auction_only_points',
+        filterable: true, sortable: true,
+        width: 140,
+        Cell: ({ original }) => (
+          <div style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Toggle
+              id={`auction_only_points_${original.achievement_task_id}`}
+              checked={ !!original.auction_only_points }
+              onChange={ this.toggleAuctionOnly(original) }
+              on='On'
+              off='Off'
+            />
+          </div>
+        )
+      },
       { Header: 'Campaign', id: 'subject', accessor: ({ subject }) => subject && subject.subject_name },
     ];
     if ( isAdmin( login.code ) ) columns.push(

@@ -81,7 +81,8 @@ function checkForHe($str) {
           'card_serial' => $code['card_serial'],
           'card_type' => $card_type,
           'card_points' => $task->points,
-          'created_by' => $current_user->admin_id
+          'created_by' => $current_user->admin_id, 
+          'auction_only_points' => $task->auction_only_points ? 1 : 0
       ]);
       // generate the barcode png image
       $barcode = $generator->getBarcode( $card->card_serial, $generator::TYPE_CODE_128_C );
@@ -103,7 +104,7 @@ function checkForHe($str) {
                 </p>
                 <p class='task'><?= $task->task ?></p>
                 <p class='miles'>
-                  <span><?= number_format( $task->points ) ?> Mile<?= $task->points > 1 ? 's' : '' ?></span>
+                  <span><?= number_format( $task->points ) ?> <?= $task->auction_only_points ? 'Auction ' : '' ?> Mile<?= $task->points > 1 ? 's' : '' ?></span>
                 </p>
               </div>
               <img src='<?= $subject->logoPath() ?>' alt='campaign' id='campaign' />

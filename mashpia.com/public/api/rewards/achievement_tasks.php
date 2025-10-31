@@ -53,7 +53,7 @@ class TasksRouter {
     public function update( $id ) {
         $task = \AchievementTask::find([ $id ]);
 
-        $keys = ['subject_id', 'task', 'points'];
+        $keys = ['subject_id', 'task', 'points', 'auction_only_points'];
         foreach( $keys as $key ){
             if ( isset( $_POST[$key] ) )
                 $task->{$key} = $_POST[$key];
