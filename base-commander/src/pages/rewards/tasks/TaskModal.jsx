@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 // components
 import { SaveButton } from 'components/buttons';
-import { RewardSubjectSelect } from 'components/inputs';
+import { Checkbox, RewardSubjectSelect } from 'components/inputs';
 import { 
   Modal, ModalHeader, ModalBody, ModalFooter,
   Row, Col, Label, Input
@@ -108,6 +108,27 @@ class TaskModal extends Component {
                 <div className='invalid-message'>1 to 1,000 Miles</div>
 
               </Col>
+              
+              <Col xs={ 12 }>
+                <Checkbox
+                  id='auction_only_points'
+                  name='auction_only_points'
+                  checked={ !!task.auction_only_points }
+                  onChange={ e =>
+                    this.onChange({
+                      target: {
+                        name: 'auction_only_points',
+                        value: e.target.checked,
+                        type: 'checkbox',
+                        checked: e.target.checked
+                      }
+                    })
+                  }
+                />
+                <Label htmlFor='auction_only_points'>Auction Only Points</Label>
+              </Col>
+
+
               <Col xs={ 12 }>
                 {/* TODO, limit to 40 characters */}
                 <Label htmlFor='task'>Task</Label>

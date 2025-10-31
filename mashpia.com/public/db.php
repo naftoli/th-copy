@@ -651,15 +651,6 @@ function auctionPoints($user_id, $auction_row = NULL, $checkIcorpa = true, $with
 			$cur_points = $trigger_points;
 		}
 		unset($trigger_points);
-		
-		switch ($user_id) {
-			case 15862:
-				$cur_points = 2586;
-				break;
-			case 13286:
-				$cur_points = 1003;
-				break;
-		}
 	}
 	//echo "<input type='hidden' name='TRIGGER POINTS' value='" . $trigger_points . "'>\n";
 	

@@ -325,7 +325,8 @@ class Points
                          task_id = " . $row['task_id'] . ", 
                          institution_id = " . $school_id . ", 
                          class_id = " . $row['class_id'] . ", 
-                         points = " . $row['card_points'] . ", 
+                         points = " . $row['card_points'] . ",
+                         auction_only_points = " . $row['auction_only_points'] . ",
                          resource_name = 'specific achievement card'";
 
                 if (mysql_query($sql4)) {
