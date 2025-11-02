@@ -60,7 +60,7 @@ ksort($info);
 $disable = [];
 for ($i = 1; $i <= 4; $i++) {
     $disable[$i] = true;
-    if ($admin_user['admin_id'] == 175069) $disable[$i] = false; // naftoli can override all
+    if (in_array($admin_user['admin_id'], [175069, 200721])) $disable[$i] = false; // naftoli and tzivi can override all
 }
 
 $opening = [
