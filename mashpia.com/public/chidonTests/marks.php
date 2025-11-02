@@ -139,9 +139,10 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
         ?>
     </body>
     <script>
-        // BCM IA wants to have the page only show when entering a password. not secure but makes her beleive it's secure.
+        // BCM IA wants to have the page only show when entering a password. not secure but makes her believe it's secure.
         <?php if ($admin_user['auth'] != 'super') : ?>
         const school_id = <?=$admin_user['auths']['school'][0]?>;
+        let showPage = false;
         if (school_id == 176) {
             // password protect
             const password = 'laky';
@@ -149,8 +150,12 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
             while (pass != password) {
                 pass = prompt('Please enter password.');
             }
+            showPage = true;
+        }
+        else {
+            showPage = true;
         }
         <?php endif; ?>
-        $('body').show();
+        if (showPage) $('body').show();
     </script>
 </html>
