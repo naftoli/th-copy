@@ -344,8 +344,8 @@ $daySchoolSubjects = setDaySchoolSubjects();
 </div>
 <?php endif; ?>
 
-<?php if ( !$user->user_registered ) { ?>
-<div class="container">
+<!-- <?php if ( !$user->user_registered ) { ?> -->
+<!-- <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
             <?php if (isset($_COOKIE['lang']) && $_COOKIE['lang'] == 'he') {
@@ -364,8 +364,8 @@ $daySchoolSubjects = setDaySchoolSubjects();
             ?>
         </h1>
     </div>
-</div>
-<?php } else { ?>
+</div> -->
+<!-- <?php } else { ?> -->
     <div class="container">
         <div class="content">
             <? /********************** BUTTONS ON THE TOP OF THE PAGE **********************/ ?>
@@ -971,7 +971,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
             
         </div>
     </div>
-<?php } ?>
+<!-- <?php } ?> -->
 
 <div class="footer-spacer"></div>
 
