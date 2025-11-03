@@ -8,13 +8,16 @@ class CampaignEnrollment {
     
     private $campaigns = array(
         'chabad' => array(
-            1,  4,  12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90,             100 #=> 12, 13, 40
+            1,  4,  12, 13, 15, 16, 21, 27, 40, 41, 42, 45, 90,             100, 136 #=> 12, 13, 40
         ),
         'frum' => array(
-            1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100 #=> 92, 93, 94
+            1,  4,          15, 16, 21, 27,     41, 42, 45, 90, 92, 93, 94, 100, 136 #=> 92, 93, 94
         ), 
         'day_school' =>  array(
-            121, 122, 124, 125, 126, 127, 129, 130, 131, 132, 133, 134, 135
+            121, 122, 124, 125, 126, 127, 129, 130, 131, 132, 133, 134, 135, 136
+        ), 
+        'unaffiliated' => array(
+            136
         )
     );
     
@@ -35,6 +38,8 @@ class CampaignEnrollment {
                 return $this->campaigns['day_school'];
             case 12: case 13: // 12 and 13 are just frum
                 return $this->campaigns['frum'];
+            case 8: case 9:
+                return $this->campaigns['unaffiliated'];
             case 2: case 3: default: // 2 and 3 and others are chabad
                 return $this->campaigns['chabad'];
         }
@@ -53,6 +58,10 @@ class CampaignEnrollment {
             case 12:
             case 13:
                 $this->type = 'frum';
+                break;
+            case 8:
+            case 9:
+                $this->type = 'unaffiliated';
                 break;
             case 4:
             case 5:
@@ -136,15 +145,15 @@ class CampaignEnrollment {
                 $track = 1;
             }                
             $qrys[] = "insert ignore into user_tracks
-                set subject_id = " . $subject . ",
-                level = " . $this->year . ",
-                user_id = " . $this->user_id . ",
-                track_id = " . $track . ", 
-                enrolled = 1 
-                on duplicate key update
-                enrolled = 1,
-                level = " . $this->year . ",
-                track_id = " . $track;
+                        set subject_id = " . $subject . ",
+                        level = " . $this->year . ",
+                        user_id = " . $this->user_id . ",
+                        track_id = " . $track . ", 
+                        enrolled = 1 
+                        on duplicate key update
+                        enrolled = 1,
+                        level = " . $this->year . ",
+                        track_id = " . $track;
         }
         
         $success = true;
