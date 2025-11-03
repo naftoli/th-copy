@@ -519,7 +519,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         $subjects = [];
         if ($this->inst_id === 10) {
             // ckids
-            $stmtSubjects = $MASHPIA_DB->query("SELECT subject_id FROM subjects WHERE inst_id = 10");
+            $stmtSubjects = $MASHPIA_DB->query("SELECT subject_id FROM subjects WHERE inst_id = 10 or subject_id = 136"); // add 12 pesukim campaign
         } else {
             // all other schools
             $stmtSubjects = $MASHPIA_DB->query("
@@ -567,7 +567,7 @@ class School extends ActiveRecord\Model implements JsonSerializable {
         $stmt = $MASHPIA_DB->prepare("
             INSERT INTO school_subjects VALUES( :school, :subject )
         ");
-        $stmtSubjects = $MASHPIA_DB->query("SELECT subject_id FROM subjects WHERE inst_id = 10");
+        $stmtSubjects = $MASHPIA_DB->query("SELECT subject_id FROM subjects WHERE inst_id = 10 or subject_id = 136"); // add 12 pesukim campaign
         $rows = $stmtSubjects->fetchAll();
         foreach ($rows as $row) {
             $subjects[] = $row['subject_id'];
