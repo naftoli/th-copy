@@ -7,6 +7,8 @@ require_once('file_save.php');
 $action = gr('action');
 assure_id_school('school_id');
 
+$school_type_result = mq('SELECT school_type_id, school_type_name FROM school_types ORDER BY school_type_name');
+
 $edit_row = false;
 
 if (!empty($action)) {
@@ -16,6 +18,7 @@ if (!empty($action)) {
 		case 'add':
 			$result = mq("SELECT -1 prize_id, NULL school_id, '' prize_name, '' prize_description, 1 prize_points, 1 prize_ratio, NULL prize_image_id, NULL min_grade, NULL max_grade, NULL in_stock");
 			$edit_row = mysql_fetch_assoc($result);
+			$school_type_ids = array();
 		break;
 
 		case 'add2':
@@ -24,6 +27,7 @@ if (!empty($action)) {
 			$prize_points = max(1, min(gri('prize_points', 1), 4294967295));
 			$prize_ratio = max(1, min(gri('prize_ratio', 1), 65535));
 			$in_stock = gri('in_stock', 0);
+			$school_type_ids = gra('school_type_ids', array());
 
 			if ($admin_user['auth']=='super') {
 				$message = T_('Unable to add new prize, this number is already used.');
@@ -45,9 +49,13 @@ if (!empty($action)) {
 					
 				mq('INSERT INTO prizes_auction SET in_stock=' . $in_stock . ', prize_name = ' . ms($prize_name) . ', prize_description = ' . ms(gr('prize_description')) . ', min_grade = ' . nullif_ms(gr('min_grade'), '') . ', max_grade = ' . nullif_ms(gr('max_grade'), '') . ", school_id = $school_id, prize_points = $prize_points, prize_ratio = $prize_ratio, prize_image_id = $prize_image_id");
 				// get id and create shipping id
-        $new_prize_id = mysql_insert_id();
-        $shipping_code = "TH" . $new_prize_id;
-        mq("UPDATE prizes_auction SET shipping_code = '$shipping_code' WHERE prize_id = $new_prize_id");
+				$new_prize_id = mysql_insert_id();
+				$shipping_code = "TH" . $new_prize_id;
+				mq("UPDATE prizes_auction SET shipping_code = '$shipping_code' WHERE prize_id = $new_prize_id");
+
+				foreach($school_type_ids as $school_type_id) {
+					mq("INSERT INTO prizes_auction_types (prize_id, school_type_id) VALUE ($new_prize_id, $school_type_id)");
+				}
 
 				$message = T_('Prize added');
 			}
@@ -56,16 +64,21 @@ if (!empty($action)) {
 		case 'delete':
 			mq('DELETE FROM files USING files JOIN prizes_auction ON (files.file_id = prizes_auction.prize_image_id) WHERE prize_id = ' . gri('prize_id', -1) . ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : ''));
 			mq('DELETE FROM prizes_auction WHERE prize_id = ' . gri('prize_id', -1) . ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : ''));
+			mq("DELETE FROM prizes_auction_types WHERE prize_id = " . gri('prize_id', -1));
 			$message = T_('Prize deleted');
 		break;
 		
 		case 'edit':
 			$result = mq('SELECT prize_id, school_id, prize_name, prize_description, prize_points, prize_ratio, prize_image_id, min_grade, max_grade, in_stock FROM prizes_auction WHERE prize_id = ' . gri('prize_id', -1) . ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : ''));
 			$edit_row = mysql_fetch_assoc($result);
+			$prize_id = gri('prize_id', -1);
+			$result = mq("SELECT school_type_id FROM prizes_auction_types WHERE prize_id = $prize_id");
+			$school_type_ids = mysql_fetch_column($result);
 		break;
 
 		case 'edit2':
 			$prize_id = gri('prize_id', -1);
+			$school_type_ids = array_filter(gra('school_type_ids', array()), 'is_numeric');
 
 			if ($admin_user['auth'] == 'super' || mysql_num_rows(mq("SELECT prize_id FROM prizes_auction WHERE prize_id = $prize_id AND school_id IN (" . implode(',', $admin_user['auths']['school']) . ')'))) {
 				$prize_name = gr('prize_name');
@@ -81,6 +94,11 @@ if (!empty($action)) {
 					$action = 'edit';
 				} 
 				else {
+					mq("DELETE FROM prizes_auction_types WHERE prize_id = $prize_id");
+					foreach($school_type_ids as $school_type_id) {
+						mq("INSERT INTO prizes_auction_types (prize_id, school_type_id) VALUE ($prize_id, $school_type_id)");
+					}
+
 					$prize_image_id = gri('image_delete', 0) ? 'NULL' : 'prize_image_id';
 					
 					if (isset($_FILES['image'])) 
@@ -163,6 +181,11 @@ if (!empty($action)) {
 					</LABEL>
 					
 					<BR>
+					<LABEL><?=T_('Tzivos Hashem Types')?><BR><SELECT name="school_type_ids[]" multiple size="10">
+						<? while($row = mysql_fetch_assoc($school_type_result)): ?>
+							<OPTION VALUE="<?=$row['school_type_id']?>" <?=in_array($row['school_type_id'], $school_type_ids) ? 'SELECTED' : '' ?>><?=es($row['school_type_name'])?></OPTION>
+						<? endwhile; ?>
+					</SELECT></LABEL><BR>
 					
 <!--					<LABEL>-->
 <!--						--><?php //=T_('Ratio')?>
