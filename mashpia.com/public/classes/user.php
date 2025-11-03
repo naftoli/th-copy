@@ -465,9 +465,9 @@ class user {
 		while ($row = mysql_fetch_assoc( $query ) ) {
 			if (!$this->user_registered) {
 				// only allow 12 pesukim campaign tasks
-				// if ($row['subject_id'] != 4) {
-				// 	continue;
-				// }
+				if ($row['subject_id'] != 136 || $printing_mode) {
+					continue;
+				}
 			}
 			if ($row["level"] > 0 && $row["track_id"] > 0) {
 				$user_track = new user_track($row);
