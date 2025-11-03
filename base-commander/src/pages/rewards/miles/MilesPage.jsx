@@ -131,7 +131,7 @@ class MilesPage extends Component {
                   <InlineSync icon='plus' /> Add (Auction Only)
               </Button>
             </ButtonBar>
-            <ButtonBar>
+            <ButtonBar style={{ marginTop: '12px' }}>
               <Button color='danger' 
                 onClick={ this.subtractMiles() }
                 disabled={ disableActions }>
