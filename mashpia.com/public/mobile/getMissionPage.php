@@ -907,7 +907,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				<div class='panel-heading'>
 					<i class='glyphicon glyphicon-chevron-left'></i> Mechunachim
 				</div>
-				<div class='collapse'>
+				<div class='collapse in'>
 					<div class='panel-body'>
 						<!-- add link that drops down when clicked to add a new mechunach -->
 						<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>
@@ -921,7 +921,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 							</form>
 						</div>
 						<br />
-						<table class='table table-bordered' id='mechunachimTable'>
+						<table class='table table-bordered' id='mechunachimTable' style='margin-bottom: 120px;'>
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -980,14 +980,14 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		$.each(mechunachim, function(index, mechunach) {
 			if (! parseInt(mechunach.verified)) {
 				html += "<tr><td>" + mechunach.name + "</td><td>Not Verified</td><td>" +
-							"<input type='text' name='verification_code' class='verificationCode' placeholder='Code' style='width: 75px;' />" +
+							"<input type='text' name='verification_code' class='verificationCode' placeholder='Code' style='width: 75px; margin-right: 10px;' />" +
 							"<button type='submit' data-user_id='" + mechunach.mechanech_user_id + "' data-id='" + mechunach.mechunach_id + "' onclick='verifyMechunach(this); return false;'>Verify</button>" +
 							"</td></tr>";
 			} else {
 				html += "<tr><td>" + mechunach.name + "</td><td>Verified</td><td>" + mechunach.date_verified + "</td></tr>";
 			}
-			$('#mechunachimTable tbody').append(html);
 		});
+		$('#mechunachimTable tbody').append(html);
 	}
 
 	function submitAddMechunachForm(button) {
