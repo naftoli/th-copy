@@ -125,8 +125,6 @@ class Pesukim
             $headers[] = 'MIME-Version: 1.0';
             $headers[] = 'Content-type: text/html; charset=iso-8859-1';
             $headers[] = 'From: Chayolei Tzivos Hashem <admin@tzivoshashem.org>';
-            // Additional headers
-            $headers[] = 'To: ' . $parent_email;
             if (! @mail($parent_email, 'Your Chayolei Tzivos Hashem Verification', $msg, implode("\r\n", $headers))) {
                 // send mail to myself
                 $to = 'naftoli@tzivoshashem.org';
