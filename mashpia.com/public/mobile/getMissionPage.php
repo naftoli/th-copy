@@ -615,9 +615,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                     <?
                 }
             }        
-            ?>
-            
-            <?
+
             if (count($user->weekly_labels) > 0) {
                 $i = 1;
                 foreach ($user->sorted_weekly_labels as $value) {
@@ -692,9 +690,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                     $i++;
                 }
             }        
-            ?>
-            
-            <?
+
             if (count($user->shabbos_labels) > 0) {
                 $i = 1;
                 foreach ($user->sorted_shabbos_labels as $value) {
@@ -810,9 +806,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                     $i++;
                 }
             }
-            ?>
-            
-            <?
+
             if (count($user->no_label_subjects) > 0) {
                 $i = 1;
                 foreach ($user->no_label_subjects as $value) {
@@ -903,8 +897,68 @@ $daySchoolSubjects = setDaySchoolSubjects();
                     <?
                     $i++;
                 }
-            }        
-            ?>
+            }
+
+			if (isset($_COOKIE['naftoli'])) {
+			
+			// add 12 pesukim tasks
+			require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+			require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
+			$p = new Pesukim($user_id);
+			// add label for mechnachim and list of mechunachim
+			$mechunachim = $p->getMechunachim();
+			?>
+			<div class='panel panel-default'>
+				<div class='panel-heading'>
+					<i class='glyphicon glyphicon-chevron-left'></i> Mechunachim
+				</div>
+				<div class='collapse'>
+					<div class='panel-body'>
+						<!-- add link that drops down when clicked to add a new mechunach -->
+						<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>
+						<div>
+							<form name='addMechunachForm' id='addMechunachForm' action='addMechunach.php' method='post' style='display:none;'>
+								<input type='text' name='name' placeholder='Name' />
+								<input type='text' name='phone' placeholder='Phone' />
+								<input type='text' name='email' placeholder='Email' />
+								<input type='hidden' name='user_id' value='<?=$user_id?>' />
+								<button type='submit' onclick='submitAddMechunachForm(this); return false;'>Add</button>
+							</form>
+						</div>
+						<br />
+						<table class='table table-bordered' id='mechunachimTable'>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Verified</th>
+									<th>Code / Date Verified</th>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach ($mechunachim as $mechunach) {
+									$verified = $mechunach['verified'] ? 'Verified' : 'Not Verified';
+									// if not verified, add a link to verify
+									echo "<tr><td>" . $mechunach['name'] . "</td><td>" . $verified . "</td><td>";
+									if (! $mechunach['verified']) {
+										$id = $mechunach['mechunach_id'];
+										$user_id = $mechunach['mechanech_user_id'];
+										echo "<input type='text' name='verification_code' id='verificationCode' placeholder='Code' style='width: 75px;' />";
+										echo "<button type='submit' onclick='verifyMechunach(" . $id . ", " . $user_id . "); return false;'>Verify</button>";
+									} else {
+										echo $mechunach['date_verified'];
+									}
+									echo "</td></tr>";
+								}
+								?>
+							</tbody>
+						</table>
+						<br />
+						<br />
+					</div>
+				</div>
+			</div>  
+			
+			<?php } ?>
 
 <div id="audioModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1000;">
     <h3>Audio Player</h3>
@@ -917,6 +971,57 @@ $daySchoolSubjects = setDaySchoolSubjects();
 </div>
 <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
 <script>
+	function submitAddMechunachForm(button) {
+		// check what the button says 
+		button.disabled = true;
+		button.innerHTML = 'Adding...';
+		$.ajax({
+			url: '/pesukim/ajax/addMechunach.php',
+			type: 'POST',
+			data: $('#addMechunachForm').serialize(),
+			success: function(response) {
+				const res = JSON.parse(response);
+				button.disabled = false;
+				if (res.success) {
+					alert('Mechunach added successfully. You will receive a verification code via email.');
+					button.innerHTML = 'Add';
+				} else {
+					alert('Error adding mechunach.');
+					button.innerHTML = 'Add';
+				}
+			},
+			error: function(response) {
+				button.disabled = false;
+				button.innerHTML = 'Add';
+				alert('Error adding mechunach: ' + response.responseText);
+			}
+		});
+	}
+
+	function toggleAddMechunachForm() {
+		if (document.getElementById('addMechunachForm').style.display == 'block') {
+			document.getElementById('addMechunachForm').style.display = 'none';
+		} else {
+			document.getElementById('addMechunachForm').style.display = 'block';
+		}
+	}
+
+	function verifyMechunach(id, user_id) {
+		$.ajax({
+			url: '/pesukim/ajax/verifyMechunach.php',
+			type: 'POST',
+			data: { id: id, user_id: user_id, code: document.getElementById('verificationCode').value },
+			success: function(response) {
+				const res = JSON.parse(response);
+				if (res.success) {
+					alert('Mechunach verified successfully.');
+				} else {
+					alert('Error verifying mechunach.');
+				}
+			}
+		});
+	}
+
 	function showAudioPlayer(e) {
 		var audioFile = '/chidonOld/limud/audio_links/' + e.dataset.audio + '.mp3';
 		document.getElementById('audioModal').style.display = 'block';
