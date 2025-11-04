@@ -943,11 +943,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 					</div>
 				</div>
 			</div> 
-			<script>
-				$(document).ready(function() {
-					getMechunachim();
-				});
-			</script>
 			<?php } ?>
 
 <div id="audioModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1000;">
@@ -961,7 +956,12 @@ $daySchoolSubjects = setDaySchoolSubjects();
 </div>
 <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
 <script>
+	$(document).ready(function() {
+		getMechunachim();
+	});
+
 	function getMechunachim() {
+		$('#mechunachimTable tbody').empty();
 		$.ajax({
 			url: '/pesukim/ajax/getMechunachim.php',
 			type: 'POST',
@@ -991,7 +991,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			} else {
 				html += "<tr><td>" + mechunach.name + "</td><td>Verified</td><td>" + mechunach.date_verified + "</td></tr>";
 			}
-			$('#mechunachimTable tbody').empty().html(html);
+			$('#mechunachimTable tbody').append(html);
 		});
 	}
 
