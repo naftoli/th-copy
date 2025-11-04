@@ -41,11 +41,13 @@ function updateRaffle() {
         } else {
             html += '<th>Raffle</th>';
         }
-        html += '<th>Grade</th> <th>User ID</th> <th>Soldier Name</th> <th>Full Address</th>';
-        // if (school_id == 269 || school_id == 61 ) {
-        //     html += '<th>Country</th>';
-        // }
-        html += '<th>Prize ID</th><th>Prize Won</th></thead>';
+        html += '<th>Grade</th>';
+        if ( school_id == 269 || school_id == 61 ) {
+            html += '<th>Family ID</th>';
+        } else {
+            html += '<th>User ID</th>';
+        }
+        html += '<th>Soldier Name</th> <th>Full Address</th> <th>Prize ID</th><th>Prize Won</th></thead>';
         html += '<tbody>';
         
         raffles.forEach( function ( raffle ){
@@ -82,6 +84,11 @@ winner_renderer.prototype.render = function(show_country, show_school, raffle_na
     }
 
     this.html += '<td>' + this.winner.grade + '</td>';
+    if (show_country) {
+        this.html += '<td>' + this.winner.admin_id + '</td>';
+    } else {
+        this.html += '<td>' + this.winner.user_id + '</td>';
+    }
     this.html += '<td>' + this.winner.user_id + '</td>';
     this.html += '<td>' + this.winner.first_name + ' ' + this.winner.last_name + '</td>';
     this.html += '<td>' + this.winner.address.street + ' ' + this.winner.address.city + ', ' +

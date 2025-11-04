@@ -413,7 +413,7 @@ class Raffle
         }
         // shared sql
         $sql .= "users.user_id, users.first, users.last, users.gender, schools.school_id, schools.school_name, schools.hachayol_name, schools.shorthand, 
-            classes.class_sub, classes.class_grade, admins.admin_address1, admin_city, admin_state, admin_postal, admin_country FROM raffle_winners ";
+            classes.class_sub, classes.class_grade, admins.admin_id, admins.admin_address1, admin_city, admin_state, admin_postal, admin_country FROM raffle_winners ";
         // specific joins
         if ($this->type == 'yearly' || ($this->type == "monthly" && $this->raffle_id != 10)) {
             $sql .= "JOIN prizes_auction USING (prize_id) ";
@@ -464,6 +464,7 @@ class Raffle
                 'hachayol_name' => $row['hachayol_name'],
                 'grade' => $row['class_grade'] . ($row['class_sub'] ? " - " . $row['class_sub'] : ""),
                 'shorthand' => $row['shorthand'],
+                'admin_id' => $row['admin_id'],
             ];
 
             if ($shipping_info) {
