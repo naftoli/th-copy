@@ -926,7 +926,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 							</form>
 						</div>
 						<br />
-						<table class='table table-bordered' id='mechunachimTable'>
+						<table class='table table-bordered responsive' id='mechunachimTable'>
 							<thead>
 								<tr>
 									<th>Name</th>
@@ -935,29 +935,19 @@ $daySchoolSubjects = setDaySchoolSubjects();
 								</tr>
 							</thead>
 							<tbody>
-								<?php foreach ($mechunachim as $mechunach) {
-									$verified = $mechunach['verified'] ? 'Verified' : 'Not Verified';
-									// if not verified, add a link to verify
-									echo "<tr><td>" . $mechunach['name'] . "</td><td>" . $verified . "</td><td>";
-									if (! $mechunach['verified']) {
-										$id = $mechunach['mechunach_id'];
-										$user_id = $mechunach['mechanech_user_id'];
-										echo "<input type='text' name='verification_code' class='verificationCode' placeholder='Code' style='width: 75px;' />";
-										echo "<button type='submit' data-user_id='" . $user_id . "' data-id='" . $id . "' onclick='verifyMechunach(this); return false;'>Verify</button>";
-									} else {
-										echo $mechunach['date_verified'];
-									}
-									echo "</td></tr>";
-								}
-								?>
+								
 							</tbody>
 						</table>
 						<br />
 						<br />
 					</div>
 				</div>
-			</div>  
-			
+			</div> 
+			<script>
+				$(document).ready(function() {
+					getMechunachim();
+				});
+			</script>
 			<?php } ?>
 
 <div id="audioModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1000;">
@@ -971,6 +961,40 @@ $daySchoolSubjects = setDaySchoolSubjects();
 </div>
 <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
 <script>
+	function getMechunachim() {
+		$.ajax({
+			url: '/pesukim/ajax/getMechunachim.php',
+			type: 'POST',
+			data: { user_id: <?=$user_id?> },
+			success: function(response) {
+				const res = JSON.parse(response);
+				if (res.success) {
+					displayMechunachim(res.data);
+				} else {
+					alert('Error getting mechunachim.');
+				}
+			},
+			error: function(response) {
+				alert('Error getting mechunachim: ' + response.responseText);
+			}
+		});
+	}
+
+	function displayMechunachim(mechunachim) {
+		let html = '';
+		$.each(mechunachim, function(index, mechunach) {
+			if (!mechunach.verified) {
+				html += "<tr><td>" + mechunach.name + "</td><td>Not Verified</td><td>" +
+							"<input type='text' name='verification_code' class='verificationCode' placeholder='Code' style='width: 75px;' />" +
+							"<button type='submit' data-user_id='" + mechunach.mechanech_user_id + "' data-id='" + mechunach.mechunach_id + "' onclick='verifyMechunach(this); return false;'>Verify</button>" +
+							"</td></tr>";
+			} else {
+				html += "<tr><td>" + mechunach.name + "</td><td>Verified</td><td>" + mechunach.date_verified + "</td></tr>";
+			}
+			$('#mechunachimTable tbody').empty().html(html);
+		});
+	}
+
 	function submitAddMechunachForm(button) {
 		// check what the button says 
 		button.disabled = true;
@@ -985,6 +1009,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				if (res.success) {
 					alert('Mechunach added successfully. You will receive a verification code via email.');
 					button.innerHTML = 'Add';
+					getMechunachim();
 				} else {
 					alert('Error adding mechunach.');
 					button.innerHTML = 'Add';
@@ -1020,6 +1045,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				const res = JSON.parse(response);
 				if (res.success) {
 					alert('Mechunach verified successfully.');
+					getMechunachim();
 				} else {
 					alert('Error verifying mechunach.');
 				}
