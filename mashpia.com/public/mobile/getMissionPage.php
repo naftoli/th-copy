@@ -902,11 +902,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			if (isset($_COOKIE['naftoli'])) {
 			
 			// add 12 pesukim tasks
-			require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-			require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
-			$p = new Pesukim($user_id);
-			// add label for mechnachim and list of mechunachim
-			$mechunachim = $p->getMechunachim();
 			?>
 			<div class='panel panel-default'>
 				<div class='panel-heading'>
@@ -926,7 +921,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 							</form>
 						</div>
 						<br />
-						<table class='table table-bordered responsive' id='mechunachimTable'>
+						<table class='table table-bordered' id='mechunachimTable'>
 							<thead>
 								<tr>
 									<th>Name</th>
