@@ -1007,10 +1007,13 @@ $daySchoolSubjects = setDaySchoolSubjects();
 	}
 
 	function verifyMechunach(id, user_id) {
+		const code = document.getElementById('verificationCode').value;
+		// encode the code
+		const encodedCode = encodeURIComponent(code);
 		$.ajax({
 			url: '/pesukim/ajax/verifyMechunach.php',
 			type: 'POST',
-			data: { id: id, user_id: user_id, code: document.getElementById('verificationCode').value },
+			data: { id: id, user_id: user_id, code: encodedCode },
 			success: function(response) {
 				const res = JSON.parse(response);
 				if (res.success) {

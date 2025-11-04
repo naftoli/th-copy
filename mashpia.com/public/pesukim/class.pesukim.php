@@ -145,7 +145,7 @@ class Pesukim
         $stmt->execute([
             'user_id' => $this->user_id,
             'mechunach_id' => $mechunach_id,
-            'code' => $code
+            'code' => urldecode($code)
         ]);
         return $stmt->rowCount() > 0;
     }
