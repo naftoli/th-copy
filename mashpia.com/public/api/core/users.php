@@ -394,12 +394,14 @@ class UsersRouter {
         foreach ($users as $user) {
             $soldier = \Soldier::find($user);
             // delete soldier if has no points
-            if ($soldier->canDestroy()) {
-                $soldier->delete();
-                // remove from parent account
-                $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id=' . $user->user_id . ' AND auth = "user"');
-//                return json_response('Soldier has been deleted.');
-            }
+//             if ($soldier->canDestroy()) {
+//                 $soldier->delete();
+//                 // remove from parent account
+//                 $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id=' . $user->user_id . ' AND auth = "user"');
+//                 // remove from user_tracks
+//                 $MASHPIA_DB->query('DELETE FROM user_tracks WHERE user_id = ' . $user->user_id);
+// //                return json_response('Soldier has been deleted.');
+//             }
 
             // make sure we have a class connected to student
             if (!$soldier->class_id) {
