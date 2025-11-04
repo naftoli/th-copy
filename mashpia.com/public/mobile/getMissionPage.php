@@ -942,8 +942,8 @@ $daySchoolSubjects = setDaySchoolSubjects();
 									if (! $mechunach['verified']) {
 										$id = $mechunach['mechunach_id'];
 										$user_id = $mechunach['mechanech_user_id'];
-										echo "<input type='text' name='verification_code' id='verificationCode' placeholder='Code' style='width: 75px;' />";
-										echo "<button type='submit' onclick='verifyMechunach(" . $id . ", " . $user_id . "); return false;'>Verify</button>";
+										echo "<input type='text' name='verification_code' class='verificationCode' placeholder='Code' style='width: 75px;' />";
+										echo "<button type='submit' data-user_id='" . $user_id . "' data-id='" . $id . "' onclick='verifyMechunach(this); return false;'>Verify</button>";
 									} else {
 										echo $mechunach['date_verified'];
 									}
@@ -1006,8 +1006,10 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		}
 	}
 
-	function verifyMechunach(id, user_id) {
-		const code = document.getElementById('verificationCode').value;
+	function verifyMechunach(elem) {
+		const id = elem.dataset.id;
+		const user_id = elem.dataset.user_id;
+		const code = $(elem).parent().find('.verificationCode').val();
 		// encode the code
 		const encodedCode = encodeURIComponent(code);
 		$.ajax({
