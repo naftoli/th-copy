@@ -983,7 +983,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 	function displayMechunachim(mechunachim) {
 		let html = '';
 		$.each(mechunachim, function(index, mechunach) {
-			if (!mechunach.verified) {
+			if (! parseInt(mechunach.verified)) {
 				html += "<tr><td>" + mechunach.name + "</td><td>Not Verified</td><td>" +
 							"<input type='text' name='verification_code' class='verificationCode' placeholder='Code' style='width: 75px;' />" +
 							"<button type='submit' data-user_id='" + mechunach.mechanech_user_id + "' data-id='" + mechunach.mechunach_id + "' onclick='verifyMechunach(this); return false;'>Verify</button>" +
