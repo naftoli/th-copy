@@ -135,7 +135,8 @@ if (isset($_POST['submit'])) {
         93 => "AssistingOtherJews",
         94 => "YomTov",
         100 => "BriasHaguf",
-        101 => "MishnaBalPeh"
+        101 => "MishnaBalPeh", 
+        136 => "12Pesukim"
     );
 
     // there is null data in the database under mission_number
