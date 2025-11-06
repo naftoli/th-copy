@@ -64,6 +64,11 @@ class user {
 	public $weekly_tasks = array();
 	public $shabbos_tasks = array();
 	public $no_label_tasks = array();
+	public $pesukim_tasks = array();
+
+	// PESUKIM TASKS //
+	public $pesukim_labels = array();
+	public $sorted_pesukim_labels = array();
 	
 	// DAILY TASKS //
 	public $daily_labels = array();
@@ -463,12 +468,13 @@ class user {
 		}
 		
 		while ($row = mysql_fetch_assoc( $query ) ) {
-			if (!$this->user_registered) {
+			if (! $this->user_registered) {
 				// only allow 12 pesukim campaign tasks
 				if ($row['subject_id'] != 136 || $printing_mode) {
 					continue;
 				}
-			}
+			} 
+			else if ($row['subject_id'] == 136 && $printing_mode) continue;
 			if ($row["level"] > 0 && $row["track_id"] > 0) {
 				$user_track = new user_track($row);
 				$user_track->get_subject_info();
@@ -522,6 +528,11 @@ class user {
 			}
 			for ($nltno = 0; $nltno < count($user_track->no_label_tasks); $nltno++) {
 				array_push($this->no_label_tasks, $user_track->no_label_tasks[$nltno]);
+			}
+			if ($user_track->subject_id == 136) {
+				for ($ptno = 0; $ptno < count($user_track->pesukim_tasks); $ptno++) {
+					array_push($this->pesukim_tasks, $user_track->pesukim_tasks[$ptno]);
+				}
 			}
 		}
 
@@ -640,6 +651,26 @@ class user {
 				array_push($this->no_label_labels, $key2);
 		}
 		// ********** NO LABEL TASKS ********** //
+
+		// ********** PESUKIM TASKS ********** //
+		for ($ptno = 0; $ptno < count($this->pesukim_tasks); $ptno++) {		
+			$label_name = $this->pesukim_tasks[$ptno]->label_name;			
+			$frequency_id = $this->pesukim_tasks[$ptno]->frequency_id;
+			
+			if (!in_array($label_name, $this->pesukim_labels)) {
+				if (array_key_exists($frequency_id, $this->sorted_pesukim_labels)) {
+					$missing_label = $this->sorted_pesukim_labels[$frequency_id];
+					$logger->warning(
+						"missions with label '$missing_label' are hidden because it has the same frequency_id $frequency_id as label '$label_name'",
+						['user_id' => $this->user_id]
+					);
+				}
+				array_push($this->pesukim_labels, $label_name);
+				$this->sorted_pesukim_labels[$frequency_id] = $label_name;
+			}
+		}
+		ksort($this->sorted_pesukim_labels);
+		// ********** PESUKIM TASKS ********** //
 	}	
 	
 	function get_september_user_tracks($subject_id, $start_date, $end_date) {		

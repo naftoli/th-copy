@@ -16,6 +16,7 @@ class user_track
 	public $weekly_tasks = array();
 	public $shabbos_tasks = array();
 	public $no_label_tasks = array();
+	public $pesukim_tasks = array();
 	
 	public $show_user_track;
 	public $medals = array();
@@ -129,6 +130,9 @@ class user_track
         if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
 		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
 //        if ($this->subject_id == 21 && !$chidonLimmud) echo $sql;
+		// if ($this->subject_id == 136) {
+		// 	echo $sql . "<br />"; 
+		// }
 
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
@@ -179,6 +183,14 @@ class user_track
         			for ($nltno = 0; $nltno < count($no_label_tasks); $nltno++) {
         				array_push($this->no_label_tasks, $no_label_tasks[$nltno]);
         			}
+
+					// ***** Pesukim Tasks *****//
+					if ($this->subject_id == 136) {
+        				$pesukim_tasks = $date_tasks_mission->get_pesukim_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
+        				for ($ptno = 0; $ptno < count($pesukim_tasks); $ptno++) {
+        					array_push($this->pesukim_tasks, $pesukim_tasks[$ptno]);
+        				}
+					}
                 } 
 			}		
 		}
