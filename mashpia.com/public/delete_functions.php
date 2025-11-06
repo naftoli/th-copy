@@ -45,6 +45,7 @@ function delete_task_mark($parameters) {
 	$user_id = $parameters[0];
 	$date_task_id = $parameters[1];
 	$mark_date = $parameters[2];
+	$mechunach_id = count($parameters) > 3 ? $parameters[3] : null;
 
 	$sql = "SELECT date_tasks_mission_id, mandatory_qty FROM date_tasks WHERE date_task_id=" . $date_task_id;
 	$query = mysql_query($sql);
@@ -55,10 +56,13 @@ function delete_task_mark($parameters) {
 	//if ($mark_date > 0)
 		//$sql = "DELETE FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id . " AND mark_date=" . $mark_date;	
 	//else
-	$sql = "DELETE FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id;	
+	$sql = "DELETE FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id;
+	if ($mechunach_id) {
+		$sql .= " and mechunach_id = " . $mechunach_id;
+	}
 	$query = mysql_query($sql);
 	
-	if ($query) {
+	if ($query && mysql_affected_rows() > 0) {
 		if ($mandatory) {
 			$delete_sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;		
 			$delete_query = mysql_query($delete_sql);

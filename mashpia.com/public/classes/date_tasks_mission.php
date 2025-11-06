@@ -62,13 +62,14 @@ class date_tasks_mission {
 		$sql .= " AND f.frequency_name = \"Daily\" ";
 		$sql .= "and dt.mission_marking = 1 ";
 		$sql .= "ORDER BY dt.label_ord, dt.grid_id";
+		// if ($subject_id == 136) echo $sql . "<br />";
 
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);
 		while ($row = mysql_fetch_assoc($query)) {
 			if ($this->allowPersonalization) {
 				if ( $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
-				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
+				if ( $subject_id != 136 && $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
 			} else {
 				if ( $row['default_on'] == 0 ) continue;
 			}
@@ -83,7 +84,7 @@ class date_tasks_mission {
 			$daily_task->set_date_tasks_marks($user_id, $start_date, $end_date);
 			array_push($daily_tasks, $daily_task);
 		}
-		// echo "<pre>" . print_r($daily_tasks) . "</pre>";
+		
 		return $daily_tasks;
 	}
 	
@@ -206,6 +207,45 @@ class date_tasks_mission {
 		}
 		
 		return $no_label_tasks;				
+	}
+
+	function get_pesukim_tasks($start_date, $end_date, $user_id, $subject_id, $subject_name, $track_id, $level, $subject_image_id) {	
+		$pesukim_tasks = array();
+		
+		$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+		$sql = $sql . "FROM date_tasks AS dt ";
+		$sql = $sql . "JOIN labels AS l USING (label_id) ";
+		$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
+		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
+		$sql = $sql . "AND f.frequency_name = \"Pesukim\" ";
+		$sql .= "and dt.mission_marking = 1 ";
+		//$sql = $sql . "ORDER BY dt.ord, dt.label_ord";
+		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+        // echo $sql . "<br />"; 
+		$query = mysql_query($sql);
+        $d = new Defaults($user_id);
+		while ($row = mysql_fetch_assoc($query)) {
+		    // if ($this->allowPersonalization) {
+			// 	if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
+			// 	if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
+			// } else {
+			// 	if ( $row['default_on'] == 0 ) continue;
+			// }
+			
+			// if (!empty($this->tasks)) {
+			// 	if (!in_array($row['name'], $this->tasks)) continue;
+			// }
+			
+			$pesukim_task = new pesukim_task($row);
+			$pesukim_task->set_subject_id($subject_id);
+			$pesukim_task->set_subject_image_id($subject_image_id);
+			$pesukim_task->set_date_task_mark($user_id, $start_date, $end_date);
+			$pesukim_task->set_mark_date($end_date);
+			array_push($pesukim_tasks, $pesukim_task);
+		}
+		// echo "<pre>"; print_r($pesukim_tasks); echo "</pre>"; exit;	
+		return $pesukim_tasks;
 	}
 
 	function set_week_string()
