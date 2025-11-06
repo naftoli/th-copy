@@ -120,7 +120,7 @@ if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 28) { // if the date
 	$curParsha['end'] = $end;
 } else { // if the date was provided by the user
 	$jd = intval($_GET['d']);
-	// $jd = $jd < unixtojd() ? $jd : unixtojd(); // make sure that they cannot go into the future
+	if (! isset($_COOKIE['naftoli'])) $jd = $jd < unixtojd() ? $jd : unixtojd(); // make sure that they cannot go into the future
 	$today = intval(date('w', jdtounix($jd)));
 	if (isset($_GET['s']) && $_GET['s'] == 1) {
 		$start = $jd;
