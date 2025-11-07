@@ -83,7 +83,7 @@ if ($admin_user['auth'] != 'super') {
     }
 } 
 
-if ($admin_user['admin_id'] == 175069) $disabled = false; // naftoli can override all
+if (in_array($admin_user['admin_id'], [175069, 200721])) $disabled = false; // naftoli and tzivi can override all
 
 if (isset($_POST['yr']) && $_POST['yr'] != $year) $disabled = true;
 

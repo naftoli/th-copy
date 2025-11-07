@@ -172,6 +172,7 @@ function add_task_mark($parameters, $update = true) {
 	$user_id = $parameters[0];
 	$date_task_id = $parameters[1];
 	$mark_date = $parameters[2];
+	$mechunach_id = count($parameters) > 3 ? $parameters[3] : null;
 
 	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date, dtm.subject_id ";
 	$sql = $sql . "FROM date_tasks AS dt ";
@@ -214,10 +215,16 @@ function add_task_mark($parameters, $update = true) {
 						and user_id = " . $user_id . "
 						and mark_date >= " . $start_date . "
 						and mark_date <= " . $end_date;
+		if ($mechunach_id) {
+			$sql .= " and mechunach_id = " . $mechunach_id;
+		}
 	} else {
 		$sql = "select * from date_tasks_marks
 						where date_task_id = " . $date_task_id . "
 						and user_id = " . $user_id;
+		if ($mechunach_id) {
+			$sql .= " and mechunach_id = " . $mechunach_id;
+		}
 	}
 	$result = mysql_query($sql);
 	if (mysql_num_rows($result) > 0) {
@@ -226,6 +233,12 @@ function add_task_mark($parameters, $update = true) {
 
 	$insert_sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", done_qty=1, mark_points=" . $points;
 	//echo $insert_sql . "<br />";
+	if ($subject_id == 136) {
+		$insert_sql .= ", auction_only_points = 1";
+		if ($mechunach_id) {
+			$insert_sql .= ", mechunach_id = " . $mechunach_id;
+		}
+	}
 	$insert_query = mysql_query($insert_sql);
 
 	if ($insert_query) {
@@ -293,7 +306,7 @@ function add_daily_task_mark($parameters, $update = true)
 	$date_task_id = $parameters[1];
 	$mark_date = $parameters[2];
 
-	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date
+	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date, dtm.subject_id 
 			FROM date_tasks dt
 			join date_tasks_missions dtm using (date_tasks_mission_id)
 			WHERE date_task_id=" . $date_task_id;
@@ -305,7 +318,7 @@ function add_daily_task_mark($parameters, $update = true)
 	//$mark_description = $row["name"];
 	$date_tasks_mission_id = $row['date_tasks_mission_id'];
 	$grid_id = $row['grid_id'];
-
+	$subject_id = $row['subject_id'];
 	// need to make sure marks in system aren't greater than or less than current mission dates
 	// this will make sure user cannot switch langs and marks same mission twice
 	if ($mark_date > $row['end_date']) {
@@ -338,6 +351,7 @@ function add_daily_task_mark($parameters, $update = true)
 	$sql = "INSERT INTO date_tasks_marks SET date_task_id= $date_task_id, "
 		." user_id= $user_id, mark_date=$mark_date, "
 		." mark_points= $points, done_qty = 1";
+	if ($subject_id == 136) $sql .= ", auction_only_points = 1";
 	$query = mysql_query($sql);
 
 	if ($query)
@@ -423,7 +437,7 @@ function add_daily_task_mark2($parameters, $update = true)
 	require_once("classes/rank_updater.php");
 	require_once("classes/medal_updater.php");
 
-	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date
+	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date, dtm.subject_id 
 			FROM date_tasks dt
 			join date_tasks_missions dtm using (date_tasks_mission_id)
 			WHERE date_task_id=" . $date_task_id;
@@ -435,7 +449,7 @@ function add_daily_task_mark2($parameters, $update = true)
 	//$mark_description = $row["name"];
 	$date_tasks_mission_id = $row['date_tasks_mission_id'];
 	$grid_id = $row['grid_id'];
-
+	$subject_id = $row['subject_id'];
 	// need to make sure marks in system aren't greater than or less than current mission dates
 	// this will make sure user cannot switch langs and marks same mission twice at different times
 	if ($mark_date > $row['end_date']) {
@@ -464,6 +478,7 @@ function add_daily_task_mark2($parameters, $update = true)
 	}
 
 	$sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", mark_points=" . $points . ",done_qty=1";
+	if ($subject_id == 136) $sql .= ", auction_only_points = 1";
 	//echo $sql;
 	$query = mysql_query($sql);
 
@@ -607,13 +622,13 @@ function add_mark($parameters, $update = true)
 	//$mandatory = $row['mandatory_qty'];
 	// ***** DATE TASK INFORMATION ***** //
 
-	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date
+	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date, dtm.subject_id  
 					FROM date_tasks dt
 					join date_tasks_missions dtm using (date_tasks_mission_id)
 					WHERE date_task_id=" . $date_task_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
-
+	$subject_id = $row['subject_id'];
 	$date_tasks_mission_id = mysql_real_escape_string($row['date_tasks_mission_id']);
 	$task_name = $row['name'];
 	//$mark_description = mysql_real_escape_string($row['description']);
@@ -622,6 +637,7 @@ function add_mark($parameters, $update = true)
 	$grid_id = $row['grid_id'];
 	$mandatory = $row['mandatory_qty'];
 	$short_name = $row['short_name'];
+	$daily = $row['daily_task'];
 
 	// need to make sure marks in system aren't greater than or less than current mission dates
 	if ($mark_date > $row['end_date']) {
@@ -685,6 +701,10 @@ function add_mark($parameters, $update = true)
         case 20010:
             $max = 120;
             break;
+		// times said pesukim per day
+		case 15036:
+			$max = 10;
+			break;
     }
     if ($max && $user_mark > $max) $user_mark = $max;
 
@@ -698,15 +718,18 @@ function add_mark($parameters, $update = true)
 		$start_date = $row['start_date'];
 		$end_date = $row['end_date'];
 		$sql = "select * from date_tasks_marks dtm
-						join date_tasks dt using (date_task_id)
-						where grid_id = " . $grid_id . "
-						and mark_date >= " . $start_date . "
-						and mark_date <= " . $end_date . "
-						and user_id = " . $user_id;
+				join date_tasks dt using (date_task_id)
+				where grid_id = " . $grid_id . "
+				and user_id = " . $user_id;
+		if (! $daily) {
+			$sql .= " and mark_date >= " . $start_date . " and mark_date <= " . $end_date;
+		} else {
+			$sql .= " and mark_date = " . $mark_date;
+		}
 	} else {
 		$sql = "select * from date_tasks_marks
-						where date_task_id = " . $date_task_id . "
-						and user_id = " . $user_id;
+				where date_task_id = " . $date_task_id . "
+				and user_id = " . $user_id;
 	}
 
 	//$sql = "SELECT * FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id;
@@ -728,9 +751,20 @@ function add_mark($parameters, $update = true)
 		// if done qty is set to 0, delete date task mark
 		if ($user_mark == 0) {
 			$sql = "delete from date_tasks_marks where user_id = " . $user_id . " and date_task_id = " . $date_task_id;
+			if ($grid_id && $daily) {
+				$sql .= " and mark_date = " . $mark_date;
+			} 
 		} else {
 			//$oldMark = $row['done_qty'];
-			$sql = "UPDATE date_tasks_marks SET done_qty=" . $user_mark . " WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id;
+			$sql = "UPDATE date_tasks_marks SET done_qty=" . $user_mark;
+			if ($subject_id == 136) {
+				$mark_points *= $user_mark;
+				$sql .= ", mark_points = " . $mark_points;
+			}
+			$sql .= " WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id;
+			if ($grid_id && $daily) {
+				$sql .= " and mark_date = " . $mark_date;
+			} 
 		}
 		$query = mysql_query($sql);
 		if ($query)
@@ -738,7 +772,9 @@ function add_mark($parameters, $update = true)
 	}
 	else
 	{
+		if ($subject_id == 136) $mark_points *= $user_mark;
 		$sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", done_qty=" . $user_mark . ", mark_points=" . $mark_points;
+		if ($subject_id == 136) $sql .= ", auction_only_points = 1";
 		$query = mysql_query($sql);
 		//echo $query;
 		if ($query)

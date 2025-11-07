@@ -135,7 +135,8 @@ if (isset($_POST['submit'])) {
         93 => "AssistingOtherJews",
         94 => "YomTov",
         100 => "BriasHaguf",
-        101 => "MishnaBalPeh"
+        101 => "MishnaBalPeh", 
+        136 => "12Pesukim"
     );
 
     // there is null data in the database under mission_number
@@ -368,10 +369,13 @@ if (isset($_POST['submit'])) {
                 }
                 //continue;
                 // make sure we don't have incorrect yiddish label for english task or vice versa
-                if ($lang == 1) {
-                    if ($labelID > 49) $labelID -= 20;
-                } else if ($lang == 2) {
-                    if ($labelID > 29 && $labelID < 50) $labelID += 20;
+                // for pesukim, we don't need to do this
+                if ($subject_id != 136) {
+                    if ($lang == 1) {
+                        if ($labelID > 49) $labelID -= 20;
+                    } else if ($lang == 2) {
+                        if ($labelID > 29 && $labelID < 50) $labelID += 20;
+                    }
                 }
                 /*
                 // set the start date from the array if it is full and $startDate is empty
@@ -438,7 +442,7 @@ if (isset($_POST['submit'])) {
                     $end = $endDate;
 //					        echo $start . '-' . $end . "<br /><br />"; continue;
 //                  echo 'Start: ' . $start . ' Today: ' . unixtojd() . "<br />";
-//                    if ($start <= unixtojd()) continue;
+                   if ($start <= unixtojd()) continue;
 
                     //while ($start <= $end) {
                     foreach ($types as $type) {

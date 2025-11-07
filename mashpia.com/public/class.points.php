@@ -80,10 +80,11 @@ class Points
     
     public function getAuctionPoints( $auction_start_date ) {
         $points = $this->getTotalMarks("WHERE user_id = $this->user_id and mark_date >= $auction_start_date");
-        $arrParams['user_code'] = $this->usercode;
-        $arrParams['auction_date'] = $auction_start_date;
-        $arrPoints = header_auction_points( $arrParams );
-        $points += intval($arrPoints[$arrParams['user_code']]);
+        $points += intval($this->getNonMarkPoints($auction_start_date));
+        // $arrParams['user_code'] = $this->usercode;
+        // $arrParams['auction_date'] = $auction_start_date;
+        // $arrPoints = header_auction_points( $arrParams );
+        // $points += intval($arrPoints[$arrParams['user_code']]);
         
         if ($points >= 1200) {
             return $this->getTotalPoints();
@@ -126,7 +127,7 @@ class Points
     // used in statement.php line 628
     public function getMashpiaStorePoints() {
         $reset_date = $this->getStoreResetDate();
-        $points = $this->getTotalMarks( "WHERE user_id = $this->user_id and mark_date >= " . $reset_date );
+        $points = $this->getTotalMarks( "WHERE user_id = $this->user_id and mark_date >= " . $reset_date . " and auction_only_points = 0" );
         return $points;
     }
 
@@ -237,7 +238,8 @@ class Points
         $sql = "select * from pointsDB.user_points  
                 where user_id = " . $this->user_id . " 
                 and created >= '" . $gregorian . "' 
-                and auction_only_points = 0";
+                and auction_only_points = 0 
+                and resource_name != 'auction_only_miles'";
         $result = mysql_query( $sql );
         while ( $row = mysql_fetch_assoc( $result ) ) {
             $details[] = $row;
@@ -277,7 +279,8 @@ class Points
                 AND (up.reversed_user_point_id IS NULL OR up.reversed_user_point_id not in (
                     SELECT user_point_id FROM pointsDB.user_points WHERE created < '$formatted_date' AND user_id = '{$this->user_id}'
                 ))
-                AND (up.auction_only_points = 0 OR up.resource_name = 'auction_only_miles')";
+                AND up.auction_only_points = 0 
+                AND up.resource_name != 'auction_only_miles'";
 //        }
         if ($this->debug) echo $sql . "<br />";
         // $GLOBALS['logger']->debug($sql);

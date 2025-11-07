@@ -356,7 +356,7 @@ class UsersRouter {
     }
 
     public function removeFromSchool() {
-        global $MASHPIA_DB;
+        global $MASHPIA_DB, $current_user;
 
         if (is_array($_POST['user_id'])) {
             $users = $_POST['user_id'];
@@ -394,10 +394,12 @@ class UsersRouter {
         foreach ($users as $user) {
             $soldier = \Soldier::find($user);
             // delete soldier if has no points
-            if ($soldier->canDestroy()) {
+            if ($current_user->isHQ() && $soldier->canDestroy()) {
                 $soldier->delete();
                 // remove from parent account
                 $MASHPIA_DB->query('DELETE FROM admin_auths WHERE id=' . $user->user_id . ' AND auth = "user"');
+                // remove from user_tracks
+                $MASHPIA_DB->query('DELETE FROM user_tracks WHERE user_id = ' . $user->user_id);
 //                return json_response('Soldier has been deleted.');
             }
 
