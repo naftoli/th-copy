@@ -226,16 +226,16 @@ class date_tasks_mission {
 		$query = mysql_query($sql);
         $d = new Defaults($user_id);
 		while ($row = mysql_fetch_assoc($query)) {
-		    // if ($this->allowPersonalization) {
-			// 	if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
-			// 	if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
-			// } else {
-			// 	if ( $row['default_on'] == 0 ) continue;
-			// }
+		    if ($this->allowPersonalization) {
+				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
+				// if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
+			} else {
+				if ( $row['default_on'] == 0 ) continue;
+			}
 			
-			// if (!empty($this->tasks)) {
-			// 	if (!in_array($row['name'], $this->tasks)) continue;
-			// }
+			if (!empty($this->tasks)) {
+				if (!in_array($row['name'], $this->tasks)) continue;
+			}
 			
 			$pesukim_task = new pesukim_task($row);
 			$pesukim_task->set_subject_id($subject_id);

@@ -54,14 +54,14 @@ class pesukim_task {
 		$this->start_date = $start_date;
 		$this->end_date = $end_date;
 		
-		$sql = "SELECT * FROM date_tasks_marks WHERE date_task_id=" . $this->date_task_id . " AND user_id=" . $user_id . " AND (mark_date >= " . $start_date . " AND mark_date <= " . $end_date . ")";				
-		if ($this->grid_id) {
+		// $sql = "SELECT * FROM date_tasks_marks WHERE date_task_id=" . $this->date_task_id . " AND user_id=" . $user_id . " AND (mark_date >= " . $start_date . " AND mark_date <= " . $end_date . ")";				
+		// if ($this->grid_id) {
 			$sql = "select * from date_tasks_marks dtm
 					join date_tasks dt using (date_task_id) 
 					where dtm.user_id = " . $user_id . "
 					and dt.grid_id = " . $this->grid_id . "
 					and (mark_date >= " . $start_date . " AND mark_date <= " . $end_date . ")";
-		}
+		// }
 		//if ($user_id == 19970 && $this->date_task_id == 4000051) { echo $sql; exit; }
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
