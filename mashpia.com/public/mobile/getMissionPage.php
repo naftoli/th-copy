@@ -1106,7 +1106,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 								</script>
 								<input type='hidden' name='user_id' value='<?=$user_id?>' />
 								<?php if (! $desktop) echo "<br />"; ?>
-								<button type='submit' onclick='submitAddMechunachForm(this); return false;'>Add New</button>
+								<button type='submit' onclick='submitAddMechunachForm(this); return false;' style='margin-top: 10px;'>Add New</button>
 							</form>
 						</div>
 						<br />
