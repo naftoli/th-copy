@@ -1074,9 +1074,9 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						</style>
 						<div>
 							<form name='addMechunachForm' id='addMechunachForm' action='addMechunach.php' method='post' style='<?=$style?>'>
-								<input type='text' name='name' placeholder='Name' />
-								<input type='text' name='phone' placeholder='Phone' />
-								<input type='text' name='email' placeholder='Email' />
+								<input type='text' name='name' placeholder='Name' required pattern=".{2,}" title="Please enter a valid name (at least 2 characters)" />
+								<input type='tel' name='phone' placeholder='Phone' required pattern="^(\+?\d{1,3}[- ]?)?\d{10,15}$" title="Please enter a valid phone number" />
+								<input type='email' name='email' placeholder='Email' required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" title="Please enter a valid email address" />
 								<input type='hidden' name='user_id' value='<?=$user_id?>' />
 								<?php if (! $desktop) echo "<br />"; ?>
 								<button type='submit' onclick='submitAddMechunachForm(this); return false;'>Add New</button>
