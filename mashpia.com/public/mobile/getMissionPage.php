@@ -1014,7 +1014,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 																	<input type="checkbox" class="box-check weekly<? if ($checked) echo " pre-checked"; if ($showMechunachim) echo " mechunach_task"; ?>"
 																		id="<?=$mid?>" 
 																		value="<?=$date_task_mark->date_task_id;?>:<?=$pesukim_task->mark_date;?>:<?=$mechunach_id ?? ''?>"
-																		<? if ($checked && $date_task_mark->mechunach_id == $mechunach_id) echo "checked" ?> />
+																		<? if ($checked && isset($mechunach_id) && $date_task_mark->mechunach_id == $mechunach_id) echo "checked" ?> />
 																	<!--<span class="circle"></span>-->
 																	<span class="check"></span>
 																	<span class="box"></span>
