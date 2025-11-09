@@ -1103,15 +1103,15 @@ $daySchoolSubjects = setDaySchoolSubjects();
 <script>
 	$(document).ready(function() {
 		async function init() {
-			await getMechunachim();
+			await getMechunachim(false);
 			await checkMechunachimTasks();
 		}
 		init();
 	});
 	var mechunachim = [];
 
-	async function getMechunachim() {
-		if (mechunachim && mechunachim.length > 0) {
+	async function getMechunachim(refresh = true) {
+		if (!refresh && mechunachim && mechunachim.length > 0) {
 			displayMechunachim();
 			return;
 		}
@@ -1441,6 +1441,12 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			//console.log(multiplier, screenSize, item.find(".dailyPanel").length > 0);
 			item.css({"height": item.children()[0].scrollHeight * multiplier});
 		});
+		
+		// Prevent panel-body clicks from bubbling to panel-heading
+		$(".panel-body").on('click touchstart', function(e) {
+			e.stopPropagation();
+		});
+
 		/******************* DROPDOWNS *******************/
 		$(".panel-heading").click( function() {
 			var c = $(this).parent().attr('class'); // get the classes of the parent
@@ -1467,6 +1473,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				$(this).parent().siblings().find('> .collapse').css({"height": '0px'}); // set the height to 0px to animate the closing
 			}
 		});
+		
 		/******************* CHECK ALL EVENT LISTENER *******************/
 		$(".checkAll").click( function() {
 
