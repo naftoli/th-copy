@@ -1199,13 +1199,19 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				const res = JSON.parse(response);
 				if (res.success) {
 					alert('Mechunach verified successfully.');
-					getMechunachim();
+					// reload the page
+					location.reload();
 				} else {
 					alert('Error verifying mechunach.');
+					// location.reload();
 				}
+			},
+			error: function(response) {
+				alert('Error verifying mechunach: ' + response.responseText);
+				// location.reload();
 			}
 		});
-	}
+	} 
 
 	async function checkMechunachimTasks() {
 		const user_id = <?=$user_id?>;
