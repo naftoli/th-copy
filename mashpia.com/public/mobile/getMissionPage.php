@@ -1074,9 +1074,36 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						</style>
 						<div>
 							<form name='addMechunachForm' id='addMechunachForm' action='addMechunach.php' method='post' style='<?=$style?>'>
-								<input type='text' name='name' placeholder='Name' required pattern=".{2,}" title="Please enter a valid name (at least 2 characters)" />
-								<input type='tel' name='phone' placeholder='Phone' required pattern="^(\+?\d{1,3}[- ]?)?\d{10,15}$" title="Please enter a valid phone number" />
-								<input type='email' name='email' placeholder='Email' required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" title="Please enter a valid email address" />
+								<input type='text' name='name' placeholder='Name' id='mechunachName' />
+								<input type='tel' name='phone' placeholder='Phone' id='mechunachPhone' />
+								<input type='email' name='email' placeholder='Email' id='mechunachEmail' />
+
+								<script>
+								function validateMechunachForm() {
+									const name = document.getElementById('mechunachName').value.trim();
+									const phone = document.getElementById('mechunachPhone').value.trim();
+									const email = document.getElementById('mechunachEmail').value.trim();
+
+									if (name.length < 2) {
+										alert('Please enter a valid name (at least 2 characters)');
+										return false;
+									}
+
+									// Accepts numbers with or without +, with 10-15 digits (including country code)
+									const phonePattern = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
+									if (!phonePattern.test(phone)) {
+										alert('Please enter a valid phone number');
+										return false;
+									}
+
+									const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+									if (!emailPattern.test(email)) {
+										alert('Please enter a valid email address');
+										return false;
+									}
+									return true;
+								}
+								</script>
 								<input type='hidden' name='user_id' value='<?=$user_id?>' />
 								<?php if (! $desktop) echo "<br />"; ?>
 								<button type='submit' onclick='submitAddMechunachForm(this); return false;'>Add New</button>
@@ -1162,6 +1189,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 	}
 
 	function submitAddMechunachForm(button) {
+		if (! validateMechunachForm()) return false;
 		// check what the button says 
 		button.disabled = true;
 		button.innerHTML = 'Adding...';
