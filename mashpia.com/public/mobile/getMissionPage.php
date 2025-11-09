@@ -939,6 +939,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				$p = new Pesukim($user->user_id);
 				$mechunachim = $p->getMechunachim();
 				$verified = [];
+				$mechunachim_tasks = [];
 				foreach ($mechunachim as $mechunach) {
 					if (intval($mechunach['verified'])) {
 						$verified[] = $mechunach;
@@ -953,7 +954,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 					if (strpos(strtolower($label), 'teach') !== false) {
 						$showMechunachim = true;
-						$mechunachim_tasks = [];
 						$numMechunachim = count($verified) > 0 ? count($verified) : 1;										
 					} else {
 						$showMechunachim = false;
@@ -1215,7 +1215,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 	async function checkMechunachimTasks() {
 		const user_id = <?=$user_id?>;
-		const mechunachim_tasks = <?=$mechunachim_tasks ? json_encode($mechunachim_tasks) : '[]'?>;
+		const mechunachim_tasks = <?=json_encode($mechunachim_tasks)?>;
 		const start = <?=$start?>;
 		const end = <?=$end?>;
 		
