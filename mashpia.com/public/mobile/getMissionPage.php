@@ -1057,7 +1057,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				<div class='panel-heading'>
 					<i class='glyphicon glyphicon-chevron-left'></i> Mechunachim
 				</div>
-				<div class='collapse in' style='height: auto;'>
+				<div class='collapse in mechunachPanel' style='height: auto;'>
 					<div class='panel-body'>
 						<!-- add link that drops down when clicked to add a new mechunach -->
 						<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>
@@ -1432,7 +1432,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		$(".panel:not(.mishnaPanel)").addClass('open');
 		$(".panel:not(.mishnaPanel) .collapse").addClass('in');
 		// start the page with each dropdown expanded
-		$.each($(".collapse.in"), function(index, item){
+		$.each($(".collapse.in:not(.mechunachPanel)"), function(index, item){
 			item = $(item);
 			var multiplier = parseInt(screenSize) < 790 && item.find(".dailyPanel").length > 0 ? 1.5 : 1.2; // add some (50%) initial spacing for the daily/tall ones
 			if (browser_detect() != "Chrome" && browser_detect() != "Safari") { // multiplier only used in chrome. other browsers do not have the height bug....
