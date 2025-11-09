@@ -953,6 +953,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 					if (strpos(strtolower($label), 'teach') !== false) {
 						$showMechunachim = true;
+						$mechunachim_tasks = [];
 						$numMechunachim = count($verified) > 0 ? count($verified) : 1;										
 					} else {
 						$showMechunachim = false;
@@ -987,6 +988,11 @@ $daySchoolSubjects = setDaySchoolSubjects();
 												$pesukim_task = $user->pesukim_tasks[$j];
 												$date_task_mark = $pesukim_task->date_task_mark; 
 												$checked = isset( $date_task_mark->marked ) ? $date_task_mark->marked == true : false;
+												if ($showMechunachim) {
+													$mid = $pesukim_task->date_task_id . '_' . $mechunach_id;
+												} else {
+													$mid = $pesukim_task->date_task_id;
+												}
 												?>
 												<li class="task">
 													<div class="row">
@@ -1005,13 +1011,20 @@ $daySchoolSubjects = setDaySchoolSubjects();
 																		font-size: 12px;" 
 																	<? if ($date_task_mark->done_qty) echo "value='" . $date_task_mark->done_qty . "' "; ?>	/>
 																<? else : ?>
-																<input type="checkbox" class="box-check weekly <? if ($checked) echo "pre-checked" ?>"
-																	id="<?=$pesukim_task->date_task_id . '_' . $k?>" 
-																	value="<?=$date_task_mark->date_task_id;?>:<?=$pesukim_task->mark_date;?>:<?=$mechunach_id ?? ''?>"
-																	<? if ($checked) echo "checked" ?> />
-																<!--<span class="circle"></span>-->
-																<span class="check"></span>
-																<span class="box"></span>
+																	<input type="checkbox" class="box-check weekly<? if ($checked) echo " pre-checked"; if ($showMechunachim) echo " mechunach_task"; ?>"
+																		id="<?=$mid?>" 
+																		value="<?=$date_task_mark->date_task_id;?>:<?=$pesukim_task->mark_date;?>:<?=$mechunach_id ?? ''?>"
+																		<? if ($checked && $date_task_mark->mechunach_id == $mechunach_id) echo "checked" ?> />
+																	<!--<span class="circle"></span>-->
+																	<span class="check"></span>
+																	<span class="box"></span>
+																	<? 
+																	if ($showMechunachim) {
+																		if (! in_array($pesukim_task->date_task_id, $mechunachim_tasks)) {
+																			$mechunachim_tasks[] = $pesukim_task->date_task_id;
+																		}
+																	}
+																	?>
 																<? endif; ?>
 															</div>
 															<div class="short">
@@ -1089,18 +1102,28 @@ $daySchoolSubjects = setDaySchoolSubjects();
 <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
 <script>
 	$(document).ready(function() {
-		getMechunachim();
+		async function init() {
+			await getMechunachim();
+			await checkMechunachimTasks();
+		}
+		init();
 	});
+	var mechunachim = [];
 
-	function getMechunachim() {
-		$.ajax({
+	async function getMechunachim() {
+		if (mechunachim && mechunachim.length > 0) {
+			displayMechunachim();
+			return;
+		}
+		await $.ajax({
 			url: '/pesukim/ajax/getMechunachim.php',
 			type: 'POST',
 			data: { user_id: <?=$user_id?> },
 			success: function(response) {
 				const res = JSON.parse(response);
 				if (res.success) {
-					displayMechunachim(res.data);
+					mechunachim = res.data;
+					displayMechunachim();
 				} else {
 					alert('Error getting mechunachim.');
 				}
@@ -1111,7 +1134,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		});
 	}
 
-	function displayMechunachim(mechunachim) {
+	function displayMechunachim() {
 		let html = '';
 		$.each(mechunachim, function(index, mechunach) {
 			if (! parseInt(mechunach.verified)) {
@@ -1182,6 +1205,42 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				}
 			}
 		});
+	}
+
+	async function checkMechunachimTasks() {
+		const user_id = <?=$user_id?>;
+		const mechunachim_tasks = <?=json_encode($mechunachim_tasks)?>;
+		const start = <?=$start?>;
+		const end = <?=$end?>;
+		
+		// check if this task was done at some point for this mechunach
+		await $.ajax({
+			url: '/pesukim/ajax/checkMechunachimTasks.php',
+			type: 'POST',
+			data: { user_id, mechunachim_tasks, mechunachim: JSON.stringify(mechunachim), start, end },
+			success: function(response) {
+				const res = JSON.parse(response);
+				if (res.success) {
+					// loop through the tasks and check if they were done for this mechunach
+					const tasks = res.data;
+					for (const task_id in tasks) {
+						for (const mechunach_id in tasks[task_id]) {
+							const elem = $('#' + task_id + '_' + mechunach_id);
+							if (elem) {
+								const val = tasks[task_id][mechunach_id];
+								if (val) {
+									elem.attr('checked', true);
+									elem.attr('disabled', true);
+								} 
+							}
+						}
+					}
+				}
+			},
+			error: function(error) {
+				console.log(error)
+			}
+		})
 	}
 
 	function showAudioPlayer(e) {
@@ -1514,10 +1573,9 @@ $daySchoolSubjects = setDaySchoolSubjects();
 			var info = value.split(':');
 			var date_task_id = info[0];
 			var mark_date = info[1];
-			if (info.length > 2 && info[2] != '') {
-				var mechunach_id = info[2];
-			} else {
-				var mechunach_id = null;
+			let mechunach_id = undefined;
+			if (info.length > 2) {
+				mechunach_id = info[2];
 			}
 			        			
 			var parameters = [user_id, date_task_id, mark_date, mechunach_id];

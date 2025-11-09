@@ -8,6 +8,7 @@ class date_tasks_mark {
 	public $mark_points;
 	public $mark_quantity;
 	public $mark_inactive;
+	public $mechunach_id;
 	
 	public $marked;
 	
@@ -20,6 +21,7 @@ class date_tasks_mark {
 		$this->mark_points = $row["mark_points"];
 		$this->mark_quantity = $row["mark_quantity"];
 		$this->mark_inactive = $row["mark_inactive"];
+		$this->mechunach_id = $row["mechunach_id"];
 	}
 	
 	function set_date_task_id($date_task_id) {
