@@ -1215,7 +1215,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 	async function checkMechunachimTasks() {
 		const user_id = <?=$user_id?>;
-		const mechunachim_tasks = <?=json_encode($mechunachim_tasks)?>;
+		const mechunachim_tasks = <?=$mechunachim_tasks ? json_encode($mechunachim_tasks) : '[]'?>;
 		const start = <?=$start?>;
 		const end = <?=$end?>;
 		
