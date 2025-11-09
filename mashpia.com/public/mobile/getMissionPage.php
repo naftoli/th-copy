@@ -1050,8 +1050,13 @@ $daySchoolSubjects = setDaySchoolSubjects();
 					}
 					$i++;
                 }
-            }        
-
+            } 
+			
+			if ($desktop) {
+				$style = 'display: none;';
+			} else {
+				$style = 'display: block;';
+			}
 			?>
 			<div class='panel panel-default'>
 				<div class='panel-heading'>
@@ -1060,14 +1065,21 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				<div class='collapse in mechunachPanel' style='height: auto;'>
 					<div class='panel-body'>
 						<!-- add link that drops down when clicked to add a new mechunach -->
-						<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>
+						<?php if ($desktop) echo "<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>"; ?>
+						<style>
+							#addMechunachForm input {
+								padding: 5px;
+								margin: 5px;
+							}
+						</style>
 						<div>
-							<form name='addMechunachForm' id='addMechunachForm' action='addMechunach.php' method='post' style='display:none;'>
+							<form name='addMechunachForm' id='addMechunachForm' action='addMechunach.php' method='post' style='<?=$style?>'>
 								<input type='text' name='name' placeholder='Name' />
 								<input type='text' name='phone' placeholder='Phone' />
 								<input type='text' name='email' placeholder='Email' />
 								<input type='hidden' name='user_id' value='<?=$user_id?>' />
-								<button type='submit' onclick='submitAddMechunachForm(this); return false;'>Add</button>
+								<?php if (! $desktop) echo "<br />"; ?>
+								<button type='submit' onclick='submitAddMechunachForm(this); return false;'>Add New</button>
 							</form>
 						</div>
 						<br />
