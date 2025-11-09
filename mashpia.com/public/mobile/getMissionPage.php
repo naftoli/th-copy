@@ -1057,7 +1057,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				<div class='panel-heading'>
 					<i class='glyphicon glyphicon-chevron-left'></i> Mechunachim
 				</div>
-				<div class='collapse in'>
+				<div class='collapse in' style='height: auto;'>
 					<div class='panel-body'>
 						<!-- add link that drops down when clicked to add a new mechunach -->
 						<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>
@@ -1071,7 +1071,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 							</form>
 						</div>
 						<br />
-						<table class='table table-bordered' id='mechunachimTable' style='margin-bottom: 120px;'>
+						<table class='table table-bordered' id='mechunachimTable'>
 							<thead>
 								<tr>
 									<th>Name</th>
