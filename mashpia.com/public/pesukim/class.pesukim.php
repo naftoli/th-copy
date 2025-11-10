@@ -174,7 +174,7 @@ class Pesukim
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function checkMechunachTask($date_task_id, $mechunach_id, $start, $end) {
+    public function checkMechunachTask($date_task_id, $mechunach_id) {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
             SELECT 
@@ -192,11 +192,12 @@ class Pesukim
                         date_task_id = :date_task_id)
                     AND mechunach_id = :mechunach_id
                     AND user_id = :user_id
-                    AND (mark_date < :start
-                    OR mark_date > :end)
         ");
-        $stmt->execute(['date_task_id' => $date_task_id, 'mechunach_id' => $mechunach_id, 'user_id' => $this->user_id, 'start' => $start, 'end' => $end]);
+        $stmt->execute(['date_task_id' => $date_task_id, 'mechunach_id' => $mechunach_id, 'user_id' => $this->user_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) return $row['mark_date'];
+        else return false;
         // $stmt->debugDumpParams();
-        return $stmt->rowCount() > 0;
+        // return $stmt->rowCount() > 0;
     }
 }

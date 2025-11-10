@@ -1014,7 +1014,10 @@ $daySchoolSubjects = setDaySchoolSubjects();
 																	<input type="checkbox" class="box-check weekly<? if ($checked) echo " pre-checked"; if ($showMechunachim) echo " mechunach_task"; ?>"
 																		id="<?=$mid?>" 
 																		value="<?=$date_task_mark->date_task_id;?>:<?=$pesukim_task->mark_date;?>:<?=$mechunach_id ?? ''?>"
-																		<? if ($checked && isset($mechunach_id) && $date_task_mark->mechunach_id == $mechunach_id) echo "checked" ?> />
+																		<? if (
+																			(!$showMechunachim && $checked) || 
+																			($showMechunachim && $checked && isset($mechunach_id) && $date_task_mark->mechunach_id == $mechunach_id)
+																		) echo "checked" ?> />
 																	<!--<span class="circle"></span>-->
 																	<span class="check"></span>
 																	<span class="box"></span>
@@ -1263,7 +1266,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		await $.ajax({
 			url: '/pesukim/ajax/checkMechunachimTasks.php',
 			type: 'POST',
-			data: { user_id, mechunachim_tasks, mechunachim: JSON.stringify(mechunachim), start, end },
+			data: { user_id, mechunachim_tasks, mechunachim: JSON.stringify(mechunachim) },
 			success: function(response) {
 				const res = JSON.parse(response);
 				if (res.success) {
@@ -1273,10 +1276,12 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						for (const mechunach_id in tasks[task_id]) {
 							const elem = $('#' + task_id + '_' + mechunach_id);
 							if (elem) {
-								const val = tasks[task_id][mechunach_id];
-								if (val) {
+								const date_marked = parseInt(tasks[task_id][mechunach_id]);
+								if (date_marked) {
 									elem.attr('checked', true);
-									elem.attr('disabled', true);
+									if (date_marked > parseInt(end) || date_marked < parseInt(start)) {
+										elem.attr('disabled', true);
+									}
 								} 
 							}
 						}
