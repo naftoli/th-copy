@@ -172,7 +172,7 @@ function add_task_mark($parameters, $update = true) {
 	$user_id = $parameters[0];
 	$date_task_id = $parameters[1];
 	$mark_date = $parameters[2];
-	$mechunach_id = count($parameters) > 3 ? $parameters[3] : null;
+	$mechunach_id = count($parameters) > 3 && !empty($parameters[3]) ? $parameters[3] : null;
 
 	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date, dtm.subject_id ";
 	$sql = $sql . "FROM date_tasks AS dt ";
@@ -232,13 +232,13 @@ function add_task_mark($parameters, $update = true) {
 	}
 
 	$insert_sql = "INSERT INTO date_tasks_marks SET date_task_id=" . $date_task_id . ", user_id=" . $user_id . ", mark_date=" . $mark_date . ", done_qty=1, mark_points=" . $points;
-	//echo $insert_sql . "<br />";
 	if ($subject_id == 136) {
 		$insert_sql .= ", auction_only_points = 1";
 		if ($mechunach_id) {
 			$insert_sql .= ", mechunach_id = " . $mechunach_id;
 		}
 	}
+	// echo $insert_sql; exit;
 	$insert_query = mysql_query($insert_sql);
 
 	if ($insert_query) {
@@ -305,7 +305,7 @@ function add_daily_task_mark($parameters, $update = true)
 	$user_id = $parameters[0];
 	$date_task_id = $parameters[1];
 	$mark_date = $parameters[2];
-
+	
 	$sql = "SELECT dt.*, dtm.start_date, dtm.end_date, dtm.subject_id 
 			FROM date_tasks dt
 			join date_tasks_missions dtm using (date_tasks_mission_id)

@@ -63,6 +63,7 @@ class pesukim_task {
 					and (mark_date >= " . $start_date . " AND mark_date <= " . $end_date . ")";
 		// }
 		//if ($user_id == 19970 && $this->date_task_id == 4000051) { echo $sql; exit; }
+		// echo $sql; exit;
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
 		$num_rows = mysql_num_rows($query);
