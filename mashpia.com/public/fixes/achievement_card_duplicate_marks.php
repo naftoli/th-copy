@@ -97,7 +97,7 @@ if (isset($_POST['delete']) && $_POST['delete'] == 1) {
     </form>
     <?php endif; ?>
     <?php foreach ($rows as $school_id => $more) { ?>
-        <h2><?= $schools[$school_id] ?></h2>
+        <h2><?= $schools[$school_id]['name'] ?></h2>
         <table>
             <tr>
                 <th>Grade</th>
