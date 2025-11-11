@@ -820,7 +820,8 @@
 				alert("Please enter a valid code.");
 				return false;
 			} 
-			return await checkNumber(code);
+			await checkNumber(code);
+			return false;
 		});
 
 		async function checkNumber(code) {
@@ -836,11 +837,11 @@
 			})
 			const data = await res.json()
 			if (data.msg) {
-				alert(data.msg);
+				showAlert(data.msg);
 				$("#scanner").val('');
 				return false; // Explicitly return false to prevent further event propagation or default actions
 			} else {
-				alert(i18next.t('digitstw'));
+				showAlert(i18next.t('digitstw'));
 				return false
 			}
 		}
@@ -883,7 +884,7 @@
 			const res = await checkNumber( data.codeResult.code );
 			if ( !res.msg ) {
 				setTimeout( function() {
-					showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
+					showAlert( "Sorry, it seems we could not read the card properly. Please try another angle." )
 				}, 1000 );
 			}
 		});
