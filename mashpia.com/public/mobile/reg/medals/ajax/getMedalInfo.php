@@ -86,7 +86,7 @@ $subjects = $c->getCampaigns();
 
 $subjectIcons = [];
 $subjectNames = array();
-$sql = "SELECT subject_id, subject_name, subject_gold_image_id FROM subjects WHERE subject_id IN (" . implode( ',', $subjects ) . ")";
+$sql = "SELECT subject_id, subject_name, subject_gold_image_id FROM subjects WHERE subject_id IN (" . implode( ',', $subjects ) . ") and subject_id != 136";
 $result = mysql_query( $sql );
 while ($row = mysql_fetch_assoc( $result )) {
 	$name = $row['subject_name'];
