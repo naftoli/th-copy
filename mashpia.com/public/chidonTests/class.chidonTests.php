@@ -689,7 +689,7 @@ class ChidonTests
             else break; // can't go higher if lower one was not passed
         }
 
-        // if highest track is genius, check for iyun non cumulative score
+        // if highest track is genius, check for iyun non cumulative score based on 80 avg needed on each track
         if ($highest == 'genius') {
             $actualAvg = 0;
             foreach ($marksByTrack as $track => $total) {
