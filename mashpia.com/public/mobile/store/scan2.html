@@ -836,7 +836,9 @@
 				})
 				const data = await res.json()
 				if (data.msg) {
-					alert(data.msg);
+					setInterval(function() {
+						alert(data.msg);
+					}, 1000);
 					$("#scanner").val('');
 					return false; // Explicitly return false to prevent further event propagation or default actions
 				}
