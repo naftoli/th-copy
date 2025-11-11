@@ -886,6 +886,7 @@
 
 	Quagga.onDetected( function( data ) {
 		console.log(data);
+		alert(data.codeResult.code);
 		if ( !checkNumber( data.codeResult.code ) ) {
 			setTimeout( function() {
 				showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
