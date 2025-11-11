@@ -23,7 +23,7 @@ $sql = "SELECT
                 JOIN
             classes c ON c.class_id = u.class_id
         WHERE
-            up.created > '2023-06-01'
+            up.created > '2025-08-01'
                 AND achievement_card_id > 0
                 AND up.institution_id in (" . implode(',', array_keys($schools)) . ")
         GROUP BY achievement_card_id
