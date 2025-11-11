@@ -813,20 +813,20 @@
 			$(".bug-report img").data("user_id", user);
 		});
 
-		$("#submitCode").click( async function(e) {
+		$("#submitCode").click( function(e) {
 			e.preventDefault();
 			const code = $("#scanner").val();
 			if (code.length != 20) {
 				alert("Please enter a valid code.");
 				return false;
 			} 
-			await checkNumber(code);
+			checkNumber(code);
 			return false;
 		});
 
-		async function checkNumber(code) {
+		function checkNumber(code) {
 			showError("Checking number...");
-			const res = await fetch('ajax/checkCard.php', {
+			const res = fetch('ajax/checkCard.php', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -836,7 +836,7 @@
 					card: code
 				})
 			})
-			const data = await res.json()
+			const data = res.json()
 			if (data.msg) {
 				showAlert(data.msg);
 				$("#scanner").val('');
@@ -880,10 +880,10 @@
 			Quagga.start();
 		});
 
-		Quagga.onDetected( async function( data ) {
+		Quagga.onDetected( function( data ) {
 			console.log(data);
 			alert(data.codeResult.code);
-			const res = await checkNumber( data.codeResult.code );
+			const res = checkNumber( data.codeResult.code );
 			if ( !res.msg ) {
 				setTimeout( function() {
 					showAlert( "Sorry, it seems we could not read the card properly. Please try another angle." )
