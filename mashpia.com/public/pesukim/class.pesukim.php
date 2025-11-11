@@ -25,26 +25,111 @@ class Pesukim
         return count($result) > 0;
     }
 
-    public function addReferral($referral_id) {
+    public function addRecruiter($recruiter_id) {
         global $MASHPIA_DB;
+        $MASHPIA_DB->beginTransaction();
+        $success = true;
+        
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pesukim_referrals (user_id, referred_by)
-            VALUES (:user_id, :referred_by)
+            INSERT INTO pesukim_recruiters (recruiter_id, recruited_id)
+            VALUES (:recruiter_id, :recruited_id)
         ");
-        $stmt->execute([
-            'user_id' => $this->user_id,
-            'referred_by' => $referral_id
+        $res = $stmt->execute([
+            'recruiter_id' => $recruiter_id,
+            'recruited_id' => $this->user_id
         ]);
+        if ($res) {
+            $pointsAdded = $this->addPoints(200, $recruiter_id);
+            if (! $pointsAdded) {
+                $success = false;
+            }
+        } else {
+            $success = false;
+        }
+
+        if ($success) {
+            $MASHPIA_DB->commit();
+            return true;
+        } else {
+            $MASHPIA_DB->rollBack();
+            return false;
+        }
     }
 
-    public function getReferrals() {
+    public function addPoints($points, $user_id) {
+        global $MASHPIA_DB;
+        // get institution id
+        $institution_id = $this->getSchoolId($user_id);
+        if (!$institution_id) {
+            return false;
+        }
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO pointsDB.user_points(user_id, institution_id, points, resource_name)
+            VALUES (:user_id, :institution_id, :points, 'auction_only_points')
+        ");
+        $res = $stmt->execute(['user_id' => $user_id, 'institution_id' => $institution_id, 'points' => $points]);
+        return $res;
+    }
+
+    private function getSchoolId($user_id) {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * from pesukim_referrals
-            WHERE referred_by = :user_id
+            SELECT school_id from users where user_id = :user_id
+        ");
+        $stmt->execute(['user_id' => $user_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['school_id'] ?? false;
+    }
+
+    public function getRecruiter() {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT recruiter_id from pesukim_recruiters
+            WHERE recruited_id = :recruited_id
+        ");
+        $stmt->execute(['recruited_id' => $this->user_id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function addRecruit($recruited_id) {
+        global $MASHPIA_DB;
+        $MASHPIA_DB->beginTransaction();
+        $success = true;
+
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO pesukim_recruits (recruiter_id, recruited_id)
+            VALUES (:recruiter_id, :recruited_id)
+        ");
+        $res = $stmt->execute([
+            'recruiter_id' => $this->user_id,
+            'recruited_id' => $recruited_id
+        ]);
+        if ($res) {
+            $pointsAdded = $this->addPoints(200, $this->user_id);
+            if (! $pointsAdded) {
+                $success = false;
+            }
+        } else {
+            $success = false;
+        }
+
+        if ($success) {
+            $MASHPIA_DB->commit();
+            return true;
+        } else {
+            $MASHPIA_DB->rollBack();
+            return false;
+        }
+    }
+
+    public function getRecruits() {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * from pesukim_recruiters
+            WHERE recruiter_id = :recruiter_id
         ");
         $stmt->execute([
-            'user_id' => $this->user_id
+            'recruiter_id' => $this->user_id
         ]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

@@ -681,6 +681,7 @@
 							<p style="margin: auto;" class="i18n" data-key="BarcodeHere">Type in your achievement card
 								barcode number here.</p>
 							<div class="form-group">
+								<button id="submitCode" class="btn btn-danger i18n" data-key="Submit" style="float: right;">Submit</button>
 								<input type="text" class="form-control" data-key="EnterDigits" id="scanner"
 									placeholder="Enter Digits" autofocus style="margin: auto;">
 							</div>
@@ -809,6 +810,37 @@
 			// set the USER ID for bug reports
 			$(".bug-report img").data("user_id", user);
 		});
+
+		$("#submitCode").click( async function(e) {
+			e.preventDefault();
+			const code = $("#scanner").val();
+			if (code.length != 20) {
+				alert("Please enter a valid code.");
+				return false;
+			}
+			const card = $("#scanner").val();
+			if (card.length == 20) {
+				const res = await fetch('ajax/checkCard.php', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						user: user,
+						card: card
+					})
+				})
+				const data = await res.json()
+				if (data.msg) {
+					alert(data.msg);
+					$("#scanner").val('');
+					return false; // Explicitly return false to prevent further event propagation or default actions
+				}
+			} else {
+				alert(i18next.t('digitstw'));
+				return false
+			}
+		});
 	});
 </script>
 <script src="/mobile/kiosk/lib/quagga.min.js"></script>
@@ -891,8 +923,8 @@
 	}
 
 	function toggleManual( event ){
-		const elem = $("#manual-scanner");
-		if (elem.style.display === "none") {
+		const elem = document.getElementById("manual-scanner");
+		if (elem.style.display == "none") {
 			$("#toggle-manual img").attr("src", "/mobile/img_new/scanner-2-color-red-svg.svg" );
 			$("#manual-scanner").hide();
 			$("#barcode_scanner").show();
