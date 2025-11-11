@@ -609,6 +609,10 @@
 		#toggle-manual:hover{
 			cursor: pointer;
 		}
+		#barcode_scanner video {
+			width:100%;
+            max-width: 640px;
+		}
 	</style>
 
 	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -687,7 +691,7 @@
 							</div>
 						</div>
 					</div>
-					<div id="barcode_scanner" class="viewport"></div>
+					<div id="barcode_scanner" class="viewport" style="width: 100%;"></div>
 					<div id="toggle-manual" style="display: none;">
 						<img src="/mobile/img_new/scanner-2-color-red-svg.svg" alt="manual" />
 					</div>
@@ -769,7 +773,7 @@
 </body>
 <script src="/mobile/js/js.cookie.js"></script>
 <script src="/mobile/js/authenticate.js" defer></script>
-<script src="lib/quagga.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
 <script src="js/main.js"></script>
 <script>
 	if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
@@ -846,8 +850,42 @@
 <script src="/mobile/kiosk/lib/quagga.min.js"></script>
 <script>
 	// on page load
-	setupScanner( "environment" );
+	// setupScanner( "environment" );
 	$("#toggle-manual").click( toggleManual );
+
+	// Quagga.onProcessed( showScanningBox );
+
+	const quaggaConf = {
+        inputStream: {
+            target: document.querySelector("#barcode_scanner"),
+            type: "LiveStream",
+            constraints: {
+                width: { min: 640 },
+                height: { min: 480 },
+                facingMode: "environment",
+                aspectRatio: { min: 1, max: 2 }
+            }
+        },
+		locator: {
+			patchSize: "medium",
+			halfSample: true
+		},
+		numOfWorkers: navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 2, // assume dual core
+		decoder: {
+			readers : ["code_128_reader"]
+		},
+		locate: true,
+		multiple: true
+    }
+
+    Quagga.init(quaggaConf, function (err) {
+        if (err) {
+            return console.log(err);
+        }
+		$("#manual-scanner").hide();
+		$("#barcode_scanner").show();
+        Quagga.start();
+    });
 
 	Quagga.onDetected( function( data ) {
 		if ( !checkNumber( data.codeResult.code ) ) {
@@ -857,8 +895,6 @@
 		}
 	});
 
-	Quagga.onProcessed( showScanningBox );
-
 	// show errors to the user in a nice, async way
 	function showError( error ) {
 		$('#errorModal .modal-body p').text( error );
@@ -867,62 +903,62 @@
 	}
 
 	// show a box when the user scans the code
-	function showScanningBox( result ) {
-		var drawingCtx = Quagga.canvas.ctx.overlay,
-			drawingCanvas = Quagga.canvas.dom.overlay;
+	// function showScanningBox( result ) {
+	// 	var drawingCtx = Quagga.canvas.ctx.overlay,
+	// 		drawingCanvas = Quagga.canvas.dom.overlay;
 
-		if ( result && result.box ) {
-			Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
-		}
+	// 	if ( result && result.box ) {
+	// 		Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
+	// 	}
 
-		if ( result && result.codeResult && result.codeResult.code) {
-			Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
-		}
-	}
+	// 	if ( result && result.codeResult && result.codeResult.code) {
+	// 		Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
+	// 	}
+	// }
 
 	// setup the quaggajs scanner
-	function setupScanner( mode ){
-		mode = mode ? mode : "environment"; // or user
-		var config = {
-			inputStream: {
-				name : "Live",  
-				type : "LiveStream",    
-				target: "#barcode_scanner",
-				constraints: {
-					width: {min: 320, ideal: 640, max: 1280},
-					height: {min: 240, ideal: 480, max: 720},
-					aspectRatio: {min: 1, max: 2},
-					facingMode: mode // or user
-				}
-			},
-			locator: {
-				patchSize: "medium",
-				halfSample: true
-			},
-			numOfWorkers: navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 2, // assume dual core
-			decoder: {
-				readers : ["code_128_reader"]
-			},
-			locate: true,
-			multiple: true
-		};
+	// function setupScanner( mode ){
+	// 	mode = mode ? mode : "environment"; // or user
+	// 	var config = {
+	// 		inputStream: {
+	// 			name : "Live",  
+	// 			type : "LiveStream",    
+	// 			target: "#barcode_scanner",
+	// 			constraints: {
+	// 				width: {min: 320, ideal: 640, max: 1280},
+	// 				height: {min: 240, ideal: 480, max: 720},
+	// 				aspectRatio: {min: 1, max: 2},
+	// 				facingMode: mode // or user
+	// 			}
+	// 		},
+	// 		locator: {
+	// 			patchSize: "medium",
+	// 			halfSample: true
+	// 		},
+	// 		numOfWorkers: navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 2, // assume dual core
+	// 		decoder: {
+	// 			readers : ["code_128_reader"]
+	// 		},
+	// 		locate: true,
+	// 		multiple: true
+	// 	};
 
-		var setup = function( error ){
-			if ( error ) {
-				// showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
-				$("#barcode_scanner").hide();
-				$("#manual-scanner").show(); // show the manual scanner
-				$('#manual-scanner #scanner').focus(); // focus for barcode readers
-				// setup the listener
-			} else {
-				$("#toggle-manual").show();
-				console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
-				Quagga.start();
-			}
-		}
+	// 	var setup = function( error ){
+	// 		if ( error ) {
+	// 			// showError( "Sorry, it seems we cannot scan cards on your device. Please enter in the card number by hand." );
+	// 			$("#barcode_scanner").hide();
+	// 			$("#manual-scanner").show(); // show the manual scanner
+	// 			$('#manual-scanner #scanner').focus(); // focus for barcode readers
+	// 			// setup the listener
+	// 		} else {
+	// 			$("#toggle-manual").show();
+	// 			console.log( "Quagga JS initialized. Ready to start Scanning Cards" );
+	// 			Quagga.start();
+	// 		}
+	// 	}
 
-		Quagga.init( config, setup );
-	}
+	// 	Quagga.init( config, setup );
+	// }
 
 	function toggleManual( event ){
 		const elem = document.getElementById("manual-scanner");
