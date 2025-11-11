@@ -774,7 +774,6 @@
 <script src="/mobile/js/js.cookie.js"></script>
 <script src="/mobile/js/authenticate.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@ericblade/quagga2/dist/quagga.min.js"></script>
-<script src="js/main.js"></script>
 <script>
 	if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
 		$(".bug-report").hide()
@@ -847,7 +846,6 @@
 		});
 	});
 </script>
-<script src="/mobile/kiosk/lib/quagga.min.js"></script>
 <script>
 	// on page load
 	// setupScanner( "environment" );
@@ -875,7 +873,7 @@
 			readers : ["code_128_reader"]
 		},
 		locate: true,
-		multiple: true
+		multiple: false
     }
 
     Quagga.init(quaggaConf, function (err) {
