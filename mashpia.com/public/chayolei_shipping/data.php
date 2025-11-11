@@ -274,8 +274,8 @@ function createCSV($items, $school_id, $usOnly = false, $intlOnly = false) {
                 $itemDesc = '';
                 if ($item['name']) $itemDesc .= "Personalized ";
                 $itemDesc .= $item['item'];
-                if ($item['color']) $itemDesc .= ", " . $item['color'];
-                if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+                $itemDesc .= isset($item['color']) ? ", " . $item['color'] : '';
+                $itemDesc .= isset($item['size']) ? ", size: " . $item['size'] : '';
 
                 $csv[$i++] = [$admin_id, ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                     $phone, ($school . '-' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
