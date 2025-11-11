@@ -825,26 +825,29 @@
 		});
 
 		function checkNumber(code) {
-			showError("Checking number...");
-			const res = fetch('ajax/checkCard.php', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({
+			$.ajax({
+				url: 'ajax/checkCard.php',
+				type: 'POST',
+				data: {
 					user: user,
 					card: code
-				})
-			})
-			const data = res.json()
-			if (data.msg) {
-				showAlert(data.msg);
-				$("#scanner").val('');
-				return false; // Explicitly return false to prevent further event propagation or default actions
-			} else {
-				showAlert(i18next.t('digitstw'));
-				return false
-			}
+				},
+				success: function(res) {
+					if (res) {
+						alert(res);
+						$("#scanner").val('');
+						return false;
+					} else {
+						showAlert(i18next.t('digitstw'));
+						return false;
+					}
+				},
+				error: function(res) {
+					showAlert("Error checking number.");
+					$("#scanner").val('');
+					return false;
+				}
+			});
 		}
 
 		$("#toggle-manual").click( toggleManual );
