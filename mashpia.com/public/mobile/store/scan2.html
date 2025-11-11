@@ -825,6 +825,7 @@
 		});
 
 		async function checkNumber(code) {
+			showError("Checking number...");
 			const res = await fetch('ajax/checkCard.php', {
 				method: 'POST',
 				headers: {
