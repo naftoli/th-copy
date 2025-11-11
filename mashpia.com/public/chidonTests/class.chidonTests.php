@@ -681,7 +681,7 @@ class ChidonTests
         foreach ($marksByTrack as $track => $total) {
             $avg = round($total / $numTests);
             $avgNeeded = $avgs[$track];
-            if ($track == 'genius') $avgNeeded = $avgs['genius'];
+            if ($forIyun) $avgNeeded = $avgs['genius'];
             if ($avg >= $avgNeeded) {
                 $highest = $track;
                 $actualAvg = $avg;
