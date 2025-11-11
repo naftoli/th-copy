@@ -820,6 +820,10 @@
 				alert("Please enter a valid code.");
 				return false;
 			} 
+			return await checkNumber(code);
+		});
+
+		async function checkNumber(code) {
 			const res = await fetch('ajax/checkCard.php', {
 				method: 'POST',
 				headers: {
@@ -839,7 +843,7 @@
 				alert(i18next.t('digitstw'));
 				return false
 			}
-		});
+		}
 	});
 </script>
 <script>
@@ -881,6 +885,7 @@
     });
 
 	Quagga.onDetected( function( data ) {
+		console.log(data);
 		if ( !checkNumber( data.codeResult.code ) ) {
 			setTimeout( function() {
 				showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
