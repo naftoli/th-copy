@@ -364,7 +364,7 @@ function createCSVforGear($users, $items) {
 
 function createFile($name, $info) {
     $fp = fopen($name, "w");
-    fputs($fp, $bom =( 'data' . phpchr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
+    fputs($fp, chr(0xEF) . chr(0xBB) . chr(0xBF)); // utf8 bom
     if (is_array($info)) {
         foreach ($info as $fields) {
             fputcsv($fp, $fields);
