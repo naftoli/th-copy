@@ -882,6 +882,7 @@
 
 		Quagga.onDetected( async function( data ) {
 			console.log(data);
+			alert(data.codeResult.code);
 			const res = await checkNumber( data.codeResult.code );
 			if ( !res.msg ) {
 				setTimeout( function() {
