@@ -5,9 +5,14 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.points.php';
 
-$input = json_decode(file_get_contents('php://input'), true);
-$user = mysql_real_escape_string($input['user']);
-$card = mysql_real_escape_string($input['card']);
+if (isset($_POST['user']) && isset($_POST['card'])) {
+    $user = mysql_real_escape_string($_POST['user']);
+    $card = mysql_real_escape_string($_POST['card']);
+} else {
+    $input = json_decode(file_get_contents('php://input'), true);
+    $user = mysql_real_escape_string($input['user']);
+    $card = mysql_real_escape_string($input['card']);
+}
 
 // get school id from user
 $res = mysql_query("select school_id, class_id from users where user_id = $user");
@@ -15,8 +20,7 @@ $row = mysql_fetch_assoc($res);
 $school = $row['school_id'];
 $class = $row['class_id'];
 
-$msg = Points::scanMiles($school, $class, $user, $card);
-echo $msg;
+echo Points::scanMiles($school, $class, $user, $card);
 //$scanned = json_decode($msg, true);
 //if ($scanned['success']) Points::updateScanned($card);
 ?>
