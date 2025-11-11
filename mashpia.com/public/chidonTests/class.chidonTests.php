@@ -689,6 +689,20 @@ class ChidonTests
             else break; // can't go higher if lower one was not passed
         }
 
+        // if highest track is genius, check for iyun non cumulative score
+        if ($highest == 'genius') {
+            $actualAvg = 0;
+            foreach ($marksByTrack as $track => $total) {
+                $avg = round($total / $numTests);
+                $avgNeeded = $avgs['genius'];
+                if ($avg >= $avgNeeded) {
+                    $highest = $track;
+                    $actualAvg = $avg;
+                }
+                else break; // can't go higher if lower one was not passed
+            }
+        }
+
         // compare with key
         if (isset($key)) {
             $keys = array_keys($this->types);
