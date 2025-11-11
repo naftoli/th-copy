@@ -844,69 +844,69 @@
 				return false
 			}
 		}
-	});
 
-	$("#toggle-manual").click( toggleManual );
+		$("#toggle-manual").click( toggleManual );
 
-	const quaggaConf = {
-        inputStream: {
-            target: document.querySelector("#barcode_scanner"),
-            type: "LiveStream",
-            constraints: {
-                width: { min: 320, ideal: 640, max: 1280 },
-                height: { min: 240, ideal: 480, max: 720 },
-                facingMode: "environment",
-                aspectRatio: { min: 1, max: 2 }
-            }
-        },
-		locator: {
-			patchSize: "medium",
-			halfSample: true
-		},
-		numOfWorkers: navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 2, // assume dual core
-		decoder: {
-			readers : ["code_128_reader"]
-		},
-		locate: true
-    }
-
-    Quagga.init(quaggaConf, function (err) {
-        if (err) {
-            return console.log(err);
-        }
-		$("#manual-scanner").hide();
-		$("#barcode_scanner").show();
-        Quagga.start();
-    });
-
-	Quagga.onDetected( async function( data ) {
-		console.log(data);
-		const res = await checkNumber( data.codeResult.code );
-		if ( !res.msg ) {
-			setTimeout( function() {
-				showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
-			}, 1000 );
+		const quaggaConf = {
+			inputStream: {
+				target: document.querySelector("#barcode_scanner"),
+				type: "LiveStream",
+				constraints: {
+					width: { min: 320, ideal: 640, max: 1280 },
+					height: { min: 240, ideal: 480, max: 720 },
+					facingMode: "environment",
+					aspectRatio: { min: 1, max: 2 }
+				}
+			},
+			locator: {
+				patchSize: "medium",
+				halfSample: true
+			},
+			numOfWorkers: navigator.hardwareConcurrency ? navigator.hardwareConcurrency : 2, // assume dual core
+			decoder: {
+				readers : ["code_128_reader"]
+			},
+			locate: true
 		}
-	});
 
-	// show errors to the user in a nice, async way
-	function showError( error ) {
-		$('#errorModal .modal-body p').text( error );
-		$('#errorModal').modal('show');
-		return false;
-	}
-
-	function toggleManual( event ){
-		const elem = document.getElementById("manual-scanner");
-		if (elem.style.display == "none") {
-			$("#toggle-manual img").attr("src", "/mobile/img_new/scanner-2-color-red-svg.svg" );
+		Quagga.init(quaggaConf, function (err) {
+			if (err) {
+				return console.log(err);
+			}
 			$("#manual-scanner").hide();
 			$("#barcode_scanner").show();
-		} else {
-			$("#toggle-manual img").attr("src", "/mobile/img_new/camera-color-red-svg.svg");
-			$("#manual-scanner").show();
-			$("#barcode_scanner").hide();
+			Quagga.start();
+		});
+
+		Quagga.onDetected( async function( data ) {
+			console.log(data);
+			const res = await checkNumber( data.codeResult.code );
+			if ( !res.msg ) {
+				setTimeout( function() {
+					showError( "Sorry, it seems we could not read the card properly. Please try another angle." )
+				}, 1000 );
+			}
+		});
+
+		// show errors to the user in a nice, async way
+		function showError( error ) {
+			$('#errorModal .modal-body p').text( error );
+			$('#errorModal').modal('show');
+			return false;
 		}
-	}
+
+		function toggleManual( event ){
+			const elem = document.getElementById("manual-scanner");
+			if (elem.style.display == "none") {
+				$("#toggle-manual img").attr("src", "/mobile/img_new/scanner-2-color-red-svg.svg" );
+				$("#manual-scanner").hide();
+				$("#barcode_scanner").show();
+			} else {
+				$("#toggle-manual img").attr("src", "/mobile/img_new/camera-color-red-svg.svg");
+				$("#manual-scanner").show();
+				$("#barcode_scanner").hide();
+			}
+		}
+	});
 </script>
 </html>
