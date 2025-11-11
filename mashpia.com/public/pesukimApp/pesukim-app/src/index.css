@@ -1,0 +1,22 @@
+@import url('./assets/fonts/fonts.css');
+
+:root {
+  --font-primary: "Exo", "Montserrat", sans-serif;
+  --font-italic: "Exo 2", "Montserrat", sans-serif;
+
+  --color-yellow: #FFCA32;
+  --color-red: #E1403F;
+  --color-navy: #3E4B79;
+  --color-white: #FFFFFF;
+}
+
+
+body {
+  margin: 0;
+  font-family: var(--font-primary);
+  background-color: var(--color-white);
+  color: var(--color-navy);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+

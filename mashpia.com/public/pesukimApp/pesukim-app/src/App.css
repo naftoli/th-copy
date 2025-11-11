@@ -1,0 +1,44 @@
+
+
+.App {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Scrollable main content */
+.scroll-container {
+  flex: 1;
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+/* Each full-page section */
+.page {
+  scroll-snap-align: start;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background: var(--color-red);
+  color: var(--color-white);
+  padding: 40px;
+}
+
+/* Make space for sidebar on desktop */
+@media (min-width: 769px) {
+  .scroll-container {
+    margin-left: 220px;
+  }
+}
+
+/* Mobile: no margin since sidebar overlays */
+@media (max-width: 768px) {
+  .scroll-container {
+    margin-left: 0;
+  }
+}
