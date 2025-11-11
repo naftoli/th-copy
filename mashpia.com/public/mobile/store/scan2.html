@@ -819,25 +819,22 @@
 			if (code.length != 20) {
 				alert("Please enter a valid code.");
 				return false;
-			}
-			const card = $("#scanner").val();
-			if (card.length == 20) {
-				const res = await fetch('ajax/checkCard.php', {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						user: user,
-						card: card
-					})
+			} 
+			const res = await fetch('ajax/checkCard.php', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					user: user,
+					card: code
 				})
-				const data = await res.json()
-				if (data.msg) {
-					alert(data.msg);
-					$("#scanner").val('');
-					return false; // Explicitly return false to prevent further event propagation or default actions
-				}
+			})
+			const data = await res.json()
+			if (data.msg) {
+				alert(data.msg);
+				$("#scanner").val('');
+				return false; // Explicitly return false to prevent further event propagation or default actions
 			} else {
 				alert(i18next.t('digitstw'));
 				return false
