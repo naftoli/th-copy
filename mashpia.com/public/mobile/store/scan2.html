@@ -888,11 +888,11 @@
 			console.log(data);
 			alert(data.codeResult.code);
 			const res = checkNumber( data.codeResult.code );
-			if ( !res.msg ) {
-				setTimeout( function() {
-					showAlert( "Sorry, it seems we could not read the card properly. Please try another angle." )
-				}, 1000 );
-			}
+			// if ( !res.msg ) {
+			// 	setTimeout( function() {
+			// 		showAlert( "Sorry, it seems we could not read the card properly. Please try another angle." )
+			// 	}, 1000 );
+			// }
 		});
 
 		// show errors to the user in a nice, async way
