@@ -833,8 +833,9 @@
 					card: code
 				},
 				success: function(res) {
-					if (res) {
-						alert(res);
+					const data = JSON.parse(res);
+					if (data.msg) {
+						alert(data.msg);
 						$("#scanner").val('');
 						return false;
 					} else {
