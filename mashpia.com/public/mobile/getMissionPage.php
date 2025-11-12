@@ -932,7 +932,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
                 }
             }
 
-			if (isset($_COOKIE['naftoli'])) {
+			// if (isset($_COOKIE['naftoli'])) {
 			// add 12 pesukim tasks
 			if (count($user->pesukim_labels) > 0) {
 				// get mechunachim for child
@@ -1053,85 +1053,87 @@ $daySchoolSubjects = setDaySchoolSubjects();
 					}
 					$i++;
                 }
-            } 
-			
-			if ($desktop) {
-				$style = 'display: none;';
-			} else {
-				$style = 'display: block;';
+
+				if ($desktop) {
+					$style = 'display: none;';
+				} else {
+					$style = 'display: block;';
+				}
+				?>
+				<div class='panel panel-default'>
+					<div class='panel-heading'>
+						<i class='glyphicon glyphicon-chevron-left'></i> Mechunachim
+					</div>
+					<div class='collapse in mechunachPanel' style='height: auto;'>
+						<div class='panel-body'>
+							<!-- add link that drops down when clicked to add a new mechunach -->
+							<?php if ($desktop) echo "<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>"; ?>
+							<style>
+								#addMechunachForm input {
+									padding: 5px;
+									margin: 5px;
+								}
+							</style>
+							<div>
+								<form name='addMechunachForm' id='addMechunachForm' action='addMechunach.php' method='post' style='<?=$style?>'>
+									<input type='text' name='name' placeholder='Name' id='mechunachName' />
+									<input type='tel' name='phone' placeholder='Phone' id='mechunachPhone' />
+									<input type='email' name='email' placeholder='Email' id='mechunachEmail' />
+	
+									<script>
+									function validateMechunachForm() {
+										const name = document.getElementById('mechunachName').value.trim();
+										const phone = document.getElementById('mechunachPhone').value.trim();
+										const email = document.getElementById('mechunachEmail').value.trim();
+	
+										if (name.length < 2) {
+											alert('Please enter a valid name (at least 2 characters)');
+											return false;
+										}
+	
+										// Accepts numbers with or without +, with 10-15 digits (including country code)
+										const phonePattern = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
+										if (!phonePattern.test(phone)) {
+											alert('Please enter a valid phone number');
+											return false;
+										}
+	
+										const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+										if (!emailPattern.test(email)) {
+											alert('Please enter a valid email address');
+											return false;
+										}
+										return true;
+									}
+									</script>
+									<input type='hidden' name='user_id' value='<?=$user_id?>' />
+									<?php if (! $desktop) echo "<br />"; ?>
+									<button type='submit' onclick='submitAddMechunachForm(this); return false;' style='margin-top: 10px;'>Add New</button>
+								</form>
+							</div>
+							<br />
+							<table class='table table-bordered' id='mechunachimTable'>
+								<thead>
+									<tr>
+										<th>Name</th>
+										<th>Verified</th>
+										<th>Code / Date Verified</th>
+									</tr>
+								</thead>
+								<tbody>
+									
+								</tbody>
+							</table>
+							<br />
+							<br />
+						</div>
+					</div>
+				</div> 
+				<?php 
 			}
 			?>
-			<div class='panel panel-default'>
-				<div class='panel-heading'>
-					<i class='glyphicon glyphicon-chevron-left'></i> Mechunachim
-				</div>
-				<div class='collapse in mechunachPanel' style='height: auto;'>
-					<div class='panel-body'>
-						<!-- add link that drops down when clicked to add a new mechunach -->
-						<?php if ($desktop) echo "<a href='#' onclick='toggleAddMechunachForm(); return false;'>Add New</a>"; ?>
-						<style>
-							#addMechunachForm input {
-								padding: 5px;
-								margin: 5px;
-							}
-						</style>
-						<div>
-							<form name='addMechunachForm' id='addMechunachForm' action='addMechunach.php' method='post' style='<?=$style?>'>
-								<input type='text' name='name' placeholder='Name' id='mechunachName' />
-								<input type='tel' name='phone' placeholder='Phone' id='mechunachPhone' />
-								<input type='email' name='email' placeholder='Email' id='mechunachEmail' />
 
-								<script>
-								function validateMechunachForm() {
-									const name = document.getElementById('mechunachName').value.trim();
-									const phone = document.getElementById('mechunachPhone').value.trim();
-									const email = document.getElementById('mechunachEmail').value.trim();
-
-									if (name.length < 2) {
-										alert('Please enter a valid name (at least 2 characters)');
-										return false;
-									}
-
-									// Accepts numbers with or without +, with 10-15 digits (including country code)
-									const phonePattern = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
-									if (!phonePattern.test(phone)) {
-										alert('Please enter a valid phone number');
-										return false;
-									}
-
-									const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-									if (!emailPattern.test(email)) {
-										alert('Please enter a valid email address');
-										return false;
-									}
-									return true;
-								}
-								</script>
-								<input type='hidden' name='user_id' value='<?=$user_id?>' />
-								<?php if (! $desktop) echo "<br />"; ?>
-								<button type='submit' onclick='submitAddMechunachForm(this); return false;' style='margin-top: 10px;'>Add New</button>
-							</form>
-						</div>
-						<br />
-						<table class='table table-bordered' id='mechunachimTable'>
-							<thead>
-								<tr>
-									<th>Name</th>
-									<th>Verified</th>
-									<th>Code / Date Verified</th>
-								</tr>
-							</thead>
-							<tbody>
-								
-							</tbody>
-						</table>
-						<br />
-						<br />
-					</div>
-				</div>
-			</div> 
-			<?php } ?>
-
+<?php if (isset($_COOKIE['naftoli'])) : ?>
 <div id="audioModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:white; padding:20px; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.3); z-index:1000;">
     <h3>Audio Player</h3>
     <audio id="audioPlayer" controls style="width:300px;">
@@ -1142,6 +1144,8 @@ $daySchoolSubjects = setDaySchoolSubjects();
     <button onclick="closeAudioPlayer()">Close</button>
 </div>
 <div id="overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;" onclick="closeAudioPlayer()"></div>
+<?php endif; ?>
+
 <script>
 	$(document).ready(function() {
 		async function init() {
