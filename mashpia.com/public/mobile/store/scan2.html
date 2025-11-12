@@ -890,10 +890,8 @@
 			console.log(data);
 			Quagga.pause();
 			$("#myTemporaryAlert").show();
-			setTimeout(() => {
-				$("#myTemporaryAlert").hide();
-			}, 3000);
 			const res = await checkNumber( data.codeResult.code );
+			$("#myTemporaryAlert").hide();
 			Quagga.start();
 		});
 
