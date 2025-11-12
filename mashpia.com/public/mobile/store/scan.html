@@ -601,10 +601,19 @@
 
 		#toggle-manual {
 			position: relative;
-			
+			z-index: 10;
+			cursor: pointer;
+			-webkit-tap-highlight-color: rgba(0,0,0,0.1);
+			touch-action: manipulation;
+			display: inline-block;
+			padding: 10px;
+			min-width: 60px;
+			min-height: 60px;
 		}
 		#toggle-manual img{
+			height: 50px;
 			max-height: 60px;
+			pointer-events: none; /* Let touch events go to parent */
 		}
 		#toggle-manual:hover{
 			cursor: pointer;
@@ -854,23 +863,44 @@
 
 		// Fix for mobile: Handle both touch and click events properly
 		var touchHandled = false;
-		$("#toggle-manual").on("touchstart", function(e) {
+		
+		// Use event delegation on document to catch all touches, even if element is hidden
+		$(document).on("touchstart", "#toggle-manual", function(e) {
+			console.log("Touch start detected on toggle-manual");
 			touchHandled = false;
+			e.stopPropagation();
 		});
-		$("#toggle-manual").on("touchend", function(e) {
+		
+		$(document).on("touchend", "#toggle-manual", function(e) {
+			console.log("Touch end detected on toggle-manual");
 			e.preventDefault();
 			e.stopPropagation();
+			e.stopImmediatePropagation();
 			touchHandled = true;
 			toggleManual(e);
 			return false;
 		});
-		$("#toggle-manual").on("click", function(e) {
+		
+		// Also handle tap on the image itself (in case touch doesn't reach parent)
+		$(document).on("touchend", "#toggle-manual img", function(e) {
+			console.log("Touch end detected on toggle-manual img");
+			e.preventDefault();
+			e.stopPropagation();
+			e.stopImmediatePropagation();
+			touchHandled = true;
+			toggleManual(e);
+			return false;
+		});
+		
+		// Bind click as fallback for desktop
+		$(document).on("click", "#toggle-manual, #toggle-manual img", function(e) {
 			if (touchHandled) {
 				e.preventDefault();
 				e.stopPropagation();
 				touchHandled = false;
 				return false;
 			}
+			console.log("Click detected on toggle-manual");
 			toggleManual(e);
 		});
 
