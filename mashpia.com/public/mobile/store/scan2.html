@@ -887,10 +887,9 @@
 
 		Quagga.onDetected( async function( data ) {
 			console.log(data);
-			$("#barcode-scanner video").hide();
-			$("#barcode-scanner").append('<div class="scanning">Scanning...</div>');
+			Quagga.pause();
 			const res = await checkNumber( data.codeResult.code );
-			$(".scanning").remove();
+			Quagga.start();
 			// if ( !res.msg ) {
 			// 	setTimeout( function() {
 			// 		showAlert( "Sorry, it seems we could not read the card properly. Please try another angle." )
