@@ -696,10 +696,15 @@ class ChidonTests
                 $avg = round($total / $numTests);
                 $avgNeeded = $avgs['genius'];
                 if ($avg >= $avgNeeded) {
-                    $highest = $track;
-                    $actualAvg = $avg;
+                    $iyunHighest = $track;
+                    $iyunActualAvg = $avg;
                 }
                 else break; // can't go higher if lower one was not passed
+            }
+            if ($iyunHighest != 'genius') $highest = 'expert';
+            else {
+                $highest = $iyunHighest;
+                $actualAvg = $iyunActualAvg;
             }
         }
 
