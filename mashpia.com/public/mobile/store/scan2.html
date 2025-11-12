@@ -888,6 +888,7 @@
 		Quagga.onDetected( async function( data ) {
 			console.log(data);
 			Quagga.pause();
+			alert('Scanning...');
 			const res = await checkNumber( data.codeResult.code );
 			Quagga.start();
 			// if ( !res.msg ) {
