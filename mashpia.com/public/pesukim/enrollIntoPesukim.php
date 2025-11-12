@@ -36,6 +36,8 @@ foreach ($users as $school_id => $users) {
     }
 }
 
-echo "<pre>";
-print_r($qrys);
-echo "</pre>";
+foreach ($qrys as $qry) {
+    $MASHPIA_DB->query($qry);
+}
+
+echo "Done";
