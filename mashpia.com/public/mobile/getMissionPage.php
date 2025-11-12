@@ -348,7 +348,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 </div>
 <?php endif; ?>
 
-<!-- <?php if ( !$user->user_registered ) { ?> -->
+<?php //if ( !$user->user_registered ) { ?>
 <!-- <div class="container">
     <div class="content">
         <h1 style='text-align: center; font-weight: bold;'>
@@ -369,7 +369,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
         </h1>
     </div>
 </div> -->
-<!-- <?php } else { ?> -->
+<?php //} else { ?>
     <div class="container">
         <div class="content">
             <? /********************** BUTTONS ON THE TOP OF THE PAGE **********************/ ?>
@@ -1130,7 +1130,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 					</div>
 				</div> 
 				<?php 
-			}
+			// }
 			?>
 
 <?php if (isset($_COOKIE['naftoli'])) : ?>
