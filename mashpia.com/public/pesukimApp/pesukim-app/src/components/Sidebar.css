@@ -8,12 +8,10 @@
 
 /* Base sidebar styling */
 .sidebar {
-  min-width: 250px;
-  width: 20%;
-  max-width: 450px;
+  width: 300px;
   background-color: var(--color-yellow);
   color: var(--color-navy);
-  padding: 70px 40px;
+  padding: 70px 60px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -25,6 +23,7 @@
   z-index: 100;
   overflow-y: auto;
   transition: transform 0.3s ease;
+  font-family: "Duke", sans-serif;
 }
 
 .sidebar ul {
@@ -39,20 +38,33 @@
 
 .sidebar li {
   margin: 10px 0;
-  font-family: "Exo", sans-serif;
-  font-weight: 800; /* use ExtraBold */
-  text-transform: uppercase; /* matches the style */
-  letter-spacing: 0.5px; /* subtle tracking */
-  font-size: 1.4rem;
+  font-family: "Duke", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.25px;
+  font-size: 2rem;
   color: var(--color-navy);
   cursor: pointer;
   transition: color 0.2s ease;
+  line-height: 1;
 }
 
 .sidebar li.active,
 .sidebar li:hover {
   color: var(--color-red);
   font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 230px;
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none;
+  }
 }
 
 
@@ -64,7 +76,8 @@
     max-width: 300px;
     background-color: var(--color-yellow);
     z-index: 200;
-    box-shadow: none; /* clean, no shadow */
+    box-shadow: none;
+    padding: 20px 30px;
   }
 
   .sidebar.open {
@@ -94,7 +107,7 @@
   }
 
   .sidebar li {
-    font-size: 1rem;
-    margin: 15px 0;
+    font-size: 1.75rem;
+    margin: 8px 0;
   }
 }
