@@ -16,6 +16,7 @@ if (isset($_GET['id'])) {
 $hachayol = new MyShliachHachayol(false, $id);
 $admins = $hachayol->getAdmins();
 $children = $hachayol->getChildren();
+$numChildren = $hachayol->getNumChildren();
 $totalHachayols = 0;
 
 //echo "<pre>"; print_r($children); echo "</pre>";
@@ -27,6 +28,7 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 	// headers
 	fputcsv($out, array(
 		'Number of Hachayols to Send',
+		'Number of Registered Children',
 		'Family ID',
 		'Parent',
 		'Address',
@@ -52,6 +54,7 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 		$school = ($id == 61 ? 'MS' : 'AK');
 		fputcsv($out, array(
 			$num,
+			$numChildren[$adminId],
 			$familyId,
 			$parent,
 			$address1,
@@ -99,6 +102,7 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 		<table>
 			<tr>
 				<th>Number of Hachayols to Send</th>
+				<th>Number of Registered Children</th> 
 				<th>Family ID</th>
 				<th>Parent</th>
 				<th>Address</th>
@@ -113,6 +117,7 @@ if ( isset($_GET['download']) && $_GET['download'] === 'csv' ) {
 		<? foreach ($admins as $admin_id => $admin) : ?>
 			<tr>
 				<td><?=count($children[$admin_id])?></td>
+				<td><?=$numChildren[$admin_id] ?? 0?></td>
 				<td><?=$admin['admin_id']?></td>
 				<td><?=$admin['alast'] . ' Family'?></td>
 				<td><?=$admin['admin_address1']?></td>
