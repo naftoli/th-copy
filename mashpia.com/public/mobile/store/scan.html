@@ -852,8 +852,7 @@
 			});
 		}
 
-		$("#toggle-manual").click( toggleManual );
-		// $("#toggle-manual").touchstart( toggleManual );
+		$("#toggle-manual").on("touchend click", toggleManual );
 
 		const quaggaConf = {
 			inputStream: {
