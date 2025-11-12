@@ -679,14 +679,14 @@
 			<div id="main" class="alert alert-warning">
 				<form id="scan">
 					<!--<img class="img-responsive" src="/kiosk/images/scan_cover.png" /><br />-->
-					<div class="manual" id="manual-scanner">
+					<div class="manual" id="manual-scanner" style="text-align: center;">
 						<div class="innerImg">
 							<p style="margin: auto;" class="i18n" data-key="BarcodeHere">Type in your achievement card
 								barcode number here.</p>
-							<div class="form-group">
-								<button id="submitCode" class="btn btn-danger i18n" data-key="Submit" style="float: right;">Submit</button>
+							<div class="form-group" style="display:inline-flex;">
 								<input type="text" class="form-control" data-key="EnterDigits" id="scanner"
 									placeholder="Enter Digits" autofocus style="margin: auto;">
+								<button id="submitCode" class="btn btn-danger i18n" data-key="Submit" style="float: right;">Submit</button>
 							</div>
 						</div>
 					</div>
@@ -824,8 +824,8 @@
 			return false;
 		});
 
-		function checkNumber(code) {
-			$.ajax({
+		async function checkNumber(code) {
+			await $.ajax({
 				url: 'ajax/checkCard.php',
 				type: 'POST',
 				data: {
@@ -881,13 +881,16 @@
 			}
 			$("#manual-scanner").hide();
 			$("#barcode_scanner").show();
+			$("#toggle-manual").show();
 			Quagga.start();
 		});
 
-		Quagga.onDetected( function( data ) {
+		Quagga.onDetected( async function( data ) {
 			console.log(data);
-			alert(data.codeResult.code);
-			const res = checkNumber( data.codeResult.code );
+			$("#barcode-scanner video").hide();
+			$("#barcode-scanner").append('<div class="scanning">Scanning...</div>');
+			const res = await checkNumber( data.codeResult.code );
+			$(".scanning").remove();
 			// if ( !res.msg ) {
 			// 	setTimeout( function() {
 			// 		showAlert( "Sorry, it seems we could not read the card properly. Please try another angle." )
@@ -904,7 +907,7 @@
 
 		function toggleManual( event ){
 			const elem = document.getElementById("manual-scanner");
-			if (elem.style.display == "none") {
+			if (elem.style.display == "block") {
 				$("#toggle-manual img").attr("src", "/mobile/img_new/scanner-2-color-red-svg.svg" );
 				$("#manual-scanner").hide();
 				$("#barcode_scanner").show();
