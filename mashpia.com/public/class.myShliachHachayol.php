@@ -6,6 +6,7 @@ class MyShliachHachayol {
 	private $year;
 	private $admins;
 	private $children;
+	private $numChildren;
 	private $sortedAdmins;
 	private $checkPaidForShipping;
 	private $checkIfAlreadyShipped;
@@ -58,6 +59,22 @@ class MyShliachHachayol {
 		]);
 		// $result->debugDumpParams();
  		$rows = $result->fetchAll(PDO::FETCH_ASSOC);
+
+		$stmt = $MASHPIA_DB->prepare("
+			SELECT 
+				COUNT(*) AS total
+			FROM
+				admin_auths aa
+					JOIN
+				users u ON u.user_id = aa.id
+					JOIN
+				user_registration ur USING (user_id)
+			WHERE
+				aa.auth = 'user'
+					AND aa.admin_id = :admin_id
+					AND ur.year = :year
+		");
+		
 		$removed = 0;
 		foreach ($rows as $row) {
 			if ($this->checkPaidForShipping) {
@@ -76,6 +93,10 @@ class MyShliachHachayol {
 			}
 			$this->admins[$row['admin_id']] = $row;
 			$this->children[$row['admin_id']][$row['user_id']] = $row['first'] . ' ' . $row['last'];
+
+			$res = $stmt->execute(['admin_id' => $row['admin_id'], 'year' => $this->year]);
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$this->numChildren[$row['admin_id']] = $row['total'] ?? 0;
 		}
 		// echo $removed . " families removed<br />";
 	}
@@ -104,6 +125,10 @@ class MyShliachHachayol {
 	
 	public function getChildren() {
 		return $this->children;
+	}
+
+	public function getNumChildren() {
+		return $this->numChildren;
 	}
 	
 	public function sortByAddress() {
