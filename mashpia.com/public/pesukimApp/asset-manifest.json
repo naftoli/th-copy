@@ -1,16 +1,31 @@
 {
   "files": {
-    "main.css": "./static/css/main.f855e6bc.css",
-    "main.js": "./static/js/main.8b213283.js",
-    "static/js/453.a0d9cd42.chunk.js": "./static/js/453.a0d9cd42.chunk.js",
-    "static/media/logo.svg": "./static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
+    "main.css": "./static/css/main.0d24d7ae.css",
+    "main.js": "./static/js/main.6c4a9d30.js",
+    "static/media/rebbe.jpg": "./static/media/rebbe.caad98e8a9e0c7b195d2.jpg",
+    "static/media/boy-with-hat.png": "./static/media/boy-with-hat.ab4d16d51f9676322547.png",
+    "static/media/girl-with-hat.png": "./static/media/girl-with-hat.3e9b95c368a2d6e47dd5.png",
+    "static/media/test.mp3": "./static/media/test.87dea4904611035268e4.mp3",
+    "static/media/red-pattern-bg.jpg": "./static/media/red-pattern-bg.750574438555fb7582de.jpg",
+    "static/media/confetti.png": "./static/media/confetti.9b17b77dd5da1be7e89a.png",
+    "static/media/calendar-3d.svg": "./static/media/calendar-3d.219b511824bd85fad5ff3008fc41b198.svg",
+    "static/media/tzivos-hashem-logo.png": "./static/media/tzivos-hashem-logo.2b25d9151094247698dc.png",
+    "static/media/sound-3d.svg": "./static/media/sound-3d.3c365ec091a7a2d04621bef274701456.svg",
+    "static/media/Exo2-ExtraBoldItalic.ttf": "./static/media/Exo2-ExtraBoldItalic.690b015ffd2ff5201918.ttf",
+    "static/media/Exo2-BlackItalic.ttf": "./static/media/Exo2-BlackItalic.9bb9fca014e5818ea312.ttf",
+    "static/media/Exo-Light.ttf": "./static/media/Exo-Light.61ffd6b8771d5bdf03e1.ttf",
+    "static/media/Exo-Bold.ttf": "./static/media/Exo-Bold.f007eff840a8cb682c09.ttf",
+    "static/media/Exo-Black.ttf": "./static/media/Exo-Black.45e94e0f3b41565fb31b.ttf",
+    "static/media/Exo-ExtraBold.ttf": "./static/media/Exo-ExtraBold.81854c40d10c46b5dd0d.ttf",
+    "static/media/Duke-Regular.ttf": "./static/media/Duke-Regular.e55ad93985a0b3a8de73.ttf",
+    "static/media/Duke-Fill.ttf": "./static/media/Duke-Fill.74b4fcccdb138e33e3cc.ttf",
+    "static/media/hashems-army.svg": "./static/media/hashems-army.4fe58d3bc8960b92d1b0bdccd82444d7.svg",
     "index.html": "./index.html",
-    "main.f855e6bc.css.map": "./static/css/main.f855e6bc.css.map",
-    "main.8b213283.js.map": "./static/js/main.8b213283.js.map",
-    "453.a0d9cd42.chunk.js.map": "./static/js/453.a0d9cd42.chunk.js.map"
+    "main.0d24d7ae.css.map": "./static/css/main.0d24d7ae.css.map",
+    "main.6c4a9d30.js.map": "./static/js/main.6c4a9d30.js.map"
   },
   "entrypoints": [
-    "static/css/main.f855e6bc.css",
-    "static/js/main.8b213283.js"
+    "static/css/main.0d24d7ae.css",
+    "static/js/main.6c4a9d30.js"
   ]
 }
