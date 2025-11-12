@@ -852,7 +852,27 @@
 			});
 		}
 
-		$("#toggle-manual").on("click touchstart", toggleManual );
+		// Fix for mobile: Handle both touch and click events properly
+		var touchHandled = false;
+		$("#toggle-manual").on("touchstart", function(e) {
+			touchHandled = false;
+		});
+		$("#toggle-manual").on("touchend", function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			touchHandled = true;
+			toggleManual(e);
+			return false;
+		});
+		$("#toggle-manual").on("click", function(e) {
+			if (touchHandled) {
+				e.preventDefault();
+				e.stopPropagation();
+				touchHandled = false;
+				return false;
+			}
+			toggleManual(e);
+		});
 
 		const quaggaConf = {
 			inputStream: {
