@@ -1,0 +1,197 @@
+/* Uses your theme tokens: --color-yellow, --color-red, --color-navy, --color-navy-bold, --color-white */
+/* Fonts assumed already registered (Duke Regular / Exo) */
+
+.mt-wrap {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: center;
+}
+
+.mt-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  width: min(1200px, 90%);
+}
+
+/* Cards */
+.mt-card {
+  border-radius: 16px;
+  padding: 24px 26px;
+  color: var(--color-white);
+}
+
+.mt-card .title-text {
+  margin-bottom: 0;
+}
+
+.mt-number {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.mt-card--blue {
+  /* soft blue panel used in the comps */
+  background: linear-gradient(180deg, #3c5aa6 0%, #2c427b 100%);
+}
+
+.mt-card--navy {
+  width: min(1200px, 90%);
+  box-sizing: border-box;
+  display: flex;
+  background: var(--color-navy-bold);
+  gap: 2rem;
+  justify-content: space-around;
+  align-items: center;
+}
+
+
+/* Progress bar */
+.mt-bar {
+  position: relative;
+  height: 36px;
+  border-radius: 18px;
+  margin-top: 10px;
+}
+
+.mt-bar-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  opacity: 0.25;
+}
+
+.mt-bar.red .mt-bar-track {
+  background: linear-gradient(90deg, #7b0a18, #1c1230);
+}
+
+.mt-bar.yellow .mt-bar-track {
+  background: linear-gradient(90deg, #8b6a00, #1c1230);
+}
+
+.mt-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 18px;
+  mix-blend-mode: screen;
+}
+
+.mt-bar.red .mt-bar-fill {
+  background: linear-gradient(90deg, var(--color-red), #612c7a);
+}
+
+.mt-bar.yellow .mt-bar-fill {
+  background: linear-gradient(90deg, #ffca32, #2b356a);
+}
+
+.mt-bar-ticks {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  font-family: "Exo", sans-serif;
+  font-weight: 900;
+  opacity: 0.7;
+}
+
+.mt-bubble {
+  position: absolute;
+  top: -26px;
+  background: var(--color-red);
+  color: #fff;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+
+.mt-date {
+  font-family: "Exo", sans-serif;
+  font-weight: 800;
+  opacity: 0.9;
+  height: 24px;
+  color: #798ec6;
+}
+
+.mt-number-label {
+  font-family: "Exo", sans-serif;
+  font-weight: 800;
+  opacity: 0.95;
+}
+
+.mt-number-value {
+  font-family: "Duke", sans-serif;
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.1;
+  color: var(--color-yellow);
+}
+
+.mt-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 22px;
+}
+
+.mt-actions a {
+  text-decoration: none;
+}
+
+@media (max-width: 1200px) {
+  .mt-card--navy {
+    gap: 1rem;
+  }
+
+  .mt-date {
+    height: auto;
+  }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .mt-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .mt-card--navy br {
+    display: none;
+  }
+  .mt-card--navy {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .mt-date, .mt-number-label {
+    height: auto;
+    font-size: 14px;
+  }
+  .mt-number {
+    gap: 0;
+  }
+
+  .mt-number-value {
+    font-size: 18px;
+  }
+
+  .mt-card .title-text {
+    font-size: 24px;
+  }
+
+  .mt-wrap, .mt-row {
+    gap: 18px;
+  }
+
+  .mt-card {
+    padding: 18px 20px;
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "learnTeach": {
+    "goal": 50000,
+    "taught": 30000
+  },
+  "armyRecruitment": {
+    "goal": 50000,
+    "recruited": 8000
+  },
+  "pesukim": {
+    "date": {
+      "dow": "Monday",
+      "hebrew": "12 Cheshvan",
+      "gregorian": "November 3"
+    },
+    "today": 10000,
+    "total": 10000
+  }
+}
