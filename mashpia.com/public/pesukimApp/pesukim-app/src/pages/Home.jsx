@@ -47,10 +47,10 @@ const Home = () => {
       </div>
 
       <div className="home-buttons">
-        <button className="btn" onClick={() => window.location.href = "#page-2"}>
+        <button className="btn" onClick={() => window.location.href = "#join"}>
           <span>JOIN</span>
         </button>
-        <button className="btn" onClick={() => window.location.href = "#page-3"}>
+        <button className="btn" onClick={() => window.location.href = "#report"}>
           <span>REPORT</span>
         </button>
       </div>

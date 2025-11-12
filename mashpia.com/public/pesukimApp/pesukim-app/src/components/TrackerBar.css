@@ -1,0 +1,165 @@
+
+.tracker.v2 {
+  --h: 30px;                           /* overall pill height */
+  --r: calc(var(--h) / 2);             /* radius */
+  position: relative;
+  height: var(--h);
+  border-radius: var(--r);
+  filter: drop-shadow(0 2px 0 rgba(0,0,0,.25));
+  margin-top: 40px;
+}
+
+/* ------- TRACK (outer container with padding/gutter) ------- */
+
+.tracker.v2 .trk-track {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+  overflow: hidden;
+}
+
+/* tone-specific vertical gradient: NAVY (top) -> TONE (bottom) */
+.tracker.v2.red .trk-track { 
+  background: linear-gradient(180deg, #2b356a 0%, #5a2340 100%); 
+}
+.tracker.v2.yellow .trk-track { 
+  background: linear-gradient(180deg, #2b356a 0%, #6a5a18 100%); 
+}
+
+.tracker.v2 .trk-track::before {
+  /* subtle inner bevel */
+  content:"";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r);
+}
+
+/* the “air” around the fill */
+.tracker.v2 .trk-gutter {
+  position: absolute;
+  left: 6px; right: 6px; top: 6px; bottom: 6px; /* <-- padding */
+  border-radius: calc(var(--r) - 6px);
+  overflow: hidden;
+}
+
+.tracker.v2.small .trk-gutter {
+  left: 3px; right: 3px; top: 3px; bottom: 3px;
+}
+/* ------- FILL (tone -> tint/white) ------- */
+
+.tracker.v2 .trk-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 600ms cubic-bezier(.22,1,.36,1);
+}
+
+/* red fill: base red -> whitish tint at the end */
+.tracker.v2.red .trk-fill {
+  background: linear-gradient(
+    90deg,
+    var(--color-red) 0%,
+    color-mix(in srgb, var(--color-red) 80%, white) 65%,
+    color-mix(in srgb, var(--color-red) 45%, white) 100%
+  );
+}
+
+/* yellow fill: base yellow -> whitish tint at the end */
+.tracker.v2.yellow .trk-fill {
+  background: linear-gradient(
+    90deg,
+    var(--color-yellow) 0%,
+    color-mix(in srgb, var(--color-yellow) 80%, white) 60%,
+    color-mix(in srgb, var(--color-yellow) 45%, white) 100%
+  );
+}
+
+/* Fallback if color-mix isn’t supported (keeps the spirit) */
+@supports not (background: color-mix(in srgb, red 50%, white)) {
+  .tracker.v2.red .trk-fill {
+    background: linear-gradient(90deg, var(--color-red) 0%, #ff9aa7 70%, #ffe6ea 100%);
+  }
+  .tracker.v2.yellow .trk-fill {
+    background: linear-gradient(90deg, var(--color-yellow) 0%, #ffe08a 70%, #fff6cf 100%);
+  }
+}
+
+/* ------- MAX label (right only) ------- */
+
+.tracker.v2 .trk-max {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: "Duke", sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  letter-spacing: .02em;
+  color: rgba(193, 206, 255, .9);
+  pointer-events: none;
+}
+
+
+
+/* ------- Bubble ------- */
+
+.tracker.v2 .trk-bubble {
+  position: absolute;
+  top: calc(var(--h) * -0.95);
+  transform: translateX(-50%);
+  padding: 4px 10px 5px;
+  border-radius: 12px;
+  font-family: "Duke", sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: 1;
+  white-space: nowrap;
+  /* box-shadow: 0 2px 0 rgba(0,0,0,.25); */
+}
+
+.tracker.v2.small .trk-bubble {
+  top: calc(var(--h) * -1.5);
+}
+.tracker.v2.small .trk-max, .tracker.v2.small .trk-bubble {
+  font-size: 16px;
+}
+
+.tracker.v2.red .trk-bubble { 
+  background: var(--color-red);    
+  color: var(--color-yellow); 
+}
+.tracker.v2.yellow .trk-bubble { 
+  background: var(--color-yellow); 
+  color: #193b6d; 
+}
+
+.tracker.v2 .trk-bubble::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: -7px;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 9px solid currentColor; /* pointer stroke color underneath */
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.2));
+}
+
+.tracker.v2.yellow .trk-bubble::after {
+  border-top-color: var(--color-yellow);
+}
+
+.tracker.v2.red .trk-bubble::after {
+  border-top-color: var(--color-red);
+}
+/* /* match pointer fill to bubble background using a */
+
+
+@media (max-width: 768px) {
+  .tracker.v2 .trk-bubble, .tracker.v2 .trk-max {
+    font-size: 18px;
+  }
+
+  .tracker.v2 {
+    margin-top: 18px;
+  }
+}

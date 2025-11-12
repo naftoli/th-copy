@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from "react";
+import TrackerBar from "./TrackerBar";
 import "./Sidebar.css";
 
+import logo from "../assets/images/tzivos-hashem-logo.png";
+
 const pages = [
-  { name: "Home", id: "page-0" },
-  { name: "About", id: "page-1" },
-  { name: "Join", id: "page-2" },
-  { name: "Report", id: "page-3" },
-  { name: "Learn", id: "page-4" },
-  { name: "Missions", id: "page-5" },
-  { name: "Prizes", id: "page-6" },
-  { name: "Watch The Campaign", id: "page-7" },
+  { name: "Home", id: "home", subIds: ["menu-trackers"] },
+  { name: "About", id: "about", subIds: [] },
+  { name: "Join", id: "join", subIds: [] },
+  { name: "Report", id: "report", subIds: [] },
+  { name: "Learn", id: "learn", subIds: [] },
+  { name: "Missions", id: "missions", subIds: [] },
+  { name: "Prizes", id: "prizes", subIds: [] },
+  { name: "Watch The Campaign", id: "watch-campaign", subIds: [] },
 ];
 
-export default function Sidebar() {
-  const [activeId, setActiveId] = useState("page-0");
+export default function Sidebar({ trackersData = {} }) {
+  const [activeId, setActiveId] = useState("home");
   const [open, setOpen] = useState(false);
-
+  
+  const { learnTeach = {}, armyRecruitment = {} } = trackersData || {};
+  
   const scrollToId = (id) => {
     const el = document.getElementById(id);
     if (el) {
@@ -86,13 +91,35 @@ export default function Sidebar() {
           {pages.map((p) => (
             <li
               key={p.id}
-              className={p.id === activeId ? "active" : ""}
+              className={p.id === activeId || p.subIds.includes(activeId) ? "active" : ""}
               onClick={() => scrollToId(p.id)}
             >
               {p.name}
             </li>
           ))}
         </ul>
+
+        {/* Trackers */}
+        <div className="trackers">
+          <TrackerBar
+            value={learnTeach.taught}
+            max={learnTeach.goal}
+            size="small"
+            height={18}
+            tone="red"         // red bar + red bubble
+          />
+
+          <TrackerBar
+            value={armyRecruitment.recruited}
+            max={armyRecruitment.goal}
+            size="small"
+            height={18}
+            tone="yellow"      // yellow bar + yellow bubble
+          />
+        </div>
+
+        <img src={logo} alt="Tzivos Hashem logo" className="sidebar-logo" />
+
       </aside>
     </>
   );
