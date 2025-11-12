@@ -1,0 +1,156 @@
+.home-container {
+  position: relative;
+  height: 100vh;
+  color: var(--color-white);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: var(--font-primary);
+  overflow: hidden;
+  gap: 2.5rem;
+}
+
+/* --- TOP --- */
+.home-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.8rem;
+}
+
+.character {
+  height: clamp(220px, 25vh, 300px);
+  width: auto;
+}
+
+.home-logo {
+  height: clamp(250px, 28vh, 340px);
+  width: auto;
+}
+
+/* --- TEXT --- */
+
+.welcome {
+  font-weight: 500;
+  color: var(--color-white);
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 86px;
+  font-family: "Duke", sans-serif;
+}
+
+.hashems-army-text {
+  margin-top: -65px;
+  width: 750px;
+  margin-bottom: -30px;
+}
+
+/* --- SUBTEXT --- */
+.campaign {
+  font-weight: 500;
+  color: var(--color-yellow);
+  margin: 0;
+  font-size: 86px;
+  font-family: "Duke", sans-serif;
+}
+
+.soldiers {
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--color-yellow);
+  margin-top:  10px;
+}
+
+/* --- BUTTONS --- */
+.home-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 900px) {
+  .character {
+    height: 180px;
+  }
+
+  .welcome {
+    font-size: 58px;
+  }
+
+  .home-logo {
+    height: 180px;
+  }
+
+  .campaign {
+    font-size: 58px;
+  }
+
+  .soldiers {
+    font-size: 18px;
+  }
+
+  .btn {
+    padding: 8px 28px;
+    font-size: 1rem;
+  }
+
+  .hashems-army-text {
+    margin-top: -40px;
+    width: 500px;
+    margin-bottom: -18px;
+  }
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+
+  .home-container {
+    gap: 0.5rem;
+  }
+
+  .home-buttons {
+    margin-top: 1rem;
+  }
+
+  .character {
+    height: 180px;
+  }
+
+  .welcome {
+    font-size: 35px;
+  }
+
+  .home-logo {
+    height: 160px;
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+
+  .campaign {
+    font-size: 35px;
+  }
+
+  .btn span {
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+
+  .soldiers {
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 8px 10px;
+    font-size: 1rem;
+  }
+
+  .hashems-army-text {
+    margin-top: -24px;
+    width: 300px;
+    margin-bottom: -12px;
+  }
+}

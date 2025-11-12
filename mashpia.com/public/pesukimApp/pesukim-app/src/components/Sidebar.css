@@ -1,0 +1,123 @@
+/* Use theme colors */
+:root {
+  --color-yellow: #FFCA32;
+  --color-red: #E1403F;
+  --color-navy: #3E4B79;
+  --color-white: #FFFFFF;
+}
+
+/* Base sidebar styling */
+.sidebar {
+  width: 300px;
+  background-color: var(--color-yellow);
+  color: var(--color-navy);
+  padding: 70px 60px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 100;
+  overflow-y: auto;
+  transition: transform 0.3s ease;
+  font-family: "Duke", sans-serif;
+}
+
+.sidebar-logo {
+  width: 100%;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.sidebar li {
+  margin: 10px 0;
+  font-family: "Duke", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1.25px;
+  font-size: 2rem;
+  color: var(--color-navy);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.sidebar li.active,
+.sidebar li:hover {
+  color: var(--color-red);
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .sidebar {
+    width: 230px;
+  }
+}
+
+@media (min-width: 769px) {
+  .menu-toggle {
+    display: none;
+  }
+}
+
+
+/* Hidden on mobile until toggled */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+    width: 70%;
+    max-width: 300px;
+    background-color: var(--color-yellow);
+    z-index: 200;
+    box-shadow: none;
+    padding: 20px 30px;
+    justify-content: space-around;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .menu-toggle {
+    display: block;
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    z-index: 250;
+    background: var(--color-yellow);
+    color: var(--color-navy);
+    font-size: 1.6rem;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 6px;
+    border: none;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+  }
+
+  .sidebar li {
+    font-size: 1.75rem;
+    margin: 8px 0;
+  }
+
+  .sidebar-logo {
+    width: 50%;
+    margin: 0 auto;
+  }
+}
