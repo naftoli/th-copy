@@ -823,15 +823,15 @@
 			$(".bug-report img").data("user_id", user);
 		});
 
-		$("#submitCode").click( function(e) {
+		$("#submitCode").click( async function(e) {
 			e.preventDefault();
 			const code = $("#scanner").val();
 			if (code.length != 20) {
 				alert("Please enter a valid code.");
 				return false;
 			} 
-			checkNumber(code);
-			return false;
+			await checkNumber(code);
+			return false
 		});
 
 		async function checkNumber(code) {
