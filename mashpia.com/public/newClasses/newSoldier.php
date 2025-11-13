@@ -86,7 +86,6 @@ class NewSoldier {
 		
 		$sql = "insert into users 
 				set user_code = $barcode, 
-				email = '$email', 
 				first = '$this->first', 
 				last = '$this->last', 
 				lang = 'en', 
