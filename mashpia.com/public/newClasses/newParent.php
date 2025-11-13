@@ -19,7 +19,8 @@ class NewParent extends BaseParent {
 		$sql = "INSERT INTO admins set ";
 		foreach ($this->fields as $k) {
 			if (isset($data[$k])) {
-				if (is_numeric(($data[$k] ))) $sql .= $k . " = " . mysql_real_escape_string( $data[$k] ) . ", ";
+				if (in_array($k, ['hashed_pass', 'password'])) $sql .= $k . " = \"" . $data[$k] . "\", ";
+				else if (is_numeric(($data[$k] ))) $sql .= $k . " = " . mysql_real_escape_string( $data[$k] ) . ", ";
 				else $sql .= $k . " = \"" . mysql_real_escape_string( $data[$k] ) . "\", ";
 			}
 		}
