@@ -95,8 +95,8 @@ class MyShliachHachayol {
 			$this->children[$row['admin_id']][$row['user_id']] = $row['first'] . ' ' . $row['last'];
 
 			$res = $stmt->execute(['admin_id' => $row['admin_id'], 'year' => $this->year]);
-			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			$this->numChildren[$row['admin_id']] = $row['total'] ?? 0;
+			$rowChildren = $stmt->fetch(PDO::FETCH_ASSOC);
+			$this->numChildren[$row['admin_id']] = $rowChildren['total'] ?? 0;
 		}
 		// echo $removed . " families removed<br />";
 	}
