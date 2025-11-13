@@ -42,13 +42,19 @@ class NewSoldier {
 	    $this->school_type = $type;
     }
 	
-	public function create() {
+	public function create($createBirthday = true) {
 		//return $this->createAccount();
 		if ($this->user_id = $this->createAccount()) {
             $this->setupTracks();
-			if ($this->assignToParent() && $this->setupStudent()) {
-				return true;
+			$assignedToParent = $this->assignToParent();
+			if (! $assignedToParent) {
+				return false;
+			} else if ($createBirthday) {
+				if (! $this->setupStudent()) {
+					return false;
+				}
 			}
+			return true;
 		} 
 		return false;
 	}
@@ -69,7 +75,7 @@ class NewSoldier {
                     break;
             }
         } else {
-		    if (!isset($this->school_type)) $this->school_type = 50;
+		    if (!isset($this->school_type)) $this->school_type = 8;
         }
 		$address1 = $this->parent->admin_address1;
 		$address2 = $this->parent->admin_address2;
