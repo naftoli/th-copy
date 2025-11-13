@@ -37,7 +37,7 @@ function sendEmailConfirmation($email, $name) {
   // Additional headers
   $headers[] = 'From: Tzivos Hashem <admin@tzivoshashem.org>';
   $headers[] = 'Reply-To: Tzivos Hashem <admin@tzivoshashem.org>';
-  @mail($email, $subject, $msg, implode("\r\n", $headers));
+  return @mail($email, $subject, $msg, implode("\r\n", $headers));
 }
 
 header('Content-Type: application/json; charset=utf-8');
@@ -123,7 +123,10 @@ try {
           if (!$addedRecruiter) {
             throw new Exception('Failed to add recruiter');
           }
-          sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']));
+          $emailSent = sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']));
+          if (!$emailSent) {
+            throw new Exception('Failed to send email confirmation');
+          }
       } else {
           throw new Exception('Failed to create child account');
       }
