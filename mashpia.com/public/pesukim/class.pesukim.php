@@ -25,13 +25,22 @@ class Pesukim
         return count($result) > 0;
     }
 
-    public function addRecruiter($recruiter_id) {
+    public function addRecruiter($recruiter) {
         global $MASHPIA_DB;
-        $MASHPIA_DB->beginTransaction();
-        $success = true;
+
+        // get user id from serial number
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT user_id from users where user_serial = :id or user_id = :id
+        ");
+        $stmt->execute(['id' => $recruiter]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$row || !$row['user_id']) {
+            return false;
+        }
+        $recruiter_id = $row['user_id'];
         
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pesukim_recruiters (recruiter_id, recruited_id)
+            INSERT INTO pesukim_recruits (recruiter_id, recruited_id)
             VALUES (:recruiter_id, :recruited_id)
         ");
         $res = $stmt->execute([
@@ -41,19 +50,12 @@ class Pesukim
         if ($res) {
             $pointsAdded = $this->addPoints(200, $recruiter_id);
             if (! $pointsAdded) {
-                $success = false;
+                return false;
             }
         } else {
-            $success = false;
-        }
-
-        if ($success) {
-            $MASHPIA_DB->commit();
-            return true;
-        } else {
-            $MASHPIA_DB->rollBack();
             return false;
         }
+        return true;
     }
 
     public function addPoints($points, $user_id) {
@@ -79,6 +81,29 @@ class Pesukim
         $stmt->execute(['user_id' => $user_id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row['school_id'] ?? false;
+    }
+
+    public function addDuchRecruit($info) {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO pesukim_duch_recruits (user_id, name, mothers_name)
+            VALUES (:user_id, :name, :mothers_name)
+        ");
+        return $stmt->execute([
+            'user_id' => $this->user_id,
+            'name' => $info['name'],
+            'mothers_name' => $info['mothers_name'],
+        ]);
+    }
+
+    public function getDuchRecruits() {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * from pesukim_duch_recruits
+            WHERE user_id = :user_id
+        ");
+        $stmt->execute(['user_id' => $this->user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getRecruiter() {

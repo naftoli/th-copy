@@ -1,4 +1,4 @@
-<?
+<?php
 require 'baseParent.php';
 
 class NewParent extends BaseParent {
