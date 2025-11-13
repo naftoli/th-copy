@@ -4,6 +4,7 @@
 
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/globals.php';
 
 function clean(&$value) {
   if (is_array($value)) {
@@ -93,7 +94,8 @@ try {
       $parent = new NewParent();
       $created = $parent->action([
           'username' => $input['parentEmail'],
-          'password' => '1234',
+          'hashed_pass' => password_hash('1234', PASSWORD_DEFAULT),
+          'password' => encryptPassword('1234', ENCRYPTION_KEY),
           'admin_email' => $input['parentEmail']
       ]);
       if (!$created) {
@@ -118,10 +120,12 @@ try {
           if (!$res1 || !$res2) {
             throw new Exception('Failed to create rank marks');
           }
-          $p = new Pesukim($user_id);
-          $addedRecruiter = $p->addRecruiter($input['referral']);
-          if (!$addedRecruiter) {
-            throw new Exception('Failed to add recruiter');
+          if ($input['referral']) {
+            $p = new Pesukim($user_id);
+            $addedRecruiter = $p->addRecruiter($input['referral']);
+            if (!$addedRecruiter) {
+              throw new Exception('Failed to add recruiter');
+            }
           }
           $emailSent = sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']));
           if (!$emailSent) {
