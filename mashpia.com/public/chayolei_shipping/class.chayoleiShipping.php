@@ -240,7 +240,7 @@ class ChayoleiShipping
     }
 
     public function getMedals(string $gender, int $school, array $items, string $date_limit = '') {
-        global $shipment_number;
+        global $limit_to_status;
         $medals = [];
         $medal_ids = $this->getMedalIDs();
         $subject_names = $this->getSubjectNames();
@@ -264,7 +264,14 @@ class ChayoleiShipping
         if ($school > 0) {
             $m->setSchoolId($school);
         }
-        $for_shipping = $shipment_number == 1 ? true : false;
+        $for_shipping = false;
+        foreach ($limit_to_status as $status) {
+            if ($status == 0 && count($limit_to_status) == 1) {
+                $for_shipping = true;
+            }
+            // only loop once
+            break;
+        }
         $m->setMedalDetails($for_shipping, $gender);
         $medals_for_shipping = $m->getMedalsForShipping();
         foreach ($medals_for_shipping as $user_id => $subjects) {
