@@ -940,7 +940,7 @@
 			console.log(data);
 			Quagga.pause();
 			$("#myTemporaryAlert").show();
-			const res = await checkNumber( data.codeResult.code );
+			await checkNumber( data.codeResult.code );
 			$("#myTemporaryAlert").hide();
 			Quagga.start();
 		});
