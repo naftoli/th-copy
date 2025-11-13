@@ -2,10 +2,6 @@
 // ini_set('display_errors', 1);
 // ini_set('error_reporting', E_ALL);
 
-require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/globals.php';
-
 function clean(&$value) {
   if (is_array($value)) {
     foreach ($value as $k => &$v) {
@@ -77,13 +73,15 @@ if ($errors) {
   exit;
 }
 
-$MASHPIA_DB->beginTransaction();
-
-// create a new user
+require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/globals.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/newClasses/newParent.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/newClasses/newSoldier.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
 
+$MASHPIA_DB->beginTransaction();
+// create a new user
 try {
   // first find out if there's an admin already that exists with this email
   $sql = "select * from admins where admin_email = '" . $input['parentEmail'] . "'";
