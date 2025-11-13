@@ -17,6 +17,7 @@ $hachayol = new MyShliachHachayol(false, $id);
 $admins = $hachayol->getAdmins();
 $children = $hachayol->getChildren();
 $numChildren = $hachayol->getNumChildren();
+// echo "<pre>"; print_r($numChildren); echo "</pre>"; exit;
 $totalHachayols = 0;
 
 //echo "<pre>"; print_r($children); echo "</pre>";
