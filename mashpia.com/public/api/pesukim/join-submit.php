@@ -127,10 +127,7 @@ try {
               throw new Exception('Failed to add recruiter');
             }
           }
-          $emailSent = sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']));
-          if (!$emailSent) {
-            throw new Exception('Failed to send email confirmation');
-          }
+          sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']));
       } else {
           throw new Exception('Failed to create child account');
       }
