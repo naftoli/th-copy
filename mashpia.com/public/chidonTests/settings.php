@@ -222,6 +222,8 @@ if (count($schools) == 1) {
           The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
           The Iyun test avg is set to <b>80 non-cumulative or 90 cumulative</b>.
         </p>
+        <input type="hidden" name="avg" id="avg_score_iyun" value="80" />
+        <input type="hidden" name="tracks[]" id="tracks_iyun" value="genius" />
       <?php endif; ?>
     </fieldset>
 
@@ -256,6 +258,8 @@ if (count($schools) == 1) {
           The passing mark is set by headquarters and cannot be modified by base commanders.<br /><br />
           The Iyun test final avg is set to <b>80 non-cumulative or 90 cumulative</b>.
         </p>
+        <input type="hidden" name="avgFinal" id="avg_final_iyun" value="80" />
+        <input type="hidden" name="tracks[]" id="tracks_iyun" value="genius" />
       <?php endif; ?>
     </fieldset>
 
@@ -298,7 +302,7 @@ if (count($schools) == 1) {
     <div style="clear: both;"></div>
     <br />
     <div style="clear:both;">
-      <button onclick="location.href='enterScores.php'; return false;">Go to Enter Marks Page</button>
+      <button id="enterMarksButton">Go to Enter Marks Page</button>
     </div>
   </div>
 </div>
@@ -312,7 +316,18 @@ if (count($schools) == 1) {
     if (document.getElementById('baseSelect').value != 0) setPlatoons()
   })
 
-  $("#settings_report").click( function() {
+  document.getElementById('enterMarksButton').addEventListener('click', async function(e) {
+    e.preventDefault()
+    try {
+      await save('avgFinalIyun')
+      await save('avgScoreIyun')
+      location.href = 'enterScores.php'
+    } catch (error) {
+      alert('Error saving settings: ' + error.message)
+    }
+  });
+
+  document.getElementById('settings_report').addEventListener('click', function() {
     // open in new tab
     window.open('reports/settings_report.html', '_blank')
   })
