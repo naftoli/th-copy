@@ -150,8 +150,9 @@ class Pesukim
     public function getRecruits() {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * from pesukim_recruiters
-            WHERE recruiter_id = :recruiter_id
+            SELECT * from pesukim_recruiters pr 
+            JOIN users u ON u.user_id = pr.recruited_id 
+            WHERE pr.recruiter_id = :recruiter_id
         ");
         $stmt->execute([
             'recruiter_id' => $this->user_id

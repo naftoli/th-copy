@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
 
 $p = new Pesukim($_POST['user_id']);
-$mechunachim = $p->getMechunachim();
+$res = $p->getRecruits();
+$duch_res = $p->getDuchRecruits();
 
-echo json_encode(['success' => true, 'data' => $mechunachim]);
-?>
+echo json_encode(['success' => true, 'data' => $res, 'duch_data' => $duch_res]);
