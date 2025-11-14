@@ -178,7 +178,7 @@ $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
 $user->get_user_tracks( -1, $start, $end, array(), $user->lang_id ); // get the users tracks
-//echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
+// echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
 chdir('mobile'); // and come back to this folder
 
 // don't show weekly button for day school kids
@@ -1079,33 +1079,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 									<input type='text' name='name' placeholder='Name' id='mechunachName' />
 									<input type='tel' name='phone' placeholder='Phone' id='mechunachPhone' />
 									<input type='email' name='email' placeholder='Email' id='mechunachEmail' />
-	
-									<script>
-									function validateMechunachForm() {
-										const name = document.getElementById('mechunachName').value.trim();
-										const phone = document.getElementById('mechunachPhone').value.trim();
-										const email = document.getElementById('mechunachEmail').value.trim();
-	
-										if (name.length < 2) {
-											alert('Please enter a valid name (at least 2 characters)');
-											return false;
-										}
-	
-										// Accepts numbers with or without +, with 10-15 digits (including country code)
-										const phonePattern = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
-										if (!phonePattern.test(phone)) {
-											alert('Please enter a valid phone number');
-											return false;
-										}
-	
-										const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
-										if (!emailPattern.test(email)) {
-											alert('Please enter a valid email address');
-											return false;
-										}
-										return true;
-									}
-									</script>
 									<input type='hidden' name='user_id' value='<?=$user_id?>' />
 									<?php if (! $desktop) echo "<br />"; ?>
 									<button type='submit' onclick='submitAddMechunachForm(this); return false;' style='margin-top: 10px;'>Add New</button>
@@ -1126,6 +1099,44 @@ $daySchoolSubjects = setDaySchoolSubjects();
 							</table>
 							<br />
 							<br />
+						</div>
+					</div>
+				</div> 
+
+				<style>
+					#recruits ul {
+						list-style-type: none;
+						padding-left: 0;
+					}
+					#recruits ul li {
+						margin-bottom: 10px;
+					}
+				</style>
+				<div class='panel panel-default'>
+					<div class='panel-heading'>
+						<i class='glyphicon glyphicon-chevron-left'></i> Recruits
+					</div>
+					<div class='collapse in mechunachPanel' style='height: auto;'>
+						<div class='panel-body'>
+							<!-- add link that drops down when clicked to add a new mechunach -->
+							<?php if ($desktop) echo "<a href='#' onclick='toggleAddRecruitForm(); return false;'>Add recruit for Duch</a>"; ?>
+							<style>
+								#addRecruitForm input {
+									padding: 5px;
+									margin: 5px;
+								}
+							</style>
+							<div>
+								<form name='addRecruitForm' id='addRecruitForm' action='addRecruit.php' method='post' style='<?=$style?>'>
+									<input type='text' name='name' placeholder='Name' id='recruitName' />
+									<input type='text' name='mothers_name' placeholder='Mothers Name' id='mothersName' />
+									<input type='hidden' name='user_id' value='<?=$user_id?>' />
+									<?php if (! $desktop) echo "<br />"; ?>
+									<button type='submit' onclick='submitAddRecruitForm(this); return false;' style='margin-top: 10px;'>Add recruit</button>
+								</form>
+							</div>
+							<br />
+							<div id='recruits'></div>
 						</div>
 					</div>
 				</div> 
@@ -1151,6 +1162,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		async function init() {
 			await getMechunachim(false);
 			await checkMechunachimTasks();
+			await getRecruits();
 		}
 		init();
 	});
@@ -1195,6 +1207,14 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		$('#mechunachimTable tbody').empty().append(html);
 	}
 
+	function toggleAddMechunachForm() {
+		if (document.getElementById('addMechunachForm').style.display == 'block') {
+			document.getElementById('addMechunachForm').style.display = 'none';
+		} else {
+			document.getElementById('addMechunachForm').style.display = 'block';
+		}
+	}
+
 	function submitAddMechunachForm(button) {
 		if (! validateMechunachForm()) return false;
 		// check what the button says 
@@ -1224,12 +1244,29 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		});
 	}
 
-	function toggleAddMechunachForm() {
-		if (document.getElementById('addMechunachForm').style.display == 'block') {
-			document.getElementById('addMechunachForm').style.display = 'none';
-		} else {
-			document.getElementById('addMechunachForm').style.display = 'block';
+	function validateMechunachForm() {
+		const name = document.getElementById('mechunachName').value.trim();
+		const phone = document.getElementById('mechunachPhone').value.trim();
+		const email = document.getElementById('mechunachEmail').value.trim();
+
+		if (name.length < 2) {
+			alert('Please enter a valid name (at least 2 characters)');
+			return false;
 		}
+
+		// Accepts numbers with or without +, with 10-15 digits (including country code)
+		const phonePattern = /^(\+?\d{1,3}[- ]?)?\d{10,15}$/;
+		if (!phonePattern.test(phone)) {
+			alert('Please enter a valid phone number');
+			return false;
+		}
+
+		const emailPattern = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+		if (!emailPattern.test(email)) {
+			alert('Please enter a valid email address');
+			return false;
+		}
+		return true;
 	}
 
 	function verifyMechunach(elem) {
@@ -1262,7 +1299,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 	async function checkMechunachimTasks() {
 		const user_id = <?=$user_id?>;
-		const mechunachim_tasks = <?=empty($mechunachim_tasks) ? '[]' : json_encode($mechunachim_tasks)?>;
+		const mechunachim_tasks = <?= json_encode($mechunachim_tasks); ?>;
 		const start = <?=$start?>;
 		const end = <?=$end?>;
 		
@@ -1296,6 +1333,88 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				console.log(error)
 			}
 		})
+	}
+
+	async function getRecruits() {
+		await $.ajax({
+			url: '/pesukim/ajax/getRecruits.php',
+			type: 'POST',
+			data: { user_id: <?=$user_id?> },
+			success: function(response) {
+				const res = JSON.parse(response);
+				if (res.success) {
+					displayRecruits(res.data, res.duch_data);
+				} else {
+					alert('Error getting recruits.');
+				}
+			},
+			error: function(response) {
+				alert('Error getting recruits: ' + response.responseText);
+			}
+		})
+	}
+
+	function displayRecruits(recruits, duch_recruits) {
+		let recruits_html = '<ul>';
+		$.each(recruits, function(index, recruit) {
+			recruits_html += "<li>" + recruit.first + " " + recruit.last + " (For Points)</li>";
+		});
+		$.each(duch_recruits, function(index, recruit) {
+			recruits_html += "<li>" + recruit.name + " bas " + recruit.mothers_name + " (For Duch)</li>";
+		});
+		recruits_html += '</ul>';
+		$('#recruits').html(recruits_html);
+	}
+
+	function toggleAddRecruitForm() {
+		if (document.getElementById('addRecruitForm').style.display == 'block') {
+			document.getElementById('addRecruitForm').style.display = 'none';
+		} else {
+			document.getElementById('addRecruitForm').style.display = 'block';
+		}
+	}
+
+	function submitAddRecruitForm(button) {
+		if (! validateRecruitForm()) return false;
+		button.disabled = true;
+		button.innerHTML = 'Adding...';
+		$.ajax({
+			url: '/pesukim/ajax/addDuchRecruit.php',
+			type: 'POST',
+			data: $('#addRecruitForm').serialize(),
+			success: function(response) {
+				const res = JSON.parse(response);
+				button.disabled = false;
+				if (res.success) {
+					alert('Recruit added successfully.');
+					button.innerHTML = 'Add';
+					getRecruits();
+				}
+			},
+			error: function(response) {
+				button.disabled = false;
+				button.innerHTML = 'Add';
+				alert('Error adding recruit: ' + response.responseText);
+			}
+		});
+	}
+
+	function validateRecruitForm() {
+		const name = document.getElementById('recruitName').value.trim();
+		const mothers_name = document.getElementById('mothersName').value.trim();
+		if (name.length < 2) {
+			alert('Please enter a valid name (at least 2 characters)');
+			return false;
+		}
+		if (mothers_name.length < 2) {
+			alert('Please enter a valid mother name (at least 2 characters)');
+			return false;
+		}
+		if (name == mothers_name) {
+			alert('Name and mother name cannot be the same');
+			return false;
+		}
+		return true;
 	}
 
 	function showAudioPlayer(e) {

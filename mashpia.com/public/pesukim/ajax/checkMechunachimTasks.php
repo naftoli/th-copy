@@ -1,13 +1,15 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+// ini_set('display_errors', 1);
+// ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
 
 $p = new Pesukim($_POST['user_id']);
-$tasks = $_POST['mechunachim_tasks'];
-$mechunachim = json_decode($_POST['mechunachim'], true);
+$tasks = $_POST['mechunachim_tasks'] ?? [];
+$mechunachim = $_POST['mechunachim'] ?? [];
+if ($mechunachim) $mechunachim = json_decode($mechunachim, true);
+if ($tasks) $tasks = json_decode($tasks, true);
 
 try {
     $res = [];
