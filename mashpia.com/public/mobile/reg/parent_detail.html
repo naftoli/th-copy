@@ -896,6 +896,7 @@
           setSwiper();
           $(".year").text(year);
           if (show_reg) $(".chidon_reg").show()
+          if (Cookies.get('naftoli')) $(".view_enrollment_info").show();
         }
       }
     });
@@ -922,10 +923,6 @@
       pro: 'Yediah',
       expert: 'Havonah',
       genius: 'Iyun'
-    }
-
-    if (Cookies.get('naftoli')) {
-      $(".view_enrollment_info").show();
     }
 
     $(document).on('click', '.view_enrollment_info', function () {
