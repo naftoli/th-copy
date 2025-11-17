@@ -1,0 +1,145 @@
+/* Card sizing tweak so it matches your comp proportions */
+.report-wrap {
+  height: 100%;
+  display: grid;
+  place-items: start center;
+  padding: clamp(16px, 4vw, 40px);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.report-card {
+  width: min(1000px, 100%);
+  padding: clamp(24px, 4vw, 56px);
+  border-radius: 18px;
+  background: linear-gradient(180deg, #1f2b54 0%, #0f1e43 100%);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+.report-card .title-text {
+  text-align: center;
+  margin: 0 0 6px;
+}
+
+.report-card .body-text {
+  margin: 0 0 18px;
+}
+
+/* Logo */
+.report-logo {
+  width: clamp(140px, 22vw, 210px);
+  display: block;
+  margin: 8px auto 20px;
+}
+
+/* Form layout */
+.report-form {
+  width: min(520px, 90%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+/* Visually-hidden label text for a11y */
+.sr-only {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden; clip: rect(1px,1px,1px,1px);
+}
+
+/* Input pill with soft glassy look (to match mock) */
+.input-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,0.18), rgba(0,0,0,0.12));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.25), inset 0 -2px 6px rgba(0,0,0,0.35);
+}
+
+.input-wrap input {
+  appearance: none;
+  width: 100%;
+  border: none;
+  outline: none;
+  padding: 12px 14px;
+  font-family: "Exo", sans-serif;
+  font-weight: 800;
+  color: #e6ecff;
+  background: linear-gradient(180deg, #3a4c8a 0%, #354777 100%);
+  border-radius: 10px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+}
+
+.input-wrap input::placeholder {
+  color: rgba(255,255,255,0.75);
+}
+
+/* Remember me row */
+.remember-row {
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.remember {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.remember input {
+  appearance: none;
+  width: 0;
+  height: 0;
+  position: absolute;
+  opacity: 0;
+}
+
+.checkbox-skin {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: #f2c433;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.45), inset 0 -2px 3px rgba(0,0,0,0.35);
+  position: relative;
+  transition: transform .08s ease-in;
+}
+
+.remember input:checked + .checkbox-skin::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6 12.5l3.5 3.5L18 7.5' stroke='%23193b6d' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/18px 18px no-repeat;
+}
+
+.remember input:hover + .checkbox-skin {
+  transform: scale(1.06);
+}
+
+.remember-label {
+  font-family: "Exo", sans-serif;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+
+.report-error {
+  margin: 6px 0 0;
+  text-align: center;
+  font-family: "Exo", sans-serif;
+  font-weight: 800;
+  color: #ff9aa7;
+}
+
+button[disabled] {
+  opacity: 0.75;
+  cursor: not-allowed;
+}

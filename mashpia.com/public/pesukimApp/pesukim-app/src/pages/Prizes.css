@@ -1,0 +1,215 @@
+/* Section wrapper uses your .page background */
+.prizes {
+  /* this page is a mini layout: fixed header + internal scroller */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-inline: min(5vw, 48px);
+  padding-top: clamp(8px, 1.2vh, 16px);
+  padding-bottom: clamp(8px, 1.2vh, 16px);
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* ---------- HEADER (fixed-height, no snapping) ---------- */
+
+.prizes-header {
+  flex-shrink: 0;
+  width: min(1200px, 95%);
+  margin: 40px auto 0;
+}
+
+/* Subtitle under the main title */
+.prizes-subtitle {
+  max-width: 920px;
+  margin: 0 auto clamp(12px, 2vh, 22px);
+  text-align: center;
+  line-height: 1.35;
+  font-size: clamp(16px, 2.1vw, 20px);
+}
+
+/* ---------- SCROLLABLE, SNAP-TO-SECTIONS AREA ---------- */
+
+.prizes-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+/* Each prize section fills most of the viewport and snaps */
+.prize-section {
+  scroll-snap-align: start;
+  min-height: calc(100vh - 182px - 40px - 28px); /* 100vh - header height - padding-top - page padding */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(14px, 1.8vw, 20px) 0;
+  box-sizing: border-box;
+}
+
+/* Category headers (SEFORIM/TRAVEL) */
+.prize-category {
+  margin: clamp(10px, 1.8vh, 18px) 0 clamp(12px, 1.8vh, 18px);
+  font-family: "Duke", sans-serif;
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1;
+  color: var(--color-navy-bold);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Grids */
+.prize-grid {
+  --card-w: 220px;
+  --gap: clamp(14px, 2vw, 22px);
+
+  width: min(1200px, 95%);
+  margin: 0 auto clamp(16px, 2vh, 24px);
+
+  display: flex;               /* ← switch to flexbox */
+  flex-wrap: wrap;             /* wrap rows as space runs out */
+  gap: var(--gap);
+  justify-content: center;     /* center rows even with 1–3 items */
+}
+
+/* Flip Card Container */
+.prize-card-flip {
+  width: clamp(180px, var(--card-w), 240px);
+  min-height: 280px;
+  height: auto;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.prize-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.prize-card-flip.flipped .prize-card-inner {
+  transform: rotateY(180deg);
+}
+
+.prize-card-front,
+.prize-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.prize-card-front {
+  background: var(--color-white);
+  color: var(--color-navy);
+}
+
+.prize-card-back {
+  background: var(--color-navy-bold);
+  color: var(--color-white);
+  transform: rotateY(180deg);
+  padding: clamp(14px, 1.8vw, 18px);
+  text-align: center;
+  justify-content: center;
+}
+
+/* Cards - keep for backwards compatibility */
+.prize-card {
+  width: clamp(180px, var(--card-w), 240px); /* fixed-ish card width */
+  background: var(--color-white); /* solid white look on red bg */
+  border-radius: 14px;
+  padding: clamp(14px, 1.8vw, 18px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+  color: var(--color-navy);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  box-sizing: border-box;
+}
+
+/* Title in the card */
+.prize-title {
+  white-space: pre-line; /* allow \n in titles */
+  margin: 4px 0 8px;
+  font-family: "Exo", sans-serif;
+  font-weight: 900;
+  font-size: clamp(14px, 1.7vw, 18px);
+  line-height: 1.2;
+  color: var(--color-navy);
+}
+
+.prize-card-back .prize-title {
+  color: var(--color-white);
+  margin-bottom: 12px;
+}
+
+/* Description on back of card */
+.prize-description {
+  font-family: "Exo", sans-serif;
+  font-weight: 600;
+  font-size: clamp(12px, 1.3vw, 16px);
+  line-height: 1.4;
+  color: var(--color-white);
+  margin: 0;
+  padding: 0 clamp(8px, 1vw, 12px);
+}
+
+/* Image area */
+.prize-figure {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: clamp(6px, 1.2vh, 10px);
+  padding: clamp(6px, 1vw, 10px);
+  gap: 2px;
+}
+
+/* Front card padding */
+.prize-card-front {
+  padding: clamp(14px, 1.8vw, 18px);
+}
+
+.prize-figure img {
+  max-width: 100%;
+  display: block;
+  max-height: 150px;
+  border-radius: 5px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+  /* On your app, global snap is disabled ≤900px; mirror that here */
+  .prizes-scroll-area {
+    scroll-snap-type: none;
+  }
+  .prize-section {
+    min-height: auto;
+    scroll-snap-align: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .prize-card,
+  .prize-card-flip { 
+    width: 100%; 
+    min-height: 300px;
+  }
+  .prize-grid[class*="col-"] { grid-template-columns: 1fr; }
+  .prize-title { font-size: clamp(15px, 4.6vw, 18px); }
+}

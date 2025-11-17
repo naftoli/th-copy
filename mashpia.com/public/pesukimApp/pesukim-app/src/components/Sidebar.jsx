@@ -10,7 +10,7 @@ const pages = [
   { name: "Join", id: "join", subIds: [] },
   { name: "Report", id: "report", subIds: [] },
   { name: "Learn", id: "learn", subIds: [] },
-  { name: "Missions", id: "missions", subIds: [] },
+  { name: "Missions", id: "missions", subIds: ["missions-page-2"] },
   { name: "Prizes", id: "prizes", subIds: [] },
   { name: "Watch The Campaign", id: "watch-campaign", subIds: [] },
 ];

@@ -106,14 +106,15 @@ const About = () => {
           </p>
         </section>
       </article>
-      <audio
+      {/* Uncomment this when the audio file is ready */}
+      {/* <audio
           ref={audioRef}
           src={audioFile}
           preload="auto"
           onEnded={handleEnded}
           onPlay={handlePlay}
           onPause={handlePause}
-        />
+        /> */}
     </div>
   );
 };

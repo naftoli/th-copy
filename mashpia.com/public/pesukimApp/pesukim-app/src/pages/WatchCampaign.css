@@ -1,0 +1,282 @@
+/* WatchCampaign.css */
+
+.campaign {
+  /* this page is a mini layout: fixed header + internal scroller */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-inline: min(5vw, 48px);
+  padding-top: clamp(8px, 1.2vh, 16px);
+  padding-bottom: clamp(8px, 1.2vh, 16px);
+  box-sizing: border-box;
+  max-width: 100%;
+  width: 100%;
+}
+
+/* ---------- HEADER (fixed-height, no snapping) ---------- */
+
+.campaign-header {
+  flex-shrink: 0;
+  width: min(1200px, 95%);
+  margin: 40px auto 0;
+}
+
+.campaign-top-trackers {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: flex-end;
+  gap: clamp(10px, 1.5vw, 18px);
+  padding-bottom: 40px;
+}
+
+/* ---- Sort By ---- */
+.sort-by-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* lines up with your right column */
+  gap: 6px;
+}
+
+.sort-label {
+  font-family: "Exo", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-white);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* group wrapper (no visible bg in comp, just a layout holder) */
+.sort-toggle {
+  display: flex;
+  align-items: stretch;
+  border-radius: 10px; /* matches pill corners */
+  overflow: hidden;    /* lets active pill sit flush if needed */
+}
+
+/* base button */
+.toggle {
+  border: 0;
+  padding: 8px 16px;
+  font-family: "Exo", sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: clamp(14px, 1.3vw, 18px);
+  line-height: 1;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .2s ease, color .2s ease;
+  position: relative;
+}
+
+/* unselected look (soft red pill) */
+.toggle-left,
+.toggle-right {
+  background: rgba(223, 23, 55, 0.85); /* soft brand red */
+  color: rgba(255,255,255,0.9);
+}
+
+/* only round the OUTER edges for the unselected half-pill */
+.toggle-left {
+  border-radius: 10px 0 0 10px;
+}
+.toggle-right {
+  border-radius: 0 10px 10px 0;
+}
+
+/* SELECTED look = full pill with gradient that points toward the other side */
+.toggle.active {
+  color: var(--color-navy-bold);
+  transform: translateY(-1px);
+  border-radius: 10px; /* all four corners rounded when selected */
+}
+
+/* country selected (left) → gradient flows toward the right (unselected) */
+.toggle-left.active {
+  background: linear-gradient(
+    to right,
+    #ffd44a 0%,
+    #ffcf3a 45%,
+    #ffbc50 80%
+  );
+}
+
+/* school selected (right) → gradient flows toward the left (unselected) */
+.toggle-right.active {
+  background: linear-gradient(
+    to left,
+    #ffd44a 0%,
+    #ffcf3a 45%,
+    #ffbc50 80%
+  );
+}
+
+/* hover/focus polish */
+.toggle:focus-visible {
+  outline: 2px solid #ffe07a;
+  outline-offset: 2px;
+}
+.toggle:not(.active):hover {
+  filter: brightness(1.05);
+}
+
+
+
+/* ---------- SCROLLABLE, SNAP-TO-GROUPS AREA ---------- */
+
+.campaign-scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  padding-top: 26px;
+  padding-bottom: 26px;
+}
+
+/* Each group of cards (up to 4) fills most of the viewport and snaps */
+.campaign-section {
+  scroll-snap-align: start;
+  min-height: calc(100vh - 174px - 40px - 28px - 40px); /* 100vh - header height - padding-top - page padding - trackers bottom padding */
+  display: flex;
+  padding: 60px 0;
+  box-sizing: border-box;
+}
+
+/* ---------- CARDS GRID ---------- */
+
+.campaign-grid {
+  width: min(1200px, 95%);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(14px, 1.8vw, 20px);
+  align-items: start;
+  margin: 0 auto;
+}
+
+/* Card chrome */
+.campaign-card {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  border-radius: 18px;
+}
+
+/* Tiny badge above the card (flag / logo) */
+.card-badge {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.card-badge img {
+  height: 60px;
+}
+
+.card-badge-rank-icon {
+  height: 55px;
+  width: 55px;
+  background: linear-gradient(95deg, #ffca32, #ffd96c);
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 24px;
+  color: var(--color-navy);
+}
+
+/* Page-scoped typography so globals can't override on mode toggle */
+.campaign-card .card-title {
+  font-family: 'Duke';
+  font-size: clamp(24px, 2.5vw, 38px) !important;
+  letter-spacing: 1.25px;
+  margin: 8px 0 0;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.campaign-card,
+.campaign-card .mini-label,
+.campaign-card .mini-value,
+.campaign-card .footer-title,
+.campaign-card .footer-value {
+  font-family: "Exo", sans-serif !important;
+  font-weight: 600;
+  font-size: clamp(12px, 1.2vw, 16px) !important;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.card-sub {
+  font-style: italic;
+  font-size: clamp(8px, 1vw, 12px);
+  margin: 0;
+}
+
+.card-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.card-section.red p {
+  color: var(--color-pink);
+}
+
+.card-section.yellow p {
+  color: var(--color-yellow);
+}
+
+.card-footer {
+  margin-top: auto;
+  text-align: center;
+  padding-top: 6px;
+}
+
+/* Keep TrackerBar text/bubbles reasonable inside this page */
+.campaign .tracker-wrap,
+.campaign .tracker-wrap *,
+.campaign .card-section .tracker,
+.campaign .card-section .tracker * {
+  font-size: clamp(12px, 1.1vw, 16px) !important;
+}
+
+/* first mini-value in a card-section should have more bottom margin */
+.card-section .mini-value:nth-child(2) {
+  margin-bottom: 4px !important;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 1100px) {
+  .campaign-top-trackers {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .sort-toggle {
+    justify-self: start;
+  }
+}
+
+@media (max-width: 900px) {
+  /* On your app, global snap is disabled ≤900px; mirror that here */
+  .campaign-scroll-area {
+    scroll-snap-type: none;
+  }
+  .campaign-section {
+    min-height: auto;
+    scroll-snap-align: none;
+  }
+  .campaign-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 620px) {
+  .campaign-grid {
+    grid-template-columns: 1fr;
+  }
+}
