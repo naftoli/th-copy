@@ -30,6 +30,7 @@ class Missions {
 		include_once( __DIR__ . "/../../classes/no_label_task.php" );
 		include_once( __DIR__ . "/../../classes/task.php" );
 		include_once( __DIR__ . "/../../classes/date_tasks_mark.php" );
+		include_once( __DIR__ . "/../../classes/pesukim_task.php" );
 		
 		$sql = "SELECT u.* FROM users u"
 				." JOIN classes c ON u.class_id = c.class_id"
