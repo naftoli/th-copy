@@ -49,7 +49,6 @@ export const PrizeCard = ({ title, img, img2, alt, width, height, description })
         
         {/* Back of card */}
         <div className="prize-card-back">
-          <h4 className="prize-title">{title}</h4>
           {description && (
             <p className="prize-description">{description}</p>
           )}
@@ -109,6 +108,9 @@ export default function Prizes() {
   }, []);
 
   useEffect(() => {
+    // Wait for data to load so scroll area is rendered
+    if (!data) return;
+
     const scrollArea = scrollAreaRef.current;
     if (!scrollArea) return;
 
@@ -148,7 +150,7 @@ export default function Prizes() {
     return () => {
       scrollArea.removeEventListener('wheel', handleWheel);
     };
-  }, []);
+  }, [data]);
 
   if (err) return <div className="prizes-error card card-blue">{err}</div>;
   if (!data) return <div className="prizes-loading card card-blue">Loading…</div>;
