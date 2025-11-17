@@ -2372,7 +2372,7 @@ var templates = function () {
         return data
       }
 
-      const user_exceptions = [63075, 81064, 59468, 81037, 81087, 51521, 72142, 60368, 60368]
+      const user_exceptions = [72142, 60368, 60368, 75325, 81279, 81280, 81281, 81320]
       const school_exceptions = [87, 659]
 
       if (
