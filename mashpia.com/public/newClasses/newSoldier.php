@@ -105,6 +105,9 @@ class NewSoldier {
 				last_he = '$this->lnameh',
 				he_name = '$this->fnameh $this->lnameh', 
 				lang_id = " . $this->lang;
+		if ($this->school_type == 8) {
+			$sql .= ", hachayols = 0, medals_ranks = 0";
+		}
 		if (!is_null($this->photo)) {
 			if ($this->mobile) {
 				$sql .= ", mobile_pic = '" . $this->photo . "' ";

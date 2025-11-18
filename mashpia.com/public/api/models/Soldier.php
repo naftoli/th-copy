@@ -781,6 +781,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             if (!$this->user_start_date) $this->user_start_date = unixtojd();
             // update field for chayolei lite registration
             if ($lite) $this->lite_edition = 1;
+            if ($type == 'THE') {
+                $this->hachayols = 1;
+                $this->medals_ranks = 1;
+            }
             $this->generateRank();
             $this->save();
             // create campaigns and birthday missions
