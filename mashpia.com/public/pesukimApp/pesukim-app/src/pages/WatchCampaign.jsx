@@ -31,10 +31,10 @@ export default function WatchCampaign() {
 
    // Totals for top trackers
    const totals = useMemo(() => {
-    const learnCurrent   = units.reduce((s,u)=> s + (u.learn?.current||0), 0);
-    const learnGoal      = units.reduce((s,u)=> s + (u.learn?.goal||0),    0);
-    const recruitCurrent = units.reduce((s,u)=> s + (u.recruit?.current||0),0);
-    const recruitGoal    = units.reduce((s,u)=> s + (u.recruit?.goal||0),   0);
+    const learnCurrent   = units.reduce((s,u)=> s + (parseInt(u.learn?.current)||0), 0);
+    const learnGoal      = units.reduce((s,u)=> s + (parseInt(u.learn?.goal)||0),    0);
+    const recruitCurrent = units.reduce((s,u)=> s + (parseInt(u.recruit?.current)||0),0);
+    const recruitGoal    = units.reduce((s,u)=> s + (parseInt(u.recruit?.goal)||0),   0);
     return { learnCurrent, learnGoal, recruitCurrent, recruitGoal };
   }, [units]);
 
@@ -42,10 +42,10 @@ export default function WatchCampaign() {
     let on = true;
     (async () => {
       try {
-        const res = await fetch("/api/pesukim/campaign.json", { cache: "no-store" });
+        const res = await fetch("/api/pesukim/getCampaignInfo.php", { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        if (on) setData(json);
+        if (on) setData(json.data);
       } catch (e) {
         if (on) setErr("Couldn't load campaign.");
       }

@@ -57,7 +57,7 @@ export default function Report() {
         // Store the user token
         setCookie("admin", text, remember ? 365 : 1);
         // Go to parent detail page
-        window.location.replace("/mobile/reg/parent_detail.html");
+        window.location.href = "/mobile/reg/parent_detail.html";
         return;
       }
 

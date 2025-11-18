@@ -10,9 +10,9 @@ import Missions from "./pages/Missions";
 import Prizes from "./pages/Prizes";
 import WatchCampaign from "./pages/WatchCampaign";
 import MenuTrackers from "./pages/MenuTrackers";
-import Missions2 from "./pages/Missions2";
-import Prizes2 from "./pages/Prizes2";
-import Prizes3 from "./pages/Prizes3";
+// import Missions2 from "./pages/Missions2";
+// import Prizes2 from "./pages/Prizes2";
+// import Prizes3 from "./pages/Prizes3";
 
 import "./App.css";
 
@@ -25,10 +25,10 @@ function App() {
 
     async function load() {
       try {
-        const res = await fetch("/api/pesukim/trackers.json", { cache: "no-store" });
+        const res = await fetch("/api/pesukim/getPesukimInfo.php", { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        if (isMounted) setTrackersData(json);
+        if (isMounted) setTrackersData(json.data);
       } catch (e) {
         if (isMounted) setTrackersError("Couldn't load trackers.");
       }

@@ -22,7 +22,6 @@ export default function MenuTrackers({ data = {}, error }) {
   }
 
   const { learnTeach = {}, armyRecruitment = {}, pesukim = {} } = data || {};
-
   return (
     <div className="mt-wrap">
       <section className="mt-row">
@@ -48,7 +47,7 @@ export default function MenuTrackers({ data = {}, error }) {
           <p className="body-text text-center">
             Recruitment Goal:<br />
             Recruit 50,000 Children<br />
-            to Hashem’s Army
+            to Hashem's Army
           </p>
 
           <TrackerBar
@@ -65,7 +64,7 @@ export default function MenuTrackers({ data = {}, error }) {
           <h2 className="title-text">PESSUKIM <br />SAID</h2>
           <div className="mt-number">
             <div className="mt-date">
-              {pesukim.date.dow}, {pesukim.date.hebrew} — {pesukim.date.gregorian}
+              {pesukim.date.dow}, {pesukim.date.gregorian} — {pesukim.date.hebrew}
             </div>
             <div className="mt-number-label">Today:</div>
             <div className="mt-number-value">{fmt(pesukim.today)} TIMES</div>
