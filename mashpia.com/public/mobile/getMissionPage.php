@@ -1167,6 +1167,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		init();
 	});
 	var mechunachim = [];
+	var mechunachim_tasks = <?= isset($mechunachim_tasks) ? json_encode($mechunachim_tasks) : '[]'; ?>;
 
 	async function getMechunachim(refresh = true) {
 		if (!refresh && mechunachim && mechunachim.length > 0) {
@@ -1299,7 +1300,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 
 	async function checkMechunachimTasks() {
 		const user_id = <?=$user_id?>;
-		const mechunachim_tasks = <?= isset($mechunachim_tasks) ? json_encode($mechunachim_tasks) : '[]'; ?>;
 		const start = <?=$start?>;
 		const end = <?=$end?>;
 		
@@ -1307,7 +1307,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 		await $.ajax({
 			url: '/pesukim/ajax/checkMechunachimTasks.php',
 			type: 'POST',
-			data: { user_id, mechunachim_tasks, mechunachim: JSON.stringify(mechunachim) },
+			data: { user_id, mechunachim_tasks: JSON.stringify(mechunachim_tasks), mechunachim: JSON.stringify(mechunachim) },
 			success: function(response) {
 				const res = JSON.parse(response);
 				if (res.success) {

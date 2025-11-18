@@ -38,7 +38,7 @@ const Home = () => {
         
         <img src={HashemsArmyText} alt="Hashem's Army Text" className="hashems-army-text" />
 
-        <h3 className="campaign">
+        <h3 className="campaign-text">
           12 TORAH PASSAGES CAMPAIGN
         </h3>
         <h4 className="soldiers">
