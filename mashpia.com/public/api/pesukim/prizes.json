@@ -6,25 +6,25 @@
       "prizes": [
         {
           "title": "Set of\nIgros Kodesh",
-          "img": "/prizes/igros-kodesh.png",
+          "img": "/pesukimApp/prizes/igros-kodesh.png",
           "alt": "Set of Igros Kodesh",
           "description": "A complete collection of the Rebbe's letters covering a wide range of topics including guidance, inspiration, and halachic rulings."
         },
         {
           "title": "Set of English\nShulchon Oruch from Sichos In English",
-          "img": "/prizes/set-of-sichos-in-english-shulchon-aroch.png",
+          "img": "/pesukimApp/prizes/set-of-sichos-in-english-shulchon-aroch.png",
           "alt": "Set of English Shulchon Oruch from Sichos In English",
           "description": "The complete Code of Jewish Law translated into English, making it accessible for English-speaking students and families."
         },
         {
           "title": "Set of\nSefer Hamaamarim",
-          "img": "/prizes/igros-kodesh.png",
+          "img": "/pesukimApp/prizes/igros-kodesh.png",
           "alt": "Set of Sefer Hamaamarim",
           "description": "A comprehensive collection of Chassidic discourses and teachings from the Rebbe, providing deep insights into Torah and Chassidus."
         },
         {
           "title": "Set of\nLikkutei Sichos",
-          "img": "/prizes/84-likkutei-sichos.png",
+          "img": "/pesukimApp/prizes/84-likkutei-sichos.png",
           "alt": "Set of Likkutei Sichos",
           "description": "The complete 39-volume set of the Rebbe's public addresses, covering Torah portions, holidays, and special occasions."
         }
@@ -36,14 +36,14 @@
       "prizes": [
         {
           "title": "Trip for two\nto Eretz Yisroel\n(2500 value)",
-          "img": "/prizes/usa-israel-map.png",
+          "img": "/pesukimApp/prizes/usa-israel-map.png",
           "alt": "Trip for two to Eretz Yisroel",
           "width": "100px",
           "description": "An amazing opportunity to visit the Holy Land! This prize includes round-trip airfare for two to Israel, allowing you to experience the beauty and holiness of Eretz Yisroel."
         },
         {
           "title": "Trip for Two\nanywhere in the\nUnited States\n($1,000 value)",
-          "img": "/prizes/usa-israel-map.png",
+          "img": "/pesukimApp/prizes/usa-israel-map.png",
           "alt": "Trip for Two anywhere in the United States",
           "width": "100px",
           "description": "Plan your perfect getaway! This prize includes round-trip airfare for two to any destination within the United States, up to $1,000 in value."
@@ -56,19 +56,19 @@
       "prizes": [
         {
           "title": "Sterling\nSilver Menorah",
-          "img": "/prizes/menorah.png",
+          "img": "/pesukimApp/prizes/menorah.png",
           "alt": "Sterling Silver Menorah",
           "description": "A beautiful handcrafted sterling silver menorah, perfect for lighting Chanukah candles. This elegant piece will be a treasured heirloom for generations."
         },
         {
           "title": "Sterling\nSilver Becher",
-          "img": "/prizes/becher.png",
+          "img": "/pesukimApp/prizes/becher.png",
           "alt": "Sterling Silver Becher",
           "description": "An exquisite sterling silver Kiddush cup, beautifully engraved and perfect for Shabbos and Yom Tov. A timeless piece for your Shabbos table."
         },
         {
           "title": "Sterling\nSilver Candlestick",
-          "img": "/prizes/candlestick.png",
+          "img": "/pesukimApp/prizes/candlestick.png",
           "alt": "Sterling Silver Candlestick",
           "description": "A stunning pair of sterling silver Shabbos candlesticks, handcrafted with intricate detail. These will add beauty and holiness to your Shabbos preparations."
         }
@@ -80,28 +80,28 @@
       "prizes": [
         {
           "title": "GoPro\nCamera",
-          "img": "/prizes/gopro-camera.jpg",
+          "img": "/pesukimApp/prizes/gopro-camera.jpg",
           "alt": "GoPro Camera",
           "width": "100px",
           "description": "Capture all your adventures with this high-quality GoPro camera! Waterproof, durable, and perfect for recording special moments and activities."
         },
         {
           "title": "3D\nPrinter",
-          "img": "/prizes/3d-printer.png",
+          "img": "/pesukimApp/prizes/3d-printer.png",
           "alt": "3D Printer",
           "width": "100px",
           "description": "Bring your creative ideas to life with this professional 3D printer! Perfect for makers, students, and anyone interested in technology and innovation."
         },
         {
           "title": "Electric\nScooter",
-          "img": "/prizes/electric-scooter.jpg",
+          "img": "/pesukimApp/prizes/electric-scooter.jpg",
           "alt": "Electric Scooter",
           "width": "100px",
           "description": "Ride in style with this sleek electric scooter! Eco-friendly transportation that's fun and practical for getting around town."
         },
         {
           "title": "Electric\nBike",
-          "img": "/prizes/electric-bike.jpg",
+          "img": "/pesukimApp/prizes/electric-bike.jpg",
           "alt": "Electric Bike",
           "width": "100px",
           "description": "Experience the freedom of electric biking! This high-quality e-bike makes cycling effortless and enjoyable, perfect for commuting or leisure rides."
@@ -114,15 +114,15 @@
       "prizes": [
         {
           "title": "Model\nBeis Hamikdash",
-          "img": "/prizes/rebbe.jpg",
+          "img": "/pesukimApp/prizes/rebbe.jpg",
           "alt": "Model Beis Hamikdash",
           "width": "100px",
           "description": "A detailed and educational model of the Holy Temple, perfect for learning about the Beis Hamikdash. This beautiful piece brings history to life and inspires connection to our heritage."
         },
         {
           "title": "VR Glasses\n+1 year subscription\nto TorahVR",
-          "img": "/prizes/tvr-glasses.jpg",
-          "img2": "/prizes/torah-vr.png",
+          "img": "/pesukimApp/prizes/tvr-glasses.jpg",
+          "img2": "/pesukimApp/prizes/torah-vr.png",
           "alt": "VR Glasses +1 year subscription to TorahVR",
           "width": "90px",
           "height": "90px",
