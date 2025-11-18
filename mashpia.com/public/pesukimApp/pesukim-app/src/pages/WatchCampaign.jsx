@@ -139,7 +139,7 @@ export default function WatchCampaign() {
                   <div className="card-badge">
                     {u.logo && <img src={u.logo} alt="" />}
                   </div>
-                  {mode === "country" && u.rank && (
+                  {u.rank && (
                     <div className="card-badge">
                       <div className="card-badge-rank-icon">{u.rank}</div>
                     </div>
