@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 require_once( __DIR__ . '/db.php' );
 require_once( __DIR__ . '/api/header/db.php' );
 require_once( __DIR__ . '/yearly_prize/classes/TotalWeeklyTasks.php' );
+require_once( __DIR__ . '/pesukim/class.pesukim.php' );
 
 //var_dump($_GET);
 $function_name = $_GET['function_name'];
@@ -242,6 +243,15 @@ function add_task_mark($parameters, $update = true) {
 	$insert_query = mysql_query($insert_sql);
 
 	if ($insert_query) {
+
+		// check if it's 12 pesukim and if we need to add points to recruiter
+		if ($grid_id >= 15000 && $grid_id <= 15035 && $points > 0) {
+			$pesukim = new Pesukim($user_id);
+			$recruiter = $pesukim->getRecruiter();
+			if ($recruiter) {
+				$pesukim->addPoints(intval($points) * 5, $recruiter);
+			}
+		}
 
 		if ($mandatory > 0 && $update) {
 			//if ($user_id == 50689) echo "checking mission completion...";
