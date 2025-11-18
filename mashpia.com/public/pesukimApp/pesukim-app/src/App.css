@@ -54,6 +54,11 @@
   line-height: 1;
 }
 
+.btn a, a.btn {
+  text-decoration: none;
+  color: inherit;
+}
+
 .btn.primary {
   background-color: var(--color-navy-bold);
   color: var(--color-yellow);
@@ -64,6 +69,16 @@
   color: #DF1737;
 }
 
+.btn.tertiary {
+  background-color: var(--color-yellow);
+  color: var(--color-navy-bold);
+}
+
+.btn.muted {
+  color: #ffffffa3;
+  background: #ffffff24;
+}
+
 .btn span {
   font-family: "Duke", sans-serif;
   font-weight: 600;
@@ -72,6 +87,10 @@
   text-transform: uppercase;
   letter-spacing: 2px;
   line-height: 1;
+}
+
+.m-auto {
+  margin: 0 auto;
 }
 
 .btn.small {
@@ -92,9 +111,10 @@
   background-color: var(--color-navy);
 }
 
-.btn.secondary:hover {
+.btn.secondary:hover, .btn.tertiary:hover {
   background-color: #ffd14e;
 }
+
 
 .title-text {
   font-family: "Duke", sans-serif;
@@ -129,6 +149,42 @@
 }
 
 
+.card {
+  border-radius: 16px;
+  padding: 24px 26px;
+  color: var(--color-white);
+  position: relative;
+}
+
+.card-navy {
+  background: var(--color-navy-bold);
+}
+
+.card-blue {
+  background: linear-gradient(180deg, #3c5aa6 0%, #2c427b 100%);
+}
+
+.desktop-only {
+  display: none;
+}
+
+.mobile-only {
+  display: none;
+}
+
+
+@media (min-width: 1025px) {
+  .desktop-only {
+    display: block;
+  }
+}
+
+@media (max-width: 1025px) {
+  .mobile-only {
+    display: block;
+  }
+}
+
 /* Make space for sidebar on desktop */
 @media (min-width: 900px) {
   .scroll-container {
@@ -139,7 +195,17 @@
 @media (max-width: 900px) {
   .scroll-container {
     margin-left: 230px;
+    scroll-snap-type: none; /* disable snap scrolling */
+    height: auto;           /* let content flow naturally */
+    overflow-y: auto;       /* normal scroll behavior */
   }
+
+  .page {
+    height: auto; /* allow full content to show instead of fixed 100vh */
+    scroll-snap-align: none; /* remove snapping alignment */
+    padding: 24px 0;
+  }
+
 
   .btn {
     padding: 8px 28px;
@@ -151,6 +217,14 @@
 @media (max-width: 768px) {
   .scroll-container {
     margin-left: 0;
+  }
+
+  .card .title-text {
+    font-size: 24px;
+  }
+
+  .card {
+    padding: 18px 20px;
   }
 }
 

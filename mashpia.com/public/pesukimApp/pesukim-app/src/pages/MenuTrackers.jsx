@@ -8,7 +8,7 @@ export default function MenuTrackers({ data = {}, error }) {
   if (error) {
     return (
       <div className="mt-wrap">
-        <div className="mt-card mt-card--blue">{error}</div>
+        <div className="card card-blue">{error}</div>
       </div>
     );
   }
@@ -16,17 +16,16 @@ export default function MenuTrackers({ data = {}, error }) {
   if (!data) {
     return (
       <div className="mt-wrap">
-        <div className="mt-card mt-card--blue">Loading…</div>
+        <div className="card card-blue">Loading…</div>
       </div>
     );
   }
 
   const { learnTeach = {}, armyRecruitment = {}, pesukim = {} } = data || {};
-
   return (
     <div className="mt-wrap">
       <section className="mt-row">
-        <article className="mt-card mt-card--blue">
+        <article className="card card-blue">
           <h2 className="title-text">LEARN &amp; TEACH</h2>
           <p className="body-text text-center">
             Teaching Goal:<br />
@@ -43,12 +42,12 @@ export default function MenuTrackers({ data = {}, error }) {
           <p className="body-text text-center">How many people can you teach?</p>
         </article>
 
-        <article className="mt-card mt-card--blue">
+        <article className="card card-blue">
           <h2 className="title-text">ARMY RECRUITMENT</h2>
           <p className="body-text text-center">
             Recruitment Goal:<br />
             Recruit 50,000 Children<br />
-            to Hashem’s Army
+            to Hashem's Army
           </p>
 
           <TrackerBar
@@ -61,11 +60,11 @@ export default function MenuTrackers({ data = {}, error }) {
         </article>
       </section>
 
-      <section className="mt-card mt-card--navy">
+      <section className="card card-navy">
           <h2 className="title-text">PESSUKIM <br />SAID</h2>
           <div className="mt-number">
             <div className="mt-date">
-              {pesukim.date.dow}, {pesukim.date.hebrew} — {pesukim.date.gregorian}
+              {pesukim.date.dow}, {pesukim.date.gregorian} — {pesukim.date.hebrew}
             </div>
             <div className="mt-number-label">Today:</div>
             <div className="mt-number-value">{fmt(pesukim.today)} TIMES</div>

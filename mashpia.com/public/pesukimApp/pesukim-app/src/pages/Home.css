@@ -45,10 +45,11 @@
   margin-top: -65px;
   width: 750px;
   margin-bottom: -30px;
+  max-width: 100%;
 }
 
 /* --- SUBTEXT --- */
-.campaign {
+.campaign-text {
   font-weight: 500;
   color: var(--color-yellow);
   margin: 0;
@@ -84,7 +85,7 @@
     height: 180px;
   }
 
-  .campaign {
+  .campaign-text {
     font-size: 58px;
   }
 
@@ -129,7 +130,7 @@
     margin-right: -15px;
   }
 
-  .campaign {
+  .campaign-text {
     font-size: 35px;
   }
 

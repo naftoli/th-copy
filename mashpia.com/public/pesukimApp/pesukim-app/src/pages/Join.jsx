@@ -73,7 +73,7 @@ const Join = () => {
       });
   
       // Try to parse JSON either way
-      const data = await res.json().catch(() => ({ ok: false, error: { message: 'Error getting response.' } }));
+      const data = await res.json().catch(() => ({}));
   
       if (!res.ok || data?.ok === false) {
         // If backend returns field errors, show them inline

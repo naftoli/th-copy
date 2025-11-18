@@ -702,11 +702,6 @@
 
     if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
-    const params = new URL(location.href).searchParams
-    if (params.has("override") && params.get("override") === '1') {
-      Cookies.set('override', 1)
-    }
-
     // unix timestamp for now
     const now = Math.floor(Date.now()/1000);
 

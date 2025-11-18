@@ -5,7 +5,7 @@
 
 .about-wrap {
   height: 100%;
-  width: 100%;
+  /* width: 100%; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,7 +14,7 @@
 
 /* White card */
 .about-card {
-  width: min(1000px, 80%);
+  width: min(1000px, 100%);
   background: var(--color-white);
   color: var(--color-navy);
   border-radius: 18px;
@@ -80,7 +80,7 @@
 
 .rebbe-img {
   width: clamp(84px, 14vw, 210px);
-  height: clamp(75px, 12vw, 180px);
+  height: clamp(75px, 10vw, 180px);
   object-fit: cover;
   border-radius: 12px;
   object-position: top;
