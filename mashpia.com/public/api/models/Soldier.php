@@ -784,6 +784,9 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             if ($type == 'THE') {
                 $this->hachayols = 1;
                 $this->medals_ranks = 1;
+            } else {
+                $this->hachayols = 0;
+                $this->medals_ranks = 0;
             }
             $this->generateRank();
             $this->save();
