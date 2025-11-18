@@ -40,16 +40,23 @@ foreach ($taughtByRegion as $idx => $row) {
   ];
 }
 
+$rank = 0;
+$prevTotal = 0;
 foreach ($taughtBySchool as $idx => $row) {
+  $total = $row['total'];
+  if ($total != $prevTotal) {
+    $rank++;
+    $prevTotal = $total;
+  }
   $data['schools'][] = [
     "id" => $row['school_id'],
     "name" => $row['school_name'],
     "logo" => "/schools/cheder-lubavitch-morristown.png",
     "subtitle" => $row['school_city'] . ', ' . $row['school_state'] . ', ' . $row['school_country'],
-    "rank" => $idx+1,
+    "rank" => $rank,
     "learn" => [
         "goal" => $goal,
-        "current" => $row['total']
+        "current" => $total
     ],
     "recruit" => [
         "goal" => $goal,
