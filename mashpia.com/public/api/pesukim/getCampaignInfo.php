@@ -15,15 +15,22 @@ $minutesBySchool = $pesukim->getMinutesBySchool();
 $goal = 50000;
 
 $data = [];
+$rank = 0;
+$prevTotal = 0;
 foreach ($taughtByRegion as $idx => $row) {
+  $total = $row['total'];
+  if ($total != $prevTotal) {
+    $rank++;
+    $prevTotal = $total;
+  }
   $data['countries'][] = [
     "id" => $row['region'],
     "name" => $row['region'],
     "logo" => "/assets/images/flags/cheder-lubavitch-morristown.png",
-    "rank" => $idx+1,
+    "rank" => $rank,
     "learn" => [
         "goal" => $goal,
-        "current" => $row['total']
+        "current" => $total
     ],
     "recruit" => [
         "goal" => $goal,
