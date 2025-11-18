@@ -73,6 +73,21 @@ class Pesukim
         return $res;
     }
 
+    public function deletePoints($points, $user_id) {
+        global $MASHPIA_DB;
+        // get institution id
+        $institution_id = $this->getSchoolId($user_id);
+        if (!$institution_id) {
+            return false;
+        }
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO pointsDB.user_points(user_id, institution_id, points, resource_name)
+            VALUES (:user_id, :institution_id, :points, 'auction_only_points')
+        ");
+        $res = $stmt->execute(['user_id' => $user_id, 'institution_id' => $institution_id, 'points' => -abs($points)]);
+        return $res;
+    }
+
     private function getSchoolId($user_id) {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
@@ -109,11 +124,12 @@ class Pesukim
     public function getRecruiter() {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT recruiter_id from pesukim_recruiters
+            SELECT recruiter_id from pesukim_recruits
             WHERE recruited_id = :recruited_id
         ");
         $stmt->execute(['recruited_id' => $this->user_id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['recruiter_id'] ?? false;
     }
 
     public function addRecruit($recruited_id) {
@@ -150,7 +166,7 @@ class Pesukim
     public function getRecruits() {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * from pesukim_recruiters pr 
+            SELECT * from pesukim_recruits pr 
             JOIN users u ON u.user_id = pr.recruited_id 
             WHERE pr.recruiter_id = :recruiter_id
         ");

@@ -47,12 +47,14 @@ function delete_task_mark($parameters) {
 	$mark_date = $parameters[2];
 	$mechunach_id = count($parameters) > 3 ? $parameters[3] : null;
 
-	$sql = "SELECT date_tasks_mission_id, mandatory_qty FROM date_tasks WHERE date_task_id=" . $date_task_id;
+	$sql = "SELECT date_tasks_mission_id, mandatory_qty, grid_id, points FROM date_tasks WHERE date_task_id=" . $date_task_id;
 	$query = mysql_query($sql);
 	$row = mysql_fetch_assoc($query);
 	$date_tasks_mission_id = $row["date_tasks_mission_id"];
 	$mandatory = $row["mandatory_qty"];
-	
+	$grid_id = $row["grid_id"];
+	$points = $row["points"];
+
 	//if ($mark_date > 0)
 		//$sql = "DELETE FROM date_tasks_marks WHERE date_task_id=" . $date_task_id . " AND user_id=" . $user_id . " AND mark_date=" . $mark_date;	
 	//else
@@ -63,10 +65,21 @@ function delete_task_mark($parameters) {
 	$query = mysql_query($sql);
 	
 	if ($query && mysql_affected_rows() > 0) {
+
+		// check if it's 12 pesukim and if we need to add points to recruiter
+		if ($grid_id >= 15000 && $grid_id <= 15035 && $points > 0) {
+			$pesukim = new Pesukim($user_id);
+			$recruiter = $pesukim->getRecruiter();
+			if ($recruiter) {
+				$pesukim->deletePoints(intval($points) * 5, $recruiter);
+			}
+		}
+
 		if ($mandatory) {
 			$delete_sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;		
 			$delete_query = mysql_query($delete_sql);
         }
+		
         // update the user for the yearly gift
         TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
