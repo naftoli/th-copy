@@ -31,8 +31,14 @@ $stmt = $MASHPIA_DB->prepare("
 if (isset($_FILES['file'])) {
     $file = $_FILES['file']['tmp_name'];
     $handle = fopen($file, 'r');
+
+    $first = true;
     $shipments = [];
     while (($data = fgetcsv($handle, 1000, ',')) !== false) {
+        if ($first) {
+            $first = false;
+            continue;
+        }
         $admin_id = $data[0];
         for ($i = 1; $i < 5; $i++) {
             if (intval($data[$i])) {
