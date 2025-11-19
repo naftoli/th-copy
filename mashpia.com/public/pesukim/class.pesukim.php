@@ -159,6 +159,14 @@ class Pesukim
         ]);
         if ($res) {
             $pointsAdded = $this->addPoints(200, $this->user_id);
+            if ($pointsAdded) {
+                $recruiter = $this->getRecruiter();
+                while ($recruiter) {
+                    $pesukim->addPoints(20, $recruiter);
+                    $pesukim = new Pesukim($recruiter);
+                    $recruiter = $pesukim->getRecruiter();
+                }
+            }
         } 
 
         return $res && $pointsAdded;
