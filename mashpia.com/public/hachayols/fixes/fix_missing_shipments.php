@@ -42,11 +42,13 @@ if (isset($_FILES['file'])) {
         $admin_id = $data[0];
         for ($i = 1; $i < 5; $i++) {
             if (intval($data[$i])) {
-                $shipments[$admin_id][] = $data[$i];
+                $shipments[$admin_id][] = $i;
             }
         }
     }
     fclose($handle);
+
+    // echo "<pre>"; print_r($shipments); echo "</pre>"; exit;
 
     $dates[1] = new DateTime('2025-09-16');
     $dates[2] = new DateTime('2025-09-16');
