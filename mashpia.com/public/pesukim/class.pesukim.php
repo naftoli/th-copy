@@ -53,7 +53,7 @@ class Pesukim
             'year' => $this->year
         ]);
         if ($res) {
-            $pointsAdded = $this->addPoints(200, $recruiter_id);
+            $pointsAdded = $this->addPoints(300, $recruiter_id);
             if (! $pointsAdded) {
                 return false;
             }
