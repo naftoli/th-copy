@@ -47,6 +47,9 @@ if ($method !== 'POST') {
   exit;
 }
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+
 $input = json_decode(file_get_contents('php://input'), true) ?: [];
 clean($input);
 
@@ -73,8 +76,6 @@ if ($errors) {
   exit;
 }
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/../includes/globals.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/newClasses/newParent.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/newClasses/newSoldier.php';
