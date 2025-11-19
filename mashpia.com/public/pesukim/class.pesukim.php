@@ -120,7 +120,17 @@ class Pesukim
         } else {
             return false;
         }
-    }   
+    }
+
+    public function getDuchRecruits() {
+        global $MASHPIA_DB;
+        $stmt = $MASHPIA_DB->prepare("
+            SELECT * from pesukim_duch_recruits
+            WHERE user_id = :user_id
+        ");
+        $stmt->execute(['user_id' => $this->user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public function getRecruiter() {
         global $MASHPIA_DB;
@@ -171,6 +181,7 @@ class Pesukim
         $stmt->execute([
             'recruiter_id' => $this->user_id
         ]);
+        // $stmt->debugDumpParams();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
