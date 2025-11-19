@@ -30,7 +30,6 @@ foreach ($schools as $id => $school) {
     $marks += $ct->getMarks();
     $levels += $ct->getLevels();
 }
-echo "<pre>"; print_r($scores); print_r($marks); print_r($levels); echo "</pre>"; exit;
 $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
 ?>
 <!DOCTYPE html>
@@ -156,6 +155,8 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
         else {
             showPage = true;
         }
+        <?php else: ?>
+            let showPage = true;
         <?php endif; ?>
         if (showPage) $('body').show();
     </script>
