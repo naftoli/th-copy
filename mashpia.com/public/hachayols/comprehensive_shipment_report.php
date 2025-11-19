@@ -89,6 +89,7 @@ $hachayols_to_send = 0;
                                 <thead>
                                     <tr>
                                         <th>Child Name</th>
+                                        <th>Registered</th>
                                         <?php for ($i = 1; $i <= $shipment_number_filter; $i++): ?>
                                             <th>Shipment <?php echo $i; ?></th>
                                         <?php endfor; ?>
@@ -99,6 +100,7 @@ $hachayols_to_send = 0;
                                         <?php $hachayols_to_send++; ?>
                                         <tr>
                                             <td><?php echo htmlspecialchars($child['name']); ?></td>
+                                            <td><?php echo htmlspecialchars($child['registered']); ?></td>
                                             <?php foreach ($child['shipments'] as $is_shipped): ?>
                                                 <td>
                                                     <?php if ($is_shipped): ?>
