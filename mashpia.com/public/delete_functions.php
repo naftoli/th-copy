@@ -72,6 +72,13 @@ function delete_task_mark($parameters) {
 			$recruiter = $pesukim->getRecruiter();
 			if ($recruiter) {
 				$pesukim->deletePoints(intval($points) * 5, $recruiter);
+				while ($recruiter) {
+					$pesukim = new Pesukim($recruiter);
+					$nextRecruiter = $pesukim->getRecruiter();
+					if (!$nextRecruiter) break;
+					$pesukim->deletePoints(intval($points) * 2.5, $nextRecruiter);
+					$recruiter = $nextRecruiter;
+				}
 			}
 		}
 

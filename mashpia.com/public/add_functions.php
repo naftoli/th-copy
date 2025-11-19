@@ -251,6 +251,13 @@ function add_task_mark($parameters, $update = true) {
 			if ($recruiter) {
 				$pesukim->addPoints(intval($points) * 5, $recruiter);
 			}
+			while ($recruiter) {
+				$pesukim = new Pesukim($recruiter);
+				$nextRecruiter = $pesukim->getRecruiter();
+				if (!$nextRecruiter) break;
+				$pesukim->addPoints(intval($points) * 2.5, $nextRecruiter);
+				$recruiter = $nextRecruiter;
+			}
 		}
 
 		if ($mandatory > 0 && $update) {
