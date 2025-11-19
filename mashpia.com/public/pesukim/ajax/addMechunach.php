@@ -5,7 +5,21 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
 
+$MASHPIA_DB->beginTransaction();
 $p = new Pesukim($_POST['user_id']);
-$res = $p->addMechunach($_POST);
 
-echo json_encode(['success' => $res]);
+try {
+    $res = $p->addMechunach($_POST);
+} catch (Exception $e) {
+    $MASHPIA_DB->rollBack();
+    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    exit;
+}
+
+if ($res) {
+    $MASHPIA_DB->commit();
+    echo json_encode(['success' => $res]);
+} else {
+    $MASHPIA_DB->rollBack();
+    echo json_encode(['success' => false, 'error' => 'Failed to add mechunach']);
+}
