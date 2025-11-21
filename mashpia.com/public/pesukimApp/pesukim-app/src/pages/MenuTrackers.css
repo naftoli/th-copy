@@ -79,7 +79,7 @@
 }
 
 .mt-bar.yellow .mt-bar-fill {
-  background: linear-gradient(90deg, #ffca32, #2b356a);
+  background: linear-gradient(90deg, #ffd94f, #2b356a);
 }
 
 .mt-bar-ticks {
@@ -98,7 +98,7 @@
   position: absolute;
   top: -26px;
   background: var(--color-red);
-  color: #fff;
+  color: var(--color-white);
   font-weight: 900;
   padding: 2px 8px;
   border-radius: 10px;
@@ -106,7 +106,7 @@
 }
 
 .mt-date {
-  font-family: "Exo", sans-serif;
+  font-family: "Hebrew", "Exo", sans-serif;
   font-weight: 800;
   opacity: 0.9;
   height: 24px;
@@ -175,5 +175,33 @@
 
   .mt-wrap, .mt-row {
     gap: 18px;
+  }
+}
+
+/* Reduce spacing for short screens */
+@media (max-height: 800px) {
+  .mt-wrap {
+    gap: 16px;
+  }
+  
+  .mt-row {
+    gap: 16px;
+  }
+  
+  .mt-row .card-navy {
+    gap: 1rem;
+    padding: 16px 20px;
+  }
+  
+  .mt-number {
+    gap: 0.25rem;
+  }
+  
+  .mt-number-value {
+    font-size: clamp(24px, 4vw, 36px);
+  }
+  
+  .mt-actions {
+    margin-top: 12px;
   }
 }

@@ -79,7 +79,7 @@
     background: linear-gradient(90deg, var(--color-red) 0%, #ff9aa7 70%, #ffe6ea 100%);
   }
   .tracker.v2.yellow .trk-fill {
-    background: linear-gradient(90deg, var(--color-yellow) 0%, #ffe08a 70%, #fff6cf 100%);
+    background: linear-gradient(90deg, var(--color-yellow) 0%, #ffd94f 70%, #ffd94f 100%);
   }
 }
 
