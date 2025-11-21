@@ -173,3 +173,34 @@
   }
 }
 
+/* Short screens - reduce spacing */
+@media (max-height: 800px) {
+  .about-wrap {
+    padding: clamp(8px, 2vw, 20px);
+    min-height: 100vh;
+  }
+  
+  .about-card {
+    padding: clamp(16px, 2.5vw, 30px);
+  }
+  
+  .about-head {
+    margin-bottom: clamp(10px, 1.5vw, 18px);
+  }
+  
+  .about-title {
+    font-size: clamp(32px, 4vw, 50px);
+  }
+  
+  .about-body p {
+    margin: 10px 0;
+    font-size: clamp(13px, 1vw, 16px);
+  }
+}
+
+@media ((max-height: 800px) and (min-width: 900px)) or ((max-width: 1500px) and (min-height: 900px)) {
+  .about-title {
+    font-size: 60px;
+  }
+}
+
