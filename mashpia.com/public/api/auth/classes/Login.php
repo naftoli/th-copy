@@ -53,7 +53,7 @@ class Login implements \JsonSerializable {
     public function getFilter( $school_key = 's.', $class_key = 'c.' ){
         if ( $this->type == 'HQ' )
             // $school_key.'test_school = 0';
-            return $school_key.'chayolei = 1 or s.chidon = 1';
+            return $school_key.'(chayolei = 1 or s.chidon = 1)';
         if ( $this->type == 'institution' )
             return $school_key.'inst_id = '. $this->inst_id;
         if ( $this->type == 'school' )
