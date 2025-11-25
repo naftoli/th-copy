@@ -697,11 +697,14 @@ class UserRegistrationRouter {
                     $message .= "</ol>";
                 }
             }
-            $message .= "<p><b>Chidon Experience</b><br />Registration for the Experience at the end of this year's Limmud program costs $36-$350";
-            if (in_array($details[0]['school'], [61, 269])) {
-                $message .= " plus shipping";
+
+            if ($chidonReg) {
+                $message .= "<p><b>Chidon Experience</b><br />Registration for the Experience at the end of this year's Limmud program costs $36-$350";
+                if (in_array($details[0]['school'], [61, 269])) {
+                    $message .= " plus shipping";
+                }
+                $message .= ", depending on the track passed on the tests.</p>";
             }
-            $message .= ", depending on the track passed on the tests.</p>";
 
             if ($pre_reg_prize_amount) {
                 $first_name = $details[0]['first'];
