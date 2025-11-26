@@ -39,7 +39,7 @@ class BirthdayRouter {
         }
 
         $query = $MASHPIA_DB->prepare(
-             " SELECT user_id, class_id, first, last, mobile_pic, user_photo_id, school_name, class_grade, class_sub, start_date, end_date "
+             " SELECT user_id, class_id, first, last, mobile_pic, user_photo_id, school_name, class_grade, class_sub, start_date, end_date, age "
             ." FROM birthdays JOIN users u USING (user_id) JOIN schools s USING (school_id) "
             ." JOIN classes c USING (class_id) JOIN date_tasks_missions USING (date_tasks_mission_id) "
             ." WHERE start_date >= $start_date AND end_date <= $end_date AND ($filter) AND u.user_registered IS NOT NULL $extra"
@@ -51,7 +51,8 @@ class BirthdayRouter {
         $birthdays = [];
         while( $row = $query->fetch() ) {
             $soldier = [
-                'user_id' => $row['user_id'], 'class_id' => $row['class_id'],
+                'user_id' => $row['user_id'], 'class_id' => $row['class_id'], 
+                'age' => $row['age'] ?? false, 
                 'name' => $row['first'] . ' ' . $row['last'],
                 'platoon' => ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name(),
                 'base' => $row['school_name'],
