@@ -53,12 +53,10 @@ class CropperModal extends Component {
     try {
       this.cropper.getCroppedCanvas({ width: 500, height: 500 }).toBlob( blob => {
         const formData = new FormData();
-        // Ensure filename has correct extension for JPEG
-        const fileName = this.state.name.replace(/\.(png|jpg|jpeg)$/i, '.jpg');
-        formData.append( this.props.fileName, blob, fileName );
+        formData.append( this.props.fileName, blob, this.state.name );
         // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
         this.props.uploadImage( formData );
-      }, 'image/jpeg', 0.95);
+      });
     } catch ( e ) {
       console.error( e );
       toast.error( 
