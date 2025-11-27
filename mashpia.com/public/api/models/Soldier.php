@@ -415,27 +415,49 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         if ( !is_array( $upload ) ) return $upload;
         // update the mobile_pic column
         $this->mobile_pic = $upload['mobile_pic'];
-        $this->save();
+        if ( !$this->save() ) {
+            return 'Failed to save profile picture to database.';
+        }
         return true;
     }
     // validates and moves the uploaded profile picture...
     public static function uploadProfilePicture( $user_id, $file ){
-        $type = exif_imagetype( $file['tmp_name'] );
-        $extension = image_type_to_extension( $type );
-        if ( !in_array( $type, [ IMAGETYPE_JPEG, IMAGETYPE_PNG ] ) )
-            return 'Invalid File Type. Only JPG/JPEG/PNG are supported at the moment.';
+        // Check if file was actually uploaded
+        if ( !isset($file['tmp_name']) || empty($file['tmp_name']) ) {
+            return 'No file uploaded or upload failed.';
+        }
         // all other upload errors
         if ( $file['error'] !== UPLOAD_ERR_OK )
             return codeToMessage( $file['error'] ); // api/funcitons/files/images.php#10
+        // Check file type
+        $type = @exif_imagetype( $file['tmp_name'] );
+        if ( $type === false ) {
+            return 'Unable to determine file type. File may be corrupt.';
+        }
+        $extension = image_type_to_extension( $type );
+        if ( !in_array( $type, [ IMAGETYPE_JPEG, IMAGETYPE_PNG ] ) )
+            return 'Invalid File Type. Only JPG/JPEG/PNG are supported at the moment.';
         // generate the file name
         $file_name = getProfileDestination( $user_id, $extension ); // api/funcitons/files/images.php#35
         $target = __DIR__ . "/../../mobile/reg/$file_name";
+        // Ensure directory exists
+        $dir = dirname($target);
+        if ( !is_dir($dir) ) {
+            return 'Upload directory does not exist.';
+        }
+        if ( !is_writable($dir) ) {
+            return 'Upload directory is not writable.';
+        }
         // remove duplicate files
         if ( file_exists( $target ) ) unlink( $target );
         // save file
         $result = move_uploaded_file( $file['tmp_name'], $target );
         if ( !$result ) 
             return 'Unable to save Image. Please check if your file is corrupt before trying again.';
+        // Verify file was created
+        if ( !file_exists( $target ) ) {
+            return 'File upload completed but file not found on server.';
+        }
         return [
             'mobile_pic' => $file_name,
             'profilePicture' => '/mobile/reg/' . $file_name

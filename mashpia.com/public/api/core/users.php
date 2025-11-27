@@ -225,9 +225,15 @@ class UsersRouter {
         
         // update the profile picture
         if ( isset( $_FILES['profile'] ) ) {
+            // Check if the file was uploaded
+            if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
+                json_error( 'No file was uploaded or upload failed. File may be too large or corrupt.' );
+            }
             $result = $user->setProfilePicture( $_FILES['profile'] );
             if ( is_string( $result ) )
                 json_error( $result );
+            // Reload user from database to get updated picture path
+            $user = \Soldier::find([ $id ]);
         // update other properties
         } else {
             $columns = array_keys( Soldier::table()->columns );
@@ -324,12 +330,21 @@ class UsersRouter {
 
     public function uploadProfile() {
         global $current_user;
-        if ( isset( $_FILES['profile'] ) ) {
-            $result = Soldier::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
-            if ( is_string( $result ) ) json_error( $result );
-            json_response( $result );
+        // Check if we have a file
+        if ( !isset( $_FILES['profile'] ) ) {
+            json_error('Server did not receive the profile picture file.');
         }
-        json_error('Server did not get the profile picture :-(.');
+        // Check if the file was actually uploaded
+        if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
+            json_error('No file was uploaded or upload failed. File may be too large or corrupt.');
+        }
+        // Use current_user's admin_id as temporary ID for pre-upload
+        // This is used when creating new soldiers before they have a user_id
+        $result = Soldier::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
+        if ( is_string( $result ) ) {
+            json_error( $result );
+        }
+        json_response( $result );
     }
 
     public function updateMissions() {
