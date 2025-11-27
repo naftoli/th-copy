@@ -37,14 +37,24 @@ class PersonalTab extends Component {
   // close the modal and update the profile picture
   updateProfile = ( formData ) => {
     this.setState({ uploading: true });
-    this.props.updateProfile( formData )
-      .then( () => {
-        this.setState({ uploading: false });
-        this.toggle();
-      })
-      .catch( () => {
-        this.setState({ uploading: false });
-      });
+    const uploadPromise = this.props.updateProfile( formData );
+    
+    // Check if updateProfile returns a promise
+    if ( uploadPromise && uploadPromise.then ) {
+      uploadPromise
+        .then( () => {
+          this.setState({ uploading: false });
+          this.toggle();
+        })
+        .catch( () => {
+          this.setState({ uploading: false });
+          // Modal stays open so user can try again
+        });
+    } else {
+      // Fallback for non-promise returns
+      this.setState({ uploading: false });
+      this.toggle();
+    }
   }
 
   render(){

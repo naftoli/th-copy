@@ -107,15 +107,17 @@ class CropperModal extends Component {
       <Modal isOpen={isOpen} id='cropper-modal'
           centered={centered} toggle={ uploading ? undefined : (is.not.mobile() ? toggle : undefined) }>
         <ModalHeader toggle={ uploading ? undefined : toggle }>
-          {uploading ? 'Uploading...' : 'Edit / Upload Image'}
+          { uploading ? 'Uploading...' : 'Edit / Upload Image' }
         </ModalHeader>
         <ModalBody>
-          <input type="file" style={{display: 'none'}} ref={ this.uploadRef } onChange={ this.readImageFile }/>
+          <input type="file" style={{display: 'none'}} ref={ this.uploadRef } onChange={ this.readImageFile } disabled={ uploading }/>
           { body }
         </ModalBody>
         { src &&
           <ModalFooter>
-            <Button color="primary" onClick={ this.openImage } disabled={ uploading }>Change Image</Button>
+            <Button color="primary" onClick={ this.openImage } disabled={ uploading }>
+              Change Image
+            </Button>
             <Button color="primary" onClick={ this.uploadImage } disabled={ uploading }>
               { uploading ? <Fragment><FontAwesome icon='spinner' spin /> Uploading...</Fragment> : 'Save / Replace' }
             </Button>

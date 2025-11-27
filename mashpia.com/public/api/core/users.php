@@ -224,10 +224,33 @@ class UsersRouter {
             json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
         
         // update the profile picture
-        if ( isset( $_FILES['profile'] ) ) {
-            $result = $user->setProfilePicture( $_FILES['profile'] );
+        $file_to_upload = null;
+        
+        // Check if we have a base64 encoded image in POST
+        $base64_data = getBase64FromPost('profile');
+        if ( $base64_data ) {
+            $file_array = base64ToFileArray( $base64_data, 'profile' );
+            if ( is_string( $file_array ) ) {
+                json_error( $file_array ); // Error message from conversion
+            }
+            $file_to_upload = $file_array;
+        } 
+        // Otherwise check for normal file upload
+        else if ( isset( $_FILES['profile'] ) ) {
+            // Check if the file was uploaded
+            if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
+                json_error( 'No file was uploaded or upload failed. File may be too large or corrupt.' );
+            }
+            $file_to_upload = $_FILES['profile'];
+        }
+        
+        // Process the profile picture if we have one
+        if ( $file_to_upload ) {
+            $result = $user->setProfilePicture( $file_to_upload );
             if ( is_string( $result ) )
                 json_error( $result );
+            // Reload user from database to get updated picture path
+            $user = \Soldier::find([ $id ]);
         // update other properties
         } else {
             $columns = array_keys( Soldier::table()->columns );
@@ -324,12 +347,37 @@ class UsersRouter {
 
     public function uploadProfile() {
         global $current_user;
-        if ( isset( $_FILES['profile'] ) ) {
-            $result = Soldier::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
-            if ( is_string( $result ) ) json_error( $result );
-            json_response( $result );
+        
+        $file_to_upload = null;
+        
+        // Check if we have a base64 encoded image in POST
+        $base64_data = getBase64FromPost('profile');
+        if ( $base64_data ) {
+            $file_array = base64ToFileArray( $base64_data, 'profile' );
+            if ( is_string( $file_array ) ) {
+                json_error( $file_array ); // Error message from conversion
+            }
+            $file_to_upload = $file_array;
+        } 
+        // Otherwise check for normal file upload
+        else if ( isset( $_FILES['profile'] ) ) {
+            // Check if the file was actually uploaded
+            if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
+                json_error('No file was uploaded or upload failed. File may be too large or corrupt.');
+            }
+            $file_to_upload = $_FILES['profile'];
+        } 
+        else {
+            json_error('Server did not receive the profile picture file.');
         }
-        json_error('Server did not get the profile picture :-(.');
+        
+        // Use current_user's admin_id as temporary ID for pre-upload
+        // This is used when creating new soldiers before they have a user_id
+        $result = Soldier::uploadProfilePicture( $current_user->admin_id, $file_to_upload );
+        if ( is_string( $result ) ) {
+            json_error( $result );
+        }
+        json_response( $result );
     }
 
     public function updateMissions() {
