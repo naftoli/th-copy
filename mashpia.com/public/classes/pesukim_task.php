@@ -24,6 +24,7 @@ class pesukim_task {
 	
 	public $grid_id;
 	public $points;
+	public $disable;
 	
 	function __construct($row){
 		$this->label_name = $row["label_name"];
@@ -40,6 +41,7 @@ class pesukim_task {
 		$this->medium_pic = $row["medium_pic"];
 		$this->grid_id = $row['grid_id'];
 		$this->points = $row['points'];
+		$this->disable = false;
 	}
 	
 	function set_subject_image_id($subject_image_id) {
@@ -60,7 +62,7 @@ class pesukim_task {
 					join date_tasks dt using (date_task_id) 
 					where dtm.user_id = " . $user_id . "
 					and dt.grid_id = " . $this->grid_id . "
-					and (mark_date >= " . $start_date . " AND mark_date <= " . $end_date . ")";
+					and mark_date >= " . $start_date . " AND mark_date <= " . $end_date;
 		// }
 		//if ($user_id == 19970 && $this->date_task_id == 4000051) { echo $sql; exit; }
 		// echo $sql; exit;
@@ -91,6 +93,18 @@ class pesukim_task {
 			$this->mark_date = $end_date;
 	}
 	
-	
+	function check_to_disable($user_id) {
+		$sql = "select * from date_tasks_marks dtm
+				join date_tasks dt using (date_task_id) 
+				where dtm.user_id = " . $user_id . "
+				and dt.grid_id = " . $this->grid_id . "
+				and (mark_date > " . $this->end_date . " OR mark_date < " . $this->start_date . ")";
+		$query = mysql_query($sql);
+		$row = mysql_fetch_assoc($query);
+		$num_rows = mysql_num_rows($query);
+		if ($num_rows > 0) {
+			$this->disable = true;
+		}
+	}
 } 
 ?>
