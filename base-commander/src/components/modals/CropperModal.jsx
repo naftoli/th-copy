@@ -13,7 +13,8 @@ class CropperModal extends Component {
   // the props we are expecting
   static defaultProps = {
     isOpen: true, centered: true, src: false, fileName: 'profile',
-    uploadImage: ( formData, contentType ) => {}
+    uploadImage: ( formData, contentType ) => {},
+    uploading: false
   }
 
   constructor( props ) {
@@ -83,7 +84,7 @@ class CropperModal extends Component {
 
   render() {
     // extract the props and state
-    const { isOpen, centered, toggle, viewMode } = this.props;
+    const { isOpen, centered, toggle, viewMode, uploading } = this.props;
     let { src } = this.state;
     src = src && src.indexOf( DEFAULT_PROFILE ) >= 0 ? false : src;
     src = src && src.indexOf( DEFAULT_LOGO ) >= 0 ? false : src;
@@ -91,7 +92,7 @@ class CropperModal extends Component {
     // assume we do not have an image
     let body = 
       <div style={{textAlign: 'center'}}>
-        <Button color="primary" size="lg" outline onClick={ this.openImage }>
+        <Button color="primary" size="lg" outline onClick={ this.openImage } disabled={ uploading }>
           <FontAwesome icon='camera' /> Select Image
         </Button>
       </div>;
@@ -104,16 +105,20 @@ class CropperModal extends Component {
     // render the final modal
     return (
       <Modal isOpen={isOpen} id='cropper-modal'
-          centered={centered} toggle={ is.not.mobile() ? toggle : undefined }>
-        <ModalHeader toggle={toggle}>Edit / Upload Image</ModalHeader>
+          centered={centered} toggle={ uploading ? undefined : (is.not.mobile() ? toggle : undefined) }>
+        <ModalHeader toggle={ uploading ? undefined : toggle }>
+          {uploading ? 'Uploading...' : 'Edit / Upload Image'}
+        </ModalHeader>
         <ModalBody>
           <input type="file" style={{display: 'none'}} ref={ this.uploadRef } onChange={ this.readImageFile }/>
           { body }
         </ModalBody>
         { src &&
           <ModalFooter>
-            <Button color="primary" onClick={ this.openImage }>Change Image</Button>
-            <Button color="primary" onClick={ this.uploadImage }>Save / Replace</Button>
+            <Button color="primary" onClick={ this.openImage } disabled={ uploading }>Change Image</Button>
+            <Button color="primary" onClick={ this.uploadImage } disabled={ uploading }>
+              { uploading ? <><FontAwesome icon='spinner' spin /> Uploading...</> : 'Save / Replace' }
+            </Button>
           </ModalFooter>
         }
       </Modal>
