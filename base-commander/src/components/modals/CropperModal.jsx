@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { DEFAULT_PROFILE, DEFAULT_LOGO, DEFAULT_PRIZE } from 'components/constants';
 // components
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
@@ -119,7 +119,7 @@ class CropperModal extends Component {
               Change Image
             </Button>
             <Button color="primary" onClick={ this.uploadImage } disabled={ uploading }>
-              { uploading ? <><FontAwesome icon='spinner' spin /> Uploading...</> : 'Save / Replace' }
+              { uploading ? <Fragment><FontAwesome icon='spinner' spin /> Uploading...</Fragment> : 'Save / Replace' }
             </Button>
           </ModalFooter>
         }
