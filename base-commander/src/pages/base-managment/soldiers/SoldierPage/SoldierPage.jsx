@@ -18,7 +18,8 @@ import { removeAuth, createAuth } from 'store/base/staff/operations';
 import { showError } from 'functions/notifications';
 import { 
   getSoldier,     updateSoldier, 
-  deleteSoldier,  updateMissions, updateBirthday 
+  deleteSoldier,  updateMissions, updateBirthday,
+  uploadProfile
 } from 'store/base/soldiers/operations';
 // styles
 import './SoldierPage.scss';
@@ -103,9 +104,12 @@ class SoldierPage extends Component {
     
   // update the soldiers profile page
   updateProfilePicture = formData => {
-    const { soldier } = this.state;
-    this.props.updateSoldier( soldier.user_id, formData )
-    .then( soldier => this.setState({ updates: {}, soldier }) );
+    return showError( this.props.uploadProfile( formData )
+      .then( () => {
+        toast.success('Profile picture updated successfully!');
+        this.getSoldier();
+      })
+    );
   }
   
   // update missions 
@@ -285,7 +289,8 @@ const mapStateToProps = ( state ) => {
 
 const mapDispatchToProps = {
   removeAuth,   createAuth,     updateMissions,
-  getSoldier,   updateSoldier,  deleteSoldier, updateBirthday
+  getSoldier,   updateSoldier,  deleteSoldier, updateBirthday,
+  uploadProfile
 }
 
 export default connect( mapStateToProps, mapDispatchToProps )( SoldierPage );

@@ -11,7 +11,8 @@ import { DobCol, NameRow, ProfileRow, BasePlatoonRow } from '../../components';
 class PersonalTab extends Component {
   // initial state
   state = {
-    cropperModalShow: false
+    cropperModalShow: false,
+    uploading: false
   }
   // handle updates from events
   handleChange = ( event ) => {
@@ -35,8 +36,15 @@ class PersonalTab extends Component {
   }
   // close the modal and update the profile picture
   updateProfile = ( formData ) => {
-    this.props.updateProfile( formData );
-    this.toggle();
+    this.setState({ uploading: true });
+    this.props.updateProfile( formData )
+      .then( () => {
+        this.setState({ uploading: false });
+        this.toggle();
+      })
+      .catch( () => {
+        this.setState({ uploading: false });
+      });
   }
 
   render(){
@@ -105,7 +113,7 @@ class PersonalTab extends Component {
       </Form>
       
       <CropperModal isOpen={ this.state.cropperModalShow } src={ profile_picture } 
-          toggle={ this.toggle } uploadImage={ this.updateProfile } />
+          toggle={ this.toggle } uploadImage={ this.updateProfile } uploading={ this.state.uploading } />
 
     </TabPane>
     );
