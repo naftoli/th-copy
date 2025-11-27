@@ -21,7 +21,7 @@ class ComprehensiveShipmentReport {
             SELECT 
                 a.admin_id, a.last AS family_name, a.admin_address1, a.admin_address2, 
                 a.admin_city, a.admin_state, a.admin_postal, a.admin_country,
-                u.user_id, u.first AS child_first_name, u.last AS child_last_name
+                u.user_id, u.first AS child_first_name, u.last AS child_last_name, u.user_registered 
             FROM admins a
             JOIN admin_auths aa USING (admin_id)
             JOIN users u ON aa.id = u.user_id 
@@ -87,6 +87,7 @@ class ComprehensiveShipmentReport {
 
             $families[$admin_id]['children'][] = [
                 'name' => $child['child_first_name'] . ' ' . $child['child_last_name'],
+                'registered' => $child['user_registered'],
                 'shipments' => $child_shipments
             ];
         }

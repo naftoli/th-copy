@@ -129,7 +129,7 @@ class user_track
 		if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
         if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
 		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
-//        if ($this->subject_id == 21 && !$chidonLimmud) echo $sql;
+    //    if ($this->subject_id == 40) echo $sql . "<br />";
 		// if ($this->subject_id == 136) {
 		// 	echo $sql . "<br />"; 
 		// }
@@ -141,7 +141,7 @@ class user_track
 		while ($row = mysql_fetch_assoc($query)) {
 		    
             //find out if mission is new birthday mission and then see if it's for this child
-            if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_name'], 'יום הולדת' ) !== false ) {
+            if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_description'], 'יום הולדת' ) !== false ) {
                 $sqlB = "select * from birthdays where user_id = " . $this->user_id . " and date_tasks_mission_id = " . $row['date_tasks_mission_id'];
 				//if ($this->user_id == 15025) echo "<input type='hidden' name='birthdayMission' value='" . $sqlB . "' />";
 				

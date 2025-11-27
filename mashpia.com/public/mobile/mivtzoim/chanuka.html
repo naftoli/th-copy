@@ -67,6 +67,23 @@
             .navbar {
                 min-height: 80px;
             }
+
+            input[type='radio'] {
+                -ms-transform: scale(1.3); /* IE 9 */
+                -webkit-transform: scale(1.3); /* Chrome, Safari, Opera */
+                transform: scale(1.3);
+                margin-right: 5px;
+            }
+
+            .purchases {
+                display: none;
+            }
+
+            label {
+                font-weight: normal;
+                font-size: medium;
+                padding-right: 5px;
+            }
 		</style>
 	</head>
 	<body class="page-goals">
@@ -119,7 +136,7 @@
                     </div>
                 </div>
                 
-                <div style="width: 250px; margin: auto; display: none;" id="purchases">
+                <div style="width: 250px; margin: auto;" class="purchases">
                     <div class="row">
                         <h2>Purchase For:</h2>
                         <div class="col-12">
@@ -138,7 +155,7 @@
                                                 <div>
                                                     <table>
                                                         <tr>
-                                                            <td><input type="text" class="menorah" style="width: 30px;" id="{{@key}}" /></td>
+                                                            <td><input type="number" min="0" class="menorah" style="width: 40px; margin-right: 10px;" id="{{@key}}" /></td>
                                                             <td>Menorah Box(es): <strong>$<span>{{menoraCost}}</span> </strong>/ea</td>
                                                         </tr>
                                                         <tr>
@@ -156,7 +173,7 @@
                                                 <div>
                                                     <table>
                                                         <tr>
-                                                            <td><input type="text" class="brochure" style="width: 30px;" id="{{@key}}" /></td>
+                                                            <td><input type="number" min="0" class="brochure" style="width: 40px; margin-right: 10px;" id="{{@key}}" /></td>
                                                             <td>Brochure(s): <strong>$<span>{{brochureCost}}</span> </strong>/ea</td>
                                                         </tr>
                                                         <tr>
@@ -185,61 +202,65 @@
                         <div style="font-style: italic">**Minimum order $3.50 (for CC to work)</div>
                         <input type="hidden" id="total" />
                     </div>
-                    <hr />
+                </div>
 
-                    <form action="" method="post">
-                        <div class="row">
-                            <h2>Checkout</h2>
+                <div style="width: 350px; margin: auto;" class="purchases">
+                    <div class="row">
+                        <hr />
+                        <form action="" method="post">
+                            <div class="row">
+                                <h2>Checkout</h2>
 
-                            <div id="cc_selection">
-                                <div class="form-group" style="width: 300px;">
-                                    <input type="radio" name="payment" class="payment" id="payment_1" value="0"/>
-                                    <label for="payment_1">Use credit card on file ending in</label>
-                                    <span id="creditCards"></span>
+                                <div id="cc_selection">
+                                    <div class="form-group">
+                                        <input type="radio" name="payment" class="payment" id="payment_1" value="0"/>
+                                        <label for="payment_1">Use credit card on file ending in</label>
+                                        <span id="creditCards"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="radio" name="payment" class="payment" id="payment_2" value="1"/>
+                                        <label for="payment_2">Enter a new card</label>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <input type="radio" name="payment" class="payment" id="payment_2" value="1"/>
-                                    <label for="payment_2">Enter a new card</label>
+
+                                <div id="cc_form" style="display:none;">
+                                    <div class="form-group">
+                                        <label for="cc-first" class="control-label mb-1">First Name on Card</label>
+                                        <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
+                                        <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
+                                        <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
+                                        <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
+                                        <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
+                                        <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
+                                        <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
+                                        <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
+                                    </div>
+                                    <label for="x_card_code" class="control-label mb-1">Security code</label>
+                                    <div class="form-group">
+                                        <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
+                                        <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
+                                        <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
+                                        <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
+                                    </div>
                                 </div>
                             </div>
-
-                            <div id="cc_form" style="display:none;">
-                                <div class="form-group">
-                                    <label for="cc-first" class="control-label mb-1">First Name on Card</label>
-                                    <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified" required placeholder="First Name" maxlength="18">
-                                    <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-                                </div>
-                                <div class="form-group">
-                                    <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
-                                    <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified" required placeholder="Last Name" maxlength="18">
-                                    <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-                                </div>
-                                <div class="form-group">
-                                    <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
-                                    <input id="cc-number" name="cc-number" type="number" class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX" maxlength="16">
-                                    <!-- <span class="invalid-feedback">Enter a valid credit card number</span> -->
-                                </div>
-                                <div class="form-group">
-                                    <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
-                                    <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
-                                    <!-- <span class="invalid-feedback">Enter the expiration date</span> -->
-                                </div>
-                                <label for="x_card_code" class="control-label mb-1">Security code</label>
-                                <div class="form-group">
-                                    <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc" required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
-                                    <!-- <span class="invalid-feedback order-last">Enter the 3-digit code on back</span> -->
-                                </div>
-                                <div class="form-group">
-                                    <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
-                                    <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX" maxlength="12" required />
-                                    <!-- <span class="invalid-feedback">Enter a valid zip / postal code</span> -->
-                                </div>
+                            <div class="row" style="padding: 20px !important; text-align: center;">
+                                <button id="purchase" class="btn btn-primray">Purchase</button>
                             </div>
-                        </div>
-                        <div class="row" style="padding: 20px !important; text-align: center;">
-                            <button id="purchase" class="btn btn-primray">Purchase</button>
-                        </div>
-                    </form>                    
+                        </form>                    
+                    </div>
                 </div>
             </div>
         </section>
@@ -280,17 +301,17 @@
             // when to shutdown this page
             var now = Math.floor( new Date().getTime() / 1000);
             console.log( now );
-            if ( now >= 1734411600 ) {
-                soldOut = true;
-                $("#sold-out").show();
-                $("#purchases").hide();
-            }
+            // if ( now >= 1734411600 ) {
+            //     soldOut = true;
+            //     $("#sold-out").show();
+            //     $("#purchases").hide();
+            // }
 
             // soldOut = true;
             // $("#sold-out").show();
             // $("#purchases").hide();
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
-                var menorahStart = 2228;
+                var menorahStart = 1000;
                 var menorahSold = parseInt( sold );
                 // menorahSold += ;
                 var menorahLeft = menorahStart - menorahSold;
@@ -301,12 +322,12 @@
                 }
                 if (soldOut || (menorahSoldOut && brochureSoldOut)) {
                     $("#sold-out").show();
-                    $("#purchases").hide();
+                    $(".purchases").hide();
                 }
             });
 
             $.post('ajax/purchases.php', { item : 3 }, function( sold ) {
-                var brochureStart = 2000;
+                var brochureStart = 1000;
                 var brochureSold = parseInt( sold );
                 // brochureSold += ;
                 var brochureLeft = brochureStart - brochureSold;
@@ -317,85 +338,99 @@
                 }
                 if (soldOut || (menorahSoldOut && brochureSoldOut)) {
                     $("#sold-out").show();
-                    $("#purchases").hide();
+                    $(".purchases").hide();
                 }
             });
-            
-            // get the current year
-            var year;
-            $.ajax({ 
-                type: "POST", 
-                url: "/mobile/chidon/ajax/getYear.php", 
-                async: false, 
-                success: function( info ) { 
-                    year = info; 
-                }
-            });
-            
-            // load children
-            $.post('/mobile/reg/ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
-                if ( success == -1 ) {
-                    window.location = "index.html";
-                } else {
-                    var data = $.parseJSON( success );
-                    var children = data.children;
-                    
-                    // sepearate registered and un-registered
-                    var registred_children = {};
-                    var unregistered_children = {};
-                    
-                    for (var c in children) {
-                        var child = children[c];
-                        child.menoraCost = menoraCost
-                        child.brochureCost = brochureCost
-                        if (parseInt(child.school_id) == 61) {
-                            child.myshliach = true
+
+            var year; // global variable
+
+            // Wrap dependent code in an async IIFE to ensure year is set before proceeding
+            (async function() {
+                try {
+                    year = await getYear();
+                    // Now, dependent code that requires 'year' should follow here,
+                    // e.g., the $.post('/mobile/reg/ajax/getChildren.php', ...) call and what comes after.
+                    $.post('/mobile/reg/ajax/getChildren.php', { admin : admin, year : year }, function( success ) {
+                        if ( success == -1 ) {
+                            window.location = "index.html";
                         } else {
-                            child.myshliach = false
+                            var data = $.parseJSON( success );
+                            var children = data.children;
+
+                            // sepearate registered and un-registered
+                            var registred_children = {};
+                            var unregistered_children = {};
+
+                            for (var c in children) {
+                                var child = children[c];
+                                child.menoraCost = menoraCost
+                                child.brochureCost = brochureCost
+                                if (parseInt(child.school_id) == 61) {
+                                    child.myshliach = true
+                                } else {
+                                    child.myshliach = false
+                                }
+
+                                if (
+                                    child.user_registered &&
+                                    child.school_id != 612 &&
+                                    (child.menorah || child.brochure || Cookies.get('naftoli'))
+                                ){
+                                    registred_children[c] = child;
+                                } else {
+                                    unregistered_children[c] = child;
+                                }
+                            }
+                            // console.log( registred_children );
+                            // Grab the template script
+                            var tplScript = $("#childrenTpl").html();
+                            
+                            // Compile the template
+                            var tpl = Handlebars.compile( tplScript );
+
+                            // Pass our data to the template
+                            var html = tpl( { children : registred_children } );
+                            
+                            $("#purchase_info").show();
+                            if ( $.trim( html ) === '' ) { 
+                                $("#no-children").show(); 
+                            } else {
+                                // Add the compiled html to the page
+                                $(".chilrens").append( html );
+                                $(".year").text(year);
+
+                                if ( menorahSoldOut )
+                                    $("input.menorah").attr('disabled', true);
+                                if ( brochureSoldOut )
+                                    $("input.brochure").attr('disabled', true);
+
+                                if ( soldOut ) $("#sold-out").show();
+                                else $(".purchases").show();
+                            } 
                         }
-
-                        if (
-                            child.user_registered &&
-                            child.school_id != 612 &&
-                            (child.menorah || child.brochure || Cookies.get('naftoli'))
-                        ){
-                            registred_children[c] = child;
-                        } else {
-                            unregistered_children[c] = child;
-                        }
-                    }
-                    // console.log( registred_children );
-                                        
-                    // Grab the template script
-                    var tplScript = $("#childrenTpl").html();
-                
-                    // Compile the template
-                    var tpl = Handlebars.compile( tplScript );
-
-                    // Pass our data to the template
-                    var html = tpl( { children : registred_children } );
-                    
-                    $("#purchase_info").show();
-                    if ( $.trim( html ) === '' ) { 
-                        $("#no-children").show(); 
-                    } else {
-                        // Add the compiled html to the page
-                        $(".chilrens").append( html );
-                        $(".year").text(year);
-
-                        if ( menorahSoldOut )
-                            $("input.menorah").attr('disabled', true);
-                        if ( brochureSoldOut )
-                            $("input.brochure").attr('disabled', true);
-
-                        if ( soldOut ) $("#sold-out").show();
-                        else $("#purchases").show();
-                    } 
+                    });
+                } catch (error) {
+                    console.error(error);
                 }
-            });
+            })();
+
+            function getYear() {
+                return new Promise(function(resolve, reject) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/mobile/chidon/ajax/getYear.php",
+                        success: function(info) {
+                            resolve(info); // resolve out value from server
+                        },
+                        error: function(xhr, status, err) {
+                            reject(err);
+                        }
+                    });
+                });
+            }
             
-            $(document).on('keyup', '.menorah', calcAmount);
-            $(document).on('keyup', '.brochure', calcAmount);
+            $(document).on('change blur keyup', '.menorah', calcAmount);
+            $(document).on('change blur keyup', '.brochure', calcAmount);
             $(document).on("click", "#purchase", purchaseSets);
 
             function calcAmount() {
@@ -552,7 +587,7 @@
                             };
                             cards.push(card);
                         }
-                        let html = '<select name="payment-card" class="payment-card">';
+                        let html = '<select name="payment-card" class="payment-card" style="padding: 5px;">';
                         for (let card of cards) {
                             html += `<option value=${card.profile}>${card.type}</option>`;
                         }

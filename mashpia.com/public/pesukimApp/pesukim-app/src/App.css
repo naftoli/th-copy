@@ -13,6 +13,60 @@
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
+  /* Hide scrollbar but keep scroll functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+/* Add fixed background that fills entire viewport for short screens */
+@media (max-height: 800px) and (min-width: 900px) {
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, #DA2E3E 0%, #EF374C 100%);
+    background-image: url("./assets/images/red-pattern-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    pointer-events: none;
+  }
+  
+  /* Remove background from pages, use fixed background instead */
+  .page {
+    background: transparent !important;
+  }
+}
+
+/* Disable scroll-snap on short screens (mobile) */
+@media (max-height: 800px) and (max-width: 899px) {
+  .App {
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .scroll-container {
+    scroll-snap-type: none !important;
+    scroll-behavior: auto;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .page {
+    scroll-snap-align: none !important;
+    height: auto;
+    min-height: 100vh;
+    padding: 12px 0;
+    margin-bottom: 0;
+  }
+}
+
+.scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Each full-page section */
@@ -36,7 +90,6 @@
   background-color: var(--color-navy-bold);
   color: var(--color-yellow);
   border: none;
-  font-weight: 600;
   font-size: 1.5rem;
   padding: 12px;
   border-radius: 8px;
@@ -46,7 +99,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Duke", sans-serif;
   font-weight: 600;
   font-size: 2rem;
   text-transform: uppercase;
@@ -112,7 +164,7 @@
 }
 
 .btn.secondary:hover, .btn.tertiary:hover {
-  background-color: #ffd14e;
+  background-color: #ffd94f;
 }
 
 
@@ -124,6 +176,40 @@
   text-align: center;
   margin: 0 0 clamp(16px, 2vw, 24px);
   font-weight: 500;
+}
+
+/* Reduce spacing for short screens */
+@media (max-height: 800px) {
+  .page {
+    padding: 8px 0;
+    justify-content: flex-start;
+    min-height: 100vh;
+  }
+  
+  .title-text {
+    font-size: clamp(28px, 3.5vw, 50px);
+    margin: 0 0 clamp(8px, 1.2vw, 12px);
+    line-height: 1.1;
+  }
+  
+  .body-text {
+    font-size: 16px;
+    line-height: 1.2;
+    margin: 0 0 8px;
+  }
+  
+  .card {
+    padding: 12px 16px;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    font-size: 1.2rem;
+  }
+  
+  .btn span {
+    font-size: 1.2rem;
+  }
 }
 
 .title-text.blue {
@@ -210,6 +296,12 @@
   .btn {
     padding: 8px 28px;
     font-size: 1rem;
+  }
+}
+
+@media ((max-height: 800px) and (min-width: 900px)) or ((max-width: 1500px) and (min-height: 900px)) {
+  .scroll-container {
+    margin-left: 230px;
   }
 }
 

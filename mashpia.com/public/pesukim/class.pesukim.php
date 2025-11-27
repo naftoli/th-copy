@@ -1,12 +1,16 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
 class Pesukim 
 {
     private $user_id;
     private $subject_id;
+    private $year;
 
     public function __construct($user_id) {
         $this->user_id = $user_id;
         $this->subject_id = 136;
+        $this->year = GlobalSettings::getCurrentYear();
     }
 
     public function checkTaskCompletion($task) {
@@ -40,15 +44,16 @@ class Pesukim
         $recruiter_id = $row['user_id'];
         
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pesukim_recruits (recruiter_id, recruited_id)
-            VALUES (:recruiter_id, :recruited_id)
+            INSERT INTO pesukim_recruits (recruiter_id, recruited_id, year)
+            VALUES (:recruiter_id, :recruited_id, :year)
         ");
         $res = $stmt->execute([
             'recruiter_id' => $recruiter_id,
-            'recruited_id' => $this->user_id
+            'recruited_id' => $this->user_id,
+            'year' => $this->year
         ]);
         if ($res) {
-            $pointsAdded = $this->addPoints(200, $recruiter_id);
+            $pointsAdded = $this->addPoints(300, $recruiter_id);
             if (! $pointsAdded) {
                 return false;
             }
@@ -73,6 +78,21 @@ class Pesukim
         return $res;
     }
 
+    public function deletePoints($points, $user_id) {
+        global $MASHPIA_DB;
+        // get institution id
+        $institution_id = $this->getSchoolId($user_id);
+        if (!$institution_id) {
+            return false;
+        }
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO pointsDB.user_points(user_id, institution_id, points, resource_name)
+            VALUES (:user_id, :institution_id, :points, 'auction_only_points')
+        ");
+        $res = $stmt->execute(['user_id' => $user_id, 'institution_id' => $institution_id, 'points' => -abs($points)]);
+        return $res;
+    }
+
     private function getSchoolId($user_id) {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
@@ -86,14 +106,20 @@ class Pesukim
     public function addDuchRecruit($info) {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pesukim_duch_recruits (user_id, name, mothers_name)
-            VALUES (:user_id, :name, :mothers_name)
+            INSERT INTO pesukim_duch_recruits (user_id, name, mothers_name, year)
+            VALUES (:user_id, :name, :mothers_name, :year)
         ");
-        return $stmt->execute([
+        $res = $stmt->execute([
             'user_id' => $this->user_id,
             'name' => $info['name'],
             'mothers_name' => $info['mothers_name'],
+            'year' => $this->year
         ]);
+        if ($res) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function getDuchRecruits() {
@@ -109,73 +135,81 @@ class Pesukim
     public function getRecruiter() {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT recruiter_id from pesukim_recruiters
+            SELECT recruiter_id from pesukim_recruits
             WHERE recruited_id = :recruited_id
         ");
         $stmt->execute(['recruited_id' => $this->user_id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['recruiter_id'] ?? false;
     }
 
     public function addRecruit($recruited_id) {
         global $MASHPIA_DB;
-        $MASHPIA_DB->beginTransaction();
-        $success = true;
+        // $MASHPIA_DB->beginTransaction();
+        // $success = true;
 
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pesukim_recruits (recruiter_id, recruited_id)
-            VALUES (:recruiter_id, :recruited_id)
+            INSERT INTO pesukim_recruits (recruiter_id, recruited_id, year)
+            VALUES (:recruiter_id, :recruited_id, :year)
         ");
         $res = $stmt->execute([
             'recruiter_id' => $this->user_id,
-            'recruited_id' => $recruited_id
+            'recruited_id' => $recruited_id,
+            'year' => $this->year
         ]);
         if ($res) {
             $pointsAdded = $this->addPoints(200, $this->user_id);
-            if (! $pointsAdded) {
-                $success = false;
+            if ($pointsAdded) {
+                $recruiter = $this->getRecruiter();
+                while ($recruiter) {
+                    $pesukim->addPoints(20, $recruiter);
+                    $pesukim = new Pesukim($recruiter);
+                    $recruiter = $pesukim->getRecruiter();
+                }
             }
-        } else {
-            $success = false;
-        }
+        } 
 
-        if ($success) {
-            $MASHPIA_DB->commit();
-            return true;
-        } else {
-            $MASHPIA_DB->rollBack();
-            return false;
-        }
+        return $res && $pointsAdded;
+        // if ($success) {
+        //     $MASHPIA_DB->commit();
+        //     return true;
+        // } else {
+        //     $MASHPIA_DB->rollBack();
+        //     return false;
+        // }
     }
 
     public function getRecruits() {
         global $MASHPIA_DB;
         $stmt = $MASHPIA_DB->prepare("
-            SELECT * from pesukim_recruiters pr 
+            SELECT * from pesukim_recruits pr 
             JOIN users u ON u.user_id = pr.recruited_id 
             WHERE pr.recruiter_id = :recruiter_id
         ");
         $stmt->execute([
             'recruiter_id' => $this->user_id
         ]);
+        // $stmt->debugDumpParams();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function addMechunach($info) {
         global $MASHPIA_DB;
 
-        $MASHPIA_DB->beginTransaction();
-        $success = true;
+        // $MASHPIA_DB->beginTransaction();
+        // $success = true;
 
         // add mechunach to database
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pesukim_mechunachim (mechanech_user_id, name, phone, email) 
-            VALUES (:user_id, :name, :phone, :email)
+            INSERT INTO pesukim_mechunachim (mechanech_user_id, name, phone, email, year) 
+            VALUES (:user_id, :name, :phone, :email, :year)
         ");
         $res = $stmt->execute([
             'user_id' => $this->user_id,
             'name' => $info['name'],
             'phone' => $info['phone'],
-            'email' => $info['email']
+            'email' => $info['email'],
+            'year' => $this->year
         ]);
         if ($res) {
             $mechunach_id = $MASHPIA_DB->lastInsertId();
@@ -191,21 +225,18 @@ class Pesukim
                 'mechunach_id' => $mechunach_id,
                 'code' => $code
             ]);
-            if (! $res2) {
-                $success = false;
-            } else {
+            if ($res2) {
                 $this->sendVerificationCode($code);
             }
-        } else {
-            $success = false;
         }
-        if ($success) {
-            $MASHPIA_DB->commit();
-            return true;
-        } else {
-            $MASHPIA_DB->rollBack();
-            return false;
-        }
+        return $res && $res2;
+        // if ($success) {
+        //     $MASHPIA_DB->commit();
+        //     return true;
+        // } else {
+        //     $MASHPIA_DB->rollBack();
+        //     return false;
+        // }
     }
     
     private function createVerificationCode() {

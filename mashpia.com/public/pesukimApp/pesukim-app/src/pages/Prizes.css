@@ -29,6 +29,59 @@
   font-size: clamp(16px, 2.1vw, 20px);
 }
 
+/* Reduce spacing for short screens */
+@media (max-height: 800px) {
+  .prizes {
+    height: auto;
+    min-height: 100vh;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+  
+  .prizes-header {
+    margin: 8px auto 0;
+  }
+  
+  .prizes-subtitle {
+    margin: 0 auto 4px;
+    font-size: clamp(12px, 1.4vw, 14px);
+    line-height: 1.2;
+  }
+  
+  .prizes-scroll-area {
+    padding-top: 4px;
+    padding-bottom: 4px;
+    /* Keep scroll-snap enabled since content fits with zoom */
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+  }
+  
+  .prize-section {
+    padding: 2px 0;
+    min-height: calc(100vh - 100px);
+    scroll-snap-align: start;
+  }
+  
+  .prize-category {
+    margin: 2px 0 4px;
+    font-size: clamp(16px, 2vw, 24px);
+  }
+  
+  .prize-grid {
+    margin: 0 auto 4px;
+    gap: 6px;
+  }
+  
+  .prize-card-flip {
+    min-height: 200px;
+  }
+  
+  .prize-title {
+    font-size: clamp(11px, 1.3vw, 14px);
+    margin: 1px 0 2px;
+  }
+}
+
 /* ---------- SCROLLABLE, SNAP-TO-SECTIONS AREA ---------- */
 
 .prizes-scroll-area {
@@ -38,6 +91,13 @@
   scroll-behavior: smooth;
   padding-top: 26px;
   padding-bottom: 26px;
+  /* Hide scrollbar but keep scroll functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.prizes-scroll-area::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 /* Each prize section fills most of the viewport and snaps */
@@ -61,6 +121,7 @@
   letter-spacing: 2px;
   text-transform: uppercase;
   text-align: center;
+  font-weight: 500;
 }
 
 /* Grids */
@@ -115,7 +176,7 @@
 
 .prize-card-front {
   background: var(--color-white);
-  color: var(--color-navy);
+  color: var(--color-navy-bold);
 }
 
 .prize-card-back {
@@ -134,7 +195,7 @@
   border-radius: 14px;
   padding: clamp(14px, 1.8vw, 18px);
   box-shadow: 0 6px 16px rgba(0,0,0,0.15);
-  color: var(--color-navy);
+  color: var(--color-navy-bold);
   text-align: center;
   display: flex;
   flex-direction: column;
@@ -150,7 +211,7 @@
   font-weight: 900;
   font-size: clamp(14px, 1.7vw, 18px);
   line-height: 1.2;
-  color: var(--color-navy);
+  color: var(--color-navy-bold);
 }
 
 .prize-card-back .prize-title {

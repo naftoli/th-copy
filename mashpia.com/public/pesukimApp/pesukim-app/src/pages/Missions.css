@@ -59,13 +59,13 @@
 /* Step label above the title */
 .mission-step-label {
   margin-top: 6px;
-  font-family: "Exo Bold", sans-serif;
+  font-family: "Exo 2", sans-serif;
   font-size: clamp(20px, 2.3vw, 28px);
   line-height: 1;
   color: var(--color-red);
-  text-transform: uppercase;
   font-weight: 900;
   font-style: italic;
+  color: #de1736;
 }
 
 /* Titles inside cards */
@@ -74,9 +74,10 @@
   font-family: "Duke", sans-serif;
   font-size: clamp(26px, 3vw, 36px);
   line-height: 1.05;
-  color: #ffffff;              /* white for non-accent text */
+  color: var(--color-white);              /* white for non-accent text */
   text-transform: uppercase;
   letter-spacing: 1px;
+  font-weight: 500;
 }
 
 .mission-title .accent { color: var(--color-yellow); }
@@ -111,7 +112,116 @@
 }
 
 /* accommodate shorter viewports */
-@media (max-height: 760px) {
-  .mission-card { padding: 16px; }
-  .mission-title { font-size: clamp(22px, 4vh, 32px); }
+@media (max-height: 800px) and (min-width: 900px) {
+  .missions {
+    padding-inline: min(3vw, 32px);
+    gap: clamp(8px, 1.2vh, 16px);
+    padding-top: clamp(8px, 1vh, 16px);
+    padding-bottom: clamp(8px, 1vh, 16px);
+  }
+  
+  .missions-grid {
+    gap: clamp(10px, 1.5vw, 16px);
+  }
+  
+  .mission-card { 
+    padding: clamp(12px, 1.8vw, 18px);
+  }
+  
+  .mission-icon {
+    height: clamp(24px, 3.5vw, 36px);
+    top: -18px;
+  }
+  
+  .mission-step-label {
+    font-size: clamp(16px, 2vw, 22px);
+    margin-top: 4px;
+  }
+  
+  .mission-title {
+    font-size: clamp(20px, 2.5vw, 28px);
+    margin: 4px 0 6px;
+  }
+  
+  .mission-title.single {
+    font-size: clamp(22px, 2.8vw, 30px);
+    margin-top: 6px;
+  }
+  
+  .body-text.mission-body {
+    font-size: clamp(11px, 1.5vw, 14px);
+    line-height: 1.3;
+    margin: 6px auto 0;
+  }
+  
+  .between-icon {
+    height: clamp(22px, 3.5vw, 36px);
+    top: 20px;
+  }
+}
+
+@media (max-height: 750px) and (min-width: 900px) {
+  .missions {
+    gap: clamp(6px, 1vh, 12px);
+    padding-top: clamp(4px, 0.8vh, 12px);
+    padding-bottom: clamp(4px, 0.8vh, 12px);
+  }
+  
+  .missions-grid {
+    gap: clamp(8px, 1.2vw, 12px);
+  }
+  
+  .mission-card { 
+    padding: clamp(10px, 1.5vw, 14px) !important;
+  }
+  
+  .mission-title {
+    font-size: clamp(18px, 2.2vw, 24px);
+  }
+  
+  .body-text.mission-body {
+    font-size: clamp(10px, 1.3vw, 12px);
+  }
+}
+
+/* Specific adjustments for 1079x729 and similar short/wide screens */
+@media (max-height: 730px) and (min-width: 1000px) and (max-width: 1100px) {
+  .mission-card {
+    padding: clamp(8px, 1.2vw, 12px) !important;
+  }
+  
+  .mission-title {
+    font-size: clamp(16px, 2vw, 22px) !important;
+    margin: 3px 0 4px !important;
+  }
+  
+  .mission-title.single {
+    font-size: clamp(18px, 2.3vw, 24px) !important;
+    margin-top: 4px !important;
+  }
+  
+  .body-text.mission-body {
+    font-size: clamp(9px, 1.2vw, 11px) !important;
+    line-height: 1.25 !important;
+    margin: 4px auto 0 !important;
+  }
+  
+  .mission-step-label {
+    font-size: clamp(14px, 1.8vw, 18px) !important;
+    margin-top: 2px !important;
+  }
+  
+  .mission-icon {
+    height: clamp(20px, 3vw, 28px) !important;
+    top: -14px !important;
+  }
+  
+  .missions-grid {
+    gap: clamp(6px, 1vw, 10px) !important;
+  }
+  
+  .missions {
+    gap: clamp(4px, 0.8vh, 10px) !important;
+    padding-inline: min(2.5vw, 28px) !important;
+  }
 }

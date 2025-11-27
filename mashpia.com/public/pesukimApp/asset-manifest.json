@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.1025815b.css",
-    "main.js": "./static/js/main.1f499f41.js",
+    "main.css": "./static/css/main.e3c09e35.css",
+    "main.js": "./static/js/main.39ddceca.js",
     "static/media/rebbe.jpg": "./static/media/rebbe.caad98e8a9e0c7b195d2.jpg",
     "static/media/boy-with-hat.png": "./static/media/boy-with-hat.ab4d16d51f9676322547.png",
     "static/media/girl-with-hat.png": "./static/media/girl-with-hat.3e9b95c368a2d6e47dd5.png",
@@ -9,6 +9,7 @@
     "static/media/red-pattern-bg.jpg": "./static/media/red-pattern-bg.750574438555fb7582de.jpg",
     "static/media/confetti.png": "./static/media/confetti.9b17b77dd5da1be7e89a.png",
     "static/media/hand-shake.svg": "./static/media/hand-shake.88fa73950f45d0148ab8a2d86cfb999b.svg",
+    "static/media/speech-bubble.svg": "./static/media/speech-bubble.03dbfd515d49e31d442e968e10caf764.svg",
     "static/media/open-book.svg": "./static/media/open-book.30919e22a47b939a4fd5ab4639638a33.svg",
     "static/media/pointing-hand.svg": "./static/media/pointing-hand.d301eecb786576a53a268c351866d287.svg",
     "static/media/calendar-3d.svg": "./static/media/calendar-3d.219b511824bd85fad5ff3008fc41b198.svg",
@@ -16,7 +17,7 @@
     "static/media/sound-3d.svg": "./static/media/sound-3d.3c365ec091a7a2d04621bef274701456.svg",
     "static/media/Exo2-ExtraBoldItalic.ttf": "./static/media/Exo2-ExtraBoldItalic.690b015ffd2ff5201918.ttf",
     "static/media/Exo2-BlackItalic.ttf": "./static/media/Exo2-BlackItalic.9bb9fca014e5818ea312.ttf",
-    "static/media/speech-bubble.svg": "./static/media/speech-bubble.e949cdc0ecaf51debb5fd18531ef1540.svg",
+    "static/media/FbTkuma-Regular.ttf": "./static/media/FbTkuma-Regular.e165a70e9ad456d7b480.ttf",
     "static/media/Exo-Light.ttf": "./static/media/Exo-Light.61ffd6b8771d5bdf03e1.ttf",
     "static/media/Exo-Bold.ttf": "./static/media/Exo-Bold.f007eff840a8cb682c09.ttf",
     "static/media/Exo-Black.ttf": "./static/media/Exo-Black.45e94e0f3b41565fb31b.ttf",
@@ -25,11 +26,11 @@
     "static/media/Duke-Fill.ttf": "./static/media/Duke-Fill.74b4fcccdb138e33e3cc.ttf",
     "static/media/hashems-army.svg": "./static/media/hashems-army.8fef21858b65e9979cdd342b18193fd8.svg",
     "index.html": "./index.html",
-    "main.1025815b.css.map": "./static/css/main.1025815b.css.map",
-    "main.1f499f41.js.map": "./static/js/main.1f499f41.js.map"
+    "main.e3c09e35.css.map": "./static/css/main.e3c09e35.css.map",
+    "main.39ddceca.js.map": "./static/js/main.39ddceca.js.map"
   },
   "entrypoints": [
-    "static/css/main.1025815b.css",
-    "static/js/main.1f499f41.js"
+    "static/css/main.e3c09e35.css",
+    "static/js/main.39ddceca.js"
   ]
 }

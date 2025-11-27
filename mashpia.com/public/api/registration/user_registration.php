@@ -697,11 +697,14 @@ class UserRegistrationRouter {
                     $message .= "</ol>";
                 }
             }
-            $message .= "<p><b>Chidon Experience</b><br />Registration for the Experience at the end of this year's Limmud program costs $36-$350";
-            if (in_array($details[0]['school'], [61, 269])) {
-                $message .= " plus shipping";
+
+            if ($chidonReg) {
+                $message .= "<p><b>Chidon Experience</b><br />Registration for the Experience at the end of this year's Limmud program costs $36-$350";
+                if (in_array($details[0]['school'], [61, 269])) {
+                    $message .= " plus shipping";
+                }
+                $message .= ", depending on the track passed on the tests.</p>";
             }
-            $message .= ", depending on the track passed on the tests.</p>";
 
             if ($pre_reg_prize_amount) {
                 $first_name = $details[0]['first'];
@@ -732,13 +735,16 @@ class UserRegistrationRouter {
         $message .= "<p>Join your child's WhatsApp group to stay up to date with all the latest information: <a href='$link'>WhatsApp Group</a></p>";
 
         // footer
-        $message .= "<p><b>Customer Service</b><br />
-For any questions throughout the duration of the Chidon, please be in touch with your schools Chidon Coordinator.
-<br /><br />
-If you have any questions regarding your credit card charges please email <a href='mailto:accounting@tzivoshashem.org'>accounting@tzivoshashem.org</a>.
-<br /><br />
-Wishing you Much Hatzlocho!<br />
-Tzivos Hashem HQ</body></html>";
+        $message .= "<p><b>Customer Service</b><br />";
+        if ($chidonReg) {
+            $message .= "For any questions throughout the duration of the Chidon, please be in touch with your schools Chidon Coordinator.
+            <br /><br />";
+        }
+        $message .= "
+            If you have any questions regarding your credit card charges please email <a href='mailto:accounting@tzivoshashem.org'>accounting@tzivoshashem.org</a>.
+            <br /><br />
+            Wishing you Much Hatzlocho!<br />
+            Tzivos Hashem HQ</body></html>";
 
         $subject = "Enrollment Confirmation";
         if ($chayoleiReg && $chidonReg) {
