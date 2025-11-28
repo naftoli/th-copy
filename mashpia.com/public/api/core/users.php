@@ -223,53 +223,16 @@ class UsersRouter {
         if ( !$user->validateAccess( $current_user->login ) )
             json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
         
-        // update the profile picture
-        $file_to_upload = null;
-        
-        // Debug logging
-        error_log("UPDATE user $id: FILES keys: " . json_encode(array_keys($_FILES)));
-        error_log("UPDATE user $id: POST keys: " . json_encode(array_keys($_POST)));
-        if (isset($_FILES['profile'])) {
-            error_log("UPDATE user $id: _FILES['profile']: " . json_encode($_FILES['profile']));
-        }
-        
-        // Check if we have a base64 encoded image in POST
-        $base64_data = getBase64FromPost('profile');
-        if ( $base64_data ) {
-            error_log("UPDATE user $id: Found base64 data");
-            $file_array = base64ToFileArray( $base64_data, 'profile' );
-            if ( is_string( $file_array ) ) {
-                error_log("UPDATE user $id: base64ToFileArray error: " . $file_array);
-                json_error( $file_array ); // Error message from conversion
-            }
-            $file_to_upload = $file_array;
-        } 
-        // Otherwise check for normal file upload
-        else if ( isset( $_FILES['profile'] ) ) {
-            error_log("UPDATE user $id: Processing normal file upload");
-            // Check if the file was uploaded
-            if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
-                error_log("UPDATE user $id: File upload failed - no tmp_name. Error: " . ($_FILES['profile']['error'] ?? 'unknown'));
-                json_error( 'No file was uploaded or upload failed. File may be too large or corrupt. Error code: ' . ($_FILES['profile']['error'] ?? 'unknown') );
-            }
-            $file_to_upload = $_FILES['profile'];
-        } else {
-            error_log("UPDATE user $id: No file upload detected");
-        }
-        
-        // Process the profile picture if we have one
-        if ( $file_to_upload ) {
-            error_log("UPDATE user $id: Calling setProfilePicture");
-            $result = $user->setProfilePicture( $file_to_upload );
+        // update the profile picture if uploaded
+        if ( isset( $_FILES['profile'] ) ) {
+            $result = $user->setProfilePicture( $_FILES['profile'] );
             if ( is_string( $result ) ) {
-                error_log("UPDATE user $id: setProfilePicture failed: " . $result);
                 json_error( $result );
             }
-            error_log("UPDATE user $id: Profile picture saved successfully");
             // Reload user from database to get updated picture path
             $user = \Soldier::find([ $id ]);
-        // update other properties
         } else {
+            // update other properties
             $columns = array_keys( Soldier::table()->columns );
             $toCapitalize = ['first', 'last', 'non_th_school'];
             foreach( $_POST as $key => $value ) {
@@ -365,32 +328,14 @@ class UsersRouter {
     public function uploadProfile() {
         global $current_user;
         
-        $file_to_upload = null;
-        
-        // Check if we have a base64 encoded image in POST
-        $base64_data = getBase64FromPost('profile');
-        if ( $base64_data ) {
-            $file_array = base64ToFileArray( $base64_data, 'profile' );
-            if ( is_string( $file_array ) ) {
-                json_error( $file_array ); // Error message from conversion
-            }
-            $file_to_upload = $file_array;
-        } 
-        // Otherwise check for normal file upload
-        else if ( isset( $_FILES['profile'] ) ) {
-            // Check if the file was actually uploaded
-            if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
-                json_error('No file was uploaded or upload failed. File may be too large or corrupt.');
-            }
-            $file_to_upload = $_FILES['profile'];
-        } 
-        else {
-            json_error('Server did not receive the profile picture file.');
+        // Check for file upload
+        if ( !isset( $_FILES['profile'] ) ) {
+            json_error('No profile picture file was uploaded.');
         }
         
         // Use current_user's admin_id as temporary ID for pre-upload
         // This is used when creating new soldiers before they have a user_id
-        $result = Soldier::uploadProfilePicture( $current_user->admin_id, $file_to_upload );
+        $result = Soldier::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
         if ( is_string( $result ) ) {
             json_error( $result );
         }
