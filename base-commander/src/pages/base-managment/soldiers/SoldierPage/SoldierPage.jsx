@@ -103,12 +103,17 @@ class SoldierPage extends Component {
   }
     
   // update the soldiers profile page
-  updateProfilePicture = formData => {
+  updateProfilePicture = data => {
     const { soldier } = this.state;
     console.log('SoldierPage: updateProfilePicture called for user_id:', soldier.user_id);
-    console.log('SoldierPage: FormData passed to updateSoldier');
     
-    return showError( this.props.updateSoldier( soldier.user_id, formData )
+    if (data instanceof FormData) {
+      console.log('SoldierPage: Sending FormData to updateSoldier');
+    } else {
+      console.log('SoldierPage: Sending JSON data to updateSoldier');
+    }
+    
+    return showError( this.props.updateSoldier( soldier.user_id, data )
       .then( soldier => {
         console.log('SoldierPage: Update successful, soldier data:', soldier);
         this.setState({ updates: {}, soldier });
