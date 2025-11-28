@@ -20,7 +20,6 @@ $usersInfo = [];
 foreach ($schools as $school_id => $school) {
     $su = new SchoolsUsers($school_id);
     $users[$school_id] = $su->getUsers();
-    $usersInfo[$school_id] = $su->getUserInfo();
 }
 ?>
 <!DOCTYPE html>
@@ -58,10 +57,10 @@ foreach ($schools as $school_id => $school) {
                                     ?>
                                     <tr>
                                         <td><? echo $school; ?></td>
-                                        <td><? echo $user_info['user_serial']; ?></td>
-                                        <td><? echo $user_info['class_grade'] . (empty($user_info['class_sub']) ? '' : '-' . $user_info['class_sub']); ?></td>
-                                        <td><? echo $user_info['first']; ?></td>
-                                        <td><? echo $user_info['last']; ?></td>
+                                        <td><? echo $user['user_serial']; ?></td>
+                                        <td><? echo $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
+                                        <td><? echo $user['first']; ?></td>
+                                        <td><? echo $user['last']; ?></td>
                                         <td><? echo $minutes; ?></td>
                                     </tr>
                                     <?php
