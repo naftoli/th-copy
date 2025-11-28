@@ -5,9 +5,6 @@ if ( isset( $_GET['debug'] ) ) {
     ini_set('display_errors', 1);
 }
 date_default_timezone_set( 'UTC' );
-
-// Set upload temporary directory for file uploads
-ini_set('upload_tmp_dir', sys_get_temp_dir());
 define( "API_ROOT", __DIR__ . '/..' );
 
 // include composer dependancies and custom scripts
