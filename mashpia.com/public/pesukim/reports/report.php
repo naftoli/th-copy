@@ -52,11 +52,10 @@ foreach ($schools as $school_id => $school) {
                             foreach ($users as $school_id => $users) { 
                                 foreach ($users as $user) { 
                                     $user_id = $user['user_id'];
-                                    $user_info = $usersInfo[$school_id][$user_id];
                                     $minutes = $minutes[$user_id];
                                     ?>
                                     <tr>
-                                        <td><? echo $school; ?></td>
+                                        <td><? echo $schools[$school_id]; ?></td>
                                         <td><? echo $user['user_serial']; ?></td>
                                         <td><? echo $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
                                         <td><? echo $user['first']; ?></td>
