@@ -105,7 +105,7 @@ class PesukimTotals {
         if (!empty($schools)) $sql .= " AND u.school_id IN (" . implode(',', $schools) . ")";
         $sql .= " GROUP BY user_id";
         $stmt = $MASHPIA_DB->prepare($sql);
-        $stmt->execute(['grid_id' => $this->grid_id, 'start' => $this->dates['start'], 'end' => $this->dates['end'], 'schools' => $schools]);
+        $stmt->execute(['grid_id' => $this->grid_id, 'start' => $this->dates['start'], 'end' => $this->dates['end']]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
             $minutes[$row['user_id']] = $row['total'];
