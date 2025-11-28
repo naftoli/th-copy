@@ -52,7 +52,7 @@ foreach ($schools as $school_id => $school) {
                             foreach ($users as $school_id => $users) { 
                                 foreach ($users as $user) { 
                                     $user_id = $user['user_id'];
-                                    $minutes = $minutes[$user_id];
+                                    $minutes = $minutes[$user['user_id']];
                                     ?>
                                     <tr>
                                         <td><? echo $schools[$school_id]; ?></td>
