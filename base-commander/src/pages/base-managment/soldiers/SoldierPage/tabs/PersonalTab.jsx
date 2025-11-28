@@ -36,21 +36,30 @@ class PersonalTab extends Component {
   }
   // close the modal and update the profile picture
   updateProfile = ( formData ) => {
+    console.log('PersonalTab: Starting profile picture upload');
+    console.log('FormData keys:', Array.from(formData.keys()));
+    for (let [key, value] of formData.entries()) {
+      console.log(`FormData ${key}:`, value instanceof Blob ? `Blob (${value.size} bytes, ${value.type})` : value);
+    }
+    
     this.setState({ uploading: true });
     const uploadPromise = this.props.updateProfile( formData );
     
     // Check if updateProfile returns a promise
     if ( uploadPromise && uploadPromise.then ) {
       uploadPromise
-        .then( () => {
+        .then( (result) => {
+          console.log('PersonalTab: Upload successful!', result);
           this.setState({ uploading: false });
           this.toggle();
         })
-        .catch( () => {
+        .catch( (error) => {
+          console.error('PersonalTab: Upload failed!', error);
           this.setState({ uploading: false });
           // Modal stays open so user can try again
         });
     } else {
+      console.warn('PersonalTab: updateProfile did not return a promise!');
       // Fallback for non-promise returns
       this.setState({ uploading: false });
       this.toggle();

@@ -104,11 +104,19 @@ class SoldierPage extends Component {
   // update the soldiers profile page
   updateProfilePicture = formData => {
     const { soldier } = this.state;
+    console.log('SoldierPage: updateProfilePicture called for user_id:', soldier.user_id);
+    console.log('SoldierPage: FormData passed to updateSoldier');
+    
     return showError( this.props.updateSoldier( soldier.user_id, formData )
       .then( soldier => {
+        console.log('SoldierPage: Update successful, soldier data:', soldier);
         this.setState({ updates: {}, soldier });
         toast.success('Profile picture updated successfully!');
         return soldier;
+      })
+      .catch( error => {
+        console.error('SoldierPage: Update failed:', error);
+        throw error;
       })
     );
   }

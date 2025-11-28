@@ -226,29 +226,46 @@ class UsersRouter {
         // update the profile picture
         $file_to_upload = null;
         
+        // Debug logging
+        error_log("UPDATE user $id: FILES keys: " . json_encode(array_keys($_FILES)));
+        error_log("UPDATE user $id: POST keys: " . json_encode(array_keys($_POST)));
+        if (isset($_FILES['profile'])) {
+            error_log("UPDATE user $id: _FILES['profile']: " . json_encode($_FILES['profile']));
+        }
+        
         // Check if we have a base64 encoded image in POST
         $base64_data = getBase64FromPost('profile');
         if ( $base64_data ) {
+            error_log("UPDATE user $id: Found base64 data");
             $file_array = base64ToFileArray( $base64_data, 'profile' );
             if ( is_string( $file_array ) ) {
+                error_log("UPDATE user $id: base64ToFileArray error: " . $file_array);
                 json_error( $file_array ); // Error message from conversion
             }
             $file_to_upload = $file_array;
         } 
         // Otherwise check for normal file upload
         else if ( isset( $_FILES['profile'] ) ) {
+            error_log("UPDATE user $id: Processing normal file upload");
             // Check if the file was uploaded
             if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
-                json_error( 'No file was uploaded or upload failed. File may be too large or corrupt.' );
+                error_log("UPDATE user $id: File upload failed - no tmp_name. Error: " . ($_FILES['profile']['error'] ?? 'unknown'));
+                json_error( 'No file was uploaded or upload failed. File may be too large or corrupt. Error code: ' . ($_FILES['profile']['error'] ?? 'unknown') );
             }
             $file_to_upload = $_FILES['profile'];
+        } else {
+            error_log("UPDATE user $id: No file upload detected");
         }
         
         // Process the profile picture if we have one
         if ( $file_to_upload ) {
+            error_log("UPDATE user $id: Calling setProfilePicture");
             $result = $user->setProfilePicture( $file_to_upload );
-            if ( is_string( $result ) )
+            if ( is_string( $result ) ) {
+                error_log("UPDATE user $id: setProfilePicture failed: " . $result);
                 json_error( $result );
+            }
+            error_log("UPDATE user $id: Profile picture saved successfully");
             // Reload user from database to get updated picture path
             $user = \Soldier::find([ $id ]);
         // update other properties
