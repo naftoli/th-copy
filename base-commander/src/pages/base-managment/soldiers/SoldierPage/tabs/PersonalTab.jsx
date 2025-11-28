@@ -36,8 +36,16 @@ class PersonalTab extends Component {
   }
   // close the modal and update the profile picture
   updateProfile = ( formData ) => {
-    this.toggle();
-    this.props.updateProfile( formData );
+    this.setState({ uploading: true });
+    this.props.updateProfile( formData )
+      .then(() => {
+        this.setState({ uploading: false });
+        this.toggle();
+      })
+      .catch(() => {
+        this.setState({ uploading: false });
+        // Keep modal open on error so user can retry
+      });
   }
 
   render(){
