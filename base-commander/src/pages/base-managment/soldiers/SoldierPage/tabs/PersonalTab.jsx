@@ -35,45 +35,9 @@ class PersonalTab extends Component {
     this.setState({ cropperModalShow: !this.state.cropperModalShow });
   }
   // close the modal and update the profile picture
-  updateProfile = ( data ) => {
-    console.log('PersonalTab: Starting profile picture upload');
-    
-    // Check if it's FormData or regular object
-    if (data instanceof FormData) {
-      console.log('PersonalTab: Sending as FormData');
-      for (let [key, value] of data.entries()) {
-        console.log(`FormData ${key}:`, value instanceof Blob ? `Blob (${value.size} bytes, ${value.type})` : value);
-      }
-    } else {
-      console.log('PersonalTab: Sending as JSON with base64');
-      console.log('Data keys:', Object.keys(data));
-      if (data.profile) {
-        console.log('Profile data length:', data.profile.length);
-      }
-    }
-    
-    this.setState({ uploading: true });
-    const uploadPromise = this.props.updateProfile( data );
-    
-    // Check if updateProfile returns a promise
-    if ( uploadPromise && uploadPromise.then ) {
-      uploadPromise
-        .then( (result) => {
-          console.log('PersonalTab: Upload successful!', result);
-          this.setState({ uploading: false });
-          this.toggle();
-        })
-        .catch( (error) => {
-          console.error('PersonalTab: Upload failed!', error);
-          this.setState({ uploading: false });
-          // Modal stays open so user can try again
-        });
-    } else {
-      console.warn('PersonalTab: updateProfile did not return a promise!');
-      // Fallback for non-promise returns
-      this.setState({ uploading: false });
-      this.toggle();
-    }
+  updateProfile = ( formData ) => {
+    this.toggle();
+    this.props.updateProfile( formData );
   }
 
   render(){

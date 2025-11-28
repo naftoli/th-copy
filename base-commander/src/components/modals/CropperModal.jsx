@@ -52,13 +52,12 @@ class CropperModal extends Component {
   uploadImage = () => {
     if ( !this.cropper ) return false;
     try {
-      // Convert to base64 instead of blob to bypass server upload_tmp_dir issues
-      const canvas = this.cropper.getCroppedCanvas({ width: 500, height: 500 });
-      const base64Data = canvas.toDataURL('image/png');
-      
-      // Send as JSON with base64 data
-      const data = { profile: base64Data };
-      this.props.uploadImage( data );
+      this.cropper.getCroppedCanvas({ width: 500, height: 500 }).toBlob( blob => {
+        const formData = new FormData();
+        formData.append( this.props.fileName, blob, this.state.name );
+        // API must be called with 'application/x-www-form-urlencoded; charset=utf-8' for img to post
+        this.props.uploadImage( formData );
+      });
     } catch ( e ) {
       console.error( e );
       toast.error( 
