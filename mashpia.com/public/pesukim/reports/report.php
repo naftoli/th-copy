@@ -49,10 +49,11 @@ foreach ($schools as $school_id => $school) {
                         </thead>
                         <tbody>
                             <?php
+                            $totals = [];
                             foreach ($users as $school_id => $users) { 
+                                $total = 0;
                                 foreach ($users as $user) { 
-                                    $user_id = $user['user_id'];
-                                    $minutes = $minutes[$user['user_id']];
+                                    $total += $minutes[$user['user_id']] ?? 0;
                                     ?>
                                     <tr>
                                         <td><? echo $schools[$school_id]; ?></td>
@@ -60,17 +61,38 @@ foreach ($schools as $school_id => $school) {
                                         <td><? echo $user['class_grade'] . (empty($user['class_sub']) ? '' : '-' . $user['class_sub']); ?></td>
                                         <td><? echo $user['first']; ?></td>
                                         <td><? echo $user['last']; ?></td>
-                                        <td><? echo $minutes; ?></td>
+                                        <td><? echo $minutes[$user['user_id']] ?? 0; ?></td>
                                     </tr>
                                     <?php
                                 }
+                                $totals[$school_id] = $total;
                             }
                             ?>
+                        </tbody>
+                    </table>
+                    <br />
+                    <h2>Totals</h2>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>School</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $grandTotal = 0;
+                        foreach ($totals as $school_id => $total) {
+                            echo "<tr><td>$schools[$school_id]</td><td>$total</td></tr>";
+                            $grandTotal += $total;
+                        }
+                        echo "<tr><td><b>Grand Total:</b></td><td><b>$grandTotal</b></td></tr>";
+                        ?>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     </body>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-</html>
+    </html>
