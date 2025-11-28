@@ -3,15 +3,17 @@ ini_set('display_errors',1);
 ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukimTotals.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
+
+$pesukimTotals = new PesukimTotals();
+$minutes = $pesukimTotals->getMinutesByUser(array_keys($schools));
 
 $users = [];
 $usersInfo = [];
@@ -19,14 +21,6 @@ foreach ($schools as $school_id => $school) {
     $su = new SchoolsUsers($school_id);
     $users[$school_id] = $su->getUsers();
     $usersInfo[$school_id] = $su->getUserInfo();
-}
-
-$minutes = [];
-foreach ($users as $school => $users) {
-    foreach ($users as $user) {
-        $pesukim = new Pesukim($user['user_id']);
-        $minutes[$school][] = $pesukim->getMinutes();
-    }
 }
 ?>
 <!DOCTYPE html>
@@ -60,7 +54,7 @@ foreach ($users as $school => $users) {
                                 foreach ($users as $user) { 
                                     $user_id = $user['user_id'];
                                     $user_info = $usersInfo[$school_id][$user_id];
-                                    $minutes = $minutes[$school_id][$user_id];
+                                    $minutes = $minutes[$user_id];
                                     ?>
                                     <tr>
                                         <td><? echo $school; ?></td>
