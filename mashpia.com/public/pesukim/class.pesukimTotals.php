@@ -92,6 +92,27 @@ class PesukimTotals {
         return $minutes;
     }
 
+    public function getMinutesByUser($schools = []) {
+        global $MASHPIA_DB;
+
+        $sql = "SELECT user_id, IFNULL(SUM(done_qty), 0) as total 
+                FROM date_tasks_marks 
+                JOIN date_tasks dt USING (date_task_id) 
+                JOIN users u USING (user_id)
+                WHERE dt.grid_id = :grid_id 
+                AND mark_date >= :start 
+                AND mark_date <= :end";
+        if (!empty($schools)) $sql .= " AND u.school_id IN (" . implode(',', $schools) . ")";
+        $sql .= " GROUP BY user_id";
+        $stmt = $MASHPIA_DB->prepare($sql);
+        $stmt->execute(['grid_id' => $this->grid_id, 'start' => $this->dates['start'], 'end' => $this->dates['end']]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $minutes[$row['user_id']] = $row['total'];
+        }
+        return $minutes;
+    }
+
     public function getRecruitsBySchool() {
         global $MASHPIA_DB;
 

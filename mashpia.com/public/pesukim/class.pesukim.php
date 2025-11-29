@@ -342,4 +342,22 @@ class Pesukim
         // $stmt->debugDumpParams();
         // return $stmt->rowCount() > 0;
     }
+
+    public function getMinutes() {
+        global $MASHPIA_DB;
+
+        $grid_id = 15036;
+        $dates = GlobalSettings::getCurYearDates();
+
+        $sql = "SELECT IFNULL(SUM(done_qty), 0) as total 
+                FROM date_tasks_marks 
+                JOIN date_tasks dt USING (date_task_id) 
+                WHERE dt.grid_id = :grid_id 
+                AND mark_date >= :start 
+                AND mark_date <= :end 
+                AND user_id = :user_id";
+        $stmt = $MASHPIA_DB->prepare($sql);
+        $stmt->execute(['grid_id' => $grid_id, 'start' => $dates['start'], 'end' => $dates['end'], 'user_id' => $this->user_id]);
+        return intval($stmt->fetch(PDO::FETCH_ASSOC)['total']);
+    }
 }

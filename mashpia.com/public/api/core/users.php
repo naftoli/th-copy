@@ -223,13 +223,25 @@ class UsersRouter {
         if ( !$user->validateAccess( $current_user->login ) )
             json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-77', 401 );
         
-        // update the profile picture
+        // update the profile picture if uploaded
         if ( isset( $_FILES['profile'] ) ) {
+            // Check if the file was actually uploaded without errors
+            if ( !isset($_FILES['profile']['tmp_name']) || empty($_FILES['profile']['tmp_name']) ) {
+                $error_code = $_FILES['profile']['error'] ?? 'unknown';
+                error_log("UPDATE user $id: File upload failed. Error code: $error_code");
+                error_log("UPDATE user $id: FILES array: " . json_encode($_FILES));
+                json_error( 'No file was uploaded or upload failed. Error code: ' . $error_code );
+            }
             $result = $user->setProfilePicture( $_FILES['profile'] );
-            if ( is_string( $result ) )
+            if ( is_string( $result ) ) {
                 json_error( $result );
-        // update other properties
+            }
+            // Reload user from database to get updated picture path
+            $user = \Soldier::find([ $id ]);
         } else {
+            // update other properties
+            error_log("UPDATE user $id: No profile in FILES. FILES keys: " . json_encode(array_keys($_FILES)));
+            error_log("UPDATE user $id: POST keys: " . json_encode(array_keys($_POST)));
             $columns = array_keys( Soldier::table()->columns );
             $toCapitalize = ['first', 'last', 'non_th_school'];
             foreach( $_POST as $key => $value ) {
@@ -324,12 +336,19 @@ class UsersRouter {
 
     public function uploadProfile() {
         global $current_user;
-        if ( isset( $_FILES['profile'] ) ) {
-            $result = Soldier::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
-            if ( is_string( $result ) ) json_error( $result );
-            json_response( $result );
+        
+        // Check for file upload
+        if ( !isset( $_FILES['profile'] ) ) {
+            json_error('No profile picture file was uploaded.');
         }
-        json_error('Server did not get the profile picture :-(.');
+        
+        // Use current_user's admin_id as temporary ID for pre-upload
+        // This is used when creating new soldiers before they have a user_id
+        $result = Soldier::uploadProfilePicture( $current_user->admin_id, $_FILES['profile'] );
+        if ( is_string( $result ) ) {
+            json_error( $result );
+        }
+        json_response( $result );
     }
 
     public function updateMissions() {
