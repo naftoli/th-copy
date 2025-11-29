@@ -28,6 +28,7 @@ function App() {
         const res = await fetch("/api/pesukim/getPesukimInfo.php", { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
+        console.log(json.data);
         if (isMounted) setTrackersData(json.data);
       } catch (e) {
         if (isMounted) setTrackersError("Couldn't load trackers.");
