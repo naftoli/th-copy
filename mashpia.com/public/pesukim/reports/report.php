@@ -13,7 +13,8 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true);
 $schools = $as->getSchools();
 
 $pesukimTotals = new PesukimTotals();
-$minutes = $pesukimTotals->getMinutesByUser(array_keys($schools));
+$schoolsForReport = $admin_user['auth'] == 'super' ? [] : array_keys($schools);
+$minutes = $pesukimTotals->getMinutesByUser($schoolsForReport);
 
 $users = [];
 $usersInfo = [];
