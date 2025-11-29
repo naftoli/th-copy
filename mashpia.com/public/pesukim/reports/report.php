@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukimTotals.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
 
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
 $pesukimTotals = new PesukimTotals();
