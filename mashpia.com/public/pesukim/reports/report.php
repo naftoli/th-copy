@@ -20,7 +20,7 @@ $users = [];
 $usersInfo = [];
 foreach ($schools as $school_id => $school) {
     $su = new SchoolsUsers($school_id);
-    $users[$school_id] = $su->getUsers();
+    $users[$school_id] = $su->getUsers(false, false);
 }
 ?>
 <!DOCTYPE html>
