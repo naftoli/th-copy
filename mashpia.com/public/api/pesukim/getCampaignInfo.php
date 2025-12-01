@@ -6,13 +6,14 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukimTotals.php';
 $teach = new TeachTotals();
 $taughtByRegion = $teach->getTaughtByRegion();
 $taughtBySchool = $teach->getTaughtBySchool();
+$goalByRegions = $teach->getGoalByRegions();
+$goalBySchools = $teach->getGoalBySchools();
 
 $pesukim = new PesukimTotals();
 $recruitsByRegion = $pesukim->getRecruitsByRegion();
 $recruitsBySchool = $pesukim->getRecruitsBySchool();
 $minutesByRegion = $pesukim->getMinutesByRegion();
 $minutesBySchool = $pesukim->getMinutesBySchool();
-$goal = 50000;
 
 $data = [];
 $rank = 0;
@@ -29,11 +30,11 @@ foreach ($taughtByRegion as $idx => $row) {
     "logo" => "/assets/images/flags/cheder-lubavitch-morristown.png",
     "rank" => $rank,
     "learn" => [
-        "goal" => $goal,
+        "goal" => $goalByRegions[$row['region']] ?? 0,
         "current" => $total
     ],
     "recruit" => [
-        "goal" => $goal,
+        "goal" => ceil($goalByRegions[$row['region']] ? ($goalByRegions[$row['region']] * 0.25) : 0),
         "current" => $recruitsByRegion[$row['region']] ?? 0
     ],
     "pesukimTotal" => $minutesByRegion[$row['region']] ?? 0
@@ -55,11 +56,11 @@ foreach ($taughtBySchool as $idx => $row) {
     "subtitle" => $row['school_city'] . ', ' . $row['school_state'] . ', ' . $row['school_country'],
     "rank" => $rank,
     "learn" => [
-        "goal" => $goal,
+        "goal" => $goalBySchools[$row['school_id']] ?? 0,
         "current" => $total
     ],
     "recruit" => [
-        "goal" => $goal,
+        "goal" => ceil($goalBySchools[$row['school_id']] ? ($goalBySchools[$row['school_id']] * 0.25) : 0),
         "current" => $recruitsBySchool[$row['school_id']] ?? 0
     ],
     "pesukimTotal" => $minutesBySchool[$row['school_id']] ?? 0
