@@ -24,6 +24,7 @@ class AdminSchools {
             if ($this->chidon) $sql .= "or s.chidon = 1 ";
             if ($this->registeredOnly) $sql .= "and s.school_era is null ";
             if ( $this->noTest ) $sql .= 'and s.test_school = 0 ';
+            $sql .= " or s.school_id = 836"; // include 12 Pesukim school
             $sql .= "order by school_name";
         } else if ( $this->auth == 'ckidssuper' ) {
             $sql = "select s.school_id, s.school_name 
