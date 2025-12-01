@@ -34,7 +34,7 @@ foreach ($taughtByRegion as $idx => $row) {
         "current" => $total
     ],
     "recruit" => [
-        "goal" => ceil($goalByRegions[$row['region']] ? ($goalByRegions[$row['region']] * 0.25) : 0),
+        "goal" => ceil($goalByRegions[$row['region']] ? ($goalByRegions[$row['region']] * 0.5) : 0),
         "current" => $recruitsByRegion[$row['region']] ?? 0
     ],
     "pesukimTotal" => $minutesByRegion[$row['region']] ?? 0
@@ -60,7 +60,7 @@ foreach ($taughtBySchool as $idx => $row) {
         "current" => $total
     ],
     "recruit" => [
-        "goal" => ceil($goalBySchools[$row['school_id']] ? ($goalBySchools[$row['school_id']] * 0.25) : 0),
+        "goal" => ceil($goalBySchools[$row['school_id']] ? ($goalBySchools[$row['school_id']] * 0.5) : 0),
         "current" => $recruitsBySchool[$row['school_id']] ?? 0
     ],
     "pesukimTotal" => $minutesBySchool[$row['school_id']] ?? 0
