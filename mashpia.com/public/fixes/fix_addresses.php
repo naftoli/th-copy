@@ -12,7 +12,12 @@ $qrys = [];
 if (isset($_POST['submit'])) {
     $file = $_FILES['file']['tmp_name'];
     $handle = fopen($file, 'r');
+    $first = true;
     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+        if ($first) {
+            $first = false;
+            continue;
+        }
         $admin_id = $data[0];
         $admin_state = $data[1];
         $admin_country = $data[2];
