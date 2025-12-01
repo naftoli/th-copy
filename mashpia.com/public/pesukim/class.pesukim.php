@@ -71,8 +71,8 @@ class Pesukim
             return false;
         }
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pointsDB.user_points(user_id, institution_id, points, resource_name)
-            VALUES (:user_id, :institution_id, :points, 'auction_only_points')
+            INSERT INTO pointsDB.user_points(user_id, institution_id, points, resource_name, auction_only_points)
+            VALUES (:user_id, :institution_id, :points, 'auction_only_points', 1)
         ");
         $res = $stmt->execute(['user_id' => $user_id, 'institution_id' => $institution_id, 'points' => $points]);
         return $res;
@@ -86,8 +86,8 @@ class Pesukim
             return false;
         }
         $stmt = $MASHPIA_DB->prepare("
-            INSERT INTO pointsDB.user_points(user_id, institution_id, points, resource_name)
-            VALUES (:user_id, :institution_id, :points, 'auction_only_points')
+            INSERT INTO pointsDB.user_points(user_id, institution_id, points, resource_name, auction_only_points)
+            VALUES (:user_id, :institution_id, :points, 'auction_only_points', 1)
         ");
         $res = $stmt->execute(['user_id' => $user_id, 'institution_id' => $institution_id, 'points' => -abs($points)]);
         return $res;
