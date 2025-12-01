@@ -431,7 +431,7 @@
 			
 			// get raffle eligibility info
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
-                if ( response ) {
+                if ( response && response != 0 ) {
                     $("#raffleInfoBanner").show();
                     if ( localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he' )
 						$("#raffleInfo").append( '<span style="direction: rtl">' + response + '</span>' );
