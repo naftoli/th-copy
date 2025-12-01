@@ -1113,7 +1113,7 @@
 		$.post('ajax/checkReg.php', { user_id: user }, function(reg) {
 			if (reg == 0) {
 				alert('This child is not yet registered for CTH, you will be redirected to the auction page.')
-				window.location.href = '/mobile/auction/index.html'
+				window.location.href = '/mobile/auction/index.html?id=' + user;
 			}
 		})
 
