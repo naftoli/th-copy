@@ -9,17 +9,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukimTotals.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.schoolsUsers.php';
 
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true);
+$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
 $pesukimTotals = new PesukimTotals();
-$minutes = $pesukimTotals->getMinutesByUser(array_keys($schools));
+$schoolsForReport = $admin_user['auth'] == 'super' ? [] : array_keys($schools);
+$minutes = $pesukimTotals->getMinutesByUser($schoolsForReport);
 
 $users = [];
 $usersInfo = [];
 foreach ($schools as $school_id => $school) {
     $su = new SchoolsUsers($school_id);
-    $users[$school_id] = $su->getUsers();
+    $users[$school_id] = $su->getUsers(false, false);
 }
 ?>
 <!DOCTYPE html>

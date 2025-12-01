@@ -1,4 +1,7 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('error_reporting', E_ALL);
+
 include_once( dirname(__FILE__) . "/header.php" );
 include_once( dirname(__FILE__) . "/classes/Auction.php" );
 require_once( dirname(__FILE__) . "/../../../raffles/shared/classes/Raffle.php" );
@@ -27,7 +30,7 @@ function getRaffle( $raffle_id ){
             "SELECT raffle_id AS id, name COLLATE utf8_general_ci as name, date_ran, type FROM raffles WHERE (show_for_kids = 1 OR date_to_show < NOW()) "
             ."UNION "
             ."SELECT CONCAT('a', auction_id) AS id, auction_name COLLATE utf8_general_ci AS name, show_mobile AS date_ran, 'auction' as type "
-            ."FROM auctions WHERE show_mobile < NOW() OR show_for_kids = 1 "
+            ."FROM auctions WHERE show_mobile < NOW() "
             ."ORDER BY date_ran DESC, type ASC LIMIT 1"
         );
         $raffle_query = mysql_fetch_assoc( $raffle_query );

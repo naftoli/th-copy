@@ -9,7 +9,7 @@ class IdCardsRouter {
         global $current_user; global $MASHPIA_DB;
         // limit based on admin type
         $params = [];
-        $filters = [ $current_user->login->getFilter( 's.', 'u.' ) ];
+        $filters = [ '(' . $current_user->login->getFilter( 's.', 'u.' ) . ')' ];
         if ( !$filters[0] )
             return json_error( 'Access Deinied: CORE-ID_CARDS-14' );
         // add filters from post request

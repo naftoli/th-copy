@@ -19,9 +19,9 @@ if (isset($_POST['submit'])) {
         if ($file['error'] === UPLOAD_ERR_OK) {
             $handle = fopen($file['tmp_name'], 'r');
             while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-                $prize_id = $data[0];
+                $raffle_id = $data[0];
                 $school_id = $data[1];
-                $raffle_id = $data[2];
+                $prize_id = $data[2];
                 $info[$raffle_id][$school_id][] = $prize_id;
             }
             fclose($handle);

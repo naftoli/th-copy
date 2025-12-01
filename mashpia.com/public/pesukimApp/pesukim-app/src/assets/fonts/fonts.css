@@ -53,7 +53,7 @@
 @font-face {
   font-family: "Duke";
   src: url("./Duke-Fill.ttf") format("truetype");
-  font-weight: normal;
+  font-weight: 500;
   font-style: normal;
   font-display: swap;
 }
@@ -61,6 +61,14 @@
 @font-face {
   font-family: "Duke Outline";
   src: url("./Duke-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Hebrew";
+  src: url("./FbTkuma-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
   font-display: swap;

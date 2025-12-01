@@ -155,6 +155,8 @@ $testNumber = isset($_REQUEST['test_num']) ? $_REQUEST['test_num'] : 1;
         else {
             showPage = true;
         }
+        <?php else: ?>
+            let showPage = true;
         <?php endif; ?>
         if (showPage) $('body').show();
     </script>

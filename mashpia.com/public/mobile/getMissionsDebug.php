@@ -1,26 +1,44 @@
-<?php
+<?php 
 //echo "We are working on some upgrades. Please check again later. Sorry for the inconvenience.";
 //exit;
 $days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
 $mobileURL = "/".explode("/", $_SERVER['REQUEST_URI'])[1]."/"; // get if we are in /mobile/ or /mobileDev/
 $daily = isset($_GET['daily']) && $_GET['daily']  == "true" ? true : false; // Get if we should render the daily view or not
 $desktop = isset($_GET['desktop']) && $_GET['desktop']  == "true" ? true : false; // Get if we are on a desktop or not
-if($desktop) $daily = false; // only show the weekly view on the desktop...
+if ($desktop) $daily = false; // only show the weekly view on the desktop...
+
 /********************** LOGOS FOR CAMPAIGNS **********************/
 $campaignLogos = array(
-	1	=>	'Tehillim.gif',
-	4	=>	'Tefilla.gif',
-	12	=>	'Mivtzoim.gif',
-	13	=>	'Niggunim.gif',
-	16	=>	'hiskashrus.gif',
-	21	=>	'sefer-hamitzvos.gif',
-	27	=>	'tanya.gif',
-	40	=>	'Yom-Dipagra.gif',
-	41	=>	'Father-Son.gif',
-	42	=>	'Footsteps.gif',
-	45	=>	'Cheshbon-Hanefesh.gif',
-	90	=>	'Chitas.gif',
-	100	=>	'Brias-Haguf.gif'
+    1	=>	'Tehillim.svg',
+    4	=>	'Tefilla.svg',
+    12	=>	'Mivtzoim.svg',
+    13	=>	'Niggunim.svg',
+    16	=>	'hiskashrus.svg',
+    21	=>	'sefer-hamitzvos.svg',
+    27	=>	'tanya.svg',
+    40	=>	'Yom-Dipagra.svg',
+    41	=>	'Father-son.svg',
+    42	=>	'Footsteps.svg',
+    45	=>	'Cheshbon-Hanefesh.svg',
+    90	=>	'Chitas.svg',
+    92  =>  'Niggunim.svg',
+    93  =>  'Mivtzoim.svg',
+    94  =>  'Yom-Dipagra.svg',
+    100	=>	'Brias-Haguf.svg',
+    121 =>  "day-school-Jewish Day 250 px.svg",
+    122 =>  "day-school-Jewish Uniform 250px.svg",
+    124 =>  "day-school-Health 250px.svg",
+    125 =>  "day-school_Torah 250px.svg",
+    126 =>  "day-school_Shabbat 250px.svg",
+    127 =>  "day-school_Special Days 250px.svg",
+    129 =>  "day-school-Kosher 250px.svg",
+    130 =>  "day-school_Tefilla.svg",
+    131 =>  "day-school-ahavat-yisrael.svg",
+    132 =>  "day-school-brachot.svg",
+    133 =>  "day-school-Tzedaka.svg",
+    134 =>  "day-school-honoring parents 250px.svg",
+    135 =>  "day-school-Middot-icon.svg",
+	136 =>  "pesukim.jpeg"
 );
 /********************** STICKERS **********************/
 $stickerOutlines = array(
@@ -36,6 +54,9 @@ $stickerOutlines = array(
 	42	=>	'Vihalachta Bidrachov.gif',
 	45	=>	'Cheshbon Hanefesh.gif',
 	90	=>	'Chitas.gif',
+	92  =>  'Niggunim.gif',
+	93  =>  'Mivtzoim.gif',
+	94  =>  'Yomei Dipagra.gif',
 	100	=>	'Sticker - Brias Haguf_outline bw.png'
 );
 /********************** STICKERS FOR DAILY MISSION GOALS **********************/
@@ -52,6 +73,9 @@ $dailyStickers = array(
 	42	=>	'halachta bdrachav5 of 7.png',
 	45	=>	'cheshbon hanefesh 5 of 7.png',
 	90	=>	'chitas 5 of 7.png',
+	92  =>  'niggunim 5 of 7.png',
+	93  =>  'mivtzoyim 5 of 7.png',
+	94  =>  'yoma dipagra 5 of 7.png',
 	100	=>	'brias haguf 5 of 7.png'
 );
 /********************** LOAD UP THE DATABASE CONNECTION **********************/
@@ -60,13 +84,29 @@ $user_id = mysql_real_escape_string( $_GET['id'] );
 
 /********************** GET THE CURRENT PARSHA **********************/
 $curParsha = array();
-if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 84) { // if the date was not provided or it is older then 28 days ago (4 weeks)
+// if ( isset( $_GET ) ) {
+// 	print_r( $_GET );
+// 	exit;
+// }
+if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
-	$jd = floor(unixtojd());
+	$jd = unixtojd();
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
-	// add two days to the current date,
-	// wrapping around to the beginning of the week if it reaches seven.
-	$diff = ($today + 2) % 7;
+	switch ($today) {
+		case 0:
+		case 1:
+		case 2:
+		case 3:
+		case 4:
+			$diff = $today + 2; // add two days to the current date if before thursday
+			break;
+		case 5: // thursday is the end date so no diff
+			$diff = 0;
+			break;
+		case 6: // friday is the first day so the difference is one
+			$diff = 1;
+			break;
+	}
 	$start = $jd - $diff; // the start is the current date minus the difference
 	$end = $start + 6; // the ending is the start date plus 6
 	// check if we need to change start / end
@@ -80,8 +120,8 @@ if (!isset($_GET['d']) || intval($_GET['d']) < floor(unixtojd()) - 84) { // if t
 	$curParsha['end'] = $end;
 } else { // if the date was provided by the user
 	$jd = intval($_GET['d']);
-	$jd = $jd < unixtojd() ? $jd : unixtojd(); // make sure that they cannot go to far back into the future
-	$today = intval(date('w', jdtounix($jd+1)));
+	if (! isset($_COOKIE['naftoli'])) $jd = $jd < unixtojd() ? $jd : unixtojd(); // make sure that they cannot go into the future
+	$today = intval(date('w', jdtounix($jd)));
 	if (isset($_GET['s']) && $_GET['s'] == 1) {
 		$start = $jd;
 		$end = $start + 6;
@@ -113,6 +153,9 @@ include("../classes/shabbos_task.php");
 include("../classes/no_label_task.php");
 include("../classes/task.php");
 include("../classes/date_tasks_mark.php");
+include("../classes/pesukim_task.php");
+include("../pesukim/class.pesukim.php");
+include("../api/header/db.php");
 
 /********************** LOAD THE USER **********************/
 $lang = 1; // default language is english
@@ -123,14 +166,21 @@ $row = mysql_fetch_assoc($query); // and get the user
 $lang = $row['lang_id']; // update the language
 $user = new user($row); // create a new user
 
+$school = $user->school_id;
+$grade = $user->class_id;
+
+if (in_array($school, [180, 709])) {
+    echo "Your school does not allow missions to be entered here.";
+    exit;
+}
+
 $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
 $user->get_user_tracks( -1, $start, $end, array(), $user->lang_id ); // get the users tracks
+chdir('mobile'); // and come back to this folder
 
 echo "<pre>"; print_r( $user ); echo "</pre>"; exit;
-
-chdir('mobile'); // and come back to this folder
 
 /********************** GET THE PARSHA **********************/
 $sql = "select name from parshos where start = " . $start . " and end = " . $end;

@@ -29,11 +29,12 @@ function needsUpdate($user_id) {
     ]);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     $start_date = $result['start_date'];
+    return $start_date > unixtojd();
     // figure out jewish year from start_date
-    $info = explode('/', jdtojewish($start_date));
-    $jewish_year = intval($info[2]);
-    if ($jewish_year > 5786) return true;
-    return false;
+    // $info = explode('/', jdtojewish($start_date));
+    // $jewish_year = intval($info[2]);
+    // if ($jewish_year > 5786) return true;
+    // return false;
 }
 
 $users = [];

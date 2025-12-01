@@ -125,7 +125,7 @@ abstract class Birthday {
 		if (empty($this->errors)) {
 			//add user_id and mission_id to birthday database
 			$mission_id = $t->getMissionID();	
-			$sql = "insert ignore into birthdays values( $this->user_id, $mission_id )";
+			$sql = "insert ignore into birthdays values( $this->user_id, $mission_id, $year )";
 			mysql_query( $sql );
 		}
 	}

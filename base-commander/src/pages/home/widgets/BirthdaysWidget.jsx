@@ -8,14 +8,14 @@ import { FontAwesome, Spinner, ProfilePicture } from 'components/ui';
 import { toast } from 'react-toastify';
 // constants
 
-const Birthday = ({ profilePicture, user_id, name, class_id, platoon }) => {
+const Birthday = ({ profilePicture, user_id, name, class_id, platoon, age }) => {
   return (
     <Row className='Birthday'>
       <Col xs={3} xl={2}>
         <ProfilePicture src={ profilePicture } />
       </Col>
       <Col xs={9} xl={10}>
-        <Link to={`/bm/soldiers/${user_id}`}>{ name }</Link><br/>
+        <Link to={`/bm/soldiers/${user_id}`}>{ name } { age ? `(${age})` : '' }</Link><br/>
         <Link to={`/bm/platoons/${class_id}`}>{ platoon }</Link>
       </Col>
     </Row>

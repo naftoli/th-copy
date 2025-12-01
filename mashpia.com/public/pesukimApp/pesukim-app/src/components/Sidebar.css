@@ -1,10 +1,3 @@
-/* Use theme colors */
-:root {
-  --color-yellow: #FFCA32;
-  --color-red: #E1403F;
-  --color-navy: #3E4B79;
-  --color-white: #FFFFFF;
-}
 
 /* Base sidebar styling */
 .sidebar {
@@ -24,6 +17,13 @@
   overflow-y: auto;
   transition: transform 0.3s ease;
   font-family: "Duke", sans-serif;
+  /* Hide scrollbar but keep scroll functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.sidebar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .sidebar-logo {
@@ -41,9 +41,9 @@
 }
 
 .sidebar li {
-  margin: 10px 0;
+  margin: 8px 0;
   font-family: "Duke", sans-serif;
-  font-weight: 600;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 1.25px;
   font-size: 2rem;
@@ -56,12 +56,61 @@
 .sidebar li.active,
 .sidebar li:hover {
   color: var(--color-red);
-  font-weight: 800;
+  font-weight: 500;
+}
+
+/* Trackers spacing */
+.trackers {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Spacing between trackers */
+  margin-top: 20px; /* Reduced spacing from menu */
+}
+
+.trackers .tracker {
+  margin-top: 0 !important; /* Remove individual margin, use gap instead */
 }
 
 @media (max-width: 900px) {
   .sidebar {
     width: 230px;
+  }
+}
+
+/* Reduce spacing for short screens (low aspect ratio) */
+@media ((max-height: 800px) and (min-width: 900px)) or ((max-width: 1500px) and (min-height: 900px)) {
+  .sidebar {
+    padding: 25px 35px;
+    justify-content: space-between;
+    max-width: 230px;
+  }
+  
+  .sidebar li {
+    margin: 5px 0;
+    font-size: 1.5rem;
+    line-height: 1.1;
+  }
+  
+  .sidebar ul {
+    gap: 0px;
+    margin-bottom: 6px; /* Reduced from 12px */
+  }
+  
+  .trackers {
+    margin-top: 6px; /* Reduced from 12px */
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* Add spacing between trackers */
+  }
+  
+  .trackers .tracker {
+    margin-top: 0 !important; /* Remove individual margin, use gap instead */
+  }
+  
+  .sidebar-logo {
+    margin-top: 10px;
+    width: 85%;
   }
 }
 
