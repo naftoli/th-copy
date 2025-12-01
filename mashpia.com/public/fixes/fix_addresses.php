@@ -8,11 +8,14 @@ if ($admin_user['auth'] != 'super') {
     die('No Permission');
 }
 
-$qrys = [];
+$stmt = $MASHPIA_DB->prepare("UPDATE admins SET admin_state = :state, admin_country = :country WHERE admin_id = :id");
 if (isset($_POST['submit'])) {
     $file = $_FILES['file']['tmp_name'];
     $handle = fopen($file, 'r');
     $first = true;
+    $success = true;
+    $MASHPIA_DB->beginTransaction();
+
     while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
         if ($first) {
             $first = false;
@@ -21,23 +24,23 @@ if (isset($_POST['submit'])) {
         $admin_id = $data[0];
         $admin_state = $data[1];
         $admin_country = $data[2];
-        $qrys[] = "UPDATE admins SET admin_state = '$admin_state', admin_country = '$admin_country' WHERE admin_id = $admin_id";
-    }
-
-    $success = true;
-    $MASHPIA_DB->beginTransaction();
-    foreach ($qrys as $query) {
-        if (!$MASHPIA_DB->query($query)) {
+        $result = $stmt->execute([
+            ':state' => $admin_state,
+            ':country' => $admin_country,
+            ':id' => $admin_id
+        ]);
+        if (!$result) {
             $success = false;
             break;
         }
     }
+    fclose($handle);
     if ($success) {
         $MASHPIA_DB->commit();
         echo "Addresses fixed.";
     } else {
         $MASHPIA_DB->rollBack();
-        $MASHPIA_DB->debugDumpParams();
+        $stmt->debugDumpParams();
         echo "Error fixing addresses.";
     }
 }
