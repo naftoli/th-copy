@@ -610,9 +610,9 @@
 			
 			// get raffle eligibility info
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
-				if ( response ) {
-						$("#raffleInfoBanner").show();
-						$("#raffleInfo").append( response ); // need to work out how to localize #LOCALIZE
+				if ( response && response != 0 ) {
+					$("#raffleInfoBanner").show();
+					$("#raffleInfo").append( response ); // need to work out how to localize #LOCALIZE
 				}
 			});
             
