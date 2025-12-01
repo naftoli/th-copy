@@ -4,8 +4,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $user = mysql_real_escape_string( $_REQUEST['user_id'] );
 
-header('Content-Type: application/json; charset=utf-8');
-
 $monthly_subjects = [1, 12, 15, 93, 106];
 //$ds_weekly = [126];
 $ds_daily = [121, 122, 124, 125, 129, 130, 131, 132, 133, 134, 135];
@@ -249,9 +247,9 @@ foreach ( $subjects as $subject ) {
 //            if ($details['missions_needed'] > intval( $mission['total'] )) break;
         }
 
-        if ($subject == 136) continue;
+        // if ($subject == 136) continue;
 
-    	$info[] = array( 
+    	$info[] = [ 
 			'id'	=>	$subject, 
 			'name'	=>	$subjectNames[$subject],
             'icon'  =>  $subjectIcons[$subject],
@@ -261,14 +259,14 @@ foreach ( $subjects as $subject ) {
             'total'	=>	0, 
             'needed'=>	(int)$subject_medals[$subject][1]['missions_needed'],
 			'next'	=>	1,
-            'nextMedalDate' => $left ? calculateNextDate($subject, $left) : '',
+            'nextMedalDate' => isset($left) && $left ? calculateNextDate($subject, $left) : '',
             'nextMedalImg'  => $subject_medals[$subject][1]['img'],
             'nextMedalColor'    => $imgColors[1],
             'monthly'   => $monthly,
             'weekly'    => !$monthly,
             'medals'    => $medals_arr,
             'daily'     => in_array($subject, $ds_daily)
-		);
+		];
     }
 }
 
