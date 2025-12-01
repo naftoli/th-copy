@@ -4,6 +4,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $user = mysql_real_escape_string( $_REQUEST['user_id'] );
 
+header('Content-Type: application/json; charset=utf-8');
+
 $monthly_subjects = [1, 12, 15, 93, 106];
 //$ds_weekly = [126];
 $ds_daily = [121, 122, 124, 125, 129, 130, 131, 132, 133, 134, 135];
@@ -270,5 +272,5 @@ foreach ( $subjects as $subject ) {
     }
 }
 
-echo json_encode($info);
+echo json_encode($info, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
 ?>
