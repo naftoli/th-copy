@@ -37,6 +37,7 @@ if (isset($_POST['submit'])) {
         echo "Addresses fixed.";
     } else {
         $MASHPIA_DB->rollBack();
+        $MASHPIA_DB->debugDumpParams();
         echo "Error fixing addresses.";
     }
 }
