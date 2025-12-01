@@ -27,9 +27,9 @@ $data = [
     ],
     "pesukim" => [
         "date" => [
-            "dow" => (new DateTime())->format('l'),
+            "dow" => (new DateTime(null, new DateTimeZone('America/New_York')))->format('l'),
             "hebrew" => $str2[0] . ' ' . $str2[1],
-            "gregorian" => (new DateTime())->format('F d')
+            "gregorian" => (new DateTime(null, new DateTimeZone('America/New_York')))->format('F d')
         ],
         "today" => $todayMinutes,
         "total" => $totalMinutes
