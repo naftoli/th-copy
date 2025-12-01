@@ -165,6 +165,7 @@ $row = mysql_fetch_assoc($query); // and get the user
 
 $lang = $row['lang_id']; // update the language
 $user = new user($row); // create a new user
+$user_registered = $user->user_registered && $user->user_start_date > 0 ? 1 : 0;
 
 $school = $user->school_id;
 $grade = $user->class_id;
@@ -1059,10 +1060,12 @@ $daySchoolSubjects = setDaySchoolSubjects();
 				} else {
 					$style = 'display: block;';
 				}
+
+				$label = $user_registered ? 'Mechunachim' : 'Students';
 				?>
 				<div class='panel panel-default'>
 					<div class='panel-heading'>
-						<i class='glyphicon glyphicon-chevron-left'></i> Mechunachim
+						<i class='glyphicon glyphicon-chevron-left'></i> <?=$label?>
 					</div>
 					<div class='collapse in mechunachPanel' style='height: auto;'>
 						<div class='panel-body'>
@@ -1118,24 +1121,26 @@ $daySchoolSubjects = setDaySchoolSubjects();
 					</div>
 					<div class='collapse in mechunachPanel' style='height: auto;'>
 						<div class='panel-body'>
-							<!-- add link that drops down when clicked to add a new mechunach -->
-							<?php if ($desktop) echo "<a href='#' onclick='toggleAddRecruitForm(); return false;'>Add recruit for Duch</a>"; ?>
-							<style>
-								#addRecruitForm input {
-									padding: 5px;
-									margin: 5px;
-								}
-							</style>
-							<div>
-								<form name='addRecruitForm' id='addRecruitForm' action='addRecruit.php' method='post' style='<?=$style?>'>
-									<input type='text' name='name' placeholder='Name' id='recruitName' />
-									<input type='text' name='mothers_name' placeholder='Mothers Name' id='mothersName' />
-									<input type='hidden' name='user_id' value='<?=$user_id?>' />
-									<?php if (! $desktop) echo "<br />"; ?>
-									<button type='submit' onclick='submitAddRecruitForm(this); return false;' style='margin-top: 10px;'>Add recruit</button>
-								</form>
-							</div>
-							<br />
+							<?php if ($user_registered) : ?>
+								<!-- add link that drops down when clicked to add a new mechunach -->
+								<?php if ($desktop) echo "<a href='#' onclick='toggleAddRecruitForm(); return false;'>Add recruit for Duch</a>"; ?>
+								<style>
+									#addRecruitForm input {
+										padding: 5px;
+										margin: 5px;
+									}
+								</style>
+								<div>
+									<form name='addRecruitForm' id='addRecruitForm' action='addRecruit.php' method='post' style='<?=$style?>'>
+										<input type='text' name='name' placeholder='Name' id='recruitName' />
+										<input type='text' name='mothers_name' placeholder='Mothers Name' id='mothersName' />
+										<input type='hidden' name='user_id' value='<?=$user_id?>' />
+										<?php if (! $desktop) echo "<br />"; ?>
+										<button type='submit' onclick='submitAddRecruitForm(this); return false;' style='margin-top: 10px;'>Add recruit</button>
+									</form>
+								</div>
+								<br />
+							<?php endif; ?>
 							<div id='recruits'></div>
 						</div>
 					</div>
@@ -1357,7 +1362,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 	function displayRecruits(recruits, duch_recruits) {
 		let recruits_html = '<ul>';
 		$.each(recruits, function(index, recruit) {
-			recruits_html += "<li>" + recruit.first + " " + recruit.last + " (For Points)</li>";
+			recruits_html += "<li>" + recruit.first + " " + recruit.last + "</li>";
 		});
 		$.each(duch_recruits, function(index, recruit) {
 			recruits_html += "<li>" + recruit.name + " bas " + recruit.mothers_name + " (For Duch)</li>";
