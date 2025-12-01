@@ -2,6 +2,16 @@
 require_once( dirname(__FILE__) . '/../../../../db.php' );
 $user = mysql_real_escape_string( $_POST['user_id'] );
 
+// check if the user is registered
+$sql = "SELECT user_registered FROM users WHERE user_id = " . $user;
+$result = mysql_query($sql);
+$row = mysql_fetch_assoc($result);
+$user_registered = $row['user_registered'];
+if (!$user_registered) {
+    echo 0;
+    exit;
+}
+
 require_once( dirname(__FILE__) . '/../../../../raffles/yearly/classes/YearlyRaffle.php');
 require_once( dirname(__FILE__) . '/../../../../raffles/shared/classes/Constants.php');
 use raffles\yearly\YearlyRaffle as YearlyRaffle; // use the raffle class from its namespace
