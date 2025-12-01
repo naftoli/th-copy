@@ -309,7 +309,7 @@
         <div class="button-spacing childrens-content" style="float:right;">
           <!--                                  <button class="btn btn-primary yahadusSale" style="display: none;">Yahadus Book Sale</button>-->
                                            <!-- <button class="btn btn-primary lulav">Purchase Lulav Set(s)</button> -->
-                                       <button class="btn btn-primary chanuka">Chanuka Purchase(s)</button>
+                                       <button class="btn btn-primary chanuka" style="display: none;">Chanuka Purchase(s)</button>
           <!--                            <button class="btn btn-info gameSet">Nisseui Hanosi Cards</button>-->
                                       <!-- <button class="btn btn-primary chidondrive">ChidonDrive Setup</button> -->
           <!--                                            <button class="btn btn-info story">Submit your Rebbe Story</button>-->
@@ -708,7 +708,7 @@
     // when to remove hei teves button
     console.log(now);
     if (now >= 1736398800) {
-      $(".heyTeves").hide();
+      // $(".heyTeves").hide();
     }
 
     $('.art').click(function () {
@@ -762,15 +762,12 @@
     })
 
     // get the current year
-    var year;
-    $.ajax({
-      type: "POST",
-      url: "/mobile/chidon/ajax/getYear.php",
-      async: false,
-      success: function (info) {
-        year = info;
-      }
-    });
+    var year = 0;
+    (async () => {
+      const response = await fetch('/mobile/chidon/ajax/getYear.php');
+      const info = await response.text();
+      year = info ? parseInt(info) : 0;
+    })();
 
     // load children
     var parent_id;
@@ -778,6 +775,7 @@
     var childrenToRegister = [];
     var showMsg = false
     var msg = ''
+    var show_chanuka = false;
     $.post('ajax/getChildren.php', {
       admin: admin
     }, function (success) {
@@ -863,6 +861,8 @@
           } else {
             registred_children[c] = child;
           }
+
+          if (!show_chanuka && (child.menorah || child.brochure)) show_chanuka = true;
         }
 
         Cookies.set('toRegister', childrenToRegister);
@@ -893,6 +893,7 @@
           if (show_reg) $(".chidon_reg").show()
           if (Cookies.get('naftoli')) $(".view_enrollment_info").show();
         }
+        if (show_chanuka) $(".chanuka").show()
       }
     });
 
