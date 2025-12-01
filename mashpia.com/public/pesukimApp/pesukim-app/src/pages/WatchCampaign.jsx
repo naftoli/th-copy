@@ -95,10 +95,10 @@ export default function WatchCampaign() {
         <h1 className="title-text">WATCH THE CAMPAIGN</h1>
         <div className="campaign-top-trackers">
           <div className="tracker-wrap">
-            <TrackerBar value={totals.learnCurrent} max={50000} tone="red" />
+            <TrackerBar value={totals.learnCurrent} tone="red" />
           </div>
           <div className="tracker-wrap">
-            <TrackerBar value={totals.recruitCurrent} max={50000} tone="yellow" />
+            <TrackerBar value={totals.recruitCurrent} tone="yellow" />
           </div>
           <div className="sort-by-section">
             <span className="sort-label">SORT BY</span>
