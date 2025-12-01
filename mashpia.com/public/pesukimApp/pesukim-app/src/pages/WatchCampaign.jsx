@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./WatchCampaign.css";
 import TrackerBar from "../components/TrackerBar"; // <- same API as your example
 
-const pct = (n, d) => (d > 0 ? n / d : 0);
+// const pct = (n, d) => (d > 0 ? n / d : 0);
 
 function chunkArray(arr, size) {
   const res = [];
@@ -95,10 +95,10 @@ export default function WatchCampaign() {
         <h1 className="title-text">WATCH THE CAMPAIGN</h1>
         <div className="campaign-top-trackers">
           <div className="tracker-wrap">
-            <TrackerBar value={totals.learnCurrent} max={totals.learnGoal} tone="red" />
+            <TrackerBar value={totals.learnCurrent} max={50000} tone="red" />
           </div>
           <div className="tracker-wrap">
-            <TrackerBar value={totals.recruitCurrent} max={totals.recruitGoal} tone="yellow" />
+            <TrackerBar value={totals.recruitCurrent} max={50000} tone="yellow" />
           </div>
           <div className="sort-by-section">
             <span className="sort-label">SORT BY</span>
@@ -149,14 +149,14 @@ export default function WatchCampaign() {
                   {u.subtitle && <p className="card-sub">{u.subtitle}</p>}
                   </div>
                   <div className="card-section red">
-                    <p className="mini-label">Teaching Goal:</p>
+                    <p className="mini-label">Chanukah Teaching Goal:</p>
                     <p className="mini-value">{u.learn.goal.toLocaleString()}</p>
                     <p className="mini-label">People Taught:</p>
                     <p className="mini-value">{u.learn.current.toLocaleString()}</p>
                     <TrackerBar value={u.learn.current} max={u.learn.goal} tone="red" />
                   </div>
                   <div className="card-section yellow">
-                    <p className="mini-label">Recruitment Goal:</p>
+                    <p className="mini-label">Chanukah Recruitment Goal:</p>
                     <p className="mini-value">{u.recruit.goal.toLocaleString()}</p>
                     <p className="mini-label">Children Recruited:</p>
                     <p className="mini-value">{u.recruit.current.toLocaleString()}</p>

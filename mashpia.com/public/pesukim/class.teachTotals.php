@@ -7,10 +7,14 @@ class TeachTotals {
     private $taughtBySchool;
     private $year;
     private $grid_ids;
+    private $goalByRegions;
+    private $goalBySchools;
 
     public function __construct() {
         $this->taughtByRegion = [];
         $this->taughtBySchool = [];
+        $this->goalByRegions = [];
+        $this->goalBySchools = [];
         $this->year = GlobalSettings::getCurrentYear();
         $this->grid_ids = [15037, 15038, 15039, 15040, 15041, 15042, 15043, 15044, 15045, 15046, 15047, 15048];
     }
@@ -99,5 +103,70 @@ class TeachTotals {
     public function getTaughtBySchool() {
         if (empty($this->taughtBySchool)) $this->setTaughtBySchool();
         return $this->taughtBySchool;
+    }
+
+    public function setGoalByRegions() {
+        global $MASHPIA_DB;
+        $sql = "
+            SELECT 
+                CASE
+                    WHEN a.admin_country = 'USA' THEN CONCAT('USA - ', a.admin_state)
+                    ELSE a.admin_country
+                END AS region,
+                COUNT(*) AS total
+            FROM
+                users u
+                    JOIN
+                admin_auths aa ON aa.id = u.user_id
+                    JOIN
+                admins a ON a.admin_id = aa.admin_id
+            WHERE
+                u.user_registered IS NOT NULL
+                    AND u.user_registered != ''
+                    AND u.user_registered != 0
+            GROUP BY region
+        ";
+        $stmt = $MASHPIA_DB->query($sql);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $this->goalByRegions[$row['region']] = $row['total'];
+        }
+    }
+
+    public function getGoalByRegions() {
+        if (empty($this->goalByRegions)) $this->setGoalByRegions();
+        return $this->goalByRegions;
+    }
+
+    public function setGoalBySchools() {
+        global $MASHPIA_DB;
+        $sql = "
+            SELECT 
+                school_id,
+                school_name,
+                school_city,
+                school_state,
+                school_country,
+                COUNT(*) as total
+            FROM
+                users u
+                    JOIN
+                schools s USING (school_id)
+            WHERE
+                u.user_registered IS NOT NULL
+                    AND u.user_registered != ''
+                    AND u.user_registered != 0
+            GROUP BY school_id
+        ";
+        $stmt = $MASHPIA_DB->query($sql);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $this->goalBySchools[$row['school_id']] = $row['total'];
+        }
+    }
+
+    public function getGoalBySchools() {
+        if (empty($this->goalBySchools)) $this->setGoalBySchools();
+        return $this->goalBySchools;
     }
 }
