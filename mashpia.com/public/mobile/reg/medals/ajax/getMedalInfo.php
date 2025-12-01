@@ -272,5 +272,5 @@ foreach ( $subjects as $subject ) {
     }
 }
 
-echo json_encode($info, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_SUBSTITUTE);
+echo json_encode($info);
 ?>
