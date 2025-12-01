@@ -43,7 +43,7 @@ class MilesRouter {
         if ( $storeOnly )
             $resource_name = 'transaction_manager_store';
         else if ( $auctionOnly )
-            $resource_name = 'auction_only_miles';
+            $resource_name = 'auction_only_points';
 
         // invert number if action is subtract
         if ( $action == 'subtract' )
