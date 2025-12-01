@@ -474,7 +474,7 @@
                 </div>
 				<div class="clearfix"></div>
 
-				<div id="raffleInfoContainer">
+				<div id="raffleInfoContainer" style="display: none;">
 					<div class="trackRecord">
 						<canvas class="trackRecordCanvas" id="trackRecord5"></canvas>
 					</div>
@@ -612,6 +612,7 @@
 			$.post('ajax/getRaffleInfo.php', { user_id : id }, function( response ) {
 				if ( response && response != 0 ) {
 					$("#raffleInfoBanner").show();
+					$("#raffleInfoContainer").show();
 					$("#raffleInfo").append( response ); // need to work out how to localize #LOCALIZE
 				}
 			});
