@@ -1363,7 +1363,9 @@ $daySchoolSubjects = setDaySchoolSubjects();
 	function displayRecruits(recruits, duch_recruits) {
 		let recruits_html = '<ul>';
 		$.each(recruits, function(index, recruit) {
-			recruits_html += "<li>" + recruit.first + " " + recruit.last + "</li>";
+			let gender = recruit.gender == 'M' ? 'ben' : 'bas';
+			let miles = '60 Miles earned';
+			recruits_html += "<li>" + recruit.first + " " + recruit.last + " (" + recruit.first + " " + gender + " " + recruit.mothers_name + ") " + miles + "</li>";
 		});
 		$.each(duch_recruits, function(index, recruit) {
 			recruits_html += "<li>" + recruit.name + " bas " + recruit.mothers_name + " (For Duch)</li>";
