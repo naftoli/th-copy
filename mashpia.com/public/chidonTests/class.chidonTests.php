@@ -951,7 +951,7 @@ class ChidonTests
     public static function getOpeningDates() {
         $shutdown = [];
         $opening[1] = new DateTime('2025-10-19 00:00:00', new DateTimeZone('America/New_York'));
-        $opening[2] = new DateTime('2025-12-11 00:00:00', new DateTimeZone('America/New_York'));
+        $opening[2] = new DateTime('2025-12-02 00:00:00', new DateTimeZone('America/New_York'));
         $opening[3] = new DateTime('2026-01-22 00:00:00', new DateTimeZone('America/New_York'));
         $opening[3] = new DateTime('2026-02-19 00:00:00', new DateTimeZone('America/New_York'));
         return $opening;
