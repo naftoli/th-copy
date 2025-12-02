@@ -467,14 +467,14 @@
 					</a>
 				</div> -->
 				
-				<div class="span12" id='raffleInfoBanner' style="margin-top:15px; display: none;">
+				<div class="span12" id='raffleInfoBanner' style="margin-top: 15px; display: none;">
                     <div class="medal-label">
                         <span>MISSION MARATHON</span>
                     </div>
                 </div>
+				<div class="clearfix"></div>
 
-				<div id="raffleInfoContainer" style="display: none; margin-bottom:15px;">
-					<div class="clearfix"></div>
+				<div id="raffleInfoContainer" style="margin-bottom: 15px; display: none;">
 					<div class="trackRecord">
 						<canvas class="trackRecordCanvas" id="trackRecord5"></canvas>
 					</div>
@@ -486,7 +486,7 @@
 					</div>
 				</div>
 				
-                <div id="medalsContainer" class="span12">
+                <div id="medalsContainer" class="span12" style="padding-top: 30px;">
                     <div class="medal-label">
                         <span style="color: white;">MEDALS</span>
                     </div>
@@ -627,7 +627,7 @@
 					$("#raffleInfoBanner").show();
 					$("#raffleInfoContainer").show();
 					$("#raffleInfo").append( response ); // need to work out how to localize #LOCALIZE
-				}
+				} 
 			});
             
             // get the user's information and update the UI
