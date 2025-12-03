@@ -19,7 +19,7 @@ $info = [];
 $stmt = $MASHPIA_DB->query("SELECT * FROM pesukim_settings");
 $settings = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($settings as $setting) {
-    $info[$setting['type']] = $setting['label'];
+    $info[$setting['type']] = $setting;
 }
 
 $teachingCalcMultiplier = floatval($info['teaching']['multiplier']);
