@@ -34,7 +34,7 @@ $settings = $result->fetchAll();
                 <tr>
                     <th>Type</th>
                     <th>Label</th>
-                    <th>Calculation</th>
+                    <th>Multiplier</th>
                 </tr>
             </thead>
             <tbody>
