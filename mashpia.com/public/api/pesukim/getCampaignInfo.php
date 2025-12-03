@@ -40,11 +40,11 @@ foreach ($taughtByRegion as $idx => $row) {
     "logo" => "/assets/images/flags/cheder-lubavitch-morristown.png",
     "rank" => $rank,
     "learn" => [
-        "goal" => $goalByRegions[$row['region']] ? ($goalByRegions[$row['region']] * $teachingCalcMultiplier) : 0,
+        "goal" => $goalByRegions[$row['region']] ? (intval($goalByRegions[$row['region']]) * $teachingCalcMultiplier) : 0,
         "current" => $total
     ],
     "recruit" => [
-        "goal" => ceil($goalByRegions[$row['region']] ? ($goalByRegions[$row['region']] * $recruitmentCalcMultiplier) : 0),
+        "goal" => ceil($goalByRegions[$row['region']] ? (intval($goalByRegions[$row['region']]) * $recruitmentCalcMultiplier) : 0),
         "current" => $recruitsByRegion[$row['region']] ?? 0
     ],
     "pesukimTotal" => $minutesByRegion[$row['region']] ?? 0
@@ -66,11 +66,11 @@ foreach ($taughtBySchool as $idx => $row) {
     "subtitle" => $row['school_city'] . ', ' . $row['school_state'] . ', ' . $row['school_country'],
     "rank" => $rank,
     "learn" => [
-        "goal" => $goalBySchools[$row['school_id']] ? ($goalBySchools[$row['school_id']] * $teachingCalcMultiplier) : 0,
+        "goal" => $goalBySchools[$row['school_id']] ? (intval($goalBySchools[$row['school_id']]) * $teachingCalcMultiplier) : 0,
         "current" => $total
     ],
     "recruit" => [
-        "goal" => ceil($goalBySchools[$row['school_id']] ? ($goalBySchools[$row['school_id']] * $recruitmentCalcMultiplier) : 0),
+        "goal" => ceil($goalBySchools[$row['school_id']] ? (intval($goalBySchools[$row['school_id']]) * $recruitmentCalcMultiplier) : 0),
         "current" => $recruitsBySchool[$row['school_id']] ?? 0
     ],
     "pesukimTotal" => $minutesBySchool[$row['school_id']] ?? 0
