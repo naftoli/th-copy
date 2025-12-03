@@ -3,11 +3,11 @@
 // error_reporting(E_ALL);
 
 header('Content-Type: application/json; charset=utf-8');
-require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukimTotals.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.teachTotals.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukimTotals.php';
 
-$p = new PesukimTotals();
 $t = new TeachTotals();
+$p = new PesukimTotals();
 $taught = $t->getTotalTaught();
 $recruits = $p->getTotalRecruits();
 $todayMinutes = $p->getTodayMinutes();

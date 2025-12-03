@@ -1362,7 +1362,12 @@ $daySchoolSubjects = setDaySchoolSubjects();
 	function displayRecruits(recruits, duch_recruits) {
 		let recruits_html = '<ul>';
 		$.each(recruits, function(index, recruit) {
-			recruits_html += "<li>" + recruit.first + " " + recruit.last + "</li>";
+			recruits_html += "<li>" + recruit.first + " " + recruit.last;
+			if (recruit.mothers_name) {
+				let gender = recruit.gender == 'M' ? 'ben' : 'bas';
+				recruits_html += " (" + recruit.first + " " + gender + " " + recruit.mothers_name + ") ";
+			}
+			recruits_html += " 60 Miles earned</li>";
 		});
 		$.each(duch_recruits, function(index, recruit) {
 			recruits_html += "<li>" + recruit.name + " bas " + recruit.mothers_name + " (For Duch)</li>";
