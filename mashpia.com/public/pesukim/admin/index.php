@@ -42,7 +42,7 @@ $settings = $result->fetchAll();
                     <tr data-setting-id="<?= $setting['pesukim_setting_id'] ?>">
                         <td class="type"><input type="text" class="form-control" name="type" value="<?php echo $setting['type']; ?>"></td>
                         <td class="label"><input type="text" class="form-control" name="label" value="<?php echo $setting['label']; ?>"></td>
-                        <td class="calculation"><input type="number" class="form-control" name="calculation" value="<?php echo $setting['calculation']; ?>" min="0" max="1" step="0.25"></td>
+                        <td class="multiplier"><input type="number" class="form-control" name="multiplier" value="<?php echo $setting['multiplier']; ?>" min="0" max="1" step="0.25"></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -52,16 +52,26 @@ $settings = $result->fetchAll();
             document.getElementById('save').addEventListener('click', function() {
                 let settings = [];
                 document.querySelectorAll('tbody tr').forEach(function(tr) {
-                    let pesukim_setting_id = tr.dataset.settingId;
+                    let id = tr.dataset.settingId;
                     let setting = {
-                        pesukim_setting_id: pesukim_setting_id,
+                        id: id,
                         type: tr.querySelector('td.type > input').value,
                         label: tr.querySelector('td.label > input').value,
-                        calculation: tr.querySelector('td.calculation > input').value
+                        multiplier: tr.querySelector('td.multiplier > input').value
                     };
                     settings.push(setting);
                 });
-                console.log(settings);
+                fetch('api/saveSettings.php', {
+                    method: 'POST',
+                    body: JSON.stringify(settings)
+                }).then(response => response.json()).then(data => {
+                    if (data.success) {
+                        alert('Settings saved successfully');
+                    } else {
+                        alert('Error saving settings');
+                        console.log(data.error);
+                    }
+                });
             });
         </script>
     </body>
