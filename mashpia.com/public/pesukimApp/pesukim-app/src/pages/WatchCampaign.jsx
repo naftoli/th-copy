@@ -149,14 +149,14 @@ export default function WatchCampaign() {
                   {u.subtitle && <p className="card-sub">{u.subtitle}</p>}
                   </div>
                   <div className="card-section red">
-                    <p className="mini-label">{data.settings.teaching.label}:</p>
+                    <p className="mini-label">{data.settings['teaching']['label']}:</p>
                     <p className="mini-value">{u.learn.goal.toLocaleString()}</p>
                     <p className="mini-label">People Taught:</p>
                     <p className="mini-value">{u.learn.current.toLocaleString()}</p>
                     <TrackerBar value={u.learn.current} max={u.learn.goal} tone="red" />
                   </div>
                   <div className="card-section yellow">
-                    <p className="mini-label">{data.settings.recruitment.label}:</p>
+                    <p className="mini-label">{data.settings['recruitment']['label']}:</p>
                     <p className="mini-value">{u.recruit.goal.toLocaleString()}</p>
                     <p className="mini-label">Children Recruited:</p>
                     <p className="mini-value">{u.recruit.current.toLocaleString()}</p>
