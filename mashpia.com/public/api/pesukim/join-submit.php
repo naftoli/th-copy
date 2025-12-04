@@ -12,11 +12,17 @@ function clean(&$value) {
   }
 }
 
-function sendEmailConfirmation($email, $name) {
+function generatePassword() {
+  // This code generates a random 8-character password by shuffling the string of digits, lowercase, and uppercase letters,
+  // then taking the first 8 characters from the shuffled result.
+  return substr(str_shuffle("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!@#$%^&*()"), 0, 6);
+}
+
+function sendEmailConfirmation($email, $name, $password) {
   $subject = 'Welcome to Tzivos Hashem';
 
   $msg = 'Welcome to Tzivos Hashem!<br /><br />';
-  $msg .= 'Your username is ' . $email . ' and your password is 1234<br /><br />';
+  $msg .= 'Your username is ' . $email . ' and your password is ' . $password . '<br /><br />';
   $msg .= 'Your child ' . $name . ' is now a part of Tzivos Hashem!<br /><br />';
   $msg .= 'To login, please use the following link: <a href="https://tzivoshashem.com/mobile">https://tzivoshashem.com/mobile</a><br /><br />';
   $msg .= 'If you have any questions, please feel free to contact us at <a href="mailto:support@tzivoshashem.org">support@tzivoshashem.org</a>.<br /><br />';
@@ -91,10 +97,11 @@ try {
       $parent = mysql_fetch_object($result);
   } else {
       $parent = new NewParent();
+      $pass = generatePassword();
       $created = $parent->action([
           'username' => $input['parentEmail'],
-          'hashed_pass' => password_hash('1234', PASSWORD_DEFAULT),
-          'password' => encryptPassword('1234', ENCRYPTION_KEY),
+          'hashed_pass' => password_hash($pass, PASSWORD_DEFAULT),
+          'password' => encryptPassword($pass, ENCRYPTION_KEY),
           'admin_email' => $input['parentEmail']
       ]);
       if (!$created) {
@@ -126,7 +133,7 @@ try {
               throw new Exception('Failed to add recruiter');
             }
           }
-          sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']));
+          sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']), $pass);
       } else {
           throw new Exception('Failed to create child account');
       }

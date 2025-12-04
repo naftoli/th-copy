@@ -192,6 +192,7 @@ const Join = () => {
               />
             </div>
 
+            <h2 className="body-text">Date of Birth</h2> 
             <div className="grid1">
               <Field
                 id="dob"
@@ -224,7 +225,7 @@ const Join = () => {
               />
             </div>
 
-            <h2 className="body-text">Referral Serial #</h2>
+            <h2 className="body-text">Referral Serial # <span style={{ fontSize: '12px', fontWeight: '400', color: '#ffffff' }}>(Optional - Only where Applicable)</span></h2>
             <div className="grid1">
               <Field
                 id="referral"
