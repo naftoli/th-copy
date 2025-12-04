@@ -301,15 +301,10 @@
             // when to shutdown this page
             var now = Math.floor( new Date().getTime() / 1000);
             console.log( now );
-            // if ( now >= 1734411600 ) {
-            //     soldOut = true;
-            //     $("#sold-out").show();
-            //     $("#purchases").hide();
-            // }
 
-            // soldOut = true;
-            // $("#sold-out").show();
-            // $("#purchases").hide();
+            soldOut = true;
+            $("#sold-out").show();
+            $("#purchases").hide();
             $.post('ajax/purchases.php', { item : 2 }, function( sold ) {
                 var menorahStart = 1000;
                 var menorahSold = parseInt( sold );
