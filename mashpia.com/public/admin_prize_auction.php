@@ -29,13 +29,14 @@ if (!empty($action)) {
 			$in_stock = gri('in_stock', 0);
 			$school_type_ids = gra('school_type_ids', array());
 
-			if ($admin_user['auth']=='super') {
-				$message = T_('Unable to add new prize, this number is already used.');
-				$result = mq("SELECT -1 prize_id, $school_id school_id, " . ms($prize_name) . ' prize_name, ' . nullif_ms(gr('min_grade'), '') . ' min_grade, ' . nullif_ms(gr('max_grade'), '') . ' max_grade, ' . ms(gr('prize_description')) . " prize_description, $prize_points prize_points, $prize_ratio prize_ratio, NULL prize_image_id");
-				$edit_row = mysql_fetch_assoc($result);
-				$action = 'add';
-			} 
-			elseif(mysql_num_rows(mq('SELECT 1 FROM prizes_auction WHERE prize_name = ' . ms($prize_name) . " AND school_id <=> $school_id"))) {
+			// if ($admin_user['auth']=='super') {
+			// 	$message = T_('Unable to add new prize, this number is already used.');
+			// 	$result = mq("SELECT -1 prize_id, $school_id school_id, " . ms($prize_name) . ' prize_name, ' . nullif_ms(gr('min_grade'), '') . ' min_grade, ' . nullif_ms(gr('max_grade'), '') . ' max_grade, ' . ms(gr('prize_description')) . " prize_description, $prize_points prize_points, $prize_ratio prize_ratio, NULL prize_image_id");
+			// 	$edit_row = mysql_fetch_assoc($result);
+			// 	$action = 'add';
+			// } 
+			// else
+			if(mysql_num_rows(mq('SELECT 1 FROM prizes_auction WHERE prize_name = ' . ms($prize_name) . " AND school_id <=> $school_id"))) {
 				$message = T_('Unable to add new prize, this name is already used.');
 				$result = mq("SELECT -1 prize_id, $school_id school_id, " . ms($prize_name) . ' prize_name, ' . nullif_ms(gr('min_grade'), '') . ' min_grade, ' . nullif_ms(gr('max_grade'), '') . ' max_grade, ' . ms(gr('prize_description')) . " prize_description, $prize_points prize_points, $prize_ratio prize_ratio, NULL prize_image_id");
 				$edit_row = mysql_fetch_assoc($result);
