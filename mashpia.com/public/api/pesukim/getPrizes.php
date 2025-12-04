@@ -15,7 +15,7 @@ $prizes = [];
 foreach ($info as $category => $prizesArr) {
     $prizes['categories'][$i] = [
         'name' => strtoupper($category),
-        'gridClass' => 'col-' . count($prizes)
+        'gridClass' => 'col-' . count($prizesArr)
     ];
     $catPrizes = [];
     foreach ($prizesArr as $prize) {
