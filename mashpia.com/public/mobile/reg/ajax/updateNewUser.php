@@ -10,12 +10,9 @@ $admin_id = mysql_real_escape_string( $_COOKIE['admin'] );
 $admin_id = encrypt_decrypt('decrypt', $admin_id);
 
 $first = mysql_real_escape_string( $_POST['fname'] );
-$last = mysql_real_escape_string( $_POST['last'] );
 $mothers_name = mysql_real_escape_string( $_POST['mothers_name'] );
 $country = mysql_real_escape_string( $_POST['country'] );
 $zip = mysql_real_escape_string( $_POST['zip'] );
-$dobArr = explode('/', mysql_real_escape_string( $_POST['dob'] ) );
-$dob = $dobArr[2] . '-' . $dobArr[0] . '-' . $dobArr[1];
 $gender = mysql_real_escape_string( $_POST['gender'] );
 $photo = mysql_real_escape_string( $_POST['photo'] );
 $lang = mysql_real_escape_string( $_POST['lang'] );
@@ -41,9 +38,7 @@ if (!mysql_query($sql)) {
 	// update user
 	$sql = "UPDATE users SET 
 			first = '$first', 
-			last = '$last', 
 			mothers_name = '$mothers_name', 
-			dob = '$dob', 
 			lang_id = $lang, 
 			gender = '$gender',   
 			school_type_id = " . $school_type_id;
