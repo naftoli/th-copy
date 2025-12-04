@@ -1,10 +1,15 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getCurrentYear();
 
-$sql = "SELECT * FROM prizes_auction ORDER BY category, prize_name";
+$sql = "SELECT * FROM auction_prizes ap 
+        JOIN prizes_auction pa USING (prize_id) 
+        WHERE ap.auction_id = (select auction_id from auctions where year = $year order by auction_id desc limit 1)
+        ORDER BY ap.category, pa.prize_name";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
-    $info[$row['category']][] = $row;
+    $info[$row['ap_category']][] = $row;
 }
 
 $i = 0;
