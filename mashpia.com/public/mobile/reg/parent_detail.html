@@ -429,7 +429,11 @@
                                 {{/if}}
                                 {{/if}}
                                 <div class="childrens-content-h1"><b>{{rank}}</b> {{first}} {{last}}</div>
-                                <div class="childrens-content-h2">{{school}} - {{city}}</div>
+                                <div class="childrens-content-h2">{{school}}
+                                  {{#if city}}
+                                    - {{city}}
+                                  {{/if}}
+                                </div>
                                 {{#if this.needsReg}}
                                 {{#if this.allowRemove}}
                                 {{else}}
