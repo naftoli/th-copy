@@ -30,5 +30,6 @@ foreach ($info as $category => $prizesArr) {
     }
     $prizes['categories'][$i++]['prizes'] = $catPrizes;
 }
+ksort($prizes['categories']);
 echo json_encode($prizes);
 ?>
