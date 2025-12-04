@@ -39,7 +39,7 @@ export const PrizeCard = ({ title, img, img2, alt, width, height, description })
           <h4 className="prize-title">{title}</h4>
           <div className="prize-figure-container">
             <div className="prize-figure">
-              <img src={'https://mashpia.com/file_view.php?id=' + img} alt={alt || title} width={width} height={height} />
+              <img src={img ? 'https://mashpia.com/file_view.php?id=' + img : ''} alt={alt || title} width={width} height={height} />
               {img2 && (
                 <img src={img2} alt={alt || title} width={width} height={height} />
               )}
