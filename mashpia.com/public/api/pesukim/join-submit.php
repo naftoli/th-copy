@@ -30,7 +30,7 @@ function sendEmailConfirmation($email, $name, $password) {
   $msg .= 'Best regards,<br /><br />';
   $msg .= 'The Tzivos Hashem Team';
   $msg .= '<br /><br />';
-  $msg .= 'To unsubscribe from these emails, please click <a href="https://tzivoshashem.com/mobile">here</a>.<br /><br />';
+  $msg .= 'To unsubscribe from these emails, please click <a href="https://tzivoshashem.com/unsubscribe.php">here</a>.<br /><br />';
   $msg .= 'Copyright © 2025 Tzivos Hashem. All rights reserved.';
   $msg .= '<br /><br />';
 
