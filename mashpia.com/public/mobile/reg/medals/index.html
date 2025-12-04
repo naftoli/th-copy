@@ -557,12 +557,14 @@
 			// check if we need to have the child complete their profile
 			$.post('/mobile/reg/ajax/getUser.php', { user: id }, function( success ) {
 				let user = $.parseJSON( success );
-				if (user.school_type_id == 8 || user.school_type_id == 9 || !user.school_type_id) {
-					let needed = ['admin_country', 'admin_postal', 'first', 'last', 'mothers_name', 'dob', 'lang_id', 'gender', 'school_type_id'];
-					let missing = needed.filter(item => user[item] == '' || !user[item]);
-					if (missing.length > 0) {
-						alert('Please complete your account setup to continue.');
-						window.location.href = '/mobile/reg/update_child.html?id=' + id + '&missing=' + missing.join(',');
+				if (user != 0) {
+					if (user.school_type_id == 8 || user.school_type_id == 9 || !user.school_type_id) {
+						let needed = ['admin_country', 'admin_postal', 'first', 'last', 'mothers_name', 'dob', 'lang_id', 'gender', 'school_type_id'];
+						let missing = needed.filter(item => user[item] == '' || !user[item]);
+						if (missing.length > 0) {
+							alert('Please complete your account setup to continue.');
+							window.location.href = '/mobile/reg/update_child.html?id=' + id + '&missing=' + missing.join(',');
+						}
 					}
 				}
 			});
