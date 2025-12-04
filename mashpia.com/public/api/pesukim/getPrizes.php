@@ -1,11 +1,9 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getCurrentYear();
 
 $sql = "SELECT * FROM auction_prizes ap 
         JOIN prizes_auction pa USING (prize_id) 
-        WHERE ap.auction_id = (select auction_id from auctions where year = $year order by auction_id desc limit 1)
+        WHERE ap.auction_id = (select auction_id from auctions order by auction_id desc limit 1)
         ORDER BY ap.category, pa.prize_name";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
