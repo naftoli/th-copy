@@ -551,24 +551,10 @@
         <!-- misc javascript functions that are not in all.js -->
         <script src="/mobile/js/authenticate.js" defer></script>
         <script src="/mobile/reg/js/medal-board.js" defer></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<!-- <script src="/mobile/reg/js/index.js"></script> -->
 		<script>
         document.addEventListener("DOMContentLoaded", function(event) {
-			// check if we need to have the child complete their profile
-			$.post('/mobile/reg/ajax/getUser.php', { user: id }, function( success ) {
-				let user = $.parseJSON( success );
-				if (user != 0) {
-					if (user.school_type_id == 8 || user.school_type_id == 9 || !user.school_type_id) {
-						let needed = ['admin_country', 'admin_postal', 'first', 'last', 'mothers_name', 'dob', 'lang_id', 'gender', 'school_type_id'];
-						let missing = needed.filter(item => user[item] == '' || !user[item]);
-						if (missing.length > 0) {
-							alert('Please complete your account setup to continue.');
-							window.location.href = '/mobile/reg/update_child.html?id=' + id + '&missing=' + missing.join(',');
-						}
-					}
-				}
-			});
-
             var carousel = "";
 			var loop = 0;
 
@@ -601,6 +587,24 @@
             var id = url.substring( url.indexOf( '=' ) + 1 );
             // authenticate the user with authenticate.js
             authenticate( id );
+
+			// check if we need to have the child complete their profile
+			$.post('/mobile/reg/ajax/getUser.php', { user: id }, function( success ) {
+				let user = $.parseJSON( success );
+				console.log(user);
+				if (user != 0) {
+					user.school_type_id = parseInt(user.school_type_id);
+					if (user.school_type_id == 8 || user.school_type_id == 9 || !user.school_type_id) {
+						let needed = ['admin_country', 'admin_postal', 'last', 'mothers_name', 'lang_id', 'gender', 'school_type_id'];
+						let missing = needed.filter(item => user[item] == '' || !user[item]);
+						if (missing.length > 0) {
+							alert('Please complete your account setup to continue.');
+							window.location.href = '/mobile/reg/update_child.html?id=' + id + '&missing=' + missing.join(',');
+						}
+					}
+				}
+			});
+
             // update the UI for children over parents
             if( localStorage.getItem( "login" ) == "user" ){
                 $("#mainLink").attr('href', "/mobile/news");
