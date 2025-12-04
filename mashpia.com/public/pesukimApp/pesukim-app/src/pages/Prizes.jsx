@@ -96,7 +96,7 @@ export default function Prizes() {
     let on = true;
     (async () => {
       try {
-        const res = await fetch("/api/pesukim/prizes.json", { cache: "no-store" });
+        const res = await fetch("/api/pesukim/getPrizes.php", { cache: "no-store" });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
         if (on) setData(json);

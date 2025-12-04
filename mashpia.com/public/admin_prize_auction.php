@@ -16,7 +16,7 @@ if (!empty($action)) {
 	switch($action) {
 	
 		case 'add':
-			$result = mq("SELECT -1 prize_id, NULL school_id, '' prize_name, '' prize_description, 1 prize_points, 1 prize_ratio, NULL prize_image_id, NULL min_grade, NULL max_grade, NULL in_stock");
+			$result = mq("SELECT -1 prize_id, NULL school_id, '' prize_name, '' prize_description, 1 prize_points, 1 prize_ratio, NULL prize_image_id, NULL min_grade, NULL max_grade, NULL in_stock, '' category");
 			$edit_row = mysql_fetch_assoc($result);
 			$school_type_ids = array();
 		break;
@@ -28,7 +28,7 @@ if (!empty($action)) {
 			$prize_ratio = max(1, min(gri('prize_ratio', 1), 65535));
 			$in_stock = gri('in_stock', 0);
 			$school_type_ids = gra('school_type_ids', array());
-
+			$category = gr('category');
 			// if ($admin_user['auth']=='super') {
 			// 	$message = T_('Unable to add new prize, this number is already used.');
 			// 	$result = mq("SELECT -1 prize_id, $school_id school_id, " . ms($prize_name) . ' prize_name, ' . nullif_ms(gr('min_grade'), '') . ' min_grade, ' . nullif_ms(gr('max_grade'), '') . ' max_grade, ' . ms(gr('prize_description')) . " prize_description, $prize_points prize_points, $prize_ratio prize_ratio, NULL prize_image_id");
@@ -48,7 +48,7 @@ if (!empty($action)) {
 				if (isset($_FILES['image'])) 
 					$prize_image_id = addFile($_FILES['image'], $prize_image_id);
 					
-				mq('INSERT INTO prizes_auction SET in_stock=' . $in_stock . ', prize_name = ' . ms($prize_name) . ', prize_description = ' . ms(gr('prize_description')) . ', min_grade = ' . nullif_ms(gr('min_grade'), '') . ', max_grade = ' . nullif_ms(gr('max_grade'), '') . ", school_id = $school_id, prize_points = $prize_points, prize_ratio = $prize_ratio, prize_image_id = $prize_image_id");
+				mq('INSERT INTO prizes_auction SET in_stock=' . $in_stock . ', prize_name = ' . ms($prize_name) . ', prize_description = ' . ms(gr('prize_description')) . ', min_grade = ' . nullif_ms(gr('min_grade'), '') . ', max_grade = ' . nullif_ms(gr('max_grade'), '') . ", school_id = $school_id, prize_points = $prize_points, prize_ratio = $prize_ratio, prize_image_id = $prize_image_id, category = " . ms($category));
 				// get id and create shipping id
 				$new_prize_id = mysql_insert_id();
 				$shipping_code = "TH" . $new_prize_id;
@@ -70,7 +70,7 @@ if (!empty($action)) {
 		break;
 		
 		case 'edit':
-			$result = mq('SELECT prize_id, school_id, prize_name, prize_description, prize_points, prize_ratio, prize_image_id, min_grade, max_grade, in_stock FROM prizes_auction WHERE prize_id = ' . gri('prize_id', -1) . ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : ''));
+			$result = mq('SELECT prize_id, school_id, prize_name, prize_description, prize_points, prize_ratio, prize_image_id, min_grade, max_grade, in_stock, category FROM prizes_auction WHERE prize_id = ' . gri('prize_id', -1) . ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : ''));
 			$edit_row = mysql_fetch_assoc($result);
 			$prize_id = gri('prize_id', -1);
 			$result = mq("SELECT school_type_id FROM prizes_auction_types WHERE prize_id = $prize_id");
@@ -87,6 +87,7 @@ if (!empty($action)) {
 				$prize_points = max(1, min(gri('prize_points', 1), 4294967295));
 				$prize_ratio = max(1, min(gri('prize_ratio', 1), 65535));
 				$in_stock = gri('in_stock', 0);
+				$category = gr('category');
 
 				if(mysql_num_rows(mq('SELECT 1 FROM prizes_auction WHERE prize_name = ' . ms($prize_name) . " AND school_id <=> $school_id AND prize_id != $prize_id"))) {
 					$message = T_('Unable to edit prize, this name is already used.');
@@ -108,7 +109,7 @@ if (!empty($action)) {
 					if ($prize_image_id !== 'prize_image_id') 
 						mq('DELETE FROM files USING files JOIN prizes_auction ON (files.file_id = prizes_auction.prize_image_id) WHERE prize_id = ' . gri('prize_id', -1) . ($admin_user['auth'] != 'super' ? ' AND school_id IN (' . implode(',', $admin_user['auths']['school']) . ')' : ''));
 						
-					mq('UPDATE prizes_auction SET prize_name = ' . ms($prize_name) . ', prize_description = ' . ms(gr('prize_description')) . ', min_grade = ' . nullif_ms(gr('min_grade'), '') . ', max_grade = ' . nullif_ms(gr('max_grade'), '') . ", school_id = $school_id, prize_points = $prize_points, prize_ratio = $prize_ratio, prize_image_id = $prize_image_id, in_stock=$in_stock WHERE prize_id = $prize_id");
+					mq('UPDATE prizes_auction SET prize_name = ' . ms($prize_name) . ', prize_description = ' . ms(gr('prize_description')) . ', min_grade = ' . nullif_ms(gr('min_grade'), '') . ', max_grade = ' . nullif_ms(gr('max_grade'), '') . ", school_id = $school_id, prize_points = $prize_points, prize_ratio = $prize_ratio, prize_image_id = $prize_image_id, in_stock=$in_stock, category = " . ms($category) . " WHERE prize_id = $prize_id");
 					$message = T_('Prize edited');
 				}
 			}
@@ -155,6 +156,14 @@ if (!empty($action)) {
 						<?=T_('Name')?>
 						<BR>
 						<INPUT type="text" name="prize_name" maxlength=255 value="<?=es($edit_row['prize_name'])?>">
+					</LABEL>
+					
+					<BR>
+
+					<LABEL>
+						<?=T_('Category')?> <span style="font-size: 12px; color: #666;">(e.g. SEFORIM, TRAVEL, ELECTRONICS, etc.)</span>
+						<BR>
+						<INPUT type="text" name="category" maxlength=255 value="<?=es($edit_row['category'])?>">
 					</LABEL>
 					
 					<BR>
