@@ -17,16 +17,17 @@ foreach ($info as $category => $prizes) {
         'name' => strtoupper($category),
         'gridClass' => 'col-' . count($prizes)
     ];
+    $catPrizes = [];
     foreach ($prizes as $prize) {
-        $prizes['categories'][$i]['prizes'][] = [
+        $catPrizes[] = [
             'title' => $prize['prize_name'],
             'img' => $prize['prize_image_id'],
             'alt' => $prize['prize_name'],
             'description' => $prize['prize_description'],
-            'width' => '100px',
+            'width' => '100px'
         ];
     }
-    $i++;
+    $prizes['categories'][$i++]['prizes'] = $catPrizes;
 }
 echo json_encode($prizes);
 ?>
