@@ -12,13 +12,13 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $i = 0;
 $prizes = [];
-foreach ($info as $category => $prizes) {
+foreach ($info as $category => $prizesArr) {
     $prizes['categories'][$i] = [
         'name' => strtoupper($category),
         'gridClass' => 'col-' . count($prizes)
     ];
     $catPrizes = [];
-    foreach ($prizes as $prize) {
+    foreach ($prizesArr as $prize) {
         $catPrizes[] = [
             'title' => $prize['prize_name'],
             'img' => $prize['prize_image_id'],
