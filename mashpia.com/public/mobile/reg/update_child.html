@@ -1710,12 +1710,6 @@
 					increaseArea: '20%' // optional
 				});
 
-				$('#dob').datetimepicker();
-				$('#dob').data("DateTimePicker").format('MM/DD/YYYY');
-				$('#dob').data("DateTimePicker").options({
-					showClose: true
-				});
-
 				if (id > 0) {
 					$.post('ajax/getUser.php', {
 						user: id
