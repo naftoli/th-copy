@@ -14,7 +14,7 @@ $i = 0;
 $prizes = [];
 foreach ($info as $category => $prizes) {
     $prizes['categories'][$i] = [
-        'name' => $category,
+        'name' => strtoupper($category),
         'gridClass' => 'col-' . count($prizes)
     ];
     foreach ($prizes as $prize) {
