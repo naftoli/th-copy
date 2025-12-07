@@ -162,16 +162,5 @@ foreach ( $missions as $mission ) {
     <script src="/scripts/js.cookie.js"></script>
 
     <?php // ! *************************** Debug *************************** ?>
-    <pre>
-    <?php
-        // print_r([
-        //     'post' => $_POST,
-        //     'vars' => [
-        //         'soldier' => $soldier,
-        //         'parsha' => $parsha,
-        //     ]
-        // ]);
-    ?>
-    </pre>
 </body>
 </html>
