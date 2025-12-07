@@ -66,11 +66,16 @@ export class Task extends Component {
     } else
       earned = marked = !!date_task_mark.marked;
 
+    let img_url = `${LEGACY_URL}/images/stickers/campaigns/${ subject_id }.gif`;
+    if ( subject_id === 136 ) {
+      img_url = `${LEGACY_URL}/images/stickers/campaigns/pesukim.jpeg`;
+    }
+
     return (
       <Row className='Task'>
         <Col lg={ daily ? 6 : 10 } md={ daily ? 6 : 9 } xs={ daily ? 12 : 9 }>
           <div className='cell info'>
-            <img src={ `${LEGACY_URL}/images/stickers/campaigns/${ subject_id }.gif`} 
+            <img src={ img_url } 
               className={ earned ? 'earned animated tada' : 'unearned' } alt='sticker' />
             <div>
               <p className='short-name'>
@@ -95,9 +100,17 @@ export class Task extends Component {
             </div>
             { date_task_marks.map( ({ marked, mark_date }, index) => 
               <div className="cell" key={ index }>
-                <Checkbox 
-                  checked={ marked }
-                  onChange={ this.onChange( mark_date ) } />
+                { !!quantity ? (
+                  <Input 
+                    type='number'
+                    placeholder={ quantity }
+                    value={ date_task_mark.done_qty || '' }
+                    onChange={ this.onInputChange( mark_date ) } />
+                ) : (
+                  <Checkbox 
+                    checked={ marked }
+                    onChange={ this.onChange( mark_date ) } />
+                )}
               </div>
             )}
             { date_task_marks.length < 7 && 
