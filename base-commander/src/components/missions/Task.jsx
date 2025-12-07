@@ -104,7 +104,7 @@ export class Task extends Component {
                   <Input 
                     type='number'
                     placeholder={ quantity }
-                    value={ date_task_mark.done_qty || '' }
+                    value={ date_task_mark && date_task_mark.done_qty ? date_task_mark.done_qty : '' }
                     onChange={ this.onInputChange( mark_date ) } />
                 ) : (
                   <Checkbox 
