@@ -58,32 +58,33 @@ abstract class MissionDisplay {
 		$this->days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
 
 		$this->campaignLogos = array(
-        1	=>	'Tehillim.svg',
-        4	=>	'Tefilla.svg',
-        12	=>	'Mivtzoim.svg',
-        13	=>	'Niggunim.svg',
-        16	=>	'hiskashrus.svg',
-        21	=>	'sefer-hamitzvos.svg',
-        27	=>	'tanya.svg',
-        40	=>	'Yom-Dipagra.svg',
-        41	=>	'Father-son.svg',
-        42	=>	'Footsteps.svg',
-        45	=>	'Cheshbon-Hanefesh.svg',
-        90	=>	'Chitas.svg',
-        100	=>	'Brias-Haguf.svg',
-        121 =>  "day-school-Jewish Day 250 px.svg",
-        122 =>  "day-school-Jewish Uniform 250px.svg",
-        124 =>  "day-school-Health 250px.svg",
-        125 =>  "day-school_Torah 250px.svg",
-        126 =>  "day-school_Shabbat 250px.svg",
-        127 =>  "day-school_Special Days 250px.svg",
-        129 =>  "day-school_Kosher 250px.svg",
-        130 =>  "day-school_Tefilla.svg",
-		    131 =>  "day-school-ahavat-yisrael.svg",
-		    132 =>  "day-school-brachot.svg",
-		    133 =>  "day-school-Tzedaka.svg",
-		    134 =>  "day-school-honoring parents 250px.svg",
-		    135 =>  "day-school-Middot-icon.svg"
+			1	=>	'Tehillim.svg',
+			4	=>	'Tefilla.svg',
+			12	=>	'Mivtzoim.svg',
+			13	=>	'Niggunim.svg',
+			16	=>	'hiskashrus.svg',
+			21	=>	'sefer-hamitzvos.svg',
+			27	=>	'tanya.svg',
+			40	=>	'Yom-Dipagra.svg',
+			41	=>	'Father-son.svg',
+			42	=>	'Footsteps.svg',
+			45	=>	'Cheshbon-Hanefesh.svg',
+			90	=>	'Chitas.svg',
+			100	=>	'Brias-Haguf.svg',
+			121 =>  "day-school-Jewish Day 250 px.svg",
+			122 =>  "day-school-Jewish Uniform 250px.svg",
+			124 =>  "day-school-Health 250px.svg",
+			125 =>  "day-school_Torah 250px.svg",
+			126 =>  "day-school_Shabbat 250px.svg",
+			127 =>  "day-school_Special Days 250px.svg",
+			129 =>  "day-school_Kosher 250px.svg",
+			130 =>  "day-school_Tefilla.svg",
+			131 =>  "day-school-ahavat-yisrael.svg",
+			132 =>  "day-school-brachot.svg",
+			133 =>  "day-school-Tzedaka.svg",
+			134 =>  "day-school-honoring parents 250px.svg",
+			135 =>  "day-school-Middot-icon.svg", 
+			136 =>  "pesukim.jpeg"
 		);
 
 		$this->stickerOutlines = array(
@@ -1578,7 +1579,7 @@ abstract class MissionDisplay {
 		$numLabels = count($user->daily_labels) + count($user->weekly_labels) + count($user->shabbos_labels) + count($user->no_label_subjects);
 		$tracks = $user->user_tracks;
 		$numTasks = 0;
-		$types = array('daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks');
+		$types = array('daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks', 'pesukim_tasks');
 		foreach ($tracks as $track) {
 			foreach ($types as $type) {
 				$numTasks += count($track->$type);
@@ -1762,12 +1763,25 @@ abstract class MissionDisplay {
 																$marked = false;
 																if ($mark->marked) {
 																	$marked = true;
+																	$class = "marked";
+																} else {
+																	$class = "unmarked";
+																}
+																$input = false;
+																if (!is_null($daily_task->quantity)) {
+																	$input = true;
+																	$class .= " textInput";
 																}
 																?>
-																<div class="checkboxDaily <?=$marked ? 'marked' : 'unmarked'?>" id="<?=$identifier?>">
-																	<? 
-																	if ($marked) 
-																		echo "<span class='checkmark'>&#10004;</span>";
+																<div class="checkboxdaily <?=$class?>" id="<?=$identifier?>">
+																	<?
+																	if ($input) {
+																		echo "<input value='" . $mark->done_qty . "' type='text' " . 
+																			"onkeypress='return number_validation(event);' size='1' maxlength='6' />";
+																	} else {
+																		if ($marked) 
+																			echo "<span class='checkmark'>&#10004;</span>";
+																	}
 																	?>
 																</div>
 															<? else : ?>
@@ -1780,13 +1794,15 @@ abstract class MissionDisplay {
 												</tr>
 											</table>
 
-											<? if ($this->lang_id == 2) : ?>
-												<div style="float: right; margin-top: 6px; display: inline-block;">
-											<? else : ?>
-												<div style="float: left; margin-top: 6px; display: inline-block;">
-											<? endif; ?>
-												<input type="checkbox" class="dailyRow" />
-											</div>
+											<?php if (!$input) : ?>
+												<? if ($this->lang_id == 2) : ?>
+													<div style="float: right; margin-top: 6px; display: inline-block;">
+												<? else : ?>
+													<div style="float: left; margin-top: 6px; display: inline-block;">
+												<? endif; ?>
+													<input type="checkbox" class="dailyRow" />
+												</div>
+											<?php endif; ?>
 										 </div>
 										 
 										 <div style="clear: both"></div>
