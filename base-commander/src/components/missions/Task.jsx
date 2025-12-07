@@ -102,7 +102,7 @@ export class Task extends Component {
             )}
             { date_task_marks.map( ({ marked, mark_date, done_qty }, index) => 
               <div className="cell" key={ index }>
-                { !!quantity ? (
+                { quantity && quantity > 0 ? (
                   <Input 
                     type='number'
                     placeholder={ quantity }

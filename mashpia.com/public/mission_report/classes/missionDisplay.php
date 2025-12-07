@@ -1768,22 +1768,22 @@ abstract class MissionDisplay {
 																	$class = "unmarked";
 																}
 																$input = false;
-																if (!is_null($daily_task->quantity)) {
+																if ($daily_task->quantity && $daily_task->quantity > 1) {
 																	$input = true;
 																	$class .= " textInput";
 																}
-																?>
-																<div class="checkboxdaily <?=$class?>" id="<?=$identifier?>">
-																	<?
-																	if ($input) {
-																		echo "<input value='" . $mark->done_qty . "' type='text' " . 
-																			"onkeypress='return number_validation(event);' size='1' maxlength='6' />";
-																	} else {
-																		if ($marked) 
-																			echo "<span class='checkmark'>&#10004;</span>";
+																if ($input) {
+																	echo '<div class="checkboxdaily "' . $class . ' id="' . $identifier . '">';
+																	echo '<input value="' . $mark->done_qty . '" type="text" onkeypress="return number_validation(event);" size="1" maxlength="6" />';
+																	echo '</div>';
+																} else {
+																	echo '<div class="checkboxDaily"' . ($marked ? ' class="marked"' : ' class="unmarked"') . ' id="<?=$identifier?>">';
+																	if ($marked) {
+																		echo '<span class="checkmark">&#10004;</span>';
 																	}
-																	?>
-																</div>
+																	echo '</div>';
+																}
+																?>
 															<? else : ?>
 																<div class="checkboxDaily">
 																	<span style='font-size: 20px; vertical-align: bottom; color: black; line-height: 1'>X</span>
