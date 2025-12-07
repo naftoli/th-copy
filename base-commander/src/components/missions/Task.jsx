@@ -93,18 +93,20 @@ export class Task extends Component {
 
         { daily &&
           <Col md={ 6 } className='days'>
-            <div className="cell all">
-              <Checkbox
-                checked={ marked }
-                onChange={ this.toggleAll } />
-            </div>
-            { date_task_marks.map( ({ marked, mark_date }, index) => 
+            { !quantity && (
+              <div className="cell all">
+                <Checkbox
+                  checked={ marked }
+                  onChange={ this.toggleAll } />
+              </div>
+            )}
+            { date_task_marks.map( ({ marked, mark_date, done_qty }, index) => 
               <div className="cell" key={ index }>
                 { !!quantity ? (
                   <Input 
                     type='number'
                     placeholder={ quantity }
-                    value={ date_task_mark.done_qty || '' }
+                    value={ done_qty || '' }
                     onChange={ this.onInputChange( mark_date ) } />
                 ) : (
                   <Checkbox 
