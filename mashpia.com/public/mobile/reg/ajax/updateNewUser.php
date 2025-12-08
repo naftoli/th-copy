@@ -46,7 +46,7 @@ if (!mysql_query($sql)) {
 		$sql .= ", mobile_pic = '" . $photo . "'";
 	}
 	$sql .= " WHERE user_id = " . $user_id;
-	echo $sql; exit;
+	// echo $sql; exit;
 	if (!mysql_query($sql)) {
 		$success = false;
 	}
