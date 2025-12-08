@@ -474,7 +474,6 @@ class user {
 					continue;
 				}
 			} 
-			else if ($row['subject_id'] == 136 && $printing_mode) continue;
 			if ($row["level"] > 0 && $row["track_id"] > 0) {
 				$user_track = new user_track($row);
 				$user_track->get_subject_info();
@@ -529,7 +528,7 @@ class user {
 			for ($nltno = 0; $nltno < count($user_track->no_label_tasks); $nltno++) {
 				array_push($this->no_label_tasks, $user_track->no_label_tasks[$nltno]);
 			}
-			if ($user_track->subject_id == 136) {
+			if ($user_track->subject_id == 136 && !$printing_mode) {
 				for ($ptno = 0; $ptno < count($user_track->pesukim_tasks); $ptno++) {
 					array_push($this->pesukim_tasks, $user_track->pesukim_tasks[$ptno]);
 				}
