@@ -439,9 +439,6 @@ abstract class MissionDisplay {
                                             </div>
 											<div class="<?=$taskClass?>">
 												<?=$daily_task->task_name?>
-												<?php if ($daily_task->subject_id == 136 && $this->lang_id == 1) : ?>
-													<br /><i>(Please enter the amount said each day)</i>
-												<?php endif; ?>
 											</div>
 									    </div>
 									    
