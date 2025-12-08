@@ -437,7 +437,12 @@ abstract class MissionDisplay {
                                                 <?php if ($daily_task->mandatory_qty) echo "<span class='mandStar'>*</span>"; ?>
                                                 <?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?>
                                             </div>
-											<div class="<?=$taskClass?>"><?=$daily_task->task_name?></div>
+											<div class="<?=$taskClass?>">
+												<?=$daily_task->task_name?>
+												<?php if ($daily_task->subject_id == 136 && $this->lang_id == 1) : ?>
+													<br /><i>(Please enter the amount said each day)</i>
+												<?php endif; ?>
+											</div>
 									    </div>
 									    
 									    <?
@@ -1717,7 +1722,9 @@ abstract class MissionDisplay {
 												</div>
 											<? } ?>
 											<div class="short"><?=($daily_task->short_name == '' ? '<br />' : $daily_task->short_name)?></div>
-											<div class="<?=$taskClass?>"><?=$daily_task->task_name?></div>
+											<div class="<?=$taskClass?>">
+												<?=$daily_task->task_name?>
+											</div>
 									    </div>
 									    
 									    <?
