@@ -104,9 +104,10 @@ export class Task extends Component {
               <div className="cell" key={ index }>
                 { quantity && quantity > 0 ? (
                   <Input 
-                    type='number'
+                    type='text'
+                    max={ quantity }
                     placeholder={ quantity }
-                    value={ done_qty || '' }
+                    defaultValue={ done_qty || '' }
                     onChange={ this.onInputChange( mark_date ) } />
                 ) : (
                   <Checkbox 
