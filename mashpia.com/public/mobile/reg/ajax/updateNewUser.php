@@ -9,17 +9,17 @@ require 'encrypt.php';
 $admin_id = mysql_real_escape_string( $_COOKIE['admin'] );
 $admin_id = encrypt_decrypt('decrypt', $admin_id);
 
-$first = mysql_real_escape_string( $_POST['fname'] );
-$mothers_name = mysql_real_escape_string( $_POST['mothers_name'] );
+$first = ucwords(mysql_real_escape_string( $_POST['fname'] ));
+$mothers_name = ucwords(mysql_real_escape_string( $_POST['mothers_name'] ));
 $country = mysql_real_escape_string( $_POST['country'] );
 $zip = mysql_real_escape_string( $_POST['zip'] );
-$gender = mysql_real_escape_string( $_POST['gender'] );
+$gender = strtoupper(mysql_real_escape_string( $_POST['gender'] ));
 $photo = mysql_real_escape_string( $_POST['photo'] );
 $lang = mysql_real_escape_string( $_POST['lang'] );
 $school_type_id = mysql_real_escape_string( intval($_POST['type']) );
 
 // make sure we have correct school type id
-if ( strtolower($gender) == 'f' ) {
+if ( $gender == 'F' ) {
 	$school_type_id++;
 }
 
@@ -42,10 +42,11 @@ if (!mysql_query($sql)) {
 			lang_id = $lang, 
 			gender = '$gender',   
 			school_type_id = " . $school_type_id;
-	if ($photo && strpos($photo, "img/") !== false) {
+	if ($photo && strpos($photo, "img/") !== false && $photo != 'images/addphoto.png') {
 		$sql .= ", mobile_pic = '" . $photo . "'";
 	}
 	$sql .= " WHERE user_id = " . $user_id;
+	// echo $sql; exit;
 	if (!mysql_query($sql)) {
 		$success = false;
 	}
