@@ -928,6 +928,10 @@
 
 		Quagga.init(quaggaConf, function (err) {
 			if (err) {
+				// show the manual scanner
+				$("#manual-scanner").show();
+				$("#barcode_scanner").hide();
+				$("#toggle-manual").hide();
 				return console.log(err);
 			}
 			$("#manual-scanner").hide();
