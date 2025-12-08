@@ -55,6 +55,7 @@ class MarkRouter {
             $query_array = [ 'grid_id' => $grid_id, 'mark_date' => $mark_date ];
             // get the date_task_id for each soldier
             $date_task_ids = [];    $date_task_query->execute( $query_array );
+            // $date_task_query->debugDumpParams();
             while( $row = $date_task_query->fetch() )
                 $date_task_ids[ $row['user_id'] ] = $row;
             
@@ -145,7 +146,7 @@ class MarkRouter {
         );
         // validate the data type of done_qty
         $done_qty = $mark;
-        if ( $user_task['daily_task'] )
+        if ( $user_task['daily_task'] && $user_task['subject_id'] != 136 )
             $done_qty = $done_qty ? '1' : '0';
 
         // delete any existing marks
