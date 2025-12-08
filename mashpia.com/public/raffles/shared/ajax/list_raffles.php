@@ -5,7 +5,8 @@ ini_set("display_errors", 1);
 $admin_auth = array('school'); 
 require_once $_SERVER["DOCUMENT_ROOT"].'/header.php';
 require_once $_SERVER["DOCUMENT_ROOT"].'/class.globalSettings.php';
-$dates = GlobalSettings::getCurYearDates();
+// $dates = GlobalSettings::getCurYearDates();
+$year = GlobalSettings::getCurrentYear();
 
 /***************** IMPORTS **********************/
 require_once(dirname(__FILE__).'/../classes/Raffle.php');
@@ -21,8 +22,9 @@ $ran_only = isset( $_POST['ran_only'] ) && $_POST['ran_only'] == "true";
 $all = isset( $_POST['all'] ) && $_POST['all'] == "true" ? true : false;
 
 $filter = []; // sorting
-$filter[] = "start_date >= " . $dates['start'];
-$filter[] = "end_date <= " . $dates['end'];
+// $filter[] = "start_date >= " . $dates['start'];
+// $filter[] = "end_date <= " . $dates['end'];
+$filter[] = "year = " . $year;
 // load all the raffles
 if ( $type !== "" )
     $filter[] = "type='$type'"; // add the where clause before the order_by\
@@ -34,7 +36,7 @@ if ( $admin_user['auth'] !== 'super' && $ran_only ) $filter[] = "show_for_bc = 1
 else $filter[] = "show_for_hq = 1";
 
 if ( count( $filter ) > 0 ) {
-    $filter = 'WHERE '.implode( ' AND ', $filter ).' ORDER BY run_date DESC, type';
+    $filter = 'WHERE '.implode( ' AND ', $filter ) . ' ORDER BY run_date DESC, type';
 } else {
     $filter = 'ORDER BY run_date DESC, type';
 }
