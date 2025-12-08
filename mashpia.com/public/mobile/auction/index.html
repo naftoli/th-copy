@@ -663,6 +663,15 @@
 			background: #d02535;
 			color: #fff;
 		}
+
+		.block-name {
+			text-align: center;
+		}
+
+		.category {
+			font-size: large !important;
+			color: red;
+		}
 	</style>
 	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
 	<noscript>
@@ -821,6 +830,8 @@
 						<option value="amount-desc">Amount (Points) ↓</option>
 						<option value="alpha-asc">Alphabetical (A-Z)</option>
 						<option value="alpha-desc">Alphabetical (Z-A)</option>
+						<option value="category-asc">Category (A-Z)</option>
+						<option value="category-desc">Category (Z-A)</option>
 					</select>
 				</div>
 				<button id="checkout-all-btn" class="checkout-now-btn" style="display: none; padding: 12px 20px; font-size: 1.1em; background: #e92d41; border-color: #e92d41;">
@@ -1004,6 +1015,14 @@
 					sortedPrizes.sort(function(a, b) {
 						return b.prize_name.localeCompare(a.prize_name) || (parseInt(a.prize_points, 10) - parseInt(b.prize_points, 10));
 					});
+				} else if (currentSort === 'category-asc') {
+					sortedPrizes.sort(function(a, b) {
+						return a.category.localeCompare(b.category);
+					});
+				} else if (currentSort === 'category-desc') {
+					sortedPrizes.sort(function(a, b) {
+						return b.category.localeCompare(a.category);
+					});
 				}
 
 				var html = '';
@@ -1018,6 +1037,7 @@
 						</figure>\
 						<div class="product-caption">\
 							<div class="block-name">\
+								<div class="category">' + (prize.category ? prize.category : '') + '</div>\
 								<a href="#" class="product-name">' + prize.prize_name + '</a>\
 								<p class="onePerUser">Only ' + prize.available + ' available.</p>\
 							</div>\

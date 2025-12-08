@@ -20,7 +20,7 @@ if (mysql_num_rows($result) > 0) {
     $school_type_id = $row['school_type_id'];
 
     $prizes = array();
-    $sql = "select p.prize_id, p.prize_name, p.prize_points, p.prize_image_id, ap.available 
+    $sql = "select p.prize_id, p.prize_name, p.prize_points, p.prize_image_id, p.category, ap.available 
             from prizes_auction p
             join auction_prizes ap using (prize_id) 
             left join prizes_auction_types pat using (prize_id) 
