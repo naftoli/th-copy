@@ -19,7 +19,7 @@ foreach ($tasks as $task) {
     $name = $task['name'];
     $pos = strrpos($name, ',');
     $name = substr($name, 0, $pos);
-    $sql = "update date_tasks set name = '" . $name . "' where date_task_id = " . $id;
+    $sql = "update date_tasks set name = \"" . $name . "\" where date_task_id = " . $id;
     // echo $sql . "<br />";
     if (!mysql_query($sql)) {
         echo mysql_error() . "<br />";
