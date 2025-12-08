@@ -475,10 +475,14 @@ abstract class MissionDisplay {
 												<tr>
 													<? foreach ($this->days_of_week as $index => $day) { ?>
 													  	<td>
-															<div class="checkboxDaily">
+															<?php if ($daily_task->subject_id == 136) : ?>
+																<div style="border: none; border-bottom: 2px solid grey; margin-right: 5px; width: 20px;">
+															<?php else : ?>
+																<div class="checkboxDaily">
+															<?php endif; ?>
 														 		<? //if ($firstRow) { ?>
 																<? if (in_array(($this->start + $index), $dates)) : ?>
-															 		<div style="color: grey; line-height: 0.85;">
+															 		<div style="color: grey; line-height: 0.85; text-align: center;">
 																		<? if ($this->lang_id == 2) : ?>
 																			<span style="font-size: 13px; font-weight: bold; vertical-align: text-bottom;"><?=$this->heDatesDisp[$index]?></span>
 																		<? else : ?>
