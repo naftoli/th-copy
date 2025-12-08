@@ -140,9 +140,9 @@ class MarkRouter {
         // add the mark to the dbs if we need to
         $mark_task_query = $MASHPIA_DB->prepare(
             ' INSERT INTO date_tasks_marks '
-           .' (date_task_id, user_id, mark_date, mark_points, done_qty) '
-           .' VALUES ( :date_task_id, :user_id, :mark_date, :mark_points, :done_qty )'
-           .' ON DUPLICATE KEY UPDATE done_qty = :done_qty;'
+           .' (date_task_id, user_id, mark_date, mark_points, done_qty, auction_only_points) '
+           .' VALUES ( :date_task_id, :user_id, :mark_date, :mark_points, :done_qty, :auction_only_points )'
+           .' ON DUPLICATE KEY UPDATE done_qty = :done_qty, mark_points = :mark_points, auction_only_points = :auction_only_points;'
         );
         // validate the data type of done_qty
         $done_qty = $mark;
@@ -158,12 +158,20 @@ class MarkRouter {
 
         // save the mark to the dbs if we have a mark to mark
         if ( $mark ) {
+            if ($user_task['subject_id'] == 136) {
+                $mark_points = $mark * $user_task['points'];
+                $auction_only_points = 1;
+            } else {
+                $mark_points = $user_task['points'];
+                $auction_only_points = 0;
+            }
             $mark_task_query->execute([
                 ':date_task_id' => $user_task['date_task_id'], 
                 ':user_id' => $user_task['user_id'], 
                 ':mark_date' => $mark_date,
-                ':mark_points' => $user_task['points'],
-                ':done_qty' => $done_qty
+                ':mark_points' => $mark_points,
+                ':done_qty' => $done_qty,
+                ':auction_only_points' => $auction_only_points
             ]);
             // $mark_task_query->debugDumpParams();
         }
