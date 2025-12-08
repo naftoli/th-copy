@@ -20,7 +20,10 @@ foreach ($tasks as $task) {
     $pos = strrpos($name, ',');
     $name = substr($name, 0, $pos);
     $sql = "update date_tasks set name = '" . $name . "' where date_task_id = " . $id;
-    mysql_query($sql);
+    // echo $sql . "<br />";
+    if (!mysql_query($sql)) {
+        echo mysql_error() . "<br />";
+    }
 }
 
 echo "Done";
