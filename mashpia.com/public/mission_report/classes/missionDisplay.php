@@ -1777,7 +1777,7 @@ abstract class MissionDisplay {
 																	echo '<input value="' . $mark->done_qty . '" type="text" onkeypress="return number_validation(event);" size="1" maxlength="6" />';
 																	echo '</div>';
 																} else {
-																	echo '<div class="checkboxDaily"' . ($marked ? ' class="marked"' : ' class="unmarked"') . ' id="<?=$identifier?>">';
+																	echo '<div class="checkboxDaily"' . ($marked ? ' class="marked"' : ' class="unmarked"') . ' id="' . $identifier . '">';
 																	if ($marked) {
 																		echo '<span class="checkmark">&#10004;</span>';
 																	}
