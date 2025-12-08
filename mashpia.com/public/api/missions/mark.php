@@ -164,6 +164,7 @@ class MarkRouter {
                 ':mark_points' => $user_task['points'],
                 ':done_qty' => $done_qty
             ]);
+            // $mark_task_query->debugDumpParams();
         }
     }
 
