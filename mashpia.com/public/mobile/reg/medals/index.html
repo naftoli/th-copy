@@ -599,7 +599,7 @@
 						let missing = needed.filter(item => user[item] == '' || !user[item]);
 						if (missing.length > 0) {
 							alert('Please complete your account setup to continue.');
-							window.location.href = '/mobile/reg/update_child.html?id=' + id + '&missing=' + missing.join(',');
+							window.location.href = '/mobile/reg/update_child.html?id=' + id;
 						}
 					}
 				}
