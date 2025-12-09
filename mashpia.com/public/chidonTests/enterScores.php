@@ -207,8 +207,8 @@ if ($admin_user['auth'] == 'super') {
             foreach ($types as $type => $value) {
                 $class = 'score';
                 if ($type == 'expert') $class = 'expert';
-                $score = isset($scores[$school][$id][$testNumber][$type]) ? $scores[$school][$id][$testNumber][$type] : 0;
-                echo "<td><input type='text' class='$type' name='scores[$id][$testNumber][$type]' value='" . $score . "' size='4' class='$class' ";
+                $score = isset($scores[$school][$id][$testNumber][$type]) ? intval($scores[$school][$id][$testNumber][$type]) : 0;
+                echo "<td><input type='text' class='$type' name='scores[$id][$testNumber][$type]' value='" . ($score > 0 ? $score : '') . "' size='4' class='$class' ";
 //                        if ($type != 'genius' && $disabled) echo "disabled ";
 //                        else if ($type == 'genius' && ($levelValue == 1 || $disableIyun)) echo "disabled "; // don't set variable to disabled b/c then the test levels will be disabled
                 if ($disabled) echo "disabled ";
