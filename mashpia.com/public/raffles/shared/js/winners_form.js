@@ -89,7 +89,6 @@ winner_renderer.prototype.render = function(show_country, show_school, raffle_na
     } else {
         this.html += '<td>' + this.winner.user_id + '</td>';
     }
-    this.html += '<td>' + this.winner.user_id + '</td>';
     this.html += '<td>' + this.winner.first_name + ' ' + this.winner.last_name + '</td>';
     this.html += '<td>' + this.winner.address.street + ' ' + this.winner.address.city + ', ' +
       this.winner.address.state + ' ' + this.winner.address.zip;
