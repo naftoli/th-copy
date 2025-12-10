@@ -63,7 +63,7 @@ class ChayoleiShipping
 
     public function getItems() {
         $items['birthdays'] = ['Birthday Envelope', 'Boys Birthday Card', 'Girls Birthday Card', 'Kapital Card Age 6', 'Kapital Card Age 7', 'Kapital Card Age 8', 'Kapital Card Age 9', 'Kapital Card Age 10', 'Kapital Card Age 11', 'Kapital Card Age 12'];
-        $items['hachayols'] = ['Hachayols'];
+        $items['hachayols'] = $this->getHachayolItems();
         $items['name plates'] = ['Name Plates'];
         $items['medals'] = ['Medals'];
         $items['ranks'] = ['Rank Medals', 'Rank Books'];
@@ -84,21 +84,38 @@ class ChayoleiShipping
         return $info;
     }
 
+    private function getHachayolItems() {
+        $items = [];
+        $sql = "select * from hachayol_items where year = :year";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['year' => $this->year]);
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $items[] = $row['item'];
+        }
+        // return $items;
+        return ['Hachayol Shipment #1', 'Hachayol Shipment #2', 'Hachayol Shipment #3', 'Hachayol Shipment #4', 'Hachayol Shipment #5', 'Hachayol Shipment #6', 'Hachayol Shipment #7', 'Hachayol Shipment #8', 'Hachayol Shipment #9', 'Hachayol Shipment #10'];
+    }
+
     public function getHachayols($gender, $school, $items) {
         $hachayols = [];
         $h = new Hachayol();
         $h->setSchools($school);
         $rows = $h->runSql($gender, $school, $this->year);
         foreach ($rows as $row) {
-            $hachayols[$row['user_id']][] = [
-                'item'  => 'Hachayol',
-                'size'  => '',
-                'name'  => '',
-                'id'    => 'HACH01',
-                'cat'   => 'hachayols',
-                'size'  => '',
-                'qty'   => 1
-            ];
+            foreach ($items as $item) {
+                // get last digit of item
+                $last_digit = intval(substr($item, -1));
+                $hachayols[$row['user_id']][] = [
+                    'item'  => 'Hachayol',
+                    'size'  => '',
+                    'name'  => '',
+                    'id'    => 'HACH0' . $last_digit,
+                    'cat'   => 'hachayols',
+                    'size'  => '',
+                    'qty'   => 1
+                ];
+            }
         }
         return $hachayols;
     }
