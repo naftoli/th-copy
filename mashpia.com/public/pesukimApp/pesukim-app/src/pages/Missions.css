@@ -24,11 +24,14 @@
 .between-icon {
   position: absolute;
   left: 50%;
-  height: clamp(28px, 4.5vw, 46px);
+  height: clamp(70px, 11.25vw, 115px); /* Increased size to avoid blur from scaling */
+  width: auto;
   pointer-events: none;
   z-index: 2;
-  transform: translate(-50%, -50%) scale(2.5);
+  transform: translate(-50%, -50%); /* Removed scale, using actual size */
   top: 30px;
+  image-rendering: -webkit-optimize-contrast; /* Better image rendering */
+  image-rendering: crisp-edges;
 }
 
 

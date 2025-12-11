@@ -67,11 +67,21 @@
   
   .campaign-card {
     gap: 12px;
+    min-height: 350px !important; /* Reduced for short screens */
   }
   
   .campaign-card .card-title {
     font-size: clamp(18px, 2vw, 28px) !important;
     margin: 2px 0 0;
+  }
+  
+  .card-section {
+    gap: 8px;
+  }
+  
+  .card-footer {
+    margin-top: auto;
+    padding-top: 4px;
   }
 }
 
@@ -177,13 +187,26 @@
   scroll-behavior: smooth;
   padding-top: 26px;
   padding-bottom: 26px;
-  /* Hide scrollbar but keep scroll functionality */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  /* Show scrollbar to indicate scrollability */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
 }
 
 .campaign-scroll-area::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  width: 8px; /* Chrome, Safari, Opera */
+}
+
+.campaign-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.campaign-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+.campaign-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.7);
 }
 
 /* Each group of cards (up to 4) fills most of the viewport and snaps */
@@ -202,7 +225,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: clamp(14px, 1.8vw, 20px);
-  align-items: start;
+  align-items: stretch; /* Make all cards stretch to same height */
   margin: 0 auto;
 }
 
@@ -212,6 +235,125 @@
   flex-direction: column;
   gap: 30px;
   border-radius: 18px;
+  height: 100%; /* Fill the grid cell height */
+  min-height: 500px; /* Ensure minimum height */
+  position: relative; /* For absolute positioning of badge */
+}
+
+/* Reduce card size for short/wide screens */
+@media (max-height: 800px) and (min-width: 900px) {
+  .campaign-card {
+    min-height: 350px !important;
+    gap: clamp(12px, 1.5vh, 18px) !important;
+  }
+  
+  .card-section {
+    gap: clamp(6px, 1vh, 10px) !important;
+  }
+  
+  .campaign-card .card-title {
+    font-size: clamp(18px, 2vw, 24px) !important;
+    margin: 4px 0 2px !important;
+  }
+}
+
+@media (max-height: 750px) and (min-width: 1000px) {
+  .campaign-card {
+    min-height: 250px !important;
+    gap: clamp(8px, 1vh, 12px) !important;
+    padding: clamp(8px, 1.2vw, 12px) !important;
+  }
+  
+  .card-section {
+    gap: clamp(3px, 0.6vh, 6px) !important;
+  }
+  
+  .campaign-card .card-title {
+    font-size: clamp(14px, 1.6vw, 20px) !important;
+    margin: 2px 0 1px !important;
+  }
+  
+  .campaign-card .mini-label,
+  .campaign-card .mini-value {
+    font-size: clamp(9px, 1vw, 12px) !important;
+  }
+  
+  .campaign-card .footer-title,
+  .campaign-card .footer-value {
+    font-size: clamp(9px, 1vw, 12px) !important;
+  }
+  
+  .campaign .tracker-wrap,
+  .campaign .tracker-wrap *,
+  .campaign .card-section .tracker,
+  .campaign .card-section .tracker * {
+    font-size: clamp(8px, 0.9vw, 11px) !important;
+  }
+  
+  .card-badge {
+    top: -25px !important; /* Closer to card for short screens */
+  }
+  
+  .card-badge img {
+    height: 35px !important;
+  }
+  
+  .card-badge-rank-icon {
+    height: 35px !important;
+    width: 35px !important;
+    font-size: 16px !important;
+  }
+}
+
+@media (max-height: 730px) and (min-width: 900px) {
+  .campaign-section {
+    padding: clamp(20px, 3vh, 30px) 0 !important;
+  }
+  
+  .campaign-card {
+    min-height: 200px !important;
+    gap: clamp(5px, 0.7vh, 8px) !important;
+    padding: clamp(5px, 0.9vw, 8px) !important;
+  }
+  
+  .card-section {
+    gap: clamp(2px, 0.4vh, 4px) !important;
+  }
+  
+  .campaign-card .card-title {
+    font-size: clamp(12px, 1.4vw, 16px) !important;
+    margin: 1px 0 0 !important;
+    line-height: 1.1 !important;
+  }
+  
+  .campaign-card .mini-label,
+  .campaign-card .mini-value,
+  .campaign-card .footer-title,
+  .campaign-card .footer-value {
+    font-size: clamp(8px, 0.85vw, 10px) !important;
+    line-height: 1.1 !important;
+  }
+  
+  .campaign .tracker-wrap,
+  .campaign .tracker-wrap *,
+  .campaign .card-section .tracker,
+  .campaign .card-section .tracker * {
+    font-size: clamp(7px, 0.75vw, 9px) !important;
+  }
+  
+  .card-badge {
+    top: -20px !important; /* Closer to card for short screens */
+  }
+  
+  .card-badge img {
+    height: 28px !important;
+  }
+  
+  .card-badge-rank-icon {
+    height: 28px !important;
+    width: 28px !important;
+    font-size: 13px !important;
+  }
 }
 
 /* Tiny badge above the card (flag / logo) */
@@ -222,10 +364,31 @@
   top: -35px;
   left: 50%;
   transform: translateX(-50%);
+  background: none !important; /* Remove any background box */
+  border: none !important; /* Remove any border */
+  padding: 0 !important; /* Remove any padding */
+  outline: none !important; /* Remove any outline in Safari */
+  box-shadow: none !important; /* Remove any box shadow in Safari */
+  -webkit-appearance: none; /* Remove Safari default styling */
+  appearance: none; /* Standard property for compatibility */
 }
 
 .card-badge img {
   height: 60px;
+  background: none !important; /* Ensure no background on image */
+  border: none !important; /* Remove any border in Safari */
+  outline: none !important; /* Remove any outline in Safari */
+  box-shadow: none !important; /* Remove any box shadow in Safari */
+  -webkit-appearance: none; /* Remove Safari default styling */
+  appearance: none; /* Standard property for compatibility */
+}
+
+/* Hide images if they fail to load or don't exist */
+.card-badge img:not([src]),
+.card-badge img[src=""],
+.card-badge img[src="undefined"],
+.card-badge img[src="null"] {
+  display: none !important;
 }
 
 .card-badge-rank-icon {
@@ -240,6 +403,11 @@
   font-size: 24px;
   color: var(--color-navy);
   font-family: 'Exo 2', sans-serif;
+  border: none !important; /* Remove any border in Safari */
+  outline: none !important; /* Remove any outline in Safari */
+  box-shadow: none !important; /* Remove any box shadow in Safari */
+  -webkit-appearance: none; /* Remove Safari default styling */
+  appearance: none; /* Standard property for compatibility */
 }
 
 /* Page-scoped typography so globals can't override on mode toggle */
@@ -315,6 +483,20 @@
   }
 }
 
+/* For short/wide screens, keep sort-by on the right side */
+@media (max-height: 730px) and (min-width: 900px) {
+  .campaign-top-trackers {
+    grid-template-columns: 1fr 1fr auto !important;
+    align-items: flex-end !important;
+    gap: clamp(8px, 1.2vw, 14px) !important;
+    padding-bottom: clamp(8px, 1.5vh, 12px) !important;
+  }
+  
+  .sort-by-section {
+    align-self: flex-end;
+  }
+}
+
 @media (max-width: 900px) {
   /* On your app, global snap is disabled ≤900px; mirror that here */
   .campaign-scroll-area {
@@ -323,14 +505,27 @@
   .campaign-section {
     min-height: auto;
     scroll-snap-align: none;
+    padding: 25px 0; /* Specific padding for mobile */
   }
   .campaign-grid {
     grid-template-columns: repeat(2, 1fr);
+    align-items: start; /* Allow cards to be natural height on mobile */
+    gap: 45px; /* Specific gap for mobile */
+  }
+  
+  .campaign-card {
+    height: auto; /* Allow cards to be natural height on mobile */
   }
 }
 
 @media (max-width: 620px) {
+  .campaign-section {
+    padding: 25px 0; /* Specific padding for mobile */
+  }
+  
   .campaign-grid {
     grid-template-columns: 1fr;
+    gap: 45px; /* Specific gap for mobile */
   }
 }
+

@@ -29,6 +29,70 @@
   font-size: clamp(16px, 2.1vw, 20px);
 }
 
+/* Sort section */
+.prizes-sort-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: clamp(16px, 2vh, 24px);
+}
+
+.prizes-sort-section .sort-label {
+  font-family: "Exo", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--color-white);
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.prizes-sort-section .sort-toggle {
+  display: flex;
+  align-items: stretch;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.prizes-sort-section .toggle {
+  border: 0;
+  padding: 8px 16px;
+  font-family: "Exo", sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: clamp(14px, 1.3vw, 18px);
+  line-height: 1;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .2s ease, color .2s ease;
+  position: relative;
+  background: rgba(223, 23, 55, 0.85);
+  color: rgba(255,255,255,0.9);
+}
+
+.prizes-sort-section .toggle-left {
+  border-radius: 10px 0 0 10px;
+}
+
+.prizes-sort-section .toggle-middle {
+  border-radius: 0;
+}
+
+.prizes-sort-section .toggle-right {
+  border-radius: 0 10px 10px 0;
+}
+
+.prizes-sort-section .toggle.active {
+  color: var(--color-navy-bold);
+  transform: translateY(-1px);
+  background: linear-gradient(to right, #ffd94f 0%, #ffd94f 45%, #ffd94f 80%);
+  border-radius: 10px;
+}
+
+.prizes-sort-section .toggle:not(.active):hover {
+  filter: brightness(1.05);
+}
+
 /* Reduce spacing for short screens */
 @media (max-height: 800px) {
   .prizes {
@@ -91,13 +155,26 @@
   scroll-behavior: smooth;
   padding-top: 26px;
   padding-bottom: 26px;
-  /* Hide scrollbar but keep scroll functionality */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
+  /* Show scrollbar to indicate scrollability */
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: rgba(255, 255, 255, 0.5) transparent;
 }
 
 .prizes-scroll-area::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera */
+  width: 8px; /* Chrome, Safari, Opera */
+}
+
+.prizes-scroll-area::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prizes-scroll-area::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 4px;
+}
+
+.prizes-scroll-area::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.7);
 }
 
 /* Each prize section fills most of the viewport and snaps */
@@ -223,11 +300,28 @@
 .prize-description {
   font-family: "Exo", sans-serif;
   font-weight: 600;
-  font-size: clamp(12px, 1.3vw, 16px);
+  font-size: clamp(11px, 1.2vw, 15px);
   line-height: 1.4;
   color: var(--color-white);
-  margin: 0;
+  margin: 0 0 12px;
   padding: 0 clamp(8px, 1vw, 12px);
+}
+
+.prize-miles,
+.prize-raffle-date {
+  font-family: "Exo", sans-serif;
+  font-weight: 600;
+  font-size: clamp(11px, 1.2vw, 14px);
+  line-height: 1.4;
+  color: var(--color-white);
+  margin: 8px 0;
+  padding: 0 clamp(8px, 1vw, 12px);
+}
+
+.prize-miles strong,
+.prize-raffle-date strong {
+  color: var(--color-yellow);
+  font-weight: 800;
 }
 
 /* Image area */

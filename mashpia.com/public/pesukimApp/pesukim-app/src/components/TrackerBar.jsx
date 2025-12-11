@@ -17,7 +17,8 @@ export default function TrackerBar({
   }, [value, max]);
 
   // keep bubble nicely centered over the inner fill edge
-  const bubbleLeft = `calc(${pct}% - 8px)`;
+  const bubbleLeft = `${pct}%`;
+  // const bubbleLeft = `calc(${pct}% - 8px)`;
 
   return (
     <div

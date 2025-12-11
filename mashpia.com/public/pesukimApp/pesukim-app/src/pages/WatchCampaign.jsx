@@ -2,6 +2,18 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import "./WatchCampaign.css";
 import TrackerBar from "../components/TrackerBar"; // <- same API as your example
 
+// Helper to check if image path is valid
+const isValidImagePath = (path) => {
+  if (!path) return false;
+  if (path === "" || path === "undefined" || path === "null") return false;
+  // Check if it's a valid URL or path
+  if (typeof path === "string" && path.trim().length > 0) {
+    // Check if it starts with http, https, or /
+    return path.startsWith("http") || path.startsWith("/") || path.startsWith("./");
+  }
+  return false;
+};
+
 // const pct = (n, d) => (d > 0 ? n / d : 0);
 
 function chunkArray(arr, size) {
@@ -136,9 +148,20 @@ export default function WatchCampaign() {
             <div className="campaign-grid">
               {group.map((u) => (
                 <article key={u.id} className="card card-blue campaign-card">
-                  <div className="card-badge">
-                    {u.logo && <img src={u.logo} alt="" />}
-                  </div>
+                  {isValidImagePath(u.logo) && (
+                    <div className="card-badge">
+                      <img 
+                        src={u.logo} 
+                        alt="" 
+                        onError={(e) => {
+                          // Hide image if it fails to load
+                          e.target.style.display = 'none';
+                          // Also hide the parent badge container
+                          e.target.closest('.card-badge')?.style.setProperty('display', 'none', 'important');
+                        }}
+                      />
+                    </div>
+                  )}
                   {u.rank && (
                     <div className="card-badge">
                       <div className="card-badge-rank-icon">{u.rank}</div>
