@@ -15,7 +15,7 @@
   position: absolute;
   inset: 0;
   border-radius: var(--r);
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to allow bubble to show at end */
 }
 
 /* tone-specific vertical gradient: NAVY (top) -> TONE (bottom) */
@@ -34,12 +34,12 @@
   border-radius: var(--r);
 }
 
-/* the “air” around the fill */
+/* the "air" around the fill */
 .tracker.v2 .trk-gutter {
   position: absolute;
   left: 6px; right: 6px; top: 6px; bottom: 6px; /* <-- padding */
   border-radius: calc(var(--r) - 6px);
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to allow bubble to show at end */
 }
 
 .tracker.v2.small .trk-gutter {

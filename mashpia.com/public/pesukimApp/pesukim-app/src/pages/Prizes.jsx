@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import "./Prizes.css";
 
-export const PrizeCard = ({ title, img, img2, alt, width, height, description }) => {
+export const PrizeCard = ({ title, img, img2, alt, width, height, description, miles, auction_date }) => {
   const [isFlipped, setIsFlipped] = React.useState(false);
   const [isTouchDevice, setIsTouchDevice] = React.useState(false);
 
@@ -52,6 +52,12 @@ export const PrizeCard = ({ title, img, img2, alt, width, height, description })
           {description && (
             <p className="prize-description">{description}</p>
           )}
+          {miles && (
+            <p className="prize-miles">Miles Needed: <strong>{miles.toLocaleString()}</strong></p>
+          )}
+          {auction_date && (
+            <p className="prize-raffle-date">Raffle Date: <strong>{auction_date}</strong></p>
+          )}
         </div>
       </div>
     </div>
@@ -91,6 +97,7 @@ export default function Prizes() {
   const [data, setData] = useState(null);
   const [err, setErr] = useState("");
   const scrollAreaRef = useRef(null);
+  const [sortBy, setSortBy] = useState("category"); // 'category' | 'miles'
 
   useEffect(() => {
     let on = true;
@@ -152,11 +159,55 @@ export default function Prizes() {
     };
   }, [data]);
 
-  if (err) return <div className="prizes-error card card-blue">{err}</div>;
-  if (!data) return <div className="prizes-loading card card-blue">Loading…</div>;
+  // Sort prizes based on selected sort option (must be before early returns)
+  const sortedCategories = useMemo(() => {
+    if (!data || !data.categories) return [];
+    
+    if (sortBy === "miles") {
+      // Group all prizes by miles amount
+      const allPrizes = [];
+      data.categories.forEach(cat => {
+        cat.prizes.forEach(prize => {
+          allPrizes.push({
+            ...prize,
+            originalCategory: cat.name,
+            originalGridClass: cat.gridClass
+          });
+        });
+      });
+      
+      // Group by miles amount
+      const milesGroups = {};
+      allPrizes.forEach(prize => {
+        const miles = parseInt(prize.miles) || 0;
+        if (!milesGroups[miles]) {
+          milesGroups[miles] = [];
+        }
+        milesGroups[miles].push(prize);
+      });
+      
+      // Convert to category-like structure, sorted by miles (ascending)
+      return Object.keys(milesGroups)
+        .sort((a, b) => parseInt(a) - parseInt(b))
+        .map(miles => ({
+          name: `${parseInt(miles).toLocaleString()} Miles`,
+          miles: parseInt(miles),
+          gridClass: "col-4", // Default grid class
+          prizes: milesGroups[miles]
+        }));
+    } else {
+      // "category" keeps original order
+      return [...data.categories];
+    }
+  }, [data, sortBy]);
 
   // Group categories into sections (2 per section, unless total prizes would exceed 8)
-  const categorySections = chunkCategories(data.categories || []);
+  const categorySections = useMemo(() => {
+    return chunkCategories(sortedCategories);
+  }, [sortedCategories]);
+
+  if (err) return <div className="prizes-error card card-blue">{err}</div>;
+  if (!data) return <div className="prizes-loading card card-blue">Loading…</div>;
 
   return (
     <section className="prizes">
@@ -167,6 +218,27 @@ export default function Prizes() {
           When you join and do missions you will earn miles that you can cash in to buy tickets
           in this year's Tzivos Hashem Auction for a chance to win amazing prizes including:
         </p>
+        <div className="prizes-sort-section">
+          <span className="sort-label">SORT BY</span>
+          <div className="sort-toggle" role="tablist" aria-label="Sort by">
+            <button
+              role="tab"
+              aria-selected={sortBy === "category"}
+              className={"toggle toggle-left" + (sortBy === "category" ? " active" : "")}
+              onClick={() => setSortBy("category")}
+            >
+              CATEGORY
+            </button>
+            <button
+              role="tab"
+              aria-selected={sortBy === "miles"}
+              className={"toggle toggle-right" + (sortBy === "miles" ? " active" : "")}
+              onClick={() => setSortBy("miles")}
+            >
+              MILES
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* Scrollable snap sections */}
@@ -187,6 +259,8 @@ export default function Prizes() {
                       width={prize.width}
                       height={prize.height}
                       description={prize.description}
+                      miles={prize.miles}
+                      auction_date={prize.auction_date}
                     />
                   ))}
                 </div>

@@ -120,6 +120,7 @@
     margin-bottom: 30px;
   }
   .about-rt {
+    position: relative; /* Change from absolute to relative on mobile */
     align-self: start;
     gap: 15px;
   }
