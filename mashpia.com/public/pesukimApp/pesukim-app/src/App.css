@@ -18,6 +18,10 @@
   -ms-overflow-style: none; /* IE and Edge */
 }
 
+.page {
+  position: relative;
+}
+
 /* Add fixed background that fills entire viewport for short screens */
 @media (max-height: 800px) and (min-width: 900px) {
   body::before {
