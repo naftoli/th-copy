@@ -7,10 +7,14 @@ $user = mysql_real_escape_string( $_REQUEST['user_id'] );
 $monthly_subjects = [1, 12, 15, 93, 106];
 //$ds_weekly = [126];
 $ds_daily = [121, 122, 124, 125, 129, 130, 131, 132, 133, 134, 135];
+$other_subjects = [40, 94, 136];
 
 function calculateNextDate($subject, $needed) {
     global $user, $monthly_subjects, $MASHPIA_DB;
     // find date of task for this subject in $needed times
+    if ($subject == 136) {
+        return '';
+    }
     $jd = unixtojd();
     $limit_by = $needed;
     if (! in_array($subject, $monthly_subjects)) {
@@ -229,7 +233,8 @@ foreach ( $subjects as $subject ) {
             'nextMedalImg'  => $subject_medals[$subject][$mission['ord']]['img'],
             'nextMedalColor'    => $imgColors[$mission['ord']],
             'monthly'   => $monthly,
-            'weekly'    => !$monthly,
+            'weekly'    => !$monthly && !in_array($subject, $other_subjects),
+            'other'     => in_array($subject, $other_subjects),
             'medals'    => $medals_arr,
             'daily'     => in_array($subject, $ds_daily)
 		);
@@ -263,7 +268,8 @@ foreach ( $subjects as $subject ) {
             'nextMedalImg'  => $subject_medals[$subject][1]['img'],
             'nextMedalColor'    => $imgColors[1],
             'monthly'   => $monthly,
-            'weekly'    => !$monthly,
+            'weekly'    => !$monthly && !in_array($subject, $other_subjects),
+            'other'     => in_array($subject, $other_subjects),
             'medals'    => $medals_arr,
             'daily'     => in_array($subject, $ds_daily)
 		];
