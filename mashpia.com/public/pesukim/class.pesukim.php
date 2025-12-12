@@ -57,12 +57,44 @@ class Pesukim
             if (! $pointsAdded) {
                 return false;
             }
+            if (! $this->addMissionCompletion($recruiter_id)) {
+                return false;
+            }
         } else {
             return false;
         }
         return true;
     }
 
+    public function addMissionCompletion($user_id) {
+        global $MASHPIA_DB;
+
+        // add mission completion for recruiter
+        $id = 11111111;
+        $subject_id = 136;
+        $mission_value = 1.0;
+        $mission_name = 'New Recruit';
+        $mark_date = unixtojd();
+        $stmt = $MASHPIA_DB->prepare("
+            INSERT INTO date_tasks_mission_marks 
+            SET user_id=:user_id, 
+                date_tasks_mission_id=:id, 
+                subject_id=:subject_id, 
+                mission_value=:mission_value, 
+                mission_name=:mission_name, 
+                mark_date=:mark_date, 
+                auction_only_points=1
+        ");
+        $res = $stmt->execute([
+            'user_id' => $user_id,
+            'id' => $id,
+            'subject_id' => $subject_id,
+            'mission_value' => $mission_value,
+            'mission_name' => $mission_name,
+            'mark_date' => $mark_date,
+        ]);
+        return $res;
+    }
     public function addPoints($points, $user_id) {
         global $MASHPIA_DB;
         // get institution id

@@ -131,7 +131,7 @@ try {
             $addedRecruiter = $p->addRecruiter($input['referral']);
             if (!$addedRecruiter) {
               throw new Exception('Failed to add recruiter');
-            }
+            } 
           }
           sendEmailConfirmation($input['parentEmail'], ($input['firstName'] . ' ' . $input['lastName']), $pass);
       } else {
