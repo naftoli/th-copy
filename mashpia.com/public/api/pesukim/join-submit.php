@@ -22,8 +22,12 @@ function sendEmailConfirmation($email, $name, $password) {
   $subject = 'Welcome to Tzivos Hashem';
 
   $msg = 'Welcome to Tzivos Hashem!<br /><br />';
-  $msg .= 'Your username is ' . $email . ' and your password is ' . $password . '<br /><br />';
-  $msg .= 'Your child ' . $name . ' is now a part of Tzivos Hashem!<br /><br />';
+  if ($password) {
+    $msg .= 'Your username is ' . $email . ' and your password is ' . $password . '<br /><br />';
+    $msg .= 'Your child ' . $name . ' is now a part of Tzivos Hashem!<br /><br />';
+  } else {
+    $msg .= 'The new child account has been created and connected to your parent account. You can login to your account to view the child\'s progress and manage the child\'s account.<br /><br />';
+  }
   $msg .= 'To login, please use the following link: <a href="https://tzivoshashem.com/mobile">https://tzivoshashem.com/mobile</a><br /><br />';
   $msg .= 'If you have any questions, please feel free to contact us at <a href="mailto:support@tzivoshashem.org">support@tzivoshashem.org</a>.<br /><br />';
   $msg .= 'Thank you for joining Tzivos Hashem!<br /><br />';
