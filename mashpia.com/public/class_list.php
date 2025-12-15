@@ -17,7 +17,7 @@ $key = ENCRYPTION_KEY;
 <head>
 <link href="admin_styles.css" rel="stylesheet" type="text/css">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>School List</title>
+<title>Class List</title>
 <style type='text/css'>
 tr, th, td {
 	border: 1px dashed black;
@@ -28,19 +28,19 @@ tr, th, td {
 
 <body>
 <? include('admin_header.php');?>
-<h1>School List</h1>
+<h1>Class List</h1>
 <table border="1" cellspacing="3" style="font-size:12px">
 <tr>
-<th>School ID</th>
+<th>Class ID</th>
 <th>School</th>
-<th>Base Number</th>
-<th>Phone</th>
+<th>Grade</th>
+<th>Teacher</th>
 <th>Admin</th>
 <th>username</th>
 <th>password</th>
 </tr>
 <?
-//get list of schools
+//get list of classes
 $sql = "select class_id, class_grade, class_sub, class_teacher, school_name from classes c join schools s on c.school_id = s.school_id order by c.school_id, class_grade, class_sub";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
