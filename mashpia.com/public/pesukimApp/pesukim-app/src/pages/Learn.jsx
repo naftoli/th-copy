@@ -1,8 +1,9 @@
-import React, { useMemo, useRef, useEffect } from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
 import "./Learn.css";
 
 const Learn = () => {
   const viewportRef = useRef(null);
+  const [slidesPerView, setSlidesPerView] = useState(1);
 
   // Build list of slide image URLs from public folder
   const slideImages = useMemo(() => {
@@ -23,6 +24,24 @@ const Learn = () => {
   };
 
   useEffect(() => {
+    const computeSlidesPerView = (width) => {
+      if (width >= 1200) return 3;
+      if (width >= 800) return 2;
+      return 1;
+    };
+
+    const measure = () => {
+      const w = viewportRef.current?.clientWidth || window.innerWidth || 0;
+      setSlidesPerView(computeSlidesPerView(w));
+    };
+
+    // measure initially and on resize
+    measure();
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, []);
+
+  useEffect(() => {
     const handleKey = (e) => {
       if (e.key === "ArrowRight") scrollByPage(1);
       if (e.key === "ArrowLeft") scrollByPage(-1);
@@ -39,7 +58,10 @@ const Learn = () => {
 
         <div className="learn-carousel" aria-label="12 Pessukim slides">
           <div className="learn-carousel-viewport" ref={viewportRef}>
-            <div className="learn-carousel-track">
+            <div
+              className="learn-carousel-track"
+              style={{ "--slides-per-view": slidesPerView }}
+            >
               {slideImages.map((src, i) => (
                 <div className="learn-slide" key={i}>
                   <img src={src} alt={`Slide ${i + 1}`} loading="lazy" />
