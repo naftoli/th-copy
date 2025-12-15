@@ -10,7 +10,6 @@
 .learn-card {
   width: min(1000px, 100%);
   height: auto;        /* allow card to grow if needed */
-  min-height: 80%;
   padding: clamp(24px, 4vw, 56px);
   border-radius: 18px;
   box-sizing: border-box;
@@ -46,7 +45,6 @@
   overscroll-behavior-x: contain;
   /* auto height so container hugs image height with slight padding */
   height: auto;
-  max-height: 100%;
 }
 
 .learn-carousel-track {

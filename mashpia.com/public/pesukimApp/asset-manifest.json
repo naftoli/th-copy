@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "./static/css/main.cfaa7dd3.css",
+    "main.css": "./static/css/main.65a9baf5.css",
     "main.js": "./static/js/main.a3649f01.js",
     "static/media/rebbe.jpg": "./static/media/rebbe.caad98e8a9e0c7b195d2.jpg",
     "static/media/boy-with-hat.png": "./static/media/boy-with-hat.ab4d16d51f9676322547.png",
@@ -26,11 +26,11 @@
     "static/media/Duke-Fill.ttf": "./static/media/Duke-Fill.74b4fcccdb138e33e3cc.ttf",
     "static/media/hashems-army.svg": "./static/media/hashems-army.8fef21858b65e9979cdd342b18193fd8.svg",
     "index.html": "./index.html",
-    "main.cfaa7dd3.css.map": "./static/css/main.cfaa7dd3.css.map",
+    "main.65a9baf5.css.map": "./static/css/main.65a9baf5.css.map",
     "main.a3649f01.js.map": "./static/js/main.a3649f01.js.map"
   },
   "entrypoints": [
-    "static/css/main.cfaa7dd3.css",
+    "static/css/main.65a9baf5.css",
     "static/js/main.a3649f01.js"
   ]
 }
