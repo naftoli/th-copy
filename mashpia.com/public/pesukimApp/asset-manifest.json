@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "./static/css/main.7a3a6a40.css",
-    "main.js": "./static/js/main.96c6cfa9.js",
+    "main.css": "./static/css/main.3c3465f4.css",
+    "main.js": "./static/js/main.617311db.js",
     "static/media/rebbe.jpg": "./static/media/rebbe.caad98e8a9e0c7b195d2.jpg",
     "static/media/boy-with-hat.png": "./static/media/boy-with-hat.ab4d16d51f9676322547.png",
     "static/media/girl-with-hat.png": "./static/media/girl-with-hat.3e9b95c368a2d6e47dd5.png",
@@ -26,11 +26,11 @@
     "static/media/Duke-Fill.ttf": "./static/media/Duke-Fill.74b4fcccdb138e33e3cc.ttf",
     "static/media/hashems-army.svg": "./static/media/hashems-army.8fef21858b65e9979cdd342b18193fd8.svg",
     "index.html": "./index.html",
-    "main.7a3a6a40.css.map": "./static/css/main.7a3a6a40.css.map",
-    "main.96c6cfa9.js.map": "./static/js/main.96c6cfa9.js.map"
+    "main.3c3465f4.css.map": "./static/css/main.3c3465f4.css.map",
+    "main.617311db.js.map": "./static/js/main.617311db.js.map"
   },
   "entrypoints": [
-    "static/css/main.7a3a6a40.css",
-    "static/js/main.96c6cfa9.js"
+    "static/css/main.3c3465f4.css",
+    "static/js/main.617311db.js"
   ]
 }
