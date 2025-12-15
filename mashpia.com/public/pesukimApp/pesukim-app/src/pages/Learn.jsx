@@ -64,7 +64,9 @@ const Learn = () => {
             >
               {slideImages.map((src, i) => (
                 <div className="learn-slide" key={i}>
-                  <img src={src} alt={`Slide ${i + 1}`} loading="lazy" />
+                  <div className="learn-slide-inner">
+                    <img src={src} alt={`Slide ${i + 1}`} loading="lazy" />
+                  </div>
                 </div>
               ))}
             </div>
