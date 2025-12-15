@@ -44,14 +44,13 @@
   width: 100%;
   max-width: 100%;
   overscroll-behavior-x: contain;
-  /* keep a consistent, non-shrinking viewing window so images aren't cut off */
-  height: 520px;       /* constant visual height across widths */
+  /* auto height so container hugs image height with slight padding */
+  height: auto;
 }
 
 .learn-carousel-track {
   display: flex;
   align-items: stretch;
-  height: 100%;
   --slides-per-view: 1;
 }
 
@@ -65,8 +64,8 @@
 
 .learn-slide-inner {
   width: 100%;
-  height: 100%;
-  padding: clamp(8px, 2vw, 16px);
+  height: auto;
+  padding: clamp(6px, 1.2vw, 12px);
   box-sizing: border-box;
   display: grid;
   place-items: center;
@@ -74,10 +73,12 @@
 
 .learn-slide img {
   width: 100%;
-  height: 100%;
-  object-fit: contain;
+  height: auto;            /* let image define height */
+  max-height: 70vh;        /* do not exceed viewport height */
+  object-fit: contain;     /* safe if intrinsic larger */
+  display: block;
   border-radius: 12px;
-  background: #000; /* gives letterbox for different aspect ratios */
+  background: transparent; /* avoid heavy letterbox feel */
 }
 
 .learn-carousel-nav {
