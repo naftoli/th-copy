@@ -43,11 +43,12 @@
   display: flex;
   align-items: stretch;
   height: 100%;
+  --slides-per-view: 1;
 }
 
 .learn-slide {
-  flex: 0 0 100%;
-  scroll-snap-align: center;
+  flex: 0 0 calc(100% / var(--slides-per-view));
+  scroll-snap-align: start;
   display: grid;
   place-items: center;
   padding: clamp(8px, 2vw, 16px);
