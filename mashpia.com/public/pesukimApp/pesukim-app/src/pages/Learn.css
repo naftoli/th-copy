@@ -46,6 +46,7 @@
   overscroll-behavior-x: contain;
   /* auto height so container hugs image height with slight padding */
   height: auto;
+  max-height: 100%;
 }
 
 .learn-carousel-track {
