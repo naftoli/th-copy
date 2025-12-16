@@ -3,8 +3,10 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/Mobile_Detect.php';
 
 class user {
+	public $is_mobile;
 	public $user_id;
 	public $user_code;
 	public $username;
@@ -484,7 +486,9 @@ class user {
                 // for sefer hamitzvos, get chidon limmud track misssions
                 // find out level / track for chidon limmud track
                 // ONLY show for mobile site
-                if ($row['subject_id'] == 21 && !$printing_mode) {
+				$m = new Mobile_Detect;
+				$is_mobile = $m->isMobile() || $m->isTablet();
+                if ($row['subject_id'] == 21 && !$printing_mode && $is_mobile) {
                     $sqlLimmud = "select test_type, class_grade from th_chidon tc join users u using (user_id) join classes c using (class_id) where user_id = " . $this->user_id . " and year = " . GlobalSettings::getChidonYear();
                     $resultLimmud = mysql_query($sqlLimmud);
                     if (mysql_num_rows($resultLimmud) > 0) {
