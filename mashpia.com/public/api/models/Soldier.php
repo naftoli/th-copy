@@ -118,7 +118,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     }
 
     // ******************************* CHAYOLEI MISSIONS ******************************* //
-    public function missions( $parsha, $limit_to = ['daily', 'weekly', 'shabbos', 'no_label'] ) {
+    public function missions( $parsha, $limit_to = ['daily', 'weekly', 'shabbos', 'no_label', 'pesukim'] ) {
         if ( isset( $this->missions[ $parsha->id ] ) )
             return $this->missions[ $parsha->id ];
         
@@ -154,6 +154,13 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             foreach( $legacy_missions->no_label_subjects as $label ) {
                 $label = implode( ' - ', explode( ':', $label ) );
                 foreach( $legacy_missions->no_label_tasks as $task ) {
+                    if ( $task->label_name === $label ) $this->missions[ $parsha->id ][] = $task;
+                }
+            }
+
+        if ( in_array( 'pesukim', $limit_to ) )
+            foreach( $legacy_missions->sorted_pesukim_labels as $label ) {
+                foreach( $legacy_missions->pesukim_tasks as $task ) {
                     if ( $task->label_name === $label ) $this->missions[ $parsha->id ][] = $task;
                 }
             }

@@ -80,6 +80,7 @@ class GridCell extends Component {
     // return a checkbox for on/off based tasks
     return <Checkbox 
       checked={ value }
+      disabled={ !!mission.disable }
       onChange={ this.onChange } />
   }
 }

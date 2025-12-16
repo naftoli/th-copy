@@ -989,7 +989,6 @@ $daySchoolSubjects = setDaySchoolSubjects();
 												$pesukim_task = $user->pesukim_tasks[$j];
 												$date_task_mark = $pesukim_task->date_task_mark; 
 												$checked = isset( $date_task_mark->marked ) ? $date_task_mark->marked == true : false;
-												$pesukim_task->check_to_disable($user_id);
 												if ($showMechunachim) {
 													$mid = $pesukim_task->date_task_id . '_' . $mechunach_id;
 												} else {

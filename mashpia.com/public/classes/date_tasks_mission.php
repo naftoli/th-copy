@@ -242,6 +242,7 @@ class date_tasks_mission {
 			$pesukim_task->set_subject_image_id($subject_image_id);
 			$pesukim_task->set_date_task_mark($user_id, $start_date, $end_date);
 			$pesukim_task->set_mark_date($end_date);
+			$pesukim_task->check_to_disable($user_id);
 			array_push($pesukim_tasks, $pesukim_task);
 		}
 		// echo "<pre>"; print_r($pesukim_tasks); echo "</pre>"; exit;	

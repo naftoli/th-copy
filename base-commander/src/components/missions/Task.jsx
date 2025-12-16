@@ -56,15 +56,20 @@ export class Task extends Component {
     // remove more then one underscore from task details
     task_name = task_name.replace(/[_]{2,}/g, '').trim();
     // define some variables
-    let earned, marked = false;
+    let earned, marked = false, disabled = false;
     // set the variables based on the task type
     if ( daily ) {
       earned = needed <= date_task_marks.filter( mark => !!mark.marked ).length;
       marked = date_task_marks.filter( mark => !mark.marked ).length === 0;
     } else if ( quantity ) {
       earned = date_task_mark.done_qty >= quantity;
-    } else
+    } else {
       earned = marked = !!date_task_mark.marked;
+      disabled = !!date_task_mark.disable;
+      if ( disabled ) {
+        marked = true;
+      }
+    }
 
     let img_url = `${LEGACY_URL}/images/stickers/campaigns/${ subject_id }.gif`;
     if ( subject_id === 136 ) {
@@ -130,6 +135,7 @@ export class Task extends Component {
             <div className="cell">
               <Checkbox 
                 checked={ marked } 
+                disabled={ disabled }
                 onChange={ this.onChange( mark_date || start_date ) } />
             </div>
           </Col>
