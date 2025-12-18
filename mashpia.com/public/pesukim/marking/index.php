@@ -151,7 +151,8 @@ $pesukim = ['Saying', 'Learning', 'Teaching'];
                         if (task.label_name == label) {
                             const id = student + ":" + task.date_task_id + ":" + task.end_date 
                             html += "<tr><td class='shortName'>" + task.short_name + "</td><td rowspan='2' class='checkbox'>";
-                            html += "<input type='checkbox' id='" + id + "' class='taskCheckbox' name='task_" + task.date_task_id + "' " + (task.date_task_mark.marked ? "checked" : "") + " /></td>";
+                            html += "<input type='checkbox' id='" + id + "' class='taskCheckbox' name='task_" + task.date_task_id + "' " + 
+                            (task.date_task_mark.marked ? "checked" : "") + (task.disable ? " checked disabled" : "") + "' /></td>";
                             html += "</tr><tr><td class='taskName'>" + task.task_name + "</td></tr>";
                         }
                     }
