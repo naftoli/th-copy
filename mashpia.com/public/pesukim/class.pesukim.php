@@ -1,6 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
+if (! isset($MASHPIA_DB)) { require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php'; }
 
 class Pesukim 
 {
