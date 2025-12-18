@@ -20,6 +20,17 @@ $schools = $as->getSchools();
         <title>Mark Mivtzoim</title>
         <link href="/admin_styles.css" rel="stylesheet" type="text/css">
         <link href="mivtzoim.css" rel="stylesheet" type="text/css">
+        <style>
+            select, input[type="submit"] {
+                padding: 10px;
+                /* rounded corners */
+                border-radius: 5px;
+                border: 1px solid #ccc;
+                background-color: #f0f0f0;
+                color: #333;
+                font-size: 14px;
+            }
+        </style>
     </head>
     <body>
         <?php require $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>

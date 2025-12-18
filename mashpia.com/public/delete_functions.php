@@ -1,6 +1,7 @@
 <?php
 include ( dirname(__FILE__) . "/db.php" );
 require_once( dirname(__FILE__) . '/yearly_prize/classes/TotalWeeklyTasks.php' );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/pesukim/class.pesukim.php';
 
 $function_name = $_GET['function_name'];
 $parameters = $_GET['parameters'];
@@ -67,7 +68,7 @@ function delete_task_mark($parameters) {
 	if ($query && mysql_affected_rows() > 0) {
 
 		// check if it's 12 pesukim and if we need to add points to recruiter
-		if ($grid_id >= 15000 && $grid_id <= 15035 && $points > 0) {
+		if ($grid_id && $grid_id >= 15000 && $grid_id <= 15035 && $points > 0) {
 			$pesukim = new Pesukim($user_id);
 			$recruiter = $pesukim->getRecruiter();
 			if ($recruiter) {
@@ -86,13 +87,13 @@ function delete_task_mark($parameters) {
 			$delete_sql = "DELETE FROM date_tasks_mission_marks WHERE user_id=" . $user_id . " AND date_tasks_mission_id=" . $date_tasks_mission_id;		
 			$delete_query = mysql_query($delete_sql);
         }
-		
-        // update the user for the yearly gift
-        TotalWeeklyTasks::updateUser( $user_id, $mark_date );
 
-        return json_encode("1");
+		// update the user for the yearly gift
+		TotalWeeklyTasks::updateUser( $user_id, $mark_date );
+
+		return json_encode("1");
 	}
-	else return json_encode("0");
+	return json_encode("0");
 }
 
 function delete_daily_task_mark($parameters) {

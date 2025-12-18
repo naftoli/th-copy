@@ -1,5 +1,6 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
 class Pesukim 
 {
@@ -172,7 +173,7 @@ class Pesukim
         ");
         $stmt->execute(['recruited_id' => $this->user_id]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['recruiter_id'] ?? false;
+        return $row['recruiter_id'] && $row['recruiter_id'] > 0 ? $row['recruiter_id'] : false;
     }
 
     public function addRecruit($recruited_id) {
