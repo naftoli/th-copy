@@ -180,6 +180,11 @@
           { "label": "Mivtzoim Orders", "legacy": true, "path": "/mivtzoim_purchases/reports/" }
         ]
       }, 
+      { "label": "12 Pesukim", "module": "chayolei",
+        "items": [
+          { "label": "Marking", "legacy": true, "path": "/pesukim/marking" }
+        ]
+      }, 
       { "label": "TH Drive", "module": "chayolei", 
         "items": [
           { "label": "Letter To Parents", "legacy": true, "path": "/charidy/pr/letter_to_parents.php" }
