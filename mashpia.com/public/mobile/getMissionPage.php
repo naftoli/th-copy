@@ -155,7 +155,6 @@ include("../classes/task.php");
 include("../classes/date_tasks_mark.php");
 include("../classes/pesukim_task.php");
 include("../pesukim/class.pesukim.php");
-include("../api/header/db.php");
 
 /********************** LOAD THE USER **********************/
 $lang = 1; // default language is english
