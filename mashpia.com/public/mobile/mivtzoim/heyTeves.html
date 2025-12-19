@@ -922,7 +922,7 @@
         // when to shutdown this page
         const now = Math.floor( new Date().getTime() / 1000);
         console.log( now );
-        if ( now >= 1736398800 ) {
+        if ( now >= 1736398800 && !Cookies.get('naftoli') ) {
             soldOut = true;
             $("#sold-out").show();
             $("#purchases").hide();
