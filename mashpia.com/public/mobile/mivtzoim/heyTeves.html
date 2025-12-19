@@ -920,12 +920,11 @@
         getSavedCards();
 
         // when to shutdown this page
+        let soldOut = false;
         const now = Math.floor( new Date().getTime() / 1000);
         console.log( now );
         if ( now >= 1736398800 && !Cookies.get('naftoli') ) {
             soldOut = true;
-            $("#sold-out").show();
-            $("#purchases").hide();
         }
 
         $(document).on('click', '.payment', function () {
@@ -937,51 +936,54 @@
         });
 
         // load children
-        $.post("/mobile/chidon/ajax/getYear.php", function (year) {
-            $.post('/mobile/reg/ajax/getChildren.php', {admin: admin, year: year}, function (success) {
-                if (success == -1) {
-                    window.location = "index.html";
-                } else {
-                    const data = $.parseJSON(success);
-                    children = data.children;
+        if (soldOut) {
+            $("#sold-out").show();
+        } else {
+            $.post("/mobile/chidon/ajax/getYear.php", function (year) {
+                $.post('/mobile/reg/ajax/getChildren.php', {admin: admin, year: year}, function (success) {
+                    if (success == -1) {
+                        window.location = "index.html";
+                    } else {
+                        const data = $.parseJSON(success);
+                        children = data.children;
 
-                    // sepearate registered and un-registered
-                    let registred_children = {};
-                    let unregistered_children = {};
+                        // sepearate registered and un-registered
+                        let registred_children = {};
+                        let unregistered_children = {};
 
-                    const exceptions = [3, 61, 55, 66, 110, 112, 180, 265, 432, 480, 690];
-                    for (let c in children) {
-                        let child = children[c];
-                        if (
-                            child.school_id != 612 &&
-                            child.user_registered &&
-                            !exceptions.includes(parseInt(child.school_id))
-                        ){
-                            registred_children[c] = child;
-                        } else {
-                            unregistered_children[c] = child;
+                        const exceptions = [3, 61, 55, 66, 110, 112, 180, 265, 432, 480, 690];
+                        for (let c in children) {
+                            let child = children[c];
+                            if (
+                                child.school_id != 612 &&
+                                child.user_registered &&
+                                !exceptions.includes(parseInt(child.school_id))
+                            ){
+                                registred_children[c] = child;
+                            } else {
+                                unregistered_children[c] = child;
+                            }
                         }
+                        // console.log( registred_children );
+
+                        // Grab the template script
+                        var tplScript = $("#childrenTpl").html();
+
+                        // Compile the template
+                        var tpl = Handlebars.compile(tplScript);
+
+                        // Pass our data to the template
+                        var html = tpl({children: registred_children});
+
+                        // Add the compiled html to the page
+                        $(".chilrens").append(html);
+
+                        setupItems()
+                        $("#purchases").show();
                     }
-                    // console.log( registred_children );
-
-                    // Grab the template script
-                    var tplScript = $("#childrenTpl").html();
-
-                    // Compile the template
-                    var tpl = Handlebars.compile(tplScript);
-
-                    // Pass our data to the template
-                    var html = tpl({children: registred_children});
-
-                    // Add the compiled html to the page
-                    $(".chilrens").append(html);
-
-                    setupItems()
-
-                    if (!soldOut) $("#purchases").show();
-                }
-            });
-        })
+                });
+            })
+        }
 
         $(document).on('keyup', '.qty', calcTotal)
         $(document).on('change', '.qty', calcTotal)
