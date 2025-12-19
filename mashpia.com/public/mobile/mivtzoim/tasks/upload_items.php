@@ -19,7 +19,18 @@ $stmt = $MASHPIA_DB->prepare("
         msrp = :msrp,
         sale = :sale,
         stock = :stock,
-        thumb = :thumb
+        thumb = :thumb,
+        ord = :order
+");
+
+$update = $MASHPIA_DB->prepare("
+    UPDATE mashpia_purchases.mivtzoim_items
+    SET
+        msrp = :msrp,
+        sale = :sale,
+        stock = :stock,
+        ord = :order
+    WHERE mivtzoim_item_id = :id
 ");
 
 if (isset($_FILES['items'])) {
@@ -27,21 +38,41 @@ if (isset($_FILES['items'])) {
     echo "starting...";
     $file = fopen($_FILES['items']['tmp_name'], 'r');
     while (($line = fgetcsv($file)) !== FALSE) {
-        $item = $line[0];
-        $msrp = $line[1];
-        $sale = $line[2];
-        $stock = $line[3];
-        $image = $line[4];
-        if (! $stmt->execute([
-            ':item' => $item,
-            ':msrp' => $msrp,
-            ':sale' => $sale,
-            ':stock' => $stock,
-            ':thumb' => $image
-        ])) {
-            $MASHPIA_DB->rollback();
-            echo "Error: " . $stmt->errorInfo()[2];
-            exit;
+        $i = 0;
+        $id = $line[$i++];
+        $item = $line[$i++];
+        $size = $line[$i++];
+        $yom_tov = $line[$i++];
+        $msrp = $line[$i++];
+        $sale = $line[$i++];
+        $stock = $line[$i++];
+        $image = $line[$i++];
+        $order = $line[$i++];
+        if ($id) {
+            if (! $update->execute([
+                ':id' => $id,
+                ':msrp' => $msrp,
+                ':sale' => $sale,
+                ':stock' => $stock,
+                ':order' => $order
+            ])) {
+                $MASHPIA_DB->rollback();
+                echo "Error: " . $update->errorInfo()[2];
+                exit;
+            }
+        } else {
+            if (! $stmt->execute([
+                ':item' => $item,
+                ':msrp' => $msrp,
+                ':sale' => $sale,
+                ':stock' => $stock,
+                ':thumb' => $image,
+                ':order' => $order
+            ])) {
+                $MASHPIA_DB->rollback();
+                echo "Error: " . $stmt->errorInfo()[2];
+                exit;
+            }
         }
     }
     $MASHPIA_DB->commit();
