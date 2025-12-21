@@ -651,7 +651,7 @@
 <script>
     // force https
     if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
-    let sweaters_stock = {}, children = {}
+    let sweaters_stock = {}, children = {}, caps_stock = {}
 
     if (localStorage.getItem('locallang') == 'he' || Cookies.get('lang') == 'he') {
         $(".bug-report").hide()
@@ -695,6 +695,7 @@
             items = JSON.parse(result)
             items.map(item => {
                 if (item.item.includes('Sweater')) sweaters_stock[item.mivtzoim_item_id] = item.stock
+                if (item.item.includes('Rank Cap')) caps_stock[item.mivtzoim_item_id] = item.stock
             })
 
             const sweaters = {
@@ -728,9 +729,31 @@
                 }
             }
 
+            const rankCaps = {
+                Boys: {
+                    'Sergeant': items.filter(item => item.mivtzoim_item_id == 154)[0].mivtzoim_item_id,
+                    'Sergeant Major': items.filter(item => item.mivtzoim_item_id == 155)[0].mivtzoim_item_id,
+                    'Second Lieutenant': items.filter(item => item.mivtzoim_item_id == 156)[0].mivtzoim_item_id,
+                    'First Lieutenant': items.filter(item => item.mivtzoim_item_id == 157)[0].mivtzoim_item_id,
+                    'Captain': items.filter(item => item.mivtzoim_item_id == 157)[0].mivtzoim_item_id,
+                    'Major': items.filter(item => item.mivtzoim_item_id == 159)[0].mivtzoim_item_id,
+                    'Colonel': items.filter(item => item.mivtzoim_item_id == 160)[0].mivtzoim_item_id,
+                },  
+                Girls: {
+                    'Sergeant': items.filter(item => item.mivtzoim_item_id == 161)[0].mivtzoim_item_id,
+                    'Sergeant Major': items.filter(item => item.mivtzoim_item_id == 162)[0].mivtzoim_item_id,
+                    'Second Lieutenant': items.filter(item => item.mivtzoim_item_id == 163)[0].mivtzoim_item_id,
+                    'First Lieutenant': items.filter(item => item.mivtzoim_item_id == 164)[0].mivtzoim_item_id,
+                    'Captain': items.filter(item => item.mivtzoim_item_id == 165)[0].mivtzoim_item_id,
+                    'Major': items.filter(item => item.mivtzoim_item_id == 166)[0].mivtzoim_item_id,
+                    'Colonel': items.filter(item => item.mivtzoim_item_id == 167)[0].mivtzoim_item_id,
+                }
+            }
+
             let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>Price</th><th>In Stock</th></tr>"
             for (let item of items) {
                 if (item.item.includes('Sweater')) continue // skip sweaters
+                if (item.item.includes('Rank Cap')) continue // skip rank caps
                 html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock > 20 ? 20 : item.stock}"`
                 if (parseInt(item.stock) === 0) html += ' disabled';
                 html += ` /></td><td style="padding: 0;"><img src="images/${item.thumb}" width="65px" /></td>
@@ -756,6 +779,25 @@
                 <td><strike>25.00</strike><br />
                 <span style="color: red;">20.00</span></td><td></tr>`
             }
+
+            // rank caps
+            const caps = Object.keys(rankCaps)
+            for (let g of caps) {
+                const ranks = Object.keys(rankCaps[g])
+                html += `<tr id='0:12.00'><td><input type="number" class="qty" size="4" max="20" /></td>
+                <td style="padding: 0;"><img src="images/Rank Cap ${g} Captain.png" width="65px" /></td>
+                <td style="padding: 2px;">
+                  Rank Cap ${g}
+                  <select name="rank_cap" id="rank_cap">
+                    <option value="0">Select Rank</option>
+                    ${ranks.map(rank => `<option value="${rankCaps[g][rank]}">${rank} -
+                        ${caps_stock[rankCaps[g][rank]] > 0 ? 'IN STOCK' : 'SOLD OUT'}</option>`)}
+                  </select>
+                </td>
+                <td><strike>15.00</strike><br />
+                <span style="color: red;">12.00</span></td><td></tr>`
+            }
+
             html += "</table><hr />"
 
 
@@ -773,14 +815,23 @@
                 const id = $(this).parent().parent().attr('id')
                 const info = id.split(':')
                 const item_id = parseInt(info[0])
-                const price = parseInt(info[1])
+                const price = parseFloat(info[1])
 
                 // check if it's a sweater and it's out of stock
-                if (item_id == 0) {
+                if (item_id == 0 && price == 20.00) {
                     const sweater_id = parseInt($(this).parent().parent().find("#sweater_size").val())
                     if (sweaters_stock[sweater_id] == 0) {
                         setTimeout(() => {
                             alert("Sorry, this sweater is out of stock.")
+                            $(this).val(0)
+                            calcTotal()
+                        }, 100)
+                    }
+                } else if (item_id == 0 && price == 12.00) {
+                    const cap_id = parseInt($(this).parent().parent().find("#rank_cap").val())
+                    if (caps_stock[cap_id] == 0) {
+                        setTimeout(() => {
+                            alert("Sorry, this rank cap is out of stock.")
                             $(this).val(0)
                             calcTotal()
                         }, 100)
@@ -803,11 +854,16 @@
                 const id = $(this).closest('tr').attr('id')
                 const info = id.split(':')
                 const item_id = info[0] > 0 ? info[0] : parseInt($(this).parent().parent().find("#sweater_size").val())
+                const price = parseFloat(info[1])
                 if (!item_id) {
-                    alert('You must select a size.')
-                    return false
+                    if (price == 20.00) {
+                        alert('You must select a sweater size.')
+                        return false
+                    } else if (price == 12.00) {
+                        alert('You must select a rank for the rank cap.')
+                        return false
+                    }
                 }
-                const price = info[1]
                 if (item_id && price) list.push({user_id, item_id, price, qty})
             }
         })
@@ -990,6 +1046,7 @@
         $(document).on('blur', '.qty', calcTotal)
         $(document).on('click', '#purchase', purchaseSets);
         $(document).on('change', '#sweater_size', calcTotal)
+        $(document).on('change', '#rank_cap', calcTotal)
     });
 </script>
 </html>
