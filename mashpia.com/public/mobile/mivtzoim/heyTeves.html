@@ -752,8 +752,7 @@
 
             let html = "<table><tr><th>Qty</th><th></th><th>Seforim</th><th>Price</th><th>In Stock</th></tr>"
             for (let item of items) {
-                if (item.item.includes('Sweater')) continue // skip sweaters
-                if (item.item.includes('Rank Cap')) continue // skip rank caps
+                if (item.item.includes('Sweater') || item.item.includes('Rank Cap')) continue // skip sweaters and rank caps
                 html += `<tr id="${item.mivtzoim_item_id}:${item.sale}"><td><input type='number' class='qty' size="4" max="${item.stock > 20 ? 20 : item.stock}"`
                 if (parseInt(item.stock) === 0) html += ' disabled';
                 html += ` /></td><td style="padding: 0;"><img src="images/${item.thumb}" width="65px" /></td>
@@ -853,14 +852,18 @@
                 const user_id = $(this).closest('.child').attr('id')
                 const id = $(this).closest('tr').attr('id')
                 const info = id.split(':')
-                const item_id = info[0] > 0 ? info[0] : parseInt($(this).parent().parent().find("#sweater_size").val())
                 const price = parseFloat(info[1])
+                const item_id = info[0] > 0 ? info[0] : 
+                    (price == 20.00 ? parseInt($(this).parent().parent().find("#sweater_size").val()) : 0) ||
+                    (price == 12.00 ? parseInt($(this).parent().parent().find("#rank_cap").val()) : 0)
                 if (!item_id) {
                     if (price == 20.00) {
                         alert('You must select a sweater size.')
+                        list = [] // clear the list
                         return false
                     } else if (price == 12.00) {
                         alert('You must select a rank for the rank cap.')
+                        list = [] // clear the list
                         return false
                     }
                 }
@@ -874,7 +877,7 @@
         e.preventDefault()
 
         let seforim = getListOfSeforim();
-        if (!seforim) {
+        if (!seforim || seforim.length == 0) {
             return false
         }
 
