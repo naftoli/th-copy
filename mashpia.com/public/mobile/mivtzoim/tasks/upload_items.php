@@ -15,6 +15,7 @@ $stmt = $MASHPIA_DB->prepare("
     INSERT INTO mashpia_purchases.mivtzoim_items 
     SET
         item = :item,
+        size = :size,
         yom_tov = 'Hei Teves',
         msrp = :msrp,
         sale = :sale,
@@ -26,11 +27,12 @@ $stmt = $MASHPIA_DB->prepare("
 $update = $MASHPIA_DB->prepare("
     UPDATE mashpia_purchases.mivtzoim_items
     SET
+        size = :size,
         msrp = :msrp,
         sale = :sale,
         stock = :stock,
         ord = :order
-    WHERE mivtzoim_item_id = :id
+    WHERE mivtzoim_item_id = :id OR item = :item
 ");
 
 if (isset($_FILES['items'])) {
@@ -42,38 +44,42 @@ if (isset($_FILES['items'])) {
         $id = $line[$i++];
         $item = $line[$i++];
         $size = $line[$i++];
+        if ($size == 'NULL') $size = null;
         $yom_tov = $line[$i++];
         $msrp = $line[$i++];
         $sale = $line[$i++];
         $stock = $line[$i++];
         $image = $line[$i++];
         $order = $line[$i++];
-        if ($id) {
+        // if ($id) {
             if (! $update->execute([
                 ':id' => $id,
+                ':item' => $item,
                 ':msrp' => $msrp,
                 ':sale' => $sale,
                 ':stock' => $stock,
-                ':order' => $order
+                ':order' => $order, 
+                ':size' => $size
             ])) {
                 $MASHPIA_DB->rollback();
                 echo "Error: " . $update->errorInfo()[2];
                 exit;
             }
-        } else {
-            if (! $stmt->execute([
-                ':item' => $item,
-                ':msrp' => $msrp,
-                ':sale' => $sale,
-                ':stock' => $stock,
-                ':thumb' => $image,
-                ':order' => $order
-            ])) {
-                $MASHPIA_DB->rollback();
-                echo "Error: " . $stmt->errorInfo()[2];
-                exit;
-            }
-        }
+        // } else {
+        //     if (! $stmt->execute([
+        //         ':item' => $item,
+        //         ':msrp' => $msrp,
+        //         ':sale' => $sale,
+        //         ':stock' => $stock,
+        //         ':thumb' => $image,
+        //         ':order' => $order,
+        //         ':size' => $size
+        //     ])) {
+        //         $MASHPIA_DB->rollback();
+        //         echo "Error: " . $stmt->errorInfo()[2];
+        //         exit;
+        //     }
+        // }
     }
     $MASHPIA_DB->commit();
     echo "done.";
