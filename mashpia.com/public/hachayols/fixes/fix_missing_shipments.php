@@ -70,7 +70,7 @@ if (isset($_FILES['file'])) {
                 $res = $stmt->execute([
                     'year' => $year,
                     'user' => $user_id,
-                    'item' => 'HACH01',
+                    'item' => ('HACH0' . $shipment_number),
                     'num' => 0,
                     'status' => 1,
                     'date' => $dates[$shipment_number]->format('Y-m-d H:i:s'),
