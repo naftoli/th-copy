@@ -40,11 +40,13 @@ if (isset($_FILES['file'])) {
             continue;
         }
         $admin_id = $data[0];
+        $row_shipments = [];
         for ($i = 1; $i < 5; $i++) {
             if (intval($data[$i])) {
-                $shipments[$admin_id][] = $i;
+                $row_shipments[] = $i;
             }
         }
+        $shipments[$admin_id][] = $row_shipments;
     }
     fclose($handle);
 
@@ -58,15 +60,18 @@ if (isset($_FILES['file'])) {
     $success = true;
     $MASHPIA_DB->beginTransaction();
 
-    foreach ($shipments as $admin_id => $shipment_numbers) {
+    foreach ($shipments as $admin_id => $rows) {
         $stmtUsers->execute([
             'admin_id' => $admin_id,
             'year' => $year
         ]);
         $users = $stmtUsers->fetchAll(PDO::FETCH_ASSOC);
-        foreach ($users as $user) {
+        foreach ($users as $index => $user) {
+            if (!isset($rows[$index])) {
+                continue;
+            }
             $user_id = $user['user_id'];
-            foreach ($shipment_numbers as $shipment_number) {
+            foreach ($rows[$index] as $shipment_number) {
                 $res = $stmt->execute([
                     'year' => $year,
                     'user' => $user_id,
