@@ -983,9 +983,9 @@
         let soldOut = false;
         const now = Math.floor( new Date().getTime() / 1000);
         console.log( now );
-        if ( now >= 1736398800 && !Cookies.get('naftoli') ) {
-            soldOut = true;
-        }
+        // if ( now >= 1736398800 && !Cookies.get('naftoli') ) {
+        //     soldOut = true;
+        // }
 
         $(document).on('click', '.payment', function () {
             if (parseInt($(this).val()) === 1) {
