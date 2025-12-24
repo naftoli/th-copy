@@ -1,4 +1,8 @@
 <?php
+/**
+ * gets possible future medals for a school
+ */
+
 $admin_auth = array('school');
 require('header.php');
 require_once('calendar.php');
