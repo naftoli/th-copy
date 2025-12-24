@@ -44,6 +44,7 @@ if (isset($_FILES['file'])) {
     $dates[2] = new DateTime('2025-09-16');
     $dates[3] = new DateTime('2025-10-21');
     $dates[4] = new DateTime('2025-10-31');
+    $dates[5] = new DateTime('2025-12-24');
 
     $shipment_number = intval($_POST['shipment_number']);
 
@@ -52,13 +53,8 @@ if (isset($_FILES['file'])) {
         exit;
     }
 
-    if ($shipment_number < 1 || $shipment_number > 4) {
-        echo 'Shipment number must be between 1 and 4';
-        exit;
-    }
-
     if (! isset($dates[$shipment_number])) {
-        echo 'Shipment date is required';
+        echo 'Shipment number not valid';
         exit;
     }
 
