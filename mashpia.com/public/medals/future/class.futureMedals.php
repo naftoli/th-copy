@@ -73,7 +73,7 @@ class FutureMedals {
                 ut.enrolled = 1 
                 and u.school_id in (" . implode(',', $this->schools) . ")";
         if ($this->class_id > 0) {
-            $sql .= " and u.class_id = :class_id";
+            $sql .= " AND u.class_id = :class_id";
         }
         $sql .= " ORDER BY user_id";
         $stmt = $MASHPIA_DB->prepare($sql);
@@ -106,7 +106,7 @@ class FutureMedals {
             WHERE
                 u.school_id in (" . implode(',', $this->schools) . ")";
         if ($this->class_id > 0) {
-            $sql .= " and u.class_id = :class_id";
+            $sql .= " AND u.class_id = :class_id";
         }
         $sql .= " GROUP BY user_id , subject_id";
         $stmt = $MASHPIA_DB->prepare($sql);
@@ -156,16 +156,21 @@ class FutureMedals {
                     AND dt.mandatory_qty = 1 
                     AND u.school_id IN (" . implode(',', $this->schools) . ")";
         if ($this->class_id > 0) {
-            $sql .= " and u.class_id = :class_id";
+            $sql .= " AND u.class_id = :class_id";
         }
         $sql .= " GROUP BY user_id, subject_id";
         $stmt = $MASHPIA_DB->prepare($sql);
         if ($this->class_id > 0) {
             $stmt->execute([
+                ':today'    => unixtojd(),
+                ':end_date' => $this->end_date,
                 ':class_id' => $this->class_id
             ]);
         } else {
-            $stmt->execute();
+            $stmt->execute([
+                ':today'    => unixtojd(),
+                ':end_date' => $this->end_date,
+            ]);
         }
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (! $rows) {
