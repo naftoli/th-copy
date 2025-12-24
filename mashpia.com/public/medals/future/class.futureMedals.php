@@ -136,7 +136,7 @@ class FutureMedals {
         $missions = [];
         $sql = "
             SELECT 
-                COUNT(*) AS num_missions
+                subject_id, COUNT(*) AS num_missions
             FROM
                 date_tasks_missions dtm
                     JOIN
@@ -146,7 +146,7 @@ class FutureMedals {
                     JOIN
                 users u USING (user_id)
             WHERE
-                dtm.subject_id = :subject 
+                dtm.personal = 0
                     AND dtm.start_date >= :today 
                     AND dtm.end_date <= :end_date 
                     AND u.user_id = :user
@@ -154,23 +154,22 @@ class FutureMedals {
                     AND ut.track_id = dtm.track_id
                     AND ut.level = dtm.level
                     AND u.lang_id = dtm.lang_id 
-                    AND dt.mandatory_qty = 1 
-                    AND dtm.personal = 0";
+                    AND dt.mandatory_qty = 1
+            GROUP BY subject_id";
 
         $stmt = $MASHPIA_DB->prepare($sql);
-        foreach ($this->user_subjects[$user_id] as $subject_id) {
-            $stmt->execute([
-                ':subject'  => $subject_id,
-                ':today'    => unixtojd(),
-                ':end_date' => $this->end_date,
-                ':user'     => $user_id
-            ]);
-            $row = $stmt->fetch(PDO::FETCH_ASSOC);
-            if (! $row) {
-                echo $stmt->debugDumpParams();
-                exit;
-            }
-            $missions[$subject_id] = intval($row['num_missions']);
+        $stmt->execute([
+            ':today'    => unixtojd(),
+            ':end_date' => $this->end_date,
+            ':user'     => $user_id
+        ]);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        if (! $rows) {
+            echo $stmt->debugDumpParams();
+            exit;
+        }
+        foreach ($rows as $row) {
+            $missions[$row['subject_id']] = intval($row['num_missions']);
         }
 
         return $missions;
