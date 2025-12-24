@@ -17,14 +17,12 @@ if ($admin_user['auth'] != 'super') {
 
 //******************** SCRIPT START HERE ************************//
 
-$info = file_get_contents("php://input");
-$info = json_decode($info, true);
-
+$info = json_decode(file_get_contents("php://input"), true);
 $school_id = $info['school_id'];
 $end_date = $info['end_date'];
 
-require_once 'future/class.futureMedals.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/medals/future/class.futureMedals.php';
 $fm = new FutureMedals($year, $end_date, [$school_id]);
 $future_medals = $fm->getFutureMedals();  // array of user_id => num_medals
-
 echo json_encode($future_medals);
+exit;
