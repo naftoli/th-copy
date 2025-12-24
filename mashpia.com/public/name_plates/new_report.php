@@ -18,9 +18,9 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
-$info['newly_registered'] = getNewlyRegistered();
-$info['promoted'] = getPromoted(); // adds promoted to info
-$info['future_promoted'] = getFuturePromoted(); // adds future promoted to info
+getNewlyRegistered();
+getPromoted(); // adds promoted to info
+getFuturePromoted(); // adds future promoted to info
 
 function getNewlyRegistered() {
     global $MASHPIA_DB, $year, $schools, $info;
@@ -39,7 +39,7 @@ function getNewlyRegistered() {
     // $stmt->debugDumpParams();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
-        $info[$row['school_id']][$row['class_grade']][$row['class_sub']][] = $row;
+        $info['new'][$row['school_id']][$row['class_grade']][$row['class_sub']][] = $row;
     }
 }
 
@@ -58,13 +58,13 @@ function getPromoted() {
     // $stmt->debugDumpParams();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
-        $info[$row['school_id']][$row['class_grade']][$row['class_sub']][] = $row;
+        $info['promoted'][$row['school_id']][$row['class_grade']][$row['class_sub']][] = $row;
     }
 }
 
 function getFuturePromoted() {
     global $MASHPIA_DB, $year, $schools, $info;
-    return [];
+    $info['future'] = [];
 }
 
 $reasons = [
