@@ -109,13 +109,8 @@ if (isset($_FILES['file'])) {
     <body>
         <form action="fix_missing_shipments_with_number.php" method="post" enctype="multipart/form-data">
             <input type="file" name="file" id="file">
-            <input type="hidden" name="shipment_number" value="getShipmentNumber()">
+            <input type="hidden" name="shipment_number" value="<?= $_GET['shipment_number'] ?>">
             <input type="submit" value="Upload">
         </form>
     </body>
-    <script>
-        function getShipmentNumber() {
-            return URLSearchParams(window.location.search).get('shipment_number');
-        }
-    </script>
 </html>
