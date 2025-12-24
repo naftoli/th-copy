@@ -136,7 +136,7 @@ class FutureMedals {
         $missions = [];
         $sql = "
             SELECT 
-                subject_id, COUNT(*) AS num_missions
+                user_id, subject_id, COUNT(*) AS num_missions
             FROM
                 date_tasks_missions dtm
                     JOIN
@@ -149,27 +149,31 @@ class FutureMedals {
                 dtm.personal = 0
                     AND dtm.start_date >= :today 
                     AND dtm.end_date <= :end_date 
-                    AND u.user_id = :user
                     AND u.school_type_id = dtm.school_type_id
                     AND ut.track_id = dtm.track_id
                     AND ut.level = dtm.level
                     AND u.lang_id = dtm.lang_id 
-                    AND dt.mandatory_qty = 1
-            GROUP BY subject_id";
-
+                    AND dt.mandatory_qty = 1 
+                    AND u.school_id IN (" . implode(',', $this->schools) . ")";
+        if ($this->class_id > 0) {
+            $sql .= " and u.class_id = :class_id";
+        }
+        $sql .= " GROUP BY user_id, subject_id";
         $stmt = $MASHPIA_DB->prepare($sql);
-        $stmt->execute([
-            ':today'    => unixtojd(),
-            ':end_date' => $this->end_date,
-            ':user'     => $user_id
-        ]);
+        if ($this->class_id > 0) {
+            $stmt->execute([
+                ':class_id' => $this->class_id
+            ]);
+        } else {
+            $stmt->execute();
+        }
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (! $rows) {
             echo $stmt->debugDumpParams();
             exit;
         }
         foreach ($rows as $row) {
-            $missions[$row['subject_id']] = intval($row['num_missions']);
+            $missions[$row['user_id']][$row['subject_id']] = intval($row['num_missions']);
         }
 
         return $missions;
@@ -182,7 +186,7 @@ class FutureMedals {
         // find out how many more medals can be earned by certain date by subject
         foreach ($this->user_subjects[$user_id] as $subject) {
             $current = $this->missions_done[$user_id][$subject] ?? 0;
-            $future = $future_missions[$subject] ?? 0;
+            $future = $future_missions[$user_id][$subject] ?? 0;
             $total = $current + $future;
             $current_medal = $this->ms->calcHighestMedal($subject, $current);
             $future_medal = $this->ms->calcHighestMedal($subject, $total);
