@@ -27,7 +27,7 @@ class FutureMedals {
         $users = [];
         $sql = "select * from users u 
                 join user_registration ur on ur.user_id = u.user_id 
-                where u.school_id in " . implode(',', $this->schools) . "
+                where u.school_id in (" . implode(',', $this->schools) . ")
                 and ur.year = :year 
                 and u.user_registered > 0";
         $stmt = $MASHPIA_DB->prepare($sql);
@@ -55,7 +55,7 @@ class FutureMedals {
                 users u USING (user_id)
             WHERE
                 ut.enrolled = 1 
-                and u.school_id in " . implode(',', $this->schools) . "
+                and u.school_id in (" . implode(',', $this->schools) . ")
             ORDER BY user_id";
         $result = $MASHPIA_DB->query($sql);
         $rows = $result->fetchAll(PDO::FETCH_ASSOC);
@@ -80,7 +80,7 @@ class FutureMedals {
                     JOIN
                 users u USING (user_id)
             WHERE
-                u.school_id in " . implode(',', $this->schools) . "
+                u.school_id in (" . implode(',', $this->schools) . ")
             GROUP BY user_id , subject_id
         ";
         $stmt = $MASHPIA_DB->query($sql);
