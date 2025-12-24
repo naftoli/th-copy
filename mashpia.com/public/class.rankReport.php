@@ -36,10 +36,6 @@ class RankReport extends Report {
         $this->year = GlobalSettings::getRegistrationYear();
     }
 
-    public function removeException($school_id) {
-        $this->schoolExceptions = array_diff($this->schoolExceptions, [$school_id]);
-    }
-
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {
         // if there's a school ID, update year
         if ($this->school_id) {
@@ -72,8 +68,12 @@ class RankReport extends Report {
             $sql .= "AND s.school_id = $this->school_id ";
         }
         if (! $forShipping ) {
+            $exceptions = $this->schoolExceptions;
+            if ( in_array($this->school_id, [61, 269]) ) {
+                $exceptions = array_diff($this->schoolExceptions, [61, 269]);
+            }
             $sql .= "
-                AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+                AND s.school_id not in (" . implode(',', $exceptions) . ")
             ";
         }
         if ( $rankOrd ) {
@@ -173,6 +173,11 @@ class RankReport extends Report {
         $this->ranks = [];
         $this->setRankNames();
 
+        $exceptions = $this->schoolExceptions;
+        if ( in_array($this->school_id, [61, 269]) ) {
+            $exceptions = array_diff($this->schoolExceptions, [61, 269]);
+        }
+
         $sql = "
             SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, u.*, MAX(rm.rank_ord) as rnk 
             FROM rank_marks rm
@@ -187,7 +192,7 @@ class RankReport extends Report {
             $sql .= "AND s.school_id = $this->school_id ";
         }
         $sql .= "
-            AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+            AND s.school_id not in (" . implode(',', $exceptions) . ")
         ";
         $sql .= "GROUP BY u.user_id ";
         $sql .= "ORDER BY s.school_name, rnk, c.class_grade, c.class_sub, u.last, u.first";
@@ -238,6 +243,10 @@ class RankReport extends Report {
         $start = $this->reportDates['start'];
         $end = $this->reportDates['end'];
         $filter = " AND (date_promoted >= $start AND date_promoted <= $end)";
+        $exceptions = $this->schoolExceptions;
+        if ( in_array($this->school_id, [61, 269]) ) {
+            $exceptions = array_diff($this->schoolExceptions, [61, 269]);
+        }
         $sql = "
             SELECT s.school_name, s.logo, s.logo_boys, s.logo_girls, s.school_logo_id, c.class_teacher, c.class_grade, c.class_sub, 
                    u.*, rm.*, MAX(rm.rank_ord) as `rank` 
@@ -254,7 +263,7 @@ class RankReport extends Report {
             $sql .= "AND s.school_id = $this->school_id ";
         } else {
             $sql .= "
-                AND s.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+                AND s.school_id not in (" . implode(',', $exceptions) . ")
             ";
         }
         if ($gender == 'm' || $gender == 'f') {

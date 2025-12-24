@@ -187,6 +187,7 @@ foreach ($list_of_schools as $schoolID) {
         else $info[$cat] += $cs->$nameOfFunc($_POST['gender'], $schoolID, $listOfItems);
     }
 }
+// echo "<pre>"; print_r($info); echo "</pre>"; exit;
 $info['status'] = $cs->getStatus();
 
 // find all unique tables to fetch from

@@ -55,7 +55,13 @@ class MedalReport extends Report {
                 $filter ";
             if ( $this->school_id > 0 )
                 $sql .= " AND u.school_id = $this->school_id ";
-            if (! $forShipping ) $sql .= " AND u.school_id not in (" . implode(',', $this->schoolExceptions) . ") ";
+            if (! $forShipping ) {
+                $exceptions = $this->schoolExceptions;
+                if ( in_array($this->school_id, [61, 269]) ) {
+                    $exceptions = array_diff($this->schoolExceptions, [61, 269]);
+                }
+                $sql .= " AND u.school_id not in (" . implode(',', $exceptions) . ") ";
+            }
             if ( $forShipping ) {
                 $sql .= "
                     AND mm.date_shipped IS NULL
@@ -70,6 +76,10 @@ class MedalReport extends Report {
             ";
             // echo $sql; exit;
         } else {
+            $exceptions = $this->schoolExceptions;
+            if ( in_array($this->school_id, [61, 269]) ) {
+                $exceptions = array_diff($this->schoolExceptions, [61, 269]);
+            }
             $sql = "
                 SELECT sch.school_name, s.subject_name, m.medal_name, count( u.user_id ) as total  
                 FROM medal_marks mm
@@ -86,7 +96,7 @@ class MedalReport extends Report {
             if ( $this->school_id > 0 )
                 $sql .= " AND u.school_id = $this->school_id ";
             $sql .= "
-                AND u.school_id not in (" . implode(',', $this->schoolExceptions) . ")
+                AND u.school_id not in (" . implode(',', $exceptions) . ")
             ";
             $sql .= "
                 GROUP BY sch.school_name, s.subject_id, mm.medal_ord   
