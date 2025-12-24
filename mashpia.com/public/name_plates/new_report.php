@@ -18,12 +18,12 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
-$info = getNewlyRegistered($schools);
-$info = array_replace_recursive(getPromoted($schools), $info); // adds promoted to info
-$info = array_replace_recursive(getFuturePromoted($schools), $info); // adds future promoted to info
+$info['newly_registered'] = getNewlyRegistered();
+$info['promoted'] = getPromoted(); // adds promoted to info
+$info['future_promoted'] = getFuturePromoted(); // adds future promoted to info
 
 function getNewlyRegistered() {
-    global $MASHPIA_DB;
+    global $MASHPIA_DB, $year, $schools, $info;
     $sql = "SELECT s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.first_he, u.last_he, u.user_serial 
             FROM users u 
             JOIN schools s ON s.school_id = u.school_id
@@ -31,10 +31,12 @@ function getNewlyRegistered() {
             JOIN user_registration ur USING (user_id) 
             WHERE ur.year = ? 
             AND u.user_id NOT IN (
-                SELECT user_id FROM user_registration WHERE year = ?
-            )";
+                SELECT user_id FROM name_plates WHERE year = ? AND school_id IN (" . implode(',', array_keys($schools)) . ")
+            )
+            AND u.school_id IN (" . implode(',', array_keys($schools)) . ")";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute([$year, $year - 1]);
+    // $stmt->debugDumpParams();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
         $info[$row['school_id']][$row['class_grade']][$row['class_sub']][] = $row;
@@ -42,7 +44,7 @@ function getNewlyRegistered() {
 }
 
 function getPromoted() {
-    global $MASHPIA_DB, $start_date;
+    global $MASHPIA_DB, $start_date, $schools, $info;
     $sql = "SELECT s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.first_he, u.last_he, u.user_serial, rm.rank_ord  
             FROM users u 
             JOIN rank_marks rm USING (user_id)
@@ -50,9 +52,10 @@ function getPromoted() {
             JOIN classes c ON c.class_id = u.class_id
             WHERE rm.date_promoted >= ?
             AND rm.rank_ord IN (9, 12) 
-            ORDER BY s.school_name, c.class_grade, c.class_sub, u.last, u.first, rm.rank_ord";
+            AND u.school_id IN (" . implode(',', array_keys($schools)) . ")";
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([$start_date, $end_date]);
+    $stmt->execute([$start_date]);
+    // $stmt->debugDumpParams();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($rows as $row) {
         $info[$row['school_id']][$row['class_grade']][$row['class_sub']][] = $row;
@@ -60,8 +63,17 @@ function getPromoted() {
 }
 
 function getFuturePromoted() {
-    global $MASHPIA_DB;
+    global $MASHPIA_DB, $year, $schools, $info;
+    return [];
 }
+
+$reasons = [
+    'new' => 'New Registration',
+    'promoted' => 'Promotion (General / 3* General)',
+    'future' => 'Future Promotion (General / 3* General)',
+];
+
+echo '<pre>'; print_r($info); echo '</pre>'; exit;
 /**
  Name Plate Report should include the following Information for each child: 
 - school
@@ -121,11 +133,26 @@ The following children should come up in the report. With the reason written in 
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($schools as $school) : ?>
-                <tr>
-                    <td><?php echo $school; ?></td>
-                </tr>
-            <?php endforeach; ?>
+            <?php
+            foreach ($info as $reason => $more) {
+                foreach ($more as $school_id => $other) {
+                    foreach ($other as $class_grade => $more_sub) {
+                        foreach ($more_sub as $class_sub => $rows) {
+                            foreach ($rows as $row) {
+                                echo '<tr>';
+                                echo '<td>' . $schools[$school_id] . '</td>';
+                                echo '<td>' . $class_grade . ($class_sub ? '-' . $class_sub : '') . '</td>';
+                                echo '<td>' . $row['user_serial'] . '</td>';
+                                echo '<td>' . $row['first'] . ' ' . $row['last'] . '</td>';
+                                echo '<td>' . $row['first_he'] . ' ' . $row['last_he'] . '</td>';
+                                echo '<td>' . $reasons[$reason] . '</td>';
+                                echo '</tr>';
+                            }
+                        }
+                    }
+                }
+            }
+            ?>
         </tbody>
     </table>
     <script>
