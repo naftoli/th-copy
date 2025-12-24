@@ -107,7 +107,7 @@ if (isset($_FILES['file'])) {
         <title>Fix Missing Shipments</title>
     </head>
     <body>
-        <form action="fix_missing_shipments.php" method="post" enctype="multipart/form-data">
+        <form action="fix_missing_shipments_with_number.php" method="post" enctype="multipart/form-data">
             <input type="file" name="file" id="file">
             <input type="hidden" name="shipment_number" value="getShipmentNumber()">
             <input type="submit" value="Upload">
