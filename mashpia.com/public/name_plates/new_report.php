@@ -12,7 +12,7 @@ if ($admin_user['auth'] != 'super') {
     die('Access Denied');
 }
 
-$start_date = 2457540; // Rosh Chodesh Sivan 5785
+$start_date = 2460824; // Rosh Chodesh Sivan 5785
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
