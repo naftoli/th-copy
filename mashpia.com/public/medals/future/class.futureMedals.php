@@ -19,6 +19,12 @@ class FutureMedals {
         $this->users = $this->getUsers($year);
         $this->user_subjects = $this->getUserSubjects();
         $this->missions_done = $this->getMissionsDone();
+        echo "<pre>";
+        print_r($this->users);
+        print_r($this->user_subjects);
+        print_r($this->missions_done);
+        echo "</pre>";
+        exit;
     }
 
     private function getUsers($year) {
