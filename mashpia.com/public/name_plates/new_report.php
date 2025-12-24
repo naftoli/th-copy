@@ -73,7 +73,6 @@ $reasons = [
     'future' => 'Future Promotion (General / 3* General)',
 ];
 
-echo '<pre>'; print_r($info); echo '</pre>'; exit;
 /**
  Name Plate Report should include the following Information for each child: 
 - school
