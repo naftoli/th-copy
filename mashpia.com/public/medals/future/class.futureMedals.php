@@ -100,7 +100,6 @@ class FutureMedals {
             echo $stmt->debugDumpParams();
             exit;
         }
-        exit;
         $missions_by_subject = [];
         foreach ($rows as $row) {
             $missions_by_subject[$row['user_id']][$row['subject_id']] = intval($row['total']);
