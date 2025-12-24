@@ -6,15 +6,17 @@ require_once 'class.medalsSubjects.php';
 
 class FutureMedals {
     private $schools;
+    private $class_id;
     private $end_date;
     private $ms; // medals subjects class
     private $users;
     private $user_subjects;
     private $missions_done;
 
-    public function __construct($year, $end_date, $schools) {
+    public function __construct($year, $end_date, $schools, $class_id = 0) {
         $this->end_date = $end_date;
         $this->schools = $schools;
+        $this->class_id = $class_id;
         $this->ms = new MedalsSubjects();
         $this->users = $this->getUsers($year);
         $this->user_subjects = $this->getUserSubjects();
@@ -30,8 +32,20 @@ class FutureMedals {
                 where u.school_id in (" . implode(',', $this->schools) . ")
                 and ur.year = :year 
                 and u.user_registered > 0";
+        if ($this->class_id > 0) {
+            $sql .= " and u.class_id = :class_id";
+        }
         $stmt = $MASHPIA_DB->prepare($sql);
-        $stmt->execute(['year' => $year]);
+        if ($this->class_id > 0) {
+            $stmt->execute([
+                ':year' => $year,
+                ':class_id' => $this->class_id
+            ]);
+        } else {
+            $stmt->execute([
+                ':year' => $year
+            ]);
+        }
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (! $rows) {
             echo $stmt->debugDumpParams();
@@ -57,15 +71,20 @@ class FutureMedals {
                 users u USING (user_id)
             WHERE
                 ut.enrolled = 1 
-                and u.school_id in (" . implode(',', $this->schools) . ")
-            ORDER BY user_id";
-        $result = $MASHPIA_DB->query($sql);
-        $rows = $result->fetchAll(PDO::FETCH_ASSOC);
-        if (! $rows) {
-            echo $stmt->debugDumpParams();
-            exit;
+                and u.school_id in (" . implode(',', $this->schools) . ")";
+        if ($this->class_id > 0) {
+            $sql .= " and u.class_id = :class_id";
         }
-        exit;
+        $sql .= " ORDER BY user_id";
+        $stmt = $MASHPIA_DB->prepare($sql);
+        if ($this->class_id > 0) {
+            $stmt->execute([
+                ':class_id' => $this->class_id
+            ]);
+        } else {
+            $stmt->execute();
+        }
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
             $subjects[$row['user_id']][] = $row['subject_id'];
         }
@@ -85,10 +104,19 @@ class FutureMedals {
                     JOIN
                 users u USING (user_id)
             WHERE
-                u.school_id in (" . implode(',', $this->schools) . ")
-            GROUP BY user_id , subject_id
-        ";
-        $stmt = $MASHPIA_DB->query($sql);
+                u.school_id in (" . implode(',', $this->schools) . ")";
+        if ($this->class_id > 0) {
+            $sql .= " and u.class_id = :class_id";
+        }
+        $sql .= " GROUP BY user_id , subject_id";
+        $stmt = $MASHPIA_DB->prepare($sql);
+        if ($this->class_id > 0) {
+            $stmt->execute([
+                ':class_id' => $this->class_id
+            ]);
+        } else {
+            $stmt->execute();
+        }
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (! $rows) {
             echo $stmt->debugDumpParams();

@@ -20,9 +20,10 @@ if ($admin_user['auth'] != 'super') {
 $info = json_decode(file_get_contents("php://input"), true);
 $school_id = $info['school_id'];
 $end_date = $info['end_date'];
+$class_id = $info['class_id'] ?? 0;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/medals/future/class.futureMedals.php';
-$fm = new FutureMedals($year, $end_date, [$school_id]);
+$fm = new FutureMedals($year, $end_date, [$school_id], $class_id);
 $future_medals = $fm->getFutureMedals();  // array of user_id => num_medals
 echo json_encode($future_medals);
 exit;
