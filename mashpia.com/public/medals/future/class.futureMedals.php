@@ -39,8 +39,10 @@ class FutureMedals {
         $stmt = $MASHPIA_DB->prepare($sql);
         $stmt->execute(['year' => $year]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (! $rows) echo $stmt->debugDumpParams();
-        exit;
+        if (! $rows) {
+            echo $stmt->debugDumpParams();
+            exit;
+        }
         foreach ($rows as $row) {
             $users[] = $row['user_id'];
         }
@@ -65,7 +67,10 @@ class FutureMedals {
             ORDER BY user_id";
         $result = $MASHPIA_DB->query($sql);
         $rows = $result->fetchAll(PDO::FETCH_ASSOC);
-        if (! $rows) echo $stmt->debugDumpParams();
+        if (! $rows) {
+            echo $stmt->debugDumpParams();
+            exit;
+        }
         exit;
         foreach ($rows as $row) {
             $subjects[$row['user_id']][] = $row['subject_id'];
@@ -91,7 +96,10 @@ class FutureMedals {
         ";
         $stmt = $MASHPIA_DB->query($sql);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (! $rows) echo $stmt->debugDumpParams();
+        if (! $rows) {
+            echo $stmt->debugDumpParams();
+            exit;
+        }
         exit;
         $missions_by_subject = [];
         foreach ($rows as $row) {
@@ -136,9 +144,11 @@ class FutureMedals {
                 ':end_date' => $this->end_date,
                 ':user'     => $user_id
             ]);
-            if (! $row) echo $stmt->debugDumpParams();
-            exit;
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if (! $row) {
+                echo $stmt->debugDumpParams();
+                exit;
+            }
             $missions[$subject_id] = intval($row['num_missions']);
         }
 
