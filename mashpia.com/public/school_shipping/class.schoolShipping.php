@@ -59,7 +59,11 @@ class SchoolShipping
             foreach ($school_prizes as $school_id => $raffles) {
                 foreach ($raffles as $raffle_id => $prizes) {
                     foreach ($prizes as $prize) {
-                        $prize_info = $this->prizes[$prize];
+                        $prize_info = $this->prizes[$prize] ?? null;
+                        if (!$prize_info) {
+                            echo "Prize $prize not found for School $school_id and Raffle $raffle_id<br /><br />";
+                            continue;
+                        }
                         $prize_name = $prize_info['name'];
                         $raffle_name = $this->raffles[$raffle_id];
                         // check if this prize is already in the list
