@@ -208,7 +208,7 @@ $reasons = [
                         });
                     });
                 });
-                $('#name_plate_report tbody').html(html);
+                $('#name_plate_report tbody').append(html);
                 $('#loading').hide();
                 $('#name_plate_report').show();
             }).catch(error => {
