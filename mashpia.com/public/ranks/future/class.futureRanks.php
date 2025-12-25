@@ -32,12 +32,12 @@ class FutureRanks {
         global $MASHPIA_DB;
 
         $current_medals = [];
-        $sql = "SELECT user_id, MAX(medal_ord) as medal FROM medal_marks  
-                WHERE user_id in (
-                    SELECT user_id FROM users WHERE school_id IN (" . implode(',', $this->schools) . ")
-                    AND user_registered IS NOT NULL 
-                    AND user_registered > '0000-00-00 00:00:00'
-                ) 
+        $sql = "SELECT user_id, MAX(medal_ord) as medal 
+                FROM medal_marks mm
+                JOIN users u ON u.user_id = mm.user_id
+                WHERE u.school_id IN (" . implode(',', $this->schools) . ")
+                AND u.user_registered IS NOT NULL 
+                AND u.user_registered > '0000-00-00 00:00:00'
                 GROUP BY user_id";
         $stmt = $MASHPIA_DB->prepare($sql);
         $stmt->execute();
