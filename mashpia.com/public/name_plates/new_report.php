@@ -92,6 +92,7 @@ function getPromoted() {
 $reasons = [
     'new' => 'New Registration',
     'promoted' => 'Promotion (General / 3* General)',
+    'future' => 'Future Promotion (General / 3* General)',
 ];
 ?>
 <!DOCTYPE html>
@@ -118,7 +119,7 @@ $reasons = [
     <?php include '../admin_header.php'; ?>
     <h1>Name Plate Report</h1>
     <button onclick="downloadReport()">Download Report</button><br /><br />
-    <table>
+    <table id="name_plate_report" style="display: none;">
         <thead>
             <tr>
                 <th>School</th>
@@ -186,6 +187,21 @@ $reasons = [
                 })
             ).then(data => {
                 console.log(data);
+                let html = '';
+                data.forEach(items => {
+                    items.forEach(item => {
+                        html += `<tr>
+                                <td>${item.school_name}</td>
+                                <td>${item.class_grade}</td>
+                                <td>${item.class_sub}</td>
+                                <td>${item.user_serial}</td>
+                                <td>${item.first}</td>
+                                <td>${item.last}</td>
+                            </tr>`;
+                    });
+                });
+                $('#name_plate_report tbody').html(html);
+                $('#name_plate_report').show();
             }).catch(error => {
                 console.error(error);
             });
