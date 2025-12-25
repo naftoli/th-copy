@@ -199,12 +199,12 @@ $reasons = [
                         Object.keys(grade).forEach(sub => {
                             Object.keys(sub).forEach(student => {
                                 const child = data[school][grade][sub][student];
-                                const grade = grade + (sub ? '-' + sub : '');
+                                const class_grade = grade + (sub ? '-' + sub : '');
                                 const name = child.first + ' ' + child.last;
                                 const name_he = child.first_he + ' ' + child.last_he;
                                 html += `<tr>
                                     <td>${child.school_name}</td>
-                                    <td>${grade}</td>
+                                    <td>${class_grade}</td>
                                     <td>${child.user_serial}</td>
                                     <td>${name}</td>
                                     <td>${name_he}</td>
