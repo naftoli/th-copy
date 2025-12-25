@@ -19,6 +19,8 @@ class FutureMedals {
         $this->schools = $schools;
         $this->class_id = intval($class_id);
         $this->ms = new MedalsSubjects();
+        $this->users = [];
+        $this->users_by_school = [];
         $this->setUsers($year);
         $this->user_subjects = $this->getUserSubjects();
         $this->missions_done = $this->getMissionsDone();
@@ -27,7 +29,6 @@ class FutureMedals {
     private function getUsers($year) {
         global $MASHPIA_DB;
 
-        $users = [];
         $sql = "select * from users u 
                 join user_registration ur on ur.user_id = u.user_id 
                 where u.school_id in (" . implode(',', $this->schools) . ")
