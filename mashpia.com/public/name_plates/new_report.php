@@ -194,25 +194,26 @@ $reasons = [
             ).then(data => {
                 console.log(data);
                 let html = '';
-                data.forEach(school => {
-                    Object.keys(school).forEach(grade => {
-                        Object.keys(grade).forEach(sub => {
-                            Object.keys(sub).forEach(student => {
-                                const child = data[school][grade][sub][student];
-                                const class_grade = grade + (sub ? '-' + sub : '');
-                                const name = child.first + ' ' + child.last;
-                                const name_he = child.first_he + ' ' + child.last_he;
-                                html += `<tr>
-                                    <td>${child.school_name}</td>
-                                    <td>${class_grade}</td>
-                                    <td>${child.user_serial}</td>
-                                    <td>${name}</td>
-                                    <td>${name_he}</td>
-                                    <td>Future Promotion (General / 3* General)</td>
-                                </tr>`;
-                            });
-                        });
-                    });
+                data.forEach(info => {
+                    for (const [school, grades] of Object.entries(info)) {
+                        for (const [grade, subs] of Object.entries(grades)) {
+                            for (const [sub, children] of Object.entries(subs)) {
+                                children.forEach(child => {
+                                    const class_grade = grade + (sub ? '-' + sub : '');
+                                    const name = child.first + ' ' + child.last;
+                                    const name_he = child.first_he + ' ' + child.last_he;
+                                    html += `<tr>
+                                        <td>${child.school_name}</td>
+                                        <td>${class_grade}</td>
+                                        <td>${child.user_serial}</td>
+                                        <td>${name}</td>
+                                        <td>${name_he}</td>
+                                        <td>Future Promotion (General / 3* General)</td>
+                                    </tr>`;
+                                });
+                            }
+                        }
+                    }
                 });
                 $('#name_plate_report tbody').append(html);
                 $('#loading').hide();
