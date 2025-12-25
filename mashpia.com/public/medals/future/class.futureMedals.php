@@ -130,7 +130,7 @@ class FutureMedals {
         return $missions_by_subject;
     }
 
-    private function getFutureMissions($user_id) {
+    private function getFutureMissions($school_id) {
         global $MASHPIA_DB;
 
         $missions = [];
@@ -154,7 +154,7 @@ class FutureMedals {
                     AND ut.level = dtm.level
                     AND u.lang_id = dtm.lang_id 
                     AND dt.mandatory_qty = 1 
-                    AND u.user_id = :user_id 
+                    AND u.school_id = :school_id 
                     AND u.user_registered is not null 
                     AND u.user_registered > '0000-00-00 00:00:00' 
                     GROUP BY user_id, subject_id";
@@ -162,9 +162,8 @@ class FutureMedals {
         $stmt->execute([
             ':today'    => unixtojd(),
             ':end_date' => $this->end_date,
-            ':user_id' => $user_id
+            ':school_id' => $school_id
         ]);
-
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (! $rows) {
             echo $stmt->debugDumpParams();
@@ -179,7 +178,11 @@ class FutureMedals {
 
     private function getEligibleMedals($user_id) {    
         $numMedals = 0;
-        $future_missions = $this->getFutureMissions($user_id);
+
+        foreach ($this->schools as $school_id) {
+            $future_missions = $this->getFutureMissions($school_id);
+            $numMedals += $future_missions[$user_id][$subject] ?? 0;
+        }
 
         // find out how many more medals can be earned by certain date by subject
         foreach ($this->user_subjects[$user_id] as $subject) {
