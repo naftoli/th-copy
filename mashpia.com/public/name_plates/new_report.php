@@ -23,6 +23,8 @@ The following children should come up in the report. With the reason written in 
 */
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
+ini_set('max_execution_time', 300);
+ini_set('memory_limit', '1024M');
 
 $admin_auth = ['school'];
 require_once '../header.php';
