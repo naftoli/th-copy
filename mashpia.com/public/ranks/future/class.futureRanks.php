@@ -52,11 +52,6 @@ class FutureRanks {
         $fm = new FutureMedals($this->year, $this->end_date, $this->schools);
         $future_medals = $fm->getFutureMedals();
         $current_medals = $this->getCurrentMedals();
-        echo "<pre>";
-        print_r($future_medals);
-        print_r($current_medals);
-        echo "</pre>";
-        exit;
 
         $future_ranks = [];
         foreach ($future_medals as $user_id => $medals) {
