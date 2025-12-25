@@ -177,10 +177,17 @@ $reasons = [
 
         window.onload = function() {
             const schools = <?=json_encode($schools);?>;
-            Object.keys(schools).forEach(async (school_id) => {
-                const res = await fetch(`api/get_future_rank.php?school_id=${school_id}`);
-                const data = await res.json();
+
+            Promise.all(
+                Object.keys(schools).map(async (school_id) => {
+                    const res = await fetch(`api/get_future_rank.php?school_id=${school_id}`);
+                    const data = await res.json();
+                    return data;
+                })
+            ).then(data => {
                 console.log(data);
+            }).catch(error => {
+                console.error(error);
             });
         }
     </script>
