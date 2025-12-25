@@ -2,7 +2,7 @@
 /**
  * gets future medals for a school
  */
-require_once 'class.medalsSubjects.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/medals/class.medalsSubjects.php';
 
 class FutureMedals {
     private $schools;
