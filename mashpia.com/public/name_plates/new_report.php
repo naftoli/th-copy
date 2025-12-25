@@ -21,7 +21,6 @@ The following children should come up in the report. With the reason written in 
 - Future Promotion 
 > A child who will be  promoted to general/3* general from today until 26 iyar 5786
 */
-
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 

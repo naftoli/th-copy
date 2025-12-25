@@ -30,9 +30,11 @@ class FutureRanks {
 
     private function getCurrentMedals() {
         global $MASHPIA_DB;
+
+        $current_medals = [];
         $sql = "SELECT user_id, MAX(medal_ord) as medal FROM medal_marks  
                 WHERE user_id in (
-                    SELECT user_id FROM users WHERE school_id IN (" . implode(',', $this->schools) . "
+                    SELECT user_id FROM users WHERE school_id IN (" . implode(',', $this->schools) . ")
                     AND user_registered IS NOT NULL 
                     AND user_registered > '0000-00-00 00:00:00'
                 ) 
