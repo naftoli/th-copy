@@ -12,6 +12,8 @@ if ($admin_user['auth'] != 'super') {
     die('Access Denied');
 }
 
+require_once '../medals/future/class.futureRanks.php';
+
 $start_date = 2460824; // Rosh Chodesh Sivan 5785
 
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
@@ -52,6 +54,8 @@ function getPromoted() {
             JOIN classes c ON c.class_id = u.class_id
             WHERE rm.date_promoted >= ?
             AND rm.rank_ord IN (9, 12) 
+            AND u.user_registered IS NOT NULL 
+            AND u.user_registered > '0000-00-00 00:00:00' 
             AND u.school_id IN (" . implode(',', array_keys($schools)) . ")";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute([$start_date]);
@@ -64,7 +68,17 @@ function getPromoted() {
 
 function getFuturePromoted() {
     global $MASHPIA_DB, $year, $schools, $info;
+
+    $end_date = 2461174; // 26 Iyar 5786
+    $fr = new FutureRanks($year, array_keys($schools), $end_date);
+    $future_ranks = $fr->getFutureRanks();
+
     $info['future'] = [];
+    foreach ($future_ranks as $user_id => $rank) {
+        if (in_array($rank, [9, 12])) {
+            $info['future'][] = $user_id;
+        }
+    }
 }
 
 $reasons = [
