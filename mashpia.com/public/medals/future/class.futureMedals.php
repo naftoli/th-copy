@@ -207,8 +207,7 @@ class FutureMedals {
                     $current_medal = $highest_medals_by_subject[$subject][$current];
                     $future_medal = $highest_medals_by_subject[$subject][$total];
                     $medal_difference = $future_medal - $current_medal;
-                    if ($medal_difference < 0) $medal_difference = 0;
-                    else $total_medals[$user_id] += $medal_difference;
+                    if ($medal_difference > 0) $total_medals[$user_id] = $medal_difference;
                 }
             }
         }
