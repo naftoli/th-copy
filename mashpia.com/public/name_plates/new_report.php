@@ -92,7 +92,6 @@ function getPromoted() {
 $reasons = [
     'new' => 'New Registration',
     'promoted' => 'Promotion (General / 3* General)',
-    'future' => 'Future Promotion (General / 3* General)',
 ];
 ?>
 <!DOCTYPE html>
@@ -106,7 +105,7 @@ $reasons = [
             line-height: 1.5;
         }
         tr, th, td {
-            padding: 8px;
+            padding: 10px;
             font-size: 12px;
             border-bottom: 1px solid #ccc;
         }
