@@ -113,6 +113,11 @@ $reasons = [
         .reason {
             font-size: 10px;
         }
+        button {
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
