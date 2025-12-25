@@ -47,10 +47,6 @@ class FutureMedals {
             ]);
         }
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (! $rows) {
-            echo $stmt->debugDumpParams();
-            exit;
-        }
         foreach ($rows as $row) {
             $users[] = $row['user_id'];
         }
@@ -96,6 +92,7 @@ class FutureMedals {
         global $MASHPIA_DB;
 
         // find out where the child is holding in terms of how many missions were already done for this subject
+        $missions_by_subject = [];
         $sql = "
             SELECT 
                 user_id, subject_id, COUNT(*) AS total
@@ -118,11 +115,6 @@ class FutureMedals {
             $stmt->execute();
         }
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (! $rows) {
-            echo $stmt->debugDumpParams();
-            exit;
-        }
-        $missions_by_subject = [];
         foreach ($rows as $row) {
             $missions_by_subject[$row['user_id']][$row['subject_id']] = intval($row['total']);
         }
@@ -165,10 +157,6 @@ class FutureMedals {
             ':user_id' => $user_id
         ]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        if (! $rows) {
-            echo $stmt->debugDumpParams();
-            exit;
-        }
         foreach ($rows as $row) {
             $missions[$row['subject_id']] = intval($row['num_missions']);
         }
