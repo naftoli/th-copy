@@ -154,26 +154,16 @@ class FutureMedals {
                     AND ut.level = dtm.level
                     AND u.lang_id = dtm.lang_id 
                     AND dt.mandatory_qty = 1 
-                    AND u.school_id IN (" . implode(',', $this->schools) . ") 
+                    AND u.user_id = :user_id 
                     AND u.user_registered is not null 
-                    AND u.user_registered > '0000-00-00 00:00:00'";
-        if ($this->class_id > 0) {
-            $sql .= " AND u.class_id = :class_id";
-        }
-        $sql .= " GROUP BY user_id, subject_id";
+                    AND u.user_registered > '0000-00-00 00:00:00' 
+                    GROUP BY user_id, subject_id";
         $stmt = $MASHPIA_DB->prepare($sql);
-        if ($this->class_id > 0) {
-            $stmt->execute([
-                ':today'    => unixtojd(),
-                ':end_date' => $this->end_date,
-                ':class_id' => $this->class_id
-            ]);
-        } else {
-            $stmt->execute([
-                ':today'    => unixtojd(),
-                ':end_date' => $this->end_date,
-            ]);
-        }
+        $stmt->execute([
+            ':today'    => unixtojd(),
+            ':end_date' => $this->end_date,
+            ':user_id' => $user_id
+        ]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (! $rows) {
             echo $stmt->debugDumpParams();
