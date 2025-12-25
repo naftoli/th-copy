@@ -187,10 +187,9 @@ class FutureMedals {
             $total = $current + $future;
             $current_medal = $this->ms->calcHighestMedal($subject, $current);
             $future_medal = $this->ms->calcHighestMedal($subject, $total);
-            $medal_difference = $future_medal - $current_medal;
+            $medal_difference = intval($future_medal - $current_medal);
             // make sure there's no negative even though that would be a big issue if there was
-            if ($medal_difference < 0) $medal_difference = 0;
-            $numMedals += $medal_difference;
+            if ($medal_difference > 0) $numMedals += $medal_difference;
         }
     
         return $numMedals;
