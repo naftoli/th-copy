@@ -12,7 +12,7 @@ if ($admin_user['auth'] != 'super') {
     die('Access Denied');
 }
 
-require_once '../medals/future/class.futureRanks.php';
+require_once '../ranks/future/class.futureRanks.php';
 
 $start_date = 2460824; // Rosh Chodesh Sivan 5785
 
