@@ -1,4 +1,27 @@
 <?php
+/**
+ Name Plate Report should include the following Information for each child: 
+- school
+- class
+- serial
+- English name
+- Hebrew name
+- Reason
+
+The following children should come up in the report. With the reason written in the report. 
+- New Registration
+> A child that registered this year that didnt register last year. 
+
+- Promotion (General)
+> A child who was promoted to general from Rosh Chodesh Sivan 5785 until today
+
+- Promotion (3* General)
+> A child who was promoted to 3* general from Rosh Chodesh Sivan 5785 until today
+
+- Future Promotion 
+> A child who will be  promoted to general/3* general from today until 26 iyar 5786
+*/
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -101,29 +124,6 @@ $reasons = [
     'promoted' => 'Promotion (General / 3* General)',
     'future' => 'Future Promotion (General / 3* General)',
 ];
-
-/**
- Name Plate Report should include the following Information for each child: 
-- school
-- class
-- serial
-- English name
-- Hebrew name
-- Reason
-
-The following children should come up in the report. With the reason written in the report. 
-- New Registration
-> A child that registered this year that didnt register last year. 
-
-- Promotion (General)
-> A child who was promoted to general from Rosh Chodesh Sivan 5785 until today
-
-- Promotion (3* General)
-> A child who was promoted to 3* general from Rosh Chodesh Sivan 5785 until today
-
-- Future Promotion 
-> A child who will be  promoted to general/3* general from today until 26 iyar 5786
-*/
 ?>
 <!DOCTYPE html>
 <html>

@@ -72,7 +72,7 @@ $end_date = gri('end_date', unixtojd()+30);
                         headers: {
                             'Content-Type': 'application/json'
                         },
-                        body: JSON.stringify({ school_id: $("#school_id").val(), end_date: $("#end_date").val() })
+                        body: JSON.stringify({ school_id: $("#school_id").val(), end_date: $("#end_date").val(), class_id: $("#class_id").val() })
                     });
                     const medals = await res_medals.json();
 

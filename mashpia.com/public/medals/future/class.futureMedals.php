@@ -10,15 +10,16 @@ class FutureMedals {
     private $end_date;
     private $ms; // medals subjects class
     private $users;
+    private $users_by_school;
     private $user_subjects;
     private $missions_done;
 
     public function __construct($year, $end_date, $schools, $class_id = 0) {
         $this->end_date = $end_date;
         $this->schools = $schools;
-        $this->class_id = $class_id;
+        $this->class_id = intval($class_id);
         $this->ms = new MedalsSubjects();
-        $this->users = $this->getUsers($year);
+        $this->setUsers($year);
         $this->user_subjects = $this->getUserSubjects();
         $this->missions_done = $this->getMissionsDone();
     }
@@ -52,10 +53,9 @@ class FutureMedals {
             exit;
         }
         foreach ($rows as $row) {
-            $users[] = $row['user_id'];
+            $this->users[$row['school_id']][] = $row['user_id'];
+            $this->users_by_school[$row['user_id']] = $row['school_id'];
         }
-
-        return $users;
     }
 
     private function getUserSubjects() {
@@ -130,7 +130,7 @@ class FutureMedals {
         return $missions_by_subject;
     }
 
-    private function getFutureMissions($user_id) {
+    private function getFutureMissions($school_id) {
         global $MASHPIA_DB;
 
         $missions = [];
@@ -154,7 +154,7 @@ class FutureMedals {
                     AND ut.level = dtm.level
                     AND u.lang_id = dtm.lang_id 
                     AND dt.mandatory_qty = 1 
-                    AND u.user_id = :user_id 
+                    AND u.school_id = :school_id 
                     AND u.user_registered is not null 
                     AND u.user_registered > '0000-00-00 00:00:00' 
                     GROUP BY user_id, subject_id";
@@ -162,7 +162,7 @@ class FutureMedals {
         $stmt->execute([
             ':today'    => unixtojd(),
             ':end_date' => $this->end_date,
-            ':user_id' => $user_id
+            ':school_id' => $school_id
         ]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         if (! $rows) {
@@ -176,34 +176,53 @@ class FutureMedals {
         return $missions;
     }
 
-    private function getEligibleMedals($user_id) {    
-        $numMedals = 0;
-        $future_missions = $this->getFutureMissions($user_id);
+    private function getEligibleMedals() {    
+        $numMedals = [];
+        $highest_medals_by_subject = [];
+
+        foreach ($this->schools as $school_id) {
+            $future_missions = $this->getFutureMissions($school_id);
+            foreach ($future_missions as $user_id => $missions) {
+                foreach ($missions as $subject => $num_missions) {
+                    $numMedals[$school_id][$user_id][$subject] = $num_missions;
+                }
+            }
+        }
 
         // find out how many more medals can be earned by certain date by subject
-        foreach ($this->user_subjects[$user_id] as $subject) {
-            $current = $this->missions_done[$user_id][$subject] ?? 0;
-            $future = $future_missions[$user_id][$subject] ?? 0;
-            $total = $current + $future;
-            $current_medal = $this->ms->calcHighestMedal($subject, $current);
-            $future_medal = $this->ms->calcHighestMedal($subject, $total);
-            $medal_difference = $future_medal - $current_medal;
-            // make sure there's no negative even though that would be a big issue if there was
-            if ($medal_difference < 0) $medal_difference = 0;
-            $numMedals += $medal_difference;
+        $total_medals = [];
+        foreach ($numMedals as $school_id => $missions) {
+            foreach ($missions as $user_id => $subjects) {
+                foreach ($subjects as $subject => $num_missions) {
+                    $current = $this->missions_done[$user_id][$subject] ?? 0;
+                    $future = $num_missions;
+                    $total = $current + $future;
+                    if (! isset($highest_medals_by_subject[$subject][$current])) {
+                        $highest_medals_by_subject[$subject][$current] = $this->ms->calcHighestMedal($subject, $current);
+                    }
+                    if (! isset($highest_medals_by_subject[$subject][$total])) {
+                        $highest_medals_by_subject[$subject][$total] = $this->ms->calcHighestMedal($subject, $total);
+                    }
+                    $current_medal = $highest_medals_by_subject[$subject][$current];
+                    $future_medal = $highest_medals_by_subject[$subject][$total];
+                    $medal_difference = $future_medal - $current_medal;
+                    if ($medal_difference < 0) $medal_difference = 0;
+                    else $total_medals[$user_id] += $medal_difference;
+                }
+            }
         }
-    
-        return $numMedals;
+        return $total_medals;
     }
 
     public function getFutureMedals() {
         // calculate possible medals
         $future_medals = [];
-        foreach ($this->users as $user_id) {
-            $num_medals = $this->getEligibleMedals($user_id);
-            $future_medals[$user_id] = $num_medals;
+        foreach ($this->schools as $school_id) {
+            $total_medals_by_school = $this->getEligibleMedals($school_id);
+            foreach ($total_medals_by_school as $user_id => $num_medals) {
+                $future_medals[$user_id] = $num_medals;
+            }
         }
-
         return $future_medals;
     }
 }
