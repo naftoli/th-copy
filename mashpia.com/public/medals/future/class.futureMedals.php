@@ -154,7 +154,9 @@ class FutureMedals {
                     AND ut.level = dtm.level
                     AND u.lang_id = dtm.lang_id 
                     AND dt.mandatory_qty = 1 
-                    AND u.school_id IN (" . implode(',', $this->schools) . ")";
+                    AND u.school_id IN (" . implode(',', $this->schools) . ") 
+                    AND u.user_registered is not null 
+                    AND u.user_registered > '0000-00-00 00:00:00'";
         if ($this->class_id > 0) {
             $sql .= " AND u.class_id = :class_id";
         }
