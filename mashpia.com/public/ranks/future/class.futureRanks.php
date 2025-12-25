@@ -55,7 +55,7 @@ class FutureRanks {
 
         $future_ranks = [];
         foreach ($future_medals as $user_id => $medals) {
-            $total_medals = $medals + $current_medals[$user_id];
+            $total_medals = $medals + ($current_medals[$user_id] ?? 0);
             foreach ($this->rank_medals as $rank_ord => $medals_required) {
                 if ($medals_required > $total_medals) {
                     break;
