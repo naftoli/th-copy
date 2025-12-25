@@ -18,15 +18,15 @@ class FutureMedals {
         $this->schools = $schools;
         $this->class_id = $class_id;
         $this->ms = new MedalsSubjects();
-        $this->users = $this->getUsers($year);
+        $this->setUsers($year);
         $this->user_subjects = $this->getUserSubjects();
         $this->missions_done = $this->getMissionsDone();
     }
 
-    private function getUsers($year) {
+    private function setUsers($year) {
         global $MASHPIA_DB;
 
-        $users = [];
+        $this->users = [];
         $sql = "select * from users u 
                 join user_registration ur on ur.user_id = u.user_id 
                 where u.school_id in (" . implode(',', $this->schools) . ")
@@ -52,10 +52,12 @@ class FutureMedals {
             exit;
         }
         foreach ($rows as $row) {
-            $users[] = $row['user_id'];
+            $this->users[] = $row['user_id'];
         }
+    }
 
-        return $users;
+    public function getUsers() {
+        return $this->users;
     }
 
     private function getUserSubjects() {
