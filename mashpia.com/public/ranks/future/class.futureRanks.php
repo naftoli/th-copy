@@ -32,9 +32,9 @@ class FutureRanks {
         global $MASHPIA_DB;
 
         $current_medals = [];
-        $sql = "SELECT user_id, MAX(medal_ord) as medal 
-                FROM medal_marks mm
-                JOIN users u ON u.user_id = mm.user_id
+        $sql = "SELECT user_id, COUNT(*) as num_medals 
+                FROM medal_marks mm 
+                JOIN users u USING (user_id)
                 WHERE u.school_id IN (" . implode(',', $this->schools) . ")
                 AND u.user_registered IS NOT NULL 
                 AND u.user_registered > '0000-00-00 00:00:00'
@@ -43,7 +43,7 @@ class FutureRanks {
         $stmt->execute();
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         foreach ($rows as $row) {
-            $current_medals[$row['user_id']] = $row['medal'];
+            $current_medals[$row['user_id']] = $row['num_medals'];
         }
         return $current_medals;
     }
