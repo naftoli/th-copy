@@ -188,16 +188,31 @@ $reasons = [
             ).then(data => {
                 console.log(data);
                 let html = '';
-                data.forEach(items => {
-                    items.forEach(item => {
+                data.forEach(school_items => {
+                    school_items.forEach(grade_items => {
+                        grade_items.forEach(sub_items => {
+                            sub_items.forEach(child => {
+                                const grade = child.class_grade + (child.class_sub ? '-' + child.class_sub : '');
+                                const name = child.first + ' ' + child.last;
+                                const name_he = child.first_he + ' ' + child.last_he;
+                                html += `<tr>
+                                    <td>${child.school_name}</td>
+                                    <td>${grade}</td>
+                                    <td>${child.user_serial}</td>
+                                    <td>${name}</td>
+                                    <td>${name_he}</td>
+                                    <td>Future Promotion (General / 3* General)</td>
+                                </tr>`;
+                            });
+                        });
                         html += `<tr>
                                 <td>${item.school_name}</td>
                                 <td>${item.class_grade}</td>
-                                <td>${item.class_sub}</td>
-                                <td>${item.user_serial}</td>
-                                <td>${item.first}</td>
-                                <td>${item.last}</td>
-                            </tr>`;
+                            <td>${item.class_sub}</td>
+                            <td>${item.user_serial}</td>
+                            <td>${item.first}</td>
+                            <td>${item.last}</td>
+                        </tr>`;
                     });
                 });
                 $('#name_plate_report tbody').html(html);

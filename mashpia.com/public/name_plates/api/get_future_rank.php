@@ -38,12 +38,12 @@ foreach ($rows as $row) {
     $users[$row['user_id']] = $row;
 }
 
-$info['future'] = [];
+$info = [];
 foreach ($future_ranks as $user_id => $rank) {
     if (in_array($rank, [9, 12])) {
         $user_info = $users[$user_id];
-        $info['future'][$user_info['school_id']][$user_info['class_grade']][$user_info['class_sub']][] = $user_info;
+        $info[$user_info['school_id']][$user_info['class_grade']][$user_info['class_sub']][] = $user_info;
     }
 }
-
 echo json_encode($info);
+exit;
