@@ -2,6 +2,7 @@
 /**
  * gets future ranks for a school
  */
+require_once $_SERVER['DOCUMENT_ROOT'] . '/medals/future/class.futureMedals.php';
 
 class FutureRanks {
     private $schools;
