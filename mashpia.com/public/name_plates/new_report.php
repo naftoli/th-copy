@@ -106,7 +106,7 @@ $reasons = [
             line-height: 1.5;
         }
         tr, th, td {
-            padding: 5px;
+            padding: 8px;
             font-size: 12px;
             border-bottom: 1px solid #ccc;
         }
