@@ -103,7 +103,7 @@ function getFuturePromoted() {
             FROM users u
             JOIN schools s ON s.school_id = u.school_id
             JOIN classes c ON c.class_id = u.class_id
-            WHERE u.user_id IN (" . implode(',', array_keys($future_ranks)) . ")";
+            WHERE u.school_id IN (" . implode(',', array_keys($schools)) . ")";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute();
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
