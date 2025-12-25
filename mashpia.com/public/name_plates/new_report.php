@@ -43,11 +43,11 @@ $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 $year = GlobalSettings::getRegistrationYear();
 
-getNewlyRegistered();
-getPromoted(); // adds promoted to info
-getFuturePromoted(); // adds future promoted to info
+setupNewlyRegistered();
+setupPromoted(); // adds promoted to info
+setupFuturePromoted(); // adds future promoted to info
 
-function getNewlyRegistered() {
+function setupNewlyRegistered() {
     global $MASHPIA_DB, $year, $schools, $info;
     $sql = "SELECT s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.first_he, u.last_he, u.user_serial 
             FROM users u 
@@ -68,7 +68,7 @@ function getNewlyRegistered() {
     }
 }
 
-function getPromoted() {
+function setupPromoted() {
     global $MASHPIA_DB, $start_date, $schools, $info;
     $sql = "SELECT s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.first_he, u.last_he, u.user_serial, rm.rank_ord  
             FROM users u 
@@ -89,7 +89,7 @@ function getPromoted() {
     }
 }
 
-function getFuturePromoted() {
+function setupFuturePromoted() {
     global $MASHPIA_DB, $year, $schools, $info;
 
     $end_date = 2461174; // 26 Iyar 5786
