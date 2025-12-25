@@ -73,10 +73,25 @@ function getFuturePromoted() {
     $fr = new FutureRanks($year, array_keys($schools), $end_date);
     $future_ranks = $fr->getFutureRanks();
 
+    // get school / grade info
+    $users = [];
+    $sql = "SELECT s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.first_he, u.last_he, u.user_serial
+            FROM users u
+            JOIN schools s ON s.school_id = u.school_id
+            JOIN classes c ON c.class_id = u.class_id
+            WHERE u.user_id IN (" . implode(',', array_keys($future_ranks)) . ")";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute();
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $users[$row['user_id']] = $row;
+    }
+
     $info['future'] = [];
     foreach ($future_ranks as $user_id => $rank) {
         if (in_array($rank, [9, 12])) {
-            $info['future'][] = $user_id;
+            $user_info = $users[$user_id];
+            $info['future'][$user_info['school_id']][$user_info['class_grade']][$user_info['class_sub']][] = $user_info;
         }
     }
 }
