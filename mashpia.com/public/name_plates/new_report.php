@@ -178,7 +178,7 @@ $reasons = [
         window.onload = function() {
             const schools = <?=json_encode($schools);?>;
             Object.keys(schools).forEach(async (school_id) => {
-                const res = await fetch(`ajax/get_name_plate_report.php?school_id=${school_id}`);
+                const res = await fetch(`api/get_future_rank.php?school_id=${school_id}`);
                 const data = await res.json();
                 console.log(data);
             });
