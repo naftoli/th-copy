@@ -46,7 +46,6 @@ $year = GlobalSettings::getRegistrationYear();
 
 getNewlyRegistered();
 getPromoted(); // adds promoted to info
-getFuturePromoted(); // adds future promoted to info
 
 function getNewlyRegistered() {
     global $MASHPIA_DB, $year, $schools, $info;
@@ -90,40 +89,9 @@ function getPromoted() {
     }
 }
 
-function getFuturePromoted() {
-    global $MASHPIA_DB, $year, $schools, $info;
-
-    $end_date = 2461174; // 26 Iyar 5786
-    $fr = new FutureRanks($year, array_keys($schools), $end_date);
-    $future_ranks = $fr->getFutureRanks();
-
-    // get school / grade info
-    $users = [];
-    $sql = "SELECT s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.first_he, u.last_he, u.user_serial
-            FROM users u
-            JOIN schools s ON s.school_id = u.school_id
-            JOIN classes c ON c.class_id = u.class_id
-            WHERE u.school_id IN (" . implode(',', array_keys($schools)) . ")";
-    $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    foreach ($rows as $row) {
-        $users[$row['user_id']] = $row;
-    }
-
-    $info['future'] = [];
-    foreach ($future_ranks as $user_id => $rank) {
-        if (in_array($rank, [9, 12])) {
-            $user_info = $users[$user_id];
-            $info['future'][$user_info['school_id']][$user_info['class_grade']][$user_info['class_sub']][] = $user_info;
-        }
-    }
-}
-
 $reasons = [
     'new' => 'New Registration',
     'promoted' => 'Promotion (General / 3* General)',
-    'future' => 'Future Promotion (General / 3* General)',
 ];
 ?>
 <!DOCTYPE html>
@@ -205,6 +173,15 @@ $reasons = [
             link.href = `data:text/csv;charset=utf-8,${csvContent}`;
             link.download = 'name_plate_report.csv';
             link.click();
+        }
+
+        window.onload = function() {
+            const schools = <?=json_encode($schools);?>;
+            Array.keys(schools).forEach(async (school_id) => {
+                const res = await fetch(`ajax/get_name_plate_report.php?school_id=${school_id}`);
+                const data = await res.json();
+                console.log(data);
+            });
         }
     </script>
 </body>
