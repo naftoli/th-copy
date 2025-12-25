@@ -68,7 +68,7 @@ function setupNewlyRegistered() {
     }
 }
 
-function setupPromoted() {
+function getPromoted() {
     global $MASHPIA_DB, $start_date, $schools, $info;
     $sql = "SELECT s.school_id, s.school_name, c.class_grade, c.class_sub, u.user_id, u.first, u.last, u.first_he, u.last_he, u.user_serial, rm.rank_ord  
             FROM users u 
@@ -89,15 +89,12 @@ function setupPromoted() {
     }
 }
 
-function setupFuturePromoted() {
+function getFuturePromoted() {
     global $MASHPIA_DB, $year, $schools, $info;
 
     $end_date = 2461174; // 26 Iyar 5786
     $fr = new FutureRanks($year, array_keys($schools), $end_date);
-    $users = $fr->getUsers();
-    foreach ($users as $user_id) {
-        $future_ranks[$user_id] = $fr->getFutureRanks($user_id);
-    }
+    $future_ranks = $fr->getFutureRanks();
     echo "<pre>"; print_r($future_ranks); echo "</pre>"; exit;
 
     // get school / grade info
