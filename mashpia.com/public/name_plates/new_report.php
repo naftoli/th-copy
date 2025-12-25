@@ -119,6 +119,7 @@ $reasons = [
     <?php include '../admin_header.php'; ?>
     <h1>Name Plate Report</h1>
     <button onclick="downloadReport()">Download Report</button><br /><br />
+    <div id="loading">Loading...</div>
     <table id="name_plate_report" style="display: none;">
         <thead>
             <tr>
@@ -208,6 +209,7 @@ $reasons = [
                     });
                 });
                 $('#name_plate_report tbody').html(html);
+                $('#loading').hide();
                 $('#name_plate_report').show();
             }).catch(error => {
                 console.error(error);
