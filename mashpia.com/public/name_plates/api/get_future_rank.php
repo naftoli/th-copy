@@ -9,7 +9,11 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getRegistrationYear();
 
 $info = json_decode(file_get_contents("php://input"), true);
-$school_id = $info['school_id'];
+$school_id = $info['school_id'] ?? $_GET['school_id'];
+if (! $school_id) {
+    echo json_encode(['error' => 'School ID is required']);
+    exit;
+}
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/ranks/future/class.futureRanks.php';
 
