@@ -136,7 +136,7 @@ class FutureMedals {
         $missions = [];
         $sql = "
             SELECT 
-                user_id, subject_id, COUNT(*) AS num_missions
+                subject_id, COUNT(*) AS num_missions
             FROM
                 date_tasks_missions dtm
                     JOIN
@@ -157,7 +157,7 @@ class FutureMedals {
                     AND u.user_id = :user_id 
                     AND u.user_registered is not null 
                     AND u.user_registered > '0000-00-00 00:00:00' 
-                    GROUP BY user_id, subject_id";
+                    GROUP BY subject_id";
         $stmt = $MASHPIA_DB->prepare($sql);
         $stmt->execute([
             ':today'    => unixtojd(),
@@ -170,7 +170,7 @@ class FutureMedals {
             exit;
         }
         foreach ($rows as $row) {
-            $missions[$row['user_id']][$row['subject_id']] = intval($row['num_missions']);
+            $missions[$row['subject_id']] = intval($row['num_missions']);
         }
 
         return $missions;
@@ -183,7 +183,7 @@ class FutureMedals {
         // find out how many more medals can be earned by certain date by subject
         foreach ($this->user_subjects[$user_id] as $subject) {
             $current = $this->missions_done[$user_id][$subject] ?? 0;
-            $future = $future_missions[$user_id][$subject] ?? 0;
+            $future = $future_missions[$subject] ?? 0;
             $total = $current + $future;
             $current_medal = $this->ms->calcHighestMedal($subject, $current);
             $future_medal = $this->ms->calcHighestMedal($subject, $total);
