@@ -197,18 +197,20 @@ $reasons = [
                 data.forEach(school_items => {
                     Object.keys(school_items).forEach(grade_items => {
                         Object.keys(grade_items).forEach(sub_items => {
-                            sub_items.forEach(child => {
-                                const grade = child.class_grade + (child.class_sub ? '-' + child.class_sub : '');
-                                const name = child.first + ' ' + child.last;
-                                const name_he = child.first_he + ' ' + child.last_he;
-                                html += `<tr>
-                                    <td>${child.school_name}</td>
-                                    <td>${grade}</td>
-                                    <td>${child.user_serial}</td>
-                                    <td>${name}</td>
-                                    <td>${name_he}</td>
-                                    <td>Future Promotion (General / 3* General)</td>
-                                </tr>`;
+                            Object.keys(sub_items).forEach(children => {
+                                children.forEach(child => {
+                                    const grade = child.class_grade + (child.class_sub ? '-' + child.class_sub : '');
+                                    const name = child.first + ' ' + child.last;
+                                    const name_he = child.first_he + ' ' + child.last_he;
+                                    html += `<tr>
+                                        <td>${child.school_name}</td>
+                                        <td>${grade}</td>
+                                        <td>${child.user_serial}</td>
+                                        <td>${name}</td>
+                                        <td>${name_he}</td>
+                                        <td>Future Promotion (General / 3* General)</td>
+                                    </tr>`;
+                                });
                             });
                         });
                     });
