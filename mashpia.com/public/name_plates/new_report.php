@@ -94,7 +94,10 @@ function setupFuturePromoted() {
 
     $end_date = 2461174; // 26 Iyar 5786
     $fr = new FutureRanks($year, array_keys($schools), $end_date);
-    $future_ranks = $fr->getFutureRanks();
+    $users = $fr->getUsers();
+    foreach ($users as $user_id) {
+        $future_ranks[$user_id] = $fr->getFutureRanks($user_id);
+    }
     echo "<pre>"; print_r($future_ranks); echo "</pre>"; exit;
 
     // get school / grade info
