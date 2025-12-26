@@ -220,6 +220,9 @@ foreach ($tables as $table) {
     if ($table == 'u') continue;
     $sql .= $tableAliases[$table] . " ";
 }
+if ($super && $ship_to != 'all') {
+  $sql .= " join admin_auths aa on aa.id = u.user_id join admins a on a.admin_id = aa.admin_id ";
+}
 
 //********* WHERE *********//
 $sql .= " WHERE 1";
@@ -228,6 +231,10 @@ if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 //if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
+if ($super && $ship_to != 'all') {
+    if ($ship_to == 'usa') $sql .= " AND a.admin_country = 'USA'";
+    else if ($ship_to == 'intl') $sql .= " AND a.admin_country != 'USA'";
+}
 
 //******* ORDER BY *********//
 $sql .= " ORDER BY u.school_id";
