@@ -124,6 +124,17 @@ $items = $cs->getItems();
       </select>
     </fieldset>
 
+    <?php if ($super) : ?>
+      <fieldset>
+        <legend>Shipping to (for MS/AK only):</legend>
+        <select name="ship_to">
+          <option value="all" selected>All</option>
+          <option value="usa">USA</option>
+          <option value="intl">Outside USA</option>
+        </select>
+      </fieldset>
+    <?php endif; ?>
+
     <fieldset>
       <legend>Type of Report</legend>
       <select name="report_type">

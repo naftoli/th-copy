@@ -24,6 +24,7 @@ $cats = array_keys($items_chosen);
 $fields_chosen = array_keys($_POST['fields']);
 $item_details_chosen = isset($_POST['details']) ? array_keys($_POST['details']) : [];
 $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
+$ship_to = isset($_POST['ship_to']) ? $_POST['ship_to'] : 'all';
 
 // get list of schools to iterate over
 $list_of_schools = $_POST['school'];
@@ -65,14 +66,18 @@ if ($report_type == 'file') {
                 }
             }
         }
-        $csv = createCSV($info, $school_id, true); // filter out all users that ONLY live in the usa
-        $file = $school_id . '-usa.csv';
-        createFile($file, $csv);
-        $files[] = $file;
-        $csv2 = createCSV($info, $school_id, false, true); // filter out all users that do NOT live in the usa
-        $file2 = $school_id . '-intl.csv';
-        createFile($file2, $csv2);
-        $files[] = $file2;
+        if (in_array($ship_to, ['usa', 'all'])) {
+            $csv = createCSV($info, $school_id, true); // filter out all users that ONLY live in the usa
+            $file = $school_id . '-usa.csv';
+            createFile($file, $csv);
+            $files[] = $file;
+        }
+        if (in_array($ship_to, ['intl', 'all'])) {
+            $csv = createCSV($info, $school_id, false, true); // filter out all users that do NOT live in the usa
+            $file = $school_id . '-intl.csv';
+            createFile($file, $csv);
+            $files[] = $file;
+        }
     }
     createZip($files, 'shipping.zip');
     downloadFile('shipping.zip');
