@@ -57,14 +57,14 @@ class ChayoleiShipping
     }
 
     public function getCategories() {
-        $categories = ['birthdays', 'hachayols', 'medals', 'ranks', 'name plates','mivtzoim', 'hei teves'];
+        $categories = ['birthdays', 'hachayols', 'medals', 'ranks', 'mivtzoim', 'hei teves'];
         return $categories;
     }
 
     public function getItems() {
         $items['birthdays'] = ['Birthday Envelope', 'Boys Birthday Card', 'Girls Birthday Card', 'Kapital Card Age 6', 'Kapital Card Age 7', 'Kapital Card Age 8', 'Kapital Card Age 9', 'Kapital Card Age 10', 'Kapital Card Age 11', 'Kapital Card Age 12'];
         $items['hachayols'] = $this->getHachayolItems();
-        $items['name plates'] = ['Name Plates'];
+        // $items['name plates'] = ['Name Plates'];
         $items['medals'] = ['Medals'];
         $items['ranks'] = ['Rank Medals', 'Rank Books'];
         $items['mivtzoim'] = $this->getYomTovItems(['Mivtza Lulav', 'Chanuka']);
