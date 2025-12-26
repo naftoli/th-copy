@@ -50,7 +50,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                 </div>
             </a>
         </div>
-        <h2>Name Plates</h2>
+        <!-- <h2>Name Plates</h2>
         <div id="action-links">
             <a href="/name_plates/report.php">
                 <div class="button">
@@ -64,7 +64,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
                     <span class="link-text">Name Plates Shipping Report</span>
                 </div>
             </a>
-        </div>
+        </div> -->
         
         <?php if ($admin_user['auth'] == 'super') : ?>
         <h2>Chidon Shipping</h2>
