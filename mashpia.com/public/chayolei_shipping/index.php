@@ -129,8 +129,8 @@ $items = $cs->getItems();
         <legend>Shipping to (for MS/AK only):</legend>
         <select name="ship_to">
           <option value="all" selected>All</option>
-          <option value="usa">USA</option>
-          <option value="intl">Outside USA</option>
+          <option value="usa">USA Only</option>
+          <option value="intl">Outside USA Only</option>
         </select>
       </fieldset>
     <?php endif; ?>
