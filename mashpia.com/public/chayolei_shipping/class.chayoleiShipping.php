@@ -161,7 +161,7 @@ class ChayoleiShipping
                     JOIN
                 users u USING (user_id)
             WHERE
-                mi.item in ('" . implode("','", $itemsList) . "')
+                mi.item in (\"" . implode('","', $itemsList) . "\")
                     AND p.year = :year";
         if ($gender == 'm') $sql .= " AND u.gender = 'M'";
         else if ($gender == 'f') $sql .= " AND u.gender = 'F'";
@@ -170,7 +170,7 @@ class ChayoleiShipping
         $stmt->execute([
             'year'      => $this->year
         ]);
-        // $stmt->debugDumpParams();
+        // echo "<pre>"; print_r($stmt->debugDumpParams()); echo "</pre>"; exit;
         $rows = $stmt->fetchAll();
         // find all items related to same individual and add up all the qtys of that item into one entity
         $userItems = [];
