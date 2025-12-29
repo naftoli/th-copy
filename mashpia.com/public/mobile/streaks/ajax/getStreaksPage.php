@@ -3,7 +3,8 @@ ini_set("display_errors", 1);
 ini_set('error_reporting', E_ALL);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
 $dates = GlobalSettings::getCurYearDates();
 $start = $dates['start'];
 $end = $dates['end'];
@@ -29,16 +30,9 @@ while ($row = mysql_fetch_assoc($result)) {
     $campaigns[$row['subject_id']] = $row['subject_name'];
 }
 
-$activeStreaks = [];
-$sql = "SELECT ht.grid_id, ht.num_days, dt.name, dt.cat 
-        FROM hachloto_tasks ht 
-        JOIN date_tasks dt USING (grid_id) 
-        WHERE user_id = $user_id";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $activeStreaks[$row['grid_id']] = $row['cat'] . ' - ' . $row['name'];
-}
-
+require_once '../class.streaks.php';
+$streaks = new Streaks($user_id);
+$activeStreaks = $streaks->getStreaks();
 if (count($activeStreaks) > 0) {
     $disabled = 'disabled';
 } else {
@@ -52,6 +46,17 @@ if (count($activeStreaks) > 0) {
     }
     .navbar {
         min-height: auto !important;
+    }
+    .infobox {
+        margin: 0 auto;
+        padding: 10px;
+        font-size: 1.2em;
+        line-height: 1.5;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin: 0 8% 20px 8%;
+        color: brown;
     }
 </style>
 
@@ -130,6 +135,14 @@ if (count($activeStreaks) > 0) {
 </header>
 <div class="personalImg"></div>
 
+<div class="infobox">
+    You can use this page to setup a streak for a campaign.<br />
+    A streak is a series of days that you have completed a task for.<br />
+    You can setup a streak for a campaign by selecting a campaign and a task.<br />
+    All streaks are for 90 days.<br />
+    Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).
+</div>
+
 <div class="container">
     <div class="content">
         Choose a campaign to setup a streak for:
@@ -150,9 +163,9 @@ if (count($activeStreaks) > 0) {
 <div class="container">
     <div class="content">
         <h2>Active Streaks</h2>
-        <ul>
+        <ul style="list-style-type: none; padding-left: 0;">
             <?php foreach ($activeStreaks as $gridId => $streak) : ?>
-                <li><?=$streak?></li>
+                <li><?=$streak['cat']?> - <?=$streak['name']?> (<?=count($streak['days'])?> days)</li>
             <?php endforeach; ?>
         </ul>
     </div>
