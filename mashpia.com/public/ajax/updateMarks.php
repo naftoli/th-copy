@@ -48,8 +48,8 @@ if ($action == 'delete') {
 //        $mm->mission_marks_update_by_subject_id($user_id, $subject);
 //    }
     
-    $medal_updater->update_medal_two($user_id);
-    $rank_updater->update_rank_two($user_id);
+    // $medal_updater->update_medal_two($user_id);
+    // $rank_updater->update_rank_two($user_id);
 	
 	header("Content-Type: application/json; charset=utf-8;");
     echo json_encode([ 'success' => true ]);
@@ -80,8 +80,8 @@ if ($action == 'delete') {
 		}			
 	}
     
-    $medal_updater->update_medal_two($user_id);
-    $rank_updater->update_rank_two($user_id);
+    // $medal_updater->update_medal_two($user_id);
+    // $rank_updater->update_rank_two($user_id);
 	
 	header("Content-Type: application/json; charset=utf-8;");
     echo json_encode([ 'success' => true ]);

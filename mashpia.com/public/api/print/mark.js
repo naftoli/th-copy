@@ -31,6 +31,33 @@ $( '#scanNext' ).click( function() { $('#lookup-user').val('').focus() });
 
 $('.audioLinks').hide();
 
+// jQuery - Detect inactivity
+let inactivityTimeout;
+const idleTime = 5 * 60 * 1000; // 5 minutes
+
+(function() {
+    var time;
+    var timeout = 5 * 60 * 1000; // 5 minutes
+    
+    // Reset timer on any activity
+    window.onload = resetTimer;
+    document.onmousemove = resetTimer;
+    document.onmousedown = resetTimer;
+    document.ontouchstart = resetTimer;
+    document.onclick = resetTimer;
+    document.onkeydown = resetTimer;
+    document.addEventListener('scroll', resetTimer, true);
+    
+    function resetTimer() {
+        clearTimeout(time);
+        time = setTimeout(updateMedalsRanks, timeout);
+    }
+})();
+
+window.addEventListener('beforeunload', function(e) {
+    updateMedalsRanks()
+})
+
 /**
  * Returns an event handler for the checkboxes on the page.
  * 
@@ -60,7 +87,7 @@ function onCheckboxClicked( daily ) {
         $.getJSON( url, function( response ) {
             if ( response == false )
                 return window.alert( 'Task not marked. Please try again' );
-            $.post( '/ajax/updateMedalsRanks.php', { user : user_id } );
+            // $.post( '/ajax/updateMedalsRanks.php', { user : user_id } );
             update( div );
         });
     }
@@ -87,7 +114,7 @@ function onInputChanged( event ){
         if (response == false)
             return alert("Update not performed. Please try again.");
 
-        $.post('/ajax/updateMedalsRanks.php', { user : user_id });
+        // $.post('/ajax/updateMedalsRanks.php', { user : user_id });
         update( div );
     });
 }
@@ -125,7 +152,7 @@ function toggleAll( checked ){
             alert( 'Update not performed.' );
             $( '#loading' ).hide();
         } else {
-            $.post( '/ajax/updateMedalsRanks.php', { user : user_id } );
+            // $.post( '/ajax/updateMedalsRanks.php', { user : user_id } );
             boxes.each( function( index, element ) {
                 if ( $(element).hasClass( className ) )
                     update( element );
@@ -171,7 +198,7 @@ function toggleRow( event ) {
     $.post('/ajax/updateMarks.php', data, function( response ) {
         if ( response.success == false )
             return alert( 'Update not performed.' );
-        $.post( '/ajax/updateMedalsRanks.php', { user : user_id } );
+        // $.post( '/ajax/updateMedalsRanks.php', { user : user_id } );
         boxes.each( function( index, element ) {
             if ( $( element ).hasClass( checked ? 'unmarked' : 'marked' ) )
                 update( element );
@@ -248,6 +275,7 @@ function lookupSoldier( event ) {
 }
 
 function goLeft() {
+    updateMedalsRanks($('input#user_id').val());
     var val = $( this ).parent().find( "option:selected" ).prev().val();
     var type = $(this).parent().find('select')[0].id;
     if ( val === undefined ) {
@@ -262,6 +290,7 @@ function goLeft() {
 };
 
 function goRight() {
+    updateMedalsRanks($('input#user_id').val());
     var val = $( this ).parent().find( "option:selected" ).next().val();
     var type = $(this).parent().find('select')[0].id;
     if ( val === undefined ) {
@@ -288,6 +317,11 @@ function loadSoldiers() {
         }
     });
 };
+
+function updateMedalsRanks(user = 0) {
+    const user_id = user ? user : $('input#user_id').val();
+    $.post('/ajax/updateMedalsRanks.php', { user : user_id });
+}
 
 // footer is apparently not rendered.
 $(".userMission").each( function() {			
