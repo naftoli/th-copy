@@ -1,0 +1,947 @@
+
+> front-end@0.0.0 build
+> vite build
+
+vite v7.3.0 building client environment for production...
+transforming...
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'colors.scss';
+  │         ^^^^^^^^^^^^^
+  ╵
+    src/styles/styles.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+25 │ @import 'bootstrap/scss/bootstrap';
+   │         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/styles/styles.scss 25:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+26 │ @import 'react-credit-cards/es/styles.scss';
+   │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/styles/styles.scss 26:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+36 │ @import 'branding.scss';
+   │         ^^^^^^^^^^^^^^^
+   ╵
+    src/styles/styles.scss 36:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+8 │ @import "functions";
+  │         ^^^^^^^^^^^
+  ╵
+    node_modules/bootstrap/scss/bootstrap.scss 8:9  @import
+    src/styles/styles.scss 25:9                     root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/pages/login/includes/style.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import './Login.scss';
+  │         ^^^^^^^^^^^^^^
+  ╵
+    src/pages/login/includes/style.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+3 │ @import './Forgot.scss';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/login/includes/style.scss 3:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+4 │ @import './NewAccount.scss';
+  │         ^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/pages/login/includes/style.scss 4:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/home/home.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($level > 0): $black; else: $white)
+
+More info: https://sass-lang.com/d/if-function
+
+    ╷
+103 │   $color-base: if($level > 0, $black, $white);
+    │                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_functions.scss 103:16  @import
+    node_modules/bootstrap/scss/bootstrap.scss 8:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($return-calc == true): calc(#{$value1} + #{$value2}); else: $value1 + unquote(" + ") + $value2)
+
+More info: https://sass-lang.com/d/if-function
+
+    ╷
+123 │   @return if($return-calc == true, calc(#{$value1} + #{$value2}), $value1 + unquote(" + ") + $value2);
+    │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_functions.scss 123:11  @import
+    node_modules/bootstrap/scss/bootstrap.scss 8:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($return-calc == true): calc(#{$value1} - #{$value2}); else: $value1 + unquote(" - ") + $value2)
+
+More info: https://sass-lang.com/d/if-function
+
+    ╷
+147 │   @return if($return-calc == true, calc(#{$value1} - #{$value2}), $value1 + unquote(" - ") + $value2);
+    │           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_functions.scss 147:11  @import
+    node_modules/bootstrap/scss/bootstrap.scss 8:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($dividend > 0 and $divisor > 0 or $dividend < 0 and $divisor < 0): 1; else: -1)
+
+More info: https://sass-lang.com/d/if-function
+
+    ╷
+151 │   $sign: if($dividend > 0 and $divisor > 0 or $dividend < 0 and $divisor < 0, 1, -1);
+    │          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_functions.scss 151:10  @import
+    node_modules/bootstrap/scss/bootstrap.scss 8:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/base-managment/base/includes/register.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+21 │   $grays: map-merge(
+   │ ┌─────────^
+22 │ │   (
+23 │ │     "100": $gray-100,
+24 │ │     "200": $gray-200,
+25 │ │     "300": $gray-300,
+26 │ │     "400": $gray-400,
+27 │ │     "500": $gray-500,
+28 │ │     "600": $gray-600,
+29 │ │     "700": $gray-700,
+30 │ │     "800": $gray-800,
+31 │ │     "900": $gray-900
+32 │ │   ),
+33 │ │   $grays
+34 │ │ );
+   │ └─^
+   ╵
+    node_modules/bootstrap/scss/_variables.scss 21:9  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9    @import
+    src/styles/styles.scss 25:9                       root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+48 │   $colors: map-merge(
+   │ ┌──────────^
+49 │ │   (
+50 │ │     "blue":       $blue,
+51 │ │     "indigo":     $indigo,
+52 │ │     "purple":     $purple,
+53 │ │     "pink":       $pink,
+54 │ │     "red":        $red,
+55 │ │     "orange":     $orange,
+56 │ │     "yellow":     $yellow,
+57 │ │     "green":      $green,
+58 │ │     "teal":       $teal,
+59 │ │     "cyan":       $cyan,
+60 │ │     "white":      $white,
+61 │ │     "gray":       $gray-600,
+62 │ │     "gray-dark":  $gray-800
+63 │ │   ),
+64 │ │   $colors
+65 │ │ );
+   │ └─^
+   ╵
+    node_modules/bootstrap/scss/_variables.scss 48:10  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9     @import
+    src/styles/styles.scss 25:9                        root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+77 │   $theme-colors: map-merge(
+   │ ┌────────────────^
+78 │ │   (
+79 │ │     "primary":    $primary,
+80 │ │     "secondary":  $secondary,
+81 │ │     "success":    $success,
+82 │ │     "info":       $info,
+83 │ │     "warning":    $warning,
+84 │ │     "danger":     $danger,
+85 │ │     "light":      $light,
+86 │ │     "dark":       $dark
+87 │ │   ),
+88 │ │   $theme-colors
+89 │ │ );
+   │ └─^
+   ╵
+    node_modules/bootstrap/scss/_variables.scss 77:16  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9     @import
+    src/styles/styles.scss 25:9                        root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ╷
+138 │   $spacers: map-merge(
+    │ ┌───────────^
+139 │ │   (
+140 │ │     0: 0,
+141 │ │     1: ($spacer * .25),
+142 │ │     2: ($spacer * .5),
+143 │ │     3: $spacer,
+144 │ │     4: ($spacer * 1.5),
+145 │ │     5: ($spacer * 3)
+146 │ │   ),
+147 │ │   $spacers
+148 │ │ );
+    │ └─^
+    ╵
+    node_modules/bootstrap/scss/_variables.scss 138:11  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use map.merge instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+    ╷
+152 │   $sizes: map-merge(
+    │ ┌─────────^
+153 │ │   (
+154 │ │     25: 25%,
+155 │ │     50: 50%,
+156 │ │     75: 75%,
+157 │ │     100: 100%,
+158 │ │     auto: auto
+159 │ │   ),
+160 │ │   $sizes
+161 │ │ );
+    │ └─^
+    ╵
+    node_modules/bootstrap/scss/_variables.scss 152:9  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9     @import
+    src/styles/styles.scss 25:9                        root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -29.6511627907%)
+color.adjust($color, $lightness: -15%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+178 │ $link-hover-color:                        darken($link-color, 15%) !default;
+    │                                           ^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_variables.scss 178:43  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 9.7081218274%)
+color.adjust($color, $lightness: 7.5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+374 │ $table-dark-border-color:     lighten($table-dark-bg, 7.5%) !default;
+    │                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_variables.scss 374:31  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 50.5952380952%)
+color.adjust($color, $lightness: 25%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+487 │ $input-focus-border-color:              lighten($component-active-bg, 25%) !default;
+    │                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_variables.scss 487:41  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 70.8333333333%)
+color.adjust($color, $lightness: 35%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+552 │ $custom-control-indicator-active-bg:            lighten($component-active-bg, 35%) !default;
+    │                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_variables.scss 552:49  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 70.8333333333%)
+color.adjust($color, $lightness: 35%)
+
+More info: https://sass-lang.com/d/color-functions
+
+    ╷
+627 │ $custom-range-thumb-active-bg:               lighten($component-active-bg, 35%) !default;
+    │                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ╵
+    node_modules/bootstrap/scss/_variables.scss 627:46  @import
+    node_modules/bootstrap/scss/bootstrap.scss 9:9      @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [if-function]: The Sass if() syntax is deprecated in favor of the modern CSS syntax.
+
+Suggestion: if(sass($dividend > 0 and $divisor > 0 or $dividend < 0 and $divisor < 0): 1; else: -1)
+
+More info: https://sass-lang.com/d/if-function
+
+   ╷
+53 │   $sign: if($dividend > 0 and $divisor > 0 or $dividend < 0 and $divisor < 0, 1, -1);
+   │          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    node_modules/bootstrap/scss/vendor/_rfs.scss 53:10  @import
+    node_modules/bootstrap/scss/_mixins.scss 6:9        @import
+    node_modules/bootstrap/scss/bootstrap.scss 10:9     @import
+    src/styles/styles.scss 25:9                         root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import "styles/colors";
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/navigation/Navbar/Navbar.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+3 │ @import "styles/variables";
+  │         ^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/navigation/Navbar/Navbar.scss 3:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/ui/styles/Callout.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import "../../../styles/variables";
+  │         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/navigation/dashboard/Dashboard.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+2 │ @import "styles/colors";
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/navigation/Sidebar/Sidebar.scss 2:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import "styles/colors";
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/ui/loading/Spinner.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/ui/loading/LoadingScreen.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/missions/personalize/PersonalizePage.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/home/widgets/style.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/pages/rewards/orders/include/orders.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/base-managment/parents/parents.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/base-managment/base/includes/base.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/base-managment/platoons/platoons.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/pages/rewards/prizes/include/prizes.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/buttons/styles.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+65 │       background-color: darken( $chabad-blue, 10% );
+   │                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/buttons/styles.scss 65:25  root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -24.2857142857%)
+color.adjust($color, $lightness: -10%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+65 │       background-color: darken( $chabad-blue, 10% );
+   │                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/buttons/styles.scss 65:25  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/inputs/styles/Password.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/inputs/styles/Toggle.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/components/inputs/styles/FileInput.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+19 │         &:after { color: darken($off-color, 10%); }
+   │                          ^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 19:26  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -16.5048543689%)
+color.adjust($color, $lightness: -10%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+19 │         &:after { color: darken($off-color, 10%); }
+   │                          ^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 19:26  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+22 │     &:hover ~.switchbox { cursor: pointer; color: darken($off-color, 5%); }
+   │                                                   ^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 22:51  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -8.2524271845%)
+color.adjust($color, $lightness: -5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+22 │     &:hover ~.switchbox { cursor: pointer; color: darken($off-color, 5%); }
+   │                                                   ^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 22:51  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+26 │         &:hover { color: darken($on-color, 3%); }
+   │                          ^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 26:26  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -11.953125%)
+color.adjust($color, $lightness: -3%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+26 │         &:hover { color: darken($on-color, 3%); }
+   │                          ^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 26:26  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+29 │           background-color: lighten($on-color, 5%);
+   │                             ^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 29:29  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [color-functions]: lighten() is deprecated. Suggestions:
+
+color.scale($color, $lightness: 6.6753926702%)
+color.adjust($color, $lightness: 5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+29 │           background-color: lighten($on-color, 5%);
+   │                             ^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 29:29  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [global-builtin]: Global built-in functions are deprecated and will be removed in Dart Sass 3.0.0.
+Use color.adjust instead.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+   ╷
+30 │           &:after { color: darken($on-color, 5%); }
+   │                            ^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 30:28  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [color-functions]: darken() is deprecated. Suggestions:
+
+color.scale($color, $lightness: -19.921875%)
+color.adjust($color, $lightness: -5%)
+
+More info: https://sass-lang.com/d/color-functions
+
+   ╷
+30 │           &:after { color: darken($on-color, 5%); }
+   │                            ^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 30:28  toggle-branding()
+    src/components/inputs/styles/Toggle.scss 164:3  root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($width, 2) or calc($width / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+63 │   $switch-width: $width/2;
+   │                  ^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 63:18  toggle-appearance()
+    src/components/inputs/styles/Toggle.scss 165:3  root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($width, 2) or calc($width / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+98 │         left: $width/2;
+   │               ^^^^^^^^
+   ╵
+    src/components/inputs/styles/Toggle.scss 98:15  toggle-appearance()
+    src/components/inputs/styles/Toggle.scss 165:3  root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($width, 2) or calc($width / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+101 │         width: $width/2;
+    │                ^^^^^^^^
+    ╵
+    src/components/inputs/styles/Toggle.scss 101:16  toggle-appearance()
+    src/components/inputs/styles/Toggle.scss 165:3   root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($border-radius, 2) or calc($border-radius / 2)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+107 │         border-radius: $border-radius/2;
+    │                        ^^^^^^^^^^^^^^^^
+    ╵
+    src/components/inputs/styles/Toggle.scss 107:24  toggle-appearance()
+    src/components/inputs/styles/Toggle.scss 165:3   root stylesheet
+
+WARNING: 4 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings.
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/pages/base-managment/soldiers/SoldiersPage/SoldiersPage.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import "styles/colors";
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/pages/base-managment/soldiers/SoldierPage/SoldierPage.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors.scss';
+  │         ^^^^^^^^^^^^^^^^^^^^
+  ╵
+    src/pages/base-managment/soldiers/RegistrationPage/RegistrationPage.scss 1:9  root stylesheet
+
+[plugin vite:esbuild] src/pages/rewards/prizes/PrizeModal.jsx: Duplicate member "defaultProps" in class body
+23 |    }
+24 |  
+25 |    static defaultProps = {
+   |           ^
+26 |      prize: {}
+27 |    }
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/functional/payments/PaymentForm.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/missions/styles/Label.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [import]: Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+  ╷
+1 │ @import 'styles/colors';
+  │         ^^^^^^^^^^^^^^^
+  ╵
+    src/components/missions/styles/Grid.scss 1:9  root stylesheet
+
+DEPRECATION WARNING [abs-percent]: Passing percentage units to the global abs() function is deprecated.
+In the future, this will emit a CSS abs() function to be resolved by the browser.
+To preserve current behavior: math.abs(100%)
+To emit a CSS abs() now: abs(#{100%})
+More info: https://sass-lang.com/d/abs-percent
+
+   ╷
+54 │   $dividend: abs($dividend);
+   │              ^^^^^^^^^^^^^^
+   ╵
+    node_modules/bootstrap/scss/vendor/_rfs.scss 54:14             divide()
+    node_modules/bootstrap/scss/mixins/_grid.scss 66:15            row-cols()
+    node_modules/bootstrap/scss/mixins/_grid-framework.scss 43:13  @content
+    node_modules/bootstrap/scss/mixins/_breakpoints.scss 65:5      media-breakpoint-up()
+    node_modules/bootstrap/scss/mixins/_grid-framework.scss 32:5   make-grid-columns()
+    node_modules/bootstrap/scss/_grid.scss 72:3                    @import
+    node_modules/bootstrap/scss/bootstrap.scss 16:9                @import
+    src/styles/styles.scss 25:9                                    root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($rccs-size, $rccs-card-ratio) or calc($rccs-size / $rccs-card-ratio)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+73 │     height: $rccs-size / $rccs-card-ratio;
+   │             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   ╵
+    node_modules/react-credit-cards/es/styles.scss 73:13  @import
+    src/styles/styles.scss 26:9                           root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($rccs-size, 20) or calc($rccs-size / 20)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+   ╷
+84 │       border-radius: $rccs-size / 20;
+   │                      ^^^^^^^^^^^^^^^
+   ╵
+    node_modules/react-credit-cards/es/styles.scss 84:22  @import
+    src/styles/styles.scss 26:9                           root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($rccs-size, 11) or calc($rccs-size / 11)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+361 │     height: $rccs-size / 11;
+    │             ^^^^^^^^^^^^^^^
+    ╵
+    node_modules/react-credit-cards/es/styles.scss 361:13  @import
+    src/styles/styles.scss 26:9                            root stylesheet
+
+DEPRECATION WARNING [slash-div]: Using / for division outside of calc() is deprecated and will be removed in Dart Sass 2.0.0.
+
+Recommendation: math.div($rccs-size, 7) or calc($rccs-size / 7)
+
+More info and automated migrator: https://sass-lang.com/d/slash-div
+
+    ╷
+365 │     width: $rccs-size / 7;
+    │            ^^^^^^^^^^^^^^
+    ╵
+    node_modules/react-credit-cards/es/styles.scss 365:12  @import
+    src/styles/styles.scss 26:9                            root stylesheet
+
+WARNING: 292 repetitive deprecation warnings omitted.
+Run in verbose mode to see all warnings.
+
+✓ 2720 modules transformed.
+✗ Build failed in 2.85s
+error during build:
+src/pages/login/Logout.jsx (3:9): "Redirect" is not exported by "node_modules/react-router-dom/dist/index.mjs", imported by "src/pages/login/Logout.jsx".
+file: /Users/naftolir/Sites/tzivos-hashem/front-end/src/pages/login/Logout.jsx:3:9
+
+1: import React, { Component } from 'react';
+2: import { connect } from 'react-redux';
+3: import { Redirect } from 'react-router-dom';
+            ^
+4: import { logout } from 'store/login/actions';
+
+    at getRollupError (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/parseAst.js:401:41)
+    at error (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/parseAst.js:397:42)
+    at Module.error (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:17022:16)
+    at Module.traceVariable (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:17478:29)
+    at ModuleScope.findVariable (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:15141:39)
+    at ChildScope.findVariable (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:5688:38)
+    at ClassBodyScope.findVariable (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:5688:38)
+    at ChildScope.findVariable (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:5688:38)
+    at ChildScope.findVariable (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:5688:38)
+    at FunctionScope.findVariable (file:///Users/naftolir/Sites/tzivos-hashem/front-end/node_modules/rollup/dist/es/shared/node-entry.js:5688:38)
