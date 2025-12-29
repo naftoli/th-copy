@@ -30,14 +30,18 @@ while ($row = mysql_fetch_assoc($result)) {
     $campaigns[$row['subject_id']] = $row['subject_name'];
 }
 
+$disabled = '';
 require_once '../class.streaks.php';
 $streaks = new Streaks($user_id);
 $activeStreaks = $streaks->getStreaks();
 if (count($activeStreaks) > 0) {
-    $disabled = 'disabled';
-} else {
-    $disabled = '';
-}
+    foreach ($activeStreaks as $streak) {
+        if ($streak['days'] < 90) {
+            $disabled = 'disabled';
+            break;
+        }
+    }
+} 
 ?>
 <style>
     .navbar-header h1 {
