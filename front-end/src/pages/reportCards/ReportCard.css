@@ -1,0 +1,25 @@
+table {
+    font-size: 12px;
+    text-align: center;
+    margin: auto;
+}
+tr, th, td {
+    border: 1px solid black;
+    padding: 5px;
+}
+.container {
+    display: flex;
+}
+.mainTable {
+    flex: 1;
+}
+.main {
+    page-break-after: always;
+}
+.bold {
+    font-weight: bold;
+}
+#bsd {
+    float: right;
+    margin-top: -30px;
+}

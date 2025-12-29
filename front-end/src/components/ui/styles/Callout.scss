@@ -1,0 +1,35 @@
+@import 'styles/colors.scss';
+
+.th-callout {
+  padding: 10px 12px 9px;
+  line-height: 1.5;
+  margin-bottom: 0px;
+  font-size: 14px;
+
+  > i {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.5em;
+  }
+
+  h4 {
+    margin-bottom: .3em;
+    line-height: 20px;
+  }
+
+  p { margin-bottom: .3em; }
+  p:last-child { margin-bottom: 0px; }
+
+  &.th-callout-icon {
+    padding-left: 40px;
+  }
+
+  &.alert-primary {
+    background-color: $primary-color-light;
+    border-color: $primary-color-light-border;
+    i, h4 {
+      color: $primary-color;
+    }
+  }
+}

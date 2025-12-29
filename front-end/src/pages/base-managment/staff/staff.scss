@@ -1,0 +1,60 @@
+#StaffPage {
+  height: 100%;
+
+  .ReactTable {
+    height: calc( 100% - 120px );
+    // page height grows as content shrinks
+    @media ( max-width: 411px ) {
+      height: calc( 100% - 50px ); // top of the page takes up 50px
+    }
+  }
+}
+
+#StaffDetailPage {
+
+  .PositionRow, .CreatePositionRow {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 15px;
+
+    .row { 
+      align-items: flex-end;
+      > div { margin-bottom: .5rem; }
+    }
+
+    p { margin-bottom: 0px; }
+    label { margin-top: 0px; font-weight: bold; }
+
+    .btn-group {
+      margin-top: .5rem;
+      width: 100%;
+    }
+  }
+}
+
+.CreatePositionRow {
+  .platoon {
+    transition: .5s;
+    max-height: 75px;
+    &.hide { overflow: hidden; max-height: 0px; } 
+    // reset the animation each time we leave .hide
+    .platoon:not(.hide) { animation: show-platoon .5s; }
+  }
+  // prevent overflow
+  @keyframes show-platoon {
+    0% { overflow: hidden;}
+    99% { overflow: hidden;}
+    100% { overflow: visible;}
+  }
+}
+
+#NewStaffModal {
+  max-width: 650px;
+
+  div#errors .alert {
+    margin-bottom: 0px;
+    margin-top: .5rem;
+    text-align: center;
+  }
+}

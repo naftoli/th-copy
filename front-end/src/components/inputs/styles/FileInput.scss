@@ -1,0 +1,22 @@
+@import 'styles/colors.scss';
+
+.FileInput {
+  text-align: center;
+  margin-top: 10px;
+
+  > input#file {
+    display: none;
+  }
+
+  > label {
+    padding: 14px 14px 12px 14px;
+    background: #deebf5;
+    outline: 1px dashed $primary-color;
+    outline-offset: -4px;
+    transition: .25s;
+    &:hover {
+      cursor: pointer; outline-color: #deebf5;
+      color: #fff;  background: $primary-color-hover;
+    }
+  }
+}

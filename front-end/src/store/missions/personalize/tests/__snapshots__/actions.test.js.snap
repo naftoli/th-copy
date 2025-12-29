@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`types matches snapshot 1`] = `
+Object {
+  "PERSONALIZE": "missions/personalize/personalize",
+  "SET_CAMPAIGNS": "missions/personalize/set_campaigns",
+  "SET_MISSIONS": "missions/personalize/set_missions",
+  "SET_TASKS": "missions/personalize/set_tasks",
+}
+`;

@@ -1,0 +1,70 @@
+@import 'styles/colors';
+
+#NewPlatoonModal {
+  max-width: 650px;
+}
+
+#PlatoonsPage {
+  height: 100%;
+  min-height: 350px;
+  
+  .ReactTable {
+    height: calc( 100% - 130px );
+    @media ( max-width: 412px ) {
+      height: 100%; // top of the page takes up 50px
+    }
+  }
+}
+
+
+#PlatoonPage {
+
+  .alert-info { margin-bottom: 5px; }
+
+  #connect-new-staff { margin-bottom: .5rem; }
+
+  #SoldiersTab h2 {
+    text-align: center;
+  }
+
+  #teachers, #soldiers {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  #soldiers .soldier {
+    padding: 10px;
+    margin: .5rem;
+    display: inline-flex;
+
+    padding: 10px 0px;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+
+    width: 100%;
+    .s-number { display: inline; }
+
+    @media ( min-width: 730px ) {
+      width: calc( 50% - 1rem );
+      &:first-child { flex-grow: 1; }  
+      .s-number { display: block; }
+    }
+
+    > .col-3.col-xl-2 {
+      text-align: center;
+      img.profile-img { 
+        max-height: 70px;
+        border-radius: 5px;
+        border: 1px solid $primary-color;
+      }
+    }
+
+    p { margin-bottom: 0px; }
+  }
+
+  #delete {
+    margin-top: 8px;
+    width: 100%;
+  }
+}

@@ -1,0 +1,68 @@
+@import 'styles/colors';
+
+$border-radius: .4rem;
+
+.Grid {
+
+  margin-bottom: 0px;
+
+  tr.Grid-row:first-child td {
+    border-bottom-width: 3px;
+    border-color: $primary-color;
+  }
+
+  .checkbox {
+    font-size: 1.4em;
+    height: 1.4em;
+  }
+
+  .form-control { 
+    padding: 0px 0.2rem;
+    min-width: 3.7em;
+    max-width: 5em;
+    height: 2em;
+    border-color: #000;
+    border-width: 2px;
+    text-align: center;
+    background: transparent;
+    display: inline-block;
+  }
+
+  th, td {
+    border-color: $primary-color-light;
+    vertical-align: middle;
+    text-transform: capitalize;
+  }
+  
+  thead th {
+    text-align: center;
+    vertical-align: middle;
+    border-color: transparent;
+    border-bottom-color: $primary-color;
+    background: $primary-color;
+    color: #fff;
+    font-size: .9rem;
+    padding: 0.3rem 0.6rem;
+  }
+
+  thead:first-child {
+    th:first-child {
+      border-top-left-radius: $border-radius;
+      > hr { background-color: #fff; margin: 5px 0px;}
+    }
+    th:last-child { border-top-right-radius: $border-radius; }
+  }
+  
+  tbody tr {
+    td:first-child { 
+      text-align: left; padding-right: .7rem;
+      border-left: 0px;
+    }
+    td:last-child { border-right: 0px; }
+  }
+
+  td {
+    text-align: center;
+    white-space: nowrap;
+  }
+}

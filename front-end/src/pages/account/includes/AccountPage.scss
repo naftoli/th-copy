@@ -1,0 +1,64 @@
+#LoginModal{
+  p {
+    font-style: italic;
+    margin-bottom: 0px;
+  }
+
+  .alert {
+    margin-bottom: 0px;
+    margin-top: 1em;
+  }
+}
+
+#AccountPage {
+
+  max-width: 1170px;
+  margin: 0 auto;
+  padding-top: 1em;
+
+  p { margin-bottom: 0px;}
+
+  h4 { margin-bottom: 14px;}
+
+  img.chabad-logo {
+    height: 1em;
+  }
+
+  .LoginRow {
+    .row {
+      align-items: center;
+      margin-bottom: 1em;
+    }
+  }
+
+  #accounts {
+    .Account {
+
+      padding-bottom: .5em;
+      margin-bottom: 1em;
+      border-bottom: 1px solid #ccc;
+
+      .row {
+        align-items: center;
+        > div {
+          margin-bottom: .5em;
+        }
+      }
+
+      label { 
+        margin: 0px;
+        display: block; 
+      }
+      .name {
+        width: 100%;
+        display: block;
+        font-size: 1.3em;
+
+        overflow: hidden;
+        white-space: nowrap;
+        align-items: center;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}

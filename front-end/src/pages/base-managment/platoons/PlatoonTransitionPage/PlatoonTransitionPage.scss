@@ -1,0 +1,35 @@
+#PlatoonTransitionPage {
+  padding-bottom: 2.5vh;
+
+  .row {
+    align-items: flex-end;
+  }
+
+  .btn-group { width: 100%; }
+  .btn { width: 100%; margin-top: 10px; }
+
+  p.title{
+    font-size: 1.6em;
+    font-weight: bold;
+    margin-top: 1em;
+  }
+
+  .ReactTable {
+    max-height: 70vh;
+    min-height: 31vh;
+  }
+
+  div#step-3 {
+    max-height: 325px;
+    transition: 1s;
+    animation-fill-mode: forwards;
+    margin-bottom: 25px;
+  }
+
+  div#deploy {
+    margin-top: 10px;
+    @media ( min-width: 768px ) {
+      .btn { margin-top: 0px; }
+    }
+  }
+}

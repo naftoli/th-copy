@@ -1,0 +1,31 @@
+@import 'styles/colors.scss';
+
+#RegistrationPage {
+  height: 100%;
+
+  .ReactTable {
+    height: calc( 100% - 200px );
+    min-height: 350px;
+    // page height grows as content shrinks
+    @media ( min-width: 769px ) and ( max-width: 880px ) {
+      height: calc( 100% - 220px );
+    }
+    @media ( max-width: 412px ) {
+      height: calc( 100% - 160px );
+    }
+  }
+
+  #total{
+    margin-bottom: 10px;
+  }
+}
+
+#RegistrationModal {
+  max-width: 610px;
+  .th-callout {
+    margin-bottom: 10px;
+  }
+  label {
+    margin-bottom: 2px;
+  }
+}

@@ -1,0 +1,44 @@
+import React from 'react';
+// components
+import { Row, Col, Button } from 'reactstrap';
+import { PTBaseSelect, PlatoonSelect } from 'components/inputs';
+import { ButtonBar, FontAwesome } from 'components/ui';
+
+const Step3 = ({ 
+  school_id, class_id, selectChange, 
+  selection, move, discharge
+}) => {
+  // render page
+  return (
+    <div id='step-3'>
+      <p className="title">Step 3: Select Transition for { selection.length } Soldiers</p>
+      <b>Please Note: The transition WILL NOT TAKE EFFECT until you click the BLUE BUTTON IN STEP 4, AFTER CLICKING ON THE BLUE BUTTON IN THIS STEP</b>
+      <Row>
+        <Col sm={6} xl={4}>
+          <label>To Base</label>
+          <PTBaseSelect value={ school_id } addUnassigned fetchAll showAllOption
+            onChange={ selectChange('school_id') } />
+        </Col>
+        <Col sm={6} xl={4}>
+          <label>To Platoon</label>
+          <PlatoonSelect value={ class_id } schoolId={ school_id } 
+            onChange={ selectChange('class_id') } />
+        </Col>
+        <Col sm={12} xl={4}>
+          <ButtonBar>
+            <Button color='primary' onClick={ move }>
+              <FontAwesome icon="exchange-alt" />{' '}
+              Transition (Move) Soldiers
+            </Button>
+            {/* <Button color='danger' onClick={ discharge }>
+              <FontAwesome icon="trash-alt" />{' '}
+              Discharge (Delete) Soldiers 
+            </Button> */}
+          </ButtonBar>
+        </Col>
+      </Row>
+    </div>
+  );
+};
+
+export default Step3;

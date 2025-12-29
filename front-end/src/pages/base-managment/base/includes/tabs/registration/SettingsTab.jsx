@@ -1,0 +1,61 @@
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+// components
+import { TabPane } from 'reactstrap';
+import { SettingsRow } from '../../rows';
+import { Form } from 'components/inputs';
+import { RegTypeRow } from '../../rows/RegTypeRow';
+import { NavigationRow } from '../../rows/registration/NavigationRow';
+
+export const SettingsTab = ({
+  onSubmit, base, tabId,
+  onUpdate, back, onValidChange,
+}) => {
+
+  let { child_fee, reg_type } = base;
+
+  return (
+    <TabPane tabId={tabId}>
+
+      <Form id='SettingsTab'
+        validateAfterSubmit
+        onSubmit={onSubmit}
+        onValidChange={onValidChange}>
+
+        <p className='title'>
+          General Base Settings
+        </p>
+
+        <SettingsRow
+          base={base}
+          onUpdate={onUpdate} />
+
+        {base.inst_id !== 10 &&
+          <Fragment>
+            <p className='title'>
+              Registration Settings
+            </p>
+
+            <RegTypeRow
+              early_bird_date={base.early_bird}
+              guaranteed_date={base.school_charge_date}
+              regType={reg_type}
+              onUpdate={onUpdate}
+              childFee={child_fee}
+              prices={base.currentRegPrices} />
+          </Fragment>
+        }
+
+        <NavigationRow back={back} next />
+      </Form>
+    </TabPane>
+  )
+}
+
+SettingsTab.propTypes = {
+  base: PropTypes.object.isRequired,
+  tabId: PropTypes.number.isRequired,
+  onUpdate: PropTypes.func.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+  onValidChange: PropTypes.func,
+}

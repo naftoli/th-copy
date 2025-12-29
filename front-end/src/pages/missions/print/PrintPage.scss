@@ -1,0 +1,11 @@
+#PrintPage {
+  .buttons {
+    margin-top: 8px;
+    .btn { width: 100%; margin: 4px 0px; }
+  }
+
+  #pages {
+    text-decoration: underline;
+    &:hover{ cursor: pointer; }
+  }
+}

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`types matches snapshot 1`] = `
+Object {
+  "SET_LOADING": "missions/parshos/set_loading",
+  "SET_PARSHOS": "missions/parshos/set_parshos",
+}
+`;

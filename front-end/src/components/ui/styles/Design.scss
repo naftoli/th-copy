@@ -1,0 +1,10 @@
+.btn-group.button-bar {
+  flex-wrap: wrap;
+  width: 100%;
+  .btn {
+    white-space: normal;
+    flex-grow: 1;
+    margin: 3px;
+    border-radius: .25rem !important;
+  }
+}

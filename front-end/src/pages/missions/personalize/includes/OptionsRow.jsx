@@ -1,0 +1,90 @@
+import React from 'react';
+
+import { Row, Col } from 'reactstrap';
+import { Radio } from 'components/inputs';
+import { isAdmin, isBC } from 'functions/login';
+import { PlatoonSelect, SoldierSelect, ParshaSelect, BaseSelect, MissionTypeUngenderedSelect } from 'components/selects';
+// data
+import { availableMissionLanguages } from 'data/languages.json'
+
+const OptionsRow = props => {
+  const { 
+    login,    school_id,  class_ids,
+    user_id,  parsha_id,  mission_type, lang,
+    onSelectChange, onMultiSelectChange,       onLangChange
+  } = props;
+
+  return (
+    <Row>
+      <Col sm={6}>
+        <label>Base</label>
+        <BaseSelect
+          required
+          value={ school_id }
+          isDisabled={ !isAdmin( login.code ) } 
+          onChange={ onSelectChange('school_id') } />
+      </Col>
+
+      <Col sm={6}>
+        <label>Platoon</label>
+        <PlatoonSelect
+          isClearable isMulti
+          values={ class_ids }
+          schoolId={ school_id }
+          openMenuOnFocus={ false }
+          placeholder='All Platoons'
+          isDisabled={ !isBC( login.code ) }
+          onChange={ onMultiSelectChange('class_ids')} />
+      </Col>
+
+      <Col sm={6}>
+        <label>Soldier</label>
+        <SoldierSelect
+          isClearable
+          registeredOnly
+          onlyReloadSoldiersIfNotLoaded
+          value={ user_id }
+          classIds={ class_ids }
+          schoolId={ school_id }
+          openMenuOnFocus={ false } 
+          placeholder='All Soldiers' 
+          onChange={ onSelectChange('user_id') } />
+      </Col>
+
+      <Col sm={6}>
+        <label>Parsha</label>
+        <ParshaSelect
+          isClearable
+          value={ parsha_id }
+          placeholder='Entire Year'
+          openMenuOnFocus={ false }
+          onChange={ onSelectChange('parsha_id') } />
+      </Col>
+      <Col sm={12}>
+        <label>Mission type</label>
+        <MissionTypeUngenderedSelect
+          isClearable
+          value={ mission_type }
+          placeholder='All Mission Types'
+          openMenuOnFocus={ false }
+          onChange={ onSelectChange('mission_type') } />
+      </Col>
+
+      <Col className='lang-options'>
+        <strong>Language</strong>
+        {availableMissionLanguages.map(language =>
+          <Radio
+              key={language.value}
+              value={language.value}
+              name='lang'
+              checked={ Number(lang) === language.value }
+              onChange={ onLangChange }>
+            {language.label}
+          </Radio>
+        )}
+      </Col>
+    </Row>
+  )
+}
+
+export default OptionsRow;

@@ -1,0 +1,77 @@
+/* Settings on the body element */
+body {
+  margin: 0;
+  padding: 0;
+  min-width: 350px;
+}
+
+/* Make scrolling on the entire site as smooth as currently possible */
+* {
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+.react-select__menu,
+.react-select__menu-list {
+  scroll-behavior: unset !important;
+  z-index: 10 !important;
+}
+
+/* Images cannot go beyond their parent containers */
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* Form Validation */
+div.invalid-message {
+  display: none;
+  color: #ff3c3c;
+}
+
+/* input:invalid[value=""] { border-color: #dcc1c1; } */
+input:invalid:not([value=""]) {
+  border-color: #ff3c3c;
+}
+
+/* Show invalid message only after user interaction (user-invalid) */
+input:user-invalid+div.invalid-message {
+  display: block;
+  padding-top: .2em;
+}
+
+#save>button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#root {
+  height: 100vh;
+}
+
+.alert {
+  word-break: break-word;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Table links should not be underlined unless hovered */
+table a {
+  text-decoration: none;
+}
+
+table a:hover {
+  text-decoration: underline;
+}

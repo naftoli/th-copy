@@ -1,0 +1,61 @@
+import React from 'react';
+
+import { Link } from 'react-router-dom';
+import { FontAwesome } from 'components/ui';
+import { LEGACY_URL } from 'components/constants';
+// components
+import { Col } from 'reactstrap';
+
+export const QuickLinks = ({ beta = false }) => {
+  return (
+    <Col xs={12} sm={6} xl={4}>
+      <div id='QuickLinks' className='widget'>
+        <h2>Quick Links</h2>
+
+        <div id='links'>
+          <Link to='/missions/print'>
+            <FontAwesome icon='print' />
+            Print Missions
+          </Link>
+          <Link to='/missions/mark'>
+            <FontAwesome icon='check-circle' regular />
+            Mark Missions
+          </Link>
+          {/* <a href={`${LEGACY_URL}/api/beta`}>
+              <FontAwesome icon='door-open' />
+              { beta ? 'Join' : 'Leave' } Beta
+            </a> */}
+        </div>
+      </div>
+    </Col>
+  );
+}
+
+export const Resources = () => {
+  return (
+    <Col xs={{ size: 12, order: 12 }} xl={{ size: 4, order: 0 }}>
+      <div id='Resources' className='widget'>
+        <h2>Resources</h2>
+
+        <div id='links'>
+          <a href='https://docs.google.com/document/d/1gyiFgk4uk5yF6PpsepfR3otyiDZ-_GvTlONIbMZDwT0/edit?usp=drivesdk' target='_blank' rel="noopener noreferrer">
+            <img src={`${LEGACY_URL}/homeIcons/dropbox.svg`} alt='hachayol' />
+            Resources
+          </a>
+          <a href='//dropbox.com/sh/41u2regs73kfp9h/AACJV58J9KD6elXXZisYz74Ia?dl=0' target='_blank' rel="noopener noreferrer">
+            <img src={`${LEGACY_URL}/homeIcons/tanya.png`} alt='tanya' />
+            Tanya
+          </a>
+          <a href='//www.dropbox.com/s/01g02txfyj28zqt/BC%20Calendar%205781%2011x17%20_rs112520.pdf?dl=0' target='_blank' rel="noopener noreferrer">
+            <img src={`${LEGACY_URL}/homeIcons/Calendar.png`} alt='calendar' />
+            Calendar
+          </a>
+          <a href='//thechidon.com' target='_blank' rel="noopener noreferrer">
+            <img src={`${LEGACY_URL}/homeIcons/Chidon.png`} alt='chidon' />
+            Yahadus
+          </a>
+        </div>
+      </div>
+    </Col>
+  );
+}

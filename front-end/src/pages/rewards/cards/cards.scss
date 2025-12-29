@@ -1,0 +1,21 @@
+#AchievementsCardsPage {
+
+  h2#available-miles {
+    text-align: center;
+    margin-top: 12px;
+  }
+
+  .btn {
+    width: 100%;
+    margin-top: 35.2px;
+    @media ( max-width: 575px ) { margin-top: 10px; }
+  }
+
+  #cards {
+    // display: grid;
+    text-align: center;
+    margin: 20px 0px;
+    @media print { margin: 0px; text-align: left; }
+    // grid-template-columns: repeat( auto-fit, minmax( 86mm, 1fr ) );
+  }
+}

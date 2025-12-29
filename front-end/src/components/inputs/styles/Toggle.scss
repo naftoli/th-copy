@@ -1,0 +1,199 @@
+@import 'styles/colors';
+
+@mixin toggle-branding(
+  $off-color: $danger, // color when off // was #777,
+  $on-color: green, // color when on lighter:  #5fc054
+  $inactive-text: rgba(white, 0.8), // color for inactive text
+  $transition: cubic-bezier(0,1,0.5,1) // transition style
+) {
+  // everything is next to the checkbox
+  input[type="checkbox"] {
+    // darken when disabled
+    &[disabled] ~ .switchbox {
+      color: rgba($off-color, 0.5);
+    }
+    // set hover and focus styles
+    &:focus ~ .switchbox, &:hover ~ .switchbox {
+      .switch {
+        background-color: $off-color;
+        &:after { color: darken($off-color, 10%); }
+      }
+    }
+    &:hover ~.switchbox { cursor: pointer; color: darken($off-color, 5%); }
+    // change styles when checked to on-color
+    &:checked {
+      ~ .switchbox {
+        &:hover { color: darken($on-color, 3%); }
+
+        .switch {
+          background-color: lighten($on-color, 5%);
+          &:after { color: darken($on-color, 5%); }
+        }
+      }
+      
+      &:focus, &:hover ~ .switchbox .switch {
+        background-color: $on-color;
+        &:after { color: darken($on-color, 10%); }
+      }
+    }
+  }
+  // defaut styles for the switch
+  .switchbox .switch {
+    transition: background-color 0.3s $transition;
+    background: lighten($off-color, 5%);
+    &:before { color: $inactive-text; }
+    &:after { // Autoprefixer choked here, so making the prefixes explicit
+      -webkit-transition: -webkit-transform 0.3s $transition;
+      transition: transform 0.3s $transition;
+      color: $off-color; 
+    }
+  }
+}
+
+@mixin toggle-appearance 
+( 
+  $width: 90px,
+  $height: 28px,
+  $border-radius: 2px,
+  $offset: 1px,
+  $label-font-size: 13px,
+  $switch-font-size: 10px,
+  $shadow: 0 2px 2px rgba(black, 0.4)
+){
+  $switch-width: $width/2;
+  
+  min-width: $width;
+
+  input[type="checkbox"] {
+
+    &:focus ~ .switchbox, &:hover ~ .switchbox {
+      .switch {
+        &:after { box-shadow: $shadow; } 
+      }
+    }
+    
+    &:checked {
+      ~ .switchbox {
+        .switch {
+          &:after { transform: translate3d($width - ($switch-width + $offset),0,0); }  
+        }
+      }
+      &:focus, &:hover {
+        ~ .switchbox {
+          .switch { &:after { box-shadow: $shadow; } }
+        } 
+      }
+    }
+  }
+  
+  .switchbox {
+    font-size: $label-font-size;
+    
+    .switch {
+      height: $height;
+      flex: 0 0 $width;
+      border-radius: $border-radius;
+      
+      &:before {
+        left: $width/2;
+        font-size: $switch-font-size; 
+        line-height: $height;
+        width: $width/2;
+        padding: 0 12px;
+      }
+      
+      &:after {
+        top: $offset; left: $offset;
+        border-radius: $border-radius/2;
+        width: $switch-width - $offset; 
+        line-height: $height - ($offset*2);
+        font-size: $switch-font-size;
+      }
+      
+      &:hover {
+        &:after { box-shadow: $shadow; }
+      }
+    } 
+  }
+}
+
+label.toggle {
+  position: relative;
+  margin: 0px;
+  *, *:before, *:after { box-sizing: border-box; }
+  
+  input[type="checkbox"] {
+    opacity: 0;
+    position: absolute;
+    top: 0; left: 0;
+    
+    &[disabled] ~ .switchbox {
+      pointer-events: none;
+      .switch { opacity: 0.4; }
+    }
+    
+    &:checked ~ .switchbox .switch {
+      &:before { content: attr(data-unchecked); left: 0; }
+      &:after { content: attr(data-checked); }
+    }
+  }
+  // set the styles of the defaut switchbox
+  .switchbox {
+    user-select: none; position: relative;
+    display: flex; align-items: center;
+
+    .switch {
+      position: relative;
+
+      &:before {
+        content: attr(data-checked);
+        position: absolute; top: 0;
+        text-transform: capitalize; text-align: center;
+      }
+
+      &:after {
+        content: attr(data-unchecked);
+        position: absolute; z-index: 5;
+        text-transform: capitalize; text-align: center;
+        background: white; transform: translate3d(0,0,0);
+      }
+    }
+  }
+  
+  // Default values for .toggle class
+  @include toggle-branding; 
+  @include toggle-appearance; 
+
+  // disable animations
+  &.no-animate {
+    .switchbox .switch,
+    .switchbox .switch:after {
+      transition: none;
+    }
+  }
+  
+  // Create toggles of different sizes by overriding the toggle-appearance mixin defaults  
+  &.large {
+    @include toggle-appearance
+    (
+      100px, // Toggle width
+      38px,  // Toggle height
+      4px,   // Toggle border radius
+      2px,   // Offset (distance btw switch and box)
+      14px,  // Label font size
+      12px,  // Switch font size
+      0 3px 3px rgba(black, 0.4) // Switch shadow on hover/focus
+    ); 
+  }
+  
+  // Or re-brand the toggle for different applications
+  // &.danger {
+  //   @include toggle-branding
+  //   (
+  //     #b53e74,  // Off state color
+  //     #3d9c72,  // On state color
+  //     rgba(white, 0.6)  // Off state text color
+  //     // ease-in-out  // Transition timing function
+  //   ); 
+  // }
+}
