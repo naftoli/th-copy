@@ -165,7 +165,7 @@ if (count($activeStreaks) > 0) {
         <h2>Active Streaks</h2>
         <ul style="list-style-type: none; padding-left: 0;">
             <?php foreach ($activeStreaks as $gridId => $streak) : ?>
-                <li><?=$streak['cat']?> - <?=$streak['name']?> (<?=count($streak['days'])?> days)</li>
+                <li><b><?=$streak['cat']?></b> - <?=$streak['name']?> (<?=count($streak['days'])?> days)</li>
             <?php endforeach; ?>
         </ul>
     </div>
