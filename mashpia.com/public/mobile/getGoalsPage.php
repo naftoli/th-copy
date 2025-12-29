@@ -85,7 +85,6 @@ foreach ($sm as $val) {
 require_once(dirname(__FILE__)."/inc/functions/getCampaigns.php");
 // show the button if the user has unenrolled campaigns or has no campaigns...
 $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) == 0;
-
 ?>
 <header class="navbar" id="top" role="banner">
     <div class="container">
@@ -115,6 +114,7 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 					<span class="i18n" data-key="EnrollCampaign">Enroll in Campaign </span>
 				</a>
 			<? } ?>
+			<button id="streaks" class="btn btn-default" onclick="window.location.href='/mobile/streaks/?id=<?=$user_id?>'">Streaks</button>
 			<? if ($allow_parent_tasks) { // make sure that the school allows the parents to create a custom task before showing the modal ?>
 				<a id="create-link" data-toggle="modal" data-target="#customTaskModal" href="#" style="text-decoration: none" class="i18n" data-key="AddCustomTask">
 					Add Custom Task
@@ -163,7 +163,7 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 		<?php endif; ?>
 
     	<? foreach ( $campaigns as $id => $campaign ) : ?>
-
+			<?php if ($id == 136) continue; ?>
             <div class="panel panel-default">
             	<div id="spinner"></div>
             	<div class="panel-heading">

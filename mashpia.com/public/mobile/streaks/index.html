@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" dir="ltr">
 
 <head>
@@ -7,7 +7,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 	<link rel="stylesheet" href="/mobile/css/lib/animate.css">
-	<link href="css/customTaskModal.css" rel="stylesheet" />
 	<style type="text/css">
 		@charset "UTF-8";
 
@@ -65,9 +64,9 @@
 			background-attachment: fixed
 		}
 	</style>
-	<link rel="preload" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+	<link rel="preload" href="/mobile/css/all.css" as="style" onload="this.rel='stylesheet'">
 	<noscript>
-		<link rel="stylesheet" href="css/all.css" as="style" onload="this.rel='stylesheet'">
+		<link rel="stylesheet" href="/mobile/css/all.css" as="style" onload="this.rel='stylesheet'">
 	</noscript>
 	<link href="//fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="preload" type="text/css"
 		as="style" onload="this.rel='stylesheet'">
@@ -137,10 +136,10 @@
 				}
 			}(this);
 	</script>
-	<script src="js/all.js" defer></script>
+	<script src="/mobile/js/all.js" defer></script>
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 	<!-- Place favicon.ico in the root directory -->
-	<link rel="stylesheet" href="css/bug_report.css" />
+	<link rel="stylesheet" href="/mobile/css/bug_report.css" />
 	<style>
 		html,
 		body,
@@ -179,21 +178,21 @@
 		}
 
 		/*			misc page styles...*/
-		.page-goals .task {
+		.page-streaks .task {
 			font-size: 13px;
 			margin-bottom: 8px;
 		}
 
-		.page-goals li b {
+		.page-streaks li b {
 			vertical-align: top;
 		}
 
-		.page-goals li label {
+		.page-streaks li label {
 			margin-bottom: 0px;
 			margin-right: 5px;
 		}
 
-		.page-goals .he li label {
+		.page-streaks .he li label {
 			margin-bottom: 0px;
 			margin-right: 0px;
 			margin-left: 5px;
@@ -252,7 +251,7 @@
 			display: inline-block;
 		}
 
-		/*			square the edges between the goals and the dropdowns...*/
+		/*			square the edges between the streaks and the dropdowns...*/
 		.alert-warning {
 			border-top-left-radius: 0px;
 			border-top-right-radius: 0px;
@@ -355,7 +354,7 @@
 			min-height: 48px;
 		}
 
-		.page-goals header.navbar h1 {
+		.page-streaks header.navbar h1 {
 			height: auto;
 			font-size: 40px;
 			padding: 16.5px 0px;
@@ -369,7 +368,7 @@
 				display: none;
 			}
 
-			.page-goals header.navbar h1 {
+			.page-streaks header.navbar h1 {
 				font-size: 30px;
 				padding-top: 8px;
 				padding-bottom: 5px;
@@ -416,14 +415,14 @@
 			font-family: Arial;
 		}
 
-		.navbar {
-			min-height: auto !important;
-		}
+        select, button {
+            padding: 6px;
+        }
 	</style>
 
 </head>
 
-<body class="page-goals" id="main">
+<body class="page-streaks" id="main">
 	<div id="spinner"></div>
 
 
@@ -444,7 +443,7 @@
 					id = id.substring(0, d);
 				}
 				// make sure that the user is signed in....
-				$.post('reg/ajax/checkAuth.php', {
+				$.post('/mobile/reg/ajax/checkAuth.php', {
 					user_id: id,
 					admin_id: Cookies.get('admin')
 				}, function (success) {
@@ -477,16 +476,14 @@
 				};
 				var target = document.getElementById('spinner');
 				new Spinner(opts).spin(target);
-				getGoalsPage(); // get the goals page...
+				getStreaksPage(); // get the streaks page...
 
-				// function to get the goals page
-				function getGoalsPage() {
-					$.get('getGoalsPage.php?id=' + str + version, function (html) {
+				// function to get the streaks page
+				function getStreaksPage() {
+					$.get('ajax/getStreaksPage.php?id=' + str + version, function (html) {
 						$("#main").empty();
 						$("#main").append(html);
 
-						initTranslation();
-						translate(); // call the translate funtion
 						$("#main").addClass("animated fadeIn");
 						// if the language is set to 2 (yiddish) in the html
 						if (lang == 2) {
@@ -574,7 +571,6 @@
 	</script>
 	<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://unpkg.com/i18next@19.6.3/dist/umd/i18next.min.js"></script>
-	<script src="./js/translation/goalsNew/goals_new.js"></script>
 </body>
 
 </html>

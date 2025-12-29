@@ -401,11 +401,13 @@ class TasksCustomizationNew {
         return false;
     }
 
-    public function getTasks( $subject_id, $debug = false, $forPersonalization = false, $missionType = false ) {
+    public function getTasks( $subject_id, $debug = false, $forPersonalization = false, $missionType = false, $forStreak = false ) {
     	$this->debug = $debug;
         $tasks = array();
         $info = array();
         $mandatory = array();
+        $grid_ids = [];
+
         switch ($missionType) {
             case 'chabad':
                 $mission_type = '2,3';
@@ -495,6 +497,7 @@ class TasksCustomizationNew {
             $info[$row['cat']][$row['name']][$row['school_type_id']][$row['level']] = $row['quantity'];
             if ($forPersonalization) $mandatory[$row['cat']] = $row['mandatory_qty'];
             else $this->mandatory[$row['cat']] = $row['mandatory_qty'] ? true : false;
+            if ($forStreak) $grid_ids[$row['grid_id']] = $row['cat'] . '|' . $row['name'];
         }
         
         //if even one level/type has default on, the cat will show default on
@@ -661,8 +664,28 @@ class TasksCustomizationNew {
                 else $allInfo[$task][$enrolled] = $friendly[$task];
             }
         }
+
+        if ($forStreak) return ['grid_ids' => $grid_ids, 'taskInfo' => $allInfo];
         return $allInfo;
     }
+
+    public function getTasksForStreak( $subject_id ) {
+        $info = $this->getTasks( $subject_id, false, false, false, true );
+        $tasks = $info['taskInfo'];
+        $grids = $info['grid_ids'];
+
+        $tasks_with_grids = [];
+        foreach ($tasks as $cat => $more) {
+            foreach ($more as $enrolled => $taskInfo) {
+                foreach ($taskInfo as $task => $other) {
+                    $grid_id = array_search(($cat . '|' . $task), $grids);
+                    if ($grid_id) $tasks_with_grids[$grid_id] = $cat . ' - ' . $task;
+                }
+            }
+        }
+        return $tasks_with_grids;
+    }
+
 
 	public function getYDTasks( $catNum, $debug = false ) {
     	$this->debug = $debug;
