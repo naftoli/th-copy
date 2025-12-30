@@ -137,7 +137,7 @@ class ChayoleiShipping
             // $stmt->debugDumpParams();
             $rows = $stmt->fetchAll();
             foreach ($rows as $row) {
-                $items[] = $row['item'];
+                $items[$row['mivtzoim_item_id']] = $row['item'];
             }
         }
         return $items;
@@ -161,7 +161,7 @@ class ChayoleiShipping
                     JOIN
                 users u USING (user_id)
             WHERE
-                mi.item in (\"" . implode('","', $itemsList) . "\")
+                mi.mivtzoim_item_id in (" . implode(',', $items) . ")
                     AND p.year = :year";
         if ($gender == 'm') $sql .= " AND u.gender = 'M'";
         else if ($gender == 'f') $sql .= " AND u.gender = 'F'";
@@ -178,6 +178,7 @@ class ChayoleiShipping
             $userKey = $row['user_id'] . '-' . $row['item'];
             if (!isset($userItems[$userKey])) {
                 $userItems[$userKey] = [
+                    'item_id' => $row['item_id'],
                     'item'  => $row['item'],
                     'qty'   => $row['qty'],
                     'info'  => $row
@@ -191,16 +192,18 @@ class ChayoleiShipping
             $user_id = explode('-', $key)[0];
             $item = $details['item'];
             $qty = $details['qty'];
+            $item_id = $details['item_id'];
             $info = $details['info'];
             $rows[] = [
                 'user_id'   => $user_id,
+                'item_id'   => $item_id,
                 'item'      => $item,
                 'qty'       => $qty,
                 'info'      => $info
             ];
         }
         foreach ($rows as $row) {
-            if (count($items) && !in_array(strtolower($row['item']), $items)) continue;
+            if (count($items) && !in_array($row['item_id'], $items)) continue;
             $info = $row['info'];
             $purchases[$row['user_id']][] = [
                 'item'  => $row['item'],

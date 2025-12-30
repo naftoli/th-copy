@@ -59,9 +59,11 @@ function build_items() {
     foreach ($categories as $cat) {
         $html .= "<h4>" . ucwords($cat) . "</h4>";
         $html .= "<div><input type='checkbox' name='items[" . $cat . "]' class='check_items' /> All " . ucwords($cat) . "<br />";
-        foreach ($items[$cat] as $item) {
+        foreach ($items[$cat] as $item_id => $item) {
             $name = strtolower($item);
-            $html .= "<input type='checkbox' name='items[" . $cat . "][" . htmlspecialchars($name, ENT_QUOTES) . "]' class='item' /> " . ucwords($item) . "<br />";
+            if (in_array($cat, ['mivtzoim', 'hei teves'])) $id = $item_id;
+            else $id = htmlspecialchars($name, ENT_QUOTES);
+            $html .= "<input type='checkbox' name='items[" . $cat . "][" . $id . "]' class='item' /> " . ucwords($item) . "<br />";
         }
         if (in_array($cat, ['medals', 'ranks'])) {
             $html .= build_dates($cat . '_dates');
