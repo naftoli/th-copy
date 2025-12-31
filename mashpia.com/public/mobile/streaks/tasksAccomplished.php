@@ -751,7 +751,7 @@ if (isset($_POST['submit'])) {
 
   const uniqueTasks = Array.from(new Set(chartPayload.tasks.map(t => t.name)));
   // Make each bar ~50px tall by sizing the total chart height and slot/bar ratio
-  const ROW_HEIGHT_PX = 50;    // desired bar thickness
+  const ROW_HEIGHT_PX = 30;    // desired bar thickness
   const ROW_GAP_PX = 6;        // gap between rows
   const SLOT_PX = ROW_HEIGHT_PX + ROW_GAP_PX;
   const BAR_HEIGHT_PERCENT = Math.max(1, Math.min(100, Math.round((ROW_HEIGHT_PX / SLOT_PX) * 100)));
