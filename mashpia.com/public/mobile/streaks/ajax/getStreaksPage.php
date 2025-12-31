@@ -33,7 +33,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 
 $disabled = '';
-require_once '../class.streaks.php';
+require_once '../classes/class.streaks.php';
 $streaks = new Streaks($user_id);
 $activeStreaks = $streaks->getStreaks();
 if (count($activeStreaks) > 0) {
@@ -68,6 +68,10 @@ if (count($activeStreaks) > 0) {
         height: 50px;
         margin-left: 10px;
         vertical-align: middle;
+    }
+    #tasks-accomplished {
+        margin: auto;
+        margin-bottom: 20px;
     }
 </style>
 
@@ -152,6 +156,12 @@ if (count($activeStreaks) > 0) {
     You can setup a streak for a campaign by selecting a campaign and a task.<br />
     All streaks are for 90 days.<br />
     Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).
+</div>
+
+<div class="container">
+    <div class="content">
+        <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button>
+    </div>
 </div>
 
 <div class="container">
