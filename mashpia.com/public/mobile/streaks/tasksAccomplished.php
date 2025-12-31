@@ -564,7 +564,7 @@ if (isset($_POST['submit'])) {
 
     <div class="container">
         <div class="content">
-            <button id="back-button" class="btn btn-default" onclick="javascript: location.href='index.php?id=<?=$user_id?>'">Back</button>
+            <button id="back-button" class="btn btn-default" onclick="javascript: location.href='index.html?id=<?=$user_id?>'">Back</button>
             <form action="tasksAccomplished.php?id=<?=$user_id?>" method="post" onsubmit="return validateForm()">
                 Choose date range:
                 <input type="date" name="start_date" placeholder="Start Date" />
