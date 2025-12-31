@@ -750,7 +750,13 @@ if (isset($_POST['submit'])) {
   const xMax = jdToUtcDate(chartPayload.endJd + 1).getTime();
 
   const uniqueTasks = Array.from(new Set(chartPayload.tasks.map(t => t.name)));
-  const chartHeight = Math.max(140, uniqueTasks.length * 44);
+  // Make each bar ~50px tall by sizing the total chart height and slot/bar ratio
+  const ROW_HEIGHT_PX = 50;    // desired bar thickness
+  const ROW_GAP_PX = 6;        // gap between rows
+  const SLOT_PX = ROW_HEIGHT_PX + ROW_GAP_PX;
+  const BAR_HEIGHT_PERCENT = Math.max(1, Math.min(100, Math.round((ROW_HEIGHT_PX / SLOT_PX) * 100)));
+  // Add some extra space (x-axis + padding)
+  const chartHeight = Math.max(200, uniqueTasks.length * SLOT_PX + 60);
 
   const options = {
     series: [
@@ -758,7 +764,7 @@ if (isset($_POST['submit'])) {
       { name: 'Accomplished', data: dataPoints }
     ],
     chart: { type: 'rangeBar', height: chartHeight, toolbar: { show: false } },
-    plotOptions: { bar: { horizontal: true, barHeight: '92%', rangeBarGroupRows: true } },
+    plotOptions: { bar: { horizontal: true, barHeight: BAR_HEIGHT_PERCENT + '%', rangeBarGroupRows: true } },
     xaxis: {
       type: 'datetime',
       min: xMin,
