@@ -551,6 +551,37 @@ if (isset($_POST['submit'])) {
             margin: 0 auto;
             padding: 0 20px;
         }
+        #chart-legend {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            justify-content: flex-start;
+            max-width: 1200px;
+            margin: 8px auto 0 auto;
+            padding: 0 20px;
+            font-size: 13px;
+            color: #555;
+        }
+        #chart-legend .item {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        #chart-legend .swatch {
+            width: 24px;
+            height: 10px;
+            border-radius: 2px;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+        #chart-legend .swatch.accomplished {
+            background-color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+        #chart-legend .swatch.missing {
+            background-color: #e0e0e0;
+            border: 1px solid #cfcfcf;
+        }
     </style>
 
 </head>
@@ -595,8 +626,7 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
     <hr />
-    <div id="chart-container">
-    </div>
+    <div id="chart-container"></div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <?php if (!empty($accomplished_tasks)) : ?>
@@ -664,13 +694,53 @@ if (isset($_POST['submit'])) {
     ranges.push([jdToUtcDate(start).getTime(), jdToUtcDate(prev + 1).getTime()]);
     return ranges;
   }
+  // Same grouping but keep values in JD for set inversion
+  function groupJdRangesRaw(jds) {
+    if (!jds || jds.length === 0) return [];
+    const raw = [];
+    let start = jds[0];
+    let prev = jds[0];
+    for (let idx = 1; idx < jds.length; idx++) {
+      const jd = jds[idx];
+      if (jd === prev + 1) {
+        prev = jd;
+      } else {
+        raw.push([start, prev + 1]); // end is exclusive
+        start = jd;
+        prev = jd;
+      }
+    }
+    raw.push([start, prev + 1]);
+    return raw;
+  }
+  // Invert ranges within [startJd, endJdExclusive) to get "missing" ranges
+  function invertRanges(startJd, endJdExclusive, rangesRaw) {
+    const missing = [];
+    let cursor = startJd;
+    rangesRaw.forEach(r => {
+      const s = r[0], e = r[1];
+      if (cursor < s) missing.push([cursor, s]);
+      cursor = Math.max(cursor, e);
+    });
+    if (cursor < endJdExclusive) missing.push([cursor, endJdExclusive]);
+    return missing;
+  }
 
   // Build Apex series: one series with multiple data points, x = task short name
   const dataPoints = [];
+  const missingPoints = [];
   chartPayload.tasks.forEach(t => {
     const ranges = groupJdRanges(t.jds);
+    const raw = groupJdRangesRaw(t.jds);
+    const inv = invertRanges(chartPayload.startJd, chartPayload.endJd + 1, raw);
     ranges.forEach(r => {
       dataPoints.push({ x: t.name, y: r });
+    });
+    inv.forEach(r => {
+      // convert JD ranges to ms
+      const startMs = jdToUtcDate(r[0]).getTime();
+      const endMs = jdToUtcDate(r[1]).getTime();
+      missingPoints.push({ x: t.name, y: [startMs, endMs] });
     });
   });
 
@@ -680,12 +750,15 @@ if (isset($_POST['submit'])) {
   const xMax = jdToUtcDate(chartPayload.endJd + 1).getTime();
 
   const uniqueTasks = Array.from(new Set(chartPayload.tasks.map(t => t.name)));
-  const chartHeight = Math.max(120, uniqueTasks.length * 36);
+  const chartHeight = Math.max(140, uniqueTasks.length * 44);
 
   const options = {
-    series: [{ name: 'Tasks', data: dataPoints }],
+    series: [
+      { name: 'Missing', data: missingPoints },
+      { name: 'Accomplished', data: dataPoints }
+    ],
     chart: { type: 'rangeBar', height: chartHeight, toolbar: { show: false } },
-    plotOptions: { bar: { horizontal: true, barHeight: '70%' } },
+    plotOptions: { bar: { horizontal: true, barHeight: '92%', rangeBarGroupRows: true } },
     xaxis: {
       type: 'datetime',
       min: xMin,
@@ -695,15 +768,10 @@ if (isset($_POST['submit'])) {
     yaxis: {
       labels: { style: { fontSize: '12px' } }
     },
-    colors: ['#2ecc71'],
+    colors: ['#e0e0e0', '#2ecc71'],
     dataLabels: { enabled: false },
     grid: { xaxis: { lines: { show: true } }, padding: { right: 0 } },
-    tooltip: { x: { format: 'MMM d' } },
-    annotations: {
-      xaxis: [
-        { x: xMax, borderColor: '#cfcfcf', strokeDashArray: 0 }
-      ]
-    }
+    tooltip: { x: { format: 'MMM d' } }
   };
 
   new ApexCharts(document.querySelector('#chart-container'), options).render();
