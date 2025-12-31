@@ -713,10 +713,10 @@ if (isset($_POST['submit'])) {
     var lang = <?=$lang?>;
 
     function updateFormValues() {
-        const start_date = <?=$start_date ?? ''?>;
-        const end_date = <?=$end_date ?? ''?>;
-        const date_range = <?=$date_range ?? ''?>;
-        const campaign = <?=$campaign_chosen ?? ''?>;
+        const start_date = "<?=isset($start_date) ? date('Y-m-d', jdtounix($start_date)) : ''?>";
+        const end_date = "<?=isset($end_date) ? date('Y-m-d', jdtounix($end_date)) : ''?>";
+        const date_range = "<?=$date_range ?? ''?>";
+        const campaign = "<?=$campaign_chosen ?? ''?>";
         console.log(start_date, end_date, date_range, campaign);
         if (start_date) $('input[name="start_date"]').val(start_date);
         if (end_date) $('input[name="end_date"]').val(end_date);
