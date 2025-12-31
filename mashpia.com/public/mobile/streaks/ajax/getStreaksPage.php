@@ -1,6 +1,8 @@
 <?php
 ini_set("display_errors", 1);
 ini_set('error_reporting', E_ALL);
+ini_set('memory_limit', '256M');
+ini_set('max_execution_time', 300);
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/db.php';
  require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
@@ -61,6 +63,11 @@ if (count($activeStreaks) > 0) {
         border-radius: 10px;
         margin: 0 8% 20px 8%;
         color: brown;
+    }
+    progress {
+        height: 50px;
+        margin-left: 10px;
+        vertical-align: middle;
     }
 </style>
 
@@ -169,7 +176,12 @@ if (count($activeStreaks) > 0) {
         <h2>Active Streaks</h2>
         <ul style="list-style-type: none; padding-left: 0;">
             <?php foreach ($activeStreaks as $gridId => $streak) : ?>
-                <li><b><?=$streak['cat']?></b> - <?=$streak['name']?> (<?=$streak['days']?> days)</li>
+                <li>
+                    <b><?=$streak['cat']?></b> - <?=$streak['name']?> (<?=$streak['days']?> days) 
+                    <?php if ($streak['days'] > 0) : ?>
+                        <progress value="<?=$streak['days']?>" max="90"></progress>
+                    <?php endif; ?>
+                </li>
             <?php endforeach; ?>
         </ul>
     </div>

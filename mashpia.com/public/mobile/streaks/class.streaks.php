@@ -23,7 +23,8 @@ class Streaks {
         $sql = "SELECT ht.grid_id, ht.num_days, dt.name, dt.cat 
                 FROM hachloto_tasks ht 
                 JOIN date_tasks dt USING (grid_id) 
-                WHERE user_id = :user_id";
+                WHERE user_id = :user_id 
+                GROUP BY user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'user_id' => $this->user_id
@@ -37,6 +38,7 @@ class Streaks {
         }
         foreach ($this->grid_ids as $grid_id) {
             $days = $this->getStreakDays($grid_id);
+            echo "Grid ID: " . $grid_id . " - Days: " . $days . '<br />';
             $this->streaks[$grid_id] = [
                 'cat' => $this->streak_tasks[$grid_id]['cat'],
                 'name' => $this->streak_tasks[$grid_id]['name'],
@@ -68,14 +70,13 @@ class Streaks {
                 ORDER BY mark_date DESC 
                 LIMIT :limit";
         $stmt = $this->db->prepare($sql);
-        $stmt->execute([
-            'grid_id' => $grid_id,
-            'user_id' => $this->user_id,
-            'limit' => $this->num_days
-        ]);
+        $stmt->bindValue(':grid_id', $grid_id, PDO::PARAM_INT);
+        $stmt->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int)$this->num_days, PDO::PARAM_INT);
+        $stmt->execute();
         $marks = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $marks = array_column($marks, 'mark_date');
-
+        
         $today = unixtojd();
         $day = $today - 1;
         $end = $day - $this->num_days;
