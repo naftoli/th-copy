@@ -38,7 +38,6 @@ class Streaks {
         }
         foreach ($this->grid_ids as $grid_id) {
             $days = $this->getStreakDays($grid_id);
-            echo "Grid ID: " . $grid_id . " - Days: " . $days . '<br />';
             $this->streaks[$grid_id] = [
                 'cat' => $this->streak_tasks[$grid_id]['cat'],
                 'name' => $this->streak_tasks[$grid_id]['name'],
