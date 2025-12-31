@@ -69,6 +69,9 @@ if (isset($_POST['submit'])) {
             $start_date = unixtojd() - $date_range * 7;
         }
         $end_date = unixtojd(); // today
+    } else {
+        $start_date = unixtojd(strtotime($start_date));
+        $end_date = unixtojd(strtotime($end_date));
     }
     $user_tracks = getUserTasks($user_id, $campaign_chosen, $start_date, $end_date)->user_tracks;
     
