@@ -112,7 +112,23 @@ function invertRanges(startJd, endJdExclusive, rangesRaw) {
 // - or an object keyed by user_id: { "12345": { startJd, endJd, tasks: [...] } }
 function extractStreakPayload(response, userId) {
   if (!response) return null;
-  if (response.tasks || (response.startJd != null && response.endJd != null)) return response;
+  const hasArrayTasks = Array.isArray(response.tasks);
+  const hasObjectTasks = response.tasks && typeof response.tasks === 'object' && !Array.isArray(response.tasks);
+  // Already normalized
+  if (hasArrayTasks && response.startJd != null && response.endJd != null) return response;
+  // New shape: { startJd, endJd, tasks: { [userId]: Task[] } }
+  if (hasObjectTasks && response.startJd != null && response.endJd != null) {
+    const tasksByUser = response.tasks || {};
+    const key = (userId != null && Object.prototype.hasOwnProperty.call(tasksByUser, String(userId)))
+      ? String(userId)
+      : (function() {
+          const ks = Object.keys(tasksByUser);
+          return ks.length === 1 ? ks[0] : null;
+        })();
+    const list = key ? (tasksByUser[key] || []) : [];
+    return { startJd: response.startJd, endJd: response.endJd, tasks: list };
+  }
+  // Older keyed shape: { [userId]: { startJd, endJd, tasks: [] } }
   const uid = userId != null ? String(userId) : null;
   if (uid && Object.prototype.hasOwnProperty.call(response, uid)) {
     return response[uid];
@@ -350,9 +366,19 @@ class StreaksPage extends Component {
             this.renderChartForElement(this.chartsContainerRef || this.chartRef, dataOne, form.order_by, null);
           });
         } else {
-          // All children in selected base/platoons
+          // Multi-child: prefer class_id if selected, else school_id
+          const idParams = {};
+          if (form.class_id) idParams.class_id = form.class_id;
+          else if (form.school_id) idParams.school_id = form.school_id;
+          // Build request once
+          const paramsAll = new URLSearchParams(Object.assign({}, idParams, {
+            subject_id: form.subject_id,
+            start_jd: String(startJd),
+            end_jd: String(endJd)
+          })).toString();
+          const dataRaw = await api.get('/missions/streaks?' + paramsAll);
+          // Prepare children list from current filters for rendering names
           const children = this.getFilteredSoldiers();
-          // sort alphabetically by name
           children.sort(function(a, b) {
             const an = (a.first + ' ' + a.last).toLowerCase();
             const bn = (b.first + ' ' + b.last).toLowerCase();
@@ -361,29 +387,18 @@ class StreaksPage extends Component {
           this.clearCharts();
           for (let idx = 0; idx < children.length; idx++) {
             const child = children[idx];
-            const paramsAll = new URLSearchParams({
-              user_id: child.user_id,
-              subject_id: form.subject_id,
-              start_jd: String(startJd),
-              end_jd: String(endJd)
-            }).toString();
-            try {
-              const dataRaw = await api.get('/missions/streaks?' + paramsAll);
-              const data = extractStreakPayload(dataRaw, child.user_id);
-              // create container per child
-              const wrapper = document.createElement('div');
-              wrapper.style.marginBottom = '24px';
-              const title = document.createElement('h4');
-              title.textContent = child.first + ' ' + child.last;
-              const div = document.createElement('div');
-              div.id = 'chart-container-' + child.user_id;
-              wrapper.appendChild(title);
-              wrapper.appendChild(div);
-              if (this.chartsContainerRef) this.chartsContainerRef.appendChild(wrapper);
-              this.renderChartForElement(div, data, form.order_by, child.user_id);
-            } catch (err) {
-              console.error(err);
-            }
+            const data = extractStreakPayload(dataRaw, child.user_id);
+            if (!data || !Array.isArray(data.tasks)) continue;
+            const wrapper = document.createElement('div');
+            wrapper.style.marginBottom = '24px';
+            const title = document.createElement('h4');
+            title.textContent = child.first + ' ' + child.last;
+            const div = document.createElement('div');
+            div.id = 'chart-container-' + child.user_id;
+            wrapper.appendChild(title);
+            wrapper.appendChild(div);
+            if (this.chartsContainerRef) this.chartsContainerRef.appendChild(wrapper);
+            this.renderChartForElement(div, data, form.order_by, child.user_id);
           }
         }
       } catch (err) {
@@ -480,7 +495,7 @@ class StreaksPage extends Component {
         { name: 'Missing', data: built.missingPoints },
         { name: 'Accomplished', data: built.dataPoints }
       ],
-      chart: { type: 'rangeBar', height: chartHeight, toolbar: { show: false } },
+      chart: { type: 'rangeBar', height: chartHeight, toolbar: { show: false }, zoom: { enabled: false }, selection: { enabled: false } },
       plotOptions: { bar: { horizontal: true, barHeight: BAR_HEIGHT_PERCENT + '%', rangeBarGroupRows: true } },
       xaxis: { type: 'datetime', min: xMin, max: xMax, labels: { format: 'MMM d' } },
       yaxis: {
@@ -531,7 +546,7 @@ class StreaksPage extends Component {
         { name: 'Missing', data: built.missingPoints },
         { name: 'Accomplished', data: built.dataPoints }
       ],
-      chart: { type: 'rangeBar', height: chartHeight, toolbar: { show: false } },
+      chart: { type: 'rangeBar', height: chartHeight, toolbar: { show: false }, zoom: { enabled: false }, selection: { enabled: false } },
       plotOptions: { bar: { horizontal: true, barHeight: BAR_HEIGHT_PERCENT + '%', rangeBarGroupRows: true } },
       xaxis: { type: 'datetime', min: xMin, max: xMax, labels: { format: 'MMM d' } },
       yaxis: {
