@@ -7,7 +7,7 @@ import { Page404, Construction } from 'pages/errors';
 import PrintPage from './print/PrintPage';
 import TasksPage from './tasks/TasksPage';
 import MarkPage from './mark';
-import StreaksPage from './streaks/StreaksPage';
+import TasksAccomplished from './streaks/TasksAccomplished';
 // functions
 import { isBC } from 'functions/login';
 
@@ -22,7 +22,7 @@ export class MissionsIndexPage extends Component {
         <Route path={`${path}/print`}       component={ PrintPage } />
         <Route path={`${path}/mark`}        component={ MarkPage } />
         <Route path={`${path}/personalize`} component={ PersonalizePage } />
-        <Route path={`${path}/streaks`}     component={ StreaksPage } />
+        <Route path={`${path}/tasks-accomplished`} component={ TasksAccomplished } />
         <Route path={`${path}/report`}      component={ Construction } />
 
         { isBC( code ) &&

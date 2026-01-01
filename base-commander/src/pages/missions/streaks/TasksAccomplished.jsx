@@ -140,7 +140,7 @@ function extractStreakPayload(response, userId) {
   return null;
 }
 
-class StreaksPage extends Component {
+class TasksAccomplished extends Component {
   state = {
     subjects: [],
     // identifies where current subjects list came from: 'default' | 'user' | 'class'
@@ -169,7 +169,7 @@ class StreaksPage extends Component {
   // Initializes page: sets title, fetches default campaigns, loads ApexCharts and soldiers,
   // and pre-fills selection from the URL if present.
   componentDidMount() {
-    setTitle('Streaks');
+    setTitle('Tasks Accomplished Page');
     const self = this;
     loadApex().then(function(Apex) { self.ApexCharts = Apex; });
     // load soldiers list for All selection scenarios
@@ -605,14 +605,14 @@ class StreaksPage extends Component {
     this.chartRef = el;
   }
 
-  // Renders the Streaks page form and containers for the chart(s).
+  // Renders the Tasks Accomplished page form and containers for the chart(s).
   render() {
     const subjects = this.state.subjects || [];
     const form = this.state.form;
     const loading = this.state.loading;
     return (
       <div id="StreaksPage">
-        <Callout title="Streaks">
+        <Callout title="Tasks Accomplished">
           <p>View accomplished vs missing days for selected missions over a date range.</p>
         </Callout>
 
@@ -727,7 +727,7 @@ class StreaksPage extends Component {
           <Row className="buttons" style={{ marginTop: 15 }}>
             <Col xs="12" className="text-center">
               <Button color="primary" type="submit" disabled={loading}>
-                <InlineSync loading={ loading } /> Show Streaks
+                <InlineSync loading={ loading } /> Show Tasks
               </Button>
             </Col>
           </Row>
@@ -751,6 +751,6 @@ const mapStateToProps = ({ login, base }) => ({
   soldiers: base && base.soldiers && base.soldiers.soldiers
 });
 
-export default connect(mapStateToProps, { getSoldiers })(StreaksPage);
+export default connect(mapStateToProps, { getSoldiers })(TasksAccomplished);
 
 
