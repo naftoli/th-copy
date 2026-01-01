@@ -169,7 +169,7 @@ class TasksAccomplished extends Component {
   // Initializes page: sets title, fetches default campaigns, loads ApexCharts and soldiers,
   // and pre-fills selection from the URL if present.
   componentDidMount() {
-    setTitle('Tasks Accomplished Page');
+    setTitle('Tasks Accomplished');
     const self = this;
     loadApex().then(function(Apex) { self.ApexCharts = Apex; });
     // load soldiers list for All selection scenarios
