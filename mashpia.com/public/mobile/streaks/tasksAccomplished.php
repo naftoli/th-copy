@@ -62,6 +62,7 @@ if (isset($_POST['submit'])) {
     $end_date = $_POST['end_date'];
     $date_range = $_POST['date_range'];
     $campaign_chosen = $_POST['campaign'];
+    $order_by = $_POST['order_by'] ?? 'campaign';
     if ($start_date == '' && $end_date == '') {
         if ($date_range == '-1') {
             $start_date = $start; // beginning of the year
@@ -79,6 +80,9 @@ if (isset($_POST['submit'])) {
     $task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks'];
     $grid_ids = [];
     $gridIdToShort = [];
+    $gridIdToMeta = [];
+    // Prepare label_id lookup by grid_id (in case task objects don't expose label_id)
+    $labelStmt = $MASHPIA_DB->prepare("SELECT label_id FROM date_tasks WHERE grid_id = :grid_id LIMIT 1");
     foreach ($user_tracks as $user_track) {
         foreach ($task_types as $task_type) {
             foreach ($user_track->{$task_type} as $task) {
@@ -91,6 +95,27 @@ if (isset($_POST['submit'])) {
                         'grid_id' => $task->grid_id
                     ];
                     $gridIdToShort[$task->grid_id] = $task->short_name;
+                    // Determine label_id: prefer property on task, else lookup via grid_id
+                    $labelId = null;
+                    if (isset($task->label_id)) {
+                        $labelId = (int)$task->label_id;
+                    } else {
+                        $labelStmt->execute(['grid_id' => $task->grid_id]);
+                        $rowLbl = $labelStmt->fetch(PDO::FETCH_ASSOC);
+                        if ($rowLbl && isset($rowLbl['label_id'])) {
+                            $labelId = (int)$rowLbl['label_id'];
+                        }
+                    }
+                    // normalize type
+                    $type = $task_type === 'daily_tasks' ? 'daily' : ($task_type === 'weekly_tasks' ? 'weekly' : 'shabbos');
+                    $gridIdToMeta[$task->grid_id] = [
+                        'short_name' => $task->short_name,
+                        'label' => $task->label_name,
+                        'label_id' => $labelId,
+                        'frequency_id' => isset($task->frequency_id) ? (int)$task->frequency_id : null,
+						'type' => $type,
+						'label_ord' => isset($task->label_ord) ? (int)$task->label_ord : null
+                    ];
                 }
             }
         }
@@ -621,6 +646,12 @@ if (isset($_POST['submit'])) {
                         <option value="<?=$id?>"><?=$campaign?></option>
                     <?php endforeach; ?>
                 </select><br /><br />
+                Order by:
+                <select name="order_by">
+                    <option value="campaign">Mission sheet order</option>
+                    <option value="completed-asc">Completed (ascending)</option>
+                    <option value="completed-desc">Completed (descending)</option>
+                </select><br /><br />
                 <button type="submit" name="submit" class="btn btn-default">Submit</button>
             </form>
         </div>
@@ -637,7 +668,8 @@ if (isset($_POST['submit'])) {
     $payload = [
         'startJd' => (int)$start_date,
         'endJd' => (int)$end_date,
-        'tasks' => []
+        'tasks' => [],
+        'orderBy' => isset($order_by) ? $order_by : 'campaign'
     ];
     foreach ($accomplished_tasks as $gid => $rows) {
         if (!isset($gridIdToShort[$gid])) continue;
@@ -646,9 +678,19 @@ if (isset($_POST['submit'])) {
             $jds[] = (int)$r['mark_date'];
         }
         sort($jds, SORT_NUMERIC);
+        $label = isset($gridIdToMeta[$gid]['label']) ? $gridIdToMeta[$gid]['label'] : '';
+        $labelId = isset($gridIdToMeta[$gid]['label_id']) ? $gridIdToMeta[$gid]['label_id'] : null;
+        $frequencyId = isset($gridIdToMeta[$gid]['frequency_id']) ? $gridIdToMeta[$gid]['frequency_id'] : null;
+        $type = isset($gridIdToMeta[$gid]['type']) ? $gridIdToMeta[$gid]['type'] : null;
+		$labelOrd = isset($gridIdToMeta[$gid]['label_ord']) ? $gridIdToMeta[$gid]['label_ord'] : null;
         $payload['tasks'][] = [
             'name' => $gridIdToShort[$gid],
-            'jds' => $jds
+            'jds' => $jds,
+            'label' => $label,
+            'labelId' => $labelId,
+			'frequencyId' => $frequencyId,
+			'type' => $type,
+			'labelOrd' => $labelOrd
         ];
     }
     echo json_encode($payload, JSON_UNESCAPED_UNICODE);
@@ -726,10 +768,46 @@ if (isset($_POST['submit'])) {
     return missing;
   }
 
+  // Sort tasks by orderBy
+  const tasks = chartPayload.tasks.slice();
+  if (chartPayload.orderBy === 'completed-asc') {
+    tasks.sort((a, b) => a.jds.length - b.jds.length);
+  } else if (chartPayload.orderBy === 'completed-desc') {
+    tasks.sort((a, b) => b.jds.length - a.jds.length);
+  } else if (chartPayload.orderBy === 'campaign') {
+    // Mission page order:
+    // 1) by type: daily -> weekly -> shabbos (then others if any)
+		// 2) by frequency_id (daily: freq 15 first)
+		// 3) by label group order within: label_ord asc when available
+		// 4) by label name
+		// 5) by task name
+    const typeRank = { daily: 0, weekly: 1, shabbos: 2 };
+    tasks.sort((a, b) => {
+      const ta = (a.type && a.type in typeRank) ? typeRank[a.type] : 99;
+      const tb = (b.type && b.type in typeRank) ? typeRank[b.type] : 99;
+      if (ta !== tb) return ta - tb;
+      const afRaw = (a.frequencyId ?? 9999);
+      const bfRaw = (b.frequencyId ?? 9999);
+      // daily special: move frequency 15 to the very front
+      const af = (a.type === 'daily' && afRaw === 15) ? -1 : afRaw;
+      const bf = (b.type === 'daily' && bfRaw === 15) ? -1 : bfRaw;
+      if (af !== bf) return af - bf;
+			// within same label group, prefer labelOrd if present
+			if ((a.labelId ?? null) !== null && a.labelId === (b.labelId ?? null)) {
+				const lao = (a.labelOrd ?? 9999);
+				const lbo = (b.labelOrd ?? 9999);
+				if (lao !== lbo) return lao - lbo;
+			}
+      const lab = (a.label || '').localeCompare(b.label || '');
+      if (lab !== 0) return lab;
+      return (a.name || '').localeCompare(b.name || '');
+    });
+  }
+
   // Build Apex series: one series with multiple data points, x = task short name
   const dataPoints = [];
   const missingPoints = [];
-  chartPayload.tasks.forEach(t => {
+  tasks.forEach(t => {
     const ranges = groupJdRanges(t.jds);
     const raw = groupJdRangesRaw(t.jds);
     const inv = invertRanges(chartPayload.startJd, chartPayload.endJd + 1, raw);
@@ -749,7 +827,7 @@ if (isset($_POST['submit'])) {
   // end is exclusive: add one day
   const xMax = jdToUtcDate(chartPayload.endJd + 1).getTime();
 
-  const uniqueTasks = Array.from(new Set(chartPayload.tasks.map(t => t.name)));
+  const uniqueTasks = Array.from(new Set(tasks.map(t => t.name)));
   // Make each bar ~50px tall by sizing the total chart height and slot/bar ratio
   const ROW_HEIGHT_PX = 30;    // desired bar thickness
   const ROW_GAP_PX = 6;        // gap between rows
@@ -791,11 +869,12 @@ if (isset($_POST['submit'])) {
         const end_date = "<?=isset($end_date) ? date('Y-m-d', jdtounix($end_date)) : ''?>";
         const date_range = "<?=$date_range ?? ''?>";
         const campaign = "<?=$campaign_chosen ?? ''?>";
-        console.log(start_date, end_date, date_range, campaign);
+        const order_by = "<?=isset($order_by) ? $order_by : (isset($_POST['order_by']) ? $_POST['order_by'] : '')?>";
         if (start_date) $('input[name="start_date"]').val(start_date);
         if (end_date) $('input[name="end_date"]').val(end_date);
         if (date_range) $('select[name="date_range"]').val(date_range);
         if (campaign) $('select[name="campaign"]').val(campaign);
+        if (order_by) $('select[name="order_by"]').val(order_by);
     }
 
     function validateForm() {
