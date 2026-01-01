@@ -67,7 +67,7 @@ if (isset($_POST['submit'])) {
         if ($date_range == '-1') {
             $start_date = $start; // beginning of the year
         } else {
-            $start_date = unixtojd() - $date_range * 7;
+			$start_date = unixtojd() - (int)$date_range; // subtract days, not weeks
         }
         $end_date = unixtojd(); // today
     } else {
@@ -658,6 +658,15 @@ if (isset($_POST['submit'])) {
     </div>
     <hr />
     <div id="chart-container"></div>
+    <div id="chart-controls" style="max-width:1200px;margin:8px auto 0 auto;padding:0 20px;">
+        Sort chart:
+        <select id="chartSortSelect">
+            <option value="campaign">Mission sheet order</option>
+            <option value="completed-asc">Completed (ascending)</option>
+            <option value="completed-desc">Completed (descending)</option>
+            <option value="alpha">Task name (A–Z)</option>
+        </select>
+    </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <?php if (!empty($accomplished_tasks)) : ?>
@@ -768,69 +777,81 @@ if (isset($_POST['submit'])) {
     return missing;
   }
 
-  // Sort tasks by orderBy
-  const tasks = chartPayload.tasks.slice();
-  if (chartPayload.orderBy === 'completed-asc') {
-    tasks.sort((a, b) => a.jds.length - b.jds.length);
-  } else if (chartPayload.orderBy === 'completed-desc') {
-    tasks.sort((a, b) => b.jds.length - a.jds.length);
-  } else if (chartPayload.orderBy === 'campaign') {
-    // Mission page order:
-    // 1) by type: daily -> weekly -> shabbos (then others if any)
-		// 2) by frequency_id (daily: freq 15 first)
-		// 3) by label group order within: label_ord asc when available
-		// 4) by label name
-		// 5) by task name
-    const typeRank = { daily: 0, weekly: 1, shabbos: 2 };
-    tasks.sort((a, b) => {
-      const ta = (a.type && a.type in typeRank) ? typeRank[a.type] : 99;
-      const tb = (b.type && b.type in typeRank) ? typeRank[b.type] : 99;
-      if (ta !== tb) return ta - tb;
-      const afRaw = (a.frequencyId ?? 9999);
-      const bfRaw = (b.frequencyId ?? 9999);
-      // daily special: move frequency 15 to the very front
-      const af = (a.type === 'daily' && afRaw === 15) ? -1 : afRaw;
-      const bf = (b.type === 'daily' && bfRaw === 15) ? -1 : bfRaw;
-      if (af !== bf) return af - bf;
-			// within same label group, prefer labelOrd if present
-			if ((a.labelId ?? null) !== null && a.labelId === (b.labelId ?? null)) {
-				const lao = (a.labelOrd ?? 9999);
-				const lbo = (b.labelOrd ?? 9999);
-				if (lao !== lbo) return lao - lbo;
-			}
-      const lab = (a.label || '').localeCompare(b.label || '');
-      if (lab !== 0) return lab;
-      return (a.name || '').localeCompare(b.name || '');
-    });
+  // Dynamic sorting helpers
+  const baseTasks = chartPayload.tasks.slice();
+  function sortTasks(orderBy) {
+    const tasks = baseTasks.slice();
+    if (orderBy === 'completed-asc') {
+      tasks.sort((a, b) => a.jds.length - b.jds.length);
+    } else if (orderBy === 'completed-desc') {
+      tasks.sort((a, b) => b.jds.length - a.jds.length);
+    } else if (orderBy === 'alpha') {
+      tasks.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+    } else {
+      // Mission page order:
+      // 1) type order; 2) frequency (daily: 15 first); 3) label_ord within same label; 4) label; 5) task name
+      const typeRank = { daily: 0, weekly: 1, shabbos: 2 };
+      tasks.sort((a, b) => {
+        const ta = (a.type && a.type in typeRank) ? typeRank[a.type] : 99;
+        const tb = (b.type && b.type in typeRank) ? typeRank[b.type] : 99;
+        if (ta !== tb) return ta - tb;
+        const afRaw = (a.frequencyId ?? 9999);
+        const bfRaw = (b.frequencyId ?? 9999);
+        const af = (a.type === 'daily' && afRaw === 15) ? -1 : afRaw;
+        const bf = (b.type === 'daily' && bfRaw === 15) ? -1 : bfRaw;
+        if (af !== bf) return af - bf;
+        if ((a.labelId ?? null) !== null && a.labelId === (b.labelId ?? null)) {
+          const lao = (a.labelOrd ?? 9999);
+          const lbo = (b.labelOrd ?? 9999);
+          if (lao !== lbo) return lao - lbo;
+        }
+        const lab = (a.label || '').localeCompare(b.label || '');
+        if (lab !== 0) return lab;
+        return (a.name || '').localeCompare(b.name || '');
+      });
+    }
+    return tasks;
   }
 
-  // Build Apex series: one series with multiple data points, x = task short name
-  const dataPoints = [];
-  const missingPoints = [];
-  tasks.forEach(t => {
-    const ranges = groupJdRanges(t.jds);
-    const raw = groupJdRangesRaw(t.jds);
-    const inv = invertRanges(chartPayload.startJd, chartPayload.endJd + 1, raw);
-    ranges.forEach(r => {
-      dataPoints.push({ x: t.name, y: r });
+  // Build series from tasks
+  function buildSeriesFrom(sortedTasks) {
+    const dataPoints = [];
+    const missingPoints = [];
+    const countsByNameLocal = {};
+    const totalDaysInWindow = (chartPayload.endJd - chartPayload.startJd + 1);
+    sortedTasks.forEach(t => {
+      const ranges = groupJdRanges(t.jds);
+      const raw = groupJdRangesRaw(t.jds);
+      const inv = invertRanges(chartPayload.startJd, chartPayload.endJd + 1, raw);
+      if (!countsByNameLocal[t.name]) countsByNameLocal[t.name] = { done: 0, total: totalDaysInWindow };
+      countsByNameLocal[t.name].done += t.jds.length;
+      ranges.forEach(r => {
+        dataPoints.push({ x: t.name, y: r });
+      });
+      inv.forEach(r => {
+        const startMs = jdToUtcDate(r[0]).getTime();
+        const endMs = jdToUtcDate(r[1]).getTime();
+        missingPoints.push({ x: t.name, y: [startMs, endMs] });
+      });
     });
-    inv.forEach(r => {
-      // convert JD ranges to ms
-      const startMs = jdToUtcDate(r[0]).getTime();
-      const endMs = jdToUtcDate(r[1]).getTime();
-      missingPoints.push({ x: t.name, y: [startMs, endMs] });
-    });
-  });
+    return { dataPoints, missingPoints, countsByNameLocal };
+  }
 
   // X axis min/max from selected date range
   const xMin = jdToUtcDate(chartPayload.startJd).getTime();
   // end is exclusive: add one day
   const xMax = jdToUtcDate(chartPayload.endJd + 1).getTime();
 
-  const uniqueTasks = Array.from(new Set(tasks.map(t => t.name)));
-  // Make each bar ~50px tall by sizing the total chart height and slot/bar ratio
+  let currentOrder = chartPayload.orderBy || 'campaign';
+  const initialTasks = sortTasks(currentOrder);
+  const builtInitial = buildSeriesFrom(initialTasks);
+  let chartCountsByName = builtInitial.countsByNameLocal;
+  const dataPoints = builtInitial.dataPoints;
+  const missingPoints = builtInitial.missingPoints;
+  const uniqueTasks = Array.from(new Set(initialTasks.map(t => t.name)));
+  // Make each bar ~30px tall by sizing the total chart height and slot/bar ratio
   const ROW_HEIGHT_PX = 30;    // desired bar thickness
-  const ROW_GAP_PX = 6;        // gap between rows
+  const ROW_GAP_PX = 4;        // gap between rows
   const SLOT_PX = ROW_HEIGHT_PX + ROW_GAP_PX;
   const BAR_HEIGHT_PERCENT = Math.max(1, Math.min(100, Math.round((ROW_HEIGHT_PX / SLOT_PX) * 100)));
   // Add some extra space (x-axis + padding)
@@ -850,7 +871,14 @@ if (isset($_POST['submit'])) {
       labels: { format: 'MMM d' }
     },
     yaxis: {
-      labels: { style: { fontSize: '12px' } }
+      labels: {
+        style: { fontSize: '12px' },
+        formatter: function (val) {
+          const m = chartCountsByName[val];
+          if (!m) return val;
+          return val + ' (' + m.done + ' / ' + m.total + ')';
+        }
+      }
     },
     colors: ['#e0e0e0', '#2ecc71'],
     dataLabels: { enabled: false },
@@ -858,7 +886,31 @@ if (isset($_POST['submit'])) {
     tooltip: { x: { format: 'MMM d' } }
   };
 
-  new ApexCharts(document.querySelector('#chart-container'), options).render();
+  const chart = new ApexCharts(document.querySelector('#chart-container'), options);
+  chart.render();
+
+  // Dynamic sort control
+  const sortSelect = document.getElementById('chartSortSelect');
+  if (sortSelect) {
+    sortSelect.value = currentOrder;
+    sortSelect.addEventListener('change', function () {
+      currentOrder = this.value;
+      const sorted = sortTasks(currentOrder);
+      const rebuilt = buildSeriesFrom(sorted);
+      chartCountsByName = rebuilt.countsByNameLocal;
+      chart.updateSeries([
+        { name: 'Missing', data: rebuilt.missingPoints },
+        { name: 'Accomplished', data: rebuilt.dataPoints }
+      ], true);
+      chart.updateOptions({
+        yaxis: { labels: { formatter: function (val) {
+          const m = chartCountsByName[val];
+          if (!m) return val;
+          return val + ' (' + m.done + ' / ' + m.total + ')';
+        }}}
+      }, false, false);
+    });
+  }
 </script>
 <?php endif; ?>
 <script>
