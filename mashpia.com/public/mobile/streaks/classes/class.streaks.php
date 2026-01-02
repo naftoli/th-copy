@@ -1,5 +1,7 @@
 <?php
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+
 class Streaks {
     private $num_days;
     private $user_id;
@@ -20,8 +22,8 @@ class Streaks {
     }
 
     private function setStreaks() {
-        $sql = "SELECT ht.grid_id, ht.num_days, dt.name, dt.cat 
-                FROM hachloto_tasks ht 
+        $sql = "SELECT st.grid_id, st.num_days, dt.name, dt.cat 
+                FROM streak_tasks st 
                 JOIN date_tasks dt USING (grid_id) 
                 WHERE user_id = :user_id 
                 GROUP BY user_id";
@@ -88,5 +90,19 @@ class Streaks {
             }
         }
         return count($days);
+    }
+
+    public function setupStreak($grid_id) {
+        $year = GlobalSettings::getCurrentYear();
+        $sql = "INSERT INTO streak_tasks (grid_id, user_id, year, num_days) 
+                VALUES (:gridId, :userId, :year, :numDays)";
+        $stmt = $this->db->prepare($sql);
+        $res = $stmt->execute([
+            'gridId' => $grid_id,
+            'userId' => $this->user_id,
+            'year' => $year,
+            'numDays' => $this->num_days
+        ]);
+        return $res;
     }
 }
