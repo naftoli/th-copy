@@ -103,6 +103,13 @@ class Streaks {
             'year' => $year,
             'numDays' => $this->num_days
         ]);
+        if (!$res) {
+            $this->error = $stmt->errorInfo();
+        }
         return $res;
+    }
+
+    public function getError() {
+        return $this->error;
     }
 }

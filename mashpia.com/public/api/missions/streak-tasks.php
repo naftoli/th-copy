@@ -4,6 +4,7 @@ require_once __DIR__ . '/../header/header.php';
 require_once __DIR__ . '/../../class.globalSettings.php';
 require_once __DIR__ . '/../../db.php';
 require_once __DIR__ . '/../../class.tasksCustomizationNew.php';
+require_once __DIR__ . '/../../mobile/streaks/classes/class.streaks.php';
 
 class StreakTasksRouter {
     public function index() {
@@ -28,8 +29,12 @@ class StreakTasksRouter {
         $tc->setEnd( $end );
         $tc->setType( $user_id, 0, 0 );
         $tc->setLang( $lang );
-        $tasks = $tc->getTasksForStreak( $subject_id );
-        json_response($tasks, true, true);
+        $tasks['tasks'] = $tc->getTasksForStreak( $subject_id );
+
+        $streaks = new Streaks($user_id);
+        $tasks['streaks'] = $streaks->getStreaks();
+
+        json_response($tasks);
     }
 }
 

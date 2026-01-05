@@ -703,25 +703,6 @@ class TasksAccomplished extends Component {
                 );
               })()}
             </Col>
-            <Col sm="6">
-              <label>Sort</label>
-              {(() => {
-                const orderOptions = [
-                  { value: 'campaign', label: 'Mission sheet order' },
-                  { value: 'completed-asc', label: 'Completed (ascending)' },
-                  { value: 'completed-desc', label: 'Completed (descending)' },
-                  { value: 'alpha', label: 'Task name (A–Z)' },
-                ];
-                const selected = orderOptions.find(o => o.value === form.order_by) || null;
-                return (
-                  <Select
-                    options={ orderOptions }
-                    value={ selected }
-                    onChange={ this.handleSelectChange('order_by') }
-                  />
-                );
-              })()}
-            </Col>
           </Row>
 
           <Row className="buttons" style={{ marginTop: 15 }}>
@@ -736,6 +717,32 @@ class TasksAccomplished extends Component {
         <hr/>
 
         { loading && <Spinner /> }
+
+        { (this.chartObj || (this.chartsContainerRef && this.chartsContainerRef.childNodes && this.chartsContainerRef.childNodes.length > 0)) && (
+          <div style={{ margin: '12px 0' }}>
+            <Row>
+              <Col sm="6">
+                <label>Sort</label>
+                {(() => {
+                  const orderOptions = [
+                    { value: 'campaign', label: 'Mission sheet order' },
+                    { value: 'completed-asc', label: 'Completed (ascending)' },
+                    { value: 'completed-desc', label: 'Completed (descending)' },
+                    { value: 'alpha', label: 'Task name (A–Z)' },
+                  ];
+                  const selected = orderOptions.find(o => o.value === form.order_by) || null;
+                  return (
+                    <Select
+                      options={ orderOptions }
+                      value={ selected }
+                      onChange={ this.handleSelectChange('order_by') }
+                    />
+                  );
+                })()}
+              </Col>
+            </Row>
+          </div>
+        )}
 
         <div className="streaks">
           <div id="chart-container" ref={this.setChartRef} />

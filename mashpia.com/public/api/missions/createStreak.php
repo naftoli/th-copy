@@ -5,12 +5,18 @@ require_once __DIR__ . '/../../mobile/streaks/classes/class.streaks.php';
 
 class CreateStreakRouter {
     public function index() {
-        $gridId = intval($_POST['gridId']);
-        $userId = intval($_POST['userId']);
-        $numDays = 90;
-        $streaks = new Streaks($userId, $numDays);
+        $gridId = intval($_GET['gridId']);
+        $userId = intval($_GET['userId']);
+
+        $streaks = new Streaks($userId);
         $success = $streaks->setupStreak($gridId);
-        json_response(['success' => $success]);
+        if ($success) {
+            json_response('Streak set up successfully');
+        } else {
+            // get the error from the database
+            $error = $streaks->getError();
+            json_error($error[2]);
+        }
     }
 }
 

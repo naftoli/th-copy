@@ -646,19 +646,13 @@ if (isset($_POST['submit'])) {
                         <option value="<?=$id?>"><?=$campaign?></option>
                     <?php endforeach; ?>
                 </select><br /><br />
-                Order by:
-                <select name="order_by">
-                    <option value="campaign">Mission sheet order</option>
-                    <option value="completed-asc">Completed (ascending)</option>
-                    <option value="completed-desc">Completed (descending)</option>
-                </select><br /><br />
                 <button type="submit" name="submit" class="btn btn-default">Submit</button>
             </form>
         </div>
     </div>
     <hr />
     <div id="chart-container"></div>
-    <div id="chart-controls" style="max-width:1200px;margin:8px auto 0 auto;padding:0 20px;">
+    <div id="chart-controls" style="display:none;max-width:1200px;margin:8px auto 0 auto;padding:0 20px;">
         Sort chart:
         <select id="chartSortSelect">
             <option value="campaign">Mission sheet order</option>
@@ -888,6 +882,11 @@ if (isset($_POST['submit'])) {
 
   const chart = new ApexCharts(document.querySelector('#chart-container'), options);
   chart.render();
+  // Reveal sort controls only after a chart is present
+  (function(){
+    var cc = document.getElementById('chart-controls');
+    if (cc) cc.style.display = 'block';
+  })();
 
   // Dynamic sort control
   const sortSelect = document.getElementById('chartSortSelect');

@@ -19,7 +19,8 @@ class Streaks extends Component {
     tasksOptions: [],
     yearStartJd: null,
     yearEndJd: null,
-    lang: 1
+    lang: 1, 
+    streaks: []
   };
 
   componentDidMount() {
@@ -50,16 +51,16 @@ class Streaks extends Component {
       return;
     }
     api.get('/missions/createStreak?' + new URLSearchParams({ gridId: taskId, userId: userId }).toString())
-    .then((resp) => {
-      if (resp && resp.success) {
-        alert('Streak set up successfully.');
-      } else {
-        alert('Failed to set up streak.');
-      }
+    .then((res) => {
+        alert(res);
     })
     .catch((err) => {
-      alert('Failed to set up streak.');
-      console.error(err);
+        if (err.error && err.error.includes('Duplicate entry')) {
+          alert('Streak already setup. Please choose a different task.');
+          return;
+        } 
+        alert(err.error || 'Failed to setup streak');
+        console.error(err);
     });
   }
 
@@ -116,39 +117,11 @@ class Streaks extends Component {
     }
     api.get('/missions/streak-tasks?subject_id=' + String(subjectId) + '&user_id=' + String(userId))
       .then((resp) => {
+        console.log(resp);
+        console.log(resp.tasks);
         // Normalize to [{value, label}]
-        let list = [];
-        if (Array.isArray(resp)) {
-          list = resp;
-        } else if (resp && Array.isArray(resp.data)) {
-          list = resp.data;
-        } else if (resp && typeof resp === 'object') {
-          list = Object.keys(resp).map(function(k){ return { value: k, label: resp[k] }; });
-        }
-        const options = (list || [])
-          .map(function(it){
-            if (it && typeof it === 'object') {
-              var v = '';
-              if (it.value !== undefined && it.value !== null && it.value !== '') v = it.value;
-              else if (it.id !== undefined && it.id !== null && it.id !== '') v = it.id;
-              else if (it.grid_id !== undefined && it.grid_id !== null && it.grid_id !== '') v = it.grid_id;
-              var l = '';
-              if (it.label !== undefined && it.label !== null && it.label !== '') l = it.label;
-              else if (it.name !== undefined && it.name !== null && it.name !== '') l = it.name;
-              else if (it.task_name !== undefined && it.task_name !== null && it.task_name !== '') l = it.task_name;
-              else if (it.short_name !== undefined && it.short_name !== null && it.short_name !== '') l = it.short_name;
-              else if (v !== '') l = String(v);
-              return { value: String(v), label: String(l) };
-            }
-            return { value: String(it == null ? '' : it), label: String(it == null ? '' : it) };
-          })
-          .filter(function(o){ return o.value !== ''; })
-          .sort(function(a,b){ return a.label.localeCompare(b.label); });
-        this.setState(function(prev){
-          const keep = options.some(function(o){ return String(o.value) === String(prev.form.task_id || ''); });
-          const nextVal = keep ? prev.form.task_id : (options.length ? options[0].value : '');
-          return { tasksOptions: options, form: Object.assign({}, prev.form, { task_id: nextVal }) };
-        });
+        const tasks = Object.keys(resp.tasks).map(function(key){ return { value: key, label: resp.tasks[key] }; });
+        this.setState({ tasksOptions: tasks, form: Object.assign({}, this.state.form, { task_id: tasks[0].value }) });
       })
       .catch(() => this.setState({ tasksOptions: [], form: Object.assign({}, this.state.form, { task_id: '' }) }));
   };
@@ -161,6 +134,14 @@ class Streaks extends Component {
     let s = soldiers.filter(function(sol){ return sol.school_id === String(schoolId) && (!!sol.class_id); });
     if (classId) s = s.filter(function(sol){ return sol.class_id === String(classId); });
     return s;
+  }
+
+  checkStreakDisabled() {
+    let disable = false;
+    if (this.state.streaks.length > 0) {
+        disable = this.state.streaks.some(function(streak){ return streak.days < 90; });
+    }
+    return !(this.state.form.user_id && this.state.form.subject_id && this.state.form.task_id) || disable;
   }
 
   render() {
@@ -250,8 +231,8 @@ class Streaks extends Component {
         <div style={{ marginTop: 25 }}>
           <Button
             color="primary"
-            disabled={ !(this.state.form.user_id && this.state.form.subject_id && this.state.form.task_id) }
-            onClick={ this.handleSetupStreak }
+            disabled={ this.checkStreakDisabled() }
+            onClick={ this.handleSetupStreak } 
           >
             Setup Streak
           </Button>
