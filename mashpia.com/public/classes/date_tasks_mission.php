@@ -64,7 +64,7 @@ class date_tasks_mission {
 			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
 		}
 		$sql .= " AND f.frequency_name = \"Daily\" ";
-		$sql .= "and dt.mission_marking = 1 ";
+		$sql .= " AND dt.mission_marking = 1 ";
 		if (!empty($task_mission_ids)) {
 			$sql .= " GROUP BY name ";
 		}
@@ -110,7 +110,7 @@ class date_tasks_mission {
 			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
 		}
 		$sql = $sql . "AND f.frequency_name = \"Weekly\" ";
-		$sql .= "and dt.mission_marking = 1 ";
+		$sql .= " AND dt.mission_marking = 1 ";
 		if (!empty($task_mission_ids)) {
 			$sql .= " GROUP BY name ";
 		}
@@ -156,7 +156,7 @@ class date_tasks_mission {
 			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
 		}
 		$sql = $sql . "AND f.frequency_name = \"Shabbos\" ";
-		$sql .= "and dt.mission_marking = 1 ";
+		$sql .= " AND dt.mission_marking = 1 ";
 		if (!empty($task_mission_ids)) {
 			$sql .= " GROUP BY name ";
 		}
@@ -198,8 +198,8 @@ class date_tasks_mission {
 		} else {
 			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
 		}
-		$sql = $sql . "AND (dt.label_id IS NULL or dt.label_id = 0) ";
-		$sql .= "and dt.mission_marking = 1 ";
+		$sql = $sql . " AND (dt.label_id IS NULL or dt.label_id = 0) ";
+		$sql .= " AND dt.mission_marking = 1 ";
 		if (!empty($task_mission_ids)) {
 			$sql .= " GROUP BY name ";
 		}
@@ -247,7 +247,7 @@ class date_tasks_mission {
 		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
 		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
 		$sql = $sql . "AND f.frequency_name = \"Pesukim\" ";
-		$sql .= "and dt.mission_marking = 1 ";
+		$sql .= " AND dt.mission_marking = 1 ";
 		//$sql = $sql . "ORDER BY dt.ord, dt.label_ord";
 		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
         // echo $sql . "<br />"; 
