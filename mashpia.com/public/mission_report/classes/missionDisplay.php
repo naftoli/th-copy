@@ -1014,12 +1014,10 @@ abstract class MissionDisplay {
 						<?php if ( $this->dateDisplay == 0 ) { ?>
 							<span class="hebrew-text"></span>
 						<?php } else if ( $this->dateDisplay == 1 ) { ?>
-							<span class="hebrew-text"> 
-							<span style='font-size: 16px;'>and following week</span> &#10022; 
-							<?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
+							<span class="hebrew-text"><?=$this->heDates[0]?> - <?=$this->heDates[count($this->heDates) - 1]?></span>
 						<?php } else if ( $this->dateDisplay == 2 ) { ?>
-							<b><?=date( 'M j', ( jdtounix( $this->start ) ) ) . ' - ' . date( 'M j, Y', ( jdtounix( $this->end ) ) )?></b>
-							<span class="hebrew-text"> &#10022; <?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
+							<b><?=date( 'M j, Y', ( jdtounix( $this->start ) ) ) . ' - ' . date( 'M j, Y', ( jdtounix( $this->end ) ) )?></b>
+							<span class="hebrew-text"> &#10022; <?=$this->heDates[0]?> - <?=$this->heDates[count($this->heDates) - 1]?></span>
 						<?php } ?>
 					</td>
 				</tr>
@@ -1101,11 +1099,18 @@ abstract class MissionDisplay {
 		<h3>Promotions</h3>
 		<div class='promotions-container'>
 			<?php foreach ($user->ranks as $rank) : ?>
+				<?php
+				$date_promoted = jdtojewish($rank['date_promoted'], true, CAL_JEWISH_ADD_GERESHAYIM);
+				$date_to_show = iconv('WINDOWS-1255', 'UTF-8', $date_promoted);
+				?>
 				<div class='promotion'>
 					<div class='promotion-icon'>
-						<img src='/mobile/img_new/ranks/<?=$rank->rank_ord;?>.svg' alt='<?=$rank->rank_name?>' />
+						<img src='/mobile/img_new/ranks/<?=$rank['rank_ord'];?>.svg' alt='<?=$rank['rank_name']?>' />
 					</div>
-					<div class='promotion-name'><?=$rank->rank_name?></div>
+					<div class='promotion-name'>
+						<?=$rank['rank_name']?><br />
+						<?=$date_to_show?>
+					</div>
 				</div>
 			<?php endforeach; ?> 
 		</div>
@@ -1124,7 +1129,6 @@ abstract class MissionDisplay {
 
 		<h3>Besuros Tovos</h3>
 		<div class='besuros-tovos'>
-			________________________________________________________________________________
 			________________________________________________________________________________
 			________________________________________________________________________________
 			________________________________________________________________________________

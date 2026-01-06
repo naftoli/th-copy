@@ -170,15 +170,16 @@ if ( $dates == 'english' ) $dates_id = 2;
             margin-left: 5px;
         }
         .besuros-tovos {
-            margin-top: 20px;
-            line-height: 2;
+            margin: 20px auto;
+            line-height: 2.5;
+            text-align: center;
         }
         footer {
-            position: relative;
             bottom: 0;
-            font-size: 20px;
+            font-size: 26px;
             font-weight: bold;
             margin-top: 20px;
+            text-align: center;
         }
     </style>
 </head>
