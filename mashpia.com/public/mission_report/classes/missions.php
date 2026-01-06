@@ -8,17 +8,17 @@ class Missions {
 	protected $school_type_id;
 	protected $missions;
 	
-	public function __construct( $start, $end, $user = 0, $school = 0, $grade = 0, $allowPersonalization = true, $printing_mode = false ) {
+	public function __construct( $start, $end, $user = 0, $school = 0, $grade = 0, $allowPersonalization = true, $printing_mode = false, $by_date_range = false ) {
 		$this->school = $school;
 		$this->grade = $grade;
 		$this->user = $user;
 		$this->start = $start;
 		$this->end = $end;
 		$this->missions = array();
-		$this->createMissions( $allowPersonalization, $printing_mode );
+		$this->createMissions( $allowPersonalization, $printing_mode, $by_date_range );
 	}
 	
-	private function createMissions( $allowPersonalization, $printing_mode = false ) {
+	private function createMissions( $allowPersonalization, $printing_mode = false, $by_date_range = false ) {
 		include_once( __DIR__ . "/../../classes/user.php" );
 		include_once( __DIR__ . "/../../classes/user_track.php" );
 		include_once( __DIR__ . "/../../classes/school_class.php" );
@@ -57,7 +57,7 @@ class Missions {
 			if ( !$allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization(); // don't show birthday missions for OT
             // only show 'en' or 'yi' for OT
             $lang_id = $row['school_id'] == 255 ? ($user->lang_id == 1 ? $user->lang_id : 2) : $user->lang_id;
-		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $lang_id, $printing_mode );
+		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $lang_id, $printing_mode, $by_date_range );
 		    array_push( $this->missions, $user );
 		}
 	}

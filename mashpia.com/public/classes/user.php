@@ -454,12 +454,21 @@ class user {
 		};
 	}
 	
-	function get_user_tracks($subject_id, $start_date, $end_date, $tasks = array(), $lang = 1, $printing_mode = false) {
+	function get_user_tracks($subject_id, $start_date, $end_date, $tasks = array(), $lang = 1, $printing_mode = false, $by_date_range = false) {
 		global $logger;
-		if ($subject_id == -1)
+
+		if ($by_date_range) {
+			$sql = "SELECT ut.* FROM user_tracks AS ut 
+				JOIN subjects AS s USING (subject_id) 
+				WHERE ut.user_id=" . $this->user_id . " 
+				AND ut.enrolled = 1 
+				AND ut.subject_id NOT IN (12, 15, 40, 136)
+				ORDER BY s.subject_ord";
+		} else if ($subject_id == -1)
 			$sql = "SELECT ut.* FROM user_tracks AS ut JOIN subjects AS s USING (subject_id) WHERE ut.user_id=" . $this->user_id . " and ut.enrolled = 1 ORDER BY s.subject_ord";
-		else
+		else {
 			$sql = "SELECT ut.* FROM user_tracks AS ut JOIN subjects AS s USING (subject_id) WHERE ut.user_id=" . $this->user_id . " and ut.enrolled = 1 AND ut.subject_id=" . $subject_id . " ORDER BY s.subject_ord";
+		}
 		
 		$query = mysql_query($sql);
 		
@@ -480,7 +489,11 @@ class user {
 				$user_track = new user_track($row);
 				$user_track->get_subject_info();
 				//if (!empty($tasks)) $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang);
-				$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+				if ($by_date_range) {
+					$user_track->get_date_tasks_missions_by_date_range($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+				} else {
+					$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+				}
 				array_push($this->user_tracks, $user_track);
 
                 // for sefer hamitzvos, get chidon limmud track misssions
@@ -503,7 +516,11 @@ class user {
                         $row['level'] = intval($rowLimmud['class_grade']) + 6;
                         $user_track = new user_track($row);
                         $user_track->get_subject_info();
-                        $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+                        if ($by_date_range) {
+                            $user_track->get_date_tasks_missions_by_date_range($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+                        } else {
+                            $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+                        }
                         array_push($this->user_tracks, $user_track);
                     }
                 }

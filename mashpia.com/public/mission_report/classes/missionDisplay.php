@@ -954,6 +954,196 @@ abstract class MissionDisplay {
 		return $page;
 	} // end printMission
 
+	public function printDuch($activeStreaks = []) {
+		$user = $this->mission;
+		$school = \School::find([ $user->school_class->school_id ]);
+		$platoon = \Platoon::find([ $user->school_class->class_id ]);
+		?>
+		<div class="header" style="width: 7in; margin: 20px auto;">
+			<div class="userImg">
+				<?php if ( isset( $user->mobile_pic ) ) { ?>
+					<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""
+						onerror="this.src = '/mobile/reg/images/profile-photo-default.jpg'"/>
+				<?php } elseif ( isset( $user->user_photo_id ) ) { ?>
+					<img src="/file_view.php?id=<?=$user->user_photo_id?>" width="60" alt=""
+						onerror="this.src = '/mobile/reg/images/profile-photo-default.jpg'"/>
+				<?php } else { ?>
+					<img src="/mobile/reg/images/profile-photo-default.jpg" width="60" alt=""/> 
+				<?php } ?>
+			</div>
+			<div class="schoolLogo">
+				<img src="<?= $school->logoPath(); ?>" width="80" alt="<?= $school->school_number ?>"/>
+			</div>
+			<table>
+				<tr>
+					<td class="title">
+						<span class="sb">Platoon:</span> 
+						<?= $platoon->name(); ?>
+						<br />
+						<span class="sb">Commander:</span><br>
+						<?= $platoon->class_teacher; ?>
+					</td>
+					<td>
+						<div class="headerImg">
+							<?php if ( $this->lang_id == 1 ) { ?>
+								<img src="/mission_report/image/mission report logo.png" width="350" />
+							<?php } elseif ($this->lang_id == 2) { ?>
+								<img src="/mission_report/image/mission-report-yiddish.png" width="350" />
+							<?php } ?>
+						</div>
+					</td>
+					<td class="title">
+						<?= $user->rank_name ?><br />
+						<span class="b">
+							<?php
+								if ($this->lang_id == 1)
+									echo $user->first . ' ' . $user->last;
+								else if ($this->lang_id == 2) {
+									if ( !empty( $user->first_he ) || !empty( $user->last_he ) )
+										echo $user->first_he . ' ' . $user->last_he;
+									else
+										echo $user->first . ' ' . $user->last;
+								}
+								echo "<p style='margin: 0px;'>(" . $user->user_serial . ")</p>";
+							?>
+						</span>
+					</td>
+				</tr>
+				<tr> 
+					<td colspan="3" class="line">
+						<?php if ( $this->dateDisplay == 0 ) { ?>
+							<span class="hebrew-text"></span>
+						<?php } else if ( $this->dateDisplay == 1 ) { ?>
+							<span class="hebrew-text"> 
+							<span style='font-size: 16px;'>and following week</span> &#10022; 
+							<?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
+						<?php } else if ( $this->dateDisplay == 2 ) { ?>
+							<b><?=date( 'M j', ( jdtounix( $this->start ) ) ) . ' - ' . date( 'M j, Y', ( jdtounix( $this->end ) ) )?></b>
+							<span class="hebrew-text"> &#10022; <?=$this->heDates[0]?> - <?=$this->heDates[6]?></span>
+						<?php } ?>
+					</td>
+				</tr>
+			</table>
+		</div>
+
+		<div class='container'>
+			<?php
+			$tracks = $user->user_tracks;
+			$user->get_ranks($this->start, $this->end, 0, 0);
+			$task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
+			foreach ($tracks as $track) {
+				$user->get_medals($track->subject_id, $this->start, $this->end, 0);
+				?>
+				<div class='track'>
+					<div class='campaign-container'>
+						<div class='campaign-icon'>
+							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$track->subject_id]?>' width='50' height='52' alt='<?= $track->subject_name ?>' />
+						</div>
+						<div class='campaign-name'><?= $track->subject_name ?></div>
+					</div>
+					<?php
+					foreach ($task_types as $task_type) {
+						$task_type_name = ucwords(implode(' ', explode('_', $task_type)));
+						foreach ( $track->{$task_type} as $task ) { 
+							// total of days to show 
+							$total_days = (int)$this->end - (int)$this->start;
+							// find out how many times the task has been accomplished
+							$a = new Accomplished($user->user_id, [$task->grid_id], $this->start, $this->end);
+							$a->setAccomplished();
+							$accomplished = $a->getAccomplished();
+							$accomplished_count = count($accomplished[$task->grid_id]);
+							?>
+							<div class='task-container'>
+								<div class='task-stats'><b><?=$accomplished_count?></b> / <b><?=$total_days?></b> <?=$task_type_name?></div>
+								<div class='task'>
+									<div class='task-short-name'><?= $task->short_name ?></div>
+									<div class='task-name'><?= $task->task_name ?></div>
+								</div>
+							</div>
+							<?php if (
+								isset($activeStreaks[$task->grid_id]) &&
+								$activeStreaks[$task->grid_id]['days'] > 0
+							) { ?>
+								<div class='streak-container'>
+									<div class='streak-text'><?=$activeStreaks[$task->grid_id]['days']?> Day Streak</div>
+									<div class='streak-fill'>
+										<progress value='<?=$activeStreaks[$task->grid_id]['days']?>' max='90'></progress>
+									</div>
+								</div>
+							<?php
+							}
+						}
+					}
+				echo "</div>";
+			}
+		echo "</div>";
+		?>
+
+		<h3>Medals</h3>
+		<div class='medals-container'>
+			<?php foreach ($user->medals as $medal) : ?>
+				<?php
+				$date_awarded = jdtojewish($medal['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM);
+				$date_to_show = iconv('WINDOWS-1255', 'UTF-8', $date_awarded);
+				?>
+				<div class='medal'>
+					<div class='medal-icon'>
+						<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$medal['subject_id']]?>' alt='<?=$medal['medal_name']?>' />
+					</div>
+					<div class='medal-name'>
+						<?=$medal['medal_name'] . ' ' . $medal['subject_name']?><br />
+						<?=$date_to_show?>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+
+		<h3>Promotions</h3>
+		<div class='promotions-container'>
+			<?php foreach ($user->ranks as $rank) : ?>
+				<div class='promotion'>
+					<div class='promotion-icon'>
+						<img src='/mobile/img_new/ranks/<?=$rank->rank_ord;?>.svg' alt='<?=$rank->rank_name?>' />
+					</div>
+					<div class='promotion-name'><?=$rank->rank_name?></div>
+				</div>
+			<?php endforeach; ?> 
+		</div>
+
+		<h3>Streaks</h3>
+		<div class='streaks-container'>
+			<?php foreach ($activeStreaks as $streak) : ?>
+				<div class='streak'>
+					<div class='streak-text'><?=$streak['days']?> Day Streak</div>
+					<div class='streak-fill'>
+						<progress value='<?=$streak['days']?>' max='90'></progress>
+					</div>
+				</div>
+			<?php endforeach; ?>
+		</div>
+
+		<h3>Besuros Tovos</h3>
+		<div class='besuros-tovos'>
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+			________________________________________________________________________________
+		</div>
+
+		<footer>
+			L'iylui Nishmas Moshe Kotlarsky
+		</footer>
+		<?		
+	}
+
 	public function markMission() {
 		chdir("../");
 		$user = $this->mission;
