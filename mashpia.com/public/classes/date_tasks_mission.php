@@ -109,7 +109,7 @@ class date_tasks_mission {
 		} else {
 			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
 		}
-		$sql = $sql . "AND f.frequency_name = \"Weekly\" ";
+		$sql = $sql . " AND f.frequency_name = \"Weekly\" ";
 		$sql .= " AND dt.mission_marking = 1 ";
 		if (!empty($task_mission_ids)) {
 			$sql .= " GROUP BY name ";
@@ -155,7 +155,7 @@ class date_tasks_mission {
 		} else {
 			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
 		}
-		$sql = $sql . "AND f.frequency_name = \"Shabbos\" ";
+		$sql = $sql . " AND f.frequency_name = \"Shabbos\" ";
 		$sql .= " AND dt.mission_marking = 1 ";
 		if (!empty($task_mission_ids)) {
 			$sql .= " GROUP BY name ";
