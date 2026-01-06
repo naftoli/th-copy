@@ -1091,7 +1091,7 @@ abstract class MissionDisplay {
 						<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$medal['subject_id']]?>' alt='<?=$medal['medal_name']?>' />
 					</div>
 					<div class='medal-name'>
-						<?=$medal['medal_name'] . ' ' . $medal['subject_name']?><br />
+						<?=$medal['medal_name'] . '<br />' . $medal['subject_name']?><br />
 						<?=$date_to_show?>
 					</div>
 				</div>

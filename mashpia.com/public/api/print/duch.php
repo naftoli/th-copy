@@ -135,9 +135,6 @@ if ( $dates == 'english' ) $dates_id = 2;
             width: 2in;
             gap: 2px;
         }
-        .medal {
-            width: 0.5in;
-        }
         .campaign-name {
             font-size: 22px;
         }
@@ -154,7 +151,10 @@ if ( $dates == 'english' ) $dates_id = 2;
         .task-stats {
             font-size: 9px;
         }
-        .medal, .promotion {
+        .medal {
+            width: 0.75in;
+        }
+        .promotion {
             width: 1in;
         }
         .medal-name, .promotion-name {
