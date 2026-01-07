@@ -1061,6 +1061,9 @@ abstract class MissionDisplay {
 						foreach ( $track->{$task_type} as $task ) { 
 							// total of days to show 
 							$total_days = (int)$this->end - (int)$this->start;
+							if ($task_type != 'daily_tasks') {
+								$total_days = floor($total_days / 7);
+							}
 							// find out how many times the task has been accomplished
 							$a = new Accomplished($user->user_id, [$task->grid_id], $this->start, $this->end);
 							$a->setAccomplished();
@@ -1068,7 +1071,9 @@ abstract class MissionDisplay {
 							$accomplished_count = count($accomplished[$task->grid_id]);
 							?>
 							<div class='task-container'>
-								<div class='task-stats'><b><?=$accomplished_count?></b> / <b><?=$total_days?></b> <?=$task_type_name?></div>
+								<div class='task-stats'><b><?=$accomplished_count?></b> 
+								<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
+								<?=$task_type_name?></div>
 								<div class='task'>
 									<div class='task-short-name'><?= $task->short_name ?></div>
 									<div class='task-name'><?= $task->task_name ?></div>

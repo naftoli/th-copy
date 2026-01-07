@@ -5,7 +5,7 @@ import { setTitle } from 'functions/utils';
 import { Row, Col, Button } from 'reactstrap';
 import { BaseSelect, PlatoonSelect, SoldierSelect, Select } from 'components/selects';
 import { getSoldiers } from 'store/base/soldiers/operations';
-
+import Callout from 'components/ui/Callout';
 class Streaks extends Component {
   state = {
     form: {
@@ -148,6 +148,9 @@ class Streaks extends Component {
     const form = this.state.form;
     return (
       <div id="StreaksPage">
+        <Callout title='Streaks'>
+          <p>Set up a streak for a soldier for a specific task.</p>
+        </Callout>
         <form>
           <Row>
             <Col sm="4">

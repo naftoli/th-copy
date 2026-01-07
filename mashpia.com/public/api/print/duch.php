@@ -29,8 +29,8 @@ if ( !$start && !$end ) {
     $start = $end - $date_range;
 } else {
     // convert the dates to unix timestamps
-    $start = jdtounix(strtotime($start));
-    $end = jdtounix(strtotime($end));
+    $start = unixtojd(strtotime($start));
+    $end = unixtojd(strtotime($end));
 }
 
 // * Set class_ids and user_ids if not set by client
