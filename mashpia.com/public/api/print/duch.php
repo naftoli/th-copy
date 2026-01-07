@@ -103,8 +103,8 @@ if ( $dates == 'english' ) $dates_id = 2;
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
     <style>
         .userDuch {
-            width: 8.5in;
-            margin: 10px auto;
+            width: 7in;
+            margin: 20px auto;
             page-break-after: always;
         }
         @media print {
