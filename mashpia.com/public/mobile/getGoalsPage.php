@@ -114,7 +114,7 @@ $has_campaigns = count(getCampaigns($user_id, false)) > 0 || count($campaigns) =
 					<span class="i18n" data-key="EnrollCampaign">Enroll in Campaign </span>
 				</a>
 			<? } ?>
-			<button id="streaks" class="btn btn-default" onclick="window.location.href='/mobile/streaks/?id=<?=$user_id?>'">Streaks</button>
+			<!-- <button id="streaks" class="btn btn-default" onclick="window.location.href='/mobile/streaks/?id=<?=$user_id?>'">Streaks</button> -->
 			<? if ($allow_parent_tasks) { // make sure that the school allows the parents to create a custom task before showing the modal ?>
 				<a id="create-link" data-toggle="modal" data-target="#customTaskModal" href="#" style="text-decoration: none" class="i18n" data-key="AddCustomTask">
 					Add Custom Task
