@@ -1099,7 +1099,7 @@ abstract class MissionDisplay {
 					}
 				echo "</div>";
 			}
-		echo "</div>";
+		
 		?>
 
 		<h3>Medals</h3>
@@ -1179,6 +1179,7 @@ abstract class MissionDisplay {
 		<footer>
 			L'iylui Nishmas Moshe Kotlarsky
 		</footer>
+		</div>
 		<?		
 	}
 
