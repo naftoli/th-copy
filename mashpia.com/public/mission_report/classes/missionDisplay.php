@@ -1037,7 +1037,23 @@ abstract class MissionDisplay {
 						<div class='campaign-icon'>
 							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$track->subject_id]?>' width='50' height='52' alt='<?= $track->subject_name ?>' />
 						</div>
-						<div class='campaign-name'><?= $track->subject_name ?></div>
+						<div class='campaign-items'>
+							<div class='campaign-name'><?= $track->subject_name ?></div>
+							<?php
+							// find out if any medals have been awarded for this campaign
+							$medals = [];
+							foreach ($user->medals as $medal) {
+								if ($medal['subject_id'] == $track->subject_id) {
+									$medals[] = $medal['medal_name'];
+								}
+							}
+							if (count($medals) > 0) {
+								echo "<div class='campaign-medals'>";
+								echo "<i>" . implode(' and ', $medals) . ' medal(s) earned</i>';
+								echo "</div>";
+							}
+							?>
+						</div>
 					</div>
 					<?php
 					foreach ($task_types as $task_type) {
@@ -1069,6 +1085,10 @@ abstract class MissionDisplay {
 									</div>
 								</div>
 							<?php
+								// updat streak details for later use
+								$activeStreaks[$task->grid_id]['subject_id'] = $track->subject_id;
+								$activeStreaks[$task->grid_id]['short_name'] = $task->short_name;
+								$activeStreaks[$task->grid_id]['task_name'] = $task->task_name;
 							}
 						}
 					}
@@ -1118,12 +1138,21 @@ abstract class MissionDisplay {
 		<h3>Streaks</h3>
 		<div class='streaks-container'>
 			<?php foreach ($activeStreaks as $streak) : ?>
-				<div class='streak'>
-					<div class='streak-text'><?=$streak['days']?> Day Streak</div>
-					<div class='streak-fill'>
-						<progress value='<?=$streak['days']?>' max='90'></progress>
+				<?php if ($streak['days'] > 0) : ?>
+					<div class='streak'>
+						<div class='campaign-icon'>
+							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['task_name'] ?>' />
+						</div>
+						<div class='task'>
+							<div class='task-short-name'><?= $streak['short_name'] ?></div>
+							<div class='task-name'><?= $streak['task_name'] ?></div>
+							<div class='streak-fill'>
+								<progress value='<?=$streak['days']?>' max='90'></progress>
+							</div>
+							<div class='streak-text'><?=$streak['days']?> Day Streak</div>
+						</div>						
 					</div>
-				</div>
+				<?php endif; ?>
 			<?php endforeach; ?>
 		</div>
 

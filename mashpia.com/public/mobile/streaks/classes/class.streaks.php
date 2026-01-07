@@ -5,14 +5,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 class Streaks {
     private $num_days;
     private $user_id;
+    private $start;
+    private $end;
     private $db;
     private $streaks;
     private $grid_ids;
     private $streak_tasks;
 
-    public function __construct($user_id, $num_days = 90) {
+    public function __construct($user_id, $start, $end, $num_days = 90) {
         global $MASHPIA_DB;
         $this->user_id = $user_id;
+        $this->start = $start;
+        $this->end = $end;
         $this->num_days = $num_days;
         $this->db = $MASHPIA_DB;
         $this->streaks = [];
@@ -57,8 +61,7 @@ class Streaks {
     }
 
     /**
-     * checks the last $num_days days for the streak days
-     * starts from yesterday and goes back $num_days days
+     * checks the marks from start to end for the streak days
      * returns an array of the streak days
      * the array is truncated at the first day that is not a streak day
      */
@@ -68,23 +71,26 @@ class Streaks {
                 JOIN date_tasks dt USING (date_task_id) 
                 WHERE dt.grid_id = :grid_id 
                 AND dtm.user_id = :user_id 
-                ORDER BY mark_date DESC 
-                LIMIT :limit";
+                AND dtm.mark_date >= :start 
+                AND dtm.mark_date <= :end 
+                ORDER BY mark_date DESC";
         $stmt = $this->db->prepare($sql);
-        $stmt->bindValue(':grid_id', $grid_id, PDO::PARAM_INT);
-        $stmt->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
-        $stmt->bindValue(':limit', (int)$this->num_days, PDO::PARAM_INT);
-        $stmt->execute();
-        $marks = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        $marks = array_column($marks, 'mark_date');
+        $stmt->execute([
+            'grid_id' => $grid_id,
+            'user_id' => $this->user_id,
+            'start' => $this->start,
+            'end' => $this->end
+        ]);
+        $marks = [];
+        while ($mark = $stmt->fetch(PDO::FETCH_ASSOC)) {
+            $marks[] = (int)$mark['mark_date'];
+        }
         
-        $today = unixtojd();
-        $day = $today - 1;
-        $end = $day - $this->num_days;
+        $end = (int)$this->end;
         $days = [];
-        for (; $day >= $end; $day--) {
-            if (in_array($day, $marks)) {
-                $days[] = $day;
+        for (; $end >= $this->start; $end--) {
+            if (in_array($end, $marks)) {
+                $days[] = $end;
             } else {
                 break;
             }

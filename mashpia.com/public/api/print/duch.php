@@ -27,6 +27,10 @@ $date_range = $_POST['date_range'];
 if ( !$start && !$end ) {
     $end = unixtojd();
     $start = $end - $date_range;
+} else {
+    // convert the dates to unix timestamps
+    $start = jdtounix(strtotime($start));
+    $end = jdtounix(strtotime($end));
 }
 
 // * Set class_ids and user_ids if not set by client
@@ -116,7 +120,7 @@ if ( $dates == 'english' ) $dates_id = 2;
         .track {
             margin-bottom: 15px;
         }
-        .campaign-container, .task-container, .streak-container, .medals-container, .promotions-container, .streaks-container {
+        .campaign-container, .task-container, .streak-container, .medals-container, .promotions-container, .streaks-container, .streak {
             display: flex;
             flex-direction: row;
             gap: 10px;
@@ -129,7 +133,7 @@ if ( $dates == 'english' ) $dates_id = 2;
         .task-container, .streak-container {
             margin-bottom: 5px;
         }
-        .task, .medal, .promotion, .streak {
+        .task, .medal, .promotion, .campaign-medals {
             display: flex;
             flex-direction: column;
             width: 2in;
@@ -137,6 +141,9 @@ if ( $dates == 'english' ) $dates_id = 2;
         }
         .campaign-name {
             font-size: 22px;
+        }
+        .campaign-medals {
+            font-size: 12px;
         }
         .task-short-name {
             font-size: 14px;
@@ -162,12 +169,21 @@ if ( $dates == 'english' ) $dates_id = 2;
             margin-top: -10px;
             text-align: center;
         }
+        .streak .campaign-icon {
+            width: 75px;
+        }
         .streak-text {
             weight: bold;
+            text-align: center;
+            font-size: 16px;
         }
         .streak-fill progress {
             height: 30px;
             margin-left: 5px;
+        }
+        .streak progress {
+            width: 2in;
+            margin-left: 0;
         }
         .besuros-tovos {
             margin: 20px auto;
@@ -202,7 +218,7 @@ if ( $dates == 'english' ) $dates_id = 2;
             echo ">";
 
             // get streaks for the user
-            $streaks = new Streaks($obj->user_id);
+            $streaks = new Streaks($obj->user_id, $start, $end);
             $activeStreaks = $streaks->getStreaks();
 
             $debug = false;
