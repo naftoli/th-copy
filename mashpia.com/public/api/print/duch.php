@@ -109,6 +109,7 @@ if ( $dates == 'english' ) $dates_id = 2;
             height: 11in;
             margin: 10px auto;
             page-break-after: always;
+            display: contents;
         }
         .container {
             column-count: 3;
