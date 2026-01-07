@@ -142,6 +142,7 @@ if ( $dates == 'english' ) $dates_id = 2;
         }
         .campaign-name {
             font-size: 22px;
+            line-height: 1;
         }
         .campaign-medals {
             font-size: 12px;
