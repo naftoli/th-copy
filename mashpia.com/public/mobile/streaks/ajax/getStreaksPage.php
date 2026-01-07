@@ -159,7 +159,7 @@ if (count($activeStreaks) > 0) {
             Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).
         </div>
         <br />
-        <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button>
+        <!-- <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button> -->
         <br />
         Choose a campaign to setup a streak for:
         <select name="campaign" id="campaign" <?=$disabled?>>
