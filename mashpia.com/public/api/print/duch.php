@@ -103,13 +103,11 @@ if ( $dates == 'english' ) $dates_id = 2;
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Heebo:wght@100..900&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Exo', sans-serif;
         }
-    </style>
-    <style>
         .userDuch {
             width: 7in;
             margin: 20px auto;
@@ -124,6 +122,7 @@ if ( $dates == 'english' ) $dates_id = 2;
             column-count: 3;
             column-gap: 20px;
             height: auto !important;
+            min-height: auto !important;
             /* page-break-after: avoid !important; */
         }
         .track {
@@ -202,10 +201,11 @@ if ( $dates == 'english' ) $dates_id = 2;
         }
         footer {
             bottom: 0;
-            font-size: 26px;
+            font-size: 18px;
             font-weight: bold;
             margin-top: 20px;
             text-align: center;
+            font-family: 'Heebo', sans-serif;
         }
         .pageFooter {
             padding-top: 5px;
@@ -239,7 +239,7 @@ if ( $dates == 'english' ) $dates_id = 2;
             if (isset($_GET['debug'])) $debug = true;
             $pages += $obj->printDuch($activeStreaks);
             echo "</div>";
-            echo "<div style='clear: both; page-break-after: always'></div>";
+            // echo "<div style='clear: both; page-break-after: always'></div>";
         }
     ?>
     
@@ -252,7 +252,6 @@ if ( $dates == 'english' ) $dates_id = 2;
                 // get container dimensions
                 let width = container.width();
                 let height = container.height();
-                alert(width + 'x' + height);
             });
         });
     </script>

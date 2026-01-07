@@ -1180,7 +1180,7 @@ abstract class MissionDisplay {
 		</div>
 
 		<footer>
-			L'iylui Nishmas Moshe Kotlarsky
+		מבצע בשורות טובות מוקדש לזכר ולעילוי נשמת הרה"ח הרה"ת ר' משה יהודא בן הרה"ת ר' צבי יוסף קאטלרסקי
 		</footer>
 		<?		
 	}
