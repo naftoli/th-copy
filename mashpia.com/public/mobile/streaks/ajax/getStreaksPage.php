@@ -25,7 +25,7 @@ $sql = "SELECT subject_id, subject_name
         JOIN subjects USING (subject_id) 
         WHERE user_id = $user_id 
         AND enrolled = 1 
-        AND subject_id NOT IN (12, 40, 136)";
+        AND subject_id NOT IN (12, 15, 40, 136)";
 $result = mysql_query($sql);
 $campaigns = [];
 while ($row = mysql_fetch_assoc($result)) {
@@ -34,7 +34,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $disabled = '';
 require_once '../classes/class.streaks.php';
-$streaks = new Streaks($user_id);
+$streaks = new Streaks($user_id, $start, $end);
 $activeStreaks = $streaks->getStreaks();
 if (count($activeStreaks) > 0) {
     foreach ($activeStreaks as $streak) {
@@ -43,7 +43,7 @@ if (count($activeStreaks) > 0) {
             break;
         }
     }
-} 
+}
 ?>
 <style>
     .navbar-header h1 {
@@ -61,7 +61,6 @@ if (count($activeStreaks) > 0) {
         background-color: #f0f0f0;
         border: 1px solid #ccc;
         border-radius: 10px;
-        margin: 0 8% 20px 8%;
         color: brown;
     }
     progress {
@@ -150,22 +149,18 @@ if (count($activeStreaks) > 0) {
 </header>
 <div class="personalImg"></div>
 
-<div class="infobox">
-    You can use this page to setup a streak for a campaign.<br />
-    A streak is a series of days that you have completed a task for.<br />
-    You can setup a streak for a campaign by selecting a campaign and a task.<br />
-    All streaks are for 90 days.<br />
-    Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).
-</div>
-
 <div class="container">
     <div class="content">
+        <div class="infobox">
+            You can use this page to setup a streak for a campaign.<br />
+            A streak is a series of days that you have completed a task for.<br />
+            You can setup a streak for a campaign by selecting a campaign and a task.<br />
+            All streaks are for 90 days.<br />
+            Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).
+        </div>
+        <br />
         <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button>
-    </div>
-</div>
-
-<div class="container">
-    <div class="content">
+        <br />
         Choose a campaign to setup a streak for:
         <select name="campaign" id="campaign" <?=$disabled?>>
             <option value="0">Select a campaign</option>
@@ -178,9 +173,9 @@ if (count($activeStreaks) > 0) {
         <button id="setup-streak" <?=$disabled?>>Setup Streak</button>
     </div>
 </div>
-<br />
-
 <hr />
+
+<?php if (count($activeStreaks) > 0) : ?>
 <div class="container">
     <div class="content">
         <h2>Active Streaks</h2>
@@ -196,3 +191,4 @@ if (count($activeStreaks) > 0) {
         </ul>
     </div>
 </div>
+<?php endif; ?>

@@ -6,6 +6,7 @@ import { Row, Col, Button } from 'reactstrap';
 import { BaseSelect, PlatoonSelect, SoldierSelect, Select } from 'components/selects';
 import { getSoldiers } from 'store/base/soldiers/operations';
 import Callout from 'components/ui/Callout';
+
 class Streaks extends Component {
   state = {
     form: {
@@ -53,6 +54,8 @@ class Streaks extends Component {
     api.get('/missions/createStreak?' + new URLSearchParams({ gridId: taskId, userId: userId }).toString())
     .then((res) => {
         alert(res);
+        // reload the component
+        this.componentDidMount();
     })
     .catch((err) => {
         if (err.error && err.error.includes('Duplicate entry')) {
@@ -74,7 +77,7 @@ class Streaks extends Component {
         next.subject_id = '';
         next.task_id = '';
       }
-      return { form: next, error: null };
+      return { form: next, error: null, streaks: [] };
     }, () => {
       if (key === 'user_id') {
         if (this.state.form.user_id) {
@@ -118,10 +121,22 @@ class Streaks extends Component {
     api.get('/missions/streak-tasks?subject_id=' + String(subjectId) + '&user_id=' + String(userId))
       .then((resp) => {
         console.log(resp);
-        console.log(resp.tasks);
         // Normalize to [{value, label}]
         const tasks = Object.keys(resp.tasks).map(function(key){ return { value: key, label: resp.tasks[key] }; });
-        this.setState({ tasksOptions: tasks, form: Object.assign({}, this.state.form, { task_id: tasks[0].value }) });
+        const streaks = resp.streaks ? Object.keys(resp.streaks).map(function(gridId){
+          const s = resp.streaks[gridId] || {};
+          return { gridId: gridId, name: s.name, cat: s.cat, days: s.days };
+        }) : [];
+        // Alert if any streak is not yet 90 days
+        const hasIncomplete = streaks.some(function(s){ return (s.days || 0) < 90; });
+        if (hasIncomplete) {
+          alert('This soldier already has an active streak in progress. You cannot choose another streak until the current streak completes 90 days.');
+        }
+        this.setState({ 
+          tasksOptions: tasks, 
+          streaks: streaks,
+          form: Object.assign({}, this.state.form, { task_id: (tasks[0] ? tasks[0].value : '') }) 
+        });
       })
       .catch(() => this.setState({ tasksOptions: [], form: Object.assign({}, this.state.form, { task_id: '' }) }));
   };
@@ -137,11 +152,8 @@ class Streaks extends Component {
   }
 
   checkStreakDisabled() {
-    let disable = false;
-    if (this.state.streaks.length > 0) {
-        disable = this.state.streaks.some(function(streak){ return streak.days < 90; });
-    }
-    return !(this.state.form.user_id && this.state.form.subject_id && this.state.form.task_id) || disable;
+    const hasIncomplete = (this.state.streaks || []).some(function(s){ return (s.days || 0) < 90; });
+    return !(this.state.form.user_id && this.state.form.subject_id && this.state.form.task_id) || hasIncomplete;
   }
 
   render() {
@@ -240,6 +252,21 @@ class Streaks extends Component {
             Setup Streak
           </Button>
         </div>
+        <hr />
+
+        { (this.state.form.user_id && this.state.streaks && this.state.streaks.length > 0) && (
+          <div style={{ marginTop: 20 }}>
+            <h5>Active Streak</h5>
+            { this.state.streaks.map(function(s, idx){
+              return (
+                <div key={String(s.gridId) + '-' + String(idx)} style={{ padding: '8px 0' }}>
+                  <div><b>{ s.cat }</b> - { s.name || 'Task' } ({s.days} days)</div>
+                  <progress style={{ height: '30px' }} value={ s.days } max="90" />
+                </div>
+              );
+            }) }
+          </div>
+        )}
       </div>
     );
   }
