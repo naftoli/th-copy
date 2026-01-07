@@ -119,7 +119,7 @@ if ( $dates == 'english' ) $dates_id = 2;
             column-gap: 20px;
             min-height: auto !important;
             height: auto !important;
-            page-break-after: none !important;
+            page-break-after: avoid !important;
         }
         .track {
             margin-bottom: 15px;
