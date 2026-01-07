@@ -200,7 +200,6 @@ if ( $dates == 'english' ) $dates_id = 2;
             text-align: center;
         }
         .pageFooter {
-            width: 90% !important;
             padding-top: 5px;
             padding-bottom: 2px;
         }
