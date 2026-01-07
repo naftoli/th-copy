@@ -106,10 +106,9 @@ if ( $dates == 'english' ) $dates_id = 2;
     <style>
         .userDuch {
             width: 8.5in;
-            height: 11in;
+            /* height: 11in; */
             margin: 10px auto;
             page-break-after: always;
-            display: contents;
         }
         .container {
             column-count: 3;
