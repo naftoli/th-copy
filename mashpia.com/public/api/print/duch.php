@@ -117,9 +117,8 @@ if ( $dates == 'english' ) $dates_id = 2;
         .container {
             column-count: 3;
             column-gap: 20px;
-            min-height: auto !important;
             height: auto !important;
-            page-break-after: avoid !important;
+            /* page-break-after: avoid !important; */
         }
         .track {
             margin-bottom: 15px;
