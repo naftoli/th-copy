@@ -150,7 +150,7 @@ class DuchPage extends Component {
           </Row>
 
           <Row>
-            <Col sm={6}>
+            {/* <Col sm={6}>
               <label>Double sided</label><br />
               <Radio name='double_sided' checked={double_sided}
                 value={true} onChange={this.toggleDoubleSided}>
@@ -160,7 +160,7 @@ class DuchPage extends Component {
                 value={false} onChange={this.toggleDoubleSided}>
                 I am <strong>not</strong> printing double sided copies.
               </Radio>
-            </Col>
+            </Col> */}
 
             <Col sm={6}>
               <label>Dates</label><br />

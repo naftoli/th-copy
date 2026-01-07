@@ -17,7 +17,7 @@ $school = \School::find([ $_POST['school_id'] ]);
 $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
 $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
 
-$double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
+// $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
 $start = $_POST['start'];
 $end = $_POST['end'];
@@ -213,7 +213,7 @@ if ( $dates == 'english' ) $dates_id = 2;
         // * Print the missions just like before
         foreach ( $objMissions as $obj ) {
             $obj->setDateDisplay( $dates_id );
-            $obj->setDblSided( $double_sided );
+            // $obj->setDblSided( $double_sided );
 
             $class = 'userDuch';
             if ($obj->lang_id == 2) $class .= ' he';
@@ -238,5 +238,16 @@ if ( $dates == 'english' ) $dates_id = 2;
     
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
+    <script>
+        $(function() {
+            $(".container").each(function() {
+                let container = $(this);
+                // get container dimensions
+                let width = container.width();
+                let height = container.height();
+                alert(width + 'x' + height);
+            });
+        });
+    </script>
 </body>
 </html>
