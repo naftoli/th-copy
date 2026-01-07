@@ -101,6 +101,14 @@ if ( $dates == 'english' ) $dates_id = 2;
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Print Missions</title>
     <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Exo', sans-serif;
+        }
+    </style>
     <style>
         .userDuch {
             width: 7in;
