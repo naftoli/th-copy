@@ -203,7 +203,6 @@ if ( $dates == 'english' ) $dates_id = 2;
             width: 90% !important;
             padding-top: 5px;
             padding-bottom: 2px;
-            display: inline-block;
         }
     </style>
 </head>
