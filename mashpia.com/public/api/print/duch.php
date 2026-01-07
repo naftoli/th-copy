@@ -19,8 +19,6 @@ $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
 
 $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
-$batchedPrinting = isset($_POST['batches']) ? 1 : 0;
-
 $start = $_POST['start'];
 $end = $_POST['end'];
 $date_range = $_POST['date_range'];
@@ -200,6 +198,12 @@ if ( $dates == 'english' ) $dates_id = 2;
             font-weight: bold;
             margin-top: 20px;
             text-align: center;
+        }
+        .pageFooter {
+            width: 90% !important;
+            padding-top: 5px;
+            padding-bottom: 2px;
+            display: inline-block;
         }
     </style>
 </head>

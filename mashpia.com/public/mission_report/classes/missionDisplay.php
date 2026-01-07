@@ -210,7 +210,7 @@ abstract class MissionDisplay {
 	<? 
 	}
 
-	public function createPager( $user, $page ) {
+	public function createPager( $user, $page, $duch = false ) {
 		//return;
 		?>
 		<div style="clear: both"></div>
@@ -233,7 +233,9 @@ abstract class MissionDisplay {
 				<? if ($this->lang_id == 1) echo "Page "; ?>
 				<?=$page?>
 			</div>
-			<div class="parsha">פרשת <?=$this->parsha?></div>
+			<?php if (! $duch) : ?>
+				<div class="parsha">פרשת <?=$this->parsha?></div>
+			<?php endif; ?>
 		</div>
 		<?
 	}
@@ -1100,6 +1102,7 @@ abstract class MissionDisplay {
 				echo "</div>";
 			}
 		echo "</div>";
+		$this->createPager( $user, 2, true );
 		?>
 
 		<h3>Medals</h3>
