@@ -150,7 +150,7 @@ class DuchPage extends Component {
           </Row>
 
           <Row>
-            <Col sm={6} xl={3}>
+            <Col sm={6}>
               <label>Double sided</label><br />
               <Radio name='double_sided' checked={double_sided}
                 value={true} onChange={this.toggleDoubleSided}>
@@ -162,7 +162,7 @@ class DuchPage extends Component {
               </Radio>
             </Col>
 
-            <Col sm={6} xl={3}>
+            <Col sm={6}>
               <label>Dates</label><br />
               <Radio name='dates' checked={dates === 'none'}
                 value='none' onChange={this.toggleDates}>
