@@ -131,8 +131,8 @@
 		    });
 
 			document.addEventListener('DOMContentLoaded', function() {
-				alert('ChidonDrive for families is closed for this year, but you can still donate to us.')
-				location.href = 'https://chidondrive.com/site/donate.html'
+				// alert('ChidonDrive for families is closed for this year, but you can still donate to us.')
+				// location.href = 'https://chidondrive.com/site/donate.html'
 			})
 
 		    $('#menu-opener').click(function(e){
@@ -148,27 +148,6 @@
 					$("#section2 .title").append(" from the " + decodeURI( community ) + " Community");
 				}
 
-				// $.post('../ajax/getFamilyNames.php', function( info ) {
-				// 	let names = JSON.parse( info );
-				// 	html = '';
-				// 	for ( i in names ) {
-				// 		html += `
-				// 			<div class="result">
-				// 				<p>${names[i]}</p>
-				// 			</div>
-				// 		`;
-				// 	}
-				// 	$(".results").append( html );
-				// 	$('.search-wrapper input').on('change keyup paste', function(e){
-				// 		var val = $(this).val();
-				// 		if (val.length > 2) {
-				// 			console.log(val);
-				// 			$('.search-wrapper .results').show();
-				// 		} else { $('.search-wrapper .results').hide(); }
-				// 	});
-
-				// });
-				
 				$.post('../ajax/getFamilyNames.php', { community : community }, function( info ) {
 					let names = JSON.parse( info );
 					let lookup = [];
