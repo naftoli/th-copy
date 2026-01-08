@@ -705,7 +705,9 @@ class TasksCustomizationNew {
     private function getCampaignsForUser( $user_id ) {
         require_once 'class.campaignEnrollment.php';
         $campaign_enrollment = new CampaignEnrollment($user_id);
-        return $campaign_enrollment->getEligibleCampaigns();
+        $campaigns = $campaign_enrollment->getEligibleCampaigns();
+        $exceptions = [12, 15, 40, 136];
+        return array_diff($campaigns, $exceptions);
     }
 
 	public function getYDTasks( $catNum, $debug = false ) {
