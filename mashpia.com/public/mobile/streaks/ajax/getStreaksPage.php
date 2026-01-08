@@ -54,8 +54,8 @@ if (count($activeStreaks) > 0) {
         min-height: auto !important;
     }
     .infobox {
-        margin: 0 auto;
-        padding: 10px;
+        margin: 10px;
+        padding: 15px;
         font-size: 14px;
         background-color: #f0f0f0;
         border: 1px solid #ccc;
@@ -73,7 +73,8 @@ if (count($activeStreaks) > 0) {
     }
     .campaign-container, .task-container, .button-container {
         line-height: 1.5;
-        margin: 10px auto;
+        margin: auto 15px;
+
     }
     select, button {
         margin: 10px auto;
@@ -164,7 +165,6 @@ if (count($activeStreaks) > 0) {
         All streaks are for 90 days.<br /><br />
         Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).<br />
         </div>
-        <br />
         <!-- <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button> -->
         <div class='campaign-container'>
             Choose a campaign or all campaigns:
