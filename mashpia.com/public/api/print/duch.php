@@ -122,7 +122,7 @@ if ( $dates == 'english' ) $dates_id = 2;
             column-count: 3;
             column-gap: 20px;
             height: auto !important;
-            min-height: auto !important;
+            /* min-height: auto !important; */
             /* page-break-after: avoid !important; */
         }
         .track {
@@ -148,7 +148,7 @@ if ( $dates == 'english' ) $dates_id = 2;
             gap: 2px;
         }
         .campaign-name {
-            font-size: 22px;
+            font-size: 20px;
             line-height: 1;
         }
         .campaign-medals {
@@ -163,9 +163,11 @@ if ( $dates == 'english' ) $dates_id = 2;
         .campaign-icon, .task-stats {
             width: 50px;
             text-align: center;
+            margin-bottom: -8px;
         }
         .task-stats {
             font-size: 9px;
+            line-height: 1.2;
         }
         .medal {
             width: 0.75in;
@@ -201,11 +203,13 @@ if ( $dates == 'english' ) $dates_id = 2;
         }
         footer {
             bottom: 0;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
-            margin-top: 20px;
             text-align: center;
             font-family: 'Heebo', sans-serif;
+            width: 80%;
+            margin: auto;
+            margin-top: 20px;
         }
         .pageFooter {
             padding-top: 5px;

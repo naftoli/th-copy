@@ -39,7 +39,7 @@ if (isset($_GET['parent'])) {
 };
 
 if (isset($_GET['forStreak'])) {
-    $tasks = $tc->getTasksForStreak( $id );
+    $tasks = $tc->getTasksForStreak( $id, $user );
     echo json_encode($tasks); 
     exit;
 }

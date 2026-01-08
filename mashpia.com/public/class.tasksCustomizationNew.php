@@ -669,23 +669,44 @@ class TasksCustomizationNew {
         return $allInfo;
     }
 
-    public function getTasksForStreak( $subject_id ) {
-        $info = $this->getTasks( $subject_id, false, false, false, true );
-        $tasks = $info['taskInfo'];
-        $grids = $info['grid_ids'];
-
+    public function getTasksForStreak( $subject_id, $user_id ) {
+        $info = [];
+        $tasks = [];
+        $grids = [];
         $tasks_with_grids = [];
-        foreach ($tasks as $cat => $more) {
-            foreach ($more as $enrolled => $taskInfo) {
-                foreach ($taskInfo as $task => $other) {
-                    $grid_id = array_search(($cat . '|' . $task), $grids);
-                    if ($grid_id) $tasks_with_grids[$grid_id] = $cat . ' - ' . $task;
+
+        // get subjects if subject_id is -1 and user_id is set
+        if ($subject_id == -1 && $user_id) {
+            $subjects = $this->getCampaignsForUser( $user_id );
+            foreach ($subjects as $subject) {
+                $info[$subject] = $this->getTasks( $subject, false, false, false, true );
+                $tasks[$subject] = $info[$subject]['taskInfo'];
+                $grids[$subject] = $info[$subject]['grid_ids'];
+            }
+        } else {
+            $info[$subject_id] = $this->getTasks( $subject_id, false, false, false, true );
+            $tasks[$subject_id] = $info[$subject_id]['taskInfo'];
+            $grids[$subject_id] = $info[$subject_id]['grid_ids'];
+        }
+
+        foreach ($tasks as $subject => $other) {
+            foreach ($other as $cat => $more) {
+                foreach ($more as $enrolled => $taskInfo) {
+                    foreach ($taskInfo as $task => $other) {
+                        $grid_id = array_search(($cat . '|' . $task), $grids[$subject]);
+                        if ($grid_id) $tasks_with_grids[$grid_id] = $cat . ' - ' . $task;
+                    }
                 }
             }
         }
         return $tasks_with_grids;
     }
 
+    private function getCampaignsForUser( $user_id ) {
+        require_once 'class.campaignEnrollment.php';
+        $campaign_enrollment = new CampaignEnrollment($user_id);
+        return $campaign_enrollment->getEligibleCampaigns();
+    }
 
 	public function getYDTasks( $catNum, $debug = false ) {
     	$this->debug = $debug;

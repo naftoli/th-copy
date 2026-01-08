@@ -56,12 +56,11 @@ if (count($activeStreaks) > 0) {
     .infobox {
         margin: 0 auto;
         padding: 10px;
-        font-size: 1.2em;
-        line-height: 1.5;
+        font-size: 14px;
         background-color: #f0f0f0;
         border: 1px solid #ccc;
         border-radius: 10px;
-        color: brown;
+        color: chocolate;
     }
     progress {
         height: 50px;
@@ -71,6 +70,13 @@ if (count($activeStreaks) > 0) {
     #tasks-accomplished {
         margin: auto;
         margin-bottom: 20px;
+    }
+    .campaign-container, .task-container, .button-container {
+        line-height: 1.5;
+        margin: 10px auto;
+    }
+    select, button {
+        margin: 10px auto;
     }
 </style>
 
@@ -152,25 +158,31 @@ if (count($activeStreaks) > 0) {
 <div class="container">
     <div class="content">
         <div class="infobox">
-            You can use this page to setup a streak for a campaign.<br />
-            A streak is a series of days that you have completed a task for.<br />
-            You can setup a streak for a campaign by selecting a campaign and a task.<br />
-            All streaks are for 90 days.<br />
-            Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).
+        You can use this page to setup a streak for a campaign.<br /><br />
+        A streak is a series of days that you have completed a task for.<br /><br />
+        You can setup a streak for a campaign by selecting a campaign and a task.<br /><br />
+        All streaks are for 90 days.<br /><br />
+        Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).<br />
         </div>
         <br />
         <!-- <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button> -->
-        <br />
-        Choose a campaign to setup a streak for:
-        <select name="campaign" id="campaign" <?=$disabled?>>
-            <option value="0">Select a campaign</option>
-            <?php foreach ($campaigns as $id => $campaign) : ?>
-                <option value="<?=$id?>"><?=$campaign?></option>
-            <?php endforeach; ?>
-        </select><br /><br />
-        Choose a task to setup a streak for:
-        <select name="task" id="task" <?=$disabled?>></select><br /><br />
-        <button id="setup-streak" <?=$disabled?>>Setup Streak</button>
+        <div class='campaign-container'>
+            Choose a campaign or all campaigns:
+            <select name="campaign" id="campaign" <?=$disabled?>>
+                <option value="0">Select a campaign</option>
+                <option value="-1">All campaigns</option>
+                <?php foreach ($campaigns as $id => $campaign) : ?>
+                    <option value="<?=$id?>"><?=$campaign?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class='task-container'>
+            Choose a task to setup a streak for:
+            <select name="task" id="task" <?=$disabled?>></select>
+        </div>
+        <div class='button-container'>
+            <button id="setup-streak" <?=$disabled?>>Setup Streak</button>
+        </div>
     </div>
 </div>
 <hr />
@@ -178,14 +190,12 @@ if (count($activeStreaks) > 0) {
 <?php if (count($activeStreaks) > 0) : ?>
 <div class="container">
     <div class="content">
-        <h2>Active Streaks</h2>
+        <h2>Active Streak Hachlata(s)</h2>
         <ul style="list-style-type: none; padding-left: 0;">
             <?php foreach ($activeStreaks as $gridId => $streak) : ?>
                 <li>
                     <b><?=$streak['cat']?></b> - <?=$streak['name']?> (<?=$streak['days']?> days) 
-                    <?php if ($streak['days'] > 0) : ?>
-                        <progress value="<?=$streak['days']?>" max="90"></progress>
-                    <?php endif; ?>
+                    <progress value="<?=$streak['days']?>" max="90"></progress>
                 </li>
             <?php endforeach; ?>
         </ul>

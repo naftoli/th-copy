@@ -1043,15 +1043,10 @@ abstract class MissionDisplay {
 							<div class='campaign-name'><?= $track->subject_name ?></div>
 							<?php
 							// find out if any medals have been awarded for this campaign
-							$medals = [];
-							foreach ($user->medals as $medal) {
-								if ($medal['subject_id'] == $track->subject_id) {
-									$medals[] = $medal['medal_name'];
-								}
-							}
-							if (count($medals) > 0) {
+							if (count($user->medals)) {
+								$medal = $user->medals[count($user->medals) - 1];
 								echo "<div class='campaign-medals'>";
-								echo "<i>" . implode(' and ', $medals) . ' medal(s) earned</i>';
+								echo "<i>" . $medal['medal_name'] . ' medal earned</i>';
 								echo "</div>";
 							}
 							?>
@@ -1066,11 +1061,16 @@ abstract class MissionDisplay {
 							if ($task_type != 'daily_tasks') {
 								$total_days = floor($total_days / 7);
 							}
+							if ($task->subject_id == 1) {
+								$total_days = floor($total_days / 28);
+							}
+							if ($total_days < 1) $total_days = 1;
 							// find out how many times the task has been accomplished
 							$a = new Accomplished($user->user_id, [$task->grid_id], $this->start, $this->end);
 							$a->setAccomplished();
 							$accomplished = $a->getAccomplished();
 							$accomplished_count = count($accomplished[$task->grid_id]);
+							if ($accomplished_count > $total_days) $accomplished_count = $total_days;
 							?>
 							<div class='task-container'>
 								<div class='task-stats'><b><?=$accomplished_count?></b> 
@@ -1081,10 +1081,7 @@ abstract class MissionDisplay {
 									<div class='task-name'><?= $task->task_name ?></div>
 								</div>
 							</div>
-							<?php if (
-								isset($activeStreaks[$task->grid_id]) &&
-								$activeStreaks[$task->grid_id]['days'] > 0
-							) { ?>
+							<?php if (isset($activeStreaks[$task->grid_id])) { ?>
 								<div class='streak-container'>
 									<div class='streak-text'><?=$activeStreaks[$task->grid_id]['days']?> Day Streak</div>
 									<div class='streak-fill'>
@@ -1092,7 +1089,7 @@ abstract class MissionDisplay {
 									</div>
 								</div>
 							<?php
-								// updat streak details for later use
+								// update streak details for later use
 								$activeStreaks[$task->grid_id]['subject_id'] = $track->subject_id;
 								$activeStreaks[$task->grid_id]['short_name'] = $task->short_name;
 								$activeStreaks[$task->grid_id]['task_name'] = $task->task_name;
@@ -1105,7 +1102,7 @@ abstract class MissionDisplay {
 		$this->createPager( $user, 2, true );
 		?>
 
-		<h3>Medals</h3>
+		<h3>New Medals</h3>
 		<div class='medals-container'>
 			<?php foreach ($user->medals as $medal) : ?>
 				<?php
@@ -1124,7 +1121,7 @@ abstract class MissionDisplay {
 			<?php endforeach; ?>
 		</div>
 
-		<h3>Promotions</h3>
+		<h3>New Promotions</h3>
 		<div class='promotions-container'>
 			<?php foreach ($user->ranks as $rank) : ?>
 				<?php
@@ -1143,44 +1140,41 @@ abstract class MissionDisplay {
 			<?php endforeach; ?> 
 		</div>
 
-		<h3>Streaks</h3>
+		<h3>Hachlata Streaks</h3>
 		<div class='streaks-container'>
 			<?php foreach ($activeStreaks as $streak) : ?>
-				<?php if ($streak['days'] > 0) : ?>
-					<div class='streak'>
-						<div class='campaign-icon'>
-							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['task_name'] ?>' />
-						</div>
-						<div class='task'>
-							<div class='task-short-name'><?= $streak['short_name'] ?></div>
-							<div class='task-name'><?= $streak['task_name'] ?></div>
-							<div class='streak-fill'>
-								<progress value='<?=$streak['days']?>' max='90'></progress>
-							</div>
-							<div class='streak-text'><?=$streak['days']?> Day Streak</div>
-						</div>						
+				<div class='streak'>
+					<div class='campaign-icon'>
+						<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['task_name'] ?>' />
 					</div>
-				<?php endif; ?>
+					<div class='task'>
+						<div class='task-short-name'><?= $streak['short_name'] ?></div>
+						<div class='task-name'><?= $streak['task_name'] ?></div>
+						<div class='streak-fill'>
+							<progress value='<?=$streak['days']?>' max='90'></progress>
+						</div>
+						<div class='streak-text'><?=$streak['days']?> Day Streak</div>
+					</div>						
+				</div>
 			<?php endforeach; ?>
 		</div>
 
 		<h3>Besuros Tovos</h3>
 		<div class='besuros-tovos'>
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
-			________________________________________________________________________________
+			_________________________________________________________ הנני לבשר טוב
+			____________________________________________________________________
+			____________________________________________________________________
+			____________________________________________________________________
+			____________________________________________________________________
+			____________________________________________________________________
+			____________________________________________________________________
+			____________________________________________________________________
+			____________________________________________________________________
+			____________________________________________________________________
 		</div>
 
 		<footer>
-		מבצע בשורות טובות מוקדש לזכר ולעילוי נשמת הרה"ח הרה"ת ר' משה יהודא בן הרה"ת ר' צבי יוסף קאטלרסקי
+מבצע בשורות טובות מוקדש לזכר ולעילוי נשמת הרה"ח הרה"ת ר' משה יהודא בן הרה"ת ר' צבי יוסף קאטלרסקי
 		</footer>
 		<?		
 	}
