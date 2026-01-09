@@ -1085,7 +1085,7 @@ abstract class MissionDisplay {
 								<div class='streak-container'>
 									<div class='streak-text'><?=$activeStreaks[$task->grid_id]['days']?> Day Streak</div>
 									<div class='streak-fill'>
-										<progress value='<?=$activeStreaks[$task->grid_id]['days']?>' max='90'></progress>
+										<progress value='<?=$activeStreaks[$task->grid_id]['days']?>' max='<?=$activeStreaks[$task->grid_id]['days_needed']?>'></progress>
 									</div>
 								</div>
 							<?php
@@ -1151,7 +1151,7 @@ abstract class MissionDisplay {
 						<div class='task-short-name'><?= $streak['short_name'] ?></div>
 						<div class='task-name'><?= $streak['task_name'] ?></div>
 						<div class='streak-fill'>
-							<progress value='<?=$streak['days']?>' max='90'></progress>
+							<progress value='<?=$streak['days']?>' max='<?=$streak['days_needed']?>'></progress>
 						</div>
 						<div class='streak-text'><?=$streak['days']?> Day Streak</div>
 					</div>						

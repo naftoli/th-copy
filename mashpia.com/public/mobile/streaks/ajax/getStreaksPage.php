@@ -80,7 +80,7 @@ if (count($activeStreaks) > 0) {
         margin: 10px auto;
     }
 </style>
-
+<script src="/jquery.js"></script>
 <script>
     var lang = <?=$lang?>;
     $(document).ready(function() {
@@ -106,8 +106,8 @@ if (count($activeStreaks) > 0) {
                     const tasks = $.parseJSON( data ); 
                     console.log(tasks);
                     let html = '<option value="0">Select a task</option>';
-                    for (let gridId in tasks) {
-                        html += `<option value="${gridId}">${tasks[gridId]}</option>`;
+                    for (let streakId in tasks) {
+                        html += `<option value="${streakId}">${tasks[streakId]}</option>`;
                     }
                     $('#task').html(html);
                 }
@@ -119,14 +119,14 @@ if (count($activeStreaks) > 0) {
 
     function setupStreak() {
         const campaignId = $('#campaign').val();
-        const gridId = $('#task').val();
-        if (campaignId == 0 || gridId == 0) {
+        const streakId = $('#task').val();
+        if (campaignId == 0 || streakId == 0) {
             alert('Please select a campaign and a task');
             return;
         }
-        console.log(campaignId, gridId);
+        console.log(campaignId, streakId);
         $.post('ajax/setupStreak.php', {
-            gridId: gridId, userId: <?=$user_id?>
+            streakId: streakId, userId: <?=$user_id?>
         }, function( result ) {
             console.log(result);
             const data = $.parseJSON(result);
@@ -141,9 +141,7 @@ if (count($activeStreaks) > 0) {
                 }
                 alert(error);
             }
-        }).fail(function( jqXHR, textStatus, errorThrown ) {
-            alert('Failed to setup streak: ' + errorThrown);
-        });
+        })
     }
 </script>
 
@@ -192,10 +190,10 @@ if (count($activeStreaks) > 0) {
     <div class="content">
         <h2>Active Streak Hachlata(s)</h2>
         <ul style="list-style-type: none; padding-left: 0;">
-            <?php foreach ($activeStreaks as $gridId => $streak) : ?>
+            <?php foreach ($activeStreaks as $streakId => $streak) : ?>
                 <li>
                     <b><?=$streak['cat']?></b> - <?=$streak['name']?> (<?=$streak['days']?> days) 
-                    <progress value="<?=$streak['days']?>" max="90"></progress>
+                    <progress value="<?=$streak['days']?>" max="<?=$streak['days_needed']?>"></progress>
                 </li>
             <?php endforeach; ?>
         </ul>

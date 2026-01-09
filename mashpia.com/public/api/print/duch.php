@@ -22,15 +22,22 @@ $dates = $_POST['dates'];
 $start = $_POST['start'];
 $end = $_POST['end'];
 $date_range = $_POST['date_range'];
-if ( !$start && !$end ) {
-    $end = unixtojd();
-    $start = $end - $date_range;
-} else {
+$selectedMonth = $_POST['selectedMonth'];
+
+if ( $selectedMonth ) {
+    // selected month - convert the dates to unix timestamps
+    $dates = explode( ' - ', $selectedMonth );
+    $start = unixtojd(strtotime($dates[0]));
+    $end = unixtojd(strtotime($dates[1]));
+} else if ( $start && $end ) {
     // convert the dates to unix timestamps
     $start = unixtojd(strtotime($start));
     $end = unixtojd(strtotime($end));
-}
-
+} else {
+    // date range
+    $end = unixtojd();
+    $start = $end - $date_range;
+} 
 // * Set class_ids and user_ids if not set by client
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );

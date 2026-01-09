@@ -261,7 +261,7 @@ class Streaks extends Component {
               return (
                 <div key={String(s.gridId) + '-' + String(idx)} style={{ padding: '8px 0' }}>
                   <div><b>{ s.cat }</b> - { s.name || 'Task' } ({s.days} days)</div>
-                  <progress style={{ height: '30px' }} value={ s.days } max="90" />
+                  <progress style={{ height: '30px' }} value={ s.days } max={ s.days_needed } />
                 </div>
               );
             }) }

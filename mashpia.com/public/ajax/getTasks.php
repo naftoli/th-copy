@@ -43,7 +43,7 @@ if (isset($_GET['forStreak'])) {
     echo json_encode($tasks); 
     exit;
 }
-    
+
 $tasks = $tc->getTasks( $id, $debug );
 if ($version == "2") {
     $mandatory = $tc->mandatory;

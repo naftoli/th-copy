@@ -25,7 +25,8 @@ class DuchPage extends Component {
     dates: 'hebrew',
     start: '',
     end: '',
-    date_range: '30'
+    date_range: '30', 
+    selectedMonth: ''
   };
 
   componentDidMount() {
@@ -74,10 +75,23 @@ class DuchPage extends Component {
     const {
       school_id, class_ids, user_ids,
       double_sided, dates,
-      start, end, date_range
+      start, end, date_range, 
+      selectedMonth
     } = this.state;
 
     const { login } = this.props;
+
+    const heMonths = {
+      'טבת': '12/21/25 - 1/18/26',
+      'שבט': '1/19/26 - 2/17/26',
+      'אדר': '2/18/26 - 3/18/26',
+      'ניסן': '3/19/26 - 4/17/26',
+      'אייר': '4/18/26 - 5/16/26',
+      'סיון': '5/17/26 - 6/15/26',
+      'תמוז': '6/16/26 - 7/14/26',
+      'אב': '7/15/26 - 8/13/26',
+      'אלול': '8/14/26 - 9/11/26'
+    }
 
     return (
       <div id='DuchPage'>
@@ -150,17 +164,21 @@ class DuchPage extends Component {
           </Row>
 
           <Row>
-            {/* <Col sm={6}>
-              <label>Double sided</label><br />
-              <Radio name='double_sided' checked={double_sided}
-                value={true} onChange={this.toggleDoubleSided}>
-                I <strong>am</strong> printing double sided copies.
-              </Radio><br />
-              <Radio name='double_sided' checked={!double_sided}
-                value={false} onChange={this.toggleDoubleSided}>
-                I am <strong>not</strong> printing double sided copies.
-              </Radio>
-            </Col> */}
+            <Col sm={6}>
+              <label>OR Choose a month</label>
+              {(() => {
+                const monthOptions = Object.keys(heMonths).map(key => ({ value: heMonths[key], label: key }));
+                const selected = monthOptions.find(o => String(o.value) === String(selectedMonth)) || null;
+                return (
+                  <Select
+                    options={ monthOptions }
+                    value={ selected }
+                    onChange={ this.handleSelectChange('selectedMonth') }
+                  />
+                );
+              })()}
+              <input type='hidden' name='selectedMonth' value={selectedMonth} />
+            </Col>
 
             <Col sm={6}>
               <label>Dates</label><br />
