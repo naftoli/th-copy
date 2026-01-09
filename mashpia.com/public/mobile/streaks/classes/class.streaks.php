@@ -35,6 +35,7 @@ class Streaks {
         $stmt->execute([
             'user_id' => $this->user_id
         ]);
+        $stmt->debugDumpParams();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $streaks[$row['streak_id']] = [
                 'cat' => $row['cat'],
