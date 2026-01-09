@@ -73,8 +73,8 @@ class DuchPage extends Component {
 
   render() {
     const {
-      school_id, class_ids, user_ids,
-      double_sided, dates,
+      school_id, class_ids, 
+      user_ids, dates,
       start, end, date_range, 
       selectedMonth
     } = this.state;
