@@ -191,9 +191,9 @@ if ( $dates == 'english' ) $dates_id = 2;
             width: 75px;
         }
         .streak-text {
-            weight: bold;
             text-align: center;
-            font-size: 16px;
+            font-size: 14px;
+            line-height: 1.2;
         }
         .streak-fill progress {
             height: 30px;
