@@ -44,10 +44,6 @@ if (count($activeStreaks) > 0) {
         }
     }
 }
-echo "<pre>";
-print_r($activeStreaks);
-echo "</pre>";
-exit;
 ?>
 <style>
     .navbar-header h1 {
