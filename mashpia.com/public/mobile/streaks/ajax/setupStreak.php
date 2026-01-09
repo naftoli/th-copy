@@ -5,7 +5,7 @@ define( "MASHPIA_AUTH_REQUIRED", true );
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.streaks.php';
 
-$gridId = intval($_POST['gridId']);
+$streakId = intval($_POST['streakId']);
 $userId = intval($_POST['userId']);
 $dates = GlobalSettings::getCurYearDates();
 $start = $dates['start'];
@@ -13,6 +13,6 @@ $end = $dates['end'];
 $numDays = 90;
 
 $streaks = new Streaks($userId, $start, $end, $numDays);
-$success = $streaks->setupStreak($gridId);
-
-echo json_encode(['success' => $success]);
+$success = $streaks->setupStreak($streakId);
+$error = $streaks->getError();
+echo json_encode(['success' => $success, 'error' => $error]);

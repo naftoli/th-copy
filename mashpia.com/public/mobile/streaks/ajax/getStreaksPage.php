@@ -135,7 +135,7 @@ if (count($activeStreaks) > 0) {
                 window.location.reload();
             } else {
                 const error = data.error ? data.error : 'Failed to setup streak';
-                if (error[2].includes('Duplicate entry')) {
+                if (error.includes('Duplicate entry')) {
                     alert('Streak already setup');
                     return;
                 }

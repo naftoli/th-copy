@@ -8,14 +8,20 @@ class Streaks {
     private $start;
     private $end;
     private $streaks;
+    private $error;
 
     public function __construct($user_id, $start, $end) {
         global $MASHPIA_DB;
         $this->user_id = $user_id;
         $this->start = $start;
         $this->end = $end;
+        $this->error = null;
         $this->db = $MASHPIA_DB;
         $this->streaks = $this->setStreaks();
+    }
+
+    public function getError() {
+        return $this->error;
     }
 
     private function setStreaks() {
@@ -141,7 +147,7 @@ class Streaks {
             'taskType' => $task_type
         ]);
         if (!$res) {
-            $this->error = $stmt->errorInfo();
+            $this->error = $stmt->errorInfo()[2];
         }
         return $res;
     }
@@ -165,9 +171,5 @@ class Streaks {
             $task_type = 'weekly';
         }
         return $task_type;
-    }
-
-    public function getError() {
-        return $this->error;
     }
 }
