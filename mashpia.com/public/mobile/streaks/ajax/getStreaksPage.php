@@ -188,7 +188,7 @@ if (count($activeStreaks) > 0) {
 <?php if (count($activeStreaks) > 0) : ?>
 <div class="container">
     <div class="content">
-        <h2>Active Streak Hachlata(s)</h2>
+        <h2>Active Streak Hachloto(s)</h2>
         <ul style="list-style-type: none; padding-left: 0;">
             <?php foreach ($activeStreaks as $streakId => $streak) : ?>
                 <li>
