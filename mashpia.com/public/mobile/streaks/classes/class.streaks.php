@@ -47,7 +47,7 @@ class Streaks {
         foreach ($streaks as $streak_id => $streak) {
             $streaks[$streak_id]['days_done'] = $this->getDaysDone($streak);
         }
-        $this->streaks = $streaks;
+        return $streaks;
     }
 
     public function getStreaks() {
