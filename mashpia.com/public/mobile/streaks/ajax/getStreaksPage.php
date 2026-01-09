@@ -38,12 +38,15 @@ $streaks = new Streaks($user_id, $start, $end);
 $activeStreaks = $streaks->getStreaks();
 if (count($activeStreaks) > 0) {
     foreach ($activeStreaks as $streak) {
-        if ($streak['days'] < 90) {
+        if ($streak['days_done'] < $streak['days_needed']) {
             $disabled = 'disabled';
             break;
         }
     }
 }
+echo "<pre>";
+print_r($activeStreaks);
+echo "</pre>";
 ?>
 <style>
     .navbar-header h1 {
