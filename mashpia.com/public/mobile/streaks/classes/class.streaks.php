@@ -45,7 +45,7 @@ class Streaks {
             ];
         }
         foreach ($streaks as $streak_id => $streak) {
-            $streaks[$streak_id]['days_done'] = $this->getDaysDone($streak_id);
+            $streaks[$streak_id]['days_done'] = $this->getDaysDone($streak);
         }
         return $streaks;
     }
@@ -59,8 +59,8 @@ class Streaks {
      * returns an array of the streak days
      * the array is truncated at the first day that is not a streak day
      */
-    private function getDaysDone($streak_id) {
-        $marks = $this->getMarks($streak_id);
+    private function getDaysDone($streak) {
+        $marks = $this->getMarks(key($streak));
 
         // decide how to calculate the days done
         $task_type = $streak['task_type'];
