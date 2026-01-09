@@ -192,8 +192,8 @@ if (count($activeStreaks) > 0) {
         <ul style="list-style-type: none; padding-left: 0;">
             <?php foreach ($activeStreaks as $streakId => $streak) : ?>
                 <li>
-                    <b><?=$streak['cat']?></b> - <?=$streak['name']?> (<?=$streak['days']?> days) 
-                    <progress value="<?=$streak['days']?>" max="<?=$streak['days_needed']?>"></progress>
+                    <b><?=$streak['cat']?></b> - <?=$streak['name']?> (<?=$streak['days_done']?> days) 
+                    <progress value="<?=$streak['days_done']?>" max="<?=$streak['days_needed']?>"></progress>
                 </li>
             <?php endforeach; ?>
         </ul>
