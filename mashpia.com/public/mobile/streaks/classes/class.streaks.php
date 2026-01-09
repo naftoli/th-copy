@@ -28,14 +28,13 @@ class Streaks {
         $streaks = [];
         $sql = "SELECT st.*, dt.name, dt.cat 
                 FROM streak_tasks st 
-                JOIN date_tasks dt USING (streak_id) 
+                JOIN date_tasks dt ON st.streak_id = dt.grid_id  
                 WHERE user_id = :user_id 
                 GROUP BY user_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'user_id' => $this->user_id
         ]);
-        $stmt->debugDumpParams();
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $streaks[$row['streak_id']] = [
                 'cat' => $row['cat'],
