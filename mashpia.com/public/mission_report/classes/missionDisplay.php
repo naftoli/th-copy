@@ -214,7 +214,7 @@ abstract class MissionDisplay {
 		//return;
 		?>
 		<div style="clear: both"></div>
-		<div class="pageFooter">
+		<div class="pageFooter print-only">
 			<div class="userName">
 				<?
 				if ($this->lang_id == 1) {
@@ -956,12 +956,12 @@ abstract class MissionDisplay {
 		return $page;
 	} // end printMission
 
-	public function printDuch($activeStreaks = []) {
+	public function printDuch($activeStreaks = [], $forMobile = false) {
 		$user = $this->mission;
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		?>
-		<div class="header" style="width: 7in; margin: 20px auto;">
+		<div class="header print-only" style="width: 7in; margin: 20px auto;">
 			<div class="userImg">
 				<?php if ( isset( $user->mobile_pic ) ) { ?>
 					<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""
@@ -1102,75 +1102,86 @@ abstract class MissionDisplay {
 		$this->createPager( $user, 2, true );
 		?>
 
-		<h3>New Medals</h3>
-		<div class='medals-container'>
-			<?php foreach ($user->medals as $medal) : ?>
-				<?php
-				$date_awarded = jdtojewish($medal['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM);
-				$date_to_show = iconv('WINDOWS-1255', 'UTF-8', $date_awarded);
-				?>
-				<div class='medal'>
-					<div class='medal-icon'>
-						<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$medal['subject_id']]?>' alt='<?=$medal['medal_name']?>' />
-					</div>
-					<div class='medal-name'>
-						<?=$medal['medal_name'] . '<br />' . $medal['subject_name']?><br />
-						<?=$date_to_show?>
-					</div>
-				</div>
-			<?php endforeach; ?>
-		</div>
-
-		<h3>New Promotions</h3>
-		<div class='promotions-container'>
-			<?php foreach ($user->ranks as $rank) : ?>
-				<?php
-				$date_promoted = jdtojewish($rank['date_promoted'], true, CAL_JEWISH_ADD_GERESHAYIM);
-				$date_to_show = iconv('WINDOWS-1255', 'UTF-8', $date_promoted);
-				?>
-				<div class='promotion'>
-					<div class='promotion-icon'>
-						<img src='/mobile/img_new/ranks/<?=$rank['rank_ord'];?>.svg' alt='<?=$rank['rank_name']?>' />
-					</div>
-					<div class='promotion-name'>
-						<?=$rank['rank_name']?><br />
-						<?=$date_to_show?>
-					</div>
-				</div>
-			<?php endforeach; ?> 
-		</div>
-
-		<h3>Hachlata Streaks</h3>
-		<div class='streaks-container'>
-			<?php foreach ($activeStreaks as $streak) : ?>
-				<div class='streak'>
-					<div class='campaign-icon'>
-						<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['task_name'] ?>' />
-					</div>
-					<div class='task'>
-						<div class='task-short-name'><?= $streak['short_name'] ?></div>
-						<div class='task-name'><?= $streak['task_name'] ?></div>
-						<div class='streak-fill'>
-							<progress value='<?=$streak['days_done']?>' max='<?=$streak['days_needed']?>'></progress>
+		<div class="extra-info">
+			<h3>New Medals</h3>
+			<div class='medals-container'>
+				<?php foreach ($user->medals as $medal) : ?>
+					<?php
+					$date_awarded = jdtojewish($medal['date_awarded'], true, CAL_JEWISH_ADD_GERESHAYIM);
+					$date_to_show = iconv('WINDOWS-1255', 'UTF-8', $date_awarded);
+					?>
+					<div class='medal'>
+						<div class='medal-icon'>
+							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$medal['subject_id']]?>' alt='<?=$medal['medal_name']?>' />
 						</div>
-						<div class='streak-text'><?=$streak['days_done']?> Day Streak</div>
-					</div>						
-				</div>
-			<?php endforeach; ?>
-		</div>
+						<div class='medal-name'>
+							<?=$medal['medal_name'] . '<br />' . $medal['subject_name']?><br />
+							<?=$date_to_show?>
+						</div>
+					</div>
+				<?php endforeach; ?>
+			</div>
 
-		<h3>Besuros Tovos</h3>
-		<div class='besuros-tovos'>
-			_________________________________________________________ הנני לבשר טוב
-			____________________________________________________________________
-			____________________________________________________________________
-			____________________________________________________________________
-			____________________________________________________________________
-			____________________________________________________________________
-			____________________________________________________________________
-			____________________________________________________________________
-			____________________________________________________________________
-			____________________________________________________________________
+			<h3>New Promotions</h3>
+			<div class='promotions-container'>
+				<?php foreach ($user->ranks as $rank) : ?>
+					<?php
+					$date_promoted = jdtojewish($rank['date_promoted'], true, CAL_JEWISH_ADD_GERESHAYIM);
+					$date_to_show = iconv('WINDOWS-1255', 'UTF-8', $date_promoted);
+					?>
+					<div class='promotion'>
+						<div class='promotion-icon'>
+							<img src='/mobile/img_new/ranks/<?=$rank['rank_ord'];?>.svg' alt='<?=$rank['rank_name']?>' />
+						</div>
+						<div class='promotion-name'>
+							<?=$rank['rank_name']?><br />
+							<?=$date_to_show?>
+						</div>
+					</div>
+				<?php endforeach; ?> 
+			</div>
+
+			<h3>Hachlata Streaks</h3>
+			<div class='streaks-container'>
+				<?php foreach ($activeStreaks as $streak) : ?>
+					<div class='streak'>
+						<div class='campaign-icon'>
+							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['task_name'] ?>' />
+						</div>
+						<div class='task'>
+							<div class='task-short-name'><?= $streak['short_name'] ?></div>
+							<div class='task-name'><?= $streak['task_name'] ?></div>
+							<div class='streak-fill'>
+								<progress value='<?=$streak['days_done']?>' max='<?=$streak['days_needed']?>'></progress>
+							</div>
+							<div class='streak-text'><?=$streak['days_done']?> Day Streak</div>
+						</div>						
+					</div>
+				<?php endforeach; ?>
+			</div>
+
+			<h3>Besuros Tovos</h3>
+			<div class='besuros-tovos print-only'>
+				_________________________________________________________ הנני לבשר טוב
+				____________________________________________________________________
+				____________________________________________________________________
+				____________________________________________________________________
+				____________________________________________________________________
+				____________________________________________________________________
+				____________________________________________________________________
+				____________________________________________________________________
+				____________________________________________________________________
+				____________________________________________________________________
+			</div>
+			<?php if ($forMobile) : ?>
+				<div class='besuros-tovos no-print'>
+					הנני לבשר טוב<br />
+					Write your Besuros Tovos here:<br />
+					<textarea style="width: 90%; height: 100px; margin-right: 1em;"></textarea>
+				</div>
+				<button class="no-print" onclick="javascript:window.print()">Print</button>
+				<button class="no-print" onclick="javascript:emailToOhel(<?=$user->admin_email?>)">Email to the Ohel</button>
+			<?php endif; ?>
 		</div>
 
 		<footer>

@@ -376,42 +376,19 @@ $daySchoolSubjects = setDaySchoolSubjects();
             <div style="margin-bottom: 20px;">
                 <? $alignmentRight = $lang == 2 ? "left" : "right"; // swich right to left for hebrew ?>
                 <? $alignmentLeft  = $lang == 2 ? "right" : "left"; // swich left to right for hebrew ?>
-                <div id="buttons" style="text-align: center;">
-                    <div id="rightButtons" style="float: <?=$alignmentRight?>; text-align:<?=$alignmentRight?>;">
-                        <?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
-                      
-						
-						<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?= $desktop ? "display: none" : ""?>" />
-                       
-						<?php if ( (!isset($_COOKIE['lang']) || $_COOKIE['lang'] != 'he') && isset($_COOKIE['admin']) ) { ?>
-						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>">
-                            <!--<input type="button" class="btn btn-danger btn-sm i18n"  data-key="PrintMissions" value="Print Missions" />-->
-                       
-							<button type="button" data-key="PrintMissions" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;<?//= $day_school ? "display: none;" : ""?>">
-								Print Missions
-							</button>
-							
-							</a>
-                        <?php } ?>
-                    </div>
-                    <div id="leftButtons" style="float: <?=$alignmentLeft?>; text-align:<?=$alignmentLeft?>;">
-                        <a id="goalsLink" href="" style="float: <?=$alignmentLeft?>">
-                            <!-- <input type="button" class="btn btn-danger btn-sm i18n" data-key="Personalize" value="Personalize" /> -->
-
-							<button type="button" data-key="Personalize" class="btn btn-danger btn-sm i18n"  style="margin: 0 5px;">
-								Personalize
-							</button>
-
-
-                        </a>
-                    </div>
-                    <button type="button" data-key="Help" class="btn btn-danger btn-sm i18n" data-toggle="modal" data-target="#myModal"
-                            style="margin: 0 5px; <?= $desktop ? 'float: right;' : ''?>">
-                        Help
-                    </button>
+                <div id="buttons" style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+					<?php require_once dirname(__FILE__) . '/reg/ajax/encrypt.php';?>
+					<input type="button" class="showProgress btn btn-danger btn-sm" value="Weekly View" style="<?= $desktop ? "display: none" : ""?>" />
+					<?php if ( (!isset($_COOKIE['lang']) || $_COOKIE['lang'] != 'he') && isset($_COOKIE['admin']) ) { ?>
+						<a id="printLink" href="/mission_report/newParentPrint.php?bypass=1&admin=<?=encrypt_decrypt('decrypt', $_COOKIE['admin'])?>" target="_blank" style="<?=$desktop ? "" : "display: none"?>"
+							class="btn btn-danger btn-sm" type="button">Print Missions
+						</a>
+					<?php } ?>
+					<a type="button" class="btn btn-danger btn-sm" id="goalsLink">Personalize</a>
+					<a type="button" class="btn btn-danger btn-sm" href="/mobile/duch/?id=<?=$user_id?>">Duch</a>
+					<a type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Help</a>
                 </div>
                 <? /********************** DATE DROPDOWN. TODO: REMOVE AND MOVE TO SLIDING BAR ON TOP **********************/ ?>
-                
                 <div style="clear:both"></div>
             </div>
 
