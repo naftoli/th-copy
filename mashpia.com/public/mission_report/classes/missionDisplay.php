@@ -1161,7 +1161,7 @@ abstract class MissionDisplay {
 			</div>
 
 			<h3>Besuros Tovos</h3>
-			<div class='besuros-tovos print-only'>
+			<div class='besuros-tovos <?php if ($forMobile) echo 'print-only'; ?>'>
 				_________________________________________________________ הנני לבשר טוב
 				____________________________________________________________________
 				____________________________________________________________________
