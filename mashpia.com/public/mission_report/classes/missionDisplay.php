@@ -1161,7 +1161,18 @@ abstract class MissionDisplay {
 			</div>
 
 			<h3>Besuros Tovos</h3>
-			<div class='besuros-tovos <?php if ($forMobile) echo 'print-only'; ?>'>
+			<?php if ($forMobile) : ?>
+				<div class='besuros-tovos'>
+					הנני לבשר טוב<br />
+					Write your Besuros Tovos here:<br />
+					<textarea id="besuros_tovos" style="width: 90%; height: 100px; margin-right: 1em; line-height: initial;"></textarea>
+				</div>
+			<?php else : ?>
+			<div class='besuros-tovos'>
+				<?php if (isset($besuros_tovos) && $besuros_tovos) : ?>
+					הנני לבשר טוב<br />
+					<?php echo $besuros_tovos; ?>
+				<?php else : ?>
 				_________________________________________________________ הנני לבשר טוב
 				____________________________________________________________________
 				____________________________________________________________________
@@ -1172,15 +1183,8 @@ abstract class MissionDisplay {
 				____________________________________________________________________
 				____________________________________________________________________
 				____________________________________________________________________
+				<?php endif; ?>
 			</div>
-			<?php if ($forMobile) : ?>
-				<div class='besuros-tovos no-print'>
-					הנני לבשר טוב<br />
-					Write your Besuros Tovos here:<br />
-					<textarea style="width: 90%; height: 100px; margin-right: 1em;"></textarea>
-				</div>
-				<button class="no-print" onclick="javascript:window.print()">Print</button>
-				<button class="no-print" onclick="javascript:emailToOhel(<?=$user->admin_email?>)">Email to the Ohel</button>
 			<?php endif; ?>
 		</div>
 

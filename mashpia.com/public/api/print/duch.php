@@ -1,21 +1,23 @@
 <?php
 ini_set('display_errors',1);
-require_once( '../header/header.php' ); // load header
+error_reporting(E_ALL);
 
+require_once( '../header/header.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/DSMission.php' );
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.streaks.php';
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.accomplished.php' );
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.accomplished.php' ); 
 
 if ( !isset( $_POST['school_id'] ) ) {
-    header('Location: /new/missions/print' ); die();
+    header('Location: /new/missions/print'); die();
 }
 
 $school = \School::find([ $_POST['school_id'] ]);
 $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
 $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
+if (!is_array($user_ids)) $user_ids = [ $user_ids ];
 
 // $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
@@ -24,6 +26,8 @@ $end = $_POST['end'];
 $date_range = $_POST['date_range'];
 $selectedMonth = $_POST['selectedMonth'];
 
+$besuros_tovos = $_POST['besuros_tovos'] ?? '';
+
 if ( $selectedMonth ) {
     // selected month - convert the dates to unix timestamps
     $dates = explode( ' - ', $selectedMonth );
@@ -31,8 +35,8 @@ if ( $selectedMonth ) {
     $end = unixtojd(strtotime($dates[1]));
 } else if ( $start && $end ) {
     // convert the dates to unix timestamps
-    $start = unixtojd(strtotime($start));
-    $end = unixtojd(strtotime($end));
+    if (! is_numeric($start)) $start = unixtojd(strtotime($start));
+    if (! is_numeric($end)) $end = unixtojd(strtotime($end));
 } else {
     // date range
     $end = unixtojd();

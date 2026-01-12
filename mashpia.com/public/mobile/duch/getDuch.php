@@ -1,6 +1,6 @@
 <?php
-ini_set('display_errors',1);
-error_reporting(E_ALL);
+// ini_set('display_errors',1);
+// error_reporting(E_ALL);
 
 // require_once( $_SERVER['DOCUMENT_ROOT'] . '/header.php' ); // load header
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
@@ -32,7 +32,6 @@ foreach ( $missions as $mission ) {
 // * Convert the dates for the legacy system
 $dates_id = 1;
 ?>
-<link rel="stylesheet" href="/mobile/mission_report/newStyle.css?v=2.3" type="text/css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&family=Heebo:wght@100..900&display=swap" rel="stylesheet">
@@ -44,11 +43,6 @@ $dates_id = 1;
         width: auto;
         margin: auto;
         page-break-after: always;
-    }
-    @media print {
-        .userDuch {
-            height: 11in;
-        }
     }
     .container {
         /* column-count: 3;
@@ -149,6 +143,12 @@ $dates_id = 1;
         padding-bottom: 2px;
     }
 </style>
+<script>
+    var school_id = <?= $user->school_id ?>;
+    var user_id = <?= $user_id ?>;
+    var start = <?= $start ?>;
+    var end = <?= $end ?>;
+</script>
 <?php
     $pages = 0;
     // * Print the missions just like before
