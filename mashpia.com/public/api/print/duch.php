@@ -269,6 +269,10 @@ if ( $dates == 'english' ) $dates_id = 2;
                 let height = container.height();
             });
         });
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            window.print();
+        });
     </script>
 </body>
 </html>
