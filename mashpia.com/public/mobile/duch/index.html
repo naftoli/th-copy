@@ -544,12 +544,57 @@
 
     }); // end on page loaded listener
 
-    function printDuch(email = false) {
-        if (email) {
-            $("#spinner").html('Sending to Ohel...');
-        } else {
-            $("#spinner").html('Printing...');
+    function sendToOhel() {
+        $("#spinner").html('Sending to Ohel...');
+        // create form and submit it
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = '/api/print/duch';
+		// submit to a hidden iframe so the request runs in the background
+		var bgFrame = document.getElementById('bg-submit-frame');
+		if (!bgFrame) {
+			bgFrame = document.createElement('iframe');
+			bgFrame.name = 'bg-submit-frame';
+			bgFrame.id = 'bg-submit-frame';
+			bgFrame.style.width = '0';
+			bgFrame.style.height = '0';
+			bgFrame.style.border = '0';
+			bgFrame.style.position = 'absolute';
+			bgFrame.style.left = '-9999px';
+			document.body.appendChild(bgFrame);
+		}
+		form.target = 'bg-submit-frame';
+        form.enctype = 'application/x-www-form-urlencoded';
+
+        const elements = [
+            { name: 'school_id', value: school_id },
+            { name: 'user_ids', value: user_id },
+            { name: 'start', value: start },
+            { name: 'end', value: end },
+            { name: 'from_mobile', value: 1 }, 
+            { name: 'email', value: 1 }
+        ];
+        const besuros_tovos = document.getElementById('besuros_tovos').value;
+        if (besuros_tovos) {
+            elements.push({ name: 'besuros_tovos', value: besuros_tovos });
         }
+        elements.forEach(element => {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = element.name;
+            input.value = element.value;
+            form.appendChild(input);
+        });
+        document.body.appendChild(form);
+		// clear the spinner when the background request completes
+		bgFrame.onload = function() {
+			$("#spinner").empty();
+		};
+		form.submit();
+    }
+
+    function printDuch() {
+        $("#spinner").html('Printing...');
         // create form and submit it
         const form = document.createElement('form');
         form.method = 'post';
@@ -568,9 +613,6 @@
         if (besuros_tovos) {
             elements.push({ name: 'besuros_tovos', value: besuros_tovos });
         }
-        if (email) {
-            elements.push({ name: 'email', value: 1 });
-        }
         elements.forEach(element => {
             const input = document.createElement('input');
             input.type = 'hidden';
@@ -580,11 +622,7 @@
         });
         document.body.appendChild(form);
         form.submit();
-        $("#spinner").empty();
-    }
-
-    function emailToOhel() {
-        printDuch(true);
+        $("#spinner").empty();        
     }
 </script>
 <script>

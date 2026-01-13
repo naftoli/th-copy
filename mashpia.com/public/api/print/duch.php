@@ -208,8 +208,6 @@
                 alert('Error: ' + error);
             });
         };
-
-        
     </script>
 </body>
 </html>
