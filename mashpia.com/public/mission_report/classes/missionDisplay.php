@@ -963,7 +963,7 @@ abstract class MissionDisplay {
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		?>
-		<div class="header print-only" style="width: 7in; margin: 20px auto;">
+		<div class="header print-only" style="margin: 20px auto;">
 			<div class="userImg">
 				<?php if ( isset( $user->mobile_pic ) ) { ?>
 					<img src="/mobile/reg/<?=$user->mobile_pic?>" width="60" alt=""
