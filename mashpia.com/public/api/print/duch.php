@@ -181,7 +181,9 @@
                     })
                 } else {
                     $("#print-button").show();
-                    window.print();
+                    setTimeout(function() {
+                        window.print();
+                    }, 1000);
                 }
             }).catch(error => {
                 $("#spinner").empty();
