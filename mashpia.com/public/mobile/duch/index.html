@@ -434,12 +434,15 @@
                 width: 1.5in !important;
             }
         }
-        #buttons {
+        #buttons, #print-buttons {
             display: flex;
             gap: 10px;
             justify-content: center;
             margin-top: -30px;
             margin-bottom: 20px;
+        }
+        #print-buttons {
+            padding-top: 1em;
         }
     </style>
 </head>
@@ -453,7 +456,7 @@
 
     <div class="no-print" id="buttons">
         <button class="no-print btn btn-primary btn-sm" onclick="javascript:printDuch()">Print</button>
-        <button class="no-print btn btn-primary btn-sm" onclick="javascript:emailToOhel()">Email to the Ohel</button>
+        <!-- <button class="no-print btn btn-primary btn-sm" onclick="javascript:emailToOhel()">Email to the Ohel</button> -->
     </div>
 
     <div class="page-missions" id="main">
@@ -541,9 +544,12 @@
 
     }); // end on page loaded listener
 
-    function printDuch() {
-        $("#spinner").html('Printing...');
-        
+    function printDuch(email = false) {
+        if (email) {
+            $("#spinner").html('Sending to Ohel...');
+        } else {
+            $("#spinner").html('Printing...');
+        }
         // create form and submit it
         const form = document.createElement('form');
         form.method = 'post';
@@ -556,11 +562,16 @@
             { name: 'user_ids', value: user_id },
             { name: 'start', value: start },
             { name: 'end', value: end },
-            { name: 'from_mobile', value: 1 },
-            { name: 'besuros_tovos', value: document.getElementById('besuros_tovos').value },
+            { name: 'from_mobile', value: 1 }
         ];
+        const besuros_tovos = document.getElementById('besuros_tovos').value;
+        if (besuros_tovos) {
+            elements.push({ name: 'besuros_tovos', value: besuros_tovos });
+        }
+        if (email) {
+            elements.push({ name: 'email', value: 1 });
+        }
         elements.forEach(element => {
-            if (element.value === '') return;
             const input = document.createElement('input');
             input.type = 'hidden';
             input.name = element.name;
@@ -573,47 +584,7 @@
     }
 
     function emailToOhel() {
-        // save file to server and send the file to the email
-        // Save page as PDF and then email to recipient using html2pdf.js
-        $("#spinner").html('Saving and sending... <span class="spinner"></span>');
-
-        // Options for html2pdf
-        const element = document.getElementById("main");
-        // Generate PDF as blob
-        let email = 'ohel@ohelchabad.org';
-        html2pdf().set({
-            margin:       [0.5, 0.5],
-            filename:     'duch.pdf',
-            image:        { type: 'jpeg', quality: 0.98 },
-            html2canvas:  { scale: 2, useCORS: true },
-            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-        }).from(element).outputPdf('blob').then(function(blob) {
-            // Prepare form data
-            const formData = new FormData();
-            formData.append('email', email);
-            formData.append('id', id);
-            formData.append('file', blob, 'duch.pdf');
-
-            // Send to server for emailing
-            $.ajax({
-                url: 'sendDuchEmail.php',
-                method: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $("#spinner").empty();
-                    alert("Duch has been sent to " + email + "!");
-                },
-                error: function() {
-                    $("#spinner").empty();
-                    alert("Error sending Duch. Please try again.");
-                }
-            });
-        }).catch(function(error) {
-            $("#spinner").empty();
-            alert("Failed to save Duch. " + error);
-        });
+        printDuch(true);
     }
 </script>
 <script>

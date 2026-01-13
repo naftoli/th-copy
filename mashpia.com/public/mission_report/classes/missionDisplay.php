@@ -957,6 +957,8 @@ abstract class MissionDisplay {
 	} // end printMission
 
 	public function printDuch($activeStreaks = [], $forMobile = false) {
+		global $besuros_tovos;
+		
 		$user = $this->mission;
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
@@ -1160,18 +1162,22 @@ abstract class MissionDisplay {
 				<?php endforeach; ?>
 			</div>
 
-			<h3>Besuros Tovos</h3>
 			<?php if ($forMobile) : ?>
 				<div class='besuros-tovos'>
 					הנני לבשר טוב<br />
 					Write your Besuros Tovos here:<br />
 					<textarea id="besuros_tovos" style="width: 90%; height: 100px; margin-right: 1em; line-height: initial;"></textarea>
 				</div>
+				<div class="no-print" id="print-buttons">
+					<button class="no-print btn btn-primary btn-sm" onclick="javascript:printDuch()">Print</button>
+					<button class="no-print btn btn-primary btn-sm" onclick="javascript:emailToOhel()">Email to the Ohel</button>
+				</div>
 			<?php else : ?>
+			<h3>Besuros Tovos</h3>
 			<div class='besuros-tovos'>
 				<?php if (isset($besuros_tovos) && $besuros_tovos) : ?>
 					הנני לבשר טוב<br />
-					<?php echo $besuros_tovos; ?>
+					<?= htmlspecialchars($besuros_tovos); ?>
 				<?php else : ?>
 				_________________________________________________________ הנני לבשר טוב
 				____________________________________________________________________
