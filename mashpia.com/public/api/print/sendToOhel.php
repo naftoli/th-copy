@@ -8,17 +8,48 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// send the pdf to ohel
-$mail = new PHPMailer(true);
-try {
-    $mail->setFrom('admin@mashpia.com', 'Mashpia');
-    // $mail->addAddress('ohel@ohelchabad.org');
-    $mail->addAddress('naftoli@tzivoshashem.org');
-    $mail->Subject = 'Duch';
-    $mail->Body = 'Please find the attached Duch PDF';
-    $mail->addAttachment('duch_pdf/duch.pdf');
-    $mail->send();
-    echo json_encode(['success' => true]);
-} catch (Exception $e) {
-    echo json_encode(['success' => false, 'error' => $mail->ErrorInfo]);
+function emailToOhel($fileName) {
+    // send the pdf to ohel
+    $mail = new PHPMailer(true);
+    try {
+        $mail->setFrom('admin@mashpia.com', 'Mashpia');
+        // $mail->addAddress('ohel@ohelchabad.org');
+        $mail->addAddress('naftoli@tzivoshashem.org');
+        $mail->Subject = 'Duch';
+        $mail->Body = 'Please find the attached Duch PDF';
+        $mail->addAttachment($fileName);
+        $mail->send();
+        return false;
+    } catch (Exception $e) {
+        return $mail->ErrorInfo;
+    }
+}
+
+// Check if a file was uploaded successfully
+if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+    $fileTmpPath = $_FILES['file']['tmp_name'];
+    $fileName = basename($_FILES['file']['name']); // Sanitize filename if needed
+    $uploadDir = './duch_pdf/'; // Specify your target directory on the server
+
+    // Ensure the upload directory exists
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    $destPath = $uploadDir . $fileName;
+
+    // Move the file from the temporary location to the desired folder
+    if (move_uploaded_file($fileTmpPath, $destPath)) {
+        // email the file to the Ohel
+        $error = emailToOhel($destPath);
+        if ($error) {
+            echo json_encode(['success' => false, 'error' => $error, 'message' => null]);
+        } else {
+            echo json_encode(['success' => true, 'error' => null, 'message' => 'File has been emailed to the Ohel.']);
+        }
+    } else {
+        echo json_encode(['success' => false, 'error' => 'Failed to move file. Check directory permissions.', 'message' => null]);
+    }
+} else {
+    echo json_encode(['success' => false, 'error' => 'No file uploaded or an error occurred.', 'message' => null]);
 }
