@@ -116,6 +116,19 @@
         h3 {
             font-weight: bold;
         }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+        }
+        @media screen {
+            .no-print {
+                display: block !important;
+            }
+        }
+        btn {
+            padding: 5px 10px;
+        }
     </style>
 </head>
 

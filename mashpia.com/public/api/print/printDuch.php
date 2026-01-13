@@ -117,8 +117,8 @@ foreach ( $objMissions as $obj ) {
     $id = $obj->user_id;
     echo "
     <div align='center'>
-    <button class='no-print btn btn-primary btn-sm' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
-    <button class='no-print btn btn-primary btn-sm' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
+    <button class='no-print btn btn-primary' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
+    <button class='no-print btn btn-primary' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
     </div>";
     echo "<div class='$class' id='user-$id'";
     if ($obj->lang_id == 2) echo " dir='rtl' ";
