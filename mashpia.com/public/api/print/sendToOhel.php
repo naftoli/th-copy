@@ -17,7 +17,7 @@ function emailToOhel($fileName) {
     To Unsubscribe please click <a href='http://mashpia.com/unsubscribe.php'>here</a>.<br /><br />
     Click <a href='http://mashpia.com/privacy.html'>here</a> for our Privacy Policy.<br /><br />
     Thank you,<br />
-    Mashpia Team
+    Tzivos Hashem Team
     </body>
     </html>";
     try {
