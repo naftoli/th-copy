@@ -16,11 +16,6 @@
             margin: 20px auto;
             page-break-after: always;
         }
-        @media print {
-            .userDuch {
-                height: 11in;
-            }
-        }
         .container {
             column-count: 3;
             column-gap: 20px;
