@@ -12,7 +12,7 @@ function emailToOhel($fileName) {
     // send the pdf to ohel
     $mail = new PHPMailer(true);
     try {
-        $mail->isSendmail();
+        // $mail->isSendmail();
         $mail->setFrom('admin@mashpia.com', 'Mashpia');
         // $mail->addAddress('ohel@ohelchabad.org');
         $mail->addAddress('naftoli@tzivoshashem.org');
