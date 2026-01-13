@@ -459,9 +459,8 @@
         <button class="no-print btn btn-primary btn-sm" onclick="javascript:emailToOhel()">Email to the Ohel</button>
     </div>
 
-    <div class="page-missions" id="main">
-	    <div id="spinner"></div>
-    </div>
+    <div id="spinner"></div>
+    <div class="page-missions" id="main"></div>
 </body>
 <script>
     window.jQuery || document.write('<script src="/mobile/js/jquery-1.11.1.min.js"><\/script>'); // load up jquery if it is not already loaded
@@ -593,8 +592,8 @@
     }
 
     function printDuch() {
-        var target = document.getElementById('spinner');
-        new Spinner(opts).spin(target);
+        // var target = document.getElementById('spinner');
+        // new Spinner(opts).spin(target);
         // create form and submit it
         const form = document.createElement('form');
         form.method = 'post';
@@ -622,7 +621,7 @@
         });
         document.body.appendChild(form);
         form.submit();
-        $("#spinner").empty();        
+        // $("#spinner").empty();        
     }
 </script>
 <script>
