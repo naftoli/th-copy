@@ -7,16 +7,6 @@ require_once __DIR__ . '/../../../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
-use Dompdf\Dompdf as Dompdf;
-
-$html = file_get_contents('php://input');
-// save page as pdf and send to ohel
-$pdf = new Dompdf();
-$pdf->loadHtml($html);
-$pdf->setPaper('a4', 'portrait');
-$pdf->render();
-$output = $pdf->output();
-file_put_contents('duch_pdf/duch.pdf', $output);
 
 // send the pdf to ohel
 $mail = new PHPMailer(true);

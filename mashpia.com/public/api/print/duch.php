@@ -122,6 +122,7 @@
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
     <script src="/mobile/js/spin.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         // options for the loading spinner....
         var opts = {
@@ -162,6 +163,18 @@
                 }
                 $('#main').html(html);
                 if (email) {
+                    setTimeout(function() {
+                        const elem = document.getElementById('main');
+                        const opt = {
+                            margin:       1,
+                            filename:     'duch.pdf',
+                            image:        { type: 'jpeg', quality: 0.95 },
+                            html2canvas:  { scale: 2 },
+                            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                        };
+                        html2pdf().set(opt).from(elem).save();
+                    }, 1000);
+                    /*
                     fetch('sendToOhel.php', {
                         method: 'POST',
                         body: html,
@@ -179,6 +192,7 @@
                         $("#spinner").empty();
                         alert('Error: ' + (result.error || JSON.stringify(result)));
                     })
+                    */
                 } else {
                     $("#print-button").show();
                     setTimeout(function() {
@@ -190,6 +204,8 @@
                 alert('Error: ' + error);
             });
         };
+
+        
     </script>
 </body>
 </html>
