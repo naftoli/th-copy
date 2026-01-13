@@ -169,7 +169,7 @@
                             margin:       0.5,
                             filename:     'duch.pdf',
                             image:        { type: 'jpeg', quality: 0.98 },
-                            html2canvas:  { imageTimeout: 0, useCORS: true },
+                            html2canvas:  { imageTimeout: 0 },
                             jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                         };
                         html2pdf().set(opt).from(elem).save();
