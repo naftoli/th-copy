@@ -456,7 +456,7 @@
 
     <div class="no-print" id="buttons">
         <button class="no-print btn btn-primary btn-sm" onclick="javascript:printDuch()">Print</button>
-        <button class="no-print btn btn-primary btn-sm" onclick="javascript:emailToOhel()">Email to the Ohel</button>
+        <button class="no-print btn btn-primary btn-sm email" style="display: none;" onclick="javascript:emailToOhel()">Email to the Ohel</button>
     </div>
 
     <div id="spinner"></div>
@@ -470,6 +470,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" 
     integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" 
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/scripts/js.cookie.js"></script>
 
 <script>
     // options for the loading spinner....
@@ -508,6 +509,10 @@
             }
             // make sure that the user is logged in
             authenticate(id);
+
+            if (Cookies.get('naftoli')) {
+                $('.email').show();
+            }
 
             $.post('/mobile/reg/ajax/getPhoto.php', { user_id: id }, function (success) {
                 let info = $.parseJSON(success);
