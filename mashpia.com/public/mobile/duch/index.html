@@ -545,7 +545,7 @@
     }); // end on page loaded listener
 
     function emailToOhel() {
-        $("#spinner").html('Sending to Ohel...');
+        new Spinner(opts).spin(target);
         // create form and submit it
         const form = document.createElement('form');
         form.method = 'post';
@@ -586,15 +586,12 @@
             form.appendChild(input);
         });
         document.body.appendChild(form);
-		// clear the spinner when the background request completes
-		bgFrame.onload = function() {
-			$("#spinner").empty();
-		};
 		form.submit();
+        $("#spinner").empty();
     }
 
     function printDuch() {
-        $("#spinner").html('Printing...');
+        new Spinner(opts).spin(target);
         // create form and submit it
         const form = document.createElement('form');
         form.method = 'post';
