@@ -11,13 +11,23 @@ use PHPMailer\PHPMailer\Exception;
 function emailToOhel($fileName) {
     // send the pdf to ohel
     $mail = new PHPMailer(true);
+    $msg = "<html>
+    <body>
+    Please find the attached Duch PDF.<br /><br />
+    To Unsubscribe please click <a href='http://mashpia.com/unsubscribe.php'>here</a>.<br /><br />
+    Click <a href='http://mashpia.com/privacy.html'>here</a> for our Privacy Policy.<br /><br />
+    Thank you,<br />
+    Mashpia Team
+    </body>
+    </html>";
     try {
-        // $mail->isSendmail();
-        $mail->setFrom('admin@mashpia.com', 'Mashpia');
+        $mail->setFrom('cth@mashpia.com', 'Chayolei Tzivos Hashem');
         // $mail->addAddress('ohel@ohelchabad.org');
         $mail->addAddress('naftoli@tzivoshashem.org');
+        $mail->addReplyTo('cth@tzivoshashem.org', 'Chayolei Tzivos Hashem');
+        $mail->isHTML(true);
         $mail->Subject = 'Duch';
-        $mail->Body = 'Please find the attached Duch PDF';
+        $mail->Body = $msg;
         $mail->addAttachment($fileName);
         $mail->send();
     } catch (Exception $e) {
