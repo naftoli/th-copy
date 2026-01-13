@@ -17,6 +17,9 @@ function emailToOhel($fileName) {
         $mail->Host = 'smtp.mashpia.com';
         $mail->Port = 465;
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->SMTPAuth = true;
+        $mail->Username = '_mainaccount@mashpia.com';
+        $mail->Password = 'Naftoli@5783!';
         $mail->setFrom('admin@mashpia.com', 'Mashpia');
         // $mail->addAddress('ohel@ohelchabad.org');
         $mail->addAddress('naftoli@tzivoshashem.org');
