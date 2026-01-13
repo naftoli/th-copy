@@ -12,7 +12,14 @@ function emailToOhel($fileName) {
     // send the pdf to ohel
     $mail = new PHPMailer(true);
     try {
-        $mail->isSendmail();
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
+        $mail->isSMTP();
+        $mail->Host = 'smtp.mashpia.com';
+        $mail->Port = 465;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+        $mail->SMTPAuth = true;
+        $mail->Username = '_mainaccount@mashpia.com';
+        $mail->Password = 'Naftoli8770!';
         $mail->setFrom('admin@mashpia.com', 'Mashpia');
         // $mail->addAddress('ohel@ohelchabad.org');
         $mail->addAddress('naftoli@tzivoshashem.org');
