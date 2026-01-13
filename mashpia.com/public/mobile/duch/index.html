@@ -519,8 +519,7 @@
                 $(".personalImg").append(html);
             });
 
-            var target = document.getElementById('spinner');
-            new Spinner(opts).spin(target);
+            new Spinner(opts).spin(document.getElementById('spinner'));
 
             // use regex to determine desktop or mobile
             var desktop = $(window).width() >
@@ -545,8 +544,7 @@
     }); // end on page loaded listener
 
     function emailToOhel() {
-        var target = document.getElementById('spinner');
-        new Spinner(opts).spin(target);
+        new Spinner(opts).spin(document.getElementById('spinner'));
         // create form and submit it
         const form = document.createElement('form');
         form.method = 'post';
