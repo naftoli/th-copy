@@ -148,7 +148,7 @@ if (count($activeStreaks) > 0) {
 <header class="navbar" id="top" role="banner">
     <div class="container">
         <div class="navbar-header">
-        	<h1 class="i18n" data-key="myStreaks">My Streaks</h1>
+        	<h1 class="i18n" data-key="myStreaks">Streak Hachlota</h1>
         </div>
     </div>
 </header>
@@ -157,11 +157,8 @@ if (count($activeStreaks) > 0) {
 <div class="container">
     <div class="content">
         <div class="infobox">
-        You can use this page to setup a streak for a campaign.<br /><br />
-        A streak is a series of days that you have completed a task for.<br /><br />
-        You can setup a streak for a campaign by selecting a campaign and a task.<br /><br />
-        All streaks are for 90 days.<br /><br />
-        Once you have a streak setup, you cannot choose another streak until the current streak is completed (by completing the task for 90 days).<br />
+        Pick a campaign and task.<br /><br />
+        Do it 90 days in a row to give the Rebbe nachas, and unlock your next Streak Hachlota!<br /><br />
         </div>
         <!-- <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button> -->
         <div class='campaign-container'>
