@@ -158,7 +158,7 @@ if (count($activeStreaks) > 0) {
     <div class="content">
         <div class="infobox">
         Pick a campaign and task.<br /><br />
-        Do it 90 days in a row to give the Rebbe nachas, and unlock your next Streak Hachlota!<br /><br />
+        Do it 90 days in a row to give the Rebbe nachas, and unlock your next Streak Hachlota!
         </div>
         <!-- <button id="tasks-accomplished" class="btn btn-default" onclick="javascript: location.href='tasksAccomplished.php?id=<?=$user_id?>'">View Tasks Accomplished</button> -->
         <div class='campaign-container'>
