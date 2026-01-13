@@ -115,7 +115,11 @@ foreach ( $objMissions as $obj ) {
     if (in_array($obj->school_type_id , [4,5])) $class .= ' ds';
 
     $id = $obj->user_id;
-    echo "<div align='center'><button id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button></div>";
+    echo "
+    <div align='center'>
+    <button class='no-print btn btn-primary btn-sm' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
+    <button class='no-print btn btn-primary btn-sm' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
+    </div>";
     echo "<div class='$class' id='user-$id'";
     if ($obj->lang_id == 2) echo " dir='rtl' ";
     echo ">";
