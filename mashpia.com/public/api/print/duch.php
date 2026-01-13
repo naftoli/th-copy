@@ -168,6 +168,7 @@
         
         window.onload = function() {
             const email = <?= isset($_POST['email']) && $_POST['email'] ? 1 : 0 ?>;
+            const fromBC = <?= isset($_POST['from_bc']) && $_POST['from_bc'] ? 1 : 0 ?>;
             fetch('printDuch.php', {
                 method: 'POST',
                 body: JSON.stringify(<?= json_encode($_POST) ?>),
@@ -179,39 +180,12 @@
                 }
                 $('#main').html(html);
                 if (email) {
-                    setTimeout(async function() {
-                        const elem = document.getElementById('main');
-                        const filename = new Date().toISOString().replace(/[-:]/g, '') + '.pdf';
-                        const opt = {
-                            margin:       0.5,
-                            filename:      filename,
-                            image:        { type: 'jpeg', quality: 0.98 },
-                            html2canvas:  { imageTimeout: 0 },
-                            jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-                        };
-                        const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
-                        const formData = new FormData();
-                        formData.append('file', pdfBlob, filename);
-                        fetch('sendToOhel.php', {
-                            method: 'POST',
-                            body: formData,
-                        })
-                        .then(response => response.json())
-                        .then(result => {
-                            $("#spinner").empty();
-                            if (result.success) {
-                                alert('Email sent successfully');
-                            } else {
-                                alert('Error: ' + (result.error || JSON.stringify(result)));
-                            }
-                        })
-                        .catch(result => {
-                            $("#spinner").empty();
-                            alert('Error: ' + (result.error || JSON.stringify(result)));
-                        });
-                    }, 1500);
+                    emailToOhel();
                 } else {
                     $("#print-button").show();
+                    if (fromBC) {
+                        $("#email-button").show();
+                    }
                     setTimeout(function() {
                         window.print();
                     }, 1000);
@@ -221,6 +195,40 @@
                 alert('Error: ' + error);
             });
         };
+
+        function emailToOhel() {
+            setTimeout(async function() {
+                const elem = document.getElementById('main');
+                const filename = new Date().toISOString().replace(/[-:]/g, '') + '.pdf';
+                const opt = {
+                    margin:       0.5,
+                    filename:      filename,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { imageTimeout: 0 },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
+                const formData = new FormData();
+                formData.append('file', pdfBlob, filename);
+                fetch('sendToOhel.php', {
+                    method: 'POST',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(result => {
+                    $("#spinner").empty();
+                    if (result.success) {
+                        alert('Email sent successfully');
+                    } else {
+                        alert('Error: ' + (result.error || JSON.stringify(result)));
+                    }
+                })
+                .catch(result => {
+                    $("#spinner").empty();
+                    alert('Error: ' + (result.error || JSON.stringify(result)));
+                });
+            }, 1500);
+        }
     </script>
 </body>
 </html>
