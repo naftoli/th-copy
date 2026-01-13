@@ -12,10 +12,7 @@ function emailToOhel($fileName) {
     // send the pdf to ohel
     $mail = new PHPMailer(true);
     try {
-        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      //Enable verbose debug output
-        $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = 'smtp.mashpia.com';                     //Set the SMTP server to send through
-        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+        $mail->isSendmail();
         $mail->setFrom('admin@mashpia.com', 'Mashpia');
         // $mail->addAddress('ohel@ohelchabad.org');
         $mail->addAddress('naftoli@tzivoshashem.org');
@@ -23,10 +20,10 @@ function emailToOhel($fileName) {
         $mail->Body = 'Please find the attached Duch PDF';
         $mail->addAttachment($fileName);
         $mail->send();
-        return false;
     } catch (Exception $e) {
         return $mail->ErrorInfo;
     }
+    return 0;
 }
 
 // Check if a file was uploaded successfully
