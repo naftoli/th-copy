@@ -26,7 +26,7 @@ export class MissionsIndexPage extends Component {
         <Route path={`${path}/personalize`} component={ PersonalizePage } />
         <Route path={`${path}/tasks-accomplished`} component={ TasksAccomplished } />
         <Route path={`${path}/streaks`}     component={ Streaks } />
-        <Route page={`${path}/duch`}        component={ DuchPage } />
+        <Route path={`${path}/duch`}        component={ DuchPage } />
         <Route path={`${path}/report`}      component={ Construction } />
 
         { isBC( code ) &&
