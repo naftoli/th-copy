@@ -62,6 +62,9 @@ export class SettingsRow extends Component {
     const schoolGenderProps = { name: 'school_gender', onChange: this.onChange }
     const missionTypeProps = { name: 'pic_mission_type', onChange: this.onNumberChange }
     const storeResetProps = { name: 'store_miles_reset', onChange: this.onChange }
+    const storeResetOptions = this.state.storeResetOptions || [];
+    const isPreset = storeResetOptions.some(r => parseInt(r.jd, 10) === store_reset_jd);
+    const isCustom = Number.isInteger(store_reset_jd) && store_reset_jd > 0 && !isPreset;
 
     return (
       <Row id='SettingsRow'>
@@ -132,7 +135,7 @@ export class SettingsRow extends Component {
           <p className='title'>Store Miles Settings</p>
           <Label>Allow students to spend miles earned from:</Label>
 
-          { this.state.storeResetOptions && this.state.storeResetOptions.map((reset, index) => (
+          { storeResetOptions && storeResetOptions.map((reset, index) => (
             <Fragment key={ reset.jd }>
               <Radio value={ reset.jd }
                 name='store_miles_reset'
@@ -147,7 +150,7 @@ export class SettingsRow extends Component {
           <Radio key={0} id='store_reset' value='0'
             name='store_miles_reset'
             onChange={ this.changeSchoolReset }
-            checked={ store_reset === undefined && store_reset_jd === 0 }>
+            checked={ store_reset_jd === 0 }>
             Always (This includes all miles from previous years)
           </Radio>
           <br />
@@ -155,14 +158,14 @@ export class SettingsRow extends Component {
           <Radio key={ toJulian( moment() ) } value={ toJulian( moment() ) }
             name='store_miles_reset'
             { ...storeResetProps }
-            checked={ store_reset !== undefined && !this.state.checked }
+            checked={ isCustom }
             onChange={ this.enableCustom }>
             Custom Date:
           </Radio>
           <br />
 
           <Date value={ store_reset }
-            disabled = { this.state.disabled }
+            disabled = { !isCustom }
             onChange={ this.onDateChage } />
         </Col>
 
