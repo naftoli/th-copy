@@ -23,6 +23,7 @@ class pesukim_task {
 	public $medium_pic;
 	
 	public $grid_id;
+	public $streak_id;
 	public $points;
 	public $disable;
 	
@@ -41,6 +42,7 @@ class pesukim_task {
 		$this->medium_pic = $row["medium_pic"];
 		$this->grid_id = $row['grid_id'];
 		$this->points = $row['points'];
+		$this->streak_id = $row['streak_id'];
 		$this->disable = false;
 	}
 	
