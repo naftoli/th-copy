@@ -1083,18 +1083,18 @@ abstract class MissionDisplay {
 									<div class='task-name'><?= $task->task_name ?></div>
 								</div>
 							</div>
-							<?php if (isset($activeStreaks[$task->grid_id])) { ?>
+							<?php if (isset($activeStreaks[$task->streak_id])) { ?>
 								<div class='streak-container'>
-									<div class='streak-text'><?=$activeStreaks[$task->grid_id]['days_done']?> Day Streak</div>
+									<div class='streak-text'><?=$activeStreaks[$task->streak_id]['days_done']?> Day Streak</div>
 									<div class='streak-fill'>
-										<progress value='<?=$activeStreaks[$task->grid_id]['days_done']?>' max='<?=$activeStreaks[$task->grid_id]['days_needed']?>'></progress>
+										<progress value='<?=$activeStreaks[$task->streak_id]['days_done']?>' max='<?=$activeStreaks[$task->grid_id]['days_needed']?>'></progress>
 									</div>
 								</div>
 							<?php
 								// update streak details for later use
-								$activeStreaks[$task->grid_id]['subject_id'] = $track->subject_id;
-								$activeStreaks[$task->grid_id]['short_name'] = $task->short_name;
-								$activeStreaks[$task->grid_id]['task_name'] = $task->task_name;
+								$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
+								$activeStreaks[$task->streak_id]['short_name'] = $task->short_name;
+								$activeStreaks[$task->streak_id]['task_name'] = $task->task_name;
 							}
 						}
 					}

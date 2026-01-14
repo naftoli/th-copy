@@ -26,11 +26,12 @@ class Streaks {
 
     private function setStreaks() {
         $streaks = [];
-        $sql = "SELECT st.*, dt.name, dt.cat 
+        $sql = "SELECT st.*, dt.name, dt.cat, dt.streak_duch_cat, dt.streak_duch_name  
                 FROM streak_tasks st 
-                JOIN date_tasks dt ON st.streak_id = dt.grid_id  
-                WHERE user_id = :user_id 
-                GROUP BY user_id";
+                JOIN date_tasks dt USING (streak_id)  
+                WHERE st.user_id = :user_id 
+                AND dt.streak_show = 1 
+                GROUP BY st.streak_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'user_id' => $this->user_id
@@ -41,7 +42,9 @@ class Streaks {
                 'name' => $row['name'], 
                 'num_days' => $row['num_days'], 
                 'days_needed' => $row['days_needed'], 
-                'task_type' => $row['task_type']
+                'task_type' => $row['task_type'], 
+                'duch_cat' => $row['streak_duch_cat'],
+                'duch_name' => $row['streak_duch_name']
             ];
         }
         foreach ($streaks as $streak_id => $streak) {
@@ -136,10 +139,10 @@ class Streaks {
         }
         if ($days_needed < 1) $days_needed = 1;
         $sql = "INSERT INTO streak_tasks (streak_id, user_id, year, num_days, days_needed, task_type) 
-                VALUES (:gridId, :userId, :year, :numDays, :daysNeeded, :taskType)";
+                VALUES (:streakId, :userId, :year, :numDays, :daysNeeded, :taskType)";
         $stmt = $this->db->prepare($sql);
         $res = $stmt->execute([
-            'gridId' => $streak_id,
+            'streakId' => $streak_id,
             'userId' => $this->user_id,
             'year' => $year,
             'numDays' => $num_days, 
