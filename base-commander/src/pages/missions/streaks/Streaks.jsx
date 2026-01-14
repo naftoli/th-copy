@@ -51,7 +51,7 @@ class Streaks extends Component {
       alert('Please select a Soldier and a Task to set up a streak.');
       return;
     }
-    api.get('/missions/createStreak?' + new URLSearchParams({ gridId: taskId, userId: userId }).toString())
+    api.get('/missions/createStreak?' + new URLSearchParams({ streakID: taskId, userId: userId }).toString())
     .then((res) => {
         alert(res);
         // reload the component
@@ -123,9 +123,9 @@ class Streaks extends Component {
         console.log(resp);
         // Normalize to [{value, label}]
         const tasks = Object.keys(resp.tasks).map(function(key){ return { value: key, label: resp.tasks[key] }; });
-        const streaks = resp.streaks ? Object.keys(resp.streaks).map(function(gridId){
-          const s = resp.streaks[gridId] || {};
-          return { gridId: gridId, name: s.name, cat: s.cat, days: s.days };
+        const streaks = resp.streaks ? Object.keys(resp.streaks).map(function(streakId){
+          const s = resp.streaks[streakId] || {};
+          return { streakId: streakId, name: s.name, cat: s.cat, days: s.days };
         }) : [];
         // Alert if any streak is not yet 90 days
         const hasIncomplete = streaks.some(function(s){ return (s.days || 0) < 90; });
@@ -259,7 +259,7 @@ class Streaks extends Component {
             <h5>Active Streak</h5>
             { this.state.streaks.map(function(s, idx){
               return (
-                <div key={String(s.gridId) + '-' + String(idx)} style={{ padding: '8px 0' }}>
+                <div key={String(s.streakId) + '-' + String(idx)} style={{ padding: '8px 0' }}>
                   <div><b>{ s.cat }</b> - { s.name || 'Task' } ({s.days} days)</div>
                   <progress style={{ height: '30px' }} value={ s.days } max={ s.days_needed } />
                 </div>

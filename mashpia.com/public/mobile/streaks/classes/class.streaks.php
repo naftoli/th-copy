@@ -43,8 +43,8 @@ class Streaks {
                 'num_days' => $row['num_days'], 
                 'days_needed' => $row['days_needed'], 
                 'task_type' => $row['task_type'], 
-                'duch_cat' => $row['streak_duch_cat'],
-                'duch_name' => $row['streak_duch_name']
+                'duch_cat' => $row['streak_duch_cat'] ?? $row['cat'],
+                'duch_name' => $row['streak_duch_name'] ?? $row['name']
             ];
         }
         foreach ($streaks as $streak_id => $streak) {

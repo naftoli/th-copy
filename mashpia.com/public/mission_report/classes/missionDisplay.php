@@ -1093,8 +1093,6 @@ abstract class MissionDisplay {
 							<?php
 								// update streak details for later use
 								$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
-								$activeStreaks[$task->streak_id]['short_name'] = $task->short_name;
-								$activeStreaks[$task->streak_id]['task_name'] = $task->task_name;
 							}
 						}
 					}
@@ -1151,8 +1149,8 @@ abstract class MissionDisplay {
 							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['task_name'] ?>' />
 						</div>
 						<div class='task'>
-							<div class='task-short-name'><?= $streak['short_name'] ?></div>
-							<div class='task-name'><?= $streak['task_name'] ?></div>
+							<div class='task-short-name'><?= $streak['duch_cat'] ?></div>
+							<div class='task-name'><?= $streak['duch_name'] ?></div>
 							<div class='streak-fill'>
 								<progress value='<?=$streak['days_done']?>' max='<?=$streak['days_needed']?>'></progress>
 							</div>

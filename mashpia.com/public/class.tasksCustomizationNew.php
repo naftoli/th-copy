@@ -427,7 +427,7 @@ class TasksCustomizationNew {
         if ( $subject_id == 40 ) $orderBy = " order by IFNULL(dt.yd_cat_num, 10000), dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
         
         if ( $this->type == 'user' ) {
-			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id, dt.streak_id "
+			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.streak_id "
 				." FROM date_tasks dt "
                 ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
 				." JOIN user_tracks ut USING (subject_id, level, track_id) "
