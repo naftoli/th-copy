@@ -7,12 +7,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.streaks.
 
 $streakId = intval($_POST['streakId']);
 $userId = intval($_POST['userId']);
-$dates = GlobalSettings::getCurYearDates();
-$start = $dates['start'];
-$end = $dates['end'];
-$numDays = 90;
+$end = unixtojd();
+$start = $end - 90;
 
-$streaks = new Streaks($userId, $start, $end, $numDays);
+$streaks = new Streaks($userId, $start, $end);
 $success = $streaks->setupStreak($streakId);
 $error = $streaks->getError();
 echo json_encode(['success' => $success, 'error' => $error]);
