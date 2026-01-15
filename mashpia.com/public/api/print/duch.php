@@ -66,6 +66,7 @@
         .task-stats {
             font-size: 9px;
             line-height: 1.2;
+            direction: ltr;
         }
         .medal {
             width: 0.75in;
