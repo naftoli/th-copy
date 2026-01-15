@@ -29,7 +29,7 @@ class StreakTasksRouter {
         $tc->setEnd( $end );
         $tc->setType( $user_id, 0, 0 );
         $tc->setLang( $lang );
-        $tasks['tasks'] = $tc->getTasksForStreak( $subject_id );
+        $tasks['tasks'] = $tc->getTasksForStreak( $subject_id, $user_id );
 
         $streaks = new Streaks($user_id, $start, $end);
         $tasks['streaks'] = $streaks->getStreaks();
