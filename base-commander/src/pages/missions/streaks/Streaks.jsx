@@ -54,8 +54,8 @@ class Streaks extends Component {
     api.get('/missions/createStreak?' + new URLSearchParams({ streakId: taskId, userId: userId }).toString())
     .then((res) => {
         alert(res);
-        // reload the component
-        this.componentDidMount();
+        // refresh tasks + active streaks for the currently selected campaign
+        this.loadTasksForSubject();
     })
     .catch((err) => {
         if (err.error && err.error.includes('Duplicate entry')) {
@@ -123,12 +123,21 @@ class Streaks extends Component {
         console.log(resp);
         // Normalize to [{value, label}]
         const tasks = Object.keys(resp.tasks).map(function(key){ return { value: key, label: resp.tasks[key] }; });
-        const streaks = resp.streaks ? Object.keys(resp.streaks).map(function(streakId){
-          const s = resp.streaks[streakId] || {};
-          return { streakId: streakId, name: s.name, cat: s.cat, days: s.days };
+        const streaksById = resp.streaks || {};
+        const streaks = streaksById ? Object.keys(streaksById).map(function(streakId){
+          const s = streaksById[streakId] || {};
+          return {
+            streakId: streakId,
+            name: s.name,
+            cat: s.cat,
+            days_done: s.days_done,
+            days_needed: s.days_needed
+          };
         }) : [];
-        // Alert if any streak is not yet 90 days
-        const hasIncomplete = streaks.some(function(s){ return (s.days || 0) < 90; });
+        // Disable setup if any active streak is still in progress (matches mobile behavior)
+        const hasIncomplete = streaks.some(function(s){
+          return (parseInt(s.days_done, 10) || 0) < (parseInt(s.days_needed, 10) || 0);
+        });
         if (hasIncomplete) {
           alert('This soldier already has an active streak in progress. You cannot choose another streak until the current streak completes 90 days.');
         }
@@ -152,7 +161,9 @@ class Streaks extends Component {
   }
 
   checkStreakDisabled() {
-    const hasIncomplete = (this.state.streaks || []).some(function(s){ return (s.days || 0) < 90; });
+    const hasIncomplete = (this.state.streaks || []).some(function(s){
+      return (parseInt(s.days_done, 10) || 0) < (parseInt(s.days_needed, 10) || 0);
+    });
     return !(this.state.form.user_id && this.state.form.subject_id && this.state.form.task_id) || hasIncomplete;
   }
 
