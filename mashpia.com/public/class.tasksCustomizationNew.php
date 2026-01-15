@@ -448,7 +448,7 @@ class TasksCustomizationNew {
 //            $users = $this->getUsersInGrade($this->id);
 //            if ( empty($users) ) return false;
 //            where ut.user_id in (" . implode(',', $users) . ")
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.k_id, dt.grid_id, dt.streak_id  
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id, dt.streak_id  
                     from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     join user_tracks ut using (subject_id, level, track_id) 
@@ -466,7 +466,7 @@ class TasksCustomizationNew {
 //			 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 //            echo $sql;
         } else {
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.k_id, dt.grid_id, dt.streak_id  
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id, dt.streak_id  
                     from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     where dtm.subject_id = " . $subject_id . " 
@@ -479,7 +479,7 @@ class TasksCustomizationNew {
             if ($mission_type) $sql .= " and dtm.school_type_id in (" . $mission_type . ")";
         }
         $sql .= ' GROUP BY cat, name, level '.$orderBy;
-//        echo $sql; exit;
+        // echo $sql; exit;
 
         $result = mysql_query( $sql );
         if (!$result) {
