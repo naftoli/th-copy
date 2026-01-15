@@ -111,7 +111,7 @@ foreach ( $objMissions as $obj ) {
     // $obj->setDblSided( $double_sided );
 
     $class = 'userDuch';
-    if ($obj->lang_id == 2) $class .= ' he';
+    if (isRTL($obj->lang_id)) $class .= ' he';
     if (in_array($obj->school_type_id , [4,5])) $class .= ' ds';
 
     $id = $obj->user_id;
@@ -121,7 +121,7 @@ foreach ( $objMissions as $obj ) {
     <button class='no-print btn btn-primary' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
     </div>";
     echo "<div class='$class' id='user-$id'";
-    if ($obj->lang_id == 2) echo " dir='rtl' ";
+    if (in_array($obj->lang_id, [2, 4])) echo " dir='rtl' ";
     echo ">";
 
     // get streaks for the user
@@ -133,4 +133,8 @@ foreach ( $objMissions as $obj ) {
     $pages += $obj->printDuch($activeStreaks);
     echo "</div>";
     // echo "<div style='clear: both; page-break-after: always'></div>";
+}
+
+function isRTL($lang_id) {
+    return in_array($lang_id, [2, 4]);
 }

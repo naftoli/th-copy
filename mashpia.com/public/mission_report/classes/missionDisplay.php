@@ -1102,7 +1102,7 @@ abstract class MissionDisplay {
 		$this->createPager( $user, 2, true );
 		?>
 
-		<div class="extra-info">
+		<div class="extra-info" dir="ltr">
 			<h3>New Medals</h3>
 			<div class='medals-container'>
 				<?php foreach ($user->medals as $medal) : ?>
