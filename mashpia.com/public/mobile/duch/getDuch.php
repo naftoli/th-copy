@@ -168,6 +168,9 @@ $dates_id = 1;
         // get streaks for the user
         $streaks = new Streaks($obj->user_id, $start, $end);
         $activeStreaks = $streaks->getStreaks();
+        // echo "<pre>";
+        // print_r($activeStreaks);
+        // echo "</pre>";
 
         $debug = false;
         if (isset($_GET['debug'])) $debug = true;

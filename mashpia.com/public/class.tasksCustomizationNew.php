@@ -427,7 +427,7 @@ class TasksCustomizationNew {
         if ( $subject_id == 40 ) $orderBy = " order by IFNULL(dt.yd_cat_num, 10000), dt.cat_ord_new, dtm.level, dtm.school_type_id, dt.name";
         
         if ( $this->type == 'user' ) {
-			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id, dt.streak_id "
+			$sql = "SELECT distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.streak_show, dt.grid_id, dt.streak_id "
 				." FROM date_tasks dt "
                 ." JOIN date_tasks_missions dtm USING (date_tasks_mission_id) "
 				." JOIN user_tracks ut USING (subject_id, level, track_id) "
@@ -448,7 +448,7 @@ class TasksCustomizationNew {
 //            $users = $this->getUsersInGrade($this->id);
 //            if ( empty($users) ) return false;
 //            where ut.user_id in (" . implode(',', $users) . ")
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id, dt.streak_id  
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.streak_show, dt.grid_id, dt.streak_id  
                     from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     join user_tracks ut using (subject_id, level, track_id) 
@@ -466,7 +466,7 @@ class TasksCustomizationNew {
 //			 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 //            echo $sql;
         } else {
-            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.grid_id, dt.streak_id  
+            $sql = "select distinct dt.cat, dt.name, dt.quantity, dtm.school_type_id, dtm.level, dt.default_on, dt.mandatory_qty, dt.streak_show, dt.grid_id, dt.streak_id  
                     from date_tasks dt 
                     join date_tasks_missions dtm using (date_tasks_mission_id) 
                     where dtm.subject_id = " . $subject_id . " 
@@ -498,7 +498,9 @@ class TasksCustomizationNew {
             if ($forPersonalization) $mandatory[$row['cat']] = $row['mandatory_qty'];
             else $this->mandatory[$row['cat']] = $row['mandatory_qty'] ? true : false;
             if ($forStreak) {
-                $streak_ids[$row['streak_id']] = $row['cat'] . '|' . $row['name'];
+                if (intval($row['streak_show']) == 1) {
+                    $streak_ids[$row['streak_id']] = $row['cat'] . '|' . $row['name'];
+                }
             }
         }
         
@@ -685,7 +687,7 @@ class TasksCustomizationNew {
                 $tasks[$subject] = $info[$subject]['taskInfo'];
                 $streaks[$subject] = $info[$subject]['streak_ids'];
             }
-        } else {
+        } else if ($subject_id > 0) {
             $info[$subject_id] = $this->getTasks( $subject_id, false, false, false, true );
             $tasks[$subject_id] = $info[$subject_id]['taskInfo'];
             $streaks[$subject_id] = $info[$subject_id]['streak_ids'];

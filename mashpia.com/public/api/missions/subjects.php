@@ -17,6 +17,11 @@ class SubjectsRouter {
             $type = 'school';
         } 
 
+        $exceptions = [12, 40, 136];
+        if (isset($_GET['for_streak'])) {
+            $exceptions = [12, 15, 40, 136];
+        }
+
         if ($id > 0) {
             $sql = "SELECT DISTINCT s.subject_id, s.subject_name 
                     FROM users u 
@@ -24,7 +29,7 @@ class SubjectsRouter {
                     JOIN subjects s USING (subject_id)
                     WHERE u.{$type}_id = :id
                       AND ut.enrolled = 1
-                      AND s.subject_id NOT IN (12, 40, 136)
+                      AND s.subject_id NOT IN (" . implode(',', $exceptions) . ")
                     GROUP BY s.subject_id
                     ORDER BY s.subject_name";
             $stmt = $MASHPIA_DB->prepare($sql);

@@ -1146,7 +1146,7 @@ abstract class MissionDisplay {
 				<?php foreach ($activeStreaks as $streak) : ?>
 					<div class='streak'>
 						<div class='campaign-icon'>
-							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['task_name'] ?>' />
+							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']]?>' alt='<?= $streak['duch_cat'] ?>' />
 						</div>
 						<div class='task'>
 							<div class='task-short-name'><?= $streak['duch_cat'] ?></div>

@@ -102,7 +102,7 @@ class Streaks extends Component {
 
   loadSubjectsForUser = async (userId) => {
     try {
-      const list = await api.get('/missions/subjects?user_id=' + String(userId));
+      const list = await api.get('/missions/subjects?user_id=' + String(userId) + '&for_streak=1');
       this.setState(function(prev){
         return { subjects: list || [], form: Object.assign({}, prev.form, { subject_id: '', task_id: '' }) };
       });
