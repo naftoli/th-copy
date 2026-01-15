@@ -260,8 +260,8 @@ class Streaks extends Component {
             { this.state.streaks.map(function(s, idx){
               return (
                 <div key={String(s.streakId) + '-' + String(idx)} style={{ padding: '8px 0' }}>
-                  <div><b>{ s.cat }</b> - { s.name || 'Task' } ({s.days} days)</div>
-                  <progress style={{ height: '30px' }} value={ s.days } max={ s.days_needed } />
+                  <div><b>{ s.cat }</b> - { s.name || 'Task' } ({s.days_done} days)</div>
+                  <progress style={{ height: '30px' }} value={ s.days_done } max={ s.days_needed } />
                 </div>
               );
             }) }
