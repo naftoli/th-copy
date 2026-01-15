@@ -51,7 +51,7 @@ class Streaks extends Component {
       alert('Please select a Soldier and a Task to set up a streak.');
       return;
     }
-    api.get('/missions/createStreak?' + new URLSearchParams({ streakID: taskId, userId: userId }).toString())
+    api.get('/missions/createStreak?' + new URLSearchParams({ streakId: taskId, userId: userId }).toString())
     .then((res) => {
         alert(res);
         // reload the component
