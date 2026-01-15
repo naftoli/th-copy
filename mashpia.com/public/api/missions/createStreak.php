@@ -1,16 +1,14 @@
 <?php
 define( "MASHPIA_AUTH_REQUIRED", true );
 include_once( __DIR__ . "/../header/header.php" );
-require_once __DIR__ . '/../../class.globalSettings.php';
 require_once __DIR__ . '/../../mobile/streaks/classes/class.streaks.php';
 
 class CreateStreakRouter {
     public function index() {
         $streakId = intval($_GET['streakId']);
         $userId = intval($_GET['userId']);
-        $dates = GlobalSettings::getCurYearDates();
-        $start = $dates['start'];
-        $end = $dates['end'];
+        $end = unixtojd();
+        $start = $end - 90;
         $streaks = new Streaks($userId, $start, $end);
         $success = $streaks->setupStreak($streakId);
         if ($success) {
