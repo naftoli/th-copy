@@ -6,13 +6,13 @@ require_once __DIR__ . '/../../mobile/streaks/classes/class.streaks.php';
 
 class CreateStreakRouter {
     public function index() {
-        $gridId = intval($_GET['gridId']);
+        $streakId = intval($_GET['streakId']);
         $userId = intval($_GET['userId']);
         $dates = GlobalSettings::getCurYearDates();
         $start = $dates['start'];
         $end = $dates['end'];
         $streaks = new Streaks($userId, $start, $end);
-        $success = $streaks->setupStreak($gridId);
+        $success = $streaks->setupStreak($streakId);
         if ($success) {
             json_response('Streak set up successfully');
         } else {
