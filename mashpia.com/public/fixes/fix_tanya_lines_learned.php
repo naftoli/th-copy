@@ -29,6 +29,7 @@ $sql = "select dtmm.*, dt.short_name from date_tasks_marks dtmm
         where dt.grid_id in (21001,21002,21003,21004,21005,21006,21007,21008,21013,21014) 
         and dtm.start_date >= 2460846  
         limit $limit, $end";
+// echo $sql; exit;
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $marks[] = $row;
@@ -44,6 +45,7 @@ foreach ($marks as $row) {
     if (in_array($short_name, ['Mishna Testing','מבחן משנה'])) $campaign = $mishnaCampaign;
 
     $campaign_qry = "SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id;
+    echo $campaign_qry . "<br />"; 
     $exists_query = mysql_query($campaign_qry);
     if (mysql_num_rows($exists_query) > 0) {
         $exists_row = mysql_fetch_assoc($exists_query);
@@ -67,9 +69,10 @@ foreach ($marks as $row) {
             ."mission_sheet_amount = " . $mark . ", "
             ."school_id = " . $user_info['school_id'] . ", "
             ."class_id = " . $user_info['class_id'];
-        $qrys[] = $update_sql;
+        $qrys[] = $insert_sql;
     }
 }
+// echo "<pre>"; print_r($qrys); echo "</pre>"; exit;
 foreach ($qrys as $qry) {
     if (mysql_query($qry)) $updated++;
 }
