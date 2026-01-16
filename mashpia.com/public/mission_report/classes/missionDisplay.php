@@ -1034,6 +1034,7 @@ abstract class MissionDisplay {
 			$user->get_ranks($this->start, $this->end, 0, 0);
 			$task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
 			foreach ($tracks as $track) {
+				$track->lang_id= $this->lang_id;
 				$user->get_medals($track->subject_id, $this->start, $this->end, 0);
 				?>
 				<div class='track'>
@@ -1060,11 +1061,10 @@ abstract class MissionDisplay {
 						foreach ( $track->{$task_type} as $task ) { 
 							// total of days to show 
 							$total_days = (int)$this->end - (int)$this->start;
-							if ($task_type != 'daily_tasks') {
-								$total_days = floor($total_days / 7);
-							}
 							if ($task->subject_id == 1) {
 								$total_days = floor($total_days / 28);
+							} else if ($task_type != 'daily_tasks') {
+								$total_days = floor($total_days / 7);
 							}
 							if ($total_days < 1) $total_days = 1;
 							// find out how many times the task has been accomplished
@@ -1073,7 +1073,7 @@ abstract class MissionDisplay {
 							$accomplished = $a->getAccomplished();
 							$accomplished_count = count($accomplished[$task->grid_id]);
 							if ($accomplished_count > $total_days) $accomplished_count = $total_days;
-							$duch_task = new DuchTask($user->user_id, $task);
+							$duch_task = new DuchTask($user->user_id, $task, $this->start, $this->end, $track);
 							if ($duch_task->needsPersonalization()) {
 								$task->task_name = $duch_task->getPersonalizedTask();
 							} 

@@ -36,7 +36,7 @@ class Accomplished {
             $stmt->bindValue(':end_date', $this->end_date, PDO::PARAM_INT);
             $stmt->bindValue(':limit', $this->limit, PDO::PARAM_INT);
             $stmt->execute();
-            // if ($this->user_id == 72463) $stmt->debugDumpParams();
+            // if ($this->user_id == 72463 && $grid_id == 8001) $stmt->debugDumpParams();
             $this->accomplished[$grid_id] = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }

@@ -2,17 +2,25 @@
 class DuchTask {
     private $db;
     public $user_id;
+    public $start;
+    public $end;
     public $streak_id;
     public $task_name;
+    public $grid_id;
     public $date_task_id;
+    public $track_info;
 
-    public function __construct($user_id, $task) {
+    public function __construct($user_id, $task, $start, $end, $track_info) {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
         $this->user_id = $user_id;
+        $this->start = $start;
+        $this->end = $end;
         $this->streak_id = $task->streak_id;
         $this->task_name = $task->streak_duch_name;
+        $this->grid_id = $task->grid_id;
         $this->date_task_id = $task->date_task_id;
+        $this->track_info = $track_info;
     }
 
     public function needsPersonalization() {
@@ -43,10 +51,10 @@ class DuchTask {
         $done = $this->getAmountDone();
         switch ($this->streak_id) {
             case 8001:
-                return "My Kapitalach quota was " . $quota . " and I said " . $done . " Kapitlach";
+                return "My total Kapitalach quota was " . $quota . " kapitelach and I said " . $done . " Kapitlach";
                 break;
             case 8002:
-                return "My Minutes quota was " . $quota . " Minutes and I said " . $done . " Minutes";
+                return "My total Minutes quota was " . $quota . " minutes and I said " . $done . " Minutes";
                 break;
             default:
                 return $this->task_name;
@@ -56,27 +64,53 @@ class DuchTask {
 
     private function getQuota() {
         $stmt = $this->db->prepare("
-            SELECT description FROM date_tasks 
-            WHERE date_task_id = :date_task_id
+            SELECT IFNULL(SUM(quantity), 0) as quantity
+            FROM
+                date_tasks dt
+                JOIN date_tasks_missions dtm USING (date_tasks_mission_id) 
+            WHERE
+                dt.grid_id = :grid_id
+                AND dtm.start_date >= :start
+                AND dtm.end_date <= :end 
+                AND dtm.track_id = :track_id
+                AND dtm.level = :level
+                AND dtm.lang_id = :lang_id
         ");
         $stmt->execute([
-            'date_task_id' => $this->date_task_id
+            'grid_id' => $this->grid_id,
+            'start' => $this->start,
+            'end' => $this->end,
+            'track_id' => $this->track_info->track_id,
+            'level' => $this->track_info->level,
+            'lang_id' => $this->track_info->lang_id
         ]);
         // $stmt->debugDumpParams();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['description'];
+        return $row['quantity'];
     }
 
     private function getAmountDone() {
+        $limit = (int)$this->end - (int)$this->start;
         $stmt = $this->db->prepare("
-            SELECT IFNULL(done_qty, 0) as done_qty from date_tasks_marks 
-            WHERE date_task_id = :date_task_id 
-            AND user_id = :user_id
+            SELECT IFNULL(SUM(done_qty), 0) as done_qty
+            FROM
+                date_tasks_marks dtm
+                    JOIN
+                date_tasks dt USING (date_task_id)
+            WHERE
+                dt.grid_id = :grid_id
+                    AND dtm.user_id = :user_id
+                    AND dtm.mark_date >= :start
+                    AND dtm.mark_date <= :end
+            ORDER BY mark_date DESC
+            LIMIT :limit
         ");
-        $stmt->execute([
-            'date_task_id' => $this->date_task_id,
-            'user_id' => $this->user_id
-        ]);
+        $stmt->bindValue(':grid_id', $this->grid_id, PDO::PARAM_INT);
+        $stmt->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
+        $stmt->bindValue(':start', $this->start, PDO::PARAM_INT);
+        $stmt->bindValue(':end', $this->end, PDO::PARAM_INT);
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
         // $stmt->debugDumpParams();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         return $row['done_qty'];
