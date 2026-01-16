@@ -45,7 +45,7 @@ foreach ($marks as $row) {
     if (in_array($short_name, ['Mishna Testing','מבחן משנה'])) $campaign = $mishnaCampaign;
 
     $campaign_qry = "SELECT mission_sheet_amount AS t FROM lines_learned WHERE campaign_id = " . $campaign . " AND user_id = " . $user_id;
-    echo $campaign_qry . "<br />"; 
+    // echo $campaign_qry . "<br />"; 
     $exists_query = mysql_query($campaign_qry);
     if (mysql_num_rows($exists_query) > 0) {
         $exists_row = mysql_fetch_assoc($exists_query);
