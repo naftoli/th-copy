@@ -1073,6 +1073,10 @@ abstract class MissionDisplay {
 							$accomplished = $a->getAccomplished();
 							$accomplished_count = count($accomplished[$task->grid_id]);
 							if ($accomplished_count > $total_days) $accomplished_count = $total_days;
+							$duch_task = new DuchTask($user->user_id, $task);
+							if ($duch_task->needsPersonalization()) {
+								$task->task_name = $duch_task->getPersonalizedTask();
+							} 
 							?>
 							<div class='task-container'>
 								<div class='task-stats'><b><?=$accomplished_count?></b> 

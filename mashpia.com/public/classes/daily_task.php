@@ -28,6 +28,7 @@ class daily_task {
 	
 	public $grid_id;
 	public $streak_id;
+	public $streak_duch_name;
 	
 	function __construct($row, $subject_id, $task_name){
 		$this->subject_id = $subject_id;
@@ -51,6 +52,7 @@ class daily_task {
 		$this->medium_pic = $row["medium_pic"];
 		$this->grid_id = $row['grid_id'];
 		$this->streak_id = $row['streak_id'];
+		$this->streak_duch_name = $row['streak_duch_name'];
 	}
 	
 	function set_dates($start_date, $end_date) {

@@ -26,6 +26,7 @@ class no_label_task {
 	
 	public $grid_id;
 	public $streak_id;
+	public $streak_duch_name;
 	
 	function __construct($row){
 //		$this->subject_id = $row["subject_id"];
@@ -41,6 +42,7 @@ class no_label_task {
 		$this->grid_id = $row['grid_id'];
 		$this->label_ord = $row['label_ord'];
 		$this->streak_id = $row['streak_id'];
+		$this->streak_duch_name = $row['streak_duch_name'];
 	}
 	
 	function set_dates($start_date, $end_date) {

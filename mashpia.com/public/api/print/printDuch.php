@@ -5,7 +5,8 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/DSMission.php' );
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.streaks.php';
-require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.accomplished.php' ); 
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.accomplished.php' );
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/classes/duch_task.php' );
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 if ( !isset( $_POST['school_id'] ) ) {

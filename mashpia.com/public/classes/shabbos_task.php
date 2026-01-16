@@ -21,6 +21,7 @@ class shabbos_task {
 	public $medium_pic;
 	public $grid_id;
 	public $streak_id;
+	public $streak_duch_name;
 	public $points;
 	
 	function __construct($row) {
@@ -40,6 +41,7 @@ class shabbos_task {
 		$this->grid_id = $row["grid_id"];
 		$this->points = $row['points'];
 		$this->streak_id = $row['streak_id'];
+		$this->streak_duch_name = $row['streak_duch_name'];
 	}
 	
 	function set_subject_image_id($subject_image_id) {

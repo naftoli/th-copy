@@ -10,6 +10,7 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/DSMission.php
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.streaks.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.accomplished.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php' );
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/classes/duch_task.php' );
 
 $dates = GlobalSettings::getCurYearDates();
 $start = $dates['start'];
