@@ -1,10 +1,18 @@
-<?
+<?php
 require_once 'class.balPehCampaign.php';
 
 class Tanya extends BalPehCampaign {
 	
-	public function __construct( $campaign ) {
-		parent::__construct( $campaign );
+	public function __construct( $campaign = 0, $type = 'Tanya' ) {
+		if ($campaign > 0) {
+			parent::__construct( $campaign );
+		} else {
+			$sql = "SELECT id FROM line_campaigns WHERE type = '" . $type . "' ORDER BY id DESC LIMIT 1";
+			$result = mysql_query($sql);
+			$row = mysql_fetch_assoc($result);
+			$campaign = $row['id'];
+			parent::__construct( $campaign );
+		}
 	}
 	
 	public function getUsersTotalLearned( array $users ) {

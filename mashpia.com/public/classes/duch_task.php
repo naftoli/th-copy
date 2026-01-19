@@ -1,4 +1,7 @@
 <?php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.balPehCampaign.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.tanya.php';
+
 class DuchTask {
     private $db;
     public $user_id;
@@ -117,7 +120,9 @@ class DuchTask {
     }
 
     private function personalizeTanya() {
-        return "Tanya";
+        $t = new Tanya();
+        $total = $t->getUsersTotalLearned([$this->user_id]);
+        return "I know a total of " . $total . " lines of Tanya Baal Peh";
     }
 
     private function personalizeChidon() {

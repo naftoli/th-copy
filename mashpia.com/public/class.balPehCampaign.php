@@ -1,4 +1,4 @@
-<?
+<?php
 abstract class BalPehCampaign {
 	protected $campaign_id;
 	protected $campaign_type;
@@ -10,7 +10,7 @@ abstract class BalPehCampaign {
 	
 	public function __construct( $id ) {
 		$this->campaign_id = $id;
-		$sql = "select start_date from line_campaigns where id = " . $this->campaign_id;
+		$sql = "select start_date from line_campaigns where id = " . $id;
 		$result = mysql_query( $sql );
 		$row = mysql_fetch_assoc( $result );
 		$this->start_date = $row['start_date'];
