@@ -1056,6 +1056,7 @@ abstract class MissionDisplay {
 						</div>
 					</div>
 					<?php
+					$report_mission = [];
 					foreach ($task_types as $task_type) {
 						$task_type_name = ucwords(implode(' ', explode('_', $task_type)));
 						foreach ( $track->{$task_type} as $task ) { 
@@ -1099,10 +1100,46 @@ abstract class MissionDisplay {
 									// update streak details for later use
 									$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
 								}
+							} else {
+								$report_mission[] = [
+									'subject_id' => $track->subject_id,
+									'subject_name' => $track->subject_name,
+									'logo' => $this->campaignLogos[$track->subject_id],
+									'task_type_name' => $task_type_name,
+									'accomplished_count' => $accomplished_count,
+									'total_days' => $total_days,
+									'task_info' => $task
+								];
 							}
 						}
 					}
 				echo "</div>";
+			}
+			if (count($report_mission)) {
+				foreach ($report_mission as $mission) {
+echo <<<HTML
+<div class='track'>
+	<div class='campaign-container'>
+		<div class='campaign-icon'>
+			<img src="/mission_report/campaignLogos/$mission->subject_id" width='50' height='52' alt="$mission->subject_name" />
+		</div>
+		<div class='campaign-items'>
+			<div class='campaign-name'>{$mission['subject_name']}</div>
+		</div>
+	</div>
+	<div class='task-container'>
+		<div class='task-stats'><b>{$mission['accomplished_count']}</b> 
+		/ <b>{$mission['total_days']}</b> 
+		{$mission['task_type_name']}
+		</div>
+		<div class='task'>
+			<div class='task-short-name'>{$mission['task_info']['short_name']}</div>
+			<div class='task-name'>{$mission['task_info']['task_name']}</div>
+		</div>
+	</div>
+</div>
+HTML;
+				}
 			}
 		echo "</div>";
 		$this->createPager( $user, 2, true );
