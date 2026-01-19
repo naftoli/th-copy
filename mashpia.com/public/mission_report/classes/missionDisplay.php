@@ -1101,79 +1101,46 @@ abstract class MissionDisplay {
 									$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
 								}
 							} else {
-								$report_mission[] = [
-									'subject_id' => $track->subject_id,
-									'subject_name' => $track->subject_name,
-									'logo' => $this->campaignLogos[$track->subject_id],
-									'task_type_name' => $task_type_name,
+								$report_mission = [
+									'track' => $track,
+									'task' => $task,
 									'accomplished_count' => $accomplished_count,
 									'total_days' => $total_days,
-									'task_info' => $task
+									'task_type_name' => $task_type_name,
 								];
 							}
 						}
 					}
 				echo "</div>";
 			}
-			/*
-			if (! empty($report_mission)) {
-				foreach ($report_mission as $mission) {
-					// Make sure $mission is treated as an array
-					$subject_id = isset($mission['subject_id']) ? $mission['subject_id'] : '';
-					$subject_name = isset($mission['subject_name']) ? $mission['subject_name'] : '';
-					$accomplished_count = isset($mission['accomplished_count']) ? $mission['accomplished_count'] : '';
-					$total_days = isset($mission['total_days']) ? $mission['total_days'] : '';
-					$task_type_name = isset($mission['task_type_name']) ? $mission['task_type_name'] : '';
-					$task_info = isset($mission['task_info']) ? $mission['task_info'] : [];
-					$short_name = isset($task_info['short_name']) ? $task_info['short_name'] : '';
-					$task_name = isset($task_info['task_name']) ? $task_info['task_name'] : '';
-					$streak_id = isset($task_info['streak_id']) ? $task_info['streak_id'] : null;
-					$grid_id = isset($task_info['grid_id']) ? $task_info['grid_id'] : null;
-
-					$logo = '';
-					if (isset($this->campaignLogos[$subject_id])) {
-						$logo = $this->campaignLogos[$subject_id];
-					}
-					?>
-					<div class='track'>
-						<div class='campaign-container'>
-							<div class='campaign-icon'>
-								<img src="/mission_report/campaignLogos/<?=$logo?>" width='50' height='52' alt="<?=$subject_name?>" />
-							</div>
-							<div class='campaign-items'>
-								<div class='campaign-name'><?=$subject_name?></div>
-							</div>
+			
+			if ($report_mission) {
+				$track = $report_mission['track'];
+				$task = $report_mission['task'];
+				$accomplished_count = $report_mission['accomplished_count'];
+				$total_days = $report_mission['total_days'];
+				$task_type_name = $report_mission['task_type_name'];
+				?>
+				<div class='track'>
+					<div class='campaign-container'>
+						<div class='campaign-icon'>
+							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$track->subject_id]?>' width='50' height='52' alt='<?= $track->subject_name ?>' />
 						</div>
-						<div class='task-container'>
-							<div class='task-stats'><b><?=$accomplished_count?></b> 
-								/ <b><?=$total_days?></b> 
-								<?=$task_type_name?>
-							</div>
-							<div class='task'>
-								<div class='task-short-name'><?=$short_name?></div>
-								<div class='task-name'><?=$task_name?></div>
-							</div>
+						<div class='campaign-items'>
+							<div class='campaign-name'><?= $track->subject_name ?></div>
 						</div>
-					
-						<?php
-						if ($streak_id && isset($activeStreaks[$streak_id])) {
-							$days_done = isset($activeStreaks[$streak_id]['days_done']) ? $activeStreaks[$streak_id]['days_done'] : 0;
-							$days_needed = isset($activeStreaks[$grid_id]['days_needed']) ? $activeStreaks[$grid_id]['days_needed'] : 0;
-							?>
-							<div class='streak-container'>
-								<div class='streak-text'><?=$days_done?> Day Streak</div>
-								<div class='streak-fill'>
-									<progress value="<?=$days_done?>" max="<?=$days_needed?>"></progress>
-								</div>
-							</div>
-							<?php
-							// update streak details for later use
-							$activeStreaks[$streak_id]['subject_id'] = $subject_id;
-						}
-					echo "</div>";
-				}
+					</div>
+					<div class='task-container'>
+						<div class='task-stats'><b><?=$accomplished_count?></b> 
+						 / <b><?=$total_days?></b> 
+						<?=$task_type_name?></div>
+						<div class='task'>
+							<div class='task-short-name'><?= $task->short_name ?></div>
+							<div class='task-name'><?= $task->task_name ?></div>
+						</div>
+					</div>
+				<?php	
 			}
-			*/
 		echo "</div>";
 		$this->createPager( $user, 2, true );
 		?>
