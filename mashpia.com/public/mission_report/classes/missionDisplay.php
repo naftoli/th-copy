@@ -1134,40 +1134,39 @@ abstract class MissionDisplay {
 					if (isset($this->campaignLogos[$subject_id])) {
 						$logo = $this->campaignLogos[$subject_id];
 					}
-
-					echo <<<HTML
-<div class='track'>
-	<div class='campaign-container'>
-		<div class='campaign-icon'>
-			<img src="/mission_report/campaignLogos/$logo" width='50' height='52' alt="$subject_name" />
-		</div>
-		<div class='campaign-items'>
-			<div class='campaign-name'>{$subject_name}</div>
-		</div>
-	</div>
-	<div class='task-container'>
-		<div class='task-stats'><b>{$accomplished_count}</b> 
-			/ <b>{$total_days}</b> 
-			{$task_type_name}
-		</div>
-		<div class='task'>
-			<div class='task-short-name'>{$short_name}</div>
-			<div class='task-name'>{$task_name}</div>
-		</div>
-	</div>
-</div>
-HTML;
+					?>
+					<div class='track'>
+						<div class='campaign-container'>
+							<div class='campaign-icon'>
+								<img src="/mission_report/campaignLogos/<?=$logo?>" width='50' height='52' alt="<?=$subject_name?>" />
+							</div>
+							<div class='campaign-items'>
+								<div class='campaign-name'><?=$subject_name?></div>
+							</div>
+						</div>
+						<div class='task-container'>
+							<div class='task-stats'><b><?=$accomplished_count?></b> 
+								/ <b><?=$total_days?></b> 
+								<?=$task_type_name?>
+							</div>
+							<div class='task'>
+								<div class='task-short-name'><?=$short_name?></div>
+								<div class='task-name'><?=$task_name?></div>
+							</div>
+						</div>
+					</div>
+					<?php
 					if ($streak_id && isset($activeStreaks[$streak_id])) {
 						$days_done = isset($activeStreaks[$streak_id]['days_done']) ? $activeStreaks[$streak_id]['days_done'] : 0;
 						$days_needed = isset($activeStreaks[$grid_id]['days_needed']) ? $activeStreaks[$grid_id]['days_needed'] : 0;
-						echo <<<HTML
-<div class='streak-container'>
-	<div class='streak-text'>{$days_done} Day Streak</div>
-	<div class='streak-fill'>
-		<progress value="$days_done" max="$days_needed"></progress>
-	</div>
-</div>
-HTML;
+						?>
+						<div class='streak-container'>
+							<div class='streak-text'><?=$days_done?> Day Streak</div>
+							<div class='streak-fill'>
+								<progress value="<?=$days_done?>" max="<?=$days_needed?>"></progress>
+							</div>
+						</div>
+						<?php
 						// update streak details for later use
 						$activeStreaks[$streak_id]['subject_id'] = $subject_id;
 					}
