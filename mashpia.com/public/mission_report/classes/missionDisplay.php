@@ -1121,13 +1121,12 @@ abstract class MissionDisplay {
 										</div>
 									</div>
 								<?php
-							}
-							$report_mission = false;
-							// update streak details for later use
-							$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
+								}
+								// update streak details for later use
+								$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
+							// }
 						}
 					}
-				}
 				echo "</div>";
 			}
 		echo "</div>";
