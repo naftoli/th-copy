@@ -1139,6 +1139,18 @@ echo <<<HTML
 	</div>
 </div>
 HTML;
+					if (isset($activeStreaks[$mission['task_info']['streak_id']])) {
+						$days_done = $activeStreaks[$mission['task_info']['streak_id']]['days_done'];
+						$days_needed = $activeStreaks[$mission['task_info']['grid_id']]['days_needed'];
+						echo <<<HTML
+<div class='streak-container'>
+	<div class='streak-text'>{$days_done} Day Streak</div>
+	<div class='streak-fill'>
+		<progress value="$days_done" max="$days_needed"></progress>
+	</div>
+</div>
+HTML;
+					}
 				}
 			}
 		echo "</div>";
