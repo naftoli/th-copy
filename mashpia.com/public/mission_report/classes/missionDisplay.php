@@ -1098,25 +1098,25 @@ abstract class MissionDisplay {
 										</div>
 									</div>
 								<?php
-							} else {
-							echo <<<HTML
-<div class='campaign-container'>
-	<div class='campaign-icon'>
-		<img src="/mission_report/campaignLogos/{$this->campaignLogos[$track->subject_id]}" width='50' height='52' alt="$track->subject_name" />
-	</div>
-	<div class='campaign-items'>
-		<div class='campaign-name'>$track->subject_name</div>
-	</div>
-</div>
-<div class='task-container'>
-	<div class='task-stats'><b>$accomplished_count</b> / <b>$total_days</b>
-	$task_type_name</div>
-	<div class='task'>
-		<div class='task-short-name'>$task->short_name</div>
-		<div class='task-name'>$task->task_name</div>
-	</div>
-</div>
-HTML;
+// 							} else {
+// 							echo <<<HTML
+// <div class='campaign-container'>
+// 	<div class='campaign-icon'>
+// 		<img src="/mission_report/campaignLogos/{$this->campaignLogos[$track->subject_id]}" width='50' height='52' alt="$track->subject_name" />
+// 	</div>
+// 	<div class='campaign-items'>
+// 		<div class='campaign-name'>$track->subject_name</div>
+// 	</div>
+// </div>
+// <div class='task-container'>
+// 	<div class='task-stats'><b>$accomplished_count</b> / <b>$total_days</b>
+// 	$task_type_name</div>
+// 	<div class='task'>
+// 		<div class='task-short-name'>$task->short_name</div>
+// 		<div class='task-name'>$task->task_name</div>
+// 	</div>
+// </div>
+// HTML;
 							}
 							// update streak details for later use
 							$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
