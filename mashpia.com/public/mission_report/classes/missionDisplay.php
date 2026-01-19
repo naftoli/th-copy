@@ -1080,7 +1080,7 @@ abstract class MissionDisplay {
 							// report missions should be a separate entry
 							$report_mission_html = '';
 							if (trim($task->short_name) == 'Report Missions') {
-								$report_mission_html = `
+								$report_mission_html = <<<HTML
 								<div class='campaign-container'>
 									<div class='campaign-icon'>
 										<img src='/mission_report/campaignLogos/{$this->campaignLogos[$track->subject_id]}' width='50' height='52' alt='{$track->subject_name}' />
@@ -1097,7 +1097,7 @@ abstract class MissionDisplay {
 										<div class='task-name'>{$task->task_name}</div>
 									</div>
 								</div>
-								`;
+HTML;
 							}
 							?>
 							<div class='task-container'>
