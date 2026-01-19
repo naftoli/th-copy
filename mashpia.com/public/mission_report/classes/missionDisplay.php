@@ -1154,22 +1154,23 @@ abstract class MissionDisplay {
 								<div class='task-name'><?=$task_name?></div>
 							</div>
 						</div>
-					</div>
-					<?php
-					if ($streak_id && isset($activeStreaks[$streak_id])) {
-						$days_done = isset($activeStreaks[$streak_id]['days_done']) ? $activeStreaks[$streak_id]['days_done'] : 0;
-						$days_needed = isset($activeStreaks[$grid_id]['days_needed']) ? $activeStreaks[$grid_id]['days_needed'] : 0;
-						?>
-						<div class='streak-container'>
-							<div class='streak-text'><?=$days_done?> Day Streak</div>
-							<div class='streak-fill'>
-								<progress value="<?=$days_done?>" max="<?=$days_needed?>"></progress>
-							</div>
-						</div>
+					
 						<?php
-						// update streak details for later use
-						$activeStreaks[$streak_id]['subject_id'] = $subject_id;
-					}
+						if ($streak_id && isset($activeStreaks[$streak_id])) {
+							$days_done = isset($activeStreaks[$streak_id]['days_done']) ? $activeStreaks[$streak_id]['days_done'] : 0;
+							$days_needed = isset($activeStreaks[$grid_id]['days_needed']) ? $activeStreaks[$grid_id]['days_needed'] : 0;
+							?>
+							<div class='streak-container'>
+								<div class='streak-text'><?=$days_done?> Day Streak</div>
+								<div class='streak-fill'>
+									<progress value="<?=$days_done?>" max="<?=$days_needed?>"></progress>
+								</div>
+							</div>
+							<?php
+							// update streak details for later use
+							$activeStreaks[$streak_id]['subject_id'] = $subject_id;
+						}
+					echo "</div>";
 				}
 			}
 		echo "</div>";
