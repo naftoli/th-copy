@@ -1102,7 +1102,7 @@ abstract class MissionDisplay {
 // 								</div>
 // HTML;
 // 							} else {
-							if (! $report_mission) {
+							// if (! $report_mission) {
 								?>
 								<div class='task-container'>
 									<div class='task-stats'><b><?=$accomplished_count?></b> 
@@ -1121,7 +1121,7 @@ abstract class MissionDisplay {
 										</div>
 									</div>
 								<?php
-							}
+							// }
 							$report_mission = false;
 							// update streak details for later use
 							$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
