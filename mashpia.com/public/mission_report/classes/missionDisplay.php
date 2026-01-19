@@ -1056,6 +1056,7 @@ abstract class MissionDisplay {
 						</div>
 					</div>
 					<?php
+					$report_mission = false;
 					foreach ($task_types as $task_type) {
 						$task_type_name = ucwords(implode(' ', explode('_', $task_type)));
 						foreach ( $track->{$task_type} as $task ) { 
@@ -1077,8 +1078,10 @@ abstract class MissionDisplay {
 							if ($duch_task->needsPersonalization()) {
 								$task->task_name = $duch_task->getPersonalizedTask();
 							} 
+							if ($task->grid_id == 13012) {
+								$report_mission = true;
+							}
 							// report missions should be a separate entry
-							$report_mission_html = '';
 							// if ($task->grid_id == 13012) {
 // 								$report_mission_html = <<<HTML
 // 								<div class='campaign-container'>
@@ -1099,6 +1102,7 @@ abstract class MissionDisplay {
 // 								</div>
 // HTML;
 // 							} else {
+							if (! $report_mission) {
 								?>
 								<div class='task-container'>
 									<div class='task-stats'><b><?=$accomplished_count?></b> 
@@ -1117,8 +1121,8 @@ abstract class MissionDisplay {
 										</div>
 									</div>
 								<?php
-							// }
-							echo $report_mission_html;
+							}
+							$report_mission = false;
 							// update streak details for later use
 							$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
 						}
