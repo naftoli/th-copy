@@ -1150,6 +1150,8 @@ HTML;
 	</div>
 </div>
 HTML;
+						// update streak details for later use
+						$activeStreaks[$activeStreaks['task_info']['streak_id']]['subject_id'] = $mission['subject_id'];
 					}
 				}
 			}
