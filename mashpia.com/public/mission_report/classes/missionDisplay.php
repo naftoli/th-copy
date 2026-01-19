@@ -1115,7 +1115,7 @@ abstract class MissionDisplay {
 					}
 				echo "</div>";
 			}
-
+			/*
 			if (! empty($report_mission)) {
 				foreach ($report_mission as $mission) {
 					// Make sure $mission is treated as an array
@@ -1173,6 +1173,7 @@ abstract class MissionDisplay {
 					echo "</div>";
 				}
 			}
+			*/
 		echo "</div>";
 		$this->createPager( $user, 2, true );
 		?>
