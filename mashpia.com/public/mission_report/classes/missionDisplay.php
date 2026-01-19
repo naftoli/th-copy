@@ -1079,8 +1079,7 @@ abstract class MissionDisplay {
 							} 
 							// report missions should be a separate entry
 							$report_mission_html = '';
-							if ($task->grid_id == 13012) {
-								continue;
+							// if ($task->grid_id == 13012) {
 // 								$report_mission_html = <<<HTML
 // 								<div class='campaign-container'>
 // 									<div class='campaign-icon'>
@@ -1099,7 +1098,7 @@ abstract class MissionDisplay {
 // 									</div>
 // 								</div>
 // HTML;
-							} else {
+// 							} else {
 								?>
 								<div class='task-container'>
 									<div class='task-stats'><b><?=$accomplished_count?></b> 
@@ -1118,7 +1117,7 @@ abstract class MissionDisplay {
 										</div>
 									</div>
 								<?php
-							}
+							// }
 							echo $report_mission_html;
 							// update streak details for later use
 							$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
