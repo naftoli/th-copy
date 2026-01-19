@@ -1127,7 +1127,7 @@ abstract class MissionDisplay {
 							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$track->subject_id]?>' width='50' height='52' alt='<?= $track->subject_name ?>' />
 						</div>
 						<div class='campaign-items'>
-							<div class='campaign-name'><?= $task->short_name ?></div>
+							<div class='campaign-name' style="font-size: 18px;">><?= $task->short_name ?></div>
 						</div>
 					</div>
 					<div class='task-container'>
