@@ -1098,31 +1098,32 @@ abstract class MissionDisplay {
 									</div>
 								</div>
 HTML;
-							}
-							?>
-							<div class='task-container'>
-								<div class='task-stats'><b><?=$accomplished_count?></b> 
-								<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
-								<?=$task_type_name?></div>
-								<div class='task'>
-									<div class='task-short-name'><?= $task->short_name ?></div>
-									<div class='task-name'><?= $task->task_name ?></div>
-								</div>
-							</div>
-							<?php if (isset($activeStreaks[$task->streak_id])) { ?>
-								<div class='streak-container'>
-									<div class='streak-text'><?=$activeStreaks[$task->streak_id]['days_done']?> Day Streak</div>
-									<div class='streak-fill'>
-										<progress value='<?=$activeStreaks[$task->streak_id]['days_done']?>' max='<?=$activeStreaks[$task->grid_id]['days_needed']?>'></progress>
+							} else {
+								?>
+								<div class='task-container'>
+									<div class='task-stats'><b><?=$accomplished_count?></b> 
+									<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
+									<?=$task_type_name?></div>
+									<div class='task'>
+										<div class='task-short-name'><?= $task->short_name ?></div>
+										<div class='task-name'><?= $task->task_name ?></div>
 									</div>
 								</div>
-							<?php
-								echo $report_mission_html;
-								// update streak details for later use
-								$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
+								<?php if (isset($activeStreaks[$task->streak_id])) { ?>
+									<div class='streak-container'>
+										<div class='streak-text'><?=$activeStreaks[$task->streak_id]['days_done']?> Day Streak</div>
+										<div class='streak-fill'>
+											<progress value='<?=$activeStreaks[$task->streak_id]['days_done']?>' max='<?=$activeStreaks[$task->grid_id]['days_needed']?>'></progress>
+										</div>
+									</div>
+								<?php
 							}
+							echo $report_mission_html;
+							// update streak details for later use
+							$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
 						}
 					}
+				}
 				echo "</div>";
 			}
 		echo "</div>";
