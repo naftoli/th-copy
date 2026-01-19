@@ -121,7 +121,7 @@ class DuchTask {
 
     private function personalizeTanya() {
         $t = new Tanya();
-        $total = $t->getUsersTotalLearned([$this->user_id]);
+        $total = $t->getTotalLearnedForDuch($this->user_id);
         return "I know a total of " . $total . " lines of Tanya Baal Peh";
     }
 
