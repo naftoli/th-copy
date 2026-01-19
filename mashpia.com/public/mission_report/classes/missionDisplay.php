@@ -1115,13 +1115,8 @@ abstract class MissionDisplay {
 					}
 				echo "</div>";
 			}
-			// There are several issues why this may not be showing up:
-			// 1. The $report_mission array might be empty.
-			// 2. Bad array/object access, inconsistent usage of $mission as an object and an array.
-			// 3. Wrong campaign logo key.
-			// 4. In the streak section, possibly accessing wrong keys.
 
-			if (!empty($report_mission)) {
+			if (! empty($report_mission)) {
 				foreach ($report_mission as $mission) {
 					// Make sure $mission is treated as an array
 					$subject_id = isset($mission['subject_id']) ? $mission['subject_id'] : '';
@@ -1144,7 +1139,7 @@ abstract class MissionDisplay {
 <div class='track'>
 	<div class='campaign-container'>
 		<div class='campaign-icon'>
-			<img src="/mission_report/campaignLogos/{$logo}" width='50' height='52' alt="{$subject_name}" />
+			<img src="/mission_report/campaignLogos/$logo" width='50' height='52' alt="$subject_name" />
 		</div>
 		<div class='campaign-items'>
 			<div class='campaign-name'>{$subject_name}</div>
@@ -1169,7 +1164,7 @@ HTML;
 <div class='streak-container'>
 	<div class='streak-text'>{$days_done} Day Streak</div>
 	<div class='streak-fill'>
-		<progress value="{$days_done}" max="{$days_needed}"></progress>
+		<progress value="$days_done" max="$days_needed"></progress>
 	</div>
 </div>
 HTML;
