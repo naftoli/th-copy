@@ -1056,7 +1056,6 @@ abstract class MissionDisplay {
 						</div>
 					</div>
 					<?php
-					// $report_mission = false;
 					foreach ($task_types as $task_type) {
 						$task_type_name = ucwords(implode(' ', explode('_', $task_type)));
 						foreach ( $track->{$task_type} as $task ) { 
@@ -1078,53 +1077,27 @@ abstract class MissionDisplay {
 							if ($duch_task->needsPersonalization()) {
 								$task->task_name = $duch_task->getPersonalizedTask();
 							} 
-							// if ($task->grid_id == 13012) {
-							// 	$report_mission = true;
-							// }
-							// report missions should be a separate entry
-							// if ($task->grid_id == 13012) {
-// 								$report_mission_html = <<<HTML
-// 								<div class='campaign-container'>
-// 									<div class='campaign-icon'>
-// 										<img src="/mission_report/campaignLogos/{$this->campaignLogos[$track->subject_id]}" width='50' height='52' alt="$track->subject_name" />
-// 									</div>
-// 									<div class='campaign-items'>
-// 										<div class='campaign-name'>$track->subject_name</div>
-// 									</div>
-// 								</div>
-// 								<div class='task-container'>
-// 									<div class='task-stats'><b>$accomplished_count</b> / <b>$total_days</b>
-// 									$task_type_name</div>
-// 									<div class='task'>
-// 										<div class='task-short-name'>$task->short_name</div>
-// 										<div class='task-name'>$task->task_name</div>
-// 									</div>
-// 								</div>
-// HTML;
-// 							} else {
-							// if (! $report_mission) {
-								?>
-								<div class='task-container'>
-									<div class='task-stats'><b><?=$accomplished_count?></b> 
-									<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
-									<?=$task_type_name?></div>
-									<div class='task'>
-										<div class='task-short-name'><?= $task->short_name ?></div>
-										<div class='task-name'><?= $task->task_name ?></div>
+							?>
+							<div class='task-container'>
+								<div class='task-stats'><b><?=$accomplished_count?></b> 
+								<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
+								<?=$task_type_name?></div>
+								<div class='task'>
+									<div class='task-short-name'><?= $task->short_name ?></div>
+									<div class='task-name'><?= $task->task_name ?></div>
+								</div>
+							</div>
+							<?php if (isset($activeStreaks[$task->streak_id])) { ?>
+								<div class='streak-container'>
+									<div class='streak-text'><?=$activeStreaks[$task->streak_id]['days_done']?> Day Streak</div>
+									<div class='streak-fill'>
+										<progress value='<?=$activeStreaks[$task->streak_id]['days_done']?>' max='<?=$activeStreaks[$task->grid_id]['days_needed']?>'></progress>
 									</div>
 								</div>
-								<?php if (isset($activeStreaks[$task->streak_id])) { ?>
-									<div class='streak-container'>
-										<div class='streak-text'><?=$activeStreaks[$task->streak_id]['days_done']?> Day Streak</div>
-										<div class='streak-fill'>
-											<progress value='<?=$activeStreaks[$task->streak_id]['days_done']?>' max='<?=$activeStreaks[$task->grid_id]['days_needed']?>'></progress>
-										</div>
-									</div>
-								<?php
-								}
+							<?php
 								// update streak details for later use
 								$activeStreaks[$task->streak_id]['subject_id'] = $track->subject_id;
-							// }
+							}
 						}
 					}
 				echo "</div>";
