@@ -1033,6 +1033,7 @@ abstract class MissionDisplay {
 			$tracks = $user->user_tracks;
 			$user->get_ranks($this->start, $this->end, 0, 0);
 			$task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
+			$report_mission = [];
 			foreach ($tracks as $track) {
 				$track->lang_id= $this->lang_id;
 				$user->get_medals($track->subject_id, $this->start, $this->end, 0);
@@ -1056,7 +1057,6 @@ abstract class MissionDisplay {
 						</div>
 					</div>
 					<?php
-					$report_mission = [];
 					foreach ($task_types as $task_type) {
 						$task_type_name = ucwords(implode(' ', explode('_', $task_type)));
 						foreach ( $track->{$task_type} as $task ) { 
