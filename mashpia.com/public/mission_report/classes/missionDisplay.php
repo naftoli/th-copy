@@ -1139,6 +1139,7 @@ abstract class MissionDisplay {
 							<div class='task-name'><?= $task->task_name ?></div>
 						</div>
 					</div>
+				</div>
 				<?php	
 			}
 		echo "</div>";
