@@ -1115,43 +1115,66 @@ abstract class MissionDisplay {
 					}
 				echo "</div>";
 			}
-			if (count($report_mission)) {
+			// There are several issues why this may not be showing up:
+			// 1. The $report_mission array might be empty.
+			// 2. Bad array/object access, inconsistent usage of $mission as an object and an array.
+			// 3. Wrong campaign logo key.
+			// 4. In the streak section, possibly accessing wrong keys.
+
+			if (!empty($report_mission)) {
 				foreach ($report_mission as $mission) {
-echo <<<HTML
+					// Make sure $mission is treated as an array
+					$subject_id = isset($mission['subject_id']) ? $mission['subject_id'] : '';
+					$subject_name = isset($mission['subject_name']) ? $mission['subject_name'] : '';
+					$accomplished_count = isset($mission['accomplished_count']) ? $mission['accomplished_count'] : '';
+					$total_days = isset($mission['total_days']) ? $mission['total_days'] : '';
+					$task_type_name = isset($mission['task_type_name']) ? $mission['task_type_name'] : '';
+					$task_info = isset($mission['task_info']) ? $mission['task_info'] : [];
+					$short_name = isset($task_info['short_name']) ? $task_info['short_name'] : '';
+					$task_name = isset($task_info['task_name']) ? $task_info['task_name'] : '';
+					$streak_id = isset($task_info['streak_id']) ? $task_info['streak_id'] : null;
+					$grid_id = isset($task_info['grid_id']) ? $task_info['grid_id'] : null;
+
+					$logo = '';
+					if (isset($this->campaignLogos[$subject_id])) {
+						$logo = $this->campaignLogos[$subject_id];
+					}
+
+					echo <<<HTML
 <div class='track'>
 	<div class='campaign-container'>
 		<div class='campaign-icon'>
-			<img src="/mission_report/campaignLogos/$mission->subject_id" width='50' height='52' alt="$mission->subject_name" />
+			<img src="/mission_report/campaignLogos/{$logo}" width='50' height='52' alt="{$subject_name}" />
 		</div>
 		<div class='campaign-items'>
-			<div class='campaign-name'>{$mission['subject_name']}</div>
+			<div class='campaign-name'>{$subject_name}</div>
 		</div>
 	</div>
 	<div class='task-container'>
-		<div class='task-stats'><b>{$mission['accomplished_count']}</b> 
-		/ <b>{$mission['total_days']}</b> 
-		{$mission['task_type_name']}
+		<div class='task-stats'><b>{$accomplished_count}</b> 
+			/ <b>{$total_days}</b> 
+			{$task_type_name}
 		</div>
 		<div class='task'>
-			<div class='task-short-name'>{$mission['task_info']['short_name']}</div>
-			<div class='task-name'>{$mission['task_info']['task_name']}</div>
+			<div class='task-short-name'>{$short_name}</div>
+			<div class='task-name'>{$task_name}</div>
 		</div>
 	</div>
 </div>
 HTML;
-					if (isset($activeStreaks[$mission['task_info']['streak_id']])) {
-						$days_done = $activeStreaks[$mission['task_info']['streak_id']]['days_done'];
-						$days_needed = $activeStreaks[$mission['task_info']['grid_id']]['days_needed'];
+					if ($streak_id && isset($activeStreaks[$streak_id])) {
+						$days_done = isset($activeStreaks[$streak_id]['days_done']) ? $activeStreaks[$streak_id]['days_done'] : 0;
+						$days_needed = isset($activeStreaks[$grid_id]['days_needed']) ? $activeStreaks[$grid_id]['days_needed'] : 0;
 						echo <<<HTML
 <div class='streak-container'>
 	<div class='streak-text'>{$days_done} Day Streak</div>
 	<div class='streak-fill'>
-		<progress value="$days_done" max="$days_needed"></progress>
+		<progress value="{$days_done}" max="{$days_needed}"></progress>
 	</div>
 </div>
 HTML;
 						// update streak details for later use
-						$activeStreaks[$activeStreaks['task_info']['streak_id']]['subject_id'] = $mission['subject_id'];
+						$activeStreaks[$streak_id]['subject_id'] = $subject_id;
 					}
 				}
 			}
