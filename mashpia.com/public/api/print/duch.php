@@ -278,9 +278,7 @@
                 filename:     'duch.pdf',
                 image:        { type: 'jpeg', quality: 0.98 },
                 // NOTE: html2canvas won't perfectly match print pagination/columns.
-                html2canvas:  { 
-                    imageTimeout: 0 
-                },
+                html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
             };
 
