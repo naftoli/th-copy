@@ -279,7 +279,6 @@
                 image:        { type: 'jpeg', quality: 0.98 },
                 // NOTE: html2canvas won't perfectly match print pagination/columns.
                 html2canvas:  { 
-                    scale: 2, 
                     imageTimeout: 0 
                 },
                 jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
