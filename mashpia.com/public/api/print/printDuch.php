@@ -62,13 +62,6 @@ if ( !$user_ids ) {
         $users = array_merge( $users, $usersTmp );
         $user_ids = array_merge( $user_ids, $user_idsTmp );
     }
-    // $users = \Soldier::find_all_by_class_id( $class_ids );
-    // $users = array_filter($users, function ($u) { return $u->user_registered; });
-    // // order users alphabetically
-    // usort( $users, function( $a, $b ) {
-    //     return $a->last > $b->last;
-    // });
-    // $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
     $users = \Soldier::find( $user_ids );
@@ -80,7 +73,8 @@ if ( !$user_ids ) {
     });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 }
-echo "<pre>"; print_r($user_ids); echo "</pre>"; exit;
+echo "<pre>"; print_r($user_ids); echo "</pre>"; 
+exit;
 // * Convert the dates for the legacy system
 $dates_id = 1;
 if ( $dates == 'none' ) $dates_id = 0;
