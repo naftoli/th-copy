@@ -45,7 +45,7 @@ if ( $selectedMonth ) {
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
-
+echo "<pre>"; print_r($class_ids); print_r($user_ids); echo "</pre>"; exit;
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
