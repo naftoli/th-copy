@@ -80,6 +80,13 @@ class PrintPage extends Component {
 
     const { login } = this.props;
 
+    let legacyUrl = '';
+    if (LEGACY_URL === '' && isBC(login.code) && login.id === 9) {
+      legacyUrl = '//duch.mashpia.com/api/print/missions';
+    } else {
+      legacyUrl = `${LEGACY_URL}/api/print/missions`;
+    }
+
     return (
       <div id='PrintPage'>
         <Callout title='Print Missions'>
@@ -91,7 +98,7 @@ class PrintPage extends Component {
           </p>
         </Callout>
 
-        <form target='_blank' method='post' action={`${LEGACY_URL}/api/print/missions`}>
+        <form target='_blank' method='post' action={legacyUrl}>
           <Row>
             <Col sm={6}>
               <label>Base</label>

@@ -1,5 +1,6 @@
 <?php
 ini_set('max_execution_time', 300);
+ini_set('memory_limit', '3072M');
 
 require_once( '../header/header.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
