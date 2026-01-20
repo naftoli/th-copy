@@ -960,6 +960,7 @@ abstract class MissionDisplay {
 		global $besuros_tovos;
 		
 		$user = $this->mission;
+		$all_medals = $user->get_all_medals();
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		?>
@@ -1047,10 +1048,9 @@ abstract class MissionDisplay {
 							<div class='campaign-name'><?= $track->subject_name ?></div>
 							<?php
 							// find out if any medals have been awarded for this campaign
-							if (count($user->medals)) {
-								$medal = $user->medals[count($user->medals) - 1];
+							if (isset($all_medals[$track->subject_id])) {
 								echo "<div class='campaign-medals'>";
-								echo "<i>" . $medal['medal_name'] . ' medal earned</i>';
+								echo "<i>Current Medal: " . $all_medals[$track->subject_id] . '</i>';
 								echo "</div>";
 							}
 							?>
@@ -1209,7 +1209,7 @@ abstract class MissionDisplay {
 				<?php endforeach; ?>
 			</div>
 			<?php endif; ?>
-			
+
 			<?php if ($forMobile) : ?>
 				<div class='besuros-tovos'>
 					הנני לבשר טוב<br />

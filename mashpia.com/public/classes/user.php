@@ -958,5 +958,31 @@ class user {
 			$str = ($needed - $total) . " to " . $name;
 		return $str; 
 	}
+
+	function get_all_medals() {
+		// get all medals earned by the user by subject
+		// return an array of subject_id => medal_name
+		// first get all medals
+		$medals = [];
+		$sql = "SELECT * FROM medals";
+		$query = mysql_query($sql);
+		while ($row = mysql_fetch_assoc($query)) {
+			$medals[$row['medal_ord']] = $row['medal_name'];
+		}
+		// then get the highest medal earned by the user by subject
+		$all_medals = [];
+		$sql = "SELECT 
+					subject_id, MAX(medal_ord)
+				FROM
+					medal_marks
+				WHERE
+					user_id = $this->user_id 
+				GROUP BY subject_id";
+		$query = mysql_query($sql);
+		while ($row = mysql_fetch_assoc($query)) {
+			$all_medals[$row['subject_id']] = $medals[$row['medal_ord']];
+		}
+		return $all_medals;
+	}
 }
 ?>
