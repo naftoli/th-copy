@@ -972,7 +972,7 @@ class user {
 		// then get the highest medal earned by the user by subject
 		$all_medals = [];
 		$sql = "SELECT 
-					subject_id, MAX(medal_ord)
+					subject_id, MAX(medal_ord) as medal_ord 
 				FROM
 					medal_marks
 				WHERE
