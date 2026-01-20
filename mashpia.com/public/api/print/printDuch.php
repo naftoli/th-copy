@@ -45,7 +45,6 @@ if ( $selectedMonth ) {
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
-echo "<pre>"; print_r($class_ids); echo "</pre>"; 
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
@@ -66,6 +65,7 @@ if ( !$user_ids ) {
     }
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
+    echo "<pre>"; print_r($user_ids); echo "</pre>"; exit;
     $users = \Soldier::find( $user_ids );
     $users = is_array( $users ) ? $users : [ $users ]; // make sure it is an array so we can filter it
     $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
