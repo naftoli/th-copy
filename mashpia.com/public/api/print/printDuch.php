@@ -51,6 +51,7 @@ if ( !$user_ids ) {
     $user_ids = [];
     // do each class separately so that we can order the children alphabetically
     foreach ( $class_ids as $class_id ) {
+        echo "Class ID: $class_id<br>"; exit;
         $sql = "SELECT user_id FROM users WHERE class_id = $class_id";
         echo $sql; exit;
         $result = mysql_query($sql);
