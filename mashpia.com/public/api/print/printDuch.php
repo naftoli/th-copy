@@ -13,8 +13,7 @@ if ( !isset( $_POST['school_id'] ) ) {
     echo 'error';
     die();
 }
-echo "<pre>"; print_r($_POST); echo "</pre>";
-die();
+
 $school = \School::find([ $_POST['school_id'] ]);
 $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
 $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
@@ -46,7 +45,7 @@ if ( $selectedMonth ) {
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
-
+echo "<pre>"; print_r($class_ids); echo "</pre>"; exit;
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
