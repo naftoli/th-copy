@@ -1,4 +1,6 @@
 <?php
+ini_set('max_execution_time', 300);
+
 require_once( '../header/header.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.php' );
