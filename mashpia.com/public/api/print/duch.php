@@ -187,20 +187,20 @@
                 } else {
                     // Page-count is only an estimate (html2canvas doesn't perfectly match print layout,
                     // especially with CSS columns). We also need to wait for fonts/images so layout is final.
-                    (async function() {
-                        const main = document.getElementById('main');
-                        await waitForRenderReady(main);
-                        // If you want per-soldier page estimates, use each .userDuch block:
-                        document.querySelectorAll('.userDuch').forEach(el => checkPageCount(el));
-                        // checkPageCount(main);
-                    })();
-                    // $("#print-button").show();
-                    // if (fromBC) {
-                    //     $("#email-button").show();
-                    // }
-                    // setTimeout(function() {
-                    //     window.print();
-                    // }, 1000);
+                    // (async function() {
+                    //     const main = document.getElementById('main');
+                    //     await waitForRenderReady(main);
+                    //     // If you want per-soldier page estimates, use each .userDuch block:
+                    //     document.querySelectorAll('.userDuch').forEach(el => checkPageCount(el));
+                    //     // checkPageCount(main);
+                    // })();
+                    $("#print-button").show();
+                    if (fromBC) {
+                        $("#email-button").show();
+                    }
+                    setTimeout(function() {
+                        window.print();
+                    }, 1000);
                 }
             }).catch(error => {
                 $("#spinner").empty();
