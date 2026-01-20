@@ -52,6 +52,7 @@ if ( !$user_ids ) {
     // do each class separately so that we can order the children alphabetically
     foreach ( $class_ids as $class_id ) {
         $sql = "SELECT user_id FROM users WHERE class_id = $class_id";
+        echo $sql; exit;
         $result = mysql_query($sql);
         while ($row = mysql_fetch_assoc($result)) {
             $usersTmp[] = $row['user_id'];
