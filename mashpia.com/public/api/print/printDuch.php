@@ -52,8 +52,8 @@ if ( !$user_ids ) {
     // do each class separately so that we can order the children alphabetically
     foreach ( $class_ids as $class_id ) {
         $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
-        $usersTmp = array_filter($usersTmp, function ($u) { return $u->user_registered; });
         echo "<pre>"; print_r($usersTmp); echo "</pre>"; exit;
+        $usersTmp = array_filter($usersTmp, function ($u) { return $u->user_registered; });
         // order users alphabetically
         usort( $usersTmp, function( $a, $b ) {
             return $a->last > $b->last;
