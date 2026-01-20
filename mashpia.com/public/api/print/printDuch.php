@@ -49,15 +49,11 @@ if ( !$class_ids ) {
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
+    echo "<pre>"; print_r($class_ids); echo "</pre>"; exit;
     // do each class separately so that we can order the children alphabetically
     foreach ( $class_ids as $class_id ) {
-        echo "Class ID: $class_id<br>"; exit;
-        $sql = "SELECT user_id FROM users WHERE class_id = $class_id";
-        echo $sql; exit;
-        $result = mysql_query($sql);
-        while ($row = mysql_fetch_assoc($result)) {
-            $usersTmp[] = $row['user_id'];
-        }
+        $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
+        echo "<pre>"; print_r($usersTmp); echo "</pre>"; exit;
         $usersTmp = array_filter($usersTmp, function ($u) { return $u->user_registered; });
         // order users alphabetically
         usort( $usersTmp, function( $a, $b ) {
