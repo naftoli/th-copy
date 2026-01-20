@@ -45,8 +45,7 @@ if ( $selectedMonth ) {
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
-echo "<pre>"; print_r($class_ids); print_r($user_ids); echo "</pre>"; 
-echo "True/False: " . ( !$user_ids ? 'True' : 'False' ) . "<br>"; exit;
+
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
@@ -54,6 +53,7 @@ if ( !$user_ids ) {
     foreach ( $class_ids as $class_id ) {
         $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
         $usersTmp = array_filter($usersTmp, function ($u) { return $u->user_registered; });
+        echo "<pre>"; print_r($usersTmp); echo "</pre>"; exit;
         // order users alphabetically
         usort( $usersTmp, function( $a, $b ) {
             return $a->last > $b->last;
