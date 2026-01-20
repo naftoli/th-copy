@@ -109,6 +109,13 @@ foreach ( $missions as $info ) {
     }
 }
 
+// * Print the buttons to print and email the Duch
+echo "
+    <div style='display: flex; justify-content: center; gap: 10px; margin-top: 10px;'>
+    <button class='no-print btn btn-primary' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
+    <button class='no-print btn btn-primary' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
+    </div>";
+
 $pages = 0;
 // * Print the missions just like before
 foreach ( $objMissions as $obj ) {
@@ -120,11 +127,6 @@ foreach ( $objMissions as $obj ) {
     if (in_array($obj->school_type_id , [4,5])) $class .= ' ds';
 
     $id = $obj->user_id;
-    echo "
-    <div style='display: flex; justify-content: center; gap: 10px; margin-top: 10px;'>
-    <button class='no-print btn btn-primary' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
-    <button class='no-print btn btn-primary' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
-    </div>";
     echo "<div class='$class' id='user-$id'";
     if (in_array($obj->lang_id, [2, 4])) echo " dir='rtl' ";
     echo ">";
