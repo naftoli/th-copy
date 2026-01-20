@@ -93,6 +93,13 @@ class DuchPage extends Component {
       'אלול': '8/15/26 - 9/12/26'
     }
 
+    let legacyUrl = '';
+    if (LEGACY_URL === '') {
+      legacyUrl = '//duch.mashpia.com/api/print/duch';
+    } else {
+      legacyUrl = `${LEGACY_URL}/api/print/duch`;
+    }
+
     return (
       <div id='DuchPage'>
         <Callout title='Duch'>
@@ -102,7 +109,7 @@ class DuchPage extends Component {
           </p>
         </Callout>
 
-        <form target='_blank' method='post' action={`${LEGACY_URL}/api/print/duch`}>
+        <form target='_blank' method='post' action={legacyUrl}>
           <Row>
             <Col sm={4}>
               <label>Base</label>
