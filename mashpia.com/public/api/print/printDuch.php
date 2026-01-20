@@ -45,7 +45,7 @@ if ( $selectedMonth ) {
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
-echo "<pre>"; print_r($class_ids); echo "</pre>"; exit;
+
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
@@ -80,7 +80,7 @@ if ( !$user_ids ) {
     });
     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 }
-
+echo "<pre>"; print_r($user_ids); echo "</pre>"; exit;
 // * Convert the dates for the legacy system
 $dates_id = 1;
 if ( $dates == 'none' ) $dates_id = 0;
