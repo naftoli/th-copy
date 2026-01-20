@@ -25,6 +25,15 @@ if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
 
+if ($user_ids) {
+    foreach ($user_ids as $i => $user_id) {
+        if ($i == 0 && !$user_id) {
+            $user_ids = false;
+            break;
+        }
+    }
+}
+
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
@@ -41,13 +50,6 @@ if ( !$user_ids ) {
         $users = array_merge( $users, $usersTmp );
         $user_ids = array_merge( $user_ids, $user_idsTmp );
     }
-    // $users = \Soldier::find_all_by_class_id( $class_ids );
-    // $users = array_filter($users, function ($u) { return $u->user_registered; });
-    // // order users alphabetically
-    // usort( $users, function( $a, $b ) {
-    //     return $a->last > $b->last;
-    // });
-    // $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
     $users = \Soldier::find( $user_ids );
