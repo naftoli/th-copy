@@ -1147,6 +1147,7 @@ abstract class MissionDisplay {
 		?>
 
 		<div class="extra-info" dir="ltr">
+			<?php if (count($user->medals)) : ?>
 			<h3>New Medals</h3>
 			<div class='medals-container'>
 				<?php foreach ($user->medals as $medal) : ?>
@@ -1165,7 +1166,9 @@ abstract class MissionDisplay {
 					</div>
 				<?php endforeach; ?>
 			</div>
+			<?php endif; ?>
 
+			<?php if (count($user->ranks)) : ?>	
 			<h3>New Promotions</h3>
 			<div class='promotions-container'>
 				<?php foreach ($user->ranks as $rank) : ?>
@@ -1184,7 +1187,9 @@ abstract class MissionDisplay {
 					</div>
 				<?php endforeach; ?> 
 			</div>
+			<?php endif; ?>
 
+			<?php if (count($activeStreaks)) : ?>
 			<h3>Hachlata Streaks</h3>
 			<div class='streaks-container'>
 				<?php foreach ($activeStreaks as $streak) : ?>
@@ -1203,7 +1208,8 @@ abstract class MissionDisplay {
 					</div>
 				<?php endforeach; ?>
 			</div>
-
+			<?php endif; ?>
+			
 			<?php if ($forMobile) : ?>
 				<div class='besuros-tovos'>
 					הנני לבשר טוב<br />
