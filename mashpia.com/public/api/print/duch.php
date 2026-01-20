@@ -179,17 +179,28 @@
                     alert('Error: School ID is required');
                     return;
                 }
+                
                 $('#main').html(html);
+                
                 if (email) {
                     emailToOhel();
                 } else {
-                    $("#print-button").show();
-                    if (fromBC) {
-                        $("#email-button").show();
-                    }
-                    setTimeout(function() {
-                        window.print();
-                    }, 1000);
+                    // Page-count is only an estimate (html2canvas doesn't perfectly match print layout,
+                    // especially with CSS columns). We also need to wait for fonts/images so layout is final.
+                    (async function() {
+                        const main = document.getElementById('main');
+                        await waitForRenderReady(main);
+                        // If you want per-soldier page estimates, use each .userDuch block:
+                        document.querySelectorAll('.userDuch').forEach(el => checkPageCount(el));
+                        // checkPageCount(main);
+                    })();
+                    // $("#print-button").show();
+                    // if (fromBC) {
+                    //     $("#email-button").show();
+                    // }
+                    // setTimeout(function() {
+                    //     window.print();
+                    // }, 1000);
                 }
             }).catch(error => {
                 $("#spinner").empty();
@@ -200,12 +211,13 @@
         function emailToOhel() {
             setTimeout(async function() {
                 const elem = document.getElementById('main');
+                
                 const filename = new Date().toISOString().replace(/[-:]/g, '') + '.pdf';
                 const opt = {
                     margin:       0.5,
                     filename:      filename,
                     image:        { type: 'jpeg', quality: 0.98 },
-                    html2canvas:  { imageTimeout: 0 },
+                    html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
                 const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
@@ -229,6 +241,59 @@
                     alert('Error: ' + (result.error || JSON.stringify(result)));
                 });
             }, 1500);
+        }
+
+        async function waitForRenderReady(rootEl) {
+            // Wait for webfonts (if supported)
+            try {
+                if (document.fonts && document.fonts.ready) {
+                    await document.fonts.ready;
+                }
+            } catch (e) {}
+
+            // Wait for images inside root to load/decode so heights don't change after measuring
+            try {
+                const imgs = (rootEl || document).querySelectorAll ? (rootEl || document).querySelectorAll('img') : [];
+                const waits = [];
+                imgs.forEach(function(img) {
+                    if (!img) return;
+                    if (img.complete && img.naturalWidth) return;
+                    if (img.decode) {
+                        waits.push(img.decode().catch(function(){}));
+                    } else {
+                        waits.push(new Promise(function(resolve){ img.onload = resolve; img.onerror = resolve; }));
+                    }
+                });
+                await Promise.all(waits);
+            } catch (e) {}
+
+            // Let the browser flush layout at least once
+            await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
+        }
+
+        function checkPageCount(element) {
+            // Configure PDF settings to match standard paper
+            const opt = {
+                margin:       0.5, // inches
+                filename:     'duch.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                // NOTE: html2canvas won't perfectly match print pagination/columns.
+                html2canvas:  { 
+                    scale: 2, 
+                    imageTimeout: 0 
+                },
+                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+
+            // Generate the PDF internally but don't save it yet
+            html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
+                // The pdf object is an instance of jsPDF
+                const totalPages = pdf.internal.getNumberOfPages();
+                alert('This will be approximately ' + totalPages + ' pages.');
+            }).catch(function(err) {
+                console.error('checkPageCount failed', err);
+                alert('Could not estimate pages. See console for details.');
+            });
         }
     </script>
 </body>
