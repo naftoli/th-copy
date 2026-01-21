@@ -1,5 +1,10 @@
 <?php
-ini_set('display_errors',1);
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+ini_set('max_execution_time', 300);
+ini_set('memory_limit', '3072M');
+
 require_once( '../header/header.php' ); // load header
 
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
@@ -25,6 +30,15 @@ if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
 
+if ($user_ids) {
+    foreach ($user_ids as $i => $user_id) {
+        if ($i == 0 && !$user_id) {
+            $user_ids = false;
+            break;
+        }
+    }
+}
+
 if ( !$user_ids ) {
     $users = [];
     $user_ids = [];
@@ -41,13 +55,6 @@ if ( !$user_ids ) {
         $users = array_merge( $users, $usersTmp );
         $user_ids = array_merge( $user_ids, $user_idsTmp );
     }
-    // $users = \Soldier::find_all_by_class_id( $class_ids );
-    // $users = array_filter($users, function ($u) { return $u->user_registered; });
-    // // order users alphabetically
-    // usort( $users, function( $a, $b ) {
-    //     return $a->last > $b->last;
-    // });
-    // $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
 // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
 } else if ( $user_ids ) {
     $users = \Soldier::find( $user_ids );
@@ -182,6 +189,71 @@ if ( $dates == 'english' ) $dates_id = 2;
                 window.print();
             }
         }, false);
+        /*
+            (function () {
+            let currentIndex = 0;
+
+            // Collect all sections based on the break divs
+            const allNodes = Array.from(document.body.children);
+            const sections = [];
+            let temp = [];
+
+            allNodes.forEach(node => {
+                temp.push(node);
+                if (
+                node.tagName === 'DIV' &&
+                node.style &&
+                node.style.pageBreakAfter === 'always'
+                ) {
+                sections.push([...temp]); // save this section
+                temp = []; // reset for next
+                }
+            });
+
+            // Add CSS to hide everything initially
+            allNodes.forEach(node => {
+                if (node.style) node.style.display = 'none';
+            });
+
+            // Define the print function globally so you can also call it from AHK
+            window.printNextSection = function () {
+                if (currentIndex < sections.length) {
+                // Hide all
+                allNodes.forEach(node => {
+                    if (node.style) node.style.display = 'none';
+                });
+
+                // Show current section
+                sections[currentIndex].forEach(node => {
+                    if (node.style) node.style.display = '';
+                });
+
+                // Print and go to next
+                window.print();
+                currentIndex++;
+                } else {
+                sendCtrlBacktick();
+                alert('All sections printed!'); 
+                }
+            };
+                
+            function sendCtrlBacktick() {
+            document.title = 'PRINT_COMPLETE_SIGNAL';
+            }
+
+            // Initially hide everything
+            allNodes.forEach(node => {
+                if (node.style) node.style.display = 'none';
+            });
+            // Add keyboard shortcut: press "n" to trigger
+            window.addEventListener('keydown', function (e) {
+                if (e.key === 'n' && !e.ctrlKey && !e.altKey && !e.metaKey) {
+                e.preventDefault();
+                printNextSection();
+                }
+            });
+            })();
+        */
     </script>
     <?php // ! *************************** Debug *************************** ?>
     <!-- <details id='debug'>

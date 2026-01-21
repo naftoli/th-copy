@@ -81,11 +81,11 @@ class PrintPage extends Component {
     const { login } = this.props;
 
     let legacyUrl = '';
-    // if (school_id === 9 && LEGACY_URL === '' && isBC(login.code)) {
-    //   legacyUrl = '//duch.mashpia.com/api/print/missions';
-    // } else {
+    if (school_id === 9 && LEGACY_URL === '' && isBC(login.code)) {
+      legacyUrl = '//duch.mashpia.com/api/print/missions';
+    } else {
       legacyUrl = `${LEGACY_URL}/api/print/missions`;
-    // }
+    }
 
     return (
       <div id='PrintPage'>
