@@ -656,9 +656,6 @@
 					return false;
 				}
 
-				document.getElementById('donateBtn').disabled = true;
-				document.getElementById('donateBtn').value = "Processing...";
-
 				// get all info together
 				let donation = {};
 				let amount = calcAmount();
@@ -694,11 +691,19 @@
 				//donation.skip = 1;	
 
 				console.log(donation);
+				// Prevent double-submission
+				if ($("#donateBtn").attr('data-processing') === 'true') {
+					return false;
+				}
+
+				$("#donateBtn").attr('data-processing', 'true')
+				$("#donateBtn").attr('disabled', true)
+
 				$.post('../ajax/processDonation.php', { donation_info: donation }, function (result) {
 					console.log(result);
 					let res = JSON.parse(result);
-					document.getElementById('donateBtn').disabled = false;
-					document.getElementById('donateBtn').value = "Donate";
+					$("#donateBtn").attr('data-processing', 'false')
+					$("#donateBtn").attr('disabled', false);
 					alert(res.message);
 					if (res.success) {
 						location.href = "thank-you.html";

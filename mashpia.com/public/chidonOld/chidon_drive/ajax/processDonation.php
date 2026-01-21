@@ -1,10 +1,9 @@
 <?php
-ini_set('display_errors',1);
-ini_set('error_reporting', E_ALL);
+// ini_set('display_errors',1);
+// ini_set('error_reporting', E_ALL);
 
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
-require_once __DIR__ . '/../../../emails/sendEmail.php';
 
 $year = GlobalSettings::getChidonYear();
 $donation = $_POST['donation_info'];
@@ -99,78 +98,18 @@ $cc_info['state'] = $billing['state'];
 $cc_info['zip'] = $billing['zip'];
 $cc_info['country'] = $billing['country'];
 
-// first process donation
-if ( $cc_info['skip'] ) {
-  // don't process card at all
-  $trans_id = 11111;
-  $trans_info = "testing by skipping authorize.net transaction.";
-  $response = null;
-} else {
-  require 'authorize.php';
-  $response = chargeCreditCard( $amount, $cc_info );
-}
+// Start database transaction
+$MASHPIA_DB->beginTransaction();
 
-// check response
+// Initialize variables
+$trans_id = null;
+$trans_info = null;
 $msg = '';
 $error_msg = '';
-if ($response != null) {
-  // Check to see if the API request was successfully received and acted upon
-  if ($response->getMessages()->getResultCode() == "Ok") {
-      // Since the API request was successful, look for a transaction response
-      // and parse it to display the results of authorizing the card
-      $tresponse = $response->getTransactionResponse();
-  
-      if ($tresponse != null && $tresponse->getMessages() != null) {
-          $msg .= " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
-          $msg .= " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
-          $msg .= " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
-          $msg .= " Auth Code: " . $tresponse->getAuthCode() . "\n";
-          $msg .= " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+$donation_id = null;
 
-          $trans_id = $tresponse->getTransId();
-          $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
-
-          // send email
-          // sendEmail( $amount, $trans_id, $email, $name );
-          $subject = "Chidon Drive Donation";
-          $message = '<img src="http://chidondrive.com/ajax/email-header.jpg" style="max-width: 100%; height: auto;" />';
-          $message .= "<p>Dear " . $name . ",</p>";
-          $message .= "<p>Thank you for your generous donation of $" . number_format( $amount, 2 ) . " from " . date('F-d-Y') . ".</p>
-                      <p>Your support enables us to show our children how meaningful their learning is, and to drive them to go mechayil el choyil.</p>";
-          $message .= "<p>Your transaction id is: " . $trans_id . "</p>";
-          $message .= "<p>Thank you.</p>";
-          $message .= "<p>P.S. Please retain this as proof of receipt of your tax-deductible donation of $" . number_format( $amount, 2 ) . "USD. No goods or services were provided for this donation. Tzivos Hashem is a 501(c)3 nonprofit corporation. Tax ID: 11-2872082.</p>";
-          $error = sendEmail($email, $subject, $message, true, []);
-          if ($error) {
-            $error_msg .= "There was an error sending the confirmation email: " . $error . "\n";
-          }
-      } else {
-        $error_msg .= "Transaction Failed \n";
-        if ($tresponse->getErrors() != null) {
-            // $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-            // $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
-            $error_msg .= $tresponse->getErrors()[0]->getErrorText() . "\n";
-        }
-      }
-      // Or, print errors if the API request wasn't successful
-  } else {
-      $error_msg .= "Transaction Failed \n";
-      $tresponse = $response->getTransactionResponse();
-  
-      if ($tresponse != null && $tresponse->getErrors() != null) {
-          $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
-          $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
-      } else {
-          $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
-          $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
-      }
-  }
-} else if ( $cc_info['skip'] ) {
-  $msg = "Success.";
-}
-
-if ( !empty( $msg ) ) {
-  // add to donations table 
+try {
+  // STEP 1: Insert donation into database first (with placeholder transaction_id)
   $stmt = $MASHPIA_DB->prepare("
     INSERT INTO chidon_donations 
     SET 
@@ -185,26 +124,117 @@ if ( !empty( $msg ) ) {
         phone = :phone , 
         notes = :notes
   ");
+  
+  // Use placeholder transaction_id initially
+  $placeholder_trans_id = $cc_info['skip'] ? '11111' : '0';
+  $placeholder_trans_info = $cc_info['skip'] ? 'testing by skipping authorize.net transaction.' : 'Pending credit card processing';
+  
   $res = $stmt->execute([
     ':name'         =>  $name,
     ':display_name' =>  $display_name, 
     ':anonymous'    =>  $anonymous,
     ':year'         =>  $year, 
     ':amount'       =>  $amount, 
-    ':trans_id'     =>  $trans_id, 
-    ':trans_info'   =>  $trans_info, 
+    ':trans_id'     =>  $placeholder_trans_id, 
+    ':trans_info'   =>  $placeholder_trans_info, 
     ':email'        =>  $email,
     ':phone'        =>  $phone,
     ':notes'        =>  $notes
   ]);
+  
+  $donation_id = $MASHPIA_DB->lastInsertId();
 
+  // STEP 2: Process credit card payment
+  if ( $cc_info['skip'] ) {
+    // don't process card at all
+    $trans_id = 11111;
+    $trans_info = "testing by skipping authorize.net transaction.";
+    $response = null;
+    $msg = "Success.";
+  } else {
+    require 'authorize.php';
+    $response = chargeCreditCard( $amount, $cc_info );
+    
+    // STEP 3: Check payment response
+    if ($response != null) {
+      // Check to see if the API request was successfully received and acted upon
+      if ($response->getMessages()->getResultCode() == "Ok") {
+          // Since the API request was successful, look for a transaction response
+          // and parse it to display the results of authorizing the card
+          $tresponse = $response->getTransactionResponse();
+      
+          if ($tresponse != null && $tresponse->getMessages() != null) {
+              $msg .= " Successfully created transaction with Transaction ID: " . $tresponse->getTransId() . "\n";
+              $msg .= " Transaction Response Code: " . $tresponse->getResponseCode() . "\n";
+              $msg .= " Message Code: " . $tresponse->getMessages()[0]->getCode() . "\n";
+              $msg .= " Auth Code: " . $tresponse->getAuthCode() . "\n";
+              $msg .= " Description: " . $tresponse->getMessages()[0]->getDescription() . "\n";
+
+              $trans_id = $tresponse->getTransId();
+              $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();
+              
+              // Update donation record with actual transaction info
+              $update_stmt = $MASHPIA_DB->prepare("
+                UPDATE chidon_donations 
+                SET transaction_id = :trans_id, transaction_info = :trans_info
+                WHERE chidon_donation_id = :donation_id
+              ");
+              $update_stmt->execute([
+                ':trans_id' => $trans_id,
+                ':trans_info' => $trans_info,
+                ':donation_id' => $donation_id
+              ]);
+
+              // send email
+              include 'sendEmail.php';
+              if (! sendEmail( $amount, $trans_id, $email, $name )) {
+                $error_msg .= "There was an error sending the confirmation email";
+              }
+          } else {
+            $error_msg .= "Transaction Failed \n";
+            if ($tresponse->getErrors() != null) {
+                $error_msg .= $tresponse->getErrors()[0]->getErrorText() . "\n";
+            }
+          }
+      } else {
+          $error_msg .= "Transaction Failed \n";
+          $tresponse = $response->getTransactionResponse();
+      
+          if ($tresponse != null && $tresponse->getErrors() != null) {
+              $error_msg .= " Error Code  : " . $tresponse->getErrors()[0]->getErrorCode() . "\n";
+              $error_msg .= " Error Message : " . $tresponse->getErrors()[0]->getErrorText() . "\n";
+          } else {
+              $error_msg .= " Error Code  : " . $response->getMessages()->getMessage()[0]->getCode() . "\n";
+              $error_msg .= " Error Message : " . $response->getMessages()->getMessage()[0]->getText() . "\n";
+          }
+      }
+    } else {
+      $error_msg .= "Transaction Failed: No response from payment processor.\n";
+    }
+  }
+
+  // STEP 4: Commit or rollback based on payment result
+  if ( !empty( $error_msg ) && !$cc_info['skip'] ) {
+    // Payment failed - rollback the database transaction
+    $MASHPIA_DB->rollBack();
+    echo json_encode([
+      'success'     =>  false,
+      'message'     =>  $error_msg
+    ]);
+  } else {
+    // Payment succeeded (or skipped) - commit the transaction
+    $MASHPIA_DB->commit();
+    echo json_encode([
+      'success'   =>  true,
+      'message'   =>  $msg
+    ]);
+  }
+  
+} catch (Exception $e) {
+  // Rollback on any exception
+  $MASHPIA_DB->rollBack();
   echo json_encode([
-    'success'   =>  true,
-    'message'   =>  $msg
-  ]);
-} else {
-  echo json_encode([
-    'success'     =>  false,
-    'message'     =>  $error_msg
+    'success'   =>  false,
+    'message'   =>  'An error occurred: ' . $e->getMessage()
   ]);
 }

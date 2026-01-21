@@ -14,7 +14,25 @@ function sendEmail( $amount, $trans_id, $email, $name ) {
     $message .= "<p>Your transaction id is: " . $trans_id . "</p>";
     $message .= "<p>Thank you.</p>";
     $message .= "<p>P.S. Please retain this as proof of receipt of your tax-deductible donation of $" . number_format( $amount, 2 ) . "USD. No goods or services were provided for this donation. Tzivos Hashem is a 501(c)3 nonprofit corporation. Tax ID: 11-2872082.</p>";
+    $message = addFooterToMessage($message);
     if ( @mail( $email, $subject, $message, implode("\r\n", $headers) ) ) return true;
     else return false;
+}
+
+function addFooterToMessage($message) {
+    $msg_footer = <<<FOOTER
+    <br /><br />
+    <div align="center">
+    &copy; 2019 Tzivos Hashem<br />
+    <address>
+      792 Eastern Pkwy, Brooklyn, NY 11213
+    </address>
+    <br />
+    <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
+    To unsubscibe from these emails please click <a href="http://mashpia.com/unsubscribe.html">here</a><br />
+    </div>
+    FOOTER;
+    $message .= $msg_footer;
+    return $message;
 }
 ?>

@@ -793,8 +793,13 @@
 					return false;
 				}
 
-				document.getElementById('donateButton').disabled = true;
-				document.getElementById('donateButton').value = "Processing...";
+				// Prevent double-submission
+				if ($("#donateButton").attr('data-processing') === 'true') {
+					return false;
+				}
+
+				$("#donateButton").attr('data-processing', 'true')
+				$("#donateButton").attr('disabled', true)
 
 				let cc = {}
 				cc.num = $("#cc_num").val();
@@ -810,6 +815,8 @@
 				billing.country = $("#bill_country").val();
 				cc.billing = billing;
 
+				cc.billing.skip = 1;
+
 				donation.cc = cc;
 				donation.email = $("#email").val();
 				donation.phone = $("#phone").val();
@@ -818,8 +825,8 @@
 				$.post('../ajax/processFamilyDonation.php', { donation_info: donation }, function (result) {
 					console.log(result);
 					let res = JSON.parse(result);
-					document.getElementById('donateButton').disabled = false;
-					document.getElementById('donateButton').value = "Donate";
+					$("#donateButton").attr('data-processing', 'false')
+					$("#donateButton").attr('disabled', false)
 					if (res.success) {
 						alert("Your donation has been processed. A receipt will be sent to the email address provided. Thank you for your support!");
 						location.href = "thank-you.html?id=" + admin_id;

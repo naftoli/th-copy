@@ -1,9 +1,11 @@
 <?php
-require_once __DIR__ . '/../../vendor/autoload.php';
+// ini_set('display_errors',1);
+// ini_set('error_reporting', E_ALL);
+// require_once __DIR__ . '/../../vendor/autoload.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\SMTP;
-use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer as PHPMailer;
+use PHPMailer\PHPMailer\SMTP as SMTP;
+use PHPMailer\PHPMailer\Exception as Exception;
 
 function sendEmail($to, $subject, $message, $isHtml = true, $attachments = []) {
     // add footer to message
