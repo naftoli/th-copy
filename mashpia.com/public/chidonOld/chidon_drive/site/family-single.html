@@ -217,7 +217,7 @@
 								<input type="text" id="bill_state" required />
 							</div>
 						</div>
-						<input type="submit" class="button donate" value="Donate" /><br />
+						<input type="submit" id="donateButton" class="button donate" value="Donate" /><br />
 					</form>
 				</div>
 				<div class="activity">
@@ -777,7 +777,7 @@
 
 			$("#donationForm").submit(function (e) {
 				e.preventDefault();
-
+				
 				// get all info together
 				let donation = {};
 				donation.family = admin_id;
@@ -792,6 +792,9 @@
 					alert("You have not indicated how much you would like to donate.");
 					return false;
 				}
+
+				document.getElementById('donateButton').disabled = true;
+				document.getElementById('donateButton').value = "Processing...";
 
 				let cc = {}
 				cc.num = $("#cc_num").val();
@@ -815,6 +818,8 @@
 				$.post('../ajax/processFamilyDonation.php', { donation_info: donation }, function (result) {
 					console.log(result);
 					let res = JSON.parse(result);
+					document.getElementById('donateButton').disabled = false;
+					document.getElementById('donateButton').value = "Donate";
 					if (res.success) {
 						alert("Your donation has been processed. A receipt will be sent to the email address provided. Thank you for your support!");
 						location.href = "thank-you.html?id=" + admin_id;

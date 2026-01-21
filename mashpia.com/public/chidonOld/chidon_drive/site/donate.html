@@ -656,6 +656,9 @@
 					return false;
 				}
 
+				document.getElementById('donateButton').disabled = true;
+				document.getElementById('donateButton').value = "Processing...";
+
 				// get all info together
 				let donation = {};
 				let amount = calcAmount();
@@ -694,6 +697,8 @@
 				$.post('../ajax/processDonation.php', { donation_info: donation }, function (result) {
 					console.log(result);
 					let res = JSON.parse(result);
+					document.getElementById('donateButton').disabled = false;
+					document.getElementById('donateButton').value = "Donate";
 					alert(res.message);
 					if (res.success) {
 						location.href = "thank-you.html";

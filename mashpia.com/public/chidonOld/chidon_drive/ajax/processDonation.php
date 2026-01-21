@@ -1,7 +1,10 @@
 <?php
-// ini_set(display_errors,1);
+ini_set('display_errors',1);
+ini_set('error_reporting', E_ALL);
+
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
+require_once __DIR__ . '/../../../emails/sendEmail.php';
 
 $year = GlobalSettings::getChidonYear();
 $donation = $_POST['donation_info'];
@@ -128,7 +131,6 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email
-          require_once $_SERVER['DOCUMENT_ROOT'] . '/emails/sendEmail.php';
           // sendEmail( $amount, $trans_id, $email, $name );
           $subject = "Chidon Drive Donation";
           $message = '<img src="http://chidondrive.com/ajax/email-header.jpg" style="max-width: 100%; height: auto;" />';
