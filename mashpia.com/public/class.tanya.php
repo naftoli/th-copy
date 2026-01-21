@@ -60,7 +60,11 @@ class Tanya extends BalPehCampaign {
 
 	public function getTotalLearnedForDuch( $user ) {
 		global $MASHPIA_DB;
-		$sql = "SELECT IFNULL(SUM(mission_sheet_amount), 0) as total FROM lines_learned WHERE user_id = :user_id and campaign_id = :campaign_id";
+		$sql = "SELECT IFNULL(SUM(mission_sheet_amount), 0) as total 
+				FROM lines_learned 
+				WHERE user_id = :user_id 
+				and campaign_id = :campaign_id
+				and lines_learned > 0";
 		$stmt = $MASHPIA_DB->prepare($sql);
 		$stmt->execute([
 			'user_id' => $user,

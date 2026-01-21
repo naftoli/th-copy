@@ -958,11 +958,11 @@ abstract class MissionDisplay {
 
 	public function printDuch($activeStreaks = [], $forMobile = false) {
 		global $besuros_tovos;
-		
 		$user = $this->mission;
 		$all_medals = $user->get_all_medals();
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
+		$only_one_task = [21001, 21002, 21003, 21004, 21006, 21007, 21014, 21008, 21009];
 		?>
 		<div class="header print-only" style="margin: 20px auto;">
 			<div class="userImg">
@@ -1035,6 +1035,7 @@ abstract class MissionDisplay {
 			$user->get_ranks($this->start, $this->end, 0, 0);
 			$task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
 			$report_mission = [];
+			$streak_ids = []; // keep track of all the streak ids
 			foreach ($tracks as $track) {
 				$track->lang_id= $this->lang_id;
 				$user->get_medals($track->subject_id, $this->start, $this->end, 0);
@@ -1050,7 +1051,7 @@ abstract class MissionDisplay {
 							// find out if any medals have been awarded for this campaign
 							if (isset($all_medals[$track->subject_id])) {
 								echo "<div class='campaign-medals'>";
-								echo "<i>Current Medal: " . $all_medals[$track->subject_id] . '</i>';
+								echo "<i>Current Medal - " . $all_medals[$track->subject_id] . '</i>';
 								echo "</div>";
 							}
 							?>
@@ -1060,22 +1061,38 @@ abstract class MissionDisplay {
 					foreach ($task_types as $task_type) {
 						$task_type_name = ucwords(implode(' ', explode('_', $task_type)));
 						foreach ( $track->{$task_type} as $task ) { 
-							// total of days to show 
-							$total_days = (int)$this->end - (int)$this->start;
-							if ($task->subject_id == 1) {
-								$total_days = floor($total_days / 28);
-							} else if ($task_type != 'daily_tasks') {
-								$total_days = floor($total_days / 7);
+							// if the streak id is already in the array, skip this task b/c it was shown already
+							if (in_array($task->streak_id, $streak_ids)) {
+								continue;
 							}
-							if ($total_days < 1) $total_days = 1;
+							$streak_ids[] = $task->streak_id;
+							
+							// total of days to show 
+							if (in_array($task->grid_id, $only_one_task)) {
+								$total_days = 1;
+							} else {
+								$total_days = (int)$this->end - (int)$this->start;
+								if ($task->streak_id == 22002) {
+									// for each week remove a day
+									$to_subtract = floor($total_days / 7);
+									$total_days -= $to_subtract;
+								} else if ($task->subject_id == 1) {
+									$total_days = floor($total_days / 28);
+								} else if ($task_type != 'daily_tasks') {
+									$total_days = floor($total_days / 7);
+								}
+								if ($total_days < 1) $total_days = 1;
+							}
+
 							// find out how many times the task has been accomplished
-							$a = new Accomplished($user->user_id, [$task->grid_id], $this->start, $this->end);
+							$a = new Accomplished($user->user_id, [$task->grid_id], [$task->streak_id], $this->start, $this->end);
 							$a->setAccomplished();
 							$accomplished = $a->getAccomplished();
 							$accomplished_count = count($accomplished[$task->grid_id]);
 							if ($accomplished_count > $total_days) $accomplished_count = $total_days;
-							$duch_task = new DuchTask($user->user_id, $task, $this->start, $this->end, $track);
-							if ($duch_task->needsPersonalization()) {
+							if (! empty($task->streak_duch_name)) {
+								$task->short_name = $task->streak_short_name;
+								$duch_task = new DuchTask($user->user_id, $task, $this->start, $this->end, $track);
 								$task->task_name = $duch_task->getPersonalizedTask();
 							} 
 							if ($task->grid_id != 13012) {

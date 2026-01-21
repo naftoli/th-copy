@@ -7,10 +7,7 @@ class DuchTask {
     public $user_id;
     public $start;
     public $end;
-    public $streak_id;
-    public $task_name;
-    public $grid_id;
-    public $date_task_id;
+    public $task;
     public $track_info;
 
     public function __construct($user_id, $task, $start, $end, $track_info) {
@@ -19,20 +16,17 @@ class DuchTask {
         $this->user_id = $user_id;
         $this->start = $start;
         $this->end = $end;
-        $this->streak_id = $task->streak_id;
-        $this->task_name = $task->streak_duch_name;
-        $this->grid_id = $task->grid_id;
-        $this->date_task_id = $task->date_task_id;
+        $this->task = $task;
         $this->track_info = $track_info;
     }
 
-    public function needsPersonalization() {
-        $streaks = [8001, 8002, 21013, 20002];
-        return in_array($this->streak_id, $streaks);
-    }
+    // public function needsPersonalization() {
+    //     $streaks = [8001, 8002, 21013, 20002];
+    //     return in_array($this->streak_id, $streaks);
+    // }
 
     public function getPersonalizedTask() { 
-        switch ($this->streak_id) {
+        switch ($this->task->streak_id) {
             case 8001:
             case 8002:
                 return $this->personalizeTehillim();
@@ -43,26 +37,22 @@ class DuchTask {
             case 20002:
                 return $this->personalizeChidon();
                 break;
-            default:
-                return $this->task_name;
-                break;
         }
+        return $this->task->streak_duch_name;
     }
 
     private function personalizeTehillim() {
         $quota = $this->getQuota();
         $done = $this->getAmountDone();
-        switch ($this->streak_id) {
+        switch ($this->task->streak_id) {
             case 8001:
                 return "My total Kapitalach quota was " . $quota . " kapitelach and I said " . $done . " Kapitlach";
                 break;
             case 8002:
                 return "My total Minutes quota was " . $quota . " minutes and I said " . $done . " Minutes";
                 break;
-            default:
-                return $this->task_name;
-                break;
         }
+        return $this->task->streak_duch_name;
     }
 
     private function getQuota() {
@@ -80,7 +70,7 @@ class DuchTask {
                 AND dtm.lang_id = :lang_id
         ");
         $stmt->execute([
-            'grid_id' => $this->grid_id,
+            'grid_id' => $this->task->grid_id,
             'start' => $this->start,
             'end' => $this->end,
             'track_id' => $this->track_info->track_id,
@@ -108,7 +98,7 @@ class DuchTask {
             ORDER BY mark_date DESC
             LIMIT :limit
         ");
-        $stmt->bindValue(':grid_id', $this->grid_id, PDO::PARAM_INT);
+        $stmt->bindValue(':grid_id', $this->task->grid_id, PDO::PARAM_INT);
         $stmt->bindValue(':user_id', $this->user_id, PDO::PARAM_INT);
         $stmt->bindValue(':start', $this->start, PDO::PARAM_INT);
         $stmt->bindValue(':end', $this->end, PDO::PARAM_INT);
