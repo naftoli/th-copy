@@ -251,8 +251,8 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
         if (! isset($admins[$admin_id])) $admins[$admin_id] = $row;
         $children[$user_id] = $admin_id;
         $users[$user_id] = $row;
-        // $shipping_status[$user_id] = in_array($admin_id, $shipping_paid) ? 'ship' : 'pickup';
-        $shipping_status[$user_id] = 'ship';
+        $shipping_status[$user_id] = in_array($admin_id, $shipping_paid) ? 'ship' : 'pickup';
+        // $shipping_status[$user_id] = 'ship';
     }
 
     $info = [];
