@@ -1066,13 +1066,13 @@ abstract class MissionDisplay {
 								continue;
 							}
 							$streak_ids[] = $task->streak_id;
-							
+
 							// total of days to show 
 							if (in_array($task->grid_id, $only_one_task)) {
 								$total_days = 1;
 							} else {
 								$total_days = (int)$this->end - (int)$this->start;
-								if ($task->streak_id == 22002) {
+								if ($task->streak_id == 22001) {
 									// for each week remove a day
 									$to_subtract = floor($total_days / 7);
 									$total_days -= $to_subtract;
