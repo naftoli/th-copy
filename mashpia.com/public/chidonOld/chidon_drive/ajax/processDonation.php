@@ -128,8 +128,20 @@ if ($response != null) {
           $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();          
 
           // send email
-          include_once 'sendEmail.php';
-          sendEmail( $amount, $trans_id, $email, $name );
+          require_once $_SERVER['DOCUMENT_ROOT'] . '/emails/sendEmail.php';
+          // sendEmail( $amount, $trans_id, $email, $name );
+          $subject = "Chidon Drive Donation";
+          $message = '<img src="http://chidondrive.com/ajax/email-header.jpg" style="max-width: 100%; height: auto;" />';
+          $message .= "<p>Dear " . $name . ",</p>";
+          $message .= "<p>Thank you for your generous donation of $" . number_format( $amount, 2 ) . " from " . date('F-d-Y') . ".</p>
+                      <p>Your support enables us to show our children how meaningful their learning is, and to drive them to go mechayil el choyil.</p>";
+          $message .= "<p>Your transaction id is: " . $trans_id . "</p>";
+          $message .= "<p>Thank you.</p>";
+          $message .= "<p>P.S. Please retain this as proof of receipt of your tax-deductible donation of $" . number_format( $amount, 2 ) . "USD. No goods or services were provided for this donation. Tzivos Hashem is a 501(c)3 nonprofit corporation. Tax ID: 11-2872082.</p>";
+          $error = sendEmail($email, $subject, $message, true, []);
+          if ($error) {
+            $error_msg .= "There was an error sending the confirmation email: " . $error . "\n";
+          }
       } else {
         $error_msg .= "Transaction Failed \n";
         if ($tresponse->getErrors() != null) {
