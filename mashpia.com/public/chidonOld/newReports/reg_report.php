@@ -40,7 +40,7 @@ $sql = "
         yarmulka,
         recruited_by,
         poll,
-        comments,
+        tc.comments,
         test_type,
         non_th_school, 
         a.*
@@ -58,7 +58,6 @@ $sql = "
         tc.year = $req_yr AND u.school_id in (" . implode(',', array_keys($schools)) . ") 
     GROUP BY u.user_id
     ORDER BY reg_date DESC";
-
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;

@@ -168,7 +168,7 @@ function getCouponCredit($row) {
                 SELECT user_serial FROM users WHERE user_id = :user_id
             )
             AND type = 'chidon' 
-            AND date_redeemed is null 
+            AND used = 0
     ";
     $stmt = $db->prepare($sql);
     $stmt->execute([
