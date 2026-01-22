@@ -272,24 +272,30 @@ try {
       error_log("Failed to commit transaction: " . $e->getMessage());
       // Even if commit fails, try to return success since payment went through
     }
+    // Send email BEFORE response (with timeout to prevent hanging)
+    if (!empty($trans_id) && !$cc_info['skip']) {
+      // Include email function before trying to use it
+      if (file_exists(__DIR__ . '/sendEmail.php')) {
+        include_once __DIR__ . '/sendEmail.php';
+        if (function_exists('sendEmail')) {
+          try {
+            // Set a short timeout for email sending
+            $old_time_limit = ini_get('max_execution_time');
+            set_time_limit(5); // Give email 5 seconds max
+            @sendEmail($amount, $trans_id, $email, $name);
+            set_time_limit($old_time_limit);
+          } catch (Throwable $e) {
+            // Silently fail - email is not critical
+            error_log("Failed to send donation email: " . $e->getMessage());
+          }
+        }
+      }
+    }
+    
     echo json_encode([
       'success'   =>  true,
       'message'   =>  $msg
     ]);
-    
-    // Send email AFTER response is sent (non-blocking)
-    if (!empty($trans_id) && !$cc_info['skip']) {
-      // Use register_shutdown_function to send email after response
-      register_shutdown_function(function() use ($amount, $trans_id, $email, $name) {
-        try {
-          include __DIR__ . '/sendEmail.php';
-          sendEmail($amount, $trans_id, $email, $name);
-        } catch (Exception $e) {
-          error_log("Failed to send donation email in shutdown: " . $e->getMessage());
-        }
-      });
-    }
-    
     exit;
   }
   
