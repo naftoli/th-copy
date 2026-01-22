@@ -322,7 +322,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 						<div class="date"><?=$start_date?> - <?=$end_date?> / <span class="hebrew"><?=$j_start_date?> - <?=$j_end_date?></span></div>
 					</div>
 					<div id="navigation-buttons">
-						<? if($end - 7 >= unixtojd() - 28) { ?>
+						<? if($end - 7 >= unixtojd() - $limit) { ?>
 							<a id="previous" class="parsha-navigator" href="<?="..{$mobileURL}missionsNew.html?id=$user_id&d=" . ($end - 7)?>">
 								<img src="img_new/arrow-1-color-white-svg.svg" /> <?=$parshos[$end - 7]?>
 							</a>
