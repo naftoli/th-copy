@@ -2,6 +2,10 @@
 ini_set('display_errors',1);
 ini_set('error_reporting', E_ALL);
 
+// Set custom error log file for donation processing
+$donation_log_file = __DIR__ . '/donation_errors.log';
+ini_set('error_log', $donation_log_file);
+
 require_once __DIR__ . '/../../../api/header/db.php';
 require_once __DIR__ . '/../../../class.globalSettings.php';
 
@@ -129,7 +133,7 @@ try {
   ");
   
   // Use placeholder transaction_id initially
-  $placeholder_trans_id = $cc_info['skip'] ? '11111' : '0';
+  $placeholder_trans_id = $cc_info['skip'] ? 11111 : 0;
   $placeholder_trans_info = $cc_info['skip'] ? 'testing by skipping authorize.net transaction.' : 'Pending credit card processing';
   
   $res = $stmt->execute([
@@ -211,21 +215,20 @@ try {
               $trans_info = $trans_id . ":" . $tresponse->getResponseCode() . ":" . $tresponse->getMessages()[0]->getCode() . ":". $tresponse->getAuthCode() . ":" . $tresponse->getMessages()[0]->getDescription();
               
               // Update donation record with actual transaction info
-              $update_stmt = $MASHPIA_DB->prepare("
-                UPDATE chidon_donations 
-                SET transaction_id = :trans_id, transaction_info = :trans_info
-                WHERE chidon_donation_id = :donation_id
-              ");
-              $update_stmt->execute([
-                ':trans_id' => $trans_id,
-                ':trans_info' => $trans_info,
-                ':donation_id' => $donation_id
-              ]);
-
-              // send email
-              include 'sendEmail.php';
-              if (! sendEmail( $amount, $trans_id, $email, $name )) {
-                $error_msg .= "There was an error sending the confirmation email";
+              try {
+                $update_stmt = $MASHPIA_DB->prepare("
+                  UPDATE chidon_donations 
+                  SET transaction_id = :trans_id, transaction_info = :trans_info
+                  WHERE id = :donation_id
+                ");
+                $update_stmt->execute([
+                  ':trans_id' => $trans_id,
+                  ':trans_info' => $trans_info,
+                  ':donation_id' => $donation_id
+                ]);
+              } catch (Exception $e) {
+                // Log error but don't fail the transaction
+                error_log("Failed to update donation transaction info: " . $e->getMessage());
               }
           } else {
             $error_msg .= "Transaction Failed \n";
@@ -251,25 +254,55 @@ try {
   // STEP 4: Commit or rollback based on payment result
   if ( !empty( $error_msg ) && !$cc_info['skip'] ) {
     // Payment failed - rollback the database transaction
-    $MASHPIA_DB->rollBack();
+    try {
+      $MASHPIA_DB->rollBack();
+    } catch (Exception $e) {
+      error_log("Failed to rollback transaction: " . $e->getMessage());
+    }
     echo json_encode([
       'success'   =>  false,
       'message'   =>  $error_msg
     ]);
+    exit;
   } else {
     // Payment succeeded (or skipped) - commit the transaction
-    $MASHPIA_DB->commit();
+    try {
+      $MASHPIA_DB->commit();
+    } catch (Exception $e) {
+      error_log("Failed to commit transaction: " . $e->getMessage());
+      // Even if commit fails, try to return success since payment went through
+    }
     echo json_encode([
       'success'   =>  true,
       'message'   =>  $msg
     ]);
+    
+    // Send email AFTER response is sent (non-blocking)
+    if (!empty($trans_id) && !$cc_info['skip']) {
+      // Use register_shutdown_function to send email after response
+      register_shutdown_function(function() use ($amount, $trans_id, $email, $name) {
+        try {
+          include __DIR__ . '/sendEmail.php';
+          sendEmail($amount, $trans_id, $email, $name);
+        } catch (Exception $e) {
+          error_log("Failed to send donation email in shutdown: " . $e->getMessage());
+        }
+      });
+    }
+    
+    exit;
   }
   
 } catch (Exception $e) {
   // Rollback on any exception
-  $MASHPIA_DB->rollBack();
+  try {
+    $MASHPIA_DB->rollBack();
+  } catch (Exception $rollbackEx) {
+    error_log("Failed to rollback on exception: " . $rollbackEx->getMessage());
+  }
   echo json_encode([
     'success'   =>  false,
     'message'   =>  'An error occurred: ' . $e->getMessage()
   ]);
+  exit;
 }
