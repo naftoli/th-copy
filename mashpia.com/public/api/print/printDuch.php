@@ -42,7 +42,7 @@ if ( $selectedMonth ) {
 } else {
     // date range
     $end = unixtojd();
-    $start = $end - $date_range - 1; // one less b/c we include start and end date in total number of days
+    $start = $end - $date_range + 1; // one less b/c we include start and end date in total number of days
 } 
 // * Set class_ids and user_ids if not set by client
 if ( !$class_ids ) {
