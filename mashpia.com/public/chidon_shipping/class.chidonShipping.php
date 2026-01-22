@@ -1450,7 +1450,7 @@ class ChidonShipping
         $info = [];
         $cat = 'gear';
         foreach ($rows as $row) {
-            $gender = $row['gender'] == 'M' ? 'boys' : $row['gender'] == 'F' ? 'girls' : '';
+            $gender = ($row['gender'] == 'M') ? 'boys' : ($row['gender'] == 'F' ? 'girls' : '');
             foreach ($items as $item) {
                 if ($item == 'th sweater') {
                     $id = $this->getItemID($cat, $item, $gender, $row['size']);
