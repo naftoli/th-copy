@@ -30,10 +30,10 @@ function sendEmail($to, $subject, $message, $isHtml = true, $attachments = []) {
 }
 
 function addFooterToMessage($message) {
-    $msg_footer = <<<FOOTER
+    $msg_footer = '
     <br /><br />
     <div align="center">
-    &copy; 2019 Tzivos Hashem<br />
+    &copy; 2026 Tzivos Hashem<br />
     <address>
       792 Eastern Pkwy, Brooklyn, NY 11213
     </address>
@@ -41,7 +41,7 @@ function addFooterToMessage($message) {
     <a href="http://mashpia.com/privacy.html">Privacy Policy</a><br />
     To unsubscibe from these emails please click <a href="http://mashpia.com/unsubscribe.html">here</a><br />
     </div>
-    FOOTER;
+    ';
     $message .= $msg_footer;
     return $message;
 }
