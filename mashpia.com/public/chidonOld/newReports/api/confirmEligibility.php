@@ -17,12 +17,11 @@ $school_id = $input['school'];
  * It should lock Inputting Marks for test 3
  */
 
-$error = false;
-$success = addToConfirmations($school_id, $year);
+$error_msg = addToConfirmations($school_id, $year);
 echo json_encode([
-    'success'   => $success,
+    'success'   => $error_msg === 0,
     'error'     => 'Failed to confirm eligibility.',
-    'error_msg' => $error
+    'error_msg' => $error_msg
 ]);
 
 function addToConfirmations($school_id, $year) {
@@ -30,13 +29,13 @@ function addToConfirmations($school_id, $year) {
     $sql = "INSERT IGNORE INTO chidon_confirmations (school_id, year) VALUES (:school, :year)";
     $stmt = $MASHPIA_DB->prepare($sql);
     if ($stmt->execute([
-        ':school'   => $school_id,
         ':year'     => $year,
+        ':school'   => $school_id,
     ])) {
-        return true;
+        return 0;
     } else {
-        $error = $stmt->errorInfo();
-        return false;
+        $error = $stmt->errorInfo()[2];
+        return $error;
     }
 }
 

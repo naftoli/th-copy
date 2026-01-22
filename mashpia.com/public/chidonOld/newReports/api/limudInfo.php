@@ -4,6 +4,7 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 
 $input = json_decode(file_get_contents('php://input'), true);
 $year = intval($input['year']);
@@ -20,9 +21,14 @@ if ($school_id == 0 && $admin_user['auth'] != 'super') {
 // find out if school info was confirmed and should be locked
 $locked = 0;
 if ($admin_user['auth'] != 'super') {
-    $sql = "select * from chidon_confirmations where school_id = $school_id and year = $year";
-    $result = mysql_query($sql);
-    if (mysql_num_rows($result) > 0) $locked = 1;
+    $sql = "SELECT * FROM chidon_confirmations WHERE school_id = :school_id AND year = :year";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([
+        ':school_id' => $school_id,
+        ':year' => $year,
+    ]);
+    $result = $stmt->fetchAll();
+    if (count($result) > 0) $locked = 1;
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';

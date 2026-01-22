@@ -14,9 +14,19 @@ $schools = $as->getSchools();
 $year = GlobalSettings::getChidonYear();
 if (isset($_GET['year'])) $year = $_GET['year'];
 
-$sql = "select school_id from chidon_confirmations where year = " . $year;
-$res = $mysqli->query($sql);
-$confirmations = $res->fetch_all(MYSQLI_ASSOC);
+$sql = "SELECT * FROM chidon_confirmations WHERE year = :year";
+$stmt = $MASHPIA_DB->prepare($sql);
+$stmt->execute([':year' => $year]);
+$confirmations = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$info = [];
+$sql = "SELECT * FROM chidon_open_reg WHERE year = :year";
+$stmt = $MASHPIA_DB->prepare($sql);
+$stmt->execute([':year' => $year]);
+$open_reg = $stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($open_reg as $reg) {
+  $info[$reg['school_id']] = $reg;
+}
 
 $school_ids = [];
 foreach ($confirmations as $conf) {
@@ -31,9 +41,14 @@ foreach ($confirmations as $conf) {
         <link href="../../admin_styles.css" rel="stylesheet" type="text/css">
         <style>
           tr, th, td {
-            padding: 6px;
-            font-size: 12px;
-            border-bottom: 1px solid grey;
+            font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+            font-size: 14px;
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+          }
+          input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
           }
         </style>
     </head>
@@ -54,14 +69,21 @@ foreach ($confirmations as $conf) {
         <br />
         <table>
             <tr>
-                <td>School</td>
-                <td>Confirmed</td>
+                <th>School</th>
+                <th>Confirmed</th>
+                <th>Open Registration</th>
+                <th>Notes</th>
             </tr>
             <?php
             foreach ($schools as $id => $school) {
+                if (empty($school)) continue;
                 echo "<tr><td>" . $school . "</td><td>";
                 if (in_array($id, $school_ids)) echo "yes";
                 else echo "no";
+                echo "</td><td>";
+                echo "<input type='checkbox' class='open_registration' data-school_id='" . $id . "' " . (isset($info[$id]) && $info[$id]['open_reg'] ? 'checked' : '') . " />";
+                echo "</td><td>";
+                echo "<textarea class='notes' rows='3' cols='20' placeholder='Notes' data-school_id='" . $id . "'>" . (isset($info[$id]) && $info[$id]['notes'] ? $info[$id]['notes'] : '') . "</textarea>";
                 echo "</td></tr>";
             }
             ?>
@@ -72,6 +94,40 @@ foreach ($confirmations as $conf) {
           e.preventDefault()
           const year = $("#year").val()
           location.href = "confirmed_report.php?year=" + year
+        })
+        $(".open_registration").click( function( e ) {
+          e.preventDefault()
+          const school_id = $(this).data('school_id')
+          const confirmed = $(this).is(':checked') ? 1 : 0
+          fetch('api/updateConfirmation.php', {
+            method: 'POST',
+            body: JSON.stringify({ school_id, value: confirmed, field: 'open_reg' })
+          })
+          .then( response => response.json() )
+          .then( data => {
+            console.log(data)
+            if (data.error) {
+                alert(data.error)
+            }
+          })
+          .catch( error => console.error('Error:', error) )
+        })
+        $(".notes").change( function( e ) {
+          e.preventDefault()
+          const school_id = $(this).data('school_id')
+          const notes = $(this).val()
+          fetch('api/updateConfirmation.php', {
+            method: 'POST',
+            body: JSON.stringify({ school_id, value: notes, field: 'notes' })
+          })
+          .then( response => response.json() )
+          .then( data => {
+            console.log(data)
+            if (data.error) {
+                alert(data.error)
+            }
+          })
+          .catch( error => console.error('Error:', error) )
         })
     </script>
 </html>
