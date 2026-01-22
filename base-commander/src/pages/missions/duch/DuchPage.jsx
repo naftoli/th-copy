@@ -95,7 +95,7 @@ class DuchPage extends Component {
 
     let legacyUrl = '';
     if (LEGACY_URL === '') {
-      legacyUrl = '//duch.mashpia.com/api/print/duch';
+      legacyUrl = 'https://v.mashpia.com/api/print/duch';
     } else {
       legacyUrl = `${LEGACY_URL}/api/print/duch`;
     }

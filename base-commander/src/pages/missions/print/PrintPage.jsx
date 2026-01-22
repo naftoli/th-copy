@@ -82,7 +82,7 @@ class PrintPage extends Component {
 
     let legacyUrl = '';
     if (school_id === 9 && LEGACY_URL === '' && isBC(login.code)) {
-      legacyUrl = '//duch.mashpia.com/api/print/missions';
+      legacyUrl = 'https://v.mashpia.com/api/print/missions';
     } else {
       legacyUrl = `${LEGACY_URL}/api/print/missions`;
     }
