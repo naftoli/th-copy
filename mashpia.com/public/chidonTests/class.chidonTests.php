@@ -953,7 +953,7 @@ class ChidonTests
         $opening[1] = new DateTime('2025-10-19 00:00:00', new DateTimeZone('America/New_York'));
         $opening[2] = new DateTime('2025-12-02 00:00:00', new DateTimeZone('America/New_York'));
         $opening[3] = new DateTime('2026-01-21 00:00:00', new DateTimeZone('America/New_York'));
-        $opening[3] = new DateTime('2026-02-19 00:00:00', new DateTimeZone('America/New_York'));
+        $opening[4] = new DateTime('2026-02-19 00:00:00', new DateTimeZone('America/New_York'));
         return $opening;
     }
 
@@ -967,7 +967,7 @@ class ChidonTests
         $shutdown[1] = new DateTime('2025-11-13 00:00:00', new DateTimeZone('America/New_York'));
         $shutdown[2] = new DateTime('2025-12-25 00:00:00', new DateTimeZone('America/New_York'));
         $shutdown[3] = new DateTime('2026-01-30 00:00:00', new DateTimeZone('America/New_York'));
-        $shutdown[3] = new DateTime('2026-02-23 00:00:00', new DateTimeZone('America/New_York'));
+        $shutdown[4] = new DateTime('2026-02-23 00:00:00', new DateTimeZone('America/New_York'));
         return $shutdown;
     }
 }
