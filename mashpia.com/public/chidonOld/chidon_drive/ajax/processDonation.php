@@ -235,30 +235,38 @@ try {
       error_log("Failed to commit transaction: " . $e->getMessage());
       // Even if commit fails, try to return success since payment went through
     }
-    // Send email BEFORE response (with timeout to prevent hanging)
+    echo json_encode([
+      'success'   =>  true,
+      'message'   =>  $msg
+    ]);
+    
+    // Flush output immediately so response is sent to client (PHP-FPM compatible)
+    if (function_exists('fastcgi_finish_request')) {
+      // This sends the response to the client and closes the connection
+      // The script continues running but client already received the response
+      fastcgi_finish_request();
+    } else {
+      // For non-FastCGI, flush all output buffers
+      while (ob_get_level() > 0) {
+        ob_end_flush();
+      }
+      flush();
+    }
+    
+    // Send email AFTER response is sent (non-blocking - client already got response)
     if (!empty($trans_id) && !$cc_info['skip']) {
       // Include email function before trying to use it
       if (file_exists(__DIR__ . '/sendEmail.php')) {
         include_once __DIR__ . '/sendEmail.php';
         if (function_exists('sendEmail')) {
-          try {
-            // Set a short timeout for email sending
-            $old_time_limit = ini_get('max_execution_time');
-            set_time_limit(5); // Give email 5 seconds max
-            @sendEmail($amount, $trans_id, $email, $name);
-            set_time_limit($old_time_limit);
-          } catch (Throwable $e) {
-            // Silently fail - email is not critical
-            error_log("Failed to send donation email: " . $e->getMessage());
-          }
+          // Don't let email errors affect the response (already sent)
+          // Use error suppression and set a timeout
+          set_time_limit(10); // Give email 10 seconds max
+          @sendEmail($amount, $trans_id, $email, $name);
         }
       }
     }
     
-    echo json_encode([
-      'success'   =>  true,
-      'message'   =>  $msg
-    ]);
     exit;
   }
   
