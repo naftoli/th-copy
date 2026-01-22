@@ -130,8 +130,9 @@
       }
     }
 
-    const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'KHK Trip Eligible', 'Award',
-      'Raised on Drive', 'Personal Credit', 'Minimum Fee', 'Registered', 'Trip Registered', 'Shipping']
+    const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'Ultimate Trip Eligible', 'Highest Possible Award',
+      'Raised on Drive', 'Personal Credit', 'Family Credit', 'Coupon Credit', 'Registration Fee (After Credits/Prepayments were applied)', 
+      'Registered', 'Trip Registered', 'Shipping']
     if (superAdmin) {
       headers.push('Registration Paid')
       headers.push('Confirmed Eligibility')
@@ -197,7 +198,9 @@
                   <span className="smaller">{row.award ? row.khk_passed_tests ? khkAwardDescs[types[row.award]] : awardDescs[types[row.award]] : ''}</span>
                 </td>
                 <td>${row.raised}</td>
-                <td>${row.credit}</td>
+                <td>${row.personal_credit}</td>
+                <td>${row.family_credit}</td>
+                <td>${row.coupon_credit}</td>
                 <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
                 <td>{row.date_paid}</td>
                 <td>{row.trip ? row.trip : parseInt(row.ultimate_trip) == 1 ? 'Ultimate Trip' : ''}</td>

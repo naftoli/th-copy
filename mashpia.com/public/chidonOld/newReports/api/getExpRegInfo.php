@@ -65,6 +65,7 @@ if ($res) {
     $khk_eligibility = KHK::getUltimateTripEligibility($ids)[0];
     $khk_marks = getKhKMarks($year);
     $raised = getAllRaised($year);
+    $family_credit = getAllFamilyCredit();
     $personal_credit = getAllPersonalCredit();
     $ct->overrideStudents($rows);
     $ct->setScores();
@@ -86,7 +87,9 @@ if ($res) {
         $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
         $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
-        $row['credit'] = getPersonalCredit($row);
+        $row['personal_credit'] = getPersonalCredit($row);
+        $row['family_credit'] = getFamilyCredit($row);
+        $row['coupon_credit'] = getCouponCredit($row);
         $info[$row['school_id']][] = $row;
         $actual_schools[$row['school_id']] = $schools[$row['school_id']];
     }
@@ -151,6 +154,31 @@ function getAward($row) {
     else return $award;
 }
 
+function getCouponCredit($row) {
+    global $db, $year;
+
+    $sql = "
+        SELECT 
+            user_id, IFNULL( SUM(value), 0 ) AS total 
+        FROM
+            coupon_codes
+        WHERE
+            year = :year 
+            AND serial_num = (
+                SELECT user_serial FROM users WHERE user_id = :user_id
+            )
+            AND type = 'chidon' 
+            AND date_redeemed is null 
+    ";
+    $stmt = $db->prepare($sql);
+    $stmt->execute([
+        ':year' => $year,
+        ':user_id' => $row['user_id']
+    ]);
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $row['total'] ?? 0;
+}
+
 function getAllRaised($year) {
     global $db;
 
@@ -183,10 +211,10 @@ function getRaised($row) {
 
 function getFee($row) {
     $fees = [
-        'maven'     => 36,
-        'pro'       => 100,
-        'expert'    => 200,
-        'genius'    => 200
+        'maven'     => 50,
+        'pro'       => 105,
+        'expert'    => 205,
+        'genius'    => 205
     ];
     $reward = $row['reward'];
     $fee = array_key_exists($reward, $fees) ? $fees[$reward] : 0;
@@ -248,7 +276,7 @@ function getShippingInfo($row) {
     return isset($shipping[$row['admin_id']]) ? 'shipping' : 'pickup';
 }
 
-function getAllPersonalCredit() {
+function getAllFamilyCredit() {
     global $db, $year;
     
     $credit = [];
@@ -268,7 +296,32 @@ function getAllPersonalCredit() {
     return $credit;
 }
 
+function getFamilyCredit($row) {
+    global $family_credit;
+    return $family_credit[$row['user_id']] ?? 0;
+}
+
+function getAllPersonalCredit() {
+    global $db, $year;
+    
+    $credit = [];
+    $stmt = $db->prepare("
+        SELECT IFNULL(SUM(amount), 0) as total, user_id  
+        FROM registration_charges 
+        WHERE year = :year AND type in ('RRYSD', 'RRYDA', 'RRHVN')
+        GROUP BY user_id 
+    ");
+    $stmt->execute([
+        ':year' => $year
+    ]);
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    foreach ($rows as $row) {
+        $credit[$row['user_id']] = $row['total'];
+    }
+    return $credit;
+}
+
 function getPersonalCredit($row) {
     global $personal_credit;
-    return $personal_credit[$row['admin_id']] ?? 0;
+    return $personal_credit[$row['user_id']] ?? 0;
 }
