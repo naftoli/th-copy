@@ -1071,7 +1071,7 @@ abstract class MissionDisplay {
 							if (in_array($task->grid_id, $only_one_task)) {
 								$total_days = 1;
 							} else {
-								$total_days = (int)$this->end - (int)$this->start;
+								$total_days = (int)$this->end - (int)$this->start + 1; // one more b/c we include start and end date in total number of days
 								if ($task->streak_id == 22001) {
 									// for each week remove a day
 									$to_subtract = floor($total_days / 7);
@@ -1123,7 +1123,8 @@ abstract class MissionDisplay {
 									'task' => $task,
 									'accomplished_count' => $accomplished_count,
 									'total_days' => $total_days,
-									'task_type_name' => $task_type_name,
+									'task_type_name' => $task_type_name, 
+									'icon' => '/mission_report/campaignLogos/Cheshbon-Hanefesh.svg',
 								];
 							}
 						}
@@ -1137,11 +1138,12 @@ abstract class MissionDisplay {
 				$accomplished_count = $report_mission['accomplished_count'];
 				$total_days = $report_mission['total_days'];
 				$task_type_name = $report_mission['task_type_name'];
+				$icon = $report_mission['icon'];
 				?>
 				<div class='track'>
 					<div class='campaign-container'>
 						<div class='campaign-icon'>
-							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$track->subject_id]?>' width='50' height='52' alt='<?= $track->subject_name ?>' />
+							<img src='<?=$icon?>' width='50' height='52' alt='<?= $track->subject_name ?>' />
 						</div>
 						<div class='campaign-items'>
 							<div class='campaign-name' style="font-size: 18px;"><?= $task->short_name ?></div>

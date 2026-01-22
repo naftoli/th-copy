@@ -33,16 +33,16 @@ $besuros_tovos = $_POST['besuros_tovos'] ?? '';
 if ( $selectedMonth ) {
     // selected month - convert the dates to unix timestamps
     $dates = explode( ' - ', $selectedMonth );
-    $start = unixtojd(strtotime($dates[0]));
-    $end = unixtojd(strtotime($dates[1]));
+    $start = unixtojd(strtotime($dates[0])) + 1;
+    $end = unixtojd(strtotime($dates[1])) + 1;
 } else if ( $start && $end ) {
     // convert the dates to unix timestamps
-    if (! is_numeric($start)) $start = unixtojd(strtotime($start));
-    if (! is_numeric($end)) $end = unixtojd(strtotime($end));
+    if (! is_numeric($start)) $start = unixtojd(strtotime($start)) + 1;
+    if (! is_numeric($end)) $end = unixtojd(strtotime($end)) + 1;
 } else {
     // date range
     $end = unixtojd();
-    $start = $end - $date_range;
+    $start = $end - $date_range - 1; // one less b/c we include start and end date in total number of days
 } 
 // * Set class_ids and user_ids if not set by client
 if ( !$class_ids ) {
