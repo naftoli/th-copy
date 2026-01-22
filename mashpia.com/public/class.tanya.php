@@ -70,7 +70,7 @@ class Tanya extends BalPehCampaign {
 			'user_id' => $user,
 			'campaign_id' => $this->campaign_id
 		]);	
-		$stmt->debugDumpParams();
+		// $stmt->debugDumpParams();
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		return $row['total'];
     }
