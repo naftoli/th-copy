@@ -64,12 +64,13 @@ class Tanya extends BalPehCampaign {
 				FROM lines_learned 
 				WHERE user_id = :user_id 
 				and campaign_id = :campaign_id
-				and lines_learned > 0";
+				and mission_sheet_amount > 0";
 		$stmt = $MASHPIA_DB->prepare($sql);
 		$stmt->execute([
 			'user_id' => $user,
 			'campaign_id' => $this->campaign_id
 		]);	
+		$stmt->debugDumpParams();
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		return $row['total'];
     }
