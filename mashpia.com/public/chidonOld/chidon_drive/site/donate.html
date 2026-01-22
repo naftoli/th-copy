@@ -706,7 +706,9 @@
 					$("#donateBtn").attr('disabled', false);
 					alert(res.message);
 					if (res.success) {
-						location.href = "thank-you.html";
+						setTimeout(function() {
+							location.href = "thank-you.html";
+						}, 1000);
 					}
 				});
 			});

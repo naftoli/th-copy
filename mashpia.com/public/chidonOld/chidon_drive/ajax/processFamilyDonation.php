@@ -188,8 +188,6 @@ try {
   // STEP 2: Process credit card payment
   if ( $cc_info['skip'] ) {
     // don't process card at all
-    $trans_id = 11111;
-    $trans_info = "testing by skipping authorize.net transaction.";
     $response = null;
     $msg = "Success.";
   } else {
@@ -299,7 +297,9 @@ try {
           // Don't let email errors affect the response (already sent)
           // Use error suppression and set a timeout
           set_time_limit(10); // Give email 10 seconds max
-          @sendEmail($amount, $trans_id, $email, $name);
+          if (!sendEmail($amount, $trans_id, $email, $name)) {
+            error_log("Failed to send donation email: " . $e->getMessage());
+          }
         }
       }
     }
