@@ -83,7 +83,7 @@ foreach ($confirmations as $conf) {
                 echo "</td><td>";
                 echo "<input type='checkbox' class='open_registration' data-school_id='" . $id . "' " . (isset($info[$id]) && $info[$id]['open_reg'] ? 'checked' : '') . " />";
                 echo "</td><td>";
-                echo "<textarea class='notes' rows='3' cols='20' placeholder='Notes' data-school_id='" . $id . "'>" . (isset($info[$id]) && $info[$id]['notes'] ? $info[$id]['notes'] : '') . "</textarea>";
+                echo "<textarea class='notes' rows='3' cols='20' data-school_id='" . $id . "'>" . (isset($info[$id]) && $info[$id]['notes'] ? $info[$id]['notes'] : '') . "</textarea>";
                 echo "</td></tr>";
             }
             ?>
@@ -96,17 +96,16 @@ foreach ($confirmations as $conf) {
           location.href = "confirmed_report.php?year=" + year
         })
         $(".open_registration").click( function( e ) {
-          e.preventDefault()
-          const school_id = $(this).data('school_id')
+          const school_id = this.dataset.school_id
           const confirmed = $(this).is(':checked') ? 1 : 0
           fetch('api/updateConfirmation.php', {
             method: 'POST',
-            body: JSON.stringify({ school_id, value: confirmed, field: 'open_reg' })
+            body: JSON.stringify({ school_id: school_id, value: confirmed, field: 'open_reg' })
           })
           .then( response => response.json() )
           .then( data => {
             console.log(data)
-            if (data.error) {
+            if (!data.success) {
                 alert(data.error)
             }
           })
@@ -114,16 +113,16 @@ foreach ($confirmations as $conf) {
         })
         $(".notes").change( function( e ) {
           e.preventDefault()
-          const school_id = $(this).data('school_id')
+          const school_id = this.dataset.school_id
           const notes = $(this).val()
           fetch('api/updateConfirmation.php', {
             method: 'POST',
-            body: JSON.stringify({ school_id, value: notes, field: 'notes' })
+            body: JSON.stringify({ school_id: school_id, value: notes, field: 'notes' })
           })
           .then( response => response.json() )
           .then( data => {
             console.log(data)
-            if (data.error) {
+            if (!data.success) {
                 alert(data.error)
             }
           })
