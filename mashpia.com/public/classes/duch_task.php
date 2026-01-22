@@ -4,20 +4,22 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.tanya.php';
 
 class DuchTask {
     private $db;
-    public $user_id;
     public $start;
     public $end;
     public $task;
     public $track_info;
+    public $user_id;
+    public $school_type_id;
 
-    public function __construct($user_id, $task, $start, $end, $track_info) {
+    public function __construct($user, $task, $start, $end, $track_info) {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->user_id = $user_id;
+        $this->user_id = $user->user_id;
         $this->start = $start;
         $this->end = $end;
         $this->task = $task;
         $this->track_info = $track_info;
+        $this->school_type_id = $user->school_type_id;
     }
 
     // public function needsPersonalization() {
@@ -67,7 +69,8 @@ class DuchTask {
                 AND dtm.end_date <= :end 
                 AND dtm.track_id = :track_id
                 AND dtm.level = :level
-                AND dtm.lang_id = :lang_id
+                AND dtm.lang_id = :lang_id 
+                AND dtm.school_type_id = :school_type_id
         ");
         $stmt->execute([
             'grid_id' => $this->task->grid_id,
@@ -75,7 +78,8 @@ class DuchTask {
             'end' => $this->end,
             'track_id' => $this->track_info->track_id,
             'level' => $this->track_info->level,
-            'lang_id' => $this->track_info->lang_id
+            'lang_id' => $this->track_info->lang_id,
+            'school_type_id' => $this->school_type_id
         ]);
         // $stmt->debugDumpParams();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);

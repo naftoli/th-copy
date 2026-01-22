@@ -1092,7 +1092,7 @@ abstract class MissionDisplay {
 							if ($accomplished_count > $total_days) $accomplished_count = $total_days;
 							if (! empty($task->streak_duch_name)) {
 								$task->short_name = $task->streak_short_name;
-								$duch_task = new DuchTask($user->user_id, $task, $this->start, $this->end, $track);
+								$duch_task = new DuchTask($user, $task, $this->start, $this->end, $track);
 								$task->task_name = $duch_task->getPersonalizedTask();
 							} 
 							if ($task->grid_id != 13012) {
