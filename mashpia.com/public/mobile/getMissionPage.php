@@ -80,15 +80,44 @@ $dailyStickers = array(
 );
 /********************** LOAD UP THE DATABASE CONNECTION **********************/
 require_once '../db.php';
-$user_id = mysql_real_escape_string( $_GET['id'] );
 
-/********************** GET THE CURRENT PARSHA **********************/
-$curParsha = array();
-// if ( isset( $_GET ) ) {
-// 	print_r( $_GET );
-// 	exit;
-// }
-if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - 28) { // if the date was not provided or it is older then 28 days ago (4 weeks)
+/********************** INCLUDE DEPENDANCIES **********************/
+include("../classes/user.php");
+include("../classes/user_track.php");
+include("../classes/school_class.php");
+include("../class.taskExceptions.php");
+include("../classes/date_tasks_mission.php");
+include("../classes/daily_task.php");
+include("../classes/weekly_task.php");
+include("../classes/shabbos_task.php");
+include("../classes/no_label_task.php");
+include("../classes/task.php");
+include("../classes/date_tasks_mark.php");
+include("../classes/pesukim_task.php");
+include("../pesukim/class.pesukim.php");
+
+/********************** LOAD THE USER **********************/
+$user_id = mysql_real_escape_string( $_GET['id'] );
+$lang = 1; // default language is english
+$sql = "SELECT * FROM users WHERE user_id = " . $user_id; // get the user
+$query = mysql_query($sql); // run the query
+$row = mysql_fetch_assoc($query); // and get the user
+
+$lang = $row['lang_id']; // update the language
+$user = new user($row); // create a new user
+$user_registered = $user->user_registered && $user->user_start_date > 0 ? 1 : 0;
+
+$school = $user->school_id;
+$grade = $user->class_id;
+
+if (in_array($school, [180, 709])) {
+    echo "Your school does not allow missions to be entered here.";
+    exit;
+}
+
+$curParsha = [];
+$limit = $school == 463 ? 365 : 28;
+if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - $limit) { // if the date was not provided or it is older then 28 days ago (4 weeks)
 	//get todays day
 	$jd = unixtojd();
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
@@ -141,39 +170,7 @@ do {
 	$heDatesDisp[] = $heArr[0];
 } while (++$temp <= $end);
 
-/********************** INCLUDE DEPENDANCIES **********************/
-include("../classes/user.php");
-include("../classes/user_track.php");
-include("../classes/school_class.php");
-include("../class.taskExceptions.php");
-include("../classes/date_tasks_mission.php");
-include("../classes/daily_task.php");
-include("../classes/weekly_task.php");
-include("../classes/shabbos_task.php");
-include("../classes/no_label_task.php");
-include("../classes/task.php");
-include("../classes/date_tasks_mark.php");
-include("../classes/pesukim_task.php");
-include("../pesukim/class.pesukim.php");
-
-/********************** LOAD THE USER **********************/
-$lang = 1; // default language is english
-$sql = "SELECT * FROM users WHERE user_id = " . $user_id; // get the user
-$query = mysql_query($sql); // run the query
-$row = mysql_fetch_assoc($query); // and get the user
-
-$lang = $row['lang_id']; // update the language
-$user = new user($row); // create a new user
-$user_registered = $user->user_registered && $user->user_start_date > 0 ? 1 : 0;
-
-$school = $user->school_id;
-$grade = $user->class_id;
-
-if (in_array($school, [180, 709])) {
-    echo "Your school does not allow missions to be entered here.";
-    exit;
-}
-
+// ********************** LOAD THE USER **********************/
 $user->get_rank(); // get his rank
 $user->get_school_class(); // and get his class
 chdir('../'); // move up a directory
@@ -199,7 +196,7 @@ if (isset($_GET['app'])) define('HOME', 'mission_report');
 else define('HOME', '../mission_report');
 
 /********************** GET ALL THE PARSHIOS **********************/
-$parshos = array();
+$parshos = [];
 if (isset($_GET['d'])) {
 	$jdTemp = unixtojd();
 	$today = intval(date('w', jdtounix($jdTemp))); //sunday starts 0
@@ -232,7 +229,8 @@ if (isset($_GET['d'])) {
 	}
 }
 // only allow parents to go back 3 weeks
-$sql = "select * from parshos where end <= " . $curParsha['end'] . " order by end desc limit 12";
+$sql = "SELECT * FROM parshos WHERE end <= " . $curParsha['end'] . " ORDER BY end DESC";
+if ($limit == 28) $sql .= " LIMIT 12";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
 	$parshos[$row['end']] = $row['name'];
