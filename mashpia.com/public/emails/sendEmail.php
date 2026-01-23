@@ -7,13 +7,19 @@ use PHPMailer\PHPMailer\PHPMailer as PHPMailer;
 use PHPMailer\PHPMailer\SMTP as SMTP;
 use PHPMailer\PHPMailer\Exception as Exception;
 
-function sendEmail($to, $subject, $message, $isHtml = true, $attachments = []) {
+function sendEmail($from, $to, $subject, $message, $isHtml = true, $attachments = []) {
     // add footer to message
     $message = addFooterToMessage($message);
     // send email
     $mail = new PHPMailer(true);
     try {
-        $mail->setFrom('cth@mashpia.com', 'Chayolei Tzivos Hashem');
+        if ($from == 'chidon') {
+            $mail->setFrom('chidon@mashpia.com', 'Chidon');
+            $mail->addReplyTo('chidon@mashpia.com', 'Chidon');
+        } else {
+            $mail->setFrom('admin@mashpia.com', 'Chayolei Tzivos Hashem');
+            $mail->addReplyTo('admin@mashpia.com', 'Chayolei Tzivos Hashem');
+        }
         $mail->addReplyTo('cth@mashpia.com', 'Chayolei Tzivos Hashem');
         $mail->addAddress($to);
         $mail->isHTML($isHtml);
