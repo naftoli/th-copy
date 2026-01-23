@@ -3,8 +3,8 @@ function sendEmail( $amount, $trans_id, $email, $name ) {
     // send email confirmation
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-    $headers[] = 'From: chidon@tzivoshashem.com';
-    $headers[] = 'Reply-To: chidon@tzivoshashem.com';
+    $headers[] = 'From: chidon@mashpia.com';
+    $headers[] = 'Reply-To: chidon@mashpia.com';
 
     $subject = "Chidon Drive Donation";
     $message = '<img src="http://chidondrive.com/ajax/email-header.jpg" style="max-width: 100%; height: auto;" />';

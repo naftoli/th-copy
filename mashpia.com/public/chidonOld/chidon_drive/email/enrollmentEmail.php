@@ -5,8 +5,8 @@ function sendEnrollmentEmail( $email ) {
 
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
-    $headers[] = 'From: chidon@tzivoshashem.com';
-    $headers[] = 'Reply-To: chidon@tzivoshashem.com';
+    $headers[] = 'From: chidon@mashpia.com';
+    $headers[] = 'Reply-To: chidon@mashpia.com';
 
     $server = $_SERVER['SERVER_NAME'];
     if ( $server == 'chidondrive.com' ) $src = "http://chidondrive.com/email/Chidon-5780-Header-web.png";

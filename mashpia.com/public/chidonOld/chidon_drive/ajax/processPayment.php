@@ -137,8 +137,8 @@ if ($response != null) {
           $parent_email = $row['admin_email'];
           $subject = "Shabbaton Enrollment " . $year;
           $message = "Thank you for your registration fee of $" . $amount . ". Your transaction id is: " . $trans_id . ". Your child(ren) are now enrolled in the Chidon Shabbaton for " . $year;
-          $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
-                    'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+          $headers = 'From: chidon@mashpia.com' . "\r\n" .
+                    'Reply-To: chidon@mashpia.com' . "\r\n";
           @mail( "$email, $parent_email", $subject, $message, $headers );
         } else {
           $error_msg .= "Transaction Failed \n";

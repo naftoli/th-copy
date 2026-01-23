@@ -47,8 +47,8 @@ if ( $success ) {
   $email = $row['admin_email'];
   $subject = "Shabbaton Enrollment " . $year;
   $message = "Your child(ren) are now successfully enrolled in the Chidon Shabbaton for " . $year;
-  $headers = 'From: chidon@tzivoshashem.com' . "\r\n" .
-            'Reply-To: chidon@tzivoshashem.com' . "\r\n";
+  $headers = 'From: chidon@mashpia.com' . "\r\n" .
+            'Reply-To: chidon@mashpia.com' . "\r\n";
   @mail( $email, $subject, $message, $headers );
 
   echo json_encode([
