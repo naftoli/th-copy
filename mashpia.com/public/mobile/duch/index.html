@@ -444,6 +444,9 @@
         #print-buttons {
             padding-top: 1em;
         }
+        #selection select, #selection button {
+            padding: 5px;
+        }
     </style>
 </head>
 <body>
@@ -454,7 +457,60 @@
     </div>
     <div class="personalImg no-print"></div>
 
-    <div class="no-print" id="buttons">
+    <script>
+        const heMonths = {
+            'טבת': '12/21/25 - 1/18/26',
+            'שבט': '1/19/26 - 2/17/26',
+            'אדר': '2/18/26 - 3/18/26',
+            'ניסן': '3/19/26 - 4/16/26',
+            'אייר': '4/17/26 - 5/16/26',
+            'סיון': '5/17/26 - 6/15/26',
+            'תמוז': '6/16/26 - 7/14/26',
+            'אב': '7/15/26 - 8/13/26',
+            'אלול': '8/14/26 - 9/11/26'
+        }
+    </script>
+
+    <div class="no-print" id="selection">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <p>
+                        Choose the dates to print the Duch for:
+                        <br />
+                        <select id="date-range">
+                            <option value="30">Last 30 Days</option>
+                            <option value="60">Last 60 Days</option>
+                            <option value="90">Last 90 Days</option>
+                        </select>
+                    </p>
+                    <p>
+                        OR choose a hebrew month:
+                        <br />
+                        <select id="hebrew-month">
+                            <option value="">Select a month</option>
+                            <script>
+                                Object.keys(heMonths).forEach(month => {
+                                    document.getElementById('hebrew-month').innerHTML += `<option value="${month}">${month}</option>`;
+                                });
+                            </script>
+                        </select>
+                    </p>
+                    <p>
+                        OR choose a date range:
+                        <br />
+                        <input type="date" id="start-date" />
+                        <input type="date" id="end-date" />
+                    </p>
+                    <button onclick="javascript:generateDuch()">Generate Duch</button>
+                    <hr />
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+
+    <div class="no-print" id="buttons" style="display: none;">
         <button class="no-print btn btn-primary btn-sm" onclick="javascript:printDuch()">Print</button>
         <button class="no-print btn btn-primary btn-sm email" style="display: none;" onclick="javascript:emailToOhel()">Email to the Ohel</button>
     </div>
@@ -473,6 +529,8 @@
 <script src="/scripts/js.cookie.js"></script>
 
 <script>
+    var id
+
     // options for the loading spinner....
     var opts = {
         lines: 8, // The number of lines to draw
@@ -500,7 +558,7 @@
     document.addEventListener("DOMContentLoaded", function () {
         $(function () {
             var url = location.toString();
-            var id = url.substring(url.indexOf('=') + 1);
+            id = url.substring(url.indexOf('=') + 1);
             var str = id;
             // get the date from the URL
             var d = id.indexOf('&d');
@@ -524,8 +582,6 @@
                 $(".personalImg").append(html);
             });
 
-            new Spinner(opts).spin(document.getElementById('spinner'));
-
             // use regex to determine desktop or mobile
             var desktop = $(window).width() >
                 767; // all devices this small are mobile. As well as the folowing regex
@@ -536,17 +592,58 @@
             console.log({
                 "desktop": desktop
             });
-            
-            // get the duch page
-            $.get('getDuch.php?id=' + id, function(html) {
-                $("#spinner").empty();
-                $('#main').html(html);
-                $("#main").addClass("animated fadeIn");
-            });
-
         });
 
     }); // end on page loaded listener
+
+    function generateDuch() {
+        const dateRange = document.getElementById('date-range').value;
+        const hebrewMonth = document.getElementById('hebrew-month').value;
+        let startDate = document.getElementById('start-date').value;
+        let endDate = document.getElementById('end-date').value;
+        let start, end
+
+        if (dateRange) {
+            end = new Date();
+            start = new Date(end)
+            start.setDate(start.getDate() - dateRange + 1);
+            end.setDate(end.getDate() + 1);
+        }  
+        if (hebrewMonth) {
+            const dates = heMonths[hebrewMonth].split(' - ');
+            start = new Date(dates[0]);
+            start.setDate(start.getDate() + 1);
+            end = new Date(dates[1]);
+            end.setDate(end.getDate() + 1);
+        }  
+        if (startDate && endDate) {
+            start = new Date(startDate);
+            start.setDate(start.getDate() + 1);
+            end = new Date(endDate);
+            end.setDate(end.getDate() + 1);
+        } 
+        
+        if (!start || !end) {
+            alert('Please select a date range or a hebrew month');
+            return;
+        }
+
+        // Function to get clean YYYY-MM-DD in local time
+        function getLocalDateString(date) {
+            const localDate = new Date(date.getTime());
+            return localDate.toISOString().split('T')[0];
+        }
+
+        new Spinner(opts).spin(document.getElementById('spinner'));
+        // get the duch page
+        const url = 'getDuch.php?id=' + id + '&start=' + getLocalDateString(start) + '&end=' + getLocalDateString(end);
+        $.get(url, function(html) {
+            $("#spinner").empty();
+            $('#main').html(html);
+            $("#main").addClass("animated fadeIn");
+            $("#buttons").show();
+        });
+    }
 
     function emailToOhel() {
         new Spinner(opts).spin(document.getElementById('spinner'));

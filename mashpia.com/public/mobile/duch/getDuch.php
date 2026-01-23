@@ -12,9 +12,15 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.accompl
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/classes/duch_task.php' );
 
-$dates = GlobalSettings::getCurYearDates();
-$start = $dates['start'];
-$end = unixtojd();
+if (isset($_GET['start']) && isset($_GET['end'])) {
+    $start = unixtojd(strtotime($_GET['start']));
+    $end = unixtojd(strtotime($_GET['end']));
+} else {
+    $dates = GlobalSettings::getCurYearDates();
+    $start = $dates['start'];
+    $end = unixtojd();
+}
+
 $user_id = $_GET['id'];
 $user = \Soldier::find([ $user_id ]);
 $mission = new Missions( $start, $end, $user_id, 0, 0, true, true, true );
