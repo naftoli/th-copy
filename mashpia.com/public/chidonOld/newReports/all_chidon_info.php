@@ -341,6 +341,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
             $fields_to_use = [
                 "highest_track",
                 "test_type",
+                "khk_override",
                 "personal_credit",
                 "coupon_code",
                 "raised",
@@ -412,7 +413,7 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
             ];
             
             $fields = ['first', 'last', 'admin_id', 'user_id', 'user_serial', 'school_id', 'class_id', 'class_grade', 'class_sub', 'school_id_chidon', 
-                'personal_credit', 'coupon_code', 'raised', 'family_balance', 'track_passed', 'khk_override'];
+                'personal_credit', 'coupon_code', 'raised', 'family_balance', 'track_passed'];
             $stmt = $MASHPIA_DB->query("show columns from th_chidon");
             foreach ( $stmt->fetchAll() as $row ) {
                 if (in_array($row['Field'], $fields_to_use)) $fields[] = $row['Field'];
