@@ -31,12 +31,14 @@ function getChildren() {
                 c.class_grade, 
                 tc.*, 
                 conf.chidon_confirmation_id as schoolConfirmed, 
+                cor.open_reg as openRegForSchool,
                 a.admin_id, a.admin_country, a.admin_address1, a.admin_address2, a.admin_city, a.admin_state, a.admin_postal 
             from users u 
             join schools s using (school_id)
             join th_chidon tc using (user_id)  
             join classes c on c.class_id = u.class_id 
             left join chidon_confirmations conf on (u.school_id = conf.school_id and conf.year = :year) 
+            left join chidon_open_reg cor on (cor.school_id = u.school_id and cor.year = :year) 
             join admin_auths aa on aa.id = u.user_id 
             join admins a using (admin_id) 
             where tc.year = :year 

@@ -849,7 +849,7 @@
             show_reg = true
           }
 
-          if (child.chidonRegistered && parseInt(child.chidonSchoolConfirmed)) {
+          if (child.chidonRegistered && (parseInt(child.chidonSchoolConfirmed) || parseInt(child.openRegForSchool))) {
             $(".subsidy").show()
           }
 

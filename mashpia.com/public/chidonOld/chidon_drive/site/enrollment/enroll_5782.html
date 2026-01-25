@@ -550,8 +550,8 @@
 
         let registered = children.filter(child => child.date_paid)
         let haveTrack = children.filter(child => child.track)
-        let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.schoolConfirmed))
-        let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed))
+        let eligible = children.filter(child => child.track && !child.date_paid && (parseInt(child.schoolConfirmed) || parseInt(child.openRegForSchool)))
+        let schoolNotConfirmed = children.filter(child => !parseInt(child.schoolConfirmed) && !parseInt(child.openRegForSchool))
 
         if (!schoolNotConfirmed.length && !eligible.length && !registered.length) {
             alert("It seems like you don't have any child(ren) that are eligible this year.")

@@ -1253,7 +1253,7 @@
 			
 			let close = true // change to false to open registration
 			let registered = children.filter(child => child.date_paid)
-			let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed)
+			let eligible = children.filter(child => child.track && !child.date_paid && (child.schoolConfirmed || parseInt(child.openRegForSchool)))
 			if (Cookies.get('naftoli')) {
 				close = false
 				eligible = children.filter(child => !child.date_paid)
@@ -1398,7 +1398,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 		}
 
 		async function processPage(admin, eligible) {
-			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed)
+			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed && !parseInt(child.openRegForSchool))
 			if (schoolNotConfirmed.length) {
 				alert('Some of your children will not show up because their school has not yet confirmed their eligibility.')
 			}

@@ -341,7 +341,6 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
             $fields_to_use = [
                 "highest_track",
                 "test_type",
-                "khk_override",
                 "personal_credit",
                 "coupon_code",
                 "raised",
