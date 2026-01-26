@@ -8,6 +8,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
+$superAdmin = $admin_user['auth'] == 'super';
+
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
@@ -71,6 +73,9 @@ foreach ($confirmations as $conf) {
             <tr>
                 <th>School</th>
                 <th>Confirmed</th>
+                <?php if ($superAdmin) : ?>
+                <th>Remove Confirmation</th>
+                <?php endif; ?>
                 <th>Open Registration</th>
                 <th>Notes</th>
             </tr>
@@ -80,6 +85,9 @@ foreach ($confirmations as $conf) {
                 echo "<tr><td>" . $school . "</td><td>";
                 if (in_array($id, $school_ids)) echo "yes";
                 else echo "no";
+                if ($superAdmin) {
+                    echo "</td><td><button class='remove_confirmation' data-school_id='" . $id . "'>Remove Confirmation</button></td>";
+                }
                 echo "</td><td>";
                 echo "<input type='checkbox' class='open_registration' data-school_id='" . $id . "' " . (isset($info[$id]) && $info[$id]['open_reg'] ? 'checked' : '') . " />";
                 echo "</td><td>";
@@ -128,5 +136,26 @@ foreach ($confirmations as $conf) {
           })
           .catch( error => console.error('Error:', error) )
         })
+        <?php if ($superAdmin) : ?>
+        $(".remove_confirmation").click( function( e ) {
+          e.preventDefault()
+          const school_id = this.dataset.school_id
+          fetch('api/removeConfirmation.php', {
+            method: 'POST',
+            body: JSON.stringify({ school_id: school_id })
+          })
+          .then( response => response.json() )
+          .then( data => {
+            console.log(data)
+            if (!data.success) {
+                alert(data.error)
+            } else {
+                alert('Confirmation removed.')
+                location.reload()
+            }
+          })
+          .catch( error => console.error('Error:', error) )
+        })
+        <?php endif; ?>
     </script>
 </html>
