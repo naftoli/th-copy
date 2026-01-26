@@ -117,7 +117,7 @@ foreach ($students as $student) {
         'havonah'   => $avgs['expert'],
         'iyun'      => $avgs['genius'],
         'non_cumulative_track_passed'   => $track_passed ? $types[$track_passed] : '',
-        'cumulative_track_passed'   => calculateCumulative($student),
+        'cumulative_track_passed'   => ucwords(calculateCumulative($student)),
 //        'time_committed'    => $learning_time[$student['test_type']] * $days,
 //        'time_learned'  => $learned,
         'dropped_out'   => intval($student['dropped_out']),
