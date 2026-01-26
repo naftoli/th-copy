@@ -993,7 +993,6 @@ function sendMyselfEmail($error, $desc) {
     $headers[] = 'MIME-Version: 1.0';
     $headers[] = 'Content-type: text/html; charset=iso-8859-1';
     $headers[] = 'From: chidon@mashpia.com';
-    $headers[] = 'CC: zalman@campsgi.com';
     $description = '';
     if (is_array($desc)) {
         foreach ($desc as $item) {
