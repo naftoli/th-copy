@@ -131,7 +131,7 @@
     }
 
     const headers = ['Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'Ultimate Trip Eligible', 'Highest Possible Award',
-      'Raised on Drive', 'Personal Credit', 'Family Credit', 'Coupon Credit', 'Registration Fee (After Credits/Prepayments were applied)', 
+      'Raised on Drive', 'Personal Credit', 'Coupon Credit', 'Registration Fee (After Drive/Personal/Coupon Credits were applied)', 'Family Credit', 
       'Registered', 'Trip Registered', 'Shipping']
     if (superAdmin) {
       headers.push('Registration Paid')
@@ -199,9 +199,9 @@
                 </td>
                 <td>${row.raised}</td>
                 <td>${row.personal_credit}</td>
-                <td>${row.family_credit}</td>
                 <td>${row.coupon_credit}</td>
                 <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
+                <td>${row.family_credit}</td>
                 <td>{row.date_paid}</td>
                 <td>{row.trip ? row.trip : parseInt(row.ultimate_trip) == 1 ? 'Ultimate Trip' : ''}</td>
                 <td>{([61, 269].includes(parseInt(row.school_id)) || superAdmin) ? row.shipping : ''}</td>

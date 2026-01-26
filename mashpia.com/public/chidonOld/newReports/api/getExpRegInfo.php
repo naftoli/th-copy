@@ -67,6 +67,7 @@ if ($res) {
     $raised = getAllRaised($year);
     $family_credit = getAllFamilyCredit();
     $personal_credit = getAllPersonalCredit();
+    $coupon_credit = getAllCouponCredit();
     $ct->overrideStudents($rows);
     $ct->setScores();
     $ct->calculateMarks();
@@ -87,9 +88,9 @@ if ($res) {
         $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
         $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
-        $row['personal_credit'] = getPersonalCredit($row);
-        $row['family_credit'] = getFamilyCredit($row);
-        $row['coupon_credit'] = getCouponCredit($row);
+        $row['personal_credit'] = $personal_credit[$row['user_id']] ?? 0;
+        $row['family_credit'] = $family_credit[$row['admin_id']] ?? 0;
+        $row['coupon_credit'] = $coupon_credit[$row['user_serial']] ?? 0;
         $info[$row['school_id']][] = $row;
         $actual_schools[$row['school_id']] = $schools[$row['school_id']];
     }
@@ -154,29 +155,29 @@ function getAward($row) {
     else return $award;
 }
 
-function getCouponCredit($row) {
+function getAllCouponCredit() {
     global $db, $year;
 
     $sql = "
         SELECT 
-            serial_num, IFNULL( SUM(value), 0 ) AS total 
+            serial_num, IFNULL(SUM(value), 0) AS total
         FROM
             coupon_codes
         WHERE
-            year = :year 
-            AND serial_num = (
-                SELECT user_serial FROM users WHERE user_id = :user_id
-            )
-            AND type = 'chidon' 
-            AND used = 0
+            year = :year AND type = 'chidon'
+                AND used = 0
+        GROUP BY serial_num
     ";
     $stmt = $db->prepare($sql);
     $stmt->execute([
-        ':year' => $year,
-        ':user_id' => $row['user_id']
+        ':year' => $year 
     ]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $row['total'] ?? 0;
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $credit = [];
+    foreach ($rows as $row) {
+        $credit[$row['serial_num']] = $row['total'];
+    }
+    return $credit;
 }
 
 function getAllRaised($year) {
@@ -205,6 +206,7 @@ function getAllRaised($year) {
 }
 
 function getFee($row) {
+    global $raised, $personal_credit, $family_credit, $coupon_credit;
     $fees = [
         'maven'     => 50,
         'pro'       => 105,
@@ -213,13 +215,20 @@ function getFee($row) {
     ];
     $reward = $row['reward'];
     $fee = array_key_exists($reward, $fees) ? $fees[$reward] : 0;
+    $fee = intval($fee);
+    $subtract = 0;
     // check if already paid for registration
-    if (intval($row['paid']) > 0) $fee -= intval($row['paid']);
+    if (intval($row['paid']) > 0) $subtract += intval($row['paid']);
     // check how much was raised
-    if ($row['raised'] > 0) $fee -= intval($row['raised']);
-    // zero out negative fees
-    if ($fee < 0) $fee = 0;
-    return $fee;
+    if ($raised[$row['user_id']] > 0) $subtract += intval($raised[$row['user_id']]);
+    // check how much was paid for personal credit
+    if ($personal_credit[$row['user_id']] > 0) $subtract += intval($personal_credit[$row['user_id']]);
+    // check how much was paid for family credit
+    // if ($family_credit[$row['admin_id']] > 0) $subtract += intval($family_credit[$row['admin_id']]);
+    // check how much was paid for coupon credit
+    if ($coupon_credit[$row['user_serial']] > 0) $subtract += intval($coupon_credit[$row['user_serial']]);
+    // return the max of 0 or the fee minus the subtract
+    return max(0, $fee - $subtract);
 }
 
 function getTrip($row) {
@@ -291,11 +300,6 @@ function getAllFamilyCredit() {
     return $credit;
 }
 
-function getFamilyCredit($row) {
-    global $family_credit;
-    return $family_credit[$row['user_id']] ?? 0;
-}
-
 function getAllPersonalCredit() {
     global $db, $year;
     
@@ -314,9 +318,4 @@ function getAllPersonalCredit() {
         $credit[$row['user_id']] = $row['total'];
     }
     return $credit;
-}
-
-function getPersonalCredit($row) {
-    global $personal_credit;
-    return $personal_credit[$row['user_id']] ?? 0;
 }
