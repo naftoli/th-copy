@@ -409,7 +409,8 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                 'th_chidon_id',
                 'first',
                 'raised',
-                'user_serial'
+                'user_serial', 
+                'track_passed'
             ];
             
             $fields = ['first', 'last', 'admin_id', 'user_id', 'user_serial', 'school_id', 'class_id', 'class_grade', 'class_sub', 'school_id_chidon', 
@@ -449,15 +450,15 @@ if (isset($_POST['chidon_ids']) || isset($_POST['user_ids']) || isset($_POST['us
                     } else {
                         if (in_array($field, $not_to_edit)) {
                             echo $row[$field];
-                        } else if ($field == 'track_passed') {
-                            echo "<select id='" . $field . "' name='" . $field . "' class='edit' data-old='" . strtolower($row[$field]) . "'>";
-                                echo "<option value=''></option>";
-                                foreach ($tracks as $track) {
-                                    echo "<option value='" . strtolower($track) . "'";
-                                    if (strtolower($track) == strtolower($row[$field])) echo " selected ";
-                                    echo ">" . $track . "</option>";
-                                }
-                                echo "</select>";
+                        // } else if ($field == 'track_passed') {
+                        //     echo "<select id='" . $field . "' name='" . $field . "' class='edit' data-old='" . strtolower($row[$field]) . "'>";
+                        //         echo "<option value=''></option>";
+                        //         foreach ($tracks as $track) {
+                        //             echo "<option value='" . strtolower($track) . "'";
+                        //             if (strtolower($track) == strtolower($row[$field])) echo " selected ";
+                        //             echo ">" . $track . "</option>";
+                        //         }
+                        //         echo "</select>";
                         } else {
                             if (in_array($field, ['test_type', 'reward_type', 'award_type'])) {
                                 echo "<select id='" . $field . "' name='" . $field . "' class='edit' data-old='" . $row[$field] . "'>";
