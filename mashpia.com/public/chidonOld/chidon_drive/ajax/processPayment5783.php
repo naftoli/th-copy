@@ -975,15 +975,15 @@ function getEmailMsg($trans_id) {
 }
 
 function sendEmail($msg) {
-    global $admin_email;
-
+    // global $admin_email;
+    $admin_email = 'naftoli@tzivoshashem.org';
     if ($admin_email) {
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=iso-8859-1';
         $headers[] = 'From: Chidon Headquarters <chidon@mashpia.com>';
         $headers[] = 'Reply-to: Chidon Headquarters <chidon@tzivoshashem.org>';
         $headers[] = 'Bcc: dedications@tzivoshashem.org';
-        if (isset($_COOKIE['myshliach']) && intval($_COOKIE['myshliach'])) $headers[] = 'Cc: chidon@myshliach.com';
+        // if (isset($_COOKIE['myshliach']) && intval($_COOKIE['myshliach'])) $headers[] = 'Cc: chidon@myshliach.com';
         return @mail($admin_email, 'Chidon Confirmation', $msg, implode("\r\n", $headers));
     }
     return false;
