@@ -314,7 +314,7 @@
                                       <button class="btn btn-primary chidondrive">ChidonDrive Setup</button>
           <!--                                            <button class="btn btn-info story">Submit your Rebbe Story</button>-->
           <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
-                    <!-- <button class="btn btn-primary chidon_reg" style="display: none;">Chidon Reward Registration</button> -->
+                    <button class="btn btn-primary chidon_reg" style="display: none;">Chidon Experience Registration</button>
           <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
           <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
          <!-- <button class="btn btn-primary heyTeves">Hei Teves Sale</button> -->
@@ -722,9 +722,9 @@
 
     // when to show link for chidon registration
     let show_reg = false;
-    // if (Cookies.get('naftoli')) {
-    //   show_reg = true;
-    // }
+    if (Cookies.get('naftoli')) {
+      show_reg = true;
+    }
 
     // allow parents to swipe to open a child's account.
     function setSwiper() {
