@@ -87,7 +87,7 @@ foreach ($confirmations as $conf) {
                 else echo "no";
                 if ($superAdmin) {
                     echo "</td><td><button class='remove_confirmation' data-school_id='" . $id . "'";
-                    if (in_array($id, $school_ids)) {
+                    if (!in_array($id, $school_ids)) {
                         echo " disabled";
                     }
                     echo ">Remove Confirmation</button></td>";
