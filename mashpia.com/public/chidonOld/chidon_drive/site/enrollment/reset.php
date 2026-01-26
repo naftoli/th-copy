@@ -6,7 +6,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 
 $year = GlobalSettings::getChidonYear();
-$date = '2024-02-17';
+$date = '2026-01-25';
 
 if ($admin_user['auth'] != 'super') {
     echo "No Permission.";
@@ -112,30 +112,13 @@ function resetCharges($admin_id) {
 function resetFamilyBalances($admin_id) {
     global $MASHPIA_DB, $year;
 
-    $sql = "select * from family_prepaid_balances where year = :year and admin_id = :admin";
+    $sql = "delete from family_prepaid_balances where year = :year and admin_id = :admin";
     $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([
+    $res = $stmt->execute([
         ':year' => $year,
         ':admin' => $admin_id
     ]);
-    $balance = $stmt->fetch();
-    if (!$balance) {
-        return true;
-    }
-
-    $stmt = $MASHPIA_DB->prepare("
-        update family_prepaid_balances 
-        set used = 0, used_2 = 0, refund_amount = null, refund_type = null, paypal = null, accounting_code = null 
-        where year = :year and admin_id = :admin");
-    $res = $stmt->execute([
-        ':year' => $year,
-        ':admin' => $balance['admin_id']
-    ]);
-    if (!$res) {
-        return false;
-    }
-
-    return true;
+    return $res;
 }
 
 function resetExtraPurchases($admin_id) {
@@ -176,7 +159,7 @@ function resetCoupons($admin_id) {
     $rows = $stmt->fetchAll();
     $serials = array_map(function($r) { return $r['user_serial']; }, $rows);
     foreach ($serials as $user_serial) {
-        if ($coupon->checkForUserCode($user_serial)) $coupon->useUserCode($user_serial);
+        if (!$coupon->resetUserCodes($user_serial)) return false;
     }
     return true;
 }

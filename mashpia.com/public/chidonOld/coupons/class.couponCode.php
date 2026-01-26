@@ -232,4 +232,21 @@ class CouponCode
         if ($stmt->errorCode() > 0) return false;
         else return true;
     }
+
+    public function resetUserCodes($user_serial) {
+        $stmt = $this->db->prepare("
+            UPDATE coupon_codes 
+            SET used = 0, date_redeemed = null 
+            WHERE year = :year
+            AND serial_num = :serial
+            AND type = :type
+        ");
+        $stmt->execute([
+            ':year' => $this->year,
+            ':serial' => $user_serial,
+            ':type' => $this->type
+        ]);
+        if ($stmt->errorCode() > 0) return false;
+        else return true;
+    }
 }
