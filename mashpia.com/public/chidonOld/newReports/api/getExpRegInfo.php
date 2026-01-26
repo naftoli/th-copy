@@ -9,7 +9,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
 $db = getDbHandle();
 $chidon_yr = getChidonYear();
-$year = $_GET['year'] && $_GET['year'] > 0 ? $_GET['year'] : $chidon_yr;
+$year = isset($_GET['year']) && $_GET['year'] > 0 ? $_GET['year'] : $chidon_yr;
 $schools = getSchools(intval($chidon_yr) != intval($year));
 $ct = new ChidonTests($year);
 $types = $ct->getTypes();
@@ -62,12 +62,14 @@ $info = [];
 if ($res) {
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $ids = array_map(function($row) { return $row['user_id']; }, $rows);
-    $khk_eligibility = KHK::getUltimateTripEligibility($ids)[0];
+    $khk_eligibility_result = KHK::getUltimateTripEligibility($ids);
+    $khk_eligibility = !empty($khk_eligibility_result) ? $khk_eligibility_result[0] : [];
     $khk_marks = getKhKMarks($year);
     $raised = getAllRaised($year);
     $family_credit = getAllFamilyCredit();
     $personal_credit = getAllPersonalCredit();
     $coupon_credit = getAllCouponCredit();
+    $shipping = getAllShippingInfo();
     $ct->overrideStudents($rows);
     $ct->setScores();
     $ct->calculateMarks();
@@ -128,6 +130,9 @@ function getKhkPassed($row) {
     if (! $row['th_chidon_id']) return false;
     else {
         global $khk_marks;
+        if (!isset($khk_marks[$row['th_chidon_id']]) || empty($khk_marks[$row['th_chidon_id']])) {
+            return false;
+        }
         $marks = $khk_marks[$row['th_chidon_id']];
 
         $total = 0;
@@ -137,6 +142,7 @@ function getKhkPassed($row) {
             $total += $mark['mark'];
             $num_tests++;
         }
+        if ($num_tests == 0) return false;
         $avg = intval($total / $num_tests);
         return $avg >= $passing_mark;
     }
