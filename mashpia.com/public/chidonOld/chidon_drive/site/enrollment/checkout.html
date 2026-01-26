@@ -643,20 +643,21 @@
             }
         })
 
-        let isProcessing = false;
         $(document).on('click', '.processPayment', function (evt) {
             evt.preventDefault();
 
-            if (isProcessing) return; // Prevent further clicks
-            isProcessing = true;
-            $(".processPayment").attr('disabled', true);
-
             // Call the validation function
             if (!validatePayment()) {
-                isProcessing = false; // Reset processing flag
-                $(".processPayment").attr('disabled', false); // Re-enable the button if validation fails
                 return false; // Stop further processing
             }
+
+            // Prevent double-submission
+            if ($(".processPayment").attr('data-processing') === 'true') {
+                return false;
+            }
+
+            $(".processPayment").attr('data-processing', 'true');
+            $(".processPayment").attr('disabled', true);
 
             // Proceed with the AJAX request if validation passes
             const tracks = window.localStorage ? window.localStorage.getItem('tracks') : Cookies.get('tracks');
@@ -690,29 +691,28 @@
                       if (res.success) {
                           // remove all cookies and local storage items
                           clearStorage()
-                          isProcessing = false; // Reset processing flag
-                          $(".processPayment").attr('disabled', false);
+                          // Keep button disabled on success and redirect
                           if (isRunningInIOSApp()) alert(res.msg, true);
                           else {
                             alert(res.msg)
-                            location.href = 'http://mashpia.com/mobile';
+                            location.href = 'https://mashpia.com/mobile';
                           }
                       } else if (res.error) {
                         alert(res.error);
-                        isProcessing = false; // Reset processing flag
+                        $(".processPayment").attr('data-processing', 'false');
                         $(".processPayment").attr('disabled', false);
                       } else {
                           throw new Error("Invalid response format.");
                       }
                   } catch (error) {
                       alert(error.message);
-                    //   isProcessing = false; // Reset processing flag
-                    //   $(".processPayment").attr('disabled', false);
+                      $(".processPayment").attr('data-processing', 'false');
+                      $(".processPayment").attr('disabled', false);
                   }
               })
               .fail(function(jqXHR, textStatus, errorThrown) {
                   alert("Failed to connect to the server. Please try again later.");
-                  isProcessing = false; // Reset processing flag
+                  $(".processPayment").attr('data-processing', 'false');
                   $(".processPayment").attr('disabled', false);
               });
         });
@@ -890,14 +890,14 @@
 				// Close modal when OK button is clicked
 				okButton.onclick = function() {
 					modal.style.display = 'none';
-                    if (redirect) location.href = 'http://mashpia.com/mobile'
+                    if (redirect) location.href = 'https://mashpia.com/mobile'
 				}
 				
 				// Close modal when clicking outside
 				modal.onclick = function(e) {
 					if (e.target === modal) {
 						modal.style.display = 'none';
-                        if (redirect) location.href = 'http://mashpia.com/mobile'
+                        if (redirect) location.href = 'https://mashpia.com/mobile'
 					}
 				}
 				
@@ -905,7 +905,7 @@
 				document.addEventListener('keydown', function(e) {
 					if (e.key === 'Escape' && modal.style.display === 'flex') {
 						modal.style.display = 'none';
-                        if (redirect) location.href = 'http://mashpia.com/mobile'
+                        if (redirect) location.href = 'https://mashpia.com/mobile'
 					}
 				});
 			}
