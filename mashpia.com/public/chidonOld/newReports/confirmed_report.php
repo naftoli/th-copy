@@ -85,8 +85,12 @@ foreach ($confirmations as $conf) {
                 echo "<tr><td>" . $school . "</td><td>";
                 if (in_array($id, $school_ids)) echo "yes";
                 else echo "no";
-                if ($superAdmin && in_array($id, $school_ids)) {
-                    echo "</td><td><button class='remove_confirmation' data-school_id='" . $id . "'>Remove Confirmation</button></td>";
+                if ($superAdmin) {
+                    echo "</td><td><button class='remove_confirmation' data-school_id='" . $id . "'";
+                    if (in_array($id, $school_ids)) {
+                        echo " disabled";
+                    }
+                    echo ">Remove Confirmation</button></td>";
                 }
                 echo "</td><td>";
                 echo "<input type='checkbox' class='open_registration' data-school_id='" . $id . "' " . (isset($info[$id]) && $info[$id]['open_reg'] ? 'checked' : '') . " />";
