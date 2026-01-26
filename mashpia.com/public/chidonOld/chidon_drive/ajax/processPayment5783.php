@@ -984,7 +984,8 @@ function sendEmail($msg) {
         $headers[] = 'Reply-to: Chidon Headquarters <chidon@tzivoshashem.org>';
         $headers[] = 'Bcc: dedications@tzivoshashem.org';
         // if (isset($_COOKIE['myshliach']) && intval($_COOKIE['myshliach'])) $headers[] = 'Cc: chidon@myshliach.com';
-        return @mail($admin_email, 'Chidon Confirmation', $msg, implode("\r\n", $headers));
+        if (@mail($admin_email, 'Chidon Confirmation', $msg, implode("\r\n", $headers))) return true;
+        else return false;
     }
     return false;
 }
