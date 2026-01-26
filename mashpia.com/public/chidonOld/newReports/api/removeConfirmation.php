@@ -13,5 +13,5 @@ $input = json_decode(file_get_contents('php://input'), true);
 $school_id = $input['school_id'];
 $sql = "DELETE FROM chidon_confirmations WHERE school_id = :school_id and year = :year";
 $stmt = $MASHPIA_DB->prepare($sql);
-$stmt->execute([':school_id' => $school_id, ':year' => $year]);
-echo json_encode(['success' => $stmt->rowCount() > 0]);
+$res = $stmt->execute([':school_id' => $school_id, ':year' => $year]);
+echo json_encode(['success' => intval($res)]);

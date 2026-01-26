@@ -85,7 +85,7 @@ foreach ($confirmations as $conf) {
                 echo "<tr><td>" . $school . "</td><td>";
                 if (in_array($id, $school_ids)) echo "yes";
                 else echo "no";
-                if ($superAdmin) {
+                if ($superAdmin && in_array($id, $school_ids)) {
                     echo "</td><td><button class='remove_confirmation' data-school_id='" . $id . "'>Remove Confirmation</button></td>";
                 }
                 echo "</td><td>";
@@ -148,9 +148,9 @@ foreach ($confirmations as $conf) {
           .then( data => {
             console.log(data)
             if (!data.success) {
-                alert(data.error)
+                alert("Failed to remove confirmation.")
             } else {
-                alert('Confirmation removed.')
+                alert('Confirmation removed successfully.')
                 location.reload()
             }
           })
