@@ -487,6 +487,13 @@
         xl: 'Adult XL'
       }
       let html = "<option value=''>Please Select</option>"
+      // Check if options exists before accessing its properties
+      if (!options) {
+        for (let size in sizes) {
+          html += `<option value=''>${sizes[size]} (<i>loading...</i>)</option>`
+        }
+        return html
+      }
       for (let size in sizes) {
         if (options[size] && options[size]['qty'] > 0)
           html += `<option value='${size}'>${sizes[size]} (${options[size]['qty']} left)</option>`
@@ -506,6 +513,12 @@
       let typeUpper = type[0].toUpperCase() + type.substring(1)
       $(this).parent().parent().next('.addressInfo').empty()
       if (num) {
+        // Check if sweater info is loaded
+        if (!sweaters[type]) {
+          alert('Sweater information is still loading. Please wait a moment and try again.')
+          $(this).val(0)
+          return
+        }
         let html = ''
         for (let i = 1; i <= num; i++) {
           html += `<div class="flex medium-select">

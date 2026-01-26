@@ -1251,7 +1251,7 @@
 			// const only_schools = [11, 40, 58, 66, 89, 105, 112, 185, 470, 472, 517, 621, 726, 739, 817]
 			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
 			
-			let close = true // change to false to open registration
+			let close = false // change to false to open registration
 			let registered = children.filter(child => child.date_paid)
 			let eligible = children.filter(child => child.track && !child.date_paid && (child.schoolConfirmed || parseInt(child.openRegForSchool)))
 			if (Cookies.get('naftoli')) {
