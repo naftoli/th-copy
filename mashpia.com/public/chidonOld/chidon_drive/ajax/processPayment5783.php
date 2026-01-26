@@ -187,7 +187,8 @@ function addNewCard() {
         $props = [
             'cc-number' => $ccInfo['num'],
             'cc-exp' => $ccInfo['exp'],
-            'x_card_code' => $ccInfo['cvv']
+            'x_card_code' => $ccInfo['cvv'], 
+            'zip' => $ccInfo['zip']
         ];
         $newCard = $admin->createPaymentProfile($props);
         return $newCard;
