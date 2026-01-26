@@ -83,7 +83,7 @@ if ($res) {
         $row['khk_passed_tests'] = getKhkPassed($row);
         $row['reward'] = getReward($row);
         $row['award'] = getAward($row);
-        $row['raised'] = getRaised($row);
+        $row['raised'] = $raised[$row['user_id']] ?? 0;
         $row['fee'] = getFee($row);
         $row['trip'] = getTrip($row);
         $row['shipping'] = in_array($row['school_id'], [61, 269]) ? getShippingInfo($row) : '';
@@ -159,7 +159,7 @@ function getCouponCredit($row) {
 
     $sql = "
         SELECT 
-            user_id, IFNULL( SUM(value), 0 ) AS total 
+            serial_num, IFNULL( SUM(value), 0 ) AS total 
         FROM
             coupon_codes
         WHERE
@@ -202,11 +202,6 @@ function getAllRaised($year) {
         $raised[$row['user_id']] = $row['total'];
     }
     return $raised;
-}
-
-function getRaised($row) {
-    global $raised;
-    return $raised[$row['user_id']] ?? 0;
 }
 
 function getFee($row) {
