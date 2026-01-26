@@ -91,6 +91,7 @@ if ($res) {
         $row['personal_credit'] = $personal_credit[$row['user_id']] ?? 0;
         $row['family_credit'] = $family_credit[$row['admin_id']] ?? 0;
         $row['coupon_credit'] = $coupon_credit[$row['user_serial']] ?? 0;
+        $row['to_subtract'] = calcToSubtract($row);
         $info[$row['school_id']][] = $row;
         $actual_schools[$row['school_id']] = $schools[$row['school_id']];
     }
@@ -218,17 +219,21 @@ function getFee($row) {
     $fee = intval($fee);
     $subtract = 0;
     // check if already paid for registration
-    if (intval($row['paid']) > 0) $subtract += intval($row['paid']);
-    // check how much was raised
+    // if (intval($row['paid']) > 0) $subtract += intval($row['paid']);
+    $toSubtract = calcToSubtract($row);
+    // return the max of 0 or the fee minus the subtract
+    return max(0, $fee - $toSubtract);
+}
+
+function calcToSubtract($row) {
+    global $raised, $personal_credit, $family_credit, $coupon_credit;
+    $subtract = 0;
     if ($raised[$row['user_id']] > 0) $subtract += intval($raised[$row['user_id']]);
     // check how much was paid for personal credit
     if ($personal_credit[$row['user_id']] > 0) $subtract += intval($personal_credit[$row['user_id']]);
-    // check how much was paid for family credit
-    // if ($family_credit[$row['admin_id']] > 0) $subtract += intval($family_credit[$row['admin_id']]);
     // check how much was paid for coupon credit
     if ($coupon_credit[$row['user_serial']] > 0) $subtract += intval($coupon_credit[$row['user_serial']]);
-    // return the max of 0 or the fee minus the subtract
-    return max(0, $fee - $subtract);
+    return $subtract;
 }
 
 function getTrip($row) {

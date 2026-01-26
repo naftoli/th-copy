@@ -164,7 +164,11 @@
       'Iyun': 'Plaque, Medal, Mini Trophy & KHK Plaque'
     }
 
-    const khkFee = '$200 Regional Trip $350 KHK Trip'
+    const calcKHKFee = (toSubtract) => {
+      const trip = Math.max(0, 200 - toSubtract)
+      const khk = Math.max(0, 350 - toSubtract)
+      return "$" + trip + " Regional Trip $" + khk + " KHK Trip"
+    }
 
     return (
       <div>
@@ -200,7 +204,7 @@
                 <td>${row.raised}</td>
                 <td>${row.personal_credit}</td>
                 <td>${row.coupon_credit}</td>
-                <td>{parseInt(row.khk_eligible) ? khkFee : ('$' + row.fee)}</td>
+                <td>{parseInt(row.khk_eligible) ? calcKHKFee(row.to_subtract) : ('$' + row.fee)}</td>
                 <td>${row.family_credit}</td>
                 <td>{row.date_paid}</td>
                 <td>{row.trip ? row.trip : parseInt(row.ultimate_trip) == 1 ? 'Ultimate Trip' : ''}</td>
