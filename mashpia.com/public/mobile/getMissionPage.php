@@ -1,4 +1,5 @@
 <?php 
+ini_set('max_execution_time', 300);
 //echo "We are working on some upgrades. Please check again later. Sorry for the inconvenience.";
 //exit;
 $days_of_week = array("F", "ש", "S", "M", "T", "W", "T");
