@@ -107,6 +107,7 @@ if (count($activeStreaks) > 0) {
                     console.log(tasks);
                     let html = '<option value="0">Select a task</option>';
                     for (let streakId in tasks) {
+                        if (streakId == 0) continue;
                         html += `<option value="${streakId}">${tasks[streakId]}</option>`;
                     }
                     $('#task').html(html);
