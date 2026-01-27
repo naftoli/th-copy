@@ -140,6 +140,7 @@ class Streaks {
     }
 
     public function setupStreak($streak_id) {
+        if (! $streak_id) return false;
         $year = GlobalSettings::getCurrentYear();
         // find out if task is daily, weekly, monthly, none
         $task_type = $this->getTaskType($streak_id);
