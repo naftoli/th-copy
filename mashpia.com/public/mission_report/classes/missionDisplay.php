@@ -963,7 +963,6 @@ abstract class MissionDisplay {
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		$only_one_task = [21001, 21002, 21003, 21004, 21006, 21007, 21014, 21008, 21009];
-		$skip_grids = [20010];
 		?>
 		<div class="header print-only" style="margin: 20px auto;">
 			<div class="userImg">
@@ -1037,6 +1036,7 @@ abstract class MissionDisplay {
 			$task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
 			$report_mission = [];
 			$streak_ids = []; // keep track of all the streak ids
+			$skip_grids = [20010]; // skip the limud task grid id
 			foreach ($tracks as $track) {
 				$track->lang_id= $this->lang_id;
 				$user->get_medals($track->subject_id, $this->start, $this->end, 0);
