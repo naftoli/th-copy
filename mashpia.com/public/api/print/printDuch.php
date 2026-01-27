@@ -33,17 +33,21 @@ $besuros_tovos = $_POST['besuros_tovos'] ?? '';
 if ( $selectedMonth ) {
     // selected month - convert the dates to unix timestamps
     $dates = explode( ' - ', $selectedMonth );
-    $start = unixtojd(strtotime($dates[0]));
-    $end = unixtojd(strtotime($dates[1]));
-} else if ( $start && $end ) {
+    $start = unixtojd(strtotime($dates[0])) + 1;
+    $end = unixtojd(strtotime($dates[1])) + 1;
+} else if ( $start_date && $end_date ) {
     // convert the dates to unix timestamps
-    if (! is_numeric($start_date)) $start = unixtojd(strtotime($start_date));
-    if (! is_numeric($end_date)) $end = unixtojd(strtotime($end_date));
+    if (! is_numeric($start_date)) $start = unixtojd(strtotime($start_date)) + 1;
+    if (! is_numeric($end_date)) $end = unixtojd(strtotime($end_date)) + 1;
 } else {
     // date range
     $end = unixtojd();
     $start = $end - $date_range + 1; // one less b/c we include start and end date in total number of days
 } 
+// echo "Start: " . $start . "<br />";
+// echo "End: " . $end . "<br />";
+// exit;
+
 // * Set class_ids and user_ids if not set by client
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
