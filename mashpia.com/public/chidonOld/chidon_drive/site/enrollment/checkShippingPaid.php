@@ -14,7 +14,7 @@ if (!$info || !isset($info->admin)) {
 
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        school_id, IFNULL(COUNT(*), 0) AS total
+        school_id, COUNT(*) AS total
     FROM
         registration_charges
     WHERE
@@ -31,7 +31,7 @@ $res = $stmt->execute([
 $paid = [];
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $row) {
-    $paid[$row['school_id']] = $row['total'];
+    $paid[$row['school_id']] = intval($row['total']) ? intval($row['total']) : 0;
 }
 
 echo json_encode($paid);
