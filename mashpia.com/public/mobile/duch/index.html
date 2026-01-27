@@ -606,7 +606,7 @@
         if (dateRange) {
             end = new Date();
             start = new Date(end)
-            start.setDate(start.getDate() - dateRange + 1);
+            start.setDate(start.getDate() - dateRange + 2); // +2 because we include start and end date in total number of days
             end.setDate(end.getDate() + 1);
         }  
         if (hebrewMonth) {
