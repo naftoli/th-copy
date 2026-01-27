@@ -896,7 +896,7 @@ function getEmailMsg($trans_id) {
     $msg = "Below is a summary of your Chidon registration and extra purchase(s) where applicable.<br /><br />";
 
     if ($users) {
-        $msg .= "REGISTRATION<br /><br /><blockquote>";
+        $msg .= "REGISTRATION<br /><blockquote>";
         foreach ($users as $user_id => $amount) {
             $msg .= "Registered " . $user_info[$user_id]['first'] . " for: $" . $amount . "<br />";
             $msg .= "Track: " . $tracks[$user_id] . "<br />";
@@ -912,11 +912,11 @@ function getEmailMsg($trans_id) {
                 $msg .= "</ul>";
             }
         }
-        $msg .= "</blockquote><br /><br />";
+        $msg .= "</blockquote><br />";
     }
 
     if ($celebBoxes || $sweaters) {
-        $msg .= "EXTRA PURCHASES<br /><br /><blockquote>";
+        $msg .= "EXTRA PURCHASES<br /><blockquote>";
         $msg .= "You purchased:<br /><ol>";
         if ($celebBoxes) {
             $msg .= "<li>" . $celebBoxes . " Celebration boxe(s) for: $" . ($celebBoxes * CELEB_BOX_COST) . ". ";
@@ -940,10 +940,10 @@ function getEmailMsg($trans_id) {
                 }
             }
         }
-        $msg .= "</ol></blockquote><br /><br />";
+        $msg .= "</ol></blockquote><br />";
     }
 
-    $msg . "SUMMARY<br /><br /><blockquote>";
+    $msg . "SUMMARY<br /><blockquote>";
     if ($credit > 0) $msg .= "Amount Credited From Your Pre Registration Credit: $" . $credit . ".<br />";
     if ($to_charge > 0) {
         $msg .= "Total Charged Today: $" . $to_charge . ".<br />";
@@ -968,7 +968,7 @@ function getEmailMsg($trans_id) {
     $msg .= "If you have any questions, please be in touch with your school's Chidon co-ordinator.<br /><br />";
     $msg .= "Wishing you much continued Nachas,<br />Chidon HQ</blockquote>";
 
-    $msg .= "<br /><br /><footer style='font-size: 9px; color: grey;'>Our Address: <address>792 Eastern Parkway Brooklyn, NY 11213</address><br /><br />
+    $msg .= "<br /><footer style='font-size: 9px; color: grey;'>Our Address: <address>792 Eastern Parkway Brooklyn, NY 11213</address><br /><br />
             To Unsubscribe please click <a href='http://mashpia.com/unsubscribe.php'>here</a></footer>";
 
     return $msg;
