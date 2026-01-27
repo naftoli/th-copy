@@ -34,7 +34,7 @@ $stmt = $MASHPIA_DB->prepare("
         type LIKE '%RRS%' AND year = :year
             AND admin_id = :admin
     GROUP BY school_id
-    ");
+");
 
 $stmt->execute([
     ':year' => $year,
