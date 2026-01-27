@@ -1545,7 +1545,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			}
 
 			// set shipping already paid
-			await checkShippingPaid(eligible[0].admin_id)
+			await checkShippingPaid(admin)
 			html += `<div id="shipping_charges" style="display: none;"></div>`
 
 			$(".login").hide();
