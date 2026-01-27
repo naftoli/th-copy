@@ -17,8 +17,8 @@ if (isset($_GET['start']) && isset($_GET['end'])) {
     $end = unixtojd(strtotime($_GET['end']));
 } else {
     $dates = GlobalSettings::getCurYearDates();
-    $start = $dates['start'];
-    $end = unixtojd();
+    $start = $dates['start'] + 1;
+    $end = unixtojd() + 1;
 }
 
 $user_id = $_GET['id'];
