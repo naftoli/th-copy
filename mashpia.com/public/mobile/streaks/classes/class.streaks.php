@@ -17,7 +17,7 @@ class Streaks {
         $this->end = $end;
         $this->error = null;
         $this->db = $MASHPIA_DB;
-        $this->streaks = $this->setStreaks();
+        $this->setStreaks();
     }
 
     public function getError() {
@@ -25,7 +25,7 @@ class Streaks {
     }
 
     private function setStreaks() {
-        $streaks = [];
+        $this->streaks = [];
         $sql = "SELECT 
                     st.*,
                     dt.name,
@@ -51,7 +51,7 @@ class Streaks {
             'user_id' => $this->user_id
         ]);
         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $streaks[$row['streak_id']] = [
+            $this->streaks[$row['streak_id']] = [
                 'cat' => $row['cat'],
                 'name' => $row['name'], 
                 'num_days' => $row['num_days'], 
@@ -61,10 +61,9 @@ class Streaks {
                 'duch_name' => $row['streak_duch_name'] ?? $row['name']
             ];
         }
-        foreach ($streaks as $streak_id => $streak) {
-            $streaks[$streak_id]['days_done'] = $this->getDaysDone($streak);
+        foreach ($this->streaks as $streak_id => $streak) {
+            $this->streaks[$streak_id]['days_done'] = $this->getDaysDone($streak_id, $streak['task_type']);
         }
-        return $streaks;
     }
 
     public function getStreaks() {
@@ -76,11 +75,10 @@ class Streaks {
      * returns an array of the streak days
      * the array is truncated at the first day that is not a streak day
      */
-    private function getDaysDone($streak) {
-        $marks = $this->getMarks(key($streak));
+    private function getDaysDone($streak_id, $task_type) {
+        $marks = $this->getMarks($streak_id);
 
         // decide how to calculate the days done
-        $task_type = $streak['task_type'];
         switch ($task_type) {
             case 'weekly':
                 $needed_interval = 7;
