@@ -13,8 +13,8 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/classes/duch_task.php' );
 
 if (isset($_GET['start']) && isset($_GET['end'])) {
-    $start = unixtojd(strtotime($_GET['start']));
-    $end = unixtojd(strtotime($_GET['end']));
+    $start = unixtojd(strtotime($_GET['start'])) + 1;
+    $end = unixtojd(strtotime($_GET['end'])) + 1;
 } else {
     $dates = GlobalSettings::getCurYearDates();
     $start = $dates['start'] + 1;

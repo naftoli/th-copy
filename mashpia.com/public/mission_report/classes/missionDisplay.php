@@ -1081,6 +1081,8 @@ abstract class MissionDisplay {
 								} else if ($task->subject_id == 1 || $task->grid_id == 21013) {
 									$total_days = floor($total_days / 28);
 									$task_type_name = 'Monthly Task';
+								} else if ($task_type == 'shabbos_tasks') {
+									$total_days = $this->countSaturdaysJD($this->start, $this->end);
 								} else if ($task_type != 'daily_tasks') {
 									$total_days = floor($total_days / 7);
 								}
@@ -1275,6 +1277,32 @@ abstract class MissionDisplay {
 מבצע בשורות טובות מוקדש לזכר ולעילוי נשמת הרה"ח הרה"ת ר' משה יהודא בן הרה"ת ר' צבי יוסף קאטלרסקי
 		</footer>
 		<?		
+	}
+
+	private function countSaturdaysJD($startJD, $endJD) {
+		// 1. Ensure start is before end
+		if ($startJD > $endJD) return 0;
+	
+		// 2. Adjust start to the NEXT Saturday (if it isn't one already)
+		// We calculate how far we are from a Saturday (Target is remainder 5)
+		$remainder = $startJD % 7;
+		
+		// Remainder 5 is Saturday. 
+		// If remainder is 0 (Mon), we need to add 5 days.
+		// If remainder is 6 (Sun), we need to add 6 days to wrap around to Sat.
+		// The formula (5 - current + 7) % 7 calculates days to add.
+		$daysUntilSaturday = (5 - $remainder + 7) % 7;
+		
+		$firstSaturday = $startJD + $daysUntilSaturday;
+	
+		// 3. If even the first Saturday is past our end date, there are 0.
+		if ($firstSaturday > $endJD) {
+			return 0;
+		}
+	
+		// 4. Calculate total Saturdays
+		// Subtract the first Saturday from the end date, divide by 7, and add 1 (count inclusive)
+		return floor(($endJD - $firstSaturday) / 7) + 1;
 	}
 
 	public function markMission() {
