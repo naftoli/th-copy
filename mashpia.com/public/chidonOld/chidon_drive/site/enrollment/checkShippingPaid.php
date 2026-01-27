@@ -2,9 +2,9 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/chidon_drive/encrypt.php';
+require_once __DIR__ . '/../../../../api/header/db.php';
+require_once __DIR__ . '/../../../../class.globalSettings.php';
+require_once __DIR__ . '/../../../../chidonOld/chidon_drive/encrypt.php';
 
 $year = GlobalSettings::getChidonYear();
 
@@ -40,8 +40,6 @@ $stmt->execute([
     ':year' => $year,
     ':admin' => $admin_id
 ]);
-$stmt->debugDumpParams();
-exit;
 
 $paid = [];
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
