@@ -1078,8 +1078,9 @@ abstract class MissionDisplay {
 									// for each week remove a day
 									$to_subtract = floor($total_days / 7);
 									$total_days -= $to_subtract;
-								} else if ($task->subject_id == 1) {
+								} else if ($task->subject_id == 1 || $task->grid_id == 21013) {
 									$total_days = floor($total_days / 28);
+									$task_type_name = 'Monthly Task';
 								} else if ($task_type != 'daily_tasks') {
 									$total_days = floor($total_days / 7);
 								}
@@ -1102,6 +1103,7 @@ abstract class MissionDisplay {
 								<div class='task-container'>
 									<div class='task-stats'><b><?=$accomplished_count?></b> 
 									<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
+									<br />
 									<?=$task_type_name?></div>
 									<div class='task'>
 										<div class='task-short-name'><?= $task->short_name ?></div>
