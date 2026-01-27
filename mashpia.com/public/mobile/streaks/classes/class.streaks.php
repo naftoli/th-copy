@@ -134,7 +134,7 @@ class Streaks {
             'start' => $this->start,
             'end' => $this->end
         ]);
-        $stmt->debugDumpParams();
+        // $stmt->debugDumpParams();
         while ($mark = $stmt->fetch(PDO::FETCH_ASSOC)) {
             $marks[] = (int)$mark['mark_date'];
         }
