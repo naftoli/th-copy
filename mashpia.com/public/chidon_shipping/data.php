@@ -281,7 +281,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
 
                 $user = $users[$user_id];
                 $qty = $item['qty'] ?? 1;
-                $school = $user['school_id'] == 61 ? 'MyShliach' : $user['school_id'] == 269 ? 'Anash Kinder' : '';
+                $school = $user['school_id'] == 61 ? 'MyShliach' : ($user['school_id'] == 269 ? 'Anash Kinder' : '');
                 $shipping = $shipping_status[$user_id];
 
                 $itemDesc = '';
@@ -291,7 +291,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
 
                 $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
-                    $phone, ($school . '-' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
+                    $phone, ($school . ' - ' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
                     $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc,
                     $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], '', '',
                     ($admin['admin_city'] . ', ' . $admin['admin_state'] . ', ' . $admin['admin_country'])];

@@ -14,14 +14,14 @@ if (!$info || !isset($info->admin)) {
 
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        school_id, COUNT(*) AS total
+        school_id, IFNULL(COUNT(*), 0) AS total
     FROM
         registration_charges
     WHERE
         type LIKE '%RRS%' AND year = :year
             AND admin_id = :admin
     GROUP BY school_id
-    ");
+");
 
 $res = $stmt->execute([
     ':year' => $year,
