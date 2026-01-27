@@ -33,10 +33,12 @@ $stmt = $MASHPIA_DB->prepare("
     GROUP BY school_id
     ");
 
-$res = $stmt->execute([
+$stmt->execute([
     ':year' => $year,
     ':admin' => $admin_id
 ]);
+$stmt->debugDumpParams();
+exit;
 
 $paid = [];
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
