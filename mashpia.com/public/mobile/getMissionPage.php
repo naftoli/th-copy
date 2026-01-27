@@ -385,7 +385,7 @@ $daySchoolSubjects = setDaySchoolSubjects();
 					<?php } ?>
 					<a type="button" class="btn btn-danger btn-sm" id="goalsLink">Personalize</a>
 					<a type="button" class="btn btn-danger btn-sm" href="/mobile/duch/?id=<?=$user_id?>">Duch</a>
-					<a type="button" class="btn btn-danger btn-sm" href="/mobile/streaks/?id=<?=$user_id?>">Streaks</a>
+					<!-- <a type="button" class="btn btn-danger btn-sm" href="/mobile/streaks/?id=<?=$user_id?>">Streaks</a> -->
 					<a type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#myModal">Help</a>
                 </div>
                 <? /********************** DATE DROPDOWN. TODO: REMOVE AND MOVE TO SLIDING BAR ON TOP **********************/ ?>
