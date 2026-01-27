@@ -1103,7 +1103,6 @@ abstract class MissionDisplay {
 								<div class='task-container'>
 									<div class='task-stats'><b><?=$accomplished_count?></b> 
 									<?php if ($task_type != 'no_label_tasks') : ?> / <b><?=$total_days?></b> <?php endif; ?>
-									<br />
 									<?=$task_type_name?></div>
 									<div class='task'>
 										<div class='task-short-name'><?= $task->short_name ?></div>
