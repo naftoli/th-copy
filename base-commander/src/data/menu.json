@@ -35,6 +35,8 @@
       { "label": "Print Summer Missions", "legacy": true, "path": "/print_missions_summer.php", "user_types": [ "HQ", "BC" ] },
       { "label": "Mark", "path": "/missions/mark" },
       { "label": "Personalize", "path": "/missions/personalize" },
+      { "label": "Duch", "path": "/missions/duch" },
+      { "label": "Streaks", "path": "/missions/streaks" },
       { "label": "Tasks", "path": "/missions/tasks", "user_types": [ "HQ", "INST", "BC" ] },
       { "label": "Mission Checklist (old)", "legacy": true, "path": "/mission_sheets_checklist.php", "user_types": [ "HQ", "BC" ] },
       { "label": "Mission Report (old)", "legacy": true, "path": "/missions_report.php", "user_types": [ "HQ", "BC" ] }
