@@ -10,6 +10,11 @@ $userId = intval($_POST['userId']);
 $end = unixtojd();
 $start = $end - 90;
 
+if ($streakId == 0 || $streakId == '0') {
+    echo json_encode(['success' => false, 'error' => 'Invalid streak id']);
+    exit;
+}
+
 $streaks = new Streaks($userId, $start, $end);
 $success = $streaks->setupStreak($streakId);
 $error = $streaks->getError();

@@ -107,7 +107,6 @@ if (count($activeStreaks) > 0) {
                     console.log(tasks);
                     let html = '<option value="0">Select a task</option>';
                     for (let streakId in tasks) {
-                        if (streakId == 0) continue;
                         html += `<option value="${streakId}">${tasks[streakId]}</option>`;
                     }
                     $('#task').html(html);
@@ -121,7 +120,7 @@ if (count($activeStreaks) > 0) {
     function setupStreak() {
         const campaignId = $('#campaign').val();
         const streakId = $('#task').val();
-        if (campaignId == 0 || streakId == 0) {
+        if (campaignId == 0 || streakId == 0 || streakId == '0') {
             alert('Please select a campaign and a task');
             return;
         }
