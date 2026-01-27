@@ -26,11 +26,25 @@ class Streaks {
 
     private function setStreaks() {
         $streaks = [];
-        $sql = "SELECT st.*, dt.name, dt.cat, dt.streak_duch_cat, dt.streak_duch_name  
-                FROM streak_tasks st 
-                JOIN date_tasks dt USING (streak_id)  
-                WHERE st.user_id = :user_id 
-                AND dt.streak_show = 1 
+        $sql = "SELECT 
+                    st.*,
+                    dt.name,
+                    dt.cat,
+                    dt.streak_duch_cat,
+                    dt.streak_duch_name
+                FROM
+                    streak_tasks st
+                        JOIN
+                    date_tasks dt USING (streak_id)
+                        JOIN
+                    users u USING (user_id)
+                        JOIN
+                    user_tracks ut USING (user_id)
+                        JOIN
+                    date_tasks_missions dtm USING (date_tasks_mission_id , school_type_id , track_id , level)
+                WHERE
+                    st.user_id = :user_id
+                        AND dt.streak_show = 1
                 GROUP BY st.streak_id";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
