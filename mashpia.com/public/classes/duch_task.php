@@ -120,6 +120,6 @@ class DuchTask {
     }
 
     private function personalizeChidon() {
-        return "Chidon";
+        return "I learned for a total of XXX minutes for Chidon.";
     }
 }

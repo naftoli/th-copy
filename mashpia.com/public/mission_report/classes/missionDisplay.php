@@ -1036,7 +1036,7 @@ abstract class MissionDisplay {
 			$task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
 			$report_mission = [];
 			$streak_ids = []; // keep track of all the streak ids
-			$skip_grids = [20010]; // skip the limud task grid id
+			$skip_grids = [20010, 20002]; // skip the limud task and chidon sefer hamitzvos task 
 			foreach ($tracks as $track) {
 				$track->lang_id= $this->lang_id;
 				$user->get_medals($track->subject_id, $this->start, $this->end, 0);
