@@ -24,8 +24,8 @@ if (!is_array($user_ids)) $user_ids = [ $user_ids ];
 
 // $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
-$start = $_POST['start'];
-$end = $_POST['end'];
+$start_date = $_POST['start'];
+$end_date = $_POST['end'];
 $date_range = $_POST['date_range'];
 $selectedMonth = $_POST['selectedMonth'];
 $besuros_tovos = $_POST['besuros_tovos'] ?? '';
@@ -37,8 +37,8 @@ if ( $selectedMonth ) {
     $end = unixtojd(strtotime($dates[1]));
 } else if ( $start && $end ) {
     // convert the dates to unix timestamps
-    if (! is_numeric($start)) $start = unixtojd(strtotime($start));
-    if (! is_numeric($end)) $end = unixtojd(strtotime($end));
+    if (! is_numeric($start_date)) $start = unixtojd(strtotime($start_date));
+    if (! is_numeric($end_date)) $end = unixtojd(strtotime($end_date));
 } else {
     // date range
     $end = unixtojd();

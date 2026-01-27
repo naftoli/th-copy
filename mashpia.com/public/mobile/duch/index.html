@@ -604,23 +604,17 @@
         let start, end
 
         if (dateRange) {
-            end = new Date();
-            start = new Date(end)
-            start.setDate(start.getDate() - dateRange + 2); // +2 because we include start and end date in total number of days
-            end.setDate(end.getDate() + 1);
+            end = getFutureDateString();
+            start = getFutureDateString(end, -(dateRange - 2)); // -2 because we include start and end date in total number of days
         }  
         if (hebrewMonth) {
             const dates = heMonths[hebrewMonth].split(' - ');
-            start = new Date(dates[0]);
-            start.setDate(start.getDate() + 1);
-            end = new Date(dates[1]);
-            end.setDate(end.getDate() + 1);
+            start = getFutureDateString(new Date(dates[0]));
+            end = getFutureDateString(new Date(dates[1]));
         }  
         if (startDate && endDate) {
-            start = new Date(startDate);
-            start.setDate(start.getDate() + 1);
-            end = new Date(endDate);
-            end.setDate(end.getDate() + 1);
+            start = getFutureDateString(new Date(startDate), 1);
+            end = getFutureDateString(new Date(endDate), 1);
         } 
         
         if (!start || !end) {
@@ -628,21 +622,37 @@
             return;
         }
 
-        // Function to get clean YYYY-MM-DD in local time
-        function getLocalDateString(date) {
-            const localDate = new Date(date.getTime());
-            return localDate.toISOString().split('T')[0];
-        }
+        console.log({ start, end });
 
         new Spinner(opts).spin(document.getElementById('spinner'));
         // get the duch page
-        const url = 'getDuch.php?id=' + id + '&start=' + getLocalDateString(start) + '&end=' + getLocalDateString(end);
+        const url = 'getDuch.php?id=' + id + '&start=' + start + '&end=' + end;
         $.get(url, function(html) {
             $("#spinner").empty();
             $('#main').html(html);
             $("#main").addClass("animated fadeIn");
             $("#buttons").show();
         });
+    }
+
+    /**
+     * Returns a string YYYY-MM-DD
+     * @param {Date} baseDate - The starting date object (default: today)
+     * @param {number} daysToAdd - Number of days to add (negative to subtract)
+     */
+    function getFutureDateString(baseDate = new Date(), daysToAdd = 0) {
+        // Clone the date so we don't mutate the original
+        const copy = new Date(baseDate);
+        
+        // Add the days
+        copy.setDate(copy.getDate() + daysToAdd);
+        
+        // Format to YYYY-MM-DD
+        const year = copy.getFullYear();
+        const month = String(copy.getMonth() + 1).padStart(2, '0');
+        const day = String(copy.getDate()).padStart(2, '0');
+        
+        return `${year}-${month}-${day}`;
     }
 
     function emailToOhel() {
