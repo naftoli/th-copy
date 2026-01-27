@@ -963,6 +963,7 @@ abstract class MissionDisplay {
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		$only_one_task = [21001, 21002, 21003, 21004, 21006, 21007, 21014, 21008, 21009];
+		$skip_grids = [20010];
 		?>
 		<div class="header print-only" style="margin: 20px auto;">
 			<div class="userImg">
@@ -1062,7 +1063,8 @@ abstract class MissionDisplay {
 						$task_type_name = ucwords(implode(' ', explode('_', $task_type)));
 						foreach ( $track->{$task_type} as $task ) { 
 							// if the streak id is already in the array, skip this task b/c it was shown already
-							if (in_array($task->streak_id, $streak_ids)) {
+							// or if the grid id is in the skip_grids array
+							if (in_array($task->streak_id, $streak_ids) || in_array($task->grid_id, $skip_grids)) {
 								continue;
 							}
 							$streak_ids[] = $task->streak_id;
