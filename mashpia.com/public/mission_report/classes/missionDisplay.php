@@ -1088,10 +1088,14 @@ abstract class MissionDisplay {
 							}
 
 							// find out how many times the task has been accomplished
-							$a = new Accomplished($user->user_id, [$task->grid_id], [$task->streak_id], $this->start, $this->end);
+							$a = new Accomplished($user->user_id, $this->start, $this->end, $task);
 							$a->setAccomplished();
 							$accomplished = $a->getAccomplished();
-							$accomplished_count = count($accomplished[$task->grid_id]);
+							if ($task->streak_id > 0) {
+								$accomplished_count = count($accomplished[$task->streak_id]);
+							} else {
+								$accomplished_count = count($accomplished[$task->grid_id]);
+							}
 							if ($accomplished_count > $total_days) $accomplished_count = $total_days;
 							if (! empty($task->streak_duch_name)) {
 								$task->short_name = $task->streak_short_name;

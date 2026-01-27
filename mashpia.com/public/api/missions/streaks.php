@@ -55,35 +55,52 @@ class StreaksRouter {
             }
 
             $task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks'];
+            $type_map = ['daily_tasks' => 'daily', 'weekly_tasks' => 'weekly', 'shabbos_tasks' => 'shabbos'];
+            
+            // Build all data structures in a single pass
             $grid_ids = []; // per-user map: user_id => [grid_id...]
-            $gridIdToShort = [];
-            $gridIdToMeta = [];
+            $task_data = []; // per-user map: user_id => [grid_id => {task, short_name, meta}]
             $labelStmt = $MASHPIA_DB->prepare("SELECT label_id FROM date_tasks WHERE grid_id = :grid_id LIMIT 1");
+            
             foreach ($users as $user) {
                 $user_id = $user->user_id;
-                if (!isset($grid_ids[$user_id])) $grid_ids[$user_id] = [];
+                if (!isset($grid_ids[$user_id])) {
+                    $grid_ids[$user_id] = [];
+                    $task_data[$user_id] = [];
+                }
+                
                 foreach ($user->user_tracks as $user_track) {
                     foreach ($task_types as $task_type) {
                         foreach ($user_track->{$task_type} as $task) {
-                            if (! in_array($task->grid_id, $grid_ids[$user_id], true)) {
-                                $grid_ids[$user_id][] = $task->grid_id;
-                                $gridIdToShort[$user_id][$task->grid_id] = $task->short_name;
-                                $labelId = isset($task->label_id) ? intval($task->label_id) : null;
-                                if (!$labelId) {
-                                    $labelStmt->execute(['grid_id' => $task->grid_id]);
-                                    $rowLbl = $labelStmt->fetch(PDO::FETCH_ASSOC);
-                                    if ($rowLbl && isset($rowLbl['label_id'])) $labelId = intval($rowLbl['label_id']);
+                            $gid = $task->grid_id;
+                            
+                            // Skip if we've already processed this grid_id
+                            if (isset($task_data[$user_id][$gid])) continue;
+                            
+                            // Get label_id if not on task
+                            $labelId = isset($task->label_id) ? intval($task->label_id) : null;
+                            if (!$labelId) {
+                                $labelStmt->execute(['grid_id' => $gid]);
+                                $rowLbl = $labelStmt->fetch(PDO::FETCH_ASSOC);
+                                if ($rowLbl && isset($rowLbl['label_id'])) {
+                                    $labelId = intval($rowLbl['label_id']);
                                 }
-                                $typeName = $task_type === 'daily_tasks' ? 'daily' : ($task_type === 'weekly_tasks' ? 'weekly' : 'shabbos');
-                                $gridIdToMeta[$user_id][$task->grid_id] = [
+                            }
+                            
+                            // Store all data for this grid_id
+                            $grid_ids[$user_id][] = $gid;
+                            $task_data[$user_id][$gid] = [
+                                'task' => $task,
+                                'short_name' => $task->short_name,
+                                'meta' => [
                                     'short_name'   => $task->short_name,
                                     'label'        => $task->label_name,
                                     'label_id'     => $labelId,
                                     'frequency_id' => isset($task->frequency_id) ? intval($task->frequency_id) : null,
-                                    'type'         => $typeName,
+                                    'type'         => $type_map[$task_type],
                                     'label_ord'    => isset($task->label_ord) ? intval($task->label_ord) : null
-                                ];
-                            }
+                                ]
+                            ];
                         }
                     }
                 }
@@ -92,25 +109,46 @@ class StreaksRouter {
             $tasks = [];
             foreach ($users as $user) {
                 $user_id = $user->user_id;
-                if (empty($grid_ids[$user_id])) { $tasks[$user_id] = []; continue; }
-                $accomplished = new Accomplished($user_id, $grid_ids[$user_id], $start_jd, $end_jd);
-                $accomplished->setAccomplished();
-                $accomplished_tasks = $accomplished->getAccomplished();
-                foreach ($accomplished_tasks as $gid => $marks) {
-                    if (!isset($gridIdToShort[$user_id][$gid])) continue;
-                    $jds = [];
-                    foreach ($marks as $mark) $jds[] = intval($mark['mark_date']);
-                    sort($jds, SORT_NUMERIC);
-                    $meta = $gridIdToMeta[$user_id][$gid] ?? [];
-                    $tasks[$user_id][] = [
-                        'name'        => $gridIdToShort[$user_id][$gid],   
-                        'jds'         => $jds,
-                        'label'       => $meta['label']        ?? '',
-                        'labelId'     => $meta['label_id']     ?? null,
-                        'frequencyId' => $meta['frequency_id'] ?? null,
-                        'type'        => $meta['type']         ?? null,
-                        'labelOrd'    => $meta['label_ord']    ?? null
-                    ];
+                $tasks[$user_id] = [];
+                
+                if (empty($grid_ids[$user_id])) continue;
+                
+                // Process each task individually with Accomplished
+                foreach ($grid_ids[$user_id] as $gid) {
+                    if (!isset($task_data[$user_id][$gid])) continue;
+                    
+                    $data = $task_data[$user_id][$gid];
+                    $task = $data['task'];
+                    
+                    $accomplished = new Accomplished($user_id, $start_jd, $end_jd, $task);
+                    $accomplished->setAccomplished();
+                    $accomplished_tasks = $accomplished->getAccomplished();
+                    
+                    // Get marks: check streak_id first, then grid_id
+                    $marks = [];
+                    if (isset($task->streak_id) && $task->streak_id > 0 && isset($accomplished_tasks[$task->streak_id])) {
+                        $marks = $accomplished_tasks[$task->streak_id];
+                    } elseif (isset($accomplished_tasks[$gid])) {
+                        $marks = $accomplished_tasks[$gid];
+                    }
+                    
+                    if (!empty($marks)) {
+                        $jds = array_map(function($mark) { 
+                            return intval($mark['mark_date']); 
+                        }, $marks);
+                        sort($jds, SORT_NUMERIC);
+                        
+                        $meta = $data['meta'];
+                        $tasks[$user_id][] = [
+                            'name'        => $data['short_name'],
+                            'jds'         => $jds,
+                            'label'       => $meta['label'] ?? '',
+                            'labelId'     => $meta['label_id'] ?? null,
+                            'frequencyId' => $meta['frequency_id'] ?? null,
+                            'type'        => $meta['type'] ?? null,
+                            'labelOrd'    => $meta['label_ord'] ?? null
+                        ];
+                    }
                 }
             }
 
