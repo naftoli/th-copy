@@ -41,22 +41,22 @@ if (!$admin_id || $amount <= 0 || $num_installments <= 0) {
 $year = GlobalSettings::getChidonYear();
 
 // Check if there's already an active installment for this year
-$stmt = $MASHPIA_DB->prepare("
-    SELECT * FROM th_chidon_installments
-    WHERE admin_id = :admin_id 
-    AND year = :year
-");
-$stmt->execute([
-    ':admin_id' => $admin_id,
-    ':year' => $year
-]);
-if ($stmt->fetch()) {
-    echo json_encode([
-        'success' => false,
-        'error' => 'You already have an active installment plan for this year'
-    ]);
-    exit;
-}
+// $stmt = $MASHPIA_DB->prepare("
+//     SELECT * FROM th_chidon_installments
+//     WHERE admin_id = :admin_id 
+//     AND year = :year
+// ");
+// $stmt->execute([
+//     ':admin_id' => $admin_id,
+//     ':year' => $year
+// ]);
+// if ($stmt->fetch()) {
+//     echo json_encode([
+//         'success' => false,
+//         'error' => 'You already have an active installment plan for this year'
+//     ]);
+//     exit;
+// }
 
 // Get admin info to get customer profile
 $stmt = $MASHPIA_DB->prepare("SELECT * FROM admins WHERE admin_id = :admin_id");
