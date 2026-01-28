@@ -1251,13 +1251,9 @@
 				}
 			}
 
-			// only let ultimate trip kids to update their trip info
-			// const only_schools = [11, 40, 58, 66, 89, 105, 112, 185, 470, 472, 517, 621, 726, 739, 817]
-			// let eligible = children.filter(child => child.track && !child.date_paid && child.schoolConfirmed && only_schools.includes(parseInt(child.school_id)))
-			
 			let close = false // change to false to open registration
 			let registered = children.filter(child => child.date_paid)
-			let eligible = children.filter(child => child.track && !child.date_paid && (child.schoolConfirmed || parseInt(child.openRegForSchool)))
+			let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
 			if (Cookies.get('naftoli')) {
 				close = false
 				eligible = children.filter(child => !child.date_paid)
@@ -1402,9 +1398,9 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 		}
 
 		async function processPage(admin, eligible) {
-			let schoolNotConfirmed = children.filter(child => !child.schoolConfirmed && !parseInt(child.openRegForSchool))
+			let schoolNotConfirmed = children.filter(child => !parseInt(child.openRegForSchool))
 			if (schoolNotConfirmed.length) {
-				alert('Some of your children will not show up because their school has not yet confirmed their eligibility.')
+				alert('Some of your children will not show up because TH has not opened registration for them yet.')
 			}
 
 			// check if there's any family balance that can be applied to registration
