@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+    <title>Chidon Registration Fees</title>
+    <style type="text/css">
+        @charset "UTF-8";
+        .fa {
+            display: inline-block;
+            font: normal normal normal 14px/1 FontAwesome;
+            font-size: inherit;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            transform: translate(0, 0)
+        }
+
+        html {
+            font-family: sans-serif;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%
+        }
+
+        body {
+            margin: 0
+        }
+
+        * {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        :after, :before {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box
+        }
+
+        html {
+            font-size: 10px
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #333;
+            background-color: #fff
+        }
+
+        a {
+            color: #428bca;
+            text-decoration: none
+        }
+
+        .container {
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto
+        }
+
+        .navbar {
+            position: relative;
+            min-height: 50px;
+            margin-bottom: 20px;
+            border: 1px solid transparent
+        }
+
+        body, html {
+            overflow-x: hidden;
+            height: 100%
+        }
+
+        body {
+            background: #fff;
+            font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 300;
+            padding-bottom: 100px;
+            background-size: cover;
+            background-attachment: fixed
+        }
+
+        header.navbar {
+            background: #0881eb;
+        }
+
+        .page-goals header.navbar h1 {
+            font-size: 40px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            width: auto;
+            display: block;
+            margin: 15px auto
+        }
+
+        .personalImg {
+            width: 50px;
+            height: 50px;
+            left: 1%;
+            top: 1%;
+            border-radius: 50%;
+            position: absolute
+        }
+
+        .form-control {
+            border: 1px solid lightgrey !important;
+            border-radius: 5px;
+            padding: 8px;
+            width: 100%;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        #cc_selection {
+            font-size: 14px;
+            font-weight: 200;
+        }
+
+        #cc_selection .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #cc_selection .form-group input[type="radio"] {
+            margin-right: 8px;
+            margin-bottom: 0;
+        }
+
+        #cc_selection .form-group label {
+            display: inline;
+            margin-bottom: 0;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        #cc_selection select {
+            margin-left: 10px;
+            padding: 5px;
+        }
+
+        #cc_selection input {
+            margin-right: 5px;
+        }
+
+        h2 {
+            margin-top: 10px;
+            font-size: 24px;
+        }
+
+        .navbar {
+            min-height: 80px;
+        }
+
+        .payment-card {
+            min-width: 150px;
+        }
+
+        .child-breakdown {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+
+        .child-breakdown h3 {
+            margin-top: 0;
+            color: #0881eb;
+        }
+
+        .fee-line {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .fee-line:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 2px solid #0881eb;
+        }
+
+        .total-section {
+            background-color: #e8f4f8;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .total-section h2 {
+            margin-top: 0;
+        }
+
+        .total-amount {
+            font-size: 36px;
+            font-weight: bold;
+            color: #0881eb;
+            margin: 10px 0;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            background-color: #0881eb;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0669c7;
+        }
+
+        .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .installment-info {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border: 1px solid #ffc107;
+        }
+
+        .credit {
+            color: #28a745;
+        }
+
+        .debit {
+            color: #dc3545;
+        }
+    </style>
+    <link rel="preload" href="/mobile/reg/css/all.css" as="style" onload="this.rel='stylesheet'">
+    <noscript>
+        <link rel="stylesheet" href="/mobile/reg/css/all.css" as="style" onload="this.rel='stylesheet'">
+    </noscript>
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700" rel="preload"
+          as="style" onload="this.rel='stylesheet'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,600,600i,700"
+              rel="stylesheet">
+    </noscript>
+    <script>!function (e) {
+        "use strict";
+        var t = function (t, n, r) {
+            function o(e) {
+                if (i.body) return e();
+                setTimeout(function () {
+                    o(e)
+                })
+            }
+
+            function a() {
+                d.addEventListener && d.removeEventListener("load", a), d.media = r || "all"
+            }
+
+            var l, i = e.document, d = i.createElement("link");
+            if (n) l = n; else {
+                var s = (i.body || i.getElementsByTagName("head")[0]).childNodes;
+                l = s[s.length - 1]
+            }
+            var u = i.styleSheets;
+            d.rel = "stylesheet", d.href = t, d.media = "only x", o(function () {
+                l.parentNode.insertBefore(d, n ? l : l.nextSibling)
+            });
+            var f = function (e) {
+                for (var t = d.href, n = u.length; n--;) if (u[n].href === t) return e();
+                setTimeout(function () {
+                    f(e)
+                })
+            };
+            return d.addEventListener && d.addEventListener("load", a), d.onloadcssdefined = f, f(a), d
+        };
+        "undefined" != typeof exports ? exports.loadCSS = t : e.loadCSS = t
+    }("undefined" != typeof global ? global : this), function (e) {
+        if (e.loadCSS) {
+            var t = loadCSS.relpreload = {};
+            if (t.support = function () {
+                try {
+                    return e.document.createElement("link").relList.supports("preload")
+                } catch (e) {
+                    return !1
+                }
+            }, t.poly = function () {
+                for (var t = e.document.getElementsByTagName("link"), n = 0; n < t.length; n++) {
+                    var r = t[n];
+                    "preload" === r.rel && "style" === r.getAttribute("as") && (e.loadCSS(r.href, r, r.getAttribute("media")), r.rel = null)
+                }
+            }, !t.support()) {
+                t.poly();
+                var n = e.setInterval(t.poly, 300);
+                e.addEventListener && e.addEventListener("load", function () {
+                    t.poly(), e.clearInterval(n)
+                }), e.attachEvent && e.attachEvent("onload", function () {
+                    e.clearInterval(n)
+                })
+            }
+        }
+    }(this);</script>
+    <script src="/mobile/reg/js/all.js" defer></script>
+    <style>
+        html,
+        body,
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        div,
+        button,
+        i,
+        input {
+            color: #1b2b51;
+        }
+
+        body {
+            position: relative;
+        }
+
+        #page-title {
+            font-size: 25px;
+            font-weight: 700;
+            color: #fff;
+            text-align: center;
+            width: auto;
+            display: block;
+            padding: 5px 0px;
+            transition: .25s;
+        }
+
+        @media (min-width: 525px) {
+            #page-title {
+                font-size: 40px;
+                padding: 10px 0px;
+            }
+        }
+
+        .input-group .input-group-addon, .form-control {
+            border-radius: 5px;
+        }
+
+        .input-group .form-control {
+            width: 99%;
+        }
+
+        /* border radius not working. so just keep it 1% from the edge....*/
+
+        .page5 .chilrens {
+            margin-bottom: 10px;
+        }
+
+        .page5 .chilrens .row {
+            margin-bottom: 10px;
+        }
+
+        .form-control {
+            border: 1px solid lightgrey !important;
+        }
+
+        input[type='text'] {
+            margin-right: 10px;
+        }
+
+        #cc_selection {
+            font-size: 14px;
+            font-weight: 200;
+        }
+
+        #cc_selection select {
+            margin-left: 10px;
+            padding: 5px;
+        }
+
+        #cc_selection input {
+            margin-right: 5px;
+        }
+
+        h2 {
+            margin-top: 10px;
+            font-size: 24px;
+        }
+
+        .navbar {
+            min-height: 80px;
+        }
+
+        tr, th, td {
+            padding: 5px;
+        }
+
+        .qty {
+            width: 50px;
+        }
+
+        @media only screen and (max-width: 400px) {
+            th, td {
+                max-width: 75px;
+            }
+        }
+
+        @media only screen and (max-width: 255px) {
+            th, td {
+                max-width: 65px;
+            }
+        }
+
+        img {
+            padding: 5px;
+        }
+
+        .payment-card {
+            min-width: 150px;
+        }
+    </style>
+</head>
+<body class="page-goals">
+<header class="navbar" id="top" role="banner">
+    <div class="span12" style="max-width:1024px;width:100%;margin:0 auto;float:none;text-align: center;">
+        <span id="page-title">Chidon Registration Fees</span>
+    </div>
+</header>
+
+<div class="personalImg"></div>
+
+<section style="width: 400px; margin: 10px auto;">
+    <div class="container page5">
+        <div id="loading" style="text-align: center; padding: 20px;">
+            Loading fee breakdown...
+        </div>
+
+        <div id="no-children" style="display: none;">
+            <div style="text-align: center; padding: 20px;">
+                <p>You don't have any children eligible for Chidon registration at this time.</p>
+            </div>
+        </div>
+
+        <div id="fee-breakdown" style="display: none;">
+            <div id="children-breakdown"></div>
+
+            <div class="total-section">
+                <h2>Total Amount Owing</h2>
+                <div class="total-amount" id="total-owing">$0.00</div>
+            </div>
+
+            <div id="installment-section" style="display: none;">
+                <h2>Pay in Installments</h2>
+                
+                <div class="form-group">
+                    <label for="installment-amount">Amount to Pay:</label>
+                    <input type="number" id="installment-amount" class="form-control" step="0.01" min="0" />
+                    <small>Enter the amount you'd like to pay in installments (or leave blank to pay entire balance)</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="num_installments">Number of Installments:</label>
+                    <select id="num_installments" class="form-control">
+                        <option value="2">2 months</option>
+                        <option value="3">3 months</option>
+                        <option value="4">4 months</option>
+                    </select>
+                </div>
+
+                <div class="installment-info" id="installment-calculation">
+                    <p><strong>Installment Amount:</strong> <span id="installment-amount-display">$0.00</span></p>
+                    <p><strong>Total Amount:</strong> <span id="total-amount-display">$0.00</span></p>
+                    <p><strong>Start Date:</strong> <span id="start-date-display"></span></p>
+                </div>
+
+                <hr/>
+
+                <form action="" method="post" id="installmentForm">
+                    <div class="row">
+                        <h2>Payment Method</h2>
+
+                        <div id="cc_selection">
+                            <div class="form-group">
+                                <input type="radio" name="payment" class="payment" id="payment_1" value="0" checked/>
+                                <label for="payment_1">Use credit card on file ending in</label>
+                                <span id="creditCards"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="radio" name="payment" class="payment" id="payment_2" value="1"/>
+                                <label for="payment_2">Enter a new card</label>
+                            </div>
+                        </div>
+
+                        <div id="cc_form" style="display:none;">
+                            <div class="form-group">
+                                <label for="cc-first" class="control-label mb-1">First Name on Card</label>
+                                <input id="cc-first" name="cc-first" type="text" class="form-control cc-first identified"
+                                       required placeholder="First Name" maxlength="18">
+                            </div>
+                            <div class="form-group">
+                                <label for="cc-last" class="control-label mb-1">Last Name on Card</label>
+                                <input id="cc-last" name="cc-last" type="text" class="form-control cc-last identified"
+                                       required placeholder="Last Name" maxlength="18">
+                            </div>
+                            <div class="form-group">
+                                <label for="cc-number" class="control-label mb-1">Card number (no spaces please)</label>
+                                <input id="cc-number" name="cc-number" type="number"
+                                       class="form-control cc-number identified" required placeholder="XXXXXXXXXXXXXXXX"
+                                       maxlength="16">
+                            </div>
+                            <div class="form-group">
+                                <label for="cc-exp" class="control-label mb-1">Expiration (no dashes or slashes please)</label>
+                                <input id="cc-exp" name="cc-exp" type="number" class="form-control cc-exp" required
+                                       placeholder="MMYY" autocomplete="cc-exp" maxlength="4">
+                            </div>
+                            <label for="x_card_code" class="control-label mb-1">Security code</label>
+                            <div class="form-group">
+                                <input id="x_card_code" name="x_card_code" type="number" class="form-control cc-cvc"
+                                       required autocomplete="off" placeholder="XXX" pattern="[0-9]{3,4}" maxlength="4">
+                            </div>
+                            <div class="form-group">
+                                <label for="zip" class="control-label mb-1">Zip / Postal Code</label>
+                                <input id="zip" name="zip" type="text" class="form-control" placeholder="XXXXX"
+                                       maxlength="12" required/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 20px !important; text-align: center;">
+                        <button id="create-installment" class="btn">Create Installment Plan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+
+<script src="/mobile/js/js.cookie.js"></script>
+<script src="/mobile/reg/js/all.js" defer></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js" 
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" 
+        crossorigin="anonymous"></script>
+<script>
+    // force https
+    if (window.location.protocol == 'http:') window.location.href = window.location.href.replace('http:', 'https:')
+    
+    let admin = Cookies.get('admin');
+    if (!admin) {
+        alert('Please log in first');
+        window.location.href = '/mobile';
+    }
+
+    let totalOwing = 0;
+    let cards = [];
+    let breakdown = [];
+
+    document.addEventListener("DOMContentLoaded", function (event) {
+        getSavedCards();
+        getFeeBreakdown();
+        
+        $("#installmentForm").on('submit', createInstallment);
+        $("#create-installment").on('click', createInstallment);
+    });
+
+    // Get saved cards
+    function getSavedCards() {
+        $.post('../../chidonOld/chidon_drive/ajax/getAdminInfo.php', {admin}, function (result) {
+            const adminInfo = JSON.parse(result);
+            if (adminInfo['cards'] && adminInfo['cards'].length) {
+                for (let i in adminInfo['cards']) {
+                    let cardInfo = adminInfo['cards'][i];
+                    let info = cardInfo.payment.creditCard.cardType + ' - ' + cardInfo.payment.creditCard.cardNumber.substr(4);
+                    let card = {
+                        profile: cardInfo.customerPaymentProfileId,
+                        type: info,
+                        number: cardInfo.payment.creditCard.cardNumber.substr(4),
+                        paymentProfileId: cardInfo.customerPaymentProfileId
+                    };
+                    cards.push(card);
+                }
+                let html = '<select name="payment-card" class="payment-card" id="payment-card">';
+                for (let card of cards) {
+                    html += `<option value="${card.paymentProfileId}">${card.type}</option>`;
+                }
+                html += '</select>';
+                $("#creditCards").html(html);
+                $(".payment-card").change(function() {
+                    $(".payment").eq(0).attr('checked', true);
+                })
+            } else {
+                $(".payment").eq(0).attr('disabled', true);
+                $(".payment").eq(1).trigger('click');
+            }
+        });
+    }
+
+    // Get fee breakdown
+    function getFeeBreakdown() {
+        console.log('Calling getFeeBreakdown.php with admin:', admin);
+        $.post('ajax/getFeeBreakdown.php', {admin}, function (result) {
+            console.log('Received response:', result);
+            try {
+                const data = typeof result === 'string' ? JSON.parse(result) : result;
+                if (!data.success) {
+                    $("#loading").hide();
+                    $("#no-children").show();
+                    if (data.error) {
+                        alert(data.error);
+                    }
+                    return;
+                }
+
+                breakdown = data.breakdown || [];
+                totalOwing = parseFloat(data.total_owing || 0);
+
+                if (breakdown.length === 0) {
+                    $("#loading").hide();
+                    $("#no-children").show();
+                    return;
+                }
+
+                // Display breakdown
+                let html = '<h2>Fee Breakdown by Child</h2>';
+                for (let child of breakdown) {
+                    const fee = parseFloat(child.fee || 0);
+                    const personalCredit = parseFloat(child.personal_credit || 0);
+                    const chidonDriveCredit = parseFloat(child.chidon_drive_credit || 0);
+                    const couponCredit = parseFloat(child.coupon_credit || 0);
+                    const finalFee = parseFloat(child.final_fee || 0);
+                    
+                    html += `<div class="child-breakdown">
+                        <h3>${child.first || ''} ${child.last || ''} - ${child.track || 'Unknown'} Track</h3>
+                        <div class="fee-line">
+                            <span>Smallest Fee:</span>
+                            <span>$${fee.toFixed(2)}</span>
+                        </div>`;
+                    
+                    if (personalCredit > 0) {
+                        html += `<div class="fee-line">
+                            <span>Personal Credit:</span>
+                            <span class="credit">-$${personalCredit.toFixed(2)}</span>
+                        </div>`;
+                    }
+                    
+                    if (chidonDriveCredit > 0) {
+                        html += `<div class="fee-line">
+                            <span>Chidon Drive Credit:</span>
+                            <span class="credit">-$${chidonDriveCredit.toFixed(2)}</span>
+                        </div>`;
+                    }
+                    
+                    if (couponCredit > 0) {
+                        html += `<div class="fee-line">
+                            <span>Coupon Credit:</span>
+                            <span class="credit">-$${couponCredit.toFixed(2)}</span>
+                        </div>`;
+                    }
+                    
+                    html += `<div class="fee-line">
+                        <span>Final Fee:</span>
+                        <span class="debit">$${finalFee.toFixed(2)}</span>
+                    </div>
+                    </div>`;
+                }
+                $("#children-breakdown").html(html);
+                $("#total-owing").text('$' + totalOwing.toFixed(2));
+                
+                $("#loading").hide();
+                $("#fee-breakdown").show();
+                
+                // Only show installment section if there's a balance to pay
+                if (totalOwing > 0) {
+                    // Set default installment amount to total
+                    $("#installment-amount").val(totalOwing.toFixed(2));
+                    $("#installment-amount").attr('max', totalOwing.toFixed(2));
+                    $("#installment-section").show();
+                    updateInstallmentCalculation();
+                } else {
+                    $("#installment-section").hide();
+                }
+            } catch (error) {
+                console.error('Error parsing response:', error);
+                console.error('Response:', result);
+                $("#loading").hide();
+                alert('Error loading fee breakdown. Please try again.');
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('AJAX Error:', textStatus, errorThrown);
+            console.error('Response:', jqXHR.responseText);
+            $("#loading").hide();
+            alert('Error connecting to server. Please try again.');
+        });
+    }
+
+    function updateInstallmentCalculation() {
+        let amount = parseFloat($("#installment-amount").val()) || totalOwing;
+        if (amount > totalOwing) {
+            amount = totalOwing;
+            $("#installment-amount").val(amount.toFixed(2));
+        }
+        
+        const numInstallments = parseInt($("#num_installments").val());
+        const installmentAmount = (amount / numInstallments).toFixed(2);
+        const startDate = new Date();
+        const startDateStr = (startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + startDate.getFullYear();
+
+        $("#installment-amount-display").text('$' + installmentAmount);
+        $("#total-amount-display").text('$' + amount.toFixed(2));
+        $("#start-date-display").text(startDateStr);
+    }
+
+    $(document).on('change', '#num_installments', updateInstallmentCalculation);
+    $(document).on('input', '#installment-amount', updateInstallmentCalculation);
+
+    $(document).on('click', '.payment', function () {
+        if (parseInt($(this).val()) === 1) {
+            $("#cc_form").show();
+        } else {
+            $("#cc_form").hide();
+        }
+    });
+
+    const createInstallment = async e => {
+        e.preventDefault();
+
+        // Prevent double-submission
+        if ($("#create-installment").attr('data-processing') === 'true') {
+            return false;
+        }
+
+        $("#create-installment").attr('data-processing', 'true');
+        $("#create-installment").attr('disabled', true);
+
+        let amount = parseFloat($("#installment-amount").val()) || totalOwing;
+        if (amount <= 0 || amount > totalOwing) {
+            alert("Please enter a valid amount between $0.01 and $" + totalOwing.toFixed(2));
+            $("#create-installment").attr('data-processing', 'false');
+            $("#create-installment").attr('disabled', false);
+            return false;
+        }
+
+        let info = {};
+        info.cc = {};
+
+        // make sure we have a payment method selected
+        if (!$(".payment:checked").length) {
+            alert("You must choose a payment method.");
+            $("#create-installment").attr('data-processing', 'false');
+            $("#create-installment").attr('disabled', false);
+            return false;
+        }
+
+        const paymentMethod = $(".payment:checked").val();
+        let card_id = 0;
+
+        if (parseInt(paymentMethod) === 0) {
+            card_id = parseInt($("#payment-card").val());
+            if (!card_id) {
+                alert("You must select a credit card.");
+                $("#create-installment").attr('data-processing', 'false');
+                $("#create-installment").attr('disabled', false);
+                return false;
+            }
+        } else {
+            alert("Please use a credit card on file. If you need to add a new card, please do so from your account settings first.");
+            $("#create-installment").attr('data-processing', 'false');
+            $("#create-installment").attr('disabled', false);
+            return false;
+        }
+
+        const numInstallments = parseInt($("#num_installments").val());
+        const startDate = new Date();
+        const startDateStr = startDate.getFullYear() + '-' + 
+            String(startDate.getMonth() + 1).padStart(2, '0') + '-' + 
+            String(startDate.getDate()).padStart(2, '0');
+
+        const data = {
+            admin: admin,
+            amount: amount,
+            num_installments: numInstallments,
+            card_id: card_id,
+            start_date: startDateStr
+        };
+
+        try {
+            const res = await fetch('ajax/createInstallment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            
+            if (result.success) {
+                var msg = "Thank you! Your installment plan has been created successfully. You will receive an email confirmation shortly.";
+                alert(msg);
+                location.href = "/mobile";
+            } else {
+                alert(result.error || 'An error occurred creating the installment plan.');
+            }
+        } catch (error) {
+            console.log(error);
+            alert("An error occurred. Please try again.");
+        }
+        
+        $("#create-installment").attr('data-processing', 'false');
+        $("#create-installment").attr('disabled', false);
+    }
+</script>
+</body>
+</html>
