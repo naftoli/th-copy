@@ -181,8 +181,11 @@ try {
         
         // Check KHK eligibility
         $khk_eligible = ($child['class_grade'] == '8' && isset($khk[$child['user_id']]) && $khk[$child['user_id']]);
-        if ($khk_eligible && in_array($track, ['Yesod', 'Yediah'])) {
-            $track = 'Havonah';
+        // if ($khk_eligible && in_array($track, ['Yesod', 'Yediah'])) {
+        //     $track = 'Havonah';
+        // }
+        if ($khk_eligible) {
+            $track = 'Ultimate';
         }
         
         // Get fee amounts for this track
