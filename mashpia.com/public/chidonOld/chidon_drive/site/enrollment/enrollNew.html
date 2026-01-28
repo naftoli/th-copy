@@ -1243,12 +1243,14 @@
 			for (let child of children) {
 				child.track = tracks[child.user_id]
 				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
-				if (child.khk_eligible) {
-					// check track 
-					if (['Yesod', 'Yediah'].includes(child.track)) {
-						child.track = 'Havonah'
-					}
-				}
+				// if (child.khk_eligible) {
+				// 	// check track 
+				// 	console.log(child.track)
+				// 	debugger
+				// 	if (['Yesod', 'Yediah'].includes(child.track)) {
+				// 		child.track = 'Havonah'
+				// 	}
+				// }
 			}
 
 			let close = false // change to false to open registration
