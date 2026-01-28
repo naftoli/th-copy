@@ -763,6 +763,7 @@
 			let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
       console.log(eligible)
       if (eligible.length) show_reg = true
+      console.log("Show registration: " + show_reg)
     })()
 
     // allow parents to swipe to open a child's account.
@@ -922,6 +923,7 @@
           $(".chilrens").append(html);
           setSwiper();
           $(".year").text(year);
+          console.log("Show registration: " + show_reg)
           if (show_reg) $(".chidon_reg").show()
           if (Cookies.get('naftoli')) $(".view_enrollment_info").show();
         }
