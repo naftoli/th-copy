@@ -471,8 +471,9 @@
             <div id="installment-section" style="display: none;">
                 <h2>Pay in Installments</h2>
                 <p>
-                    You can pay your registration fee in installments. The first payment will go through 
-                    <b>tonight</b> and continue monthly until the full amount is paid.
+                    You can pay your registration fee in installments. Choose when you'd like the first payment 
+                    to be processed (between today and one month from now), and payments will continue monthly 
+                    until the full amount is paid.
                 </p>
                 
                 <div class="form-group">
@@ -488,6 +489,12 @@
                         <option value="3">3 months</option>
                         <option value="4">4 months</option>
                     </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="start-date">Start Date:</label>
+                    <input type="date" id="start-date" class="form-control" required />
+                    <small>Choose when the first payment should be processed (between today and one month from now)</small>
                 </div>
 
                 <div class="installment-info" id="installment-calculation">
@@ -634,6 +641,7 @@
                 }
 
                 breakdown = data.breakdown || [];
+                const familyBalance = parseFloat(data.family_balance || 0);
                 totalOwing = parseFloat(data.total_owing || 0);
 
                 if (breakdown.length === 0) {
@@ -654,7 +662,7 @@
                     html += `<div class="child-breakdown">
                         <h3>${child.first || ''} ${child.last || ''} - ${child.track || 'Unknown'} Track</h3>
                         <div class="fee-line">
-                            <span>Smallest Fee:</span>
+                            <span>Registration Fee:</span>
                             <span>$${fee.toFixed(2)}</span>
                         </div>`;
                     
@@ -685,7 +693,20 @@
                     </div>
                     </div>`;
                 }
+                
+                // Display family balance if it exists
+                if (familyBalance > 0) {
+                    html += `<div class="child-breakdown" style="background-color: #d4edda; border: 1px solid #c3e6cb;">
+                        <h3>Family Balance Credit</h3>
+                        <div class="fee-line">
+                            <span>Family Balance Credit:</span>
+                            <span class="credit">-$${familyBalance.toFixed(2)}</span>
+                        </div>
+                    </div>`;
+                }
+                
                 $("#children-breakdown").html(html);
+                
                 $("#total-owing").text('$' + totalOwing.toFixed(2));
                 
                 $("#loading").hide();
@@ -696,6 +717,23 @@
                     // Set default installment amount to total
                     $("#installment-amount").val(totalOwing.toFixed(2));
                     $("#installment-amount").attr('max', totalOwing.toFixed(2));
+                    
+                    // Set up date picker with min=today, max=one month from now
+                    const today = new Date();
+                    const oneMonthFromNow = new Date();
+                    oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+                    
+                    const todayStr = today.getFullYear() + '-' + 
+                        String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                        String(today.getDate()).padStart(2, '0');
+                    const maxDateStr = oneMonthFromNow.getFullYear() + '-' + 
+                        String(oneMonthFromNow.getMonth() + 1).padStart(2, '0') + '-' + 
+                        String(oneMonthFromNow.getDate()).padStart(2, '0');
+                    
+                    $("#start-date").attr('min', todayStr);
+                    $("#start-date").attr('max', maxDateStr);
+                    $("#start-date").val(todayStr);
+                    
                     $("#installment-section").show();
                     updateInstallmentCalculation();
                 } else {
@@ -724,16 +762,29 @@
         
         const numInstallments = parseInt($("#num_installments").val());
         const installmentAmount = (amount / numInstallments).toFixed(2);
-        const startDate = new Date();
-        const startDateStr = (startDate.getMonth() + 1) + '/' + startDate.getDate() + '/' + startDate.getFullYear();
+        
+        // Get selected start date or default to today
+        let startDateStr = $("#start-date").val();
+        if (!startDateStr) {
+            const today = new Date();
+            startDateStr = today.getFullYear() + '-' + 
+                String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                String(today.getDate()).padStart(2, '0');
+            $("#start-date").val(startDateStr);
+        }
+        
+        // Format for display
+        const startDateParts = startDateStr.split('-');
+        const displayDate = startDateParts[1] + '/' + startDateParts[2] + '/' + startDateParts[0];
 
         $("#installment-amount-display").text('$' + installmentAmount);
         $("#total-amount-display").text('$' + amount.toFixed(2));
-        $("#start-date-display").text(startDateStr);
+        $("#start-date-display").text(displayDate);
     }
 
     $(document).on('change', '#num_installments', updateInstallmentCalculation);
     $(document).on('input', '#installment-amount', updateInstallmentCalculation);
+    $(document).on('change', '#start-date', updateInstallmentCalculation);
 
     $(document).on('click', '.payment', function () {
         if (parseInt($(this).val()) === 1) {
@@ -792,10 +843,30 @@
         }
 
         const numInstallments = parseInt($("#num_installments").val());
-        const startDate = new Date();
-        const startDateStr = startDate.getFullYear() + '-' + 
-            String(startDate.getMonth() + 1).padStart(2, '0') + '-' + 
-            String(startDate.getDate()).padStart(2, '0');
+        
+        // Get selected start date
+        let startDateStr = $("#start-date").val();
+        if (!startDateStr) {
+            alert("Please select a start date.");
+            $("#create-installment").attr('data-processing', 'false');
+            $("#create-installment").attr('disabled', false);
+            return false;
+        }
+        
+        // Validate date is within allowed range
+        const selectedDate = new Date(startDateStr);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const oneMonthFromNow = new Date();
+        oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+        oneMonthFromNow.setHours(23, 59, 59, 999);
+        
+        if (selectedDate < today || selectedDate > oneMonthFromNow) {
+            alert("Start date must be between today and one month from now.");
+            $("#create-installment").attr('data-processing', 'false');
+            $("#create-installment").attr('disabled', false);
+            return false;
+        }
 
         const data = {
             admin: admin,

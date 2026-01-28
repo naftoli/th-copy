@@ -230,6 +230,16 @@ try {
         $totalOwing += $finalFee;
     }
 
+    // Apply family balance credit to total (subtract it)
+    $familyBalance = floatval($familyBalance ?? 0);
+    if ($familyBalance > 0) {
+        $totalOwing -= $familyBalance;
+        // Don't let total go below zero
+        if ($totalOwing < 0) {
+            $totalOwing = 0;
+        }
+    }
+
     $response = [
         'success' => true,
         'breakdown' => $breakdown,
