@@ -433,11 +433,21 @@ class user {
 	}
 	
 	function get_rank() {
-		$sql = "SELECT r.rank_ord, r.rank_name, r.rank_image_id, date_promoted FROM rank_marks JOIN ranks AS r USING(rank_ord) WHERE user_id=" . $this->user_id . " ORDER BY rank_ord DESC LIMIT 1";
+		$sql = "SELECT 
+					MAX(rm.rank_ord) as rank_ord, 
+					r.rank_name,
+					r.rank_image_id,
+					rm.date_promoted
+				FROM
+					rank_marks rm 
+						JOIN
+					ranks r USING (rank_ord)
+				WHERE
+					rm.user_id = " . $this->user_id;
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
 		if ($row) {
-			$this->rank_ord = $row["rank_ord"];
+			$this->rank_ord = $row["cached_rank"];
 			$this->rank_name = $row["rank_name"];
 			$this->rank_image_id = $row['rank_image_id'];
 			$this->date_promoted = $row['date_promoted'];
@@ -459,11 +469,11 @@ class user {
 
 		if ($by_date_range) {
 			$sql = "SELECT ut.* FROM user_tracks AS ut 
-				JOIN subjects AS s USING (subject_id) 
-				WHERE ut.user_id=" . $this->user_id . " 
-				AND ut.enrolled = 1 
-				AND ut.subject_id NOT IN (12, 15, 40, 136)
-				ORDER BY s.subject_ord";
+					JOIN subjects AS s USING (subject_id) 
+					WHERE ut.user_id=" . $this->user_id . " 
+					AND ut.enrolled = 1 
+					AND ut.subject_id NOT IN (12, 15, 40, 136)
+					ORDER BY s.subject_ord";
 		} else if ($subject_id == -1)
 			$sql = "SELECT ut.* FROM user_tracks AS ut JOIN subjects AS s USING (subject_id) WHERE ut.user_id=" . $this->user_id . " and ut.enrolled = 1 ORDER BY s.subject_ord";
 		else {
