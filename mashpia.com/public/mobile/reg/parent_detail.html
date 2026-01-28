@@ -733,6 +733,10 @@
 
     // when to show link for chidon registration
     let show_reg = false;
+    if (Cookies.get('naftoli')) {
+      show_reg = true
+    }
+
     (async () => {
       const res = await $.post('/chidonOld/chidon_drive/ajax/getChildren.php', { admin: admin })
       const data = JSON.parse(res)
@@ -744,21 +748,9 @@
       const tracks = tResult.tracks
       console.log(tracks)
 
-      const khkResult = await $.post('/chidonOld/chidon_drive/ajax/getKHK.php', { children: children })
-      const khkRes = JSON.parse(khkResult)
-      const khk = khkRes.khk
-      console.log(khk)
-
       // update children with track info
 			for (let child of children) {
 				child.track = tracks[child.user_id]
-				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
-				if (child.khk_eligible) {
-					// check track 
-					if (['Yesod', 'Yediah'].includes(child.track)) {
-						child.track = 'Havonah'
-					}
-				}
 			}
 			let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
       console.log(eligible)
