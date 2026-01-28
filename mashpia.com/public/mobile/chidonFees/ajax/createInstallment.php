@@ -23,7 +23,7 @@ if (!isset($data['admin']) || !isset($data['amount']) || !isset($data['num_insta
     exit;
 }
 
-$admin = mysql_real_escape_string($data['admin']);
+$admin = $data['admin'];
 $admin_id = encrypt_decrypt('decrypt', $admin);
 $amount = floatval($data['amount']);
 $num_installments = intval($data['num_installments']);
@@ -41,27 +41,27 @@ if (!$admin_id || $amount <= 0 || $num_installments <= 0) {
 $year = GlobalSettings::getChidonYear();
 
 // Check if there's already an active installment for this year
-// $stmt = $MASHPIA_DB->prepare("
-//     SELECT * FROM th_chidon_installments
-//     WHERE admin_id = :admin_id 
-//     AND year = :year
-// ");
-// $stmt->execute([
-//     ':admin_id' => $admin_id,
-//     ':year' => $year
-// ]);
-// if ($stmt->fetch()) {
-//     echo json_encode([
-//         'success' => false,
-//         'error' => 'You already have an active installment plan for this year'
-//     ]);
-//     exit;
-// }
+$stmt = $MASHPIA_DB->prepare("
+    SELECT * FROM th_chidon_installments
+    WHERE admin_id = :admin_id 
+    AND year = :year
+");
+$stmt->execute([
+    ':admin_id' => $admin_id,
+    ':year' => $year
+]);
+if ($stmt->fetch()) {
+    echo json_encode([
+        'success' => false,
+        'error' => 'You already have an active installment plan for this year'
+    ]);
+    exit;
+}
 
 // Get admin info to get customer profile
-$sql = "SELECT * FROM admins WHERE admin_id = " . $admin_id;
-$result = mysql_query($sql);
-$admin_info = mysql_fetch_assoc($result);
+$stmt = $MASHPIA_DB->prepare("SELECT * FROM admins WHERE admin_id = :admin_id");
+$stmt->execute([':admin_id' => $admin_id]);
+$admin_info = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$admin_info || !$admin_info['authorize_customer_profile_id']) {
     echo json_encode([
@@ -140,8 +140,18 @@ try {
             }
         }
     } else {
-        throw new Exception('Failed to create installment plan');
+        throw new Exception('Failed to create installment subscription: ' . $response);
     }
+    
+    // If we get here, everything succeeded
+    $MASHPIA_DB->commit();
+    echo json_encode([
+        'success' => true,
+        'message' => 'Installment plan created successfully',
+        'subscription_id' => $subscription_id
+    ]);
+    exit;
+    
 } catch (Exception $e) {
     $MASHPIA_DB->rollBack();
     echo json_encode([
@@ -150,11 +160,3 @@ try {
     ]);
     exit;
 }
-
-$MASHPIA_DB->commit();
-echo json_encode([
-    'success' => true,
-    'message' => 'Installment plan created successfully',
-    'subscription_id' => $subscription_id
-]);
-exit;
