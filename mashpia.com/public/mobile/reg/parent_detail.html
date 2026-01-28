@@ -314,7 +314,7 @@
                                       <!-- <button class="btn btn-primary chidondrive">ChidonDrive Setup</button> -->
           <!--                                            <button class="btn btn-info story">Submit your Rebbe Story</button>-->
           <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
-                    <button class="btn btn-primary chidon_reg">Chidon Experience Registration</button>
+                    <button class="btn btn-primary chidon_reg" style="display: none;">Chidon Experience Registration</button>
           <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
           <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
          <!-- <button class="btn btn-primary heyTeves">Hei Teves Sale</button> -->
@@ -706,6 +706,17 @@
 
     if (localStorage.getItem("locallang") == 'he' || Cookies.get('lang') == 'he') $("#news-link").hide();
 
+    // make sure we have a cookie
+    var admin = Cookies.get('admin');
+    if (!admin) {
+      window.location = "index.html";
+    }
+
+    // remove any shipping cookies
+    Cookies.remove('shipping');
+    Cookies.remove('shipOpt');
+    Cookies.remove('destination');
+
     // unix timestamp for now
     const now = Math.floor(Date.now()/1000);
 
@@ -721,7 +732,38 @@
     })
 
     // when to show link for chidon registration
-    let show_reg = true;
+    let show_reg = false;
+    (async () => {
+      const res = await $.post('/chidonOld/chidon_drive/ajax/getChildren.php', { admin: admin })
+      const data = JSON.parse(res)
+      console.log(data)
+      const children = data.info.children
+
+      const result = await $.post('/chidonOld/chidon_drive/ajax/getTracks.php', { children: children })
+      const tResult = JSON.parse(result)
+      const tracks = tResult.tracks
+      console.log(tracks)
+
+      const khkResult = await $.post('/chidonOld/chidon_drive/ajax/getKHK.php', { children: children })
+      const khkRes = JSON.parse(khkResult)
+      const khk = khkRes.khk
+      console.log(khk)
+
+      // update children with track info
+			for (let child of children) {
+				child.track = tracks[child.user_id]
+				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
+				if (child.khk_eligible) {
+					// check track 
+					if (['Yesod', 'Yediah'].includes(child.track)) {
+						child.track = 'Havonah'
+					}
+				}
+			}
+			let eligible = children.filter(child => child.track && !child.date_paid && (child.schoolConfirmed || parseInt(child.openRegForSchool)))
+      console.log(eligible)
+      if (eligible.length) show_reg = true
+    })()
 
     // allow parents to swipe to open a child's account.
     function setSwiper() {
@@ -734,17 +776,6 @@
       });
       translate(); // on mobile\js\translation\parent-detail\parent_detail.js
     }
-
-    // make sure we have a cookie
-    var admin = Cookies.get('admin');
-    if (!admin) {
-      window.location = "index.html";
-    }
-
-    // remove any shipping cookies
-    Cookies.remove('shipping');
-    Cookies.remove('shipOpt');
-    Cookies.remove('destination');
 
     // $(".tickets").click( function() {
     //   // open in new tab
