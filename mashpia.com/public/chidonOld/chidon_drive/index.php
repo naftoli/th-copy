@@ -8,7 +8,7 @@ $url_end = substr( $url, $pos + 1 );
 if ( $url_end && is_numeric( $url_end ) ) {
     header("Location: https://" . $host . "/site/family-single.html?id=" . $url_end);
     exit;
-} else if (isset($_GET['a']) && strpos($url, 'enrollNew.html?a=') !== false) {
+} else if (isset($_GET['a']) && strpos($url, 'enrollNew') !== false) {
     header("Location: https://" . $host . "/site/enrollment/enrollNew.html?a=" . $_GET['a']);
     exit;
 } else {
