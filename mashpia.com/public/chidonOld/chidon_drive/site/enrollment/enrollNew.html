@@ -844,7 +844,7 @@
 							break;
 						}
 					case 'val':
-						if (!$(obj.elem).val().trim().length) errors.push(obj.error)
+						if (!(($(obj.elem).val() || '').trim().length)) errors.push(obj.error)
 						break
 					case 'radio':
 					case 'checkbox':
@@ -856,13 +856,13 @@
 							if (parseInt(val) === 1) {
 								if (obj.yes) {
 									for (let id of obj.yes) {
-										if (!$(id.elem).val().trim().length) errors.push(id.error)
+										if (!(($(id.elem).val() || '').trim().length)) errors.push(id.error)
 									}
 								}
 							} else if (parseInt(val) === 0) {
 								if (obj.no) {
 									for (let id of obj.no) {
-										if (!$(id.elem).val().trim().length) errors.push(id.error)
+										if (!(($(id.elem).val() || '').trim().length)) errors.push(id.error)
 									}
 								}
 							}
