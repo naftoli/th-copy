@@ -26,7 +26,10 @@ if ( $url_end && is_numeric( $url_end ) ) {
             header("Location: https://" . $host . $url);
             break;
         case '/site/enrollment/enrollNew.html':
-            header("Location: https://" . $host . $url . (isset($_GET['a']) ? '?a=' . $_GET['a'] : ''));
+            if (! empty($_SERVER['QUERY_STRING'])) {
+                $url .= '?' . $_SERVER['QUERY_STRING'];
+            }
+            header("Location: https://" . $host . $url);
             break;
         default:
             header("Location: https://" . $host . "/site");
