@@ -20,15 +20,16 @@ if ( $url_end && is_numeric( $url_end ) ) {
         header("Location: https://" . $host . "/site/login.html?a=" . $_GET['a']);
         exit;
     }
+    if (strpos($url, '?a=') !== false) {
+        $a = $_GET['a'];
+    }
     switch ( $url ) {
         case '/site/intro.html':
         case '/site/setup.html':
             header("Location: https://" . $host . $url);
             break;
         case '/site/enrollment/enrollNew.html':
-            if (! empty($_SERVER['QUERY_STRING'])) {
-                $url .= '?' . $_SERVER['QUERY_STRING'];
-            }
+        case '/site/enrollment/enroll.html?a=' . $a:
             header("Location: https://" . $host . $url);
             break;
         default:
