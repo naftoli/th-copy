@@ -20,10 +20,6 @@ if ( $url_end && is_numeric( $url_end ) ) {
         header("Location: https://" . $host . "/site/login.html?a=" . $_GET['a']);
         exit;
     }
-    if (strpos($url, '?a=') !== false) {
-        header("Location: https://" . $host . $url);
-        exit;
-    }
     switch ( $url ) {
         case '/site/intro.html':
         case '/site/setup.html':
