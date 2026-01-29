@@ -447,7 +447,7 @@ class user {
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
 		if ($row) {
-			$this->rank_ord = $row["cached_rank"];
+			$this->rank_ord = $row["rank_ord"];
 			$this->rank_name = $row["rank_name"];
 			$this->rank_image_id = $row['rank_image_id'];
 			$this->date_promoted = $row['date_promoted'];
