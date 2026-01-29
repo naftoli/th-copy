@@ -21,7 +21,8 @@ if ( $url_end && is_numeric( $url_end ) ) {
         exit;
     }
     if (strpos($url, '?a=') !== false) {
-        $a = $_GET['a'];
+        header("Location: https://" . $host . $url);
+        exit;
     }
     switch ( $url ) {
         case '/site/intro.html':
@@ -29,7 +30,6 @@ if ( $url_end && is_numeric( $url_end ) ) {
             header("Location: https://" . $host . $url);
             break;
         case '/site/enrollment/enrollNew.html':
-        case '/site/enrollment/enroll.html?a=' . $a:
             header("Location: https://" . $host . $url);
             break;
         default:
