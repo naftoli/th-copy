@@ -826,9 +826,10 @@
 
         const paymentMethod = $(".payment:checked").val();
         let card_id = 0;
+        let new_card = null;
 
         if (parseInt(paymentMethod) === 0) {
-            card_id = parseInt($("#payment-card").val());
+            card_id = parseInt($("#payment-card").val(), 10);
             if (!card_id) {
                 alert("You must select a credit card.");
                 $("#create-installment").attr('data-processing', 'false');
@@ -836,10 +837,27 @@
                 return false;
             }
         } else {
-            alert("Please use a credit card on file. If you need to add a new card, please do so from your account settings first.");
-            $("#create-installment").attr('data-processing', 'false');
-            $("#create-installment").attr('disabled', false);
-            return false;
+            // Enter a new card: collect form data and send to createInstallment.php to add and use
+            const ccFirst = ($("#cc-first").val() || '').trim();
+            const ccLast = ($("#cc-last").val() || '').trim();
+            const ccNumber = ($("#cc-number").val() || '').replace(/\D/g, '');
+            const ccExp = ($("#cc-exp").val() || '').trim();
+            const ccCvv = ($("#x_card_code").val() || '').trim();
+            const zip = ($("#zip").val() || '').trim();
+            if (!ccFirst || !ccLast || ccNumber.length < 13 || ccExp.length !== 4 || ccCvv.length < 3) {
+                alert("Please fill in all new card fields: first name, last name, card number (no spaces), expiration (MMYY), and security code.");
+                $("#create-installment").attr('data-processing', 'false');
+                $("#create-installment").attr('disabled', false);
+                return false;
+            }
+            new_card = {
+                first: ccFirst,
+                last: ccLast,
+                number: ccNumber,
+                exp: ccExp,
+                cvv: ccCvv,
+                zip: zip
+            };
         }
 
         const numInstallments = parseInt($("#num_installments").val());
@@ -875,6 +893,9 @@
             card_id: card_id,
             start_date: startDateStr
         };
+        if (new_card) {
+            data.new_card = new_card;
+        }
 
         try {
             const res = await fetch('ajax/createInstallment.php', {
