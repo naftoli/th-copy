@@ -19,7 +19,7 @@ if ( $url_end && is_numeric( $url_end ) ) {
         }
         header("Location: https://" . $host . "/site/login.html?a=" . $_GET['a']);
         exit;
-    } else if (strpos($url, '?a=') !== false) {
+    } else if (strpos($url, 'enrollNew.html?a=') !== false) {
         header("Location: https://" . $host . $url);
         exit;
     }
