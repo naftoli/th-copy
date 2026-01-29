@@ -29,7 +29,7 @@ if ( $url_end && is_numeric( $url_end ) ) {
             header("Location: https://" . $host . $url);
             break;
         case '/site/enrollment/enrollNew.html':
-        
+        case '/site/enrollment/enroll.html?a=' . $a:
             header("Location: https://" . $host . $url);
             break;
         default:
