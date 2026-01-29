@@ -87,7 +87,7 @@ try {
     
     // Step 4: Create the subscription
     debug_print("Creating subscription");
-    $result = $installments->createSubscription($total_amount, $num_installments, $start_date);
+    $result = $installments->createSubscription($total_amount, $num_installments, $start_date, $admin_id);
     
     debug_print("Subscription creation result", $result);
     

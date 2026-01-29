@@ -177,7 +177,7 @@ try {
 
     // Now create installment subscription (skip updateBilling when we just added the card)
     $installments = new Installments($customer, $card_id, !$used_new_card);
-    $response = $installments->createSubscription($amount, $num_installments, $start_date);
+    $response = $installments->createSubscription($amount, $num_installments, $start_date, $admin_id);
 
     if (strpos($response, 'Success') !== false) {
         // Subscription created successfully

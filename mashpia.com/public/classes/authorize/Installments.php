@@ -129,7 +129,7 @@ class Installments
         else return false;
     }
 
-    public function createSubscription($amount, $numInstallments, $start_date = null) {
+    public function createSubscription($amount, $numInstallments, $start_date = null, $admin_id = 0) {
         $this->total_amount = $amount;
         $this->number_of_installments = $numInstallments;
         $this->installment_amount = round(floatval($amount / $numInstallments), 2);
@@ -154,6 +154,13 @@ class Installments
 
         $subscription->setPaymentSchedule($paymentSchedule);
         $subscription->setAmount($this->installment_amount);
+
+        if ($admin_id > 0) {
+            $order = new AnetAPI\OrderType();
+            $desc = "F" . $admin_id . ":RRFAM-" . $this->installment_amount;
+            $order->setDescription($desc); 
+            $subscription->setOrder($order); 
+        }
 
         // When using a customer profile, we don't need to include billing information
         // Set up customer profile - this contains the billing information already

@@ -106,7 +106,7 @@ try {
     echo "<br />";
     
     // Create subscription with specific start date
-    $response = $installments->createSubscription($amount, $num_installments, $start_date);
+    $response = $installments->createSubscription($amount, $num_installments, $start_date, $admin_id);
     
     echo "Response from creating subscription: " . $response . "<br>";
     
