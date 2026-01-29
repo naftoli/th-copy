@@ -170,9 +170,15 @@
         window.onload = function() {
             const email = <?= isset($_POST['email']) && $_POST['email'] ? 1 : 0 ?>;
             const fromBC = <?= isset($_POST['from_bc']) && $_POST['from_bc'] ? 1 : 0 ?>;
+            const postData = <?= json_encode($_POST) ?>;
+            // Pass profile parameter from URL if present
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('profile')) {
+                postData.profile = 1;
+            }
             fetch('printDuch.php', {
                 method: 'POST',
-                body: JSON.stringify(<?= json_encode($_POST) ?>),
+                body: JSON.stringify(postData),
             }).then(response => response.text()).then(html => {
                 $("#spinner").empty();
                 if (html === 'error') {
