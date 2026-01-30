@@ -111,6 +111,7 @@ foreach ( $missions as $info ) {
         $objMissions[] = MissionDisplay::getInstance( $type, $mission );
     }
 }
+
 ob_start();
 // * Print the buttons to print and email the Duch
 echo "
