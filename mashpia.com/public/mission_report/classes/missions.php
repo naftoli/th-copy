@@ -20,19 +20,18 @@ class Missions {
 	protected $end;
 	protected $school_type_id;
 	protected $missions;
-	public $for_duch = false;
 	
-	public function __construct( $start, $end, $user = 0, $school = 0, $grade = 0, $allowPersonalization = true, $printing_mode = false, $by_date_range = false ) {
+	public function __construct( $start, $end, $user = 0, $school = 0, $grade = 0, $allowPersonalization = true, $printing_mode = false, $by_date_range = false, $for_duch = false ) {
 		$this->school = $school;
 		$this->grade = $grade;
 		$this->user = $user;
 		$this->start = $start;
 		$this->end = $end;
 		$this->missions = array();
-		$this->createMissions( $allowPersonalization, $printing_mode, $by_date_range );
+		$this->createMissions( $allowPersonalization, $printing_mode, $by_date_range, $for_duch );
 	}
 	
-	private function createMissions( $allowPersonalization, $printing_mode = false, $by_date_range = false ) {
+	private function createMissions( $allowPersonalization, $printing_mode = false, $by_date_range = false, $for_duch = false ) {
 		$sql = "SELECT u.* FROM users u"
 				." JOIN classes c ON u.class_id = c.class_id"
 				." WHERE u.user_registered > 0";
@@ -53,7 +52,7 @@ class Missions {
 		    $user = new user( $row );
 		    $user->get_rank();
 			$user->get_school_class();
-			if ( $this->for_duch ) {
+			if ( $for_duch ) {
 				$user->for_duch = true;
 			}
 			// the idea was to disable personalization for OT so that there's the same number of pages that get printed for every child in each class, 

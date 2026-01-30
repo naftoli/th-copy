@@ -17,10 +17,11 @@ if ( !isset( $_POST['school_id'] ) ) {
     die();
 }
 
-$school = \School::find([ $_POST['school_id'] ]);
-$user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
-$class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
-if (!is_array($user_ids)) $user_ids = [ $user_ids ];
+$school_id = $_POST['school_id'];
+// $school = \School::find([ $_POST['school_id'] ]);
+// $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
+// $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
+// if (!is_array($user_ids)) $user_ids = [ $user_ids ];
 
 // $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
@@ -45,48 +46,48 @@ if ( $selectedMonth ) {
     $start = $end - $date_range + 1; // one less b/c we include start and end date in total number of days
 } 
 
-// * Set class_ids and user_ids if not set by client
-if ( !$class_ids ) {
-    $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
-}
+// // * Set class_ids and user_ids if not set by client
+// if ( !$class_ids ) {
+//     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
+// }
 
-if ($user_ids) {
-    foreach ($user_ids as $i => $user_id) {
-        if ($i == 0 && !$user_id) {
-            $user_ids = false;
-            break;
-        }
-    }
-}
+// if ($user_ids) {
+//     foreach ($user_ids as $i => $user_id) {
+//         if ($i == 0 && !$user_id) {
+//             $user_ids = false;
+//             break;
+//         }
+//     }
+// }
 
-if ( !$user_ids ) {
-    $users = [];
-    $user_ids = [];
-    // do each class separately so that we can order the children alphabetically
-    foreach ( $class_ids as $class_id ) {
-        $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
+// if ( !$user_ids ) {
+//     $users = [];
+//     $user_ids = [];
+//     // do each class separately so that we can order the children alphabetically
+//     foreach ( $class_ids as $class_id ) {
+//         $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
         
-        $usersTmp = array_filter($usersTmp, function ($u) { return $u->user_registered; });
-        // order users alphabetically
-        usort( $usersTmp, function( $a, $b ) {
-            return strcmp($a->last ?? '', $b->last ?? '');
-        });
-        $user_idsTmp = array_map(function ($u) { return $u->user_id; }, $usersTmp);
+//         $usersTmp = array_filter($usersTmp, function ($u) { return $u->user_registered; });
+//         // order users alphabetically
+//         usort( $usersTmp, function( $a, $b ) {
+//             return strcmp($a->last ?? '', $b->last ?? '');
+//         });
+//         $user_idsTmp = array_map(function ($u) { return $u->user_id; }, $usersTmp);
 
-        $users = array_merge( $users, $usersTmp );
-        $user_ids = array_merge( $user_ids, $user_idsTmp );
-    }
-// make sure the soldiers are in the selected platoons if provided with an array of soldiers.
-} else if ( $user_ids ) {
-    $users = \Soldier::find( $user_ids );
-    $users = is_array( $users ) ? $users : [ $users ]; // make sure it is an array so we can filter it
-    $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
-    // order users alphabetically
-    usort( $users, function( $a, $b ) {
-        return strcmp($a->last ?? '', $b->last ?? '');
-    });
-    $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
-}
+//         $users = array_merge( $users, $usersTmp );
+//         $user_ids = array_merge( $user_ids, $user_idsTmp );
+//     }
+// // make sure the soldiers are in the selected platoons if provided with an array of soldiers.
+// } else if ( $user_ids ) {
+//     $users = \Soldier::find( $user_ids );
+//     $users = is_array( $users ) ? $users : [ $users ]; // make sure it is an array so we can filter it
+//     $users = array_filter($users, function ($u) use ($class_ids) { return in_array( $u->class_id, $class_ids ); });
+//     // order users alphabetically
+//     usort( $users, function( $a, $b ) {
+//         return strcmp($a->last ?? '', $b->last ?? '');
+//     });
+//     $user_ids = array_map(function ($u) { return $u->user_id; }, $users);
+// }
 
 // * Convert the dates for the legacy system
 $dates_id = 1;
@@ -99,8 +100,7 @@ $all_date_tasks_missions = [];
 // * Generate the missions using the legacy code
 $missions = [];
 foreach( $user_ids as $user_id ) {
-    $mission = new Missions( $start, $end, $user_id, 0, 0, true, true, true );
-    $mission->for_duch = true;
+    $mission = new Missions( $start, $end, 0, $school_id, 0, true, true, true, true );
     $missions[] = $mission->getMissions();
 }
 
