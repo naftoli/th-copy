@@ -511,7 +511,7 @@
     <br />
 
     <div class="no-print" id="buttons" style="display: none;">
-        <button class="no-print btn btn-primary btn-sm" onclick="javascript:printDuch()">Print</button>
+        <button class="no-print btn btn-primary btn-sm print" style="display: none;" onclick="javascript:printDuch()">Print</button>
         <button class="no-print btn btn-primary btn-sm email" style="display: none;" onclick="javascript:emailToOhel()">Email to the Ohel</button>
     </div>
 
@@ -569,6 +569,7 @@
             authenticate(id);
 
             if (Cookies.get('naftoli')) {
+                $('.print').show();
                 $('.email').show();
             }
 
