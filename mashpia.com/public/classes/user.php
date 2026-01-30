@@ -528,11 +528,15 @@ class user {
                         $row['level'] = intval($rowLimmud['class_grade']) + 6;
                         $user_track = new user_track($row);
                         $user_track->get_subject_info();
-                        if ($by_date_range) {
-                            $user_track->get_date_tasks_missions_by_date_range($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
-                        } else {
-                            $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
-                        }
+						if ($this->for_duch) {
+							$user_track->get_date_tasks_missions_for_duch($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+						} else {
+                            if ($by_date_range) {
+                                $user_track->get_date_tasks_missions_by_date_range($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+                            } else {
+                                $user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks, true);
+                            }
+						}
                         array_push($this->user_tracks, $user_track);
                     }
                 }
