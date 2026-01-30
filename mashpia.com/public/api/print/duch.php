@@ -179,7 +179,7 @@
             fetch(url, {
                 method: 'POST',
                 body: JSON.stringify(postData),
-            }).then(response => response.text()).then(async html => {
+            }).then(response => response.text()).then(html => {
                 $("#spinner").empty();
                 if (html === 'error') {
                     alert('Error: School ID is required');
@@ -193,7 +193,9 @@
                         const page = pages[i];
                         $('#main').append(page);
                         // wait for the page to render
-                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        setTimeout(function() {
+                            console.log('page rendered');
+                        }, 500)
                     }
                 } else {
                     $('#main').html(html);

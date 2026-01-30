@@ -103,6 +103,10 @@ $all_date_tasks_missions = [];
 $mission = new Missions( $start, $end, 0, $school_id, 0, true, true, true, true );
 $missions = $mission->getMissions();
 // }
+echo "<pre>";
+print_r($missions);
+echo "</pre>";
+exit;
 
 // * Generate the printed sheets using the legacy code
 $objMissions = [];
