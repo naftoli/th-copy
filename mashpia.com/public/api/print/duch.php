@@ -190,9 +190,15 @@
                     alert('Error: School ID is required');
                     return;
                 }
-                
-                $('#main').html(html);
-                
+
+                // break up html into pages
+                const pages = html.split('|');
+                $('#main').html(pages[0]);
+                for (let i = 1; i < pages.length; i++) {
+                    const page = pages[i];
+                    $('#main').append(page);
+                }
+
                 if (email) {
                     emailToOhel();
                 } else {

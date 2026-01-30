@@ -131,7 +131,7 @@ foreach ( $objMissions as $obj ) {
     if (in_array($obj->school_type_id , [4,5])) $class .= ' ds';
 
     $id = $obj->user_id;
-    echo "<div class='$class' id='user-$id'";
+    echo "|<div class='$class' id='user-$id'";
     if (in_array($obj->lang_id, [2, 4])) echo " dir='rtl' ";
     echo ">";
 
