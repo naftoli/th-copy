@@ -98,11 +98,11 @@ $all_date_tasks = [];
 $all_date_tasks_missions = [];
 
 // * Generate the missions using the legacy code
-$missions = [];
-foreach( $user_ids as $user_id ) {
-    $mission = new Missions( $start, $end, 0, $school_id, 0, true, true, true, true );
-    $missions[] = $mission->getMissions();
-}
+// $missions = [];
+// foreach( $user_ids as $user_id ) {
+$mission = new Missions( $start, $end, 0, $school_id, 0, true, true, true, true );
+$missions = $mission->getMissions();
+// }
 
 // * Generate the printed sheets using the legacy code
 $objMissions = [];
