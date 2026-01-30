@@ -138,6 +138,7 @@
     <div id="main"></div>
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
+    <script src="/scripts/js.cookie.js"></script>
     <script src="/mobile/js/spin.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
@@ -176,7 +177,11 @@
             if (urlParams.get('profile')) {
                 postData.profile = 1;
             }
-            fetch('printDuch.php', {
+            let url = 'printDuch.php';
+            if (Cookies.get('naftoli')) {
+                url = 'printDuchAll.php';
+            }
+            fetch(url, {
                 method: 'POST',
                 body: JSON.stringify(postData),
             }).then(response => response.text()).then(html => {

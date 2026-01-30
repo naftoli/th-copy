@@ -130,6 +130,8 @@ class user {
     
     // REGISTRATION //
     public $registration_fee = false;
+
+	public $for_duch = false;
 	
 	function __construct($row){
 		$this->user_id = $row['user_id'];
@@ -564,6 +566,10 @@ class user {
 					array_push($this->pesukim_tasks, $user_track->pesukim_tasks[$ptno]);
 				}
 			}
+		}
+
+		if ($this->for_duch) {
+			return;
 		}
 
 		// sort no label tasks by task ord

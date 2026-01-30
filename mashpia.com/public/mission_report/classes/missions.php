@@ -20,6 +20,7 @@ class Missions {
 	protected $end;
 	protected $school_type_id;
 	protected $missions;
+	public $for_duch = false;
 	
 	public function __construct( $start, $end, $user = 0, $school = 0, $grade = 0, $allowPersonalization = true, $printing_mode = false, $by_date_range = false ) {
 		$this->school = $school;
@@ -52,6 +53,9 @@ class Missions {
 		    $user = new user( $row );
 		    $user->get_rank();
 			$user->get_school_class();
+			if ( $this->for_duch ) {
+				$user->for_duch = true;
+			}
 			// the idea was to disable personalization for OT so that there's the same number of pages that get printed for every child in each class, 
 			// but since it doesn't help anyway (b/c ages could be different in same class), the if statment will not return true but false
 			if ( !$allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization(); // don't show birthday missions for OT
