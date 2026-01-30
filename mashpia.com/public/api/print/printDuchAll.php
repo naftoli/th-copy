@@ -93,6 +93,9 @@ $dates_id = 1;
 if ( $dates == 'none' ) $dates_id = 0;
 if ( $dates == 'english' ) $dates_id = 2;
 
+$all_date_tasks = [];
+$all_date_tasks_missions = [];
+
 // * Generate the missions using the legacy code
 $missions = [];
 foreach( $user_ids as $user_id ) {
@@ -112,6 +115,7 @@ foreach ( $missions as $info ) {
         $objMissions[] = MissionDisplay::getInstance( $type, $mission );
     }
 }
+
 ob_start();
 // * Print the buttons to print and email the Duch
 echo "
