@@ -219,7 +219,6 @@ class user_track
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
 
-
 		if (! $all_date_tasks_missions[$this->subject_id][$this->level][$this->track_id][$this->school_type_id][$this->lang_id][$start_date][$end_date]) {
 			$query = mysql_query($sql);
 			while ($row = mysql_fetch_assoc($query)) {
