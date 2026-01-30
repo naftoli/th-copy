@@ -179,7 +179,7 @@
             fetch(url, {
                 method: 'POST',
                 body: JSON.stringify(postData),
-            }).then(response => response.text()).then(html => {
+            }).then(response => response.text()).then(async html => {
                 $("#spinner").empty();
                 if (html === 'error') {
                     alert('Error: School ID is required');
