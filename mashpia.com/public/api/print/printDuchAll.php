@@ -103,10 +103,6 @@ foreach( $user_ids as $user_id ) {
     $mission = new Missions( $start, $end, $user_id, 0, 0, true, true, true, true );
     $missions[] = $mission->getMissions();
 }
-echo "<pre>";
-print_r($missions);
-echo "</pre>";
-exit;
 
 // * Generate the printed sheets using the legacy code
 $objMissions = [];
