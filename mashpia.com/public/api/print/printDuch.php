@@ -143,7 +143,7 @@ foreach ( $objMissions as $obj ) {
     $pages += $obj->printDuch($activeStreaks);
     echo "</div>";
 }
-$html = ob_get_clean();
+$html = ob_get_flush();
 echo $html;
 
 function isRTL($lang_id) {
