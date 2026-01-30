@@ -115,6 +115,7 @@ try {
         
         $child['coupon'] = $c->checkForUserCode($child['user_serial']);
     }
+    unset($child); // break reference so later foreach doesn't overwrite last element
 
     // Get tracks
     $ct = new ChidonTests();
@@ -124,6 +125,7 @@ try {
     foreach ($children as $child) {
         $track = '';
         $cumulative = '';
+        // only need to calculate track if there's no reward type set for this child
         if (empty($child['reward_type']) || $child['reward_type'] === 'highest track passed') {
             $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
             $ct->setScores();
@@ -131,7 +133,7 @@ try {
             $scores = $ct->getScores();
             if (isset($scores[$child['th_chidon_id']])) {
                 $cumulative = $ct->calculateCumulative($child, $scores[$child['th_chidon_id']]);
-            }
+            };
             if ($cumulative == 'iyun') $track = 'Iyun';
             else {
                 $marks = $ct->getMarks();
