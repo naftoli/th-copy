@@ -111,7 +111,7 @@ foreach ( $missions as $info ) {
         $objMissions[] = MissionDisplay::getInstance( $type, $mission );
     }
 }
-
+ob_start();
 // * Print the buttons to print and email the Duch
 echo "
     <div style='display: flex; justify-content: center; gap: 10px; margin-top: 10px;'>
@@ -143,6 +143,8 @@ foreach ( $objMissions as $obj ) {
     $pages += $obj->printDuch($activeStreaks);
     echo "</div>";
 }
+$html = ob_get_clean();
+echo $html;
 
 function isRTL($lang_id) {
     return in_array($lang_id, [2, 4]);
