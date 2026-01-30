@@ -178,7 +178,7 @@ if (!empty($users)) {
         if (intval($row['reg_chidon'])) $children[$row['user_id']]['chidonRegistered'] = 1;
         if (intval($row['th_chidon_id'])) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
         $children[$row['user_id']]['ultimate_trip'] = intval($row['ultimate_trip']);
-        $children[$row['user_id']]['rep'] = intval($row['school_rep']) ? 1 : intval($row['regional_rep']) ? 1 : intval($row['intl_rep']) ? 1 : 0;
+        $children[$row['user_id']]['rep'] = intval($row['school_rep']) ? 1 : (intval($row['regional_rep']) ? 1 : (intval($row['intl_rep']) ? 1 : 0));
         $children[$row['user_id']]['chidon_registered'] = $row['date_paid'] > 0 ? 1 : 0;
 
         // turn on chidon registration for children from monsey schools
