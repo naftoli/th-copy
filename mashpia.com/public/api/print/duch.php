@@ -172,11 +172,6 @@
             const email = <?= isset($_POST['email']) && $_POST['email'] ? 1 : 0 ?>;
             const fromBC = <?= isset($_POST['from_bc']) && $_POST['from_bc'] ? 1 : 0 ?>;
             const postData = <?= json_encode($_POST) ?>;
-            // Pass profile parameter from URL if present
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('profile')) {
-                postData.profile = 1;
-            }
             let url = 'printDuch.php';
             if (Cookies.get('naftoli')) {
                 url = 'printDuchAll.php';
@@ -191,12 +186,17 @@
                     return;
                 }
 
-                // break up html into pages
-                const pages = html.split('|');
-                $('#main').html(pages[0]);
-                for (let i = 1; i < pages.length; i++) {
-                    const page = pages[i];
-                    $('#main').append(page);
+                if (Cookies.get('naftoli')) {
+                    // break up html into pages
+                    const pages = html.split('|');
+                    for (let i = 0; i < pages.length; i++) {
+                        const page = pages[i];
+                        $('#main').append(page);
+                        // wait for the page to render
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                    }
+                } else {
+                    $('#main').html(html);
                 }
 
                 if (email) {
