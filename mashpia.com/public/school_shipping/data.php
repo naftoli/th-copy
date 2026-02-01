@@ -139,7 +139,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['description'] . "</textarea></td></tr>";
                     } else {
                         // update summary
-                        addToSummary($item, $school);
+                        addToSummary($item, $school, $status);
                     }
                 }
             }
@@ -147,18 +147,17 @@ function createHtmlForItem($school, $row, $output = true) {
     }
 }
 
-function addToSummary($item, $school) {
+function addToSummary($item, $school, $status) {
     global $summary, $summary_items;
 
-    $id = $item['id'];
+    $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    // if item doesn't exist in summary_items, add it
-    if (isset($summary_items[$id])) $summary_items[$id]['qty'] += $qty;
-    // else update qty
-    else $summary_items[$id] = $item;
-    // update summary
-    if (isset($summary[$school][$id])) $summary[$school][$id] += $qty;
-    else $summary[$school][$id] = $qty;
+    if (! empty($status['description'])) $key .= '*';
+
+    if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
+
+    if (isset($summary[$school][$key])) $summary[$school][$key] += $qty;
+    else $summary[$school][$key] = $qty;
 }
 
 

@@ -204,6 +204,9 @@ foreach ($resultsBySchool as $school => $row) : ?>
           <?php
           if (isset($summary[$school])) {
               foreach ($summary[$school] as $id => $qty) {
+                if (strpos($id, '*') !== false) {
+                  $id = str_replace('*', '<span style="color: red;">*</span>', $id);
+                }
                   echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
                   $item = $summary_items[$id];
                   echo "<td>" . $item['item'] . "</td>";
@@ -326,7 +329,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   }
 
   let info = []
-  let bc = <?= $superAdmin ? 0 : 1 ?>;
+  const super_admin = <?= $superAdmin ? 1 : 0 ?>;
+  const bc = super_admin ? 0 : 1;
   const year = <?= $year ?>;
 
   function update(elem, action, qty = 1, desc = '') {
@@ -387,9 +391,9 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveAll").click(function () {
     $(".shipping").each(function () {
+      const originalVal = parseInt($(this).data('original-value'))
+      const action = super_admin ? ([3, 4].includes(originalVal) ? 5 : 1) : 2
       let qty = $(this).parent().parent().find('td:eq(3)').text()
-      let action = 1
-      if (bc) action = 2
       update(this, action, qty)
     })
     save()
@@ -397,9 +401,9 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      let qty = $(this).parent().parent().find('td:eq(3)').text()
-      let action = 1
-      if (bc) action = 2
+      const originalVal = parseInt($(this).data('original-value'))
+      const action = super_admin ? ([3, 4].includes(originalVal) ? 5 : 1) : 2
+      const qty = $(this).parent().parent().find('td:eq(3)').text()
       update(this, action, qty)
     })
     save()
