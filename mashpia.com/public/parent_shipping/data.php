@@ -58,7 +58,7 @@ function build_items() {
 }
 
 function createHtmlForItem($admin_id, $output = true) {
-    global $info, $item_details_chosen, $items_chosen, $limit_to_status;
+    global $info, $item_details_chosen, $items_chosen, $limit_to_status, $superAdmin;
 
     $school = $admin_id; // school is the admin_id in this case bc we are using the code from class.chidon_shipping.php
     foreach ($items_chosen as $cat => $more) {
@@ -100,7 +100,7 @@ function createHtmlForItem($admin_id, $output = true) {
                         echo "<td class='no-print'>";
                         $originalValue = empty($status) ? 0 : $status['status'];
                         echo "<select id='" . $item['id'] . ':' . $admin_id . "' class='shipping' data-original-value='$originalValue'>";
-                        if (!$super && (empty($status) || $status['status'] == 0)) $options = ['Not Yet Shipped'];
+                        if (!$superAdmin && (empty($status) || $status['status'] == 0)) $options = ['Not Yet Shipped'];
                         else $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged', 'Replaced'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
