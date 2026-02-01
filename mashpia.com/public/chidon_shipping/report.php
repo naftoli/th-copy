@@ -492,7 +492,6 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const user = ids[1]
     const num = ids[2]
     action = parseInt(action)
-    console.log(action)
     if (action != 4 || (action == 4 && desc)) {
       // find out if item already exists
       const found = info.find(e => e.item == item && e.user == user && e.num == num)
