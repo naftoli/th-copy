@@ -492,6 +492,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     const user = ids[1]
     const num = ids[2]
     action = parseInt(action)
+    console.log(action)
     if (action != 4 || (action == 4 && desc)) {
       // find out if item already exists
       const found = info.find(e => e.item == item && e.user == user && e.num == num)
@@ -532,7 +533,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveAll").click(function () {
     $(".shipping").each(function () {
-      const action = super_admin ? 1 : 2
+      const originalVal = parseInt($(this).data('original-value'))
+      const action = super_admin ? ([3, 4].includes(originalVal) ? 5 : 1) : 2
       const desc = $(this).parent().parent().find('.description').val()
       const ship_num = $(this).parent().parent().find('.shipment_number').val()
       update(this, action, desc, ship_num)
@@ -542,6 +544,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
+      // const originalVal = $(this).data('original-value')
+      // const action = super_admin ? ([3, 4].includes(parseInt(originalVal)) ? 5 : 1) : 2
       const action = super_admin ? 1 : 2
       const desc = $(this).parent().parent().find('.description').val()
       const ship_num = $(this).parent().parent().find('.shipment_number').val()
