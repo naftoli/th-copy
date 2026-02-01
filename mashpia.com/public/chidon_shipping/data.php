@@ -277,6 +277,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
                 if (! isset($children[$user_id])) continue;
                 $admin = $admins[$children[$user_id]];
                 $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
+                $phone = makeTextForExcel($phone);
                 $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
 
                 $user = $users[$user_id];
@@ -426,4 +427,24 @@ function getUpdatedSchools($schools) {
         $schools[$row['school_id']] = $row['chidon_5783_updated_shipping'];
     }
     return $schools;
+}
+
+function makeTextForExcel($text) {
+    // first strip out all non-numeric characters
+    $text = preg_replace('/[^0-9]/', '', $text);
+    // find out how many digits we have
+    $digits = strlen($text);
+    if ($digits == 10) {
+        // add a - after the first 3 digits
+        $text = substr($text, 0, 3) . '-' . substr($text, 3);
+        // add a - after the first 6 digits
+        $text = substr($text, 0, 6) . '-' . substr($text, 6);
+    } else if ($digits == 7) {
+        // add a - after the first 3 digits
+        $text = substr($text, 0, 3) . '-' . substr($text, 3);
+    } else {
+        // add a space after the first 3 digits
+        $text = substr($text, 0, 3) . ' ' . substr($text, 3);
+    }
+    return $text;
 }
