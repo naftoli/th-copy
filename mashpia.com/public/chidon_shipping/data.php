@@ -156,7 +156,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "<td><textarea class='description' rows='3' cols='15'>" . ($status['description'] ?? '') . "</textarea></td></tr>";
                     } else {
                         // update summary
-                        addToSummary($item, $school);
+                        addToSummary($item, $school, $row, $status);
                     }
                 }
             }
@@ -164,12 +164,13 @@ function createHtmlForItem($school, $row, $output = true) {
     }
 }
 
-function addToSummary($item, $school) {
+function addToSummary($item, $school, $status) {
     global $summary, $summary_items, $grand_summary;
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-//    if (is_array($key)) print_r($key);
+    $had_damage = ! empty($status['description']);
+    if ($had_damage) $key .= '<span style="color: red;">*</span>';
 
     if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
 
