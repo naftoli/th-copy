@@ -252,7 +252,12 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
         $children[$user_id] = $admin_id;
         $users[$user_id] = $row;
         $ship_status = in_array($admin_id, $shipping_paid) ? 'ship' : 'pickup';
-        if ($ship_status == 'ship') $ship_status .= ' ' . ($ship_to == 'domestic' ? 'USA' : 'INTL');
+        $country = $row['admin_country'];
+        $usa = ['USA', 'US', 'United States', 'U.S.A', 'Unites States of America'];
+        if ($ship_status == 'ship') {
+            if (in_array($country, $usa)) $ship_status .= ' USA';
+            else $ship_status .= ' INTL';
+        }
         $shipping_status[$user_id] = $ship_status;
     }
 
