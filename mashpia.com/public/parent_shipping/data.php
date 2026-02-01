@@ -67,7 +67,7 @@ function createHtmlForItem($admin_id, $output = true) {
             foreach ($items as $item) {
                 // get status and whether to show this item
                 $show_item = false;
-                $status = isset($info['status'][$row['admin_id']][$item['id']]) ? $info['status'][$row['admin_id']][$item['id']] : [];
+                $status = isset($info['status'][$admin_id][$item['id']]) ? $info['status'][$admin_id][$item['id']] : [];
                 if (empty($limit_to_status)) $show_item = true;
                 else {
                     foreach ($limit_to_status as $idx) {
