@@ -20,7 +20,7 @@ $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 $report_type = $_POST['report_type'];
 $ship_to = isset($_POST['ship_to']) ? $_POST['ship_to'] : 'all';
 
-$cs = new ParentShipping();
+$cs = new ParentShipping($year);
 // get results for chosen items
 $info = [];
 foreach ($items_chosen as $cat => $itemsPerCat) {
@@ -226,12 +226,14 @@ foreach ($info as $cat => $more) {
   });
 
   let info = []
+  const super_admin = <?= $superAdmin ? 1 : 0 ?>;
+  const year = <?= $year ?>;
 
   function update(elem, action, qty = 1, desc = '') {
     const id = $(elem).attr('id')
     const ids = id.split(':')
     const item = ids[0]
-    const school = ids[1]
+    const admin = ids[1]
     // get description
     action = parseInt(action)
     if (
@@ -244,7 +246,7 @@ foreach ($info as $cat => $more) {
       // check if item already exists in array
       let found = false
       for (let i = 0; i < info.length; i++) {
-        if (info[i].item == item && info[i].school == school) {
+        if (info[i].item == item && info[i].admin == admin) {
           found = true
           info[i].action = action
           info[i].qty = qty
@@ -252,31 +254,50 @@ foreach ($info as $cat => $more) {
           break
         }
       }
-      if (!found) info.push({action, item, school, qty, desc})
+      if (!found) info.push({ action, item, admin, qty, desc })
     }
   }
 
   function save(reload = true) {
-    $.post('ajax/saveShipping.php', {info}, function (result) {
-      const res = JSON.parse(result)
-      if (res.success) {
-        if (reload) location.reload()
+    fetch('ajax/saveShipping.php', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept-Encoding': 'gzip, deflate' // Browser will compress automatically
+        },
+        body: JSON.stringify({ info, year })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      if (data.success) alert('Saved successfully')
+      else if (!data.success) {
+        alert(data.error)
+        console.log(data.error_info)
       }
-      else alert(res.error)
+      if (data.success && reload) location.reload()
+    })
+    .catch(error => {
+      console.log(error)
     })
   }
 
   $("#saveAll").click(function () {
     $(".shipping").each(function () {
+      const originalVal = parseInt($(this).data('original-value'))
+      const action = super_admin ? ([2, 3].includes(originalVal) ? 4 : 1) : 2
       let qty = $(this).parent().parent().find('td:eq(3)').text()
-      update(this, 1, qty)
+      update(this, action, qty)
     })
     save()
   })
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      update(this, 1)
+      const originalVal = parseInt($(this).data('original-value'))
+      const action = super_admin ? ([2, 3].includes(originalVal) ? 4 : 1) : 2
+      let qty = $(this).parent().parent().find('td:eq(3)').text()
+      update(this, action, qty)
     })
     save()
   })

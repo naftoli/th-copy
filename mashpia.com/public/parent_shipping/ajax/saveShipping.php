@@ -6,74 +6,98 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
 
-$info = $_POST['info'];
+// Check if data is compressed
+$input = file_get_contents('php://input');
 
-$sql = "INSERT IGNORE INTO parent_shipping  
-        SET 
-            year = :year, 
-            admin_id = :admin, 
-            item_id = :item, 
-            shipped = :shipped, 
-            missing = :missing, 
-            qty = :qty, 
-            damaged = :damaged, 
-            desc_of_damage = :desc
-        ON DUPLICATE KEY UPDATE 
-            shipped = :shipped, 
-            missing = :missing, 
-            qty = :qty, 
-            damaged = :damaged, 
-            desc_of_damage = :desc";
-$stmt = $MASHPIA_DB->prepare($sql);
+if (isset($_SERVER['HTTP_CONTENT_ENCODING']) && $_SERVER['HTTP_CONTENT_ENCODING'] === 'gzip') {
+    $input = gzdecode($input);
+}
+
+$data = json_decode($input, true);
+$info = $data['info'];
+$year = $data['year'] ?? GlobalSettings::getCurrentYear();
+$table = 'parent_shipping';
+
+$select = "SELECT * FROM $table WHERE year = :year AND admin_id = :admin AND item_id = :item";
+$stmtSelect = $MASHPIA_DB->prepare($select);
+
+// can only insert for not yet shipped or shipped
+$insert = "INSERT INTO $table  
+            SET 
+                year = :year, 
+                admin_id = :admin, 
+                item_id = :item, 
+                qty = :qty, 
+                status = :status, 
+                description = :desc";
+$stmtInsert = $MASHPIA_DB->prepare($insert);
+
+$update = "UPDATE $table 
+            SET 
+                qty = :qty, 
+                status = :status,
+                description = :desc 
+            WHERE 
+                year = :year 
+                AND admin_id = :admin 
+                AND item_id = :item";
+$stmtUpdate = $MASHPIA_DB->prepare($update);
 
 $MASHPIA_DB->beginTransaction();
 $success = true;
 foreach ($info as $row) {
-    // figure out shipped / missing / damaged
-    switch (intval($row['action'])) {
-        case 0:
-            $shipped = 0;
-            $missing = 0;
-            $damaged = 0;
-            break;
-        case 1:
-            $shipped = 1;
-            $missing = 0;
-            $damaged = 0;
-            break;
-        case 2:
-            $shipped = 1;
-            $missing = 1;
-            $damaged = 0;
-            break;
-        case 3:
-            $shipped = 1;
-            $missing = 0;
-            $damaged = 1;
-            break;
-    }
-    $res = $stmt->execute([
+    $res = $stmtSelect->execute([
         'year'      => $year,
-        'admin'     => $row['school'],
-        'item'      => $row['item'],
-        'shipped'   => $shipped,
-        'missing'   => $missing,
-        'damaged'   => $damaged,
-        'qty'       => $row['qty'],
-        'desc'      => $row['desc']
+        'admin'     => $row['admin'],
+        'item'      => $row['item']
     ]);
     if (! $res) {
-        $stmt->debugDumpParams();
         $success = false;
         break;
+    } else {
+        // find out if we need to insert or update
+        $found = $stmtSelect->fetch(PDO::FETCH_ASSOC);
+        if ($found) {
+            $res = $stmtUpdate->execute([
+                'year'      => $year,
+                'admin'     => $row['admin'],
+                'item'      => $row['item'],
+                'qty'       => $row['qty'],
+                'status'    => intval($row['action']),
+                'desc'      => $row['desc']
+            ]);
+        } else {
+            $res = $stmtInsert->execute([
+                'year'      => $year,
+                'admin'     => $row['admin'],
+                'item'      => $row['item'],
+                'qty'       => $row['qty'],
+                'status'    => intval($row['action']),
+                'desc'      => $row['desc']
+            ]);
+        }
+        if (! $res) {
+            $success = false;
+            break;
+        }
     }
 }
 if ($success) $MASHPIA_DB->commit();
-else $MASHPIA_DB->rollBack();
+else {
+    $MASHPIA_DB->rollBack();
+    ob_start();
+    if ($found) {
+        echo $stmtUpdate->debugDumpParams();
+    } else {
+        echo $stmtInsert->debugDumpParams();
+    }
+    $error_info = ob_get_clean();
+    ob_end_flush();
+}
 
 echo json_encode([
     'success'   => $success,
-    'error'     => 'There was an error updating the status.'
+    'error'     => 'There was an error updating the status.',
+    'error_info'=> $error_info
 ]);

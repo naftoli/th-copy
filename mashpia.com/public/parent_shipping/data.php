@@ -67,19 +67,18 @@ function createHtmlForItem($admin_id, $output = true) {
             foreach ($items as $item) {
                 // get status and whether to show this item
                 $show_item = false;
-                $status = isset($info['status'][$school][$item['id']]) ? $info['status'][$school][$item['id']] : [];
-                $statusDesc = [
-                    1   => 'shipped',
-                    2   => 'missing',
-                    3   => 'damaged'
-                ];
+                $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item_num] : [];
                 if (empty($limit_to_status)) $show_item = true;
                 else {
                     foreach ($limit_to_status as $idx) {
-                        if ($idx == 0) {
-                            if (empty($status) || ($status['shipped'] == 0 && $status['missing'] == 0 && $status['damaged'] == 0)) $show_item = true;
+                        if ($idx == 0 && (empty($status) || $status['status'] == 0)) {
+                            $show_item = true;
+                            break;
                         }
-                        else if ($idx && !empty($status) && intval($status[$statusDesc[$idx]]) == 1) $show_item = true;
+                        else if (!empty($status) && $status['status'] == $idx) {
+                            $show_item = true;
+                            break;
+                        }
                     }
                 }
                 if ($show_item) {
@@ -99,8 +98,10 @@ function createHtmlForItem($admin_id, $output = true) {
                         echo "<td>" . $item['size'] . "</td>";
                         // add column for shipping info
                         echo "<td class='no-print'>";
-                        echo "<select id='" . $item['id'] . ':' . $school . "' class='shipping'>";
-                        $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged'];
+                        $originalValue = empty($status) ? 0 : $status['status'];
+                        echo "<select id='" . $item['id'] . ':' . $admin_id . "' class='shipping' data-original-value='$originalValue'>";
+                        if (!$super && (empty($status) || $status['status'] == 0)) $options = ['Not Yet Shipped'];
+                        else $options = ['Not Yet Shipped', 'Shipped', 'Missing', 'Damaged', 'Replaced'];
                         foreach ($options as $i => $val) {
                             echo "<option value='$i'";
                             /*
@@ -108,22 +109,10 @@ function createHtmlForItem($admin_id, $output = true) {
                              * 1 = shipped
                              * 2 = missing
                              * 3 = damaged
+                             * 4 = replaced
                              */
-                            switch ($i) {
-                                case 0:
-                                    if (empty($status) || intval($status['shipped']) == 0) echo " selected ";
-                                    break;
-                                case 1:
-                                    if (!empty($status) && intval($status['shipped']) == 1 && intval($status['missing']) == 0
-                                        && intval($status['damaged']) == 0) echo " selected ";
-                                    break;
-                                case 2:
-                                    if (!empty($status) && intval($status['missing']) == 1) echo " selected ";
-                                    break;
-                                case 3:
-                                    if (!empty($status) && intval($status['damaged']) == 1) echo " selected ";
-                                    break;
-                            }
+                            if ($i == 0 && (empty($status) || $status['status'] == 0)) echo " selected";
+                            else if (!empty($status) && $i == $status['status']) echo " selected";
                             echo ">" . $val . "</option>";
                         }
                         echo "</select></td>";
@@ -140,10 +129,10 @@ function createHtmlForItem($admin_id, $output = true) {
                             }
                             echo ">$i</option>";
                         }
-                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['desc_of_damage'] . "</textarea></td></tr>";
+                        echo "</select></td><td><textarea class='description' rows='3' cols='15'>" . $status['description'] . "</textarea></td></tr>";
                     } else {
                         // update summary
-                        addToSummary($item);
+                        addToSummary($item, $status);
                     }
                 }
             }
@@ -151,16 +140,15 @@ function createHtmlForItem($admin_id, $output = true) {
     }
 }
 
-function addToSummary($item) {
+function addToSummary($item, $status) {
     global $summary, $summary_items;
 
     $id = $item['id'];
-    $qty = $item['qty'] ?? 1;
+    $qty = isset($item['qty']) ? intval($item['qty']) : 1;
+    if (! empty($status['description'])) $id .= '*';
 
-    // update summary
+    if (! in_array($id, array_keys($summary_items))) $summary_items[$id] = $item;
+
     if (isset($summary[$id])) $summary[$id] += $qty;
     else $summary[$id] = $qty;
-
-    // if item doesn't exist in summary_items, add it
-    if (! isset($summary_items[$id])) $summary_items[$id] = $item;
 }

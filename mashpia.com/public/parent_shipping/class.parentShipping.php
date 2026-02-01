@@ -10,11 +10,15 @@ class ParentShipping
 {
     private $db, $year, $parents;
 
-    public function __construct() {
+    public function __construct($yr = 0) {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->year = GlobalSettings::getChidonYear();
+        $this->year = $yr ?? GlobalSettings::getChidonRegYear();
         $this->parents = [];
+    }
+
+    public function setYear($yr) {
+        $this->year = $yr;
     }
 
     public function getCategories() {

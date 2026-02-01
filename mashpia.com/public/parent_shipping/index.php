@@ -10,6 +10,10 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
+$year = GlobalSettings::getChidonRegYear();
+$cur_year = GlobalSettings::getChidonYear();
+
 require 'class.parentShipping.php';
 require 'data.php';
 
@@ -65,17 +69,24 @@ $items = $cs->getItems();
 
     <fieldset>
       <legend style="margin-bottom: -5px;">Limit To</legend>
-<!--      <h4>School</h4>-->
-<!--      <select name="school">-->
-<!--          --><?php //if ($super) echo '<option value="0">All Schools</option>'; ?>
-<!--          --><?php //foreach ($schools as $id => $school) echo "<option value=" . $id . ">" . $school . "</option>"; ?>
-<!--      </select><br />-->
+      <h4>Year</h4>
+      <select name="year">
+        <?php
+        for ($y = 5782; $y <= $year; $y++) {
+          echo "<option value='" . $y . "'";
+          if ($y == $cur_year) echo " selected ";
+          echo ">" . $y . "</option>";
+        }
+        ?>
+      </select>
+      <br />
       <h4>Status</h4>
       <p>
-        <input type="checkbox" name="status[]" value="0" /> Not Yet Shipped<br />
-        <input type="checkbox" name="status[]" value="1" /> Shipped<br />
-        <input type="checkbox" name="status[]" value="2" /> Missing<br />
-        <input type="checkbox" name="status[]" value="3" /> Damaged<br />
+        <input type="checkbox" name="status[]" class="status" value="0" /> Not Yet Shipped<br />
+        <input type="checkbox" name="status[]" class="status" value="1" /> Shipped<br />
+        <input type="checkbox" name="status[]" class="status" value="2" /> Missing<br />
+        <input type="checkbox" name="status[]" class="status" value="3" /> Damaged<br />
+        <input type="checkbox" name="status[]" class="status" value="4" /> Replaced<br />
       </p>
     </fieldset>
 
