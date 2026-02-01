@@ -169,8 +169,7 @@ function addToSummary($item, $school, $status) {
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    $had_damage = ! empty($status['description']);
-    if ($had_damage) $key .= '<span style="color: red;">*</span>';
+    if (! empty($status['damaged'])) $key .= '*';
 
     if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
 
