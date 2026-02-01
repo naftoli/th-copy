@@ -58,16 +58,16 @@ if ($report_type == 'file') {
         }
 
         $shipping_paid = getShippingPaid($ship_to);
-        if ($ship_to == 'domestic') {
-            $csv = createCSV($info, $year, $school_id, $ship_to); // filter out all users that ONLY live in the usa
-            $file = $school_id . '-usa.csv';
-        } else if ($ship_to == 'intl') {
-            $csv = createCSV($info, $year, $school_id, $ship_to); // filter out all users that do NOT live in the usa
-            $file = $school_id . '-intl.csv';
-        } else {
-            $csv = createCSV($info, $year, $school_id);
+        // if ($ship_to == 'domestic') {
+        //     $csv = createCSV($info, $year, $school_id, $ship_to); // filter out all users that ONLY live in the usa
+        //     $file = $school_id . '-usa.csv';
+        // } else if ($ship_to == 'intl') {
+        //     $csv = createCSV($info, $year, $school_id, $ship_to); // filter out all users that do NOT live in the usa
+        //     $file = $school_id . '-intl.csv';
+        // } else {
+            $csv = createCSV($info, $year, $school_id, $ship_to);
             $file = $school_id . '.csv';
-        }
+        // }
         createFile($file, $csv);
         $files[] = $file;
     }
