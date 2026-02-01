@@ -169,7 +169,7 @@ function addToSummary($item, $school, $status) {
 
     $key = $item['id'];
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
-    if (! empty($status['damaged'])) $key .= '*';
+    if (! empty($status['description'])) $key .= '*';
 
     if (! in_array($key, array_keys($summary_items))) $summary_items[$key] = $item;
 
