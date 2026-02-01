@@ -237,9 +237,8 @@ function processFee() {
                 $error = $e->getMessage();
             }
         }
-        
-        return $error ? $error : false;
     }
+    return $error ? $error : false;
 }
 
 function getAuthDesc() {
