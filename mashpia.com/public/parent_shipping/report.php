@@ -118,6 +118,9 @@ foreach ($info as $cat => $more) {
         <?php
         foreach ($summary as $id => $qty) {
           $item = $summary_items[$id];
+          if (strpos($id, '*') !== false) {
+            $id = str_replace('*', '<span style="color: red;">*</span>', $id);
+          }
           echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
           echo "<td>" . $item['item'] . "</td>";
           echo "<td>" . $item['type'] . "</td>";
