@@ -437,8 +437,8 @@ function makeTextForExcel($text) {
     if ($digits == 10) {
         // add a - after the first 3 digits
         $text = substr($text, 0, 3) . '-' . substr($text, 3);
-        // add a - after the first 6 digits
-        $text = substr($text, 0, 6) . '-' . substr($text, 6);
+        // add a - after the first 7 digits
+        $text = substr($text, 0, 7) . '-' . substr($text, 7);
     } else if ($digits == 7) {
         // add a - after the first 3 digits
         $text = substr($text, 0, 3) . '-' . substr($text, 3);
