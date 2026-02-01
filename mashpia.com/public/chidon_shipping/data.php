@@ -156,7 +156,7 @@ function createHtmlForItem($school, $row, $output = true) {
                         echo "<td><textarea class='description' rows='3' cols='15'>" . ($status['description'] ?? '') . "</textarea></td></tr>";
                     } else {
                         // update summary
-                        addToSummary($item, $school, $row, $status);
+                        addToSummary($item, $school, $status);
                     }
                 }
             }
