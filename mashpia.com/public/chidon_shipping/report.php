@@ -348,6 +348,9 @@ foreach ($resultsBySchool as $school => $more) : ?>
             <?php
             if (isset($summary[$school])) {
                 foreach ($summary[$school] as $id => $qty) {
+                    if (strpos($id, '*') !== false) {
+                      $id = str_replace('*', '<span style="color: red;">*</span>', $id);
+                    }
                     echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
                     $item = $summary_items[$id];
                     foreach (['item', 'size', 'color', 'cat'] as $attr) {
