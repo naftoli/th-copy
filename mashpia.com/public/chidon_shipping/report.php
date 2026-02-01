@@ -543,9 +543,9 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      // const originalVal = $(this).data('original-value')
-      // const action = super_admin ? ([3, 4].includes(parseInt(originalVal)) ? 5 : 1) : 2
-      const action = super_admin ? 1 : 2
+      const originalVal = parseInt($(this).data('original-value'))
+      const action = super_admin ? ([3, 4].includes(originalVal) ? 5 : 1) : 2
+      // const action = super_admin ? 1 : 2
       const desc = $(this).parent().parent().find('.description').val()
       const ship_num = $(this).parent().parent().find('.shipment_number').val()
       update(this, action, desc, ship_num)
