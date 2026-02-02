@@ -28,6 +28,35 @@
       font-style: italic;
     }
   </style>
+  <style>
+    /* 1. The Container: Limits height to force scrolling */
+    .table-scroll-container {
+      height: 300px;
+      overflow-y: auto; /* Enables vertical scrolling */
+      border: 1px solid #ccc;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    /* 2. The Sticky Header Logic */
+    th {
+      position: sticky;
+      top: 0;
+      background-color: #333; /* Dark background */
+      color: white;
+      z-index: 10; 
+    }
+  
+    /* Just basic styling for readability */
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+  </style>
 </head>
 <body>
 <h1>Chidon Experience Registration Report</h1>
