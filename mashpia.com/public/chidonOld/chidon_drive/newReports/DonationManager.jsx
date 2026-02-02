@@ -69,11 +69,12 @@ function DonationManager() {
             });
 
             // Send all updates in one request
-            const response = await fetch('../ajax/updateSubsidies.php', {
+            const response = await fetch('ajax/updateSubsidies.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'same-origin',
                 body: JSON.stringify({
                     updates
                 }),
