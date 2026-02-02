@@ -319,12 +319,12 @@
 		let children = []; // need to know user_id of children when creating the subsidies
 		if (pos > 0) admin_id = url.substr(pos + 1);
 
-		// document.addEventListener('DOMContentLoaded', function() {
-		// 	if (admin_id != 129555) {
-		// 		alert('ChidonDrive for families is closed for this year, but you can still donate to us.')
-		// 		location.href = 'https://chidondrive.com/site/donate.html'
-		// 	}
-		// })
+		document.addEventListener('DOMContentLoaded', function() {
+			if (admin_id != 129555) {
+				alert('ChidonDrive for families is closed for this year, but you can still donate to us.')
+				location.href = 'https://chidondrive.com/site/donate.html'
+			}
+		})
 
 		$('#menu-opener').click(function (e) {
 			$('header nav').toggleClass('open');
