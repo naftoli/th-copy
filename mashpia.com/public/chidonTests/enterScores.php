@@ -52,7 +52,7 @@ $disabled = true;
 $exceptions = [
     1 => [],
     2 => [],
-    3 => [19]
+    3 => [19, 110]
 ];
 $exceptionsDates = [
     1 => [
