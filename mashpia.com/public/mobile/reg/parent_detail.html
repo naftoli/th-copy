@@ -748,11 +748,17 @@
       const tracks = tResult.tracks
       console.log(tracks)
 
+      const khkResult = await $.post('/chidonOld/chidon_drive/ajax/getKHK.php', { children: children })
+      const khk = JSON.parse(khkResult).khk
+      console.log(khk)
+
       // update children with track info
 			for (let child of children) {
 				child.track = tracks[child.user_id]
+        if (!child.track && khk[child.user_id]) child.track = 'Ultimate'
+        console.log(child.track)
 			}
-			let eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
+			const eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
       console.log(eligible)
       if (eligible.length) show_reg = true
       if (show_reg) $(".chidon_reg").show()
