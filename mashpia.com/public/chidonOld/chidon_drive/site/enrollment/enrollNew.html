@@ -1241,6 +1241,7 @@
 			// update children with track info
 			for (let child of children) {
 				child.track = tracks[child.user_id]
+				if (!child.track && khk[child.user_id]) child.track = 'Ultimate'
 				child.khk_eligible = child.class_grade == '8' ? khk[child.user_id] : false
 				// if (child.khk_eligible) {
 				// 	// check track 
