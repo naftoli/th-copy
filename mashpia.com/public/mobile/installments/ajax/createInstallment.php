@@ -238,7 +238,7 @@ try {
     $from = 'chidon';
     $to = $admin_model->admin_email;
     $subject = 'Installment Plan Created';
-    $message = 'Your installment plan for $' . $amount . ' starting on ' . $start_date . ' has been created successfully.<br /><br /> Your subscription ID is: ' . $subscription_id . '<br /><br /> Thank you.';
+    $message = 'Your installment plan for $' . $amount . ' starting on ' . $start_date . ' has been created successfully.<br /><br /> Your subscription ID is: ' . $subscription_id . '<br /><br />Your still need to register your child(ren) for the chidon experience separately. Thank you.';
     $error = sendEmail($from, $to, $subject, $message);
     if ($error) {
         error_log('Error sending email: ' . $error);
