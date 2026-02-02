@@ -473,7 +473,9 @@
                 <p>
                     You can pay your registration fee in installments. Choose when you'd like the first payment 
                     to be processed (between today and one month from now), and payments will continue monthly 
-                    until the full amount is paid.
+                    until the full amount is paid.<br /><br />
+                    <b>PLEASE NOTE:</b> This does NOT register your child(ren) for the chidon experience. 
+                    You must still register your child(ren) for the chidon experience separately.
                 </p>
                 
                 <div class="form-group">
@@ -908,7 +910,9 @@
             const result = await res.json();
             
             if (result.success) {
-                var msg = "Thank you! Your installment plan has been created successfully. You will receive an email confirmation shortly.";
+                var msg = "Thank you! Your installment plan has been created successfully. \
+                You will receive an email confirmation shortly.\
+                You STILL need to register your child(ren) for the chidon experience separately.";
                 alert(msg);
                 location.href = "/mobile";
             } else {
