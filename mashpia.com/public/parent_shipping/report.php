@@ -28,9 +28,29 @@ foreach ($items_chosen as $cat => $itemsPerCat) {
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
     $info[$cat] = $cs->$nameOfFunc($listOfItems);
 }
-$info['status'] = $cs->getStatus();
 
 $parents = $cs->getParents();
+$admin_ids = array_keys($parents);
+
+$report_type = $_POST['report_type'];
+if ($report_type == 'file') {
+    $files = [];
+    $status = $cs->getStatus();
+    // remove items as needed
+    foreach ($info as $cat => $details) {
+      foreach ($details as $admin_id => $items) {
+          foreach ($items as $idx => $item) {
+              $item_status = isset($status[$admin_id][$item['id']]) ? $status[$admin_id][$item['id']]['status'] : 0;
+              if ($limit_to_status && !in_array($item_status, $limit_to_status)) unset($info[$cat][$admin_id][$idx]);
+          }
+      }
+    }
+    $csv = $cs->createCSV($info);
+    $file = 'parent_shipping.csv';
+    $cs->createFile($file, $csv);
+    $cs->downloadFile($file);
+    exit;
+}
 
 $summary = []; // for HQ
 $summary_items = []; // mapping of item ID to item info

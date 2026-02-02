@@ -152,3 +152,17 @@ function addToSummary($item, $status) {
     if (isset($summary[$id])) $summary[$id] += $qty;
     else $summary[$id] = $qty;
 }
+
+function makeTextForExcel($text) {
+    // first strip out all non-numeric characters
+    $text = preg_replace('/[^0-9]/', '', $text);
+    // add a - after the first 3 digits
+    $text = substr($text, 0, 3) . '-' . substr($text, 3);
+    // find out how many digits we have
+    $digits = strlen($text);
+    if ($digits == 10) {
+        // add a - after the first 7 digits
+        $text = substr($text, 0, 7) . '-' . substr($text, 7);
+    }
+    return $text;
+}

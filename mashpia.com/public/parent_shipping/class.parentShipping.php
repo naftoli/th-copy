@@ -60,7 +60,7 @@ class ParentShipping
 
         $ep = [];
         $sql = "select * from extra_purchases ep 
-                join purchase_addresses pa using (purchase_id) 
+                left join purchase_addresses pa using (purchase_id) 
                 join admins a using (admin_id) 
                 where ep.year = :year";
         if ($ship_to == 'domestic') {
@@ -84,6 +84,7 @@ class ParentShipping
                 'type'  => $row['type_of_sweater'] ?? '',
                 'cat'   => 'extra purchases',
                 'qty'   => $row['amount'],
+                'info'  => $row
             ];
         }
         return $ep;
@@ -131,5 +132,90 @@ class ParentShipping
         if (! empty($deep)) return $item_ids[$cat][$item][$deep];
         else if (! empty($item)) return $item_ids[$cat][$item];
         else return $item_ids[$cat];
+    }
+
+    function createCSV($info) {
+        $i = 0;
+        $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+            'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
+            'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+        $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'Shipping Type',
+            'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
+            'Full Item Name', 'Quantity', 'Recipient Email', 'Comments', 'City, State, Country'];
+        foreach ($info as $cat => $details) {
+            foreach ($details as $admin_id => $items) {
+                foreach ($items as $idx => $item) {
+                    $admin = $item['info'];
+                    $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
+                    $phone = makeTextForExcel($phone);
+                    $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
+    
+                    $qty = $item['qty'] ?? 1;
+                    $country = $admin['admin_country'];
+                    $usa = ['USA', 'US', 'United States', 'U.S.A', 'Unites States of America'];
+                    if (in_array($country, $usa)) $shipping = ' USA';
+                    else $shipping = ' INTL';
+    
+                    $itemDesc = '';
+                    // if ($item['name']) $itemDesc .= "Personalized ";
+                    $itemDesc .= $item['item'];
+                    // if ($item['color']) $itemDesc .= ", " . $item['color'];
+                    if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+                    $address = $admin['address'] ?? $admin['admin_address1'];
+                    $address2 = $admin['address'] ? '' : ($admin['admin_address2'] ?? '');
+                    $address3 = $admin['address'] ? '' : ($admin['admin_address3'] ?? '');
+                    $city = $admin['city'] ?? $admin['admin_city'];
+                    $state = $admin['state'] ?? $admin['admin_state'];
+                    $zip = $admin['zip'] ?? $admin['admin_postal'];
+                    $country = $admin['country'] ?? $admin['admin_country'];
+    
+                    $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
+                        $phone, $shipping, $address, $address2, $address3, $city,
+                        $state, $zip, $country, $item['id'], $itemDesc,
+                        $qty, $admin['admin_email'], '', ($city . ', ' . $state . ', ' . $country)];
+                }
+            }
+        }
+    
+        return $csv;
+    }
+    
+    function createFile($name, $info) {
+        $fp = fopen($name, "w");
+        fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
+        if (is_array($info)) {
+            foreach ($info as $fields) {
+                fputcsv($fp, $fields);
+            }
+        } else {
+            fputs($fp, $info);
+        }
+        fclose($fp);
+    }
+    
+    function createZip($files, $filename) {
+        $zip = new ZipArchive;
+        $success = $zip->open($filename, ZipArchive::CREATE);
+        if ($success !== true) {
+            exit("cannot open <$filename>\n");
+        }
+        foreach($files as $file) {
+            $zip->addFromString($file, file_get_contents($file));
+            unlink($file);
+        }
+        $zip->close();
+    }
+    
+    function downloadFile($filename) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filename));
+        flush(); // Flush system output buffer
+        readfile($filename);
+        unlink($filename);
     }
 }

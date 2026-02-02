@@ -796,4 +796,143 @@ class SchoolShipping
         }
         return $info;
     }
+
+    function createCSV($items, $year, $school_id, $shipTo = 'all') {
+        global $MASHPIA_DB, $shipping_paid;
+    
+        // create sql to get all needed fields
+        $sql = "SELECT 
+                    a.*,
+                    u.user_id,
+                    u.first AS u_first,
+                    u.last AS u_last,
+                    u.user_serial,
+                    u.school_id
+                FROM
+                    admins a
+                        JOIN
+                    admin_auths aa USING (admin_id)
+                        JOIN
+                    users u ON u.user_id = aa.id
+                        JOIN
+                    th_chidon tc ON tc.user_id = u.user_id
+                WHERE
+                    aa.auth = 'user' AND u.school_id = :id 
+                        AND tc.year = :year ";
+        if ($shipTo == 'domestic') $sql .= " AND a.admin_country IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+        else if ($shipTo == 'intl') $sql .= " AND a.admin_country NOT IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+        $sql .= " GROUP BY u.user_id";
+        $stmt = $MASHPIA_DB->prepare($sql);
+        $stmt->execute([
+            'year'  => $year,
+            'id' => $school_id
+        ]);
+        $rows = $stmt->fetchAll();
+    
+        $users = [];
+        $admins = [];
+        $children = [];
+        $shipping_status = [];
+        foreach ($rows as $row) {
+            $user_id = $row['user_id'];
+            $admin_id = $row['admin_id'];
+            if (! isset($admins[$admin_id])) $admins[$admin_id] = $row;
+            $children[$user_id] = $admin_id;
+            $users[$user_id] = $row;
+            $ship_status = in_array($admin_id, $shipping_paid) ? 'ship' : 'pickup';
+            $country = $row['admin_country'];
+            $usa = ['USA', 'US', 'United States', 'U.S.A', 'Unites States of America'];
+            if ($ship_status == 'ship') {
+                if (in_array($country, $usa)) $ship_status .= ' USA';
+                else $ship_status .= ' INTL';
+            }
+            $shipping_status[$user_id] = $ship_status;
+        }
+    
+        $info = [];
+        foreach ($items as $cat => $more) {
+            foreach ($more as $user_id => $list) {
+                foreach ($list as $item) {
+                    $info[$cat][$user_id][] = $item;
+                }
+            }
+        }
+    
+        $i = 0;
+        $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+            'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
+            'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+        $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
+            'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
+            'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email', 'Child Count', 'Comments', 'City, State, Country'];
+        foreach ($info as $more) {
+            foreach ($more as $user_id => $list) {
+                foreach ($list as $item) {
+                    if (! isset($children[$user_id])) continue;
+                    $admin = $admins[$children[$user_id]];
+                    $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
+                    $phone = makeTextForExcel($phone);
+                    $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
+    
+                    $user = $users[$user_id];
+                    $qty = $item['qty'] ?? 1;
+                    $school = $user['school_id'] == 61 ? 'MyShliach' : ($user['school_id'] == 269 ? 'Anash Kinder' : '');
+                    $shipping = $shipping_status[$user_id];
+    
+                    $itemDesc = '';
+                    if ($item['name']) $itemDesc .= "Personalized ";
+                    $itemDesc .= $item['item'];
+                    if ($item['color']) $itemDesc .= ", " . $item['color'];
+                    if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+    
+                    $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
+                        $phone, ($school . ' - ' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
+                        $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc,
+                        $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], '', '',
+                        ($admin['admin_city'] . ', ' . $admin['admin_state'] . ', ' . $admin['admin_country'])];
+                }
+            }
+        }
+    
+        return $csv;
+    }
+    
+    function createFile($name, $info) {
+        $fp = fopen($name, "w");
+        fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
+        if (is_array($info)) {
+            foreach ($info as $fields) {
+                fputcsv($fp, $fields);
+            }
+        } else {
+            fputs($fp, $info);
+        }
+        fclose($fp);
+    }
+    
+    function createZip($files, $filename) {
+        $zip = new ZipArchive;
+        $success = $zip->open($filename, ZipArchive::CREATE);
+        if ($success !== true) {
+            exit("cannot open <$filename>\n");
+        }
+        foreach($files as $file) {
+            $zip->addFromString($file, file_get_contents($file));
+            unlink($file);
+        }
+        $zip->close();
+    }
+    
+    function downloadFile($filename) {
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/octet-stream');
+        header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($filename));
+        flush(); // Flush system output buffer
+        readfile($filename);
+        unlink($filename);
+    }
 }

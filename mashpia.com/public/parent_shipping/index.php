@@ -105,6 +105,7 @@ $items = $cs->getItems();
         <option value="all" selected>Summary and Details</option>
         <option value="summary">Summary Only</option>
         <option value="details">Details Only</option>
+        <option value='file'>CSV File</option>
       </select><br />
         <?php if ($super) echo '<input type="checkbox" name="grand_summary" value="1" /> Include Grand Summary at the End of the Report'; ?>
       <br />
