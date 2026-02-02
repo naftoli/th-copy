@@ -81,6 +81,7 @@ function DonationManager() {
             });
 
             if (!response.ok) throw new Error('Failed to update subsidies');
+            else alert('Subsidies updated successfully');
 
             await fetchDonations();
 
