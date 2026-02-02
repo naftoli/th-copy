@@ -201,25 +201,26 @@ try {
         $saved = $installments->saveToDb($MASHPIA_DB, $admin_id, $year);
         if (!$saved) {
             throw new Exception('Failed to save installment plan to database');
-        } else {
-            // update coupon codes used to 1
-            $stmt = $MASHPIA_DB->prepare("
-                UPDATE coupon_codes 
-                SET used = 1, date_redeemed = NOW()
-                WHERE used = 0 and year = :year and serial_num in (
-                    SELECT user_serial FROM users WHERE user_id in (
-                        SELECT id FROM admin_auths WHERE admin_id = :admin_id and auth = 'user'
-                    )
-                )
-            ");
-            $res = $stmt->execute([
-                ':admin_id' => $admin_id,
-                ':year' => $year
-            ]);
-            if (!$res) {
-                throw new Exception('Failed to update coupon codes');
-            }
-        }
+        } 
+        // else {
+            // // update coupon codes used to 1
+            // $stmt = $MASHPIA_DB->prepare("
+            //     UPDATE coupon_codes 
+            //     SET used = 1, date_redeemed = NOW()
+            //     WHERE used = 0 and year = :year and serial_num in (
+            //         SELECT user_serial FROM users WHERE user_id in (
+            //             SELECT id FROM admin_auths WHERE admin_id = :admin_id and auth = 'user'
+            //         )
+            //     )
+            // ");
+            // $res = $stmt->execute([
+            //     ':admin_id' => $admin_id,
+            //     ':year' => $year
+            // ]);
+            // if (!$res) {
+            //     throw new Exception('Failed to update coupon codes');
+            // }
+        // }
     } else {
         throw new Exception('Failed to create installment subscription: ' . $response);
     }
