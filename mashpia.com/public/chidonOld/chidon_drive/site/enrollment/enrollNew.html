@@ -1418,9 +1418,8 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 			for (let child of eligible) {
 				console.log(child)
 				let myshliach = false // flag for determining if need to show shipping section
-				let anash_kinder = false // flag for determining if child is anash kinder
 				if ([61, 269].includes(parseInt(child.school_id))) myshliach = true
-				if (child.school_id == 269) anash_kinder = true
+				let myshliach_only = child.school_id == 61
 				// figure out if child is eligible for ultimate experience
 				// console.log(child)
 				let ultimate = child.khk_eligible
@@ -1448,11 +1447,9 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 					text = `I cannot join the 5 day Ultimate Chidon Experience, however I would like to join the Regional Trip that is available in my area.`
 					if (myshliach) {
 						text = `You will be joining one of your base's Regional Trips. If you are unable to join any of the trips, please select the 'no trip' option below and
-						$100 will be deducted from your registration fee.<br /><br />
-						`
-					if (!anash_kinder) text += `
-						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />
-					`
+						$100 will be deducted from your registration fee.<br /><br />`
+					if (myshliach_only) text += `
+						Please speak to your base's coordinator with regards to any questions you have about your trip.<br /><br />`
 					text += `
 						<select name="regional_trip" id="regional_trip">
 							<option value="0">Please select which trip you will be joining</option>`
@@ -1485,8 +1482,10 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 					let text = 'You will be joining your school\'s Regional Trip. Speak to your schools coordinator with regards to any questions you have about your region\'s trip.'
 					if (myshliach) {
 						text = `You will be joining one of your base's Regional Trips. If you are unable to join any of the trips, please select the 'no trip' option below and
-						$100 will be deducted from your registration fee.<br /><br />
-						Please speak to your base's coordinator (whatsapp +1 (929) 231-2827) with regards to any questions you have about your trip.<br /><br />
+						$100 will be deducted from your registration fee.<br /><br />`
+					if (myshliach_only) text += `
+						Please speak to your base's coordinator (whatsapp +1 (929) 231-2827) with regards to any questions you have about your trip.<br /><br />`
+					text += `
 						<select name="regional_trip" id="regional_trip">
 							<option value="0">Please select which trip you will be joining</option>`
 						// add option for anash kinder only
