@@ -70,18 +70,18 @@ if (isset($_POST['card_number'])) {
                     SET trans_id = ? 
                     WHERE registration_charge_id = ?");
                 $stmt->execute([$response_array[6], $registration_charge_id]);                
-                echo "Card charged successfully and amount added to family credits.<br />";
+                echo "Card charged successfully and amount added to family credits.<br /><br />";
                 $MASHPIA_DB->commit();
             }
             else {
                 $MASHPIA_DB->rollBack();
                 $response .= $response_array[3] . "\n";  
-                echo "Error charging card: " . $response . "<br />";        
+                echo "Error charging card: " . $response . "<br /><br />";        
             }
         }
         else {
             $MASHPIA_DB->rollBack();
-            echo "No response from authorize.php.<br />";
+            echo "No response from authorize.php.<br /><br />";
         }
     }
 }
