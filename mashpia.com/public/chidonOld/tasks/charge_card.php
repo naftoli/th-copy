@@ -4,12 +4,8 @@ ini_set('error_reporting', E_ALL);
 
 // Use admin auth so we get admin login form instead of redirect to home
 require_once __DIR__ . '/../../api/header/db.php';
-require_once __DIR__ . '/../../api/models/Admin.php';
-require_once __DIR__ . '/../../classes/authorize/CustomerProfile.php';
-require_once __DIR__ . '/../../classes/authorize/PaymentProfile.php';
-
-use \classes\authorize\CustomerProfile as Customer;
-use \classes\authorize\PaymentProfile as PaymentProfile;
+require_once __DIR__ . '/../../class.globalSettings.php';
+$year = GlobalSettings::getChidonYear();
 
 $ip = $_SERVER['SERVER_ADDR']; 
 if ($ip == '39.53.201.236') {
