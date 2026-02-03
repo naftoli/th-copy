@@ -743,23 +743,23 @@
       console.log(data)
       const children = data.info.children
 
-      const result = await $.post('/chidonOld/chidon_drive/ajax/getTracks.php', { children: children })
-      const tResult = JSON.parse(result)
-      const tracks = tResult.tracks
-      console.log(tracks)
+      // const result = await $.post('/chidonOld/chidon_drive/ajax/getTracks.php', { children: children })
+      // const tResult = JSON.parse(result)
+      // const tracks = tResult.tracks
+      // console.log(tracks)
 
-      const khkResult = await $.post('/chidonOld/chidon_drive/ajax/getKHK.php', { children: children })
-      const khk = JSON.parse(khkResult).khk
-      console.log(khk)
+      // const khkResult = await $.post('/chidonOld/chidon_drive/ajax/getKHK.php', { children: children })
+      // const khk = JSON.parse(khkResult).khk
+      // console.log(khk)
 
-      // update children with track info
-			for (let child of children) {
-				child.track = tracks[child.user_id]
-        if (!child.track && khk[child.user_id]) child.track = 'Ultimate'
-        console.log(child.track)
-			}
-			const eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
-      console.log(eligible)
+      // // update children with track info
+			// for (let child of children) {
+			// 	child.track = tracks[child.user_id]
+      //   if (!child.track && khk[child.user_id]) child.track = 'Ultimate'
+      //   console.log(child.track)
+			// }
+			// const eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
+      // console.log(eligible)
       // if (eligible.length) show_reg = true
       const show_reg = children.some(child => parseInt(child.open_reg_5786));
       if (show_reg) $(".chidon_reg").show()
