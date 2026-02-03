@@ -18,7 +18,7 @@ require_once __DIR__ . '/../../class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-$stmt = $MASHPIA_DB->prepare("SELECT open_reg_5786 FROM schools WHERE school_id IN (" . implode(',', array_keys($schools)) . ")");
+$stmt = $MASHPIA_DB->prepare("SELECT school_id, open_reg_5786 FROM schools WHERE school_id IN (" . implode(',', array_keys($schools)) . ")");
 $stmt->execute();
 $open_reg = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($open_reg as $reg) {
