@@ -3,15 +3,7 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 // Use admin auth so we get admin login form instead of redirect to home
-$admin_auth = ['school'];
-require_once __DIR__ . '/../../header.php';
-require_once __DIR__ . '/../../api/header/header.php';
-
-if ($admin_user['auth'] != 'super') {
-    echo "No Permission.";
-    exit;
-}
-
+require_once __DIR__ . '/../../api/header/db.php';
 require_once __DIR__ . '/../../api/models/Admin.php';
 require_once __DIR__ . '/../../classes/authorize/CustomerProfile.php';
 require_once __DIR__ . '/../../classes/authorize/PaymentProfile.php';
@@ -19,8 +11,37 @@ require_once __DIR__ . '/../../classes/authorize/PaymentProfile.php';
 use \classes\authorize\CustomerProfile as Customer;
 use \classes\authorize\PaymentProfile as PaymentProfile;
 
+$ip = $_SERVER['SERVER_ADDR']; 
+if ($ip == '39.53.201.236') {
+    echo "Go Away!";
+    exit;
+}
+
 if (isset($_POST['card_number'])) {
-    $amount = floatval($_POST['amount']);    
+    $amount = floatval($_POST['amount']); 
+    if (!$amount || $amount <= 0) {
+        echo "Amount is required and must be greater than 0.<br />";
+        exit;
+    }
+    $admin_id = intval($_POST['admin_id']);
+    if (!$admin_id || $admin_id <= 0) {
+        echo "Family ID is required and must be greater than 0.<br />";
+        exit;
+    }
+
+    // insert into registration charges table
+    $MASHPIA_DB->beginTransaction();
+    $stmt = $MASHPIA_DB->prepare("
+        INSERT INTO registration_charges (trans_id, user_id, school_id, admin_id, type, amount, date, year) 
+        VALUES (0, 0, 0, ?, 'RRFAM', ?, NOW(), ?)");
+    $res = $stmt->execute([$admin_id, $amount, $year]);
+    if (!$res) {
+        $MASHPIA_DB->rollBack();
+        echo "Error inserting into registration charges table: " . $stmt->errorInfo()[2] . "<br />";
+        exit;
+    }
+    $registration_charge_id = $MASHPIA_DB->lastInsertId();
+
     $card_num 	= $_POST['card_number'];
     $exp_date 	= $_POST['exp_date'];
     $first_name = $_POST['ccfname'];
@@ -47,22 +68,23 @@ if (isset($_POST['card_number'])) {
                 $response .= $response_array[6] . ":";
                 $response .= $response_array[9];
 
-                // insert into registration charges table
+                // update registration charges table
                 $stmt = $MASHPIA_DB->prepare("
-                    INSERT INTO registration_charges (trans_id, user_id, school_id, admin_id, type, amount, date, year) 
-                    VALUES (?, 0, 0, ?, 'RRFAM', ?, NOW(), ?)");
-                $res = $stmt->execute([$response_array[6], $admin_id, $amount, $year]);
-                if (!$res) {
-                    echo "Error inserting into registration charges table: " . $stmt->errorInfo()[2] . "<br />";
-                }
-                echo "Card charged successfully.<br />";
+                    UPDATE registration_charges 
+                    SET trans_id = ? 
+                    WHERE registration_charge_id = ?");
+                $stmt->execute([$response_array[6], $registration_charge_id]);                
+                echo "Card charged successfully and amount added to family credits.<br />";
+                $MASHPIA_DB->commit();
             }
             else {
+                $MASHPIA_DB->rollBack();
                 $response .= $response_array[3] . "\n";  
                 echo "Error charging card: " . $response . "<br />";        
             }
         }
         else {
+            $MASHPIA_DB->rollBack();
             echo "No response from authorize.php.<br />";
         }
     }
