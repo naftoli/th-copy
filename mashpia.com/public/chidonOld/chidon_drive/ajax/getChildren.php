@@ -26,7 +26,7 @@ function getChildren() {
 
     $children = [];
     // track, raised, grade, trip location
-    $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, u.user_serial, u.open_reg_5786,  
+    $sql = "select u.user_id, u.school_id, u.class_id, u.mobile_pic, u.user_photo_id, u.first, u.last, u.user_serial, s.open_reg_5786,  
                 UPPER(u.gender) as gender, 
                 c.class_grade, 
                 tc.*, 
