@@ -145,8 +145,8 @@ if (isset($_GET['amount'])) {
             display: flex;
             gap: 1rem;
         }
-        .row .form-group { flex: 1; }
-        .row .form-group:last-child { flex: 0 0 80px; }
+        .row .form-group { flex: 1 1 0; min-width: 0; }
+        .row.row-cvv .form-group:last-child { flex: 0 0 80px; min-width: auto; }
         .row-3 .form-group:nth-child(1) { flex: 1.5; }
         .row-3 .form-group:nth-child(2) { flex: 1; }
         .row-3 .form-group:nth-child(3) { flex: 0 0 90px; }
@@ -207,7 +207,7 @@ if (isset($_GET['amount'])) {
                 <label for="card_number">Card Number</label>
                 <input type="text" name="card_number" id="card_number" placeholder="4111 1111 1111 1111" maxlength="19" inputmode="numeric" autocomplete="cc-number" required>
             </div>
-            <div class="row">
+            <div class="row row-cvv">
                 <div class="form-group">
                     <label for="exp_date">Exp (MMYY)</label>
                     <input type="text" name="exp_date" id="exp_date" placeholder="1225" maxlength="4" inputmode="numeric" autocomplete="cc-exp" required>
