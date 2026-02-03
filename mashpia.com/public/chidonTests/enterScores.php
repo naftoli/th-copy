@@ -188,7 +188,11 @@ if ($admin_user['auth'] == 'super') {
         echo "</tr>";
         foreach ($children as $child) {
             // check locked
-            if (in_array($school, $locked) && $admin_user['auth'] != 'super') $disabled = true;
+            if (
+              $admin_user['auth'] != 'super' && 
+              in_array($school, $locked) && 
+              !in_array($school, $exceptions[$testNumber])
+            ) $disabled = true;
             $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
             $name = $child['first'] . ' ' . $child['last'];
             $id = $child['th_chidon_id'];
