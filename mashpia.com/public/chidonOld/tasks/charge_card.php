@@ -2,6 +2,8 @@
 ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
+// Use admin auth so we get admin login form instead of redirect to home
+$admin_auth = ['school'];
 require_once __DIR__ . '/../../header.php';
 require_once __DIR__ . '/../../api/header/header.php';
 
@@ -44,7 +46,15 @@ if (isset($_POST['card_number'])) {
                 $response .= $response_array[4] . ":";
                 $response .= $response_array[6] . ":";
                 $response .= $response_array[9];
-                $charged = true;
+
+                // insert into registration charges table
+                $stmt = $MASHPIA_DB->prepare("
+                    INSERT INTO registration_charges (trans_id, user_id, school_id, admin_id, type, amount, date, year) 
+                    VALUES (?, 0, 0, ?, 'RRFAM', ?, NOW(), ?)");
+                $res = $stmt->execute([$response_array[6], $admin_id, $amount, $year]);
+                if (!$res) {
+                    echo "Error inserting into registration charges table: " . $stmt->errorInfo()[2] . "<br />";
+                }
                 echo "Card charged successfully.<br />";
             }
             else {
