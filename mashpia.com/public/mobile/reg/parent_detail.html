@@ -761,7 +761,8 @@
 			const eligible = children.filter(child => child.track && !child.date_paid && parseInt(child.openRegForSchool))
       console.log(eligible)
       // if (eligible.length) show_reg = true
-      // if (show_reg) $(".chidon_reg").show()
+      const show_reg = children.some(child => parseInt(child.open_reg_5786));
+      if (show_reg) $(".chidon_reg").show()
     })()
 
     // allow parents to swipe to open a child's account.

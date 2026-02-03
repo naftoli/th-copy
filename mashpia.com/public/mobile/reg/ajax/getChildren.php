@@ -75,7 +75,7 @@ if (!empty($users)) {
     $sql = "select s.school_name, s.school_name_he, s.school_city, s.school_era, s.reg_type, s.shipping_method, s.school_country, c.class_grade, "
         . " u.user_id, u.first, u.last, u.first_he, u.last_he, u.lang_id, u.chayolei, u.chidon, u.user_serial, u.school_type_id, u.hachayol, "
         . " u.mobile_pic, u.user_photo_id, u.school_id, u.user_registered, u.gender, s.school_id, c.class_id, s.show_report_card_1, "
-        . " s.show_report_card_2, s.show_report_card_3 "
+        . " s.show_report_card_2, s.show_report_card_3, s.open_reg_5786 "
         . " FROM users u "
         . " JOIN schools s USING (school_id) "
         . " LEFT JOIN classes c ON c.class_id = u.class_id "
@@ -119,6 +119,7 @@ if (!empty($users)) {
         $children[$row['user_id']]['show_report_card_1'] = intval($row['show_report_card_1']);
         $children[$row['user_id']]['show_report_card_2'] = intval($row['show_report_card_2']);
         $children[$row['user_id']]['show_report_card_3'] = intval($row['show_report_card_3']);
+        $children[$row['user_id']]['open_reg_5786'] = intval($row['open_reg_5786']);
 
         // find out hachayol info if year greater than 5785
         if ($reg_year > 5785) {
