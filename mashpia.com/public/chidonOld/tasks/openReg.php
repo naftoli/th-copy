@@ -3,6 +3,7 @@ ini_set('display_errors', 1);
 ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
+require_once __DIR__ . '/../../header.php';
 require_once __DIR__ . '/../../api/header/db.php';
 require_once __DIR__ . '/../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
