@@ -65,7 +65,6 @@ if (isset($_POST['card_number'])) {
         else {
             echo "No response from authorize.php.<br />";
         }
-        exit;
     }
 }
 
