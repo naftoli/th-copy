@@ -1905,4 +1905,14 @@ class ChidonShipping
         ];
         return $descriptions[$code] ?? '';
     }
+
+    public function getSpanishTranslations() {
+        $sql = "select item_id, spanish from chidon_items_translations";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $translations[$row['item_id']] = $row['spanish'];
+        }
+        return $translations;
+    }
 }

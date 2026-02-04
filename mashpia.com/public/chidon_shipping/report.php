@@ -35,6 +35,7 @@ $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
     $status = $cs->getStatus();
+    $translations = $cs->getSpanishTranslations();
 //    echo "<pre>"; print_r($status); echo "</pre>"; exit;
     foreach ($list_of_schools as $school_id) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
@@ -116,6 +117,7 @@ if ($ship_to != 'all') {
 }
 
 $info['status'] = $cs->getStatus();
+$translations = $cs->getSpanishTranslations();
 
 // find all unique tables to fetch from
 $tables = [];
@@ -341,6 +343,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
               <th>Size</th>
               <th>Gender/Color</th>
               <th>Category</th>
+              <th>Spanish Name</th>
               <!--            <th>Status</th>-->
             </tr>
             </thead>
@@ -358,6 +361,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
                         if (isset($item[$attr])) echo $item[$attr];
                         echo "</td>";
                     }
+                    echo "<td>" . $translations[$id] . "</td>";
                     echo "</tr>";
                 }
             }
