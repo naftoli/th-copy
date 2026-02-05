@@ -296,6 +296,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
                 $itemDesc .= $item['item'];
                 if ($item['color']) $itemDesc .= ", " . $item['color'];
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+                $itemDesc .= " " . $item['name'];
                 $translation = $translations[$item['id']] ?? '';
 
                 $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
