@@ -118,7 +118,7 @@ if ($ship_to != 'all') {
 
 $info['status'] = $cs->getStatus();
 $translations = $cs->getSpanishTranslations();
-echo "<pre>"; print_r($translations); print_r($info); echo "</pre>"; 
+// echo "<pre>"; print_r($translations); print_r($info); echo "</pre>"; 
 
 // find all unique tables to fetch from
 $tables = [];
