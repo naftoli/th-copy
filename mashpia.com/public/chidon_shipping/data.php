@@ -169,7 +169,7 @@ function addToSummary($item, $school, $status) {
     global $summary, $summary_items, $grand_summary;
 
     $key = $item['id'];
-    if (! empty(trim($item['name']))) $key .= 'P';
+    if (! empty(trim($item['name'])) && strpos($item['item'], 'Name Bracelet') === false) $key .= 'P';
     $qty = isset($item['qty']) ? intval($item['qty']) : 1;
     if (! empty($status['description'])) $key .= '*';
 
