@@ -784,11 +784,26 @@ class ChidonShipping
         // get extra info for ID cards
         $extra_info = $this->getLanyardInfo();
 
+        require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+        $ct = new ChidonTests();
         foreach ($rows as $row) {
 //            if (in_array($row['user_id'], $this->toExclude)) continue;
 //            if (!empty($this->only) && !in_array($row['user_id'], $this->only)) continue;
             if (! isset($extra_info[$row['user_serial']]['code'])) continue;
             if ($row['trip'] == 'east' || intval($row['ultimate_trip'])) continue;
+            if ($ct->getDates()[2][2] > date('Y-m-d')) {
+                // find out what track child passed 
+                // skip children that haven't passed any track or passed only yesod
+                $ct->setStudents($row['school_id'], $row['class_id'], $row['user_id']);
+                $ct->setScores();
+                $ct->calculateMarks();
+                $marks = $ct->getMarks();
+                if (!isset($marks[$row['th_chidon_id']])) continue;
+                $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id']);
+                if ($ht == 'genius') $ht = $ct->getHighestTrack($marks[$row['th_chidon_id']], $row['user_id'], false, 3, false, true);
+                $track = $ht ? $ct->getTypes()[$ht] : '';
+                if (empty($track) || $track == 'yesod') continue;
+            }
             $info[$row['user_id']][] = [
                 'item'  => 'ID card',
                 'size'  => '',
