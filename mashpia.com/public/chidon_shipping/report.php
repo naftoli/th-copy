@@ -553,7 +553,8 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       const ship_num = $(this).parent().parent().find('.shipment_number').val()
       update(this, action, desc, ship_num)
     })
-    save()
+    console.log(info)
+    // save()
   })
 
   $(".saveSchool").click(function () {
