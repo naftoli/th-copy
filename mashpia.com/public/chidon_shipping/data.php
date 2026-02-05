@@ -296,11 +296,11 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
                 $itemDesc .= $item['item'];
                 if ($item['color']) $itemDesc .= ", " . $item['color'];
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
-                $translation = isset($translations[$item['id']]) ? $translations[$item['id']] : '';
+                $translation = $translations[$item['id']] ?? '';
 
                 $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                     $phone, ($school . ' - ' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
-                    $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc, ($translation ?? ''), 
+                    $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc, $translation, 
                     $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], '', '',
                     ($admin['admin_city'] . ', ' . $admin['admin_state'] . ', ' . $admin['admin_country'])];
             }
