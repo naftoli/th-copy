@@ -24,6 +24,13 @@ if (isset($_POST['submit'])) {
     $success = true;
     mysql_query('set autocommit=0');
     mysql_query('begin');
+    $res = mysql_query('truncate table chidon_items_translations');
+    if (!$res) {
+        $success = false;
+        echo "error: " . mysql_error();
+        mysql_query('rollback');
+        exit;
+    }
     foreach ($qrys as $qry) {
         if (! mysql_query($qry)) {
             $success = false;
