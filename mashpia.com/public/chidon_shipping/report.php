@@ -361,7 +361,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
                         if (isset($item[$attr])) echo $item[$attr];
                         echo "</td>";
                     }
-                    echo "<td>" . $translations[$id] . "</td>";
+                    echo "<td>" . isset($translations[$id]) ? $translations[$id] : '' . "</td>";
                     echo "</tr>";
                 }
             }
