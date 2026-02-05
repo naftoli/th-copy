@@ -756,11 +756,7 @@
     }
 
     function updateInstallmentCalculation() {
-        let amount = parseFloat($("#installment-amount").val()) || totalOwing;
-        if (amount > totalOwing) {
-            amount = totalOwing;
-            $("#installment-amount").val(amount.toFixed(2));
-        }
+        let amount = parseFloat($("#installment-amount").val());
         
         const numInstallments = parseInt($("#num_installments").val());
         const installmentAmount = (amount / numInstallments).toFixed(2);
@@ -807,7 +803,7 @@
         $("#create-installment").attr('data-processing', 'true');
         $("#create-installment").attr('disabled', true);
 
-        let amount = parseFloat($("#installment-amount").val()) || totalOwing;
+        let amount = parseFloat($("#installment-amount").val());
         if (amount <= 0) {
             alert("Please enter a valid amount");
             $("#create-installment").attr('data-processing', 'false');
