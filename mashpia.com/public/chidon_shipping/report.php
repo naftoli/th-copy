@@ -27,6 +27,7 @@ $limit_to_status = isset($_POST['status']) ? $_POST['status'] : [];
 $ship_to = isset($_POST['ship_to']) ? $_POST['ship_to'] : 'all';
 $list_of_schools = $_POST['school'];
 $shipment_number = isset($_POST['shipment_number']) ? $_POST['shipment_number'] : 0;
+$shipping_type = isset($_POST['shipping_type']) ? $_POST['shipping_type'] : 'all';
 
 $cs = new ChidonShipping();
 $cs->setYear($year);
@@ -58,7 +59,7 @@ if ($report_type == 'file') {
             }
         }
 
-        $shipping_paid = getShippingPaid($ship_to);
+        $shipping_paid = getShippingPaid($ship_to, $shipping_type);
         // if ($ship_to == 'domestic') {
         //     $csv = createCSV($info, $year, $school_id, $ship_to); // filter out all users that ONLY live in the usa
         //     $file = $school_id . '-usa.csv';
@@ -159,6 +160,7 @@ if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 //if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
+if ($shipping_type != 'all') $sql .= " AND s.shipping_type = '" . $shipping_type . "'";
 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 
 //******* ORDER BY *********//
