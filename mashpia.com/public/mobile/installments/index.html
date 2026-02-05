@@ -808,8 +808,8 @@
         $("#create-installment").attr('disabled', true);
 
         let amount = parseFloat($("#installment-amount").val()) || totalOwing;
-        if (amount <= 0 || amount > totalOwing) {
-            alert("Please enter a valid amount between $0.01 and $" + totalOwing.toFixed(2));
+        if (amount <= 0) {
+            alert("Please enter a valid amount");
             $("#create-installment").attr('data-processing', 'false');
             $("#create-installment").attr('disabled', false);
             return false;
