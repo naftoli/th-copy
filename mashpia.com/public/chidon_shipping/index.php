@@ -128,8 +128,8 @@ $items = $cs->getItems();
       <legend>Shipping to:</legend>
       <select name="ship_to">
         <option value="all" selected>All</option>
-        <option value="domestic">Domestic</option>
-        <option value="intl">International</option>
+        <option value="domestic">Domestic (AK / MyShliach)</option>
+        <option value="intl">International (AK / MyShliach)</option>
       </select>
     </fieldset>
 
