@@ -109,6 +109,7 @@ function createHtmlForItem($school, $row, $output = true) {
                                 echo "<td>" . $row[$desc] . "</td>";
                             }
                         }
+                        if (! empty(trim($item['name']))) $item['item'] = 'Personalized ' . $item['item'];
                         echo "<td>" . $item['item'];
                         if ($item_details_chosen && count($item_details_chosen)) {
                             foreach ($item_details_chosen as $field) {
