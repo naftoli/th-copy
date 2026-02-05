@@ -368,10 +368,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
                         }
                         echo "</td>";
                     }
-                    if (strpos($id, 'P') !== false) {
-                      $id = substr($id, 0, -1);
-                    }
-                    $translation = $translations[$id] ?? '';
+                    $translation = $translations[$item['id']] ?? '';
                     if ($translation && !empty(trim($item['name']))) {
                       $translation = 'Personalizado ' . $translation;
                     }
