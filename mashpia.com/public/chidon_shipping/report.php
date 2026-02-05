@@ -118,7 +118,7 @@ if ($ship_to != 'all') {
 
 $info['status'] = $cs->getStatus();
 $translations = $cs->getSpanishTranslations();
-echo "<pre>"; print_r($translations); echo "</pre>"; 
+echo "<pre>"; print_r($translations); print_r($info); echo "</pre>"; 
 
 // find all unique tables to fetch from
 $tables = [];
@@ -183,7 +183,6 @@ $summary_items = []; // mapping of item ID to item info
 // go through it once so that we can have totals
 foreach ($resultsBySchool as $school => $more) {
     if (!isset($schools[$school])) continue;
-    echo "<pre>"; print_r($more); echo "</pre>"; exit;
     foreach ($more as $row) {
 //        if (isset($row['class_grade']) && !in_array($row['class_grade'], ['3', '4', '5', '6', '7', '8', '9'])) continue;
         createHtmlForItem($school, $row, false);
