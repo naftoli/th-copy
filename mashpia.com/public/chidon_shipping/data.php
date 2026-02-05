@@ -300,6 +300,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
                 $itemDesc .= " " . $item['name'];
                 $translation = $translations[$item['id']] ?? '';
+                if ($translation && !empty(trim($item['name']))) $translation = 'Personalizado ' . $translation;
 
                 $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                     $phone, ($school . ' - ' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
