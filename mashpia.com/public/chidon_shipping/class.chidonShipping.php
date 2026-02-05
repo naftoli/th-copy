@@ -743,7 +743,6 @@ class ChidonShipping
                     else if ($gift == 'jewelry' && $row['gender'] == 'F' && ($gender == 'f' || $gender == 0)) $add = true;
                     if ($add) {
                         $color = '';
-                        $name = '';
                         if ($gift == 'yarmulka') {
                             if ($row['yarmulka'] == 0) $row['yarmulka'] = 5; // make sure yarmulka has a size
                             $id = $this->getItemID($cat, $gift, $row['yarmulka']);
@@ -754,7 +753,7 @@ class ChidonShipping
                             'item'  => $gift,
                             'size'  => $gift == 'yarmulka' ? $row['yarmulka'] > 0 ? $row['yarmulka'] : '' : '',
                             'color' => $color,
-                            'name'  => $name,
+                            'name'  => '',
                             'id'    => $id,
                             'cat'   => $cat
                         ];
@@ -1160,6 +1159,7 @@ class ChidonShipping
                 $id = 'CHI' . $row['prize_id'];
                 $info[$row['user_id']][] = [
                     'id'    => $id,
+                    'pid'   => $id . 'P',
                     'item'  => $row['prize_name'],
                     'size'  => $row['size'],
                     'color' => $row['color'],
