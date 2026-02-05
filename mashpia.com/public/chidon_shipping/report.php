@@ -363,7 +363,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
                     foreach (['item', 'size', 'color', 'cat'] as $attr) {
                         echo "<td>";
                         if (isset($item[$attr])) {
-                          if ($attr == 'item' && !empty(trim($item['name']))) $item[$attr] = 'Personalized ' . $item[$attr];
+                          if ($attr == 'item' && !empty(trim($item['name'])) && strpos($item[$attr], 'Name Bracelet') === false) $item[$attr] = 'Personalized ' . $item[$attr];
                           echo $item[$attr];
                         }
                         echo "</td>";
