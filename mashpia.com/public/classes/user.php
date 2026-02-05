@@ -435,17 +435,11 @@ class user {
 	}
 	
 	function get_rank() {
-		$sql = "SELECT 
-					MAX(rm.rank_ord) as rank_ord, 
-					r.rank_name,
-					r.rank_image_id,
-					rm.date_promoted
-				FROM
-					rank_marks rm 
-						JOIN
-					ranks r USING (rank_ord)
-				WHERE
-					rm.user_id = " . $this->user_id;
+		$sql = "SELECT r.rank_ord, r.rank_name, r.rank_image_id, date_promoted 
+				FROM rank_marks 
+				JOIN ranks AS r USING(rank_ord) 
+				WHERE user_id = " . $this->user_id . " 
+				ORDER BY rank_ord DESC LIMIT 1";
 		$query = mysql_query($sql);
 		$row = mysql_fetch_assoc($query);
 		if ($row) {
