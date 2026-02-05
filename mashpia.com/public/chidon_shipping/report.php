@@ -128,6 +128,7 @@ foreach ($fields_chosen as $field) {
     $table = substr($field, 0, $pos);
     if (!in_array($table, $tables)) $tables[] = $table;
 }
+if ($shipping_type != 'all' && !in_array('s', $tables)) $tables[] = 's'; // add shipping type if not already in the tables
 
 // build sql statement
 $tableAliases = [
@@ -160,7 +161,7 @@ if (in_array('tc', $tables)) $sql .= " AND tc.year = " . $year;
 //if ($_POST['school'] > 0) $sql .= " AND u.school_id = " . $_POST['school'];
 if ($_POST['gender'] == 'm') $sql .= " AND u.gender = 'M'";
 else if ($_POST['gender'] == 'f') $sql .= " AND u.gender = 'F'";
-//if ($shipping_type != 'all') $sql .= " AND s.shipping_type = '" . $shipping_type . "'";
+if ($shipping_type != 'all') $sql .= " AND s.shipping_type = '" . $shipping_type . "'";
 echo "<input type='hidden' name='sql' value='" . $sql . "' />";
 
 //******* ORDER BY *********//
