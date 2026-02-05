@@ -438,6 +438,7 @@ function getUpdatedSchools($schools) {
 }
 
 function makeTextForExcel($text) {
+    if (empty(trim($text))) return '';
     // first strip out all non-numeric characters
     $text = preg_replace('/[^0-9]/', '', $text);
     // add a - after the first 3 digits
