@@ -1159,7 +1159,6 @@ class ChidonShipping
                 $id = 'CHI' . $row['prize_id'];
                 $info[$row['user_id']][] = [
                     'id'    => $id,
-                    'pid'   => $id . 'P',
                     'item'  => $row['prize_name'],
                     'size'  => $row['size'],
                     'color' => $row['color'],
