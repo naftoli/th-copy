@@ -362,7 +362,10 @@ foreach ($resultsBySchool as $school => $more) : ?>
                     $item = $summary_items[$id];
                     foreach (['item', 'size', 'color', 'cat'] as $attr) {
                         echo "<td>";
-                        if (isset($item[$attr])) echo $item[$attr];
+                        if (isset($item[$attr])) {
+                          if ($attr == 'item' && !empty(trim($item['name']))) $item[$attr] = 'Personalized ' . $item[$attr];
+                          echo $item[$attr];
+                        }
                         echo "</td>";
                     }
                     echo "<td>" . $translations[$id] ?? '' . "</td>";
@@ -427,6 +430,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
         $item_details = $summary_items[$item];
         $desc = "($item)";
         foreach (['item', 'size', 'color'] as $attr) {
+            if ($attr == 'item' && !empty(trim($item_details['name']))) $item_details[$attr] = 'Personalized ' . $item_details[$attr];
             if (isset($item_details[$attr])) $desc .= ' ' . $item_details[$attr];
         }
         echo "<br />";
