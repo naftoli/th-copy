@@ -60,7 +60,7 @@ class ParentShipping
 
         $ep = [];
         $sql = "select * from extra_purchases ep 
-                left join purchase_addresses pa using (purchase_id) 
+                join purchase_addresses pa using (purchase_id) 
                 join admins a using (admin_id) 
                 where ep.year = :year";
         if ($ship_to == 'domestic') {
@@ -156,7 +156,7 @@ class ParentShipping
                     if (in_array($country, $usa)) $shipping = ' USA';
                     else $shipping = ' INTL';
     
-                    $itemDesc = '';
+                    $itemDesc = $item['type'] ? ($item['type'] . ' ') : '';
                     // if ($item['name']) $itemDesc .= "Personalized ";
                     $itemDesc .= $item['item'];
                     // if ($item['color']) $itemDesc .= ", " . $item['color'];

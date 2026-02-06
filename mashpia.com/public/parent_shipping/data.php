@@ -84,7 +84,7 @@ function createHtmlForItem($admin_id, $output = true) {
                 if ($show_item) {
                     if ($output) {
                         // create new row
-                        echo "<tr><td>" . $item['item'];
+                        echo "<tr><td>" . ($item['type'] ? ($item['type'] . ' ') : '') . $item['item'];
                         if ($item_details_chosen && count($item_details_chosen)) {
                             foreach ($item_details_chosen as $field) {
                                 if ($field == 'item') continue;
@@ -154,6 +154,7 @@ function addToSummary($item, $status) {
 }
 
 function makeTextForExcel($text) {
+    if (empty($text)) return '';
     // first strip out all non-numeric characters
     $text = preg_replace('/[^0-9]/', '', $text);
     // add a - after the first 3 digits

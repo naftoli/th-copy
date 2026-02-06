@@ -84,7 +84,7 @@ function createHtmlForItem($school, $row, $output = true) {
                 else $item_num = 0;
                 // get status and whether to show this item
                 $show_item = false;
-                $status = isset($info['status'][$row['user_id']][$item['id']][$item_num]) ? $info['status'][$row['user_id']][$item['id']][$item_num] : [];
+                $status = $info['status'][$row['user_id']][$item['id']][$item_num] ?? [];
                 if (empty($limit_to_status)) $show_item = true;
                 else {
                     foreach ($limit_to_status as $idx) {
@@ -428,17 +428,17 @@ function downloadFile($filename) {
     unlink($filename);
 }
 
-function getUpdatedSchools($schools) {
-    global $MASHPIA_DB;
-    $sql = "select * from schools where school_id in (" . implode(',', array_keys($schools)) . ")";
-    $result = $MASHPIA_DB->query($sql);
-    $rows = $result->fetchAll();
-    $schools = [];
-    foreach ($rows as $row) {
-        $schools[$row['school_id']] = $row['chidon_5783_updated_shipping'];
-    }
-    return $schools;
-}
+// function getUpdatedSchools($schools) {
+//     global $MASHPIA_DB;
+//     $sql = "select * from schools where school_id in (" . implode(',', array_keys($schools)) . ")";
+//     $result = $MASHPIA_DB->query($sql);
+//     $rows = $result->fetchAll();
+//     $schools = [];
+//     foreach ($rows as $row) {
+//         $schools[$row['school_id']] = $row['chidon_5783_updated_shipping'];
+//     }
+//     return $schools;
+// }
 
 function makeTextForExcel($text) {
     if (empty(trim($text))) return '';

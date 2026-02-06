@@ -40,7 +40,7 @@ if ($report_type == 'file') {
     foreach ($info as $cat => $details) {
       foreach ($details as $admin_id => $items) {
           foreach ($items as $idx => $item) {
-              $item_status = isset($status[$admin_id][$item['id']]) ? $status[$admin_id][$item['id']]['status'] : 0;
+              $item_status = $status[$admin_id][$item['id']]['status'] ?? 0;
               if ($limit_to_status && !in_array($item_status, $limit_to_status)) unset($info[$cat][$admin_id][$idx]);
           }
       }
@@ -299,6 +299,13 @@ foreach ($info as $cat => $more) {
         console.log(data.error_info)
       }
       if (data.success && reload) location.reload()
+      else if (data.success) {
+        for (let i = 0; i < info.length; i++) {
+          const item = info[i]
+          const id = `${item.item}:${item.user}:${item.num}`
+          document.getElementById(id).dataset.originalValue = item.action
+        }
+      }
     })
     .catch(error => {
       console.log(error)
@@ -307,7 +314,7 @@ foreach ($info as $cat => $more) {
 
   $("#saveAll").click(function () {
     $(".shipping").each(function () {
-      const originalVal = parseInt($(this).data('original-value'))
+      const originalVal = parseInt(this.dataset.originalValue)
       const action = super_admin ? ([2, 3].includes(originalVal) ? 4 : 1) : 2
       let qty = $(this).parent().parent().find('td:eq(3)').text()
       update(this, action, qty)
@@ -317,7 +324,7 @@ foreach ($info as $cat => $more) {
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      const originalVal = parseInt($(this).data('original-value'))
+      const originalVal = parseInt(this.dataset.originalValue)
       const action = super_admin ? ([2, 3].includes(originalVal) ? 4 : 1) : 2
       let qty = $(this).parent().parent().find('td:eq(3)').text()
       update(this, action, qty)
@@ -326,18 +333,15 @@ foreach ($info as $cat => $more) {
   })
 
   $(".shipping").change(function () {
+    const originalVal = this.dataset.originalValue
     const action = parseInt(this.value)
     const qty = parseInt($(this).parent().parent().find('.qty').val())
     const desc = $(this).parent().parent().find('.description').val()
-    // if (action == 2 && !qty) {
-    //   alert('You must enter how many items are missing before it can be saved.')
-    //   return false
-    // } else
     if (action == 3 && !(qty && desc)) {
       alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
       return false
     }
-    update(this, action, qty)
+    update(this, action, qty, desc)
     save(false)
   })
 

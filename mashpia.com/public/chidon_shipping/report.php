@@ -119,7 +119,6 @@ if ($ship_to != 'all') {
 
 $info['status'] = $cs->getStatus();
 $translations = $cs->getSpanishTranslations();
-// echo "<pre>"; print_r($translations); print_r($info); echo "</pre>"; 
 
 // find all unique tables to fetch from
 $tables = [];
@@ -542,7 +541,14 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
       console.log(data)
       if (data.success && reload) location.reload()
       else if (!data.success && data.error) alert(data.error)
-      if (data.info) console.log(data.info)
+      if (data.info && Array.isArray(data.info) && parseInt(data.info[0]) > 0) console.log(data.info)
+      if (data.success) {
+        for (let i = 0; i < info.length; i++) {
+          const item = info[i]
+          const id = `${item.item}:${item.user}:${item.num}`
+          document.getElementById(id).dataset.originalValue = item.action
+        }
+      }
     })
     .catch(error => {
       console.log(error)
@@ -551,7 +557,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveAll").click(function () {
     $(".shipping").each(function () {
-      const originalVal = parseInt($(this).data('original-value'))
+      const originalVal = parseInt(this.dataset.originalValue)
       const action = super_admin ? ([3, 4].includes(originalVal) ? 5 : 1) : 2
       const desc = $(this).parent().parent().find('.description').val()
       const ship_num = $(this).parent().parent().find('.shipment_number').val()
@@ -563,7 +569,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 
   $(".saveSchool").click(function () {
     $(this).parent().find('.shipping').each(function () {
-      const originalVal = parseInt($(this).data('original-value'))
+      const originalVal = parseInt(this.dataset.originalValue)
       const action = super_admin ? ([3, 4].includes(originalVal) ? 5 : 1) : 2
       // const action = super_admin ? 1 : 2
       const desc = $(this).parent().parent().find('.description').val()
@@ -574,7 +580,7 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
   })
 
   $(".shipping").change(function () {
-    const originalVal = $(this).data('original-value')
+    const originalVal = this.dataset.originalValue
     const action = parseInt(this.value)
     const desc = $(this).parent().parent().find('.description').val()
     const ship_num = $(this).parent().parent().find('.shipment_number').val()
