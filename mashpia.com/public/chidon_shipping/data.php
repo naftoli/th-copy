@@ -110,7 +110,7 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                         }
                         if (!empty(trim($item['name'])) && strpos($item['item'], 'Name Bracelet') === false) $item['item'] = 'Personalized ' . $item['item'];
-                        echo "<td>" . $item['item'];
+                        echo "<td>" . ($item['type'] ? ($item['type'] . ' ') : '') . $item['item'];
                         if ($item_details_chosen && count($item_details_chosen)) {
                             foreach ($item_details_chosen as $field) {
                                 if ($field == 'date') continue;
@@ -295,7 +295,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
 
                 $itemDesc = '';
                 if ($item['name']) $itemDesc .= "Personalized ";
-                $itemDesc .= $item['item'];
+                $itemDesc .= ($item['type'] ? ($item['type'] . ' ') : '') . $item['item'];
                 if ($item['color']) $itemDesc .= ", " . $item['color'];
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
                 $itemDesc .= " " . $item['name'];
@@ -365,7 +365,7 @@ function createCSVforGear($users, $items) {
             $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
             $user = $users[$user_id];
             $qty = $item['qty'] ?? 1;
-            $itemDesc = '';
+            $itemDesc = $item['type'] ? ($item['type'] . ' ') : '';
             $itemDesc .= $item['item'];
             if ($item['color']) $itemDesc .= ", " . $item['color'];
             if ($item['size']) $itemDesc .= ", size: " . $item['size'];

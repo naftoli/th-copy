@@ -503,6 +503,7 @@ class ChidonShipping
                 $cat = 'sweaters';
                 $size = $row['size'];
                 $item = 'parent/grandparent sweaters';
+                $type = $row['type_of_sweater'];
                 $id = $this->getItemID($cat, $item, ($row['type_of_sweater'] . ' sweater'), $size);
             }
             $purchases[$row['admin_id']][] = [
@@ -512,7 +513,8 @@ class ChidonShipping
                 'color' => '',
                 'name'  => '',
                 'id'    => $id,
-                'cat'   => $cat
+                'cat'   => $cat, 
+                'type'  => $type ?? ''
             ];
         }
 
