@@ -110,7 +110,7 @@ function createHtmlForItem($school, $row, $output = true) {
                             }
                         }
                         if (!empty(trim($item['name'])) && strpos($item['item'], 'Name Bracelet') === false) $item['item'] = 'Personalized ' . $item['item'];
-                        echo "<td>" . (isset($item['type']) && !empty($item['type']) ? ($item['type'] . ' ') : '') . $item['item'];
+                        echo "<td>" . $item['item'];
                         if ($item_details_chosen && count($item_details_chosen)) {
                             foreach ($item_details_chosen as $field) {
                                 if ($field == 'date') continue;
