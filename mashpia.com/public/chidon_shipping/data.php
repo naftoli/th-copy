@@ -366,7 +366,7 @@ function createCSVforGear($users, $items) {
             $user = $users[$user_id];
             $qty = $item['qty'] ?? 1;
             $itemDesc = $item['type'] ? ($item['type'] . ' ') : '';
-            $itemDesc .= (isset($item['type']) && !empty($item['type']) ? ($item['type'] . ' ') : '') . $item['item'];
+            $itemDesc .= $item['item'];
             if ($item['color']) $itemDesc .= ", " . $item['color'];
             if ($item['size']) $itemDesc .= ", size: " . $item['size'];
             if ($item['rank']) $itemDesc .= ", rank: " . $item['rank'];
