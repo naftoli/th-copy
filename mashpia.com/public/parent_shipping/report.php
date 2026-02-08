@@ -62,6 +62,8 @@ foreach ($info as $cat => $more) {
         createHtmlForItem($admin_id, false);
     }
 }
+
+$translations = $cs->getTranslations();
 ?>
 <!DOCTYPE html>
 <html>
@@ -131,6 +133,7 @@ foreach ($info as $cat => $more) {
           <th>Sweater Type</th>
           <th>Size</th>
           <th>Category</th>
+          <th>Spanish Name</th>
           <!--            <th>Status</th>-->
         </tr>
         </thead>
@@ -145,7 +148,8 @@ foreach ($info as $cat => $more) {
           echo "<td>" . $item['item'] . "</td>";
           echo "<td>" . $item['type'] . "</td>";
           echo "<td>" . $item['size'] . "</td>";
-          echo "<td>" . $item['cat'] . "</td></tr>";
+          echo "<td>" . $item['cat'] . "</td>";
+          echo "<td>" . ($translations[$item['id']] ?? '') . "</td></tr>";
         }
         ?>
         </tbody>
