@@ -28,6 +28,7 @@ foreach ($items_chosen as $cat => $itemsPerCat) {
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
     $info[$cat] = $cs->$nameOfFunc($listOfItems);
 }
+$translations = $cs->getSpanishTranslations();
 
 $parents = $cs->getParents();
 $admin_ids = array_keys($parents);
@@ -62,8 +63,6 @@ foreach ($info as $cat => $more) {
         createHtmlForItem($admin_id, false);
     }
 }
-
-$translations = $cs->getSpanishTranslations();
 ?>
 <!DOCTYPE html>
 <html>
