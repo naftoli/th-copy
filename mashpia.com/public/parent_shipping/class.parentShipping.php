@@ -135,6 +135,7 @@ class ParentShipping
     }
 
     public function createCSV($info) {
+        global $translations;
         $i = 0;
         $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
             'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
