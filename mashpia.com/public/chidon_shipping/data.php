@@ -242,6 +242,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
         'id' => $school_id
     ]);
     $rows = $stmt->fetchAll();
+    $child_count = getChildCount($items, $year, $school_id, $shipTo);
 
     $users = [];
     $admins = [];
@@ -305,7 +306,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
                 $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                     $phone, ($school . ' - ' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
                     $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc, $translation, 
-                    $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], '', '',
+                    $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], $child_count[$child_count[$admin['admin_id']]], '',
                     ($admin['admin_city'] . ', ' . $admin['admin_state'] . ', ' . $admin['admin_country'])];
             }
         }
@@ -391,7 +392,7 @@ function createCSVforGear($users, $items) {
 
 function createFile($name, $info) {
     $fp = fopen($name, "w");
-    fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
+    fputs($fp, "\xEF\xBB\xBF"); 
     if (is_array($info)) {
         foreach ($info as $fields) {
             fputcsv($fp, $fields);
@@ -453,4 +454,35 @@ function makeTextForExcel($text) {
         $text = substr($text, 0, 7) . '-' . substr($text, 7);
     }
     return $text;
+}
+
+function getChildCount($items, $year, $school_id, $shipTo = 'all') {
+    global $MASHPIA_DB;
+    $info = [];
+    $sql = "SELECT 
+                admin_id, count(admin_id) as child_count
+            FROM
+                admins a
+                    JOIN
+                admin_auths aa USING (admin_id)
+                    JOIN
+                users u ON u.user_id = aa.id
+                    JOIN
+                th_chidon tc ON tc.user_id = u.user_id
+            WHERE
+                aa.auth = 'user' AND u.school_id = :id 
+                    AND tc.year = :year ";
+    if ($shipTo == 'domestic') $sql .= " AND a.admin_country IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+    else if ($shipTo == 'intl') $sql .= " AND a.admin_country NOT IN ('USA', 'US', 'United States', 'U.S.A', 'Unites States of America')";
+    $sql .= " GROUP BY admin_id";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([
+        'year'  => $year,
+        'id' => $school_id
+    ]);
+    $rows = $stmt->fetchAll();
+    foreach ($rows as $row) {
+        $info[$row['admin_id']] = $row['child_count'];
+    }
+    return $info;
 }
