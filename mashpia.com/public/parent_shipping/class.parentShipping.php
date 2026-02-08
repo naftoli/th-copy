@@ -134,14 +134,14 @@ class ParentShipping
         else return $item_ids[$cat];
     }
 
-    function createCSV($info) {
+    public function createCSV($info) {
         $i = 0;
         $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
             'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
-            'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+            'Country Code', 'Item SKU', 'Item Name 1', 'Item Name 2', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
         $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'Shipping Type',
             'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
-            'Full Item Name', 'Quantity', 'Recipient Email', 'Comments', 'City, State, Country'];
+            'Full Item Name', 'Spanish Item Name', 'Quantity', 'Recipient Email', 'Comments', 'City, State, Country'];
         foreach ($info as $cat => $details) {
             foreach ($details as $admin_id => $items) {
                 foreach ($items as $idx => $item) {
@@ -155,7 +155,8 @@ class ParentShipping
                     $usa = ['USA', 'US', 'United States', 'U.S.A', 'Unites States of America'];
                     if (in_array($country, $usa)) $shipping = ' USA';
                     else $shipping = ' INTL';
-    
+                    
+                    $translation = $translations[$item['id']] ?? '';
                     $itemDesc = $item['type'] ? ($item['type'] . ' ') : '';
                     // if ($item['name']) $itemDesc .= "Personalized ";
                     $itemDesc .= $item['item'];
@@ -171,7 +172,7 @@ class ParentShipping
     
                     $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                         $phone, $shipping, $address, $address2, $address3, $city,
-                        $state, $zip, $country, $item['id'], $itemDesc,
+                        $state, $zip, $country, $item['id'], $itemDesc, $translation, 
                         $qty, $admin['admin_email'], '', ($city . ', ' . $state . ', ' . $country)];
                 }
             }
@@ -180,7 +181,7 @@ class ParentShipping
         return $csv;
     }
     
-    function createFile($name, $info) {
+    public function createFile($name, $info) {
         $fp = fopen($name, "w");
         fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
         if (is_array($info)) {
@@ -193,7 +194,7 @@ class ParentShipping
         fclose($fp);
     }
     
-    function createZip($files, $filename) {
+    public function createZip($files, $filename) {
         $zip = new ZipArchive;
         $success = $zip->open($filename, ZipArchive::CREATE);
         if ($success !== true) {
@@ -206,7 +207,7 @@ class ParentShipping
         $zip->close();
     }
     
-    function downloadFile($filename) {
+    public function downloadFile($filename) {
         header('Content-Description: File Transfer');
         header('Content-Type: application/octet-stream');
         header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
@@ -217,5 +218,15 @@ class ParentShipping
         flush(); // Flush system output buffer
         readfile($filename);
         unlink($filename);
+    }
+
+    public function getSpanishTranslations() {
+        $sql = "select item_id, spanish from chidon_items_translations";
+        $stmt = $this->db->query($sql);
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        foreach ($rows as $row) {
+            $translations[$row['item_id']] = $row['spanish'];
+        }
+        return $translations;
     }
 }

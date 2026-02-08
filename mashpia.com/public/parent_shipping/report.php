@@ -63,7 +63,7 @@ foreach ($info as $cat => $more) {
     }
 }
 
-$translations = $cs->getTranslations();
+$translations = $cs->getSpanishTranslations();
 ?>
 <!DOCTYPE html>
 <html>
