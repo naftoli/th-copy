@@ -142,10 +142,10 @@ class ParentShipping
             'Country Code', 'Item SKU', 'Item Name / Title', 'Item Name 2', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
         $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'Shipping Type',
             'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
-            'Full Item Name', 'Item Warehouse Location', 'Quantity', 'Recipient Email', 'Child Count', 'Comments', 'City, State, Country'];
+            'Full Item Name', 'Item Warehouse Location', 'Quantity', 'Recipient Email', 'Comments', 'City, State, Country'];
         foreach ($info as $cat => $details) {
             foreach ($details as $admin_id => $items) {
-                $child_count = count($items);
+                // $child_count = count($items);
                 foreach ($items as $idx => $item) {
                     $admin = $item['info'];
                     $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
@@ -175,7 +175,7 @@ class ParentShipping
                     $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                         $phone, $shipping, $address, $address2, $address3, $city,
                         $state, $zip, $country, $item['id'], $itemDesc, $translation, 
-                        $qty, $admin['admin_email'], $child_count, '', ($city . ', ' . $state . ', ' . $country)];
+                        $qty, $admin['admin_email'], '', ($city . ', ' . $state . ', ' . $country)];
                 }
             }
         }
@@ -186,7 +186,7 @@ class ParentShipping
     public function createFile($name, $info) {
         $fp = fopen($name, "w");
         // Add the UTF-8 BOM
-        fputs($fp, "\xEF\xBB\xBF"); // utf8
+        fputs($fp, "\xEF\xBB\xBF"); 
         if (is_array($info)) {
             foreach ($info as $fields) {
                 fputcsv($fp, $fields);
