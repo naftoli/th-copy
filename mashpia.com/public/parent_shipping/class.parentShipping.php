@@ -185,7 +185,8 @@ class ParentShipping
     
     public function createFile($name, $info) {
         $fp = fopen($name, "w");
-        fputs($fp, $bom =( chr(0xEF) . chr(0xBB) . chr(0xBF) )); // utf8
+        // Add the UTF-8 BOM
+        fputs($fp, "\xEF\xBB\xBF"); // utf8
         if (is_array($info)) {
             foreach ($info as $fields) {
                 fputcsv($fp, $fields);
