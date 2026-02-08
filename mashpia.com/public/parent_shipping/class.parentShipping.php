@@ -137,14 +137,15 @@ class ParentShipping
     public function createCSV($info) {
         global $translations;
         $i = 0;
-        $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+        $csv[$i++] = ['Order #', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
             'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
-            'Country Code', 'Item SKU', 'Item Name 1', 'Item Name 2', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+            'Country Code', 'Item SKU', 'Item Name / Title', 'Item Name 2', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
         $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'Shipping Type',
             'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
-            'Full Item Name', 'Spanish Item Name', 'Quantity', 'Recipient Email', 'Comments', 'City, State, Country'];
+            'Full Item Name', 'Item Warehouse Location', 'Quantity', 'Recipient Email', 'Child Count', 'Comments', 'City, State, Country'];
         foreach ($info as $cat => $details) {
             foreach ($details as $admin_id => $items) {
+                $child_count = count($items);
                 foreach ($items as $idx => $item) {
                     $admin = $item['info'];
                     $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
@@ -174,7 +175,7 @@ class ParentShipping
                     $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                         $phone, $shipping, $address, $address2, $address3, $city,
                         $state, $zip, $country, $item['id'], $itemDesc, $translation, 
-                        $qty, $admin['admin_email'], '', ($city . ', ' . $state . ', ' . $country)];
+                        $qty, $admin['admin_email'], $child_count, '', ($city . ', ' . $state . ', ' . $country)];
                 }
             }
         }
