@@ -2481,9 +2481,9 @@ var templates = function () {
       }
 
       // hide chidon reg if not applicable
-      // if (user.registrationStatus.chidon) $("#chidon-registration").hide()
-      if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
-      else $("#chidon-registration").show()
+      if (user.registrationStatus.chidon && !Cookies.get('naftoli')) $("#chidon-registration").hide()
+      // if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
+      // else $("#chidon-registration").show()
 
       // determine if we need to show non th school fields or not
       if (user.school.school_id === anash_kinder || user.school.school_id === myshliach) {
