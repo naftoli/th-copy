@@ -451,7 +451,7 @@
                                     {{#if this.reg_types.chayolei}}
                                       <button class="btn btn-primary re_register">
                                         {{#if this.confirmationOnly}}
-                                        <!--                                                                        <span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>-->
+                                        <!--<span data-key="UpdateChayolei" class="i18n">Update Personal Info</span>-->
                                         {{else}}
                                         <span data-key="RegisterChayolei"
                                               class="i18n">Register Chayolei Tzivos Hashem</span> {{ this.reg_year }}
@@ -463,9 +463,9 @@
                                       <!-- spacer if showing both chayolei and chidon buttons -->
                                       <div class="button-spacing"></div>
                                       {{/if}}
-                                      <!-- <button class="btn btn-primary re_register"> -->
-                                        <!-- <span data-key="RegisterChidon" class="i18n2">Chidon Limmud Enrollment </span>{{ this.next_year_chidon }} -->
-                                      <!-- </button> -->
+                                      <button class="btn btn-primary re_register limmud_reg" style="display: none;">
+                                        <span data-key="RegisterChidon" class="i18n2">Chidon Limmud Enrollment </span>{{ this.next_year_chidon }}
+                                      </button>
                                     {{/if}}
                                   {{/if}}
                                 {{/if}}
@@ -735,6 +735,7 @@
     let show_reg = false;
     if (Cookies.get('naftoli')) {
       show_reg = true
+      $("#limmud_reg").show()
     }
 
     (async () => {
