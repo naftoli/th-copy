@@ -474,6 +474,7 @@
     <div class="no-print" id="selection">
         <div class="container">
             <div class="row">
+                <a href="" id="back-to-missions">Back to Missions</a>
                 <div class="col-12">
                     <p>
                         Choose the dates to print the Duch for:
@@ -567,6 +568,8 @@
             }
             // make sure that the user is logged in
             authenticate(id);
+
+            $("#back-to-missions").attr('href', '/mobile/missionsNew.html?id=' + id);
 
             if (Cookies.get('naftoli')) {
                 $('.print').show();
