@@ -70,13 +70,13 @@ if ($admin_auth[0] == 'school') {
             exit;
         }
     
-        $id = isset( $_POST['school'] ) ? $_POST['school'] : $admin_user['auths']['school'][0];
-        
+        $id = isset( $_POST['school'] ) ? intval($_POST['school']) : intval($admin_user['auths']['school'][0]);
+
         if ( ($numSchools == 1 && !isset( $_POST['submit'] )) || (isset( $_POST['school'] ) && !isset( $_POST['class'] ) ) ) {
             $classes = array();
-            $sql = "select class_id, class_grade, class_sub 
-                    from classes 
-                    where class_era = 0 
+            $sql = "select class_id, class_grade, class_sub
+                    from classes
+                    where class_era = 0
                     and school_id = " . $id;
             //echo $sql;
             $result = mysql_query( $sql );
@@ -97,7 +97,7 @@ if ($admin_auth[0] == 'school') {
             echo "</select>";
             echo "&nbsp;&nbsp;";
             if ( isset( $_POST['school'] ) ) {
-                echo "<input type='hidden' name='school' value=" . $_POST['school'] . " />";
+                echo "<input type='hidden' name='school' value='" . intval($_POST['school']) . "' />";
             }
             echo "<input type='submit' value='go' name='submit' />";
             echo "</form>";
@@ -112,7 +112,7 @@ if ($admin_auth[0] == 'school') {
             </div>
             <br />
             <?
-            $class_id = isset( $_POST['class' ] ) ? $_POST['class'] : 0;
+            $class_id = isset( $_POST['class' ] ) ? intval($_POST['class']) : 0;
             $users = array();
             $codes = array();
             $sql = "select * from users u 

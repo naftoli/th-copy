@@ -2,7 +2,7 @@
 	set_time_limit(86400); // 24 hours
     $no_login = true;
 	require('header.php'); 
-	$sql = 'SELECT school_logo_id FROM schools WHERE school_id = '.$_GET['school_id'];
+	$sql = 'SELECT school_logo_id FROM schools WHERE school_id = '.intval($_GET['school_id']);
 	$rs = mysql_query($sql);
 	while($photo_id = mysql_fetch_array($rs))
 	{

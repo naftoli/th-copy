@@ -22,26 +22,22 @@ $_GETPOST = $_POST + $_GET;
 require_once( $_SERVER['DOCUMENT_ROOT'].'/db.php' );
 
 // authentication imports
-if (!isset($_GETPOST['bypass'])) {
-	if (!isset($dual_auth)) // $dual_auth is set where before? not in db.php. - hornbacher
-		$dual_auth = false;
-	
-	if ($dual_auth) {
-		require_once( $_SERVER['DOCUMENT_ROOT'].'/admin_auth.php' );
-		require_once( $_SERVER['DOCUMENT_ROOT'].'/auth.php' );
-		
-		if (empty($admin_user) && empty($user)) {
-			include('login.php');
-			exit;
-		}
-	} 
-	elseif (isset($admin_auth)) {
-		require_once( $_SERVER['DOCUMENT_ROOT'].'/admin_auth.php' );
-	} else {
-		require_once( $_SERVER['DOCUMENT_ROOT'].'/auth.php' );
+if (!isset($dual_auth))
+	$dual_auth = false;
+
+if ($dual_auth) {
+	require_once( $_SERVER['DOCUMENT_ROOT'].'/admin_auth.php' );
+	require_once( $_SERVER['DOCUMENT_ROOT'].'/auth.php' );
+
+	if (empty($admin_user) && empty($user)) {
+		include('login.php');
+		exit;
 	}
+}
+elseif (isset($admin_auth)) {
+	require_once( $_SERVER['DOCUMENT_ROOT'].'/admin_auth.php' );
 } else {
-	$admin_user['admin_id'] = $_GETPOST['admin'];
+	require_once( $_SERVER['DOCUMENT_ROOT'].'/auth.php' );
 }
 
 /* all these funcitons are imported in public_html/header.php */

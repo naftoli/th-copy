@@ -2,7 +2,7 @@
 	set_time_limit(86400); // 24 hours
     $no_login = true;
 	require('header.php'); 
-	$sql = 'SELECT user_photo_id FROM users WHERE user_id = '.$_GET['user_id'];
+	$sql = 'SELECT user_photo_id FROM users WHERE user_id = '.intval($_GET['user_id']);
 	$rs = mysql_query($sql);
 	while($photo_id = mysql_fetch_array($rs))
 	{

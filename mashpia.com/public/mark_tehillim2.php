@@ -45,9 +45,9 @@ if (isset($_POST['submit'])) {
     if($debug) print_r($_POST);
     if($debug) echo "</pre>";
     
-    $date = $_POST['date'];
-    $school = $_POST['school'];
-    $grade = $_POST['grade'];
+    $date = intval($_POST['date']);
+    $school = intval($_POST['school']);
+    $grade = intval($_POST['grade']);
     //echo $date;
     //exit;
     if ($date == 0 || $school == 0) {

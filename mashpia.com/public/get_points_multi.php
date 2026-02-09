@@ -7,7 +7,7 @@ if (!empty($_POST['start_date']))
 	$intStartDate = unixtojd($_POST['start_date']);
 if (!empty($_POST['end_date']))
 	$intEndDate = unixtojd($_POST['end_date']);
-$arrUserIds = unserialize($_POST['serialized_user_ids']);
+$arrUserIds = json_decode($_POST['serialized_user_ids'], true);
 $arrResults = array();
 foreach ($arrUserIds as $intUser) {
 	$strSql = "WHERE user_id = {$intUser}";

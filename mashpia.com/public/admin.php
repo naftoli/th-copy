@@ -115,7 +115,7 @@ $admin->check_ckids_school();
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 
-<HTML DIR="<?=$dir?>">
+<HTML DIR="<?=htmlspecialchars($dir, ENT_QUOTES, 'UTF-8');?>">
 
 	<HEAD>
 		<TITLE><?=T_('Admin Menu'), ' - ', T_('Tzivos Hashem Management System')?></TITLE>
@@ -124,17 +124,13 @@ $admin->check_ckids_school();
 		<LINK rel="stylesheet" type="text/css" href="/styles/admin/admin.php.css"/> <!--chrome says this is not used by the page-->
 		<STYLE type="text/css">
 			.points tbody th {
-				text-align: <?=$align_start?>;
+				text-align: <?=htmlspecialchars($align_start, ENT_QUOTES, 'UTF-8');?>;
 			}
 		</STYLE>
 		
 		<script>
-			var school_registered = "<?=$school_registered;?>";
-			var admin_id = <?=$admin_user['admin_id'];?>;
-			// cannot find location of these variables being used.
-			var user = <?="'" . $uname . "'";?>;
-			var pass = <?="'" . $pass . "'";?>; // plain text password put in js!?!?!?!?
-						
+			var school_registered = "<?=htmlspecialchars($school_registered, ENT_QUOTES, 'UTF-8');?>";
+			var admin_id = <?=intval($admin_user['admin_id']);?>;
 			// moved to js/admin/admin.php.js
 		</script>
 		<script src="js/admin/admin.php.js"></script>

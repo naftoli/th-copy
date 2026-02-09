@@ -383,6 +383,7 @@ function rangeRows($start, $end) {
 }
 
 function authToName($auth, $id) {
+  $id = intval($id);
   switch($auth) {
     case 'school':
       $result = mq("SELECT school_name name FROM schools WHERE school_id = $id");
@@ -829,7 +830,7 @@ function header_points($arrParams) {
 	}
 
 	if ( $strResult ) {
-		$arrResults = @unserialize($strResult);
+		$arrResults = json_decode($strResult, true);
 		return $arrResults;
 	} else {
 		return [

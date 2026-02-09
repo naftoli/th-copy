@@ -165,6 +165,7 @@ if (!function_exists('check_id_access')) {
 
 if(!function_exists('check_school_setting')) {
 	function check_school_setting($user_id, $req_setting) {
+		$user_id = intval($user_id);
 		$row = mysql_fetch_assoc( mq(
 			"SELECT school_id, school_settings FROM users JOIN schools USING (school_id) WHERE user_id = $user_id"
 		) );
@@ -206,7 +207,7 @@ if (!function_exists('check_login_admin'))  {
 				// check if the user is valid (see above for function)
 				return check_auth_admin( $row['admin_id'], $auth );
 			} else { // there is no record with that username and password. log the attempted login
-				error_log("Failed login u:$username p:$password\n", 3, '/tmp/.ht_login_errors');
+				// error_log("Failed login u:$username p:$password\n", 3, '/tmp/.ht_login_errors');
 				// clear the cookies
 				setcookie('admin_id', '', time() - 86400, '/');
 				setcookie('admin_auth', '', time() - 86400, '/');

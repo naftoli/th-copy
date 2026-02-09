@@ -121,6 +121,7 @@ foreach ($result as $row) {
 
 // find out if school set the report cards to show on parent accounts
 $field = 'show_report_card_' . $testNumber;
+if (!in_array($testNumber, [1, 2, 3])) die('Invalid test number');
 $stmtReportCards = $MASHPIA_DB->prepare("
     SELECT " . $field . " FROM schools WHERE school_id = ?
 ")

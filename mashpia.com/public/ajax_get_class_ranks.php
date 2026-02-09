@@ -20,7 +20,7 @@ while ($row = mysql_fetch_assoc($query))
 require_once('classes/school_class.php');
 require_once('classes/user.php');
 require_once('classes/rank_mark.php');
-$sql = "SELECT * FROM classes WHERE class_id=" . $_GET['class_id'];
+$sql = "SELECT * FROM classes WHERE class_id=" . intval($_GET['class_id']);
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $class = new school_class($row);
