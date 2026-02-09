@@ -2482,7 +2482,7 @@ var templates = function () {
 
       // hide chidon reg if not applicable
       if (user.registrationStatus.chidon) $("#chidon-registration").hide()
-      if (Cookies.get('naftoli')) $("#chidon-registration").show()
+      if (Cookies.get('naftoli') && user.getChidonInfo) $("#chidon-registration").show()
       // if (user.registrationStatus.chidon && !user.getChidonInfo) $("#chidon-registration").hide()
       // else $("#chidon-registration").show()
 
