@@ -144,7 +144,7 @@ foreach ($info as $cat => $more) {
             $id = str_replace('*', '<span style="color: red;">*</span>', $id);
           }
           echo "<tr><td>" . $id . "</td>";
-          echo "<td class='qty'>" . $qty . "</td>";
+          echo "<td>" . $qty . "</td>";
           echo "<td>" . $item['item'] . "</td>";
           echo "<td>" . $item['type'] . "</td>";
           echo "<td>" . $item['size'] . "</td>";

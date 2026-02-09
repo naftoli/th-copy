@@ -84,16 +84,16 @@ function createHtmlForItem($admin_id, $output = true) {
                 if ($show_item) {
                     if ($output) {
                         // create new row
-                        echo "<tr><td>" . ($item['type'] ? ($item['type'] . ' ') : '') . $item['item'];
+                        echo "<tr><td>" . ($item['type'] ? ($item['type'] . ' ') : '') . $item['item'] . "</td>";
                         if ($item_details_chosen && count($item_details_chosen)) {
                             foreach ($item_details_chosen as $field) {
                                 if ($field == 'item') continue;
-                                echo "</td><td>";
-                                if ($field == 'qty') echo isset($item[$field]) ? $item[$field] : 1;
-                                else if (isset($item[$field])) echo $item[$field];
+                                if ($field == 'qty') echo "<td class='qty'>" . (isset($item[$field]) ? $item[$field] : 1) . "</td>";
+                                else echo "<td>";
+                                if (isset($item[$field])) echo $item[$field];
+                                echo "</td>";
                             }
                         }
-                        echo "</td>";
                         echo "<td>" . $item['type'] . "</td>";
                         echo "<td>" . $item['size'] . "</td>";
                         // add column for shipping info
