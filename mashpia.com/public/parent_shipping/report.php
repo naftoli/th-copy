@@ -143,7 +143,7 @@ foreach ($info as $cat => $more) {
           if (strpos($id, '*') !== false) {
             $id = str_replace('*', '<span style="color: red;">*</span>', $id);
           }
-          echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
+          echo "<tr><td>" . $id . "</td><td class='qty'>" . $qty . "</td>";
           echo "<td>" . $item['item'] . "</td>";
           echo "<td>" . $item['type'] . "</td>";
           echo "<td>" . $item['size'] . "</td>";
@@ -275,7 +275,7 @@ foreach ($info as $cat => $more) {
         if (info[i].item == item && info[i].admin == admin) {
           found = true
           info[i].action = action
-          info[i].qty = qty
+          info[i].qty = qty ?? 1
           info[i].desc = desc
           break
         }
@@ -319,7 +319,7 @@ foreach ($info as $cat => $more) {
     $(".shipping").each(function () {
       const originalVal = parseInt(this.dataset.originalValue)
       const action = super_admin ? ([2, 3].includes(originalVal) ? 4 : 1) : 2
-      let qty = $(this).parent().parent().find('td:eq(3)').text()
+      let qty = $(this).parent().parent().find('.qty').text()
       update(this, action, qty)
     })
     save()
@@ -329,7 +329,7 @@ foreach ($info as $cat => $more) {
     $(this).parent().find('.shipping').each(function () {
       const originalVal = parseInt(this.dataset.originalValue)
       const action = super_admin ? ([2, 3].includes(originalVal) ? 4 : 1) : 2
-      let qty = $(this).parent().parent().find('td:eq(3)').text()
+      let qty = $(this).parent().parent().find('.qty').text()
       update(this, action, qty)
     })
     save()
@@ -338,7 +338,7 @@ foreach ($info as $cat => $more) {
   $(".shipping").change(function () {
     const originalVal = this.dataset.originalValue
     const action = parseInt(this.value)
-    const qty = parseInt($(this).parent().parent().find('.qty').val())
+    const qty = parseInt($(this).parent().parent().find('.qty').text())
     const desc = $(this).parent().parent().find('.description').val()
     if (action == 3 && !(qty && desc)) {
       alert('You must enter how many items are damaged AND explain the damage before it can be saved.')
@@ -365,7 +365,7 @@ foreach ($info as $cat => $more) {
     const val = $(this).val()
     const elem = $(this).parent().parent().find('.shipping')
     const action = parseInt($(elem).val())
-    const qty = $(this).parent().parent().find('.qty').val()
+    const qty = $(this).parent().parent().find('.qty').text()
     if (parseInt(qty) == 0) {
       alert('You must enter a qty before it can be saved.')
       return false

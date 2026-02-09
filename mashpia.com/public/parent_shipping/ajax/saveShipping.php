@@ -63,7 +63,7 @@ foreach ($info as $row) {
                 'year'      => $year,
                 'admin'     => $row['admin'],
                 'item'      => $row['item'],
-                'qty'       => $row['qty'],
+                'qty'       => $row['qty'] ?? 1,
                 'status'    => intval($row['action']),
                 'desc'      => $row['desc']
             ]);
@@ -72,7 +72,7 @@ foreach ($info as $row) {
                 'year'      => $year,
                 'admin'     => $row['admin'],
                 'item'      => $row['item'],
-                'qty'       => $row['qty'],
+                'qty'       => $row['qty'] ?? 1,
                 'status'    => intval($row['action']),
                 'desc'      => $row['desc']
             ]);
