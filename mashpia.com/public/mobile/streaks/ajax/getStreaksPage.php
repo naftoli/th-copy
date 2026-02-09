@@ -156,6 +156,12 @@ if (count($activeStreaks) > 0) {
 
 <div class="container">
     <div class="content">
+        <button id="back-to-missions">Back to Missions</button>
+        <script>
+            $("#back-to-missions").click(function() {
+                window.location.href = '/mobile/missionsNew.html?id=' + <?=$user_id?>;
+            });
+        </script>
         <div class="infobox">
         Pick a campaign and task.<br /><br />
         Do it 90 days in a row to give the Rebbe nachas, and unlock your next Streak Hachlota!
