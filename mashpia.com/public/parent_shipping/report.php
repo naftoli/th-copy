@@ -143,7 +143,8 @@ foreach ($info as $cat => $more) {
           if (strpos($id, '*') !== false) {
             $id = str_replace('*', '<span style="color: red;">*</span>', $id);
           }
-          echo "<tr><td>" . $id . "</td><td class='qty'>" . $qty . "</td>";
+          echo "<tr><td>" . $id . "</td>";
+          echo "<td class='qty'>" . $qty . "</td>";
           echo "<td>" . $item['item'] . "</td>";
           echo "<td>" . $item['type'] . "</td>";
           echo "<td>" . $item['size'] . "</td>";
