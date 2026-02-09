@@ -32,11 +32,12 @@ $translations = $cs->getSpanishTranslations();
 
 $parents = $cs->getParents();
 $admin_ids = array_keys($parents);
+$info['status'] = $cs->getStatus();
 
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
-    $status = $cs->getStatus();
+    $status = $info['status'];
     // remove items as needed
     foreach ($info as $cat => $details) {
       foreach ($details as $admin_id => $items) {
