@@ -463,9 +463,9 @@
                                       <!-- spacer if showing both chayolei and chidon buttons -->
                                       <div class="button-spacing"></div>
                                       {{/if}}
-                                      <button class="btn btn-primary re_register limmud_reg" style="display: none;">
+                                      <!-- <button class="btn btn-primary re_register">
                                         <span data-key="RegisterChidon" class="i18n2">Chidon Limmud Enrollment </span>{{ this.next_year_chidon }}
-                                      </button>
+                                      </button> -->
                                     {{/if}}
                                   {{/if}}
                                 {{/if}}
@@ -735,7 +735,6 @@
     let show_reg = false;
     if (Cookies.get('naftoli')) {
       show_reg = true
-      $(".limmud_reg").show()
     }
 
     (async () => {
