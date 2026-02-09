@@ -336,7 +336,6 @@ foreach ($resultsBySchool as $school => $more) : ?>
       <?php if (in_array($_POST['report_type'], ['all', 'summary'])) : ?>
         <div class='summary-div'>
           <h3>Summary for <?= $schools[$school] ?></h3>
-          <h3>Summary</h3>
           <table class="table table-striped table-condensed cell-border hover row-order order-column summary">
             <thead>
             <tr>
@@ -354,11 +353,11 @@ foreach ($resultsBySchool as $school => $more) : ?>
             <?php
             if (isset($summary[$school])) {
                 foreach ($summary[$school] as $id => $qty) {
+                    $item = $summary_items[$id];
                     if (strpos($id, '*') !== false) {
                       $id = str_replace('*', '<span style="color: red;">*</span>', $id);
                     }
                     echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
-                    $item = $summary_items[$id];
                     foreach (['item', 'size', 'color', 'cat'] as $attr) {
                         echo "<td>";
                         if (isset($item[$attr])) {
@@ -649,10 +648,22 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
                 padding-right: 3%;
               }
 
-              th, th, td {
+              tr, th, td {
                 font-size: 14px;
                 padding: 5px;
                 border-bottom: 1px solid grey;
+              }
+
+              th, td {
+                border-right: 1px solid grey;
+              }
+
+              th:first-child, td:first-child {
+                border-left: 1px solid grey;
+              }
+
+              th {
+                border-top: 1px solid grey;
               }
             </style>                  
           </head>
