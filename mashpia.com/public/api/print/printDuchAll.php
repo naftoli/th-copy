@@ -19,9 +19,9 @@ if ( !isset( $_POST['school_id'] ) ) {
 
 $school_id = $_POST['school_id'];
 $school = \School::find([ $school_id ]);
-// $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
-// $class_ids = $_POST['class_ids'] ? explode( ',', $_POST['class_ids'] ) : false;
-// if (!is_array($user_ids)) $user_ids = [ $user_ids ];
+$user_ids = isset( $_POST['user_ids'] ) && $_POST['user_ids'] !== '' ? ( is_array( $_POST['user_ids'] ) ? $_POST['user_ids'] : explode( ',', $_POST['user_ids'] ) ) : null;
+$class_ids = isset( $_POST['class_ids'] ) && $_POST['class_ids'] !== '' ? ( is_array( $_POST['class_ids'] ) ? $_POST['class_ids'] : explode( ',', $_POST['class_ids'] ) ) : null;
+if ( $user_ids && ! is_array( $user_ids ) ) $user_ids = [ $user_ids ];
 
 // $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
 $dates = $_POST['dates'];
