@@ -468,7 +468,7 @@ class user {
 					JOIN subjects AS s USING (subject_id) 
 					WHERE ut.user_id=" . $this->user_id . " 
 					AND ut.enrolled = 1 
-					AND ut.subject_id NOT IN (12, 15, 40, 94, 136)
+					AND ut.subject_id NOT IN (12, 15, 40, 93, 94, 136)
 					ORDER BY s.subject_ord";
 		} else if ($subject_id == -1)
 			$sql = "SELECT ut.* FROM user_tracks AS ut JOIN subjects AS s USING (subject_id) WHERE ut.user_id=" . $this->user_id . " and ut.enrolled = 1 ORDER BY s.subject_ord";
