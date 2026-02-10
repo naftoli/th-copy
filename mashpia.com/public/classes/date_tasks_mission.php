@@ -12,7 +12,8 @@ class date_tasks_mission {
 	public $mission_value;
 	public $start_date;
 	public $end_date;
-	
+	public $default_on;
+
 	public $subject_name;
 	public $subject_image_id;
 	
@@ -38,6 +39,7 @@ class date_tasks_mission {
 		$this->mission_value = $row["mission_value"];
 		$this->start_date = $row["start_date"];
 		$this->end_date = $row["end_date"];
+		$this->default_on = isset( $row["default_on"] ) ? $row["default_on"] : 1;
 		$this->week_string = "";
 		$this->e = new TaskExceptions();
 		$this->tasks = $tasks;

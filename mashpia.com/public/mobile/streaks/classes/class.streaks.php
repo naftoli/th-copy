@@ -71,6 +71,104 @@ class Streaks {
     }
 
     /**
+     * Load streaks for multiple users in batch. Returns [ user_id => [ streak_id => streak_data, ... ], ... ].
+     */
+    public static function getStreaksForUsers(array $user_ids, $start, $end) {
+        global $MASHPIA_DB;
+        if ( empty( $user_ids ) ) return [];
+        $db = $MASHPIA_DB;
+        $placeholders = implode( ',', array_fill( 0, count( $user_ids ), '?' ) );
+        $sql = "SELECT st.user_id, st.streak_id, st.num_days, st.days_needed, st.task_type,
+                    dt.name, dt.cat, dt.streak_duch_cat, dt.streak_duch_name
+                FROM streak_tasks st
+                JOIN date_tasks dt USING (streak_id)
+                JOIN users u USING (user_id)
+                JOIN user_tracks ut USING (user_id)
+                JOIN date_tasks_missions dtm USING (date_tasks_mission_id, school_type_id, track_id, level)
+                WHERE st.user_id IN ($placeholders) AND dt.streak_show = 1
+                GROUP BY st.user_id, st.streak_id";
+        $stmt = $db->prepare( $sql );
+        $stmt->execute( array_values( $user_ids ) );
+        $by_user = [];
+        $streak_ids = [];
+        while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+            $uid = (int) $row['user_id'];
+            $sid = (int) $row['streak_id'];
+            if ( ! isset( $by_user[ $uid ] ) ) $by_user[ $uid ] = [];
+            $by_user[ $uid ][ $sid ] = [
+                'cat' => $row['cat'],
+                'name' => $row['name'],
+                'num_days' => $row['num_days'],
+                'days_needed' => $row['days_needed'],
+                'task_type' => $row['task_type'],
+                'duch_cat' => $row['streak_duch_cat'] ?? $row['cat'],
+                'duch_name' => $row['streak_duch_name'] ?? $row['name'],
+                'days_done' => 0
+            ];
+            $streak_ids[ $sid ] = true;
+        }
+        $streak_ids = array_keys( $streak_ids );
+        if ( empty( $streak_ids ) ) return $by_user;
+
+        $ph_u = implode( ',', array_fill( 0, count( $user_ids ), '?' ) );
+        $ph_s = implode( ',', array_fill( 0, count( $streak_ids ), '?' ) );
+        $params = array_merge( array_values( $user_ids ), $streak_ids, [ $start, $end ] );
+        $sql_marks = "SELECT dtm.user_id, dt.streak_id, dtm.mark_date
+                FROM date_tasks_marks dtm
+                JOIN date_tasks dt USING (date_task_id)
+                WHERE dtm.user_id IN ($ph_u) AND dt.streak_id IN ($ph_s)
+                AND dtm.mark_date >= ? AND dtm.mark_date <= ?
+                ORDER BY dtm.user_id, dt.streak_id, dtm.mark_date DESC";
+        $stmt = $db->prepare( $sql_marks );
+        $stmt->execute( $params );
+        $marks_by_user_streak = [];
+        while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+            $uid = (int) $row['user_id'];
+            $sid = (int) $row['streak_id'];
+            $d = (int) $row['mark_date'];
+            if ( ! isset( $marks_by_user_streak[ $uid ] ) ) $marks_by_user_streak[ $uid ] = [];
+            if ( ! isset( $marks_by_user_streak[ $uid ][ $sid ] ) ) $marks_by_user_streak[ $uid ][ $sid ] = [];
+            $marks_by_user_streak[ $uid ][ $sid ][] = $d;
+        }
+
+        foreach ( $by_user as $uid => $streaks ) {
+            foreach ( $streaks as $sid => $data ) {
+                $marks = isset( $marks_by_user_streak[ $uid ][ $sid ] ) ? $marks_by_user_streak[ $uid ][ $sid ] : [];
+                $by_user[ $uid ][ $sid ]['days_done'] = self::computeDaysDone( $marks, (int) $start, (int) $end, $data['task_type'] );
+            }
+        }
+        return $by_user;
+    }
+
+    private static function computeDaysDone(array $marks, $start, $end, $task_type) {
+        $needed_interval = ( $task_type === 'weekly' ) ? 7 : ( ( $task_type === 'monthly_tasks' ) ? 28 : 1 );
+        $days = 0;
+        $day = $end;
+        $ctr = 0;
+        $found = false;
+        while ( $day >= $start ) {
+            $ctr++;
+            if ( in_array( $day, $marks, true ) ) {
+                $days++;
+                if ( ! $found ) $found = true;
+            } else {
+                if ( $ctr <= $needed_interval ) {
+                    $day--;
+                    continue;
+                }
+                if ( $found ) {
+                    $ctr = 0;
+                    $found = false;
+                } else {
+                    break;
+                }
+            }
+            $day--;
+        }
+        return $days;
+    }
+
+    /**
      * checks the marks from start to end for the streak days
      * returns an array of the streak days
      * the array is truncated at the first day that is not a streak day

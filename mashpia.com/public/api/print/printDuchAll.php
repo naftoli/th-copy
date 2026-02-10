@@ -97,12 +97,9 @@ if ( $dates == 'english' ) $dates_id = 2;
 $all_date_tasks = [];
 $all_date_tasks_missions = [];
 
-// * Generate the missions using the legacy code
-$missions = [];
-foreach( $user_ids as $user_id ) {
-    $mission = new Missions( $start, $end, $user_id, 0, 0, true, true, true, true );
-    $missions[] = $mission->getMissions();
-}
+// * Generate the missions using the legacy code (one query for all users in school)
+$mission = new Missions( $start, $end, $user_ids, 0, 0, true, true, true, true );
+$missions = [ $mission->getMissions() ];
 
 // * Generate the printed sheets using the legacy code
 $objMissions = [];
@@ -125,6 +122,9 @@ echo "
     </div>";
 
 $pages = 0;
+// * Load streaks for all users in one batch
+$allStreaks = Streaks::getStreaksForUsers( $user_ids, $start, $end );
+
 // * Print the missions just like before
 foreach ( $objMissions as $obj ) {
     $obj->setDateDisplay( $dates_id );
@@ -139,9 +139,7 @@ foreach ( $objMissions as $obj ) {
     if (in_array($obj->lang_id, [2, 4])) echo " dir='rtl' ";
     echo ">";
 
-    // get streaks for the user
-    $streaks = new Streaks($obj->user_id, $start, $end);
-    $activeStreaks = $streaks->getStreaks();
+    $activeStreaks = isset( $allStreaks[ $id ] ) ? $allStreaks[ $id ] : [];
 
     $debug = false;
     if (isset($_GET['debug'])) $debug = true;

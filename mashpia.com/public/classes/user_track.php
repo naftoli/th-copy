@@ -219,8 +219,8 @@ class user_track
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
 
-		if (! isset($all_date_tasks_missions[$this->subject_id][$this->level][$this->track_id][$this->school_type_id][$this->lang_id][$start_date][$end_date])) {
-			$all_date_tasks_missions[$this->subject_id][$this->level][$this->track_id][$this->school_type_id][$this->lang_id][$start_date][$end_date] = [];
+		if ( ! isset( $all_date_tasks_missions[ $this->subject_id ][ $this->level ][ $this->track_id ][ $this->school_type_id ][ $lang ][ $start_date ][ $end_date ] ) ) {
+			$all_date_tasks_missions[ $this->subject_id ][ $this->level ][ $this->track_id ][ $this->school_type_id ][ $lang ][ $start_date ][ $end_date ] = [];
 			$query = mysql_query($sql);
 			while ($row = mysql_fetch_assoc($query)) {
 				//find out if mission is new birthday mission and then see if it's for this child
@@ -238,71 +238,39 @@ class user_track
 				$date_tasks_mission = new date_tasks_mission($row, $tasks, $allowPersonalization);
 				
 				if ($date_tasks_mission->date_tasks_mission_id > 0) {
-					array_push($all_date_tasks_missions[$this->subject_id][$this->level][$this->track_id][$this->school_type_id][$this->lang_id][$start_date][$end_date], $date_tasks_mission);
+					array_push( $all_date_tasks_missions[ $this->subject_id ][ $this->level ][ $this->track_id ][ $this->school_type_id ][ $lang ][ $start_date ][ $end_date ], $date_tasks_mission );
 				}
 			}
-		} else {
-			echo "using cached missions";
 		}
-		return;
-		
-		foreach ($all_date_tasks_missions[$this->subject_id][$this->level][$this->track_id][$this->school_type_id][$this->lang_id][$start_date][$end_date] as $date_tasks_mission) {   
-			//find out if default is off
-			//if it's off, find out if this mission should be shown for this user
-			if ($row['default_on'] || $d->isOn($date_tasks_mission->date_tasks_mission_id, 'mission')) {
-				
-				// ***** Daily Tasks *****//
-				if (! isset($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['daily_tasks'])) {
-					$all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['daily_tasks'] = [];
-					$daily_tasks = $date_tasks_mission->get_daily_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-					array_push($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['daily_tasks'], ...$daily_tasks);
-				}
-				for ($dtno = 0; $dtno < count($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['daily_tasks']); $dtno++) {
-					array_push($this->daily_tasks, $all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['daily_tasks'][$dtno]);
-				}
-				
-				// ***** Weekly Tasks *****//
-				if (! isset($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['weekly_tasks'])) {
-					$all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['weekly_tasks'] = [];
-					$weekly_tasks = $date_tasks_mission->get_weekly_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-					array_push($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['weekly_tasks'], ...$weekly_tasks);
-				}
-				for ($wtno = 0; $wtno < count($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['weekly_tasks']); $wtno++) {
-					array_push($this->weekly_tasks, $all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['weekly_tasks'][$wtno]);
-				}								
-				
-				// ***** Shabbos Tasks *****//
-				if (! isset($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['shabbos_tasks'])) {
-					$all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['shabbos_tasks'] = [];
-					$shabbos_tasks = $date_tasks_mission->get_shabbos_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-					array_push($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['shabbos_tasks'], ...$shabbos_tasks);
-				}
-				for ($stno = 0; $stno < count($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['shabbos_tasks']); $stno++) {
-					array_push($this->shabbos_tasks, $all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['shabbos_tasks'][$stno]);
-				}				
-				
-				// ***** No Label Tasks *****//
-				if (! isset($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['no_label_tasks'])) {
-					$all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['no_label_tasks'] = [];
-					$no_label_tasks = $date_tasks_mission->get_no_label_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $date_tasks_mission->mission_name, $date_tasks_mission->mission_number, $this->user_id, $this->subject_name, $this->subject_image_id, $this->subject_id);
-					array_push($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['no_label_tasks'], ...$no_label_tasks);
-				}
-				for ($nltno = 0; $nltno < count($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['no_label_tasks']); $nltno++) {
-					array_push($this->no_label_tasks, $all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['no_label_tasks'][$nltno]);
-				}
 
-				// ***** Pesukim Tasks *****//
-				if ($this->subject_id == 136) {
-					if (! isset($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['pesukim_tasks'])) {
-						$all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['pesukim_tasks'] = [];
-						$pesukim_tasks = $date_tasks_mission->get_pesukim_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-						array_push($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['pesukim_tasks'], ...$pesukim_tasks);
-					}
-					for ($ptno = 0; $ptno < count($all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['pesukim_tasks']); $ptno++) {
-						array_push($this->pesukim_tasks, $all_date_tasks[$date_tasks_mission->date_tasks_mission_id]['pesukim_tasks'][$ptno]);
-					}
+		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)
+		foreach ( $all_date_tasks_missions[ $this->subject_id ][ $this->level ][ $this->track_id ][ $this->school_type_id ][ $lang ][ $start_date ][ $end_date ] as $date_tasks_mission ) {
+			if ( ! $date_tasks_mission->default_on && ! $d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
+				continue;
+			}
+
+			$daily_tasks = $date_tasks_mission->get_daily_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
+			for ($dtno = 0; $dtno < count($daily_tasks); $dtno++) {
+				array_push($this->daily_tasks, $daily_tasks[$dtno]);
+			}
+			$weekly_tasks = $date_tasks_mission->get_weekly_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
+			for ($wtno = 0; $wtno < count($weekly_tasks); $wtno++) {
+				array_push($this->weekly_tasks, $weekly_tasks[$wtno]);
+			}
+			$shabbos_tasks = $date_tasks_mission->get_shabbos_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
+			for ($stno = 0; $stno < count($shabbos_tasks); $stno++) {
+				array_push($this->shabbos_tasks, $shabbos_tasks[$stno]);
+			}
+			$no_label_tasks = $date_tasks_mission->get_no_label_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $date_tasks_mission->mission_name, $date_tasks_mission->mission_number, $this->user_id, $this->subject_name, $this->subject_image_id, $this->subject_id);
+			for ($nltno = 0; $nltno < count($no_label_tasks); $nltno++) {
+				array_push($this->no_label_tasks, $no_label_tasks[$nltno]);
+			}
+			if ($this->subject_id == 136) {
+				$pesukim_tasks = $date_tasks_mission->get_pesukim_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
+				for ($ptno = 0; $ptno < count($pesukim_tasks); $ptno++) {
+					array_push($this->pesukim_tasks, $pesukim_tasks[$ptno]);
 				}
-			} 		
+			}
 		}
 	}
 

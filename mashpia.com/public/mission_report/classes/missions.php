@@ -36,30 +36,79 @@ class Missions {
 				." JOIN classes c ON u.class_id = c.class_id"
 				." WHERE u.user_registered > 0";
 		if ( $this->school ) {
-			$sql .= " AND u.school_id = " . $this->school;
+			$sql .= " AND u.school_id = " . (int) $this->school;
 		}
 		if ( $this->grade ) {
-			$sql .= " AND u.class_id = " . $this->grade;
+			$sql .= " AND u.class_id = " . (int) $this->grade;
 		}
-		if ( $this->user ) {
-			$sql .= " AND u.user_id = " . $this->user;
+		if ( is_array( $this->user ) && ! empty( $this->user ) ) {
+			$ids = array_map( 'intval', $this->user );
+			$sql .= " AND u.user_id IN (" . implode( ',', $ids ) . ")";
+			$sql .= " ORDER BY FIELD(u.user_id, " . implode( ',', $ids ) . ")";
+		} elseif ( $this->user ) {
+			$sql .= " AND u.user_id = " . (int) $this->user;
+			$sql .= " ORDER BY c.class_grade, c.class_sub, u.last, u.first";
+		} else {
+			$sql .= " ORDER BY c.class_grade, c.class_sub, u.last, u.first";
 		}
-		$sql .= " ORDER BY c.class_grade, c.class_sub, u.last, u.first";
-		
+
 		$query = mysql_query( $sql );
+		$rows = array();
 		while ( $row = mysql_fetch_assoc($query) ) {
-		    if (! $this->school_type_id) $this->school_type_id = $row['school_type_id'];
+			$rows[] = $row;
+		}
+
+		// When loading multiple users, batch-load ranks and classes to reduce queries
+		$ranks_by_user = array();
+		$classes_by_id = array();
+		if ( is_array( $this->user ) && count( $rows ) > 0 ) {
+			$user_ids = array_unique( array_column( $rows, 'user_id' ) );
+			$class_ids = array_unique( array_filter( array_column( $rows, 'class_id' ) ) );
+
+			if ( ! empty( $user_ids ) ) {
+				$rids = array_map( 'intval', $user_ids );
+				$rq = mysql_query( "SELECT rm.user_id, r.rank_ord, r.rank_name, r.rank_image_id, rm.date_promoted
+					FROM rank_marks rm
+					JOIN ranks r USING(rank_ord)
+					WHERE rm.user_id IN (" . implode( ',', $rids ) . ")
+					ORDER BY rm.user_id, r.rank_ord DESC" );
+				while ( $r = mysql_fetch_assoc( $rq ) ) {
+					if ( ! isset( $ranks_by_user[ $r['user_id'] ] ) ) {
+						$ranks_by_user[ $r['user_id'] ] = $r;
+					}
+				}
+			}
+			if ( ! empty( $class_ids ) ) {
+				$cids = array_map( 'intval', $class_ids );
+				$cq = mysql_query( "SELECT * FROM classes WHERE class_id IN (" . implode( ',', $cids ) . ")" );
+				while ( $c = mysql_fetch_assoc( $cq ) ) {
+					$classes_by_id[ $c['class_id'] ] = new school_class( $c );
+				}
+			}
+		}
+
+		foreach ( $rows as $row ) {
+		    if ( ! $this->school_type_id ) $this->school_type_id = $row['school_type_id'];
 		    $user = new user( $row );
-		    $user->get_rank();
-			$user->get_school_class();
+		    if ( isset( $ranks_by_user[ $row['user_id'] ] ) ) {
+				$r = $ranks_by_user[ $row['user_id'] ];
+				$user->rank_ord = $r['rank_ord'];
+				$user->rank_name = $r['rank_name'];
+				$user->rank_image_id = $r['rank_image_id'];
+				$user->date_promoted = $r['date_promoted'];
+			} else {
+				$user->get_rank();
+			}
+			if ( isset( $classes_by_id[ $row['class_id'] ] ) ) {
+				$user->school_class = $classes_by_id[ $row['class_id'] ];
+			} else {
+				$user->get_school_class();
+			}
 			if ( $for_duch ) {
 				$user->for_duch = true;
 			}
-			// the idea was to disable personalization for OT so that there's the same number of pages that get printed for every child in each class, 
-			// but since it doesn't help anyway (b/c ages could be different in same class), the if statment will not return true but false
-			if ( !$allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization(); // don't show birthday missions for OT
-            // only show 'en' or 'yi' for OT
-            $lang_id = $row['school_id'] == 255 ? ($user->lang_id == 1 ? $user->lang_id : 2) : $user->lang_id;
+			if ( ! $allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization();
+			$lang_id = $row['school_id'] == 255 ? ( $user->lang_id == 1 ? $user->lang_id : 2 ) : $user->lang_id;
 		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $lang_id, $printing_mode, $by_date_range );
 		    array_push( $this->missions, $user );
 		}
