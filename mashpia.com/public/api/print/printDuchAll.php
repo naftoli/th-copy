@@ -112,8 +112,8 @@ $dtmSql = "
             AND mission_description NOT IN ('Yom Holedes Mission' , 'יום הולדת')";
 $dtmStmt = $MASHPIA_DB->prepare($dtmSql);
 $dtmStmt->execute([
-    'start' => $start_date,
-    'end' => $end_date
+    'start' => $start,
+    'end' => $end
 ]);
 $dtm = $dtmStmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($dtm as $dtmRow) {
