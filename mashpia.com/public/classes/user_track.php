@@ -207,7 +207,7 @@ class user_track
 
 		if ( ! isset( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] ) ) {
 			$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] = [];
-			
+
 			$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id // limit the language and school id
 				. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id // limit the task
 				. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
@@ -215,7 +215,6 @@ class user_track
 			if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
 			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
 	
-
 			include_once dirname(__FILE__) . '/../class.defaults.php';
 			$d = new Defaults($this->user_id);
 
@@ -242,7 +241,9 @@ class user_track
 		}
 
 		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)
-		foreach ( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] as $date_tasks_mission ) {
+		foreach ( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] as $dtm ) {
+			$date_tasks_mission = new date_tasks_mission($dtm, $tasks, $allowPersonalization);
+			
 			if ( ! $date_tasks_mission->default_on && ! $d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
 				continue;
 			}
