@@ -43,8 +43,9 @@ if ( $selectedMonth ) {
 } else {
     // date range
     $end = unixtojd();
+    $date_range = ( isset( $date_range ) && is_numeric( $date_range ) && $date_range > 0 ) ? (int) $date_range : 30;
     $start = $end - $date_range + 1; // one less b/c we include start and end date in total number of days
-} 
+}
 
 // // * Set class_ids and user_ids if not set by client
 if ( !$class_ids ) {
@@ -94,6 +95,7 @@ $dates_id = 1;
 if ( $dates == 'none' ) $dates_id = 0;
 if ( $dates == 'english' ) $dates_id = 2;
 
+$all_date_tasks_missions = [];
 $dtmSql = "
     SELECT 
         *
@@ -166,6 +168,11 @@ foreach ( $objMissions as $obj ) {
     if (isset($_GET['debug'])) $debug = true;
     $pages += $obj->printDuch($activeStreaks);
     echo "</div>|";
+    // Flush so client receives output progressively and doesn't timeout
+    if ( ob_get_level() ) {
+        ob_flush();
+        flush();
+    }
 }
 $html = ob_get_flush();
 echo $html;
