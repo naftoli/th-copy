@@ -219,8 +219,8 @@ class user_track
 			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
 
 			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {				
-				array_push( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ], $row );
+			while ($row = mysql_fetch_assoc($query)) {
+				$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ][] = $row;				
 			}
 		}
 
