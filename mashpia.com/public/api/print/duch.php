@@ -186,19 +186,19 @@
                     return;
                 }
 
-                if (Cookies.get('naftoli')) {
-                    // break up html into pages
-                    const pages = html.split('|');
-                    for (let i = 0; i < pages.length; i++) {
-                        // wait for the page to render
-                        setTimeout(function() {
-                            $('#main').append(pages[i]);
-                            console.log('waiting 1 second');
-                        }, 1000)
-                    }
-                } else {
+                // if (Cookies.get('naftoli')) {
+                //     // break up html into pages
+                //     const pages = html.split('|');
+                //     for (let i = 0; i < pages.length; i++) {
+                //         // wait for the page to render
+                //         setTimeout(function() {
+                //             $('#main').append(pages[i]);
+                //             console.log('waiting 1 second');
+                //         }, 1000)
+                //     }
+                // } else {
                     $('#main').html(html);
-                }
+                // }
 
                 if (email) {
                     emailToOhel();
