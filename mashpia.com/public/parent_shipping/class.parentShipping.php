@@ -144,6 +144,8 @@ class ParentShipping
             'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
             'Full Item Name', 'Item Warehouse Location', 'Quantity', 'Recipient Email', 'Comments', 'City, State, Country'];
         foreach ($info as $cat => $details) {
+            // Skip status category - it has a different structure (metadata, not items)
+            if ($cat == 'status') continue;
             foreach ($details as $admin_id => $items) {
                 // $child_count = count($items);
                 foreach ($items as $idx => $item) {

@@ -28,12 +28,12 @@ foreach ($items_chosen as $cat => $itemsPerCat) {
     $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
     $info[$cat] = $cs->$nameOfFunc($listOfItems);
 }
-$translations = $cs->getSpanishTranslations();
 
+$translations = $cs->getSpanishTranslations();
 $parents = $cs->getParents();
 $admin_ids = array_keys($parents);
 $info['status'] = $cs->getStatus();
-
+// echo "<pre>"; print_r($info); echo "</pre>"; exit;
 $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
