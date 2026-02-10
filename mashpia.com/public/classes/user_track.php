@@ -226,8 +226,6 @@ class user_track
 
 		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)
 		foreach ( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] as $row ) {
-			$date_tasks_mission = new date_tasks_mission($row, $tasks, $allowPersonalization);
-
 			//find out if mission is new birthday mission and then see if it's for this child
 			if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_description'], 'יום הולדת' ) !== false ) {
 				$sqlB = "select * from birthdays where user_id = " . $this->user_id . " and date_tasks_mission_id = " . $row['date_tasks_mission_id'];
@@ -239,6 +237,8 @@ class user_track
 					continue;
 				} 
 			}
+
+			$date_tasks_mission = new date_tasks_mission($row, $tasks, $allowPersonalization);
 
 			if ( ! $date_tasks_mission->default_on && ! $d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
 				continue;
