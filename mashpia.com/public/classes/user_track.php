@@ -206,6 +206,8 @@ class user_track
 		$this->end_date = $end_date;
 
 		if ( ! isset( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] ) ) {
+			$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] = [];
+			
 			$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id // limit the language and school id
 				. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id // limit the task
 				. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
