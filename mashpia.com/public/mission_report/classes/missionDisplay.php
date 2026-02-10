@@ -1150,7 +1150,8 @@ abstract class MissionDisplay {
 				$icon = $report_mission['icon'];
 				?>
 				<script>
-				const html = `
+				(function() {
+					const html = `
 				<div class='track'>
 					<div class='campaign-container'>
 						<div class='campaign-icon'>
@@ -1169,9 +1170,10 @@ abstract class MissionDisplay {
 							<div class='task-name'><?= $task->task_name ?></div>
 						</div>
 					</div>
-				</div>`
-				const elem = $(".track").eq(0)
-				elem.prepend(html);
+				</div>`;
+					const elem = $(".track").eq(0);
+					elem.prepend(html);
+				})();
 				</script>
 				<?php	
 			}
