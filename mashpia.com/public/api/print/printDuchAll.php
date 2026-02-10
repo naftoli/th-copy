@@ -94,8 +94,28 @@ $dates_id = 1;
 if ( $dates == 'none' ) $dates_id = 0;
 if ( $dates == 'english' ) $dates_id = 2;
 
-$all_date_tasks = [];
-$all_date_tasks_missions = [];
+$dtmSql = "
+    SELECT 
+        *
+    FROM
+        date_tasks_missions dtm
+            JOIN
+        date_tasks dt USING (date_tasks_mission_id)
+    WHERE
+        dtm.start_date >= :start 
+            AND dtm.end_date <= :end 
+            AND subject_id NOT IN (12 , 15, 40, 136)
+            AND mission_name NOT LIKE '%Chidon Limmud%'
+            AND mission_description NOT IN ('Yom Holedes Mission' , 'יום הולדת')";
+$dtmStmt = $db->prepare($dtmSql);
+$dtmStmt->execute([
+    'start' => $start,
+    'end' => $end
+]);
+$dtm = $dtmStmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($dtm as $dtmRow) {
+    $all_date_tasks_missions[$dtmRow['subject_id']][$dtmRow['school_type_id']][$dtmRow['lang_id']][$dtmRow['level']][$dtmRow['track_id']][] = $dtmRow;
+}
 
 // * Generate the missions using the legacy code (one query for all users in school)
 $mission = new Missions( $start, $end, $user_ids, 0, 0, true, true, true, true );
