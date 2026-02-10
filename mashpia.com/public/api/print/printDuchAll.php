@@ -107,7 +107,7 @@ $dtmSql = "
             AND subject_id NOT IN (12 , 15, 40, 136)
             AND mission_name NOT LIKE '%Chidon Limmud%'
             AND mission_description NOT IN ('Yom Holedes Mission' , 'יום הולדת')";
-$dtmStmt = $db->prepare($dtmSql);
+$dtmStmt = $MASHPIA_DB->prepare($dtmSql);
 $dtmStmt->execute([
     'start' => $start,
     'end' => $end
