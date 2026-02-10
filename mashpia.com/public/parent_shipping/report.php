@@ -40,6 +40,7 @@ if ($report_type == 'file') {
     $status = $info['status'];
     // remove items as needed
     foreach ($info as $cat => $details) {
+      if ($cat == 'status') continue;
       foreach ($details as $admin_id => $items) {
           foreach ($items as $idx => $item) {
               $item_status = $status[$admin_id][$item['id']]['status'] ?? 0;
