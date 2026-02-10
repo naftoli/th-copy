@@ -190,12 +190,11 @@
                     // break up html into pages
                     const pages = html.split('|');
                     for (let i = 0; i < pages.length; i++) {
-                        const page = pages[i];
-                        $('#main').append(page);
                         // wait for the page to render
                         setTimeout(function() {
-                            console.log('page rendered');
-                        }, 500)
+                            $('#main').append(pages[i]);
+                            console.log('waiting 1 second');
+                        }, 1000)
                     }
                 } else {
                     $('#main').html(html);
