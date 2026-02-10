@@ -205,6 +205,9 @@ class user_track
 		$this->start_date = $start_date;
 		$this->end_date = $end_date;
 
+		include_once dirname(__FILE__) . '/../class.defaults.php';
+		$d = new Defaults($this->user_id);
+
 		if ( ! isset( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] ) ) {
 			$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] = [];
 
@@ -214,9 +217,6 @@ class user_track
 			if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
 			if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
 			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
-	
-			include_once dirname(__FILE__) . '/../class.defaults.php';
-			$d = new Defaults($this->user_id);
 
 			$query = mysql_query($sql);
 			while ($row = mysql_fetch_assoc($query)) {
@@ -243,7 +243,7 @@ class user_track
 		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)
 		foreach ( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] as $dtm ) {
 			$date_tasks_mission = new date_tasks_mission($dtm, $tasks, $allowPersonalization);
-			
+
 			if ( ! $date_tasks_mission->default_on && ! $d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
 				continue;
 			}
