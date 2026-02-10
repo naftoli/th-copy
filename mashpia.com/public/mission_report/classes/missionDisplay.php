@@ -1171,9 +1171,8 @@ abstract class MissionDisplay {
 						</div>
 					</div>
 				</div>`;
-					var scriptEl = document.currentScript;
-					var sheet = scriptEl && $(scriptEl).closest('.userDuch');
-					var elem = sheet && sheet.length ? sheet.find('.track').eq(0) : $('.track').eq(0);
+					var sheet = document.getElementById('user-<?= (int) $this->user_id ?>');
+					var elem = sheet ? $(sheet).find('.track').eq(0) : $('.track').eq(0);
 					if (elem.length) elem.prepend(html);
 				})();
 				</script>
