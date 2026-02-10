@@ -227,17 +227,16 @@ class user_track
 		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)
 		foreach ( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] as $row ) {
 			//find out if mission is new birthday mission and then see if it's for this child
-			if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_description'], 'יום הולדת' ) !== false ) {
-				$sqlB = "select * from birthdays where user_id = " . $this->user_id . " and date_tasks_mission_id = " . $row['date_tasks_mission_id'];
-				//if ($this->user_id == 15025) echo "<input type='hidden' name='birthdayMission' value='" . $sqlB . "' />";
+			// if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_description'], 'יום הולדת' ) !== false ) {
+			// 	$sqlB = "select * from birthdays where user_id = " . $this->user_id . " and date_tasks_mission_id = " . $row['date_tasks_mission_id'];
+			// 	//if ($this->user_id == 15025) echo "<input type='hidden' name='birthdayMission' value='" . $sqlB . "' />";
 				
-				$resB = mysql_query( $sqlB );
-				if ( mysql_num_rows( $resB ) == 0 || !$allowPersonalization ) {
-					//don't add this mission to child's list of missions
-					continue;
-				} 
-			}
-
+			// 	$resB = mysql_query( $sqlB );
+			// 	if ( mysql_num_rows( $resB ) == 0 || !$allowPersonalization ) {
+			// 		//don't add this mission to child's list of missions
+			// 		continue;
+			// 	} 
+			// }
 			$date_tasks_mission = new date_tasks_mission($row, $tasks, $allowPersonalization);
 
 			if ( ! $date_tasks_mission->default_on && ! $d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
