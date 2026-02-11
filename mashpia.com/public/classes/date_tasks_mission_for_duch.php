@@ -76,14 +76,7 @@ class date_tasks_mission_for_duch {
 
 		$query = mysql_query($sql);
 		if ($query) {
-			$d = new Defaults($user_id);
 			while ($row = mysql_fetch_assoc($query)) {
-				if ($this->allowPersonalization) {
-					if (isset($row['default_on']) && $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
-					if ($this->subject_id != 136 && $this->e->isException($row['date_task_id'], $user_id)) continue;
-				} else {
-					if (isset($row['default_on']) && $row['default_on'] == 0) continue;
-				}
 				$daily_task = new daily_task($row, $subject_id, $row['name']);
 				$daily_task->set_subject_image_id($subject_image_id);
 				$daily_task->set_dates($start_date, $end_date);
@@ -118,15 +111,7 @@ class date_tasks_mission_for_duch {
         //echo "<input type='hidden' name='weekly tasks' value='$sql' />";
 		$query = mysql_query($sql);
 		if ($query) {
-			$d = new Defaults($user_id);
 			while ($row = mysql_fetch_assoc($query)) {
-				if ($this->allowPersonalization) {
-					if (isset($row['default_on']) && $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
-					if ($this->subject_id != 136 && $this->e->isException($row['date_task_id'], $user_id)) continue;
-				} else {
-					if (isset($row['default_on']) && $row['default_on'] == 0) continue;
-				}
-				if (!empty($this->tasks) && !in_array($row['name'], $this->tasks)) continue;
 				$weekly_task = new weekly_task($row);
 				$weekly_task->set_subject_id($subject_id);
 				$weekly_task->set_subject_image_id($subject_image_id);
@@ -162,15 +147,7 @@ class date_tasks_mission_for_duch {
 			
 		$query = mysql_query($sql);
 		if ($query) {
-			$d = new Defaults($user_id);
 			while ($row = mysql_fetch_assoc($query)) {
-				if ($this->allowPersonalization) {
-					if (isset($row['default_on']) && $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
-					if ($this->subject_id != 136 && $this->e->isException($row['date_task_id'], $user_id)) continue;
-				} else {
-					if (isset($row['default_on']) && $row['default_on'] == 0) continue;
-				}
-				if (!empty($this->tasks) && !in_array($row['name'], $this->tasks)) continue;
 				$shabbos_task = new shabbos_task($row);
 				$shabbos_task->set_mark_date($start_date, $end_date);
 				$shabbos_task->set_subject_id($subject_id);
@@ -201,18 +178,7 @@ class date_tasks_mission_for_duch {
 		$sql = $sql . "ORDER BY dt.grid_id, dt.ord, dt.date_task_id";
 		$query = mysql_query($sql);
 		if ($query) {
-			$d = new Defaults($user_id);
 			while ($row = mysql_fetch_assoc($query)) {
-				if (isset($_COOKIE['naftoli']) && $subject_id == 21) {}
-				else {
-					if ($this->allowPersonalization) {
-						if (isset($row['default_on']) && $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
-						if ($subject_id != 136 && $this->e->isException($row['date_task_id'], $user_id)) continue;
-					} else {
-						if (isset($row['default_on']) && $row['default_on'] == 0) continue;
-					}
-					if (!empty($this->tasks) && !in_array($row['name'], $this->tasks)) continue;
-				}
 				$no_label_task = new no_label_task($row);
 				$no_label_task->set_dates($start_date, $end_date);
 				$no_label_task->set_mark_date($end_date);
@@ -245,15 +211,7 @@ class date_tasks_mission_for_duch {
         // echo $sql . "<br />"; 
 		$query = mysql_query($sql);
 		if ($query) {
-			$d = new Defaults($user_id);
 			while ($row = mysql_fetch_assoc($query)) {
-				if ($this->allowPersonalization) {
-					if (isset($row['default_on']) && $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
-					if ($this->subject_id != 136 && $this->e->isException($row['date_task_id'], $user_id)) continue;
-				} else {
-					if (isset($row['default_on']) && $row['default_on'] == 0) continue;
-				}
-				if (!empty($this->tasks) && !in_array($row['name'], $this->tasks)) continue;
 				$pesukim_task = new pesukim_task($row);
 				$pesukim_task->set_subject_id($subject_id);
 				$pesukim_task->set_subject_image_id($subject_image_id);
