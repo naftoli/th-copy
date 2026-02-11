@@ -158,6 +158,11 @@ foreach ($dtm as $dtmRow) {
 }
 // echo "<pre>"; print_r($all_date_tasks_missions); echo "</pre>"; exit;
 
+// * Preload birthday mission IDs for all users; assign to global so user_track_for_duch can use it
+if ( ! empty( $user_ids ) ) {
+	warmBirthdayCache( $user_ids );
+}
+
 // * Generate the missions: use school filter when list is huge to avoid giant IN/FIELD in SQL
 $user_ids_to_pass = $user_ids;
 $school_for_query = 0;

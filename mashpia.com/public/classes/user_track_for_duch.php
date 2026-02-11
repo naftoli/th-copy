@@ -2,10 +2,41 @@
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.taskExceptions.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.defaults.php';
 
+// Birthday cache: user_id => [date_tasks_mission_id, ...]. Set by caller (e.g. printDuchAll) from warmBirthdayCache() return value.
+if ( ! isset( $GLOBALS['birthday_cache'] ) ) {
+	$GLOBALS['birthday_cache'] = [];
+}
+
+/**
+ * Preload birthdays for all given users in one query (or chunked). Call before looping (e.g. printDuchAll).
+ * Returns the cache array; caller should assign to global $birthday_cache for user_track_for_duch to use.
+ * @param int[] $user_ids
+ * @return array user_id => [date_tasks_mission_id, ...]
+ */
+function warmBirthdayCache( array $user_ids ) {
+	$cache = [];
+	$user_ids = array_filter( array_map( 'intval', $user_ids ) );
+	if ( empty( $user_ids ) || ! function_exists( 'mysql_query' ) ) return $cache;
+	$chunk = 500;
+	foreach ( array_chunk( $user_ids, $chunk ) as $ids ) {
+		$ids_list = implode( ',', $ids );
+		$r = mysql_query( "SELECT user_id, date_tasks_mission_id FROM birthdays WHERE user_id IN ($ids_list)" );
+		if ( $r ) {
+			while ( $row = mysql_fetch_assoc( $r ) ) {
+				$uid = (int) $row['user_id'];
+				if ( ! isset( $cache[ $uid ] ) ) $cache[ $uid ] = [];
+				$cache[ $uid ][] = (int) $row['date_tasks_mission_id'];
+			}
+		}
+	}
+	foreach ( $user_ids as $uid ) {
+		if ( ! isset( $cache[ $uid ] ) ) $cache[ $uid ] = [];
+	}
+	$GLOBALS['birthday_cache'] = $cache;
+}
+
 class user_track_for_duch 
 {
-	private static $birthday_cache = [];  // user_id => [date_tasks_mission_id, ...]
-
 	public $user_id;
 	public $subject_id;
 	public $track_id;
@@ -56,41 +87,12 @@ class user_track_for_duch
 		$this->d = new Defaults($this->user_id);
 	}
 
-    /**
-	 * Preload birthdays for all given users in one query (or chunked). Call before looping (e.g. printDuchAll).
-	 * @param int[] $user_ids
-	 */
-	public static function warmBirthdayCache( array $user_ids ) {
-		$user_ids = array_filter( array_map( 'intval', $user_ids ) );
-		if ( empty( $user_ids ) || ! function_exists( 'mysql_query' ) ) return;
-		$chunk = 500;
-		foreach ( array_chunk( $user_ids, $chunk ) as $ids ) {
-			$ids_list = implode( ',', $ids );
-			$r = mysql_query( "SELECT user_id, date_tasks_mission_id FROM birthdays WHERE user_id IN ($ids_list)" );
-			if ( $r ) {
-				while ( $row = mysql_fetch_assoc( $r ) ) {
-					$uid = (int) $row['user_id'];
-					if ( ! isset( self::$birthday_cache[ $uid ] ) ) self::$birthday_cache[ $uid ] = [];
-					self::$birthday_cache[ $uid ][] = (int) $row['date_tasks_mission_id'];
-				}
-			}
-		}
-		foreach ( $user_ids as $uid ) {
-			if ( ! isset( self::$birthday_cache[ $uid ] ) ) self::$birthday_cache[ $uid ] = [];
-		}
-	}
-
-	/** @return int[] date_tasks_mission_ids for this user (from cache or lazy load) */
+	/** @return int[] date_tasks_mission_ids for this user (from global $birthday_cache or lazy load) */
 	private function _birthday_mission_ids() {
+		$birthday_cache = $GLOBALS['birthday_cache'];
 		$uid = (int) $this->user_id;
-		if ( ! isset( self::$birthday_cache[ $uid ] ) ) {
-			self::$birthday_cache[ $uid ] = [];
-			$r = mysql_query( "SELECT date_tasks_mission_id FROM birthdays WHERE user_id = " . $uid );
-			if ( $r ) while ( $row = mysql_fetch_assoc( $r ) ) self::$birthday_cache[ $uid ][] = (int) $row['date_tasks_mission_id'];
-		}
-		return self::$birthday_cache[ $uid ];
+		return $birthday_cache[ $uid ] ?? [];
 	}
-
 	
 	function set_user_information($row)
 	{

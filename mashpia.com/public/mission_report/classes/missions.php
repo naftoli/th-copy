@@ -99,10 +99,6 @@ class Missions {
 			}
 		}
 
-		if ( $for_duch ) {
-			user_track_for_duch::warmBirthdayCache( array_column( $rows, 'user_id' ) );
-		}
-
 		foreach ( $rows as $row ) {
 		    if ( ! $this->school_type_id ) $this->school_type_id = $row['school_type_id'];
 		    $user = new user( $row );
