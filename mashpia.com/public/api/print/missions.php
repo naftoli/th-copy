@@ -5,16 +5,30 @@
 ini_set('max_execution_time', 600);
 ini_set('memory_limit', '3072M');
 
+ob_start();
+
+if ( !isset( $_POST['school_id'] ) ) {
+    header('Location: /new/missions/print' ); die();
+}
+
+// Output loading overlay immediately so user sees it while server processes
+echo '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Print Missions</title><link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" /><style>
+#loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;font-family:sans-serif}
+#loading-overlay .spinner{width:40px;height:40px;border:3px solid #e0e0e0;border-top-color:#333;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loading-overlay p{margin-top:16px;color:#666}
+</style></head><body><div id="loading-overlay"><div class="spinner"></div><p>Loading missions...</p></div><div id="content" style="display:none">';
+if ( ob_get_level() ) {
+    ob_flush();
+    flush();
+}
+
 require_once( '../header/header.php' ); // load header
 
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/missions.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/noPicMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/DSMission.php' );
-
-if ( !isset( $_POST['school_id'] ) ) {
-    header('Location: /new/missions/print' ); die();
-}
 
 $school = \School::find([ $_POST['school_id'] ]);
 $user_ids = $_POST['user_ids'] ? explode( ',', $_POST['user_ids'] ) : false;
@@ -68,7 +82,8 @@ if ( !$user_ids ) {
 }
 
 if ( !$parsha_ids ) {
-    echo 'Cannot Print 0 Parshos. Please select at least 1 parsha.'; die();
+    echo 'Cannot Print 0 Parshos. Please select at least 1 parsha.</div><script>document.getElementById("loading-overlay").style.display="none";document.getElementById("content").style.display="block"</script></body></html>';
+    die();
 }
 
 $parshos = \Parsha::find( $parsha_ids );
@@ -133,12 +148,6 @@ if ( $dates == 'none' ) $dates_id = 0;
 if ( $dates == 'english' ) $dates_id = 2;
 
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Print Missions</title>
-    <link rel="stylesheet" href="/mission_report/newStyle.css?v=2.3" type="text/css" />
     <style>
         /* Mandatory star marks*/
         .mandStar {
@@ -156,9 +165,6 @@ if ( $dates == 'english' ) $dates_id = 2;
             right: 0px !important;
         }
     </style>
-</head>
-
-<body>
     <div id='stats'>
         <p>Soldiers Printed: <?= count( $user_ids ) ?> | Parshos Printed: <?= count( $parsha_ids ) ?></p>
         <p id='total'>
@@ -199,6 +205,8 @@ if ( $dates == 'english' ) $dates_id = 2;
     <script src="/jquery.js"></script>
     <script src="missions.js"></script>
     <script>
+        document.getElementById('loading-overlay').style.display = 'none';
+        document.getElementById('content').style.display = 'block';
         document.querySelector('#total-pages').innerText = document.querySelector('#pages-printed').value;
         document.addEventListener('DOMContentLoaded', function() {
             // your code here
@@ -307,5 +315,6 @@ if ( $dates == 'english' ) $dates_id = 2;
         ?>
         </pre>
     </details> -->
+</div><!-- #content -->
 </body>
 </html>
