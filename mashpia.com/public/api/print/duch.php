@@ -253,7 +253,7 @@
                                 openGradeInNewPage(g, i * 1000);
                             });
                             setTimeout(function() {
-                                listEl.innerHTML = '<p>Opened ' + json.grades.length + ' grade pages. You can close this window.</p>';
+                                window.close();
                             }, json.grades.length * 400 + 200);
                             return;
                         }
