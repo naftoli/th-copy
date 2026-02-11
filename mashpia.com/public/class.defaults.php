@@ -62,21 +62,21 @@ class Defaults {
     
     public function isOn($id, $table) {
         // Use batch-loaded cache when available (e.g. printDuchAll)
-        if ( isset( $GLOBALS['defaults_cache'] ) && $this->user ) {
-            $tab = $table === 'mission' ? 'mission' : 'task';
-            if ( ! isset( $GLOBALS['defaults_cache'][ $tab ] ) ) {
-                return false;
-            }
-            $uid = (int) $this->user;
-            $cache = isset( $GLOBALS['defaults_cache'][ $tab ][ $uid ] ) ? $GLOBALS['defaults_cache'][ $tab ][ $uid ] : [];
-            if ( is_array( $id ) ) {
-                foreach ( $id as $i ) {
-                    if ( isset( $cache[ (int) $i ] ) ) return true;
-                }
-                return false;
-            }
-            return isset( $cache[ (int) $id ] );
-        }
+        // if ( isset( $GLOBALS['defaults_cache'] ) && $this->user ) {
+        //     $tab = $table === 'mission' ? 'mission' : 'task';
+        //     if ( ! isset( $GLOBALS['defaults_cache'][ $tab ] ) ) {
+        //         return false;
+        //     }
+        //     $uid = (int) $this->user;
+        //     $cache = isset( $GLOBALS['defaults_cache'][ $tab ][ $uid ] ) ? $GLOBALS['defaults_cache'][ $tab ][ $uid ] : [];
+        //     if ( is_array( $id ) ) {
+        //         foreach ( $id as $i ) {
+        //             if ( isset( $cache[ (int) $i ] ) ) return true;
+        //         }
+        //         return false;
+        //     }
+        //     return isset( $cache[ (int) $id ] );
+        // }
         if (!$this->class && !$this->user) {
         	if (is_array( $id )) {
         		$sql3 = "select * from school_{$table}s where school_id = $this->school and {$table}_id in (" . implode(',', $id) . ")";
