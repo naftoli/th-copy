@@ -280,6 +280,86 @@ if ( ! empty( $user_ids ) ) {
 				}
 			}
 		}
+
+		// * Batch-load defaults (user opted-in to task/mission when default_on=0); Defaults reads from $GLOBALS['defaults_cache']
+		$GLOBALS['defaults_cache'] = [ 'task' => [], 'mission' => [] ];
+
+		$user_task_def = [];
+		$u_ph = implode( ',', array_fill( 0, count( $uids ), '?' ) );
+		$t_ph = implode( ',', array_fill( 0, count( $task_ids ), '?' ) );
+		$stmt = $MASHPIA_DB->prepare( "SELECT user_id, task_id FROM user_tasks WHERE user_id IN ($u_ph) AND task_id IN ($t_ph)" );
+		$stmt->execute( array_merge( $uids, $task_ids ) );
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$user_task_def[ (int) $row['user_id'] ][ (int) $row['task_id'] ] = true;
+		}
+
+		$class_task_def = [];
+		if ( ! empty( $class_ids_ex ) && ! empty( $task_ids ) ) {
+			$c_ph = implode( ',', array_fill( 0, count( $class_ids_ex ), '?' ) );
+			$t_ph = implode( ',', array_fill( 0, count( $task_ids ), '?' ) );
+			$stmt = $MASHPIA_DB->prepare( "SELECT class_id, task_id FROM class_tasks WHERE class_id IN ($c_ph) AND task_id IN ($t_ph)" );
+			$stmt->execute( array_merge( $class_ids_ex, $task_ids ) );
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$class_task_def[ (int) $row['class_id'] ][ (int) $row['task_id'] ] = true;
+			}
+		}
+
+		$school_task_def = [];
+		if ( ! empty( $school_ids ) && ! empty( $task_ids ) ) {
+			$s_ph = implode( ',', array_fill( 0, count( $school_ids ), '?' ) );
+			$t_ph = implode( ',', array_fill( 0, count( $task_ids ), '?' ) );
+			$stmt = $MASHPIA_DB->prepare( "SELECT school_id, task_id FROM school_tasks WHERE school_id IN ($s_ph) AND task_id IN ($t_ph)" );
+			$stmt->execute( array_merge( $school_ids, $task_ids ) );
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$school_task_def[ (int) $row['school_id'] ][ (int) $row['task_id'] ] = true;
+			}
+		}
+
+		$m_ph = implode( ',', array_fill( 0, count( $mission_ids ), '?' ) );
+		$user_mission_def = [];
+		$u_ph = implode( ',', array_fill( 0, count( $uids ), '?' ) );
+		$stmt = $MASHPIA_DB->prepare( "SELECT user_id, mission_id FROM user_missions WHERE user_id IN ($u_ph) AND mission_id IN ($m_ph)" );
+		$stmt->execute( array_merge( $uids, $mission_ids ) );
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$user_mission_def[ (int) $row['user_id'] ][ (int) $row['mission_id'] ] = true;
+		}
+
+		$class_mission_def = [];
+		if ( ! empty( $class_ids_ex ) && ! empty( $mission_ids ) ) {
+			$c_ph = implode( ',', array_fill( 0, count( $class_ids_ex ), '?' ) );
+			$stmt = $MASHPIA_DB->prepare( "SELECT class_id, mission_id FROM class_missions WHERE class_id IN ($c_ph) AND mission_id IN ($m_ph)" );
+			$stmt->execute( array_merge( $class_ids_ex, $mission_ids ) );
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$class_mission_def[ (int) $row['class_id'] ][ (int) $row['mission_id'] ] = true;
+			}
+		}
+
+		$school_mission_def = [];
+		if ( ! empty( $school_ids ) && ! empty( $mission_ids ) ) {
+			$s_ph = implode( ',', array_fill( 0, count( $school_ids ), '?' ) );
+			$stmt = $MASHPIA_DB->prepare( "SELECT school_id, mission_id FROM school_missions WHERE school_id IN ($s_ph) AND mission_id IN ($m_ph)" );
+			$stmt->execute( array_merge( $school_ids, $mission_ids ) );
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$school_mission_def[ (int) $row['school_id'] ][ (int) $row['mission_id'] ] = true;
+			}
+		}
+
+		foreach ( $user_school_class as $uid => $sc ) {
+			$sid = $sc['school_id'];
+			$cid = $sc['class_id'];
+			foreach ( $task_subject as $tid => $dummy ) {
+				$on = isset( $user_task_def[ $uid ][ $tid ] ) || ( $cid && isset( $class_task_def[ $cid ][ $tid ] ) ) || ( $sid && isset( $school_task_def[ $sid ][ $tid ] ) );
+				if ( $on ) {
+					$GLOBALS['defaults_cache']['task'][ $uid ][ $tid ] = true;
+				}
+			}
+			foreach ( $mission_ids as $mid ) {
+				$on = isset( $user_mission_def[ $uid ][ $mid ] ) || ( $cid && isset( $class_mission_def[ $cid ][ $mid ] ) ) || ( $sid && isset( $school_mission_def[ $sid ][ $mid ] ) );
+				if ( $on ) {
+					$GLOBALS['defaults_cache']['mission'][ $uid ][ $mid ] = true;
+				}
+			}
+		}
 	}
 }
 
