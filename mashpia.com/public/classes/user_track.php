@@ -122,23 +122,43 @@ class user_track
 		//echo "<input type='hidden' name='3) END DATE' value='" . $end_date . "'>\n";
 		$this->start_date = $start_date;
 		$this->end_date = $end_date;
-		
-		$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id // limit the language and school id
-			. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id // limit the task
-			. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
-		if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
-        if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
-		$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
-    //    if ($this->subject_id == 40) echo $sql . "<br />";
-		// if ($this->subject_id == 136) {
-		// 	echo $sql . "<br />"; 
-		// }
 
         include_once dirname(__FILE__) . '/../class.defaults.php';
 		$d = new Defaults($this->user_id);
-                
-		$query = mysql_query($sql);
-		while ($row = mysql_fetch_assoc($query)) {
+
+		$rows = [];
+		if ( isset( $GLOBALS['mission_print_missions'] ) ) {
+			$m = &$GLOBALS['mission_print_missions'];
+			$cache = isset( $m[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] )
+				? $m[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] : [];
+			foreach ( $cache as $row ) {
+				if ( $row['start_date'] < $start_date || $row['end_date'] > $end_date ) continue;
+				if ( ! $print_parent_tasks && ! empty( $row['created_by_parent'] ) ) continue;
+				if ( $this->subject_id == 21 && ! $chidonLimmud && strpos( (string) $row['mission_name'], 'Chidon Limmud' ) !== false ) continue;
+				$rows[] = $row;
+			}
+			usort( $rows, function ( $a, $b ) {
+				$ca = empty( $a['created_by_parent'] ) ? 1 : 0;
+				$cb = empty( $b['created_by_parent'] ) ? 1 : 0;
+				if ( $ca !== $cb ) return $cb - $ca;
+				if ( (int) $a['mission_number'] !== (int) $b['mission_number'] ) return (int) $a['mission_number'] - (int) $b['mission_number'];
+				if ( (int) $a['start_date'] !== (int) $b['start_date'] ) return (int) $a['start_date'] - (int) $b['start_date'];
+				return strcmp( $a['mission_name'], $b['mission_name'] );
+			} );
+		} else {
+			$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id
+				. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id
+				. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date;
+			if ( ! $print_parent_tasks ) $sql .= " AND created_by_parent IS NULL";
+			if ( $this->subject_id == 21 && ! $chidonLimmud ) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
+			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name";
+			$query = mysql_query( $sql );
+			while ( $row = mysql_fetch_assoc( $query ) ) {
+				$rows[] = $row;
+			}
+		}
+
+		foreach ( $rows as $row ) {
 		    
             //find out if mission is new birthday mission and then see if it's for this child
             if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_description'], 'יום הולדת' ) !== false ) {
@@ -200,82 +220,6 @@ class user_track
 			}		
 		}
 //		echo "<pre>"; print_r($this->daily_tasks); echo "</pre>"; exit;
-	}
-
-	function get_date_tasks_missions_for_duch($school_type_id, $start_date, $end_date, $tasks = array(), $lang = 1, $allowPersonalization = true,
-                                     $print_parent_tasks = true, $chidonLimmud = false)
-	{
-		global $all_date_tasks_missions;
-		//echo "<input type='hidden' name='3) END DATE' value='" . $end_date . "'>\n";
-		$this->start_date = $start_date;
-		$this->end_date = $end_date;
-
-		include_once dirname(__FILE__) . '/../class.defaults.php';
-		$d = new Defaults($this->user_id);
-
-		if ( ! isset( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] ) ) {
-			$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] = [];
-
-			$sql = "SELECT * FROM date_tasks_missions WHERE lang_id = $lang and school_type_id=" . $school_type_id // limit the language and school id
-				. " AND subject_id=" . $this->subject_id . " AND level=" . $this->level . " AND track_id=" . $this->track_id // limit the task
-				. " AND start_date >= " . $start_date . " AND end_date <= " . $end_date; // limit the dates
-			if(!$print_parent_tasks) $sql .= " AND created_by_parent IS NULL";
-			if ($this->subject_id == 21 && !$chidonLimmud) $sql .= " AND mission_name NOT LIKE '%Chidon Limmud%' ";
-			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
-
-			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {
-				$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ][] = $row;				
-			}
-		} 
-
-		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)
-		foreach ( $all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ] as $row ) {
-			//find out if mission is new birthday mission and then see if it's for this child
-			if ( strpos( $row['mission_name'], 'Birthday!' ) !== false || strpos( $row['mission_description'], 'יום הולדת' ) !== false ) {
-				$mid = (int) $row['date_tasks_mission_id'];
-				$uid = (int) $this->user_id;
-				if ( isset( $GLOBALS['birthday_cache'] ) ) {
-					if ( ! $allowPersonalization || ! isset( $GLOBALS['birthday_cache'][ $uid ][ $mid ] ) ) {
-						continue;
-					}
-				} else {
-					$sqlB = "select * from birthdays where user_id = " . $this->user_id . " and date_tasks_mission_id = " . $mid;
-					$resB = mysql_query( $sqlB );
-					if ( mysql_num_rows( $resB ) == 0 || !$allowPersonalization ) {
-						continue;
-					}
-				}
-			}
-			$date_tasks_mission = new date_tasks_mission($row, $tasks, $allowPersonalization);
-
-			if ( ! $date_tasks_mission->default_on && ! $d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
-				continue;
-			}
-
-			$daily_tasks = $date_tasks_mission->get_daily_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-			for ($dtno = 0; $dtno < count($daily_tasks); $dtno++) {
-				array_push($this->daily_tasks, $daily_tasks[$dtno]);
-			}
-			$weekly_tasks = $date_tasks_mission->get_weekly_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-			for ($wtno = 0; $wtno < count($weekly_tasks); $wtno++) {
-				array_push($this->weekly_tasks, $weekly_tasks[$wtno]);
-			}
-			$shabbos_tasks = $date_tasks_mission->get_shabbos_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-			for ($stno = 0; $stno < count($shabbos_tasks); $stno++) {
-				array_push($this->shabbos_tasks, $shabbos_tasks[$stno]);
-			}
-			$no_label_tasks = $date_tasks_mission->get_no_label_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $date_tasks_mission->mission_name, $date_tasks_mission->mission_number, $this->user_id, $this->subject_name, $this->subject_image_id, $this->subject_id);
-			for ($nltno = 0; $nltno < count($no_label_tasks); $nltno++) {
-				array_push($this->no_label_tasks, $no_label_tasks[$nltno]);
-			}
-			if ($this->subject_id == 136) {
-				$pesukim_tasks = $date_tasks_mission->get_pesukim_tasks($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-				for ($ptno = 0; $ptno < count($pesukim_tasks); $ptno++) {
-					array_push($this->pesukim_tasks, $pesukim_tasks[$ptno]);
-				}
-			}
-		}
 	}
 
 	function get_date_tasks_missions_by_date_range($school_type_id, $start_date, $end_date, $tasks = array(), $lang = 1, $allowPersonalization = true,

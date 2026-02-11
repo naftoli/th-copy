@@ -1,5 +1,37 @@
 <?php
 /**
+ * Pre-load task rows for mission printing.
+ * Sets $GLOBALS['mission_print_tasks'][mission_id][type] = array of rows.
+ * Used by date_tasks_mission::get_*_tasks when mission_print_tasks is set.
+ */
+function build_mission_print_task_cache( $mission_ids ) {
+	global $MASHPIA_DB;
+	$GLOBALS['mission_print_tasks'] = [];
+	if ( empty( $mission_ids ) ) return;
+	$mids = array_values( array_unique( array_filter( array_map( 'intval', $mission_ids ) ) ) );
+	$placeholders = implode( ',', array_fill( 0, count( $mids ), '?' ) );
+
+	$queries = [
+		'daily_tasks'   => "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* FROM date_tasks dt JOIN labels l ON dt.label_id = l.label_id JOIN frequencies f ON l.frequency_id = f.frequency_id JOIN frequency_periods fp ON f.frequency_period_id = fp.frequency_period_id WHERE dt.date_tasks_mission_id IN ($placeholders) AND f.frequency_name = 'Daily' AND dt.mission_marking = 1 ORDER BY dt.label_ord, dt.grid_id",
+		'weekly_tasks'  => "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* FROM date_tasks dt JOIN labels l ON dt.label_id = l.label_id JOIN frequencies f ON l.frequency_id = f.frequency_id JOIN frequency_periods fp ON f.frequency_period_id = fp.frequency_period_id WHERE dt.date_tasks_mission_id IN ($placeholders) AND f.frequency_name = 'Weekly' AND dt.mission_marking = 1 ORDER BY dt.label_ord, dt.grid_id",
+		'shabbos_tasks' => "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* FROM date_tasks dt JOIN labels l ON dt.label_id = l.label_id JOIN frequencies f ON l.frequency_id = f.frequency_id JOIN frequency_periods fp ON f.frequency_period_id = fp.frequency_period_id WHERE dt.date_tasks_mission_id IN ($placeholders) AND f.frequency_name = 'Shabbos' AND dt.mission_marking = 1 ORDER BY dt.label_ord, dt.grid_id",
+		'no_label_tasks'=> "SELECT * FROM date_tasks dt WHERE dt.date_tasks_mission_id IN ($placeholders) AND (dt.label_id IS NULL OR dt.label_id = 0) AND dt.mission_marking = 1 ORDER BY dt.grid_id, dt.ord, dt.date_task_id",
+		'pesukim_tasks' => "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* FROM date_tasks dt JOIN labels l ON dt.label_id = l.label_id JOIN frequencies f ON l.frequency_id = f.frequency_id JOIN frequency_periods fp ON f.frequency_period_id = fp.frequency_period_id WHERE dt.date_tasks_mission_id IN ($placeholders) AND f.frequency_name = 'Pesukim' AND dt.mission_marking = 1 ORDER BY dt.label_ord, dt.grid_id",
+	];
+	foreach ( $queries as $type => $sql ) {
+		$stmt = $MASHPIA_DB->prepare( $sql );
+		$stmt->execute( $mids );
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$mid = (int) $row['date_tasks_mission_id'];
+			if ( ! isset( $GLOBALS['mission_print_tasks'][ $mid ][ $type ] ) ) {
+				$GLOBALS['mission_print_tasks'][ $mid ][ $type ] = [];
+			}
+			$GLOBALS['mission_print_tasks'][ $mid ][ $type ][] = $row;
+		}
+	}
+}
+
+/**
  * Batch-load birthday cache for mission printing.
  * Used by missions.php and printDuchAll.php.
  * Sets $GLOBALS['birthday_cache'] (user_id => [mission_id => true]).

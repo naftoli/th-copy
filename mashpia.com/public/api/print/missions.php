@@ -74,14 +74,34 @@ if ( !$parsha_ids ) {
 $parshos = \Parsha::find( $parsha_ids );
 $parshos = is_array( $parshos ) ? $parshos : [ $parshos ]; // make sure it is an array of objects.
 
-// * Batch-load caches for mission printing (birthdays)
+// * Pre-load missions for mission printing (user_track reads from mission_print_missions when set)
 $start_min = null;
 $end_max = null;
 foreach ( $parshos as $parsha ) {
     if ( $start_min === null || $parsha->start < $start_min ) $start_min = $parsha->start;
     if ( $end_max === null || $parsha->end > $end_max ) $end_max = $parsha->end;
 }
-if ( $start_min !== null && $end_max !== null && ! empty( $user_ids ) ) {
+
+$GLOBALS['mission_print_missions'] = [];
+if ( $start_min !== null && $end_max !== null ) {
+    global $MASHPIA_DB;
+    $dtmSql = "
+        SELECT * FROM date_tasks_missions dtm
+        WHERE dtm.start_date >= :start AND dtm.end_date <= :end
+        ORDER BY subject_id, school_type_id, lang_id, level, track_id, mission_number, start_date, mission_name";
+    $dtmStmt = $MASHPIA_DB->prepare( $dtmSql );
+    $dtmStmt->execute( [ 'start' => $start_min, 'end' => $end_max ] );
+    $dtm = $dtmStmt->fetchAll( PDO::FETCH_ASSOC );
+    $mission_ids = [];
+    foreach ( $dtm as $dtmRow ) {
+        $GLOBALS['mission_print_missions'][ $dtmRow['subject_id'] ][ $dtmRow['school_type_id'] ][ $dtmRow['lang_id'] ][ $dtmRow['level'] ][ $dtmRow['track_id'] ][] = $dtmRow;
+        $mission_ids[] = (int) $dtmRow['date_tasks_mission_id'];
+    }
+    require_once __DIR__ . '/missions_print_cache.php';
+    build_mission_print_task_cache( $mission_ids );
+}
+
+if ( ! empty( $user_ids ) ) {
     require_once __DIR__ . '/missions_print_cache.php';
     build_mission_print_caches( $user_ids, $start_min, $end_max );
 }

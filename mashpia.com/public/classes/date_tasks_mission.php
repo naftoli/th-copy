@@ -54,29 +54,35 @@ class date_tasks_mission {
 		
 	function get_daily_tasks($start_date, $end_date, $user_id, $subject_id, $subject_name, $track_id, $level, $subject_image_id, $task_mission_ids = []) {
 		$daily_tasks = array();
+		$d = new Defaults($user_id);
 
-		$sql  = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-		$sql .= "FROM date_tasks AS dt ";
-		$sql .= "JOIN labels AS l USING (label_id) ";
-		$sql .= "JOIN frequencies AS f USING (frequency_id) ";
-		$sql .= "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+		$rows = [];
+		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['daily_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['daily_tasks'] ) ) {
+			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['daily_tasks'];
 		} else {
-			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			$sql  = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+			$sql .= "FROM date_tasks AS dt ";
+			$sql .= "JOIN labels AS l USING (label_id) ";
+			$sql .= "JOIN frequencies AS f USING (frequency_id) ";
+			$sql .= "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+			} else {
+				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			}
+			$sql .= " AND f.frequency_name = \"Daily\" ";
+			$sql .= " AND dt.mission_marking = 1 ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " GROUP BY name ";
+			}
+			$sql .= "ORDER BY dt.label_ord, dt.grid_id";
+			$query = mysql_query($sql);
+			while ($row = mysql_fetch_assoc($query)) {
+				$rows[] = $row;
+			}
 		}
-		$sql .= " AND f.frequency_name = \"Daily\" ";
-		$sql .= " AND dt.mission_marking = 1 ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " GROUP BY name ";
-		}
-		$sql .= "ORDER BY dt.label_ord, dt.grid_id";
-		// if ($subject_id == 136) echo $sql . "<br />";
-		// echo $sql . "<br />";
 
-		$query = mysql_query($sql);
-        $d = new Defaults($user_id);
-		while ($row = mysql_fetch_assoc($query)) {
+		foreach ( $rows as $row ) {
 			if ($this->allowPersonalization) {
 				if ( $row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $subject_id != 136 && $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
@@ -100,28 +106,35 @@ class date_tasks_mission {
 	
 	function get_weekly_tasks($start_date, $end_date, $user_id, $subject_id, $subject_name, $track_id, $level, $subject_image_id, $task_mission_ids = []) {	
 		$weekly_tasks = array();
-		
-		$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-		$sql = $sql . "FROM date_tasks AS dt ";
-		$sql = $sql . "JOIN labels AS l USING (label_id) ";
-		$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
-		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+		$d = new Defaults($user_id);
+
+		$rows = [];
+		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['weekly_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['weekly_tasks'] ) ) {
+			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['weekly_tasks'];
 		} else {
-			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+			$sql = $sql . "FROM date_tasks AS dt ";
+			$sql = $sql . "JOIN labels AS l USING (label_id) ";
+			$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
+			$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+			} else {
+				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			}
+			$sql = $sql . " AND f.frequency_name = \"Weekly\" ";
+			$sql .= " AND dt.mission_marking = 1 ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " GROUP BY name ";
+			}
+			$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+			$query = mysql_query($sql);
+			while ($row = mysql_fetch_assoc($query)) {
+				$rows[] = $row;
+			}
 		}
-		$sql = $sql . " AND f.frequency_name = \"Weekly\" ";
-		$sql .= " AND dt.mission_marking = 1 ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " GROUP BY name ";
-		}
-		//$sql = $sql . "ORDER BY dt.ord, dt.label_ord";
-		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
-        //echo "<input type='hidden' name='weekly tasks' value='$sql' />";
-		$query = mysql_query($sql);
-        $d = new Defaults($user_id);
-		while ($row = mysql_fetch_assoc($query)) {
+
+		foreach ( $rows as $row ) {
 		    if ($this->allowPersonalization) {
 				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
@@ -146,28 +159,35 @@ class date_tasks_mission {
 	
 	function get_shabbos_tasks($start_date, $end_date, $user_id, $subject_id, $subject_name, $track_id, $level, $subject_image_id, $task_mission_ids = []) {	
 		$shabbos_tasks = array();
-	
-		$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-		$sql = $sql . "FROM date_tasks AS dt ";
-		$sql = $sql . "JOIN labels AS l USING (label_id) ";
-		$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
-		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+		$d = new Defaults($user_id);
+
+		$rows = [];
+		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['shabbos_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['shabbos_tasks'] ) ) {
+			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['shabbos_tasks'];
 		} else {
-			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+			$sql = $sql . "FROM date_tasks AS dt ";
+			$sql = $sql . "JOIN labels AS l USING (label_id) ";
+			$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
+			$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+			} else {
+				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			}
+			$sql = $sql . " AND f.frequency_name = \"Shabbos\" ";
+			$sql .= " AND dt.mission_marking = 1 ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " GROUP BY name ";
+			}
+			$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+			$query = mysql_query($sql);
+			while ($row = mysql_fetch_assoc($query)) {
+				$rows[] = $row;
+			}
 		}
-		$sql = $sql . " AND f.frequency_name = \"Shabbos\" ";
-		$sql .= " AND dt.mission_marking = 1 ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " GROUP BY name ";
-		}
-		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
-		//echo "<input type='hidden' name='shabbos tasks' value='$sql'>";
-			
-		$query = mysql_query($sql);
-        $d = new Defaults($user_id);
-		while ($row = mysql_fetch_assoc($query)) {
+
+		foreach ( $rows as $row ) {
 		    if ($this->allowPersonalization) {
 				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
@@ -192,23 +212,32 @@ class date_tasks_mission {
 	
 	function get_no_label_tasks($start_date, $end_date, $mission_name, $mission_number, $user_id, $subject_name, $subject_image_id, $subject_id, $task_mission_ids = []) {	
 		$no_label_tasks = array();
-		 
-		$sql = "SELECT * ";
-		$sql = $sql . "FROM date_tasks AS dt ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+		$d = new Defaults($user_id);
+
+		$rows = [];
+		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['no_label_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['no_label_tasks'] ) ) {
+			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['no_label_tasks'];
 		} else {
-			$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			$sql = "SELECT * ";
+			$sql = $sql . "FROM date_tasks AS dt ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " WHERE dt.date_tasks_mission_id IN (" . implode(',', $task_mission_ids) . ")";
+			} else {
+				$sql .= " WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id;
+			}
+			$sql = $sql . " AND (dt.label_id IS NULL or dt.label_id = 0) ";
+			$sql .= " AND dt.mission_marking = 1 ";
+			if (!empty($task_mission_ids)) {
+				$sql .= " GROUP BY name ";
+			}
+			$sql = $sql . "ORDER BY dt.grid_id, dt.ord, dt.date_task_id";
+			$query = mysql_query($sql);
+			while ($row = mysql_fetch_assoc($query)) {
+				$rows[] = $row;
+			}
 		}
-		$sql = $sql . " AND (dt.label_id IS NULL or dt.label_id = 0) ";
-		$sql .= " AND dt.mission_marking = 1 ";
-		if (!empty($task_mission_ids)) {
-			$sql .= " GROUP BY name ";
-		}
-		$sql = $sql . "ORDER BY dt.grid_id, dt.ord, dt.date_task_id";
-		$query = mysql_query($sql);
-        $d = new Defaults($user_id);		
-		while ($row = mysql_fetch_assoc($query)) {
+
+		foreach ( $rows as $row ) {
             if (isset($_COOKIE['naftoli']) && $subject_id == 21) {}
             else {
                 if ($this->allowPersonalization) {
@@ -223,7 +252,6 @@ class date_tasks_mission {
                 }
             }
 
-//			echo "<pre>"; print_r($row); echo "</pre>";
 			$no_label_task = new no_label_task($row);
 			$no_label_task->set_dates($start_date, $end_date);
 			$no_label_task->set_mark_date($end_date);
@@ -241,21 +269,28 @@ class date_tasks_mission {
 
 	function get_pesukim_tasks($start_date, $end_date, $user_id, $subject_id, $subject_name, $track_id, $level, $subject_image_id) {	
 		$pesukim_tasks = array();
-		
-		$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
-		$sql = $sql . "FROM date_tasks AS dt ";
-		$sql = $sql . "JOIN labels AS l USING (label_id) ";
-		$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
-		$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
-		$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
-		$sql = $sql . "AND f.frequency_name = \"Pesukim\" ";
-		$sql .= " AND dt.mission_marking = 1 ";
-		//$sql = $sql . "ORDER BY dt.ord, dt.label_ord";
-		$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
-        // echo $sql . "<br />"; 
-		$query = mysql_query($sql);
-        $d = new Defaults($user_id);
-		while ($row = mysql_fetch_assoc($query)) {
+		$d = new Defaults($user_id);
+
+		$rows = [];
+		if ( isset( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['pesukim_tasks'] ) && ! empty( $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['pesukim_tasks'] ) ) {
+			$rows = $GLOBALS['mission_print_tasks'][ $this->date_tasks_mission_id ]['pesukim_tasks'];
+		} else {
+			$sql = "SELECT l.label_name, l.frequency_id, f.frequency_name, fp.frequency_period_name, dt.* ";
+			$sql = $sql . "FROM date_tasks AS dt ";
+			$sql = $sql . "JOIN labels AS l USING (label_id) ";
+			$sql = $sql . "JOIN frequencies AS f USING (frequency_id) ";
+			$sql = $sql . "JOIN frequency_periods AS fp USING (frequency_period_id) ";
+			$sql = $sql . "WHERE dt.date_tasks_mission_id=" . $this->date_tasks_mission_id . " ";
+			$sql = $sql . "AND f.frequency_name = \"Pesukim\" ";
+			$sql .= " AND dt.mission_marking = 1 ";
+			$sql = $sql . "ORDER BY dt.label_ord, dt.grid_id";
+			$query = mysql_query($sql);
+			while ($row = mysql_fetch_assoc($query)) {
+				$rows[] = $row;
+			}
+		}
+
+		foreach ( $rows as $row ) {
 		    if ($this->allowPersonalization) {
 				if ($row['default_on'] == 0 && !$d->isOn($row['date_task_id'], 'task')) continue;
 				if ( $this->e->isException( $row['date_task_id'], $user_id ) ) continue;
@@ -275,7 +310,6 @@ class date_tasks_mission {
 			$pesukim_task->check_to_disable($user_id);
 			array_push($pesukim_tasks, $pesukim_task);
 		}
-		// echo "<pre>"; print_r($pesukim_tasks); echo "</pre>"; exit;	
 		return $pesukim_tasks;
 	}
 
