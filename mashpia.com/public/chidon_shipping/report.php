@@ -342,10 +342,10 @@ foreach ($resultsBySchool as $school => $more) : ?>
               <th>Item ID</th>
               <th>Quantity</th>
               <th>Item Name</th>
+              <th>Spanish Name</th>
               <th>Size</th>
               <th>Gender/Color</th>
               <th>Category</th>
-              <th>Spanish Name</th>
               <!--            <th>Status</th>-->
             </tr>
             </thead>
@@ -357,8 +357,14 @@ foreach ($resultsBySchool as $school => $more) : ?>
                     if (strpos($id, '*') !== false) {
                       $id = str_replace('*', '<span style="color: red;">*</span>', $id);
                     }
+                    $translation = $translations[$item['id']] ?? '';
+                    if ($translation && !empty(trim($item['name']))) {
+                      $translation = 'Personalizado ' . $translation;
+                    }
                     echo "<tr><td>" . $id . "</td><td>" . $qty . "</td>";
-                    foreach (['item', 'size', 'color', 'cat'] as $attr) {
+                    echo "<td>" . $item['item'] . "</td>";
+                    echo "<td>" . $translation . "</td>";
+                    foreach (['size', 'color', 'cat'] as $attr) {
                         echo "<td>";
                         if (isset($item[$attr])) {
                           if ($attr == 'item' && !empty(trim($item['name'])) && strpos($item[$attr], 'Name Bracelet') === false) $item[$attr] = 'Personalized ' . $item[$attr];
@@ -366,11 +372,6 @@ foreach ($resultsBySchool as $school => $more) : ?>
                         }
                         echo "</td>";
                     }
-                    $translation = $translations[$item['id']] ?? '';
-                    if ($translation && !empty(trim($item['name']))) {
-                      $translation = 'Personalizado ' . $translation;
-                    }
-                    echo "<td>" . $translation . "</td>";
                     echo "</tr>";
                 }
             }
