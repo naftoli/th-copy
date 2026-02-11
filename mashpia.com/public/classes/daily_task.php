@@ -30,8 +30,7 @@ class daily_task {
 	public $streak_id;
 	public $streak_short_name;
 	public $streak_duch_name;
-	public $default_on;
-
+	
 	function __construct($row, $subject_id, $task_name){
 		$this->subject_id = $subject_id;
 		$this->label_name = $row["label_name"];
@@ -56,7 +55,6 @@ class daily_task {
 		$this->streak_id = $row['streak_id'];
 		$this->streak_short_name = $row['streak_duch_cat'];
 		$this->streak_duch_name = $row['streak_duch_name'];
-		$this->default_on = isset($row['default_on']) ? $row['default_on'] : 1;
 	}
 	
 	function set_dates($start_date, $end_date) {

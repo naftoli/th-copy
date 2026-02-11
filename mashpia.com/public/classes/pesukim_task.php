@@ -26,8 +26,7 @@ class pesukim_task {
 	public $streak_id;
 	public $points;
 	public $disable;
-	public $default_on;
-
+	
 	function __construct($row){
 		$this->label_name = $row["label_name"];
 		$this->frequency_id = $row["frequency_id"];
@@ -45,7 +44,6 @@ class pesukim_task {
 		$this->points = $row['points'];
 		$this->streak_id = $row['streak_id'];
 		$this->disable = false;
-		$this->default_on = isset($row['default_on']) ? $row['default_on'] : 1;
 	}
 	
 	function set_subject_image_id($subject_image_id) {

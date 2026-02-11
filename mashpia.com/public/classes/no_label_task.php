@@ -28,8 +28,7 @@ class no_label_task {
 	public $streak_id;
 	public $streak_short_name;
 	public $streak_duch_name;
-	public $default_on;
-
+	
 	function __construct($row){
 //		$this->subject_id = $row["subject_id"];
 		$this->date_task_id = $row["date_task_id"];
@@ -46,7 +45,6 @@ class no_label_task {
 		$this->streak_id = $row['streak_id'];
 		$this->streak_short_name = $row['streak_duch_cat'];
 		$this->streak_duch_name = $row['streak_duch_name'];
-		$this->default_on = isset($row['default_on']) ? $row['default_on'] : 1;
 	}
 	
 	function set_dates($start_date, $end_date) {

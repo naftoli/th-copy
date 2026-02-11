@@ -27,8 +27,7 @@ class weekly_task {
 	public $streak_short_name;
 	public $streak_duch_name;
 	public $points;
-	public $default_on;
-
+	
 	function __construct($row){
 		$this->label_name = $row["label_name"];
 		$this->frequency_id = $row["frequency_id"];
@@ -47,7 +46,6 @@ class weekly_task {
 		$this->streak_id = $row['streak_id'];
 		$this->streak_short_name = $row['streak_duch_cat'];
 		$this->streak_duch_name = $row['streak_duch_name'];
-		$this->default_on = isset($row['default_on']) ? $row['default_on'] : 1;
 	}
 	
 	function set_subject_image_id($subject_image_id) {
