@@ -13,6 +13,8 @@ include_once( __DIR__ . "/../../classes/date_tasks_mark.php" );
 include_once( __DIR__ . "/../../classes/pesukim_task.php" );
 
 class Missions {
+	const MAX_USER_IDS_IN_QUERY = 500;
+
 	protected $school;
 	protected $grade;
 	protected $user;
@@ -20,7 +22,7 @@ class Missions {
 	protected $end;
 	protected $school_type_id;
 	protected $missions;
-	
+
 	public function __construct( $start, $end, $user = 0, $school = 0, $grade = 0, $allowPersonalization = true, $printing_mode = false, $by_date_range = false, $for_duch = false ) {
 		$this->school = $school;
 		$this->grade = $grade;
@@ -30,7 +32,7 @@ class Missions {
 		$this->missions = array();
 		$this->createMissions( $allowPersonalization, $printing_mode, $by_date_range, $for_duch );
 	}
-	
+
 	private function createMissions( $allowPersonalization, $printing_mode = false, $by_date_range = false, $for_duch = false ) {
 		$sql = "SELECT u.* FROM users u"
 				." JOIN classes c ON u.class_id = c.class_id"
@@ -41,7 +43,11 @@ class Missions {
 		if ( $this->grade ) {
 			$sql .= " AND u.class_id = " . (int) $this->grade;
 		}
-		if ( is_array( $this->user ) && ! empty( $this->user ) ) {
+		// Avoid huge IN / FIELD() for entire school: use school filter and class order when list is too long
+		$use_school_instead = is_array( $this->user ) && count( $this->user ) > self::MAX_USER_IDS_IN_QUERY && $this->school;
+		if ( $use_school_instead ) {
+			$sql .= " ORDER BY c.class_grade, c.class_sub, u.last, u.first";
+		} elseif ( is_array( $this->user ) && ! empty( $this->user ) ) {
 			$ids = array_map( 'intval', $this->user );
 			$sql .= " AND u.user_id IN (" . implode( ',', $ids ) . ")";
 			$sql .= " ORDER BY FIELD(u.user_id, " . implode( ',', $ids ) . ")";
@@ -61,20 +67,23 @@ class Missions {
 		// When loading multiple users, batch-load ranks and classes to reduce queries
 		$ranks_by_user = array();
 		$classes_by_id = array();
-		if ( is_array( $this->user ) && count( $rows ) > 0 ) {
+		if ( ( is_array( $this->user ) || count( $rows ) > 1 ) && count( $rows ) > 0 ) {
 			$user_ids = array_unique( array_column( $rows, 'user_id' ) );
 			$class_ids = array_unique( array_filter( array_column( $rows, 'class_id' ) ) );
 
 			if ( ! empty( $user_ids ) ) {
 				$rids = array_map( 'intval', $user_ids );
-				$rq = mysql_query( "SELECT rm.user_id, r.rank_ord, r.rank_name, r.rank_image_id, rm.date_promoted
-					FROM rank_marks rm
-					JOIN ranks r USING(rank_ord)
-					WHERE rm.user_id IN (" . implode( ',', $rids ) . ")
-					ORDER BY rm.user_id, r.rank_ord DESC" );
-				while ( $r = mysql_fetch_assoc( $rq ) ) {
-					if ( ! isset( $ranks_by_user[ $r['user_id'] ] ) ) {
-						$ranks_by_user[ $r['user_id'] ] = $r;
+				$chunks = array_chunk( $rids, self::MAX_USER_IDS_IN_QUERY );
+				foreach ( $chunks as $chunk ) {
+					$rq = mysql_query( "SELECT rm.user_id, r.rank_ord, r.rank_name, r.rank_image_id, rm.date_promoted
+						FROM rank_marks rm
+						JOIN ranks r USING(rank_ord)
+						WHERE rm.user_id IN (" . implode( ',', $chunk ) . ")
+						ORDER BY rm.user_id, r.rank_ord DESC" );
+					while ( $r = mysql_fetch_assoc( $rq ) ) {
+						if ( ! isset( $ranks_by_user[ $r['user_id'] ] ) ) {
+							$ranks_by_user[ $r['user_id'] ] = $r;
+						}
 					}
 				}
 			}

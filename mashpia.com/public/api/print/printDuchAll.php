@@ -120,10 +120,20 @@ $dtm = $dtmStmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($dtm as $dtmRow) {
     $all_date_tasks_missions[$dtmRow['subject_id']][$dtmRow['school_type_id']][$dtmRow['lang_id']][$dtmRow['level']][$dtmRow['track_id']][] = $dtmRow;
 }
+// echo "<pre>"; print_r($all_date_tasks_missions); echo "</pre>"; exit;
 
-// * Generate the missions using the legacy code (one query for all users in school)
-$mission = new Missions( $start, $end, $user_ids, 0, 0, true, true, true, true );
+// * Generate the missions: use school filter when list is huge to avoid giant IN/FIELD in SQL
+$user_ids_to_pass = $user_ids;
+$school_for_query = 0;
+if ( is_array( $user_ids ) && count( $user_ids ) > Missions::MAX_USER_IDS_IN_QUERY && $school_id ) {
+	$user_ids_to_pass = [];
+	$school_for_query = (int) $school_id;
+}
+$mission = new Missions( $start, $end, $user_ids_to_pass, $school_for_query, 0, true, true, true, true );
 $missions = [ $mission->getMissions() ];
+if ( $school_for_query && empty( $user_ids_to_pass ) ) {
+	$user_ids = array_map( function ( $u ) { return $u->user_id; }, $missions[0] );
+}
 
 // * Generate the printed sheets using the legacy code
 $objMissions = [];

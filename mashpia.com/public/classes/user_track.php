@@ -222,6 +222,8 @@ class user_track
 			while ($row = mysql_fetch_assoc($query)) {
 				$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ][] = $row;				
 			}
+		} else {
+			echo "using cached mission list<br />";
 		}
 
 		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)
