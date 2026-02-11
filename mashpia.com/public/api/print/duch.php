@@ -256,7 +256,7 @@
                             setTimeout(function() {
                                 listEl.innerHTML = '<p>Opened ' + json.grades.length + ' grade pages. Closing…</p>';
                                 window.close();
-                            }, lastOpenMs + 500);
+                            }, lastOpenMs + 1000);
                             return;
                         }
                         var fullData = Object.assign({}, postData);
