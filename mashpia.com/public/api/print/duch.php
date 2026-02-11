@@ -253,7 +253,7 @@
                             listEl.style.display = 'block';
                             listEl.innerHTML = '<p>Opening ' + json.grades.length + ' grade pages…</p>';
                             json.grades.forEach(function(g, i) {
-                                openGradeInNewPage(g, i * 400);
+                                openGradeInNewPage(g, i * 1000);
                             });
                             setTimeout(function() {
                                 listEl.innerHTML = '<p>Opened ' + json.grades.length + ' grade pages. You can close this window.</p>';
