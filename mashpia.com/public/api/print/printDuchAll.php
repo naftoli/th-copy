@@ -20,8 +20,33 @@ if ( !isset( $_POST['school_id'] ) ) {
 $school_id = $_POST['school_id'];
 $school = \School::find([ $school_id ]);
 
+$dates = $_POST['dates'];
+$start_date = $_POST['start'];
+$end_date = $_POST['end'];
+$date_range = $_POST['date_range'];
+$selectedMonth = $_POST['selectedMonth'];
+$besuros_tovos = $_POST['besuros_tovos'] ?? '';
+
+if ( $selectedMonth ) {
+    // selected month - convert the dates to unix timestamps
+    $dates = explode( ' - ', $selectedMonth );
+    $start = unixtojd(strtotime($dates[0])) + 1;
+    $end = unixtojd(strtotime($dates[1])) + 1;
+} else if ( $start_date && $end_date ) {
+    // convert the dates to unix timestamps
+    if (! is_numeric($start_date)) $start = unixtojd(strtotime($start_date)) + 1;
+    if (! is_numeric($end_date)) $end = unixtojd(strtotime($end_date)) + 1;
+} else {
+    // date range
+    $end = unixtojd();
+    $date_range = ( isset( $date_range ) && is_numeric( $date_range ) && $date_range > 0 ) ? (int) $date_range : 30;
+    $start = $end - $date_range + 1; // one less b/c we include start and end date in total number of days
+}
+$num_days = $end - $start + 1;
+$days_flag = ceil( $num_days / 30 );
+
 // When check_tabs=1, return JSON: useTabs (true if 375+ registered children) and grades (grade label + class_ids per grade) so duch.php can open one page per grade.
-define( 'DUCH_TABS_USER_THRESHOLD', 375 );
+define( 'DUCH_TABS_USER_THRESHOLD', 300 );
 define( 'DUCH_GRADE_ORDER', [ 'Pre1a', 'Pre1', '1', '2', '3', '4', '5', '6', '7', '8' ] );
 if ( ! empty( $_POST['check_tabs'] ) ) {
     header( 'Content-Type: application/json; charset=utf-8' );
@@ -29,7 +54,7 @@ if ( ! empty( $_POST['check_tabs'] ) ) {
     $stmt = $MASHPIA_DB->prepare( 'SELECT COUNT(*) AS n FROM users WHERE school_id = ? AND user_registered > 0' );
     $stmt->execute( [ $school_id ] );
     $total_users = (int) $stmt->fetch( PDO::FETCH_ASSOC )['n'];
-    if ( $total_users < DUCH_TABS_USER_THRESHOLD ) {
+    if ( ($total_users * $days_flag) < DUCH_TABS_USER_THRESHOLD ) {
         echo json_encode( [ 'useTabs' => false ] );
         exit;
     }
@@ -59,30 +84,8 @@ $class_ids = isset( $_POST['class_ids'] ) && $_POST['class_ids'] !== '' ? ( is_a
 if ( $user_ids && ! is_array( $user_ids ) ) $user_ids = [ $user_ids ];
 
 // $double_sided = isset( $_POST['double_sided'] ) && $_POST['double_sided'] === 'true';
-$dates = $_POST['dates'];
-$start_date = $_POST['start'];
-$end_date = $_POST['end'];
-$date_range = $_POST['date_range'];
-$selectedMonth = $_POST['selectedMonth'];
-$besuros_tovos = $_POST['besuros_tovos'] ?? '';
 
-if ( $selectedMonth ) {
-    // selected month - convert the dates to unix timestamps
-    $dates = explode( ' - ', $selectedMonth );
-    $start = unixtojd(strtotime($dates[0])) + 1;
-    $end = unixtojd(strtotime($dates[1])) + 1;
-} else if ( $start_date && $end_date ) {
-    // convert the dates to unix timestamps
-    if (! is_numeric($start_date)) $start = unixtojd(strtotime($start_date)) + 1;
-    if (! is_numeric($end_date)) $end = unixtojd(strtotime($end_date)) + 1;
-} else {
-    // date range
-    $end = unixtojd();
-    $date_range = ( isset( $date_range ) && is_numeric( $date_range ) && $date_range > 0 ) ? (int) $date_range : 30;
-    $start = $end - $date_range + 1; // one less b/c we include start and end date in total number of days
-}
-
-// // * Set class_ids and user_ids if not set by client
+// * Set class_ids and user_ids if not set by client
 if ( !$class_ids ) {
     $class_ids = array_map( function ($p) { return $p->class_id; }, $school->platoons );
 }
