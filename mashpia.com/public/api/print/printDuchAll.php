@@ -147,8 +147,7 @@ $dtmSql = "
             AND subject_id NOT IN (12 , 15, 40, 93, 94, 136)
             AND mission_name NOT LIKE '%Chidon Limmud%' 
             AND created_by_parent IS NULL 
-            AND mission_description NOT IN ('Yom Holedes Mission' , 'יום הולדת') 
-            ORDER BY subject_id, school_type_id, lang_id, level, track_id, created_by_parent IS NULL DESC, mission_number, start_date, mission_name";
+            ORDER BY subject_id, school_type_id, lang_id, level, track_id, mission_number, start_date, mission_name";
 $dtmStmt = $MASHPIA_DB->prepare($dtmSql);
 $dtmStmt->execute([
     'start' => $start,
