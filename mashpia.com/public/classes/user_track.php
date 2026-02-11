@@ -200,7 +200,7 @@ class user_track
 	function get_date_tasks_missions_for_duch($school_type_id, $start_date, $end_date, $tasks = array(), $lang = 1, $allowPersonalization = true,
                                      $print_parent_tasks = true, $chidonLimmud = false)
 	{
-		global $all_date_tasks_missions;
+		global $all_date_tasks_missions, $i;
 		//echo "<input type='hidden' name='3) END DATE' value='" . $end_date . "'>\n";
 		$this->start_date = $start_date;
 		$this->end_date = $end_date;
@@ -223,7 +223,7 @@ class user_track
 				$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ][] = $row;				
 			}
 		} else {
-			echo "using cached mission list<br />";
+			echo $i++ . "using cached mission list<br />";
 		}
 
 		// Use cached mission list; tasks are still computed per user (defaults/exceptions are user-specific)

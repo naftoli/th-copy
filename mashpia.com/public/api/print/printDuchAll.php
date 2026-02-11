@@ -136,6 +136,7 @@ if ( $school_for_query && empty( $user_ids_to_pass ) ) {
 }
 
 // * Generate the printed sheets using the legacy code
+$i = 0;
 $objMissions = [];
 foreach ( $missions as $info ) {
     foreach ( $info as $mission ) {
