@@ -31,7 +31,7 @@ class SchoolShipping
     public function getItems() {
         $items = [
             'Raffles' => ['5M Raffle', '60M Raffle', 'Auction'],
-            'Chidon' => ['Celeb Box Items', 'Sweaters'],
+            'Chidon' => ['Staff Items', 'Sweaters'],
             'Hachayols' => ['Teacher Hachayols']
         ];
         return $items;
