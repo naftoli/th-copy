@@ -13,6 +13,7 @@ class DefaultsAndExceptionsCache {
     private static $exception_class_tasks = [];
     private static $exception_user_tasks = [];
     private static $task_subject = [];
+    private static $birthday_mission_ids = [];
 
     /**
      * Cache key for Defaults data (user, class, or school).
@@ -94,6 +95,16 @@ class DefaultsAndExceptionsCache {
         self::$task_subject[ (int) $date_task_id ] = (int) $subject_id;
     }
 
+    /** @return int[]|null date_tasks_mission_ids this user has in birthdays (for birthday-mission filter) */
+    public static function getBirthdayMissionIds( $user_id ) {
+        $id = (int) $user_id;
+        return isset( self::$birthday_mission_ids[ $id ] ) ? self::$birthday_mission_ids[ $id ] : null;
+    }
+
+    public static function setBirthdayMissionIds( $user_id, array $date_tasks_mission_ids ) {
+        self::$birthday_mission_ids[ (int) $user_id ] = $date_tasks_mission_ids;
+    }
+
     /** Call after mutating defaults/exceptions (e.g. addOn/deleteOn) so next read is fresh. */
     public static function clearDefaults( $type = null, $id = null ) {
         if ( $type === null ) {
@@ -117,6 +128,31 @@ class DefaultsAndExceptionsCache {
         }
         $uid = (int) $user_id;
         unset( self::$exception_user_context[ $uid ], self::$exception_user_tasks[ $uid ] );
+    }
+
+    /**
+     * Preload birthday mission IDs for all given users (for birthday-mission filter in user_track).
+     *
+     * @param int[] $user_ids
+     */
+    public static function warmBirthdayMissionIdsForUsers( array $user_ids ) {
+        $user_ids = array_filter( array_map( 'intval', $user_ids ) );
+        if ( empty( $user_ids ) || ! function_exists( 'mysql_query' ) ) {
+            return;
+        }
+        $ids = implode( ',', $user_ids );
+        $by_user = [];
+        $r = mysql_query( "SELECT user_id, date_tasks_mission_id FROM birthdays WHERE user_id IN ($ids)" );
+        if ( $r ) {
+            while ( $row = mysql_fetch_assoc( $r ) ) {
+                $uid = (int) $row['user_id'];
+                if ( ! isset( $by_user[ $uid ] ) ) $by_user[ $uid ] = [];
+                $by_user[ $uid ][] = (int) $row['date_tasks_mission_id'];
+            }
+        }
+        foreach ( $user_ids as $uid ) {
+            self::setBirthdayMissionIds( $uid, isset( $by_user[ $uid ] ) ? $by_user[ $uid ] : [] );
+        }
     }
 
     /**

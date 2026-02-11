@@ -47,7 +47,7 @@ $num_days = $end - $start + 1;
 $days_flag = ceil( $num_days / 30 ); // number of times to multiply the number of users by to get the total number of users needed for the duch
 
 // When check_tabs=1, return JSON: useTabs (true if 375+ registered children) and grades (grade label + class_ids per grade) so duch.php can open one page per grade.
-define( 'DUCH_TABS_USER_THRESHOLD', 300 );
+define( 'DUCH_TABS_USER_THRESHOLD', 365 );
 define( 'DUCH_GRADE_ORDER', [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ] );
 if ( ! empty( $_POST['check_tabs'] ) ) {
     header( 'Content-Type: application/json; charset=utf-8' );
@@ -197,9 +197,10 @@ $pages = 0;
 // * Load streaks for all users in one batch
 $allStreaks = Streaks::getStreaksForUsers( $user_ids, $start, $end );
 
-// * Preload defaults and exceptions for all users (school/class-level once, user-level in bulk)
+// * Preload defaults, exceptions, and birthday mission IDs for all users (school/class-level once, user-level in bulk)
 DefaultsAndExceptionsCache::warmDefaultsForUsers( $user_ids );
 DefaultsAndExceptionsCache::warmExceptionCacheForUsers( $user_ids );
+DefaultsAndExceptionsCache::warmBirthdayMissionIdsForUsers( $user_ids );
 
 // * Print the missions just like before
 foreach ( $objMissions as $obj ) {
