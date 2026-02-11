@@ -173,10 +173,7 @@
             const email = <?= isset($_POST['email']) && $_POST['email'] ? 1 : 0 ?>;
             const fromBC = <?= isset($_POST['from_bc']) && $_POST['from_bc'] ? 1 : 0 ?>;
             const postData = <?= json_encode($_POST) ?>;
-            let url = 'printDuch.php';
-            if (Cookies.get('naftoli')) {
-                url = 'printDuchAll.php';
-            }
+            let url = 'printDuchAll.php';
 
             function showContent(html) {
                 $("#spinner").empty();
@@ -228,7 +225,7 @@
             }
 
             // Grade-specific page: we were opened with class_ids (from auto-open). Load content for that grade only.
-            if (Cookies.get('naftoli') && url === 'printDuchAll.php' && postData.class_ids && (Array.isArray(postData.class_ids) ? postData.class_ids.length : (postData.class_ids + '').split(',').filter(Boolean).length)) {
+            if (postData.class_ids && (Array.isArray(postData.class_ids) ? postData.class_ids.length : (postData.class_ids + '').split(',').filter(Boolean).length)) {
                 fetch(url, { method: 'POST', body: JSON.stringify(postData) })
                     .then(function(r) { return r.text(); })
                     .then(showContent)
@@ -240,7 +237,7 @@
             }
 
             // Print Duch All: check if we need to auto-open grade pages (375+ users)
-            if (Cookies.get('naftoli') && url === 'printDuchAll.php') {
+            // if (Cookies.get('naftoli') && url === 'printDuchAll.php') {
                 var checkData = Object.assign({}, postData, { check_tabs: 1 });
                 fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
                     .then(function(r) { return r.text(); })
@@ -274,16 +271,16 @@
                         $("#spinner").empty();
                         alert('Error: ' + err);
                     });
-                return;
-            }
+                // return;
+            // }
 
-            fetch(url, { method: 'POST', body: JSON.stringify(postData) })
-                .then(function(r) { return r.text(); })
-                .then(showContent)
-                .catch(function(err) {
-                    $("#spinner").empty();
-                    alert('Error: ' + err);
-                });
+            // fetch(url, { method: 'POST', body: JSON.stringify(postData) })
+            //     .then(function(r) { return r.text(); })
+            //     .then(showContent)
+            //     .catch(function(err) {
+            //         $("#spinner").empty();
+            //         alert('Error: ' + err);
+            //     });
         };
 
         function emailToOhel() {
