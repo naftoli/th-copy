@@ -1,63 +1,94 @@
-<?
-class TaskExceptions { 
-	
+<?php
+if ( ! class_exists( 'DefaultsAndExceptionsCache' ) ) {
+    require_once dirname(__FILE__) . '/classes/defaults_exceptions_cache.php';
+}
+
+class TaskExceptions {
+
     public function __construct() {
-            
     }
-	
-    public function isException( $taskID, $userID ) {
-        //find out school_id and class_id for user
+
+    private function ensureExceptionCache( $userID ) {
+        $userID = (int) $userID;
+        if ( DefaultsAndExceptionsCache::getExceptionUserContext( $userID ) !== null ) {
+            return;
+        }
         $sql = "SELECT school_id, class_id FROM users WHERE user_id = " . $userID;
         $result = mysql_query( $sql );
         $row = mysql_fetch_assoc( $result );
-        $schoolID = $row['school_id'];
-        $classID = $row['class_id'];
+        $schoolID = $row ? (int) $row['school_id'] : null;
+        $classID = $row && $row['class_id'] ? (int) $row['class_id'] : null;
+        DefaultsAndExceptionsCache::setExceptionUserContext( $userID, $schoolID ?: 0, $classID ?: 0 );
 
-        //find out if school has exception
-        if ( isset( $schoolID ) ) {
-            //find out if school is unenrolled from subject
-            $sql = "SELECT * FROM school_subjects 
-                    WHERE school_id = $schoolID 
-                    AND subject_id = (
-                    SELECT subject_id FROM date_tasks_missions dtm 
-                    JOIN date_tasks dt USING (date_tasks_mission_id) 
-                    WHERE date_task_id = $taskID)";
-            $result = mysql_query($sql);
-            if (mysql_num_rows($result) == 0) {
-                return true;
-            }
-
-            $sql = "SELECT * FROM school_task_exceptions WHERE school_id = " . $schoolID . 
-            " AND date_task_id = " . $taskID; 
-            $result = mysql_query( $sql );
-            $numRows = mysql_num_rows( $result );
-            if ( $numRows > 0 ) {
-                return true;
-            }
+        if ( $schoolID ) {
+            $taskIds = [];
+            $r = mysql_query( "SELECT date_task_id FROM school_task_exceptions WHERE school_id = " . $schoolID );
+            while ( $row = mysql_fetch_assoc( $r ) ) $taskIds[] = (int) $row['date_task_id'];
+            DefaultsAndExceptionsCache::setExceptionSchoolTasks( $schoolID, $taskIds );
+            $subjects = [];
+            $r = mysql_query( "SELECT subject_id FROM school_subjects WHERE school_id = " . $schoolID );
+            while ( $row = mysql_fetch_assoc( $r ) ) $subjects[] = (int) $row['subject_id'];
+            DefaultsAndExceptionsCache::setExceptionSchoolSubjects( $schoolID, $subjects );
         }
-
-        //find out if class has exception
-        if ( isset( $classID ) ) {
-            $sql = "SELECT * FROM class_task_exceptions WHERE class_id = " . $classID . 
-            " AND date_task_id = " . $taskID;
-            $result = mysql_query( $sql );
-            $numRows = mysql_num_rows( $result );
-            if ( $numRows > 0 ) {
-                return true;
-            }
+        if ( $classID ) {
+            $taskIds = [];
+            $r = mysql_query( "SELECT date_task_id FROM class_task_exceptions WHERE class_id = " . $classID );
+            while ( $row = mysql_fetch_assoc( $r ) ) $taskIds[] = (int) $row['date_task_id'];
+            DefaultsAndExceptionsCache::setExceptionClassTasks( $classID, $taskIds );
         }
+        $taskIds = [];
+        $r = mysql_query( "SELECT date_task_id FROM user_task_exceptions WHERE user_id = " . $userID );
+        while ( $row = mysql_fetch_assoc( $r ) ) $taskIds[] = (int) $row['date_task_id'];
+        DefaultsAndExceptionsCache::setExceptionUserTasks( $userID, $taskIds );
+    }
 
-        //find out if user has exception
-        $sql = "SELECT * FROM user_task_exceptions WHERE user_id = " . $userID . 
-        " AND date_task_id = " . $taskID;
+    private function getTaskSubjectId( $taskID ) {
+        $taskID = (int) $taskID;
+        $cached = DefaultsAndExceptionsCache::getTaskSubject( $taskID );
+        if ( $cached !== null ) return $cached;
+        $sql = "SELECT subject_id FROM date_tasks dt JOIN date_tasks_missions dtm USING (date_tasks_mission_id) WHERE dt.date_task_id = " . $taskID;
         $result = mysql_query( $sql );
-        $numRows = mysql_num_rows( $result );
-        if ( $numRows > 0 ) {
+        $row = mysql_fetch_assoc( $result );
+        $sid = $row ? (int) $row['subject_id'] : null;
+        if ( $sid !== null ) DefaultsAndExceptionsCache::setTaskSubject( $taskID, $sid );
+        return $sid;
+    }
+
+    public function isException( $taskID, $userID ) {
+        $taskID = (int) $taskID;
+        $userID = (int) $userID;
+        $this->ensureExceptionCache( $userID );
+
+        $ctx = DefaultsAndExceptionsCache::getExceptionUserContext( $userID );
+        $schoolID = $ctx['school_id'];
+        $classID = $ctx['class_id'];
+
+        if ( $schoolID ) {
+            $subjectId = $this->getTaskSubjectId( $taskID );
+            if ( $subjectId !== null ) {
+                $enrolled = DefaultsAndExceptionsCache::getExceptionSchoolSubjects( $schoolID );
+                if ( $enrolled !== null && ! in_array( $subjectId, $enrolled, true ) ) {
+                    return true;
+                }
+            }
+            $schoolTasks = DefaultsAndExceptionsCache::getExceptionSchoolTasks( $schoolID );
+            if ( $schoolTasks !== null && in_array( $taskID, $schoolTasks, true ) ) {
+                return true;
+            }
+        }
+
+        if ( $classID ) {
+            $classTasks = DefaultsAndExceptionsCache::getExceptionClassTasks( $classID );
+            if ( $classTasks !== null && in_array( $taskID, $classTasks, true ) ) {
+                return true;
+            }
+        }
+
+        $userTasks = DefaultsAndExceptionsCache::getExceptionUserTasks( $userID );
+        if ( $userTasks !== null && in_array( $taskID, $userTasks, true ) ) {
             return true;
         }
 
-        //if we get here then no exception was found
         return false;
     }
 }
-?>
