@@ -71,6 +71,9 @@ class user_track
 	
 	public $start_date;
 	public $end_date;
+
+	public $e;
+	public $d;
 	
 	function __construct($row)
 	{
@@ -174,8 +177,11 @@ class user_track
 			$sql .= " ORDER BY created_by_parent IS NULL DESC, mission_number, start_date, mission_name"; // place custom parent tasks at the bottom...
 
 			$query = mysql_query($sql);
-			while ($row = mysql_fetch_assoc($query)) {
-				$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ][] = $row;				
+			if ($query) {
+				while ($row = mysql_fetch_assoc($query)) {
+					$all_date_tasks_missions[ $this->subject_id ][ $school_type_id ][ $lang ][ $this->level ][ $this->track_id ][] = $row;
+				}
+			}				
 			}
 		} 
 
@@ -194,21 +200,24 @@ class user_track
 				if (!isset($all_date_tasks[$date_tasks_mission->date_tasks_mission_id][$type])) {
 					$func = "get_{$type}";
 					$tasks = $date_tasks_mission->$func($date_tasks_mission->start_date, $date_tasks_mission->end_date, $this->user_id, $this->subject_id, $this->subject_name, $this->track_id, $this->level, $this->subject_image_id);
-					$all_date_tasks[$date_tasks_mission->date_tasks_mission_id][$type][] = $tasks;
+					$all_date_tasks[$date_tasks_mission->date_tasks_mission_id][$type] = $tasks;
 				}
 			}
 
-			if ( ! $date_tasks_mission->default_on && ! $d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
+			if ( ! $date_tasks_mission->default_on && ! $this->d->isOn( $date_tasks_mission->date_tasks_mission_id, 'mission' ) ) {
 				continue;
 			}
 
 			foreach ($all_date_tasks[$date_tasks_mission->date_tasks_mission_id] as $type => $tasks) {
 				foreach ($tasks as $row) {
+					$default_on = isset($row->default_on) ? $row->default_on : 1;
+					$date_task_id = isset($row->date_task_id) ? $row->date_task_id : null;
+					if ($date_task_id === null) continue;
 					if ($allowPersonalization) {
-						if ( $row['default_on'] == 0 && !$this->d->isOn($row['date_task_id'], 'task')) continue;
-						if ( $this->subject_id != 136 && $this->e->isException( $row['date_task_id'], $this->user_id ) ) continue;
+						if ( $default_on == 0 && !$this->d->isOn($date_task_id, 'task')) continue;
+						if ( $this->subject_id != 136 && $this->e->isException( $date_task_id, $this->user_id ) ) continue;
 					} else {
-						if ( $row['default_on'] == 0 ) continue;
+						if ( $default_on == 0 ) continue;
 					}
 					array_push($this->{$type}, $row);
 				}
