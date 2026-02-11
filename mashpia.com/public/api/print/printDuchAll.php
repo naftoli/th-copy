@@ -47,7 +47,7 @@ $days_flag = ceil( $num_days / 30 ); // number of times to multiply the number o
 
 // When check_tabs=1, return JSON: useTabs (true if 375+ registered children) and grades (grade label + class_ids per grade) so duch.php can open one page per grade.
 define( 'DUCH_TABS_USER_THRESHOLD', 300 );
-define( 'DUCH_GRADE_ORDER', [ 'Pre1a', 'Pre1', '1', '2', '3', '4', '5', '6', '7', '8' ] );
+define( 'DUCH_GRADE_ORDER', [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ] );
 if ( ! empty( $_POST['check_tabs'] ) ) {
     header( 'Content-Type: application/json; charset=utf-8' );
     global $MASHPIA_DB;
