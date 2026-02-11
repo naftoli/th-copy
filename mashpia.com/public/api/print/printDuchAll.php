@@ -133,14 +133,13 @@ $dates_id = 1;
 if ( $dates == 'none' ) $dates_id = 0;
 if ( $dates == 'english' ) $dates_id = 2;
 
+$all_date_tasks = [];
 $all_date_tasks_missions = [];
 $dtmSql = "
     SELECT 
         *
     FROM
-        date_tasks_missions dtm
-            JOIN
-        date_tasks dt USING (date_tasks_mission_id)
+        date_tasks_missions dtm 
     WHERE
         dtm.start_date >= :start 
             AND dtm.end_date <= :end 

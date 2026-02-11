@@ -4,6 +4,7 @@ include_once( __DIR__ . "/../../classes/user_track.php" );
 include_once( __DIR__ . "/../../classes/school_class.php" );
 include_once( __DIR__ . "/../../class.taskExceptions.php" );
 include_once( __DIR__ . "/../../classes/date_tasks_mission.php" );
+include_once( __DIR__ . "/../../classes/date_tasks_mission_for_duch.php" );
 include_once( __DIR__ . "/../../classes/daily_task.php" );
 include_once( __DIR__ . "/../../classes/weekly_task.php" );
 include_once( __DIR__ . "/../../classes/shabbos_task.php" );
@@ -11,6 +12,7 @@ include_once( __DIR__ . "/../../classes/no_label_task.php" );
 include_once( __DIR__ . "/../../classes/task.php" );
 include_once( __DIR__ . "/../../classes/date_tasks_mark.php" );
 include_once( __DIR__ . "/../../classes/pesukim_task.php" );
+include_once( __DIR__ . "/../../class.defaults.php" );
 
 class Missions {
 	const MAX_USER_IDS_IN_QUERY = 500;
