@@ -31,7 +31,7 @@ class SchoolShipping
     public function getItems() {
         $items = [
             'Raffles' => ['5M Raffle', '60M Raffle', 'Auction'],
-            'Chidon' => ['Staff Items', 'Sweaters'],
+            'Chidon' => ['Trip Celebration Items', 'Sweaters'],
             'Hachayols' => ['Teacher Hachayols']
         ];
         return $items;
@@ -267,7 +267,7 @@ class SchoolShipping
     public function getChidon(array $schools, array $items) {
         $info = [];
         $desc = [
-            'staff items' => $this->getDescForCelebBoxItems(),
+            'trip celebration items' => $this->getDescForCelebBoxItems(),
             'sweaters' => $this->getDescForSweaters()
         ];
 
@@ -276,7 +276,7 @@ class SchoolShipping
             foreach ($more as $itemID => $qty) {
                 // find out what type of item it is
                 $numID = intval(substr($itemID, 3));
-                if ($numID >= 600) $cat = 'staff items';
+                if ($numID >= 600) $cat = 'trip celebration items';
                 else $cat = 'sweaters';
                 if (in_array($cat, $items)) {
                     $info[$school_id][] = [
