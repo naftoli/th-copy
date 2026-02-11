@@ -1,6 +1,7 @@
 <?php 
 include_once( __DIR__ . "/../../classes/user.php" );
 include_once( __DIR__ . "/../../classes/user_track.php" );
+include_once( __DIR__ . "/../../classes/user_track_for_duch.php" );
 include_once( __DIR__ . "/../../classes/school_class.php" );
 include_once( __DIR__ . "/../../class.taskExceptions.php" );
 include_once( __DIR__ . "/../../classes/date_tasks_mission.php" );
@@ -98,6 +99,10 @@ class Missions {
 			}
 		}
 
+		if ( $for_duch ) {
+			user_track_for_duch::warmBirthdayCache( array_column( $rows, 'user_id' ) );
+		}
+
 		foreach ( $rows as $row ) {
 		    if ( ! $this->school_type_id ) $this->school_type_id = $row['school_type_id'];
 		    $user = new user( $row );
@@ -114,9 +119,6 @@ class Missions {
 				$user->school_class = $classes_by_id[ $row['class_id'] ];
 			} else {
 				$user->get_school_class();
-			}
-			if ( $for_duch ) {
-				$user->for_duch = true;
 			}
 			if ( ! $allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization();
 			$lang_id = $row['school_id'] == 255 ? ( $user->lang_id == 1 ? $user->lang_id : 2 ) : $user->lang_id;

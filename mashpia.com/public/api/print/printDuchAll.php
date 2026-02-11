@@ -195,11 +195,6 @@ $pages = 0;
 // * Load streaks for all users in one batch
 $allStreaks = Streaks::getStreaksForUsers( $user_ids, $start, $end );
 
-// * Preload birthday mission IDs for all users (one query or chunked)
-if ( is_array( $user_ids ) && ! empty( $user_ids ) ) {
-    user_track::warmBirthdayCache( $user_ids );
-}
-
 // * Print the missions just like before
 foreach ( $objMissions as $obj ) {
     $obj->setDateDisplay( $dates_id );

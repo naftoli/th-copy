@@ -492,16 +492,21 @@ class user {
 				}
 			} 
 			if ($row["level"] > 0 && $row["track_id"] > 0) {
-				$user_track = new user_track($row);
-				$user_track->get_subject_info();
+				
 				if ( $this->for_duch ) {
+					$user_track = new user_track_for_duch($row);
 					$user_track->get_date_tasks_missions_for_duch($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
-				} elseif ($by_date_range) {
-					$user_track->get_date_tasks_missions_by_date_range($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+					array_push($this->user_tracks, $user_track);
 				} else {
-					$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+					$user_track = new user_track($row);
+					$user_track->get_subject_info();
+					if ($by_date_range) {
+						$user_track->get_date_tasks_missions_by_date_range($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+					} else {
+						$user_track->get_date_tasks_missions($this->school_type_id, $start_date, $end_date, $tasks, $lang, $this->allowPersonalization, $print_custom_parent_tasks);
+					}
+					array_push($this->user_tracks, $user_track);
 				}
-				array_push($this->user_tracks, $user_track);
 
                 // for sefer hamitzvos, get chidon limmud track misssions
                 // find out level / track for chidon limmud track
