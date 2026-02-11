@@ -6,10 +6,6 @@ class TaskExceptions {
     }
 	
     public function isException( $taskID, $userID ) {
-        // Use batch-loaded cache when available (e.g. printDuchAll)
-        // if ( isset( $GLOBALS['exception_cache'] ) ) {
-        //     return isset( $GLOBALS['exception_cache'][ (int) $userID ][ (int) $taskID ] );
-        // }
         //find out school_id and class_id for user
         $sql = "SELECT school_id, class_id FROM users WHERE user_id = " . $userID;
         $result = mysql_query( $sql );

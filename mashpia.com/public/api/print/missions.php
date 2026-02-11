@@ -74,6 +74,18 @@ if ( !$parsha_ids ) {
 $parshos = \Parsha::find( $parsha_ids );
 $parshos = is_array( $parshos ) ? $parshos : [ $parshos ]; // make sure it is an array of objects.
 
+// * Batch-load caches for mission printing (birthdays)
+$start_min = null;
+$end_max = null;
+foreach ( $parshos as $parsha ) {
+    if ( $start_min === null || $parsha->start < $start_min ) $start_min = $parsha->start;
+    if ( $end_max === null || $parsha->end > $end_max ) $end_max = $parsha->end;
+}
+if ( $start_min !== null && $end_max !== null && ! empty( $user_ids ) ) {
+    require_once __DIR__ . '/missions_print_cache.php';
+    build_mission_print_caches( $user_ids, $start_min, $end_max );
+}
+
 // * Generate the missions using the legacy code
 $missions = [];
 foreach( $user_ids as $user_id ) {
