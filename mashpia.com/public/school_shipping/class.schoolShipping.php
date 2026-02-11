@@ -327,7 +327,9 @@ class SchoolShipping
             'CHI607' => 'Bunting',
             'CHI608' => 'Carpet',
             'CHI609' => 'Podium Sign',
-            'CHI610' => 'Banner W/ Frame'
+            'CHI610' => 'Banner W/ Frame',
+            'CHI611' => 'Bentcher', 
+            'CHI612' => 'Mincha Cards'
         );
         return $info;
     }
@@ -364,6 +366,15 @@ class SchoolShipping
 
     private function getItemsForSchools(array $schools) {
         // array of schools and the items they have including qty
+        $sql = "select * from school_chidon_items where school_id in (" . implode(',', $schools) . ")";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute();
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $data[$row['school_id']][$row['item_id']] = $row['qty'];
+        }
+        return $data;
+        /*
         $data = [
             2 => [
                 'CHI050' => 14,
@@ -795,6 +806,7 @@ class SchoolShipping
             }
         }
         return $info;
+        */
     }
 
     function createCSV($items, $year, $school_id, $shipTo = 'all') {

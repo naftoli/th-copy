@@ -458,7 +458,7 @@ class ChidonShipping
     }
 
     public function getStaffSweaters($gender, $school) {
-        // get from csv file
+        // moved to school shipping
     }
 
     public function getCelebrationItems($gender, $school, $items = []) {
