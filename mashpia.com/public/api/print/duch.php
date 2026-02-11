@@ -252,9 +252,11 @@
                             json.grades.forEach(function(g, i) {
                                 openGradeInNewPage(g, i * 1000);
                             });
+                            var lastOpenMs = (json.grades.length - 1) * 1000;
                             setTimeout(function() {
-                                listEl.innerHTML = '<p>Opened ' + json.grades.length + ' grade pages. You can close this window.</p>';
-                            }, json.grades.length * 1000);
+                                listEl.innerHTML = '<p>Opened ' + json.grades.length + ' grade pages. Closing…</p>';
+                                window.close();
+                            }, lastOpenMs + 500);
                             return;
                         }
                         var fullData = Object.assign({}, postData);
