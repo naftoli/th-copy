@@ -3,6 +3,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
 class Streaks {
+    const MAX_USER_IDS_IN_QUERY = 500;
+
     private $db;
     private $user_id;
     private $start;
@@ -72,63 +74,71 @@ class Streaks {
 
     /**
      * Load streaks for multiple users in batch. Returns [ user_id => [ streak_id => streak_data, ... ], ... ].
+     * Chunks user_ids to avoid huge IN clauses for entire schools.
      */
     public static function getStreaksForUsers(array $user_ids, $start, $end) {
         global $MASHPIA_DB;
         if ( empty( $user_ids ) ) return [];
         $db = $MASHPIA_DB;
-        $placeholders = implode( ',', array_fill( 0, count( $user_ids ), '?' ) );
-        $sql = "SELECT st.user_id, st.streak_id, st.num_days, st.days_needed, st.task_type,
-                    dt.name, dt.cat, dt.streak_duch_cat, dt.streak_duch_name
-                FROM streak_tasks st
-                JOIN date_tasks dt USING (streak_id)
-                JOIN users u USING (user_id)
-                JOIN user_tracks ut USING (user_id)
-                JOIN date_tasks_missions dtm USING (date_tasks_mission_id, school_type_id, track_id, level)
-                WHERE st.user_id IN ($placeholders) AND dt.streak_show = 1
-                GROUP BY st.user_id, st.streak_id";
-        $stmt = $db->prepare( $sql );
-        $stmt->execute( array_values( $user_ids ) );
         $by_user = [];
         $streak_ids = [];
-        while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
-            $uid = (int) $row['user_id'];
-            $sid = (int) $row['streak_id'];
-            if ( ! isset( $by_user[ $uid ] ) ) $by_user[ $uid ] = [];
-            $by_user[ $uid ][ $sid ] = [
-                'cat' => $row['cat'],
-                'name' => $row['name'],
-                'num_days' => $row['num_days'],
-                'days_needed' => $row['days_needed'],
-                'task_type' => $row['task_type'],
-                'duch_cat' => $row['streak_duch_cat'] ?? $row['cat'],
-                'duch_name' => $row['streak_duch_name'] ?? $row['name'],
-                'days_done' => 0
-            ];
-            $streak_ids[ $sid ] = true;
+
+        $chunks = array_chunk( array_values( $user_ids ), self::MAX_USER_IDS_IN_QUERY );
+        foreach ( $chunks as $chunk ) {
+            $placeholders = implode( ',', array_fill( 0, count( $chunk ), '?' ) );
+            $sql = "SELECT st.user_id, st.streak_id, st.num_days, st.days_needed, st.task_type,
+                        dt.name, dt.cat, dt.streak_duch_cat, dt.streak_duch_name
+                    FROM streak_tasks st
+                    JOIN date_tasks dt USING (streak_id)
+                    JOIN users u USING (user_id)
+                    JOIN user_tracks ut USING (user_id)
+                    JOIN date_tasks_missions dtm USING (date_tasks_mission_id, school_type_id, track_id, level)
+                    WHERE st.user_id IN ($placeholders) AND dt.streak_show = 1
+                    GROUP BY st.user_id, st.streak_id";
+            $stmt = $db->prepare( $sql );
+            $stmt->execute( $chunk );
+            while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                $uid = (int) $row['user_id'];
+                $sid = (int) $row['streak_id'];
+                if ( ! isset( $by_user[ $uid ] ) ) $by_user[ $uid ] = [];
+                $by_user[ $uid ][ $sid ] = [
+                    'cat' => $row['cat'],
+                    'name' => $row['name'],
+                    'num_days' => $row['num_days'],
+                    'days_needed' => $row['days_needed'],
+                    'task_type' => $row['task_type'],
+                    'duch_cat' => $row['streak_duch_cat'] ?? $row['cat'],
+                    'duch_name' => $row['streak_duch_name'] ?? $row['name'],
+                    'days_done' => 0
+                ];
+                $streak_ids[ $sid ] = true;
+            }
         }
+
         $streak_ids = array_keys( $streak_ids );
         if ( empty( $streak_ids ) ) return $by_user;
 
-        $ph_u = implode( ',', array_fill( 0, count( $user_ids ), '?' ) );
-        $ph_s = implode( ',', array_fill( 0, count( $streak_ids ), '?' ) );
-        $params = array_merge( array_values( $user_ids ), $streak_ids, [ $start, $end ] );
-        $sql_marks = "SELECT dtm.user_id, dt.streak_id, dtm.mark_date
-                FROM date_tasks_marks dtm
-                JOIN date_tasks dt USING (date_task_id)
-                WHERE dtm.user_id IN ($ph_u) AND dt.streak_id IN ($ph_s)
-                AND dtm.mark_date >= ? AND dtm.mark_date <= ?
-                ORDER BY dtm.user_id, dt.streak_id, dtm.mark_date DESC";
-        $stmt = $db->prepare( $sql_marks );
-        $stmt->execute( $params );
         $marks_by_user_streak = [];
-        while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
-            $uid = (int) $row['user_id'];
-            $sid = (int) $row['streak_id'];
-            $d = (int) $row['mark_date'];
-            if ( ! isset( $marks_by_user_streak[ $uid ] ) ) $marks_by_user_streak[ $uid ] = [];
-            if ( ! isset( $marks_by_user_streak[ $uid ][ $sid ] ) ) $marks_by_user_streak[ $uid ][ $sid ] = [];
-            $marks_by_user_streak[ $uid ][ $sid ][] = $d;
+        $ph_s = implode( ',', array_fill( 0, count( $streak_ids ), '?' ) );
+        foreach ( $chunks as $chunk ) {
+            $ph_u = implode( ',', array_fill( 0, count( $chunk ), '?' ) );
+            $params = array_merge( $chunk, $streak_ids, [ $start, $end ] );
+            $sql_marks = "SELECT dtm.user_id, dt.streak_id, dtm.mark_date
+                    FROM date_tasks_marks dtm
+                    JOIN date_tasks dt USING (date_task_id)
+                    WHERE dtm.user_id IN ($ph_u) AND dt.streak_id IN ($ph_s)
+                    AND dtm.mark_date >= ? AND dtm.mark_date <= ?
+                    ORDER BY dtm.user_id, dt.streak_id, dtm.mark_date DESC";
+            $stmt = $db->prepare( $sql_marks );
+            $stmt->execute( $params );
+            while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+                $uid = (int) $row['user_id'];
+                $sid = (int) $row['streak_id'];
+                $d = (int) $row['mark_date'];
+                if ( ! isset( $marks_by_user_streak[ $uid ] ) ) $marks_by_user_streak[ $uid ] = [];
+                if ( ! isset( $marks_by_user_streak[ $uid ][ $sid ] ) ) $marks_by_user_streak[ $uid ][ $sid ] = [];
+                $marks_by_user_streak[ $uid ][ $sid ][] = $d;
+            }
         }
 
         foreach ( $by_user as $uid => $streaks ) {
