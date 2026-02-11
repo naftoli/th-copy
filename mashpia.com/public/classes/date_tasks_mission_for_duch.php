@@ -24,6 +24,7 @@ class date_tasks_mission_for_duch {
 	public $tasks = array();
 	
 	public $allowPersonalization;
+    public $e;
 	
 	function __construct($row, $tasks = array(), $allowPersonalization = true) {
 		$this->date_tasks_mission_id = $row["date_tasks_mission_id"];
@@ -42,6 +43,7 @@ class date_tasks_mission_for_duch {
 		$this->week_string = "";
 		$this->tasks = $tasks;
 		$this->allowPersonalization = $allowPersonalization;
+        $this->e = new TaskExceptions();
 	}
 	
 	function set_subject($subject_name, $subject_image_id)
