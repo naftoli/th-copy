@@ -9,8 +9,7 @@ require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/picMission.ph
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mission_report/classes/DSMission.php' );
 require_once $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.streaks.php';
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/mobile/streaks/classes/class.accomplished.php' );
-require_once( __DIR__ . '/../../classes/duch_task.php' );
-require_once( __DIR__ . '/../../classes/defaults_exceptions_cache.php' );
+require_once( $_SERVER['DOCUMENT_ROOT'] . '/classes/duch_task.php' );
 
 $_POST = json_decode(file_get_contents('php://input'), true);
 if ( !isset( $_POST['school_id'] ) ) {
@@ -196,13 +195,6 @@ echo "
 $pages = 0;
 // * Load streaks for all users in one batch
 $allStreaks = Streaks::getStreaksForUsers( $user_ids, $start, $end );
-
-// * Preload defaults, exceptions, and birthday mission IDs for all users (school/class-level once, user-level in bulk)
-if ( is_array( $user_ids ) && ! empty( $user_ids ) ) {
-    DefaultsAndExceptionsCache::warmDefaultsForUsers( $user_ids );
-    DefaultsAndExceptionsCache::warmExceptionCacheForUsers( $user_ids );
-    DefaultsAndExceptionsCache::warmBirthdayMissionIdsForUsers( $user_ids );
-}
 
 // * Print the missions just like before
 foreach ( $objMissions as $obj ) {
