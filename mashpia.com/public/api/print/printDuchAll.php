@@ -158,9 +158,21 @@ foreach ($dtm as $dtmRow) {
 }
 // echo "<pre>"; print_r($all_date_tasks_missions); echo "</pre>"; exit;
 
-// * Preload birthday mission IDs for all users; assign to global so user_track_for_duch can use it
+// * Batch-load birthday mission IDs for all users (user_id => [mission_id => true]); user_track_for_duch reads from $GLOBALS['birthday_cache']
+$GLOBALS['birthday_cache'] = [];
 if ( ! empty( $user_ids ) ) {
-	warmBirthdayCache( $user_ids );
+	$ids = array_values( array_unique( array_filter( array_map( 'intval', $user_ids ) ) ) );
+	$chunk = 500;
+	foreach ( array_chunk( $ids, $chunk ) as $chunk_ids ) {
+		$placeholders = implode( ',', array_fill( 0, count( $chunk_ids ), '?' ) );
+		$stmt = $MASHPIA_DB->prepare( "SELECT user_id, date_tasks_mission_id FROM birthdays WHERE user_id IN ($placeholders)" );
+		$stmt->execute( $chunk_ids );
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$uid = (int) $row['user_id'];
+			$mid = (int) $row['date_tasks_mission_id'];
+			$GLOBALS['birthday_cache'][ $uid ][ $mid ] = true;
+		}
+	}
 }
 
 // * Generate the missions: use school filter when list is huge to avoid giant IN/FIELD in SQL
