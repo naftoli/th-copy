@@ -267,7 +267,7 @@ class SchoolShipping
     public function getChidon(array $schools, array $items) {
         $info = [];
         $desc = [
-            'celeb box items' => $this->getDescForCelebBoxItems(),
+            'staff items' => $this->getDescForCelebBoxItems(),
             'sweaters' => $this->getDescForSweaters()
         ];
 
@@ -276,7 +276,7 @@ class SchoolShipping
             foreach ($more as $itemID => $qty) {
                 // find out what type of item it is
                 $numID = intval(substr($itemID, 3));
-                if ($numID >= 600) $cat = 'celeb box items';
+                if ($numID >= 600) $cat = 'staff items';
                 else $cat = 'sweaters';
                 if (in_array($cat, $items)) {
                     $info[$school_id][] = [
