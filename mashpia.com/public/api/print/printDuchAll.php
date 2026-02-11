@@ -175,6 +175,114 @@ if ( ! empty( $user_ids ) ) {
 	}
 }
 
+// * Batch-load exception data (user_id => [task_id => true]); TaskExceptions reads from $GLOBALS['exception_cache']
+$GLOBALS['exception_cache'] = [];
+if ( ! empty( $user_ids ) ) {
+	$uids = array_values( array_unique( array_filter( array_map( 'intval', $user_ids ) ) ) );
+	$mission_ids = [];
+	foreach ( $all_date_tasks_missions as $by_subject ) {
+		foreach ( $by_subject as $by_type ) {
+			foreach ( $by_type as $by_lang ) {
+				foreach ( $by_lang as $by_level ) {
+					foreach ( $by_level as $missions ) {
+						foreach ( $missions as $m ) {
+							$mission_ids[] = (int) $m['date_tasks_mission_id'];
+						}
+					}
+				}
+			}
+		}
+	}
+	$mission_ids = array_unique( $mission_ids );
+	if ( ! empty( $mission_ids ) ) {
+		$m_ph = implode( ',', array_fill( 0, count( $mission_ids ), '?' ) );
+		$stmt = $MASHPIA_DB->prepare( "SELECT dt.date_task_id, m.subject_id FROM date_tasks dt JOIN date_tasks_missions m USING (date_tasks_mission_id) WHERE m.date_tasks_mission_id IN ($m_ph)" );
+		$stmt->execute( $mission_ids );
+		$task_subject = [];
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$task_subject[ (int) $row['date_task_id'] ] = (int) $row['subject_id'];
+		}
+		$task_ids = array_keys( $task_subject );
+
+		$u_ph = implode( ',', array_fill( 0, count( $uids ), '?' ) );
+		$stmt = $MASHPIA_DB->prepare( "SELECT user_id, school_id, class_id FROM users WHERE user_id IN ($u_ph)" );
+		$stmt->execute( $uids );
+		$user_school_class = [];
+		$school_ids = [];
+		$class_ids_ex = [];
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$uid = (int) $row['user_id'];
+			$sid = (int) $row['school_id'];
+			$cid = (int) $row['class_id'];
+			$user_school_class[ $uid ] = [ 'school_id' => $sid, 'class_id' => $cid ];
+			$school_ids[ $sid ] = true;
+			$class_ids_ex[ $cid ] = true;
+		}
+		$school_ids = array_keys( $school_ids );
+		$class_ids_ex = array_keys( $class_ids_ex );
+
+		$school_subjects = [];
+		if ( ! empty( $school_ids ) && ! empty( array_unique( array_values( $task_subject ) ) ) ) {
+			$s_ph = implode( ',', array_fill( 0, count( $school_ids ), '?' ) );
+			$subjects = array_unique( array_values( $task_subject ) );
+			$sub_ph = implode( ',', array_fill( 0, count( $subjects ), '?' ) );
+			$stmt = $MASHPIA_DB->prepare( "SELECT school_id, subject_id FROM school_subjects WHERE school_id IN ($s_ph) AND subject_id IN ($sub_ph)" );
+			$stmt->execute( array_merge( $school_ids, $subjects ) );
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$school_subjects[ (int) $row['school_id'] ][ (int) $row['subject_id'] ] = true;
+			}
+		}
+
+		$school_task_exc = [];
+		if ( ! empty( $school_ids ) && ! empty( $task_ids ) ) {
+			$s_ph = implode( ',', array_fill( 0, count( $school_ids ), '?' ) );
+			$t_ph = implode( ',', array_fill( 0, count( $task_ids ), '?' ) );
+			$stmt = $MASHPIA_DB->prepare( "SELECT school_id, date_task_id FROM school_task_exceptions WHERE school_id IN ($s_ph) AND date_task_id IN ($t_ph)" );
+			$stmt->execute( array_merge( $school_ids, $task_ids ) );
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$school_task_exc[ (int) $row['school_id'] ][ (int) $row['date_task_id'] ] = true;
+			}
+		}
+
+		$class_task_exc = [];
+		if ( ! empty( $class_ids_ex ) && ! empty( $task_ids ) ) {
+			$c_ph = implode( ',', array_fill( 0, count( $class_ids_ex ), '?' ) );
+			$t_ph = implode( ',', array_fill( 0, count( $task_ids ), '?' ) );
+			$stmt = $MASHPIA_DB->prepare( "SELECT class_id, date_task_id FROM class_task_exceptions WHERE class_id IN ($c_ph) AND date_task_id IN ($t_ph)" );
+			$stmt->execute( array_merge( $class_ids_ex, $task_ids ) );
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$class_task_exc[ (int) $row['class_id'] ][ (int) $row['date_task_id'] ] = true;
+			}
+		}
+
+		$user_task_exc = [];
+		$u_ph = implode( ',', array_fill( 0, count( $uids ), '?' ) );
+		$t_ph = implode( ',', array_fill( 0, count( $task_ids ), '?' ) );
+		$stmt = $MASHPIA_DB->prepare( "SELECT user_id, date_task_id FROM user_task_exceptions WHERE user_id IN ($u_ph) AND date_task_id IN ($t_ph)" );
+		$stmt->execute( array_merge( $uids, $task_ids ) );
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$user_task_exc[ (int) $row['user_id'] ][ (int) $row['date_task_id'] ] = true;
+		}
+
+		foreach ( $user_school_class as $uid => $sc ) {
+			$sid = $sc['school_id'];
+			$cid = $sc['class_id'];
+			foreach ( $task_subject as $tid => $subj_id ) {
+				$exc = false;
+				if ( $sid && ! isset( $school_subjects[ $sid ][ $subj_id ] ) ) {
+					$exc = true;
+				}
+				if ( ! $exc && $sid && isset( $school_task_exc[ $sid ][ $tid ] ) ) $exc = true;
+				if ( ! $exc && $cid && isset( $class_task_exc[ $cid ][ $tid ] ) ) $exc = true;
+				if ( ! $exc && isset( $user_task_exc[ $uid ][ $tid ] ) ) $exc = true;
+				if ( $exc ) {
+					$GLOBALS['exception_cache'][ $uid ][ $tid ] = true;
+				}
+			}
+		}
+	}
+}
+
 // * Generate the missions: use school filter when list is huge to avoid giant IN/FIELD in SQL
 $user_ids_to_pass = $user_ids;
 $school_for_query = 0;
