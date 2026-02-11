@@ -19,6 +19,41 @@ if ( !isset( $_POST['school_id'] ) ) {
 
 $school_id = $_POST['school_id'];
 $school = \School::find([ $school_id ]);
+
+// When check_tabs=1, return JSON: useTabs (true if 375+ registered children) and grades (grade label + class_ids per grade) so duch.php can open one page per grade.
+define( 'DUCH_TABS_USER_THRESHOLD', 375 );
+define( 'DUCH_GRADE_ORDER', [ 'Pre1a', 'Pre1', '1', '2', '3', '4', '5', '6', '7', '8' ] );
+if ( ! empty( $_POST['check_tabs'] ) ) {
+    header( 'Content-Type: application/json; charset=utf-8' );
+    global $MASHPIA_DB;
+    $stmt = $MASHPIA_DB->prepare( 'SELECT COUNT(*) AS n FROM users WHERE school_id = ? AND user_registered > 0' );
+    $stmt->execute( [ $school_id ] );
+    $total_users = (int) $stmt->fetch( PDO::FETCH_ASSOC )['n'];
+    if ( $total_users < DUCH_TABS_USER_THRESHOLD ) {
+        echo json_encode( [ 'useTabs' => false ] );
+        exit;
+    }
+    $by_grade = [];
+    foreach ( $school->platoons as $p ) {
+        $grade = isset( $p->class_grade ) ? trim( (string) $p->class_grade ) : '';
+        if ( $grade === '' ) continue;
+        if ( ! isset( $by_grade[ $grade ] ) ) $by_grade[ $grade ] = [ 'grade' => $grade, 'label' => $grade, 'class_ids' => [] ];
+        $by_grade[ $grade ]['class_ids'][] = (int) $p->class_id;
+    }
+    $order = array_flip( DUCH_GRADE_ORDER );
+    uksort( $by_grade, function ( $a, $b ) use ( $order ) {
+        $ia = isset( $order[ $a ] ) ? $order[ $a ] : 999;
+        $ib = isset( $order[ $b ] ) ? $order[ $b ] : 999;
+        if ( $ia !== $ib ) return $ia - $ib;
+        return strcmp( $a, $b );
+    } );
+    $grades = array_values( array_map( function ( $g ) {
+        return [ 'grade' => $g['grade'], 'label' => $g['label'], 'class_ids' => $g['class_ids'] ];
+    }, $by_grade ) );
+    echo json_encode( [ 'useTabs' => true, 'grades' => $grades ] );
+    exit;
+}
+
 $user_ids = isset( $_POST['user_ids'] ) && $_POST['user_ids'] !== '' ? ( is_array( $_POST['user_ids'] ) ? $_POST['user_ids'] : explode( ',', $_POST['user_ids'] ) ) : null;
 $class_ids = isset( $_POST['class_ids'] ) && $_POST['class_ids'] !== '' ? ( is_array( $_POST['class_ids'] ) ? $_POST['class_ids'] : explode( ',', $_POST['class_ids'] ) ) : null;
 if ( $user_ids && ! is_array( $user_ids ) ) $user_ids = [ $user_ids ];

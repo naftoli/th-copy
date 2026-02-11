@@ -135,6 +135,7 @@
 
 <body>
     <div id="spinner"></div>
+    <div id="grade-list" class="no-print" style="display: none;"></div>
     <div id="main"></div>
     <script src="/scripts/functions.js"></script>
     <script src="/jquery.js"></script>
@@ -176,54 +177,113 @@
             if (Cookies.get('naftoli')) {
                 url = 'printDuchAll.php';
             }
-            fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(postData),
-            }).then(response => response.text()).then(html => {
+
+            function showContent(html) {
                 $("#spinner").empty();
                 if (html === 'error') {
                     alert('Error: School ID is required');
                     return;
                 }
-
-                // if (Cookies.get('naftoli')) {
-                //     // break up html into pages
-                //     const pages = html.split('|');
-                //     for (let i = 0; i < pages.length; i++) {
-                //         // wait for the page to render
-                //         setTimeout(function() {
-                //             $('#main').append(pages[i]);
-                //             console.log('waiting 1 second');
-                //         }, 1000)
-                //     }
-                // } else {
-                    $('#main').html(html);
-                // }
-
+                $('#main').html(html);
                 if (email) {
                     emailToOhel();
                 } else {
-                    // Page-count is only an estimate (html2canvas doesn't perfectly match print layout,
-                    // especially with CSS columns). We also need to wait for fonts/images so layout is final.
-                    // (async function() {
-                    //     const main = document.getElementById('main');
-                    //     await waitForRenderReady(main);
-                    //     // If you want per-soldier page estimates, use each .userDuch block:
-                    //     document.querySelectorAll('.userDuch').forEach(el => checkPageCount(el));
-                    //     // checkPageCount(main);
-                    // })();
                     $("#print-button").show();
                     if (fromBC) {
                         $("#email-button").show();
                     }
-                    // setTimeout(function() {
-                    //     window.print();
-                    // }, 1000);
                 }
-            }).catch(error => {
-                $("#spinner").empty();
-                alert('Error: ' + error);
-            });
+            }
+
+            function buildFormInputs(data, classIds) {
+                var html = '';
+                var payload = Object.assign({}, data, { class_ids: classIds });
+                delete payload.check_tabs;
+                for (var key in payload) {
+                    if (!payload.hasOwnProperty(key)) continue;
+                    var val = payload[key];
+                    if (Array.isArray(val)) {
+                        for (var i = 0; i < val.length; i++) {
+                            html += '<input type="hidden" name="' + key + '[]" value="' + (val[i] != null ? String(val[i]).replace(/"/g, '&quot;') : '') + '">';
+                        }
+                    } else {
+                        html += '<input type="hidden" name="' + key + '" value="' + (val != null ? String(val).replace(/"/g, '&quot;') : '') + '">';
+                    }
+                }
+                return html;
+            }
+
+            function openGradeInNewPage(gradeData, delayMs) {
+                setTimeout(function() {
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = 'duch.php';
+                    form.target = '_blank';
+                    form.style.display = 'none';
+                    form.innerHTML = buildFormInputs(postData, gradeData.class_ids || []);
+                    document.body.appendChild(form);
+                    form.submit();
+                    document.body.removeChild(form);
+                }, delayMs);
+            }
+
+            // Grade-specific page: we were opened with class_ids (from auto-open). Load content for that grade only.
+            if (Cookies.get('naftoli') && url === 'printDuchAll.php' && postData.class_ids && (Array.isArray(postData.class_ids) ? postData.class_ids.length : (postData.class_ids + '').split(',').filter(Boolean).length)) {
+                fetch(url, { method: 'POST', body: JSON.stringify(postData) })
+                    .then(function(r) { return r.text(); })
+                    .then(showContent)
+                    .catch(function(err) {
+                        $("#spinner").empty();
+                        alert('Error: ' + err);
+                    });
+                return;
+            }
+
+            // Print Duch All: check if we need to auto-open grade pages (375+ users)
+            if (Cookies.get('naftoli') && url === 'printDuchAll.php') {
+                var checkData = Object.assign({}, postData, { check_tabs: 1 });
+                fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
+                    .then(function(r) { return r.text(); })
+                    .then(function(text) {
+                        var json = null;
+                        try { json = JSON.parse(text); } catch (e) {}
+                        if (json && json.useTabs && json.grades && json.grades.length > 0) {
+                            $("#spinner").empty();
+                            var listEl = document.getElementById('grade-list');
+                            listEl.style.display = 'block';
+                            listEl.innerHTML = '<p>Opening ' + json.grades.length + ' grade pages…</p>';
+                            json.grades.forEach(function(g, i) {
+                                openGradeInNewPage(g, i * 400);
+                            });
+                            setTimeout(function() {
+                                listEl.innerHTML = '<p>Opened ' + json.grades.length + ' grade pages. You can close this window.</p>';
+                            }, json.grades.length * 400 + 200);
+                            return;
+                        }
+                        var fullData = Object.assign({}, postData);
+                        delete fullData.check_tabs;
+                        fetch(url, { method: 'POST', body: JSON.stringify(fullData) })
+                            .then(function(r) { return r.text(); })
+                            .then(showContent)
+                            .catch(function(err) {
+                                $("#spinner").empty();
+                                alert('Error: ' + err);
+                            });
+                    })
+                    .catch(function(err) {
+                        $("#spinner").empty();
+                        alert('Error: ' + err);
+                    });
+                return;
+            }
+
+            fetch(url, { method: 'POST', body: JSON.stringify(postData) })
+                .then(function(r) { return r.text(); })
+                .then(showContent)
+                .catch(function(err) {
+                    $("#spinner").empty();
+                    alert('Error: ' + err);
+                });
         };
 
         function emailToOhel() {
