@@ -176,6 +176,7 @@ if ( ! empty( $user_ids ) ) {
 }
 
 // * Batch-load exception data (user_id => [task_id => true]); TaskExceptions reads from $GLOBALS['exception_cache']
+/*
 $GLOBALS['exception_cache'] = [];
 if ( ! empty( $user_ids ) ) {
 	$uids = array_values( array_unique( array_filter( array_map( 'intval', $user_ids ) ) ) );
@@ -362,7 +363,7 @@ if ( ! empty( $user_ids ) ) {
 		}
 	}
 }
-
+*/
 // * Generate the missions: use school filter when list is huge to avoid giant IN/FIELD in SQL
 $user_ids_to_pass = $user_ids;
 $school_for_query = 0;
