@@ -118,6 +118,9 @@ class Missions {
 				$user->get_school_class();
 			}
 			if ( ! $allowPersonalization && $row['school_id'] == 255 ) $user->disablePersonalization();
+			if ( $for_duch ) {
+				$user->for_duch = true;
+			}
 			$lang_id = $row['school_id'] == 255 ? ( $user->lang_id == 1 ? $user->lang_id : 2 ) : $user->lang_id;
 		    $user->get_user_tracks( -1, $this->start, $this->end, array(), $lang_id, $printing_mode, $by_date_range );
 		    array_push( $this->missions, $user );

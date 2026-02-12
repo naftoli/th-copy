@@ -970,7 +970,13 @@ abstract class MissionDisplay {
 	public function printDuch($activeStreaks = [], $forMobile = false) {
 		global $besuros_tovos;
 		$user = $this->mission;
-		$all_medals = $user->get_all_medals();
+		$all_medals = isset( $GLOBALS['duch_all_medals'][ $user->user_id ] ) ? $GLOBALS['duch_all_medals'][ $user->user_id ] : $user->get_all_medals();
+		if ( isset( $GLOBALS['duch_medals'][ $user->user_id ] ) ) {
+			$user->medals = $GLOBALS['duch_medals'][ $user->user_id ];
+		}
+		if ( isset( $GLOBALS['duch_ranks'][ $user->user_id ] ) ) {
+			$user->ranks = $GLOBALS['duch_ranks'][ $user->user_id ];
+		}
 		$school = \School::find([ $user->school_class->school_id ]);
 		$platoon = \Platoon::find([ $user->school_class->class_id ]);
 		$only_one_task = [21001, 21002, 21003, 21004, 21006, 21007, 21014, 21008, 21009];
@@ -1043,14 +1049,18 @@ abstract class MissionDisplay {
 		<div class='container'>
 			<?php
 			$tracks = $user->user_tracks;
-			$user->get_ranks($this->start, $this->end, 0, 0);
+			if ( ! isset( $GLOBALS['duch_ranks'][ $user->user_id ] ) ) {
+				$user->get_ranks($this->start, $this->end, 0, 0);
+			}
 			$task_types = ['daily_tasks', 'weekly_tasks', 'shabbos_tasks', 'no_label_tasks'];
 			$report_mission = [];
 			$streak_ids = []; // keep track of all the streak ids
 			$skip_grids = [20010, 20002]; // skip the limud task and chidon sefer hamitzvos task 
 			foreach ($tracks as $track) {
 				$track->lang_id= $this->lang_id;
-				$user->get_medals($track->subject_id, $this->start, $this->end, 0);
+				if ( ! isset( $GLOBALS['duch_medals'][ $user->user_id ] ) ) {
+					$user->get_medals($track->subject_id, $this->start, $this->end, 0);
+				}
 				?>
 				<div class='track'>
 					<div class='campaign-container'>
