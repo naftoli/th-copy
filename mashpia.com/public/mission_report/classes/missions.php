@@ -78,7 +78,8 @@ class Missions {
 				$rids = array_map( 'intval', $user_ids );
 				$chunks = array_chunk( $rids, self::MAX_USER_IDS_IN_QUERY );
 				foreach ( $chunks as $chunk ) {
-					$rq = mysql_query( "SELECT rm.user_id, r.rank_ord, r.rank_name, r.rank_image_id, rm.date_promoted
+					$rq = mysql_query( "
+						SELECT rm.user_id, r.rank_ord, r.rank_name, r.rank_image_id, rm.date_promoted
 						FROM rank_marks rm
 						JOIN ranks r USING(rank_ord)
 						WHERE rm.user_id IN (" . implode( ',', $chunk ) . ")
