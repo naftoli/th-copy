@@ -428,7 +428,9 @@ abstract class MissionDisplay {
 										<div class="taskRow">
 							            <div class="row">
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$daily_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
                                                 <div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
@@ -583,7 +585,9 @@ abstract class MissionDisplay {
 										    </div>
 											<div class="checkbox<?php if ($weekly_task->quantity) echo " textInput";?>"></div>
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$weekly_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
@@ -691,7 +695,9 @@ abstract class MissionDisplay {
 										    </div>
 											<div class="checkbox<?php if ($shabbos_task->quantity) echo " textInput";?>"></div>
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$shabbos_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
@@ -808,7 +814,9 @@ abstract class MissionDisplay {
 								    </div>
 									<div class="checkbox<?php if ($no_label_task->quantity) echo " textInput";?>"></div>
 									<div class="rowImg">
-										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+										<?php $logo = $this->campaignLogos[$no_label_task->subject_id] ?? ''; if ($logo): ?>
+										<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+										<?php endif; ?>
 									</div>
 									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
@@ -1198,7 +1206,9 @@ abstract class MissionDisplay {
 					?>
 					<div class='medal'>
 						<div class='medal-icon'>
-							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$medal['subject_id']] ?? ''?>' alt='<?=$medal['medal_name']?>' />
+							<?php $logo = $this->campaignLogos[$medal['subject_id']] ?? ''; if ($logo): ?>
+							<img src='/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>' alt='<?= htmlspecialchars($medal['medal_name']) ?>' />
+							<?php endif; ?>
 						</div>
 						<div class='medal-name'>
 							<?=$medal['medal_name'] . '<br />' . $medal['subject_name']?><br />
@@ -1236,7 +1246,9 @@ abstract class MissionDisplay {
 				<?php foreach ($activeStreaks as $streak) : ?>
 					<div class='streak'>
 						<div class='campaign-icon'>
-							<img src='/mission_report/campaignLogos/<?=$this->campaignLogos[$streak['subject_id']] ?? ''?>' alt='<?= $streak['duch_cat'] ?>' />
+							<?php $logo = $this->campaignLogos[$streak['subject_id']] ?? ''; if ($logo): ?>
+							<img src='/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>' alt='<?= htmlspecialchars($streak['duch_cat']) ?>' />
+							<?php endif; ?>
 						</div>
 						<div class='task'>
 							<div class='task-short-name'><?= $streak['duch_cat'] ?></div>
@@ -1445,7 +1457,9 @@ abstract class MissionDisplay {
 										?>
 							            <div class="row">
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$daily_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
@@ -1591,7 +1605,9 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$weekly_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
@@ -1703,7 +1719,9 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$shabbos_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
@@ -1831,7 +1849,9 @@ abstract class MissionDisplay {
 										?>
 									</div>
 									<div class="rowImg">
-										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+										<?php $logo = $this->campaignLogos[$no_label_task->subject_id] ?? ''; if ($logo): ?>
+										<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+										<?php endif; ?>
 									</div>
 									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
@@ -2071,7 +2091,9 @@ abstract class MissionDisplay {
 										?>
 							            <div class="row">
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$daily_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$daily_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($daily_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$daily_task->medium_pic?>.jpg" /></div>
@@ -2267,7 +2289,9 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$weekly_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$weekly_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($weekly_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$weekly_task->medium_pic?>.jpg" /></div>
@@ -2376,7 +2400,9 @@ abstract class MissionDisplay {
 												?>
 											</div>
 											<div class="rowImg">
-												<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$shabbos_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+												<?php $logo = $this->campaignLogos[$shabbos_task->subject_id] ?? ''; if ($logo): ?>
+												<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+												<?php endif; ?>
 											</div>
 											<? if ($this->missionType == 2 && !empty($shabbos_task->medium_pic)) { ?>
 												<div class="mediumPic"><img src="/mission_report/color/<?=$shabbos_task->medium_pic?>.jpg" /></div>
@@ -2501,7 +2527,9 @@ abstract class MissionDisplay {
 										?>
 									</div>
 									<div class="rowImg">
-										<img src="/mission_report/campaignLogos/<?=$this->campaignLogos[$no_label_task->subject_id] ?? ''?>" width="50" height="52" alt=""/>
+										<?php $logo = $this->campaignLogos[$no_label_task->subject_id] ?? ''; if ($logo): ?>
+										<img src="/mission_report/campaignLogos/<?= htmlspecialchars($logo) ?>" width="50" height="52" alt=""/>
+										<?php endif; ?>
 									</div>
 									<? if ($this->missionType == 2 && !empty($no_label_task->medium_pic)) { ?>
 										<div class="mediumPic"><img src="/mission_report/color/<?=$no_label_task->medium_pic?>.jpg" /></div>
