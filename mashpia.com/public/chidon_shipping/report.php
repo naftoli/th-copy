@@ -252,7 +252,7 @@ ksort($grand_summary);
 <?php
 if (in_array($_POST['report_type'], ['all', 'summary'])) {
     $i = 0;
-    $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category'];
+    $s_items = ['Item ID', 'Quantity', 'Item Name', 'Size', 'Gender/Color', 'Category', 'Spanish Name'];
     echo "Order Summary by: <select name='order' id='order'>";
     echo "<option value='-1'>Choose ordering</option>";
     foreach ($s_items as $s_item) {
