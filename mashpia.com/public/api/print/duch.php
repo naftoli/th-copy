@@ -242,7 +242,7 @@
                 return;
             }
 
-            // Print Duch All: check if we need to auto-open grade pages (300+ users)
+            // Print Duch All: check if we need to auto-open grade pages (375+ users)
             // if (Cookies.get('naftoli') && url === 'printDuchAll.php') {
                 var checkData = Object.assign({}, postData, { check_tabs: 1 });
                 fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
