@@ -193,7 +193,7 @@
             async function printToPdf() {
                 const elem = document.getElementById('main');
                 await waitForRenderReady(elem);
-                const filename = 'duch_' + new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + '.pdf';
+                const filename = 'duch_' + new Date().toISOString().replace(/[-:]/g, '').slice(0, 10) + '.pdf';
                 const opt = {
                     margin: 0.5,
                     filename: filename,
