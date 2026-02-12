@@ -76,6 +76,88 @@ function build_duch_marks_cache( $user_ids, $start, $end ) {
 }
 
 /**
+ * Batch-load medals and ranks for duch printing.
+ * Sets $GLOBALS['duch_all_medals'][user_id] = [subject_id => medal_name] (highest medal per subject).
+ * Sets $GLOBALS['duch_medals'][user_id] = array of medal rows (awarded in date range, for "New Medals").
+ * Sets $GLOBALS['duch_ranks'][user_id] = array of rank rows (promoted in date range, for "New Promotions").
+ *
+ * @param array $user_ids
+ * @param int   $start  Julian day (inclusive)
+ * @param int   $end    Julian day (inclusive)
+ */
+function build_duch_medals_ranks_cache( $user_ids, $start, $end ) {
+	global $MASHPIA_DB;
+	$GLOBALS['duch_all_medals'] = [];
+	$GLOBALS['duch_medals'] = [];
+	$GLOBALS['duch_ranks'] = [];
+	if ( empty( $user_ids ) ) return;
+
+	$uids = array_values( array_unique( array_filter( array_map( 'intval', $user_ids ) ) ) );
+	$chunk = 500;
+
+	// medals lookup: medal_ord => medal_name
+	$medals_by_ord = [];
+	$mq = $MASHPIA_DB->query( "SELECT medal_ord, medal_name FROM medals" );
+	if ( $mq ) {
+		while ( $r = $mq->fetch( PDO::FETCH_ASSOC ) ) {
+			$medals_by_ord[ (int) $r['medal_ord'] ] = $r['medal_name'];
+		}
+	}
+
+	foreach ( array_chunk( $uids, $chunk ) as $chunk_ids ) {
+		$placeholders = implode( ',', array_fill( 0, count( $chunk_ids ), '?' ) );
+		$params = array_merge( $chunk_ids, [ $start, $end ] );
+
+		// all_medals: subject_id => medal_name (highest per subject) per user
+		$sql_all = "SELECT user_id, subject_id, MAX(medal_ord) as medal_ord
+			FROM medal_marks
+			WHERE user_id IN ($placeholders)
+			GROUP BY user_id, subject_id";
+		$stmt = $MASHPIA_DB->prepare( $sql_all );
+		if ( $stmt && $stmt->execute( $chunk_ids ) ) {
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$uid = (int) $row['user_id'];
+				$sid = (int) $row['subject_id'];
+				$ord = (int) $row['medal_ord'];
+				if ( ! isset( $GLOBALS['duch_all_medals'][ $uid ] ) ) $GLOBALS['duch_all_medals'][ $uid ] = [];
+				$GLOBALS['duch_all_medals'][ $uid ][ $sid ] = isset( $medals_by_ord[ $ord ] ) ? $medals_by_ord[ $ord ] : '';
+			}
+		}
+
+		// medals: awarded in date range (for New Medals section)
+		$sql_medals = "SELECT mm.*, s.subject_name, m.medal_name
+			FROM medal_marks mm
+			JOIN subjects s USING (subject_id)
+			JOIN medals m USING (medal_ord)
+			WHERE mm.user_id IN ($placeholders)
+			AND mm.date_awarded >= ? AND mm.date_awarded <= ?";
+		$stmt = $MASHPIA_DB->prepare( $sql_medals );
+		if ( $stmt && $stmt->execute( $params ) ) {
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$uid = (int) $row['user_id'];
+				if ( ! isset( $GLOBALS['duch_medals'][ $uid ] ) ) $GLOBALS['duch_medals'][ $uid ] = [];
+				$GLOBALS['duch_medals'][ $uid ][] = $row;
+			}
+		}
+
+		// ranks: promoted in date range (for New Promotions section)
+		$sql_ranks = "SELECT rm.*, r.rank_name, r.rank_ord, r.rank_image_id
+			FROM rank_marks rm
+			JOIN ranks r USING (rank_ord)
+			WHERE rm.user_id IN ($placeholders)
+			AND rm.date_promoted >= ? AND rm.date_promoted <= ?";
+		$stmt = $MASHPIA_DB->prepare( $sql_ranks );
+		if ( $stmt && $stmt->execute( $params ) ) {
+			while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+				$uid = (int) $row['user_id'];
+				if ( ! isset( $GLOBALS['duch_ranks'][ $uid ] ) ) $GLOBALS['duch_ranks'][ $uid ] = [];
+				$GLOBALS['duch_ranks'][ $uid ][] = $row;
+			}
+		}
+	}
+}
+
+/**
  * Batch-load birthday cache for mission printing.
  * Used by missions.php and printDuchAll.php.
  * Sets $GLOBALS['birthday_cache'] (user_id => [mission_id => true]).

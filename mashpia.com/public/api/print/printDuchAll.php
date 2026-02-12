@@ -46,7 +46,7 @@ $num_days = $end - $start + 1;
 $days_flag = ceil( $num_days / 30 ); // number of times to multiply the number of users by to get the total number of users needed for the duch
 
 // When check_tabs=1, return JSON: useTabs (true if 300+ registered children) and grades (grade label + class_ids per grade) so duch.php can open one page per grade.
-define( 'DUCH_TABS_USER_THRESHOLD', 300 );
+define( 'DUCH_TABS_USER_THRESHOLD', 500 );
 define( 'DUCH_GRADE_ORDER', [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ] );
 if ( ! empty( $_POST['check_tabs'] ) ) {
     header( 'Content-Type: application/json; charset=utf-8' );
@@ -162,6 +162,7 @@ foreach ($dtm as $dtmRow) {
 require_once __DIR__ . '/missions_print_cache.php';
 build_mission_print_caches( $user_ids, $start, $end, $all_date_tasks_missions );
 build_duch_marks_cache( $user_ids, $start, $end );
+build_duch_medals_ranks_cache( $user_ids, $start, $end );
 // * Generate the missions: use school filter when list is huge to avoid giant IN/FIELD in SQL
 $user_ids_to_pass = $user_ids;
 $school_for_query = 0;
