@@ -175,21 +175,25 @@
             const postData = <?= json_encode($_POST) ?>;
             let url = 'printDuchAll.php';
 
-            function showContent(html) {
+            function showContent(html, payload) {
                 if (html === 'error') {
                     $("#spinner").empty();
                     alert('Error: School ID is required');
                     return;
                 }
+                window.duchPostData = payload || postData;
                 $('#main').html(html);
                 $("#spinner").empty();
                 if (email) {
                     emailToOhel();
                 } else {
                     $("#print-button").show();
+                    $("#pdf-button").show();
                     if (fromBC) {
                         $("#email-button").show();
                     }
+                    // Auto-download PDF when content loads (no button click needed)
+                    setTimeout(function() { downloadPdf(); }, 500);
                 }
             }
 
@@ -229,7 +233,7 @@
             if (postData.class_ids && (Array.isArray(postData.class_ids) ? postData.class_ids.length : (postData.class_ids + '').split(',').filter(Boolean).length)) {
                 fetch(url, { method: 'POST', body: JSON.stringify(postData) })
                     .then(function(r) { return r.text(); })
-                    .then(showContent)
+                    .then(function(t) { showContent(t, postData); })
                     .catch(function(err) {
                         $("#spinner").empty();
                         alert('Error: ' + err);
@@ -264,7 +268,7 @@
                         delete fullData.check_tabs;
                         fetch(url, { method: 'POST', body: JSON.stringify(fullData) })
                             .then(function(r) { return r.text(); })
-                            .then(showContent)
+                            .then(function(t) { showContent(t, fullData); })
                             .catch(function(err) {
                                 $("#spinner").empty();
                                 alert('Error: ' + err);
@@ -285,6 +289,34 @@
             //         alert('Error: ' + err);
             //     });
         };
+
+        function downloadPdf() {
+            var payload = window.duchPostData || {};
+            payload = Object.assign({}, payload, { format: 'pdf' });
+            var btn = document.getElementById('pdf-button');
+            if (btn) { btn.disabled = true; btn.textContent = 'Generating…'; }
+            fetch('printDuchAll.php', { method: 'POST', body: JSON.stringify(payload) })
+                .then(function(r) {
+                    if (!r.ok) throw new Error(r.statusText || 'Request failed');
+                    return r.blob();
+                })
+                .then(function(blob) {
+                    var url = URL.createObjectURL(blob);
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'duch-' + new Date().toISOString().slice(0, 10) + '.pdf';
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                })
+                .catch(function(err) {
+                    alert('Error generating PDF: ' + err);
+                })
+                .finally(function() {
+                    if (btn) { btn.disabled = false; btn.textContent = 'Download PDF'; }
+                });
+        }
 
         function emailToOhel() {
             setTimeout(async function() {

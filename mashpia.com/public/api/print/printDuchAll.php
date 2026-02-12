@@ -45,10 +45,13 @@ if ( $selectedMonth ) {
 $num_days = $end - $start + 1;
 $days_flag = ceil( $num_days / 30 ); // number of times to multiply the number of users by to get the total number of users needed for the duch
 
+// When format=pdf, skip check_tabs (we want a single PDF, not grade tabs)
+$format_pdf = ! empty( $_POST['format'] ) && $_POST['format'] === 'pdf';
+
 // When check_tabs=1, return JSON: useTabs (true if 300+ registered children) and grades (grade label + class_ids per grade) so duch.php can open one page per grade.
 define( 'DUCH_TABS_USER_THRESHOLD', 500 );
 define( 'DUCH_GRADE_ORDER', [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ] );
-if ( ! empty( $_POST['check_tabs'] ) ) {
+if ( ! $format_pdf && ! empty( $_POST['check_tabs'] ) ) {
     header( 'Content-Type: application/json; charset=utf-8' );
     global $MASHPIA_DB;
     $stmt = $MASHPIA_DB->prepare( 'SELECT COUNT(*) AS n FROM users WHERE school_id = ? AND user_registered > 0' );
@@ -189,12 +192,15 @@ foreach ( $missions as $info ) {
 }
 
 ob_start();
-// * Print the buttons to print and email the Duch
-echo "
+if ( ! $format_pdf ) {
+    // * Print the buttons to print and email the Duch
+    echo "
     <div style='display: flex; justify-content: center; gap: 10px; margin-top: 10px;'>
     <button class='no-print btn btn-primary' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
+    <button class='no-print btn btn-primary' id='pdf-button' style='display: none;' onclick='javascript:downloadPdf()'>Download PDF</button>
     <button class='no-print btn btn-primary' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
     </div>";
+}
 
 $pages = 0;
 // * Load streaks for all users in one batch
@@ -220,14 +226,69 @@ foreach ( $objMissions as $obj ) {
     if (isset($_GET['debug'])) $debug = true;
     $pages += $obj->printDuch($activeStreaks);
     echo "</div>|";
-    // Flush so client receives output progressively and doesn't timeout
-    if ( ob_get_level() ) {
+    // Flush so client receives output progressively and doesn't timeout (only when not PDF)
+    if ( ! $format_pdf && ob_get_level() ) {
         ob_flush();
         flush();
     }
 }
-$html = ob_get_flush();
-echo $html;
+$bodyHtml = ob_get_clean();
+
+if ( $format_pdf ) {
+    $bodyHtml = str_replace( '|', '', $bodyHtml );
+    outputDuchPdf( $bodyHtml );
+} else {
+    echo $bodyHtml;
+}
+
+function outputDuchPdf( $bodyHtml ) {
+    $basePath = rtrim( $_SERVER['DOCUMENT_ROOT'], '/' ) . '/';
+    $cssPath = 'mission_report/newStyle.css';
+    $inlineStyles = "
+        body { font-family: 'Exo', sans-serif; }
+        .userDuch { width: 7in; margin: 20px auto; page-break-after: always; }
+        .container { column-count: 3; column-gap: 20px; height: auto !important; }
+        .track { margin-bottom: 15px; }
+        .campaign-container, .task-container, .streak-container, .medals-container, .promotions-container, .streaks-container, .streak {
+            display: flex; flex-direction: row; gap: 10px; break-inside: avoid; page-break-inside: avoid;
+        }
+        .container .medals-container, .container .promotions-container, .container .streaks-container { margin-bottom: 20px; }
+        .task-container, .streak-container { margin-bottom: 5px; }
+        .task, .medal, .promotion, .campaign-medals { display: flex; flex-direction: column; width: 2in; gap: 2px; }
+        .campaign-name { font-size: 20px; line-height: 1; }
+        .campaign-medals { font-size: 12px; }
+        .task-short-name { font-size: 14px; }
+        .task-name { font-size: 9px; }
+        .campaign-icon, .task-stats { width: 50px; text-align: center; margin-bottom: -8px; }
+        .task-stats { font-size: 9px; line-height: 1.2; direction: ltr; }
+        .medal { width: 0.75in; }
+        .promotion { width: 1in; }
+        .medal-name, .promotion-name { font-size: 12px; margin-top: -10px; text-align: center; }
+        .streak .campaign-icon { width: 75px; }
+        .streak-text { text-align: center; font-size: 14px; line-height: 1; }
+        .streak-fill progress { height: 30px; margin-left: 5px; }
+        .streak progress { width: 2in; margin-left: 0; }
+    ";
+    $cssLink = file_exists( $basePath . $cssPath )
+        ? '<link rel="stylesheet" href="' . $cssPath . '" type="text/css" />'
+        : '';
+    $fullHtml = '<!DOCTYPE html><html><head><meta charset="utf-8"/>' . $cssLink
+        . '<style>' . $inlineStyles . '</style></head><body>' . $bodyHtml . '</body></html>';
+
+    require_once dirname( dirname( dirname( __DIR__ ) ) ) . '/vendor/autoload.php';
+    $options = new \Dompdf\Options();
+    $options->set( 'isRemoteEnabled', false );
+    $options->set( 'isHtml5ParserEnabled', true );
+    $dompdf = new \Dompdf\Dompdf( $options );
+    $dompdf->setBasePath( $basePath );
+    $dompdf->loadHtml( $fullHtml, 'UTF-8' );
+    $dompdf->setPaper( 'letter', 'portrait' );
+    $dompdf->render();
+    $filename = 'duch-' . date( 'Y-m-d' ) . '.pdf';
+    header( 'Content-Type: application/pdf' );
+    header( 'Content-Disposition: attachment; filename="' . $filename . '"' );
+    echo $dompdf->output();
+}
 
 function isRTL($lang_id) {
     return in_array($lang_id, [2, 4]);
