@@ -29,9 +29,10 @@ class SchoolsUsers {
         $this->classes = $classes;
     }
     
-    private function setUsers($registered, $only) {
+    private function setUsers($registered, $only, $forParent = false) {
         $sql = "select u.*, s.shorthand, ";
 		if ($this->year > 0) $sql .= "ur.*, ";
+		if ($forParent) $sql .= "aa.admin_id, ";
 		$sql .= "c.class_grade, c.class_sub, c.class_teacher from users u 
                 join classes c using (class_id) ";
 		if ($this->year > 0 && $registered) {
@@ -40,6 +41,9 @@ class SchoolsUsers {
             $sql .= "left join user_registration ur using (user_id) ";
         }
         $sql .= "join schools s on s.school_id = u.school_id ";
+		if ($forParent) {
+			$sql .= "join admin_auths aa on aa.id = u.user_id and aa.auth = 'user'";
+		}
         if ($this->school)
             $sql .= "where u.school_id = " . $this->school;
         else
@@ -76,9 +80,9 @@ class SchoolsUsers {
         }
     }
         
-    public function getUsers($registered = true, $only = true) {
+    public function getUsers($registered = true, $only = true, $forParent = false) {
         if ( empty ( $this->users ) && empty( $this->usersByClass ) ) 
-            $this->setUsers($registered, $only);
+            $this->setUsers($registered, $only, $forParent);
         //find out which users array to get    
         if ( empty( $this->classes ) )
             return $this->users;
