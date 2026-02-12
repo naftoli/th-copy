@@ -16,7 +16,7 @@ include_once( __DIR__ . "/../../classes/pesukim_task.php" );
 include_once( __DIR__ . "/../../class.defaults.php" );
 
 class Missions {
-	const MAX_USER_IDS_IN_QUERY = 500;
+	const MAX_USER_IDS_IN_QUERY = 250;
 
 	protected $school;
 	protected $grade;
