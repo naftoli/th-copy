@@ -81,7 +81,7 @@ $year = GlobalSettings::getRegistrationYear();
         html += "<h2>" + schools[school] + "</h2>"
       }
       html += `
-        <table><tr>${school > 0 ? '' : "<th>School</th>"}${[61, 269].includes(school) ? "<th>Family ID</th>" : '' }<th>Grade</th><th>Student</th><th>Serial #</th><th>TH Started Date</th>
+        <table><tr>${school > 0 ? '' : "<th>School</th>"}${[61, 269].includes(user.school_id) ? "<th>Family ID</th>" : '' }<th>Grade</th><th>Student</th><th>Serial #</th><th>TH Started Date</th>
         <th>${year} Registration Date</th></tr>
       `
       for (let user of data[school]) {
@@ -90,7 +90,7 @@ $year = GlobalSettings::getRegistrationYear();
         if (!totals[user.school_id][grade]) totals[user.school_id][grade] = 0
         totals[user.school_id][grade]++
         html += `
-          <tr>${school > 0 ? '' : "<td>" + schools[user.school_id] + "</td>"}${[61, 269].includes(school) ? "<td>" + user.admin_id + "</td>" : '' }<td>${grade}</td><td>${user.first + ' ' + user.last}</td>
+          <tr>${school > 0 ? '' : "<td>" + schools[user.school_id] + "</td>"}${[61, 269].includes(user.school_id) ? "<td>" + user.admin_id + "</td>" : '' }<td>${grade}</td><td>${user.first + ' ' + user.last}</td>
           <td>${user.user_serial}</td><td>${jdToGreg(user.user_start_date).toDateString()}</td><td>${user.reg_date}</td></tr>
         `
       }
