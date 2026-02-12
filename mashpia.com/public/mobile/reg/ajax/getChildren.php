@@ -120,6 +120,12 @@ if (!empty($users)) {
         $children[$row['user_id']]['show_report_card_2'] = intval($row['show_report_card_2']);
         $children[$row['user_id']]['show_report_card_3'] = intval($row['show_report_card_3']);
         $children[$row['user_id']]['open_reg_5786'] = intval($row['open_reg_5786']);
+        // if we are now past 3am on Feb. 12, 2026, turn off chidon registration for all children except for australian schools
+        $now = new DateTime('now', new DateTimeZone('America/New_York'));
+        $fixed = new DateTime('2026-02-12 03:00:00', new DateTimeZone('America/New_York'));
+        if ($now > $fixed && !in_array($row['school_id'], [66, 110, 112, 180])) {
+            $children[$row['user_id']]['open_reg_5786'] = 0;
+        }
 
         // find out hachayol info if year greater than 5785
         if ($reg_year > 5785) {
