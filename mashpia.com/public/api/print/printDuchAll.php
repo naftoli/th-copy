@@ -45,37 +45,49 @@ if ( $selectedMonth ) {
 $num_days = $end - $start + 1;
 $days_flag = ceil( $num_days / 30 ); // number of times to multiply the number of users by to get the total number of users needed for the duch
 
-// When check_tabs=1, return JSON: useTabs (true if 300+ registered children) and grades (grade label + class_ids per grade) so duch.php can open one page per grade.
+// When check_tabs=1, return JSON: useTabs (true if over threshold) and batches (user_ids per batch of DUCH_TABS_USER_THRESHOLD) so duch.php can open one page per batch.
 define( 'DUCH_TABS_USER_THRESHOLD', 500 );
 define( 'DUCH_GRADE_ORDER', [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ] );
 if ( ! empty( $_POST['check_tabs'] ) ) {
     header( 'Content-Type: application/json; charset=utf-8' );
     global $MASHPIA_DB;
-    $stmt = $MASHPIA_DB->prepare( 'SELECT COUNT(*) AS n FROM users WHERE school_id = ? AND user_registered > 0' );
-    $stmt->execute( [ $school_id ] );
-    $total_users = (int) $stmt->fetch( PDO::FETCH_ASSOC )['n'];
-    if ( ($total_users * $days_flag) < DUCH_TABS_USER_THRESHOLD ) {
+    $tab_class_ids = isset( $_POST['class_ids'] ) && $_POST['class_ids'] !== ''
+        ? ( is_array( $_POST['class_ids'] ) ? $_POST['class_ids'] : explode( ',', $_POST['class_ids'] ) )
+        : array_map( function ( $p ) { return $p->class_id; }, $school->platoons );
+    $tab_class_ids = array_filter( array_map( 'intval', $tab_class_ids ) );
+    $users = [];
+    foreach ( $tab_class_ids as $class_id ) {
+        $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
+        $usersTmp = array_filter( $usersTmp, function ( $u ) { return $u->user_registered; } );
+        $users = array_merge( $users, $usersTmp );
+    }
+    $order = array_flip( DUCH_GRADE_ORDER );
+    usort( $users, function ( $a, $b ) use ( $order ) {
+        $ga = isset( $a->platoon ) && isset( $a->platoon->class_grade ) ? trim( (string) $a->platoon->class_grade ) : '';
+        $gb = isset( $b->platoon ) && isset( $b->platoon->class_grade ) ? trim( (string) $b->platoon->class_grade ) : '';
+        $ia = isset( $order[ $ga ] ) ? $order[ $ga ] : 999;
+        $ib = isset( $order[ $gb ] ) ? $order[ $gb ] : 999;
+        if ( $ia !== $ib ) return $ia - $ib;
+        return strcmp( $a->last ?? '', $b->last ?? '' );
+    } );
+    $user_ids = array_map( function ( $u ) { return $u->user_id; }, $users );
+    $total = count( $user_ids );
+    if ( ( $total * $days_flag ) < DUCH_TABS_USER_THRESHOLD ) {
         echo json_encode( [ 'useTabs' => false ] );
         exit;
     }
-    $by_grade = [];
-    foreach ( $school->platoons as $p ) {
-        $grade = isset( $p->class_grade ) ? trim( (string) $p->class_grade ) : '';
-        if ( $grade === '' ) continue;
-        if ( ! isset( $by_grade[ $grade ] ) ) $by_grade[ $grade ] = [ 'grade' => $grade, 'label' => $grade, 'class_ids' => [] ];
-        $by_grade[ $grade ]['class_ids'][] = (int) $p->class_id;
+    $batches = [];
+    $chunk_size = DUCH_TABS_USER_THRESHOLD;
+    $chunks = array_chunk( $user_ids, $chunk_size );
+    foreach ( $chunks as $i => $chunk ) {
+        $from = $i * $chunk_size + 1;
+        $to = $i * $chunk_size + count( $chunk );
+        $batches[] = [
+            'user_ids' => $chunk,
+            'label'    => 'Batch ' . ( $i + 1 ) . ' (' . $from . '-' . $to . ')',
+        ];
     }
-    $order = array_flip( DUCH_GRADE_ORDER );
-    uksort( $by_grade, function ( $a, $b ) use ( $order ) {
-        $ia = isset( $order[ $a ] ) ? $order[ $a ] : 999;
-        $ib = isset( $order[ $b ] ) ? $order[ $b ] : 999;
-        if ( $ia !== $ib ) return $ia - $ib;
-        return strcmp( $a, $b );
-    } );
-    $grades = array_values( array_map( function ( $g ) {
-        return [ 'grade' => $g['grade'], 'label' => $g['label'], 'class_ids' => $g['class_ids'] ];
-    }, $by_grade ) );
-    echo json_encode( [ 'useTabs' => true, 'grades' => $grades ] );
+    echo json_encode( [ 'useTabs' => true, 'batches' => $batches ] );
     exit;
 }
 

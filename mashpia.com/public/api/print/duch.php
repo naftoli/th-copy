@@ -193,14 +193,16 @@
                 }
             }
 
-            function buildFormInputs(data, classIds) {
+            function buildFormInputs(data, overrides) {
                 var html = '';
-                var payload = Object.assign({}, data, { class_ids: classIds });
+                var payload = Object.assign({}, data, overrides || {});
                 delete payload.check_tabs;
                 for (var key in payload) {
                     if (!payload.hasOwnProperty(key)) continue;
                     var val = payload[key];
-                    if (Array.isArray(val)) {
+                    if (key === 'user_ids' && Array.isArray(val)) {
+                        html += '<input type="hidden" name="user_ids" value="' + (val.join(',') || '').replace(/"/g, '&quot;') + '">';
+                    } else if (Array.isArray(val)) {
                         for (var i = 0; i < val.length; i++) {
                             html += '<input type="hidden" name="' + key + '[]" value="' + (val[i] != null ? String(val[i]).replace(/"/g, '&quot;') : '') + '">';
                         }
@@ -211,22 +213,25 @@
                 return html;
             }
 
-            function openGradeInNewPage(gradeData, delayMs) {
+            function openBatchInNewPage(batchData, delayMs) {
                 setTimeout(function() {
                     var form = document.createElement('form');
                     form.method = 'POST';
                     form.action = 'duch.php';
                     form.target = '_blank';
                     form.style.display = 'none';
-                    form.innerHTML = buildFormInputs(postData, gradeData.class_ids || []);
+                    var overrides = { user_ids: batchData.user_ids || [] };
+                    form.innerHTML = buildFormInputs(postData, overrides);
                     document.body.appendChild(form);
                     form.submit();
                     document.body.removeChild(form);
                 }, delayMs);
             }
 
-            // Grade-specific page: we were opened with class_ids (from auto-open). Load content for that grade only.
-            if (postData.class_ids && (Array.isArray(postData.class_ids) ? postData.class_ids.length : (postData.class_ids + '').split(',').filter(Boolean).length)) {
+            // Grade- or batch-specific page: we were opened with class_ids or user_ids (from auto-open). Load content for that selection only.
+            var hasClassIds = postData.class_ids && (Array.isArray(postData.class_ids) ? postData.class_ids.length : (postData.class_ids + '').split(',').filter(Boolean).length);
+            var hasUserIds = postData.user_ids && (Array.isArray(postData.user_ids) ? postData.user_ids.length : (postData.user_ids + '').split(',').filter(Boolean).length);
+            if (hasClassIds || hasUserIds) {
                 fetch(url, { method: 'POST', body: JSON.stringify(postData) })
                     .then(function(r) { return r.text(); })
                     .then(showContent)
@@ -245,17 +250,17 @@
                     .then(function(text) {
                         var json = null;
                         try { json = JSON.parse(text); } catch (e) {}
-                        if (json && json.useTabs && json.grades && json.grades.length > 0) {
+                        if (json && json.useTabs && json.batches && json.batches.length > 0) {
                             $("#spinner").empty();
                             var listEl = document.getElementById('grade-list');
                             listEl.style.display = 'block';
-                            listEl.innerHTML = '<p>Opening ' + json.grades.length + ' grade pages…</p>';
-                            json.grades.forEach(function(g, i) {
-                                openGradeInNewPage(g, i * 1000);
+                            listEl.innerHTML = '<p>Opening ' + json.batches.length + ' batch pages…</p>';
+                            json.batches.forEach(function(b, i) {
+                                openBatchInNewPage(b, i * 1000);
                             });
-                            var lastOpenMs = (json.grades.length - 1) * 1000;
+                            var lastOpenMs = (json.batches.length - 1) * 1000;
                             setTimeout(function() {
-                                listEl.innerHTML = '<p>Opened ' + json.grades.length + ' grade pages. Closing…</p>';
+                                listEl.innerHTML = '<p>Opened ' + json.batches.length + ' batch pages. Closing…</p>';
                                 window.close();
                             }, lastOpenMs + 1000);
                             return;
