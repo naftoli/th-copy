@@ -81,7 +81,7 @@ $year = GlobalSettings::getRegistrationYear();
         html += "<h2>" + schools[school] + "</h2>"
       }
       html += `
-        <table><tr>${school > 0 ? '' : "<th>School</th>"}${[61, 269].includes(user.school_id) ? "<th>Family ID</th>" : '' }<th>Grade</th><th>Student</th><th>Serial #</th><th>TH Started Date</th>
+        <table><tr>${school > 0 ? '' : "<th>School</th>"}${[61, 269].includes(school) ? "<th>Family ID</th>" : '' }<th>Grade</th><th>Student</th><th>Serial #</th><th>TH Started Date</th>
         <th>${year} Registration Date</th></tr>
       `
       for (let user of data[school]) {
