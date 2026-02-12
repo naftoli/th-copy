@@ -45,49 +45,53 @@ if ( $selectedMonth ) {
 // $num_days = $end - $start + 1;
 // $days_flag = ceil( $num_days / 30 ); // number of times to multiply the number of users by to get the total number of users needed for the duch
 
-// When check_tabs=1, return JSON: useTabs (true if over threshold) and batches (user_ids per batch of DUCH_TABS_USER_THRESHOLD) so duch.php can open one page per batch.
-define( 'DUCH_TABS_USER_THRESHOLD', 360 );
+// When check_tabs=1, return JSON: useTabs (true if more than DUCH_TABS_MAX_CLASSES classes) and tabs (class_ids per tab, max DUCH_TABS_MAX_CLASSES classes each) so duch.php can open one page per tab.
+define( 'DUCH_TABS_MAX_CLASSES', 10 );
 define( 'DUCH_GRADE_ORDER', [ 'Pre1a', '1', '2', '3', '4', '5', '6', '7', '8' ] );
 if ( ! empty( $_POST['check_tabs'] ) ) {
     header( 'Content-Type: application/json; charset=utf-8' );
-    global $MASHPIA_DB;
-    $tab_class_ids = isset( $_POST['class_ids'] ) && $_POST['class_ids'] !== ''
-        ? ( is_array( $_POST['class_ids'] ) ? $_POST['class_ids'] : explode( ',', $_POST['class_ids'] ) )
-        : array_map( function ( $p ) { return $p->class_id; }, $school->platoons );
-    $tab_class_ids = array_filter( array_map( 'intval', $tab_class_ids ) );
-    $users = [];
-    foreach ( $tab_class_ids as $class_id ) {
-        $usersTmp = \Soldier::find_all_by_class_id( [ $class_id ] );
-        $usersTmp = array_filter( $usersTmp, function ( $u ) { return $u->user_registered; } );
-        $users = array_merge( $users, $usersTmp );
+    $by_grade = [];
+    foreach ( $school->platoons as $p ) {
+        $grade = isset( $p->class_grade ) ? trim( (string) $p->class_grade ) : '';
+        if ( $grade === '' ) continue;
+        if ( ! isset( $by_grade[ $grade ] ) ) $by_grade[ $grade ] = [ 'grade' => $grade, 'label' => $grade, 'class_ids' => [] ];
+        $by_grade[ $grade ]['class_ids'][] = (int) $p->class_id;
     }
     $order = array_flip( DUCH_GRADE_ORDER );
-    usort( $users, function ( $a, $b ) use ( $order ) {
-        $ga = isset( $a->platoon ) && isset( $a->platoon->class_grade ) ? trim( (string) $a->platoon->class_grade ) : '';
-        $gb = isset( $b->platoon ) && isset( $b->platoon->class_grade ) ? trim( (string) $b->platoon->class_grade ) : '';
-        $ia = isset( $order[ $ga ] ) ? $order[ $ga ] : 999;
-        $ib = isset( $order[ $gb ] ) ? $order[ $gb ] : 999;
+    uksort( $by_grade, function ( $a, $b ) use ( $order ) {
+        $ia = isset( $order[ $a ] ) ? $order[ $a ] : 999;
+        $ib = isset( $order[ $b ] ) ? $order[ $b ] : 999;
         if ( $ia !== $ib ) return $ia - $ib;
-        return strcmp( $a->last ?? '', $b->last ?? '' );
+        return strcmp( $a, $b );
     } );
-    $user_ids = array_map( function ( $u ) { return $u->user_id; }, $users );
-    $total = count( $user_ids );
-    if ( $total < DUCH_TABS_USER_THRESHOLD ) {
+    $tab_class_ids = isset( $_POST['class_ids'] ) && $_POST['class_ids'] !== ''
+        ? ( is_array( $_POST['class_ids'] ) ? $_POST['class_ids'] : explode( ',', $_POST['class_ids'] ) )
+        : null;
+    $tab_class_ids = $tab_class_ids ? array_filter( array_map( 'intval', $tab_class_ids ) ) : null;
+    $class_ids_ordered = [];
+    foreach ( $by_grade as $g ) {
+        foreach ( $g['class_ids'] as $cid ) {
+            if ( ! $tab_class_ids || in_array( $cid, $tab_class_ids ) ) {
+                $class_ids_ordered[] = $cid;
+            }
+        }
+    }
+    $total_classes = count( $class_ids_ordered );
+    if ( $total_classes <= DUCH_TABS_MAX_CLASSES ) {
         echo json_encode( [ 'useTabs' => false ] );
         exit;
     }
-    $batches = [];
-    $chunk_size = DUCH_TABS_USER_THRESHOLD;
-    $chunks = array_chunk( $user_ids, $chunk_size );
+    $chunks = array_chunk( $class_ids_ordered, DUCH_TABS_MAX_CLASSES );
+    $tabs = [];
     foreach ( $chunks as $i => $chunk ) {
-        $from = $i * $chunk_size + 1;
-        $to = $i * $chunk_size + count( $chunk );
-        $batches[] = [
-            'user_ids' => $chunk,
-            'label'    => 'Batch ' . ( $i + 1 ) . ' (' . $from . '-' . $to . ')',
+        $from = $i * DUCH_TABS_MAX_CLASSES + 1;
+        $to = $i * DUCH_TABS_MAX_CLASSES + count( $chunk );
+        $tabs[] = [
+            'class_ids' => $chunk,
+            'label'     => 'Tab ' . ( $i + 1 ) . ' (Classes ' . $from . '-' . $to . ')',
         ];
     }
-    echo json_encode( [ 'useTabs' => true, 'batches' => $batches ] );
+    echo json_encode( [ 'useTabs' => true, 'tabs' => $tabs ] );
     exit;
 }
 

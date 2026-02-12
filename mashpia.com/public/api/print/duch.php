@@ -213,14 +213,14 @@
                 return html;
             }
 
-            function openBatchInNewPage(batchData, delayMs) {
+            function openTabInNewPage(tabData, delayMs) {
                 setTimeout(function() {
                     var form = document.createElement('form');
                     form.method = 'POST';
                     form.action = 'duch.php';
                     form.target = '_blank';
                     form.style.display = 'none';
-                    var overrides = { user_ids: batchData.user_ids || [] };
+                    var overrides = { class_ids: tabData.class_ids || [] };
                     form.innerHTML = buildFormInputs(postData, overrides);
                     document.body.appendChild(form);
                     form.submit();
@@ -228,10 +228,9 @@
                 }, delayMs);
             }
 
-            // Grade- or batch-specific page: we were opened with class_ids or user_ids (from auto-open). Load content for that selection only.
+            // Tab- or grade-specific page: we were opened with class_ids (from auto-open). Load content for that selection only.
             var hasClassIds = postData.class_ids && (Array.isArray(postData.class_ids) ? postData.class_ids.length : (postData.class_ids + '').split(',').filter(Boolean).length);
-            var hasUserIds = postData.user_ids && (Array.isArray(postData.user_ids) ? postData.user_ids.length : (postData.user_ids + '').split(',').filter(Boolean).length);
-            if (hasClassIds || hasUserIds) {
+            if (hasClassIds) {
                 fetch(url, { method: 'POST', body: JSON.stringify(postData) })
                     .then(function(r) { return r.text(); })
                     .then(showContent)
@@ -242,25 +241,24 @@
                 return;
             }
 
-            // Print Duch All: check if we need to auto-open grade pages (360+ users)
-            // if (Cookies.get('naftoli') && url === 'printDuchAll.php') {
+            // Print Duch All: check if we need to auto-open tab pages (more than 10 classes)
                 var checkData = Object.assign({}, postData, { check_tabs: 1 });
                 fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
                     .then(function(r) { return r.text(); })
                     .then(function(text) {
                         var json = null;
                         try { json = JSON.parse(text); } catch (e) {}
-                        if (json && json.useTabs && json.batches && json.batches.length > 0) {
+                        if (json && json.useTabs && json.tabs && json.tabs.length > 0) {
                             $("#spinner").empty();
                             var listEl = document.getElementById('grade-list');
                             listEl.style.display = 'block';
-                            listEl.innerHTML = '<p>Opening ' + json.batches.length + ' batch pages…</p>';
-                            json.batches.forEach(function(b, i) {
-                                openBatchInNewPage(b, i * 1000);
+                            listEl.innerHTML = '<p>Opening ' + json.tabs.length + ' tab pages…</p>';
+                            json.tabs.forEach(function(t, i) {
+                                openTabInNewPage(t, i * 1000);
                             });
-                            var lastOpenMs = (json.batches.length - 1) * 1000;
+                            var lastOpenMs = (json.tabs.length - 1) * 1000;
                             setTimeout(function() {
-                                listEl.innerHTML = '<p>Opened ' + json.batches.length + ' batch pages. Closing…</p>';
+                                listEl.innerHTML = '<p>Opened ' + json.tabs.length + ' tab pages. Closing…</p>';
                                 window.close();
                             }, lastOpenMs + 1000);
                             return;
@@ -279,8 +277,7 @@
                         $("#spinner").empty();
                         alert('Error: ' + err);
                     });
-                // return;
-            // }
+            }
 
             // fetch(url, { method: 'POST', body: JSON.stringify(postData) })
             //     .then(function(r) { return r.text(); })
