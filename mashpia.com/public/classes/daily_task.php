@@ -67,31 +67,43 @@ class daily_task {
 	}
 	
 	function set_date_tasks_marks($user_id, $start_date, $end_date) {
+		$cache = isset( $GLOBALS['duch_marks_cache'] ) ? $GLOBALS['duch_marks_cache'] : null;
+		$lookup_key = $this->grid_id ? 'grid_' . $this->grid_id : $this->date_task_id;
+		$empty_row = array( 'date_task_id' => null, 'user_id' => null, 'mark_date' => null, 'done_qty' => null, 'mark_description' => null, 'mark_points' => null, 'mark_quantity' => null, 'mark_inactive' => null, 'mechunach_id' => null );
+
 		for ($mark_date = $start_date; $mark_date <= $end_date; $mark_date++) {
-			$sql = "SELECT * FROM date_tasks_marks WHERE user_id=" . $user_id . " AND date_task_id=" . $this->date_task_id . " AND mark_date=" . $mark_date;
-			if ($this->grid_id) {
-				$sql = "select * from date_tasks_marks dtm
-						join date_tasks dt using (date_task_id) 
-						where dtm.user_id = " . $user_id . "
-						and dt.grid_id = " . $this->grid_id . "
-						and dtm.mark_date = " . $mark_date;
-			}	
-			$query = mysql_query($sql);
-			$row = mysql_fetch_assoc($query);
-			$num_rows = mysql_num_rows($query);
+			$row = null;
+			if ( $cache && isset( $cache[ $user_id ][ $lookup_key ][ $mark_date ] ) ) {
+				$row = $cache[ $user_id ][ $lookup_key ][ $mark_date ];
+			}
+			if ( ! $row ) {
+				if ( ! $cache ) {
+					$sql = "SELECT * FROM date_tasks_marks WHERE user_id=" . (int) $user_id . " AND date_task_id=" . (int) $this->date_task_id . " AND mark_date=" . (int) $mark_date;
+					if ($this->grid_id) {
+						$sql = "select * from date_tasks_marks dtm
+								join date_tasks dt using (date_task_id) 
+								where dtm.user_id = " . (int) $user_id . "
+								and dt.grid_id = " . (int) $this->grid_id . "
+								and dtm.mark_date = " . (int) $mark_date;
+					}
+					$query = mysql_query($sql);
+					$row = mysql_fetch_assoc($query);
+				} else {
+					$row = $empty_row;
+				}
+			}
+			if ( ! $row || ! is_array( $row ) ) {
+				$row = $empty_row;
+			}
 			$date_tasks_mark = new date_tasks_mark($row);
-						
-			if ($num_rows == 0) 
-			{
+			$has_mark = isset( $row['date_task_id'] ) && $row['date_task_id'] !== null && $row['date_task_id'] !== '';
+			if ( ! $has_mark ) {
 				$date_tasks_mark->set_date_task_id($this->date_task_id);
 				$date_tasks_mark->set_mark_date($mark_date);
 				$date_tasks_mark->set_marked(false);
-			}
-			else 
-			{
+			} else {
 				$date_tasks_mark->set_marked(true);
 			}
-			
 			array_push($this->date_task_marks, $date_tasks_mark);
 		}
 	}

@@ -158,9 +158,10 @@ foreach ($dtm as $dtmRow) {
 }
 // echo "<pre>"; print_r($all_date_tasks_missions); echo "</pre>"; exit;
 
-// * Batch-load caches (birthdays, exceptions, defaults); user_track_for_duch / user_track / TaskExceptions / Defaults read from globals
+// * Batch-load caches (birthdays, exceptions, defaults, date_tasks_marks); user_track_for_duch / user_track / TaskExceptions / Defaults read from globals
 require_once __DIR__ . '/missions_print_cache.php';
 build_mission_print_caches( $user_ids, $start, $end, $all_date_tasks_missions );
+build_duch_marks_cache( $user_ids, $start, $end );
 // * Generate the missions: use school filter when list is huge to avoid giant IN/FIELD in SQL
 $user_ids_to_pass = $user_ids;
 $school_for_query = 0;

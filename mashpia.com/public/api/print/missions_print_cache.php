@@ -32,6 +32,51 @@ function build_mission_print_task_cache( $mission_ids ) {
 }
 
 /**
+ * Batch-load date_tasks_marks for duch printing.
+ * One query per user chunk instead of per day per task.
+ * Sets $GLOBALS['duch_marks_cache'][user_id][lookup_key][mark_date] = row (or empty array when no mark).
+ * lookup_key: date_task_id for normal tasks, 'grid_' . grid_id for grid-based tasks.
+ *
+ * @param array $user_ids
+ * @param int   $start  Julian day (inclusive)
+ * @param int   $end    Julian day (inclusive)
+ */
+function build_duch_marks_cache( $user_ids, $start, $end ) {
+	global $MASHPIA_DB;
+	$GLOBALS['duch_marks_cache'] = [];
+	if ( empty( $user_ids ) ) return;
+
+	$uids = array_values( array_unique( array_filter( array_map( 'intval', $user_ids ) ) ) );
+	$chunk = 500;
+	foreach ( array_chunk( $uids, $chunk ) as $chunk_ids ) {
+		$placeholders = implode( ',', array_fill( 0, count( $chunk_ids ), '?' ) );
+		$params = array_merge( $chunk_ids, [ $start, $end ] );
+		$sql = "SELECT dtm.*, dt.grid_id
+			FROM date_tasks_marks dtm
+			JOIN date_tasks dt ON dtm.date_task_id = dt.date_task_id
+			WHERE dtm.user_id IN ($placeholders)
+			AND dtm.mark_date >= ? AND dtm.mark_date <= ?";
+		$stmt = $MASHPIA_DB->prepare( $sql );
+		$stmt->execute( $params );
+		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
+			$uid = (int) $row['user_id'];
+			$dtid = (int) $row['date_task_id'];
+			$mid = (int) $row['mark_date'];
+			$grid_id = isset( $row['grid_id'] ) && $row['grid_id'] !== '' ? (int) $row['grid_id'] : 0;
+
+			if ( ! isset( $GLOBALS['duch_marks_cache'][ $uid ] ) ) {
+				$GLOBALS['duch_marks_cache'][ $uid ] = [];
+			}
+			$GLOBALS['duch_marks_cache'][ $uid ][ $dtid ][ $mid ] = $row;
+			if ( $grid_id ) {
+				$gk = 'grid_' . $grid_id;
+				$GLOBALS['duch_marks_cache'][ $uid ][ $gk ][ $mid ] = $row;
+			}
+		}
+	}
+}
+
+/**
  * Batch-load birthday cache for mission printing.
  * Used by missions.php and printDuchAll.php.
  * Sets $GLOBALS['birthday_cache'] (user_id => [mission_id => true]).
