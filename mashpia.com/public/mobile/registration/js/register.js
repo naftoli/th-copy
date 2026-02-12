@@ -2612,7 +2612,7 @@ var templates = function () {
       $("#yahadus-poll").empty().append(html)
 
       // update the address info
-      if (user.getChidonInfo ||
+      if ((user.getChidonInfo && user.registrationStatus.chidonEdit) ||
         (user.parentAccount.admin_address1 && user.parentAccount.admin_address1 != '' &&
           user.parentAccount.admin_city && user.parentAccount.admin_city != '' &&
           user.parentAccount.admin_state && user.parentAccount.admin_state != '' &&
@@ -2765,7 +2765,9 @@ var templates = function () {
         }
       }
 
-      this.setChidonReg(user) // can only do it after the resets bc the chidon fee value is reset to 20
+      if (user.registrationStatus.chidonEdit) {
+        this.setChidonReg(user) // can only do it after the resets bc the chidon fee value is reset to 20
+      }
 
       if (user.school.school_id == anash_kinder) $("#anash_kinder_text").show();
       else $("#anash_kinder_text").hide();
