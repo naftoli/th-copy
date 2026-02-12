@@ -51,10 +51,10 @@ function build_duch_marks_cache( $user_ids, $start, $end ) {
 		$placeholders = implode( ',', array_fill( 0, count( $chunk_ids ), '?' ) );
 		$params = array_merge( $chunk_ids, [ $start, $end ] );
 		$sql = "SELECT dtm.*, dt.grid_id
-			FROM date_tasks_marks dtm
-			JOIN date_tasks dt ON dtm.date_task_id = dt.date_task_id
-			WHERE dtm.user_id IN ($placeholders)
-			AND dtm.mark_date >= ? AND dtm.mark_date <= ?";
+				FROM date_tasks_marks dtm
+				JOIN date_tasks dt ON dtm.date_task_id = dt.date_task_id
+				WHERE dtm.user_id IN ($placeholders)
+				AND dtm.mark_date >= ? AND dtm.mark_date <= ?";
 		$stmt = $MASHPIA_DB->prepare( $sql );
 		$stmt->execute( $params );
 		while ( $row = $stmt->fetch( PDO::FETCH_ASSOC ) ) {
