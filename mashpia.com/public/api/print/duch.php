@@ -277,7 +277,6 @@
                         $("#spinner").empty();
                         alert('Error: ' + err);
                     });
-            }
 
             // fetch(url, { method: 'POST', body: JSON.stringify(postData) })
             //     .then(function(r) { return r.text(); })
