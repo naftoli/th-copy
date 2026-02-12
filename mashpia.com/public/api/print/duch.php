@@ -190,6 +190,7 @@
                     if (fromBC) {
                         $("#email-button").show();
                     }
+                    setTimeout(function() { window.print(); }, 500);
                 }
             }
 
