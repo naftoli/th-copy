@@ -42,8 +42,8 @@ if ( $selectedMonth ) {
     $date_range = ( isset( $date_range ) && is_numeric( $date_range ) && $date_range > 0 ) ? (int) $date_range : 30;
     $start = $end - $date_range + 1; // one less b/c we include start and end date in total number of days
 }
-$num_days = $end - $start + 1;
-$days_flag = ceil( $num_days / 30 ); // number of times to multiply the number of users by to get the total number of users needed for the duch
+// $num_days = $end - $start + 1;
+// $days_flag = ceil( $num_days / 30 ); // number of times to multiply the number of users by to get the total number of users needed for the duch
 
 // When check_tabs=1, return JSON: useTabs (true if over threshold) and batches (user_ids per batch of DUCH_TABS_USER_THRESHOLD) so duch.php can open one page per batch.
 define( 'DUCH_TABS_USER_THRESHOLD', 360 );
@@ -72,7 +72,7 @@ if ( ! empty( $_POST['check_tabs'] ) ) {
     } );
     $user_ids = array_map( function ( $u ) { return $u->user_id; }, $users );
     $total = count( $user_ids );
-    if ( ( $total * $days_flag ) < DUCH_TABS_USER_THRESHOLD ) {
+    if ( $total < DUCH_TABS_USER_THRESHOLD ) {
         echo json_encode( [ 'useTabs' => false ] );
         exit;
     }
