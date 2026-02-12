@@ -69,9 +69,9 @@ class pesukim_task {
 		//if ($user_id == 19970 && $this->date_task_id == 4000051) { echo $sql; exit; }
 		// echo $sql; exit;
 		$query = mysql_query($sql);
-		$row = mysql_fetch_assoc($query);
-		$num_rows = mysql_num_rows($query);
-		$date_task_mark = new date_tasks_mark($row);
+		$row = ( $query !== false ) ? mysql_fetch_assoc($query) : null;
+		$num_rows = ( $query !== false ) ? mysql_num_rows($query) : 0;
+		$date_task_mark = new date_tasks_mark($row ?: array('date_task_id'=>null,'user_id'=>null,'mark_date'=>null,'done_qty'=>null,'mark_description'=>null,'mark_points'=>null,'mark_quantity'=>null,'mark_inactive'=>null,'mechunach_id'=>null));
 		
 		if ($num_rows == 0) {
 			$date_task_mark->set_marked(false);
@@ -102,8 +102,7 @@ class pesukim_task {
 				and dt.grid_id = " . $this->grid_id . "
 				and (mark_date > " . $this->end_date . " OR mark_date < " . $this->start_date . ")";
 		$query = mysql_query($sql);
-		$row = mysql_fetch_assoc($query);
-		$num_rows = mysql_num_rows($query);
+		$num_rows = ( $query !== false ) ? mysql_num_rows($query) : 0;
 		if ($num_rows > 0) {
 			$this->disable = true;
 		}

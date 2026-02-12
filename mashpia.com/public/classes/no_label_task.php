@@ -84,10 +84,9 @@ class no_label_task {
 					and (mark_date >= " . $start_date . " AND mark_date <= " . $end_date . ")";
 		}
 		$query = mysql_query($sql);
-		$num_rows = mysql_num_rows($query);
-
-		$row = mysql_fetch_assoc($query);
-		$date_task_mark = new date_tasks_mark($row);
+		$num_rows = ( $query !== false ) ? mysql_num_rows($query) : 0;
+		$row = ( $query !== false ) ? mysql_fetch_assoc($query) : null;
+		$date_task_mark = new date_tasks_mark($row ?: array('date_task_id'=>null,'user_id'=>null,'mark_date'=>null,'done_qty'=>null,'mark_description'=>null,'mark_points'=>null,'mark_quantity'=>null,'mark_inactive'=>null,'mechunach_id'=>null));
 		
 		if ($num_rows == 0) {
 			$date_task_mark->set_date_task_id($this->date_task_id);
