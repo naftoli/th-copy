@@ -176,12 +176,13 @@
             let url = 'printDuchAll.php';
 
             function showContent(html) {
-                $("#spinner").empty();
                 if (html === 'error') {
+                    $("#spinner").empty();
                     alert('Error: School ID is required');
                     return;
                 }
                 $('#main').html(html);
+                $("#spinner").empty();
                 if (email) {
                     emailToOhel();
                 } else {
@@ -236,7 +237,7 @@
                 return;
             }
 
-            // Print Duch All: check if we need to auto-open grade pages (375+ users)
+            // Print Duch All: check if we need to auto-open grade pages (300+ users)
             // if (Cookies.get('naftoli') && url === 'printDuchAll.php') {
                 var checkData = Object.assign({}, postData, { check_tabs: 1 });
                 fetch(url, { method: 'POST', body: JSON.stringify(checkData) })
