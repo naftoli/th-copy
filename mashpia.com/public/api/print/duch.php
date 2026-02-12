@@ -186,6 +186,27 @@
                 if (email) {
                     emailToOhel();
                 } else {
+                    printToPdf();
+                }
+            }
+
+            async function printToPdf() {
+                const elem = document.getElementById('main');
+                await waitForRenderReady(elem);
+                const filename = 'duch_' + new Date().toISOString().replace(/[-:]/g, '').slice(0, 15) + '.pdf';
+                const opt = {
+                    margin: 0.5,
+                    filename: filename,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { useCORS: true, allowTaint: false, imageTimeout: 0 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
+                try {
+                    await html2pdf().set(opt).from(elem).save();
+                    $('#main').html('<p style="text-align:center;margin-top:40px;">PDF has been downloaded.</p>');
+                } catch (err) {
+                    console.error('printToPdf failed', err);
+                    alert('Could not generate PDF. See console for details.');
                     $("#print-button").show();
                     if (fromBC) {
                         $("#email-button").show();
