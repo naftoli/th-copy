@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf8"/>
+  <title>Chidon Experience Registration Report</title>
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+    crossorigin="anonymous"/>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+  <style>
+    body {
+      margin: 20px;
+    }
+    th, td {
+      vertical-align: middle !important;
+      text-align: center !important;
+    }
+    .smaller {
+      font-size: 14px;
+      font-style: italic;
+    }
+  </style>
+  <style>
+    /* 1. The Container: Limits height to force scrolling */
+    .table-scroll-container {
+      height: 300px;
+      overflow-y: auto; /* Enables vertical scrolling */
+      border: 1px solid #ccc;
+    }
+  
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    /* 2. The Sticky Header Logic */
+    th {
+      position: sticky;
+      top: 0;
+      background-color: #333; /* Dark background */
+      color: white;
+      z-index: 10; 
+    }
+  
+    /* Just basic styling for readability */
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+<h1>Chidon Experience Registration Report</h1>
+<div id="main"></div>
+</body>
+<script type="text/babel">
+  const { useState, useEffect } = React
+  const { createRoot } = ReactDOM
+
+  const Report = () => {
+    const [data, setData] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+    const [superAdmin, setSuperAdmin] = useState(false)
+    const [types, setTypes] = useState([])
+    const [schools, setSchools] = useState([])
+    const [isChecked, setIsChecked] = useState({})
+
+    useEffect(() => {
+      // get the year param from the url
+      const urlParams = new URLSearchParams(window.location.search)
+      let year = urlParams.get('year') ? urlParams.get('year') : 0
+      fetch('api/getExpRegInfo.php?year=' + year)
+        .then(res => res.json())
+        .then(
+          (result) => {
+            // console.log(result.info)
+            if (result.super) setSuperAdmin(true)
+            if (result.types) {
+              result.types[''] = 'None'
+              setTypes(result.types)
+            }
+            if (result.schools) setSchools(result.schools)
+            if (result.info) {
+              setData(result.info)
+              Object.keys(result.info).forEach(school => {
+                Object.keys(result.info[school]).forEach(child => {
+                  let serial = child['user_serial']
+                  setIsChecked({ ...isChecked, [serial]: child['confirmed_info'] })
+                })
+              })
+            }
+            else if (result.error) setError(result.error)
+            setLoading(false)
+          },
+          (error) => {
+            setError(error)
+            setLoading(false)
+          }
+        )
+    }, [])
+
+    if (loading) {
+      return <div>Loading...</div>
+    }
+
+    if (error) {
+      return <div>Error: {error.message}</div>
+    }
+
+    const updateEligibility = async (e, serial) => {
+      const checked = e.target.checked ? 1 : 0
+      const res = await fetch('api/updateEligibility.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ serial, checked })
+      })
+      const data = await res.json()
+      if (data.success) {
+        setIsChecked({ ...isChecked, [serial]: checked })
+        alert('Eligibility updated for ' + serial)
+      } else {
+        alert(data.error)
+      }
+    }
+
+    const confEligibility = async (e) => {
+      const id = e.target.id.split('_')[1]
+      const conf = confirm('Once eligibility is confirmed, there will be NO CHANGES. Are you sure you want to confirm eligibility for ' + schools[id]['name'] + '?')
+      if (conf) {
+        const res = await fetch('api/confirmEligibility.php', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({school: id})
+        })
+        const data = await res.json()
+        if (data.success) {
+          alert('Eligibility confirmed for ' + schools[id]['name'])
+          e.target.disabled = true
+          // change button text
+          e.target.innerHTML = 'Eligibility Confirmed'
+        } else {
+          alert(data.error)
+          console.log(data.error_msg)
+        }
+      }
+    }
+
+    const headers = ['School','Grade', 'Serial', 'Name', 'Earned Reward', 'Eligible Reward', 'Ultimate Trip Eligible', 'Highest Possible Award',
+      'Raised on Drive', 'Personal Credit', 'Coupon Credit', 'Registration Fee (After Drive/Personal/Coupon Credits were applied)', 'Family Credit', 
+      'Registered', 'Trip Registered', 'Shipping']
+    if (superAdmin) {
+      headers.push('Registration Paid')
+      headers.push('Confirmed Eligibility')
+    }
+
+    const rewardDescs = {
+      'Yesod': 'Sweater, Gift & Yesod Final',
+      'Yediah': 'Sweater, Gift, Prizes & Yediah Final',
+      'Havonah': 'Sweater, Gift, Prizes, Trip & Havonah Final',
+      'Iyun': 'Sweater, Gift, Prizes, Trip & Iyun Final',
+    }
+
+    const khkDescs = {
+      'Havonah': 'Sweater, Gift, Prizes, Trip & Havonah & KHK Final',
+      'Iyun': 'Sweater, Gift, Prizes, Trip & Iyun & KHK Final',
+    }
+
+    const awardDescs = {
+      'Yesod': 'Certificate',
+      'Yediah': 'Plaque',
+      'Havonah': 'Plaque & Medal',
+      'Iyun': 'Plaque, Medal & Mini Trophy'
+    }
+
+    const khkAwardDescs = {
+      'Yesod': 'Certificate & KHK Plaque',
+      'Yediah': 'Plaque & KHK Plaque',
+      'Havonah': 'Plaque, Medal & KHK Plaque',
+      'Iyun': 'Plaque, Medal, Mini Trophy & KHK Plaque'
+    }
+
+    const calcKHKFee = (toSubtract) => {
+      const trip = Math.max(0, 205 - toSubtract)
+      const khk = Math.max(0, 350 - toSubtract)
+      return "$" + trip + " Regional Trip $" + khk + " KHK Trip"
+    }
+
+    return (
+      <div>
+        {data && Object.keys(data).map((school, j) => (
+        <div key={j}>
+          <h2>{schools[school]['name']}</h2>
+          <button className="btn btn-primary" id={'school_' + school} onClick={confEligibility} disabled={parseInt(schools[school]['locked']) == 1}>
+            {parseInt(schools[school]['locked']) ? 'Eligibility Confirmed' : 'Confirm Eligibility'}
+          </button>
+          <table className="table table-striped">
+            <thead>
+            <tr>
+              {headers.map((header, i) => (
+                <th key={i}>{header}</th>
+              ))}
+            </tr>
+            </thead>
+            <tbody>
+            {data[school].map((row, i) => (
+              <tr key={i}>
+                <td>{schools[school]['name']}</td>
+                <td>{row.grade}</td>
+                <td>{row.user_serial}</td>
+                <td>{row.first + ' ' + row.last}</td>
+                <td><b>{types[row.highest_track]}</b><br/><span className="smaller">{rewardDescs[types[row.highest_track]]}</span></td>
+                <td>
+                  <b>{types[row.reward]}</b><br/><span className="smaller">{row.khk_passed_tests ? khkDescs[types[row.reward]] : rewardDescs[types[row.reward]]}</span>
+                </td>
+                <td>{parseInt(row.khk_eligible) ? 'Yes' : 'No'}</td>
+                <td>
+                  <b>{types[row.award]}</b><br/>
+                  <span className="smaller">{row.award ? row.khk_passed_tests ? khkAwardDescs[types[row.award]] : awardDescs[types[row.award]] : ''}</span>
+                </td>
+                <td>${row.raised}</td>
+                <td>${row.personal_credit}</td>
+                <td>${row.coupon_credit}</td>
+                <td>{parseInt(row.khk_eligible) ? calcKHKFee(row.to_subtract) : ('$' + row.fee)}</td>
+                <td>${row.family_credit}</td>
+                <td>{row.date_paid}</td>
+                <td>{row.trip ? row.trip : parseInt(row.ultimate_trip) == 1 ? 'Ultimate Trip' : ''}</td>
+                <td>{([61, 269].includes(parseInt(row.school_id)) || superAdmin) ? row.shipping : ''}</td>
+                {superAdmin && <td>{row.paid ? ('$' + row.paid) : ''}</td>}
+                {superAdmin && <td><input type="checkbox" checked={isChecked[row.user_serial]} onChange={(e) => updateEligibility(e, row.user_serial)} /></td>}
+              </tr>
+            ))}
+            </tbody>
+          </table>
+        </div>
+        ))}
+      </div>
+    )
+  }
+
+  const container = document.getElementById('main')
+  const root = createRoot(container)
+  root.render(<Report/>)
+</script>
+</html>
