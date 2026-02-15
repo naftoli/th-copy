@@ -60,6 +60,9 @@ if ($report_type == 'file') {
         foreach ($info as $cat => $details) {
             foreach ($details as $user => $items) {
                 foreach ($items as $idx => $item) {
+                  // find out how many of the same item we have
+                  if ($idx > 0 && $item['id'] == $items[$idx - 1]['id']) $item_num++;
+                  else $item_num = 0;
                   $item_status = isset($status[$user][$item['id']][$item_num]['status']) ? $status[$user][$item['id']][$item_num]['status'] : 0;
                   if ($limit_to_status && !in_array($item_status, $limit_to_status)) unset($info[$cat][$user][$idx]);
                 }
