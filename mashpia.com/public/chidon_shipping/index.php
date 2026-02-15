@@ -47,6 +47,94 @@ $items = $cs->getItems();
       margin-top: 20px;
       margin-bottom: 5px;
     }
+    /* School multi-select dropdown */
+    .school-multiselect {
+      position: relative;
+      width: 100%;
+      max-width: 280px;
+    }
+    .school-multiselect .dropdown-trigger {
+      min-height: 34px;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background: #fff;
+      cursor: pointer;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 4px;
+    }
+    .school-multiselect .dropdown-trigger:hover {
+      border-color: #66afe9;
+    }
+    .school-multiselect .dropdown-trigger .placeholder {
+      color: #999;
+    }
+    .school-multiselect .dropdown-trigger .badge {
+      font-size: 12px;
+      padding: 2px 6px;
+      background: #337ab7;
+      color: #fff;
+      border-radius: 3px;
+    }
+    .school-multiselect .dropdown-trigger .badge .remove {
+      cursor: pointer;
+      margin-left: 4px;
+      font-weight: bold;
+    }
+    .school-multiselect .dropdown-trigger .chevron {
+      margin-left: auto;
+      font-size: 12px;
+    }
+    .school-multiselect .dropdown-panel {
+      display: none;
+      position: absolute;
+      z-index: 9999;
+      top: 100%;
+      left: 0;
+      right: 0;
+      margin-top: 2px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.175);
+      max-height: 300px;
+      overflow: hidden;
+    }
+    .school-multiselect.open .dropdown-panel {
+      display: block;
+    }
+    .school-multiselect .search-box {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .school-multiselect .search-box input {
+      width: 100%;
+      padding: 6px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .school-multiselect .check-all-row {
+      padding: 8px 12px;
+      border-bottom: 1px solid #eee;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .school-multiselect .check-all-row:hover {
+      background: #f5f5f5;
+    }
+    .school-multiselect .option-row {
+      padding: 6px 12px;
+      cursor: pointer;
+    }
+    .school-multiselect .option-row:hover {
+      background: #f5f5f5;
+    }
+    .school-multiselect .options-list {
+      max-height: 220px;
+      overflow-y: auto;
+    }
   </style>
 </head>
 <body>
@@ -88,14 +176,41 @@ $items = $cs->getItems();
       </select><br />
       <h4>School(s)</h4>
       <?php
-        if ($super) echo '<select name="school[]" id="school" multiple style="height: 300px;">';
-        else echo '<select name="school[]" id="school">';
-        foreach ($schools as $id => $school) {
-            if (strlen($school) < 3) continue;
-            echo "<option value=" . $id . ">" . $school . "</option>";
-        }
+      $schools_filtered = array_filter($schools, function ($s) { return strlen($s) >= 3; });
+      if ($super) {
+          $schools_data = [];
+          foreach ($schools_filtered as $id => $name) {
+              $schools_data[] = ['id' => (int)$id, 'name' => $name];
+          }
+          $schools_json = json_encode($schools_data);
+          ?>
+      <div id="school-multiselect-container" class="school-multiselect">
+        <div class="dropdown-trigger" id="school-dropdown-trigger">
+          <span class="placeholder">Select schools...</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="dropdown-panel" id="school-dropdown-panel">
+          <div class="search-box">
+            <input type="text" id="school-search" placeholder="Search schools..." />
+          </div>
+          <div class="check-all-row">
+            <input type="checkbox" id="school-check-all" /> <label for="school-check-all">Select All Schools</label>
+          </div>
+          <div class="options-list" id="school-options-list"></div>
+        </div>
+      </div>
+      <div id="school-hidden-inputs"></div>
+      <script>window.CHIDON_SCHOOLS_DATA = <?= $schools_json ?>;</script>
+      <?php
+      } else {
+          echo '<select name="school[]" id="school">';
+          foreach ($schools_filtered as $id => $school) {
+              echo "<option value='" . (int)$id . "'>" . htmlspecialchars($school) . "</option>";
+          }
+          echo '</select>';
+      }
       ?>
-      </select><br />
+      <br />
       <h4>Status</h4>
       <p>
         <input type="checkbox" name="status[]" class="status" value="0" /> Not Yet Shipped<br />
@@ -183,9 +298,20 @@ $items = $cs->getItems();
 
   function showDropdown() {
     const superAdmin = <?= $super ? 1 : 0 ?>;
-    const school_id = parseInt($("#school").val())
-    if (superAdmin || [61, 269].includes(school_id)) $("#shipping").show()
+    let school_id;
+    if (superAdmin && window.schoolMultiselectSelected) {
+      school_id = window.schoolMultiselectSelected.length ? parseInt(window.schoolMultiselectSelected[0]) : null;
+    } else {
+      school_id = parseInt($("#school").val());
+    }
+    if (superAdmin || (school_id && [61, 269].includes(school_id))) $("#shipping").show()
     else $("#shipping").hide()
+  }
+
+  function getSelectedSchoolIds() {
+    if (window.schoolMultiselectSelected) return window.schoolMultiselectSelected;
+    const val = $("#school").val();
+    return val ? (Array.isArray(val) ? val : [val]) : [];
   }
 
   $(".check_items").click(checkAllItems)
@@ -204,7 +330,7 @@ $items = $cs->getItems();
       return false
     }
     // check school for at least one school selected
-    if ($("#school").val() === null) {
+    if (!getSelectedSchoolIds().length) {
       alert('You must choose at least one school!')
       return false
     }
@@ -227,6 +353,107 @@ $items = $cs->getItems();
   $(function() {
     $("#all_details").click()
     showDropdown()
+
+    // School multi-select (super users only)
+    if (window.CHIDON_SCHOOLS_DATA && $("#school-multiselect-container").length) {
+      var schools = window.CHIDON_SCHOOLS_DATA;
+      window.schoolMultiselectSelected = [];
+
+      function renderOptions(filter) {
+        var q = (filter || "").toLowerCase();
+        var html = "";
+        schools.forEach(function(s) {
+          if (q && s.name.toLowerCase().indexOf(q) < 0) return;
+          var checked = window.schoolMultiselectSelected.indexOf(String(s.id)) >= 0;
+          html += '<div class="option-row" data-id="' + s.id + '">' +
+            '<input type="checkbox" class="school-opt-cb" id="school-opt-' + s.id + '" value="' + s.id + '"' + (checked ? ' checked' : '') + '> ' +
+            '<label for="school-opt-' + s.id + '">' + $("<div>").text(s.name).html() + '</label></div>';
+        });
+        $("#school-options-list").html(html);
+      }
+
+      function syncHiddenInputs() {
+        var container = $("#school-hidden-inputs").empty();
+        window.schoolMultiselectSelected.forEach(function(id) {
+          container.append('<input type="hidden" name="school[]" value="' + id + '">');
+        });
+      }
+
+      function updateTrigger() {
+        var trigger = $("#school-dropdown-trigger");
+        trigger.find(".badge, .placeholder").remove();
+        if (window.schoolMultiselectSelected.length === 0) {
+          trigger.prepend('<span class="placeholder">Select schools...</span>');
+        } else {
+          var names = {};
+          schools.forEach(function(s) { names[s.id] = s.name; });
+          window.schoolMultiselectSelected.forEach(function(id) {
+            var name = names[id] || id;
+            trigger.append('<span class="badge" data-id="' + id + '">' + $("<span>").text(name).html() + ' <span class="remove">&times;</span></span>');
+          });
+        }
+        $("#school-check-all").prop("checked", window.schoolMultiselectSelected.length === schools.length);
+        renderOptions($("#school-search").val());
+        syncHiddenInputs();
+        showDropdown();
+      }
+
+      $("#school-dropdown-trigger").on("click", function(e) {
+        e.stopPropagation();
+        $("#school-multiselect-container").toggleClass("open");
+        if ($("#school-multiselect-container").hasClass("open")) $("#school-search").focus();
+      });
+
+      $(document).on("click", function() {
+        $("#school-multiselect-container").removeClass("open");
+      });
+      $("#school-multiselect-container").on("click", function(e) { e.stopPropagation(); });
+
+      $("#school-search").on("input", function() {
+        renderOptions($(this).val());
+      });
+
+      $("#school-check-all").on("change", function() {
+        if ($(this).is(":checked")) {
+          schools.forEach(function(s) {
+            if (window.schoolMultiselectSelected.indexOf(String(s.id)) < 0) {
+              window.schoolMultiselectSelected.push(String(s.id));
+            }
+          });
+        } else {
+          window.schoolMultiselectSelected = [];
+        }
+        updateTrigger();
+      });
+
+      $("#school-options-list").on("change", ".school-opt-cb", function() {
+        var id = String($(this).val());
+        if ($(this).is(":checked")) {
+          if (window.schoolMultiselectSelected.indexOf(id) < 0) window.schoolMultiselectSelected.push(id);
+        } else {
+          window.schoolMultiselectSelected = window.schoolMultiselectSelected.filter(function(x) { return x !== id; });
+        }
+        updateTrigger();
+      });
+
+      $("#school-options-list").on("click", ".option-row", function(e) {
+        if (!$(e.target).is("input")) {
+          var cb = $(this).find(".school-opt-cb");
+          cb.prop("checked", !cb.prop("checked")).trigger("change");
+        }
+      });
+
+      $("#school-dropdown-trigger").on("click", ".badge .remove", function(e) {
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        var id = $(this).closest(".badge").data("id");
+        window.schoolMultiselectSelected = window.schoolMultiselectSelected.filter(function(x) { return x !== String(id); });
+        updateTrigger();
+      });
+
+      renderOptions();
+      syncHiddenInputs();
+    }
   })
 </script>
 </html>
