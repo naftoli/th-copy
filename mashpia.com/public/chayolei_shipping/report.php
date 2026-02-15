@@ -57,12 +57,11 @@ if ($report_type == 'file') {
             $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
         }
         // remove shipped items if needed
-        if (in_array(0, $limit_to_status)) {
-            foreach ($info as $cat => $details) {
-                foreach ($details as $user => $items) {
-                    foreach ($items as $idx => $item) {
-                        if (isset($status[$user][$item['id']]) && $status[$user][$item['id']]['shipped'] == 1) unset($info[$cat][$user][$idx]);
-                    }
+        foreach ($info as $cat => $details) {
+            foreach ($details as $user => $items) {
+                foreach ($items as $idx => $item) {
+                  $item_status = isset($status[$user][$item['id']][$item_num]['status']) ? $status[$user][$item['id']][$item_num]['status'] : 0;
+                  if ($limit_to_status && !in_array($item_status, $limit_to_status)) unset($info[$cat][$user][$idx]);
                 }
             }
         }
