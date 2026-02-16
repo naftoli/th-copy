@@ -20,19 +20,8 @@ if ($res) {
     $info = $stmt->fetchAll();
 }
 
-// get admin emails
-$emails = [];
-$sql = "select admin_email from admins where admin_id = :admin";
-$stmt = $MASHPIA_DB->prepare($sql);
-foreach ($admins as $admin_id) {
-    $stmt->execute([
-        ':admin' => $admin_id
-    ]);
-    $tmp = $stmt->fetch();
-    $emails[$admin_id] = $tmp['admin_email'];
-}
-
 // get family pot
+$admins = [];
 $family_pot = [];
 $sql = "SELECT * FROM registration_charges 
         LEFT JOIN transactions ON registration_charges.trans_id = transactions.trans_id
@@ -42,11 +31,24 @@ $stmt->execute([
     ':year' => $year
 ]);
 while ($row = $stmt->fetch()) {
+    $admins[] = $row['admin_id'];
     if (isset($row['response'])) {
         $response = json_decode($row['response'], true);
         $row['trans_id'] = $response['transactionResponse']['transId'];
     }
     $family_pot[$row['admin_id']][] = $row;
+}
+
+// get admin emails
+$emails = [];
+foreach ($admins as $admin_id) {
+    $sql = "select admin_email from admins where admin_id = :admin";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $stmt->execute([
+        ':admin' => $admin_id
+    ]);
+    $row = $stmt->fetch();
+    $emails[$admin_id] = $row['admin_email'];
 }
 
 $data['info'] = $info;
