@@ -42,6 +42,10 @@ $stmt->execute([
     ':year' => $year
 ]);
 while ($row = $stmt->fetch()) {
+    if (isset($row['response'])) {
+        $response = json_decode($row['response'], true);
+        $row['trans_id'] = $response['transactionResponse']['transId'];
+    }
     $family_pot[$row['admin_id']][] = $row;
 }
 
