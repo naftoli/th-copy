@@ -24,12 +24,13 @@ if ($res) {
     }
 }
 
-// get family pot
+$emails = [];
 $family_pot = [];
-$sqlCharges = "SELECT * FROM registration_charges 
-        LEFT JOIN transactions ON registration_charges.trans_id = transactions.trans_id
-        WHERE year = :year and type = 'RRFAM' 
-        AND admin_id = :admin";
+
+$sqlCharges = "SELECT * FROM registration_charges rc 
+            LEFT JOIN transactions t ON rc.trans_id = t.trans_id
+            WHERE rc.year = :year and rc.type = 'RRFAM' 
+            AND rc.admin_id = :admin";
 $stmtCharges = $MASHPIA_DB->prepare($sqlCharges);
 
 $sqlEmails = "select admin_email from admins where admin_id = :admin";
