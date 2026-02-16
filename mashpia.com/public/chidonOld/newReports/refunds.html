@@ -92,26 +92,28 @@
                 <td>{row.paypal}</td>
                 <td>{row.accounting_code}</td>
                 <td style={{ width: '500px' }}>
-                  <table className="table table-striped table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Trans ID</th>
-                        <th>Amount</th>
-                        <th>Date</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {family[row.admin_id] ? family[row.admin_id].map(
-                        (item) => (
-                          <tr key={item.trans_id}>
-                            <td>{item.trans_id}</td>
-                            <td>{item.amount}</td>
-                            <td>{item.date}</td>
-                          </tr>
-                        )
-                      ) : ''}
-                    </tbody>
-                  </table>
+                  {family[row.admin_id] && (
+                    <table className="table table-striped table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Trans ID</th>
+                          <th>Amount</th>
+                          <th>Date</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {family[row.admin_id].map(
+                          (item) => (
+                            <tr key={item.trans_id}>
+                              <td>{item.trans_id}</td>
+                              <td>{item.amount}</td>
+                              <td>{item.date}</td>
+                            </tr>
+                          )
+                        )}
+                      </tbody>
+                    </table>
+                  )}
                 </td>
                 <td>{emails[row.admin_id]}</td>
               </tr>
