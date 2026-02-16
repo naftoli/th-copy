@@ -10,6 +10,7 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+$admins = [];
 $info = [];
 $sql = "select * from family_prepaid_balances where year = :year";
 $stmt = $MASHPIA_DB->prepare($sql);
@@ -17,11 +18,13 @@ $res = $stmt->execute([
     ':year' => $year
 ]);
 if ($res) {
-    $info = $stmt->fetchAll();
+    while ($row = $stmt->fetch()) {
+        $admins[] = $row['admin_id'];
+        $info[$row['admin_id']] = $row['amount'];
+    }
 }
 
 // get family pot
-$admins = [];
 $family_pot = [];
 $sql = "SELECT * FROM registration_charges 
         LEFT JOIN transactions ON registration_charges.trans_id = transactions.trans_id
