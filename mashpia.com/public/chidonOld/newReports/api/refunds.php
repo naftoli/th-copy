@@ -42,6 +42,10 @@ foreach ($admins as $admin_id) {
         ':admin' => $admin_id
     ]);
     while ($row = $stmtCharges->fetch()) {
+        if (isset($row['response']) && $row['response'] != null) {
+            $response = json_decode($row['response'], true);
+            $row['trans_id'] = $response['transactionResponse']['transId'];
+        }
         $family_pot[$admin_id][] = $row;
     }
     $stmtEmails->execute([

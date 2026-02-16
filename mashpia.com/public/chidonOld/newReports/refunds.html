@@ -84,8 +84,8 @@
             </tr>
           </thead>
           <tbody>
-            {Object.entries(data).map(([admin_id, row]) => (
-              <tr key={admin_id}>
+            {Object.entries(data).map(([admin_id, row], rowIndex) => (
+              <tr key={`${admin_id}-${rowIndex}`}>
                 <td>{admin_id}</td>
                 <td>{row.refund_amount}</td>
                 <td>{row.refund_type}</td>
@@ -103,8 +103,8 @@
                       </thead>
                       <tbody>
                         {family[admin_id].map(
-                          (item) => (
-                            <tr key={item.trans_id}>
+                          (item, itemIndex) => (
+                            <tr key={item.trans_id != null ? item.trans_id : `${admin_id}-family-${itemIndex}`}>
                               <td>{item.trans_id}</td>
                               <td>{item.amount}</td>
                               <td>{item.date}</td>
