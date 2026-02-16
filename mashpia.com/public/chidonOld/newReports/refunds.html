@@ -84,7 +84,7 @@
             </tr>
           </thead>
           <tbody>
-            {data.map((row, admin_id) => (
+            {Object.entries(data).map(([admin_id, row]) => (
               <tr key={admin_id}>
                 <td>{admin_id}</td>
                 <td>{row.refund_amount}</td>
