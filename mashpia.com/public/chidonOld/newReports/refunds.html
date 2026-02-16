@@ -92,8 +92,8 @@
                 <td>{row.refund_type}</td>
                 <td>{row.paypal}</td>
                 <td>{row.accounting_code}</td>
-                <td>
-                  <table>
+                <td style={{ width: '400px' }}>
+                  <table className="table table-striped table-bordered">
                     <thead>
                       <tr>
                         <th>Trans ID</th>
@@ -104,7 +104,7 @@
                     <tbody>
                       {family[row.admin_id] ? family[row.admin_id].map(
                         (item) => (
-                          <tr>
+                          <tr key={item.trans_id}>
                             <td>{item.trans_id}</td>
                             <td>{item.amount}</td>
                             <td>{item.date}</td>
