@@ -32,9 +32,11 @@ $stmt->execute([
 ]);
 while ($row = $stmt->fetch()) {
     $admins[] = $row['admin_id'];
-    if (isset($row['response'])) {
+    if (isset($row['response']) && $row['response'] != '') {
         $response = json_decode($row['response'], true);
         $row['trans_id'] = $response['transactionResponse']['transId'];
+    } else {
+        $row['trans_id'] = $row['trans_id'];
     }
     $family_pot[$row['admin_id']][] = $row;
 }
