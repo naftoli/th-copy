@@ -30,7 +30,8 @@ $family_pot = [];
 $sqlCharges = "SELECT * FROM registration_charges rc 
             LEFT JOIN transactions t ON rc.trans_id = t.trans_id
             WHERE rc.year = :year and rc.type = 'RRFAM' 
-            AND rc.admin_id = :admin";
+            AND rc.admin_id = :admin 
+            AND rc.amount > 0";
 $stmtCharges = $MASHPIA_DB->prepare($sqlCharges);
 
 $sqlEmails = "select admin_email from admins where admin_id = :admin";
