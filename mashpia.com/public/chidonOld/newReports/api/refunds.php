@@ -28,18 +28,21 @@ if ($res) {
 $family_pot = [];
 $sql = "SELECT * FROM registration_charges 
         LEFT JOIN transactions ON registration_charges.trans_id = transactions.trans_id
-        WHERE year = :year and type = 'RRFAM'";
+        WHERE year = :year and type = 'RRFAM' 
+        AND admin_id = :admin";
 $stmt = $MASHPIA_DB->prepare($sql);
-$stmt->execute([
-    ':year' => $year
-]);
-while ($row = $stmt->fetch()) {
-    $admins[] = $row['admin_id'];
-    if (isset($row['response']) && $row['response'] != null) {
-        $response = json_decode($row['response'], true);
-        $row['trans_id'] = $response['transactionResponse']['transId'];
+foreach ($admins as $admin_id) {
+    $stmt->execute([
+        ':year' => $year,
+        ':admin' => $admin_id
+    ]);
+    while ($row = $stmt->fetch()) {
+        if (isset($row['response']) && $row['response'] != null) {
+            $response = json_decode($row['response'], true);
+            $row['trans_id'] = $response['transactionResponse']['transId'];
+        }
+        $family_pot[$row['admin_id']][] = $row;
     }
-    $family_pot[$row['admin_id']][] = $row;
 }
 
 // get admin emails
