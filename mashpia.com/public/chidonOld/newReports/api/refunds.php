@@ -20,7 +20,7 @@ $res = $stmt->execute([
 if ($res) {
     while ($row = $stmt->fetch()) {
         $admins[] = $row['admin_id'];
-        $info[$row['admin_id']] = $row['amount'];
+        $info[$row['admin_id']] = $row;
     }
 }
 
