@@ -27,7 +27,7 @@ if ($res) {
 $emails = [];
 $family_pot = [];
 
-$sqlCharges = "SELECT * FROM registration_charges rc 
+$sqlCharges = "SELECT rc.*, t.response FROM registration_charges rc 
             LEFT JOIN transactions t ON rc.trans_id = t.trans_id
             WHERE rc.year = :year and rc.type = 'RRFAM' 
             AND rc.admin_id = :admin 
