@@ -105,7 +105,7 @@
                       {family[row.admin_id] ? family[row.admin_id].map(
                         (item) => (
                           <tr key={item.trans_id}>
-                            <td>{item.trans_id}</td>
+                            <td>{item.response ?? item.trans_id}</td>
                             <td>{item.amount}</td>
                             <td>{item.date}</td>
                           </tr>

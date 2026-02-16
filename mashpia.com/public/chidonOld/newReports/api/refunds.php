@@ -34,7 +34,9 @@ foreach ($admins as $admin_id) {
 
 // get family pot
 $family_pot = [];
-$sql = "SELECT * FROM registration_charges WHERE year = :year and type = 'RRFAM'";
+$sql = "SELECT * FROM registration_charges 
+        LEFT JOIN transactions ON registration_charges.trans_id = transactions.trans_id
+        WHERE year = :year and type = 'RRFAM'";
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute([
     ':year' => $year
