@@ -38,8 +38,8 @@
 
   const Report = () => {
     const [data, setData] = useState([])
-    const [prepaid, setPrepaid] = useState([])
     const [emails, setEmails] = useState([])
+    const [family, setFamily] = useState([])
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(true)
 
@@ -51,8 +51,8 @@
             if (result.info) {
               setLoading(false)
               setData(result.info)
-              setPrepaid(result.prepaid)
               setEmails(result.emails)
+              setFamily(result.family_pot)
             }
           },
           (error) => {
@@ -71,7 +71,7 @@
       return <div>Error: {error.message}</div>
     }
 
-    const headers = ['Email', 'Admin ID', 'Prepaid', 'Used 1', 'Used 2', 'Personal Credit Old', 'Personal Credit Current', 'Refund Request', 'Refund Type', 'Paypal Email', 'Codes', 'Real Prepaid', 'Real Refund']
+    const headers = ['Email', 'Admin ID', 'Refund Request', 'Refund Type', 'Paypal Email', 'Codes', 'Family Pot']
 
     return (
       <div>
@@ -88,17 +88,13 @@
               <tr key={index}>
                 <td>{emails[row.admin_id]}</td>
                 <td>{row.admin_id}</td>
-                <td>{row.prepaid}</td>
-                <td>{row.used}</td>
-                <td>{row.used_2}</td>
-                <td>{prepaid[row.admin_id]['total1']}</td>
-                <td>{prepaid[row.admin_id]['total2']}</td>
                 <td>{row.refund_amount}</td>
                 <td>{row.refund_type}</td>
                 <td>{row.paypal}</td>
                 <td>{row.accounting_code}</td>
-                <td>{row.real_prepaid}</td>
-                <td>{row.real_prepaid - row.used - (row.used_2 ? row.used_2 : 0)}</td>
+                <td>{family[row.admin_id] ? family[row.admin_id].map(
+                  (item) => item.trans_id + ' ' + item.amount + ' ' + item.date
+                ).join(', ') : ''}</td>
               </tr>
             ))}
           </tbody>

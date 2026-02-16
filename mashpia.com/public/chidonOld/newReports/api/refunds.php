@@ -20,35 +20,6 @@ if ($res) {
     $info = $stmt->fetchAll();
 }
 
-// get personal balance from th_chidon database
-$sql = "select user_id, prepaid_credit, prepaid_credit_old 
-        from th_chidon 
-        where year = :year 
-        and user_id in (
-            select id from admin_auths where admin_id = :admin and auth = 'user')";
-$stmt = $MASHPIA_DB->prepare($sql);
-
-$admins = [];
-$prepaid = [];
-foreach ($info as $row) {
-    $admins[] = $row['admin_id'];
-    $stmt->execute([
-        ':year' => $year,
-        ':admin' => $row['admin_id']
-    ]);
-    $total1 = 0;
-    $total2 = 0;
-    $tmp = $stmt->fetchAll();
-    foreach ($tmp as $t) {
-        $total1 += floatval($t['prepaid_credit_old']);
-        $total2 += floatval($t['prepaid_credit']);
-    }
-    $prepaid[$row['admin_id']] = [
-        'total1' => $total1,
-        'total2' => $total2
-    ];
-}
-
 // get admin emails
 $emails = [];
 $sql = "select admin_email from admins where admin_id = :admin";
@@ -61,8 +32,19 @@ foreach ($admins as $admin_id) {
     $emails[$admin_id] = $tmp['admin_email'];
 }
 
+// get family pot
+$family_pot = [];
+$sql = "SELECT * FROM registration_charges WHERE year = :year and type = 'RRFAM'";
+$stmt = $MASHPIA_DB->prepare($sql);
+$stmt->execute([
+    ':year' => $year
+]);
+while ($row = $stmt->fetch()) {
+    $family_pot[$row['admin_id']][] = $row;
+}
+
 $data['info'] = $info;
-$data['prepaid'] = $prepaid;
 $data['emails'] = $emails;
+$data['family_pot'] = $family_pot;
 
 echo json_encode($data);
