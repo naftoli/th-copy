@@ -94,7 +94,7 @@
                 <td>{row.accounting_code}</td>
                 <td>{family[row.admin_id] ? family[row.admin_id].map(
                   (item) => item.trans_id + ' ' + item.amount + ' ' + item.date
-                ).join(', ') : ''}</td>
+                ).join('<br />') : ''}</td>
               </tr>
             ))}
           </tbody>
