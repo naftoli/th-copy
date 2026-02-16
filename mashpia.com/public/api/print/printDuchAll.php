@@ -159,7 +159,7 @@ $dtmSql = "
     WHERE
         dtm.start_date >= :start 
             AND dtm.end_date <= :end 
-            AND subject_id NOT IN (12 , 15, 40, 93, 94, 136)
+            AND subject_id NOT IN (12, 15, 40, 93, 94, 136)
             AND mission_name NOT LIKE '%Chidon Limmud%' 
             AND created_by_parent IS NULL 
             ORDER BY subject_id, school_type_id, lang_id, level, track_id, mission_number, start_date, mission_name";
