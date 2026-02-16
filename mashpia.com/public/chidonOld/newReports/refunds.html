@@ -104,7 +104,7 @@
                       <tbody>
                         {family[admin_id].map(
                           (item, itemIndex) => (
-                            <tr key={item.trans_id != null ? item.trans_id : `${admin_id}-family-${itemIndex}`}>
+                            <tr key={`${admin_id}-family-${itemIndex}`}>
                               <td>{item.trans_id}</td>
                               <td>{item.amount}</td>
                               <td>{item.date}</td>
