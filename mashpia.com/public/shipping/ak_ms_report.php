@@ -12,11 +12,13 @@ if ($admin_user['auth'] != 'super') {
 
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        * 
+        admin_id, amount 
     FROM
         registration_charges
     WHERE
-        type LIKE '%RRS%' AND year = :year
+        type LIKE '%RRS%' AND year = :year 
+        AND refunded = 0 
+        AND school_id IN (269, 61) 
     GROUP BY admin_id ORDER BY admin_id
 ");
 $stmt->execute(['year' => $year]);
