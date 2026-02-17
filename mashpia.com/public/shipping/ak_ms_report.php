@@ -12,9 +12,10 @@ if ($admin_user['auth'] != 'super') {
 
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        admin_id, amount 
+        a.*, amount 
     FROM
-        registration_charges
+        registration_charges rc 
+    JOIN admins a USING (admin_id) 
     WHERE
         type LIKE '%RRS%' AND year = :year 
         AND refunded = 0 
@@ -23,5 +24,35 @@ $stmt = $MASHPIA_DB->prepare("
 ");
 $stmt->execute(['year' => $year]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-echo "<pre>"; print_r($rows); echo "</pre>"; exit;
+?>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AK/MS Report</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>AK/MS Report</h1>
+    <table>
+        <tr>
+            <th>Admin ID</th>
+            <th>Amount</th>
+        </tr>
+        <? foreach ($rows as $row) : ?>
+            <tr>
+                <td><?= $row['admin_id'] ?></td>
+                <td><?= $row['amount'] ?></td>
+            </tr>
+        <? endforeach; ?>
+    </table>
+</body>
+</html>
