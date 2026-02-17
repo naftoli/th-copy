@@ -855,6 +855,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             // create campaigns and birthday missions
             $this->enrollInCampaigns();
             $this->setupBirthdayMissions(false);
+            // move all marks from old date_tasks_marks table to regular date_tasks_marks table
+            $this->moveMarksFromArchive();
         } else {
             // make sure admin is parent
             $stmt = $MASHPIA_DB->prepare("
@@ -880,6 +882,31 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
         }
         return $errors;
+    }
+
+    public function moveMarksFromArchive() {
+        global $MASHPIA_DB;
+        // check if there are any marks to move
+        $success = true;
+        $MASHPIA_DB->beginTransaction();
+        $stmt = $MASHPIA_DB->prepare("SELECT COUNT(*) as total FROM date_tasks_marks_old WHERE user_id = :user");
+        $success = $stmt->execute([':user' => $this->user_id]);
+        $row = $stmt->fetch();
+        if ($success && $row['total'] > 0) {
+            $stmt = $MASHPIA_DB->prepare("INSERT INTO date_tasks_marks SELECT * FROM date_tasks_marks_old WHERE user_id = :user");
+            $success = $stmt->execute([':user' => $this->user_id]);
+            if ($success) {
+                $stmt = $MASHPIA_DB->prepare("DELETE FROM date_tasks_marks_old WHERE user_id = :user");
+                $success = $stmt->execute([':user' => $this->user_id]);
+            }
+        }
+        if ($success) {
+            $MASHPIA_DB->commit();
+            return true;
+        } else {
+            $MASHPIA_DB->rollBack();
+            return false;
+        }
     }
 
     public function addHachayol($user_id, $year) {
