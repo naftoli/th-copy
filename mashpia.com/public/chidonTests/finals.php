@@ -107,6 +107,17 @@ function getTrack($child) {
     global $cs;
     $track = $cs->getTrackByTests($child, true);
     return $track;
+
+    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+    $ct->setScores();
+    $scores = $ct->getScores();
+    $ct->calculateMarks();
+    $marks = $ct->getMarks();
+    $highest_track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id'], false, 3, false, false, $child['highest_track']);
+    // check if child passed Iyun through cumulative marks
+    $cumulative = $ct->calculateCumulative($row, $scores[$row['th_chidon_id']]);
+    if ($cumulative == 'iyun') $highest_track = 'genius';
+    return $highest_track;
 }
 
 function getAward($child)
@@ -126,16 +137,6 @@ function getAward($child)
 
     $track = $cs->getAwardTrack($child);
     return $track ? $awards[$track] : 'no award yet';
-}
-
-function showIyun($child) {
-    global $ct;
-    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
-    $ct->setScores();
-    $scores = $ct->getScores()[$child['th_chidon_id']];
-    $cumulative_track = $ct->calculateCumulative($child, $scores);
-    $highest = $child['highest_track'];
-    return $highest == 'iyun' || $cumulative_track == 'iyun';
 }
 
 $info = [];
@@ -225,10 +226,8 @@ if (isset($_POST['grade'])) {
         echo "<th>Award</th>";
         echo "</tr>";
         foreach ($children as $child) {
-            $highest = $child['highest_track'] == 'iyun' ? $child['highest_track'] : getTrack($child); // track based off tests
-            $child['highest_track'] = $highest;
-            $show_iyun = showIyun($child);
-            if ($show_iyun) $child['highest_track'] = 'iyun';
+            $child['highest_track'] = getTrack($child);
+            $show_iyun = $child['highest_track'] == 'iyun';
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
