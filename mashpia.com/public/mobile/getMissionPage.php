@@ -117,8 +117,8 @@ if (in_array($school, [180, 709])) {
 }
 
 $curParsha = [];
-$limit = $school == 463 ? 365 : 28;
-if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - $limit) { // if the date was not provided or it is older then 28 days ago (4 weeks)
+$limit = isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] ? 365 : 28;
+if (!isset($_GET['d']) || intval($_GET['d']) < unixtojd() - $limit) { // if the date was not provided or it is older then limit days ago
 	//get todays day
 	$jd = unixtojd();
 	$today = intval(date('w', jdtounix($jd))); //sunday starts 0
