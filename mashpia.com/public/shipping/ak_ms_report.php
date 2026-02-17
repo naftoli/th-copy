@@ -31,9 +31,10 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>AK/MS Report</title>
     <style>
         tr, th, td {
-            font-size: 12px;
+            font-size: 14px;
             padding: 10px;
             border-bottom: 1px solid #ccc;
+            font-family: Arial;
         }
         th {
             background-color: #f0f0f0;
@@ -47,6 +48,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>Admin ID</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Paid for Shipping</th>
             <th>Amount</th>
         </tr>
         <? foreach ($rows as $row) : ?>
@@ -54,6 +56,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= $row['admin_id'] ?></td>
                 <td><?= $row['first'] ?></td>
                 <td><?= $row['last'] ?></td>
+                <td><?= $row['amount'] > 0 ? 'Yes' : 'No' ?></td>
                 <td><?= $row['amount'] ?></td>
             </tr>
         <? endforeach; ?>
