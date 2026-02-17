@@ -1113,13 +1113,17 @@ abstract class MissionDisplay {
 							}
 
 							// find out how many times the task has been accomplished
-							$a = new Accomplished($user->user_id, $this->start, $this->end, $task);
-							$a->setAccomplished();
-							$accomplished = $a->getAccomplished();
-							if ($task->streak_id > 0) {
-								$accomplished_count = count($accomplished[$task->streak_id]);
+							if (isset($GLOBALS['duch_marks_cache'][ $user->user_id ][ $task->grid_id ])) {	
+								$accomplished_count = count($GLOBALS['duch_marks_cache'][ $user->user_id ][ $task->grid_id ]);
 							} else {
-								$accomplished_count = count($accomplished[$task->grid_id]);
+								$a = new Accomplished($user->user_id, $this->start, $this->end, $task);
+								$a->setAccomplished();
+								$accomplished = $a->getAccomplished();
+								if ($task->streak_id > 0) {
+									$accomplished_count = count($accomplished[$task->streak_id]);
+								} else {
+									$accomplished_count = count($accomplished[$task->grid_id]);
+								}
 							}
 							if ($accomplished_count > $total_days) $accomplished_count = $total_days;
 							if (! empty($task->streak_duch_name)) {

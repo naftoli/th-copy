@@ -14,7 +14,7 @@ class Accomplished {
         $this->start_date = $start_date;
         $this->end_date = $end_date;
         $this->task = $task;
-        $this->limit = (int)$end_date - (int)$start_date;
+        $this->limit = (int)$end_date - (int)$start_date + 1;
         $this->accomplished = [];
     }
 
