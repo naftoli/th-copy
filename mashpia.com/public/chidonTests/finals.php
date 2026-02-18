@@ -104,7 +104,7 @@ function passedKhk($child)
 }
 
 function getTrack($child) {
-    global $ct;
+    global $ct, $types;
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
     $scores = $ct->getScores();
@@ -114,7 +114,7 @@ function getTrack($child) {
     // check if child passed Iyun through cumulative marks
     $cumulative = $ct->calculateCumulative($child, $scores[$child['th_chidon_id']]);
     if ($cumulative == 'iyun') $highest_track = 'genius';
-    return $highest_track;
+    return $types[$highest_track];
 }
 
 function getAward($child)
