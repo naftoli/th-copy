@@ -13,7 +13,7 @@ if ($admin_user['auth'] != 'super') {
 $paid_for_shipping = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        a.admin_id, rc.amount, rc.date, rc.school_id  
+        a.admin_id, rc.amount, rc.date  
     FROM
         registration_charges rc
             JOIN
@@ -33,8 +33,7 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 foreach ($rows as $row) {
     $paid_for_shipping[$row['admin_id']] = [
         'amount' => $row['amount'],
-        'date' => $row['date'],
-        'school_id' => $row['school_id']
+        'date' => $row['date']
     ];
 }
 
@@ -79,7 +78,6 @@ $admins = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>Admin ID</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>School</th>
             <th>Paid for Shipping</th>
             <th>Amount Paid</th>
             <th>Date Paid</th>
@@ -89,11 +87,6 @@ $admins = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= $row['admin_id'] ?></td>
                 <td><?= $row['first'] ?></td>
                 <td><?= $row['last'] ?></td>
-                <td>
-                    <?= isset($paid_for_shipping[$row['admin_id']]) ? 
-                        $paid_for_shipping[$row['admin_id']]['school_id'] == 61 ? 'MyShliach' : 
-                            'Anash Kinder' : '' ?>
-                </td>
                 <td><?= isset($paid_for_shipping[$row['admin_id']]) ? 'Yes' : 'No' ?></td>
                 <td><?= isset($paid_for_shipping[$row['admin_id']]) ? $paid_for_shipping[$row['admin_id']]['amount'] : '' ?></td>
                 <td><?= isset($paid_for_shipping[$row['admin_id']]) ? $paid_for_shipping[$row['admin_id']]['date'] : '' ?></td>
