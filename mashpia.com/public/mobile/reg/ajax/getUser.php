@@ -21,7 +21,9 @@ $sql = "SELECT
                 LEFT JOIN
             admins a USING (admin_id) 
         WHERE
-            u.user_id = " . $user . " AND aa.admin_id = " . $admin_id . " AND tc.year = " . $year;
+            u.user_id = " . $user . " AND aa.admin_id = " . $admin_id . " 
+            AND (tc.year = $year OR tc.year IS NULL)
+";
 // echo $sql;
 $result = mysql_query( $sql );
 if ( mysql_num_rows($result) > 0 ) {
