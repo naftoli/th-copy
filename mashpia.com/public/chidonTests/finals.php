@@ -114,7 +114,7 @@ function getTrack($child) {
     // check if child passed Iyun through cumulative marks
     $cumulative = $ct->calculateCumulative($child, $scores[$child['th_chidon_id']]);
     if ($cumulative == 'iyun') $highest_track = 'genius';
-    return $types[$highest_track];
+    return $types[$highest_track] ?? '';
 }
 
 function getAward($child)
