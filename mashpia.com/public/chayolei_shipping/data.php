@@ -201,7 +201,8 @@ function checkShippingStatus($admin_id) {
     $sql = "SELECT IFNULL(COUNT(*), 0) as total FROM registration_charges 
             WHERE admin_id = :admin 
             AND year = :year 
-            AND type in ('RRSUSA', 'RRSCAN', 'RRSINT')";
+            AND type (LIKE 'THAK%' OR LIKE 'THMS%') 
+            AND refunded = 0";
     $stmt = $MASHPIA_DB->prepare($sql);
     $stmt->execute([
         'year'      => $year,
@@ -272,6 +273,7 @@ function createCSV($items, $school_id, $usOnly = false, $intlOnly = false) {
                 $user = $users[$user_id];
                 $school = $user['school_id'] == 61 ? 'MyShliach' : 'Anash Kinder';
                 $shipping = $shipping_status[$user_id];
+                if ($shipping == 'pickup') continue; // skip if pickup
                 $qty = $item['qty'] ?? 1;
                 $itemDesc = '';
                 if ($item['name']) $itemDesc .= "Personalized ";

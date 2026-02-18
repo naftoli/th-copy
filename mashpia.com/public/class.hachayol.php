@@ -231,5 +231,4 @@ class Hachayol
         return (isset($this->chidonNumbers[$school_id]) ? $this->chidonNumbers[$school_id] : 0);
     }
 }
-
 ?>
