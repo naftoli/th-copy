@@ -97,12 +97,35 @@ class ChayoleiShipping
         return ['Hachayol Shipment #1', 'Hachayol Shipment #2', 'Hachayol Shipment #3', 'Hachayol Shipment #4', 'Hachayol Shipment #5', 'Hachayol Shipment #6', 'Hachayol Shipment #7', 'Hachayol Shipment #8', 'Hachayol Shipment #9', 'Hachayol Shipment #10'];
     }
 
+    public function checkShippingStatus($admin_id) {    
+        $status = 'pickup';
+        // we need to check the registration_charges table to see if shipping was paid for
+        $sql = "SELECT IFNULL(COUNT(*), 0) as total FROM registration_charges 
+                WHERE admin_id = :admin 
+                AND year = :year 
+                AND type (LIKE 'THAK%' OR LIKE 'THMS%') 
+                AND refunded = 0";
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute([
+            'year'      => $this->year,
+            'admin'     => $admin_id
+        ]);
+        $row = $stmt->fetch();
+        if ($row && $row['total'] > 0) $status = 'shipping';
+        return $status;
+    }
+
     public function getHachayols($gender, $school, $items) {
         $hachayols = [];
         $h = new Hachayol();
         $h->setSchools($school);
         $rows = $h->runSql($gender, $school, $this->year);
         foreach ($rows as $row) {
+            if (in_array($school, [61, 269])) {
+                // check if parent paid for shipping
+                $shipping = $this->checkShippingStatus($row['admin_id']);
+                if ($shipping == 'pickup') continue; // skip if pickup
+            }
             foreach ($items as $item) {
                 // get last digit of item
                 $last_digit = intval(substr($item, -1));

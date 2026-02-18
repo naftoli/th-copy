@@ -190,29 +190,6 @@ function addToSummary($item, $school) {
     else $grand_summary[$key][$school] = $qty;
 }
 
-function checkShippingStatus($admin_id) {
-    global $MASHPIA_DB, $year;
-
-    $status = 'pickup';
-//    $sql = "select * from chidon_parent_shipping
-//            where year = :year
-//            and parent_id = :id";
-    // we need to check the registration_charges table to see if shipping was paid for
-    $sql = "SELECT IFNULL(COUNT(*), 0) as total FROM registration_charges 
-            WHERE admin_id = :admin 
-            AND year = :year 
-            AND type (LIKE 'THAK%' OR LIKE 'THMS%') 
-            AND refunded = 0";
-    $stmt = $MASHPIA_DB->prepare($sql);
-    $stmt->execute([
-        'year'      => $year,
-        'admin'     => $admin_id
-    ]);
-    $row = $stmt->fetch();
-    if ($row && $row['total'] > 0) $status = 'shipping';
-    return $status;
-}
-
 function createCSV($items, $school_id, $usOnly = false, $intlOnly = false) {
     global $items_chosen, $MASHPIA_DB;
 
@@ -237,12 +214,10 @@ function createCSV($items, $school_id, $usOnly = false, $intlOnly = false) {
     $admins = [];
     $children = [];
     $users = [];
-    $shipping_status = [];
     foreach ($rows as $row) {
         $admins[$row['admin_id']] = $row;
         $children[$row['user_id']] = $row['admin_id'];
         $users[$row['user_id']] = $row;
-        $shipping_status[$row['user_id']] = checkShippingStatus($row['admin_id']);
     }
 
     $info = [];
@@ -272,8 +247,7 @@ function createCSV($items, $school_id, $usOnly = false, $intlOnly = false) {
                 $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
                 $user = $users[$user_id];
                 $school = $user['school_id'] == 61 ? 'MyShliach' : 'Anash Kinder';
-                $shipping = $shipping_status[$user_id];
-                if ($shipping == 'pickup') continue; // skip if pickup
+                $shipping = 'ship';
                 $qty = $item['qty'] ?? 1;
                 $itemDesc = '';
                 if ($item['name']) $itemDesc .= "Personalized ";

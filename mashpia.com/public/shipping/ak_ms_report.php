@@ -10,20 +10,46 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+$paid_for_shipping = [];
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
-        a.*, amount 
+        a.admin_id, rc.amount
     FROM
-        registration_charges rc 
-    JOIN admins a USING (admin_id) 
+        registration_charges rc
+            JOIN
+        admin_auths aa ON aa.id = rc.user_id
+            JOIN
+        admins a ON a.admin_id = aa.admin_id
     WHERE
-        type LIKE '%RRS%' AND year = :year 
-        AND refunded = 0 
-        AND school_id IN (269, 61) 
-    GROUP BY admin_id ORDER BY admin_id
+        year = :year 
+            AND rc.school_id IN (61 , 269)
+            AND (type LIKE 'THAK%' OR type LIKE 'THMS%')
+    GROUP BY admin_id
+    ORDER BY admin_id
 ");
 $stmt->execute(['year' => $year]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+foreach ($rows as $row) {
+    $paid_for_shipping[$row['admin_id']] = $row['amount'];
+}
+
+$stmt = $MASHPIA_DB->prepare("
+    SELECT 
+        a.*
+    FROM
+        users u
+            JOIN
+        admin_auths aa ON aa.id = u.user_id
+            JOIN
+        admins a ON a.admin_id = aa.admin_id
+    WHERE
+        u.school_id IN (61 , 269)
+            AND user_registered IS NOT NULL
+    GROUP BY admin_id
+    ORDER BY admin_id
+");
+$stmt->execute();
+$admins = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -51,13 +77,13 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>Paid for Shipping</th>
             <th>Amount</th>
         </tr>
-        <? foreach ($rows as $row) : ?>
+        <? foreach ($admins as $row) : ?>
             <tr>
                 <td><?= $row['admin_id'] ?></td>
                 <td><?= $row['first'] ?></td>
                 <td><?= $row['last'] ?></td>
-                <td><?= $row['amount'] > 0 ? 'Yes' : 'No' ?></td>
-                <td><?= $row['amount'] ?></td>
+                <td><?= isset($paid_for_shipping[$row['admin_id']]) ? 'Yes' : 'No' ?></td>
+                <td><?= isset($paid_for_shipping[$row['admin_id']]) ? $paid_for_shipping[$row['admin_id']] : 0 ?></td>
             </tr>
         <? endforeach; ?>
     </table>

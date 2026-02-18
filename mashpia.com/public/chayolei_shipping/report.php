@@ -50,7 +50,7 @@ $report_type = $_POST['report_type'];
 if ($report_type == 'file') {
     $files = [];
     $status = $cs->getStatus();
-    foreach ([61, 269] as $school_id) {
+    foreach ($list_of_schools as $school_id) {
         foreach ($items_chosen as $cat => $itemsPerCat) {
             $listOfItems = array_keys($itemsPerCat);
             $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
@@ -85,103 +85,6 @@ if ($report_type == 'file') {
     downloadFile('shipping.zip');
     exit;
 }
-/*
-    $ids = $cs->getChildrenToRemove();
-    foreach ([61, 269] as $school_id) {
-        $info = [];
-        $cs->setToExclude($ids);
-        foreach ($items_chosen as $cat => $itemsPerCat) {
-            $listOfItems = array_keys($itemsPerCat);
-            $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-//            if ($cat == 'extra purchases') $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems, 'byFamily', $remove);
-            if ($cat == 'extra purchases') continue;
-            else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-        }
-//        echo "<pre>"; print_r($info); echo "</pre>";
-        $csv = createCSV($info, $school_id);
-        $file = $school_id . '.csv';
-        createFile($file, $csv);
-        $files[] = $file;
-    }
-    // add extra purchases not ak/myshliach to ship
-    $extra = $cs->getExtraPurchasesToShip();
-    $csv = $cs->createCSVFromExtraPurchases($extra);
-    $file = 'extra_purchases.csv';
-    createFile($file, $csv);
-    $files[] = $file;
-
-    /*
-     * create myshliach / anash kinder with extra purchases files
-     * there's 3 files needed
-     * 1. for parents that paid for shipping and include extra purchases that are to be shipped to home address
-     * 2. for parents that didn't pay for shipping and include extra purchases that are to be pickud up
-     * 3. (for parents that paid for shipping but have) extra purchases that go to different address
-     */
-/*
-// first
-// reset the array of kids to remove
-$cs->setToExclude([]);
-foreach ([61, 269] as $school_id) {
-    $info = [];
-    $ids = $cs->getChildrenToRemove(true);
-    $cs->setOnly($ids);
-
-    foreach ($items_chosen as $cat => $itemsPerCat) {
-        $listOfItems = array_keys($itemsPerCat);
-        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK();
-        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-    }
-    $csv = createCSV($info, $school_id);
-    $file = $school_id . 'withEPtoShip.csv';
-    createFile($file, $csv);
-    $files[] = $file;
-}
-
-//second
-foreach ([61, 269] as $school_id) {
-    $info = [];
-    $ids = $cs->getChildrenToRemove(false, true);
-    $cs->setOnly($ids);
-
-    foreach ($items_chosen as $cat => $itemsPerCat) {
-        $listOfItems = array_keys($itemsPerCat);
-        $nameOfFunc = 'get' . str_replace(' ', '', ucwords($cat));
-        if ($cat == 'extra purchases') $info[$cat] = $cs->getExtraPurchasesAK(false);
-        else $info[$cat] = $cs->$nameOfFunc($_POST['gender'], $school_id, $listOfItems);
-    }
-    $csv = createCSV($info, $school_id);
-    $file = $school_id . 'withEPtoPickup.csv';
-    createFile($file, $csv);
-    $files[] = $file;
-}
-
-//third
-$extra = $cs->getExtraPurchasesToShip(true);
-$csv = $cs->createCSVFromExtraPurchases($extra);
-$file = 'extra_purchases_myshliach_ak.csv';
-createFile($file, $csv);
-$files[] = $file;
-
-createZip($files, 'shipping.zip');
-downloadFile('shipping.zip');
-exit;
-*/
-//else if ($report_type == 'fileGear') {
-//    $files = [];
-//    $listOfItems = array_keys($items_chosen['gear']);
-//    $info['gear'] = $cs->getGear($_POST['gender'],0, $listOfItems, true);
-//    $users = array_keys($info['gear']);
-//    $csv = createCSVforGear($users, $info['gear']);
-//    $file = 'gear.csv';
-//    createFile($file, $csv);
-//    downloadFile($file);
-//    exit;
-//}
-
-// get list of schools to iterate over
-$list_of_schools = $_POST['school'];
-$shipment_number = isset($_POST['shipment_number']) ? $_POST['shipment_number'] : 0;
 
 // get results for chosen items
 $info = [];
