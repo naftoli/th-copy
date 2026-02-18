@@ -97,22 +97,36 @@ class ChayoleiShipping
         return ['Hachayol Shipment #1', 'Hachayol Shipment #2', 'Hachayol Shipment #3', 'Hachayol Shipment #4', 'Hachayol Shipment #5', 'Hachayol Shipment #6', 'Hachayol Shipment #7', 'Hachayol Shipment #8', 'Hachayol Shipment #9', 'Hachayol Shipment #10'];
     }
 
-    public function checkShippingStatus($admin_id) {    
-        $status = 'pickup';
+    public function checkShippingStatus($school_id) {    
+        $shipping_status = [];
         // we need to check the registration_charges table to see if shipping was paid for
-        $sql = "SELECT IFNULL(COUNT(*), 0) as total FROM registration_charges 
-                WHERE admin_id = :admin 
-                AND year = :year 
-                AND type (LIKE 'THAK%' OR LIKE 'THMS%') 
-                AND refunded = 0";
+        $sql = "
+            SELECT 
+                a.admin_id, rc.amount, rc.date  
+            FROM
+                registration_charges rc
+                    JOIN
+                admin_auths aa ON aa.id = rc.user_id
+                    JOIN
+                admins a ON a.admin_id = aa.admin_id
+            WHERE
+                year = :year 
+                    AND rc.school_id = :school_id
+                    AND (type LIKE 'THAK%' OR type LIKE 'THMS%')
+                    AND rc.refunded = 0
+            GROUP BY admin_id
+            ORDER BY admin_id
+        ";
         $stmt = $this->db->prepare($sql);
         $stmt->execute([
             'year'      => $this->year,
-            'admin'     => $admin_id
+            'school_id' => $school_id
         ]);
-        $row = $stmt->fetch();
-        if ($row && $row['total'] > 0) $status = 'shipping';
-        return $status;
+        $rows = $stmt->fetchAll();
+        foreach ($rows as $row) {
+            $shipping_status[$row['admin_id']] = $row;
+        }
+        return $shipping_status;
     }
 
     public function getHachayols($gender, $school, $items) {
@@ -120,11 +134,13 @@ class ChayoleiShipping
         $h = new Hachayol();
         $h->setSchools($school);
         $rows = $h->runSql($gender, $school, $this->year);
+        if (in_array($school, [61, 269])) {
+            $shipping_status = $this->checkShippingStatus($school);
+        }
         foreach ($rows as $row) {
             if (in_array($school, [61, 269])) {
                 // check if parent paid for shipping
-                $shipping = $this->checkShippingStatus($row['admin_id']);
-                if ($shipping == 'pickup') continue; // skip if pickup
+                if (!isset($shipping_status[$row['admin_id']])) continue;
             }
             foreach ($items as $item) {
                 // get last digit of item
@@ -140,6 +156,7 @@ class ChayoleiShipping
                 ];
             }
         }
+        
         return $hachayols;
     }
 
