@@ -104,7 +104,7 @@ function passedKhk($child)
 }
 
 function getTrack($child) {
-    global $cs;
+    global $ct;
     $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
     $ct->setScores();
     $scores = $ct->getScores();
