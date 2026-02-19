@@ -183,6 +183,7 @@ ksort($grand_summary);
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Shipping Reports</title>
   <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css"/>
+  <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/colreorder/1.7.0/css/colReorder.dataTables.min.css"/>
   <style>
     body {
       font-family: sans-serif;
@@ -438,16 +439,21 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
 </body>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="//cdn.datatables.net/colreorder/1.7.0/js/dataTables.colReorder.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 <script src="/scripts/js.cookie.js"></script>
 <script>
   // summary tables don't need to be ordered
   const summary = $(".table.summary").DataTable({
-    paging: false
+    paging: false,
+    colReorder: true, 
+    stateSave: true  
   })
 
   const table = $(".table").not(".summary").DataTable({
-    paging: false
+    paging: false,
+    colReorder: true, 
+    stateSave: true  
   })
 
   const sortBy = (table, value) => {
