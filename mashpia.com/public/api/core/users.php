@@ -36,10 +36,10 @@ class UsersRouter {
             // can't get admin id here b/c it creates bugs
             $sql = "
                 SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
-                       MAX(rank_ord) as rank_name 
+                       IFNULL(MAX(rank_ord), 1) as rank_name 
                 FROM users u 
                 JOIN schools s USING ( school_id ) 
-                JOIN rank_marks using ( user_id ) 
+                LEFT JOIN rank_marks using ( user_id ) 
                 LEFT JOIN classes c USING ( class_id ) WHERE $filters 
                 GROUP BY user_id 
                 ORDER BY school_name, class_grade, class_sub, last, first
