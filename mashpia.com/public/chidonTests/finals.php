@@ -147,7 +147,7 @@ $tooLate = false;
 // disable marking after certain dates for bc's
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
-    $shutdown = new DateTime('2025-03-11 00:00:00', new DateTimeZone('America/New_York'));
+    $shutdown = new DateTime('2026-02-24 00:00:00', new DateTimeZone('America/New_York'));
     if ($today >= $shutdown) {
         $tooLate = true;
     }
