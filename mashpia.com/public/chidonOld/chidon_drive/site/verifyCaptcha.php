@@ -1,6 +1,6 @@
 <?php
 // check captcha
-$privatekey = '6Lee7pYqAAAAAHQN_UBJh_XuT8CHch7I_9-TQ0TU';
+$privatekey = '6Lf6enEsAAAAAGHu7VXOhq60fB1cUOapdbCdUA45';
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, "https://www.google.com/recaptcha/api/siteverify");
 curl_setopt($ch, CURLOPT_HEADER, 0);
