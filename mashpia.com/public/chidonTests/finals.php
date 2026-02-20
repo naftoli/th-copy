@@ -224,7 +224,7 @@ if (isset($_POST['grade'])) {
         echo "</tr>";
         foreach ($children as $child) {
             $child['highest_track'] = getTrack($child);
-            $show_iyun = $child['highest_track'] == 'iyun';
+            $show_iyun = $child['highest_track'] == 'Iyun';
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
