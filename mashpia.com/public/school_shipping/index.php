@@ -288,6 +288,13 @@ $year = GlobalSettings::getChidonRegYear();
     if (window.SCHOOL_SCHOOLS_DATA && $("#school-multiselect-container").length) {
       var schools = window.SCHOOL_SCHOOLS_DATA;
       window.schoolMultiselectSelected = [];
+      try {
+        var stored = sessionStorage.getItem('school_shipping_schools');
+        if (stored) {
+          var arr = JSON.parse(stored);
+          if (Array.isArray(arr)) window.schoolMultiselectSelected = arr.map(String);
+        }
+      } catch (e) {}
 
       function renderOptions(filter) {
         var q = (filter || "").toLowerCase();
@@ -325,6 +332,7 @@ $year = GlobalSettings::getChidonRegYear();
         $("#school-check-all").prop("checked", window.schoolMultiselectSelected.length === schools.length);
         renderOptions($("#school-search").val());
         syncHiddenInputs();
+        try { sessionStorage.setItem('school_shipping_schools', JSON.stringify(window.schoolMultiselectSelected)); } catch (e) {}
       }
 
       $("#school-dropdown-trigger").on("click", function(e) {
@@ -380,8 +388,7 @@ $year = GlobalSettings::getChidonRegYear();
         updateTrigger();
       });
 
-      renderOptions();
-      syncHiddenInputs();
+      updateTrigger();
     }
   })
 </script>

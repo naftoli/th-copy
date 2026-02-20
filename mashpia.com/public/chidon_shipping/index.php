@@ -358,6 +358,13 @@ $items = $cs->getItems();
     if (window.CHIDON_SCHOOLS_DATA && $("#school-multiselect-container").length) {
       var schools = window.CHIDON_SCHOOLS_DATA;
       window.schoolMultiselectSelected = [];
+      try {
+        var stored = sessionStorage.getItem('chidon_shipping_schools');
+        if (stored) {
+          var arr = JSON.parse(stored);
+          if (Array.isArray(arr)) window.schoolMultiselectSelected = arr.map(String);
+        }
+      } catch (e) {}
 
       function renderOptions(filter) {
         var q = (filter || "").toLowerCase();
@@ -396,6 +403,7 @@ $items = $cs->getItems();
         renderOptions($("#school-search").val());
         syncHiddenInputs();
         showDropdown();
+        try { sessionStorage.setItem('chidon_shipping_schools', JSON.stringify(window.schoolMultiselectSelected)); } catch (e) {}
       }
 
       $("#school-dropdown-trigger").on("click", function(e) {
@@ -451,8 +459,7 @@ $items = $cs->getItems();
         updateTrigger();
       });
 
-      renderOptions();
-      syncHiddenInputs();
+      updateTrigger();
     }
   })
 </script>
