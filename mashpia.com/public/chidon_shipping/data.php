@@ -274,12 +274,14 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
     }
 
     $i = 0;
-    $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+    $csv[$i++] = ['Order #', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
         'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
-        'Country Code', 'Item SKU', 'Item Name 1', 'Spanish Name 1', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+        'Country Code', 'Item SKU', 'Item Name / Title', 'Item Warehouse Location', 'Item Quantity', 'Item Options', 'Buyer Email', 
+        'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
     $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
         'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
-        'Full Item Name', 'Spanish Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email', 'Child Count', 'Comments', 'City, State, Country'];
+        'Full Item Name', 'Spanish Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email', 
+        'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
     foreach ($info as $more) {
         foreach ($more as $user_id => $list) {
             foreach ($list as $item) {
@@ -299,7 +301,7 @@ function createCSV($items, $year, $school_id, $shipTo = 'all') {
                 $itemDesc .= (isset($item['type']) && !empty($item['type']) ? ($item['type'] . ' ') : '') . $item['item'];
                 if ($item['color']) $itemDesc .= ", " . $item['color'];
                 if ($item['size']) $itemDesc .= ", size: " . $item['size'];
-                $itemDesc .= " " . $item['name'];
+                // $itemDesc .= " " . $item['name'];
                 $translation = $translations[$item['id']] ?? '';
                 if ($translation && !empty(trim($item['name']))) $translation = 'Personalizado ' . $translation;
 

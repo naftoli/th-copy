@@ -871,38 +871,38 @@ class SchoolShipping
         }
     
         $i = 0;
-        $csv[$i++] = ['Order Number', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
+        $csv[$i++] = ['Order #', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
             'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
-            'Country Code', 'Item SKU', 'Item Name 1', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+            'Country Code', 'Item SKU', 'Item Name / Title', 'Item Warehouse Location', 'Item Quantity', 'Item Options', 'Buyer Email', 
+            'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
         $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'School - Shipping Type',
             'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
-            'Full Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email', 'Child Count', 'Comments', 'City, State, Country'];
-        foreach ($info as $more) {
-            foreach ($more as $user_id => $list) {
-                foreach ($list as $item) {
-                    if (! isset($children[$user_id])) continue;
-                    $admin = $admins[$children[$user_id]];
-                    $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
-                    $phone = makeTextForExcel($phone);
-                    $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
-    
-                    $user = $users[$user_id];
-                    $qty = $item['qty'] ?? 1;
-                    $school = $user['school_id'] == 61 ? 'MyShliach' : ($user['school_id'] == 269 ? 'Anash Kinder' : '');
-                    $shipping = $shipping_status[$user_id];
-    
-                    $itemDesc = '';
-                    if ($item['name']) $itemDesc .= "Personalized ";
-                    $itemDesc .= $item['item'];
-                    if ($item['color']) $itemDesc .= ", " . $item['color'];
-                    if ($item['size']) $itemDesc .= ", size: " . $item['size'];
-    
-                    $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
-                        $phone, ($school . ' - ' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
-                        $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc,
-                        $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], '', '',
-                        ($admin['admin_city'] . ', ' . $admin['admin_state'] . ', ' . $admin['admin_country'])];
-                }
+            'Full Item Name', 'Spanish Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email', 
+            'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+        foreach ($more as $user_id => $list) {
+            foreach ($list as $item) {
+                if (! isset($children[$user_id])) continue;
+                $admin = $admins[$children[$user_id]];
+                $phone = $admin['admin_phone_mobile'] ?? $admin['admin_phone_work'] ?? $admin['admin_phone_home'] ?? '';
+                $phone = makeTextForExcel($phone);
+                $first = empty($admin['father']) ? $admin['first'] : ($admin['father'] . ' ' . $admin['mother']);
+
+                $user = $users[$user_id];
+                $qty = $item['qty'] ?? 1;
+                $school = $user['school_id'] == 61 ? 'MyShliach' : ($user['school_id'] == 269 ? 'Anash Kinder' : '');
+                $shipping = $shipping_status[$user_id];
+
+                $itemDesc = '';
+                if ($item['name']) $itemDesc .= "Personalized ";
+                $itemDesc .= $item['item'];
+                if ($item['color']) $itemDesc .= ", " . $item['color'];
+                if ($item['size']) $itemDesc .= ", size: " . $item['size'];
+
+                $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
+                    $phone, ($school . ' - ' . ucwords($shipping)), $admin['admin_address1'], $admin['admin_address2'], '', $admin['admin_city'],
+                    $admin['admin_state'], $admin['admin_postal'], $admin['admin_country'], $item['id'], $itemDesc, '',
+                    $qty, ($user['u_first'] . ' ' . $user['u_last'] . ' - ' . $user['user_serial']), $admin['admin_email'], '', '',
+                    ($admin['admin_city'] . ', ' . $admin['admin_state'] . ', ' . $admin['admin_country'])];
             }
         }
     

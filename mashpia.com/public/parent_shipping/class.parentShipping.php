@@ -139,10 +139,12 @@ class ParentShipping
         $i = 0;
         $csv[$i++] = ['Order #', 'Recipient Full Name', 'Recipient First Name', 'Recipient Last Name', 'Recipient Phone',
             'Recipient Company', 'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code',
-            'Country Code', 'Item SKU', 'Item Name / Title', 'Item Name 2', 'Item Quantity', 'Item Options', 'Recipient Email', 'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
+            'Country Code', 'Item SKU', 'Item Name / Title', 'Item Warehouse Location', 'Item Quantity', 'Item Options', 'Buyer Email', 
+            'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
         $csv[$i++] = ['Family ID', 'Parent Full Name', 'Parent First Name', 'Parent Last Name', 'Recipient Phone', 'Shipping Type',
             'Address Line 1', 'Address Line 2', 'Address Line 3', 'City', 'State', 'Postal Code', 'Country Code', 'CHI Number',
-            'Full Item Name', 'Item Warehouse Location', 'Quantity', 'Recipient Email', 'Comments', 'City, State, Country'];
+            'Full Item Name', 'Spanish Item Name', 'Quantity', 'Child Name - Serial #', 'Recipient Email', 
+            'Custom Field 1', 'Internal Notes', 'Custom Field 2'];
         foreach ($info as $cat => $details) {
             // Skip status category - it has a different structure (metadata, not items)
             if ($cat == 'status') continue;
@@ -177,7 +179,7 @@ class ParentShipping
                     $csv[$i++] = [$admin['admin_id'], ($first . ' ' . $admin['last']), $admin['first'], $admin['last'],
                         $phone, $shipping, $address, $address2, $address3, $city,
                         $state, $zip, $country, $item['id'], $itemDesc, $translation, 
-                        $qty, $admin['admin_email'], '', ($city . ', ' . $state . ', ' . $country)];
+                        $qty, '', $admin['admin_email'], '', '', ($city . ', ' . $state . ', ' . $country)];
                 }
             }
         }
