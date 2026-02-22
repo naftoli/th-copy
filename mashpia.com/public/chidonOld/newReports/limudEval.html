@@ -37,6 +37,7 @@
     const [summary, setSummary] = useState([])
     const [test_num, setTestNum] = useState(0)
     const [locked, setLocked] = useState(false)
+    const [superAdmin, setSuperAdmin] = useState(false)
 
     const handleSchoolChange = (e) => {
       setSchool(e.target.value)
@@ -66,6 +67,7 @@
           setInfo(data.info)
           setSummary(data.summary)
           setLocked(data.school_confirmed == 1 ? true : false)
+          setSuperAdmin(!!data.super)
         })
     }
 
@@ -90,6 +92,7 @@
               <Table
                 info={info}
                 locked={locked}
+                superAdmin={superAdmin}
               />
             </>
           }
@@ -267,7 +270,7 @@
     )
   }
 
-  const Table = ({info, locked}) => {
+  const Table = ({info, locked, superAdmin}) => {
     // variables
     const tracks = {
       'Yesod': 'maven',
@@ -356,6 +359,10 @@
       update(e, 'reward', serial)
     }
 
+    const updateFinalType = (e, serial) => {
+      update(e, 'final_type', serial)
+    }
+
     const updateAward = (e, serial) => {
       update(e, 'award', serial)
     }
@@ -429,7 +436,9 @@
 
     // constants for table
     const headers = ['Serial', 'Name', 'Class', 'Track Chosen By Enrollment', 'Non Cumulative Track Passed', 'Cumulative Track Passed',
-      'Passing Avg', 'Yesod Mark/Avg', 'Yediah Mark/Avg', 'Havonah Mark/Avg', 'Iyun Mark/Avg', 'Reward', 'Award', 'KHK Experience', 'Dropped Out', 'Reason']
+      'Passing Avg', 'Yesod Mark/Avg', 'Yediah Mark/Avg', 'Havonah Mark/Avg', 'Iyun Mark/Avg', 'Reward', 'Award',
+      ...(superAdmin ? ['Final Type'] : []),
+      'KHK Experience', 'Dropped Out', 'Reason']
     const reasons = ['', 'Not Interested', 'Family Reason', 'Other School Work', 'Not happy with mark on previous test', 'Other']
     const khk_options = ['Eligible', 'KHK Experience', 'Regional Trip']
     const avgs = [70, 75, 80, 85, 90]
@@ -497,6 +506,16 @@
                   })}
                 </select>
               </td>
+              {superAdmin && (
+                <td>
+                  <select name="final_type" className="form-select final_type" style={{width: '100px'}} defaultValue={row.final_type || 'highest track passed'}
+                          onChange={(e) => updateFinalType(e, row.serial)}>
+                    {Object.entries(rewards).map((reward, i) => {
+                      return <option key={i} value={reward[1]}>{reward[0]}</option>
+                    })}
+                  </select>
+                </td>
+              )}
               <td>
                 {!row.khk_eligible && <span style={{color: 'red'}}>Not Eligible</span>}
                 {row.khk_eligible &&

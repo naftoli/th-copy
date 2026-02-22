@@ -111,6 +111,7 @@ foreach ($students as $student) {
         'track'     => $student['test_type'],
         'reward'    => $student['reward_type'] === 'highest track passed' || empty($student['reward_type']) ? 'highest track passed' : $student['reward_type'],
         'award'     => empty($student['award_type']) ? 'highest final passed' : $student['award_type'],
+        'final_type' => (empty($student['final_type']) || $student['final_type'] === 'highest track passed') ? 'highest track passed' : $student['final_type'],
         'passing_avg'   => $passing_avg,
         'yesod'     => $avgs['maven'],
         'yediah'    => $avgs['pro'],
@@ -131,6 +132,7 @@ echo json_encode([
     'info'      => $info,
     'summary'   => $summary,
     'school_confirmed' => $locked,
+    'super'     => ($admin_user['auth'] == 'super'),
 ]);
 
 function getPassingAvg($id) {

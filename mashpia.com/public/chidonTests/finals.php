@@ -224,7 +224,12 @@ if (isset($_POST['grade'])) {
         echo "</tr>";
         foreach ($children as $child) {
             $child['highest_track'] = getTrack($child);
-            $show_iyun = $child['highest_track'] == 'Iyun';
+            // When final_type is set and not 'highest track passed', use it to determine which columns are enabled
+            $track_for_inputs = $child['highest_track'];
+            if (!empty($child['final_type']) && $child['final_type'] !== 'highest track passed' && isset($types[$child['final_type']])) {
+                $track_for_inputs = $types[$child['final_type']];
+            }
+            $show_iyun = ($track_for_inputs == 'Iyun');
             if ($child['date_paid'] > 0) {
                 if ($gradeChosen > 0 && $child['class_id'] != $gradeChosen) continue;
                 $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : '-' . $child['class_sub']);
@@ -234,8 +239,8 @@ if (isset($_POST['grade'])) {
                     $child['highest_track'] . "</td>";
                 for ($i = 1; $i <= 4; $i++) {
                     if ($i == 4 && !$super && !in_array($school, [61, 269])) continue;
-                    // find out which track the child can go up to
-                    $key = array_search(ucwords($child['highest_track']), $tracks);
+                    // find out which track the child can go up to (use final_type when set for which inputs are enabled)
+                    $key = array_search(ucwords($track_for_inputs), $tracks);
                     $key++;
                     // create the proper input box
                     $track = 'track_' . $i;

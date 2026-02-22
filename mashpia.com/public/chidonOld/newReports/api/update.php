@@ -56,6 +56,7 @@ function updateField($serial, $field, $value) {
     $table_fields = [
         'track'         => 'test_type',
         'reward'        => 'reward_type',
+        'final_type'    => 'final_type',
         'award'         => 'award_type',
         'dropped_out'   => 'dropped_out',
         'reason'        => 'reason',
