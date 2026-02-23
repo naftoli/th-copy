@@ -290,6 +290,11 @@
       'Highest final passed': 'highest final passed',
     })
 
+    const final_types = Object.assign({}, tracks, {
+      'Iyun': 'genius',
+      'Highest final passed': 'highest final passed'
+    })
+
     const downloadCSV = () => {
       // Get headers
       const headers = ['Serial', 'Name', 'Class', 'Track Chosen By Enrollment', 'Non Cumulative Track Passed', 'Cumulative Track Passed',
@@ -510,8 +515,8 @@
                 <td>
                   <select name="final_type" className="form-select final_type" style={{width: '100px'}} defaultValue={row.final_type || 'highest track passed'}
                           onChange={(e) => updateFinalType(e, row.serial)}>
-                    {Object.entries(rewards).map((reward, i) => {
-                      return <option key={i} value={reward[1]}>{reward[0]}</option>
+                    {Object.entries(final_types).map((final_type, i) => {
+                      return <option key={i} value={final_type[1]}>{final_type[0]}</option>
                     })}
                   </select>
                 </td>
