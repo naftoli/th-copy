@@ -103,12 +103,12 @@ const HomePage = () => {
         <Resources />
 
         <BirthdaysWidget
-          refresh={() => dispatch(getBirthdays())}
+          refresh={(fromDate, toDate) => dispatch(getBirthdays(fromDate, toDate))}
           birthdays={home.birthdays}
         />
 
         <PromotionsWidget
-          refresh={() => dispatch(getPromotions())}
+          refresh={(fromDate, toDate) => dispatch(getPromotions(fromDate, toDate))}
           promotions={home.promotions}
         />
 

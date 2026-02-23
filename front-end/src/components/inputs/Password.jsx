@@ -36,9 +36,11 @@ export const Password = ({
   return (
     <InputGroup size={size} className='Password'>
       {showIcon &&
-        <InputGroupText>
-          <img src={lock} alt='lock' />
-        </InputGroupText>
+        <div className="input-group-prepend">
+          <InputGroupText>
+            <img src={lock} alt='lock' />
+          </InputGroupText>
+        </div>
       }
 
       <input
@@ -54,16 +56,18 @@ export const Password = ({
         placeholder={placeholder || 'Password'} />
 
       {showToggle &&
-        <Button outline
-          color='primary'
-          disabled={disabled}
-          className='toggle-password'
-          onClick={togglePassword}
-          tabIndex={tabToggle ? 0 : -1}>
+        <div className="input-group-append">
+          <Button outline
+            color='primary'
+            disabled={disabled}
+            className='toggle-password'
+            onClick={togglePassword}
+            tabIndex={tabToggle ? 0 : -1}>
 
-          <FontAwesome icon={showPassword ? 'eye' : 'eye-slash'} />
+            <FontAwesome icon={showPassword ? 'eye' : 'eye-slash'} />
 
-        </Button>
+          </Button>
+        </div>
       }
     </InputGroup>
   );

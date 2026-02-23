@@ -43,9 +43,11 @@ const Forgot = () => {
       <div className='form' id='forgot-form'>
         <form onSubmit={handleLoginForm}>
           <InputGroup size="lg">
-            <InputGroupText>
-              <FontAwesome icon='envelope' regular />
-            </InputGroupText>
+            <div className="input-group-prepend">
+              <InputGroupText>
+                <FontAwesome icon='envelope' regular />
+              </InputGroupText>
+            </div>
             <Input
               name='email'
               type='email'

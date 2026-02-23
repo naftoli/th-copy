@@ -7,6 +7,9 @@ import { Page404, Construction } from 'pages/errors';
 import PrintPage from './print/PrintPage';
 import TasksPage from './tasks/TasksPage';
 import MarkPage from './mark';
+import TasksAccomplished from './streaks/TasksAccomplished';
+import Streaks from './streaks/Streaks';
+import DuchPage from './duch/DuchPage';
 // functions
 import { isBC } from 'functions/login';
 
@@ -18,6 +21,9 @@ export const MissionsIndexPage = ({ login }) => {
       <Route path="print" element={<PrintPage />} />
       <Route path="mark" element={<MarkPage />} />
       <Route path="personalize" element={<PersonalizePage />} />
+      <Route path="tasks-accomplished" element={<TasksAccomplished />} />
+      <Route path="streaks" element={<Streaks />} />
+      <Route path="duch" element={<DuchPage />} />
       <Route path="report" element={<Construction />} />
 
       {isBC(code) &&

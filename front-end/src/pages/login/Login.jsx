@@ -74,9 +74,11 @@ export const Login = () => {
         <div className='form' id='login-form'>
           <form onSubmit={handleLoginForm}>
             <InputGroup size="lg">
-              <InputGroupText>
-                <img src={user} alt='username' />
-              </InputGroupText>
+              <div className="input-group-prepend">
+                <InputGroupText>
+                  <img src={user} alt='username' />
+                </InputGroupText>
+              </div>
 
               <input
                 name='username'

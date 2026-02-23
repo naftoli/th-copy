@@ -22,6 +22,12 @@ $rccs-name-font-size: 12px;
 $rccs-number-font-size: 17px;
 $rccs-cvc-font-size: 12px;
 
+// Override Bootstrap link colors to match Bootstrap 4 / base-commander
+$link-color: #3e6dc4;
+$link-decoration: none;
+$link-hover-color: #2e5aa8;
+$link-hover-decoration: none;
+
 @import 'bootstrap/scss/bootstrap';
 @import 'react-credit-cards/es/styles.scss';
 
@@ -34,6 +40,7 @@ $rccs-cvc-font-size: 12px;
 @import 'react-datepicker/dist/react-datepicker.css';
 
 @import 'branding.scss';
+@import 'index.css';
 
 
 @font-face {
