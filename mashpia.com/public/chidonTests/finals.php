@@ -149,7 +149,7 @@ $tooLate = false;
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = new DateTime('2026-02-24 00:00:00', new DateTimeZone('America/New_York'));
-    $exceptions = [48, 49, 192];
+    $exceptions = [];
     if ($today >= $shutdown && !in_array($school_ids[0], $exceptions)) {
         $tooLate = true;
     }
