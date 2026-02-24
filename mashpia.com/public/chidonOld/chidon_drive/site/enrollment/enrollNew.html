@@ -1418,6 +1418,7 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				$("#ch_info #ski").val(user.ski)
 				$("#ch_info #skill").val(user.skill)
 				$("#ch_info #outerwear").val(user.outerwear)
+				if (parseInt(user.trip_option) > 0) $("#ch_info .trip_option").eq(parseInt(user.trip_option) - 1).attr('checked', true)
 				$("#ch_info #general_info_girls").hide()
 				$("#ch_info #general_info_boys").show()
 				$("#ch_info #trip_options").show()
