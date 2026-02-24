@@ -11,6 +11,7 @@ $super = $admin_user['auth'] == 'super';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true); // add chidon schools
 $schools = $as->getSchools();
+$school_ids = array_keys($schools);
 
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $currentYear = GlobalSettings::getChidonYear();
@@ -148,7 +149,8 @@ $tooLate = false;
 if ($admin_user['auth'] != 'super') {
     $today = new DateTime();
     $shutdown = new DateTime('2026-02-24 00:00:00', new DateTimeZone('America/New_York'));
-    if ($today >= $shutdown) {
+    $exceptions = [48];
+    if ($today >= $shutdown && !in_array($school_ids[0], $exceptions)) {
         $tooLate = true;
     }
 }
