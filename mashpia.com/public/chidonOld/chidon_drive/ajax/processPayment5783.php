@@ -838,7 +838,8 @@ function saveUltimateTripInfo() {
             weight = :weight,
             ski = :ski,
             skill = :skill,
-            outerwear = :outerwear
+            outerwear = :outerwear, 
+            trip_option = :trip_option
         WHERE
             user_id = :user AND year = :year
     ");
@@ -872,7 +873,8 @@ function saveUltimateTripInfo() {
                     'height' => $info->height,
                     'weight' => $info->weight,
                     'ski' => $info->ski,
-                    'skill' => $info->skill
+                    'skill' => $info->skill,
+                    'trip_option' => $info->trip_option ?? 0
                 ]);
                 if (!$res) {
                     $success = false;

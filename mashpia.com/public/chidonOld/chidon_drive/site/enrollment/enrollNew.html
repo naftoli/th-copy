@@ -545,6 +545,49 @@
 								I would like my child to be dropped off by the bus at the above address.
 							</div>
 						</div>
+
+						<div class="modal-section" id="trip_options" style="display: none;">
+							<h5>Trip Options</h5>
+							<p>
+								Please select from the following trip options.<br />
+								If you would like to stay for the overnight, choose from option 1 - 4.<br />
+								If you would like to go back to crown heights to sleep, choose option 5.
+							</p>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="radio" name="trip_option" class="trip_option" value="1" />
+								</label>
+								Option 1: 🏊1 hour and 40 minutes in the water park ⛷️ 3 hours in big snow
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="radio" name="trip_option" class="trip_option" value="2" />
+								</label>
+								Option 2: 🏊 2 hours and 10 minutes in the water park ⛷️ 2 and half hours in big snow
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="radio" name="trip_option" class="trip_option" value="3" />
+								</label>
+								Option 3: 🏊 2 hours and 40 minutes in the water park ⛷️ 2 hours in big snow
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="radio" name="trip_option" class="trip_option" value="4" />
+								</label>
+								Option 4: 🏊 3 hours in the water park ⛷️ 1 and a half hours in big snow
+							</div>
+							<div class="flex checkbox-container">
+								<label>
+									<input type="radio" name="trip_option" class="trip_option" value="5" />
+								</label>
+								<span style="flex-direction: row;">
+								Option 5: 🏊 1 hour and 40 minutes in the water park ⛷️ 1 hour in big snow<br />
+								<i>I understand that I will be having less time in the water park and at big snow. But I would like to choose this option so I can go back to crown heights to sleep</i>
+								</span>
+							</div>
+						</div>
+
 						<div class="modal-section">
 							<h5>Feedback</h5>
 							<p>What makes Chidon special to you? Please share.</p>
@@ -832,12 +875,13 @@
 				{ elem: '#chayol_initials', type: 'val', error: 'You must enter your chayol initials.' },
 				{ elem: '#parent_initials', type: 'val', error: 'You must enter your parent initials.' },
 				{ elem: '.thurs_walking', type: 'radio', error: 'You must enter walking information for Thursday.'},
-				{ elem: '.ms_walking', type: 'radio', error: 'You must enter walking information for Motzei Shabbos.'}
+				{ elem: '.ms_walking', type: 'radio', error: 'You must enter walking information for Motzei Shabbos.'},
+				{ elem: '.trip_option', type: 'radio', error: 'You must enter a trip option.', gender: 'M'}
 			]
 			for (let obj of needed) {
 				switch (obj.type) {
 					case 'select':
-						if (obj.gender == $("#ch_info #gender").val()) {
+						if (obj.gender && obj.gender == $("#ch_info #gender").val()) {
 							let val = $(obj.elem).val()
 							if (!val || val === '' || val === '0' || parseInt(val) === 0) errors.push(obj.error)
 							break;
@@ -847,6 +891,7 @@
 						break
 					case 'radio':
 					case 'checkbox':
+						if (obj.gender && obj.gender != $("#ch_info #gender").val()) continue;
 						if (!$(obj.elem).is(':checked')) errors.push(obj.error)
 						// check dependants
 						else {
@@ -931,8 +976,9 @@
 					acc.zone = 0
 				}
 				acc.phone = $("#acc_phone").val()
-				let info = { shoe, sandwich, allergy, allergies, in_zone, chidon_answer, thurs_walking, ms_walking, 
-					height, weight, ski, skill, outerwear }
+				const trip_option = $(".trip_option:checked").length > 0 ? parseInt($(".trip_option:checked").val()) : 0
+				let info = { shoe, sandwich, allergy, allergies, in_zone, chidon_answer, thurs_walking, ms_walking,
+					height, weight, ski, skill, outerwear, trip_option }
 				info.accomodation = acc
 				ultimate_info[user_id] = info
 				if (editing_mode) {
@@ -1374,10 +1420,12 @@ please speak to your Base Commander to ensure that he/she confirms your child(re
 				$("#ch_info #outerwear").val(user.outerwear)
 				$("#ch_info #general_info_girls").hide()
 				$("#ch_info #general_info_boys").show()
+				$("#ch_info #trip_options").show()
 			} else if (user.gender == 'F') {
 				$("#ch_info #whatsapp_link").attr('href', 'https://chat.whatsapp.com/DkAU7ohNx0B8UpYy45RKNa')
 				$("#ch_info #general_info_boys").hide()
 				$("#ch_info #general_info_girls").show()
+				$("#ch_info #trip_options").hide()
 			}
 
 			$("#ch_info select").niceSelect('update')
