@@ -26,37 +26,7 @@ while ($row = mysql_fetch_assoc($result)) {
 }
 // echo "<pre>"; print_r( $info ); echo "</pre>"; exit;
 
-function createZip($files, $filename)
-{
-    $zip = new ZipArchive;
-    $success = $zip->open($filename, ZipArchive::CREATE);
-    if ($success !== true) {
-        exit("cannot open <$filename>\n");
-    }
-    foreach ($files as $file) {
-        $zip->addFromString($file, file_get_contents($file));
-        unlink($file);
-    }
-    $zip->close();
-
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($filename));
-    flush(); // Flush system output buffer
-    readfile($filename);
-    unlink($filename);
-
-}
-
-function custom_urlencode($url)
-{
-    return implode('/', array_map('rawurlencode', explode('/', $url)));
-}
-
+require_once 'chidon_zip_function.php';
 $imgs = []; // array for keeping track of all pictures that are showing up
 ?>
 <!DOCTYPE html>

@@ -10,46 +10,6 @@ $schools = $as->getSchools();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-function createZip($files, $filename) {
-    $image_extensions = explode(',', "jpg,jpeg,jpe,jif,jfif,jfi,png,gif,webp,tiff,tif,raw,arw,cr2,nrw,k25,bmp,dib,heif,heic,jp2,j2k,jpf,jpx,jpm,mj2,svg,svgz");
-    $zip = new ZipArchive;
-    $success = $zip->open($filename, ZipArchive::CREATE);
-    if ($success !== true) {
-        exit("cannot open <$filename>\n");
-    }
-    foreach($files as $file_with_fallbacks) {
-        $filename = $file_with_fallbacks['filename'];
-        $fallbacks = $file_with_fallbacks['fallbacks'];
-        foreach($fallbacks as $file) {
-            if ($file['from_db']) {
-                $sql = "SELECT file_name, file_data FROM files WHERE file_id = '{$file['val']}'";
-                $query = mysql_query($sql);
-                if (!$query) break;
-                $row = mysql_fetch_assoc($query);
-                $file_contents = $row['file_data'];
-                $file_name_split = explode('.', $row['file_name']);
-                $origanal_extension = end($file_name_split);
-            } else {
-                $file_contents = @file_get_contents($file['url']);
-                $url_split = explode('.', $file['url']);
-                $origanal_extension = end($url_split);
-            }
-            if ($file_contents) {
-                $extension = in_array($origanal_extension, $image_extensions) ? $origanal_extension : "jpg";
-                // for debugging without zip extension
-                // echo '<img width="100px" src="data:image/png;base64, ' . base64_encode($file_contents) . '">';
-                $zip->addFromString("$filename.$extension", $file_contents);
-                break;
-            }
-        }
-    }
-    $zip->close();
-}
-
-function custom_urlencode($url) {
-    return implode('/', array_map('rawurlencode', explode('/', $url)));
-}
-
 function passedKHK($child) {
     global $khk_marks;
     if (isset($khk_marks[$child['th_chidon_id']])) {
@@ -110,6 +70,7 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
     }
 }
 
+require_once 'chidon_zip_function.php';
 $imgs = []; // array for keeping track of all pictures that are showing up
 foreach ( $info as $id => $children ) {
     foreach ($children as $child) {
@@ -132,13 +93,3 @@ foreach ( $info as $id => $children ) {
 
 $filename = 'chidonPicsKHK.zip';
 createZip($imgs, $filename);
-header('Content-Description: File Transfer');
-header('Content-Type: application/octet-stream');
-header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
-header('Expires: 0');
-header('Cache-Control: must-revalidate');
-header('Pragma: public');
-header('Content-Length: ' . filesize($filename));
-flush(); // Flush system output buffer
-readfile($filename);
-unlink($filename);
