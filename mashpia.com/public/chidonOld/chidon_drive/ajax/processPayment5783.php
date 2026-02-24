@@ -874,7 +874,7 @@ function saveUltimateTripInfo() {
                     'weight' => $info->weight,
                     'ski' => $info->ski,
                     'skill' => $info->skill,
-                    'trip_option' => $info->trip_option ?? 0
+                    'trip_option' => $info->trip_option
                 ]);
                 if (!$res) {
                     $success = false;
