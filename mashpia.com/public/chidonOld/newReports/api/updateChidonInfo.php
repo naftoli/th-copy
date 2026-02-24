@@ -3,7 +3,7 @@ $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 
-$fields = ['chidon_id', 'shoe', 'sandwhich', 'allergies', 'in_zone', 'host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2'];
+$fields = ['chidon_id', 'shoe', 'sandwhich', 'allergies', 'in_zone', 'host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2', 'trip_option'];
 $input = json_decode(file_get_contents('php://input'), true);
 foreach ($fields as $field) {
     $$field = $input[$field];
@@ -23,7 +23,8 @@ $stmt = $MASHPIA_DB->prepare("
         shoe_size = :shoe,
         sandwich = :sandwhich,
         allergies = :allergies,
-        in_zone = :in_zone
+        in_zone = :in_zone,
+        trip_option = :trip_option
     WHERE
         th_chidon_id = :chidon_id
 ");
@@ -41,7 +42,8 @@ $success = $stmt->execute([
     'shoe' => $shoe,
     'sandwhich' => $sandwhich,
     'allergies' => $allergies,
-    'in_zone' => ($in_zone == 'yes' ? 1 : 0)
+    'in_zone' => ($in_zone == 'yes' ? 1 : 0),
+    'trip_option' => $trip_option
 ]);
 
 echo json_encode([

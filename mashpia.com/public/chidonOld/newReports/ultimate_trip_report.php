@@ -144,6 +144,7 @@ $info = $stmt->fetchAll();
                     <th>Outerwear</th>
                     <th>Shoe Size</th>
                     <th>Allergies</th>
+                    <th>Trip Option</th>
                     <th>In Walking Zone</th>
                     <th>Host</th>
                     <th>Host Phone Number</th>
@@ -190,6 +191,7 @@ $info = $stmt->fetchAll();
                     $ski = $row['ski'];
                     $skill = $row['skill'];
                     $outerwear = $row['outerwear'];
+                    $trip_option = intval($row['trip_option']);
 
                     switch ($thurs_walking) {
                         case 0:
@@ -225,6 +227,14 @@ $info = $stmt->fetchAll();
                         <td><input type='text' class='outerwear' value='" . $outerwear . "' /></td>
                         <td><input type='text' class='shoe' value='" . $shoe . "' /></td>
                         <td><input type='text' class='alergies' value='" . $allergies . "' /></td>
+                        <td><select name='trip_option' class='trip_option'>
+                        <option value='0'>Select Option</option>
+                        <option value='1'" . ($trip_option == 1 ? ' selected' : '') . "
+                        >Option 1</option><option value='2'" . ($trip_option == 2 ? ' selected' : '') . "
+                        >Option 2</option><option value='3'" . ($trip_option == 3 ? ' selected' : '') . "
+                        >Option 3</option><option value='4'" . ($trip_option == 4 ? ' selected' : '') . "
+                        >Option 4</option><option value='5'" . ($trip_option == 5 ? ' selected' : '') . "
+                        >Option 5</option></select></td>
                         <td><select name='in_zone' class='in_zone'><option value='yes'" . ($in_zone ? ' selected' : '') . "
                         >yes</option><option value='no'" . (!$in_zone ? ' selected' : '') . ">no</option></select></td> 
                         <td><input type='text' class='host' value='" . $host . "' /></td>
@@ -257,7 +267,7 @@ $info = $stmt->fetchAll();
         let row = $(this).parent().parent()
         let chidon_id = $(row).attr('id')
         let fields = ['sandwhich', 'height', 'weight', 'ski', 'skill', 'outerwear', 'shoe', 'allergies', 'in_zone', 
-            'host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2']
+            'host', 'host_phone', 'street_num', 'suffix', 'street', 'apt', 'cross1', 'cross2', 'trip_option']
         let info = {
           chidon_id: chidon_id
         }

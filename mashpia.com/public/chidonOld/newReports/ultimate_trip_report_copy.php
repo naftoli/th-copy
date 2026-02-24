@@ -118,6 +118,7 @@ $info = $stmt->fetchAll();
                     <th>Outerwear</th>
                     <th>Shoe Size</th>
                     <th>Allergies</th>
+                    <th>Trip Option</th>
                     <th>In Walking Zone</th>
                     <th>Host</th>
                     <th>Host Phone Number</th>
@@ -164,6 +165,7 @@ $info = $stmt->fetchAll();
                     $ski = $row['ski'];
                     $skill = $row['skill'];
                     $outerwear = $row['outerwear'];
+                    $trip_option = $row['trip_option'];
 
                     switch ($thurs_walking) {
                         case 0:
@@ -192,10 +194,10 @@ $info = $stmt->fetchAll();
                     echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "
                         </td><td>" . $serial . "</td><td>" . $gender . "</td><td>" . $sandwich . "</td><td>" . $height . 
                             "</td><td>" . $weight . "</td><td>" . $ski . "</td><td>" . $skill . "</td><td>" . $outerwear . "</td><td>" . $shoe . 
-                            "</td><td>" . $allergies . "</td><td>" . $in_zone . "</td><td>" . $host . "</td><td>" . $host_phone . 
-                            "</td><td>" . $street_num . "</td><td>" . $suffix . "</td><td>" . $street . "</td><td>" . $apt . 
-                            "</td><td>" . $cross1 . "</td><td>" . $cross2 . "</td><td>" . $thurs . "</td><td>" . $ms . "</td><td>" . $zone . 
-                            "</td><td>" . $poll . "</td><td></td></tr>";
+                            "</td><td>" . $allergies . "</td><td>" . ($trip_option > 0 ? 'Option ' . $trip_option : '') . "</td><td>" . $in_zone . 
+                            "</td><td>" . $host . "</td><td>" . $host_phone . "</td><td>" . $street_num . "</td><td>" . $suffix . 
+                            "</td><td>" . $street . "</td><td>" . $apt . "</td><td>" . $cross1 . "</td><td>" . $cross2 . "</td><td>" . $thurs . 
+                            "</td><td>" . $ms . "</td><td>" . $zone . "</td><td>" . $poll . "</td><td></td></tr>";
                 }
                 ?>
             </tbody>
