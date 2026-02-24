@@ -655,6 +655,10 @@ var registrationApp = function () {
     var total = state.cart.reduce(function (total, item) {
       return parseInt(total) + parseInt(item.price)
     }, 0)
+    for (i = 0; i < state.cart.length; i++) {
+      if (state.cart[i].meta.discount) total -= parseFloat(state.cart[i].meta.discount)
+    }
+    if (total < 0) total = 0;
     if (total <= 0) {
       var postData = {};
       postData.payment = {}
@@ -2132,9 +2136,13 @@ var registrationApp = function () {
 
   function registerUsersHandler(event) {
     event.preventDefault();
+    // prevent double submission (can cause "active transaction" error if two requests hit same DB connection)
+    var $btn = $("#payment-button");
+    if ($btn.prop('disabled')) return;
+    $btn.prop('disabled', true);
     var postData = {};
     // show loading
-    $("#payment-button").html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
+    $btn.html('<i class="fas fa-circle-notch fa-spin fa-2x"></i>');
     postData.payment = formToJSON(event.target);
     // sanitize input
     postData.payment["cc-number"] = postData.payment["cc-number"].replace(/ /g, '');
@@ -2269,9 +2277,10 @@ var registrationApp = function () {
     });
   }
 
-  async function registerUsers(postData) {
+  function registerUsers(postData) {
     console.log(postData)
-    $("#payment-button").attr('disabled', true)
+    var $btn = $("#payment-button");
+    $btn.prop('disabled', true);
     return new Promise(function (resolve, reject) {
       APIRequest('POST', api_url + '?action=registerUsers', postData, resolve)
     }).then(function (data) {
@@ -2290,6 +2299,7 @@ var registrationApp = function () {
         $("#successModal").modal('show')
       } else {
         showError(data.error);
+        $btn.prop('disabled', false).html('Pay');
       }
     });
   }

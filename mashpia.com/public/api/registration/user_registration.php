@@ -180,7 +180,7 @@ class UserRegistrationRouter {
         /******************************** PAYMENT ********************************/
         $trans_id = 0;
         // exceptions for parents that paid manually
-        $parents_paid = [201418, 170313];
+        $parents_paid = [];
         if (in_array($admin->admin_id, $parents_paid)) {
             $total = 0;
             $trans_id = 1111111;
