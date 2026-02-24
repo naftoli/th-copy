@@ -11,7 +11,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 function createZip($files, $filename) {
-    $image_extensions = explode(',', "jpg,jpeg,jpe,jif,jfif,jfi,png,gif,webp,tiff,tif,raw,arw,cr2,nrw,k25,bmp,dib,heif,heic,jp2,j2k,jpf,jpx,jpm,mj2,svg,svgz");
+    // $image_extensions = explode(',', "jpg,jpeg,jpe,jif,jfif,jfi,png,gif,webp,tiff,tif,raw,arw,cr2,nrw,k25,bmp,dib,heif,heic,jp2,j2k,jpf,jpx,jpm,mj2,svg,svgz");
     $zip = new ZipArchive;
     $success = $zip->open($filename, ZipArchive::CREATE);
     if ($success !== true) {
@@ -28,17 +28,19 @@ function createZip($files, $filename) {
                 $row = mysql_fetch_assoc($query);
                 $file_contents = $row['file_data'];
                 $file_name_split = explode('.', $row['file_name']);
-                $origanal_extension = end($file_name_split);
+                $file_name = $file_name_split[0];
             } else {
                 $file_contents = @file_get_contents($file['url']);
                 $url_split = explode('.', $file['url']);
-                $origanal_extension = end($url_split);
+                $file_name = $url_split[0];
             }
-            if ($file_contents) {
-                $extension = in_array($origanal_extension, $image_extensions) ? $origanal_extension : "jpg";
-                // for debugging without zip extension
-                // echo '<img width="100px" src="data:image/png;base64, ' . base64_encode($file_contents) . '">';
-                $zip->addFromString("$filename.$extension", $file_contents);
+            if ($file_contents && $png_file = imagecreatefromstring($file_contents)) {
+                // create a png file from the file_contents and add it to the zip
+                $file_name = $file_name . '.png';
+                imagepng($png_file, $file_name);
+                imagedestroy($png_file);
+                $zip->addFromString($file_name, file_get_contents($file_name));
+                unlink($file_name);
                 break;
             }
         }
