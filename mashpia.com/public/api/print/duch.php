@@ -190,7 +190,10 @@
                     if (fromBC) {
                         $("#email-button").show();
                     }
-                    setTimeout(function() { window.print(); }, 500);
+                    // Wait for fonts, images, and layout before auto-printing
+                    waitForRenderReady(document.getElementById('main')).then(function() {
+                        window.print();
+                    });
                 }
             }
 
