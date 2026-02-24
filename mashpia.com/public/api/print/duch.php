@@ -194,7 +194,13 @@
                     waitForRenderReady(document.getElementById('main')).then(function() {
                         const children = document.querySelectorAll('.userDuch');
                         children.forEach(function(child) {
-                            checkPageCount(child);
+                            const totalPages = checkPageCount(child);
+                            if (totalPages % 2 !== 0) {
+                                // add a blank page
+                                child.insertAdjacentHTML('beforeend',
+                                    '<div style="page-break-after: always;"></div>'
+                                );
+                            }
                         });
                         window.print();
                     });
@@ -358,7 +364,7 @@
             await new Promise(function(r){ requestAnimationFrame(function(){ requestAnimationFrame(r); }); });
         }
 
-        function checkPageCount(element) {
+        async function checkPageCount(element) {
             // Configure PDF settings to match standard paper
             const opt = {
                     margin:       0.5,
@@ -368,15 +374,11 @@
                 };
 
             // Generate the PDF internally but don't save it yet
-            html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
-                // The pdf object is an instance of jsPDF
-                const totalPages = pdf.internal.getNumberOfPages();
-                console.log('Total pages: ' + totalPages);
-                pdf.save('duch.pdf');
-            }).catch(function(err) {
-                console.error('checkPageCount failed', err);
-                return 0;
-            });
+            const pdf = await html2pdf().set(opt).from(element).toPdf().get('pdf');
+            // The pdf object is an instance of jsPDF
+            const totalPages = pdf.internal.getNumberOfPages();
+            console.log('Total pages: ' + totalPages);
+            return totalPages;
         }
     </script>
 </body>
