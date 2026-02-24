@@ -39,7 +39,8 @@ function saveUltimateTripInfo() {
             weight = :weight,
             ski = :ski,
             skill = :skill,
-            outerwear = :outerwear
+            outerwear = :outerwear,
+            trip_option = :trip_option
         WHERE
             user_id = :user AND year = :year
     ");
@@ -73,7 +74,8 @@ function saveUltimateTripInfo() {
                     'skill' => $info->skill,
                     'outerwear' => $info->outerwear, 
                     'height' => $info->height,
-                    'weight' => $info->weight
+                    'weight' => $info->weight,
+                    'trip_option' => $info->trip_option
                 ]);
                 if (!$res) {
                     $stmt->debugDumpParams();
