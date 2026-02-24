@@ -36,72 +36,99 @@ $info = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta charset="UTF-8">
     <title>Ultimate Trip Info</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 25px 0;
-        font-size: 14px;
-        font-family: Arial, sans-serif;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    :root {
+        --bg: #f8fafc;
+        --card: #ffffff;
+        --border: #e2e8f0;
+        --text: #1e293b;
+        --text-muted: #64748b;
+        --accent: #2563eb;
     }
 
-    .data-table thead tr {
-        background-color: #009879;
-        color: #ffffff;
-        text-align: left;
-        position: sticky;
-        top: 0;
-    }
+    * { box-sizing: border-box; }
 
-    .data-table th,
-    .data-table td {
-        padding: 12px 15px;
-        border-bottom: 1px solid #dddddd;
-        white-space: nowrap;
-    }
-
-    .data-table tbody tr {
-        border-bottom: 1px solid #dddddd;
-    }
-
-    .data-table tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-    }
-
-    .data-table tbody tr:last-of-type {
-        border-bottom: 2px solid #009879;
-    }
-
-    .data-table tbody tr:hover {
-        background-color: #f5f5f5;
-        cursor: default;
-    }
-
-    /* Container for table with horizontal scroll */
-    .table-container {
-        max-width: 100%;
-        overflow-x: auto;
-        margin: 20px 0;
-        padding: 0 10px;
-    }
-
-    /* Additional styles for better readability */
     body {
         margin: 0;
-        padding: 20px;
-        font-family: Arial, sans-serif;
+        padding: 24px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+    }
+
+    .page-header {
+        margin-bottom: 24px;
     }
 
     h1 {
-        color: #009879;
-        margin-bottom: 20px;
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text);
+    }
+
+    .count-badge {
+        display: block;
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 400;
+        margin-top: 4px;
+    }
+
+    .table-card {
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    .data-table thead {
+        background: #f1f5f9;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .data-table th {
+        padding: 12px 14px;
+        text-align: left;
+        font-weight: 500;
+        color: var(--text-muted);
+        white-space: nowrap;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+    }
+
+    .data-table tbody tr:hover {
+        background: #f8fafc;
     }
     </style>
 </head>
 <body>
-    <h1>Ultimate Trip Info</h1>
-    <div class="table-container">
+    <div class="page-header">
+        <h1>Ultimate Trip Info</h1>
+        <span class="count-badge"><?= count($info) ?> participants</span>
+    </div>
+    <div class="table-card">
+        <div class="table-container">
         <table class="data-table">
             <thead>
                 <tr>
@@ -202,6 +229,7 @@ $info = $stmt->fetchAll();
                 ?>
             </tbody>
         </table>
+        </div>
     </div>
 </body>
 </html>

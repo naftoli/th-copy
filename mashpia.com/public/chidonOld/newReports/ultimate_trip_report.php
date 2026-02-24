@@ -38,96 +38,169 @@ $info = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <meta charset="UTF-8">
     <title>Ultimate Trip Info</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-    .data-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 25px 0;
-        font-size: 14px;
-        font-family: Arial, sans-serif;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    :root {
+        --bg: #f8fafc;
+        --card: #ffffff;
+        --border: #e2e8f0;
+        --text: #1e293b;
+        --text-muted: #64748b;
+        --accent: #2563eb;
+        --accent-hover: #1d4ed8;
+        --success: #22c55e;
     }
 
-    .data-table thead tr {
-        background-color: #009879;
-        color: #ffffff;
-        text-align: left;
-        position: sticky;
-        top: 0;
-    }
+    * { box-sizing: border-box; }
 
-    .data-table th,
-    .data-table td {
-        padding: 12px 15px;
-        border-bottom: 1px solid #dddddd;
-        white-space: nowrap;
-    }
-
-    .data-table tbody tr {
-        border-bottom: 1px solid #dddddd;
-    }
-
-    .data-table tbody tr:nth-of-type(even) {
-        background-color: #f3f3f3;
-    }
-
-    .data-table tbody tr:last-of-type {
-        border-bottom: 2px solid #009879;
-    }
-
-    .data-table tbody tr:hover {
-        background-color: #f5f5f5;
-        cursor: default;
-    }
-
-    /* Container for table with horizontal scroll */
-    .table-container {
-        max-width: 100%;
-        overflow-x: auto;
-        margin: 20px 0;
-        padding: 0 10px;
-    }
-
-    /* Additional styles for better readability */
     body {
         margin: 0;
-        padding: 20px;
-        font-family: Arial, sans-serif;
+        padding: 24px;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        line-height: 1.5;
+    }
+
+    .page-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-bottom: 24px;
     }
 
     h1 {
-        color: #009879;
-        margin-bottom: 20px;
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: var(--text);
     }
 
-    .download-csv {
-        background-color: #009879;
-        color: #ffffff;
-        padding: 10px 20px;
+    .actions {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 10px 18px;
         border: none;
-        border-radius: 5px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        font-family: inherit;
         cursor: pointer;
-        font-size: 16px;
+        transition: background 0.15s;
     }
 
-    .download-csv:hover {
-        background-color: #007259;
+    .btn-primary {
+        background: var(--accent);
+        color: white;
+    }
+    .btn-primary:hover { background: var(--accent-hover); }
+
+    .btn-secondary {
+        background: var(--card);
+        color: var(--text);
+        border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #f1f5f9; }
+
+    .table-card {
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
 
-    .download-csv:active {
-        background-color: #005e46;
+    .table-container {
+        overflow-x: auto;
     }
 
-    .download-csv:disabled {
-        background-color: #cccccc;
-        cursor: not-allowed;
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 13px;
+    }
+
+    .data-table thead {
+        background: #f1f5f9;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .data-table th {
+        padding: 12px 14px;
+        text-align: left;
+        font-weight: 500;
+        color: var(--text-muted);
+        white-space: nowrap;
+        border-bottom: 1px solid var(--border);
+    }
+
+    .data-table td {
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--border);
+        white-space: nowrap;
+    }
+
+    .data-table tbody tr:hover {
+        background: #f8fafc;
+    }
+
+    .data-table input,
+    .data-table select {
+        padding: 6px 10px;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 13px;
+        font-family: inherit;
+        min-width: 60px;
+    }
+
+    .data-table input:focus,
+    .data-table select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(37,99,235,0.15);
+    }
+
+    .data-table .save {
+        padding: 6px 12px;
+        font-size: 12px;
+        background: var(--success);
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+    .data-table .save:hover { filter: brightness(1.05); }
+
+    .count-badge {
+        display: block;
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 400;
+        margin-top: 4px;
     }
     </style>
 </head>
 <body>
-    <h1>Ultimate Trip Info</h1>
-    <button class="download-csv" onclick="downloadAsCsv()">Download CSV</button>
-    <div class="table-container">
+    <div class="page-header">
+        <div>
+            <h1>Ultimate Trip Info</h1>
+            <span class="count-badge"><?= count($info) ?> participants</span>
+        </div>
+        <div class="actions">
+            <button class="btn btn-secondary" onclick="downloadAsCsv()">Download CSV</button>
+        </div>
+    </div>
+    <div class="table-card">
+        <div class="table-container">
         <table class="data-table">
             <thead>
                 <tr>
@@ -253,6 +326,7 @@ $info = $stmt->fetchAll();
                 ?>
             </tbody>
         </table>
+        </div>
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.3.min.js"
@@ -294,12 +368,14 @@ $info = $stmt->fetchAll();
 
     // function to download as csv
     function downloadAsCsv() {
-      const headers = ['School', 'Grade/Class', 'Student', 'Serial Number', 'Gender', 'Sandwich', 'Height', 'Weight', 'Ski/Snowboard', 'Skill Level', 'Outerwear', 'Shoe Size', 'Allergies', 'In Walking Zone', 'Host', 'Host Phone Number', 'Street Number', 'Street Number Suffix', 'Street Name', 'Apt. #', 'Host Cross Street 1', 'Host Cross Street 2', 'Thursday Walking', 'Motzei Shabbos Walking', 'Zone ID', 'Comments']
+      const headers = ['School', 'Grade/Class', 'Student', 'Serial Number', 'Gender', 'Sandwich', 'Height', 'Weight', 'Ski/Snowboard', 'Skill Level', 'Outerwear', 'Shoe Size', 'Allergies', 
+      'Trip Option', 'In Walking Zone', 'Host', 'Host Phone Number', 'Street Number', 'Street Number Suffix', 'Street Name', 'Apt. #', 'Host Cross Street 1', 'Host Cross Street 2', 
+      'Thursday Walking', 'Motzei Shabbos Walking', 'Zone ID', 'Comments']
       const rows = getRows()
       const universalBOM = "\uFEFF";
       let csvContent = `${ headers.join(',') }\n`;
       // Add each row to the CSV content and encode it for unicode in excel
-      rows.forEach( row => { csvContent += `${row.join(',')}\n` } );
+      rows.forEach( row => { csvContent += row.join(',') + '\n' } );
       csvContent = encodeURIComponent( universalBOM + csvContent );
       // create and click the download link
       let link = document.createElement('a');
@@ -311,16 +387,16 @@ $info = $stmt->fetchAll();
 
     function getRows() {
       const rows = []
-      $('.data-table tbody tr').map(function () {
+      $('.data-table tbody tr').each(function () {
         const row = []
-        const cells = $(this).find('td')
-        cells.each(function () {
+        $(this).find('td').each(function () {
           const cell = $(this)
-          const text = cell.text().trim()
-          row.push(text)
+          const input = cell.find('input, select')
+          const text = input.length ? input.val() : cell.text().trim()
+          row.push('"' + String(text).replace(/"/g, '""') + '"')
         })
         rows.push(row)
-      }).get()
+      })
       return rows
     }
 </script>
