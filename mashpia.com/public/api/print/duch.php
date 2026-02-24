@@ -192,6 +192,10 @@
                     }
                     // Wait for fonts, images, and layout before auto-printing
                     waitForRenderReady(document.getElementById('main')).then(function() {
+                        const children = document.querySelectorAll('.userDuch');
+                        children.forEach(function(child) {
+                            checkPageCount(child);
+                        });
                         window.print();
                     });
                 }
@@ -357,13 +361,12 @@
         function checkPageCount(element) {
             // Configure PDF settings to match standard paper
             const opt = {
-                margin:       0.5, // inches
-                filename:     'duch.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                // NOTE: html2canvas won't perfectly match print pagination/columns.
-                html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
-                jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
-            };
+                    margin:       0.5,
+                    filename:      filename,
+                    image:        { type: 'jpeg', quality: 0.98 },
+                    html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
+                    jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+                };
 
             // Generate the PDF internally but don't save it yet
             html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
