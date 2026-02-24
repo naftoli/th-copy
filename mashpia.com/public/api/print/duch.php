@@ -372,8 +372,10 @@
                 // The pdf object is an instance of jsPDF
                 const totalPages = pdf.internal.getNumberOfPages();
                 console.log('Total pages: ' + totalPages);
+                pdf.save('duch.pdf');
             }).catch(function(err) {
                 console.error('checkPageCount failed', err);
+                return 0;
             });
         }
     </script>
