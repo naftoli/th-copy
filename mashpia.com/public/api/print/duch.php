@@ -362,7 +362,6 @@
             // Configure PDF settings to match standard paper
             const opt = {
                     margin:       0.5,
-                    filename:      filename,
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
@@ -372,10 +371,9 @@
             html2pdf().set(opt).from(element).toPdf().get('pdf').then(function (pdf) {
                 // The pdf object is an instance of jsPDF
                 const totalPages = pdf.internal.getNumberOfPages();
-                alert('This will be approximately ' + totalPages + ' pages.');
+                console.log('Total pages: ' + totalPages);
             }).catch(function(err) {
                 console.error('checkPageCount failed', err);
-                alert('Could not estimate pages. See console for details.');
             });
         }
     </script>
