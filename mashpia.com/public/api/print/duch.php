@@ -131,6 +131,8 @@
             padding: 5px 10px;
         }
     </style>
+
+    <script src="https://docraptor.com/docraptor-1.0.0.js"></script>
 </head>
 
 <body>
@@ -192,17 +194,30 @@
                     }
                     // Wait for fonts, images, and layout before auto-printing
                     waitForRenderReady(document.getElementById('main')).then(function() {
-                        const children = document.querySelectorAll('.userDuch');
-                        children.forEach(function(child) {
-                            const totalPages = checkPageCount(child);
-                            if (totalPages % 2 !== 0) {
-                                // add a blank page
-                                child.insertAdjacentHTML('beforeend',
-                                    '<div style="page-break-after: always;"></div>'
-                                );
-                            }
+                        // const children = document.querySelectorAll('.userDuch');
+                        // children.forEach(function(child) {
+                        //     const totalPages = checkPageCount(child);
+                        //     if (totalPages % 2 !== 0) {
+                        //         // add a blank page
+                        //         child.insertAdjacentHTML('beforeend',
+                        //             '<div style="page-break-after: always;"></div>'
+                        //         );
+                        //     }
+                        // });
+                        // window.print();
+                        // this key works in test mode!
+                        DocRaptor.createAndDownloadDoc("YOUR_API_KEY_HERE", {
+                            name: "html-and-javascript",
+                            test: true, // test documents are free but watermarked
+                            document_type: "pdf",
+                            document_content: document.getElementById('main').innerHTML,
+                            // document_url: "https://docraptor.com/examples/invoice.html",
+                            javascript: true
+                            // prince_options: {
+                            //   media: "print", // @media 'screen' or 'print' CSS
+                            //   baseurl: "https://yoursite.com", // the base URL for any relative URLs
+                            // }
                         });
-                        window.print();
                     });
                 }
             }
