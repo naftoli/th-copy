@@ -243,7 +243,30 @@ foreach ( $objMissions as $obj ) {
     }
 }
 $html = ob_get_flush();
-echo $html;
+
+// create php code for this curl request:
+$url = "https://CIrbbDsV2QqOc-ULQnQv@api.docraptor.com/docs";
+$headers = [
+    "Content-Type:application/json"
+];
+$data = [
+    "test" => true,
+    "document_content" => $html,
+    "type" => "pdf"
+];
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, $url);
+curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+curl_setopt($ch, CURLOPT_POST, 1);
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+$response = curl_exec($ch);
+curl_close($ch);
+// echo $response;
+// save the response to a file
+file_put_contents("/pdf/docraptor.pdf", $response);
+
+// echo $html;
 
 function isRTL($lang_id) {
     return in_array($lang_id, [2, 4]);
