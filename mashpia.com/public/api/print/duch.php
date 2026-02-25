@@ -206,12 +206,12 @@
                         // });
                         // window.print();
                         // this key works in test mode!
-                        DocRaptor.createAndDownloadDoc("YOUR_API_KEY_HERE", {
+                        DocRaptor.createAndDownloadDoc("CIrbbDsV2QqOc-ULQnQv", {
                             name: "html-and-javascript",
                             test: true, // test documents are free but watermarked
                             document_type: "pdf",
                             document_content: document.getElementById('main').innerHTML,
-                            // document_url: "https://docraptor.com/examples/invoice.html",
+                            document_url: "https://mashpia.com/pdf/duch.php",
                             javascript: true
                             // prince_options: {
                             //   media: "print", // @media 'screen' or 'print' CSS
