@@ -206,18 +206,18 @@
                         // });
                         // window.print();
                         // this key works in test mode!
-                        DocRaptor.createAndDownloadDoc("CIrbbDsV2QqOc-ULQnQv", {
-                            name: "html-and-javascript",
-                            test: true, // test documents are free but watermarked
-                            document_type: "pdf",
-                            document_content: document.getElementById('main').innerHTML,
-                            // document_url: "https://mashpia.com/pdf/duch.php",
-                            javascript: true
-                            // prince_options: {
-                            //   media: "print", // @media 'screen' or 'print' CSS
-                            //   baseurl: "https://yoursite.com", // the base URL for any relative URLs
-                            // }
-                        });
+                        // DocRaptor.createAndDownloadDoc("CIrbbDsV2QqOc-ULQnQv", {
+                        //     name: "html-and-javascript",
+                        //     test: true, // test documents are free but watermarked
+                        //     document_type: "pdf",
+                        //     document_content: document.getElementById('main').innerHTML,
+                        //     // document_url: "https://mashpia.com/pdf/duch.php",
+                        //     javascript: true
+                        //     // prince_options: {
+                        //     //   media: "print", // @media 'screen' or 'print' CSS
+                        //     //   baseurl: "https://yoursite.com", // the base URL for any relative URLs
+                        //     // }
+                        // });
                     });
                 }
             }
