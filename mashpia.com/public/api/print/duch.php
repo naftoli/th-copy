@@ -211,7 +211,7 @@
                             test: true, // test documents are free but watermarked
                             document_type: "pdf",
                             document_content: document.getElementById('main').innerHTML,
-                            document_url: "https://mashpia.com/pdf/duch.php",
+                            // document_url: "https://mashpia.com/pdf/duch.php",
                             javascript: true
                             // prince_options: {
                             //   media: "print", // @media 'screen' or 'print' CSS
