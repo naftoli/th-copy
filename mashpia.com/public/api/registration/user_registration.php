@@ -147,7 +147,6 @@ class UserRegistrationRouter {
         json_response( $rate );
     }
 
-    // charge the card and register the users
     public function registerUsers() {
         global $current_user, $MASHPIA_DB;
         $admin = $current_user; // $current_user global gets overwritten by wp
