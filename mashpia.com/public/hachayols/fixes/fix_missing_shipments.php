@@ -41,6 +41,8 @@ if (isset($_FILES['file'])) {
     }
     fclose($handle);
 
+    echo "<pre>"; print_r($shipments); echo "</pre>"; 
+
     $success = true;
     $MASHPIA_DB->beginTransaction();
 
@@ -55,6 +57,7 @@ if (isset($_FILES['file'])) {
                 continue;
             }
             $user_id = $user['user_id'];
+            echo "User: " . $user_id . " - Item: " . $rows[$index] . "<br>"; continue;
             foreach ($rows[$index] as $item_id) {
                 $shipment_number = intval(substr($item_id, -1));
                 $res = $stmt->execute([
