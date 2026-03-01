@@ -55,21 +55,20 @@ if (isset($_FILES['file'])) {
                 continue;
             }
             $user_id = $user['user_id'];
-            foreach ($rows[$index] as $item_id) {
-                $shipment_number = intval(substr($item_id, -1));
-                $res = $stmt->execute([
-                    'year' => $year,
-                    'user' => $user_id,
-                    'item' => $item_id,
-                    'num' => 0,
-                    'status' => 1,
-                    'date' => date('Y-m-d H:i:s'),
-                    'shipment_number' => $shipment_number
-                ]);
-                if (!$res) {
-                    $success = false;
-                    break 3;
-                }
+            $item_id = $rows[$index];
+            $shipment_number = intval(substr($item_id, -1));
+            $res = $stmt->execute([
+                'year' => $year,
+                'user' => $user_id,
+                'item' => $item_id,
+                'num' => 0,
+                'status' => 1,
+                'date' => date('Y-m-d H:i:s'),
+                'shipment_number' => $shipment_number
+            ]);
+            if (!$res) {
+                $success = false;
+                break 2;
             }
         }
     }
