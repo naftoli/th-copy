@@ -35,27 +35,11 @@ if (isset($_FILES['file'])) {
     $first = true;
     $shipments = [];
     while (($data = fgetcsv($handle, 1000, ',')) !== false) {
-        if ($first) {
-            $first = false;
-            continue;
-        }
-        $admin_id = $data[0];
-        $row_shipments = [];
-        for ($i = 1; $i < 5; $i++) {
-            if (intval($data[$i])) {
-                $row_shipments[] = $i;
-            }
-        }
-        $shipments[$admin_id][] = $row_shipments;
+        $admin_id = intval($data[0]);
+        $item_id = intval($data[1]);
+        $shipments[$admin_id][] = $item_id;
     }
     fclose($handle);
-
-    // echo "<pre>"; print_r($shipments); echo "</pre>"; exit;
-
-    $dates[1] = new DateTime('2025-09-16');
-    $dates[2] = new DateTime('2025-09-16');
-    $dates[3] = new DateTime('2025-10-21');
-    $dates[4] = new DateTime('2025-10-31');
 
     $success = true;
     $MASHPIA_DB->beginTransaction();
@@ -71,14 +55,15 @@ if (isset($_FILES['file'])) {
                 continue;
             }
             $user_id = $user['user_id'];
-            foreach ($rows[$index] as $shipment_number) {
+            foreach ($rows[$index] as $item_id) {
+                $shipment_number = intval(substr($item_id, -1));
                 $res = $stmt->execute([
                     'year' => $year,
                     'user' => $user_id,
-                    'item' => ('HACH0' . $shipment_number),
+                    'item' => $item_id,
                     'num' => 0,
                     'status' => 1,
-                    'date' => $dates[$shipment_number]->format('Y-m-d H:i:s'),
+                    'date' => date('Y-m-d H:i:s'),
                     'shipment_number' => $shipment_number
                 ]);
                 if (!$res) {
