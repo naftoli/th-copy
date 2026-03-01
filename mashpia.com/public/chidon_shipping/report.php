@@ -707,7 +707,11 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
         }
       }).get().join(',')
     }).get()
-    const csv = headers.join(',') + '\n' + rows.join('\n')
+    // add a BOM to the csv to ensure Excel opens it correctly
+    // add utf8 encoding
+    const universalBOM = "\uFEFF";
+    const utf8 = "charset=utf-8";
+    const csv = universalBOM + utf8 + headers.join(',') + '\n' + rows.join('\n')
     // create a blob
     const blob = new Blob([csv], { type: 'text/csv' });
     // create a url
