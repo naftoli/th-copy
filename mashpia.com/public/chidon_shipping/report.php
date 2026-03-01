@@ -383,6 +383,7 @@ foreach ($resultsBySchool as $school => $more) : ?>
       <?php endif; ?>
       <?php if (in_array($_POST['report_type'], ['all', 'details'])) : ?>
           <?= "<h3>" . $schools[$school] . ' - ' . $year . "</h3>"; ?>
+          <button class='no-print csvDownload' onclick='downloadCSV(this)'>Download as CSV</button>
         <table class="table table-striped table-condensed cell-border hover row-order order-column">
           <thead>
           <tr>
@@ -683,6 +684,39 @@ if ($admin_user['auth'] == 'super' && isset($_POST['grand_summary']) && $_POST['
     printWindow.focus();
     printWindow.print();
     printWindow.close();
+  }
+
+  function downloadCSV(btn) {
+    // table is the next sibling of the button (h3, button, table in DOM)
+    const table = $(btn).next('div').find('table')
+    if (!table.length) {
+      alert('Could not find table')
+      return
+    }
+    const headers = table.find('th').map((i, el) => $(el).text().trim()).get()
+    const rows = table.find('tbody tr').map((i, tr) => {
+      return $(tr).find('td').map((j, cell) => {
+        const $cell = $(cell)
+        // Check if the cell contains a select dropdown
+        const $select = $cell.find('select')
+        if ($select.length) {
+          // If present, get the selected option's text
+          return $select.find('option:selected').text().trim()
+        } else {
+          return $cell.text().trim()
+        }
+      }).get().join(',')
+    }).get()
+    const csv = headers.join(',') + '\n' + rows.join('\n')
+    // create a blob
+    const blob = new Blob([csv], { type: 'text/csv' });
+    // create a url
+    const url = URL.createObjectURL(blob);
+    // create a link
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'chidon_shipping.csv';
+    link.click();
   }
 </script>
 </html>
