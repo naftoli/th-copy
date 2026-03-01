@@ -36,7 +36,7 @@ if (isset($_FILES['file'])) {
     $shipments = [];
     while (($data = fgetcsv($handle, 1000, ',')) !== false) {
         $admin_id = intval($data[0]);
-        $item_id = intval($data[1]);
+        $item_id = $data[1];
         $shipments[$admin_id][] = $item_id;
     }
     fclose($handle);
