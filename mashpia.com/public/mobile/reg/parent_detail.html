@@ -314,7 +314,7 @@
                                       <!-- <button class="btn btn-primary chidondrive">ChidonDrive Setup</button> -->
           <!--                                            <button class="btn btn-info story">Submit your Rebbe Story</button>-->
           <!--                        <button class="btn btn-info subsidy" style="display: none;">Apply for Chidon Subsidy</button>-->
-                    <button class="btn btn-primary chidon_reg" style="display: none;">Chidon Experience Registration</button>
+                    <!-- <button class="btn btn-primary chidon_reg" style="display: none;">Chidon Experience Registration</button> -->
           <!--                        <button class="btn btn-info contest">Purim Costume Contest</button>-->
           <!--                        <button class="btn btn-info gear" style="display: none;">Order Sweaters & Gear</button>-->
          <!-- <button class="btn btn-primary heyTeves">Hei Teves Sale</button> -->
@@ -322,6 +322,7 @@
 <!--          <button class="btn btn-primary tickets" style="display: none;">Buy Chidon Tickets</button>-->
           <!--                    <button class="btn btn-info power">Power of Children Quiz</button>-->
           <!-- <button class="btn btn-primary art">Submit Art Contest</button> -->
+          <button class="btn btn-primary costume_contest">Costume Contest</button>
         </div>
       </div>
     </div>
@@ -782,6 +783,10 @@
     //   const win = window.open('https://seats.live/chidon', '_blank');
     //   win.focus();
     // })
+
+    $(".costume_contest").click(function () {
+      location.href = 'https://forms.gle/Gdwos4PCgqaRYGWS7'
+    })
 
     $(".chidon_reg").click(function () {
       Cookies.set('chidon_admin', admin)
