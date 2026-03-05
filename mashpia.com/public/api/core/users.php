@@ -73,7 +73,8 @@ class UsersRouter {
             $stmtAdmins = $MASHPIA_DB->query( $sql );
             while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
                 $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
-                $admins[$rowAdmin['admin_id']] = $row;
+                if (!in_array($rowAdmin['admin_id'], array_keys($admins)))
+                    $admins[$rowAdmin['admin_id']] = $row;
             }
         }
 
@@ -83,7 +84,8 @@ class UsersRouter {
             $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
             $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
             // format dates
-            $dob = $row['dob']; $user_registered = $row['user_registered'];
+            $dob = $row['dob']; 
+            $user_registered = $row['user_registered'];
             // $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('n/j/Y') : $row['dob'];
             // $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
             // format and return just the data we want...
@@ -96,7 +98,7 @@ class UsersRouter {
                 'chayolei'  => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']),
                 'school_id' => $row['school_id'], 'class_id' => $row['class_id'] ? $row['class_id'] : false,
                 'school'    => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'],
-                    'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
+                'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
                 'barcode'   => '3'.$row['user_code'],
                 'platoon'   => ( $platoon ? [ 'name' => $platoon ] : null ),
                 'rank_name' => $rankNames[$row['rank_name']],
