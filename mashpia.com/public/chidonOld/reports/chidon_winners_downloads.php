@@ -18,34 +18,35 @@ $team = $_POST['team'] ?? '';
 $grade = intval($_POST['grade']) ?? '';
 $gender = strtoupper($_POST['gender']) ?? '';
 
-$sql = "select * from th_chidon_winners tcw 
-        join users u on u.user_serial = tcw.serial 
-        join th_chidon tc on tc.user_id = u.user_id 
-        where tcw.year = " . $year . " 
-        and tcw.grade = :grade 
-        and tcw.gender = :gender";
+$sql = "SELECT * FROM th_chidon_winners tcw 
+        JOIN users u ON u.user_serial = tcw.serial 
+        JOIN th_chidon tc ON tc.user_id = u.user_id 
+        WHERE tcw.year = " . $year . " 
+        AND tcw.grade = :grade 
+        AND tcw.gender = :gender";
 
 switch ($team) {
     case 'Mishne Torah':
     case 'Sefer Hamitzvos':
-        $sql .= " and tcw.team = '" . $team . "'";
+        $sql .= " AND tcw.team = '" . $team . "'";
         break;
     case 'Blue Trophy':
-        $sql .= " and tcw.blue_trophy = 1";
+        $sql .= " AND tcw.blue_trophy = 1";
         break;
     case 'Gold Trophy':
     case 'Silver Trophy':
     case 'Bronze Trophy':
         $trophy = explode(' ', $team)[0];
-        $sql .= " and tcw.trophy = '" . $trophy . "'";
+        $sql .= " AND tcw.trophy = '" . $trophy . "'";
         break;
     case 'KHK Gold Trophy':
     case 'KHK Silver Trophy':
     case 'KHK Bronze Trophy':
         $trophy = explode(' ', $team)[1];
-        $sql .= " and tcw.khk_trophy = '" . $trophy . "'";
+        $sql .= " AND tcw.khk_trophy = '" . $trophy . "'";
         break;
 }
+$sql .= "GROUP BY tcw.serial";
 
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute([
@@ -66,6 +67,6 @@ foreach ( $info as $child) {
     ];
     $imgs[] = ['filename' => $child['serial'], 'fallbacks' => $img_fallbacks];
 }
-
+// echo "<pre>"; print_r($imgs); echo "</pre>"; exit;
 $filename = 'chidonPics.zip';
 createZip($imgs, $filename);
