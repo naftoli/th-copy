@@ -127,4 +127,5 @@ foreach ( $info as $id => $children ) {
 }
 
 $filename = 'chidonPicsIyun.zip';
+echo "<pre>"; print_r( $imgs ); echo "</pre>"; exit;
 createZip($imgs, $filename);
