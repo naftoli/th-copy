@@ -68,5 +68,5 @@ foreach ( $info as $child) {
     $imgs[] = ['filename' => $child['serial'], 'fallbacks' => $img_fallbacks];
 }
 // echo "<pre>"; print_r($imgs); echo "</pre>"; 
-$filename = 'chidonPics.zip';
+$filename = str_replace(' ', '_', $team) . '_' . $grade . '_' . $gender . ".zip";
 createZip($imgs, $filename);
