@@ -39,6 +39,9 @@ function createZip($files, $zip_path) {
 }
 
 function downloadZip($zip_path) {
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
     header('Content-Disposition: attachment; filename="' . basename($zip_path) . '"');

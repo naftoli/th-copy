@@ -73,19 +73,20 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
 <h2>Dowloads</h2>
 <form action="chidon_winners_downloads.php" method="post">
     Team:
-    <select id="team" name="team">
+    <select id="team" name="team" multiple>
         <?php foreach ($teams as $team) { ?>
             <option value="<?= $team ?>"><?= $team ?></option>
         <?php } ?>
     </select><br /><br />
     Grade:
-    <select id="grade" name="grade">
+    <select id="grade" name="grade" multiple>
         <?php for ($i = 4; $i <= 8; $i++) { ?>
             <option value="<?= $i ?>"><?= $i ?>th Grade</option>
         <?php } ?>
     </select><br /><br />
     Gender:
     <select id="gender" name="gender">
+        <option value="B">Both</option>
         <option value="M">Boys</option>
         <option value="F">Girls</option>
     </select><br /><br />

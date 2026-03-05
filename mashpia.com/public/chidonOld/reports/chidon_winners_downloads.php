@@ -14,45 +14,79 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-$team = $_POST['team'] ?? '';
-$grade = intval($_POST['grade']) ?? '';
-$gender = strtoupper($_POST['gender']) ?? '';
+$teams = isset($_POST['team']) ? (array) $_POST['team'] : [];
+$grades = isset($_POST['grade']) ? (array) $_POST['grade'] : [];
+$gender = isset($_POST['gender']) ? strtoupper(trim($_POST['gender'])) : '';
+
+$grade_placeholders = [];
+foreach (array_map('intval', $grades) as $i => $g) {
+    $grade_placeholders[] = ':grade' . $i;
+}
+$grade_list = implode(',', $grade_placeholders ?: ['0']);
 
 $sql = "SELECT * FROM th_chidon_winners tcw 
         JOIN users u ON u.user_serial = tcw.serial 
         JOIN th_chidon tc ON tc.user_id = u.user_id 
-        WHERE tcw.year = " . $year . " 
-        AND tcw.grade = :grade 
-        AND tcw.gender = :gender";
-
-switch ($team) {
-    case 'Mishne Torah':
-    case 'Sefer Hamitzvos':
-        $sql .= " AND tcw.team = '" . $team . "'";
-        break;
-    case 'Blue Trophy':
-        $sql .= " AND tcw.blue_trophy = 1";
-        break;
-    case 'Gold Trophy':
-    case 'Silver Trophy':
-    case 'Bronze Trophy':
-        $trophy = explode(' ', $team)[0];
-        $sql .= " AND tcw.trophy = '" . $trophy . "'";
-        break;
-    case 'KHK Gold Trophy':
-    case 'KHK Silver Trophy':
-    case 'KHK Bronze Trophy':
-        $trophy = explode(' ', $team)[1];
-        $sql .= " AND tcw.khk_trophy = '" . $trophy . "'";
-        break;
+        WHERE tcw.year = " . intval($year) . " 
+        AND tcw.grade IN (" . $grade_list . ") ";
+if (in_array($gender, ['F', 'M'])) {
+    $sql .= "AND tcw.gender = :gender ";
 }
-$sql .= "GROUP BY tcw.serial";
+
+// figure out the team sql
+$blue_trophy = 0;
+$teamSql = [];
+$trophies = [];
+$khk_trophies = [];
+
+foreach ($teams as $team) {
+    switch ($team) {
+        case 'Mishne Torah':
+        case 'Sefer Hamitzvos':
+            $teamSql[] = $team;
+            break;
+        case 'Blue Trophy':
+            $blue_trophy = 1;
+            break;
+        case 'Gold Trophy':
+        case 'Silver Trophy':
+        case 'Bronze Trophy':
+            $trophy = explode(' ', $team)[0];
+            $trophies[] = $trophy;
+            break;
+        case 'KHK Gold Trophy':
+        case 'KHK Silver Trophy':
+        case 'KHK Bronze Trophy':
+            $trophy = explode(' ', $team)[1];
+            $khk_trophies[] = $trophy;
+            break;
+    }
+}
+
+if ($blue_trophy) 
+    $sql .= " AND blue_trophy = 1";
+if (!empty($teamSql)) {
+    $sql .= " AND tcw.team IN (" . implode(',', array_map(function ($t) use ($MASHPIA_DB) {
+        return $MASHPIA_DB->quote($t);
+    }, $teamSql)) . ")";
+}
+if (!empty($trophies)) {
+    $sql .= " AND tcw.trophy IN (" . implode(',', array_map([$MASHPIA_DB, 'quote'], $trophies)) . ")";
+}
+if (!empty($khk_trophies)) {
+    $sql .= " AND tcw.khk_trophy IN (" . implode(',', array_map([$MASHPIA_DB, 'quote'], $khk_trophies)) . ")";
+}
+$sql .= " GROUP BY tcw.serial";
 
 $stmt = $MASHPIA_DB->prepare($sql);
-$stmt->execute([
-    ':grade' => $grade,
-    ':gender' => $gender
-]);
+$params = [];
+foreach (array_map('intval', $grades) as $i => $g) {
+    $params[':grade' . $i] = $g;
+}
+if (in_array($gender, ['F', 'M'])) {
+    $params[':gender'] = $gender;
+}
+$stmt->execute($params);
 $info = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $imgs = []; 
@@ -68,5 +102,5 @@ foreach ( $info as $child) {
     $imgs[] = ['filename' => $child['serial'], 'fallbacks' => $img_fallbacks];
 }
 // echo "<pre>"; print_r($imgs); echo "</pre>"; 
-$filename = str_replace(' ', '_', $team) . '_' . $grade . '_' . $gender . ".zip";
+$filename = 'chidon_pics_' . $gender . ".zip";
 createZip($imgs, $filename);
