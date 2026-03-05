@@ -142,6 +142,7 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
             const serial = e.target.dataset.serial;
             const field = e.target.dataset.field;
             $.post('ajax/deletePic.php', { serial, field }, function(response) {
+                const res = JSON.parse(response)
                 if (response.success) {
                     location.reload();
                 } else {

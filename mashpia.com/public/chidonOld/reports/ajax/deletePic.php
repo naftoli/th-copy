@@ -17,16 +17,19 @@ $serial = $_POST['serial'] ?? '';
 $field = $_POST['field'] ?? '';
 
 if (in_array($field, ['khk_photo', 'chidon_photo'])) {
-    $table = 'th_chidon';
+    $sql = "update th_chidon set $field = null where year = :year and user_id = (select user_id from users where serial = :serial)";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $res = $stmt->execute([
+        ':year' => $year,
+        ':serial' => $serial
+    ]);
 } else {
-    $table = 'users';
+    $sql = "update users set $field = null where user_serial = :serial";
+    $stmt = $MASHPIA_DB->prepare($sql);
+    $res = $stmt->execute([
+        ':serial' => $serial
+    ]);
 }
-
-$sql = "update $table set $field = null where year = :year and user_id = (select user_id from users where serial = :serial)";
-$stmt = $MASHPIA_DB->prepare($sql);
-$res = $stmt->execute([
-    ':year' => $year,
-    ':serial' => $serial
-]);
+if (!$res) $stmt->debugDumpParams();
 
 echo json_encode(['success' => $res ? 1 : 0]);
