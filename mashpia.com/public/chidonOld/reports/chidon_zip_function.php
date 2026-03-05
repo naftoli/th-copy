@@ -9,26 +9,25 @@ function createZip($files, $zip_path) {
     if ($success !== true) {
         exit("cannot open <$zip_path>\n");
     }
-    foreach ($files as $file_with_fallbacks) {
-        $entry_name = $file_with_fallbacks['filename'];
-        $fallbacks = $file_with_fallbacks['fallbacks'];
-        foreach ($fallbacks as $file) {
-            if ($file['from_db']) {
-                $sql = "SELECT file_name, file_data FROM files WHERE file_id = '{$file['val']}'";
-                $query = mysql_query($sql);
-                if (!$query) break;
-                $row = mysql_fetch_assoc($query);
-                $file_contents = $row['file_data'];
-            } else {
-                $file_contents = @file_get_contents($file['url']);
-            }
-            if ($file_contents && $png_img = @imagecreatefromstring($file_contents)) {
-                ob_start();
-                imagepng($png_img);
-                $png_data = ob_get_clean();
-                imagedestroy($png_img);
-                $zip->addFromString($entry_name . '.png', $png_data);
+    foreach ($files as $file) {
+        $entry_name = $file['filename'];
+        $fallbacks = $file['fallbacks'];
+        $img = null;
+        foreach ($fallbacks as $img_fallback) {
+            if (!empty($img_fallback['val']) && $img_fallback['val'] !== 'img/addphoto.png') {
+                $img = $img_fallback['url'];
                 break;
+            }
+            if ($img) {
+                $file_contents = @file_get_contents($img);
+                if ($file_contents && $png_img = @imagecreatefromstring($file_contents)) {
+                    ob_start();
+                    @imagepng($png_img);
+                    $png_data = ob_get_clean();
+                    @imagedestroy($png_img);
+                    $zip->addFromString($entry_name . '.png', $png_data);
+                    break;
+                }
             }
         }
     }
