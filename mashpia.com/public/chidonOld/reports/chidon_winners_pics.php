@@ -69,7 +69,7 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
 <BODY>
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Winners Pictures</h1>
-<!--
+
 <h2>Dowloads</h2>
 <form action="chidon_winners_downloads.php" method="post">
     Team:
@@ -91,7 +91,7 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
     </select><br /><br />
     <input type="submit" value="Download">
 </form>
--->
+
 <h2>Winners</h2>
 <table class="pics">
 <tr>
@@ -128,7 +128,9 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
         }
         echo "<tr><td>" . $child['serial'] . "</td><td>" . $child['name'] . "</td><td>";
         echo $child['school'] . "</td><td>" . $child['grade'] . "</td><td>";
-        echo "<img src='" . $img . "' /></td><td><button class='delete' data-serial='" . $child['serial'] . "' data-field='" . $field . "'>Delete</button></td></tr>";
+        echo "<img src='" . $img . "' /></td><td>";
+        if ($img) echo "<button class='delete' data-serial='" . $child['serial'] . "' data-field='" . $field . "'>Delete</button>";
+        echo "</td></tr>";
         if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
             $imgs[] = $img;
         }
@@ -141,14 +143,15 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
         $('.delete').click(function(e) {
             const serial = e.target.dataset.serial;
             const field = e.target.dataset.field;
-            $.post('ajax/deletePic.php', { serial, field }, function(response) {
-                const res = JSON.parse(response)
-                if (response.success) {
-                    location.reload();
-                } else {
-                    alert('Failed to delete picture');
-                }
-            });
+            if (serial && field) {
+                $.post('ajax/deletePic.php', { serial, field }, function(res) {
+                    if (res.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed to delete picture');
+                    }
+                });
+            } 
         });
     });
 </script>
