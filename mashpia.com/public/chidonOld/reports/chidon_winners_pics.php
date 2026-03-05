@@ -20,6 +20,7 @@ $sql = "select * from th_chidon_winners tcw
         join users u on u.user_serial = tcw.serial 
         join th_chidon tc on tc.user_id = u.user_id 
         where tcw.year = " . $year . " 
+        group by tcw.serial 
         order by tcw.th_chidon_winner_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
