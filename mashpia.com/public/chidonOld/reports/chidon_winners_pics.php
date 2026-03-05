@@ -17,7 +17,7 @@ function custom_urlencode($url) {
     return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
-echo "<pre>"; print_r($_POST); echo "</pre>"; 
+// echo "<pre>"; print_r($_POST); echo "</pre>"; 
 $info = [];
 if (isset($_POST['team']) || isset($_POST['grade']) || isset($_POST['gender'])) {
     require_once 'chidonWinnersSql.php';
