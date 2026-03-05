@@ -27,6 +27,7 @@ while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
 }
 // echo "<pre>"; print_r( $info ); echo "</pre>"; 
+$teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silver Trophy', 'Bronze Trophy', 'KHK Gold Trophy', 'KHK Silver Trophy', 'KHK Bronze Trophy'];
 ?>
 <!DOCTYPE html>
 <HTML>
@@ -50,9 +51,17 @@ while ($row = mysql_fetch_assoc($result)) {
       display: block;
     }
 
-    button {
+    button, input[type="submit"] {
       font-size: 14px;
       padding: 10px;
+    }
+
+    select {
+      font-size: 14px;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 200px;
     }
   </style>
 </HEAD>
@@ -60,6 +69,30 @@ while ($row = mysql_fetch_assoc($result)) {
 <BODY>
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Winners Pictures</h1>
+<!--
+<h2>Dowloads</h2>
+<form action="chidon_winners_downloads.php" method="post">
+    Team:
+    <select id="team" name="team">
+        <?php foreach ($teams as $team) { ?>
+            <option value="<?= $team ?>"><?= $team ?></option>
+        <?php } ?>
+    </select><br /><br />
+    Grade:
+    <select id="grade" name="grade">
+        <?php for ($i = 4; $i <= 8; $i++) { ?>
+            <option value="<?= $i ?>"><?= $i ?>th Grade</option>
+        <?php } ?>
+    </select><br /><br />
+    Gender:
+    <select id="gender" name="gender">
+        <option value="M">Boys</option>
+        <option value="F">Girls</option>
+    </select><br /><br />
+    <input type="submit" value="Download">
+</form>
+-->
+<h2>Winners</h2>
 <table class="pics">
 <tr>
     <th>Serial Number</th>
@@ -67,28 +100,31 @@ while ($row = mysql_fetch_assoc($result)) {
     <th>School</th>
     <th>Grade</th>
     <th>Chidon Picture</th>
+    <th></th>
 </tr>
     <?php 
     foreach ($info as $child) {
         $img_fallbacks = [
-            ['from_db' => false, 'val' => $child['khk_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['khk_photo'])],
-            ['from_db' => false, 'val' => $child['chidon_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
-            ['from_db' => false, 'val' => $child['mobile_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
-            ['from_db' => false, 'val' => $child['chidon_pic_5782'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5782'])],
-            ['from_db' => false, 'val' => $child['chidon_pic_5781'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5781'])],
-            ['from_db' => true,  'val' => $child['user_photo_id']]
+            ['from_db' => false, 'field' => 'khk_photo', 'val' => $child['khk_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['khk_photo'])],
+            ['from_db' => false, 'field' => 'chidon_photo', 'val' => $child['chidon_photo'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_photo'])],
+            ['from_db' => false, 'field' => 'mobile_pic', 'val' => $child['mobile_pic'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['mobile_pic'])],
+            ['from_db' => false, 'field' => 'chidon_pic_5782', 'val' => $child['chidon_pic_5782'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5782'])],
+            ['from_db' => false, 'field' => 'chidon_pic_5781', 'val' => $child['chidon_pic_5781'],    'url' => 'https://mashpia.com/mobile/reg/' . custom_urlencode($child['chidon_pic_5781'])],
+            ['from_db' => true,  'field' => 'user_photo_id', 'val' => $child['user_photo_id']]
         ];
+        $field = null;
         $img = null;
         // find first valid image
         foreach ($img_fallbacks as $img_fallback) {
             if (!empty($img_fallback['val']) && $img_fallback['val'] !== 'img/addphoto.png') {
                 $img = $img_fallback['url'];
+                $field = $img_fallback['field'];
                 break;
             }
         }
         echo "<tr><td>" . $child['serial'] . "</td><td>" . $child['name'] . "</td><td>";
         echo $child['school'] . "</td><td>" . $child['grade'] . "</td><td>";
-        echo "<img src='" . $img . "' /></td></tr>";
+        echo "<img src='" . $img . "' /></td><td><button class='delete' data-serial='" . $child['serial'] . "' data-field='" . $field . "'>Delete</button></td></tr>";
         if ($img != 'http://mashpia.com/mobile/reg/img/addphoto.png') {
             $imgs[] = $img;
         }
@@ -96,4 +132,19 @@ while ($row = mysql_fetch_assoc($result)) {
     ?>
 </table>
 </BODY>
+<script>
+    $(document).ready(function() {
+        $('.delete').click(function(e) {
+            const serial = e.target.dataset.serial;
+            const field = e.target.dataset.field;
+            $.post('ajax/deletePic.php', { serial, field }, function(response) {
+                if (response.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to delete picture');
+                }
+            });
+        });
+    });
+</script>
 </HTML>
