@@ -109,9 +109,12 @@ $imgs = []; // array for keeping track of all pictures that are showing up
             if (!empty($img_fallback['val'])) {
                 if ($img_fallback['from_db']) {
                     $img = 'http://mashpia.com/file_view.php?id=' . $img_fallback['val'];
-                } else {
+                } else if ($img_fallback['val'] != 'img/addphoto.png') {
                     $img = $img_fallback['url'];
+                } else {
+                    continue;
                 }
+                $field = $img_fallback['field'];
                 break;
             }
           }

@@ -4,6 +4,8 @@ ini_set('error_reporting', 1);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+// load PDO-based DB handle ($MASHPIA_DB) used in chidonWinnersSql.php
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
@@ -15,16 +17,21 @@ function custom_urlencode($url) {
     return implode('/', array_map('rawurlencode', explode('/', $url)));
 }
 
+echo "<pre>"; print_r($_POST); echo "</pre>"; 
 $info = [];
-$sql = "select * from th_chidon_winners tcw 
-        join users u on u.user_serial = tcw.serial 
-        join th_chidon tc on tc.user_id = u.user_id 
-        where tcw.year = " . $year . " 
-        group by tcw.serial 
-        order by tcw.th_chidon_winner_id";
-$result = mysql_query($sql);
-while ($row = mysql_fetch_assoc($result)) {
-    $info[] = $row;
+if (isset($_POST['team']) || isset($_POST['grade']) || isset($_POST['gender'])) {
+    require_once 'chidonWinnersSql.php';
+} else {
+    $sql = "select * from th_chidon_winners tcw 
+            join users u on u.user_serial = tcw.serial 
+            join th_chidon tc on tc.user_id = u.user_id 
+            where tcw.year = " . $year . " 
+            group by tcw.serial 
+            order by tcw.th_chidon_winner_id";
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $info[] = $row;
+    }
 }
 // echo "<pre>"; print_r( $info ); echo "</pre>"; 
 $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silver Trophy', 'Bronze Trophy', 'KHK Gold Trophy', 'KHK Silver Trophy', 'KHK Bronze Trophy'];
@@ -70,16 +77,16 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Winners Pictures</h1>
 
-<h2>Dowloads</h2>
-<form action="chidon_winners_downloads.php" method="post">
+<h2>Selections</h2>
+<form action="chidon_winners_downloads.php" method="post" id="selections">
     Team:
-    <select id="team" name="team" multiple>
+    <select id="team" name="team[]" multiple>
         <?php foreach ($teams as $team) { ?>
             <option value="<?= $team ?>"><?= $team ?></option>
         <?php } ?>
     </select><br /><br />
     Grade:
-    <select id="grade" name="grade" multiple>
+    <select id="grade" name="grade[]" multiple>
         <?php for ($i = 4; $i <= 8; $i++) { ?>
             <option value="<?= $i ?>"><?= $i ?>th Grade</option>
         <?php } ?>
@@ -90,7 +97,8 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
         <option value="M">Boys</option>
         <option value="F">Girls</option>
     </select><br /><br />
-    <input type="submit" value="Download">
+    <input type="submit" value="Download"><br /><br />
+    <input type="submit" name="update" id="update" value="Update Pictures">
 </form>
 
 <h2>Winners</h2>
@@ -120,8 +128,10 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
             if (!empty($img_fallback['val'])) {
                 if ($img_fallback['from_db']) {
                     $img = 'http://mashpia.com/file_view.php?id=' . $img_fallback['val'];
-                } else {
+                } else if ($img_fallback['val'] != 'img/addphoto.png') {
                     $img = $img_fallback['url'];
+                } else {
+                    continue;
                 }
                 $field = $img_fallback['field'];
                 break;
@@ -141,6 +151,12 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
 </BODY>
 <script>
     $(document).ready(function() {
+        $("#update").click(function(e) {
+            e.preventDefault()
+            document.getElementById('selections').action = 'chidon_winners_pics.php';
+            document.getElementById('selections').submit();
+        });
+
         $('.delete').click(function(e) {
             const serial = e.target.dataset.serial;
             const field = e.target.dataset.field;
