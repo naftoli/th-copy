@@ -11,6 +11,10 @@ if ($admin_user['auth'] != 'super') {
     die('Access Denied');
 }
 
+function custom_urlencode($url) {
+    return implode('/', array_map('rawurlencode', explode('/', $url)));
+}
+
 $info = [];
 $sql = "select * from th_chidon_winners tcw 
         join users u on u.user_serial = tcw.serial 
