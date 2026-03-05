@@ -21,7 +21,7 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
 }
-// echo "<pre>"; print_r( $info ); echo "</pre>"; 
+echo "<pre>"; print_r( $info ); echo "</pre>"; 
 ?>
 <!DOCTYPE html>
 <HTML>
