@@ -87,6 +87,7 @@ class UsersRouter {
             // $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('n/j/Y') : $row['dob'];
             // $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
             // format and return just the data we want...
+            $admin_id = $row['admin_id'] ?? $admin_ids[$row['user_id']];
             $users[] = [
                 'user_id'   => intval($row['user_id']), 'user_serial' => intval($row['user_serial']),
                 'first'     => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'],
@@ -99,12 +100,12 @@ class UsersRouter {
                 'barcode'   => '3'.$row['user_code'],
                 'platoon'   => ( $platoon ? [ 'name' => $platoon ] : null ),
                 'rank_name' => $rankNames[$row['rank_name']],
-                'admin_id'  => $row['admin_id'] ?? $admin_ids[$row['user_id']], 
-                'email'     => $row['admin_email'] ?? '', 
-                'work_phone' => $row['admin_phone_work'] ?? '', 
-                'home_phone' => $row['admin_phone_home'] ?? '', 
-                'mobile_phone' => $row['admin_phone_mobile'] ?? '', 
-                'mobile_phone2' => $row['admin_phone_mobile2'] ?? ''
+                'admin_id'  => $admin_id, 
+                'email'     => $admins[$admin_id]['admin_email'] ?? '', 
+                'work_phone' => $admins[$admin_id]['admin_phone_work'] ?? '', 
+                'home_phone' => $admins[$admin_id]['admin_phone_home'] ?? '', 
+                'mobile_phone' => $admins[$admin_id]['admin_phone_mobile'] ?? '', 
+                'mobile_phone2' => $admins[$admin_id]['admin_phone_mobile2'] ?? ''
             ];
         }
         json_response( $users );
