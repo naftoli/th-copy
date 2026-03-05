@@ -26,7 +26,7 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_id']][] = $row;
 }
-echo "<pre>"; print_r( $info ); echo "</pre>"; 
+// echo "<pre>"; print_r( $info ); echo "</pre>"; 
 
 require_once 'chidon_zip_function.php';
 $imgs = []; // array for keeping track of all pictures that are showing up
