@@ -23,7 +23,6 @@ if (in_array($field, ['khk_photo', 'chidon_photo'])) {
 }
 
 $sql = "update $table set $field = null where year = :year and user_id = (select user_id from users where serial = :serial)";
-echo $sql; exit;
 $stmt = $MASHPIA_DB->prepare($sql);
 $res = $stmt->execute([
     ':year' => $year,
