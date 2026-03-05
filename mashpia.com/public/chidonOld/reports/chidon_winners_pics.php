@@ -69,7 +69,7 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
 <BODY>
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Winners Pictures</h1>
-
+<!--
 <h2>Dowloads</h2>
 <form action="chidon_winners_downloads.php" method="post">
     Team:
@@ -91,7 +91,7 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
     </select><br /><br />
     <input type="submit" value="Download">
 </form>
-
+        -->
 <h2>Winners</h2>
 <table class="pics">
 <tr>
@@ -144,7 +144,9 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
             const serial = e.target.dataset.serial;
             const field = e.target.dataset.field;
             if (serial && field) {
-                $.post('ajax/deletePic.php', { serial, field }, function(res) {
+                $.post('ajax/deletePic.php', { serial, field }, function(result) {
+                    const res = JSON.parse(result)
+                    console.log(res)
                     if (res.success) {
                         location.reload();
                     } else {
