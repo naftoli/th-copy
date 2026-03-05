@@ -69,7 +69,7 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
 <BODY>
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Winners Pictures</h1>
-
+<!--
 <h2>Dowloads</h2>
 <form action="chidon_winners_downloads.php" method="post">
     Team:
@@ -91,7 +91,7 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
     </select><br /><br />
     <input type="submit" value="Download">
 </form>
-
+-->
 <h2>Winners</h2>
 <table class="pics">
 <tr>
