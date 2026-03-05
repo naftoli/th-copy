@@ -106,10 +106,14 @@ $imgs = []; // array for keeping track of all pictures that are showing up
           $img = null;
           // find first valid image
           foreach ($img_fallbacks as $img_fallback) {
-              if (!empty($img_fallback['val']) && $img_fallback['val'] !== 'img/addphoto.png') {
-                  $img = $img_fallback['url'];
-                  break;
-              }
+            if (!empty($img_fallback['val'])) {
+                if ($img_fallback['from_db']) {
+                    $img = 'http://mashpia.com/file_view.php?id=' . $img_fallback['val'];
+                } else {
+                    $img = $img_fallback['url'];
+                }
+                break;
+            }
           }
           echo "<tr><td>" . $child['user_serial'] . "</td><td>" . $child['first'] . ' ' . $child['last'] . "</td><td>";
           echo $child['school_name'] . "</td><td>" . $grade . "</td><td>";
