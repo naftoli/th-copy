@@ -107,12 +107,9 @@
             })
             .then(res => res.json())
             .then(data => {
-                let url = '/mobile/reg/' + data.img;
-                // if we are coming from tzivos.local or localhost, we need to prepend the domain
-                if (window.location.hostname == 'tzivos.local' || window.location.hostname == 'localhost') {
-                    url = 'https://mashpia.com/mobile/reg/' + data.img;
+                if (data.success && data.img) {
+                    document.getElementById('overlayImage').src = 'getImage.php?path=mobile/reg/' + encodeURIComponent(data.img);
                 }
-                document.getElementById('overlayImage').src = url
             })
         }
 
@@ -131,19 +128,28 @@
             // Draw main image
             ctx.drawImage(mainImage, 0, 0, canvas.width, canvas.height);
 
-            // Calculate overlay position and size
+            // Calculate overlay position and size (circle diameter)
             const overlaySize = canvas.width * 0.23; // 23% of main image width
             const overlayX = (canvas.width - overlaySize) / 2;
-            const overlayY = canvas.height * 0.21 - overlaySize/2; // 21% from top
+            const overlayY = canvas.height * 0.21 - overlaySize / 2; // 21% from top
+
+            // Scale overlay to cover the circle while preserving aspect ratio (match object-fit: cover)
+            const iw = overlayImage.naturalWidth;
+            const ih = overlayImage.naturalHeight;
+            const scale = Math.max(overlaySize / iw, overlaySize / ih);
+            const drawW = iw * scale;
+            const drawH = ih * scale;
+            const drawX = overlayX + (overlaySize - drawW) / 2;
+            const drawY = overlayY + (overlaySize - drawH) / 2;
 
             // Create circular clipping path
             ctx.save();
             ctx.beginPath();
-            ctx.arc(overlayX + overlaySize/2, overlayY + overlaySize/2, overlaySize/2, 0, Math.PI * 2);
+            ctx.arc(overlayX + overlaySize / 2, overlayY + overlaySize / 2, overlaySize / 2, 0, Math.PI * 2);
             ctx.clip();
 
-            // Draw overlay image
-            ctx.drawImage(overlayImage, overlayX, overlayY, overlaySize, overlaySize);
+            // Draw overlay image (centered, aspect ratio preserved)
+            ctx.drawImage(overlayImage, drawX, drawY, drawW, drawH);
             ctx.restore();
 
             // Create download link
@@ -153,14 +159,11 @@
             link.click();
         }
 
-        // get invite id from url
+        // get invite id from url; load via same-origin proxy so canvas is not tainted (toDataURL works)
         const url = window.location.search
         const urlParams = new URLSearchParams(url)
         const id = urlParams.get('id')
-        let src = '/chidonOld/certs/Jpegs/' + id + '.jpg'
-        if (window.location.hostname == 'tzivos.local' || window.location.hostname == 'localhost') {
-            src = 'https://mashpia.com/chidonOld/certs/Jpegs/' + id + '.jpg'
-        }
+        const src = 'getImage.php?path=chidonOld/certs/Jpegs/' + encodeURIComponent(id) + '.jpg'
         document.getElementById('mainImage').src = src
 
         // get updated image if exists
