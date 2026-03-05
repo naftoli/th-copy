@@ -4,20 +4,17 @@ ini_set('error_reporting', 1);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-
-require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
-$as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true); // add chidon schools
-$schools = $as->getSchools();
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
-$limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
+if ($admin_user['auth'] != 'super') {
+    die('Access Denied');
+}
 
 $info = [];
 $sql = "select * from th_chidon_winners tcw 
         join users u on u.user_serial = tcw.serial 
-        join th_chidon tc on tc.user_id = u.user_id
+        join th_chidon tc on tc.user_id = u.user_id 
         where tcw.year = " . $year . " 
         order by tcw.th_chidon_winner_id";
 $result = mysql_query($sql);
