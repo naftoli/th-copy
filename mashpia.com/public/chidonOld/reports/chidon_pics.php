@@ -12,6 +12,8 @@ $schools = $as->getSchools();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+$limit = isset($_GET['limit']) ? $_GET['limit'] : 0;
+
 $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
@@ -19,7 +21,7 @@ $sql = "select * from th_chidon tc
         join classes c on c.class_id = u.class_id 
         where year = " . $year . " 
         and date_paid > 0 
-        and tc.school_id in (" . implode(',', array_keys($schools)) . ")";
+        and tc.school_id in (" . implode(',', array_keys($schools)) . ") " . ($limit ? "limit " . $limit : "");
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[$row['school_id']][] = $row;
