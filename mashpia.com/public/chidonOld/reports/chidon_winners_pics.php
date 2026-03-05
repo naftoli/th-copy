@@ -81,21 +81,30 @@ $teams = ['Mishne Torah', 'Sefer Hamitzvos', 'Blue Trophy', 'Gold Trophy', 'Silv
 <form action="chidon_winners_downloads.php" method="post" id="selections">
     Team:
     <select id="team" name="team[]" multiple>
-        <?php foreach ($teams as $team) { ?>
-            <option value="<?= $team ?>"><?= $team ?></option>
-        <?php } ?>
+        <?php 
+        foreach ($teams as $team) { 
+            $selected = in_array($team, isset($_POST['team']) ? (array) $_POST['team'] : []) ? 'selected' : '';
+            echo "<option value='$team' $selected>$team</option>";
+        } 
+        ?>
     </select><br /><br />
     Grade:
     <select id="grade" name="grade[]" multiple>
-        <?php for ($i = 4; $i <= 8; $i++) { ?>
-            <option value="<?= $i ?>"><?= $i ?>th Grade</option>
-        <?php } ?>
+        <?php 
+        for ($i = 4; $i <= 8; $i++) { 
+            $selected = in_array($i, isset($_POST['grade']) ? (array) $_POST['grade'] : []) ? 'selected' : '';
+            echo "<option value='$i' $selected>" . $i . "th Grade</option>";
+        } 
+        ?>
     </select><br /><br />
     Gender:
     <select id="gender" name="gender">
-        <option value="B">Both</option>
-        <option value="M">Boys</option>
-        <option value="F">Girls</option>
+        <?php 
+        $selected = isset($_POST['gender']) ? $_POST['gender'] : 'B';
+        echo "<option value='B' " . ($selected == 'B' ? 'selected' : '') . ">Both</option>";
+        echo "<option value='M' " . ($selected == 'M' ? 'selected' : '') . ">Boys</option>";
+        echo "<option value='F' " . ($selected == 'F' ? 'selected' : '') . ">Girls</option>";
+        ?>
     </select><br /><br />
     <input type="submit" value="Download"><br /><br />
     <input type="submit" name="update" id="update" value="Update Pictures">
