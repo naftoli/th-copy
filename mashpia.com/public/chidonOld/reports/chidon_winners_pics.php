@@ -18,13 +18,13 @@ $info = [];
 $sql = "select * from th_chidon_winners tcw 
         join users u on u.user_serial = tcw.serial 
         join th_chidon tc on tc.user_id = u.user_id
-        where year = " . $year . " 
+        where tcw.year = " . $year . " 
         order by tcw.th_chidon_winner_id";
 $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $info[] = $row;
 }
-echo "<pre>"; print_r( $info ); echo "</pre>"; 
+// echo "<pre>"; print_r( $info ); echo "</pre>"; 
 ?>
 <!DOCTYPE html>
 <HTML>
