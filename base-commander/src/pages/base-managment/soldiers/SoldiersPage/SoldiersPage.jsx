@@ -112,13 +112,14 @@ export class SoldiersPage extends Component {
   toCSV = () => {
     const headers = [
       'Serial Number', 'First Name', 'Last Name', 'שם פרטי', 'שם משפחה', 'DOB', 'Gender', 'Registered', 
-      'Chayolei', 'Tehillim', 'Chidon', 'Platoon', 'Base', 'Rank', 'Family ID'
+      'Chayolei', 'Tehillim', 'Chidon', 'Platoon', 'Base', 'Rank', 'Family ID', 'Email', 'Work Phone', 'Home Phone', 'Cell Phone 1', 'Cell Phone 2'
     ];
     // get the data
     const rows = this.props.soldiers.map( soldier => [
       soldier.user_serial, soldier.first, soldier.last, soldier.first_he, soldier.last_he, soldier.dob, soldier.gender, 
       soldier.user_registered, soldier.chayolei, soldier.yan, soldier.chidon,
-      soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name, soldier.rank_name, soldier.admin_id
+      soldier.platoon ? `="${soldier.platoon.name}"` : '-', soldier.school.school_name, soldier.rank_name, soldier.admin_id, 
+      soldier.email, soldier.work_phone, soldier.home_phone, soldier.mobile_phone, soldier.mobile_phone2 
     ]);
     return dataToCSV( headers, rows );
   }

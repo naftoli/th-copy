@@ -57,10 +57,13 @@ class UsersRouter {
         }
 
         if ($current_user->login->code !== 'PARENT') {
+            $admins = [];
             // get all admin_ids
             $admin_ids = [];
-            $sql = "select aa.* from admin_auths aa 
+            $sql = "select aa.*, a.admin_email, a.admin_phone_work, a.admin_phone_home, a.admin_phone_mobile, a.admin_phone_mobile2 
+                    from admin_auths aa 
                     join users u on aa.id = u.user_id 
+                    left join admins a using (admin_id) 
                     where aa.auth = 'user' 
                     and u.school_id > 0";
 //            if (isset($_COOKIE['naftoli'])) {
@@ -70,6 +73,7 @@ class UsersRouter {
             $stmtAdmins = $MASHPIA_DB->query( $sql );
             while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
                 $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
+                $admins[$rowAdmin['admin_id']] = $row;
             }
         }
 
@@ -95,7 +99,12 @@ class UsersRouter {
                 'barcode'   => '3'.$row['user_code'],
                 'platoon'   => ( $platoon ? [ 'name' => $platoon ] : null ),
                 'rank_name' => $rankNames[$row['rank_name']],
-                'admin_id'  => $row['admin_id'] ?? $admin_ids[$row['user_id']],
+                'admin_id'  => $row['admin_id'] ?? $admin_ids[$row['user_id']], 
+                'email'     => $row['admin_email'] ?? '', 
+                'work_phone' => $row['admin_phone_work'] ?? '', 
+                'home_phone' => $row['admin_phone_home'] ?? '', 
+                'mobile_phone' => $row['admin_phone_mobile'] ?? '', 
+                'mobile_phone2' => $row['admin_phone_mobile2'] ?? ''
             ];
         }
         json_response( $users );
