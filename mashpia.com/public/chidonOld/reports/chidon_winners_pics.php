@@ -24,7 +24,7 @@ if (isset($_POST['team']) || isset($_POST['grade']) || isset($_POST['gender'])) 
 } else {
     $sql = "select * from th_chidon_winners tcw 
             join users u on u.user_serial = tcw.serial 
-            join th_chidon tc on tc.user_id = u.user_id 
+            join th_chidon tc on tc.user_id = u.user_id and tc.year = tcw.year 
             where tcw.year = " . $year . " 
             group by tcw.serial 
             order by tcw.th_chidon_winner_id";

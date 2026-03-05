@@ -11,7 +11,7 @@ $grade_list = implode(',', $grade_placeholders ?: ['0']);
 
 $sql = "SELECT * FROM th_chidon_winners tcw 
         JOIN users u ON u.user_serial = tcw.serial 
-        JOIN th_chidon tc ON tc.user_id = u.user_id 
+        JOIN th_chidon tc ON tc.user_id = u.user_id AND tc.year = tcw.year 
         WHERE tcw.year = " . intval($year) . " 
         AND tcw.grade IN (" . $grade_list . ") ";
 if (in_array($gender, ['F', 'M'])) {
