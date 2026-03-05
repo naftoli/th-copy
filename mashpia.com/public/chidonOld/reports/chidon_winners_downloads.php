@@ -67,6 +67,6 @@ foreach ( $info as $child) {
     ];
     $imgs[] = ['filename' => $child['serial'], 'fallbacks' => $img_fallbacks];
 }
-echo "<pre>"; print_r($imgs); echo "</pre>"; 
+// echo "<pre>"; print_r($imgs); echo "</pre>"; 
 $filename = 'chidonPics.zip';
 createZip($imgs, $filename);
