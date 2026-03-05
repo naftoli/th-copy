@@ -9,6 +9,7 @@ function createZip($files, $zip_path) {
     if ($success !== true) {
         exit("cannot open <$zip_path>\n");
     }
+    echo "<pre>"; print_r( $files ); echo "</pre>"; exit;
     foreach ($files as $file) {
         $entry_name = $file['filename'];
         $fallbacks = $file['fallbacks'];
