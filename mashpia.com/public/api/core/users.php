@@ -74,7 +74,7 @@ class UsersRouter {
             while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
                 $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
                 if (!in_array($rowAdmin['admin_id'], array_keys($admins)))
-                    $admins[$rowAdmin['admin_id']] = $row;
+                    $admins[$rowAdmin['admin_id']] = $rowAdmin;
             }
         }
 
