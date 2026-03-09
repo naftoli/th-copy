@@ -22,9 +22,6 @@ $year = GlobalSettings::getChidonYear();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.php';
 $cs = new ChidonShipping($year);
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
-$ct = new ChidonTests();
-
 $gender = $_REQUEST['type'];
 chdir(__DIR__); // so createFile() writes .tsv here and downloadFile() finds them
 require 'functions.php';
@@ -35,30 +32,34 @@ $final_marks = getFinalMarks();
 
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
+    // echo "<pre>"; print_r($children); echo "</pre>"; 
+    // continue;
     if (! empty($children)) {
        if (in_array($school_id, [7,54,106,255])) {
+            // continue; // for now
            // for OT do both, by school and by grade
-           if ($school_id == 255) {
+            if ($school_id == 255) {
                $sheet = createSpreadSheet($children);
                $file_name = $school . ".tsv";
                createFile($file_name, $sheet);
-           }
-           // sort children by grade and create sheet for each grade
-           $sorted = [];
-           foreach ($children as $child) {
+            }
+            // sort children by grade and create sheet for each grade
+            $sorted = [];
+            foreach ($children as $child) {
                $sorted[$child['class_grade']][] = $child;
-           }
-           foreach ($sorted as $grade => $details) {
+            }
+            foreach ($sorted as $grade => $details) {
                $sheet = createSpreadSheet($details);
                $file_name = $school . " Grade " . $grade . ".tsv";
                createFile($file_name, $sheet);
-           }
+            }
        } else {
             $sheet = createSpreadSheet($children);
+            // echo "<pre>"; print_r($sheet); echo "</pre>"; 
             $file_name = $school . ".tsv";
             createFile($file_name, $sheet);
        }
     }
 }
-
+// exit;
 downloadFile();

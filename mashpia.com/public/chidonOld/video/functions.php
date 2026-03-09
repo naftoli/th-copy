@@ -63,11 +63,10 @@ function getChildren($school_id, $gender, $serials = []) {
     }
     $sql .= " GROUP BY u.user_id";
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
-//    echo $sql; exit;
+    // echo $sql . "<br>";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $award = getAward($row);
-        $row['award_track'] = $award;
+        $row['award_track'] = getAward($row);
         $children[] = $row;
     }
     return $children;
@@ -183,7 +182,8 @@ function createFile($name, $info, $csv = false) {
 function createSpreadSheet($children, $type = 'ht', $east_only = false) {
     $info = [];
     foreach ($children as $child) {
-        $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
+        // $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
+        $track = $child['award_track'];
         if (empty($track)) continue;
         // remove any child not going on east coast trip or ultimate trip if east_only is true
         if ($east_only && !intval($child['ultimate_trip']) && $child['trip'] != 'east') continue;
