@@ -33,6 +33,7 @@ $prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
 
+// $i = 0;
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     // echo "<pre>"; print_r($children); echo "</pre>"; 
@@ -61,6 +62,7 @@ foreach ($schools as $school_id => $school) {
             // echo "<pre>"; print_r($sheet); echo "</pre>"; 
             $file_name = $school . ".tsv";
             createFile($file_name, $sheet);
+            // if (++$i > 10) exit;
        }
     }
 }

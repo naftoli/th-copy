@@ -651,8 +651,7 @@ class ChidonTests
         //         $highest_track = $rowTrack['highest_track'];
         //     }
         // } 
-        $types = $this->types;
-        $key = array_search($highest_track, $types);
+        $key = $highest_track ? array_search($highest_track, $this->types) : false;
 
         $highest = $forEligibility ? 'maven' : '';
         $avgs = $this->getPassingAvgs($user_id);
@@ -687,6 +686,7 @@ class ChidonTests
         }
 
         // if highest track is genius, check for iyun non cumulative score based on 80 avg needed on each track
+        // when track is genius, the child can only get it if all tracks are at least 80%
         if ($highest == 'genius') {
             $actualAvg = 0;
             foreach ($marksByTrack as $track => $total) {
@@ -706,7 +706,7 @@ class ChidonTests
         }
 
         // compare with key
-        if (isset($key)) {
+        if (isset($key) && $key !== false) {
             $keys = array_keys($this->types);
             $idx = array_search($key, $keys);
             $idx2 = array_search($highest, $keys);
