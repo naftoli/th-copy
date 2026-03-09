@@ -13,12 +13,19 @@ $schools = $as->getSchools();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+// Optional per-school download to avoid timeouts: pass ?school_id=ID
+$school_id = isset($_GET['school_id']) ? intval($_GET['school_id']) : 0;
+
 $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
-        where year = " . $year . "  
-        and tc.date_paid > 0 
-        and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
+        where tc.year = " . $year . "  
+        and tc.date_paid > 0 ";
+if ($school_id && isset($schools[$school_id])) {
+    $sql .= "and tc.school_id = " . $school_id;
+} else {
+    $sql .= "and tc.school_id in (" . implode(',', array_keys($schools)) . ")";
+}
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[$row['school_id']][] = $row;

@@ -64,7 +64,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Pictures</h1>
 <a href="chidon_pics_download.php" target="__blank">
-  <button id="downloadPics">Download Pictures</button>
+  <button id="downloadPics">Download ALL Pictures (may take long)</button>
 </a>
 <br />
 <a href="chidon_pics_iyun.php" target="__blank">
@@ -84,6 +84,11 @@ $imgs = []; // array for keeping track of all pictures that are showing up
 </a>
 <?php foreach ($info as $id => $children) : ?>
   <h2><?= $schools[$id] ?></h2>
+  <p>
+    <a href="chidon_pics_download.php?school_id=<?= $id ?>" target="__blank">
+      <button>Download Pictures for <?= $schools[$id] ?></button>
+    </a>
+  </p>
   <table class="pics">
     <tr>
       <th>Serial Number</th>
