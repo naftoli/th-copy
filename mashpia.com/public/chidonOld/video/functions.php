@@ -461,7 +461,7 @@ function downloadFile() {
     $list = scandir($dir);
     $files = extractFiles($list);
 
-    $filename = "Chidon.zip";
+    $filename = "ChidonVideo.zip";
     createZip($files, $filename);
 
     header('Content-Description: File Transfer');
