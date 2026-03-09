@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors',1);
 ini_set('error_reporting', E_ALL);
-ini_set('max_execution_time', 900);
+ini_set('max_execution_time', 600);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -16,7 +16,7 @@ $year = GlobalSettings::getChidonYear();
 $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
-        where year = " . $year . " and 
+        where year = " . $year . "  
         and tc.date_paid > 0 
         and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
 $result = mysql_query( $sql );
