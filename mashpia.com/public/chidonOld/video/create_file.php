@@ -59,5 +59,5 @@ foreach ($schools as $school_id => $school) {
        }
     }
 }
-
+exit;
 downloadFile();
