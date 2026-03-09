@@ -450,8 +450,14 @@ function createZip($files, $filename) {
 }
 
 function downloadFile() {
-    // loop through dir to get files
-    $dir = getcwd();
+    // Discard any output from header.php etc. so the response is only the zip
+    while (ob_get_level()) {
+        ob_end_clean();
+    }
+
+    // Use script's directory so we find the .tsv files created by createFile
+    $dir = __DIR__;
+    chdir($dir);
     $list = scandir($dir);
     $files = extractFiles($list);
 

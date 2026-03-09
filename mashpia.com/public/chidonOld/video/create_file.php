@@ -22,6 +22,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.
 $cs = new ChidonShipping($year);
 
 $gender = $_REQUEST['type'];
+chdir(__DIR__); // so createFile() writes .tsv here and downloadFile() finds them
 require 'functions.php';
 
 $prizes = getUserPrizes();
