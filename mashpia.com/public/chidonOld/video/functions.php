@@ -450,30 +450,30 @@ function createZip($files, $filename) {
 }
 
 function downloadFile() {
-    // Discard any output from header.php etc. so the response is only the zip
-    while (ob_get_level()) {
-        ob_end_clean();
-    }
+    buildZipAndRedirect();
+}
 
-    // Use script's directory so we find the .tsv files created by createFile
+/**
+ * Build zip in video dir, store token in session, redirect to send script (avoids header.php output corrupting zip).
+ */
+function buildZipAndRedirect() {
     $dir = __DIR__;
     chdir($dir);
     $list = scandir($dir);
     $files = extractFiles($list);
 
-    $filename = "ChidonVideo.zip";
-    createZip($files, $filename);
+    $token = bin2hex(random_bytes(16));
+    $zipName = 'ChidonVideo_' . $token . '.zip';
+    createZip($files, $zipName);
 
-    header('Content-Description: File Transfer');
-    header('Content-Type: application/octet-stream');
-    header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
-    header('Expires: 0');
-    header('Cache-Control: must-revalidate');
-    header('Pragma: public');
-    header('Content-Length: ' . filesize($filename));
-    flush(); // Flush system output buffer
-    readfile($filename);
-    unlink($filename);
+    if (!session_id()) {
+        session_start();
+    }
+    $_SESSION['video_download_token'] = $token;
+    $_SESSION['video_download_time'] = time();
+
+    header('Location: create_file_send.php?t=' . $token);
+    exit;
 }
 
 function getSchoolReps($school, $gender) {
