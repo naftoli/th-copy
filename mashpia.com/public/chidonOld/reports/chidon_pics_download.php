@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors',1);
 ini_set('error_reporting', E_ALL);
-ini_set('max_execution_time', 600);
+ini_set('max_execution_time', 900);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
@@ -45,4 +45,5 @@ foreach ( $info as $id => $children ) {
 }
 
 $filename = 'chidonPics.zip';
+// echo "<pre>"; print_r($imgs); echo "</pre>"; exit;
 createZip($imgs, $filename);
