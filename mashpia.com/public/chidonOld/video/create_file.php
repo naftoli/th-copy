@@ -52,6 +52,10 @@ foreach ($schools as $school_id => $school) {
            }
        } else {
             $sheet = createSpreadSheet($children);
+            echo "<pre>";
+            print_r($sheet);
+            echo "</pre>";
+            exit;
             $file_name = $school . ".tsv";
             createFile($file_name, $sheet);
        }
