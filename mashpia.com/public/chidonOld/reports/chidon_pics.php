@@ -63,9 +63,7 @@ $imgs = []; // array for keeping track of all pictures that are showing up
 <BODY>
 <?php require_once $_SERVER['DOCUMENT_ROOT'] . '/admin_header.php'; ?>
 <h1>Chidon Pictures</h1>
-<a href="chidon_pics_download.php" target="__blank">
-  <button id="downloadPics">Download ALL Pictures (may take long)</button>
-</a>
+<button id="downloadPicsAll">Download Pictures (auto by school)</button>
 <br />
 <a href="chidon_pics_iyun.php" target="__blank">
   <button id="downloadPicsIyun">Download Iyun Only Pictures</button>
@@ -134,4 +132,27 @@ $imgs = []; // array for keeping track of all pictures that are showing up
   </table>
 <?php endforeach; ?>
 </BODY>
+<script>
+  (function() {
+    const schoolIds = <?= json_encode(array_keys($schools)) ?>;
+    const btn = document.getElementById('downloadPicsAll');
+    if (!btn) return;
+    btn.addEventListener('click', function(e) {
+      e.preventDefault();
+      let i = 0;
+      function next() {
+        if (i >= schoolIds.length) return;
+        const id = schoolIds[i++];
+        const a = document.createElement('a');
+        a.href = 'chidon_pics_download.php?school_id=' + encodeURIComponent(id);
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(next, 1000); // stagger downloads slightly
+      }
+      next();
+    });
+  })();
+</script>
 </HTML>
