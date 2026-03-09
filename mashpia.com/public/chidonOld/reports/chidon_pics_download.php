@@ -17,7 +17,8 @@ $info = [];
 $sql = "select * from th_chidon tc 
         join users u using (user_id) 
         where year = " . $year . " and 
-        tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
+        and tc.date_paid > 0 
+        and tc.school_id in (" . implode(',', array_keys( $schools )) . ")";
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
     $info[$row['school_id']][] = $row;
