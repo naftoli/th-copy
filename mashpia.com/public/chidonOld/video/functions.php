@@ -66,6 +66,7 @@ function getChildren($school_id, $gender, $serials = []) {
     // echo $sql . "<br>";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        $row['highest_track'] = getHighestTrack($row);
         $row['award_track'] = getAward($row);
         $children[] = $row;
     }
@@ -113,10 +114,37 @@ function getAllChildrenByGender($gender) {
     $sql .= " ORDER BY s.school_name, u.last, u.first";
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
+        $row['highest_track'] = getHighestTrack($row);
         $row['award_track'] = getAward($row);
         $children[] = $row;
     }
     return $children;
+}
+
+function getHighestTrack($child) {
+    global $ct;
+    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+    $ct->setScores();
+    $ct->calculateMarks();
+    $marks = $ct->getMarks();
+    $highest_track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
+    if ($highest_track == 'genius') {
+        // check if child passed Iyun through cumulative marks
+        $cumulative = $ct->calculateCumulative($child, $marks[$child['th_chidon_id']]);
+        if ($cumulative == 'iyun') $highest_track = 'genius';
+    }
+    // check if bc changed the reward type
+    if (!empty($child['reward_type']) && $child['reward_type'] != 'highest track passed') {
+        $reward_track = $child['reward_type'];
+        // compare reward track with highest track
+        $keys = array_keys($ct->getTypes());
+        $key1 = array_search($highest_track, $keys);
+        $key2 = array_search($reward_track, $keys);
+        if ($key2 > $key1) $highest_track = $reward_track;
+    }
+    $tracks = $ct->getTypes();
+    $highest_track = strtolower($tracks[$highest_track]);
+    return $highest_track;
 }
 
 function getAward($child) {
@@ -182,8 +210,7 @@ function createFile($name, $info, $csv = false) {
 function createSpreadSheet($children, $type = 'ht', $east_only = false) {
     $info = [];
     foreach ($children as $child) {
-        // $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
-        $track = $child['award_track'];
+        $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
         if (empty($track)) continue;
         // remove any child not going on east coast trip or ultimate trip if east_only is true
         if ($east_only && !intval($child['ultimate_trip']) && $child['trip'] != 'east') continue;

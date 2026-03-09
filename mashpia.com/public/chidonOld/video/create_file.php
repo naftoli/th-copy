@@ -22,6 +22,9 @@ $year = GlobalSettings::getChidonYear();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.php';
 $cs = new ChidonShipping($year);
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+$ct = new ChidonTests();
+
 $gender = $_REQUEST['type'];
 chdir(__DIR__); // so createFile() writes .tsv here and downloadFile() finds them
 require 'functions.php';
