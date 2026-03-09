@@ -22,6 +22,9 @@ $year = GlobalSettings::getChidonYear();
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.php';
 $cs = new ChidonShipping($year);
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+$ct = new ChidonTests();
+
 $gender = $_REQUEST['type'];
 chdir(__DIR__); // so createFile() writes .tsv here and downloadFile() finds them
 require 'functions.php';
@@ -32,8 +35,6 @@ $final_marks = getFinalMarks();
 
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
-    echo "<pre>"; print_r($children); echo "</pre>"; 
-    continue;
     if (! empty($children)) {
        if (in_array($school_id, [7,54,106,255])) {
            // for OT do both, by school and by grade
@@ -59,5 +60,5 @@ foreach ($schools as $school_id => $school) {
        }
     }
 }
-exit;
+
 downloadFile();

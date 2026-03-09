@@ -43,8 +43,7 @@ function getChildren($school_id, $gender, $serials = []) {
                 tc.khk_trip, 
                 tc.rep_type, 
                 tc.trophy_type,
-                tc.ultimate_trip, 
-                tci.highest_track 
+                tc.ultimate_trip 
             FROM
                 users u
                     JOIN
@@ -53,8 +52,6 @@ function getChildren($school_id, $gender, $serials = []) {
                 classes c ON c.class_id = u.class_id
                     JOIN
                 th_chidon tc ON tc.user_id = u.user_id 
-                    JOIN
-                th_chidon_info tci ON tci.user_id = u.user_id AND tci.year = tc.year 
                     LEFT JOIN 
                 non_th_schools nts ON nts.non_th_school_id = u.non_th_school_id 
             WHERE

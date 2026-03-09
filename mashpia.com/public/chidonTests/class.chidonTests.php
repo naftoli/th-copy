@@ -99,7 +99,6 @@ class ChidonTests
         $qry = "
             SELECT 
                 tc.*,
-                tci.highest_track, 
                 u.first, u.last, u.gender, u.user_serial, 
                 c.class_id, c.class_grade, c.class_sub, 
                 s.school_id, s.school_name 
@@ -110,9 +109,7 @@ class ChidonTests
                     JOIN
                 schools s on s.school_id = u.school_id
                     JOIN
-                classes c ON c.class_id = u.class_id 
-                    LEFT JOIN 
-                th_chidon_info tci on tc.year = tci.year and tc.user_id = tci.user_id  
+                classes c ON c.class_id = u.class_id  
             WHERE
                 tc.year = :year 
         ";
@@ -640,20 +637,20 @@ class ChidonTests
     public function getHighestTrack($marks, $user_id, $forEligibility = false, $numTests = 3, $needAvg = false, $forIyun = false, $ht = false) {
         // check if we already determined the track
         $highest_track = $ht ?? '';
-        if (!$ht) {
-            $stmt = $this->db->prepare("
-                SELECT highest_track FROM th_chidon_info 
-                WHERE year = :year AND user_id = :user
-            ");
-            $stmt->execute([
-                'user'  => $user_id,
-                'year'  => $this->year
-            ]);
-            $rowTrack = $stmt->fetch();
-            if ($rowTrack && !$needAvg) {
-                $highest_track = $rowTrack['highest_track'];
-            }
-        } 
+        // if (!$ht) {
+        //     $stmt = $this->db->prepare("
+        //         SELECT highest_track FROM th_chidon_info 
+        //         WHERE year = :year AND user_id = :user
+        //     ");
+        //     $stmt->execute([
+        //         'user'  => $user_id,
+        //         'year'  => $this->year
+        //     ]);
+        //     $rowTrack = $stmt->fetch();
+        //     if ($rowTrack && !$needAvg) {
+        //         $highest_track = $rowTrack['highest_track'];
+        //     }
+        // } 
         $types = $this->types;
         $key = array_search($highest_track, $types);
 
