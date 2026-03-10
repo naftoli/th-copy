@@ -41,13 +41,13 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
         <? include('../../admin_header.php'); ?>
         <h1>Chidon Prizes</h1>
 
-        <p style="float: right">
-          <button class="button" style="padding: 5px;" id="copy">Copy Prizes from <?= ($year - 1) ?> to <?= $year ?></button>
-        </p>
-
-        <p style="margin: 20px 10px">
-            <a href="./new.php" class="button">New Prize</a>
-        </p>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <p style="margin: 20px 10px">
+            <button class="button" style="padding: 5px;" id="new">New Prize</button>
+            <button class="button" style="padding: 5px;" id="download">Download Prizes</button>
+            <button class="button" style="padding: 5px;" id="copy">Copy Prizes from <?= ($year - 1) ?> to <?= $year ?></button>
+          </p>
+        </div>
 
         <table>
             <tr>
@@ -67,11 +67,16 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
                 <th></th>
             </tr>
             
-            <?
+            <?php
+                $prizes = [];
                 $sql = "SELECT * FROM chidon_prizes WHERE year = $year";
                 $query = mysql_query($sql);
                 while ($row = mysql_fetch_assoc($query)) {
                     $school_exceptions = isset($exceptions[$row['prize_id']]) ? $exceptions[$row['prize_id']] : [];
+                    $prizes[] = [
+                        'prize_id' => $row['prize_id'],
+                        'filename' => $row['prize_picture'],
+                    ];
                     ?>
                     <tr id="<?= $row['prize_id'] ?>">
                         <td><?= $row['prize_id'] ?></td>
@@ -100,6 +105,26 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
     </body>
     <script>
       $( function() {
+        $("#new").click( function() {
+          window.location.href = "./new.php";
+        })
+
+        $("#download").click( function() {
+          const f = new FormData();
+          f.append("prizes", JSON.stringify(<?= json_encode($prizes) ?>));
+          $.ajax({
+            url: "download.php",
+            method: "POST",
+            data: f,
+            success: function(result) {
+              console.log(result);
+            }
+            error: function(xhr, status, error) {
+              console.log(xhr.responseText);
+            }
+          })
+        })
+
         $("#copy").click( function() {
           $.ajax({
             url: "./copyPrizes.php",
