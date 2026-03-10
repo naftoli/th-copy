@@ -110,21 +110,18 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
         })
 
         $("#download").click( function() {
-          const f = new FormData();
-          f.append("prizes", JSON.stringify(<?= json_encode($prizes) ?>));
-          $.ajax({
-            url: "download.php",
-            type: "POST",          // safer with older jQuery
-            data: f,
-            processData: false,    // <— prevent $.param(FormData)
-            contentType: false,    // <— let browser set multipart boundary
-            success: function(result) {
-              console.log(result);
-            },
-            error: function(xhr, status, error) {
-              console.log(xhr.responseText);
-            }
-          })
+          // create new form and submit it
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = "download.php";
+          form.enctype = "multipart/form-data";
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "prizes";
+          input.value = JSON.stringify(<?= json_encode($prizes) ?>);
+          form.appendChild(input);
+          document.body.appendChild(form);
+          form.submit();
         })
 
         $("#copy").click( function() {
