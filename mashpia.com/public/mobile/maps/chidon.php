@@ -122,6 +122,7 @@ foreach ($rows as $row) {
 
         const addresses = <?= json_encode($addresses); ?>;
         for (const address of addresses) {
+            if (address.address.trim() == 'Brooklyn, NY') continue;
             geocode({ address: address.address }, address);
         }
     }
