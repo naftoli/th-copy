@@ -114,8 +114,10 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
           f.append("prizes", JSON.stringify(<?= json_encode($prizes) ?>));
           $.ajax({
             url: "download.php",
-            method: "POST",
+            type: "POST",          // safer with older jQuery
             data: f,
+            processData: false,    // <— prevent $.param(FormData)
+            contentType: false,    // <— let browser set multipart boundary
             success: function(result) {
               console.log(result);
             },
