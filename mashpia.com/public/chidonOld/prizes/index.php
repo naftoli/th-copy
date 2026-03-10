@@ -118,7 +118,7 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
             data: f,
             success: function(result) {
               console.log(result);
-            }
+            },
             error: function(xhr, status, error) {
               console.log(xhr.responseText);
             }
