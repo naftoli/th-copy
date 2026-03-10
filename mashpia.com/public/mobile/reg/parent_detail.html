@@ -517,6 +517,11 @@
                                   <span>Edit Ultimate Trip Info</span>
                                 </button><br />
                               {{/if}}
+                              {{#if this.ultimate_trip}}
+                                <button class="btn btn-info chidon_hosts" data-gender="{{this.gender}}" id="chidon_hosts_{{@key}}">
+                                  <span>Chidon Hosts</span>
+                                </button><br />
+                              {{/if}}
                               {{#if this.show_report_cards}}
                               <button class="btn btn-primary report-card"><span>View Report Card</span></button>
                               <br/>
@@ -950,6 +955,12 @@
       if (window.location.protocol == 'https:') location.href = "/mobile/registration/?user_id=" + id;
       else location.href = "https:" + window.location.hostname + "/mobile/registration/?user_id=" + id;
     });
+
+    $(document).on('click', '.chidon_hosts', function () {
+      const id = $(this).attr('id')
+      const gender = document.getElementById(id).dataset.gender
+      window.open(`https://mashpia.com/mobile/maps/chidon.php?g=${gender}`, '_blank')
+    })
 
     const testTypes = {
       maven: 'Yesod',
