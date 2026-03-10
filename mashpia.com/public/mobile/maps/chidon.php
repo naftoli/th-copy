@@ -10,11 +10,22 @@ $bus = $_GET['bus'] ?? '';
 
 $sql = "
     SELECT 
-        u.first, u.last, tc.*
+        u.first,
+        u.last,
+        a.admin_phone_work,
+        a.admin_phone_mobile,
+        a.admin_phone_mobile2,
+        a.admin_phone_home,
+        a.admin_email,
+        tc.*
     FROM
         th_chidon tc
             JOIN
         users u USING (user_id)
+            JOIN
+        admin_auths aa ON aa.id = u.user_id
+            JOIN
+        admins a USING (admin_id)
     WHERE
         year = :year AND ultimate_trip = 1
             AND u.gender = :gender
@@ -25,13 +36,17 @@ $stmt->execute([':year' => $year, ':gender' => $gender]);
 $rows = $stmt->fetchAll();
 
 $addresses = [];
-foreach ($rows as $row) {
-    $addresses[] = [
+foreach ($rows as $i => $row) {
+    $addresses[$i] = [
         'address' => $row['host_street_num'] . ' ' . $row['host_street'] . ' ' . $row['host_street_apt'] . ', ' . $row['host_street_num_suffix'] . ' Brooklyn, NY',
         'child_name' => $row['first'] . ' ' . $row['last'],
-        'phone_number' => $row['host_number'] ?? '',
+        'phone_numbers' => [],
         'email' => $row['admin_email'] ?? '',
     ];
+    if ($row['admin_phone_mobile']) $addresses[$i]['phone_numbers'][] = $row['admin_phone_mobile'];
+    if ($row['admin_phone_mobile2']) $addresses[$i]['phone_numbers'][] = $row['admin_phone_mobile2'];
+    if ($row['admin_phone_work']) $addresses[$i]['phone_numbers'][] = $row['admin_phone_work'];
+    if ($row['admin_phone_home']) $addresses[$i]['phone_numbers'][] = $row['admin_phone_home'];
 }
 ?>
 <!DOCTYPE html>
@@ -117,7 +132,7 @@ foreach ($rows as $row) {
                     const { results: geocodeResults } = results;
                     const marker = new AdvancedMarkerElement({
                         position: geocodeResults[0].geometry.location, 
-                        title: info.child_name + '\n' + geocodeResults[0].formatted_address + '\nPhone Number: ' + info.phone_number + (info.email ? '\nEmail: ' + info.email : ''),
+                        title: info.child_name + '\n' + geocodeResults[0].formatted_address + '\nParent Phone Numbers:\n' + info.phone_numbers.join("\n") + (info.email ? '\nParent Email: ' + info.email : ''),
                         gmpClickable: true,
                     });
                     // Note: gmp-map handles markers automatically if 'map' is set, 
@@ -132,14 +147,11 @@ foreach ($rows as $row) {
 
                     // Add a click listener for each marker, and set up the info window.
                     const infoWindow = new InfoWindow({
-                        content: marker.title,
+                        content: info.child_name + "<br />" + geocodeResults[0].formatted_address + "<br />Parent Phone Numbers:<br />" + info.phone_numbers.join("<br />") + (info.email ? "<br />Parent Email: " + info.email : ''),
                         position: marker.position,
                     });
                     // Add a click listener for each marker, and set up the info window.
                     marker.addListener('click', ({ domEvent, latLng }) => {
-                        const { target } = domEvent;
-                        infoWindow.close();
-                        infoWindow.setContent(marker.title);
                         infoWindow.open(marker.map, marker);
                     });
                 })
