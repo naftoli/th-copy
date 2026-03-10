@@ -6,6 +6,7 @@ require_once __DIR__ . '/../../class.globalSettings.php';
 
 $year = GlobalSettings::getChidonYear();
 $gender = $_GET['g'] ?? 'M';
+$bus = $_GET['bus'] ?? '';
 
 $sql = "
     SELECT 
@@ -17,8 +18,8 @@ $sql = "
     WHERE
         year = :year AND ultimate_trip = 1
             AND u.gender = :gender
-    ORDER BY user_id
 ";
+if ($bus && in_array($bus, ['thurs', 'ms'])) $sql .= " AND {$bus}_walking = 2";
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute([':year' => $year, ':gender' => $gender]);
 $rows = $stmt->fetchAll();
