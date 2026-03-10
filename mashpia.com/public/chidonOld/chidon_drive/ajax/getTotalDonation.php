@@ -3,6 +3,8 @@ require __DIR__ . '/../../../api/header/db.php';
 require __DIR__ . '/../../../class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
+$bigDonors = 1120000;
+
 $stmt = $MASHPIA_DB->prepare("
     SELECT 
         SUM(donation_amount) AS total 
@@ -49,9 +51,10 @@ if ( $res ) {
     $row = $stmt->fetch();
     $totalReg += floatval($row['paid']);
 
+
   echo json_encode([
     'success' =>  true, 
-    'total'   =>  floatval( $totalDonation ) + floatval( $totalReg )
+    'total'   =>  floatval( $totalDonation ) + floatval( $totalReg ) + floatval( $bigDonors )
   ]);
 } else {
   echo json_encode([
