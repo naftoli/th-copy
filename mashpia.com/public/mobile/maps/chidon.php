@@ -1,7 +1,12 @@
 <?php
+$admin_auth = ['user'];
+require_once __DIR__ . '/../../header.php';
 require_once __DIR__ . '/../../api/header/db.php';
 require_once __DIR__ . '/../../class.globalSettings.php';
+
 $year = GlobalSettings::getChidonYear();
+$gender = $_GET['g'] ?? 'M';
+
 $sql = "
     SELECT 
         u.first, u.last, tc.*
@@ -11,11 +16,11 @@ $sql = "
         users u USING (user_id)
     WHERE
         year = :year AND ultimate_trip = 1
-            AND u.gender = 'M'
+            AND u.gender = :gender
     ORDER BY user_id
 ";
 $stmt = $MASHPIA_DB->prepare($sql);
-$stmt->execute([':year' => $year]);
+$stmt->execute([':year' => $year, ':gender' => $gender]);
 $rows = $stmt->fetchAll();
 
 $addresses = [];
