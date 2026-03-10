@@ -4,19 +4,15 @@ require_once __DIR__ . '/../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 $sql = "
     SELECT 
-        a.*, tc.user_id, u.first, u.last
+        u.first, u.last, tc.*
     FROM
         th_chidon tc
             JOIN
         users u USING (user_id)
-            JOIN
-        admin_auths aa ON aa.id = u.user_id
-            JOIN
-        admins a USING (admin_id)
     WHERE
         year = :year AND ultimate_trip = 1
             AND u.gender = 'M'
-    ORDER BY admin_id , user_id
+    ORDER BY user_id
 ";
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute([':year' => $year]);
@@ -25,14 +21,9 @@ $rows = $stmt->fetchAll();
 $addresses = [];
 foreach ($rows as $row) {
     $addresses[] = [
-        'address' => $row['admin_address1'] . ' ' . $row['admin_address2'] . ' ' . $row['admin_city'] . ', ' . $row['admin_state'] . ' ' . $row['admin_postal'] . ' ' . $row['admin_country'],
+        'address' => $row['host_street_num'] . ' ' . $row['host_street'] . ' ' . $row['host_street_apt'] . ', ' . $row['host_street_num_suffix'] . ' Brooklyn, NY',
         'child_name' => $row['first'] . ' ' . $row['last'],
-        'phone_numbers' => [
-            $row['admin_phone_mobile'] ?? '',
-            $row['admin_phone_mobile2'] ?? '',
-            $row['admin_phone_home'] ?? '',
-            $row['admin_phone_work'] ?? '',
-        ],
+        'phone_number' => $row['host_number'] ?? '',
         'email' => $row['admin_email'] ?? '',
     ];
 }
@@ -100,11 +91,11 @@ foreach ($rows as $row) {
             mapTypeControl: false,
         });
 
-        const marker = new AdvancedMarkerElement({
-            map: innerMap,
-            position: mapElement.center,
-            title: 'Jewish Children\'s Museum',
-        });
+        // const marker = new AdvancedMarkerElement({
+        //     map: innerMap,
+        //     position: mapElement.center,
+        //     title: 'Jewish Children\'s Museum',
+        // });
 
         async function geocode(request, info) {
             // 3. Use the geocoder instance instead of google.maps.geocoding
@@ -114,7 +105,7 @@ foreach ($rows as $row) {
                     const marker = new AdvancedMarkerElement({
                         map: innerMap,
                         position: geocodeResults[0].geometry.location, 
-                        title: info.child_name + '\n' + geocodeResults[0].formatted_address + '\nPhone Number: ' + info.phone_numbers.filter(phone => phone !== '').join("\nPhone Number: ") + (info.email ? '\nEmail: ' + info.email : ''),
+                        title: info.child_name + '\n' + geocodeResults[0].formatted_address + '\nPhone Number: ' + info.phone_number + (info.email ? '\nEmail: ' + info.email : ''),
                     });
                     // Note: gmp-map handles markers automatically if 'map' is set, 
                     // but appending is fine for Advanced Markers.
