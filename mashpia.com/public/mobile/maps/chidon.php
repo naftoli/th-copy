@@ -8,6 +8,8 @@ $year = GlobalSettings::getChidonYear();
 $gender = $_GET['g'] ?? 'M';
 $bus = $_GET['bus'] ?? '';
 
+$families_to_exclude = [];
+
 $sql = "
     SELECT 
         u.first,
@@ -31,6 +33,7 @@ $sql = "
             AND u.gender = :gender
 ";
 if ($bus && in_array($bus, ['thurs', 'ms'])) $sql .= " AND {$bus}_walking = 2";
+else if (!empty($families_to_exclude)) $sql .= " AND a.admin_id NOT IN (" . implode(',', $families_to_exclude) . ")";
 $stmt = $MASHPIA_DB->prepare($sql);
 $stmt->execute([':year' => $year, ':gender' => $gender]);
 $rows = $stmt->fetchAll();
@@ -151,7 +154,7 @@ foreach ($rows as $i => $row) {
                         position: marker.position,
                     });
                     // Add a click listener for each marker, and set up the info window.
-                    marker.addListener('click', ({ domEvent, latLng }) => {
+                    marker.addListener('gmp-click', () => {
                         infoWindow.open(marker.map, marker);
                     });
                 })
@@ -162,9 +165,9 @@ foreach ($rows as $i => $row) {
 
         const addresses = <?= json_encode($addresses); ?>;
         for (const address of addresses) {
-            geocode({ address: address.address }, address);
+            await geocode({ address: address.address }, address)
         }
     }
-    initMap();
+    initMap()
   </script>
 </html>
