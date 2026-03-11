@@ -38,4 +38,5 @@ function downloadZip($zip_path) {
 }
 
 $prizes = json_decode($_POST['prizes'], true);
+echo "<pre>"; print_r($prizes); echo "</pre>"; exit;
 createZip($prizes, 'prizes.zip');
