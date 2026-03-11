@@ -959,7 +959,7 @@
     $(document).on('click', '.chidon_hosts', function () {
       const id = $(this).attr('id')
       const gender = document.getElementById(id).dataset.gender
-      window.open(`https://mashpia.com/mobile/maps/chidon.php?g=${gender}`, '_blank')
+      location.href = `/mobile/maps/chidon.php?g=${gender}`
     })
 
     const testTypes = {
