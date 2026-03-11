@@ -13,7 +13,7 @@ function createZip($files, $zip_path) {
       exit("cannot open <$zip_path>\n");
   }
   foreach ($files as $file) {
-    $zip->addFromString('Prize_' . $file['prize_id'] . '.png', file_get_contents($file['filename']));
+    $zip->addFile($file['filename'], 'Prize_' . $file['prize_id'] . '.png');
   }
   $zip->close();
 
