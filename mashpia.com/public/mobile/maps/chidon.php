@@ -1,6 +1,4 @@
 <?php
-$admin_auth = ['user'];
-require_once __DIR__ . '/../../header.php';
 require_once __DIR__ . '/../../api/header/db.php';
 require_once __DIR__ . '/../../class.globalSettings.php';
 
@@ -96,7 +94,14 @@ foreach ($rows as $i => $row) {
     </gmp-map>
 
   </body>
+  <script src="../js/js.cookie.js"></script>
   <script>
+    // make sure we have a cookie
+    var admin = Cookies.get('admin');
+        if (!admin) {
+        window.location.href = "/mobile/reg/";
+    }
+
     async function initMap() {
         // 1. Capture the Geocoder class from the import
         const [{ Map, InfoWindow }, { AdvancedMarkerElement, PinElement }, { Geocoder }] = await Promise.all([
