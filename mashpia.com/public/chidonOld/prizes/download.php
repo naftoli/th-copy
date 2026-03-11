@@ -12,8 +12,11 @@ function createZip($files, $zip_path) {
   if ($success !== true) {
       exit("cannot open <$zip_path>\n");
   }
+  // get the root directory
+  $root_dir = $_SERVER['DOCUMENT_ROOT'];
+  echo "<pre>"; print_r($root_dir); echo "</pre>"; exit;
   foreach ($files as $file) {
-    $zip->addFile($file['filename'], 'Prize_' . $file['prize_id'] . '.png');
+    $zip->addFile($root_dir . $file['filename'], 'Prize_' . $file['prize_id'] . '.png');
   }
   $zip->close();
 
@@ -38,5 +41,4 @@ function downloadZip($zip_path) {
 }
 
 $prizes = json_decode($_POST['prizes'], true);
-echo "<pre>"; print_r($prizes); echo "</pre>"; exit;
 createZip($prizes, 'prizes.zip');
