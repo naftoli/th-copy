@@ -14,9 +14,8 @@ function createZip($files, $zip_path) {
   }
   // get the root directory
   $root_dir = $_SERVER['DOCUMENT_ROOT'];
-  echo "<pre>"; print_r($root_dir); echo "</pre>"; exit;
   foreach ($files as $file) {
-    $zip->addFile($root_dir . $file['filename'], 'Prize_' . $file['prize_id'] . '.png');
+    $zip->addFile(($root_dir . $file['filename']), ('Prize_' . $file['prize_id'] . '.png'));
   }
   $zip->close();
 
