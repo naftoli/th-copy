@@ -292,48 +292,61 @@
 	background-image: url(../img/home/thumbs/trophies.jpg);
 	padding-top: 10rem;
 	text-align: center;
+	height: auto !important;
 }
 #section3 .trophies-wrapper {
 	display: flex;
-  background: rgba(6, 9, 47, .7);
-  margin-top: 4rem;
-  padding: 2rem 0;
+	background: rgba(6, 9, 47, .7);
+	margin-top: 4rem;
+	padding: 2rem 0;
 }
 #section3 .trophies-wrapper h4 {
 	font-family: 'Russo One', sans-serif;
 	color: #85adba;
 	text-transform: uppercase;
-  transform: rotate(-90deg);
-  font-weight: 900;
-  font-size: 1.5rem;
-  position: relative;
-  left: 2rem;
+	transform: rotate(-90deg);
+	font-weight: 900;
+	font-size: 1.5rem;
+	position: relative;
+	left: 2rem;
+	margin-right: 1rem;
 }
 #section3 .trophy {
-  width: 30%;
-  position: relative;
-  display: flex;
-  align-items: center;
+	width: 30%;
+	position: relative;
+	display: flex;
+	align-items: center;
 }
-#section3 .trophy.gold {
-  margin-left: 50px;
+#section3 .gold {
+ 	 margin-left: 20px;
 }
 #section3 .trophy .image-wrapper {
 	width: auto;
 	height: 220%;
 	position: absolute;
-	bottom: -30px;
+	/* bottom: -30px; */
 	left: -50px;
 	display: flex;
 	align-items: center;
 }
-#section3 .trophy .image-wrapper img {
-	width: auto;
-	height: 100%;
+#section3 .gold .image-wrapper img {
+	/* width: auto; */
+	/* height: 100%; */
+	width: 45%;
+}
+#section3 .silver .image-wrapper img {
+	/* width: auto; */
+	/* height: 100%; */
+	width: 40%;
+}
+#section3 .bronze .image-wrapper img {
+	/* width: auto; */
+	/* height: 100%; */
+	width: 35%;
 }
 #section3 .trophy .text-wrapper {
 	width: 60%;
-	margin-left: 20%;
+	margin-left: 18%;
 	color: #e3b949;
 }
 #section3 .trophy .text-wrapper .trophy-type {
@@ -341,14 +354,17 @@
 	font-weight: bold;
 	text-transform: uppercase;
 }
-#section3 .trophy .text-wrapper h6 {
+#section3 .trophy.gold .text-wrapper, #section3 .trophy.gold .text-wrapper h6 {
 	color: #e3b949;
+	margin-left: 20%;
 }
 #section3 .trophy.silver .text-wrapper, #section3 .trophy.silver .text-wrapper h6 {
 	color: #b7b1ae;
+	margin-left: 15%;
 }
 #section3 .trophy.bronze .text-wrapper, #section3 .trophy.bronze .text-wrapper h6 {
 	color: #e39362;
+	margin-left: 10%;
 }
 #section3 .trophy.bronze .text-wrapper .trophy-type {
 	text-transform: uppercase;
