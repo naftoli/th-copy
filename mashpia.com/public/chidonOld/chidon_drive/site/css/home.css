@@ -287,6 +287,30 @@
 	top: 1.2rem;
 }
 
+#section3 .trophy .image-with-label {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+#section3 .trophy .image-with-label .trophy-type {
+	margin-top: 0.3rem;
+	/* font-size: 1.1rem; */
+	text-transform: uppercase;
+	font-size: larger;
+	text-align: center;
+	margin-left: 1rem;
+}
+#section3 .trophy.gold .image-with-label .trophy-type {
+	color: #e3b949;
+	margin-left: 2rem;
+}
+#section3 .trophy.silver .image-with-label .trophy-type {
+	color: #b7b1ae;
+}
+#section3 .trophy.bronze .image-with-label .trophy-type {
+	color: #e39362;
+}
+
 #section3{
 	/* background-image: url(../img/home/trophies.jpg); */
 	background-image: url(../img/home/thumbs/trophies.jpg);
@@ -318,16 +342,17 @@
 	align-items: center;
 }
 #section3 .gold {
- 	 margin-left: 20px;
+ 	 /* margin-left: 20px; */
 }
 #section3 .trophy .image-wrapper {
 	width: auto;
-	height: 220%;
+	/* height: 220%; */
 	position: absolute;
 	/* bottom: -30px; */
-	left: -50px;
+	/* left: -50px; */
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
+    margin-left: -20%;
 }
 #section3 .gold .image-wrapper img {
 	/* width: auto; */
@@ -364,7 +389,7 @@
 }
 #section3 .trophy.bronze .text-wrapper, #section3 .trophy.bronze .text-wrapper h6 {
 	color: #e39362;
-	margin-left: 10%;
+	/* margin-left: 10%; */
 }
 #section3 .trophy.bronze .text-wrapper .trophy-type {
 	text-transform: uppercase;
