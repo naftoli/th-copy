@@ -629,7 +629,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if (!$year) $year = GlobalSettings::getRegistrationYear( $this->school_id );
         if (!$chidon_year) $chidon_year = GlobalSettings::getChidonRegYear();
-        // if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $chidon_year = 5786;
+        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
+            $year = 5787;
+            $chidon_year = 5787;
+        }
 
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
@@ -671,27 +674,29 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // turn off chayolei and chidon reg if school has not registered yet
-        if (
-            (isset($result['chayolei']) && $result['chayolei'] == false)
-            ||
-            (isset($result['chidon']) && $result['chidon'] == false)
-        ) {
-            $school_registered = false;
-            $reg_info = $this->school->school_registrations;
-            foreach ($reg_info as $reg) {
-                if ($reg->year == $year) {
-                    $school_registered = true;
-                    break;
+        if (!isset($_COOKIE['naftoli'])) {
+            if (
+                (isset($result['chayolei']) && $result['chayolei'] == false)
+                ||
+                (isset($result['chidon']) && $result['chidon'] == false)
+            ) {
+                $school_registered = false;
+                $reg_info = $this->school->school_registrations;
+                foreach ($reg_info as $reg) {
+                    if ($reg->year == $year) {
+                        $school_registered = true;
+                        break;
+                    }
                 }
-            }
-            if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
-                $exceptions = [61, 269, 49, 192]; // allow Monsey schools to register for chidon even if school not registered
-            } else {
-                $exceptions = [49, 192]; // allow Monsey schools to register for chidon even if school not registered
-            }
-            if (!$school_registered && !GlobalSettings::isAustralian($this->school_id) && !in_array($this->school_id, $exceptions)) {
-                $result['chayolei'] = true; // disable chayolei reg if school is not registered
-                $result['chidon'] = true; // disable chidon reg if school is not registered
+                if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
+                    $exceptions = [61, 269, 49, 192]; // allow Monsey schools to register for chidon even if school not registered
+                } else {
+                    $exceptions = [49, 192]; // allow Monsey schools to register for chidon even if school not registered
+                }
+                if (!$school_registered && !GlobalSettings::isAustralian($this->school_id) && !in_array($this->school_id, $exceptions)) {
+                    $result['chayolei'] = true; // disable chayolei reg if school is not registered
+                    $result['chidon'] = true; // disable chidon reg if school is not registered
+                }
             }
         }
 
@@ -761,7 +766,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function regYears() {
         $chayolei_year = GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = GlobalSettings::getChidonRegYear();
-        // if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $chidon_year = 5786;
+        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
+            $chidon_year = 5787;
+            $chayolei_year = 5787;
+        }
         return [
             'chayolei'  => $chayolei_year,
             'chidon'    => $chidon_year

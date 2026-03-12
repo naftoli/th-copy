@@ -60,7 +60,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $showMsg = false;
 $chidon_year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getChidonRegYear();
-// if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $chidon_year = 5786;
+// if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $chidon_year = 5787;
 $sqlChidon = "select user_id from th_chidon where (date_paid is null or date_paid = 0) and parent_id = " . $admin . " 
     and year = " . $chidon_year;
 $resultChidon = mysql_query($sqlChidon);
