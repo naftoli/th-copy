@@ -14,9 +14,10 @@ if( isset($_GET['debug'])){
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
 
-if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
-    $year = 5787;
-}
+// if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
+//     $year = 5787;
+// }
+
 require_once './class.schoolExceptions.php';
 $exceptions = SchoolExceptions::getSchoolExceptions();
 ?>
