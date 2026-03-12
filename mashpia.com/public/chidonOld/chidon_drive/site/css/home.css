@@ -625,7 +625,8 @@
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper {
 		width: 20%;
-		left: 8px;
+		left: 7rem;
+		margin-left: 0 !important;
 	}
 	#section3 .trophies-wrapper .trophy .image-wrapper img {
 		width: 100%;
