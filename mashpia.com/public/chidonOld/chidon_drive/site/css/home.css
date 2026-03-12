@@ -634,7 +634,11 @@
 	#section3 .trophies-wrapper .trophy .text-wrapper {
 		width: 70%;
 	}
-	
+
+	#section3 .trophy .image-with-label .trophy-type {
+		margin-left: 0;
+	}
+
 	#section5 .plaques-wrapper {
 		flex-wrap: wrap;
 		justify-content: space-around;
