@@ -635,7 +635,15 @@
 		width: 70%;
 	}
 
-	#section3 .trophy .image-with-label .trophy-type {
+	#section3 .trophy.gold .image-with-label .trophy-type {
+		margin-left: 0;
+	}
+
+	#section3 .trophy.silver .image-with-label .trophy-type {
+		margin-left: 0;
+	}
+
+	#section3 .trophy.bronze .image-with-label .trophy-type {
 		margin-left: 0;
 	}
 
