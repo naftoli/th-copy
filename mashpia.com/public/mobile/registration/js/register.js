@@ -1554,11 +1554,11 @@ var registrationApp = function () {
           options = [50, 75, 100, 136, 150]
           break
         case 'pro':
-          options = [105, 120, 150, 180, 200]
+          options = [110, 136, 150, 180, 200]
           break
         case 'expert':
         case 'genius':
-          options = [205, 225, 250, 300]
+          options = [210, 225, 250, 300]
           break
       }
 
@@ -2373,7 +2373,7 @@ var templates = function () {
             **/
       let html = '<option value="0">Select Amount to Pay</option>'
       let fees = [25, 30, 40, 50]
-      if (user.school.school_id == 61) fees = [35, 40, 45, 50]
+      if (user.school.school_id == 61) fees = [36, 40, 45]
       else if (user.school.school_id == 269) fees = [55, 60, 65, 70]
 
       async function checkChangeFees() {
@@ -2382,8 +2382,10 @@ var templates = function () {
         return data
       }
 
-      const user_exceptions = [72142, 60368, 60368, 75325, 81279, 81280, 81281, 81320, 25391, 63651]
-      const school_exceptions = [87, 659]
+      // const user_exceptions = [72142, 60368, 60368, 75325, 81279, 81280, 81281, 81320, 25391, 63651]
+      // const school_exceptions = [87, 659]
+      const user_exceptions = []
+      const school_exceptions = []
 
       if (
         !user_exceptions.includes(user.user_id) && 
@@ -2775,20 +2777,20 @@ var templates = function () {
         }
       }
 
-      if (user.registrationStatus.chidonEdit) {
+      // if (user.registrationStatus.chidonEdit) {
         this.setChidonReg(user) // can only do it after the resets bc the chidon fee value is reset to 20
-      }
+      // }
 
       if (user.school.school_id == anash_kinder) $("#anash_kinder_text").show();
       else $("#anash_kinder_text").hide();
 
       if ([61, 269].includes(user.school.school_id)) {
         $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing average " +
-          "on the 3 tests there will be a fee of $36 - $350 depending on the track they pass plus a shipping fee (amount is dependant on your address).")
+          "on the 3 tests there will be a fee of $50 - $360 depending on the track they pass plus a shipping fee (amount is dependant on your address).")
         $("#myshliachTerms").show()
       } else {
         $("#terms-1").text("I am aware that if my child qualifies for the Chidon Experience by getting a passing " +
-          "average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass.")
+          "average on the 3 tests there will be a fee of $50 - $360 depending on the track they pass.")
         $("#myshliachTerms").hide()
       }
 
@@ -2935,7 +2937,7 @@ var templates = function () {
           if (type === 'chayolei') {
             // setup chayolei fee dropdown
             let htmlFee = '';
-            let rates = [100, 75, 65, 60, 55, 50];
+            let rates = [100, 75, 65, 60];
             for (let n of rates) {
               if (n < user.registrationRates[type]) break;
               htmlFee += "<option value=" + n + ">$" + n + "</option>";
@@ -2987,7 +2989,7 @@ var templates = function () {
         // update amounts to be charged in installments
         $("#earlyRegTotal").text(futurePayment.toFixed(2))
         // update installments options
-        const monthsLeft = monthsBetween(new Date(), new Date("2026-02-02"));
+        const monthsLeft = monthsBetween(new Date(), new Date("2027-02-04"));
         const installmentsInfo = {
           1: 'One',
           2: 'Two',
@@ -2998,7 +3000,9 @@ var templates = function () {
           7: 'Seven',
           8: 'Eight',
           9: 'Nine',
-          10: 'Ten'
+          10: 'Ten', 
+          11: 'Eleven',
+          12: 'Twelve'
         }
         for (let i of Object.keys(installmentsInfo)) {
           if (parseInt(i) > monthsLeft) continue;

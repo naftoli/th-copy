@@ -1200,7 +1200,7 @@
                         return totalMonths;
                       }
                       // figure out how many months are left until Feb 2, 2026
-                      const monthsLeft = monthsBetween(new Date(), new Date("2026-02-02"));
+                      const monthsLeft = monthsBetween(new Date(), new Date("2027-02-04"));
                   </script>
                   <div class="form-group" id="recurring" style="display: none">
                     <label class="control-label">Early Experience Payment</label><hr />
@@ -1231,7 +1231,9 @@
                         7: 'Seven',
                         8: 'Eight',
                         9: 'Nine',
-                        10: 'Ten'
+                        10: 'Ten', 
+                        11: 'Eleven',
+                        12: 'Twelve'
                       }
                       for (let i of Object.keys(installmentsInfo)) {
                         if (parseInt(i) > monthsLeft) continue;

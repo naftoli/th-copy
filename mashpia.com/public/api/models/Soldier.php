@@ -389,7 +389,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 tc.year = :year AND tc.user_id = :user 
         ");
         $year = GlobalSettings::getChidonRegYear();
-        // if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5786;
+        // if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5787;
         $res = $query->execute([
             ':user' => $this->user_id,
             ':year' => $year
@@ -511,8 +511,8 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         // calculate chayolei rate
         $result = [ 'chayolei' => $this->school->soldierFee( true ) ];
         // add chidon if user is in grade 4+
-        if ( $this->platoon && intval($this->platoon->class_grade) >= 4 )
-            $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
+        // if ( $this->platoon && intval($this->platoon->class_grade) >= 3 )
+        //     $result[ 'chidon' ] = GlobalSettings::getChidonCost( $this->school_id );
         return $result;
     }
 
@@ -629,10 +629,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
 
         if (!$year) $year = GlobalSettings::getRegistrationYear( $this->school_id );
         if (!$chidon_year) $chidon_year = GlobalSettings::getChidonRegYear();
-        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
-            $year = 5787;
-            $chidon_year = 5787;
-        }
+        // if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
+        //     $year = 5787;
+        //     $chidon_year = 5787;
+        // }
 
         // fetch the status from the two other tables, with prepared statements for security ;-)
         $user_status_query = $MASHPIA_DB->prepare(
@@ -752,7 +752,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $timezone = new DateTimeZone('America/New_York');
 
         // Create DateTime objects for the target date and current time
-        $targetDate = new DateTime('2026-02-12 03:00:00', $timezone);
+        $targetDate = new DateTime('2027-02-12 00:00:00', $timezone);
         $now = new DateTime('now', $timezone);
 
         // Compare the dates
@@ -766,10 +766,10 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
     public function regYears() {
         $chayolei_year = GlobalSettings::getRegistrationYear( $this->school_id );
         $chidon_year = GlobalSettings::getChidonRegYear();
-        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
-            $chidon_year = 5787;
-            $chayolei_year = 5787;
-        }
+        // if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
+        //     $chidon_year = 5787;
+        //     $chayolei_year = 5787;
+        // }
         return [
             'chayolei'  => $chayolei_year,
             'chidon'    => $chidon_year
@@ -848,7 +848,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 ]);
             }
             // update fields to mark registered
-            $this->user_registered = new \Datetime();
+            $new_reg = false;
+            if (!$this->user_registered) {
+                $this->user_registered = new \Datetime();
+                $new_reg = true;
+            }
             if (!$this->user_start_date) $this->user_start_date = unixtojd();
             // update field for chayolei lite registration
             if ($lite) $this->lite_edition = 1;
@@ -861,9 +865,11 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
             }
             $this->generateRank();
             $this->save();
-            // create campaigns and birthday missions
-            $this->enrollInCampaigns();
-            $this->setupBirthdayMissions(false);
+            // create campaigns and birthday missions if not already enrolled
+            if ($new_reg) {
+                $this->enrollInCampaigns();
+                $this->setupBirthdayMissions(false);
+            }
             // move all marks from old date_tasks_marks table to regular date_tasks_marks table
             $moved = $this->moveMarksFromArchive();
             if (!$moved) {

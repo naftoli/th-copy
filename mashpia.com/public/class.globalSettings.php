@@ -69,16 +69,16 @@ class GlobalSettings {
      * @return integer
      */
     public static function getRegCost(int $type, bool $early_bird, $myshliach = false, $anashKinder = false) {
-        $fee = 65;
-        if ($type == 1) $fee = 50;
-        else if ($anashKinder) $fee = 65;
+        $fee = 70;
+        if ($type == 1) $fee = 60;
+        else if ($anashKinder) $fee = 70;
         else if ($early_bird) {
             switch ($type) {
                 case 2:
-                    $fee = 55;
+                    $fee = 60;
                     break;
                 case 3:
-                    $fee = $myshliach ? 50 : 60;
+                    $fee = $myshliach ? 60 : 65;
                     break;
             }
         }
@@ -89,7 +89,7 @@ class GlobalSettings {
      * have one source of truth for the date of expiry for early bird
      */
     public static function earlyBird() {
-        return new DateTime('2025-09-06 04:00:00');
+        return new DateTime('2026-09-17 00:00:00', new DateTimeZone('America/New_York'));
     }
 
     /**
@@ -128,16 +128,18 @@ class GlobalSettings {
     /**
      * getChidonCost
      * 
-     * return the current price for chidon registration
+     * return the minimum price for chidon enrollment
      *
      * @return int
      */
     public static function getChidonCost( $school_id = false ) {
         // Anash kinder has a different fee
-        if ( in_array( $school_id, [ 269 ] ) ) {
-            return 50;
+        if ( $school_id && $school_id == 269 ) {
+            return 55;
+        } else if ( $school_id && $school_id == 61 ) {
+            return 36;
         }
-        return 20;
+        return 25; // default to 25
     }
 
     /**

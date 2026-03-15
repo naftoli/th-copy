@@ -2,6 +2,7 @@
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonRegYear();
+// if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5787;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 
@@ -27,8 +28,6 @@ $result = mysql_query($sql);
 while ($row = mysql_fetch_assoc($result)) {
     $exceptions[$row['prize_id']][] = $row['school_id'];
 }
-
-// if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) $year = 5786;
 
 // get selected prizes
 $selected = [];
