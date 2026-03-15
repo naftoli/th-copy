@@ -662,7 +662,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         $exceptions = [482,544,583];
         // if ( $this->platoon && intval($this->platoon->class_grade) >= 3 && (intval($this->platoon->class_grade) < 8 || GlobalSettings::isAustralian($this->school_id) && intval($this->platoon->class_grade) <= 8) &&
         if ( 
-            $this->platoon && intval($this->platoon->class_grade) >= 4 && intval($this->platoon->class_grade) <= 8 && 
+            $this->platoon && intval($this->platoon->class_grade) >= 3 && intval($this->platoon->class_grade) <= 8 && 
             (intval($row['school_chidon']) || in_array($this->school_id, [49, 192])) && intval($row['chidon']) && !in_array( $this->school_id, $exceptions )
         ) {
             $result['chidon'] = !!$row['th_chidon_id'];
@@ -674,6 +674,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
         }
 
         // turn off chayolei and chidon reg if school has not registered yet
+        /*
         if (!isset($_COOKIE['naftoli'])) {
             if (
                 (isset($result['chayolei']) && $result['chayolei'] == false)
@@ -699,6 +700,7 @@ class Soldier extends \ActiveRecord\Model implements \JsonSerializable {
                 }
             }
         }
+        */
 
         // check if child is eligible for khk track when registering for chidon
         $eligible = KHK::enrollmentEligibility([$this->user_id]);

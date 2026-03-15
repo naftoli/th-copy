@@ -182,6 +182,7 @@ if (!empty($users)) {
         $reg_query = mysql_query($qry);
         $row = array_merge($row, mysql_fetch_assoc($reg_query));
         $children[$row['user_id']]['schoolTypeRegistered'] = $row['registered'] > 0 || GlobalSettings::isAustralian($row['school_id']) ? 1 : 0;
+        $children[$row['user_id']]['schoolTypeRegistered'] = 1; // always true for now
         if (intval($row['reg_chidon'])) $children[$row['user_id']]['chidonRegistered'] = 1;
         if (intval($row['th_chidon_id'])) $children[$row['user_id']]['th_chidon_id'] = $row['th_chidon_id'];
         $children[$row['user_id']]['ultimate_trip'] = intval($row['ultimate_trip']);
@@ -189,12 +190,12 @@ if (!empty($users)) {
         $children[$row['user_id']]['chidon_registered'] = $row['date_paid'] > 0 ? 1 : 0;
 
         // turn on chidon registration for children from monsey schools
-        if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
+        // if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
             if (in_array($row['school_id'], [61, 269, 49, 192])) {
                 $children[$row['user_id']]['schoolRegistered'] = 1;
                 $children[$row['user_id']]['schoolTypeRegistered'] = 1;
             }
-        }
+        // }
 
         //mivtza lulav
        $lulavSchools = [];
@@ -347,7 +348,7 @@ if (!empty($users)) {
             $children[$row['user_id']]['chidon5783'] = false;
         }
         if (!$row['reg_chidon'] // if not in chidon
-            && intval($row['class_grade']) >= 4 // and in grade 4+
+            && intval($row['class_grade']) >= 3 // and in grade 4+
             // && (intval($row['class_grade']) <= 8 || (GlobalSettings::isAustralian($row['school_id']) && intval($row['class_grade']) <= 8)) // not in grade 8
             && intval($row['class_grade']) <= 8 
             && intval($row['chidon']) // make sure the kid is in chidon
@@ -366,10 +367,10 @@ if (!empty($users)) {
 //        if (! isset($_COOKIE['naftoli'])) $children[$row['user_id']]['editChidon'] = false;
 
         // if school hasn't registered, turn off chayolei, chidon registration
-        if (! $children[$row['user_id']]['schoolTypeRegistered']) {
-            $children[$row['user_id']]['reg_types'] = [];
-            $children[$row['user_id']]['editChidon'] = false;
-        }
+        // if (! $children[$row['user_id']]['schoolTypeRegistered']) {
+        //     $children[$row['user_id']]['reg_types'] = [];
+        //     $children[$row['user_id']]['editChidon'] = false;
+        // }
 
          // turn off chidon past certain date
         if (!isset($_COOKIE['naftoli']) && \Soldier::turnOffChidon() && !in_array($row['school_id'], [66, 110, 112, 180])) {
