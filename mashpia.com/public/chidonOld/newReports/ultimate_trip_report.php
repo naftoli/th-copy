@@ -30,8 +30,8 @@ $sql = "SELECT
 if (isset($_GET['gender'])) $sql .= " AND u.gender = :gender";
 $sql .= " ORDER BY u.school_id , class_grade , class_sub , last , first";
 $stmt = $MASHPIA_DB->prepare($sql);
-$stmt->execute(['year' => $year]);
 if (isset($_GET['gender'])) $stmt->bindValue(':gender', $_GET['gender']);
+$stmt->execute(['year' => $year]);
 $info = $stmt->fetchAll();
 ?>
 <!DOCTYPE html>
