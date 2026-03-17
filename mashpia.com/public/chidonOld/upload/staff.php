@@ -6,6 +6,8 @@ if ( $admin_user['auth'] != 'super' ) {
 }
 ini_set('display_errors',1);
 require __DIR__ . "/../../db.php";
+require __DIR__ . "/../../class.globalSettings.php";
+$chidon_year = GlobalSettings::getChidonYear();
 
 $headers = [
   'first_name',
@@ -77,7 +79,7 @@ if (($handle = fopen($_FILES['file']['tmp_name'], "r")) !== FALSE) {
     //echo "<pre>"; print_r( $data ); echo "</pre>";
     if ( $row++ < 1 ) continue;
     $username = $data[0] . '' . $data[1];
-    $qry = "insert into th_chidon_staff set year = 5779, gender = 'girls', username = '" . $username . "', password = 'shabbaton', ";
+    $qry = "insert into th_chidon_staff set year = " . intval($chidon_year) . ", gender = 'girls', username = '" . $username . "', password = 'shabbaton', ";
     for ( $i = 0; $i < 13; $i++ ) {
       if ( $i == 4 ) continue; // skip teams for now
       $qry .= $headers[$i] . " = '" . $data[$i] . "',";

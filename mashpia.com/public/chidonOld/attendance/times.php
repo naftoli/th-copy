@@ -3,7 +3,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once '../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 // Hardcoded for testing
-$year = 5779;
+// $year = 5779;
 
 if ( isset( $_POST['day'] ) ) {
   //echo "<pre>"; print_r( $_POST ); echo "</pre>";

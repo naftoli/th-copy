@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../class.adminSchools.php';
 require_once __DIR__ . '/../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 // Hardcoded for testing
-$year = 5779;
+// $year = 5779;
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'], true, true );
 $schools = $as->getSchools();
 $school_list = array_keys( $schools );
