@@ -246,6 +246,7 @@ $info = $stmt->fetchAll();
                     $grade = $row['class_grade'] . (empty($row['class_sub']) ? '' : '-' . $row['class_sub']);
                     $student = $row['first'] . ' ' . $row['last'];
                     $serial = $row['user_serial'];
+                    $dob = $row['dob'];
                     $gender = strtolower($row['gender']) == 'm' ? 'boys' : 'girls';
                     $shoe = $row['shoe_size'];
                     $sandwich = $row['sandwich'];
