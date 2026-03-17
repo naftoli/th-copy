@@ -341,9 +341,9 @@ class StaffManager
           users u USING (user_id)
               LEFT JOIN
           th_chidon_attendance_marks m ON m.th_chidon_id = tc.th_chidon_id
-              AND m.att_time_id = :time_id
+              AND m.att_time_id = ?
       WHERE
-          tc.year = :year AND tc.$field IN ($placeholders) 
+          tc.year = ? AND tc.$field IN ($placeholders) 
             AND u.gender = 'M' 
     ";
     if ( $type == 'walk' ) {
@@ -353,13 +353,8 @@ class StaffManager
     }
 
     $stmt = $this->db->prepare( $sql );
-    $stmt->bindValue(':year', $this->year);
-    $stmt->bindValue(':time_id', $time_id);
-    $i = 1;
-    foreach ( array_values($groups) as $g ) {
-      $stmt->bindValue($i++, (string)$g);
-    }
-    $res = $stmt->execute();
+    $params = array_merge([ $time_id, $this->year ], array_values($groups));
+    $res = $stmt->execute($params);
     //return $stmt->debugDumpParams(); 
     $children = [];
     if ( $res ) {
