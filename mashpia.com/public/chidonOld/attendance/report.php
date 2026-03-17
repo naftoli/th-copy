@@ -26,7 +26,7 @@ $sql = "
     users u USING (user_id)
         JOIN
     classes c ON c.class_id = u.class_id
-        JOIN
+        LEFT JOIN
     th_chidon_attendance_times t ON (tc.bunk_number = t.att_type_number or tc.walking_group = t.att_type_number) 
         LEFT JOIN
     th_chidon_attendance_marks m USING (att_time_id, th_chidon_id)
@@ -38,7 +38,7 @@ $sql = "
         AND tc.school_id IN (" . implode(',', $school_list) . ") 
   ORDER BY t.att_time, t.att_type_number, u.last, u.first
 ";
-//echo $sql;
+// echo $sql;
 $result = mysql_query( $sql );
 while ( $row = mysql_fetch_assoc( $result ) ) {
   $times[$row['att_time']] = $row;
