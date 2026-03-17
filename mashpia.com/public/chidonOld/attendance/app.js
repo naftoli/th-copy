@@ -102,8 +102,10 @@ var app = function() {
     function updateTimes( groupList ) {
         state.selectedGroups = groupList;
         $.post( "api/getMarkingOptions.php", { login: state.login, groups: groupList }, function( response ) {
-            try { response = JSON.parse(response); }
-            catch (e) { console.error(e); }
+            if (typeof response === 'string') {
+                try { response = JSON.parse(response); }
+                catch (e) { console.error(e); }
+            }
             
             if (!response.success) {
                 alert(response.error); return false;
@@ -138,7 +140,9 @@ var app = function() {
     function updateChildren( time_id, type ){
         $.post("api/getMarkingDetails.php", { login: state.login, time_id: time_id, type: type, groups: state.selectedGroups }, function (response) {
             console.log( response );
-            response = JSON.parse(response);
+            if (typeof response === 'string') {
+                response = JSON.parse(response);
+            }
             
             if (!response.success) {
                 alert(response.error); return false;
@@ -181,7 +185,9 @@ var app = function() {
         };
         
         $.post("api/markChild.php", data, function( response) {
-            response = JSON.parse(response);
+            if (typeof response === 'string') {
+                response = JSON.parse(response);
+            }
             if (!response.success) {
                 event.target.checked = !event.target.checked;
             }
@@ -266,7 +272,8 @@ chap_item.prototype.render = function() {
 function register_service_worker() {
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
-          navigator.serviceWorker.register('/chidon/attendance/service_worker.js').then(function(registration) {
+          // Register from the current directory so this works on localhost/dev paths.
+          navigator.serviceWorker.register('service_worker.js').then(function(registration) {
             // Registration was successful
             console.log('ServiceWorker registration successful with scope: ', registration.scope);
           }, function(err) {

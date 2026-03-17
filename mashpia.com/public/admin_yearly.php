@@ -4,10 +4,45 @@ $admin_auth = array();
 require('header.php');
 require 'class.globalSettings.php';
 $regYear = GlobalSettings::getRegistrationYear();
-$year = $regYear - 1;
+$last_year = $regYear - 1;
 
 //$date = cal_from_jd(unixtojd(), CAL_JEWISH);
 $schools = implode(',', array_merge(array(-1), array_filter(gra('school_id'), 'is_numeric')));
+
+function registerPreRegisteredStudentsForYear() {
+	global $MASHPIA_DB, $regYear, $schools;
+
+	$db = $MASHPIA_DB;
+    $added = 0;
+
+    $sqlUsers = "SELECT user_id, reg_date, paid 
+                 FROM user_registration  
+                 WHERE year = :year
+				 AND school_id IN ($schools)";
+    $stmtUsers = $db->prepare($sqlUsers);
+    $stmtUsers->execute([':year' => $regYear]);
+
+    while ($rowUser = $stmtUsers->fetch(PDO::FETCH_ASSOC)) {
+        $sql = "UPDATE users 
+                SET user_registered = :reg_date,
+                    user_registration_fee = :paid
+                WHERE user_id = :user_id";
+        $stmtUpdate = $db->prepare($sql);
+        if ($stmtUpdate->execute([
+            ':reg_date' => $rowUser['reg_date'],
+            ':paid'     => $rowUser['paid'],
+            ':user_id'  => $rowUser['user_id'],
+        ])) {
+            $added++;
+            $user = $soldierFactory($rowUser['user_id']);
+            $user->enrollInCampaigns();
+            $user->setupBirthdayMissions(false);
+            $user->moveMarksFromArchive();
+        }
+    }
+
+    return $added;
+}
 
 if (gr('class_era')) {
 	// mq("UPDATE classes SET class_era = " . $year . " WHERE class_era = 0 AND school_id IN ($schools)");
@@ -20,12 +55,12 @@ if (gr('class_era')) {
 	// 	$msg = "Error creating new classes for new year.";
 	// }
 	
-	// $message = sprintf(T_('%d classes marked as year %d.'), mysql_affected_rows(), $year);
+	// $message = sprintf(T_('%d classes marked as year %d.'), mysql_affected_rows(), $last_year);
 	// if ($msg) $message .= "<br />" . $msg;
 }  
 elseif (gr('school_era')) {
 	mq("UPDATE schools SET 
-				school_era = " . $year . ",
+				school_era = " . $last_year . ",
 				package_id = NULL,
 				add_on_one  = 0,  
 				add_on_two  = 0, 
@@ -39,7 +74,7 @@ elseif (gr('school_era')) {
 	// update the siddur gift
 	mq("UPDATE schools SET siddur_gift = 0 WHERE school_id IN ($schools)");
 				
-	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $year);
+	$message = sprintf(T_('%d schools marked as year %d.'), mysql_affected_rows(), $last_year);
 } 
 elseif (gr('user_registered')) {
 	mq("UPDATE users SET 	user_registered = NULL, 
@@ -50,18 +85,7 @@ elseif (gr('user_registered')) {
 	$num = mysql_affected_rows();
 
 	// register pre-registered students
-	$added = 0;
-	$sqlUsers = "select user_id, reg_date, paid from user_registration  
-				where year = " . $regYear . " 
-				and school_id in ($schools)";
-	$resultUsers = mq($sqlUsers);
-	while ($rowUser = mysql_fetch_assoc($resultUsers)) {
-		$sql = "update users 
-				set user_registered = '" . $rowUser['reg_date'] . "', 
-				user_registration_fee = " . $rowUser['paid'] . "  
-				where user_id = " . $rowUser['user_id'];
-		if ( mq( $sql ) ) $added++;
-	}
+	$added = registerPreRegisteredStudentsForYear();
 							
 	$message = sprintf(T_('%d users de-registered. %d users re-registered from pre-registration.'), $num, $added);
 }
