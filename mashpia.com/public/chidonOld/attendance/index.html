@@ -62,7 +62,9 @@
             };
             
             $.post("api/login.php", data, function( response ) {
-                response = JSON.parse( response );
+                if (typeof response === 'string') {
+                    response = JSON.parse(response);
+                }
                 
                 if (!response.success) {
                     $("#invalid-login").show();
