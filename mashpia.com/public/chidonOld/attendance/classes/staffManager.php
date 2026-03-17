@@ -32,7 +32,7 @@ class StaffManager
     $this->walkingGroups = [];
     $this->year = GlobalSettings::getChidonYear();
     // Hardcoded for testing
-    // $this->year = 5779;
+    $this->year = 5779;
   }
 
   public function getYear() {
