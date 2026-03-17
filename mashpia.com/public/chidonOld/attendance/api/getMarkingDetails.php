@@ -1,22 +1,26 @@
 <?php
 ini_set('display_errors',1);
-require_once __DIR__ . "/functions/header.php";
-// Authentication scheme
-require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
-$login = encrypt_decrypt('decrypt', $_POST['login']);
-if(!$login) render_json_error("Invalid Login", $_POST);
+require_once __DIR__ . '/bootstrap.php';
 
-require "../classes/staffManager.php";
-$sm = new StaffManager();
-if ( !$sm->setStaffByID( $login ) ) render_json_error("Invalid Staff ID", $_POST);
+$sm = attendance_require_staff();
 
-$type = $_POST['type'];
-$marks = $sm->getChildren( $_POST['time_id'], $_POST['type'], $_POST['groups'] );
+$type = attendance_get_post_string('type');
+$timeId = attendance_get_post_string('time_id');
+$groups = attendance_get_post_array('groups');
 
-echo json_encode([
-    "success"   => true,
-    "type"      => $type,
-    "marks"     => $marks,
+if ($type === '' || $timeId === '' || empty($groups)) {
+    attendance_json_error('Invalid Request', $_POST);
+}
+
+if (!$sm->assertGroupsAllowed($groups)) {
+    attendance_json_error('Not authorized for one or more selected groups');
+}
+
+$marks = $sm->getChildren($timeId, $type, $groups);
+
+attendance_json_ok([
+    'type' => $type,
+    'marks' => $marks,
 ]);
 
 //header('Content-Type: application/json');

@@ -1,15 +1,20 @@
 <?php
-require_once '../../../db.php';
-$id = mysql_real_escape_string( $_POST['id'] );
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
+$id = isset($_POST['id']) ? (int)$_POST['id'] : 0;
+if (!$id) {
+  echo json_encode(['success' => false, 'error' => 'Missing id']);
+  exit;
+}
 
-$sql = "delete from th_chidon_attendance_times where att_time_id = " . $id;
-if ( mysql_query( $sql ) ) {
+global $MASHPIA_DB;
+$stmt = $MASHPIA_DB->prepare("delete from th_chidon_attendance_times where att_time_id = :id");
+if ( $stmt->execute([':id' => $id]) ) {
   echo json_encode([
     'success' =>  true
   ]);
 } else {
-  json_encode([
+  echo json_encode([
     'success' =>  false, 
-    'error'   =>  mysql_error()
+    'error'   =>  'Delete failed'
   ]);
 }

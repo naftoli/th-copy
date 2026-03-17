@@ -1,16 +1,18 @@
 <?php
-require_once __DIR__ . "/functions/header.php";
-// Authentication scheme
-require_once( $_SERVER['DOCUMENT_ROOT'].'/mobile/reg/ajax/encrypt.php' );
-$login = encrypt_decrypt('decrypt', $_POST['login']);
-if(!$login) render_json_error("Invalid Login", $_POST);
+require_once __DIR__ . '/bootstrap.php';
 
-require "../classes/staffManager.php";
-$sm = new StaffManager();
-if ( !$sm->setStaffByID( $login ) ) render_json_error("Invalid Staff ID", $_POST);
+$sm = attendance_require_staff();
+$groups = attendance_get_post_array('groups');
+if (empty($groups)) {
+    attendance_json_error('No groups provided');
+}
+
+if (!$sm->assertGroupsAllowed($groups)) {
+    attendance_json_error('Not authorized for one or more selected groups');
+}
 
 $times = [];
-$timesInfo = $sm->getTimes( $_POST['groups'] );
+$timesInfo = $sm->getTimes($groups);
 foreach ( $timesInfo as $time_entry ) {
     $time = $time_entry['att_time'];
     $timeDetails = explode(' ', $time);
@@ -23,9 +25,8 @@ foreach ( $timesInfo as $time_entry ) {
     ];
 }
 
-echo json_encode([
-    "success"   => true,
-    "times"     => $times,
+attendance_json_ok([
+    'times' => $times,
 ]);
 
 //header('Content-Type: application/json');

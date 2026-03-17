@@ -1,61 +1,59 @@
 <?php
-require_once '../../db.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once '../../class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 if ( isset( $_POST['day'] ) ) {
   //echo "<pre>"; print_r( $_POST ); echo "</pre>";
 
-  $gender = mysql_real_escape_string( $_POST['gender'] );
-  $day = mysql_real_escape_string( strtolower( $_POST['day'] ) );
-  $time = mysql_real_escape_string( $_POST['time'] );
-  $desc = mysql_real_escape_string( $_POST['description'] );
-  $short_name = mysql_real_escape_string( $_POST['short_name'] );
-  $type = mysql_real_escape_string( $_POST['type'] );
+  $gender = trim((string)($_POST['gender'] ?? ''));
+  $day = strtolower(trim((string)($_POST['day'] ?? '')));
+  $date = trim((string)($_POST['date'] ?? ''));
+  $time = trim((string)($_POST['time'] ?? ''));
+  $desc = trim((string)($_POST['description'] ?? ''));
+  $short_name = trim((string)($_POST['short_name'] ?? ''));
+  $type = trim((string)($_POST['type'] ?? ''));
   $groups = [];
-  foreach ( $_POST['groups'] as $k => $v ) {
-    $groups[] = $k;
+  if (isset($_POST['groups']) && is_array($_POST['groups'])) {
+    foreach ( $_POST['groups'] as $k => $v ) {
+      $groups[] = (string)$k;
+    }
   }
 
-  if ( $gender == 'girls' ) {
-     $dates = [
-        'thursday' =>  '2019-03-28', 
-        'friday'   =>  '2019-03-29',
-        'motzei shabbos'  =>  '2019-03-30', 
-        'sunday'   =>  '2019-03-31'
-     ];
-  } else if ( $gender == 'boys' ) {
-    $dates = [
-       'thursday' =>  '2019-04-04', 
-       'friday'   =>  '2019-04-05',
-       'motzei shabbos'  =>  '2019-04-06', 
-       'sunday'   =>  '2019-04-07'
-    ];
+  if (!$gender || !$day || !$date || !$time || !$short_name || !$type || empty($groups)) {
+    die("Missing required fields");
   }
+
+  $att_time = $date . " " . $time . ":00";
 
   // create attendance time in database
+  global $MASHPIA_DB;
+  $stmt = $MASHPIA_DB->prepare("
+    INSERT INTO th_chidon_attendance_times
+      (day_of_week, att_time, att_type, att_type_number, description, short_name, chidon_type, year)
+    VALUES
+      (:day_of_week, :att_time, :att_type, :att_type_number, :description, :short_name, :chidon_type, :year)
+  ");
   foreach ( $groups as $group ) {
-    $qry = "insert into th_chidon_attendance_times 
-            set day_of_week = '" . $day . "', 
-            att_time = '" . $dates[$day] . " " . $time . ":00', 
-            att_type = '" . $type . "', 
-            att_type_number = '" . $group . "', 
-            description = '" . $desc . "', 
-            short_name = '" . $short_name . "', 
-            chidon_type = '" . $gender . "', 
-            year = " . $year;
-    //echo $qry . "<br />";
-    mysql_query( $qry ) or die( mysql_error() . "<br />" . $qry );
+    $stmt->execute([
+      ':day_of_week' => $day,
+      ':att_time' => $att_time,
+      ':att_type' => $type,
+      ':att_type_number' => $group,
+      ':description' => $desc,
+      ':short_name' => $short_name,
+      ':chidon_type' => $gender,
+      ':year' => $year,
+    ]);
   }
 }
 
 // get attendance times
 $info = [];
-$sql = "select * from th_chidon_attendance_times where year = " . $year;
-$result = mysql_query( $sql );
-while ( $row = mysql_fetch_assoc( $result ) ) {
-  $info[] = $row;
-}
+global $MASHPIA_DB;
+$stmt = $MASHPIA_DB->prepare("select * from th_chidon_attendance_times where year = :year order by att_time asc, att_type asc, att_type_number asc");
+$stmt->execute([':year' => $year]);
+$info = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html>
@@ -107,9 +105,17 @@ while ( $row = mysql_fetch_assoc( $result ) ) {
           <br />
 
           <div class="field">
+            <label class="label">Date</label>
+            <div class="control">
+              <input type="date" name="date" class="input is-primary" style="width: 180px;" required />
+            </div>
+          </div>
+          <br />
+
+          <div class="field">
             <label class="label">Time</label>
             <div class="control">
-              <input type="time" name="time" class="input is-primary" style="width: 140px;" />
+              <input type="time" name="time" class="input is-primary" style="width: 140px;" required />
             </div>
           </div>
           <br />

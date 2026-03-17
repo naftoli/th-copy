@@ -30,8 +30,36 @@ class StaffManager
     $this->types = [];
     $this->bunks = [];
     $this->walkingGroups = [];
-    // $this->year = GlobalSettings::getChidonYear();
-    $this->year = 5779;
+    $this->year = GlobalSettings::getChidonYear();
+    // $this->year = 5779;
+  }
+
+  public function getYear() {
+    return $this->year;
+  }
+
+  private function ensureAssignmentsLoaded() {
+    if ( empty( $this->assignments ) ) $this->setAssignments();
+    if ( empty( $this->types ) ) $this->setTypes();
+  }
+
+  public function assertGroupsAllowed( array $groups ) {
+    $this->ensureAssignmentsLoaded();
+    $allowed = [];
+    if ( isset( $this->assignments['bunk'] ) && is_array( $this->assignments['bunk'] ) ) {
+      foreach ( $this->assignments['bunk'] as $b ) $allowed[(string)$b] = true;
+    }
+    if ( isset( $this->assignments['walking_group'] ) && is_array( $this->assignments['walking_group'] ) ) {
+      foreach ( $this->assignments['walking_group'] as $g ) $allowed[(string)$g] = true;
+    }
+    foreach ( $groups as $g ) {
+      if (!isset($allowed[(string)$g])) return false;
+    }
+    return true;
+  }
+
+  private function buildInPlaceholders( array $values ) {
+    return implode(',', array_fill(0, count($values), '?'));
   }
 
   public function checkLogin( $username, $password ) {
@@ -85,8 +113,7 @@ class StaffManager
   }
 
   public function getInfo() {
-    if ( empty( $this->assignments ) ) $this->setAssignments();
-    if ( empty( $this->types ) ) $this->setTypes();
+    $this->ensureAssignmentsLoaded();
     return [
       'assignments' =>  $this->assignments, 
       'roles'       =>  $this->roles,
@@ -129,6 +156,7 @@ class StaffManager
       $stmt->execute([ ':staff_id' => $this->staffID ]);
       $rows = $stmt->fetchAll();
       foreach ( $rows as $row ) {
+        if ( !isset($this->assignments[$row['type']]) ) $this->assignments[$row['type']] = [];
         if ( !in_array( $row['group_number'], $this->assignments[$row['type']] ) ) $this->assignments[$row['type']][] = $row['group_number'];
         if ( !in_array( $row['role'], $this->roles ) ) $this->roles[] = $row['role'];
       }
@@ -179,6 +207,8 @@ class StaffManager
       //   }
       // }
     }
+    if (!isset($this->assignments['bunk'])) $this->assignments['bunk'] = [];
+    if (!isset($this->assignments['walking_group'])) $this->assignments['walking_group'] = [];
     sort( $this->assignments['bunk'] );
     // find out the counselors for each bunk in array
     $counselors = [];
@@ -214,7 +244,7 @@ class StaffManager
             staff_type_id = 8 AND group_number = :group 
               AND s.gender = 'boys'
       ");
-      $res = $stmt->execute([ ':group' => intval( $group ) ]);
+      $res = $stmt->execute([ ':group' => (string)$group ]);
       if ( $res ) {
         $rows = $stmt->fetchAll();
         foreach ( $rows as $row )
@@ -248,33 +278,32 @@ class StaffManager
   }
 
   public function getBunks() {
-    foreach ( $this->assignments as $row ) {
-      if ( $row['bunk'] ) $this->bunks[] = $row['bunk'];
-    }
-    return $this->bunks;
+    $this->ensureAssignmentsLoaded();
+    return $this->assignments['bunk'] ?? [];
   }
 
   public function getWalkingGroups() {
-    foreach ( $this->assignments as $row ) {
-      if ( $row['walking_group'] ) $this->walkingGroups[] = $row['walking_group'];
-    }
-    return $this->walkingGroups;
+    $this->ensureAssignmentsLoaded();
+    return $this->assignments['walking_group'] ?? [];
   }
 
   public function getTimes( array $groups ) {
     $times = [];
-    $listOfGroups = implode('","', $groups);
+    if (empty($groups)) return [];
+    $placeholders = $this->buildInPlaceholders($groups);
     $stmt = $this->db->prepare("
       SELECT 
           t.*
       FROM
           th_chidon_attendance_times t
       WHERE
-          t.att_type_number IN (\"$listOfGroups\") 
+          t.year = ?
+            AND t.att_type_number IN ($placeholders) 
             AND t.chidon_type = 'boys' 
       GROUP BY att_type, att_time
     ");
-    $res = $stmt->execute([ ':staff_id' => $this->staffID ]);
+    $params = array_merge([ $this->year ], array_values($groups));
+    $res = $stmt->execute($params);
     //$debug = $stmt->debugDumpParams();
     if ( $res ) {
       $times = $stmt->fetchAll();
@@ -292,7 +321,8 @@ class StaffManager
         $field = "walking_group";
         break;
     } 
-    $groupsList = implode('","', $groups);
+    if (!$field || empty($groups)) return [];
+    $placeholders = $this->buildInPlaceholders($groups);
     $sql = "
       SELECT 
           tc.*,
@@ -312,7 +342,7 @@ class StaffManager
           th_chidon_attendance_marks m ON m.th_chidon_id = tc.th_chidon_id
               AND m.att_time_id = :time_id
       WHERE
-          year = :year AND $field IN (\"$groupsList\") 
+          tc.year = :year AND tc.$field IN ($placeholders) 
             AND u.gender = 'M' 
     ";
     if ( $type == 'walk' ) {
@@ -322,10 +352,13 @@ class StaffManager
     }
 
     $stmt = $this->db->prepare( $sql );
-    $res = $stmt->execute([ 
-      ':year'     =>  $this->year, 
-      ':time_id'  =>  $time_id 
-    ]);
+    $stmt->bindValue(':year', $this->year);
+    $stmt->bindValue(':time_id', $time_id);
+    $i = 1;
+    foreach ( array_values($groups) as $g ) {
+      $stmt->bindValue($i++, (string)$g);
+    }
+    $res = $stmt->execute();
     //return $stmt->debugDumpParams(); 
     $children = [];
     if ( $res ) {

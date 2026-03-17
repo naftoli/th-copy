@@ -30,9 +30,9 @@ $sql = "
         LEFT JOIN
     th_chidon_attendance_marks m USING (att_time_id, th_chidon_id)
   WHERE
-    tc.year = 5779 AND u.gender = 'M'
+    tc.year = " . intval($year) . " AND u.gender = 'M'
         AND tc.date_paid > 0
-        AND t.year = 5779
+        AND t.year = " . intval($year) . "
         AND t.chidon_type = 'boys'
         AND tc.school_id IN (" . implode(',', $school_list) . ") 
   ORDER BY t.att_time, t.att_type_number, u.last, u.first

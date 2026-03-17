@@ -15,25 +15,22 @@ var app = function() {
     function login() {
         var login_key = localStorage.getItem( 'attendance_login' );
         // make sure that we even have a token....
-        if (!login_key) return false;
+        if (!login_key) return Promise.resolve(false);
         state.login = login_key;
-        // get the info...
-        $.post({
-            url: "api/getAdmin.php",
-            data: { login: login_key },
-            async: false,
-            success: function(response) {
+        return $.post("api/getAdmin.php", { login: login_key })
+            .then(function(response) {
                 try { response = JSON.parse(response); }
-                catch (e) { logout(); }
-                let res = response;
-                // make sure that we can get the user data....
-                if (!res.success) logout();
-                // set the user in the state to the current user...
-                state.user = res.user;
-                state.info = res.info;
+                catch (e) { logout(); return false; }
+                if (!response.success) { logout(); return false; }
+                state.user = response.user;
+                state.info = response.info;
                 $("#user-name").text(state.user.first_name + ' ' + state.user.last_name + ' (' + state.info.roles.join(' / ') + ')');
-            }
-        });
+                return true;
+            })
+            .catch(function() {
+                logout();
+                return false;
+            });
     }
     
     function setupApp() {

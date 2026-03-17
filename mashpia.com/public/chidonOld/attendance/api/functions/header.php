@@ -9,5 +9,6 @@ function render_json_error($error_message, $details = false){
 }
 
 function clean_post_param($param_name){
-    return mysql_real_escape_string($_POST[$param_name]);
+    if (!isset($_POST[$param_name]) || is_array($_POST[$param_name])) return '';
+    return trim((string)$_POST[$param_name]);
 }
