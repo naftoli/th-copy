@@ -211,6 +211,7 @@ $info = $stmt->fetchAll();
                     <th>Grade/Class</th>
                     <th>Student</th>
                     <th>Serial Number</th>
+                    <th>Date of Birth</th>
                     <th>Gender</th>
                     <th>Sandwich</th>
                     <th>Height</th>
@@ -294,7 +295,7 @@ $info = $stmt->fetchAll();
                     }
 
                     echo "<tr class='' id='" . $chidon_id . "'><td>" . $school . "</td><td>" . $grade . "</td><td>" . $student . "
-                        </td><td>" . $serial . "</td><td>" . $gender . "</td>
+                        </td><td>" . $serial . "</td><td>" . $dob . "</td><td>" . $gender . "</td>
                         <td><input type='text' class='sandwhich' value='" . $sandwich . "' /></td>
                         <td><input type='text' class='height' value='" . $height . "' /></td>
                         <td><input type='text' class='weight' value='" . $weight . "' /></td>
@@ -371,7 +372,7 @@ $info = $stmt->fetchAll();
 
     // function to download as csv
     function downloadAsCsv() {
-      const headers = ['School', 'Grade/Class', 'Student', 'Serial Number', 'Gender', 'Sandwich', 'Height', 'Weight', 'Ski/Snowboard', 'Skill Level', 'Outerwear', 'Shoe Size', 'Allergies', 
+      const headers = ['School', 'Grade/Class', 'Student', 'Serial Number', 'Date of Birth', 'Gender', 'Sandwich', 'Height', 'Weight', 'Ski/Snowboard', 'Skill Level', 'Outerwear', 'Shoe Size', 'Allergies', 
       'Trip Option', 'In Walking Zone', 'Host', 'Host Phone Number', 'Street Number', 'Street Number Suffix', 'Street Name', 'Apt. #', 'Host Cross Street 1', 'Host Cross Street 2', 
       'Thursday Walking', 'Motzei Shabbos Walking', 'Zone ID', 'Comments']
       const rows = getRows()
