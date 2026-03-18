@@ -2,14 +2,20 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import * as api from '../api';
 import ChildItem from './ChildItem';
 
-// Build a map of groupValue → typeName from info.assignments
+// Maps info.assignments keys to the type strings getChildren() accepts ('bunk' | 'walk')
+const ASSIGNMENT_TO_API_TYPE = {
+  bunk: 'bunk',
+  walking_group: 'walk',
+};
+
 function buildGroupTypeMap(info) {
   const assignments = (info && info.assignments) || {};
   const map = {};
   Object.entries(assignments).forEach(([typeName, groupsObj]) => {
     if (typeName === 'counselors' || typeName === 'walking_counselors') return;
+    const apiType = ASSIGNMENT_TO_API_TYPE[typeName] || typeName;
     Object.values(groupsObj).filter(Boolean).forEach(g => {
-      map[g] = typeName;
+      map[g] = apiType;
     });
   });
   return map;
