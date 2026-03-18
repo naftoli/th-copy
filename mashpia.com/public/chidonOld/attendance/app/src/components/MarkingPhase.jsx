@@ -1,18 +1,48 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import * as api from '../api';
 import ChildItem from './ChildItem';
 
-export default function MarkingPhase({ token, groups, onBack }) {
+// Build a map of groupValue → typeName from info.assignments
+function buildGroupTypeMap(info) {
+  const assignments = (info && info.assignments) || {};
+  const map = {};
+  Object.entries(assignments).forEach(([typeName, groupsObj]) => {
+    if (typeName === 'counselors' || typeName === 'walking_counselors') return;
+    Object.values(groupsObj).filter(Boolean).forEach(g => {
+      map[g] = typeName;
+    });
+  });
+  return map;
+}
+
+export default function MarkingPhase({ token, groups, info, onBack }) {
+  const groupTypeMap = useMemo(() => buildGroupTypeMap(info), [info]);
+
+  // Split selected groups by their type: { typeName: [group, ...] }
+  const groupsByType = useMemo(() => {
+    const result = {};
+    groups.forEach(g => {
+      const type = groupTypeMap[g];
+      if (type) {
+        if (!result[type]) result[type] = [];
+        result[type].push(g);
+      }
+    });
+    return result;
+  }, [groups, groupTypeMap]);
+
   const [timesState, setTimesState] = useState({ loading: true, times: [], error: null });
   const [selectedTime, setSelectedTime] = useState(null);
+
+  // sections: [{ sectionKey, type, groupNum, children }]
+  // Using sectionKey = `${type}-${groupNum}` to handle same group number across types
   const [childrenState, setChildrenState] = useState({
     loading: false,
-    marks: {},
-    type: '',
+    sections: [],
     error: null,
   });
 
-  // Load available times when groups change
+  // Load available times
   useEffect(() => {
     let cancelled = false;
     setTimesState({ loading: true, times: [], error: null });
@@ -37,77 +67,88 @@ export default function MarkingPhase({ token, groups, onBack }) {
     return () => { cancelled = true; };
   }, [token, groups]);
 
-  // Load children when selected time changes
+  // Load children for ALL selected group types when the selected time changes.
+  // One API call per type so the backend can query each type's table correctly.
   useEffect(() => {
     if (!selectedTime) return;
     let cancelled = false;
-    setChildrenState({ loading: true, marks: {}, type: '', error: null });
+    setChildrenState({ loading: true, sections: [], error: null });
 
-    api.getMarkingDetails(token, selectedTime.key, selectedTime.type, groups)
-      .then(result => {
+    const calls = Object.entries(groupsByType).map(([type, typeGroups]) =>
+      api.getMarkingDetails(token, selectedTime.key, type, typeGroups)
+        .then(result => ({ type, result }))
+    );
+
+    Promise.all(calls)
+      .then(responses => {
         if (cancelled) return;
-        if (!result.success) {
-          setChildrenState({
-            loading: false,
-            marks: {},
-            type: '',
-            error: result.error || 'Failed to load students.',
-          });
-          return;
-        }
-        setChildrenState({
-          loading: false,
-          marks: result.marks || {},
-          type: result.type || selectedTime.type,
-          error: null,
+        const sections = [];
+        let hasError = false;
+
+        responses.forEach(({ type, result }) => {
+          if (!result.success) { hasError = true; return; }
+          const marks = result.marks || {};
+          const resolvedType = result.type || type;
+          Object.keys(marks)
+            .sort((a, b) => Number(a) - Number(b))
+            .forEach(groupNum => {
+              sections.push({
+                sectionKey: `${resolvedType}-${groupNum}`,
+                type: resolvedType,
+                groupNum,
+                children: marks[groupNum] || [],
+              });
+            });
         });
+
+        if (hasError && sections.length === 0) {
+          setChildrenState({ loading: false, sections: [], error: 'Failed to load students.' });
+        } else {
+          setChildrenState({ loading: false, sections, error: null });
+        }
       })
       .catch(() => {
         if (!cancelled) {
-          setChildrenState({
-            loading: false,
-            marks: {},
-            type: '',
-            error: 'Connection error loading students.',
-          });
+          setChildrenState({ loading: false, sections: [], error: 'Connection error loading students.' });
         }
       });
 
     return () => { cancelled = true; };
-  }, [token, selectedTime, groups]);
+  }, [token, selectedTime, groupsByType]);
 
-  // Toggle a single child with optimistic update + server revert on failure
-  const handleToggleChild = useCallback((chidonId, groupNum, newMarked) => {
+  // Optimistic toggle with server revert on failure
+  const handleToggleChild = useCallback((chidonId, sectionKey, newMarked) => {
     const updateChild = (marked) => {
-      setChildrenState(prev => {
-        const groupChildren = (prev.marks[groupNum] || []).map(c =>
-          c.th_chidon_id === chidonId ? Object.assign({}, c, { marked }) : c
-        );
-        return Object.assign({}, prev, {
-          marks: Object.assign({}, prev.marks, { [groupNum]: groupChildren }),
-        });
-      });
+      setChildrenState(prev => ({
+        ...prev,
+        sections: prev.sections.map(section => {
+          if (section.sectionKey !== sectionKey) return section;
+          return {
+            ...section,
+            children: section.children.map(c =>
+              c.th_chidon_id === chidonId ? Object.assign({}, c, { marked }) : c
+            ),
+          };
+        }),
+      }));
     };
 
     updateChild(newMarked);
 
     api.markChild(token, selectedTime.key, chidonId, newMarked)
-      .then(result => {
-        if (!result.success) updateChild(!newMarked);
-      })
-      .catch(() => {
-        updateChild(!newMarked);
-      });
+      .then(result => { if (!result.success) updateChild(!newMarked); })
+      .catch(() => updateChild(!newMarked));
   }, [token, selectedTime]);
 
-  // Toggle all children in a group
-  const handleCheckAllGroup = useCallback((groupNum) => {
-    const children = childrenState.marks[groupNum] || [];
-    const allMarked = children.every(c => c.marked);
-    children.forEach(c => {
-      handleToggleChild(c.th_chidon_id, groupNum, !allMarked);
+  // Toggle all children in a section
+  const handleCheckAllSection = useCallback((sectionKey) => {
+    const section = childrenState.sections.find(s => s.sectionKey === sectionKey);
+    if (!section) return;
+    const allMarked = section.children.every(c => c.marked);
+    section.children.forEach(c => {
+      handleToggleChild(c.th_chidon_id, sectionKey, !allMarked);
     });
-  }, [childrenState.marks, handleToggleChild]);
+  }, [childrenState.sections, handleToggleChild]);
 
   return (
     <>
@@ -169,36 +210,31 @@ export default function MarkingPhase({ token, groups, onBack }) {
         </div>
       )}
 
-      {/* Children list */}
+      {/* Children sections */}
       {!childrenState.loading && !childrenState.error && (
         <ChildrenList
-          marks={childrenState.marks}
-          type={childrenState.type}
+          sections={childrenState.sections}
           onToggle={handleToggleChild}
-          onCheckAll={handleCheckAllGroup}
+          onCheckAll={handleCheckAllSection}
         />
       )}
     </>
   );
 }
 
-function ChildrenList({ marks, type, onToggle, onCheckAll }) {
-  const groupNumbers = Object.keys(marks).sort((a, b) => Number(a) - Number(b));
+function ChildrenList({ sections, onToggle, onCheckAll }) {
+  if (sections.length === 0) return null;
 
-  if (groupNumbers.length === 0) return null;
-
-  return groupNumbers.map(gNum => {
-    const children = marks[gNum] || [];
+  return sections.map(({ sectionKey, type, groupNum, children }) => {
     const markedCount = children.filter(c => c.marked).length;
-
     return (
-      <div className="section-card group-section" key={gNum}>
+      <div className="section-card group-section" key={sectionKey}>
         <div className="group-section-header">
           <div className="group-section-title">
-            {type} {gNum}
+            {type} {groupNum}
             <span className="marked-count">({markedCount}/{children.length} marked)</span>
           </div>
-          <button className="check-all-btn" onClick={() => onCheckAll(gNum)}>
+          <button className="check-all-btn" onClick={() => onCheckAll(sectionKey)}>
             Check / Uncheck All
           </button>
         </div>
@@ -208,7 +244,7 @@ function ChildrenList({ marks, type, onToggle, onCheckAll }) {
               key={child.th_chidon_id}
               child={child}
               type={type}
-              onToggle={(newMarked) => onToggle(child.th_chidon_id, gNum, newMarked)}
+              onToggle={(newMarked) => onToggle(child.th_chidon_id, sectionKey, newMarked)}
             />
           ))}
         </div>

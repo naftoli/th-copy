@@ -98,6 +98,7 @@ export default function App() {
           <MarkingPhase
             token={token}
             groups={selectedGroups}
+            info={info}
             onBack={handleBackToGroups}
           />
         )}
