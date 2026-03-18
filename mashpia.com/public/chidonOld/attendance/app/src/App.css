@@ -350,6 +350,20 @@ body {
 
 .empty-state { text-align: center; color: #636e72; padding: 20px; }
 
+/* ── Offline banner ───────────────────────────────────────────────────────── */
+.offline-banner {
+  background: #fdcb6e;
+  color: #2d3436;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
 /* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 600px) {
   .children-grid { grid-template-columns: 1fr; }

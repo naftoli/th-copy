@@ -4,6 +4,7 @@ import Login from './components/Login';
 import Header from './components/Header';
 import GroupSelection from './components/GroupSelection';
 import MarkingPhase from './components/MarkingPhase';
+import OfflineBanner from './components/OfflineBanner';
 
 const LOGIN_KEY = 'attendance_login';
 
@@ -87,6 +88,7 @@ export default function App() {
 
   return (
     <div className="app">
+      <OfflineBanner />
       <Header user={user} info={info} onLogout={handleLogout} />
       <main className="dashboard">
         {phase === 'groups' && (
