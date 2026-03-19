@@ -67,7 +67,6 @@ while ($row = mysql_fetch_assoc($query)) {
 
 
 // ***** REPORT DATES ***** //
-var_dump($admin_user); exit;
 include("../classes/admin.php");
 $sql = "SELECT * FROM admins WHERE admin_id=" . $admin_user['admin_id'];
 $query = mysql_query($sql);
