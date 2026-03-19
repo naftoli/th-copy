@@ -122,7 +122,7 @@ class admin {
         $sql = $sql . "AND aa.auth='user' ";
         $sql = $sql . "AND u.parent_marking=1 ";
         //$sql .= "and u.school_id is not null and u.class_id is not null";
-        //echo "<input type='hidden' name='adminSql' value='$sql' />";
+        echo "<input type='hidden' name='adminSql' value='$sql' />";
         
         $query = mysql_query($sql);
         while ($row = mysql_fetch_assoc($query)) {
