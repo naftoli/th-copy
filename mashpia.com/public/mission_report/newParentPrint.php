@@ -67,8 +67,9 @@ while ($row = mysql_fetch_assoc($query)) {
 
 
 // ***** REPORT DATES ***** //
+$admin_id = $_GET['admin'] ?? $admin_user['admin_id'];
 include("../classes/admin.php");
-$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_user['admin_id'];
+$sql = "SELECT * FROM admins WHERE admin_id=" . $admin_id;
 $query = mysql_query($sql);
 $row = mysql_fetch_assoc($query);
 $admin = new \classes\admin($row);
