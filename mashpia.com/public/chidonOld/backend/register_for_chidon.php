@@ -14,7 +14,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/PHPExcel/IOFactory.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $tracks = [
     'yesod'     => 'maven',

@@ -5,10 +5,6 @@ ini_set('error_reporting', E_ALL);
 require __DIR__ . '/../../../db.php';
 require __DIR__ . '/../../../api/header/db.php';
 
-//***************** LOAD CURRENT YEAR **********************/
-require_once __DIR__ . '/../../../class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
-
 $ccInfo = $_POST['ccInfo'];
 $admin_id = $_POST['admin_id'];
 
