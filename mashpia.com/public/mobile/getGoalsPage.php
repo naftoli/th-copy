@@ -32,7 +32,7 @@ $res = mysql_query($qry);
 $r = mysql_fetch_assoc($res);
 
 require_once '../class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 $dates = GlobalSettings::getCurYearDates();
 //$dates['start'] = 2458006;
 

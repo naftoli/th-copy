@@ -4,7 +4,7 @@
 
 require '../../../db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 $item_id = 4;
 
 $query ="

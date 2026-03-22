@@ -2,7 +2,7 @@
 require '../../../db.php';
 require 'encrypt.php';
 require '../../../class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 $user = mysql_real_escape_string( $_POST['user'] );
 $admin_id = mysql_real_escape_string( $_COOKIE['admin'] );

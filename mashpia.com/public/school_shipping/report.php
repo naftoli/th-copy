@@ -5,7 +5,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 $superAdmin = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getRegistrationYear();
+$year = isset($_POST['year']) ? $_POST['year'] : GlobalSettings::getCurrentYear();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);

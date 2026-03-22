@@ -38,7 +38,7 @@ if (isset($_POST['submit'])) {
 }
 
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 function getMonthsAndSM($year) {
     $months = ['Elul', 'Tishrei', 'Cheshvon', 'Kislev', 'Teves', 'Shvat', 'Adar I', 'Adar II', 'Nissan', 'Iyar', 'Sivan', 'Tamuz', 'Av'];

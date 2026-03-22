@@ -150,7 +150,7 @@ class UserRegistrationRouter {
     public function registerUsers() {
         global $current_user, $MASHPIA_DB;
         $admin = $current_user; // $current_user global gets overwritten by wp
-        $chidonYr = GlobalSettings::getRegistrationYear();
+        $chidonYr = GlobalSettings::getChidonRegYear();
 
         /******************************** SETUP ********************************/
         // * get the post data

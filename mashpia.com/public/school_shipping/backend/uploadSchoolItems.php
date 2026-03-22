@@ -11,7 +11,7 @@ if ($admin_user['auth'] != 'super') {
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 if (isset($_POST['submit'])) {
     $file_info = $_FILES['file'];
