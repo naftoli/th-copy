@@ -17,8 +17,8 @@ class Hachayol
         $this->db = DB::getInstance();
         $this->schools = array();
         $this->schoolDetails = array();
-        $this->chidonYear = GlobalSettings::getChidonRegYear();
-        $this->year = GlobalSettings::getRegistrationYear();
+        $this->chidonYear = GlobalSettings::getChidonYear();
+        $this->year = GlobalSettings::getCurrentYear();
         $this->chidonNumbers = array();
         $this->schoolExceptions = [55, 66, 110, 112, 180, 256, 584, 585, 588, 612, 432, 713, 709, 427, 434, 690, 480];
         $this->testSchools = false;
