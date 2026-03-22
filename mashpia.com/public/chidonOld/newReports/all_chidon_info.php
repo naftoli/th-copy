@@ -16,7 +16,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/chidon_drive/site/enrollment/class.tripRegistration.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonOld/coupons/class.couponCode.php';
 
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonYear();
 $ct = new ChidonTests($year);
 $c = new CouponCode($MASHPIA_DB, $year);
 

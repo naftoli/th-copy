@@ -7,7 +7,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
 $super = $admin_user['auth'] == 'super';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonYear();
 
 $stmt = $MASHPIA_DB->prepare("
     INSERT INTO th_chidon_shipping 

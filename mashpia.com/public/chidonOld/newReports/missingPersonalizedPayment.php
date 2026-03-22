@@ -8,7 +8,7 @@ if ($admin_user['auth'] != 'super') {
     die('Access denied');
 }
 
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonYear();
 
 $stmt = $MASHPIA_DB->prepare("
     SELECT 

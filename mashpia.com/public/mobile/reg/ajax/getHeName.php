@@ -15,7 +15,7 @@ $stmt = $MASHPIA_DB->prepare("
         user_id = :user AND year = :year");
 $res = $stmt->execute([
     'user' => $_POST['user_id'],
-    'year' => GlobalSettings::getChidonRegYear()
+    'year' => GlobalSettings::getChidonYear()
 ]);
 if ($res) {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);

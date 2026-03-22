@@ -38,7 +38,7 @@ mysql_query('SET AUTOCOMMIT=0');
 mysql_query('START TRANSACTION');
 
 if (isset($_GET['chidon'])) {
-    $year = GlobalSettings::getChidonRegYear();
+    $year = GlobalSettings::getChidonYear();
     $sql = "delete from th_chidon where user_id = $user and year = $year";
     $result = mysql_query($sql);
     if (!$result) {

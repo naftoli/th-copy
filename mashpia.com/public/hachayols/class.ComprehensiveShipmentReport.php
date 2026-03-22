@@ -8,7 +8,7 @@ class ComprehensiveShipmentReport {
     private $check_for_payment;
 
     public function __construct($school_id, $check_for_payment = true) {
-        $this->year = GlobalSettings::getChidonRegYear();
+        $this->year = GlobalSettings::getChidonYear();
         $this->school_id = intval($school_id);
         $this->check_for_payment = $check_for_payment;
     }
