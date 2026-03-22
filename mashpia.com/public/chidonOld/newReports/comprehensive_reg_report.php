@@ -28,7 +28,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth'], true, true);
 $schools = $as->getSchools();
 
-$startGrade = 4;
+$startGrade = 3;
 $endGrade = 8;
 $grades = [];
 for ($i = $startGrade; $i <= $endGrade; $i++) $grades[] = "$i";
