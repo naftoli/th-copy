@@ -22,7 +22,7 @@ $zip = $data['parent']['admin_postal'];
 $authorization = $data['parent']['transaction_id'];
 $total = $data['totals']['grand_total'];
 $reg_total = $data['totals']['registration_total'];
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $myshliach = false;
 $user_ids = [];
@@ -68,7 +68,7 @@ foreach ( $children as $child ) {
         }
     }
 
-    $year = GlobalSettings::getChidonYear();
+    $year = GlobalSettings::getChidonRegYear();
     $recruited_by = isset( $child['recruited_by'] ) && !is_null( $child['recruited_by'] ) ? intval( $child['recruited_by'] ) : 0;
     $recruited = $recruited_by > 0 ? 1 : 0;
 

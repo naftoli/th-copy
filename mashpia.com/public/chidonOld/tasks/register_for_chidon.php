@@ -1,7 +1,7 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 // $info = [
 //     7760539	=> [

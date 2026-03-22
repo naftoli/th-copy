@@ -15,7 +15,7 @@ if(!$user_id || !$school_id || !$t_shirt){
 }
 //***************** LOAD CURRENT YEAR **********************/
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 //***************** PREVENT DUPLICATES **********************/
 $validate_query = mysql_query("SELECT * FROM th_chidon WHERE user_id='$user_id' AND year='$year'");

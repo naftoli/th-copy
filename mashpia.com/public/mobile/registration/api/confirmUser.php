@@ -4,7 +4,7 @@
 
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $info = json_decode(file_get_contents('php://input'), true);
 $user_id = $info['user_id'];
