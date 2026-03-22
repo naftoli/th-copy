@@ -98,7 +98,7 @@ function getGradeData($students) {
 }
 
 // Get data
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 $as = new AdminSchools($admin_user['admin_id'], $admin_user['auth']);
 $schools = $as->getSchools();
 $users = getRegisteredStudents();
