@@ -111,7 +111,7 @@ if (isset($_POST['submit'])) {
 
     // get start and end from db
     require_once 'class.globalSettings.php';
-    $missionYear = GlobalSettings::getRegistrationYear();
+    $missionYear = GlobalSettings::getCurrentYear();
 
     $defaultStart = 2460938; // Sept. 19, 2025
     $defaultEnd = 2461299; // August 20, 2026
@@ -398,7 +398,7 @@ if (isset($_POST['submit'])) {
                     $end = $endDate;
 //					echo $start . '-' . $end . "<br /><br />"; continue;
 //                    echo 'Start: ' . $start . ' Today: ' . unixtojd() . "<br />";
-//                    if ($start < unixtojd()) continue;
+                   if ($start < unixtojd()) continue;
 
                     //while ($start <= $end) {
                     foreach ($types as $type) {
