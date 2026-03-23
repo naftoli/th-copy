@@ -1338,9 +1338,9 @@ var registrationApp = function () {
 
       // disable changing of prizes if prize has been paid for
       // disable changing of prizes after a certain date
-      const date = new Date()
-      const cutoff = new Date('2024-12-01') // cutoff date for changing prizes
-      if (date > cutoff) disable = true
+      // const date = new Date()
+      // const cutoff = new Date('2024-12-01') // cutoff date for changing prizes
+      // if (date > cutoff) disable = true
 
       for (let prize of res) {
         let disable = false // disable prize if it's personalized
