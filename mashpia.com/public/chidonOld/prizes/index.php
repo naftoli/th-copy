@@ -12,11 +12,8 @@ if( isset($_GET['debug'])){
 }
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonRegYear();
-
-// if (isset($_COOKIE['naftoli']) && $_COOKIE['naftoli'] == 1) {
-//     $year = 5787;
-// }
+$year = $_GET['year'] ?? GlobalSettings::getChidonRegYear();
+$reg_year = GlobalSettings::getRegistrationYear();
 
 require_once './class.schoolExceptions.php';
 $exceptions = SchoolExceptions::getSchoolExceptions();
@@ -43,7 +40,18 @@ $exceptions = SchoolExceptions::getSchoolExceptions();
 
     <BODY>
         <? include('../../admin_header.php'); ?>
-        <h1>Chidon Prizes</h1>
+        <h1>Chidon Prizes <?= $year ?></h1>
+
+        <form action="" method="get">
+          <select name="year" id="year">
+            <?php
+            for ($i = 0; $i < 5; $i++) {
+              echo "<option value='" . ($reg_year - $i) . "'" . ($reg_year - $i == $year ? " selected" : "") . ">" . ($reg_year - $i) . "</option>";
+            }
+            ?>
+          </select>
+          <button type="submit">Go</button>
+        </form>
 
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <p style="margin: 20px 10px">
