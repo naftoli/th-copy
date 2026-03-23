@@ -93,7 +93,7 @@ function getStartEnd($arr) {
 
         // get start and end from db
         require_once 'class.globalSettings.php';
-        $missionYear = GlobalSettings::getCurrentYear();
+        $missionYear = GlobalSettings::getRegistrationYear();
 
         $weeks = array();
         $sql2 = 'select * from parshos where year in(' . ($missionYear-1) . ',' . $missionYear . ')';
