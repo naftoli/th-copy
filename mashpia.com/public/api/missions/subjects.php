@@ -16,7 +16,7 @@ class SubjectsRouter {
             $id = intval($_GET['school_id']);
             $type = 'school';
         } else {
-            $school_id = $current_user->login->school_id;
+            $id = $current_user->login->school_id;
             $type = 'school';
         }
 
