@@ -14,7 +14,7 @@ if ($admin_user['auth'] != 'super') {
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 $schoolSettings = MivtzoimSetting::getSchools( $year, [2, 3] );
 ?>
 <!DOCTYPE html>

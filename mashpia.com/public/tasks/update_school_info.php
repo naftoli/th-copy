@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../db.php';
 require_once __DIR__ . '/../class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 $sql1 = "
     update user_registration ur 

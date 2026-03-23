@@ -5,7 +5,7 @@ require_once($_SERVER["DOCUMENT_ROOT"].'/header.php');
 
 //***************** LOAD CURRENT YEAR **********************/
 require_once($_SERVER['DOCUMENT_ROOT']."/class.globalSettings.php");
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once $_SERVER['DOCUMENT_ROOT'] . '/classes/authorize/AuthorizeAPIRequest.php';

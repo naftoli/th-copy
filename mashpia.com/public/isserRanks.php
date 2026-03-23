@@ -3,7 +3,7 @@ $admin_auth = array('school');
 require('header.php');
 
 require_once 'class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 require_once 'class.rankReport.php';
 $rr = new RankReport();

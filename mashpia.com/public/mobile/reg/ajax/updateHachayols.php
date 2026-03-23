@@ -2,7 +2,7 @@
 $admin_auth = ['user'];
 require $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = intval(GlobalSettings::getRegistrationYear());
+$year = intval(GlobalSettings::getCurrentYear());
 
 if ($year < 5786) {
     $stmt = $MASHPIA_DB->prepare("update users set hachayol = :val where user_id = :user");

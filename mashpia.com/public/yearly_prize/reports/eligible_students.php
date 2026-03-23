@@ -20,7 +20,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.parshos.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 $parshos = Parshos::getParshos($year);
 ?>
 <!DOCTYPE html>

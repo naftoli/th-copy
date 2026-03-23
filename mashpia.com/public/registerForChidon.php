@@ -1,7 +1,7 @@
 <?php
 require 'db.php';
 require 'class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 $file = fopen("chidonReg5.csv", "r");
 $contents = stream_get_contents($file);

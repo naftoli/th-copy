@@ -1,7 +1,7 @@
 <?php
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getChidonRegYear();
 
 if ( isset( $_FILES['chidon'] ) ) {
     $name = $_FILES['chidon']['tmp_name'];

@@ -14,7 +14,7 @@ if (!$admin) {
 require_once '../../class.globalSettings.php';
 require_once '../../mobile/reg/ajax/encrypt.php';
 
-$year = intval(GlobalSettings::getRegistrationYear());
+$year = intval(GlobalSettings::getCurrentYear());
 $admin_id = encrypt_decrypt('decrypt', $admin);
 
 $hachayols = [];

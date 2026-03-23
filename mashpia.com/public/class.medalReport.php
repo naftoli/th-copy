@@ -23,7 +23,7 @@ class MedalReport extends Report {
         $this->userInfo = array();
         $this->medalOrds = array();
         $this->subjects = array();
-        $this->year = GlobalSettings::getRegistrationYear();
+        $this->year = GlobalSettings::getCurrentYear();
         $this->medals_for_shipping = [];
     }
 

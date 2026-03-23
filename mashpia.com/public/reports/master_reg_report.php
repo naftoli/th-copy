@@ -76,7 +76,7 @@ foreach ($rows as $row) {
 }
 
 // get all chidon registered kids 
-// $year = GlobalSettings::getChidonRegYear();
+// $year = GlobalSettings::getChidonYear();
 $stmt = $MASHPIA_DB->prepare("select * from th_chidon where year = ?");
 $res = $stmt->execute([$year]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);

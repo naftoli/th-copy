@@ -18,7 +18,7 @@ $categories = $cs->getCategories();
 $items = $cs->getItems();
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonYear();
 ?>
 <!DOCTYPE html>
 <html>

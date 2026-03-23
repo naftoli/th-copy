@@ -26,7 +26,7 @@ $stmtCharges = $MASHPIA_DB->prepare("
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Payment Report</title>
+  <title>Payment Report <?= GlobalSettings::getChidonRegYear() ?></title>
   <style>
     table {
       font-family: Arial, sans-serif;

@@ -27,7 +27,7 @@ function getChidonYear() {
 
 function getChayoleiYear() {
     require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-    return GlobalSettings::getRegistrationYear();
+    return GlobalSettings::getCurrentYear();
 }
 
 function getSchools($prev = false) {

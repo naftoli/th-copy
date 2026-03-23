@@ -33,7 +33,7 @@ class RankReport extends Report {
         $this->books = [];
         $this->shipped = [];
         $this->medalsShipped = [];
-        $this->year = GlobalSettings::getRegistrationYear();
+        $this->year = GlobalSettings::getCurrentYear();
     }
 
     public function setRanks($orderType = 'byGrade', $rankOrd = 0, $nameBreak = ' ', $specificGender = '', $forShipping = false) {

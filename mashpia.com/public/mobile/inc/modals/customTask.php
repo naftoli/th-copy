@@ -23,7 +23,7 @@ $admin->get_markable_children(); // get the children he can mark...
 //echo "</pre>";
 
 require_once $_SERVER['DOCUMENT_ROOT'].'/class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 //find end date of this year's parshos
 $end_date = mysql_fetch_assoc(mysql_query("SELECT end FROM parshos WHERE year = " . $year . " ORDER BY end DESC LIMIT 1"))['end'];

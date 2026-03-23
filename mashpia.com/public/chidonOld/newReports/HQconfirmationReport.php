@@ -8,7 +8,7 @@ if ($admin_user['auth'] != 'super') {
     die('Access denied');
 }
 
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonYear();
 
 // get all prizes selected by users
 $stmtPrizes = $MASHPIA_DB->prepare("

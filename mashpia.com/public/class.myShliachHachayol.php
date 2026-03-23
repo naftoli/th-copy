@@ -15,7 +15,7 @@ class MyShliachHachayol {
 		// we only check if already shipped for shipment 1 and ms/ak catchup
 		$this->checkIfAlreadyShipped = $checkIfAlreadyShipped;
 		$this->checkPaidForShipping = $checkPaidForShipping;
-		$this->year = GlobalSettings::getRegistrationYear();
+		$this->year = GlobalSettings::getCurrentYear();
 		$this->setInfo( $forPickup, $id ); 
 	}
 

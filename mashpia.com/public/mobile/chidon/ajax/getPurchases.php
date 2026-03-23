@@ -4,7 +4,7 @@ ini_set('error_reporting', E_ALL);
 
 require $_SERVER['DOCUMENT_ROOT'] . '/db.php';
 require $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getChidonRegYear();
 
 require 'encrypt.php';
 $admin_id = encrypt_decrypt('decrypt', $_POST['admin']);

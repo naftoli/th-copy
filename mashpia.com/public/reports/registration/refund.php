@@ -9,8 +9,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/api/header/db.php';
 if ($admin_user['auth'] != 'super') exit;
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$chayoleiYr = GlobalSettings::getRegistrationYear();
-$chidonYr = GlobalSettings::getChidonRegYear();
+$registrationYear = GlobalSettings::getRegistrationYear();
+$chidonRegYear = GlobalSettings::getChidonRegYear();
 
 $id = $_POST['id'];
 $amount = floatval(str_replace('$', '', $_POST['amount']));
@@ -93,7 +93,7 @@ echo json_encode([
 ]);
 
 function updateChayolei() {
-    global $MASHPIA_DB, $year, $serial;
+    global $MASHPIA_DB, $registrationYear, $serial;
 
     $stmt = $MASHPIA_DB->prepare("
         UPDATE users 
@@ -114,7 +114,7 @@ function updateChayolei() {
         )
     ");
     $res2 = $stmt->execute([
-        ':year' => $year,
+        ':year' => $registrationYear,
         ':serial' => $serial
     ]);
 
@@ -137,7 +137,7 @@ function updateHachayol() {
 }
 
 function updateChidon() {
-    global $MASHPIA_DB, $year, $serial;
+    global $MASHPIA_DB, $chidonRegYear, $serial;
 
     $stmt = $MASHPIA_DB->prepare("
         DELETE FROM th_chidon 
@@ -149,7 +149,7 @@ function updateChidon() {
         )
     ");
     $res = $stmt->execute([
-        ':year' => $year,
+        ':year' => $chidonRegYear,
         ':serial' => $serial
     ]);
 
@@ -157,7 +157,7 @@ function updateChidon() {
 }
 
 function updateKHK() {
-    global $MASHPIA_DB, $year, $serial;
+    global $MASHPIA_DB, $chidonRegYear, $serial;
 
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon  
@@ -170,7 +170,7 @@ function updateKHK() {
         )
     ");
     $res = $stmt->execute([
-        ':year' => $year,
+        ':year' => $chidonRegYear,
         ':serial' => $serial
     ]);
 
@@ -178,7 +178,7 @@ function updateKHK() {
 }
 
 function updateChidonReg() {
-    global $MASHPIA_DB, $year, $serial;
+    global $MASHPIA_DB, $chidonRegYear, $serial;
 
     $stmt = $MASHPIA_DB->prepare("
         UPDATE th_chidon 
@@ -193,7 +193,7 @@ function updateChidonReg() {
         )
     ");
     $res = $stmt->execute([
-        ':year' => $year,
+        ':year' => $chidonRegYear,
         ':serial' => $serial
     ]);
 
@@ -201,7 +201,7 @@ function updateChidonReg() {
 }
 
 function updateYahadus() {
-    global $MASHPIA_DB, $year, $serial;
+    global $MASHPIA_DB, $chidonRegYear, $serial;
 
     $stmt = $MASHPIA_DB->prepare("
         DELETE FROM yahadus_book_purchases 
@@ -214,7 +214,7 @@ function updateYahadus() {
         LIMIT 1
     ");
     $res = $stmt->execute([
-        ':year' => $year,
+        ':year' => $chidonRegYear,
         ':serial' => $serial
     ]);
 

@@ -16,7 +16,7 @@ class SchoolShipping
     public function __construct($yr = 0) {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->year = $yr ?? GlobalSettings::getRegistrationYear();
+        $this->year = $yr ?? GlobalSettings::getCurrentYear();
     }
 
     public function getCategories() {

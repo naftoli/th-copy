@@ -16,7 +16,7 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/class.shabbosMevorchim.php';
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
-$year = GlobalSettings::getRegistrationYear();
+$year = GlobalSettings::getCurrentYear();
 
 $sm = calculateSM($year);
 $months = array(
