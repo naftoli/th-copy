@@ -203,7 +203,7 @@ if (isset($_POST['submit'])) {
                                 else {
                                     echo "skipping row<br />";
                                     $empty = true;
-                                    continue 3;
+                                    continue 2;
                                 }
                             }
                             else $empty = false;
