@@ -375,19 +375,19 @@ if (isset($_POST['submit'])) {
                 }
 
                 // create mission for each day
-//                $startTemp = $defaultStart;
-//                $endTemp = $defaultEnd;
-//                while ($startTemp < $endTemp) {
-//                    $arrStart[] = $startTemp;
-//                    $arrEnd[] = $startTemp;
-//                    $startTemp++;
-//                }
-//                echo "<pre>"; print_r( $arrStart ); echo "</pre>";
-//                echo "<pre>"; print_r( $arrEnd ); echo "</pre>";
+               $startTemp = $defaultStart;
+               $endTemp = $defaultEnd;
+               while ($startTemp < $endTemp) {
+                   $arrStart[] = $startTemp;
+                   $arrEnd[] = $startTemp;
+                   $startTemp++;
+               }
+               echo "<pre>"; print_r( $arrStart ); echo "</pre>";
+               echo "<pre>"; print_r( $arrEnd ); echo "</pre>";
 
-//                echo "Start Level: " . $firstLevel . "<br />";
-//                echo "End Level: " . $lastLevel . "<br />";
-//                exit;
+               echo "Start Level: " . $firstLevel . "<br />";
+               echo "End Level: " . $lastLevel . "<br />";
+               exit;
 
                 // This takes the array of start dates and creates new missions based on that
                 $num = count($arrStart);
