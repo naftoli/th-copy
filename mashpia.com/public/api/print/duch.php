@@ -319,8 +319,8 @@
         function emailToOhel() {
             console.log('emailing to ohel');
             setTimeout(async function() {
+                /*
                 const elem = document.getElementById('main');
-                
                 const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
                 const opt = {
                     margin:       0.5,
@@ -329,10 +329,12 @@
                     html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                // const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
+                const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
+                */
+               const elem = ocument.documentElement.outerHTML;
                 const formData = new FormData();
                 // formData.append('file', pdfBlob, filename);
-                formData.append('html', elem.innerHTML);
+                formData.append('html', elem);
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,
