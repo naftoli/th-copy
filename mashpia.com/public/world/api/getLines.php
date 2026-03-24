@@ -2,8 +2,7 @@
 ini_set('display_errors',1);
 require_once( dirname(__FILE__) . '/../../db.php' );
 require_once( dirname(__FILE__) . '/../../class.globalSettings.php' );
-
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getCurrentYear();
 
 $campaign_query = mysql_query(
     "SELECT * FROM line_campaigns WHERE year = " . $year
