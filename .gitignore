@@ -15,3 +15,7 @@ mashpia.com/composer.lock
 .vscode/
 .idea/
 mashpia.com/includes/
+mashpia.com/public/chidonOld/reports/*.zip
+mashpia.com/public/chidonOld/limud/**/*.mp3
+mashpia.com/public/chidonOld/chidon_drive/ajax/phplog
+mashpia.com/public/chidonOld/downloads/*.pdf
