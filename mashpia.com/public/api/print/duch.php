@@ -329,9 +329,10 @@
                     html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
+                // const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
                 const formData = new FormData();
-                formData.append('file', pdfBlob, filename);
+                // formData.append('file', pdfBlob, filename);
+                formData.append('html', elem.innerHTML);
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,

@@ -8,7 +8,7 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-function emailToOhel($fileName) {
+function emailToOhel($fileName = null, $html = null) {
     // send the pdf to ohel
     $mail = new PHPMailer(true);
     $msg = "<html>
@@ -28,8 +28,8 @@ function emailToOhel($fileName) {
         $mail->addReplyTo('cth@tzivoshashem.org', 'Chayolei Tzivos Hashem');
         $mail->isHTML(true);
         $mail->Subject = 'Duch';
-        $mail->Body = $msg;
-        $mail->addAttachment($fileName);
+        $mail->Body = $html ? $html : $msg;
+        if ($fileName) $mail->addAttachment($fileName);
         $mail->send();
     } catch (Exception $e) {
         return $mail->ErrorInfo;
@@ -37,8 +37,12 @@ function emailToOhel($fileName) {
     return 0;
 }
 
-// Check if a file was uploaded successfully
-if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+// Check if a html was uploaded successfully
+if (isset($_POST['html'])) {
+    $html = $_POST['html'];
+    $error = emailToOhel(null, $html);
+} else if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+    // Check if a file was uploaded successfully
     $fileTmpPath = $_FILES['file']['tmp_name'];
     $fileName = basename($_FILES['file']['name']); // Sanitize filename if needed
     $uploadDir = './duch_pdf/'; // Specify your target directory on the server
@@ -63,5 +67,5 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
         echo json_encode(['success' => false, 'error' => 'Failed to move file. Check directory permissions.', 'message' => null]);
     }
 } else {
-    echo json_encode(['success' => false, 'error' => 'No file uploaded or an error occurred.', 'message' => null]);
+    echo json_encode(['success' => false, 'error' => 'No file or html uploaded or an error occurred.', 'message' => null]);
 }
