@@ -323,7 +323,7 @@
                 const elem = document.documentElement.outerHTML;
                 const formData = new FormData();
                 formData.append('html', elem);
-
+                /*
                 const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
                 const opt = {
                     margin:       0.5,
@@ -334,7 +334,7 @@
                 };
                 const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
                 formData.append('file', pdfBlob, filename);
-                
+                */
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,
