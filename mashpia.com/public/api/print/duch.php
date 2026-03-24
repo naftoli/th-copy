@@ -320,6 +320,7 @@
             console.log('emailing to ohel');
             setTimeout(async function() {
                 document.getElementById('buttons').remove();
+                /*
                 var mainEl = document.getElementById('main');
                 // Root-relative only (/path), not // protocol-relative or bare relative URLs
                 var htmlForPdf = mainEl.innerHTML;
@@ -337,6 +338,10 @@
                 };
                 const pdfBlob = await html2pdf().set(opt).from(htmlForPdf).toPdf().output('blob');
                 formData.append('file', pdfBlob, filename);
+                */
+               const html = document.documentElement.outerHTML;
+               const formData = new FormData();
+               formData.append('html', html);
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,
