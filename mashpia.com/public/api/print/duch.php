@@ -317,6 +317,7 @@
         };
 
         function emailToOhel() {
+            console.log('emailing to ohel');
             setTimeout(async function() {
                 const elem = document.getElementById('main');
                 
