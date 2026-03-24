@@ -41,7 +41,8 @@ function updateLines( target, campaign_type ) {
         user    : id, 
         grade   : grade,
         table   : 'lines_learned',
-        school  : school 
+        school  : school, 
+        updateSummary : 1
     }
     // update the campaign
     $.post('ajax/updateBalPehCampaign.php', postData, function( data ) {
