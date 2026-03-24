@@ -319,23 +319,22 @@
         function emailToOhel() {
             console.log('emailing to ohel');
             setTimeout(async function() {
-                /*
-                const elem = document.getElementById('main');
+                document.getElementById('buttons').remove();
+                const elem = document.documentElement.outerHTML;
+                const formData = new FormData();
+                formData.append('html', elem);
+
                 const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
                 const opt = {
                     margin:       0.5,
-                    filename:      filename,
+                    filename:     filename,
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
                 const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
-                */
-                document.getElementById('buttons').remove();
-                const elem = document.documentElement.outerHTML;
-                const formData = new FormData();
-                // formData.append('file', pdfBlob, filename);
-                formData.append('html', elem);
+                formData.append('file', pdfBlob, filename);
+                
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,

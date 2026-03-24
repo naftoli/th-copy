@@ -38,14 +38,7 @@ function emailToOhel($fileName = null, $html = null) {
 }
 
 // Check if a html was uploaded successfully
-if (isset($_POST['html'])) {
-    $html = $_POST['html'];
-    // add 'https://mashpia.com' to all img srcs and link hrefs only if it starts with /
-    $html = preg_replace('/src="([^"]+)"/', 'src="https://mashpia.com/$1"', $html);
-    $html = preg_replace('/href="([^"]+)"/', 'href="https://mashpia.com/$1"', $html);
-    $error = emailToOhel(null, $html);
-    echo json_encode(['success' => !$error, 'error' => $error, 'message' => 'File has been emailed to the Ohel.']);
-} else if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
+if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
     // Check if a file was uploaded successfully
     $fileTmpPath = $_FILES['file']['tmp_name'];
     $fileName = basename($_FILES['file']['name']); // Sanitize filename if needed
@@ -70,6 +63,13 @@ if (isset($_POST['html'])) {
     } else {
         echo json_encode(['success' => false, 'error' => 'Failed to move file. Check directory permissions.', 'message' => null]);
     }
+} else if (isset($_POST['html'])) {
+    $html = $_POST['html'];
+    // add 'https://mashpia.com' to all img srcs and link hrefs only if it starts with /
+    $html = preg_replace('/src="([^"]+)"/', 'src="https://mashpia.com/$1"', $html);
+    $html = preg_replace('/href="([^"]+)"/', 'href="https://mashpia.com/$1"', $html);
+    $error = emailToOhel(null, $html);
+    echo json_encode(['success' => !$error, 'error' => $error, 'message' => 'File has been emailed to the Ohel.']);
 } else {
     echo json_encode(['success' => false, 'error' => 'No file or html uploaded or an error occurred.', 'message' => null]);
 }
