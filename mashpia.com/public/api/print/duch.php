@@ -321,7 +321,7 @@
             setTimeout(async function() {
                 const elem = document.getElementById('main');
                 
-                const filename = new Date().toISOString().replace(/[-:]/g, '') + '.pdf';
+                const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
                 const opt = {
                     margin:       0.5,
                     filename:      filename,
