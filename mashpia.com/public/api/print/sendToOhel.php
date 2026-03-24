@@ -40,6 +40,9 @@ function emailToOhel($fileName = null, $html = null) {
 // Check if a html was uploaded successfully
 if (isset($_POST['html'])) {
     $html = $_POST['html'];
+    // add 'https://mashpia.com' to all img srcs and link hrefs only if it starts with /
+    $html = preg_replace('/src="([^"]+)"/', 'src="https://mashpia.com/$1"', $html);
+    $html = preg_replace('/href="([^"]+)"/', 'href="https://mashpia.com/$1"', $html);
     $error = emailToOhel(null, $html);
 } else if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
     // Check if a file was uploaded successfully
