@@ -34,7 +34,7 @@ function emailToOhel($fileName = null, $html = null) {
     } catch (Exception $e) {
         return $mail->ErrorInfo;
     }
-    return 0;
+    return false;
 }
 
 // Check if a html was uploaded successfully
@@ -44,6 +44,7 @@ if (isset($_POST['html'])) {
     $html = preg_replace('/src="([^"]+)"/', 'src="https://mashpia.com/$1"', $html);
     $html = preg_replace('/href="([^"]+)"/', 'href="https://mashpia.com/$1"', $html);
     $error = emailToOhel(null, $html);
+    echo json_encode(['success' => !$error, 'error' => $error, 'message' => 'File has been emailed to the Ohel.']);
 } else if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
     // Check if a file was uploaded successfully
     $fileTmpPath = $_FILES['file']['tmp_name'];
