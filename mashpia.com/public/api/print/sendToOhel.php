@@ -23,7 +23,7 @@ function emailToOhel($fileName) {
     try {
         $mail->setFrom('cth@mashpia.com', 'Chayolei Tzivos Hashem');
         $mail->addAddress('ohel@ohelchabad.org');
-        // $mail->addBCC('naftoli@tzivoshashem.org');
+        $mail->addBCC('naftoli@tzivoshashem.org');
         // $mail->addAddress('naftoli@tzivoshashem.org');
         $mail->addReplyTo('cth@tzivoshashem.org', 'Chayolei Tzivos Hashem');
         $mail->isHTML(true);
