@@ -245,6 +245,7 @@ foreach ( $objMissions as $obj ) {
 $html = ob_get_flush();
 
 // create php code for this curl request:
+    /*
 $url = "https://CIrbbDsV2QqOc-ULQnQv@api.docraptor.com/docs";
 $headers = [
     "Content-Type:application/json"
@@ -265,8 +266,8 @@ curl_close($ch);
 // echo $response;
 // save the response to a file
 file_put_contents("/pdf/docraptor.pdf", $response);
-
-// echo $html;
+*/
+echo $html;
 
 function isRTL($lang_id) {
     return in_array($lang_id, [2, 4]);
