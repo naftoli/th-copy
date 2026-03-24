@@ -321,9 +321,12 @@
             setTimeout(async function() {
                 document.getElementById('buttons').remove();
                 const elem = document.documentElement.outerHTML;
+                // add 'https://mashpia.com' to all img srcs and link hrefs only if it starts with /
+                elem = elem.replace(/src="([^"]+)"/, 'src="https://mashpia.com/$1"');
+                elem = elem.replace(/href="([^"]+)"/, 'href="https://mashpia.com/$1"');
+                
                 const formData = new FormData();
-                formData.append('html', elem);
-                /*
+                // formData.append('html', elem);
                 const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
                 const opt = {
                     margin:       0.5,
@@ -332,9 +335,8 @@
                     html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
+                const pdfBlob = await html2pdf().set(opt).from(elem.getElementById('main').innerHTML).toPdf().output('blob');
                 formData.append('file', pdfBlob, filename);
-                */
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,

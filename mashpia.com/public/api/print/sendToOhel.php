@@ -65,9 +65,6 @@ if (isset($_FILES['file']) && $_FILES['file']['error'] === UPLOAD_ERR_OK) {
     }
 } else if (isset($_POST['html'])) {
     $html = $_POST['html'];
-    // add 'https://mashpia.com' to all img srcs and link hrefs only if it starts with /
-    $html = preg_replace('/src="([^"]+)"/', 'src="https://mashpia.com/$1"', $html);
-    $html = preg_replace('/href="([^"]+)"/', 'href="https://mashpia.com/$1"', $html);
     $error = emailToOhel(null, $html);
     echo json_encode(['success' => !$error, 'error' => $error, 'message' => 'File has been emailed to the Ohel.']);
 } else {
