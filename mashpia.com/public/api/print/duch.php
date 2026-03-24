@@ -331,7 +331,7 @@
                 };
                 const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
                 */
-               const elem = ocument.documentElement.outerHTML;
+               const elem = document.documentElement.outerHTML;
                 const formData = new FormData();
                 // formData.append('file', pdfBlob, filename);
                 formData.append('html', elem);
