@@ -193,7 +193,7 @@
                         $("#email-button").show();
                     }
                     // Wait for fonts, images, and layout before auto-printing
-                    waitForRenderReady(document.getElementById('main')).then(function() {
+                    // waitForRenderReady(document.getElementById('main')).then(function() {
                         // const children = document.querySelectorAll('.userDuch');
                         // children.forEach(function(child) {
                         //     const totalPages = checkPageCount(child);
@@ -218,7 +218,7 @@
                         //     //   baseurl: "https://yoursite.com", // the base URL for any relative URLs
                         //     // }
                         // });
-                    });
+                    // });
                 }
             }
 

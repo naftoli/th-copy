@@ -208,8 +208,8 @@ ob_start();
 // * Print the buttons to print and email the Duch
 echo "
     <div style='display: flex; justify-content: center; gap: 10px; margin-top: 10px;'>
-    <button class='no-print btn btn-primary' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
-    <button class='no-print btn btn-primary' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
+    <button class='no-print btn btn-primary' id='print-button' style='display: none; cursor: pointer;' onclick='javascript:window.print()'>Print</button>
+    <button class='no-print btn btn-primary' id='email-button' style='display: none; cursor: pointer;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
     </div>";
 
 $pages = 0;
