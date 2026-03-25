@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book Orders</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Base styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        /* Book section styles */
+        #book-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            max-width: 300px;
+            width: 300px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: auto;
+        }
+
+        #book-section h2 {
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        /* List styles */
+        #list-wrapper {
+            position: relative;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        #book-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #book-list li {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            gap: 10px;
+        }
+
+        #book-list li:last-child {
+            border-bottom: none;
+        }
+
+        .book-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .book-text {
+            flex: 1;
+            font-size: 0.9em;
+        }
+
+        .delete-btn {
+            cursor: pointer;
+            font-size: 1.1em;
+            text-align: center;
+            width: 24px;
+            height: 24px;
+            margin: -2px;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+            color: #dc3545;
+            background: transparent;
+        }
+
+        .delete-btn:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        /* Add book section */
+        #add-book {
+            margin-top: 12px;
+            position: relative;
+        }
+
+        #add-input {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.9em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Suggestions styles */
+        #suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            margin-top: 2px;
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 4px 4px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            display: none;
+        }
+
+        #suggestions.visible {
+            display: block;
+        }
+
+        #suggestions li {
+            display: flex;
+            align-items: center;
+            padding: 8px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+
+        #suggestions li:last-child {
+            border-bottom: none;
+        }
+
+        #suggestions li:hover {
+            background: #f0f0f0;
+        }
+
+        .suggestion-icon {
+            width: 24px;
+            height: 24px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        /* Modal styles */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .modal h3 {
+            margin: 0 0 10px;
+            font-size: 1.1em;
+        }
+
+        .modal p {
+            margin: 0 0 5px 0;
+            font-size: 0.9em;
+            color: #555;
+        }
+
+        .modal label {
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .modal input[type="text"],
+        .modal select,
+        .modal input[type="number"] {
+            padding: 8px;
+            font-size: 0.9em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Payment section styles */
+        #card-select-container,
+        #new-card-details {
+            display: none;
+            margin-top: 5px;
+            margin-left: 20px;
+        }
+
+        #new-card-details {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .expiry-cvv {
+            display: flex;
+            gap: 8px;
+        }
+
+        .expiry-cvv input {
+            flex: 1;
+        }
+
+        /* Action buttons */
+        .actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .actions button {
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        #save-btn,
+        #charge-confirm-btn {
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        #save-btn:hover,
+        #charge-confirm-btn:hover {
+            background: #45a049;
+        }
+
+        #cancel-btn,
+        #charge-cancel-btn {
+            background: #aaa;
+            color: #fff;
+        }
+
+        #cancel-btn:hover,
+        #charge-cancel-btn:hover {
+            background: #999;
+        }
+
+        #remove-btn {
+            background: #f44336;
+            color: #fff;
+        }
+
+        #remove-btn:hover {
+            background: #e53935;
+        }
+
+        .shipping-status {
+            cursor: pointer;
+            font-size: 1.1em;
+            text-align: center;
+            width: 24px;
+            height: 24px;
+            margin: -2px;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+            color: #666;
+            background: transparent;
+        }
+
+        .shipping-status:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .shipping-status.shipped { color: #28a745; }
+        .shipping-status.received { color: #007bff; }
+        .shipping-status.replaced { color: #17a2b8; }
+        .shipping-status.missing { color: #dc3545; }
+        .shipping-status.damaged { color: #dc3545; }
+
+        #damage-details {
+            margin-top: 10px;
+            display: none;
+        }
+
+        #damage-details.visible {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <section id="book-section">
+        <h2>Book Orders</h2>
+        <div id="list-wrapper">
+            <ul id="book-list"></ul>
+        </div>
+        <div id="add-book">
+            <input type="text" id="add-input" placeholder="Add book by name..." autocomplete="off" />
+            <ul id="suggestions"></ul>
+        </div>
+    </section>
+
+    <!-- Order Modal -->
+    <div id="order-overlay" class="overlay">
+        <div class="modal">
+            <h3>Order Book</h3>
+            <p>Ordering: <strong id="order-book-name"></strong></p>
+            <label for="charge-amount">Amount to Charge:</label>
+            <input type="text" id="charge-amount" value="40" style="width: 100px; padding: 8px; font-size: 0.9em; border: 1px solid #ccc; border-radius: 4px;" />
+
+            <label style="margin-top: 10px;">Payment Option:</label>
+            <label><input type="radio" name="charge-option" value="card-file" /> Charge a card on file</label>
+            <div id="card-select-container">
+                <select id="card-select">
+                    <option value="" disabled selected>Select a card...</option>
+                    <option value="card-1234">Visa ending 1234</option>
+                    <option value="card-5678">Mastercard ending 5678</option>
+                    <option value="card-9087">Amex ending 9087</option>
+                </select>
+            </div>
+
+            <label><input type="radio" name="charge-option" value="new-card" /> Use a new card</label>
+            <div id="new-card-details">
+                <input type="text" id="new-card-number" placeholder="Card Number" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" required/>
+                <div class="expiry-cvv">
+                    <input type="text" id="new-card-expiry" placeholder="MM / YY" inputmode="numeric" autocomplete="cc-exp" required/>
+                    <input type="text" id="new-card-cvv" placeholder="CVV" inputmode="numeric" autocomplete="cc-csc" required/>
+                </div>
+            </div>
+
+            <label><input type="radio" name="charge-option" value="no-charge" checked /> No charge</label>
+            <div class="actions">
+                <button id="order-cancel-btn">Cancel</button>
+                <button id="order-confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-overlay" class="overlay">
+        <div class="modal">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete <strong id="delete-book-name"></strong>?</p>
+            <div class="actions">
+                <button id="delete-cancel-btn">Cancel</button>
+                <button id="delete-confirm-btn" style="background:#f44336;color:#fff;">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shipping Status Modal -->
+    <div id="shipping-overlay" class="overlay">
+        <div class="modal">
+            <h3>Update Shipping Status</h3>
+            <p>Update status for: <strong id="shipping-book-name"></strong></p>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label><input type="radio" name="shipping-status" value="not-shipped"> Not Yet Shipped</label>
+                <label><input type="radio" name="shipping-status" value="shipped"> Shipped</label>
+                <label><input type="radio" name="shipping-status" value="received"> Received</label>
+                <label><input type="radio" name="shipping-status" value="replaced"> Replaced</label>
+                <label><input type="radio" name="shipping-status" value="missing"> Missing</label>
+                <label><input type="radio" name="shipping-status" value="damaged"> Damaged</label>
+            </div>
+
+            <div id="damage-details">
+                <label for="damage-description" style="display: block; margin-top: 10px;">Describe the damage:</label>
+                <textarea id="damage-description" rows="3" style="width: 95%; margin-top: 5px; margin-right: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+            </div>
+
+            <div class="actions">
+                <button id="shipping-cancel-btn">Cancel</button>
+                <button id="shipping-save-btn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Book data
+        const booksData = [
+            {
+                name: "Yahadus Book 1",
+                imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%201.png"
+            },
+            {
+                name: "Yahadus Book 2",
+                imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%202.png"
+            },
+            {
+                name: "Yahadus Book 3",
+                imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%203.png"
+            },
+            {
+                name: "Yahadus Book 4",
+                imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%204.png"
+            },
+            {
+                name: "Yahadus Book 5",
+                imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%205.png"
+            }
+        ];
+
+        // DOM Elements
+        const bookList = document.getElementById('book-list');
+        const addInput = document.getElementById('add-input');
+        const suggestions = document.getElementById('suggestions');
+        const orderOverlay = document.getElementById('order-overlay');
+        const orderBookNameEl = document.getElementById('order-book-name');
+        const chargeAmount = document.getElementById('charge-amount');
+        const orderConfirmBtn = document.getElementById('order-confirm-btn');
+        const orderCancelBtn = document.getElementById('order-cancel-btn');
+        const deleteOverlay = document.getElementById('delete-overlay');
+        const deleteBookNameEl = document.getElementById('delete-book-name');
+        const deleteConfirmBtn = document.getElementById('delete-confirm-btn');
+        const deleteCancelBtn = document.getElementById('delete-cancel-btn');
+
+        // Payment Elements
+        const chargeOptionRadios = document.querySelectorAll('input[name="charge-option"]');
+        const cardSelectContainer = document.getElementById('card-select-container');
+        const cardSelect = document.getElementById('card-select');
+        const newCardDetails = document.getElementById('new-card-details');
+        const newCardNumber = document.getElementById('new-card-number');
+        const newCardExpiry = document.getElementById('new-card-expiry');
+        const newCardCvv = document.getElementById('new-card-cvv');
+
+        // Shipping status related elements
+        const shippingOverlay = document.getElementById('shipping-overlay');
+        const shippingBookNameEl = document.getElementById('shipping-book-name');
+        const shippingStatusRadios = document.getElementsByName('shipping-status');
+        const damageDetails = document.getElementById('damage-details');
+        const damageDescription = document.getElementById('damage-description');
+        const shippingSaveBtn = document.getElementById('shipping-save-btn');
+        const shippingCancelBtn = document.getElementById('shipping-cancel-btn');
+
+        let currentBookName = null;
+        let liToDelete = null;
+
+        // Store shipping statuses
+        const bookShippingStatus = {};
+        const bookDamageDetails = {};
+
+        // Create book item
+        function createBookItem(book) {
+            const li = document.createElement('li');
+            li.dataset.bookName = book.name;
+
+            const status = bookShippingStatus[book.name] || 'not-shipped';
+            const statusText = status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const damageText = status === 'damaged' ? `\nDamage details: ${bookDamageDetails[book.name] || 'No details provided'}` : '';
+
+            li.innerHTML = `
+                <img src="${book.imageUrl}" alt="${book.name.substring(0,1)}" class="book-icon" title="${book.name}">
+                <span class="book-text">${book.name}</span>
+                <span class="shipping-status ${status}" title="Status: ${statusText}${damageText}"><i class="fas fa-shipping-fast"></i></span>
+                <span class="delete-btn" title="Remove Book"><i class="fas fa-trash"></i></span>
+            `;
+
+            // Delete button event listener
+            li.querySelector('.delete-btn').addEventListener('click', () => {
+                liToDelete = li;
+                deleteBookNameEl.textContent = li.dataset.bookName;
+                deleteOverlay.classList.add('active');
+            });
+
+            // Shipping status event listener
+            li.querySelector('.shipping-status').addEventListener('click', () => {
+                currentBookName = li.dataset.bookName;
+                openShippingModal();
+            });
+
+            return li;
+        }
+
+        // Show suggestions
+        function showSuggestions(filterValue) {
+            const filter = filterValue.toLowerCase().trim();
+            suggestions.innerHTML = '';
+            const currentBookNames = Array.from(bookList.querySelectorAll('li')).map(li => li.dataset.bookName);
+            let hasSuggestions = false;
+
+            booksData.forEach(book => {
+                if (!currentBookNames.includes(book.name) &&
+                    (!filter || book.name.toLowerCase().includes(filter)))
+                {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <img src="${book.imageUrl}" class="suggestion-icon" alt="">
+                        <span>${book.name}</span>
+                    `;
+                    li.dataset.bookName = book.name;
+
+                    li.addEventListener('click', () => {
+                        let oldBook = null;
+                        if (bookList.children.length > 0) {
+                            if (confirm("You already have a book ordered. Would you like to delete it and order this one instead?")) {
+                                oldBook = bookList.children[0];
+                                currentBookName = book.name;
+                                const tempBook = createBookItem(book);
+                                const confirmOrder = () => {
+                                    bookList.innerHTML = '';
+                                    bookList.appendChild(tempBook);
+                                    updateTotalCredits();
+                                };
+                                const cancelOrder = () => {
+                                    currentBookName = oldBook.dataset.bookName;
+                                };
+                                orderConfirmBtn.addEventListener('click', confirmOrder, { once: true });
+                                orderCancelBtn.addEventListener('click', cancelOrder, { once: true });
+                                openOrderModal();
+                            }
+                        } else {
+                            bookList.appendChild(createBookItem(book));
+                            currentBookName = book.name;
+                            openOrderModal();
+                        }
+                        addInput.value = '';
+                        suggestions.innerHTML = '';
+                        suggestions.classList.remove('visible');
+                    });
+                    suggestions.appendChild(li);
+                    hasSuggestions = true;
+                }
+            });
+            suggestions.classList.toggle('visible', hasSuggestions);
+        }
+
+        // Open order modal
+        function openOrderModal() {
+            if (!currentBookName) return;
+            orderBookNameEl.textContent = currentBookName;
+            chargeAmount.value = "40";
+
+            // Reset payment options
+            document.querySelector('input[name="charge-option"][value="no-charge"]').checked = true;
+            cardSelectContainer.style.display = 'none';
+            newCardDetails.style.display = 'none';
+            cardSelect.selectedIndex = 0;
+            newCardNumber.value = '';
+            newCardExpiry.value = '';
+            newCardCvv.value = '';
+
+            orderOverlay.classList.add('active');
+        }
+
+        // Event listeners for payment options
+        chargeOptionRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                const selectedValue = document.querySelector('input[name="charge-option"]:checked').value;
+                cardSelectContainer.style.display = (selectedValue === 'card-file') ? 'block' : 'none';
+                newCardDetails.style.display = (selectedValue === 'new-card') ? 'flex' : 'none';
+
+                if (selectedValue !== 'card-file') { cardSelect.selectedIndex = 0; }
+                if (selectedValue !== 'new-card') {
+                    newCardNumber.value = ''; newCardExpiry.value = ''; newCardCvv.value = '';
+                }
+            });
+        });
+
+        // Order confirmation
+        orderConfirmBtn.addEventListener('click', () => {
+            if (!currentBookName) return;
+            const amount = parseFloat(chargeAmount.value);
+            const selectedPaymentOption = document.querySelector('input[name="charge-option"]:checked').value;
+
+            // Payment processing logic
+            let paymentSuccessful = true;
+
+            if (selectedPaymentOption === 'card-file') {
+                const selectedCard = cardSelect.value;
+                if (!selectedCard) {
+                    alert("Please select a card on file.");
+                    paymentSuccessful = false;
+                    return;
+                }
+                console.log(`Processing payment of $${amount} with card on file: ${selectedCard}`);
+            } else if (selectedPaymentOption === 'new-card') {
+                if (!newCardNumber.value || !newCardExpiry.value || !newCardCvv.value) {
+                    alert("Please fill in all new card details.");
+                    paymentSuccessful = false;
+                    return;
+                }
+                if (!/^\d{2}\s?\/\s?\d{2}$/.test(newCardExpiry.value)) {
+                    alert("Please enter expiry date in MM / YY format.");
+                    paymentSuccessful = false;
+                    return;
+                }
+                console.log(`Processing payment of $${amount} with new card ending: ${newCardNumber.value.slice(-4)}`);
+            } else {
+                console.log(`No charge for ${currentBookName}`);
+            }
+
+            if (paymentSuccessful) {
+                orderOverlay.classList.remove('active');
+                alert(`Book order confirmed! ${selectedPaymentOption !== 'no-charge' ? `$${amount} will be charged.` : 'No charge will be made.'}`);
+            }
+        });
+
+        orderCancelBtn.addEventListener('click', () => {
+            orderOverlay.classList.remove('active');
+        });
+
+        // Delete confirmation
+        deleteConfirmBtn.addEventListener('click', () => {
+            if (liToDelete) {
+                liToDelete.remove();
+                liToDelete = null;
+                if (document.activeElement === addInput) {
+                    showSuggestions(addInput.value);
+                }
+            }
+            deleteOverlay.classList.remove('active');
+        });
+
+        deleteCancelBtn.addEventListener('click', () => {
+            liToDelete = null;
+            deleteOverlay.classList.remove('active');
+        });
+
+        // Card number and expiry formatting
+        function formatCardNumber(e) {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 16);
+            const sections = value.match(/.{1,4}/g);
+            if (sections) value = sections.join(' ');
+            e.target.value = value;
+        }
+
+        function formatExpiry(e) {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 4);
+            if (value.length > 2) {
+                value = value.substring(0, 2) + ' / ' + value.substring(2);
+            }
+            e.target.value = value;
+        }
+
+        newCardNumber.addEventListener('input', formatCardNumber);
+        newCardExpiry.addEventListener('input', formatExpiry);
+
+        // Input/suggestions event listeners
+        addInput.addEventListener('focus', () => showSuggestions(addInput.value));
+        addInput.addEventListener('input', () => showSuggestions(addInput.value));
+        document.addEventListener('click', (e) => {
+            if (!addInput.contains(e.target) && !suggestions.contains(e.target)) {
+                suggestions.classList.remove('visible');
+            }
+        });
+
+        function openShippingModal() {
+            if (!currentBookName) return;
+            
+            shippingBookNameEl.textContent = currentBookName;
+            const currentStatus = bookShippingStatus[currentBookName] || 'not-shipped';
+            
+            // Set the current status in radio buttons
+            shippingStatusRadios.forEach(radio => {
+                radio.checked = radio.value === currentStatus;
+            });
+
+            // Show/hide damage details if needed
+            damageDetails.classList.toggle('visible', currentStatus === 'damaged');
+            if (currentStatus === 'damaged') {
+                damageDescription.value = bookDamageDetails[currentBookName] || '';
+            }
+
+            shippingOverlay.classList.add('active');
+        }
+
+        // Event listener for shipping status changes
+        shippingStatusRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                damageDetails.classList.toggle('visible', radio.value === 'damaged');
+                if (radio.value === 'damaged') {
+                    damageDescription.focus();
+                }
+            });
+        });
+
+        shippingSaveBtn.addEventListener('click', () => {
+            const selectedStatus = document.querySelector('input[name="shipping-status"]:checked').value;
+            bookShippingStatus[currentBookName] = selectedStatus;
+            
+            if (selectedStatus === 'damaged') {
+                bookDamageDetails[currentBookName] = damageDescription.value.trim();
+            } else {
+                delete bookDamageDetails[currentBookName];
+            }
+
+            // Update the shipping status icon
+            const statusIcon = document.querySelector(`li[data-book-name="${currentBookName}"] .shipping-status`);
+            if (statusIcon) {
+                statusIcon.className = `shipping-status ${selectedStatus}`;
+                const statusText = selectedStatus.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const damageText = selectedStatus === 'damaged' ? `\nDamage details: ${bookDamageDetails[currentBookName] || 'No details provided'}` : '';
+                statusIcon.title = `Status: ${statusText}${damageText}`;
+            }
+
+            shippingOverlay.classList.remove('active');
+        });
+
+        shippingCancelBtn.addEventListener('click', () => {
+            shippingOverlay.classList.remove('active');
+        });
+    </script>
+</body>
+</html>

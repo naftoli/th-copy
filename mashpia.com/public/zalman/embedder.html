@@ -1,0 +1,373 @@
+<!--B"H-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinecone Semantic Search</title>
+    <style>
+        body {
+    font-family: sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+#searchForm label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#searchForm input[type="text"],
+#searchForm input[type="number"] {
+    width: calc(100% - 22px); /* Account for padding and border */
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+#searchForm button {
+    display: inline-block;
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+#searchForm button:hover {
+    background-color: #2980b9;
+}
+
+#searchForm button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+}
+
+.status-message {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.status-message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-message.loading {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+    text-align: center;
+}
+
+.status-message.success {
+     background-color: #d4edda;
+     color: #155724;
+     border: 1px solid #c3e6cb;
+ }
+
+#resultsContainer {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.result-item {
+    background-color: #ecf0f1;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.result-item p {
+    margin: 0 0 10px 0;
+}
+
+.result-item strong {
+    color: #2980b9;
+}
+
+.result-item .score {
+    font-weight: bold;
+    color: #27ae60; /* Green for score */
+    margin-right: 15px;
+}
+
+.result-item .metadata {
+    font-size: 0.9em;
+    color: #555;
+    background-color: #f9f9f9;
+    padding: 8px;
+    border: 1px dashed #ccc;
+    margin-top: 8px;
+    white-space: pre-wrap; /* Preserve formatting */
+    word-wrap: break-word;
+}
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Semantic Search with Pinecone</h1>
+        <p>Enter a text prompt to find semantically similar items stored in Pinecone.</p>
+
+        <form id="searchForm">
+            <label for="query">Search Prompt:</label>
+            <input type="text" id="query" name="query" required placeholder="e.g., information about renewable energy">
+
+            <label for="topK">Number of Results (Top K):</label>
+            <input type="number" id="topK" name="topK" value="5" min="1" max="20" required>
+
+            <button type="submit" id="searchButton">Search</button>
+        </form>
+
+        <div id="status" class="status-message" aria-live="polite"></div>
+
+        <h2>Results</h2>
+        <div id="resultsContainer">
+            <!-- Search results will be displayed here -->
+            <p>Enter a prompt and click search to see results.</p>
+        </div>
+    </div>
+
+    <script>
+        // B"H - Client-side Search Script
+
+// --- Configuration ---
+// IMPORTANT: Replace this with the actual URL of your PHP backend script
+const API_ENDPOINT = 'https://mashpia.com/zalman/chatembed.php'; // <--- CHANGE THIS
+
+// --- DOM Elements ---
+const searchForm = document.getElementById('searchForm');
+const queryInput = document.getElementById('query');
+const topKInput = document.getElementById('topK');
+const searchButton = document.getElementById('searchButton');
+const statusDiv = document.getElementById('status');
+const resultsContainer = document.getElementById('resultsContainer');
+
+// --- Event Listener ---
+searchForm.addEventListener('submit', handleSearchSubmit);
+
+// --- Functions ---
+
+/**
+ * Handles the form submission event.
+ * @param {Event} event - The form submission event.
+ */
+async function handleSearchSubmit(event) {
+    event.preventDefault(); // Prevent default page reload
+
+    const queryText = queryInput.value.trim();
+    const topK = parseInt(topKInput.value, 10);
+
+    if (!queryText) {
+        showStatus('Please enter a search prompt.', 'error');
+        return;
+    }
+     if (isNaN(topK) || topK < 1) {
+        showStatus('Please enter a valid number for Top K (>= 1).', 'error');
+        return;
+    }
+
+    searchButton.disabled = true;
+    showStatus('Processing your request...', 'loading');
+    resultsContainer.innerHTML = ''; // Clear previous results
+
+    try {
+        // Step 1: Get embedding for the query text
+        showStatus('Step 1: Generating embedding for your query...', 'loading');
+        const embedding = await getEmbedding(queryText);
+        if (!embedding) return; // Error handled in getEmbedding
+
+        // Step 2: Perform search using the embedding
+        showStatus('Step 2: Searching Pinecone with the embedding...', 'loading');
+        const searchResults = await searchPinecone(embedding, topK);
+        if (!searchResults) return; // Error handled in searchPinecone
+
+        // Step 3: Display results
+        displayResults(searchResults);
+
+    } catch (error) {
+        // Catch unexpected errors during the process
+        console.error('Unexpected Search Error:', error);
+        showStatus(`An unexpected error occurred: ${error.message}`, 'error');
+    } finally {
+        searchButton.disabled = false; // Re-enable button regardless of outcome
+    }
+}
+
+/**
+ * Calls the backend API to get an embedding for the given text.
+ * @param {string} text - The text to embed.
+ * @returns {Promise<Array<number>|null>} The embedding vector or null on error.
+ */
+async function getEmbedding(text) {
+    const formData = new FormData();
+    formData.append('action', 'embed');
+    formData.append('text', text);
+
+    try {
+        const response = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success || !result.embedding) {
+            const errorMessage = result.error || 'Failed to get embedding from server.';
+            console.error('Embedding Error:', result);
+            showStatus(`Embedding Error: ${errorMessage}`, 'error');
+            return null;
+        }
+
+        console.log('Embedding received:', result.embedding);
+        return result.embedding; // Should be an array of numbers
+
+    } catch (error) {
+        console.error('Network or Fetch Error (Embedding):', error);
+        showStatus(`Network error while getting embedding: ${error.message}`, 'error');
+        return null;
+    }
+}
+
+/**
+ * Calls the backend API to search Pinecone using an embedding vector.
+ * @param {Array<number>} vector - The embedding vector to search with.
+ * @param {number} topK - The number of results to retrieve.
+ * @returns {Promise<object|null>} The search results object from Pinecone or null on error.
+ */
+async function searchPinecone(vector, topK) {
+    const formData = new FormData();
+    formData.append('action', 'search');
+    formData.append('topK', topK.toString()); // Send as string
+
+    // IMPORTANT: Send vector and filter (if any) as JSON strings
+    formData.append('vector', JSON.stringify(vector));
+    // formData.append('filter', JSON.stringify({"genre": "fiction"})); // Example filter - uncomment and modify if needed
+
+    try {
+        const response = await fetch(API_ENDPOINT, {
+            method: 'POST',
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success || !result.results) {
+             const errorMessage = result.error || 'Failed to get search results from server.';
+             console.error('Search Error:', result);
+             showStatus(`Search Error: ${errorMessage}`, 'error');
+             return null;
+        }
+
+        console.log('Search Results received:', result.results);
+        return result.results; // This should be the object containing 'matches' etc.
+
+    } catch (error) {
+        console.error('Network or Fetch Error (Search):', error);
+        showStatus(`Network error during search: ${error.message}`, 'error');
+        return null;
+    }
+}
+
+/**
+ * Displays the search results in the results container.
+ * @param {object} searchData - The results object from the Pinecone query response.
+ */
+function displayResults(searchData) {
+    resultsContainer.innerHTML = ''; // Clear previous content (like "Enter prompt...")
+
+    if (!searchData.matches || searchData.matches.length === 0) {
+        resultsContainer.innerHTML = '<p>No relevant results found in Pinecone.</p>';
+        showStatus('Search complete. No matches found.', 'success');
+        return;
+    }
+
+    showStatus(`Search complete. Found ${searchData.matches.length} results.`, 'success');
+
+    searchData.matches.forEach(match => {
+        const itemDiv = document.createElement('div');
+        itemDiv.className = 'result-item';
+
+        const scoreSpan = document.createElement('span');
+        scoreSpan.className = 'score';
+        scoreSpan.textContent = `Score: ${match.score ? match.score.toFixed(4) : 'N/A'}`; // Format score
+
+        const textP = document.createElement('p');
+        // Prefer original_text if available in metadata, otherwise show ID
+        const originalText = match.metadata?.original_text;
+        textP.innerHTML = `<strong>Content:</strong> ${originalText ? escapeHtml(originalText) : `<em>ID: ${escapeHtml(match.id)}</em>`}`;
+
+        const metaDiv = document.createElement('div');
+        metaDiv.className = 'metadata';
+        // Display all metadata prettily formatted
+        metaDiv.textContent = `ID: ${match.id}\nMetadata: ${JSON.stringify(match.metadata || {}, null, 2)}`;
+
+        itemDiv.appendChild(scoreSpan);
+        itemDiv.appendChild(textP);
+        itemDiv.appendChild(metaDiv);
+
+        resultsContainer.appendChild(itemDiv);
+    });
+}
+
+/**
+ * Updates the status message area.
+ * @param {string} message - The message to display.
+ * @param {'loading' | 'error' | 'success' | 'info'} type - The type of message for styling.
+ */
+function showStatus(message, type = 'info') {
+    statusDiv.textContent = message;
+    statusDiv.className = `status-message ${type}`; // Reset classes and add new type
+    console.log(`Status (${type}): ${message}`);
+}
+
+/**
+ * Basic HTML escaping function to prevent XSS from metadata content.
+ * Use a more robust library in production if necessary.
+ * @param {string} unsafe - The potentially unsafe string.
+ * @returns {string} The escaped string.
+ */
+function escapeHtml(unsafe) {
+    if (!unsafe) return '';
+    return unsafe
+         .replace(/&/g, "&")
+         .replace(/</g, "<")
+         .replace(/>/g, ">")
+       
+         .replace(/'/g, "'");
+}
+
+// Initial message
+showStatus('Ready to search.', 'info');
+    </script>
+</body>
+</html>

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trust Game Show</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-image: url('https://mashpia.com/zalman/score.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        /* Ensure the image covers the entire screen */
+        html {
+            height: 100%;
+        }
+
+        .points {
+            position: absolute;
+            color: white;
+            font-size: 80px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            padding: 20px;
+        }
+
+        .points-R {
+            top: 135px;
+            left: 290px;
+        }
+
+        .points-Y {
+            top: 135px;
+            right: 255px;
+        }
+
+        .points-D {
+            bottom: 115px;
+            left: 290px;
+        }
+
+        .points-E {
+            bottom: 115px;
+            right: 255px;
+        }
+
+        /* Green border animation */
+        .green-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            border: 15px solid #00ff00;
+            box-sizing: border-box;
+            animation: greenPulse 2.5s ease-out;
+        }
+
+        /* Red border animation */
+        .red-border {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+            border: 15px solid #ff0000;
+            box-sizing: border-box;
+            animation: redPulse 2.5s ease-out;
+        }
+
+        @keyframes greenPulse {
+            0% {
+                border-color: #00ff00;
+                opacity: 1;
+            }
+            100% {
+                border-color: transparent;
+                opacity: 0;
+            }
+        }
+
+        @keyframes redPulse {
+            0% {
+                border-color: #ff0000;
+                opacity: 1;
+            }
+            100% {
+                border-color: transparent;
+                opacity: 0;
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 2px solid #888;
+            width: 80%;
+            max-width: 600px;
+            border-radius: 10px;
+            position: relative;
+            cursor: move;
+        }
+
+        .modal-header {
+            cursor: move;
+            padding: 10px;
+            margin: -20px -20px 20px -20px;
+            background-color: #f0f0f0;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .position-input {
+            margin: 10px 0;
+            padding: 10px;
+        }
+
+        .position-input label {
+            display: inline-block;
+            width: 80px;
+            font-weight: bold;
+        }
+
+        .position-input input {
+            width: 80px;
+            padding: 5px;
+            margin: 0 10px;
+        }
+
+        .apply-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        .apply-btn:hover {
+            background-color: #45a049;
+        }
+
+        /* Model Questions */
+        .question {
+            position: absolute;
+            top: 45%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 30px;
+            width: 80%;
+            max-width: 1140px;
+            text-align: center;
+            display: none;
+            z-index: 1500;
+        }
+
+        .question h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .question p {
+            font-size: 40px;
+            line-height: 1.2;
+            color: rgb(0, 0, 0);
+            word-wrap: break-word;
+            max-width: 1140px;
+            margin: 0 auto;
+            text-shadow: 0px 0px 0px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="points points-R" id="points-R">0</div>
+    <div class="points points-Y" id="points-Y">0</div>
+    <div class="points points-D" id="points-D">0</div>
+    <div class="points points-E" id="points-E">0</div>
+
+    <!-- Model Questions -->
+    <div class="question" id="question1">
+        <p>What are the most effective strategies for maintaining long-term motivation when working on a complex project that spans several months and requires consistent focus, energy, and attention to detail?</p>
+    </div>
+
+    <div class="question" id="question2">
+        <p>How does the integration of artificial intelligence in everyday technology influence human decision-making processes, and what ethical considerations arise from increasingly autonomous systems in society?</p>
+    </div>
+
+    <div class="question" id="question3">
+        <p>In what ways can educational institutions adapt their curricula to better prepare students for the rapidly evolving job market, especially with the rise of automation, remote work, and global collaboration?</p>
+    </div>
+
+    <!-- Modal for position editing -->
+    <div id="positionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Positions & Settings</h2>
+                <span class="close">&times;</span>
+            </div>
+            
+            <h3>Points Positions</h3>
+            <div class="position-input">
+                <label>Points R:</label>
+                <input type="number" id="points-R-top" placeholder="Top">
+                <input type="number" id="points-R-left" placeholder="Left">
+                <button class="apply-btn" onclick="applyPosition('points-R')">Apply</button>
+            </div>
+            
+            <div class="position-input">
+                <label>Points Y:</label>
+                <input type="number" id="points-Y-top" placeholder="Top">
+                <input type="number" id="points-Y-right" placeholder="Right">
+                <button class="apply-btn" onclick="applyPosition('points-Y')">Apply</button>
+            </div>
+            
+            <div class="position-input">
+                <label>Points D:</label>
+                <input type="number" id="points-D-bottom" placeholder="Bottom">
+                <input type="number" id="points-D-left" placeholder="Left">
+                <button class="apply-btn" onclick="applyPosition('points-D')">Apply</button>
+            </div>
+            
+            <div class="position-input">
+                <label>Points E:</label>
+                <input type="number" id="points-E-bottom" placeholder="Bottom">
+                <input type="number" id="points-E-right" placeholder="Right">
+                <button class="apply-btn" onclick="applyPosition('points-E')">Apply</button>
+            </div>
+
+            <h3>Question Settings</h3>
+            <div class="position-input">
+                <label>Question Top:</label>
+                <input type="number" id="question-top" placeholder="Top %">
+                <button class="apply-btn" onclick="applyQuestionPosition()">Apply</button>
+            </div>
+
+            <div class="position-input">
+                <label>Font Size:</label>
+                <input type="number" id="question-font-size" placeholder="Font Size">
+                <button class="apply-btn" onclick="applyQuestionFont()">Apply</button>
+            </div>
+
+            <div class="position-input">
+                <label>Line Height:</label>
+                <input type="number" id="question-line-height" placeholder="Line Height" step="0.1">
+                <button class="apply-btn" onclick="applyQuestionLineHeight()">Apply</button>
+            </div>
+
+            <div class="position-input">
+                <label>Max Width:</label>
+                <input type="number" id="question-max-width" placeholder="Max Width">
+                <button class="apply-btn" onclick="applyQuestionMaxWidth()">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize points object
+        let points = {
+            R: 0,
+            Y: 0,
+            D: 0,
+            E: 0
+        };
+
+        // Track current background image
+        let currentBackground = 1; // 1 = original, 2 = scoreq
+
+        // Track current question
+        let currentQuestion = 0; // 0 = none, 1-3 = question number
+
+        // Function to update points display
+        function updatePointsDisplay() {
+            document.getElementById('points-R').textContent = points.R;
+            document.getElementById('points-Y').textContent = points.Y;
+            document.getElementById('points-D').textContent = points.D;
+            document.getElementById('points-E').textContent = points.E;
+        }
+
+        // Function to create green border animation
+        function createGreenBorder() {
+            const border = document.createElement('div');
+            border.className = 'green-border';
+            document.body.appendChild(border);
+            
+            // Remove the element after animation completes
+            setTimeout(() => {
+                if (border.parentNode) {
+                    border.parentNode.removeChild(border);
+                }
+            }, 2500);
+        }
+
+        // Function to create red border animation
+        function createRedBorder() {
+            const border = document.createElement('div');
+            border.className = 'red-border';
+            document.body.appendChild(border);
+            
+            // Remove the element after animation completes
+            setTimeout(() => {
+                if (border.parentNode) {
+                    border.parentNode.removeChild(border);
+                }
+            }, 2500);
+        }
+
+        // Initialize display
+        updatePointsDisplay();
+
+        // Modal functionality
+        const modal = document.getElementById('positionModal');
+        const closeBtn = document.getElementsByClassName('close')[0];
+        const modalContent = document.querySelector('.modal-content');
+        const modalHeader = document.querySelector('.modal-header');
+
+        // Dragging variables
+        let isDragging = false;
+        let currentX;
+        let currentY;
+        let initialX;
+        let initialY;
+        let xOffset = 0;
+        let yOffset = 0;
+
+        // Close modal when clicking X
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        // Drag functionality
+        modalHeader.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+
+        function dragStart(e) {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+
+            if (e.target === modalHeader || modalHeader.contains(e.target)) {
+                isDragging = true;
+            }
+        }
+
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+
+                xOffset = currentX;
+                yOffset = currentY;
+
+                setTranslate(currentX, currentY, modalContent);
+            }
+        }
+
+        function setTranslate(xPos, yPos, el) {
+            el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+        }
+
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+
+        // Function to load current positions into modal
+        function loadCurrentPositions() {
+            const pointsR = document.querySelector('.points-R');
+            const pointsY = document.querySelector('.points-Y');
+            const pointsD = document.querySelector('.points-D');
+            const pointsE = document.querySelector('.points-E');
+
+            document.getElementById('points-R-top').value = parseInt(pointsR.style.top) || 135;
+            document.getElementById('points-R-left').value = parseInt(pointsR.style.left) || 290;
+            
+            document.getElementById('points-Y-top').value = parseInt(pointsY.style.top) || 135;
+            document.getElementById('points-Y-right').value = parseInt(pointsY.style.right) || 255;
+            
+            document.getElementById('points-D-bottom').value = parseInt(pointsD.style.bottom) || 115;
+            document.getElementById('points-D-left').value = parseInt(pointsD.style.left) || 290;
+            
+            document.getElementById('points-E-bottom').value = parseInt(pointsE.style.bottom) || 115;
+            document.getElementById('points-E-right').value = parseInt(pointsE.style.right) || 255;
+
+            // Load question settings
+            const question = document.querySelector('.question');
+            const questionP = document.querySelector('.question p');
+            
+            document.getElementById('question-top').value = parseInt(question.style.top) || 45;
+            document.getElementById('question-font-size').value = parseInt(questionP.style.fontSize) || 40;
+            document.getElementById('question-line-height').value = parseFloat(questionP.style.lineHeight) || 1.2;
+            document.getElementById('question-max-width').value = parseInt(questionP.style.maxWidth) || 11000000;
+        }
+
+        // Function to apply position changes
+        function applyPosition(pointsClass) {
+            const element = document.querySelector('.' + pointsClass);
+            
+            switch(pointsClass) {
+                case 'points-R':
+                    const topR = document.getElementById('points-R-top').value;
+                    const leftR = document.getElementById('points-R-left').value;
+                    if (topR) element.style.top = topR + 'px';
+                    if (leftR) element.style.left = leftR + 'px';
+                    break;
+                case 'points-Y':
+                    const topY = document.getElementById('points-Y-top').value;
+                    const rightY = document.getElementById('points-Y-right').value;
+                    if (topY) element.style.top = topY + 'px';
+                    if (rightY) element.style.right = rightY + 'px';
+                    break;
+                case 'points-D':
+                    const bottomD = document.getElementById('points-D-bottom').value;
+                    const leftD = document.getElementById('points-D-left').value;
+                    if (bottomD) element.style.bottom = bottomD + 'px';
+                    if (leftD) element.style.left = leftD + 'px';
+                    break;
+                case 'points-E':
+                    const bottomE = document.getElementById('points-E-bottom').value;
+                    const rightE = document.getElementById('points-E-right').value;
+                    if (bottomE) element.style.bottom = bottomE + 'px';
+                    if (rightE) element.style.right = rightE + 'px';
+                    break;
+            }
+        }
+
+        // Function to show/hide questions
+        function showQuestion(questionNumber) {
+            // Hide all questions first
+            document.getElementById('question1').style.display = 'none';
+            document.getElementById('question2').style.display = 'none';
+            document.getElementById('question3').style.display = 'none';
+            
+            // Show the selected question
+            if (questionNumber >= 1 && questionNumber <= 3) {
+                document.getElementById('question' + questionNumber).style.display = 'block';
+                currentQuestion = questionNumber;
+            }
+        }
+
+        function hideAllQuestions() {
+            document.getElementById('question1').style.display = 'none';
+            document.getElementById('question2').style.display = 'none';
+            document.getElementById('question3').style.display = 'none';
+            currentQuestion = 0;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion === 0) {
+                showQuestion(1);
+            } else if (currentQuestion < 3) {
+                showQuestion(currentQuestion + 1);
+            } else {
+                showQuestion(1); // Loop back to first question
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion === 0) {
+                showQuestion(3);
+            } else if (currentQuestion > 1) {
+                showQuestion(currentQuestion - 1);
+            } else {
+                showQuestion(3); // Loop to last question
+            }
+        }
+
+        function toggleQuestions() {
+            if (currentQuestion === 0) {
+                // No question showing, show the first one
+                showQuestion(1);
+            } else {
+                // Question is showing, hide it
+                hideAllQuestions();
+            }
+        }
+
+        // Update keyboard event listener to include P key
+        document.addEventListener('keydown', function(event) {
+            switch(event.key.toLowerCase()) {
+                case 'a':
+                    if (currentBackground === 1) {
+                        document.body.style.backgroundImage = "url('https://mashpia.com/zalman/scoreq.png')";
+                        currentBackground = 2;
+                    } else {
+                        document.body.style.backgroundImage = "url('https://mashpia.com/zalman/score.png')";
+                        currentBackground = 1;
+                    }
+                    break;
+                case 'm':
+                    nextQuestion();
+                    break;
+                case 'n':
+                    previousQuestion();
+                    break;
+                case 'b':
+                    toggleQuestions();
+                    break;
+                case 'p':
+                    loadCurrentPositions();
+                    modal.style.display = 'block';
+                    break;
+                case 'q':
+                    points.R += 10;
+                    updatePointsDisplay();
+                    createGreenBorder();
+                    break;
+                case 'w':
+                    points.R -= 10;
+                    updatePointsDisplay();
+                    createRedBorder();
+                    break;
+                case 'e':
+                    points.Y += 10;
+                    updatePointsDisplay();
+                    createGreenBorder();
+                    break;
+                case 'r':
+                    points.Y -= 10;
+                    updatePointsDisplay();
+                    createRedBorder();
+                    break;
+                case 't':
+                    points.D += 10;
+                    updatePointsDisplay();
+                    createGreenBorder();
+                    break;
+                case 'y':
+                    points.D -= 10;
+                    updatePointsDisplay();
+                    createRedBorder();
+                    break;
+                case 'u':
+                    points.E += 10;
+                    updatePointsDisplay();
+                    createGreenBorder();
+                    break;
+                case 'i':
+                    points.E -= 10;
+                    updatePointsDisplay();
+                    createRedBorder();
+                    break;
+            }
+        });
+
+        // Function to apply question position
+        function applyQuestionPosition() {
+            const topValue = document.getElementById('question-top').value;
+            if (topValue) {
+                const questions = document.querySelectorAll('.question');
+                questions.forEach(q => q.style.top = topValue + '%');
+            }
+        }
+
+        // Function to apply question font size
+        function applyQuestionFont() {
+            const fontSize = document.getElementById('question-font-size').value;
+            if (fontSize) {
+                const questionPs = document.querySelectorAll('.question p');
+                questionPs.forEach(p => p.style.fontSize = fontSize + 'px');
+            }
+        }
+
+        // Function to apply question line height
+        function applyQuestionLineHeight() {
+            const lineHeight = document.getElementById('question-line-height').value;
+            if (lineHeight) {
+                const questionPs = document.querySelectorAll('.question p');
+                questionPs.forEach(p => p.style.lineHeight = lineHeight);
+            }
+        }
+
+        // Function to apply question max width
+        function applyQuestionMaxWidth() {
+            const maxWidth = document.getElementById('question-max-width').value;
+            if (maxWidth) {
+                const questionPs = document.querySelectorAll('.question p');
+                questionPs.forEach(p => p.style.maxWidth = maxWidth + 'px');
+            }
+        }
+    </script>
+</body>
+</html>

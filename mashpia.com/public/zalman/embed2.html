@@ -1,0 +1,356 @@
+<!--B"H-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B"H - Pinecone Semantic Search</title>
+    <style>
+        /* --- Intense Good CSS --- */
+        :root {
+            --bg-color: #1a1a2e; /* Dark blue */
+            --primary-color: #e07a5f; /* Coral */
+            --secondary-color: #81b29a; /* Sage */
+            --accent-color: #f2cc8f; /* Pale yellow */
+            --text-color: #f4f1de; /* Off-white */
+            --card-bg: #162447; /* Slightly darker blue */
+            --border-color: #4b5d67;
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 2rem 3rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px var(--shadow-color);
+            width: 100%;
+            max-width: 800px;
+            border: 1px solid var(--border-color);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 1px;
+            text-shadow: 1px 1px 3px var(--shadow-color);
+        }
+
+        #search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        #prompt {
+            font-family: inherit;
+            font-size: 1rem;
+            padding: 0.8rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            resize: vertical; /* Allow vertical resize */
+            min-height: 60px;
+        }
+
+        #prompt:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(129, 178, 154, 0.3);
+        }
+
+        button[type="submit"] {
+            font-family: inherit;
+            font-size: 1.1rem;
+            font-weight: bold;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-color), #d95b3a);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(224, 122, 95, 0.3);
+        }
+
+        button[type="submit"]:hover:not(:disabled) {
+            background: linear-gradient(135deg, #d95b3a, var(--primary-color));
+            box-shadow: 0 6px 15px rgba(224, 122, 95, 0.5);
+            transform: translateY(-2px);
+        }
+
+        button[type="submit"]:active:not(:disabled) {
+             transform: translateY(0);
+             box-shadow: 0 2px 5px rgba(224, 122, 95, 0.4);
+        }
+
+        button[type="submit"]:disabled {
+            background: #555;
+            cursor: not-allowed;
+            opacity: 0.7;
+            box-shadow: none;
+        }
+
+        #loading-indicator {
+            display: none; /* Hidden by default */
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+
+        #results {
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            padding-top: 1.5rem;
+        }
+
+        #results h2 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .result-item {
+            background-color: rgba(22, 36, 71, 0.6); /* Slightly transparent card bg */
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            opacity: 0; /* Start hidden for animation */
+            transform: translateY(20px); /* Start lowered for animation */
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        /* Stagger animation */
+        .result-item:nth-child(1) { animation-delay: 0.1s; }
+        .result-item:nth-child(2) { animation-delay: 0.2s; }
+        .result-item:nth-child(3) { animation-delay: 0.3s; }
+        .result-item:nth-child(4) { animation-delay: 0.4s; }
+        .result-item:nth-child(5) { animation-delay: 0.5s; }
+        /* Add more if expecting more than 5 results */
+
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px var(--shadow-color);
+        }
+
+        .result-item p {
+            margin-bottom: 0.5rem;
+            white-space: pre-wrap; /* Preserve whitespace/newlines */
+            word-wrap: break-word; /* Break long words */
+        }
+
+        .result-item .score {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            font-weight: bold;
+            display: block; /* On its own line */
+            margin-top: 0.8rem;
+            text-align: right;
+        }
+
+        .result-item .metadata-label {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        #error-message {
+            color: #ff6b6b; /* Red for errors */
+            background-color: rgba(255, 107, 107, 0.1);
+            border: 1px solid #ff6b6b;
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1.5rem;
+            display: none; /* Hidden by default */
+            text-align: center;
+        }
+
+         /* Responsive */
+        @media (max-width: 768px) {
+             body { padding: 1rem; }
+             .container { padding: 1.5rem; }
+             h1 { font-size: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Pinecone Semantic Search</h1>
+
+        <form id="search-form">
+            <textarea id="prompt" name="prompt" placeholder="Enter your search query here..." required rows="3"></textarea>
+            <button type="submit" id="submit-button">Search</button>
+        </form>
+
+        <div id="loading-indicator">Searching... Please wait ✨</div>
+        <div id="error-message"></div>
+        <div id="results">
+            <!-- Search results will be injected here -->
+             <!-- <h2>Results:</h2> -->
+             <!-- Example structure:
+             <div class="result-item">
+                 <p><span class="metadata-label">Text:</span> Lorem ipsum dolor sit amet...</p>
+                 <span class="score">Score: 0.987</span>
+             </div>
+             -->
+        </div>
+    </div>
+
+    <script>
+        // --- Intense Good JavaScript ---
+        const searchForm = document.getElementById('search-form');
+        const promptInput = document.getElementById('prompt');
+        const submitButton = document.getElementById('submit-button');
+        const resultsDiv = document.getElementById('results');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const errorMessageDiv = document.getElementById('error-message');
+
+        // Set the URL for your PHP API endpoint
+        const API_URL = 'https://mashpia.com/zalman/searchembeds.php'; // Make sure this path is correct relative to the HTML file or use an absolute path
+
+        searchForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const prompt = promptInput.value.trim();
+            if (!prompt) {
+                showError('Please enter a search prompt.');
+                return;
+            }
+
+            // --- UI Updates: Start Loading ---
+            submitButton.disabled = true;
+            loadingIndicator.style.display = 'block';
+            resultsDiv.innerHTML = ''; // Clear previous results
+            errorMessageDiv.style.display = 'none'; // Hide previous errors
+
+            try {
+                // --- Prepare Request Data ---
+                const requestData = {
+                    action: 'search_text', // Matches the 'action' in PHP
+                    prompt: prompt,
+                    topK: 5 // You can make this configurable if needed
+                };
+
+                // --- Make API Call ---
+                console.log('Sending request to:', API_URL, 'with data:', requestData);
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                // --- Handle Response ---
+                 console.log('Received response status:', response.status);
+                const result = await response.json(); // Attempt to parse JSON regardless of status for error details
+                 console.log('Parsed response:', result);
+
+                if (!response.ok) {
+                    // Handle HTTP errors (4xx, 5xx)
+                    let errorMsg = `Server Error: ${response.status} ${response.statusText}`;
+                    if (result && result.error) {
+                        errorMsg = result.error + (result.details ? ` (${result.details})` : '');
+                    }
+                    throw new Error(errorMsg); // Throw to be caught by the catch block
+                }
+
+                if (result.success && result.results) {
+                     displayResults(result.results);
+                } else {
+                    // Handle cases where success might be false or results missing
+                    throw new Error(result.error || 'Failed to get results from server.');
+                }
+
+            } catch (error) {
+                console.error('Search Error:', error);
+                showError(`Search failed: ${error.message}`);
+            } finally {
+                // --- UI Updates: Stop Loading ---
+                submitButton.disabled = false;
+                loadingIndicator.style.display = 'none';
+            }
+        });
+
+        function displayResults(matches) {
+            resultsDiv.innerHTML = '<h2>Results:</h2>'; // Add header before results
+
+            if (!matches || matches.length === 0) {
+                resultsDiv.innerHTML += '<p>No relevant results found.</p>';
+                return;
+            }
+
+            matches.forEach(match => {
+                const item = document.createElement('div');
+                item.className = 'result-item';
+
+                let content = '';
+                // Display metadata - adjust based on what you store (e.g., 'original_text')
+                if (match.metadata && match.metadata.original_text) {
+                     // Escape HTML to prevent XSS if text comes from untrusted sources
+                     const escapedText = document.createElement('div').innerText = match.metadata.original_text;
+                     content += `<p><span class="metadata-label">Text:</span> ${escapedText}</p>`;
+                } else {
+                    content += `<p><span class="metadata-label">ID:</span> ${match.id}</p>`; // Fallback to ID if no text
+                }
+
+                // Display Score
+                const score = match.score ? match.score.toFixed(4) : 'N/A';
+                content += `<span class="score">Score: ${score}</span>`;
+
+                item.innerHTML = content;
+                resultsDiv.appendChild(item);
+            });
+        }
+
+        function showError(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.style.display = 'block';
+            resultsDiv.innerHTML = ''; // Clear results area on error
+        }
+
+    </script>
+</body>
+</html>

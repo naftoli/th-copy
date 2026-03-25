@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Drafting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #07232c;
+            background-image: url('https://mashpia.com/zalman/d.png');
+            background-size: 1920px 1080px;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            width: 100%;
+            border: 20px solid transparent;
+            transition: border-color 0.2s ease;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Draggable names styling */
+        .draggable-name {
+            position: absolute;
+            font-size: 19px;
+            color: white;
+            cursor: move;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            padding: 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 3px;
+            z-index: 10;
+        }
+
+        /* Optional: Add some content overlay if needed */
+        .content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Countdown timer styling */
+        .countdown {
+            position: fixed;
+            bottom: 255px;
+            right: 100px;
+            color: white;
+            font-size: 135px;
+            font-weight: bold;
+            display: none;
+            font-family: monospace;
+            cursor: move;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Red flash effect */
+        .flash-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 0, 0, 0.8);
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .flash-overlay.active {
+            opacity: 1;
+        }
+
+        /* Game image overlay */
+        .game-image {
+            position: fixed;
+            bottom: 250px;
+            right: 50px;
+            width: 500px;
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            border: 3px solid white;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            cursor: move;
+        }
+
+        #gameImage {
+            background-image: url('https://mashpia.com/file_view.php?id=963439992');
+        }
+
+        #gameImageS {
+            background-image: url('https://mashpia.com/file_view.php?id=212757648');
+        }
+
+        #gameImageD {
+            background-image: url('https://mashpia.com/file_view.php?id=4237293998');
+        }
+
+        #gameImageF {
+            background-image: url('https://mashpia.com/mobile/reg/img/14153.20180828192237.png');
+        }
+
+        #gameImageG {
+            background-image: url('https://mashpia.com/mobile/reg/img/4783.20181008184558.png');
+        }
+
+        #gameImageH {
+            background-image: url('https://mashpia.com/file_view.php?id=1094854244');
+        }
+
+        #gameImageJ {
+            background-image: url('https://mashpia.com/file_view.php?id=3908570262');
+        }
+
+        #gameImageK {
+            background-image: url('https://mashpia.com/file_view.php?id=75611168');
+        }
+
+        #gameImageL {
+            background-image: url('https://mashpia.com/file_view.php?id=3481229470');
+        }
+
+        #gameImage1 {
+            background-image: url('https://mashpia.com/mobile/reg/img/18928.20180904200907.png');
+        }
+
+        #gameImage2 {
+            background-image: url('https://mashpia.com/file_view.php?id=1427724024');
+        }
+
+        #gameImage3 {
+            background-image: url('https://mashpia.com/zalman/ms.png');
+        }
+
+        #gameImage4 {
+            background-image: url('https://mashpia.com/zalman/as.png');
+        }
+
+        #gameImage5 {
+            background-image: url('https://mashpia.com/file_view.php?id=1109188584');
+        }
+
+        #gameImage6 {
+            background-image: url('https://mashpia.com/file_view.php?id=4024447550');
+        }
+
+        .game-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 45px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 1001;
+        }
+    </style>
+</head>
+<body>
+    <!-- Red flash overlay -->
+    <div class="flash-overlay" id="flashOverlay"></div>
+    
+    <!-- Game elements -->
+    <div class="game-image" id="gameImage">
+        <div class="game-text" id="gameText">Yosef Roth</div>
+    </div>
+    <div class="game-image" id="gameImageS">
+        <div class="game-text" id="gameTextS">Zali Rodal</div>
+    </div>
+    <div class="game-image" id="gameImageD">
+        <div class="game-text" id="gameTextD">Eli Kassowitz</div>
+    </div>
+    <div class="game-image" id="gameImageF">
+        <div class="game-text" id="gameTextF">Nochum Brummel</div>
+    </div>
+    <div class="game-image" id="gameImageG">
+        <div class="game-text" id="gameTextG">SB Baumgarten</div>
+    </div>
+    <div class="game-image" id="gameImageH">
+        <div class="game-text" id="gameTextH">Eli Hecht</div>
+    </div>
+    <div class="game-image" id="gameImageJ">
+        <div class="game-text" id="gameTextJ">Motty Gorman</div>
+    </div>
+    <div class="game-image" id="gameImageK">
+        <div class="game-text" id="gameTextK">Menny Munitz</div>
+    </div>
+    <div class="game-image" id="gameImageL">
+        <div class="game-text" id="gameTextL">Tzvi Ezagui</div>
+    </div>
+    <div class="game-image" id="gameImage1">
+        <div class="game-text" id="gameText1">Yisroel Lipsker</div>
+    </div>
+    <div class="game-image" id="gameImage2">
+        <div class="game-text" id="gameText2">Aryeh Leib Silberstein</div>
+    </div>
+    <div class="game-image" id="gameImage3">
+        <div class="game-text" id="gameText3">Motty Smith</div>
+    </div>
+    <div class="game-image" id="gameImage4">
+        <div class="game-text" id="gameText4">Ari Mishulovin</div>
+    </div>
+    <div class="game-image" id="gameImage5">
+        <div class="game-text" id="gameText5">Levi Sillberstein</div>
+    </div>
+    <div class="game-image" id="gameImage6">
+        <div class="game-text" id="gameText6">Willy Way</div>
+    </div>
+    
+    <div class="content">
+        <!-- Your content can go here -->
+    </div>
+
+    <!-- Countdown Timer -->
+    <div class="countdown" id="countdown">05:00</div>
+    
+    <!-- 3 Minute Countdown Timer -->
+    <div class="countdown" id="countdown3min"">03:00</div>
+    
+    <!-- 1 Minute Countdown Timer -->
+    <div class="countdown" id="countdown1min">01:00</div>
+    
+    <!-- Custom Countdown Timer -->
+    <div class="countdown" id="countdownCustom">00:00</div>
+    
+
+    <!-- Draggable Names - Bottom Left (Alphabetical by Last Name) -->
+    <div class="draggable-name" style="left: 20px; top: 480px;">J. Ahlers</div>
+    <div class="draggable-name" style="left: 20px; top: 510px;">N. Amar</div>
+    <div class="draggable-name" style="left: 20px; top: 540px;">E. Aranbayev</div>
+    <div class="draggable-name" style="left: 20px; top: 570px;">M. Ashkenazi</div>
+    <div class="draggable-name" style="left: 20px; top: 600px;">S. Ashkenazi</div>
+    <div class="draggable-name" style="left: 20px; top: 630px;">M. Babych</div>
+    <div class="draggable-name" style="left: 20px; top: 660px;">E. Bachayev</div>
+    <div class="draggable-name" style="left: 20px; top: 690px;">S. Bachayev</div>
+    <div class="draggable-name" style="left: 20px; top: 720px;">C. Baybachayev</div>
+    <div class="draggable-name" style="left: 20px; top: 750px;">M. Baybachayev</div>
+    <div class="draggable-name" style="left: 20px; top: 780px;">A. M. Baybachayev</div>
+    <div class="draggable-name" style="left: 20px; top: 810px;">E. Ben-David</div>
+    <div class="draggable-name" style="left: 20px; top: 840px;">E. Bensoussan</div>
+    <div class="draggable-name" style="left: 20px; top: 870px;">S. Bensoussan</div>
+    <div class="draggable-name" style="left: 20px; top: 900px;">M. Benkhen</div>
+    <div class="draggable-name" style="left: 20px; top: 930px;">A. Y. Beroz</div>
+    
+    <div class="draggable-name" style="left: 220px; top: 480px;">J. Bloom</div>
+    <div class="draggable-name" style="left: 220px; top: 510px;">N. Chernobelskiy</div>
+    <div class="draggable-name" style="left: 220px; top: 540px;">L. De La Cruz</div>
+    <div class="draggable-name" style="left: 220px; top: 570px;">J. Davis</div>
+    <div class="draggable-name" style="left: 220px; top: 600px;">A. Dekhkanov</div>
+    <div class="draggable-name" style="left: 220px; top: 630px;">M. Dhan</div>
+    <div class="draggable-name" style="left: 220px; top: 660px;">M. M. Eizenberg</div>
+    <div class="draggable-name" style="left: 220px; top: 690px;">M. D. S. Fishman</div>
+    <div class="draggable-name" style="left: 220px; top: 720px;">I. Frankel</div>
+    <div class="draggable-name" style="left: 220px; top: 750px;">A. Fuzailov</div>
+    <div class="draggable-name" style="left: 220px; top: 780px;">J. Fuzailov</div>
+    <div class="draggable-name" style="left: 220px; top: 810px;">S. Fuzailov</div>
+    <div class="draggable-name" style="left: 220px; top: 840px;">Y. M. Fuzailov</div>
+    <div class="draggable-name" style="left: 220px; top: 870px;">E. Gadaev</div>
+    <div class="draggable-name" style="left: 220px; top: 900px;">A. S. Gamzon</div>
+    <div class="draggable-name" style="left: 220px; top: 930px;">E. S. Gamzon</div>
+    <div class="draggable-name" style="left: 220px; top: 960px;">Y. Gavrielov</div>
+    
+    <div class="draggable-name" style="left: 420px; top: 480px;">Y. Garmiza</div>
+    <div class="draggable-name" style="left: 420px; top: 510px;">U. Garmiza</div>
+    <div class="draggable-name" style="left: 420px; top: 540px;">D. Garmiza</div>
+    <div class="draggable-name" style="left: 420px; top: 570px;">J. Hecht</div>
+    <div class="draggable-name" style="left: 420px; top: 600px;">N. Hecht</div>
+    <div class="draggable-name" style="left: 420px; top: 630px;">M. H. Itzikowitz</div>
+    <div class="draggable-name" style="left: 420px; top: 660px;">D. Izrailov</div>
+    <div class="draggable-name" style="left: 420px; top: 690px;">H. Judson</div>
+    <div class="draggable-name" style="left: 420px; top: 720px;">O. S. Kauffman</div>
+    <div class="draggable-name" style="left: 420px; top: 750px;">D. Khafizov</div>
+    <div class="draggable-name" style="left: 420px; top: 780px;">S. Krichevsky</div>
+    <div class="draggable-name" style="left: 420px; top: 810px;">S. Lieberman</div>
+    <div class="draggable-name" style="left: 420px; top: 840px;">A. Malca</div>
+    <div class="draggable-name" style="left: 420px; top: 870px;">J. Mamonov</div>
+    <div class="draggable-name" style="left: 420px; top: 900px;">I. Mashkabov</div>
+    <div class="draggable-name" style="left: 420px; top: 930px;">T. Mashkabov</div>
+    
+    <div class="draggable-name" style="left: 620px; top: 480px;">A. Mukhamedov</div>
+    <div class="draggable-name" style="left: 620px; top: 510px;">A. D. Ohana</div>
+    <div class="draggable-name" style="left: 620px; top: 540px;">A. Pesin</div>
+    <div class="draggable-name" style="left: 620px; top: 570px;">M. Rabinowitz</div>
+    <div class="draggable-name" style="left: 620px; top: 600px;">Z. Rodriguez</div>
+    <div class="draggable-name" style="left: 620px; top: 630px;">B. Rosenfeld</div>
+    <div class="draggable-name" style="left: 620px; top: 660px;">S. Steinmetz</div>
+    <div class="draggable-name" style="left: 620px; top: 690px;">J. Sunden</div>
+    <div class="draggable-name" style="left: 620px; top: 720px;">A. Tselner</div>
+    <div class="draggable-name" style="left: 620px; top: 750px;">J. Tiersky</div>
+    <div class="draggable-name" style="left: 620px; top: 780px;">C. Uhlman</div>
+    <div class="draggable-name" style="left: 620px; top: 810px;">D. Yusim</div>
+    <div class="draggable-name" style="left: 620px; top: 840px;">E. Zelinsky</div>
+    
+    <!-- New draggable names on the right side (alphabetical by last name) -->
+    <div class="draggable-name" style="left: 1700px; top: 480px;">I. Davis</div>
+    <div class="draggable-name" style="left: 1700px; top: 510px;">T. Ezagui</div>
+    <div class="draggable-name" style="left: 1700px; top: 540px;">S. Forer</div>
+    <div class="draggable-name" style="left: 1700px; top: 570px;">M. Goldshmid</div>
+    <div class="draggable-name" style="left: 1700px; top: 600px;">E. Hecht</div>
+    <div class="draggable-name" style="left: 1700px; top: 630px;">Y. Lipsker</div>
+    <div class="draggable-name" style="left: 1700px; top: 660px;">M. Levy</div>
+    <div class="draggable-name" style="left: 1700px; top: 690px;">S. N. Mockin</div>
+    <div class="draggable-name" style="left: 1700px; top: 720px;">M. Munitz</div>
+    <div class="draggable-name" style="left: 1700px; top: 750px;">Y. Namdar</div>
+    <div class="draggable-name" style="left: 1700px; top: 780px;">Z. Rodal</div>
+    <div class="draggable-name" style="left: 1700px; top: 810px;">M. Shtainberg</div>
+    <div class="draggable-name" style="left: 1700px; top: 840px;">C. Wilchanski</div>
+    <div class="draggable-name" style="left: 1700px; top: 870px;">Y. Zekaria</div>
+    
+
+
+
+
+    <script>
+        // Make all draggable names draggable
+        document.addEventListener('DOMContentLoaded', function() {
+            // Global text selection prevention
+            document.addEventListener('selectstart', function(e) { e.preventDefault(); return false; });
+            document.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+            document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
+            document.addEventListener('mousedown', function(e) { 
+                if (e.target.classList.contains('draggable-name')) {
+                    e.preventDefault(); 
+                }
+            });
+            
+            // Prevent text selection on the entire document
+            document.body.style.webkitUserSelect = 'none';
+            document.body.style.mozUserSelect = 'none';
+            document.body.style.msUserSelect = 'none';
+            document.body.style.userSelect = 'none';
+            
+            // Game state variables
+            let gameImageVisible = false;
+            let gameTextVisible = false;
+            let gameImageSVisible = false;
+            let gameTextSVisible = false;
+            let gameImageDVisible = false;
+            let gameTextDVisible = false;
+            let gameImageFVisible = false;
+            let gameTextFVisible = false;
+            let gameImageGVisible = false;
+            let gameTextGVisible = false;
+            let gameImageHVisible = false;
+            let gameTextHVisible = false;
+            let gameImageJVisible = false;
+            let gameTextJVisible = false;
+            let gameImageKVisible = false;
+            let gameTextKVisible = false;
+            let gameImageLVisible = false;
+            let gameTextLVisible = false;
+            let gameImage1Visible = false;
+            let gameText1Visible = false;
+            let gameImage2Visible = false;
+            let gameText2Visible = false;
+            let gameImage3Visible = false;
+            let gameText3Visible = false;
+            let gameImage4Visible = false;
+            let gameText4Visible = false;
+            let gameImage5Visible = false;
+            let gameText5Visible = false;
+            let gameImage6Visible = false;
+            let gameText6Visible = false;
+            
+            const draggableNames = document.querySelectorAll('.draggable-name');
+            
+            // Make all game images draggable as a group
+            const gameImages = document.querySelectorAll('.game-image');
+            let isDraggingGameImages = false;
+            let currentXGameImages;
+            let currentYGameImages;
+            let initialXGameImages;
+            let initialYGameImages;
+            let xOffsetGameImages = 0;
+            let yOffsetGameImages = 0;
+
+            gameImages.forEach(image => {
+                image.addEventListener('mousedown', dragStartGameImages);
+                image.addEventListener('mousemove', dragGameImages);
+                image.addEventListener('mouseup', dragEndGameImages);
+                image.addEventListener('mouseleave', dragEndGameImages);
+                
+                // Prevent text selection during drag for all game images
+                image.addEventListener('selectstart', function(e) { e.preventDefault(); return false; });
+                image.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+                image.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
+                image.addEventListener('mousedown', function(e) { e.preventDefault(); });
+                image.addEventListener('touchstart', function(e) { e.preventDefault(); });
+                image.addEventListener('touchmove', function(e) { e.preventDefault(); });
+                image.addEventListener('touchend', function(e) { e.preventDefault(); });
+                
+                // Prevent any text selection on all game images
+                image.style.webkitUserSelect = 'none';
+                image.style.mozUserSelect = 'none';
+                image.style.msUserSelect = 'none';
+                image.style.userSelect = 'none';
+            });
+
+            function dragStartGameImages(e) {
+                e.preventDefault();
+                initialXGameImages = e.clientX - xOffsetGameImages;
+                initialYGameImages = e.clientY - yOffsetGameImages;
+                isDraggingGameImages = true;
+            }
+
+            function dragGameImages(e) {
+                if (isDraggingGameImages) {
+                    e.preventDefault();
+                    currentXGameImages = e.clientX - initialXGameImages;
+                    currentYGameImages = e.clientY - initialYGameImages;
+
+                    xOffsetGameImages = currentXGameImages;
+                    yOffsetGameImages = currentYGameImages;
+
+                    // Move all game images together (including invisible ones)
+                    gameImages.forEach(image => {
+                        setTranslateGameImages(currentXGameImages, currentYGameImages, image);
+                    });
+                }
+            }
+
+            function setTranslateGameImages(xPos, yPos, el) {
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+            }
+
+            function dragEndGameImages(e) {
+                initialXGameImages = currentXGameImages;
+                initialYGameImages = currentYGameImages;
+                isDraggingGameImages = false;
+            }
+
+
+
+
+            
+            draggableNames.forEach(name => {
+                let isDragging = false;
+                let currentX;
+                let currentY;
+                let initialX;
+                let initialY;
+                let xOffset = 0;
+                let yOffset = 0;
+
+                name.addEventListener('mousedown', dragStart);
+                name.addEventListener('mousemove', drag);
+                name.addEventListener('mouseup', dragEnd);
+                name.addEventListener('mouseleave', dragEnd);4
+                
+                // Comprehensive text selection prevention
+                name.addEventListener('selectstart', function(e) { e.preventDefault(); return false; });
+                name.addEventListener('dragstart', function(e) { e.preventDefault(); return false; });
+                name.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; });
+                name.addEventListener('mousedown', function(e) { e.preventDefault(); });
+                name.addEventListener('touchstart', function(e) { e.preventDefault(); });
+                name.addEventListener('touchmove', function(e) { e.preventDefault(); });
+                name.addEventListener('touchend', function(e) { e.preventDefault(); });
+                
+                // Prevent any text selection
+                name.style.webkitUserSelect = 'none';
+                name.style.mozUserSelect = 'none';
+                name.style.msUserSelect = 'none';
+                name.style.userSelect = 'none';
+
+                function dragStart(e) {
+                    e.preventDefault();
+                    initialX = e.clientX - xOffset;
+                    initialY = e.clientY - yOffset;
+
+                    if (e.target === name) {
+                        isDragging = true;
+                    }
+                }
+
+                function drag(e) {
+                    if (isDragging) {
+                        e.preventDefault();
+                        currentX = e.clientX - initialX;
+                        currentY = e.clientY - initialY;
+
+                        xOffset = currentX;
+                        yOffset = currentY;
+
+                        setTranslate(currentX, currentY, name);
+                    }
+                }
+
+                function setTranslate(xPos, yPos, el) {
+                    el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+                }
+
+                function dragEnd(e) {
+                    initialX = currentX;
+                    initialY = currentY;
+                    isDragging = false;
+                }
+            });
+
+            // 5 Minute Countdown Timer functionality
+            const countdownElement = document.getElementById('countdown');
+            let timeLeft = 300; // 5 minutes in seconds
+            let timerInterval = null;
+            let isTimerVisible = false;
+            let isTimerRunning = false;
+
+            function updateTimer() {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                countdownElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Color based on time remaining
+                if (timeLeft > 240) { // 5+ minutes
+                    countdownElement.style.color = '#FFFFFF';
+                } else if (timeLeft > 180) { // 3-4 minutes
+                    countdownElement.style.color = '#ea9b9b';
+                } else if (timeLeft > 120) { // 2-3 minutes
+                    countdownElement.style.color = '#dc5252';
+                } else if (timeLeft > 60) { // 1-2 minutes
+                    countdownElement.style.color = '#d12f2f';
+                } else { // 0-1 minutes
+                    countdownElement.style.color = '#dc0000';
+                }
+            }
+
+            function startTimer() {
+                if (!isTimerVisible) return;
+                if (timerInterval) return; // Already running
+                
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateTimer();
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        timerInterval = null;
+                        isTimerRunning = false;
+                        timeLeft = 0;
+                        updateTimer();
+                    }
+                }, 1000);
+                isTimerRunning = true;
+            }
+
+            function pauseTimer() {
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                    isTimerRunning = false;
+                }
+            }
+
+            function resetTimer() {
+                pauseTimer();
+                timeLeft = 300; // Reset to 5 minutes
+                updateTimer();
+            }
+
+            function toggleTimer() {
+                if (isTimerVisible) {
+                    // Hide timer and reset
+                    countdownElement.style.display = 'none';
+                    isTimerVisible = false;
+                    resetTimer();
+                } else {
+                    // Show timer
+                    countdownElement.style.display = 'block';
+                    isTimerVisible = true;
+                    updateTimer();
+                }
+            }
+
+            // 3 Minute Countdown Timer functionality
+            const countdown3minElement = document.getElementById('countdown3min');
+            let timeLeft3min = 180; // 3 minutes in seconds
+            let timerInterval3min = null;
+            let isTimerVisible3min = false;
+            let isTimerRunning3min = false;
+
+            function updateTimer3min() {
+                const minutes = Math.floor(timeLeft3min / 60);
+                const seconds = timeLeft3min % 60;
+                countdown3minElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Color based on time remaining
+                if (timeLeft3min > 300) { // 5+ minutes
+                    countdown3minElement.style.color = 'white';
+                } else if (timeLeft3min > 240) { // 4-5 minutes
+                    countdown3minElement.style.color = '#ea9b9b';
+                } else if (timeLeft3min > 180) { // 3-4 minutes
+                    countdown3minElement.style.color = '#ea9b9b';
+                } else if (timeLeft3min > 120) { // 2-3 minutes
+                    countdown3minElement.style.color = '#dc5252';
+                } else if (timeLeft3min > 60) { // 1-2 minutes
+                    countdown3minElement.style.color = '#d12f2f';
+                } else { // 0-1 minutes
+                    countdown3minElement.style.color = '#dc0000';
+                }
+            }
+
+            function startTimer3min() {
+                if (!isTimerVisible3min) return;
+                if (timerInterval3min) return; // Already running
+                
+                timerInterval3min = setInterval(() => {
+                    timeLeft3min--;
+                    updateTimer3min();
+                    
+                    if (timeLeft3min <= 0) {
+                        clearInterval(timerInterval3min);
+                        timerInterval3min = null;
+                        isTimerRunning3min = false;
+                        timeLeft3min = 0;
+                        updateTimer3min();
+                    }
+                }, 1000);
+                isTimerRunning3min = true;
+            }
+
+            function pauseTimer3min() {
+                if (timerInterval3min) {
+                    clearInterval(timerInterval3min);
+                    timerInterval3min = null;
+                    isTimerRunning3min = false;
+                }
+            }
+
+            function resetTimer3min() {
+                pauseTimer3min();
+                timeLeft3min = 180; // Reset to 3 minutes
+                updateTimer3min();
+            }
+
+            function toggleTimer3min() {
+                if (isTimerVisible3min) {
+                    // Hide timer and reset
+                    countdown3minElement.style.display = 'none';
+                    isTimerVisible3min = false;
+                    resetTimer3min();
+                } else {
+                    // Show timer
+                    countdown3minElement.style.display = 'block';
+                    isTimerVisible3min = true;
+                    updateTimer3min();
+                }
+            }
+
+            // 1 Minute Countdown Timer functionality
+            const countdown1minElement = document.getElementById('countdown1min');
+            let timeLeft1min = 60; // 1 minute in seconds
+            let timerInterval1min = null;
+            let isTimerVisible1min = false;
+            let isTimerRunning1min = false;
+
+            function updateTimer1min() {
+                const minutes = Math.floor(timeLeft1min / 60);
+                const seconds = timeLeft1min % 60;
+                countdown1minElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Color based on time remaining
+                if (timeLeft1min > 300) { // 5+ minutes
+                    countdown1minElement.style.color = 'white';
+                } else if (timeLeft1min > 240) { // 4-5 minutes
+                    countdown1minElement.style.color = '#ea9b9b';
+                } else if (timeLeft1min > 180) { // 3-4 minutes
+                    countdown1minElement.style.color = '#ea9b9b';
+                } else if (timeLeft1min > 120) { // 2-3 minutes
+                    countdown1minElement.style.color = '#dc5252';
+                } else if (timeLeft1min > 60) { // 1-2 minutes
+                    countdown1minElement.style.color = '#d12f2f';
+                } else { // 0-1 minutes
+                    countdown1minElement.style.color = '#dc0000';
+                }
+            }
+
+            function startTimer1min() {
+                if (!isTimerVisible1min) return;
+                if (timerInterval1min) return; // Already running
+                
+                timerInterval1min = setInterval(() => {
+                    timeLeft1min--;
+                    updateTimer1min();
+                    
+                    if (timeLeft1min <= 0) {
+                        clearInterval(timerInterval1min);
+                        timerInterval1min = null;
+                        isTimerRunning1min = false;
+                        timeLeft1min = 0;
+                        updateTimer1min();
+                    }
+                }, 1000);
+                isTimerRunning1min = true;
+            }
+
+            function pauseTimer1min() {
+                if (timerInterval1min) {
+                    clearInterval(timerInterval1min);
+                    timerInterval1min = null;
+                    isTimerRunning1min = false;
+                }
+            }
+
+            function resetTimer1min() {
+                pauseTimer1min();
+                timeLeft1min = 60; // Reset to 1 minute
+                updateTimer1min();
+            }
+
+            function toggleTimer1min() {
+                if (isTimerVisible1min) {
+                    // Hide timer and reset
+                    countdown1minElement.style.display = 'none';
+                    isTimerVisible1min = false;
+                    resetTimer1min();
+                } else {
+                    // Show timer
+                    countdown1minElement.style.display = 'block';
+                    isTimerVisible1min = true;
+                    updateTimer1min();
+                }
+            }
+
+            // Custom Countdown Timer functionality
+            const countdownCustomElement = document.getElementById('countdownCustom');
+            let timeLeftCustom = 0;
+            let timerIntervalCustom = null;
+            let isTimerVisibleCustom = false;
+            let isTimerRunningCustom = false;
+            let isInputMode = false;
+            let inputBuffer = '';
+
+            function updateTimerCustom() {
+                const minutes = Math.floor(timeLeftCustom / 60);
+                const seconds = timeLeftCustom % 60;
+                countdownCustomElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                // Color based on time remaining
+                if (timeLeftCustom > 300) { // 5+ minutes
+                    countdownCustomElement.style.color = 'white';
+                } else if (timeLeftCustom > 240) { // 4-5 minutes
+                    countdownCustomElement.style.color = '#ea9b9b';
+                } else if (timeLeftCustom > 180) { // 3-4 minutes
+                    countdownCustomElement.style.color = '#ea9b9b';
+                } else if (timeLeftCustom > 120) { // 2-3 minutes
+                    countdownCustomElement.style.color = '#dc5252';
+                } else if (timeLeftCustom > 60) { // 1-2 minutes
+                    countdownCustomElement.style.color = '#d12f2f';
+                } else { // 0-1 minutes
+                    countdownCustomElement.style.color = '#dc0000';
+                }
+            }
+
+            function startTimerCustom() {
+                if (!isTimerVisibleCustom) return;
+                if (timerIntervalCustom) return; // Already running
+                
+                timerIntervalCustom = setInterval(() => {
+                    timeLeftCustom--;
+                    updateTimerCustom();
+                    
+                    if (timeLeftCustom <= 0) {
+                        clearInterval(timerIntervalCustom);
+                        timerIntervalCustom = null;
+                        isTimerRunningCustom = false;
+                        timeLeftCustom = 0;
+                        updateTimerCustom();
+                    }
+                }, 1000);
+                isTimerRunningCustom = true;
+            }
+
+            function pauseTimerCustom() {
+                if (timerIntervalCustom) {
+                    clearInterval(timerIntervalCustom);
+                    timerIntervalCustom = null;
+                    isTimerRunningCustom = false;
+                }
+            }
+
+            function resetTimerCustom() {
+                pauseTimerCustom();
+                timeLeftCustom = 0;
+                updateTimerCustom();
+            }
+
+            function toggleTimerCustom() {
+                if (isTimerVisibleCustom) {
+                    // Hide timer and reset
+                    countdownCustomElement.style.display = 'none';
+                    isTimerVisibleCustom = false;
+                    resetTimerCustom();
+                } else {
+                    // Enter input mode (invisible)
+                    isInputMode = true;
+                    inputBuffer = '';
+                    countdownCustomElement.style.display = 'none';
+                }
+            }
+
+            // Make countdown timers draggable as a group
+            const countdownTimers = document.querySelectorAll('.countdown');
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            countdownTimers.forEach(timer => {
+                timer.addEventListener('mousedown', dragStart);
+                timer.addEventListener('mousemove', drag);
+                timer.addEventListener('mouseup', dragEnd);
+                timer.addEventListener('mouseleave', dragEnd);
+                
+                // Prevent text selection during drag
+                timer.addEventListener('selectstart', function(e) { e.preventDefault(); });
+                timer.addEventListener('dragstart', function(e) { e.preventDefault(); });
+                timer.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+            });
+
+            function dragStart(e) {
+                e.preventDefault();
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+                isDragging = true;
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+
+                    xOffset = currentX;
+                    yOffset = currentY;
+
+                    // Move all timers together (including invisible ones)
+                    countdownTimers.forEach(timer => {
+                        setTranslate(currentX, currentY, timer);
+                    });
+                }
+            }
+
+            function setTranslate(xPos, yPos, el) {
+                el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
+            }
+
+            function dragEnd(e) {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+            }
+
+            // Keyboard event listeners
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'z' || e.key === 'Z') {
+                    e.preventDefault();
+                    toggleTimer();
+                } else if (e.key === 'x' || e.key === 'X') {
+                    e.preventDefault();
+                    toggleTimer3min();
+                } else if (e.key === 'c' || e.key === 'C') {
+                    e.preventDefault();
+                    toggleTimer1min();
+                } else if (e.key === 'v' || e.key === 'V') {
+                    e.preventDefault();
+                    toggleTimerCustom();
+                } else if (e.key === ' ') {
+                    e.preventDefault();
+                    if (isTimerVisible) {
+                        if (isTimerRunning) {
+                            pauseTimer();
+                        } else {
+                            startTimer();
+                        }
+                    }
+                    if (isTimerVisible3min) {
+                        if (isTimerRunning3min) {
+                            pauseTimer3min();
+                        } else {
+                            startTimer3min();
+                        }
+                    }
+                    if (isTimerVisible1min) {
+                        if (isTimerRunning1min) {
+                            pauseTimer1min();
+                        } else {
+                            startTimer1min();
+                        }
+                    }
+                    if (isTimerVisibleCustom) {
+                        if (isTimerRunningCustom) {
+                            pauseTimerCustom();
+                        } else {
+                            startTimerCustom();
+                        }
+                    }
+                } else if (e.key === 'q' || e.key === 'Q') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#a6a6a6';
+                } else if (e.key === 'w' || e.key === 'W') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#ffde59';
+                } else if (e.key === 'e' || e.key === 'E') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#ce0d0d';
+                } else if (e.key === 'r' || e.key === 'R') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#38b6ff';
+                } else if (e.key === 't' || e.key === 'T') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#00bf63';
+                } else if (e.key === 'y' || e.key === 'Y') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#f13939';
+                } else if (e.key === 'u' || e.key === 'U') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#ffa733';
+                } else if (e.key === 'i' || e.key === 'I') {
+                    e.preventDefault();
+                    document.body.style.borderColor = '#2771d1';
+                } else if (e.key === 'p' || e.key === 'P') {
+                    e.preventDefault();
+                    document.body.style.borderColor = 'transparent';
+                } else if (e.key === 'a' || e.key === 'A') {
+                    e.preventDefault();
+                    const gameImage = document.getElementById('gameImage');
+                    const gameText = document.getElementById('gameText');
+                    
+                    if (!gameImageVisible) {
+                        // First press: Show image
+                        gameImage.style.display = 'block';
+                        gameImageVisible = true;
+                        gameTextVisible = false;
+                        gameText.style.display = 'none';
+                    } else if (!gameTextVisible) {
+                        // Second press: Show text on image
+                        gameText.style.display = 'block';
+                        gameTextVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImage.style.display = 'none';
+                        gameText.style.display = 'none';
+                        gameImageVisible = false;
+                        gameTextVisible = false;
+                    }
+                } else if (e.key === 's' || e.key === 'S') {
+                    e.preventDefault();
+                    const gameImageS = document.getElementById('gameImageS');
+                    const gameTextS = document.getElementById('gameTextS');
+                    
+                    if (!gameImageSVisible) {
+                        // First press: Show image
+                        gameImageS.style.display = 'block';
+                        gameImageSVisible = true;
+                        gameTextSVisible = false;
+                        gameTextS.style.display = 'none';
+                    } else if (!gameTextSVisible) {
+                        // Second press: Show text on image
+                        gameTextS.style.display = 'block';
+                        gameTextSVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageS.style.display = 'none';
+                        gameTextS.style.display = 'none';
+                        gameImageSVisible = false;
+                        gameTextSVisible = false;
+                    }
+                } else if (e.key === 'd' || e.key === 'D') {
+                    e.preventDefault();
+                    const gameImageD = document.getElementById('gameImageD');
+                    const gameTextD = document.getElementById('gameTextD');
+                    
+                    if (!gameImageDVisible) {
+                        // First press: Show image
+                        gameImageD.style.display = 'block';
+                        gameImageDVisible = true;
+                        gameTextDVisible = false;
+                        gameTextD.style.display = 'none';
+                    } else if (!gameTextDVisible) {
+                        // Second press: Show text on image
+                        gameTextD.style.display = 'block';
+                        gameTextDVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageD.style.display = 'none';
+                        gameTextD.style.display = 'none';
+                        gameImageDVisible = false;
+                        gameTextDVisible = false;
+                    }
+                } else if (e.key === 'f' || e.key === 'F') {
+                    e.preventDefault();
+                    const gameImageF = document.getElementById('gameImageF');
+                    const gameTextF = document.getElementById('gameTextF');
+                    
+                    if (!gameImageFVisible) {
+                        // First press: Show image
+                        gameImageF.style.display = 'block';
+                        gameImageFVisible = true;
+                        gameTextFVisible = false;
+                        gameTextF.style.display = 'none';
+                    } else if (!gameTextFVisible) {
+                        // Second press: Show text on image
+                        gameTextF.style.display = 'block';
+                        gameTextFVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageF.style.display = 'none';
+                        gameTextF.style.display = 'none';
+                        gameImageFVisible = false;
+                        gameTextFVisible = false;
+                    }
+                } else if (e.key === 'g' || e.key === 'G') {
+                    e.preventDefault();
+                    const gameImageG = document.getElementById('gameImageG');
+                    const gameTextG = document.getElementById('gameTextG');
+                    
+                    if (!gameImageGVisible) {
+                        // First press: Show image
+                        gameImageG.style.display = 'block';
+                        gameImageGVisible = true;
+                        gameTextGVisible = false;
+                        gameTextG.style.display = 'none';
+                    } else if (!gameTextGVisible) {
+                        // Second press: Show text on image
+                        gameTextG.style.display = 'block';
+                        gameTextGVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageG.style.display = 'none';
+                        gameTextG.style.display = 'none';
+                        gameImageGVisible = false;
+                        gameTextGVisible = false;
+                    }
+                } else if (e.key === 'h' || e.key === 'H') {
+                    e.preventDefault();
+                    const gameImageH = document.getElementById('gameImageH');
+                    const gameTextH = document.getElementById('gameTextH');
+                    
+                    if (!gameImageHVisible) {
+                        // First press: Show image
+                        gameImageH.style.display = 'block';
+                        gameImageHVisible = true;
+                        gameTextHVisible = false;
+                        gameTextH.style.display = 'none';
+                    } else if (!gameTextHVisible) {
+                        // Second press: Show text on image
+                        gameTextH.style.display = 'block';
+                        gameTextHVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageH.style.display = 'none';
+                        gameTextH.style.display = 'none';
+                        gameImageHVisible = false;
+                        gameTextHVisible = false;
+                    }
+                } else if (e.key === 'j' || e.key === 'J') {
+                    e.preventDefault();
+                    const gameImageJ = document.getElementById('gameImageJ');
+                    const gameTextJ = document.getElementById('gameTextJ');
+                    
+                    if (!gameImageJVisible) {
+                        // First press: Show image
+                        gameImageJ.style.display = 'block';
+                        gameImageJVisible = true;
+                        gameTextJVisible = false;
+                        gameTextJ.style.display = 'none';
+                    } else if (!gameTextJVisible) {
+                        // Second press: Show text on image
+                        gameTextJ.style.display = 'block';
+                        gameTextJVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageJ.style.display = 'none';
+                        gameTextJ.style.display = 'none';
+                        gameImageJVisible = false;
+                        gameTextJVisible = false;
+                    }
+                } else if (e.key === 'k' || e.key === 'K') {
+                    e.preventDefault();
+                    const gameImageK = document.getElementById('gameImageK');
+                    const gameTextK = document.getElementById('gameTextK');
+                    
+                    if (!gameImageKVisible) {
+                        // First press: Show image
+                        gameImageK.style.display = 'block';
+                        gameImageKVisible = true;
+                        gameTextKVisible = false;
+                        gameTextK.style.display = 'none';
+                    } else if (!gameTextKVisible) {
+                        // Second press: Show text on image
+                        gameTextK.style.display = 'block';
+                        gameTextKVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageK.style.display = 'none';
+                        gameTextK.style.display = 'none';
+                        gameImageKVisible = false;
+                        gameTextKVisible = false;
+                    }
+                } else if (e.key === 'l' || e.key === 'L') {
+                    e.preventDefault();
+                    const gameImageL = document.getElementById('gameImageL');
+                    const gameTextL = document.getElementById('gameTextL');
+                    
+                    if (!gameImageLVisible) {
+                        // First press: Show image
+                        gameImageL.style.display = 'block';
+                        gameImageLVisible = true;
+                        gameTextLVisible = false;
+                        gameTextL.style.display = 'none';
+                    } else if (!gameTextLVisible) {
+                        // Second press: Show text on image
+                        gameTextL.style.display = 'block';
+                        gameTextLVisible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImageL.style.display = 'none';
+                        gameTextL.style.display = 'none';
+                        gameImageLVisible = false;
+                        gameTextLVisible = false;
+                    }
+                } else if (e.key === '1' && !isInputMode) {
+                    e.preventDefault();
+                    const gameImage1 = document.getElementById('gameImage1');
+                    const gameText1 = document.getElementById('gameText1');
+                    
+                    if (!gameImage1Visible) {
+                        // First press: Show image
+                        gameImage1.style.display = 'block';
+                        gameImage1Visible = true;
+                        gameText1Visible = false;
+                        gameText1.style.display = 'none';
+                    } else if (!gameText1Visible) {
+                        // Second press: Show text on image
+                        gameText1.style.display = 'block';
+                        gameText1Visible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImage1.style.display = 'none';
+                        gameText1.style.display = 'none';
+                        gameImage1Visible = false;
+                        gameText1Visible = false;
+                    }
+                } else if (e.key === '2' && !isInputMode) {
+                    e.preventDefault();
+                    const gameImage2 = document.getElementById('gameImage2');
+                    const gameText2 = document.getElementById('gameText2');
+                    
+                    if (!gameImage2Visible) {
+                        // First press: Show image
+                        gameImage2.style.display = 'block';
+                        gameImage2Visible = true;
+                        gameText2Visible = false;
+                        gameText2.style.display = 'none';
+                    } else if (!gameText2Visible) {
+                        // Second press: Show text on image
+                        gameText2.style.display = 'block';
+                        gameText2Visible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImage2.style.display = 'none';
+                        gameText2.style.display = 'none';
+                        gameImage2Visible = false;
+                        gameText2Visible = false;
+                    }
+                } else if (e.key === '3' && !isInputMode) {
+                    e.preventDefault();
+                    const gameImage3 = document.getElementById('gameImage3');
+                    const gameText3 = document.getElementById('gameText3');
+                    
+                    if (!gameImage3Visible) {
+                        // First press: Show image
+                        gameImage3.style.display = 'block';
+                        gameImage3Visible = true;
+                        gameText3Visible = false;
+                        gameText3.style.display = 'none';
+                    } else if (!gameText3Visible) {
+                        // Second press: Show text on image
+                        gameText3.style.display = 'block';
+                        gameText3Visible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImage3.style.display = 'none';
+                        gameText3.style.display = 'none';
+                        gameImage3Visible = false;
+                        gameText3Visible = false;
+                    }
+                } else if (e.key === '4' && !isInputMode) {
+                    e.preventDefault();
+                    const gameImage4 = document.getElementById('gameImage4');
+                    const gameText4 = document.getElementById('gameText4');
+                    
+                    if (!gameImage4Visible) {
+                        // First press: Show image
+                        gameImage4.style.display = 'block';
+                        gameImage4Visible = true;
+                        gameText4Visible = false;
+                        gameText4.style.display = 'none';
+                    } else if (!gameText4Visible) {
+                        // Second press: Show text on image
+                        gameText4.style.display = 'block';
+                        gameText4Visible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImage4.style.display = 'none';
+                        gameText4.style.display = 'none';
+                        gameImage4Visible = false;
+                        gameText4Visible = false;
+                    }
+                } else if (e.key === '5' && !isInputMode) {
+                    e.preventDefault();
+                    const gameImage5 = document.getElementById('gameImage5');
+                    const gameText5 = document.getElementById('gameText5');
+                    
+                    if (!gameImage5Visible) {
+                        // First press: Show image
+                        gameImage5.style.display = 'block';
+                        gameImage5Visible = true;
+                        gameText5Visible = false;
+                        gameText5.style.display = 'none';
+                    } else if (!gameText5Visible) {
+                        // Second press: Show text on image
+                        gameText5.style.display = 'block';
+                        gameText5Visible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImage5.style.display = 'none';
+                        gameText5.style.display = 'none';
+                        gameImage5Visible = false;
+                        gameText5Visible = false;
+                    }
+                } else if (e.key === '6' && !isInputMode) {
+                    e.preventDefault();
+                    const gameImage6 = document.getElementById('gameImage6');
+                    const gameText6 = document.getElementById('gameText6');
+                    
+                    if (!gameImage6Visible) {
+                        // First press: Show image
+                        gameImage6.style.display = 'block';
+                        gameImage6Visible = true;
+                        gameText6Visible = false;
+                        gameText6.style.display = 'none';
+                    } else if (!gameText6Visible) {
+                        // Second press: Show text on image
+                        gameText6.style.display = 'block';
+                        gameText6Visible = true;
+                    } else {
+                        // Third press: Hide everything
+                        gameImage6.style.display = 'none';
+                        gameText6.style.display = 'none';
+                        gameImage6Visible = false;
+                        gameText6Visible = false;
+                    }
+                } else if (e.key === 'b' || e.key === 'B') {
+                    e.preventDefault();
+                    // Trigger red flash effect
+                    const flashOverlay = document.getElementById('flashOverlay');
+                    flashOverlay.classList.add('active');
+                    
+                    // Remove the flash after 200ms
+                    setTimeout(() => {
+                        flashOverlay.classList.remove('active');
+                    }, 200);
+                } else if (isInputMode) {
+                    // Handle input mode for custom timer
+                    if (e.key >= '0' && e.key <= '9') {
+                        inputBuffer += e.key;
+                    } else if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const seconds = parseInt(inputBuffer);
+                        if (seconds > 0) {
+                            timeLeftCustom = seconds;
+                            isTimerVisibleCustom = true;
+                            isInputMode = false;
+                            countdownCustomElement.style.display = 'block';
+                            updateTimerCustom();
+                        } else {
+                            // Invalid input, hide timer
+                            countdownCustomElement.style.display = 'none';
+                            isTimerVisibleCustom = false;
+                            isInputMode = false;
+                        }
+                    } else if (e.key === 'Escape') {
+                        e.preventDefault();
+                        // Cancel input mode
+                        countdownCustomElement.style.display = 'none';
+                        isTimerVisibleCustom = false;
+                        isInputMode = false;
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

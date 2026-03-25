@@ -1,0 +1,146 @@
+<!-- B"H -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Embedding Database Client</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .container {
+      max-width: 600px;
+      background: white;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      resize: vertical;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    .results {
+      margin-top: 20px;
+      background: #eef;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 14px;
+      overflow-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Embedding Database Client</h1>
+
+  <div class="container">
+    <h2>Insert Text</h2>
+    <textarea id="insertText" rows="4" placeholder="Type text to insert..."></textarea>
+    <button onclick="insertText()">Insert into Database</button>
+
+    <h2>Search by Prompt</h2>
+    <input type="text" id="searchPrompt" placeholder="Type search prompt...">
+    <input type="number" id="topK" value="5" min="1" max="20" style="margin-top:5px;" placeholder="Top K results">
+    <button onclick="searchPrompt()">Search</button>
+
+    <div class="results" id="resultsBox"></div>
+  </div>
+
+<script>
+const serverURL =
+"https://mashpia.com/zalman/chatembed.php"
+//
+// 'http://localhost:3000'; // Adjust if hosted elsewhere
+
+async function insertText() {
+    const text = document.getElementById('insertText').value.trim();
+    if (!text) {
+        alert("Please enter some text to insert.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${serverURL}/insert`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: text })
+        });
+        const data = await response.json();
+        document.getElementById('resultsBox').innerText = JSON.stringify(data, null, 2);
+    } catch (err) {
+        console.error(err);
+        alert("Failed to insert.");
+    }
+}
+
+async function searchPrompt() {
+    const prompt = document.getElementById('searchPrompt').value.trim();
+    const topK = parseInt(document.getElementById('topK').value);
+
+    if (!prompt) {
+        alert("Please enter a prompt to search.");
+        return;
+    }
+
+    try {
+        // First, generate the embedding for the prompt
+        const embedResponse = await fetch(`${serverURL}/embed`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: prompt })
+        });
+        const embedData = await embedResponse.json();
+
+        if (!embedData.success) {
+            alert("Failed to generate embedding.");
+            return;
+        }
+
+        const embedding = embedData.embedding;
+
+        // Now, search using the embedding
+        const searchResponse = await fetch(`${serverURL}/search`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                vector: embedding,
+                topK: topK
+            })
+        });
+        const searchData = await searchResponse.json();
+        document.getElementById('resultsBox').innerText = JSON.stringify(searchData, null, 2);
+    } catch (err) {
+        console.error(err);
+        alert("Failed to search.");
+    }
+}
+</script>
+
+</body>
+</html>
