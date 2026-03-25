@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../api/models/Admin.php';
 
 //***************** LOAD CURRENT YEAR **********************/
 require_once __DIR__ . '/../../../class.globalSettings.php';
-$year = GlobalSettings::getChidonRegYear();
+$year = GlobalSettings::getChidonYear();
 
 //*************** LOAD AUTHORIZE FUNCTIONS *********************/
 require_once __DIR__ . '/../../../classes/authorize/CustomerProfile.php';
