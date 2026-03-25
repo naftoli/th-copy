@@ -15,7 +15,10 @@ class SubjectsRouter {
         } else if (isset($_GET['school_id'])) {
             $id = intval($_GET['school_id']);
             $type = 'school';
-        } 
+        } else {
+            $id = $current_user->login->school_id;
+            $type = 'school';
+        }
 
         $exceptions = [12, 40, 136];
         if (isset($_GET['for_streak'])) {

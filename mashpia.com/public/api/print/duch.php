@@ -193,7 +193,7 @@
                         $("#email-button").show();
                     }
                     // Wait for fonts, images, and layout before auto-printing
-                    waitForRenderReady(document.getElementById('main')).then(function() {
+                    // waitForRenderReady(document.getElementById('main')).then(function() {
                         // const children = document.querySelectorAll('.userDuch');
                         // children.forEach(function(child) {
                         //     const totalPages = checkPageCount(child);
@@ -218,7 +218,7 @@
                         //     //   baseurl: "https://yoursite.com", // the base URL for any relative URLs
                         //     // }
                         // });
-                    });
+                    // });
                 }
             }
 
@@ -317,20 +317,31 @@
         };
 
         function emailToOhel() {
+            console.log('emailing to ohel');
             setTimeout(async function() {
-                const elem = document.getElementById('main');
-                
-                const filename = new Date().toISOString().replace(/[-:]/g, '') + '.pdf';
+                document.getElementById('buttons').remove();
+                /*
+                var mainEl = document.getElementById('main');
+                // Root-relative only (/path), not // protocol-relative or bare relative URLs
+                var htmlForPdf = mainEl.innerHTML;
+                htmlForPdf = htmlForPdf.replace(/src="(\/(?!\/)[^"]*)"/g, 'src="https://mashpia.com$1"');
+                htmlForPdf = htmlForPdf.replace(/href="(\/(?!\/)[^"]*)"/g, 'href="https://mashpia.com$1"');
+
+                const formData = new FormData();
+                const filename = new Date().toISOString().replace(/[-:.]/g, '') + '.pdf';
                 const opt = {
                     margin:       0.5,
-                    filename:      filename,
+                    filename:     filename,
                     image:        { type: 'jpeg', quality: 0.98 },
                     html2canvas:  { useCORS: true, allowTaint: false, imageTimeout: 0 },
                     jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
                 };
-                const pdfBlob = await html2pdf().set(opt).from(elem).toPdf().output('blob');
-                const formData = new FormData();
+                const pdfBlob = await html2pdf().set(opt).from(htmlForPdf).toPdf().output('blob');
                 formData.append('file', pdfBlob, filename);
+                */
+               const html = document.documentElement.outerHTML;
+               const formData = new FormData();
+               formData.append('html', html);
                 fetch('sendToOhel.php', {
                     method: 'POST',
                     body: formData,

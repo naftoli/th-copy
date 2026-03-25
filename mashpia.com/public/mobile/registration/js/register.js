@@ -405,7 +405,7 @@ var registrationApp = function () {
     if (school_id == anash_kinder) $("#anash_kinder_text").show();
     else $("#anash_kinder_text").hide();
 
-    let txt = "I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $36 - $350 depending on the track they pass"
+    let txt = "I am aware that if my child qualifies for the Chidon Experience by getting a passing average on the 3 tests there will be a fee of $50 - $350 depending on the track they pass"
     if ([61, 269].includes(school_id)) {
       txt += " PLUS a shipping fee (depending on your address).";
       $("#myshliachTerms").show()

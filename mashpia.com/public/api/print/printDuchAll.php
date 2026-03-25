@@ -207,9 +207,9 @@ foreach ( $missions as $info ) {
 ob_start();
 // * Print the buttons to print and email the Duch
 echo "
-    <div style='display: flex; justify-content: center; gap: 10px; margin-top: 10px;'>
-    <button class='no-print btn btn-primary' id='print-button' style='display: none;' onclick='javascript:window.print()'>Print</button>
-    <button class='no-print btn btn-primary' id='email-button' style='display: none;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
+    <div style='display: flex; justify-content: center; gap: 10px; margin-top: 10px;' id='buttons'>
+    <button class='no-print btn btn-primary' id='print-button' style='display: none; cursor: pointer;' onclick='javascript:window.print()'>Print</button>
+    <button class='no-print btn btn-primary' id='email-button' style='display: none; cursor: pointer;' onclick='javascript:emailToOhel()'>Email to the Ohel</button>
     </div>";
 
 $pages = 0;
@@ -245,6 +245,7 @@ foreach ( $objMissions as $obj ) {
 $html = ob_get_flush();
 
 // create php code for this curl request:
+    /*
 $url = "https://CIrbbDsV2QqOc-ULQnQv@api.docraptor.com/docs";
 $headers = [
     "Content-Type:application/json"
@@ -265,8 +266,8 @@ curl_close($ch);
 // echo $response;
 // save the response to a file
 file_put_contents("/pdf/docraptor.pdf", $response);
-
-// echo $html;
+*/
+echo $html;
 
 function isRTL($lang_id) {
     return in_array($lang_id, [2, 4]);

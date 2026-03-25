@@ -8,6 +8,8 @@ if ($admin_user['auth'] != 'super') {
     exit;
 }
 
+require_once './class.schoolExceptions.php';
+
 $from = $_REQUEST['from'];
 $to = $_REQUEST['to'];
 
@@ -20,7 +22,7 @@ while ($row = mysql_fetch_assoc($result)) {
 
 $qrys = [];
 foreach ($prizes as $row) {
-    $qrys[] = "insert into chidon_prizes
+    $qrys[$row['prize_id']] = "insert into chidon_prizes
                 set year = $to, 
                 prize_picture = '" . $row['prize_picture'] . "', 
                 prize_name = '" . $row['prize_name'] . "', 
@@ -39,10 +41,14 @@ mysql_query('set autocommit=0');
 mysql_query('start transaction');
 
 $success = true;
-foreach ($qrys as $sql) {
+foreach ($qrys as $old_prize_id => $sql) {
+    $school_exceptions = SchoolExceptions::getSchoolExceptionsByPrize($old_prize_id);
     if (! mysql_query($sql)) {
         $success = false;
         break;
+    } else {
+        $new_prize_id = mysql_insert_id();
+        SchoolExceptions::updateSchoolExceptions($new_prize_id, $school_exceptions, true);
     }
 }
 

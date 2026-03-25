@@ -20,7 +20,7 @@ class SchoolExceptions {
         return $exceptions;
     }
 
-    public static function updateSchoolExceptions($prize_id, $exceptions) {
+    public static function updateSchoolExceptions($prize_id, $exceptions, $copy = false) {
         $qrys = [];
         // first delete all existing exceptions for this prize
         $qrys[] = "delete from chidon_prize_school_exceptions where prize_id = $prize_id";
@@ -30,8 +30,10 @@ class SchoolExceptions {
                 $qrys[] = "insert into chidon_prize_school_exceptions (prize_id, school_id) values ($prize_id, $exception)";
         }
 
-        mysql_query('set autocommit=0');
-        mysql_query('start transaction');
+        if (! $copy) {
+            mysql_query('set autocommit=0');
+            mysql_query('start transaction');
+        }
 
         $succeeded = true;
         foreach ($qrys as $qry) {
@@ -42,6 +44,8 @@ class SchoolExceptions {
             }
         }
 
+        if ($copy) return $succeeded;
+        
         if ($succeeded) {
             mysql_query('commit');
             mysql_query('set autocommit=1');

@@ -2,7 +2,7 @@
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/db.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php' );
 // get the current year
-$year = GlobalSettings::getChidonYear();
+$year = GlobalSettings::getCurrentYear();
 // allow the api to override the year
 if ( isset( $_POST['year'] ) ) $year = mysql_real_escape_string( $_POST['year'] );
 // get the campaigns for the current year
