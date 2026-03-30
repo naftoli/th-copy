@@ -1,0 +1,52 @@
+        async function sendMessage() {
+            const userText = userInput.value.trim();
+            if (isProcessingMessage || !userText) return;
+
+            if (typeof config === 'undefined' || !config.API_KEY) {
+                addMessage("⚠️ Cannot send. API Key configuration issue.", 'bot', false, true); return;
+            }
+
+            isProcessingMessage = true;
+            sendButton.disabled = true;
+            userInput.disabled = true;
+            userInput.placeholder = "Mashpia is thinking...";
+
+            addMessage(userText, 'user'); // Add user message instantly
+            messages.push({ role: "user", content: userText });
+            userInput.value = '';
+            userInput.style.height = '48px';
+            userInput.focus();
+
+            typingIndicator.style.display = 'flex';
+            scrollToBottom();
+
+            try {
+                let fullResponse = '';
+                // Wait for the full streamed response, then display it instantly
+                await streamChatGPTResponse(userText, 
+                    (chunk) => {
+                        fullResponse += chunk;
+                    },
+                    (completeResponse) => {
+                        typingIndicator.style.display = 'none';
+                        messages.push({ role: "assistant", content: completeResponse });
+                        addMessage(completeResponse, 'bot');
+                        isProcessingMessage = false;
+                        userInput.disabled = false;
+                        sendButton.disabled = userInput.value.trim().length === 0;
+                        userInput.placeholder = "Ask Mashpia...";
+                        userInput.focus();
+                    },
+                    messages // Pass the conversation history
+                );
+            } catch (error) {
+                console.error('Error during chat processing:', error);
+                typingIndicator.style.display = 'none';
+                addMessage(`😥 Apologies, I encountered an error trying to respond.\n*${error.message}*\nPlease try again.`, 'bot', false, true);
+                isProcessingMessage = false;
+                userInput.disabled = false;
+                sendButton.disabled = userInput.value.trim().length === 0;
+                userInput.placeholder = "Ask Mashpia...";
+                userInput.focus();
+            }
+        } 

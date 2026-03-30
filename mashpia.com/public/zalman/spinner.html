@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Spinner</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('https://mashpia.com/zalman/spin.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+        }
+
+        .spinner-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 0;
+        }
+
+
+
+        .spinner-stick {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 4px;
+            height: 360px;
+            background: linear-gradient(to top, #dc3545, #ff6b6b);
+            transform-origin: 50% 0;
+            transform: translate(-50%, -50%) rotate(0deg);
+            z-index: 5;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: transform 0.1s ease-out;
+        }
+
+        .spinner-stick::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 15px solid #dc3545;
+        }
+
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner-container" id="spinnerContainer">
+            <div class="spinner-stick" id="spinnerStick"></div>
+        </div>
+    </div>
+
+    <script>
+        class Spinner {
+            constructor() {
+                this.container = document.getElementById('spinnerContainer');
+                this.stick = document.getElementById('spinnerStick');
+                
+                this.isSpinning = false;
+                this.currentRotation = 0;
+                this.spinnerX = 200;
+                this.spinnerY = 200;
+                this.moveStep = 1;
+                this.backgroundScale = 100;
+                
+                this.init();
+            }
+            
+            init() {
+                this.setupEventListeners();
+            }
+            
+
+            
+            setupEventListeners() {
+                document.addEventListener('keydown', (e) => {
+                    if (this.isSpinning) return;
+                    
+                    let moved = false;
+                    
+                    switch(e.key) {
+                        case 'ArrowUp':
+                            this.spinnerY -= this.moveStep;
+                            moved = true;
+                            break;
+                        case 'ArrowDown':
+                            this.spinnerY += this.moveStep;
+                            moved = true;
+                            break;
+                        case 'ArrowLeft':
+                            this.spinnerX -= this.moveStep;
+                            moved = true;
+                            break;
+                        case 'ArrowRight':
+                            this.spinnerX += this.moveStep;
+                            moved = true;
+                            break;
+                    }
+                    
+                    if (moved) {
+                        e.preventDefault();
+                        this.updateSpinnerPosition();
+                    }
+                });
+                
+                document.addEventListener('keydown', (e) => {
+                    if (e.shiftKey) {
+                        this.moveStep = 10;
+                    }
+                });
+                
+                document.addEventListener('keyup', (e) => {
+                    if (!e.shiftKey) {
+                        this.moveStep = 1;
+                    }
+                });
+                
+                // Add click to spin functionality
+                document.addEventListener('click', () => this.spin());
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === ' ' || e.key === 'Enter') {
+                        e.preventDefault();
+                        this.spin();
+                    }
+                    if (e.key === 'r' || e.key === 'R') {
+                        this.resetPosition();
+                    }
+                    if (e.shiftKey && e.key === '-') {
+                        e.preventDefault();
+                        this.resizeBackground(-10);
+                    }
+                    if (e.shiftKey && e.key === '=') {
+                        e.preventDefault();
+                        this.resizeBackground(10);
+                    }
+                });
+            }
+            
+            updateSpinnerPosition() {
+                this.container.style.left = (this.spinnerX - 200) + 'px';
+                this.container.style.top = (this.spinnerY - 200) + 'px';
+            }
+            
+            resetPosition() {
+                this.spinnerX = 200;
+                this.spinnerY = 200;
+                this.updateSpinnerPosition();
+            }
+            
+            spin() {
+                if (this.isSpinning) return;
+                
+                this.isSpinning = true;
+                
+                // Random number of full rotations (3-8) plus random final angle
+                const fullRotations = Math.random() * 5 + 3;
+                const finalAngle = Math.random() * 360;
+                const totalRotation = fullRotations * 360 + finalAngle;
+                
+                // Calculate final rotation
+                this.currentRotation = totalRotation;
+                
+                // Animate the spin
+                const duration = 3000 + Math.random() * 2000; // 3-5 seconds
+                const startTime = performance.now();
+                
+                const animate = (currentTime) => {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    
+                    // Easing function for smooth deceleration
+                    const easeOut = 1 - Math.pow(1 - progress, 3);
+                    const currentAngle = easeOut * totalRotation;
+                    
+                    this.stick.style.transform = `translate(-50%, -50%) rotate(${currentAngle}deg)`;
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        this.onSpinComplete();
+                    }
+                };
+                
+                requestAnimationFrame(animate);
+            }
+            
+            onSpinComplete() {
+                this.isSpinning = false;
+            }
+            
+            resizeBackground(delta) {
+                this.backgroundScale = Math.max(10, Math.min(500, this.backgroundScale + delta));
+                document.body.style.backgroundSize = this.backgroundScale + '%';
+            }
+        }
+        
+        // Initialize the spinner when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new Spinner();
+        });
+    </script>
+</body>
+</html>

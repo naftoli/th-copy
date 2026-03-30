@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chidon Tab - Prize Section Final</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* --- CSS Styles --- */
+        body { margin: 0; font-family: sans-serif; }
+        #prize-section {
+            position: absolute; top:20px; right:8px;
+            background:#fff; border:1px solid #ccc; border-radius:8px;
+            padding:16px; width:350px; box-shadow:0 2px 8px rgba(0,0,0,0.1);
+            display:flex; flex-direction:column;
+        }
+        #prize-section h2 { margin:0 0 12px; font-size:1.2em; }
+        #total-credits { font-weight:normal; font-size:0.9em; margin-left:8px; }
+        /* Wrapper for list to position indicator */
+        #list-wrapper { position: relative; flex:1; }
+        /* Fixed height list */
+        #prize-list {
+            list-style:none; padding:0; margin:0;
+            height:260px; /* Adjust height as needed */
+            padding-right:16px; /* Make space for scrollbar */
+            overflow-y:auto;
+        }
+         /* Webkit (Chrome, Safari, Edge) */
+        #prize-list::-webkit-scrollbar { width: 8px; }
+        #prize-list::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        #prize-list::-webkit-scrollbar-thumb { background: #ccc; border-radius: 4px; }
+        #prize-list::-webkit-scrollbar-thumb:hover { background: #aaa; }
+        /* Firefox */
+        #prize-list { scrollbar-width: thin; scrollbar-color: #ccc #f1f1f1; }
+
+        #prize-list li {
+            display:grid; grid-template-columns:24px 1fr 24px 24px 24px;
+            align-items:center; column-gap:8px; padding:8px 0;
+            border-bottom:1px solid #eee;
+        }
+        #prize-list li:last-child { border-bottom:none; }
+        .prize-icon { width:24px; height:24px; object-fit:cover; border-radius:4px; }
+        .prize-text { }
+        .personalization-icon {
+            font-size:1.2em; text-align:center; opacity:0.3;
+            cursor:pointer; transition:opacity 0.2s; user-select: none; /* Prevent text selection */
+        }
+        .personalization-icon:hover { opacity:0.5; }
+        .personalization-icon.active { opacity:1; color: #007bff; /* Example active color */}
+        .personalization-icon.placeholder { opacity: 0; cursor: default; } /* Hide placeholder */
+        
+        
+        .delete-btn {
+            cursor: pointer;
+            font-size: 1.1em;
+            text-align: center;
+            width: 24px;
+            height: 24px;
+            margin: -2px;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+            color: #dc3545;
+            background: transparent;
+        }
+        .delete-btn:hover {
+            background: rgba(220, 53, 69, 0.1);
+        }
+
+        .shipping-status {
+            cursor: pointer;
+            font-size: 1.1em;
+            text-align: center;
+            width: 24px;
+            height: 24px;
+            margin: -2px;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background 0.2s;
+            user-select: none;
+            color: #666;
+            background: transparent;
+        }
+
+        .shipping-status:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .shipping-status.shipped { color: #28a745; }
+        .shipping-status.received { color: #007bff; }
+        .shipping-status.replaced { color: #17a2b8; }
+        .shipping-status.missing { color: #dc3545; }
+        .shipping-status.damaged { color: #dc3545; }
+
+        #damage-details {
+            margin-top: 10px;
+            display: none;
+        }
+
+        #damage-details.visible {
+            display: block;
+        }
+
+        /* Scroll indicator */
+        #scroll-indicator {
+            position:absolute; bottom:4px; right:20px; /* Adjusted position */
+            font-size:1em; display:none; pointer-events:none;
+        }
+        /* Add section pinned */
+        #add-prize { margin-top:12px; position:relative; flex-shrink:0; }
+        #add-input { width:100%; padding:6px; font-size:0.9em; border:1px solid #ccc; border-radius:4px; box-sizing:border-box; }
+
+        /* --- Styles for Suggestions Below Input --- */
+        #suggestions {
+            position: absolute;
+            top: 100%; /* Position below the input */
+            left: 0;
+            right: 0;
+            margin-top: 2px; /* Space between input and suggestions */
+            max-height: 200px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid #ccc; /* Re-apply full border */
+            border-top: none; /* Keep top border removed as it touches input */
+            border-radius: 0 0 4px 4px; /* Rounded bottom corners */
+            list-style: none;
+            padding: 0;
+            margin: 0; /* Keep margin at 0 */
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Shadow below */
+            display: none; /* Hide initially */
+        }
+        #suggestions.visible { display: block; } /* Show when needed */
+        #suggestions li { display:flex; align-items:center; padding:6px; cursor:pointer; border-bottom: 1px solid #eee;}
+        #suggestions li:last-child { border-bottom: none; }
+        #suggestions li:hover { background:#f0f0f0; }
+        .suggestion-icon { width:24px; height:24px; object-fit:cover; border-radius:4px; margin-right:8px; flex-shrink: 0; }
+
+        /* Modal overlay */
+        .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; align-items:center; justify-content:center; z-index: 100; }
+        .overlay.active { display:flex; }
+        .modal { background:#fff; padding:20px; border-radius:8px; width:300px; box-shadow:0 2px 8px rgba(0,0,0,0.2); display:flex; flex-direction:column; gap:10px; }
+        .modal h3 { margin:0 0 10px; font-size:1.1em; }
+        .modal p { margin: 0 0 5px 0; font-size: 0.9em; color: #555; }
+        .modal label { font-size:0.9em; display:flex; align-items:center; gap: 5px; }
+        .modal input[type="text"], .modal select { padding:8px; font-size:0.9em; border:1px solid #ccc; border-radius:4px; width:100%; box-sizing:border-box; }
+
+        /* Styles specific to Charge Modal sections */
+        #card-select-container, #new-card-details { display:none; margin-top: 5px; margin-left: 20px; /* Indent payment details */ }
+        #new-card-details { display:flex; flex-direction:column; gap:6px; }
+        .expiry-cvv { display:flex; gap:8px; }
+        .expiry-cvv input { flex:1; }
+
+        .actions { display:flex; justify-content:flex-end; gap:8px; margin-top:15px; }
+        .actions button { padding:8px 15px; font-size:0.9em; border:none; border-radius:4px; cursor:pointer; transition: background-color 0.2s; }
+        #save-btn, #charge-confirm-btn { background:#4CAF50; color:#fff; }
+        #save-btn:hover, #charge-confirm-btn:hover { background: #45a049; }
+        #cancel-btn, #charge-cancel-btn { background:#aaa; color:#fff; }
+        #cancel-btn:hover, #charge-cancel-btn:hover { background: #999; }
+        #remove-btn { background:#f44336; color:#fff; }
+        #remove-btn:hover { background: #e53935; }
+
+    </style>
+</head>
+<body>
+    <section id="prize-section">
+        <h2>Prizes <span id="total-credits">(Total: 0 credits)</span></h2>
+        <div id="list-wrapper">
+            <ul id="prize-list">
+                </ul>
+            <div id="scroll-indicator">▼</div>
+        </div>
+        <div id="add-prize">
+            <input type="text" id="add-input" placeholder="Add prize by name..." autocomplete="off" />
+            <ul id="suggestions"></ul>
+        </div>
+    </section>
+
+    <div id="edit-overlay" class="overlay">
+        <div class="modal">
+            <h3>Edit Personalization</h3>
+            <p>Editing for: <strong id="edit-prize-name"></strong></p>
+            <label for="personal-input">Personalized Name:</label>
+            <input type="text" id="personal-input" placeholder="Enter name"/>
+            <div class="actions">
+                <button id="remove-btn">Remove Personalization</button>
+                <button id="cancel-btn">Cancel</button>
+                <button id="save-btn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="charge-overlay" class="overlay">
+        <div class="modal">
+            <h3>Add Personalization</h3>
+             <p>Personalizing: <strong id="charge-prize-name"></strong></p>
+            <label for="charge-name-input">Personalized Name:</label>
+            <input type="text" id="charge-name-input" placeholder="Enter name"/>
+
+            <label style="margin-top: 10px;">Payment Option:</label>
+            <label><input type="radio" name="charge-option" value="card-file" /> Charge a card on file</label>
+            <div id="card-select-container"> <select id="card-select">
+                    <option value="" disabled selected>Select a card...</option>
+                    <option value="card-1234">Visa ending 1234</option>
+                    <option value="card-5678">Mastercard ending 5678</option>
+                    <option value="card-9087">Amex ending 9087</option>
+                </select>
+            </div>
+
+            <label><input type="radio" name="charge-option" value="new-card" /> Use a new card</label>
+            <div id="new-card-details"> <input type="text" id="new-card-number" placeholder="Card Number" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" required/>
+                <div class="expiry-cvv">
+                    <input type="text" id="new-card-expiry" placeholder="MM / YY" inputmode="numeric" autocomplete="cc-exp" required/>
+                    <input type="text" id="new-card-cvv" placeholder="CVV" inputmode="numeric" autocomplete="cc-csc" required/>
+                </div>
+            </div>
+
+            <label><input type="radio" name="charge-option" value="no-charge" checked /> No charge</label> <div class="actions">
+                <button id="charge-cancel-btn">Cancel</button>
+                <button id="charge-confirm-btn">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-overlay" class="overlay">
+        <div class="modal">
+            <h3>Confirm Deletion</h3>
+            <p>Are you sure you want to delete <strong id="delete-prize-name"></strong>?</p>
+            <div class="actions">
+                <button id="delete-cancel-btn">Cancel</button>
+                <button id="delete-confirm-btn" style="background:#f44336;color:#fff;">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Credit Warning Modal -->
+    <div id="credit-warning-overlay" class="overlay">
+        <div class="modal">
+            <h3>Credit Limit Warning</h3>
+            <p>The prize you are trying to add exceeds the 75 credit limit and will bring your total to <strong id="warning-total-credits"></strong> credits.</p>
+            <p>Would you like to add it anyway?</p>
+            <div class="actions">
+                <button id="credit-warning-cancel-btn">Cancel</button>
+                <button id="credit-warning-confirm-btn" style="background:#f44336;color:#fff;">Add Anyway</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shipping Status Modal -->
+    <div id="shipping-overlay" class="overlay">
+        <div class="modal">
+            <h3>Update Shipping Status</h3>
+            <p>Update status for: <strong id="shipping-prize-name"></strong></p>
+            
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <label><input type="radio" name="shipping-status" value="not-shipped"> Not Yet Shipped</label>
+                <label><input type="radio" name="shipping-status" value="shipped"> Shipped</label>
+                <label><input type="radio" name="shipping-status" value="received"> Received</label>
+                <label><input type="radio" name="shipping-status" value="replaced"> Replaced</label>
+                <label><input type="radio" name="shipping-status" value="missing"> Missing</label>
+                <label><input type="radio" name="shipping-status" value="damaged"> Damaged</label>
+            </div>
+
+            <div id="damage-details">
+                <label for="damage-description" style="display: block; margin-top: 10px;">Describe the damage:</label>
+                <textarea id="damage-description" rows="3" style="width: 95%; margin-top: 5px; margin-right: 10px; padding: 8px; border: 1px solid #ccc; border-radius: 4px;"></textarea>
+            </div>
+
+            <div class="actions">
+                <button id="shipping-cancel-btn">Cancel</button>
+                <button id="shipping-save-btn">Save</button>
+            </div>
+        </div>
+    </div>
+
+
+<script>
+        // --- 1. Define the Prize Data Structure ---
+        const prizesData = [
+      {name: "Comic Book - The Jewish Underground Vol. 2",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/187%20Comic%20Book%20The%20Jewish%20Underground%20Volume%202.png",allowPersonalization: false},  {name: "Chidon Leather Chitas (Boys)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_433.png",allowPersonalization: true},  {name: "Chidon Leather Chitas (Girls)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_434.png",allowPersonalization: true},  {name: "Chidon Leather Siddur (Boys)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_435.png",allowPersonalization: true},  {name: "Chidon Leather Siddur (Girls)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_436.png",allowPersonalization: true},  {name: "Chidon Leather Tehillim (Boys)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_437.png",allowPersonalization: true},  {name: "Chidon Leather Tehillim (Girls)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_438.png",allowPersonalization: true},  {name: "Chidon Base Ball",credits: 5,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Baseball%20300dpi.png",allowPersonalization: false},  {name: "Personalized Name Bracelet",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Name%20Bracelet.png",allowPersonalization: true},  {name: "Chidon Pogo Ball",credits: 20,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Chidon%20Pogo%20Ball.png",allowPersonalization: false},  {name: "Comic Book - The Jewish Underground Vol. 1",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/The%20Jewish%20Underground.png",allowPersonalization: false},  {name: "Comic Book - Iron Curtain Vol 1",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Comic%20Book%204.png",allowPersonalization: false},  {name: "Comic Book - Iron Curtain Vol 2",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Comic%20Book%203.png",allowPersonalization: false},  {name: "Comic Book - Escape From Europe",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Comic%20Book%202.png",allowPersonalization: false},  {name: "Chidon Leather Machzor (Girls)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_449.png",allowPersonalization: true},  {name: "Chidon Leather Machzor (Boys)",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_450.png",allowPersonalization: true},  {name: "Chocolate Mold",credits: 5,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Chocolate%20mold%20mockup%20transparent%20(1).png",allowPersonalization: false},  {name: "Backpack (Girls)",credits: 30,imageUrl: "https://mashpia.com/chidonOld/prizes/img/189%20Backpack%20Girls.png",allowPersonalization: false},  {name: "Backpack (Boys)",credits: 30,imageUrl: "https://mashpia.com/chidonOld/prizes/img/190%20Backpack%20Boys.png",allowPersonalization: false},  {name: "Waffle Maker",credits: 20,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Chidon%20Waffle%20Maker.png",allowPersonalization: false},  {name: "Chidon Cookie Cutters",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/192%20Chidon%20Cookie%20Cutters.png",allowPersonalization: false},  {name: "Reb Binyomin Kletzker",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/193%20Reb%20Binyomin%20Kletzker.png",allowPersonalization: false},  {name: "Reb Shmuel Munkis",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/194%20Reb%20Shmuel%20Munkis.png",allowPersonalization: false},  {name: "The Slavita Brothers",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_195.png",allowPersonalization: false},  {name: "Reb Hillel Paritcher",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_196.png",allowPersonalization: false},  {name: "Reb Pinchas Reizes",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Reb%20Pinchas%20Reizes.png",allowPersonalization: false},  {name: "The Shpole Zeide",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/The%20Shpole%20Zeide.png",allowPersonalization: false},  {name: "Framed Rebbe Picture 2",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Rebbe%20Picture%205784%20A.png",allowPersonalization: false},  {name: "Pocket Leather Siddur (Boys)",credits: 30,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Pocket%20Leather%20Siddur%20Girls.png",allowPersonalization: true},  {name: "Pocket Leather Siddur (Girls)",credits: 30,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Pocket%20Leather%20Siddur%20Girls.png",allowPersonalization: true},  {name: "Chidon Wearable Blanket - Small",credits: 30,imageUrl: "https://mashpia.com/chidonOld/prizes/img/v1.Chidon%20Wearable%20Blanket.png",allowPersonalization: false},  {name: "Chidon Wearable Blanket - Large",credits: 30,imageUrl: "https://mashpia.com/chidonOld/prizes/img/v1.Chidon%20Wearable%20Blanket.png",allowPersonalization: false},  {name: "Chidon Smoothie Maker",credits: 20,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Smoothie%20Maker.png",allowPersonalization: false},  {name: "Chidon Drawstring Bag",credits: 5,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Drawstring%20Bag%20150dpi.png",allowPersonalization: false},  {name: "Yahadus Book 1",credits: 45,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%201.png",allowPersonalization: false},  {name: "Yahadus Book 2",credits: 45,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%202.png",allowPersonalization: false},  {name: "Yahadus Book 3",credits: 45,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%203.png",allowPersonalization: false},  {name: "Yahadus Book 4",credits: 45,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%204.png",allowPersonalization: false},  {name: "Yahadus Book 5",credits: 45,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Yahadus%20Book%205.png",allowPersonalization: false},  {name: "The Alter Rebbe",credits: 25,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Alter%20Rebbe.png",allowPersonalization: false},  {name: "The Mitiler Rebbe",credits: 25,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Mitteler%20Rebbe.png",allowPersonalization: false},  {name: "The Tzemach Tzedek",credits: 25,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Tzemach%20Tzedek.png",allowPersonalization: false},  {name: "Tzivos Hashem Pushka",credits: 35,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Pushka.png",allowPersonalization: true},  {name: "Comic Book - The Jewish Underground Vol 3",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/The%20Jewish%20Underground%20Volume%203.png",allowPersonalization: false},  {name: "Comic Book - Escape From Ukraine",credits: 15,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_482.png",allowPersonalization: false},  {name: "Remote Control Helicopter AUS",credits: 30,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_484.png",allowPersonalization: false},  {name: "Video Drone AUS",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_485.png",allowPersonalization: false},  {name: "Waffle Maker AUS",credits: 20,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_486.png",allowPersonalization: false},  {name: "Chidon Smoothie Maker AUS",credits: 20,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_384.png",allowPersonalization: false},  {name: "Matzah Cover",credits: 75,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_488.png",allowPersonalization: true},  {name: "Linen Set",credits: 50,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_489.png",allowPersonalization: false},  {name: "Watercolor Travel Set",credits: 20,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_490.png",allowPersonalization: false},  {name: "Candle Stick",credits: 20,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_491.png",allowPersonalization: false},  {name: "Shape Shifting Cube",credits: 10,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_492.png",allowPersonalization: false},  {name: "Chidon Water Bottle (Girls)",credits: 10,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_493.png",allowPersonalization: false},  {name: "Chidon Water Bottle (Boys)",credits: 10,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_494.png",allowPersonalization: false},  {name: "Chidon Water Bottle 2 (Girls)",credits: 10,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_495.png",allowPersonalization: false},  {name: "Chidon Water Bottle 2 (Boys)",credits: 10,imageUrl: "https://mashpia.com/chidonOld/prizes/img/Prize_496.png",allowPersonalization: false}
+            // Add more prize objects here as needed
+        ];
+
+        // --- DOM Element References ---
+        const prizeList = document.getElementById('prize-list');
+        const totalCreditsEl = document.getElementById('total-credits');
+        const addInput = document.getElementById('add-input');
+        const suggestions = document.getElementById('suggestions');
+        const scrollIndicator = document.getElementById('scroll-indicator');
+
+        // Edit Modal Elements
+        const editOverlay = document.getElementById('edit-overlay');
+        const editPrizeNameEl = document.getElementById('edit-prize-name');
+        const personalInput = document.getElementById('personal-input');
+        const editSaveBtn = document.getElementById('save-btn');
+        const editCancelBtn = document.getElementById('cancel-btn');
+        const editRemoveBtn = document.getElementById('remove-btn');
+
+        // Add/Charge Modal Elements
+        const chargeOverlay = document.getElementById('charge-overlay');
+        const chargePrizeNameEl = document.getElementById('charge-prize-name');
+        const chargeNameInput = document.getElementById('charge-name-input');
+        const chargeConfirmBtn = document.getElementById('charge-confirm-btn');
+        const chargeCancelBtn = document.getElementById('charge-cancel-btn');
+        // Payment Option Elements
+        const chargeOptionRadios = document.querySelectorAll('input[name="charge-option"]');
+        const cardSelectContainer = document.getElementById('card-select-container');
+        const cardSelect = document.getElementById('card-select');
+        const newCardDetails = document.getElementById('new-card-details');
+        const newCardNumber = document.getElementById('new-card-number');
+        const newCardExpiry = document.getElementById('new-card-expiry');
+        const newCardCvv = document.getElementById('new-card-cvv');
+        // Delete Modal Elements
+        const deleteOverlay = document.getElementById('delete-overlay');
+        const deletePrizeNameEl = document.getElementById('delete-prize-name');
+        const deleteConfirmBtn = document.getElementById('delete-confirm-btn');
+        const deleteCancelBtn = document.getElementById('delete-cancel-btn');
+        let liToDelete = null;
+
+        // Credit Warning Modal Elements
+        const creditWarningOverlay = document.getElementById('credit-warning-overlay');
+        const warningTotalCreditsEl = document.getElementById('warning-total-credits');
+        const creditWarningCancelBtn = document.getElementById('credit-warning-cancel-btn');
+        const creditWarningConfirmBtn = document.getElementById('credit-warning-confirm-btn');
+        let pendingPrize = null;
+
+        // Shipping status related elements
+        const shippingOverlay = document.getElementById('shipping-overlay');
+        const shippingPrizeNameEl = document.getElementById('shipping-prize-name');
+        const shippingStatusRadios = document.getElementsByName('shipping-status');
+        const damageDetails = document.getElementById('damage-details');
+        const damageDescription = document.getElementById('damage-description');
+        const shippingSaveBtn = document.getElementById('shipping-save-btn');
+        const shippingCancelBtn = document.getElementById('shipping-cancel-btn');
+
+        // Store shipping statuses
+        const prizeShippingStatus = {};
+        const prizeDamageDetails = {};
+
+        // --- State Variables ---
+        // Stores personalization data: { 'Prize Name': 'Personalized Text', ... }
+        const prizePersonalization = {};
+        let currentPrizeNameForModal = null; // Track which prize modal is acting on
+
+        // --- Core Functions ---
+
+        function updateTotalCredits() {
+            let total = 0;
+            prizeList.querySelectorAll('li').forEach(li => {
+                total += parseInt(li.dataset.credits || 0, 10);
+            });
+            totalCreditsEl.textContent = `(Total: ${total} credits)`;
+            updateScrollIndicator();
+        }
+
+        function updateScrollIndicator() {
+            const listElement = prizeList;
+            const tolerance = 5;
+            const shouldShow = listElement.scrollHeight > listElement.clientHeight &&
+                               (listElement.scrollTop + listElement.clientHeight) < (listElement.scrollHeight - tolerance);
+             scrollIndicator.style.display = shouldShow ? 'block' : 'none';
+        }
+
+        function createPrizeItem(prizeObject) {
+            const li = document.createElement('li');
+            li.dataset.prizeName = prizeObject.name;
+            li.dataset.credits = prizeObject.credits;
+
+            const personalizedText = prizePersonalization[prizeObject.name];
+            const isPersonalized = !!personalizedText;
+            const status = prizeShippingStatus[prizeObject.name] || 'not-shipped';
+            const statusText = status.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            const damageText = status === 'damaged' ? `\nDamage details: ${prizeDamageDetails[prizeObject.name] || 'No details provided'}` : '';
+
+            li.innerHTML = `
+                <img src="${prizeObject.imageUrl}" alt="${prizeObject.name.substring(0,1)}" class="prize-icon" title="${prizeObject.name}">
+                <span class="prize-text">${prizeObject.name} (${prizeObject.credits})</span>
+                ${prizeObject.allowPersonalization
+                    ? `<span class="personalization-icon ${isPersonalized ? 'active' : ''}" data-prize="${prizeObject.name}" title="${isPersonalized ? 'Edit Personalization: ' + personalizedText : 'Add Personalization'}">א</span>`
+                    : `<span class="personalization-icon placeholder"></span>`
+                }
+                <span class="shipping-status ${status}" title="Status: ${statusText}${damageText}"><i class="fas fa-shipping-fast"></i></span>
+                <span class="delete-btn" title="Remove Prize"><i class="fas fa-trash"></i></span>
+            `;
+
+            // Delete Button Event Listener
+            li.querySelector('.delete-btn').addEventListener('click', () => {
+                liToDelete = li;
+                deletePrizeNameEl.textContent = li.dataset.prizeName;
+                deleteOverlay.classList.add('active');
+            });
+
+            // Personalization Icon Event Listener
+            if (prizeObject.allowPersonalization) {
+                const icon = li.querySelector('.personalization-icon');
+                icon.addEventListener('click', () => {
+                    currentPrizeNameForModal = icon.dataset.prize;
+                    if (icon.classList.contains('active')) {
+                        openEditModal();
+                    } else {
+                        openChargeModal();
+                    }
+                });
+            }
+
+            // Shipping Status Event Listener
+            li.querySelector('.shipping-status').addEventListener('click', () => {
+                currentPrizeNameForModal = li.dataset.prizeName;
+                openShippingModal();
+            });
+
+            return li;
+        }
+
+        function showSuggestions(filterValue) {
+            const filter = filterValue.toLowerCase().trim();
+            suggestions.innerHTML = '';
+            const currentPrizeNames = Array.from(prizeList.querySelectorAll('li')).map(li => li.dataset.prizeName);
+            let hasSuggestions = false;
+
+            prizesData.forEach(prize => {
+                if (!currentPrizeNames.includes(prize.name) &&
+                    (!filter || prize.name.toLowerCase().includes(filter)))
+                {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <img src="${prize.imageUrl}" class="suggestion-icon" alt="">
+                        <span>${prize.name} (${prize.credits})</span>
+                    `;
+                    li.dataset.prizeName = prize.name;
+
+                    li.addEventListener('click', () => {
+                        const selectedPrize = prizesData.find(p => p.name === li.dataset.prizeName);
+                        if (selectedPrize) {
+                            // Calculate new total if prize is added
+                            const currentTotal = Array.from(prizeList.querySelectorAll('li'))
+                                .reduce((sum, li) => sum + parseInt(li.dataset.credits || 0, 10), 0);
+                            const newTotal = currentTotal + selectedPrize.credits;
+
+                            if (newTotal > 75) {
+                                // Show warning modal
+                                pendingPrize = selectedPrize;
+                                warningTotalCreditsEl.textContent = newTotal;
+                                creditWarningOverlay.classList.add('active');
+                            } else {
+                                // Add prize directly if under limit
+                                prizeList.appendChild(createPrizeItem(selectedPrize));
+                                updateTotalCredits();
+                                addInput.value = '';
+                                suggestions.innerHTML = '';
+                                suggestions.classList.remove('visible');
+                            }
+                        }
+                    });
+                    suggestions.appendChild(li);
+                    hasSuggestions = true;
+                }
+            });
+            suggestions.classList.toggle('visible', hasSuggestions);
+        }
+
+        // --- Modal Functions ---
+
+        function updatePrizeIconVisual(prizeName, isActive, personalizedText = '') {
+            const icon = prizeList.querySelector(`.personalization-icon[data-prize="${prizeName}"]`);
+            if (icon) {
+                icon.classList.toggle('active', isActive);
+                icon.title = isActive ? `Edit Personalization: ${personalizedText}` : 'Add Personalization';
+            }
+        }
+
+        // Edit Modal
+        function openEditModal() {
+            if (!currentPrizeNameForModal) return;
+            const currentPersonalization = prizePersonalization[currentPrizeNameForModal] || '';
+            editPrizeNameEl.textContent = currentPrizeNameForModal;
+            personalInput.value = currentPersonalization;
+            editOverlay.classList.add('active');
+            personalInput.focus();
+        }
+
+        editSaveBtn.addEventListener('click', () => {
+            if (!currentPrizeNameForModal) return;
+            const newName = personalInput.value.trim();
+            if (newName) {
+                 prizePersonalization[currentPrizeNameForModal] = newName;
+                 updatePrizeIconVisual(currentPrizeNameForModal, true, newName);
+            } else {
+                 delete prizePersonalization[currentPrizeNameForModal];
+                 updatePrizeIconVisual(currentPrizeNameForModal, false);
+            }
+            editOverlay.classList.remove('active');
+        });
+
+        editRemoveBtn.addEventListener('click', () => {
+            if (!currentPrizeNameForModal) return;
+            delete prizePersonalization[currentPrizeNameForModal];
+            updatePrizeIconVisual(currentPrizeNameForModal, false);
+            editOverlay.classList.remove('active');
+        });
+
+        editCancelBtn.addEventListener('click', () => {
+            editOverlay.classList.remove('active');
+        });
+
+        // Add Personalization / Charge Modal
+        function openChargeModal() {
+            if (!currentPrizeNameForModal) return;
+            chargePrizeNameEl.textContent = currentPrizeNameForModal;
+            chargeNameInput.value = '';
+
+            // Reset payment options
+            document.querySelector('input[name="charge-option"][value="no-charge"]').checked = true;
+            cardSelectContainer.style.display = 'none';
+            newCardDetails.style.display = 'none';
+            cardSelect.selectedIndex = 0;
+            newCardNumber.value = '';
+            newCardExpiry.value = '';
+            newCardCvv.value = '';
+
+            chargeOverlay.classList.add('active');
+            chargeNameInput.focus();
+        }
+
+        chargeConfirmBtn.addEventListener('click', () => {
+            if (!currentPrizeNameForModal) return;
+            const newName = chargeNameInput.value.trim();
+
+            if (!newName) {
+                 alert("Please enter a name for personalization.");
+                 chargeNameInput.focus();
+                 return;
+            }
+
+            const selectedPaymentOption = document.querySelector('input[name="charge-option"]:checked').value;
+
+            // --- Placeholder for Payment Processing ---
+            console.log(`Attempting to add personalization "${newName}" for prize "${currentPrizeNameForModal}" with payment option: ${selectedPaymentOption}`);
+            let paymentSuccessful = true; // Assume success for now
+
+            if (selectedPaymentOption === 'card-file') {
+                 const selectedCard = cardSelect.value;
+                 if (!selectedCard) {
+                     alert("Please select a card on file.");
+                     paymentSuccessful = false; // Indicate failure
+                     return; // Stop processing
+                 }
+                 console.log(`--> Processing with card on file: ${selectedCard}`);
+                 // Add actual payment API call here for card on file
+            } else if (selectedPaymentOption === 'new-card') {
+                 // Basic validation (presence check) - more robust validation needed in production
+                 if (!newCardNumber.value || !newCardExpiry.value || !newCardCvv.value) {
+                     alert("Please fill in all new card details.");
+                      paymentSuccessful = false; // Indicate failure
+                     return; // Stop processing
+                 }
+                  // Basic MM/YY format check (example)
+                 if (!/^\d{2}\s?\/\s?\d{2}$/.test(newCardExpiry.value)) {
+                      alert("Please enter expiry date in MM / YY format.");
+                      paymentSuccessful = false;
+                      return;
+                 }
+                 console.log(`--> Processing with new card ending: ${newCardNumber.value.slice(-4)}`);
+                 // Add actual payment API call here for new card
+            } else { // 'no-charge'
+                 console.log(`--> Processing with no charge.`);
+            }
+            // --- End Placeholder ---
+
+            // Only save personalization and close modal if payment step was considered successful
+            if (paymentSuccessful) {
+                prizePersonalization[currentPrizeNameForModal] = newName;
+                updatePrizeIconVisual(currentPrizeNameForModal, true, newName);
+                chargeOverlay.classList.remove('active');
+            } else {
+                console.log("Payment/Validation step failed. Modal remains open.");
+                // Optionally provide more specific feedback to the user
+            }
+        });
+
+        chargeCancelBtn.addEventListener('click', () => {
+            chargeOverlay.classList.remove('active');
+        });
+
+        // Event listener for Payment Option Radios
+        chargeOptionRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                const selectedValue = document.querySelector('input[name="charge-option"]:checked').value;
+                cardSelectContainer.style.display = (selectedValue === 'card-file') ? 'block' : 'none';
+                newCardDetails.style.display = (selectedValue === 'new-card') ? 'flex' : 'none';
+
+                // Optional: Clear inputs when switching away
+                if (selectedValue !== 'card-file') { cardSelect.selectedIndex = 0; }
+                if (selectedValue !== 'new-card') {
+                    newCardNumber.value = ''; newCardExpiry.value = ''; newCardCvv.value = '';
+                }
+            });
+        });
+
+        
+        // Delete confirmation modal actions
+        deleteConfirmBtn.addEventListener('click', () => {
+            if (liToDelete) {
+                const prizeName = liToDelete.dataset.prizeName;
+                if (prizePersonalization[prizeName]) {
+                    delete prizePersonalization[prizeName];
+                }
+                liToDelete.remove();
+                liToDelete = null;
+                updateTotalCredits();
+                if (document.activeElement === addInput) {
+                    showSuggestions(addInput.value);
+                }
+            }
+            deleteOverlay.classList.remove('active');
+        });
+
+        deleteCancelBtn.addEventListener('click', () => {
+            liToDelete = null;
+            deleteOverlay.classList.remove('active');
+        });
+
+        // Automatic formatting for card number and expiry fields
+        function formatCardNumber(e) {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 16);
+            const sections = value.match(/.{1,4}/g);
+            if (sections) value = sections.join(' ');
+            e.target.value = value;
+        }
+
+        function formatExpiry(e) {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 4);
+            if (value.length > 2) {
+                value = value.substring(0, 2) + ' / ' + value.substring(2);
+            }
+            e.target.value = value;
+        }
+
+        newCardNumber.addEventListener('input', formatCardNumber);
+        newCardExpiry.addEventListener('input', formatExpiry);
+
+
+// --- Input/Suggestions Event Listeners ---
+        addInput.addEventListener('focus', () => showSuggestions(addInput.value));
+        addInput.addEventListener('input', () => showSuggestions(addInput.value));
+        document.addEventListener('click', (e) => {
+            if (!addInput.contains(e.target) && !suggestions.contains(e.target)) {
+                 suggestions.classList.remove('visible');
+            }
+        });
+
+        // --- Scroll Listener ---
+        prizeList.addEventListener('scroll', updateScrollIndicator);
+
+        // --- Initial Setup ---
+        updateTotalCredits(); // Initialize total credits display (starts at 0)
+
+        // Credit Warning Modal Event Listeners
+        creditWarningConfirmBtn.addEventListener('click', () => {
+            if (pendingPrize) {
+                prizeList.appendChild(createPrizeItem(pendingPrize));
+                updateTotalCredits();
+                addInput.value = '';
+                suggestions.innerHTML = '';
+                suggestions.classList.remove('visible');
+                pendingPrize = null;
+            }
+            creditWarningOverlay.classList.remove('active');
+        });
+
+        creditWarningCancelBtn.addEventListener('click', () => {
+            pendingPrize = null;
+            creditWarningOverlay.classList.remove('active');
+        });
+
+        // Shipping Modal Functions
+        function openShippingModal() {
+            if (!currentPrizeNameForModal) return;
+            
+            shippingPrizeNameEl.textContent = currentPrizeNameForModal;
+            const currentStatus = prizeShippingStatus[currentPrizeNameForModal] || 'not-shipped';
+            
+            // Set the current status in radio buttons
+            shippingStatusRadios.forEach(radio => {
+                radio.checked = radio.value === currentStatus;
+            });
+
+            // Reset damage description textarea
+            damageDescription.value = '';
+            
+            // Show/hide damage details if needed and set the correct description
+            damageDetails.classList.toggle('visible', currentStatus === 'damaged');
+            if (currentStatus === 'damaged') {
+                damageDescription.value = prizeDamageDetails[currentPrizeNameForModal] || '';
+            }
+
+            shippingOverlay.classList.add('active');
+        }
+
+        // Event listener for shipping status changes
+        shippingStatusRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                damageDetails.classList.toggle('visible', radio.value === 'damaged');
+                if (radio.value === 'damaged') {
+                    damageDescription.focus();
+                }
+            });
+        });
+
+        shippingSaveBtn.addEventListener('click', () => {
+            const selectedStatus = document.querySelector('input[name="shipping-status"]:checked').value;
+            prizeShippingStatus[currentPrizeNameForModal] = selectedStatus;
+            
+            if (selectedStatus === 'damaged') {
+                prizeDamageDetails[currentPrizeNameForModal] = damageDescription.value.trim();
+            } else {
+                delete prizeDamageDetails[currentPrizeNameForModal];
+            }
+
+            // Update the shipping status icon
+            const statusIcon = document.querySelector(`li[data-prize-name="${currentPrizeNameForModal}"] .shipping-status`);
+            if (statusIcon) {
+                statusIcon.className = `shipping-status ${selectedStatus}`;
+                const statusText = selectedStatus.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+                const damageText = selectedStatus === 'damaged' ? `\nDamage details: ${prizeDamageDetails[currentPrizeNameForModal] || 'No details provided'}` : '';
+                statusIcon.title = `Status: ${statusText}${damageText}`;
+            }
+
+            shippingOverlay.classList.remove('active');
+        });
+
+        shippingCancelBtn.addEventListener('click', () => {
+            shippingOverlay.classList.remove('active');
+        });
+
+    </script>
+</body>
+</html>

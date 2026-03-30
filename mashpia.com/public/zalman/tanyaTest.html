@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tanya Printing Locations</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .search-container {
+            position: absolute;
+            top: 40px;
+            left: 100px;
+            z-index: 1000;
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            width: 300px;
+            transition: all 0.3s ease;
+            max-height: 60px;
+        }
+        .search-container.expanded {
+            width: 400px;
+            max-height: calc(90vh - 40px);
+        }
+        .search-box {
+            width: 100%;
+            padding: 10px 35px 10px 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 40px;
+            box-sizing: border-box;
+            position: relative;
+        }
+        .location-list {
+            max-height: 0;
+            overflow-y: auto;
+            transition: max-height 0.3s ease;
+            margin-top: 10px;
+            background: white;
+            border-radius: 4px;
+        }
+        .location-list.expanded {
+            max-height: calc(90vh - 120px);
+        }
+        .location-item {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+        .location-item:hover {
+            background-color: #f5f5f5;
+        }
+        .year {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .cluster-info {
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        .collapse-button {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: none;
+            font-size: 20px;
+            height: 36px;
+            width: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+        .collapse-button:hover {
+            background: #f5f5f5;
+        }
+        .search-container.expanded .collapse-button {
+            display: flex;
+        }
+        .custom-marker {
+            transition: all 0.2s ease;
+        }
+        .custom-marker:hover {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
+            z-index: 1000 !important;
+        }
+        .custom-popup {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .clear-search {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: none;
+            font-size: 18px;
+            color: #666;
+            z-index: 1001;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .clear-search:hover {
+            background: rgba(0,0,0,0.05);
+            color: #333;
+        }
+        .search-container.has-text .clear-search {
+            display: flex;
+        }
+        .admin-login {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+        }
+        .edit-button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .edit-form {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 2000;
+        }
+        .edit-form input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .edit-form button {
+            margin-top: 10px;
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1999;
+        }
+        .secret-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+            z-index: 2000;
+            text-align: center;
+        }
+        .secret-popup input {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .secret-popup button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .dinosaur-game {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 2001;
+        }
+        .youtube-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .youtube-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-login" id="adminLogin" style="display: none;">
+        <input type="password" id="adminPassword" placeholder="Admin Password" onkeypress="handleKeyPress(event)">
+        <button onclick="loginAdmin()">Login</button>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="edit-form" id="editForm">
+        <h3>Edit Location</h3>
+        <input type="text" id="editAddress" placeholder="Address">
+        <input type="text" id="editYears" placeholder="Years (comma separated)">
+        <input type="text" id="editLat" placeholder="Latitude">
+        <input type="text" id="editLng" placeholder="Longitude">
+        <button onclick="saveEdit()">Save Changes</button>
+        <button onclick="cancelEdit()">Cancel</button>
+    </div>
+    <div class="secret-popup" id="secretPopup">
+        <h3>Enter Secret Code</h3>
+        <div style="position: relative;">
+            <input type="password" id="secretCode" placeholder="Enter code..." onkeypress="handleSecretKeyPress(event)">
+            <button id="togglePassword" style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);" onclick="togglePasswordVisibility()">👁️</button>
+        </div>
+        <button onclick="checkSecretCode()">Submit</button>
+    </div>
+    <div class="dinosaur-game" id="dinosaurGame">
+        <div class="youtube-container">
+            <iframe src="https://www.youtube.com" 
+                    title="YouTube" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+    <div class="search-container" id="searchContainer">
+        <div style="position: relative;">
+            <input type="text" id="searchInput" class="search-box" placeholder="Search locations...">
+            <button class="clear-search" id="clearSearch">✕</button>
+        </div>
+        <div class="location-list" id="locationList"></div>
+    </div>
+    <div id="map"></div>
+    <div class="loading" id="loading">Loading data...</div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    <script>
+        // Google Sheets configuration
+        const SPREADSHEET_ID = '1E0PYeOp28sLuknV6AH7Bu800KYpmcmVQUkCTw_DJXps';
+        const API_KEY = 'AIzaSyAbBnUIGfdvubPscqLHT7ph4ntvyjsAMME';
+        const CLIENT_ID = '186706989736-kbsu8ngdp184huitq39fgp6qkcrnpqss.apps.googleusercontent.com';
+        // Update scopes to include both read and write access
+        const SCOPES = [
+            'https://www.googleapis.com/auth/spreadsheets',
+            'https://www.googleapis.com/auth/spreadsheets.readonly'
+        ].join(' ');
+        
+        let map;
+        let markerClusterGroup;
+        let locations = [];
+        let visibleMarkers = new Map();
+        const ADMIN_PASSWORD = 'print'; // Change this to your secure password
+        let isAdmin = false;
+        let currentEditLocation = null;
+        let tokenClient;
+        let gapiInited = false;
+        let gisInited = false;
+
+        // Custom icon configuration
+        const customIcon = L.icon({
+            iconUrl: 'https://i.ibb.co/YFQWdSzB/New-Project.png',
+            iconSize: [48, 48],
+            iconAnchor: [24, 48],
+            popupAnchor: [0, -48],
+            className: 'custom-marker'
+        });
+
+        // Initialize the map
+        function initMap() {
+            map = L.map('map').setView([39.8283, -98.5795], 4);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            markerClusterGroup = L.markerClusterGroup({
+                chunkedLoading: true,
+                maxClusterRadius: 50,
+                spiderfyOnMaxZoom: true,
+                showCoverageOnHover: false,
+                zoomToBoundsOnClick: true,
+                removeOutsideVisibleBounds: true,
+                iconCreateFunction: function(cluster) {
+                    const count = cluster.getChildCount();
+                    let size = 'small';
+                    if (count > 100) size = 'large';
+                    else if (count > 10) size = 'medium';
+                    return L.divIcon({
+                        html: `<div><span>${count}</span></div>`,
+                        className: `marker-cluster marker-cluster-${size}`,
+                        iconSize: L.point(40, 40)
+                    });
+                }
+            });
+
+            map.addLayer(markerClusterGroup);
+        }
+
+        // Load data
+        async function loadData() {
+            try {
+                console.log('Starting data load...');
+                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Sheet1!A2:E?key=${API_KEY}`);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('Response not OK:', response.status, errorText);
+                    throw new Error(`HTTP error! status: ${response.status}. Details: ${errorText}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.values) {
+                    throw new Error('No data values found in response');
+                }
+                
+                locations = data.values.map(row => {
+                    if (!row[0] || !row[1] || !row[2] || !row[3]) {
+                        console.warn('Incomplete row:', row);
+                        return null;
+                    }
+                    return {
+                        address: row[0],
+                        years: row[1].split(',').map(year => parseInt(year.trim())),
+                        lat: parseFloat(row[2]),
+                        lng: parseFloat(row[3])
+                    };
+                }).filter(location => location !== null);
+
+                updateMarkers();
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Error loading data:', error);
+                document.getElementById('loading').innerHTML = `
+                    Error loading data:<br>
+                    ${error.message}<br><br>
+                    <button onclick="retryLoad()">Retry</button>
+                `;
+            }
+        }
+
+        function updateMarkers() {
+            markerClusterGroup.clearLayers();
+            
+            locations.forEach(location => {
+                const marker = L.marker([location.lat, location.lng], { icon: customIcon })
+                    .bindPopup(`
+                        <div class="custom-popup">
+                            <strong>${location.address}</strong><br>
+                            ${location.years.length === 1 ? 'Year Printed: ' : 'Years Printed: '}${location.years.join(', ')}
+                        </div>
+                    `, {
+                        offset: [0, -20],
+                        closeButton: true,
+                        autoClose: false,
+                        closeOnClick: false
+                    });
+                
+                let isPopupPinned = false;
+                
+                // Show popup on hover
+                marker.on('mouseover', function() {
+                    if (!isPopupPinned) {
+                        this.openPopup();
+                    }
+                });
+                
+                // Hide popup when mouse leaves (only if not pinned)
+                marker.on('mouseout', function() {
+                    if (!isPopupPinned) {
+                        this.closePopup();
+                    }
+                });
+                
+                // Toggle popup pin on click
+                marker.on('click', function() {
+                    if (isPopupPinned) {
+                        isPopupPinned = false;
+                        this.closePopup();
+                    } else {
+                        isPopupPinned = true;
+                        this.openPopup();
+                    }
+                });
+                
+                markerClusterGroup.addLayer(marker);
+            });
+        }
+
+        function updateLocationList(filteredLocations) {
+            if (!Array.isArray(filteredLocations)) {
+                console.warn('Invalid or empty locations array');
+                return;
+            }
+
+            const locationList = document.getElementById('locationList');
+            locationList.innerHTML = '';
+            
+            // If there are filtered locations, fit the map to show them all
+            if (filteredLocations.length > 0) {
+                const bounds = L.latLngBounds(filteredLocations.map(loc => [loc.lat, loc.lng]));
+                map.fitBounds(bounds, {
+                    padding: [50, 50],
+                    maxZoom: 12,
+                    animate: true,
+                    duration: 0.5
+                });
+            }
+            
+            filteredLocations.forEach((location, index) => {
+                location.years.forEach(year => {
+                    const div = document.createElement('div');
+                    div.className = 'location-item';
+                    div.innerHTML = `
+                        <strong>${location.address}</strong>
+                        <span class="year">(${year})</span>
+                    `;
+                    div.addEventListener('click', () => {
+                        map.setView([location.lat, location.lng], 12);
+                        markerClusterGroup.zoomToShowLayer(
+                            Array.from(markerClusterGroup.getLayers())
+                                .find(m => m.getLatLng().lat === location.lat && m.getLatLng().lng === location.lng),
+                            () => {
+                                setTimeout(() => {
+                                    Array.from(markerClusterGroup.getLayers())
+                                        .find(m => m.getLatLng().lat === location.lat && m.getLatLng().lng === location.lng)
+                                        ?.openPopup();
+                                }, 100);
+                            }
+                        );
+                    });
+                    locationList.appendChild(div);
+                });
+            });
+        }
+
+        function updateMapView(filteredLocations) {
+            if (!Array.isArray(filteredLocations) || filteredLocations.length === 0) {
+                return; // Don't update map view if no matches
+            }
+
+            const bounds = L.latLngBounds(filteredLocations.map(loc => [loc.lat, loc.lng]));
+            
+            // Add padding based on the number of points
+            const padPercent = Math.min(Math.max(10, filteredLocations.length * 2), 30);
+            
+            map.fitBounds(bounds, {
+                padding: [
+                    window.innerHeight * (padPercent/100),
+                    window.innerWidth * (padPercent/100)
+                ],
+                maxZoom: 12,
+                animate: true,
+                duration: 0.8,
+                easeLinearity: 0.25,
+                noMoveStart: true
+            });
+        }
+
+        function updateMarkers(filteredLocations) {
+            if (!Array.isArray(filteredLocations)) {
+                console.warn('Invalid locations array for markers');
+                return;
+            }
+
+            markerClusterGroup.clearLayers();
+            
+            let currentlyPinnedPopup = null;
+            
+            filteredLocations.forEach(location => {
+                if (!location || typeof location.lat !== 'number' || typeof location.lng !== 'number') {
+                    console.warn('Invalid location data:', location);
+                    return;
+                }
+
+                const marker = L.marker([location.lat, location.lng], { icon: customIcon })
+                    .bindPopup(`
+                        <div class="custom-popup">
+                            <strong>${location.address}</strong><br>
+                            ${location.years.length === 1 ? 'Year Printed: ' : 'Years Printed: '}${location.years.join(', ')}
+                            ${isAdmin ? `<button class="edit-button" onclick='showEditForm(${JSON.stringify(location).replace(/"/g, "&quot;")})'>Edit</button>` : ''}
+                        </div>
+                    `, {
+                        offset: [0, -20],
+                        closeButton: true,
+                        autoClose: false,
+                        closeOnClick: false
+                    });
+                
+                let isPopupPinned = false;
+                
+                marker.on('mouseover', function() {
+                    if (!isPopupPinned) {
+                        this.openPopup();
+                    }
+                });
+                
+                marker.on('mouseout', function() {
+                    if (!isPopupPinned) {
+                        this.closePopup();
+                    }
+                });
+                
+                marker.on('click', function() {
+                    // Close any previously pinned popup
+                    if (currentlyPinnedPopup && currentlyPinnedPopup !== this) {
+                        currentlyPinnedPopup.closePopup();
+                        currentlyPinnedPopup.isPopupPinned = false;
+                    }
+                    
+                    if (isPopupPinned) {
+                        isPopupPinned = false;
+                        this.closePopup();
+                        currentlyPinnedPopup = null;
+                    } else {
+                        isPopupPinned = true;
+                        this.openPopup();
+                        currentlyPinnedPopup = this;
+                    }
+                });
+                
+                markerClusterGroup.addLayer(marker);
+            });
+        }
+
+        function clearSearch() {
+            searchInput.value = '';
+            searchContainer.classList.remove('has-text', 'expanded');
+            document.getElementById('locationList').classList.remove('expanded');
+            
+            // Get current map view
+            const currentCenter = map.getCenter();
+            const currentZoom = map.getZoom();
+            
+            // Update markers to show all locations
+            if (Array.isArray(locations)) {
+                updateMarkers(locations);
+                // Restore the map view to where it was
+                map.setView(currentCenter, currentZoom);
+            }
+        }
+
+        // Search functionality
+        let searchTimeout;
+        const searchInput = document.getElementById('searchInput');
+        const searchContainer = document.getElementById('searchContainer');
+        const clearSearchBtn = document.getElementById('clearSearch');
+
+        clearSearchBtn.addEventListener('click', clearSearch);
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                if (searchTerm === 'kushin tuchos dude') {
+                    document.getElementById('secretPopup').style.display = 'block';
+                    document.getElementById('overlay').style.display = 'block';
+                    e.target.value = '';
+                    return;
+                }
+            }
+        });
+
+        searchInput.addEventListener('input', (e) => {
+            const hasText = e.target.value.length > 0;
+            searchContainer.classList.toggle('has-text', hasText);
+            
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                
+                if (searchTerm === '') {
+                    clearSearch();
+                    return;
+                }
+                
+                if (!Array.isArray(locations)) {
+                    console.error('Locations data is not available');
+                    return;
+                }
+
+                const filteredLocations = locations.filter(location => 
+                    location && location.address && 
+                    (location.address.toLowerCase().includes(searchTerm) ||
+                    (Array.isArray(location.years) && 
+                     location.years.some(year => year.toString().includes(searchTerm))))
+                );
+
+                // Only update the map view if we have actual matches
+                if (filteredLocations.length > 0) {
+                    updateMapView(filteredLocations);
+                }
+
+                // Always update the location list and markers
+                updateLocationList(filteredLocations);
+                updateMarkers(filteredLocations);
+
+                if (searchTerm.length > 0) {
+                    searchContainer.classList.add('expanded');
+                    document.getElementById('locationList').classList.add('expanded');
+                } else {
+                    searchContainer.classList.remove('expanded');
+                    document.getElementById('locationList').classList.remove('expanded');
+                }
+            }, 300);
+        });
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.getElementById('adminLogin').style.display = 'none';
+                // Show edit buttons for existing markers
+                updateMarkers(locations);
+            } else {
+                alert('Incorrect password');
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                loginAdmin();
+            }
+        }
+
+        function showEditForm(location) {
+            // Ensure we're working with an object
+            currentEditLocation = location;
+            
+            // Set form values
+            document.getElementById('editAddress').value = location.address || '';
+            document.getElementById('editYears').value = (location.years || []).join(', ');
+            document.getElementById('editLat').value = location.lat || '';
+            document.getElementById('editLng').value = location.lng || '';
+            
+            // Show the form and overlay
+            document.getElementById('editForm').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        function cancelEdit() {
+            document.getElementById('editForm').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+            currentEditLocation = null;
+        }
+
+        function gapiLoaded() {
+            gapi.load('client', initializeGapiClient);
+        }
+
+        async function initializeGapiClient() {
+            await gapi.client.init({
+                apiKey: API_KEY,
+                discoveryDocs: ['https://sheets.googleapis.com/$discovery/rest?version=v4'],
+            });
+            gapiInited = true;
+        }
+
+        function gisLoaded() {
+            tokenClient = google.accounts.oauth2.initTokenClient({
+                client_id: CLIENT_ID,
+                scope: SCOPES,
+                callback: '', // defined later
+                ux_mode: 'popup',
+                hosted_domain: 'mashpia.com',
+                redirect_uri: `${window.location.origin}/oauth2callback`
+            });
+            gisInited = true;
+        }
+
+        async function getAccessToken() {
+            return new Promise((resolve, reject) => {
+                if (!tokenClient) {
+                    reject(new Error('Token client not initialized'));
+                    return;
+                }
+
+                tokenClient.callback = async (resp) => {
+                    if (resp.error !== undefined) {
+                        console.error('OAuth error response:', resp);
+                        reject(resp);
+                        return;
+                    }
+                    resolve(resp.access_token);
+                };
+
+                try {
+                    // Force new consent prompt to ensure proper authorization
+                    tokenClient.requestAccessToken({
+                        prompt: 'consent',
+                        login_hint: 'zalman@campsgi.com'
+                    });
+                } catch (err) {
+                    console.error('OAuth request error:', err);
+                    reject(err);
+                }
+            });
+        }
+
+        async function saveEdit() {
+            if (!currentEditLocation) return;
+
+            try {
+                // Get access token first
+                const token = await getAccessToken();
+                if (!token) {
+                    throw new Error('Failed to get access token');
+                }
+
+                const updatedLocation = {
+                    address: document.getElementById('editAddress').value,
+                    years: document.getElementById('editYears').value.split(',').map(year => parseInt(year.trim())),
+                    lat: parseFloat(document.getElementById('editLat').value),
+                    lng: parseFloat(document.getElementById('editLng').value)
+                };
+
+                // Find the row index in the original data
+                const rowIndex = locations.findIndex(loc => 
+                    loc.address === currentEditLocation.address && 
+                    loc.lat === currentEditLocation.lat && 
+                    loc.lng === currentEditLocation.lng
+                );
+
+                if (rowIndex === -1) {
+                    throw new Error('Location not found in data');
+                }
+
+                // Update the Google Sheet
+                const range = `Sheet1!A${rowIndex + 2}:D${rowIndex + 2}`;
+                const updateRequest = {
+                    spreadsheetId: SPREADSHEET_ID,
+                    range: range,
+                    valueInputOption: 'RAW',
+                    resource: {
+                        values: [[
+                            updatedLocation.address,
+                            updatedLocation.years.join(','),
+                            updatedLocation.lat.toString(),
+                            updatedLocation.lng.toString()
+                        ]]
+                    }
+                };
+
+                await gapi.client.sheets.spreadsheets.values.update(updateRequest);
+
+                // Update local data
+                locations[rowIndex] = updatedLocation;
+                updateMarkers(locations);
+                cancelEdit();
+                alert('Changes saved successfully!');
+            } catch (error) {
+                console.error('Error saving changes:', error);
+                alert('Error saving changes: ' + error.message);
+            }
+        }
+
+        function checkSecretCode() {
+            const code = document.getElementById('secretCode').value;
+            if (code.toLowerCase() === 'ain od milvado') {
+                document.getElementById('secretPopup').style.display = 'none';
+                document.getElementById('overlay').style.display = 'none';
+                window.open('https://drive.google.com/drive/folders/1kcKfPfRFBgJZfAYCMB5D--If0AX1cAYi?usp=sharing', '_blank');
+            } else {
+                alert('Incorrect code!');
+            }
+        }
+
+        function handleSecretKeyPress(event) {
+            if (event.key === 'Enter') {
+                checkSecretCode();
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('secretCode');
+            const toggleButton = document.getElementById('togglePassword');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = '🙈'; // Change icon to indicate hiding
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = '👁️'; // Change icon to indicate showing
+            }
+        }
+
+        // Initialize
+        initMap();
+        loadData().then(() => {
+            // Show all locations after initial load
+            updateLocationList(locations);
+            updateMarkers(locations);
+            
+            // Check if we're in admin mode
+            if (window.location.href.includes('?admin')) {
+                document.getElementById('adminLogin').style.display = 'block';
+            }
+        });
+
+        // Load the Google API client libraries
+        gapiLoaded();
+        gisLoaded();
+    </script>
+</body>
+</html>

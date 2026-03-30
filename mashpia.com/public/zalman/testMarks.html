@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chidon Test Marks Entry</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .test-entry-box {
+      position: absolute;
+      top: 20px;
+      right: 40px;
+      background-color: #f9f9f9;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 10px 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      width: 440px;
+    }
+
+    .test-entry-box table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .test-entry-box th,
+    .test-entry-box td {
+      text-align: center;
+      padding: 6px 4px;
+    }
+
+    .test-entry-box th {
+      background-color: #eaeaea;
+      font-weight: bold;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .test-entry-box input {
+      width: 25px;
+      padding: 4px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      text-align: center;
+      -moz-appearance: textfield;
+      appearance: textfield;
+      transition: all 0.3s ease;
+      cursor: text;
+    }
+
+    .test-entry-box input::-webkit-outer-spin-button,
+    .test-entry-box input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .test-entry-box input:disabled {
+      background-color: #f0f0f0;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .test-entry-box input:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 5px rgba(76, 175, 80, 0.3);
+      outline: none;
+    }
+
+    .save-btn {
+      padding: 5px 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s ease;
+    }
+
+    .save-btn:hover {
+      background-color: #45a049;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .modal-content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 300px;
+    }
+
+    .modal-buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .modal-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .modal-btn.cancel {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .modal-btn.confirm {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .modal-btn:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Add the modal HTML -->
+<div id="warningModal" class="modal">
+  <div class="modal-content">
+    <h3>Warning</h3>
+    <p id="warningMessage"></p>
+    <div class="modal-buttons">
+      <button class="modal-btn cancel">Cancel</button>
+      <button class="modal-btn confirm">Continue</button>
+    </div>
+  </div>
+</div>
+
+<div class="test-entry-box">
+  <table>
+    <thead>
+      <tr>
+        <th>Test</th>
+        <th>Level</th>
+        <th>Yesod</th>
+        <th>Yediah</th>
+        <th>Havonah</th>
+        <th>Iyun</th>
+        <th>Save</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>
+          <select class="level-select" style="width: 55px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+          </select>
+        </td>
+        <td><input type="number" class="yesod" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><input type="number" class="yediah" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><input type="number" class="havonah" min="0" max="20" oninput="validateInput(this, 20)"></td>
+        <td><input type="number" class="iyun" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><button class="save-btn">Save</button></td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>
+          <select class="level-select" style="width: 55px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+          </select>
+        </td>
+        <td><input type="number" class="yesod" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><input type="number" class="yediah" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><input type="number" class="havonah" min="0" max="20" oninput="validateInput(this, 20)"></td>
+        <td><input type="number" class="iyun" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><button class="save-btn">Save</button></td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>
+          <select class="level-select" style="width: 55px; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
+            <option value="1">1</option>
+            <option value="2" selected>2</option>
+          </select>
+        </td>
+        <td><input type="number" class="yesod" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><input type="number" class="yediah" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><input type="number" class="havonah" min="0" max="20" oninput="validateInput(this, 20)"></td>
+        <td><input type="number" class="iyun" min="0" max="10" oninput="validateInput(this, 10)"></td>
+        <td><button class="save-btn">Save</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  // Function to validate input values
+  function validateInput(input, max) {
+    // Remove any non-numeric characters
+    input.value = input.value.replace(/[^0-9]/g, '');
+    
+    const value = input.value;
+    if (value === '') return;
+    
+    // Convert to number and check if it's valid
+    const num = parseInt(value, 10);
+    if (isNaN(num)) {
+      input.value = '';
+      return;
+    }
+
+    // If the number is greater than max, remove the last digit
+    if (num > max) {
+      input.value = value.slice(0, -1);
+      return;
+    }
+    
+    // Ensure the value is not negative
+    if (num < 0) {
+      input.value = '';
+      return;
+    }
+
+    // If we have a valid number, move to the next field
+    if (value.length === 2 || (max === 20 && value.length === 2) || (max === 10 && value.length === 1)) {
+      moveToNextField(input);
+    }
+  }
+
+  // Function to move to the next input field
+  function moveToNextField(currentInput) {
+    const row = currentInput.closest('tr');
+    const inputs = row.querySelectorAll('input[type="number"]');
+    const level = row.querySelector('.level-select').value;
+    
+    for (let i = 0; i < inputs.length; i++) {
+      if (inputs[i] === currentInput) {
+        // Find the next enabled input
+        let nextInput = inputs[i + 1];
+        while (nextInput && nextInput.disabled) {
+          nextInput = inputs[i + 2];
+          i++;
+        }
+        if (nextInput) {
+          nextInput.focus();
+          nextInput.select();
+        }
+        break;
+      }
+    }
+  }
+
+  // Function to show the warning modal
+  function showWarningModal(iyunValue, callback) {
+    const modal = document.getElementById('warningModal');
+    const message = document.getElementById('warningMessage');
+    const cancelBtn = modal.querySelector('.cancel');
+    const confirmBtn = modal.querySelector('.confirm');
+
+    message.textContent = `Changing to Level 1 will clear your Iyun mark of ${iyunValue}. Are you sure you want to continue?`;
+    
+    // Show the modal
+    modal.style.display = 'block';
+
+    // Handle cancel button
+    cancelBtn.onclick = function() {
+      modal.style.display = 'none';
+      callback(false);
+    };
+
+    // Handle confirm button
+    confirmBtn.onclick = function() {
+      modal.style.display = 'none';
+      callback(true);
+    };
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = 'none';
+        callback(false);
+      }
+    };
+  }
+
+  // Function to handle level changes
+  function handleLevelChange(select) {
+    const row = select.closest('tr');
+    const iyunInput = row.querySelector('.iyun');
+    const currentIyunValue = parseInt(iyunInput.value) || 0;
+    
+    // If changing to level 1 and there's a non-zero Iyun mark
+    if (select.value === '1' && currentIyunValue > 0) {
+      showWarningModal(currentIyunValue, function(confirmed) {
+        if (!confirmed) {
+          // User cancelled, revert to level 2
+          select.value = '2';
+          return;
+        }
+        
+        // User confirmed, update Iyun input state
+        iyunInput.disabled = true;
+        iyunInput.value = '';
+      });
+    } else {
+      // Update Iyun input state based on level
+      if (select.value === '1') {
+        iyunInput.disabled = true;
+        iyunInput.value = '';
+      } else {
+        iyunInput.disabled = false;
+      }
+    }
+  }
+
+  // Add event listeners to all level selects
+  document.querySelectorAll('.level-select').forEach(select => {
+    // Add change event listener
+    select.addEventListener('change', function() {
+      handleLevelChange(this);
+    });
+    
+    // Initialize the state
+    handleLevelChange(select);
+  });
+
+  // Add focus, click, and input event listeners to all inputs
+  document.querySelectorAll('input[type="number"]').forEach(input => {
+    // Select all text when the input receives focus
+    input.addEventListener('focus', function() {
+      this.select();
+    });
+    
+    // Select all text when clicking into the input
+    input.addEventListener('click', function(e) {
+      e.preventDefault();
+      this.select();
+    });
+
+    // Prevent non-numeric input
+    input.addEventListener('input', function(e) {
+      // Remove any non-numeric characters
+      this.value = this.value.replace(/[^0-9]/g, '');
+    });
+
+    // Prevent paste of non-numeric content
+    input.addEventListener('paste', function(e) {
+      e.preventDefault();
+      const pastedText = (e.clipboardData || window.clipboardData).getData('text');
+      const numericText = pastedText.replace(/[^0-9]/g, '');
+      this.value = numericText;
+    });
+  });
+</script>
+
+</body>
+</html>
