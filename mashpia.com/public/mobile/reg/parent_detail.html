@@ -321,7 +321,7 @@
           <!-- <button class="btn btn-primary neshek" style="display: none;">Neshek Sale</button> -->
 <!--          <button class="btn btn-primary tickets" style="display: none;">Buy Chidon Tickets</button>-->
           <!--                    <button class="btn btn-info power">Power of Children Quiz</button>-->
-          <!-- <button class="btn btn-primary art">Submit Art Contest</button> -->
+          <button class="btn btn-primary art">12 Pesukim Art Contest</button>
           <!-- <button class="btn btn-primary costume_contest">Costume Contest</button> -->
         </div>
       </div>
@@ -734,7 +734,14 @@
 
     $('.art').click(function () {
       // open in new tab
-      window.open('https://forms.gle/jSayc5DXfwKU1gd87', '_blank');
+      // find out if on desktop or mobile and open in new tab or redirect
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      const url = 'https://docs.google.com/forms/d/e/1FAIpQLSdK4i5BbuoBNLmvjQ9r3khbKjq80nFYMKua9XmYZRVpjvo1iQ/viewform?usp=sharing&ouid=111079753430441370067'
+      if (isMobile) {
+        window.open(url, '_blank');
+      } else {
+        window.location.href = url;
+      }
     })
 
     // when to show link for chidon registration
