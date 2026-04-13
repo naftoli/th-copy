@@ -511,7 +511,7 @@
     <script src="/mobile/js/authenticate.js" defer></script>
     <script src="/mobile/reg/js/handlebars.js" defer></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function(event) {
+        document.addEventListener("DOMContentLoaded", async function(event) {
             var url = location.href.toString();
             var pos = url.indexOf('='); 
             var user = url.substring(pos+1);
@@ -548,8 +548,9 @@
             var cartQty = 0;
             var totalPrice = 0;
             var originalBal = 0;
-            var auction_id = 84;
             var separator = '|';
+
+            const auction_id = await fetch('ajax/getAuctionId.php').then(response => response.json()).then(data => data.auction_id);
 
             var float_element = "";
             var availibleStoreHTML = "Available <strong>Auction</strong> Miles: <br /><span id='balance'></span><span id='balance-display'></span>"
