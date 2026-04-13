@@ -85,7 +85,7 @@ export class AddressRow extends Component {
           <Col xs={6}>
             <label>Phone</label>
             <PhoneNumber name={getName('phone')} id={getName('phone')}
-                         value={shipping_phone} {...inputProps} placeholder='(718) 467-6630'/>
+                         value={shipping_phone || ''} {...inputProps} placeholder='(718) 467-6630'/>
             <div className='invalid-message'>Please enter a valid phone number</div>
           </Col>
         }
