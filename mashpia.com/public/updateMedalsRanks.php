@@ -18,7 +18,9 @@ $rupdater = new rank_updater();
 echo "Running Medals / Ranks Updater....\n";
 echo "Started: " . time() . "\n";
 foreach ( $ids as $user ) {
+    echo "Updating medals...\n";
     $mupdater->update_medal_two($user);
+    echo "Updating ranks...\n";
     $rupdater->update_rank_two($user);
 }
 echo "Ended: " . time();
