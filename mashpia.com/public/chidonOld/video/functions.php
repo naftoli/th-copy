@@ -12,7 +12,7 @@ function getFinalMarks() {
 }
 
 function getChildren($school_id, $gender, $serials = []) {
-    global $year;
+    global $year, $ct;
 
     if ($gender == 'boys') $gender = 'M';
     else if ($gender == 'girls') $gender = 'F';
@@ -64,10 +64,27 @@ function getChildren($school_id, $gender, $serials = []) {
     }
     $sql .= " GROUP BY u.user_id";
     $sql .= " ORDER BY u.school_id, class_grade , last , first";
-    // echo $sql . "<br>";
+    // echo $sql . "<br />"; exit;
     $result = mysql_query($sql);
+    
+    // First pass: collect all children
+    $temp_children = [];
     while ($row = mysql_fetch_assoc($result)) {
-        $row['highest_track'] = getHighestTrack($row);
+        $temp_children[] = $row;
+    }
+    
+    // Batch load marks for all children at once (instead of per-child)
+    $preloaded_marks = null;
+    if (!empty($temp_children)) {
+        $ct->overrideStudents($temp_children);
+        $ct->setScores();
+        $ct->calculateMarks();
+        $preloaded_marks = $ct->getMarks();
+    }
+    
+    // Second pass: calculate highest_track using preloaded marks
+    foreach ($temp_children as $row) {
+        $row['highest_track'] = getHighestTrack($row, $preloaded_marks);
         $row['award_track'] = getAward($row);
         $children[] = $row;
     }
@@ -75,7 +92,7 @@ function getChildren($school_id, $gender, $serials = []) {
 }
 
 function getAllChildrenByGender($gender) {
-    global $year;
+    global $year, $ct;
 
     $children = [];
     $sql = "SELECT 
@@ -92,7 +109,6 @@ function getAllChildrenByGender($gender) {
                 s.school_city,
                 s.school_state,
                 tc.th_chidon_id, 
-                tci.highest_track, 
                 a.admin_city, 
                 a.admin_state       
             FROM
@@ -103,8 +119,6 @@ function getAllChildrenByGender($gender) {
                 classes c ON c.class_id = u.class_id 
                     JOIN
                 th_chidon tc ON tc.user_id = u.user_id 
-                    JOIN
-                th_chidon_info tci ON tci.user_id = u.user_id AND tci.year = tc.year 
                     JOIN 
                 admin_auths aa on aa.id = u.user_id 
                     JOIN 
@@ -115,20 +129,48 @@ function getAllChildrenByGender($gender) {
     $sql .= " GROUP BY u.user_id";
     $sql .= " ORDER BY s.school_name, u.last, u.first";
     $result = mysql_query($sql);
+    
+    // First pass: collect all children
+    $temp_children = [];
     while ($row = mysql_fetch_assoc($result)) {
-        $row['highest_track'] = getHighestTrack($row);
+        $temp_children[] = $row;
+    }
+    
+    // Batch load marks for all children at once (instead of per-child)
+    $preloaded_marks = null;
+    if (!empty($temp_children)) {
+        $ct->overrideStudents($temp_children);
+        $ct->setScores();
+        $ct->calculateMarks();
+        $preloaded_marks = $ct->getMarks();
+    }
+    
+    // Second pass: calculate highest_track using preloaded marks
+    foreach ($temp_children as $row) {
+        $row['highest_track'] = getHighestTrack($row, $preloaded_marks);
         $row['award_track'] = getAward($row);
         $children[] = $row;
     }
     return $children;
 }
 
-function getHighestTrack($child) {
+function getHighestTrack($child, $preloaded_marks = null) {
     global $ct;
-    $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
-    $ct->setScores();
-    $ct->calculateMarks();
-    $marks = $ct->getMarks();
+    
+    // Use preloaded marks if available, otherwise load individually (slower)
+    if ($preloaded_marks !== null && isset($preloaded_marks[$child['th_chidon_id']])) {
+        $marks = $preloaded_marks;
+    } else {
+        $ct->setStudents($child['school_id'], $child['class_id'], $child['user_id']);
+        $ct->setScores();
+        $ct->calculateMarks();
+        $marks = $ct->getMarks();
+    }
+    
+    if (!isset($marks[$child['th_chidon_id']])) {
+        return '';
+    }
+    
     $highest_track = $ct->getHighestTrack($marks[$child['th_chidon_id']], $child['user_id']);
     if ($highest_track == 'genius') {
         // check if child passed Iyun through cumulative marks
@@ -145,7 +187,7 @@ function getHighestTrack($child) {
         if ($key2 > $key1) $highest_track = $reward_track;
     }
     $tracks = $ct->getTypes();
-    $highest_track = strtolower($tracks[$highest_track]);
+    $highest_track = strtolower($tracks[$highest_track] ?? '');
     return $highest_track;
 }
 
