@@ -1,6 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('error_reporting', E_ALL);
+ob_start();
 ini_set('max_execution_time', 300);
 
 $admin_auth = ['school'];
@@ -21,6 +20,18 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.
 $cs = new ChidonShipping($year);
 
 require 'functions.php';
+
+$sheet_dir = __DIR__ . '/sheets';
+if (!is_dir($sheet_dir)) {
+    mkdir($sheet_dir, 0777, true);
+}
+foreach (scandir($sheet_dir) as $file) {
+    if ($file === '.' || $file === '..') continue;
+    $path = $sheet_dir . '/' . $file;
+    if (is_file($path)) {
+        unlink($path);
+    }
+}
 
 $genders = ['M', 'F'];
 $tracks = ['yesod', 'yediah', 'havonah', 'iyun'];
@@ -47,11 +58,10 @@ foreach ($genders as $gender) {
     foreach ($tracks as $track) {
         if (isset($sorted[$track])) {
             $sheets = createAwardCeremonyData($sorted[$track]);
-            $file_name = 'sheets/' . $track . "_" . strtolower($gender) . ".csv";
+            $file_name = $sheet_dir . '/' . $track . "_" . strtolower($gender) . ".csv";
             createFile($file_name, $sheets, true);
         }
     }
 }
 
-chdir("sheets");
-downloadFile();
+downloadFile($sheet_dir, 'AwardCeremonyData.zip');
