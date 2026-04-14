@@ -40,7 +40,7 @@ foreach ($info as $school => $children) {
     foreach ($children as $child) {
         $id = $child['th_chidon_id'];
         $ht = $ct->getHighestTrack($marks[$id], $child['user_id']);
-        $child['highest_track'] = in_array($ht, $types) ? strtolower($types[$ht]) : $ht;
+        $child['highest_track'] = in_array($ht, array_keys($types)) ? strtolower($types[$ht]) : $ht;
         $grade = $child['class_grade'];
         $avg = 0;
         $num = 0; // variable to know how to decide avg
