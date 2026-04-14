@@ -80,6 +80,7 @@ function getChildren($school_id, $gender, $serials = []) {
         $ct->setScores();
         $ct->calculateMarks();
         $preloaded_marks = $ct->getMarks();
+        $ct->preloadPassingAvgsForSchool($school_id, $temp_children);
     }
     
     // Second pass: calculate highest_track using preloaded marks
