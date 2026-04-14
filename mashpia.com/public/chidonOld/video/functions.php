@@ -160,7 +160,7 @@ function getAllChildrenByGender($gender) {
         $row['award_track'] = getAward($row);
         $children[] = $row;
     }
-    echo "<pre>"; print_r($children); echo "</pre>"; exit;
+    // echo "<pre>"; print_r($children); echo "</pre>"; exit;
     return $children;
 }
 
