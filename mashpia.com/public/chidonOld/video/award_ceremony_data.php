@@ -14,6 +14,12 @@ if ($admin_user['auth'] != 'super') {
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
+$ct = new ChidonTests($year);
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/chidon_shipping/class.chidonShipping.php';
+$cs = new ChidonShipping($year);
+
 require 'functions.php';
 
 $genders = ['M', 'F'];
