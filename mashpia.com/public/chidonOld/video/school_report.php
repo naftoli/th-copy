@@ -1,13 +1,15 @@
 <?php
 ini_set('display_errors',1);
-$admin_auth = array('school');
-require('../../header.php');
+ini_set('error_reporting', E_ALL);
 
-require_once '../../class.adminSchools.php';
+$admin_auth = ['school'];
+require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
+
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
 
-require_once '../../class.globalSettings.php';
+require_once $_SERVER['DOCUMENT_ROOT'] . '/class.globalSettings.php';
 $year = GlobalSettings::getChidonYear();
 
 require_once 'functions.php';
