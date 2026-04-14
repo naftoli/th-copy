@@ -80,6 +80,7 @@ foreach ($schools as $school_id => $school) {
         <th>Prize 6</th>
     </tr>
     <?php
+    // echo "<pre>"; print_r($sheets); echo "</pre>"; exit;
     foreach ($sheets as $sheet) {
         foreach ($sheet as $idx => $row) {
             if ($idx == 0) continue;

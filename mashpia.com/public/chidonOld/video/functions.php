@@ -102,8 +102,6 @@ function getAllChildrenByGender($gender) {
                 u.last,
                 u.non_th_school_id, 
                 u.non_th_school, 
-                u.non_th_city, 
-                u.non_th_state, 
                 u.class_id, 
                 s.school_id,
                 s.school_name,
@@ -129,6 +127,7 @@ function getAllChildrenByGender($gender) {
                     AND u.gender = '$gender'";
     $sql .= " GROUP BY u.user_id";
     $sql .= " ORDER BY s.school_name, u.last, u.first";
+    // echo $sql . "<br />"; exit;
     $result = mysql_query($sql);
     
     // First pass: collect all children
@@ -144,6 +143,15 @@ function getAllChildrenByGender($gender) {
         $ct->setScores();
         $ct->calculateMarks();
         $preloaded_marks = $ct->getMarks();
+        
+        // Group children by school and preload passing averages for each school
+        $childrenBySchool = [];
+        foreach ($temp_children as $child) {
+            $childrenBySchool[$child['school_id']][] = $child;
+        }
+        foreach ($childrenBySchool as $school_id => $schoolChildren) {
+            $ct->preloadPassingAvgsForSchool($school_id, $schoolChildren);
+        }
     }
     
     // Second pass: calculate highest_track using preloaded marks
@@ -152,6 +160,7 @@ function getAllChildrenByGender($gender) {
         $row['award_track'] = getAward($row);
         $children[] = $row;
     }
+    echo "<pre>"; print_r($children); echo "</pre>"; exit;
     return $children;
 }
 
