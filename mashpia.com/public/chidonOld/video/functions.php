@@ -516,31 +516,34 @@ function extractFiles($list) {
 
 function createZip($files, $filename) {
     $zip = new ZipArchive;
-    $success = $zip->open($filename, ZipArchive::CREATE);
+    $success = $zip->open($filename, ZipArchive::CREATE | ZipArchive::OVERWRITE);
     if ($success !== true) {
         exit("cannot open <$filename>\n");
     }
     foreach($files as $file) {
-        $zip->addFromString($file, file_get_contents($file));
+        $zip->addFromString(basename($file), file_get_contents($file));
         unlink($file);
     }
     $zip->close();
 }
 
-function downloadFile() {
+function downloadFile($dir = null, $filename = "ChidonVideo.zip") {
     // Discard any output from header.php etc. so the response is only the zip
     while (ob_get_level()) {
         ob_end_clean();
     }
 
-    // Use script's directory so we find the .tsv files created by createFile
-    $dir = __DIR__;
+    // Use the requested directory so we zip the files that were just generated
+    $dir = $dir ?: __DIR__;
+    if (!is_dir($dir)) {
+        exit("cannot open <$dir>\n");
+    }
     chdir($dir);
     $list = scandir($dir);
     $files = extractFiles($list);
 
-    $filename = "ChidonVideo.zip";
-    createZip($files, $filename);
+    $zip_path = $dir . DIRECTORY_SEPARATOR . $filename;
+    createZip($files, $zip_path);
 
     header('Content-Description: File Transfer');
     header('Content-Type: application/octet-stream');
@@ -548,10 +551,11 @@ function downloadFile() {
     header('Expires: 0');
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
-    header('Content-Length: ' . filesize($filename));
+    header('Content-Length: ' . filesize($zip_path));
     flush(); // Flush system output buffer
-    readfile($filename);
-    unlink($filename);
+    readfile($zip_path);
+    unlink($zip_path);
+    exit;
 }
 
 function getSchoolReps($school, $gender) {
