@@ -39,7 +39,7 @@ $questions = $ct->getTestQuestions();
 foreach ($info as $school => $children) {
     foreach ($children as $child) {
         $id = $child['th_chidon_id'];
-        $ht = $ct->getHighestTrack($marks[$id], $child['user_id']);
+        $ht = strtolower($ct->getHighestTrack($marks[$id], $child['user_id']));
         $child['highest_track'] = $types[$ht] ?? $ht;
         $grade = $child['class_grade'];
         $avg = 0;
