@@ -20,6 +20,7 @@ class ChidonTests
     private $end;
     private $levels;
     private $dates;
+    private $passingAvgsCache = [];
 
     public function __construct($yr = 0) {
         global $MASHPIA_DB;
@@ -219,29 +220,39 @@ class ChidonTests
     }
 
     public function setScores() {
-        $stmt = $this->db->prepare("
+        if (empty($this->children)) {
+            return;
+        }
+        
+        // Collect all th_chidon_ids
+        $ids = [];
+        foreach ($this->children as $child) {
+            if (!empty($child['th_chidon_id'])) {
+                $ids[] = intval($child['th_chidon_id']);
+            }
+        }
+        
+        if (empty($ids)) {
+            return;
+        }
+        
+        // Fetch all scores in ONE query instead of per-child
+        $placeholders = implode(',', $ids);
+        $stmt = $this->db->query("
             SELECT 
                 *
             FROM
                 th_chidon_marks
             WHERE
-                th_chidon_id = :id 
+                th_chidon_id IN ($placeholders)
         ");
-        foreach ($this->children as $child) {
-            $id = $child['th_chidon_id'];
-            $res = $stmt->execute([
-                ':id' => $id,
-            ]);
-            if ($res) {
-                $rows = $stmt->fetchAll();
-                if (! empty($rows)) {
-                    foreach ($rows as $row) {
-                        $this->scores[$id][$row['test_number']][$row['test_type']] = $row['answered_correctly'];
-                        if (! isset($this->levels[$id][$row['test_number']]))
-                            $this->levels[$id][$row['test_number']] = $row['level'];
-                    }
-                }
-            }
+        $rows = $stmt->fetchAll();
+        
+        foreach ($rows as $row) {
+            $id = $row['th_chidon_id'];
+            $this->scores[$id][$row['test_number']][$row['test_type']] = $row['answered_correctly'];
+            if (! isset($this->levels[$id][$row['test_number']]))
+                $this->levels[$id][$row['test_number']] = $row['level'];
         }
     }
 
@@ -730,7 +741,78 @@ class ChidonTests
         return $row['highest_track'];
     }
 
+    /**
+     * Preload passing averages for all users in a school to avoid N+1 queries
+     */
+    public function preloadPassingAvgsForSchool($school_id, $children = []) {
+        // Get all class_ids and user_ids from children
+        $class_ids = [];
+        $user_ids = [];
+        foreach ($children as $child) {
+            if (!empty($child['class_id'])) $class_ids[$child['class_id']] = true;
+            if (!empty($child['user_id'])) $user_ids[$child['user_id']] = true;
+        }
+        $class_ids = array_keys($class_ids);
+        $user_ids = array_keys($user_ids);
+        
+        foreach (['', 'finals'] as $type) {
+            $table = $type == 'finals' ? 'chidon_final_passing_avgs' : 'chidon_passing_avgs';
+            
+            // Build query to get all relevant passing averages in one query
+            $sql = "SELECT * FROM $table WHERE year = :year AND (school_id = :school";
+            if (!empty($class_ids)) {
+                $sql .= " OR class_id IN (" . implode(',', array_map('intval', $class_ids)) . ")";
+            }
+            if (!empty($user_ids)) {
+                $sql .= " OR user_id IN (" . implode(',', array_map('intval', $user_ids)) . ")";
+            }
+            $sql .= ")";
+            
+            $stmt = $this->db->prepare($sql);
+            $stmt->execute([':year' => $this->year, ':school' => $school_id]);
+            $rows = $stmt->fetchAll();
+            
+            // Organize by level (school, class, user)
+            $schoolAvgs = [];
+            $classAvgs = [];
+            $userAvgs = [];
+            
+            foreach ($rows as $row) {
+                if ($row['user_id'] > 0) {
+                    $userAvgs[$row['user_id']][$row['track']] = $row['avg'];
+                } else if ($row['class_id'] > 0) {
+                    $classAvgs[$row['class_id']][$row['track']] = $row['avg'];
+                } else if ($row['school_id'] > 0) {
+                    $schoolAvgs[$row['track']] = $row['avg'];
+                }
+            }
+            
+            // Pre-populate cache for each user
+            foreach ($children as $child) {
+                $user_id = $child['user_id'];
+                $class_id = $child['class_id'];
+                $cacheKey = $user_id . '_' . $type;
+                
+                $passingAvgs = [];
+                foreach ($this->types as $track => $desc) {
+                    $passingAvgs[$track] = $userAvgs[$user_id][$track] 
+                        ?? $classAvgs[$class_id][$track] 
+                        ?? $schoolAvgs[$track] 
+                        ?? 80;
+                }
+                $this->passingAvgsCache[$cacheKey] = $passingAvgs;
+            }
+        }
+    }
+
     public function getPassingAvgs($user_id, $type = '') {
+        $cacheKey = $user_id . '_' . $type;
+        
+        // Return cached result if available
+        if (isset($this->passingAvgsCache[$cacheKey])) {
+            return $this->passingAvgsCache[$cacheKey];
+        }
+        
         $table = 'chidon_passing_avgs';
         if ($type == 'finals') $table = 'chidon_final_passing_avgs';
 
@@ -764,6 +846,10 @@ class ChidonTests
         foreach ($this->types as $type => $desc) {
             $passingAvgs[$type] = $avgs['user'][$type] ?? $avgs['class'][$type] ?? $avgs['school'][$type] ?? 80;
         }
+        
+        // Cache the result
+        $this->passingAvgsCache[$cacheKey] = $passingAvgs;
+        
         return $passingAvgs;
     }
 
