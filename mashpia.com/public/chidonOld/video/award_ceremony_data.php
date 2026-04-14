@@ -32,9 +32,16 @@ foreach ($genders as $gender) {
     foreach ($children as $child) {
         $award = getAward($child);
         if ($award) {
-            $award = $tracks[$award-1];
-            $child['award'] = $award;
-            $sorted[$award][] = $child;
+            if (is_numeric($award)) {
+                $award = $tracks[(int)$award - 1] ?? '';
+            } else {
+                $award = strtolower((string)$award);
+            }
+
+            if ($award && in_array($award, $tracks, true)) {
+                $child['award'] = $award;
+                $sorted[$award][] = $child;
+            }
         }
     }
     foreach ($tracks as $track) {
