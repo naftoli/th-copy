@@ -4,7 +4,6 @@ ini_set('error_reporting', E_ALL);
 
 $admin_auth = ['school'];
 require_once $_SERVER['DOCUMENT_ROOT'] . '/header.php';
-
 require_once $_SERVER['DOCUMENT_ROOT'] . '/class.adminSchools.php';
 $as = new AdminSchools( $admin_user['admin_id'], $admin_user['auth'] );
 $schools = $as->getSchools();
