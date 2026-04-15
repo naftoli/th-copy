@@ -15,10 +15,9 @@ $offset    = intval( post_param( 'offset' ) );
 if ( !$user_id || !$location || $gender === false || $rank === false )
     render_json_error( "Invalid Request" );
 
-Cache::set('leaderboard:test', ['ok' => true, 'time' => time()], 300);
 render_json_response([
-    'cache_enabled' => Cache::enabled(),
-    'cache_test' => Cache::get('leaderboard:test')
+    'redis_class_exists' => class_exists('Redis'),
+    'cache_enabled' => Cache::enabled()
 ]);
 
 // resolve leaderboard scope
