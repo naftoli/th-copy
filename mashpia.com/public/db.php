@@ -900,4 +900,6 @@ function header_icorpa_points($arrParams)
 	return $arrResults;
 }
 function header_update_icorpa_student() {}
+
+require_once( __DIR__ . "/api/header/cache.php");
 ?>

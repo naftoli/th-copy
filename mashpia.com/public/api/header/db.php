@@ -69,3 +69,5 @@ class SimpleLogger {
         file_put_contents( $this->file_name, $msg, FILE_APPEND );
     }
 }
+
+require_once( __DIR__ . "/cache.php");
