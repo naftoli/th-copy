@@ -1,5 +1,6 @@
 <?php
 require_once( $_SERVER['DOCUMENT_ROOT'] . "/../includes/globals.php");
+
 class Cache
 {
     private static $client = null;
@@ -13,14 +14,14 @@ class Cache
 
         try {
             $redis = new Redis();
-            $redis->connect($global_redis_host, (int) $global_redis_port, 1.5);
+            $redis->connect($GLOBALS['global_redis_host'], (int) $GLOBALS['global_redis_port'], 1.5);
 
-            if (!empty($global_redis_password)) {
-                $redis->auth($global_redis_password);
+            if (!empty($GLOBALS['global_redis_password'])) {
+                $redis->auth($GLOBALS['global_redis_password']);
             }
 
-            if (isset($global_redis_db)) {
-                $redis->select((int) $global_redis_db);
+            if (isset($GLOBALS['global_redis_db'])) {
+                $redis->select((int) $GLOBALS['global_redis_db']);
             }
 
             self::$client = $redis;
