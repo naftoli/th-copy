@@ -63,3 +63,9 @@ $global_redis_host = 'localhost';
 $global_redis_port = 6379;
 $global_redis_password = 'Naftoli@5783!';
 $global_redis_db = 0;
+
+// if server is not mashpia.com
+if ( $development ) {
+    $global_redis_host = '127.0.0.1';
+    $global_redis_port = 6380;
+}
