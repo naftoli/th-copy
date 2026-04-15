@@ -10,106 +10,95 @@ class UsersRouter {
     public function index() {
         global $current_user; global $MASHPIA_DB;
 
-        $rankNames = [];
-        $sql = "SELECT * FROM ranks";
-        $stmt = $MASHPIA_DB->query( $sql );
-        while( $row = $stmt->fetch() ) {
-            $rankNames[$row['rank_ord']] = $row['rank_name'];
-        }
-
         $filters = $current_user->login->getFilter( 's.', 'u.' );
-        // generate the SQL
-        // if we are a parent
-        if ( $current_user->login->code === 'PARENT' ) {
-            $sql = "
-                SELECT u.*, aa.admin_id, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
-                       MAX(rank_ord) as rank_name 
-                FROM users u 
-                JOIN schools s USING ( school_id ) 
-                JOIN rank_marks using ( user_id ) 
-                LEFT JOIN admin_auths aa ON ( aa.id = u.user_id AND aa.auth = 'user' )
-                LEFT JOIN classes c USING ( class_id ) WHERE $filters 
-                GROUP BY user_id 
-                ORDER BY school_name, class_grade, class_sub, last, first
-            ";
-        } else {
-            // can't get admin id here b/c it creates bugs
-            $sql = "
-                SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
-                       IFNULL(MAX(rank_ord), 1) as rank_name 
-                FROM users u 
-                JOIN schools s USING ( school_id ) 
-                LEFT JOIN rank_marks using ( user_id ) 
-                LEFT JOIN classes c USING ( class_id ) WHERE $filters 
-                GROUP BY user_id 
-                ORDER BY school_name, class_grade, class_sub, last, first
-            ";
-        }
-//        if (isset($_COOKIE['naftoli'])) {
-//            echo $sql;
-//            exit;
-//        }
-        $query = $MASHPIA_DB->prepare( $sql );
-        $query->execute();
-        $info = $query->fetchAll();
-        if ($query->errorCode() !== "00000") {
-            json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
-        }
-
-        if ($current_user->login->code !== 'PARENT') {
-            $admins = [];
-            // get all admin_ids
-            $admin_ids = [];
-            $sql = "select aa.*, a.admin_email, a.admin_phone_work, a.admin_phone_home, a.admin_phone_mobile, a.admin_phone_mobile2 
-                    from admin_auths aa 
-                    join users u on aa.id = u.user_id 
-                    left join admins a using (admin_id) 
-                    where aa.auth = 'user' 
-                    and u.school_id > 0";
-//            if (isset($_COOKIE['naftoli'])) {
-//                echo $sql;
-//                exit;
-//            }
-            $stmtAdmins = $MASHPIA_DB->query( $sql );
-            while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
-                $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
-                if (!in_array($rowAdmin['admin_id'], array_keys($admins)))
-                    $admins[$rowAdmin['admin_id']] = $rowAdmin;
+        $cache_key = "core:users:index:{$current_user->login->type}:{$current_user->login->id}:" . md5( $filters );
+        $users = Cache::remember( $cache_key, 300, function () use ( $MASHPIA_DB, $current_user, $filters ) {
+            $rankNames = [];
+            $sql = "SELECT * FROM ranks";
+            $stmt = $MASHPIA_DB->query( $sql );
+            while( $row = $stmt->fetch() ) {
+                $rankNames[$row['rank_ord']] = $row['rank_name'];
             }
-        }
 
-        $users = [];
-        // fetch all results and parse them as models
-        foreach ($info as $row) {
-            $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
-            $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
-            // format dates
-            $dob = $row['dob']; 
-            $user_registered = $row['user_registered'];
-            // $dob = $row['dob'] ? ( new DateTime( $row['dob'] ) )->format('n/j/Y') : $row['dob'];
-            // $user_registered = $row['user_registered'] ? ( new DateTime( $row['user_registered'] ) )->format('n/j/Y g:i A') : $row['user_registered'];
-            // format and return just the data we want...
-            $admin_id = $row['admin_id'] ?? $admin_ids[$row['user_id']];
-            $users[] = [
-                'user_id'   => intval($row['user_id']), 'user_serial' => intval($row['user_serial']),
-                'first'     => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'],
-                'first_he'  => $row['first_he'], 'last_he' => $row['last_he'],
-                'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
-                'chayolei'  => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']),
-                'school_id' => $row['school_id'], 'class_id' => $row['class_id'] ? $row['class_id'] : false,
-                'school'    => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'],
-                'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
-                'barcode'   => '3'.$row['user_code'],
-                'platoon'   => ( $platoon ? [ 'name' => $platoon ] : null ),
-                'rank_name' => $rankNames[$row['rank_name']],
-                'admin_id'  => $admin_id, 
-                'email'     => $admins[$admin_id]['admin_email'] ?? '', 
-                'work_phone' => $admins[$admin_id]['admin_phone_work'] ?? '', 
-                'home_phone' => $admins[$admin_id]['admin_phone_home'] ?? '', 
-                'mobile_phone' => $admins[$admin_id]['admin_phone_mobile'] ?? '', 
-                'mobile_phone2' => $admins[$admin_id]['admin_phone_mobile2'] ?? ''
-            ];
-        }
+            if ( $current_user->login->code === 'PARENT' ) {
+                $sql = "
+                    SELECT u.*, aa.admin_id, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
+                           MAX(rank_ord) as rank_name 
+                    FROM users u 
+                    JOIN schools s USING ( school_id ) 
+                    JOIN rank_marks using ( user_id ) 
+                    LEFT JOIN admin_auths aa ON ( aa.id = u.user_id AND aa.auth = 'user' )
+                    LEFT JOIN classes c USING ( class_id ) WHERE $filters 
+                    GROUP BY user_id 
+                    ORDER BY school_name, class_grade, class_sub, last, first
+                ";
+            } else {
+                $sql = "
+                    SELECT u.*, s.school_name, s.shipping_city, s.school_era, c.class_grade, c.class_sub, 
+                           IFNULL(MAX(rank_ord), 1) as rank_name 
+                    FROM users u 
+                    JOIN schools s USING ( school_id ) 
+                    LEFT JOIN rank_marks using ( user_id ) 
+                    LEFT JOIN classes c USING ( class_id ) WHERE $filters 
+                    GROUP BY user_id 
+                    ORDER BY school_name, class_grade, class_sub, last, first
+                ";
+            }
+
+            $query = $MASHPIA_DB->prepare( $sql );
+            $query->execute();
+            $info = $query->fetchAll();
+            if ($query->errorCode() !== "00000") {
+                json_error("SQL Error: ".implode(', ', $query->errorInfo()), false, 500);
+            }
+
+            $admins = [];
+            $admin_ids = [];
+            if ($current_user->login->code !== 'PARENT') {
+                $sql = "select aa.*, a.admin_email, a.admin_phone_work, a.admin_phone_home, a.admin_phone_mobile, a.admin_phone_mobile2 
+                        from admin_auths aa 
+                        join users u on aa.id = u.user_id 
+                        left join admins a using (admin_id) 
+                        where aa.auth = 'user' 
+                        and u.school_id > 0";
+                $stmtAdmins = $MASHPIA_DB->query( $sql );
+                while ($rowAdmin = $stmtAdmins->fetch(PDO::FETCH_ASSOC)) {
+                    $admin_ids[$rowAdmin['id']] = $rowAdmin['admin_id'];
+                    if (!in_array($rowAdmin['admin_id'], array_keys($admins)))
+                        $admins[$rowAdmin['admin_id']] = $rowAdmin;
+                }
+            }
+
+            $users = [];
+            foreach ($info as $row) {
+                $profilePicture = ( new Soldier(['mobile_pic' => $row['mobile_pic'], 'user_photo_id' => $row['user_photo_id']]) )->profilePicture();
+                $platoon = ( new Platoon(['class_grade' => $row['class_grade'], 'class_sub' => $row['class_sub']]) )->name();
+                $dob = $row['dob']; 
+                $user_registered = $row['user_registered'];
+                $admin_id = $row['admin_id'] ?? ( $admin_ids[$row['user_id']] ?? null );
+                $users[] = [
+                    'user_id'   => intval($row['user_id']), 'user_serial' => intval($row['user_serial']),
+                    'first'     => $row['first'], 'last' => $row['last'], 'dob' => $dob, 'gender' => $row['gender'],
+                    'first_he'  => $row['first_he'], 'last_he' => $row['last_he'],
+                    'user_registered' => $user_registered,  'mobile_pic' => $row['mobile_pic'], 'profilePicture' => $profilePicture,
+                    'chayolei'  => intval($row['chayolei']), 'yan' => intval($row['yan']), 'chidon' => intval($row['chidon']),
+                    'school_id' => $row['school_id'], 'class_id' => $row['class_id'] ? $row['class_id'] : false,
+                    'school'    => [ 'school_id' => $row['school_id'], 'school_name' => $row['school_name'],
+                    'shipping_city' => $row['shipping_city'], 'school_era' => $row['school_era'] ],
+                    'barcode'   => '3'.$row['user_code'],
+                    'platoon'   => ( $platoon ? [ 'name' => $platoon ] : null ),
+                    'rank_name' => $rankNames[$row['rank_name']],
+                    'admin_id'  => $admin_id, 
+                    'email'     => $admin_id ? ( $admins[$admin_id]['admin_email'] ?? '' ) : '', 
+                    'work_phone' => $admin_id ? ( $admins[$admin_id]['admin_phone_work'] ?? '' ) : '', 
+                    'home_phone' => $admin_id ? ( $admins[$admin_id]['admin_phone_home'] ?? '' ) : '', 
+                    'mobile_phone' => $admin_id ? ( $admins[$admin_id]['admin_phone_mobile'] ?? '' ) : '', 
+                    'mobile_phone2' => $admin_id ? ( $admins[$admin_id]['admin_phone_mobile2'] ?? '' ) : ''
+                ];
+            }
+
+            return $users;
+        } );
         json_response( $users );
     }
 
@@ -120,7 +109,11 @@ class UsersRouter {
             if ( !$user->validateAccess( $current_user->login ) )
                 json_error( 'Your current login does not have access to this soldier.', 'CORE-USERS-65', 401 );
             // ! do not add true true here as PHP cannot handle the barcode as a number
-            json_response( $user->fullDetailSerialize() );
+            $cache_key = "core:users:show:{$current_user->login->type}:{$current_user->login->id}:{$id}";
+            $result = Cache::remember( $cache_key, 120, function () use ( $user ) {
+                return $user->fullDetailSerialize();
+            } );
+            json_response( $result );
         } catch ( Exception $e ) {
             json_error( 'Soldier does not exist', 'CORE-USERS-69', 404 );
         }
