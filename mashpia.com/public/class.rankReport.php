@@ -166,9 +166,9 @@ class RankReport extends Report {
 
     public function setOtherChildren($nameBreak, $users) {
         // if there's a school ID, update year
-        if ($this->school_id) {
-            $this->year = GlobalSettings::getRegistrationYear($this->school_id);
-        }
+        // if ($this->school_id) {
+        //     $this->year = GlobalSettings::getRegistrationYear($this->school_id);
+        // }
 
         $this->ranks = [];
         $this->setRankNames();
