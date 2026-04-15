@@ -15,11 +15,6 @@ $offset    = intval( post_param( 'offset' ) );
 if ( !$user_id || !$location || $gender === false || $rank === false )
     render_json_error( "Invalid Request" );
 
-render_json_response([
-    'redis_class_exists' => class_exists('Redis'),
-    'cache_enabled' => Cache::enabled()
-]);
-
 // resolve leaderboard scope
 $scope_id = 'all';
 if ( $location === "base" ) {
