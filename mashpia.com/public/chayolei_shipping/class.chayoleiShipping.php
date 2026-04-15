@@ -24,7 +24,7 @@ class ChayoleiShipping
     public function __construct() {
         global $MASHPIA_DB;
         $this->db = $MASHPIA_DB;
-        $this->year = GlobalSettings::getRegistrationYear();
+        $this->year = GlobalSettings::getCurrentYear();
         $this->schools = [];
         $this->grades = [];
         $this->users = [];
