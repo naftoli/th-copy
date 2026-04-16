@@ -49,7 +49,7 @@ $school_id = count($schools) > 1 && isset($_POST['school_id']) ? $_POST['school_
 if ($school_id) {
     $schools = [$school_id => $schools[$school_id]];
 }
-
+echo "<pre>"; print_r($gender); echo "</pre>"; exit;
 foreach ($gender as $gender) {
     foreach ($schools as $school_id => $school) {
         $children = getChildren($school_id, $gender);
