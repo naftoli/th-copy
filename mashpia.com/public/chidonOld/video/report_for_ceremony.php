@@ -34,7 +34,7 @@ $cs = new ChidonShipping($year);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
-$gender = isset($_REQUEST['gender']) ? $_REQUEST['gender'] : '';
+$gender = isset($_POST['gender']) ? $_POST['gender'] : '';
 require 'functions.php';
 $chidon_prizes = getChidonPrizes();
 $prizes = getUserPrizes();
@@ -53,18 +53,18 @@ if ($gender) {
         // echo "<pre>"; print_r($children); echo "</pre>"; 
         // continue;
         if (! empty($children)) {
-        if (in_array($school_id, [7,54,106,255])) {
-                // sort children by grade and create sheet for each grade
-                $sorted = [];
-                foreach ($children as $child) {
-                $sorted[$child['class_grade']][] = $child;
-                }
-                foreach ($sorted as $grade => $details) {
-                $grade_sheets[$school_id][$grade] = createSpreadSheet($details, 'ht', false, true);
-                }
-        } else {
-                $school_sheets[$school_id] = createSpreadSheet($children, 'ht', false, true);
-        }
+            if (in_array($school_id, [7,54,106,255])) {
+                    // sort children by grade and create sheet for each grade
+                    $sorted = [];
+                    foreach ($children as $child) {
+                    $sorted[$child['class_grade']][] = $child;
+                    }
+                    foreach ($sorted as $grade => $details) {
+                    $grade_sheets[$school_id][$grade] = createSpreadSheet($details, 'ht', false, true);
+                    }
+            } else {
+                    $school_sheets[$school_id] = createSpreadSheet($children, 'ht', false, true);
+            }
         }
     }
 }
@@ -108,7 +108,7 @@ if ($gender) {
         <h1 class="no-print">Chidon Ceremony Report</h1>
 
         <?php
-        if (!isset($_POST['submit'])) {
+        if ($gender == '') {
             echo "<form method='post' action=''>";
             echo "Gender: <select name='gender'>";
             echo "<option value='boys'>Boys</option>";
