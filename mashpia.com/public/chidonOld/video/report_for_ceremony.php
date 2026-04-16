@@ -62,8 +62,8 @@ foreach ($schools as $school_id => $school) {
     }
 }
 
-// echo "<pre>"; print_r($grade_sheets); echo "</pre>";
-// echo "<pre>"; print_r($school_sheets); echo "</pre>";
+echo "<pre>"; print_r($grade_sheets); echo "</pre>";
+echo "<pre>"; print_r($school_sheets); echo "</pre>";
 ?>
 <DOCTYPE html>
 <html>

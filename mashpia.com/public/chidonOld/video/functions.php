@@ -261,7 +261,7 @@ function createFile($name, $info, $csv = false) {
     }
 }
 
-function createSpreadSheet($children, $type = 'ht', $east_only = false) {
+function createSpreadSheet($children, $type = 'ht', $east_only = false, $for_ceremony = false) {
     $info = [];
     foreach ($children as $child) {
         $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
@@ -281,9 +281,11 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
     $i = 0;
     $sheet = [];
 
-    $sheet[$i++] = ['comp', 'Chayol Name', 'Chayol Picture', 'Grade', 'School Name', 'School Location', 'School Logo', 'Award', 'Trip',
-        'Prize 1', 'Prize 2', 'Prize 3', 'Prize 4', 'Prize 5', 'Prize 6'];
-    $sheet[$i++] = ['Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    if (! $for_ceremony) {
+        $sheet[$i++] = ['comp', 'Chayol Name', 'Chayol Picture', 'Grade', 'School Name', 'School Location', 'School Logo', 'Award', 'Trip',
+            'Prize 1', 'Prize 2', 'Prize 3', 'Prize 4', 'Prize 5', 'Prize 6'];
+        $sheet[$i++] = ['Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+    }
 
     // get school name, school location
     $school_name = '';
@@ -304,14 +306,14 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
             }
         }
     }
-    $sheet[$i++] = ['School Intro', '', '', '', $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', ''];
+    if (! $for_ceremony) $sheet[$i++] = ['School Intro', '', '', '', $school_name, $school_location, $school_logo, '', '', '', '', '', '', '', ''];
 
     // tracks
     foreach ($tracks as $track) {
         if (isset($info[$track])) {
-            $sheet[$i++] = [ucfirst($track) . ' Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+            if (! $for_ceremony) $sheet[$i++] = [ucfirst($track) . ' Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
             foreach ($info[$track] as $child) {
-                $sheet[$i++] = addToSheet($child, false, false);
+                $sheet[$i++] = addToSheet($child, false, false, $for_ceremony);
                 if (intval($child['khk_reg']) && passedKhk($child)) $khk[] = $child;
 //                if ($child['trophy_type']) {
 //                    ${$child['trophy_type']}[$child['class_grade']][$child['rep_type']][] = $child;
@@ -329,10 +331,10 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
         }
         array_multisort($last, SORT_ASC, $first, SORT_ASC, $khk);
 
-        $sheet[$i++] = ['Khk Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
+        if (! $for_ceremony) $sheet[$i++] = ['Khk Intro', '', '', '', '', '', '', '', '', '', '', '', '', '', ''];
         foreach ($khk as  $child) {
             $track = $type == 'ht' ? $child['highest_track'] : $child['award_track'];
-            $sheet[$i++] = addToSheet($child, true, false);
+            $sheet[$i++] = addToSheet($child, true, false, $for_ceremony);
         }
     }
 
@@ -352,7 +354,7 @@ function createSpreadSheet($children, $type = 'ht', $east_only = false) {
 //        }
 //    }
 
-    $sheet[$i++] = ['Outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', ''];
+    if (! $for_ceremony) $sheet[$i++] = ['Outro', '', 'end.png', '', '', '', '', '', '', '', '', '', '', '', ''];
     return $sheet;
 }
 
@@ -375,7 +377,7 @@ function passedKhk($child) {
 //    return false;
 }
 
-function addToSheet($child, $khk = false, $trophy = false) {
+function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false) {
     global $prizes;
 
     $tracks = [
@@ -390,7 +392,12 @@ function addToSheet($child, $khk = false, $trophy = false) {
     $award_num = array_search($child['award_track'], $tracks);
     if (in_array($child['highest_track'], ['yesod', 'yediah'])) $trip = 0;
     else $trip = isset($child['ultimate_trip']) && intval($child['ultimate_trip']) == 1 ? 2: 1;
-    $grade = 'Grade ' . $child['class_grade'];
+
+    if ($for_ceremony) {
+        $grade = $child['class_grade'] . (empty($child['class_sub']) ? '' : ' - ' . $child['class_sub']);
+    } else {
+        $grade = 'Grade ' . $child['class_grade'];
+    }
 
 //    if ($trophy) {
 //        $track = $child['trophy_type'] . '_trophy';
@@ -429,8 +436,14 @@ function addToSheet($child, $khk = false, $trophy = false) {
             }
         }
 
-        return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
-            $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
+        if ($for_ceremony) {
+            $user_id = $child['user_id'];
+            $award_track = $child['award_track'];
+            return [$user_id, $name, $grade, $reward_track, $award_track, $trip, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
+        } else {
+            return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
+                $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
+        }
     }
 }
 
