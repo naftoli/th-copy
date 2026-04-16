@@ -54,10 +54,10 @@ foreach ($schools as $school_id => $school) {
                $sorted[$child['class_grade']][] = $child;
             }
             foreach ($sorted as $grade => $details) {
-               $grade_sheets[$school_id][$grade] = createSpreadSheet($details);
+               $grade_sheets[$school_id][$grade] = createSpreadSheet($details, 'ht', false, true);
             }
        } else {
-            $school_sheets[$school_id] = createSpreadSheet($children);
+            $school_sheets[$school_id] = createSpreadSheet($children, 'ht', false, true);
        }
     }
 }
@@ -95,11 +95,15 @@ foreach ($schools as $school_id => $school) {
             foreach ($grade_sheets as $school_id => $grades) {
                 foreach ($grades as $grade => $sheet) {
                     foreach ($sheet as $child) {
-                        $track = $child[0];
+                        $user_id = $child[0];
                         $name = $child[1];
-                        $prizes = [$child[9], $child[10], $child[11], $child[12], $child[13], $child[14]];
+                        $grade = $child[2];
+                        $reward_track = $child[3];
+                        $award_track = $child[4];
+                        $trip = $child[5];
+                        $prizes = [$child[6], $child[7], $child[8], $child[9], $child[10], $child[11]];
                         echo "<div class='child-sheet'>";
-                        echo "<h3>Name: " . $name . " Grade: " . $grade . "</h3>";                       
+                        echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";                       
                         echo "</div>";
                     }
                 }
@@ -107,11 +111,15 @@ foreach ($schools as $school_id => $school) {
         } else {
             foreach ($school_sheets as $school_id => $sheet) {
                 foreach ($sheet as $child) {
-                    $track = $child[0];
+                    $user_id = $child[0];
                     $name = $child[1];
-                    $prizes = [$child[9], $child[10], $child[11], $child[12], $child[13], $child[14]];
+                    $grade = $child[2];
+                    $reward_track = $child[3];
+                    $award_track = $child[4];
+                    $trip = $child[5];
+                    $prizes = [$child[6], $child[7], $child[8], $child[9], $child[10], $child[11]];
                     echo "<div class='child-sheet'>";
-                    echo "<h3>Name: " . $name . " Grade: " . $grade . "</h3>";                       
+                    echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";                       
                     echo "</div>";
                 }
             }
