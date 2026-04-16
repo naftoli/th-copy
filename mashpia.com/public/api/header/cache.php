@@ -1,5 +1,5 @@
 <?php
-require_once( $_SERVER['DOCUMENT_ROOT'] . "/../includes/globals.php");
+require_once( __DIR__ . "/../../../includes/globals.php");
 
 class Cache
 {
