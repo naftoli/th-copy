@@ -43,6 +43,10 @@ $final_marks = getFinalMarks();
 
 $grade_sheets = [];
 $school_sheets = [];
+$school_id = count($schools) > 1 && isset($_POST['school_id']) ? $_POST['school_id'] : 0;
+if ($school_id) {
+    $schools = [$school_id => $schools[$school_id]];
+}
 foreach ($schools as $school_id => $school) {
     $children = getChildren($school_id, $gender);
     // echo "<pre>"; print_r($children); echo "</pre>"; 
@@ -96,13 +100,84 @@ foreach ($schools as $school_id => $school) {
     </head>
     <body>
         <h1 class="no-print">Chidon Ceremony Report</h1>
-        <button class="no-print" onclick="window.print()">Print</button>
+
         <?php
-        if (isset($grade_sheets)) {
-            foreach ($grade_sheets as $school_id => $grades) {
-                $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
-                $awards = $cs->getAwards($gender, $school_id);
-                foreach ($grades as $grade => $sheet) {
+        if (!isset($_POST['school_id']) && count($schools) > 1) {
+            echo "<form method='post' action=''>";
+            echo "<select name='school_id'>";
+            foreach ($schools as $school_id => $school) {
+                echo "<option value='" . $school_id . "'>" . $school . "</option>";
+            }
+            echo "</select>";
+            echo "<input type='submit' value='Submit'>";
+            echo "</form>";
+        } else {
+        ?>
+            <button class="no-print" onclick="window.print()">Print</button>
+            <?php
+            if (isset($grade_sheets)) {
+                foreach ($grade_sheets as $school_id => $grades) {
+                    $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
+                    $awards = $cs->getAwards($gender, $school_id);
+                    foreach ($grades as $grade => $sheet) {
+                        foreach ($sheet as $child) {
+                            $user_id = $child[0];
+                            $name = $child[1];
+                            $grade = $child[2];
+                            $sweater = ucwords($child[6]);
+                            $yarmulka = $child[7];
+                            echo "<div class='child-sheet'>";
+                            echo "<h4>" . $name . " (Grade " . $grade . ")</h4>"; 
+                            if (isset($recruitment_prizes[$user_id])) {
+                                echo "<p>Recruitment Prizes:<ul>";
+                                foreach ($recruitment_prizes[$user_id] as $prize) {
+                                    $prize_name = ucwords($prize['item'] . ($prize['color'] ? ' ' . $prize['color'] : ''));
+                                    echo "<li>" . $prize_name . "</li>";
+                                }
+                                echo "</ul></p>";
+                            }
+                            echo "<p>Sweater: " . $sweater . "</p>";
+                            if (is_numeric($yarmulka)) {
+                                echo "<p>Gift: Yarmulka Size " . $yarmulka . "</p>";
+                            } else {
+                                echo "<p>Gift: Jewelry Gift</p>";
+                            }
+                            echo "<p>Prizes:<ul>";
+                            foreach ($prizes[$user_id] as $prize) {
+                                $prize_id = $prize['id'];
+                                $he_name = $prize['name'];
+                                $prize_name = $chidon_prizes[$prize_id]['name'];
+                                if ($chidon_prizes[$prize_id]['size']) {
+                                    $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
+                                }
+                                if ($chidon_prizes[$prize_id]['color']) {
+                                    $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
+                                }
+                                if ($he_name) {
+                                    $prize_name .= " - " . $he_name;
+                                }
+                                echo "<li>" . $prize_name . "</li>";
+                            }
+                            echo "</ul></p>";
+                            if (isset($awards[$user_id])) {
+                                echo "<p>Awards:<ul>";
+                                foreach ($awards[$user_id] as $award) {
+                                    $award_name = ucwords($award['item']);
+                                    if ($award['name']) {
+                                        $award_name .= " - " . $award['name'];
+                                    }
+                                    echo "<li>" . $award_name . "</li>";
+                                }
+                                echo "</ul></p>";
+                            }
+                            echo "</div>";
+                        }
+                    }
+                }
+            } else {
+                foreach ($school_sheets as $school_id => $sheet) {
+                    $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
+                    $awards = $cs->getAwards($gender, $school_id);
                     foreach ($sheet as $child) {
                         $user_id = $child[0];
                         $name = $child[1];
@@ -110,7 +185,7 @@ foreach ($schools as $school_id => $school) {
                         $sweater = ucwords($child[6]);
                         $yarmulka = $child[7];
                         echo "<div class='child-sheet'>";
-                        echo "<h4>" . $name . " (Grade " . $grade . ")</h4>"; 
+                        echo "<h4>" . $name . " (Grade " . $grade . ")</h4>";
                         if (isset($recruitment_prizes[$user_id])) {
                             echo "<p>Recruitment Prizes:<ul>";
                             foreach ($recruitment_prizes[$user_id] as $prize) {
@@ -146,6 +221,9 @@ foreach ($schools as $school_id => $school) {
                             echo "<p>Awards:<ul>";
                             foreach ($awards[$user_id] as $award) {
                                 $award_name = ucwords($award['item']);
+                                if ($award['name']) {
+                                    $award_name .= " - " . $award['name'];
+                                }
                                 echo "<li>" . $award_name . "</li>";
                             }
                             echo "</ul></p>";
@@ -154,61 +232,7 @@ foreach ($schools as $school_id => $school) {
                     }
                 }
             }
-        } else {
-            foreach ($school_sheets as $school_id => $sheet) {
-                $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
-                $awards = $cs->getAwards($gender, $school_id);
-                foreach ($sheet as $child) {
-                    $user_id = $child[0];
-                    $name = $child[1];
-                    $grade = $child[2];
-                    $sweater = ucwords($child[6]);
-                    $yarmulka = $child[7];
-                    echo "<div class='child-sheet'>";
-                    echo "<h4>" . $name . " (Grade " . $grade . ")</h4>";
-                    if (isset($recruitment_prizes[$user_id])) {
-                        echo "<p>Recruitment Prizes:<ul>";
-                        foreach ($recruitment_prizes[$user_id] as $prize) {
-                            $prize_name = ucwords($prize['item'] . ($prize['color'] ? ' ' . $prize['color'] : ''));
-                            echo "<li>" . $prize_name . "</li>";
-                        }
-                        echo "</ul></p>";
-                    }
-                    echo "<p>Sweater: " . $sweater . "</p>";
-                    if (is_numeric($yarmulka)) {
-                        echo "<p>Gift: Yarmulka Size " . $yarmulka . "</p>";
-                    } else {
-                        echo "<p>Gift: Jewelry Gift</p>";
-                    }
-                    echo "<p>Prizes:<ul>";
-                    foreach ($prizes[$user_id] as $prize) {
-                        $prize_id = $prize['id'];
-                        $he_name = $prize['name'];
-                        $prize_name = $chidon_prizes[$prize_id]['name'];
-                        if ($chidon_prizes[$prize_id]['size']) {
-                            $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
-                        }
-                        if ($chidon_prizes[$prize_id]['color']) {
-                            $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
-                        }
-                        if ($he_name) {
-                            $prize_name .= " - " . $he_name;
-                        }
-                        echo "<li>" . $prize_name . "</li>";
-                    }
-                    echo "</ul></p>";
-                    if (isset($awards[$user_id])) {
-                        echo "<p>Awards:<ul>";
-                        foreach ($awards[$user_id] as $award) {
-                            $award_name = ucwords($award['item']);
-                            echo "<li>" . $award_name . "</li>";
-                        }
-                        echo "</ul></p>";
-                    }
-                    echo "</div>";
-                }
-            }
         }
-        ?>
+       ?>
     </body>
 </html>
