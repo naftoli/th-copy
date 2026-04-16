@@ -119,7 +119,7 @@ foreach ($schools as $school_id => $school) {
                             }
                             echo "</ul></p>";
                         }
-                        echo "<p>Sweater: " . $sweater . " Sweater</p>";
+                        echo "<p>Sweater: " . $sweater . "</p>";
                         if (is_numeric($yarmulka)) {
                             echo "<p>Gift: Yarmulka Size " . $yarmulka . "</p>";
                         } else {
@@ -174,7 +174,7 @@ foreach ($schools as $school_id => $school) {
                         }
                         echo "</ul></p>";
                     }
-                    echo "<p>Sweater: " . $sweater . " Sweater</p>";
+                    echo "<p>Sweater: " . $sweater . "</p>";
                     if (is_numeric($yarmulka)) {
                         echo "<p>Gift: Yarmulka Size " . $yarmulka . "</p>";
                     } else {
