@@ -34,7 +34,9 @@ $cs = new ChidonShipping($year);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
-$gender = isset($_REQUEST['gender']) ? $_REQUEST['gender'] : 'F';
+$gender = isset($_REQUEST['gender']) ? [$_REQUEST['gender']] : [];
+if (in_array('B', $gender)) $gender = ['M', 'F'];
+
 require 'functions.php';
 $chidon_prizes = getChidonPrizes();
 $prizes = getUserPrizes();
@@ -47,23 +49,26 @@ $school_id = count($schools) > 1 && isset($_POST['school_id']) ? $_POST['school_
 if ($school_id) {
     $schools = [$school_id => $schools[$school_id]];
 }
-foreach ($schools as $school_id => $school) {
-    $children = getChildren($school_id, $gender);
-    // echo "<pre>"; print_r($children); echo "</pre>"; 
-    // continue;
-    if (! empty($children)) {
-       if (in_array($school_id, [7,54,106,255])) {
-            // sort children by grade and create sheet for each grade
-            $sorted = [];
-            foreach ($children as $child) {
-               $sorted[$child['class_grade']][] = $child;
-            }
-            foreach ($sorted as $grade => $details) {
-               $grade_sheets[$school_id][$grade] = createSpreadSheet($details, 'ht', false, true);
-            }
-       } else {
-            $school_sheets[$school_id] = createSpreadSheet($children, 'ht', false, true);
-       }
+
+foreach ($gender as $gender) {
+    foreach ($schools as $school_id => $school) {
+        $children = getChildren($school_id, $gender);
+        // echo "<pre>"; print_r($children); echo "</pre>"; 
+        // continue;
+        if (! empty($children)) {
+        if (in_array($school_id, [7,54,106,255])) {
+                // sort children by grade and create sheet for each grade
+                $sorted = [];
+                foreach ($children as $child) {
+                $sorted[$child['class_grade']][] = $child;
+                }
+                foreach ($sorted as $grade => $details) {
+                $grade_sheets[$school_id][$grade] = createSpreadSheet($details, 'ht', false, true);
+                }
+        } else {
+                $school_sheets[$school_id] = createSpreadSheet($children, 'ht', false, true);
+        }
+        }
     }
 }
 // echo "<pre>"; print_r($grade_sheets); echo "</pre>";
@@ -106,14 +111,20 @@ foreach ($schools as $school_id => $school) {
         <h1 class="no-print">Chidon Ceremony Report</h1>
 
         <?php
-        if (!isset($_POST['school_id']) && count($schools) > 1) {
+        if (!isset($_POST['submit'])) {
             echo "<form method='post' action=''>";
-            echo "Select School: <select name='school_id'>";
-            foreach ($schools as $school_id => $school) {
-                echo "<option value='" . $school_id . "'>" . $school . "</option>";
-            }
+            echo "Gender: <select name='gender'>";
+            echo "<option value='M'>Male</option>";
+            echo "<option value='F'>Female</option>";
+            echo "<option value='B' selected>Both</option>";
             echo "</select><br /><br />";
-            echo "<input type='hidden' name='gender' value='" . $gender . "'>";
+            if (count($schools) > 1) {
+                echo "Select School: <select name='school_id'>";
+                foreach ($schools as $school_id => $school) {
+                    echo "<option value='" . $school_id . "'>" . $school . "</option>";
+                }
+                echo "</select><br /><br />";
+            }
             echo "<input type='submit' value='Submit'>";
             echo "</form>";
         } else {
