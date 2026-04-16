@@ -236,7 +236,12 @@ function getChidonPrizes() {
     $sql = "select * from chidon_prizes where year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $prizes[$row['prize_id']] = $row['prize_picture'];
+        $prizes[$row['prize_id']] = [
+            'name' => $row['prize_name'],
+            'color' => $row['color'],
+            'size' => $row['size'],
+            'img' => $row['prize_picture']
+        ];
     }
     return $prizes;
 }
@@ -253,7 +258,10 @@ function getUserPrizes() {
                 year = " . $year;
     $result = mysql_query($sql);
     while ($row = mysql_fetch_assoc($result)) {
-        $prizes[$row['user_id']][] = $row['prize_id'];
+        $prizes[$row['user_id']][] = [
+            'id' => $row['prize_id'], 
+            'name' => $row['he_name']
+        ];
     }
     return $prizes;
 }
@@ -443,7 +451,6 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         // prizes
         // $prize_amount = 0;
         // initialize prize vars
-        $show_prizes = false;
         $prize_1 = '';
         $prize_2 = '';
         $prize_3 = '';
@@ -452,8 +459,8 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         $prize_6 = '';
         if ($child['highest_track'] != 'yesod' && isset($prizes[$child['user_id']]) && !intval($child['ultimate_trip'])) {
             // $prize_amount = count($prizes[$child['user_id']]);
-            $show_prizes = true;
-            foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
+            foreach ($prizes[$child['user_id']] as $idx => $prize) {
+                $prize_id = $prize['id'];
                 $key = $idx + 1;
                 ${'prize_' . $key} = "Prize_" . $prize_id . ".png";
             }
@@ -463,11 +470,6 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
             $user_id = $child['user_id'];
             $award_track = $child['award_track'];
             $info = [$user_id, $name, $grade, $show_track, $award_track, $trip, $sweater, $yarmulka];
-            if ($show_prizes) {
-                foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
-                    $info[] = $prize_id;
-                }
-            }
             return $info;
         } else {
             return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
