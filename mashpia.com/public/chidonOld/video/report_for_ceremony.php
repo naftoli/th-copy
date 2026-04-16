@@ -72,6 +72,10 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Chidon Ceremony Report</title>
         <style>
+            body {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 14px;
+            }
             .child-sheet {
                 page-break-after: always;
             }
@@ -101,9 +105,20 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                         $reward_track = $child[3];
                         $award_track = $child[4];
                         $trip = $child[5];
-                        $prizes = [$child[6], $child[7], $child[8], $child[9], $child[10], $child[11]];
+                        $sweater = $child[6];
+                        $yarmulka = $child[7];
+                        $prizes = [$child[8], $child[9], $child[10], $child[11], $child[12], $child[13]];
                         echo "<div class='child-sheet'>";
                         echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";                       
+                        echo "<p>Sweater: " . $sweater . " Sweater</p>";
+                        if (is_numeric($yarmulka)) {
+                            echo "<p>Yarmulka: " . $yarmulka . " Yarmulka</p>";
+                        } else {
+                            echo "<p>Jewelry Gift</p>";
+                        }
+                        foreach ($prizes as $prize) {
+                            echo "<p>" . $prize . "</p>";
+                        }
                         echo "</div>";
                     }
                 }
@@ -117,9 +132,20 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                     $reward_track = $child[3];
                     $award_track = $child[4];
                     $trip = $child[5];
-                    $prizes = [$child[6], $child[7], $child[8], $child[9], $child[10], $child[11]];
+                    $sweater = $child[6];
+                    $yarmulka = $child[7];
+                    $prizes = [$child[8], $child[9], $child[10], $child[11], $child[12], $child[13]];
                     echo "<div class='child-sheet'>";
-                    echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";                       
+                    echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";
+                    echo "<p>Sweater: " . $sweater . " Sweater</p>";
+                    if (is_numeric($yarmulka)) {
+                        echo "<p>Yarmulka: " . $yarmulka . " Yarmulka</p>";
+                    } else {
+                        echo "<p>Jewelry Gift</p>";
+                    }
+                    foreach ($prizes as $prize) {
+                        echo "<p>" . $prize . "</p>";
+                    }
                     echo "</div>";
                 }
             }

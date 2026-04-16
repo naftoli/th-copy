@@ -97,7 +97,8 @@ function getAllChildrenByGender($gender) {
 
     $children = [];
     $sql = "SELECT 
-                u.user_id,
+                u.user_id, 
+                u.gender, 
                 u.first,
                 u.last,
                 u.non_th_school_id, 
@@ -108,6 +109,10 @@ function getAllChildrenByGender($gender) {
                 s.school_city,
                 s.school_state,
                 tc.th_chidon_id, 
+                tc.size, 
+                tc.yarmulka, 
+                tc.trip, 
+                tc.ultimate_trip, 
                 a.admin_city, 
                 a.admin_state       
             FROM
@@ -399,6 +404,9 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         $grade = 'Grade ' . $child['class_grade'];
     }
 
+    $sweater = $child['size'] . ' ' . ($child['gender'] == 'M' ? 'Blue' : 'Pink');
+    $yarmulka = $child['gender'] == 'M' ? $child['yarmulka'] : 'Jewelry Gift';
+
 //    if ($trophy) {
 //        $track = $child['trophy_type'] . '_trophy';
 //    }
@@ -439,7 +447,7 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         if ($for_ceremony) {
             $user_id = $child['user_id'];
             $award_track = $child['award_track'];
-            return [$user_id, $name, $grade, $show_track, $award_track, $trip, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
+            return [$user_id, $name, $grade, $show_track, $award_track, $trip, $sweater, $yarmulka, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
         } else {
             return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
                 $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
