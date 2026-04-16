@@ -111,12 +111,14 @@ foreach ($schools as $school_id => $school) {
                         $yarmulka = $child[7];
                         echo "<div class='child-sheet'>";
                         echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>"; 
-                        echo "<p>Recruitment Prizes:<ul>";
-                        foreach ($recruitment_prizes[$user_id] as $prize) {
-                            $prize_name = ucwords($prize['item'] . ($prize['color'] ? ' ' . $prize['color'] : ''));
-                            echo "<li>" . $prize_name . "</li>";
+                        if (isset($recruitment_prizes[$user_id])) {
+                            echo "<p>Recruitment Prizes:<ul>";
+                            foreach ($recruitment_prizes[$user_id] as $prize) {
+                                $prize_name = ucwords($prize['item'] . ($prize['color'] ? ' ' . $prize['color'] : ''));
+                                echo "<li>" . $prize_name . "</li>";
+                            }
+                            echo "</ul></p>";
                         }
-                        echo "</ul></p>";                        
                         echo "<p>Sweater: " . $sweater . " Sweater</p>";
                         if (is_numeric($yarmulka)) {
                             echo "<p>Gift: Yarmulka Size " . $yarmulka . "</p>";
@@ -162,12 +164,14 @@ foreach ($schools as $school_id => $school) {
                     $yarmulka = $child[7];
                     echo "<div class='child-sheet'>";
                     echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";
-                    echo "<p>Recruitment Prizes:<ul>";
-                    foreach ($recruitment_prizes[$user_id] as $prize) {
-                        $prize_name = ucwords($prize['item'] . ($prize['color'] ? ' ' . $prize['color'] : ''));
-                        echo "<li>" . $prize_name . "</li>";
+                    if (isset($recruitment_prizes[$user_id])) {
+                        echo "<p>Recruitment Prizes:<ul>";
+                        foreach ($recruitment_prizes[$user_id] as $prize) {
+                            $prize_name = ucwords($prize['item'] . ($prize['color'] ? ' ' . $prize['color'] : ''));
+                            echo "<li>" . $prize_name . "</li>";
+                        }
+                        echo "</ul></p>";
                     }
-                    echo "</ul></p>";
                     echo "<p>Sweater: " . $sweater . " Sweater</p>";
                     if (is_numeric($yarmulka)) {
                         echo "<p>Gift: Yarmulka Size " . $yarmulka . "</p>";
