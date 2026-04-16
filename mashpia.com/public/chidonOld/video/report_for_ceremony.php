@@ -113,6 +113,7 @@ foreach ($schools as $school_id => $school) {
                 echo "<option value='" . $school_id . "'>" . $school . "</option>";
             }
             echo "</select><br /><br />";
+            echo "<input type='hidden' name='gender' value='" . $gender . "'>";
             echo "<input type='submit' value='Submit'>";
             echo "</form>";
         } else {
