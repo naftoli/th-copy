@@ -39,6 +39,8 @@ function getChildren($school_id, $gender, $serials = []) {
                 s.school_city,
                 s.school_state,
                 tc.th_chidon_id, 
+                tc.size,
+                tc.yarmulka, 
                 tc.trip, 
                 tc.khk_reg,
                 tc.khk_trip, 
