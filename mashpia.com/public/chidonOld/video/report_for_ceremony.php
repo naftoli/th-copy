@@ -34,8 +34,8 @@ $cs = new ChidonShipping($year);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
-$gender = isset($_REQUEST['gender']) ? [$_REQUEST['gender']] : [];
-if (in_array('B', $gender)) $gender = ['M', 'F'];
+$genders = isset($_REQUEST['gender']) ? [$_REQUEST['gender']] : [];
+if (in_array('B', $genders)) $genders = ['M', 'F'];
 
 require 'functions.php';
 $chidon_prizes = getChidonPrizes();
@@ -49,8 +49,8 @@ $school_id = count($schools) > 1 && isset($_POST['school_id']) ? $_POST['school_
 if ($school_id) {
     $schools = [$school_id => $schools[$school_id]];
 }
-echo "<pre>"; print_r($gender); echo "</pre>"; exit;
-foreach ($gender as $gender) {
+
+foreach ($genders as $gender) {
     foreach ($schools as $school_id => $school) {
         $children = getChildren($school_id, $gender);
         // echo "<pre>"; print_r($children); echo "</pre>"; 
