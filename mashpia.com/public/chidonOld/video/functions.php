@@ -240,7 +240,6 @@ function getChidonPrizes() {
             'name' => $row['prize_name'],
             'color' => $row['color'],
             'size' => $row['size'],
-            'img' => $row['prize_picture']
         ];
     }
     return $prizes;

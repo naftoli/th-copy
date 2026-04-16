@@ -107,7 +107,7 @@ foreach ($schools as $school_id => $school) {
                         } else {
                             echo "<p>Gift: Jewelry Gift</p>";
                         }
-                        echo "<p>Prizes: <br />";
+                        echo "<p>Prizes:<ul>";
                         foreach ($prizes[$user_id] as $prize) {
                             $prize_id = $prize['id'];
                             $he_name = $prize['name'];
@@ -121,10 +121,9 @@ foreach ($schools as $school_id => $school) {
                             if ($he_name) {
                                 $prize_name .= " - " . $he_name;
                             }
-                            $prize_img = $chidon_prizes[$prize_id]['img'];
-                            echo "Prize: " . $prize_name . " <br /><img src='" . $prize_img . "' alt='" . $prize_name . "' />";
+                            echo "<li>" . $prize_name . "</li>";
                         }
-                        echo "</p>";
+                        echo "</ul></p>";
                         echo "</div>";
                     }
                 }
@@ -148,7 +147,7 @@ foreach ($schools as $school_id => $school) {
                     } else {
                         echo "<p>Gift: Jewelry Gift</p>";
                     }
-                    echo "<p>Prizes: <br />";
+                    echo "<p>Prizes:<ul>";
                     foreach ($prizes[$user_id] as $prize) {
                         $prize_id = $prize['id'];
                         $he_name = $prize['name'];
@@ -162,10 +161,9 @@ foreach ($schools as $school_id => $school) {
                         if ($he_name) {
                             $prize_name .= " - " . $he_name;
                         }
-                        $prize_img = $chidon_prizes[$prize_id]['img'];
-                        echo "Prize: " . $prize_name . " <br /><img src='" . $prize_img . "' alt='" . $prize_name . "' />";
+                        echo "<li>" . $prize_name . "</li>";
                     }
-                    echo "</p>";
+                    echo "</ul></p>";
                     echo "</div>";
                 }
             }
