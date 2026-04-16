@@ -446,6 +446,11 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
     $show_track = ucwords($child['highest_track']);
     if ($khk || $trophy) {
         if ($khk) $show_track = 'KHK';
+        if ($for_ceremony) {
+            $user_id = $child['user_id'];
+            $award_track = $child['award_track'];
+            return [$user_id, $name, $grade, $show_track, $award_track, $trip, $sweater, $yarmulka];
+        }
         return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip, '', '', '', '', '', '', ''];
     } else {
         // prizes
