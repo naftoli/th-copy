@@ -228,6 +228,17 @@ function getMarks() {
     return $marks;
 }
 
+function getChidonPrizes() {
+    global $year;
+    $prizes = [];
+    $sql = "select * from chidon_prizes where year = " . $year;
+    $result = mysql_query($sql);
+    while ($row = mysql_fetch_assoc($result)) {
+        $prizes[$row['prize_id']] = $row['prize_picture'];
+    }
+    return $prizes;
+}
+
 function getUserPrizes() {
     global $year;
 
@@ -430,6 +441,7 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         // prizes
         // $prize_amount = 0;
         // initialize prize vars
+        $show_prizes = false;
         $prize_1 = '';
         $prize_2 = '';
         $prize_3 = '';
@@ -438,6 +450,7 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         $prize_6 = '';
         if ($child['highest_track'] != 'yesod' && isset($prizes[$child['user_id']]) && !intval($child['ultimate_trip'])) {
             // $prize_amount = count($prizes[$child['user_id']]);
+            $show_prizes = true;
             foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
                 $key = $idx + 1;
                 ${'prize_' . $key} = "Prize_" . $prize_id . ".png";
@@ -447,7 +460,13 @@ function addToSheet($child, $khk = false, $trophy = false, $for_ceremony = false
         if ($for_ceremony) {
             $user_id = $child['user_id'];
             $award_track = $child['award_track'];
-            return [$user_id, $name, $grade, $show_track, $award_track, $trip, $sweater, $yarmulka, $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];
+            $info = [$user_id, $name, $grade, $show_track, $award_track, $trip, $sweater, $yarmulka];
+            if ($show_prizes) {
+                foreach ($prizes[$child['user_id']] as $idx => $prize_id) {
+                    $info[] = $prize_id;
+                }
+            }
+            return $info;
         } else {
             return [$show_track, $name, $img_url, $grade, $school_name, $school_location, $school_logo, $award_num, $trip,
                 $prize_1, $prize_2, $prize_3, $prize_4, $prize_5, $prize_6];

@@ -36,6 +36,7 @@ $ct = new ChidonTests();
 
 $gender = isset($_REQUEST['gender']) ? $_REQUEST['gender'] : 'F';
 require 'functions.php';
+$chidon_prizes = getChidonPrizes();
 $prizes = getUserPrizes();
 $marks = getMarks();
 $final_marks = getFinalMarks();
@@ -107,18 +108,23 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                         $trip = $child[5];
                         $sweater = $child[6];
                         $yarmulka = $child[7];
-                        $prizes = [$child[8], $child[9], $child[10], $child[11], $child[12], $child[13]];
+                        for ($i = 8; $i < count($child); $i++) {
+                            $prizes[] = $chidon_prizes[$child[$i]];
+                        }
                         echo "<div class='child-sheet'>";
                         echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";                       
                         echo "<p>Sweater: " . $sweater . " Sweater</p>";
                         if (is_numeric($yarmulka)) {
-                            echo "<p>Yarmulka: " . $yarmulka . " Yarmulka</p>";
+                            echo "<p>Gift: Yarmulka size " . $yarmulka . "</p>";
                         } else {
-                            echo "<p>Jewelry Gift</p>";
+                            echo "<p>Gift: Jewelry Gift</p>";
                         }
-                        foreach ($prizes as $prize) {
-                            echo "<p>" . $prize . "</p>";
+                        echo "<p>Prizes: <br />";
+                        foreach ($prizes as $prize_id) {
+                            $prize = $chidon_prizes[$prize_id];
+                            echo "<img src='" . $prize . "' alt='" . $prize . "' />";
                         }
+                        echo "</p>";
                         echo "</div>";
                     }
                 }
@@ -134,18 +140,23 @@ echo "<pre>"; print_r($school_sheets); echo "</pre>";
                     $trip = $child[5];
                     $sweater = $child[6];
                     $yarmulka = $child[7];
-                    $prizes = [$child[8], $child[9], $child[10], $child[11], $child[12], $child[13]];
+                    for ($i = 8; $i < count($child); $i++) {
+                        $prizes[] = $chidon_prizes[$child[$i]];
+                    }
                     echo "<div class='child-sheet'>";
                     echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";
                     echo "<p>Sweater: " . $sweater . " Sweater</p>";
                     if (is_numeric($yarmulka)) {
-                        echo "<p>Yarmulka: " . $yarmulka . " Yarmulka</p>";
+                        echo "<p>Gift: Yarmulka size " . $yarmulka . "</p>";
                     } else {
-                        echo "<p>Jewelry Gift</p>";
+                        echo "<p>Gift: Jewelry Gift</p>";
                     }
-                    foreach ($prizes as $prize) {
-                        echo "<p>" . $prize . "</p>";
+                    echo "<p>Prizes: <br />";
+                    foreach ($prizes as $prize_id) {
+                        $prize = $chidon_prizes[$prize_id];
+                        echo "<img src='" . $prize . "' alt='" . $prize . "' />";
                     }
+                    echo "</p>";
                     echo "</div>";
                 }
             }
