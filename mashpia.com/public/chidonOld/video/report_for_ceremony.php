@@ -34,9 +34,7 @@ $cs = new ChidonShipping($year);
 require_once $_SERVER['DOCUMENT_ROOT'] . '/chidonTests/class.chidonTests.php';
 $ct = new ChidonTests();
 
-$genders = isset($_REQUEST['gender']) ? [$_REQUEST['gender']] : [];
-if (in_array('B', $genders)) $genders = ['M', 'F'];
-
+$gender = isset($_REQUEST['gender']) ? $_REQUEST['gender'] : '';
 require 'functions.php';
 $chidon_prizes = getChidonPrizes();
 $prizes = getUserPrizes();
@@ -49,8 +47,7 @@ $school_id = count($schools) > 1 && isset($_POST['school_id']) ? $_POST['school_
 if ($school_id) {
     $schools = [$school_id => $schools[$school_id]];
 }
-
-foreach ($genders as $gender) {
+if ($gender) {
     foreach ($schools as $school_id => $school) {
         $children = getChildren($school_id, $gender);
         // echo "<pre>"; print_r($children); echo "</pre>"; 
@@ -114,9 +111,9 @@ foreach ($genders as $gender) {
         if (!isset($_POST['submit'])) {
             echo "<form method='post' action=''>";
             echo "Gender: <select name='gender'>";
-            echo "<option value='M'>Male</option>";
-            echo "<option value='F'>Female</option>";
-            echo "<option value='B' selected>Both</option>";
+            echo "<option value='boys'>Boys</option>";
+            echo "<option value='girls'>Girls</option>";
+            echo "<option value='all' selected>Both</option>";
             echo "</select><br /><br />";
             if (count($schools) > 1) {
                 echo "Select School: <select name='school_id'>";
@@ -131,6 +128,8 @@ foreach ($genders as $gender) {
         ?>
             <button class="no-print" onclick="window.print()">Print</button>
             <?php
+            if ($gender == 'boys') $gender = 'm';
+            else if ($gender == 'girls') $gender = 'f';
             if (isset($grade_sheets) && count($grade_sheets) > 0) {
                 foreach ($grade_sheets as $school_id => $grades) {
                     $recruitment_prizes = $cs->getRecruitmentPrizes($gender, $school_id);
