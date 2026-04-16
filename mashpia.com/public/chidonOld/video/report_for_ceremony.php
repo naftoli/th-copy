@@ -151,17 +151,19 @@ foreach ($schools as $school_id => $school) {
                             foreach ($prizes[$user_id] as $prize) {
                                 $prize_id = $prize['id'];
                                 $he_name = $prize['name'];
-                                $prize_name = $chidon_prizes[$prize_id]['name'];
-                                if ($chidon_prizes[$prize_id]['size']) {
-                                    $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
+                                if (isset($chidon_prizes[$prize_id])) {
+                                    $prize_name = $chidon_prizes[$prize_id]['name'];
+                                    if ($chidon_prizes[$prize_id]['size']) {
+                                        $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
+                                    }
+                                    if ($chidon_prizes[$prize_id]['color']) {
+                                        $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
+                                    }
+                                    if ($he_name) {
+                                        $prize_name .= " - " . $he_name;
+                                    }
+                                    echo "<li>" . $prize_name . "</li>";
                                 }
-                                if ($chidon_prizes[$prize_id]['color']) {
-                                    $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
-                                }
-                                if ($he_name) {
-                                    $prize_name .= " - " . $he_name;
-                                }
-                                echo "<li>" . $prize_name . "</li>";
                             }
                             echo "</ul></p>";
                             if (isset($awards[$user_id])) {
@@ -209,17 +211,19 @@ foreach ($schools as $school_id => $school) {
                         foreach ($prizes[$user_id] as $prize) {
                             $prize_id = $prize['id'];
                             $he_name = $prize['name'];
-                            $prize_name = $chidon_prizes[$prize_id]['name'];
-                            if ($chidon_prizes[$prize_id]['size']) {
-                                $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
+                            if (isset($chidon_prizes[$prize_id])) {
+                                $prize_name = $chidon_prizes[$prize_id]['name'];
+                                if ($chidon_prizes[$prize_id]['size']) {
+                                    $prize_name .= " " . $chidon_prizes[$prize_id]['size'];
+                                }
+                                if ($chidon_prizes[$prize_id]['color']) {
+                                    $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
+                                }
+                                if ($he_name) {
+                                    $prize_name .= " - " . $he_name;
+                                }
+                                echo "<li>" . $prize_name . "</li>";
                             }
-                            if ($chidon_prizes[$prize_id]['color']) {
-                                $prize_name .= " " . $chidon_prizes[$prize_id]['color'];
-                            }
-                            if ($he_name) {
-                                $prize_name .= " - " . $he_name;
-                            }
-                            echo "<li>" . $prize_name . "</li>";
                         }
                         echo "</ul></p>";
                         if (isset($awards[$user_id])) {
