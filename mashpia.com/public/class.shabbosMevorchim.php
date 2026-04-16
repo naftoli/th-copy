@@ -1,4 +1,5 @@
 <?php
+require_once(__DIR__ . '/api/header/cache.php');
 
 class ShabbosMevorchim
 {
@@ -54,6 +55,8 @@ class ShabbosMevorchim
     private $debug;
     private $backup;
     private $backup_ran_by_date = [];
+    private $year;
+    private $cacheTtl = 900;
 
     public $perfectPlatoons = [];
 
@@ -63,6 +66,7 @@ class ShabbosMevorchim
             require_once($_SERVER['DOCUMENT_ROOT'] . "/class.globalSettings.php");
             $year = GlobalSettings::getCurrentYear();
         }
+        $this->year = $year;
 
         require_once($_SERVER['DOCUMENT_ROOT'] . "/tehillim_backups/class.tehillimBackup.php"); // load the backups class
         $this->backup = new TehillimBackup();
@@ -118,6 +122,34 @@ class ShabbosMevorchim
         // set the following variables to false by default..
         $this->accomplishedOnly = false;
         $this->debug = false;
+    }
+
+    private function cacheKey($section, array $params = [])
+    {
+        return 'shabbos_mevorchim:' . $section . ':' . md5(json_encode([
+            'year' => $this->year,
+            'school_id' => $this->school_id,
+            'rDates' => $this->rDates,
+            'showDone' => $this->showDone,
+            'accomplishedOnly' => $this->accomplishedOnly,
+            'params' => $params,
+        ]));
+    }
+
+    private function rememberCache($section, array $params, callable $callback)
+    {
+        if ($this->debug || !class_exists('Cache')) {
+            return $callback();
+        }
+
+        return Cache::remember($this->cacheKey($section, $params), $this->cacheTtl, $callback);
+    }
+
+    private function applyCachedState(array $state)
+    {
+        foreach ($state as $property => $value) {
+            $this->{$property} = $value;
+        }
     }
 
     public function getBackupRan($date)
@@ -275,83 +307,82 @@ class ShabbosMevorchim
 
     public function setArmyResults()
     {
-        // select the total tehillim marks for each kid in each campaign
-        $sql1 = "SELECT sum( dt.quantity ) AS total
-                      FROM date_tasks dt
-                      JOIN date_tasks_missions dtm USING ( date_tasks_mission_id )
-                      JOIN user_tracks ut USING ( track_id, LEVEL, subject_id )
-                      JOIN users u USING ( user_id ) 
-                      JOIN schools s USING (school_id) 
-                      JOIN classes c USING (class_id) 
-                      WHERE ut.subject_id = 1
-                      AND ut.enrolled = 1
-                      AND dtm.start_date = ?
-                      AND dtm.end_date = ?
-                      AND dtm.school_type_id = u.school_type_id
-                      AND dt.grid_id = ?
-                      AND s.school_era is null
-                      AND c.class_era = 0
-                      AND u.user_registered > 0 
-                      AND u.school_id != 612 
-                  AND u.user_id = ut.user_id
-                  AND u.lang_id = dtm.lang_id";
-        $stmt1 = $this->db->prepare($sql1);
+        $state = $this->rememberCache('army_results', [
+            'tasks' => $this->tasks,
+        ], function () {
+            $this->armyResults = [];
+            $this->armyDoneResults = [];
+            // select the total tehillim marks for each kid in each campaign
+            $sql1 = "SELECT sum( dt.quantity ) AS total
+                          FROM date_tasks dt
+                          JOIN date_tasks_missions dtm USING ( date_tasks_mission_id )
+                          JOIN user_tracks ut USING ( track_id, LEVEL, subject_id )
+                          JOIN users u USING ( user_id ) 
+                          JOIN schools s USING (school_id) 
+                          JOIN classes c USING (class_id) 
+                          WHERE ut.subject_id = 1
+                          AND ut.enrolled = 1
+                          AND dtm.start_date = ?
+                          AND dtm.end_date = ?
+                          AND dtm.school_type_id = u.school_type_id
+                          AND dt.grid_id = ?
+                          AND s.school_era is null
+                          AND c.class_era = 0
+                          AND u.user_registered > 0 
+                          AND u.school_id != 612 
+                      AND u.user_id = ut.user_id
+                      AND u.lang_id = dtm.lang_id";
+            $stmt1 = $this->db->prepare($sql1);
 
-        // select the total done from date_tasks_missions for this mission in general
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
-                FROM date_tasks_marks dtm 
-                JOIN date_tasks dt USING (date_task_id) 
-                JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
-                WHERE dtmm.start_date = ?
-                AND dtmm.end_date = ?
-                AND dt.grid_id = ?";
-        $stmt2 = $this->db->prepare($sql2);
+            $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+                    FROM date_tasks_marks dtm 
+                    JOIN date_tasks dt USING (date_task_id) 
+                    JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
+                    WHERE dtmm.start_date = ?
+                    AND dtmm.end_date = ?
+                    AND dt.grid_id = ?";
+            $stmt2 = $this->db->prepare($sql2);
 
-        //$sqlQuota = "select sum( tb.quota ) as total
-        //			from tehillim_backups tb
-        //			where tb.sm_date = ?
-        //			and tb.grid_id = ?";
-        //$stmtQuota = $this->db->prepare( $sqlQuota );
+            $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
+                          FROM tehillim_backups tb 
+                          WHERE tb.sm_date = ? 
+                          AND tb.grid_id = ?";
+            $stmtBackup = $this->db->prepare($sqlBackup);
 
-        // select the totals from the backup table ( pre-deadline )
-        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
-                      FROM tehillim_backups tb 
-                      WHERE tb.sm_date = ? 
-                      AND tb.grid_id = ?";
-        $stmtBackup = $this->db->prepare($sqlBackup);
+            foreach ($this->rDates as $date) {
+                foreach ($this->tasks as $key => $task) {
+                    if ($key == 'Minutes') continue;
 
-        // for each date that we are generating this report for
-        foreach ($this->rDates as $date) {
-            // for each task (defined on line 89)
-            foreach ($this->tasks as $key => $task) {
-                // skip the minutes task
-                if ($key == 'Minutes') continue;
+                    if ($this->debug) echo "Before army wide quotas: " . time() . "<br />";
+                    $stmt1->execute(array($date, $date, $task));
+                    if ($this->debug) echo "After army wide quotas: " . time() . "<br />";
+                    $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                    $this->armyResults[$key][$date] = $row1['total'];
 
-                if ($this->debug) echo "Before army wide quotas: " . time() . "<br />";
-                $stmt1->execute(array($date, $date, $task));
-                if ($this->debug) echo "After army wide quotas: " . time() . "<br />";
-                $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                $this->armyResults[$key][$date] = $row1['total'];
+                    $stmtBackup->execute(array($date, $task));
+                    $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
+                    if ($this->debug) {
+                        echo "<pre>";
+                        print_r($rowBackup);
+                        echo "</pre>";
+                    }
 
-                // figure out if we are getting results from backup table or not
-                $stmtBackup->execute(array($date, $task));
-                $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
-                if ($this->debug) {
-                    echo "<pre>";
-                    print_r($rowBackup);
-                    echo "</pre>";
-                }
-
-                // if there is info in the backup table use that.
-                if ($rowBackup['total'] > 0) {
-                    $this->armyDoneResults[$key][$date] = $rowBackup['total'];
-                } else { // otherwise, generate the report and pull up the results.
-                    $stmt2->execute(array($date, $date, $task));
-                    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-                    $this->armyDoneResults[$key][$date] = $row2['total'];
+                    if ($rowBackup['total'] > 0) {
+                        $this->armyDoneResults[$key][$date] = $rowBackup['total'];
+                    } else {
+                        $stmt2->execute(array($date, $date, $task));
+                        $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                        $this->armyDoneResults[$key][$date] = $row2['total'];
+                    }
                 }
             }
-        }
+
+            return [
+                'armyResults' => $this->armyResults,
+                'armyDoneResults' => $this->armyDoneResults,
+            ];
+        });
+        $this->applyCachedState($state);
     }
 
     public function getArmyResults()
@@ -386,7 +417,14 @@ class ShabbosMevorchim
 
     public function setSchoolResults($id, $minutes = false)
     {
-        $sql1 = "SELECT sum( dt.quantity ) AS total
+        $state = $this->rememberCache('school_results', [
+            'id' => $id,
+            'minutes' => $minutes,
+            'tasks' => $this->tasks,
+        ], function () use ($id, $minutes) {
+            $this->schoolResults = [];
+            $this->schoolDoneResults = [];
+            $sql1 = "SELECT sum( dt.quantity ) AS total
                 FROM date_tasks dt
                 JOIN date_tasks_missions dtm
                 USING ( date_tasks_mission_id )
@@ -408,7 +446,7 @@ class ShabbosMevorchim
 				AND u.user_id = ut.user_id
 				AND u.lang_id = dtm.lang_id";
 
-        $stmt1 = $this->db->prepare($sql1);
+            $stmt1 = $this->db->prepare($sql1);
         /*
         $sql2 = "SELECT sum( dtm.done_qty ) AS total
                 FROM users u
@@ -442,7 +480,7 @@ class ShabbosMevorchim
                 AND u.user_registered > 0
 				AND u.user_id = ut.user_id";
         */
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+            $sql2 = "SELECT sum( dtm.done_qty ) AS total 
                 from date_tasks_marks dtm 
                 join date_tasks dt using (date_task_id) 
                 join date_tasks_missions dtmm using (date_tasks_mission_id) 
@@ -452,7 +490,7 @@ class ShabbosMevorchim
                 and dt.grid_id = ?
                 and u.school_id = ?";
 
-        $stmt2 = $this->db->prepare($sql2);
+            $stmt2 = $this->db->prepare($sql2);
 
         //$sqlQuota = "select sum( tb.quota ) as total
         //			from tehillim_backups tb
@@ -462,19 +500,19 @@ class ShabbosMevorchim
         //			and u.school_id = ?";
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
-        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
+            $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
                     FROM tehillim_backups tb
                     JOIN users u using ( user_id ) 
                     WHERE tb.sm_date = ? 
                     AND tb.grid_id = ?
                     AND u.school_id = ?";
-        $stmtBackup = $this->db->prepare($sqlBackup);
+            $stmtBackup = $this->db->prepare($sqlBackup);
 
-        foreach ($this->rDates as $month => $date) {
+            foreach ($this->rDates as $month => $date) {
 
-            foreach ($this->tasks as $key => $task) {
+                foreach ($this->tasks as $key => $task) {
 
-                if (!$minutes && $key == 'Minutes') continue;
+                    if (!$minutes && $key == 'Minutes') continue;
 
                 // figure out if we are getting results from backup table or not
 //				$stmtQuota->execute( array( $date, $task, $id ) );
@@ -482,23 +520,30 @@ class ShabbosMevorchim
 //				if ($rowQuota['total'] > 0) {
 //                    $this->schoolResults[$key][$date] = $rowQuota['total'];
 //				} else {
-                $stmt1->execute(array($id, $date, $date, $task));
-                $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                $this->schoolResults[$key][$date] = $row1['total'];
+                    $stmt1->execute(array($id, $date, $date, $task));
+                    $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                    $this->schoolResults[$key][$date] = $row1['total'];
                 //}
 
                 // figure out if we are getting results from backup table or not
-                $stmtBackup->execute(array($date, $task, $id));
-                $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
-                if ($rowBackup['total'] > 0) {
-                    $this->schoolDoneResults[$key][$date] = $rowBackup['total'];
-                } else {
-                    $stmt2->execute(array($date, $date, $task, $id));
-                    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-                    $this->schoolDoneResults[$key][$date] = $row2['total'];
+                    $stmtBackup->execute(array($date, $task, $id));
+                    $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
+                    if ($rowBackup['total'] > 0) {
+                        $this->schoolDoneResults[$key][$date] = $rowBackup['total'];
+                    } else {
+                        $stmt2->execute(array($date, $date, $task, $id));
+                        $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                        $this->schoolDoneResults[$key][$date] = $row2['total'];
+                    }
                 }
             }
-        }
+
+            return [
+                'schoolResults' => $this->schoolResults,
+                'schoolDoneResults' => $this->schoolDoneResults,
+            ];
+        });
+        $this->applyCachedState($state);
     }
 
     public function setASR($date, $col = false)
@@ -535,8 +580,15 @@ class ShabbosMevorchim
 
     private function setArmySchoolsResults($id, $date)
     {
+        $state = $this->rememberCache('army_school_results', [
+            'id' => $id,
+            'date' => $date,
+            'tasks' => $this->tasks,
+        ], function () use ($id, $date) {
+            $schoolResults = [];
+            $totalUsers = 0;
 
-        $sql1 = "SELECT sum( dt.quantity ) AS total 
+            $sql1 = "SELECT sum( dt.quantity ) AS total 
                 FROM date_tasks dt
                 JOIN date_tasks_missions dtm
                 USING ( date_tasks_mission_id )
@@ -557,7 +609,7 @@ class ShabbosMevorchim
 				AND u.user_id = ut.user_id
 				AND u.lang_id = dtm.lang_id";
 
-        $stmt1 = $this->db->prepare($sql1);
+            $stmt1 = $this->db->prepare($sql1);
 
         //$sqlQuota = "select sum( tb.quota ) as total
         //			from tehillim_backups tb
@@ -567,7 +619,7 @@ class ShabbosMevorchim
         //			and u.school_id = ?";
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
-        foreach ($this->tasks as $key => $task) {
+            foreach ($this->tasks as $key => $task) {
             //if ($key == 'Minutes') continue;
             // figure out if we are getting results from backup table or not
             //$stmtQuota->execute( array( $date, $task, $id ) );
@@ -575,26 +627,43 @@ class ShabbosMevorchim
             //if ($rowQuota['total'] > 0) {
             //	$this->armySchoolsResults[$key][$id] = $rowQuota['total'];
             //} else {
-            $stmt1->execute(array($id, $date, $date, $task));
-            $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-            $this->armySchoolsResults[$key][$id] = $row1['total'] > 0 ? $row1['total'] : 0;
+                $stmt1->execute(array($id, $date, $date, $task));
+                $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                $schoolResults[$key][$id] = $row1['total'] > 0 ? $row1['total'] : 0;
             //}
-        }
+            }
 
-        $sql2 = "select count(*) as total from users u 
+            $sql2 = "select count(*) as total from users u 
 				join user_tracks ut using (user_id) 
 				where school_id = " . $id . "  
 				and user_registered > 0 
 				and ut.subject_id = 1 
 				and ut.enrolled = 1";
-        $stmt2 = $this->db->query($sql2);
-        $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-        $this->totalUsers[$id] = $row2['total'];
-        if (!isset($this->totalUsers[$id])) $this->totalUsers[$id] = 0;
+            $stmt2 = $this->db->query($sql2);
+            $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+            $totalUsers = $row2['total'] ?? 0;
+
+            return [
+                'armySchoolsResults' => $schoolResults,
+                'totalUsers' => $totalUsers,
+            ];
+        });
+        foreach ($state['armySchoolsResults'] as $key => $info) {
+            foreach ($info as $schoolId => $value) {
+                $this->armySchoolsResults[$key][$schoolId] = $value;
+            }
+        }
+        $this->totalUsers[$id] = $state['totalUsers'];
     }
 
     private function setArmyDoneSchoolsResults($id, $date)
     {
+        $state = $this->rememberCache('army_done_school_results', [
+            'id' => $id,
+            'date' => $date,
+            'tasks' => $this->tasks,
+        ], function () use ($id, $date) {
+            $doneResults = [];
         /*
         $sql2 = "SELECT sum( dtm.done_qty ) AS total 
                 FROM date_tasks_marks dtm 
@@ -632,7 +701,7 @@ class ShabbosMevorchim
                 AND dtmm.school_type_id = u.school_type_id
 				AND u.user_id = ut.user_id";
         */
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total 
+            $sql2 = "SELECT sum( dtm.done_qty ) AS total 
                 from date_tasks_marks dtm 
                 join date_tasks dt using (date_task_id) 
                 join date_tasks_missions dtmm using (date_tasks_mission_id) 
@@ -642,33 +711,43 @@ class ShabbosMevorchim
                 and dtmm.end_date = ?
                 and dt.grid_id = ?";
 
-        $stmt2 = $this->db->prepare($sql2);
+            $stmt2 = $this->db->prepare($sql2);
 
-        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
+            $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
                     FROM tehillim_backups tb
                     JOIN users u using ( user_id ) 
                     WHERE tb.sm_date = ? 
                     AND tb.grid_id = ?
                     AND u.school_id = ?";
-        $stmtBackup = $this->db->prepare($sqlBackup);
+            $stmtBackup = $this->db->prepare($sqlBackup);
 
-        foreach ($this->tasks as $key => $task) {
+            foreach ($this->tasks as $key => $task) {
             //echo "ID: " . $id . " Date: " . $date . " Task: " . $task . "<br />" . $sql2 . "<br />"; 
             //if ($key == 'Minutes') continue;
 
             // figure out if we are getting results from backup table or not
-            $stmtBackup->execute(array($date, $task, $id));
-            $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
-            if ($rowBackup['total'] > 0) {
-                $this->armySchoolsDoneResults[$key][$id] = $rowBackup['total'];
-            } else {
-                if (isset($this->armySchoolsResults[$key][$id]) && $this->armySchoolsResults[$key][$id] > 0) {
-                    $stmt2->execute(array($id, $date, $date, $task));
-                    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-                    $this->armySchoolsDoneResults[$key][$id] = $row2['total'];
+                $stmtBackup->execute(array($date, $task, $id));
+                $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
+                if ($rowBackup['total'] > 0) {
+                    $doneResults[$key][$id] = $rowBackup['total'];
                 } else {
-                    $this->armySchoolsDoneResults[$key][$id] = 0;
+                    if (isset($this->armySchoolsResults[$key][$id]) && $this->armySchoolsResults[$key][$id] > 0) {
+                        $stmt2->execute(array($id, $date, $date, $task));
+                        $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                        $doneResults[$key][$id] = $row2['total'];
+                    } else {
+                        $doneResults[$key][$id] = 0;
+                    }
                 }
+            }
+
+            return [
+                'armySchoolsDoneResults' => $doneResults,
+            ];
+        });
+        foreach ($state['armySchoolsDoneResults'] as $key => $info) {
+            foreach ($info as $schoolId => $value) {
+                $this->armySchoolsDoneResults[$key][$schoolId] = $value;
             }
         }
     }
@@ -749,8 +828,11 @@ class ShabbosMevorchim
 
     public function setClasses($sid = 0)
     {
-        $this->classes = array();
-        $sql = "SELECT DISTINCT c . *
+        $state = $this->rememberCache('classes', [
+            'sid' => $sid ?: $this->school_id,
+        ], function () use ($sid) {
+            $classes = array();
+            $sql = "SELECT DISTINCT c . *
                 FROM classes c
                 JOIN schools s
                 USING ( school_id )
@@ -764,14 +846,17 @@ class ShabbosMevorchim
             $sql .= " and s.school_id = " . $this->school_id;
         }
         $sql .= " ORDER BY c.class_grade, c.class_sub";
-        $res = $this->db->query($sql);
-        if ($res) {
-            foreach ($res as $row) {
-                $this->classes[$row['class_id']]['grade'] =
-                    $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
-                $this->classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+            $res = $this->db->query($sql);
+            if ($res) {
+                foreach ($res as $row) {
+                    $classes[$row['class_id']]['grade'] =
+                        $row['class_sub'] == "" ? $row['class_grade'] : $row['class_grade'] . '-' . $row['class_sub'];
+                    $classes[$row['class_id']]['teacher'] = $row['class_teacher'];
+                }
             }
-        }
+            return [ 'classes' => $classes ];
+        });
+        $this->applyCachedState($state);
     }
 
     /**
@@ -831,10 +916,18 @@ class ShabbosMevorchim
 
     public function setClassResults($setClasses = true)
     {
-        // determine if we should set the interal classes array as well
-        if ($setClasses) $this->setClasses();
+        $state = $this->rememberCache('class_results', [
+            'setClasses' => $setClasses,
+            'tasks' => $this->tasks,
+            'school_report_name' => $this->school_report_name ?? null,
+        ], function () use ($setClasses) {
+            $this->classResults = [];
+            $this->classDoneResults = [];
+            $this->accomplished = [];
+            $this->perfectPlatoons = [];
+            if ($setClasses) $this->setClasses();
 
-        $sql1 = "SELECT sum( dt.quantity ) AS total
+            $sql1 = "SELECT sum( dt.quantity ) AS total
                 FROM date_tasks dt
                 JOIN date_tasks_missions dtm USING ( date_tasks_mission_id )
                 JOIN user_tracks ut USING ( track_id, LEVEL , subject_id )
@@ -851,9 +944,9 @@ class ShabbosMevorchim
 				AND u.user_id = ut.user_id
 				AND u.lang_id = dtm.lang_id";
 
-        $stmt1 = $this->db->prepare($sql1);
+            $stmt1 = $this->db->prepare($sql1);
 
-        $sql2 = "SELECT sum( dtm.done_qty ) AS total
+            $sql2 = "SELECT sum( dtm.done_qty ) AS total
                 FROM date_tasks_marks dtm 
                 JOIN date_tasks dt USING (date_task_id) 
                 JOIN date_tasks_missions dtmm USING (date_tasks_mission_id) 
@@ -865,7 +958,7 @@ class ShabbosMevorchim
                 AND c.class_id = ?  
                 AND u.user_registered > 0";
 
-        $stmt2 = $this->db->prepare($sql2);
+            $stmt2 = $this->db->prepare($sql2);
 
         //$sqlQuota = "select sum( tb.quota ) as total
         //			from tehillim_backups tb
@@ -875,69 +968,77 @@ class ShabbosMevorchim
         //			and u.class_id = ?";
         //$stmtQuota = $this->db->prepare( $sqlQuota );
 
-        $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
+            $sqlBackup = "SELECT IFNULL(sum( tb.done_qty ), 0) AS total
                     FROM tehillim_backups tb
                     JOIN users u using ( user_id ) 
                     WHERE tb.sm_date = ? 
                     AND tb.grid_id = ?
                     AND u.class_id = ?";
-        $stmtBackup = $this->db->prepare($sqlBackup);
+            $stmtBackup = $this->db->prepare($sqlBackup);
 
-        $cached = []; // add ability to cache results
+            $cached = [];
 
-        foreach ($this->rDates as $month => $date) {
+            foreach ($this->rDates as $month => $date) {
 
-            foreach ($this->tasks as $key => $task) {
+                foreach ($this->tasks as $key => $task) {
                 // do not do the minutes task ( only task #1 )
-                if ($setClasses && $key == 'Minutes') continue;
+                    if ($setClasses && $key == 'Minutes') continue;
 
-                foreach ($this->classes as $class => $info) {
+                    foreach ($this->classes as $class => $info) {
                     // figure out if we are getting results from backup table or not
                     //$stmtQuota->execute( array( $date, $task, $class ) );
                     //$rowQuota = $stmtQuota->fetch( PDO::FETCH_ASSOC );
                     //if ($rowQuota['total'] > 0) {
                     //	$this->classResults[$key][$date][$class] = $rowQuota['total'];
                     //} else {
-                    if (isset($cached[$key][$date][$class])) {
-                        $this->classResults[$key][$date][$class] = $cached[$key][$date][$class];
-                    } else {
-                        $stmt1->execute(array($class, $date, $date, $task));
-                        $stmt1->execute(array($class, $date, $date, $task));
-                        $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                        $this->classResults[$key][$date][$class] = $row1['total'];
-                        $cached[$key][$date][$class] = $row1['total'];
-                    }
+                        if (isset($cached[$key][$date][$class])) {
+                            $this->classResults[$key][$date][$class] = $cached[$key][$date][$class];
+                        } else {
+                            $stmt1->execute(array($class, $date, $date, $task));
+                            $stmt1->execute(array($class, $date, $date, $task));
+                            $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                            $this->classResults[$key][$date][$class] = $row1['total'];
+                            $cached[$key][$date][$class] = $row1['total'];
+                        }
                     //}
                     // if we do not want to only show what was done but also show the totals
-                    if (!$this->accomplishedOnly) {
+                        if (!$this->accomplishedOnly) {
                         // figure out if we are getting results from backup table or not
-                        $stmtBackup->execute(array($date, $task, $class));
-                        $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
-                        $backupRan = $this->getBackupRan($date);
+                            $stmtBackup->execute(array($date, $task, $class));
+                            $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
+                            $backupRan = $this->getBackupRan($date);
 
-                        if ($rowBackup['total'] > 0 || $backupRan) {
-                            $this->classDoneResults[$key][$date][$class] = $rowBackup['total'];
-                        } else {
-                            $stmt2->execute(array($date, $date, $task, $class));
-                            $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-                            $this->classDoneResults[$key][$date][$class] = $row2['total'];
-                        }
+                            if ($rowBackup['total'] > 0 || $backupRan) {
+                                $this->classDoneResults[$key][$date][$class] = $rowBackup['total'];
+                            } else {
+                                $stmt2->execute(array($date, $date, $task, $class));
+                                $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                                $this->classDoneResults[$key][$date][$class] = $row2['total'];
+                            }
 
                         //find out which classes accomplished their goals
-                        if ($this->classDoneResults[$key][$date][$class] >= $this->classResults[$key][$date][$class]) {
-                            $this->accomplished[$key][$date][$info['grade']] = $info['teacher'];
-                            // get grade only
-                            $gradeInfo = explode('-', $info['grade']);
-                            $gradeOnly = $gradeInfo[0];
-                            $this->perfectPlatoons[$gradeOnly][] = [
-                                'teacher' => $info['teacher'],
-                                'school'  => $this->school_report_name
-                            ];
+                            if ($this->classDoneResults[$key][$date][$class] >= $this->classResults[$key][$date][$class]) {
+                                $this->accomplished[$key][$date][$info['grade']] = $info['teacher'];
+                                $gradeInfo = explode('-', $info['grade']);
+                                $gradeOnly = $gradeInfo[0];
+                                $this->perfectPlatoons[$gradeOnly][] = [
+                                    'teacher' => $info['teacher'],
+                                    'school'  => $this->school_report_name
+                                ];
+                            }
                         }
                     }
                 }
             }
-        }
+            return [
+                'classes' => $this->classes,
+                'classResults' => $this->classResults,
+                'classDoneResults' => $this->classDoneResults,
+                'accomplished' => $this->accomplished,
+                'perfectPlatoons' => $this->perfectPlatoons,
+            ];
+        });
+        $this->applyCachedState($state);
     }
 
     public function setWhatsappStudentResults($class_id)
@@ -1075,13 +1176,24 @@ class ShabbosMevorchim
 
     public function setStudentResults($sid = 0, $date = 0, $forScreen = false)
     {
-        $dates = [];
-        if ($date) $dates[] = $date;
-        else {
-            foreach ($this->rDates as $date) {
-                if ($date <= unixtojd()) $dates[] = $date;
+        $state = $this->rememberCache('student_results', [
+            'sid' => $sid ?: $this->school_id,
+            'date' => $date,
+            'forScreen' => $forScreen,
+            'tasks' => $this->tasks,
+        ], function () use ($sid, $date, $forScreen) {
+            $this->users = [];
+            $this->studentResults = [];
+            $this->studentDoneResults = [];
+            $this->doneQuotas = [];
+            $this->participated = [];
+            $dates = [];
+            if ($date) $dates[] = $date;
+            else {
+                foreach ($this->rDates as $date) {
+                    if ($date <= unixtojd()) $dates[] = $date;
+                }
             }
-        }
 
 //		$sql1 = "SELECT dt.quantity AS total, dt.date_task_id
 //            FROM date_tasks dt
@@ -1126,7 +1238,7 @@ class ShabbosMevorchim
                     and dtm.lang_id = ?
                 )";
 
-        $stmt1 = $this->db->prepare($sql1);
+            $stmt1 = $this->db->prepare($sql1);
 
         $sql2 = "SELECT MAX(dtm.done_qty) AS total 
                 FROM date_tasks_marks dtm
@@ -1151,7 +1263,7 @@ class ShabbosMevorchim
                     WHERE u.user_id = ?";
             */
 
-        $stmt2 = $this->db->prepare($sql2);
+            $stmt2 = $this->db->prepare($sql2);
 
         //$sqlQuota = "select sum( quota ) as total
         //			from tehillim_backups
@@ -1165,87 +1277,97 @@ class ShabbosMevorchim
                       WHERE sm_date = ? 
                       AND grid_id = ?
                       AND user_id = ?";
-        $stmtBackup = $this->db->prepare($sqlBackup);
+            $stmtBackup = $this->db->prepare($sqlBackup);
 
-        if (!$sid) $sid = $this->school_id;
-        // Always set classes for the current school to ensure fresh data
-        $this->setClasses($sid);
+            if (!$sid) $sid = $this->school_id;
+            $this->setClasses($sid);
 
-        $users = array();
-        foreach ($this->classes as $id => $info) {
-            $sqlUsers = "SELECT u.*, ut.track_id, ut.level FROM users u 
+            $users = array();
+            foreach ($this->classes as $id => $info) {
+                $sqlUsers = "SELECT u.*, ut.track_id, ut.level FROM users u 
                         join user_tracks ut using (user_id) 
                         WHERE class_id = $id 
                         AND user_registered > 0 
                         AND ut.subject_id = 1 
                         ORDER BY last, first";
-            $stmt = $this->db->query($sqlUsers);
-            $users[$id] = $stmt->fetchAll();
-        }
-
-        foreach ($users as $info) {
-            foreach ($info as $user) {
-                $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
+                $stmt = $this->db->query($sqlUsers);
+                $users[$id] = $stmt->fetchAll();
             }
-        }
+
+            foreach ($users as $info) {
+                foreach ($info as $user) {
+                    $this->users[$user['user_id']] = $user['first'] . ' ' . $user['last'];
+                }
+            }
+ 
  
         // cache results
-        $cached = [];
-        foreach ($dates as $date) {
+            $cached = [];
+            foreach ($dates as $date) {
             // for each task
-            foreach ($this->tasks as $key => $task) {
+                foreach ($this->tasks as $key => $task) {
                 // skip task #2
-                if ($forScreen && $key == 'Minutes') continue;
+                    if ($forScreen && $key == 'Minutes') continue;
                 // Initialize counters for this school and task to ensure fresh start
-                $this->doneQuotas[$key][$sid] = 0;
-                $this->participated[$key][$sid] = 0;
+                    $this->doneQuotas[$key][$sid] = 0;
+                    $this->participated[$key][$sid] = 0;
                 
                 // for each class
-                foreach ($users as $class => $details) {
+                    foreach ($users as $class => $details) {
                     // for each user in the class.
-                    foreach ($details as $user) {
-                        if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
-                            $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
-                        else {
-                            $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
+                        foreach ($details as $user) {
+                            if (isset($cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']]))
+                                $this->studentResults[$date][$class][$user['user_id']][$key] = $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']];
+                            else {
+                                $stmt1->execute([$task, $date, $date, $user['school_type_id'], $user['track_id'], $user['level'], $user['lang_id']]);
 //                            $stmt1->debugDumpParams() . "<br />";
-                            $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
-                            $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
-                            $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
-                        }
+                                $row1 = $stmt1->fetch(PDO::FETCH_ASSOC);
+                                $this->studentResults[$date][$class][$user['user_id']][$key] = $row1['quantity'];
+                                $cached[$task][$date][$user['school_type_id']][$user['track_id']][$user['level']][$user['lang_id']] = $row1['quantity'];
+                            }
 
                         // figure out if we are getting results from backup table or not
-                        $stmtBackup->execute(array($date, $task, $user['user_id']));
+                            $stmtBackup->execute(array($date, $task, $user['user_id']));
 //                        $stmtBackup->debugDumpParams() . "<br />";
-                        $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
+                            $rowBackup = $stmtBackup->fetch(PDO::FETCH_ASSOC);
                         // check if we have run the backup for this date
-                        $backupRan = $this->getBackupRan($date);
+                            $backupRan = $this->getBackupRan($date);
 
-                        $total = 0;
-                        if ($rowBackup['total'] > 0 || $backupRan) { // or we are after the date of the backup.
-                            if (isset($rowBackup['total'])) $total = $rowBackup['total'];
-                        } else {
-                            if (
-                                isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
-                                $this->studentResults[$date][$class][$user['user_id']][$key] > 0
-                            ) {
-                                $stmt2->execute(array($user['user_id'], $date, $date, $task));
-                                $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-                                if (isset($row2['total'])) $total = $row2['total'];
+                            $total = 0;
+                            if ($rowBackup['total'] > 0 || $backupRan) {
+                                if (isset($rowBackup['total'])) $total = $rowBackup['total'];
+                            } else {
+                                if (
+                                    isset($this->studentResults[$date][$class][$user['user_id']][$key]) &&
+                                    $this->studentResults[$date][$class][$user['user_id']][$key] > 0
+                                ) {
+                                    $stmt2->execute(array($user['user_id'], $date, $date, $task));
+                                    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
+                                    if (isset($row2['total'])) $total = $row2['total'];
+                                }
                             }
-                        }
-                        $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
+                            $this->studentDoneResults[$date][$class][$user['user_id']][$key] = $total;
 
-                        if ($total > 0) {
-                            $this->participated[$key][$sid]++;
-                            if (intval($total) >= intval($this->studentResults[$date][$class][$user['user_id']][$key])) {
-                                $this->doneQuotas[$key][$sid]++;
+                            if ($total > 0) {
+                                $this->participated[$key][$sid]++;
+                                if (intval($total) >= intval($this->studentResults[$date][$class][$user['user_id']][$key])) {
+                                    $this->doneQuotas[$key][$sid]++;
+                                }
                             }
                         }
                     }
                 }
             }
-        }
+            return [
+                'classes' => $this->classes,
+                'users' => $this->users,
+                'studentResults' => $this->studentResults,
+                'studentDoneResults' => $this->studentDoneResults,
+                'doneQuotas' => $this->doneQuotas,
+                'participated' => $this->participated,
+            ];
+        });
+        $this->applyCachedState($state);
     }
 
     public function getUsers() 
