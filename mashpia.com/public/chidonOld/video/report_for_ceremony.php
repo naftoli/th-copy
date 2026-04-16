@@ -110,7 +110,7 @@ foreach ($schools as $school_id => $school) {
                         $sweater = ucwords($child[6]);
                         $yarmulka = $child[7];
                         echo "<div class='child-sheet'>";
-                        echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>"; 
+                        echo "<h4>" . $name . " (Grade " . $grade . ")</h4>"; 
                         if (isset($recruitment_prizes[$user_id])) {
                             echo "<p>Recruitment Prizes:<ul>";
                             foreach ($recruitment_prizes[$user_id] as $prize) {
@@ -163,7 +163,7 @@ foreach ($schools as $school_id => $school) {
                     $sweater = ucwords($child[6]);
                     $yarmulka = $child[7];
                     echo "<div class='child-sheet'>";
-                    echo "<h4>Name: " . $name . " Grade: " . $grade . "</h4>";
+                    echo "<h4>" . $name . " (Grade " . $grade . ")</h4>";
                     if (isset($recruitment_prizes[$user_id])) {
                         echo "<p>Recruitment Prizes:<ul>";
                         foreach ($recruitment_prizes[$user_id] as $prize) {
